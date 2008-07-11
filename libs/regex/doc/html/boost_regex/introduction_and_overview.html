@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Introduction and Overview</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../index.html" title="Boost.Regex">
 <link rel="up" href="../index.html" title="Boost.Regex">
 <link rel="prev" href="install.html" title="Building and Installing the Library">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_regex.introduction_and_overview"></a><a class="link" href="introduction_and_overview.html" title="Introduction and Overview">Introduction and
+<a name="boost_regex.introduction_and_overview"></a><a href="introduction_and_overview.html" title="Introduction and Overview">Introduction and
     Overview</a>
 </h2></div></div></div>
 <p>
@@ -39,7 +39,7 @@
       libraries can not do.
     </p>
 <p>
-      The class <a class="link" href="ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>
+      The class <a href="ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>
       is the key class in this library; it represents a "machine readable"
       regular expression, and is very closely modeled on <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span></code>,
       think of it as a string plus the actual state-machine required by the regular
@@ -47,8 +47,7 @@
       there are two typedefs that are almost always the means by which this class
       is referenced:
     </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> 
          <span class="keyword">class</span> <span class="identifier">traits</span> <span class="special">=</span> <span class="identifier">regex_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="special">&gt;</span>
@@ -86,8 +85,7 @@
       Now let's take that expression and place it in some C++ code to validate the
       format of a credit card number:
     </p>
-<pre class="programlisting">
-<span class="keyword">bool</span> <span class="identifier">validate_card_format</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">)</span>
+<pre class="programlisting"><span class="keyword">bool</span> <span class="identifier">validate_card_format</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span> <span class="identifier">e</span><span class="special">(</span><span class="string">"(\\d{4}[- ]){3}\\d{4}"</span><span class="special">);</span>
    <span class="keyword">return</span> <span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="identifier">e</span><span class="special">);</span>
@@ -112,11 +110,10 @@
       the utilities sed and Perl will already be ahead here; we need two strings
       - one a regular expression - the other a "format string" that provides
       a description of the text to replace the match with. In Boost.Regex this search
-      and replace operation is performed with the algorithm <a class="link" href="ref/regex_replace.html" title="regex_replace"><code class="computeroutput"><span class="identifier">regex_replace</span></code></a>, for our credit card
+      and replace operation is performed with the algorithm <a href="ref/regex_replace.html" title="regex_replace"><code class="computeroutput"><span class="identifier">regex_replace</span></code></a>, for our credit card
       example we can write two algorithms like this to provide the format conversions:
     </p>
-<pre class="programlisting">
-<span class="comment">// match any format with the regular expression:
+<pre class="programlisting"><span class="comment">// match any format with the regular expression:
 </span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span> <span class="identifier">e</span><span class="special">(</span><span class="string">"\\A(\\d{3,4})[- ]?(\\d{4})[- ]?(\\d{4})[- ]?(\\d{4})\\z"</span><span class="special">);</span>
 <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">machine_format</span><span class="special">(</span><span class="string">"\\1\\2\\3\\4"</span><span class="special">);</span>
 <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">human_format</span><span class="special">(</span><span class="string">"\\1-\\2-\\3-\\4"</span><span class="special">);</span>
@@ -141,11 +138,10 @@
       expression match, however in general the result of a match contains a number
       of sub-expression matches in addition to the overall match. When the library
       needs to report a regular expression match it does so using an instance of
-      the class <a class="link" href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>,
+      the class <a href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>,
       as before there are typedefs of this class for the most common cases:
     </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span>
 
 <span class="keyword">typedef</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*&gt;</span>                  <span class="identifier">cmatch</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">wchar_t</span><span class="special">*&gt;</span>               <span class="identifier">wcmatch</span><span class="special">;</span>
@@ -155,12 +151,12 @@
 <span class="special">}</span>
 </pre>
 <p>
-      The algorithms <a class="link" href="ref/regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>
-      and <a class="link" href="ref/regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>
-      make use of <a class="link" href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>
-      to report what matched; the difference between these algorithms is that <a class="link" href="ref/regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>
+      The algorithms <a href="ref/regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>
+      and <a href="ref/regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>
+      make use of <a href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>
+      to report what matched; the difference between these algorithms is that <a href="ref/regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>
       will only find matches that consume <span class="emphasis"><em>all</em></span> of the input text,
-      where as <a class="link" href="ref/regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>
+      where as <a href="ref/regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>
       will search for a match anywhere within the text being matched.
     </p>
 <p>
@@ -169,21 +165,21 @@
       of seamlessly searching almost any kind of data.
     </p>
 <p>
-      For search and replace operations, in addition to the algorithm <a class="link" href="ref/regex_replace.html" title="regex_replace"><code class="computeroutput"><span class="identifier">regex_replace</span></code></a> that we have already
-      seen, the <a class="link" href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>
+      For search and replace operations, in addition to the algorithm <a href="ref/regex_replace.html" title="regex_replace"><code class="computeroutput"><span class="identifier">regex_replace</span></code></a> that we have already
+      seen, the <a href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>
       class has a <code class="computeroutput"><span class="identifier">format</span></code> member that
       takes the result of a match and a format string, and produces a new string
       by merging the two.
     </p>
 <p>
       For iterating through all occurences of an expression within a text, there
-      are two iterator types: <a class="link" href="ref/regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a> will enumerate over
-      the <a class="link" href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>
-      objects found, while <a class="link" href="ref/regex_token_iterator.html" title="regex_token_iterator"><code class="computeroutput"><span class="identifier">regex_token_iterator</span></code></a> will enumerate
+      are two iterator types: <a href="ref/regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a> will enumerate over
+      the <a href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>
+      objects found, while <a href="ref/regex_token_iterator.html" title="regex_token_iterator"><code class="computeroutput"><span class="identifier">regex_token_iterator</span></code></a> will enumerate
       a series of strings (similar to perl style split operations).
     </p>
 <p>
-      For those that dislike templates, there is a high level wrapper class <a class="link" href="ref/deprecated_interfaces/old_regex.html" title="High Level Class RegEx (Deprecated)"><code class="computeroutput"><span class="identifier">RegEx</span></code></a>
+      For those that dislike templates, there is a high level wrapper class <a href="ref/deprecated_interfaces/old_regex.html" title="High Level Class RegEx (Deprecated)"><code class="computeroutput"><span class="identifier">RegEx</span></code></a>
       that is an encapsulation of the lower level template code - it provides a simplified
       interface for those that don't need the full power of the library, and supports
       only narrow characters, and the "extended" regular expression syntax.
@@ -191,12 +187,12 @@
       C++ standard library proposal.
     </p>
 <p>
-      The POSIX API functions: <a class="link" href="ref/posix.html#boost_regex.ref.posix.regcomp"><code class="computeroutput"><span class="identifier">regcomp</span></code></a>, <a class="link" href="ref/posix.html#boost_regex.ref.posix.regexec"><code class="computeroutput"><span class="identifier">regexec</span></code></a>, <a class="link" href="ref/posix.html#boost_regex.ref.posix.regfree"><code class="computeroutput"><span class="identifier">regfree</span></code></a> and [regerr], are available
+      The POSIX API functions: <a href="ref/posix.html#boost_regex.ref.posix.regcomp"><code class="computeroutput"><span class="identifier">regcomp</span></code></a>, <a href="ref/posix.html#boost_regex.ref.posix.regexec"><code class="computeroutput"><span class="identifier">regexec</span></code></a>, <a href="ref/posix.html#boost_regex.ref.posix.regfree"><code class="computeroutput"><span class="identifier">regfree</span></code></a> and [regerr], are available
       in both narrow character and Unicode versions, and are provided for those who
       need compatibility with these API's.
     </p>
 <p>
-      Finally, note that the library now has <a class="link" href="background_information/locale.html" title="Localization">run-time
+      Finally, note that the library now has <a href="background_information/locale.html" title="Localization">run-time
       localization support</a>, and recognizes the full POSIX regular expression
       syntax - including advanced features like multi-character collating elements
       and equivalence classes - as well as providing compatibility with other regular

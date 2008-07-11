@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Regular Expression Creation From an MFC String</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../index.html" title="Boost.Regex">
 <link rel="up" href="../mfc_strings.html" title="Using Boost Regex With MFC Strings">
 <link rel="prev" href="mfc_regex_types.html" title="Regex Types Used With MFC Strings">
@@ -24,15 +24,14 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_regex_create"></a><a class="link" href="mfc_regex_create.html" title="Regular Expression Creation From an MFC String">
+<a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_regex_create"></a><a href="mfc_regex_create.html" title="Regular Expression Creation From an MFC String">
           Regular Expression Creation From an MFC String</a>
 </h5></div></div></div>
 <p>
             The following helper function is available to assist in the creation
             of a regular expression from an MFC/ATL string type:
           </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
 <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> 
    <span class="identifier">make_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">ATL</span><span class="special">::</span><span class="identifier">CSimpleStringT</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">,</span> 
             <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">syntax_option_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>

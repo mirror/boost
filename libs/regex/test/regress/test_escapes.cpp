@@ -109,6 +109,9 @@ void test_assertion_escapes()
    TEST_REGEX_SEARCH("a\\B", perl, "ab", match_default, make_array(0, 1, -2, -2));
    TEST_REGEX_SEARCH("a\\B", perl, "a", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("a\\B", perl, "a ", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("\\By\\b", perl, "xy", match_default, make_array(1, 2, -2, -2));
+   TEST_REGEX_SEARCH("\\by\\B", perl, "yz", match_default, make_array(0, 1, -2, -2));
+   TEST_REGEX_SEARCH("\\B\\*\\B", perl, " * ", match_default, make_array(1, 2, -2, -2));
    // buffer operators:
    TEST_REGEX_SEARCH("\\`abc", perl, "abc", match_default, make_array(0, 3, -2, -2));
    TEST_REGEX_SEARCH("\\`abc", perl, "\nabc", match_default, make_array(-2, -2));

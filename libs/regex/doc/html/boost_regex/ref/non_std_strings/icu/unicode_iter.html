@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Unicode Aware Regex Iterators</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../index.html" title="Boost.Regex">
 <link rel="up" href="../icu.html" title="Working With Unicode and ICU String Types">
 <link rel="prev" href="unicode_algo.html" title="Unicode Regular Expression Algorithms">
@@ -24,23 +24,22 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="boost_regex.ref.non_std_strings.icu.unicode_iter"></a><a class="link" href="unicode_iter.html" title="Unicode Aware Regex Iterators">
+<a name="boost_regex.ref.non_std_strings.icu.unicode_iter"></a><a href="unicode_iter.html" title="Unicode Aware Regex Iterators">
           Unicode Aware Regex Iterators</a>
 </h5></div></div></div>
 <a name="boost_regex.ref.non_std_strings.icu.unicode_iter.u32regex_iterator"></a><h5>
-<a name="id2741240"></a>
-            <a class="link" href="unicode_iter.html#boost_regex.ref.non_std_strings.icu.unicode_iter.u32regex_iterator">u32regex_iterator</a>
+<a name="id607067"></a>
+            <a href="unicode_iter.html#boost_regex.ref.non_std_strings.icu.unicode_iter.u32regex_iterator">u32regex_iterator</a>
           </h5>
 <p>
             Type <code class="computeroutput"><span class="identifier">u32regex_iterator</span></code>
-            is in all respects the same as <a class="link" href="../../regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a> except that since
+            is in all respects the same as <a href="../../regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a> except that since
             the regular expression type is always <code class="computeroutput"><span class="identifier">u32regex</span></code>
             it only takes one template parameter (the iterator type). It also calls
             <code class="computeroutput"><span class="identifier">u32regex_search</span></code> internally,
             allowing it to interface correctly with UTF-8, UTF-16, and UTF-32 data:
           </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">u32regex_iterator</span>
 <span class="special">{</span>
    <span class="comment">// for members see regex_iterator
@@ -55,8 +54,7 @@
             from a string, there are a series of non-member helper functions called
             make_u32regex_iterator:
           </p>
-<pre class="programlisting">
-<span class="identifier">u32regex_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*&gt;</span> 
+<pre class="programlisting"><span class="identifier">u32regex_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*&gt;</span> 
    <span class="identifier">make_u32regex_iterator</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">s</span><span class="special">,</span> 
                           <span class="keyword">const</span> <span class="identifier">u32regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">,</span> 
                           <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">m</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">match_default</span><span class="special">);</span>
@@ -91,8 +89,7 @@
             Example: search for international currency symbols, along with their
             associated numeric value:
           </p>
-<pre class="programlisting">
-<span class="keyword">void</span> <span class="identifier">enumerate_currencies</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">text</span><span class="special">)</span>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">enumerate_currencies</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">text</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="comment">// enumerate and print all the currency symbols, along
 </span>   <span class="comment">// with any associated numeric values:
@@ -129,19 +126,18 @@
             Provided of course that the input is encoded as UTF-8.
           </p>
 <a name="boost_regex.ref.non_std_strings.icu.unicode_iter.u32regex_token_iterator"></a><h5>
-<a name="id2742828"></a>
-            <a class="link" href="unicode_iter.html#boost_regex.ref.non_std_strings.icu.unicode_iter.u32regex_token_iterator">u32regex_token_iterator</a>
+<a name="id608814"></a>
+            <a href="unicode_iter.html#boost_regex.ref.non_std_strings.icu.unicode_iter.u32regex_token_iterator">u32regex_token_iterator</a>
           </h5>
 <p>
             Type <code class="computeroutput"><span class="identifier">u32regex_token_iterator</span></code>
-            is in all respects the same as <a class="link" href="../../regex_token_iterator.html" title="regex_token_iterator"><code class="computeroutput"><span class="identifier">regex_token_iterator</span></code></a> except
+            is in all respects the same as <a href="../../regex_token_iterator.html" title="regex_token_iterator"><code class="computeroutput"><span class="identifier">regex_token_iterator</span></code></a> except
             that since the regular expression type is always <code class="computeroutput"><span class="identifier">u32regex</span></code>
             it only takes one template parameter (the iterator type). It also calls
             <code class="computeroutput"><span class="identifier">u32regex_search</span></code> internally,
             allowing it to interface correctly with UTF-8, UTF-16, and UTF-32 data:
           </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">u32regex_token_iterator</span>
 <span class="special">{</span>
    <span class="comment">// for members see regex_token_iterator
@@ -156,8 +152,7 @@
             from a string, there are a series of non-member helper functions called
             <code class="computeroutput"><span class="identifier">make_u32regex_token_iterator</span></code>:
           </p>
-<pre class="programlisting">
-<span class="identifier">u32regex_token_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*&gt;</span> 
+<pre class="programlisting"><span class="identifier">u32regex_token_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*&gt;</span> 
    <span class="identifier">make_u32regex_token_iterator</span><span class="special">(</span>
          <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">s</span><span class="special">,</span> 
          <span class="keyword">const</span> <span class="identifier">u32regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">,</span> 
@@ -198,8 +193,7 @@
             of marked sub-expression sub in regular expression <span class="emphasis"><em>e</em></span>,
             found in text <span class="emphasis"><em>s</em></span>, using match_flags <span class="emphasis"><em>m</em></span>.
           </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">N</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">N</span><span class="special">&gt;</span>
 <span class="identifier">u32regex_token_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*&gt;</span> 
    <span class="identifier">make_u32regex_token_iterator</span><span class="special">(</span>
          <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">p</span><span class="special">,</span> 
@@ -244,8 +238,7 @@
             for each submatch in regular expression <span class="emphasis"><em>e</em></span>, found
             in text <span class="emphasis"><em>s</em></span>, using match_flags <span class="emphasis"><em>m</em></span>.
           </p>
-<pre class="programlisting">
-<span class="identifier">u32regex_token_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*&gt;</span> 
+<pre class="programlisting"><span class="identifier">u32regex_token_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*&gt;</span> 
    <span class="identifier">make_u32regex_token_iterator</span><span class="special">(</span>
          <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">p</span><span class="special">,</span> 
          <span class="keyword">const</span> <span class="identifier">u32regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">,</span> 
@@ -290,8 +283,7 @@
             Example: search for international currency symbols, along with their
             associated numeric value:
           </p>
-<pre class="programlisting">
-<span class="keyword">void</span> <span class="identifier">enumerate_currencies2</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">text</span><span class="special">)</span>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">enumerate_currencies2</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">text</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="comment">// enumerate and print all the currency symbols, along
 </span>   <span class="comment">// with any associated numeric values:

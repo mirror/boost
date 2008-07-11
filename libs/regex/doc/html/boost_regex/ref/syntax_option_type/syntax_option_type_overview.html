@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Overview of syntax_option_type</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Boost.Regex">
 <link rel="up" href="../syntax_option_type.html" title="syntax_option_type">
 <link rel="prev" href="syntax_option_type_synopsis.html" title="syntax_option_type Synopsis">
@@ -24,13 +24,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_regex.ref.syntax_option_type.syntax_option_type_overview"></a><a class="link" href="syntax_option_type_overview.html" title="Overview of syntax_option_type">
+<a name="boost_regex.ref.syntax_option_type.syntax_option_type_overview"></a><a href="syntax_option_type_overview.html" title="Overview of syntax_option_type">
         Overview of syntax_option_type</a>
 </h4></div></div></div>
 <p>
-          The type <a class="link" href="../syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> is an implementation
+          The type <a href="../syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> is an implementation
           specific bitmask type (see C++ standard 17.3.2.1.2). Setting its elements
-          has the effects listed in the table below, a valid value of type <a class="link" href="../syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a>
+          has the effects listed in the table below, a valid value of type <a href="../syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a>
           will always have exactly one of the elements <code class="computeroutput"><span class="identifier">normal</span></code>,
           <code class="computeroutput"><span class="identifier">basic</span></code>, <code class="computeroutput"><span class="identifier">extended</span></code>,
           <code class="computeroutput"><span class="identifier">awk</span></code>, <code class="computeroutput"><span class="identifier">grep</span></code>,
@@ -39,23 +39,20 @@
         </p>
 <p>
           Note that for convenience all the constants listed here are duplicated
-          within the scope of class template <a class="link" href="../basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>, so you can use any
+          within the scope of class template <a href="../basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>, so you can use any
           of:
         </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">constant_name</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">constant_name</span>
 </pre>
 <p>
           or
         </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">::</span><span class="identifier">constant_name</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">::</span><span class="identifier">constant_name</span>
 </pre>
 <p>
           or
         </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">wregex</span><span class="special">::</span><span class="identifier">constant_name</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">wregex</span><span class="special">::</span><span class="identifier">constant_name</span>
 </pre>
 <p>
           in an interchangeable manner.

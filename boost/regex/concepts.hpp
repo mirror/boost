@@ -368,8 +368,6 @@ struct BaseRegexConcept
 
       // access:
       const Regex ce;
-      bool b = ce.empty();
-      ignore_unused_variable_warning(b);
       unsigned i = ce.mark_count();
       ignore_unused_variable_warning(i);
       m_flags = ce.flags();
@@ -385,7 +383,7 @@ struct BaseRegexConcept
       typedef typename sub_match_type::iterator sub_iter_type;
       BOOST_STATIC_ASSERT((::boost::is_same<sub_value_type, value_type>::value));
       BOOST_STATIC_ASSERT((::boost::is_same<sub_iter_type, BidiIterator>::value));
-      b = m_sub.matched;
+      bool b = m_sub.matched;
       ignore_unused_variable_warning(b);
       BidiIterator bi = m_sub.first;
       ignore_unused_variable_warning(bi);
@@ -805,6 +803,8 @@ struct BoostRegexConcept
       int i2 = ce.compare(ce2);
       ignore_unused_variable_warning(i2);
       bool b = ce == ce2;
+      ignore_unused_variable_warning(b);
+      b = ce.empty();
       ignore_unused_variable_warning(b);
       b = ce != ce2;
       ignore_unused_variable_warning(b);

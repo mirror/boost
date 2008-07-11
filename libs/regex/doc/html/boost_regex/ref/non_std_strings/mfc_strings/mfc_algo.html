@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Overloaded Algorithms For MFC String Types</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../index.html" title="Boost.Regex">
 <link rel="up" href="../mfc_strings.html" title="Using Boost Regex With MFC Strings">
 <link rel="prev" href="mfc_regex_create.html" title="Regular Expression Creation From an MFC String">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo"></a><a class="link" href="mfc_algo.html" title="Overloaded Algorithms For MFC String Types">
+<a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo"></a><a href="mfc_algo.html" title="Overloaded Algorithms For MFC String Types">
           Overloaded Algorithms For MFC String Types</a>
 </h5></div></div></div>
 <p>
@@ -34,21 +34,20 @@
             here they are anyway:
           </p>
 <a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_match"></a><h5>
-<a name="id2747514"></a>
-            <a class="link" href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_match">regex_match</a>
+<a name="id613970"></a>
+            <a href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_match">regex_match</a>
           </h5>
 <p>
             There are two overloads, the first reports what matched in a match_results
             structure, the second does not.
           </p>
 <p>
-            All the usual caveats for <a class="link" href="../../regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a> apply, in particular
+            All the usual caveats for <a href="../../regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a> apply, in particular
             the algorithm will only report a successful match if all of the input
-            text matches the expression, if this isn't what you want then use <a class="link" href="../../regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>
+            text matches the expression, if this isn't what you want then use <a href="../../regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>
             instead.
           </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="identifier">regex_match</span><span class="special">(</span>
    <span class="keyword">const</span> <span class="identifier">ATL</span><span class="special">::</span><span class="identifier">CSimpleStringT</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">,</span> 
    <span class="identifier">match_results</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">B</span><span class="special">*,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">what</span><span class="special">,</span> 
@@ -63,8 +62,7 @@
 <p>
             <span class="bold"><strong>Example:</strong></span>
           </p>
-<pre class="programlisting">
-<span class="comment">//
+<pre class="programlisting"><span class="comment">//
 </span><span class="comment">// Extract filename part of a path from a CString and return the result
 </span><span class="comment">// as another CString:
 </span><span class="comment">//
@@ -84,12 +82,11 @@
 <span class="special">}</span>
 </pre>
 <a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_match__second_overload_"></a><h5>
-<a name="id2748342"></a>
-            <a class="link" href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_match__second_overload_">regex_match
+<a name="id614882"></a>
+            <a href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_match__second_overload_">regex_match
             (second overload)</a>
           </h5>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="identifier">regex_match</span><span class="special">(</span>
    <span class="keyword">const</span> <span class="identifier">ATL</span><span class="special">::</span><span class="identifier">CSimpleStringT</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">,</span>
    <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">,</span>
@@ -103,8 +100,7 @@
 <p>
             <span class="bold"><strong>Example:</strong></span>
           </p>
-<pre class="programlisting">
-<span class="comment">//
+<pre class="programlisting"><span class="comment">//
 </span><span class="comment">// Find out if *password* meets our password requirements,
 </span><span class="comment">// as defined by the regular expression *requirements*.
 </span><span class="comment">//
@@ -114,15 +110,14 @@
 <span class="special">}</span>      
 </pre>
 <a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_search"></a><h5>
-<a name="id2748878"></a>
-            <a class="link" href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_search">regex_search</a>
+<a name="id615473"></a>
+            <a href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_search">regex_search</a>
           </h5>
 <p>
-            There are two additional overloads for <a class="link" href="../../regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>, the first reports
+            There are two additional overloads for <a href="../../regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>, the first reports
             what matched the second does not:
           </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="identifier">regex_search</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">ATL</span><span class="special">::</span><span class="identifier">CSimpleStringT</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">,</span>
                   <span class="identifier">match_results</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">what</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">,</span>
@@ -136,8 +131,7 @@
             <span class="bold"><strong>Example</strong></span>: Postcode extraction from an
             address string.
           </p>
-<pre class="programlisting">
-<span class="identifier">CString</span> <span class="identifier">extract_postcode</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">CString</span><span class="special">&amp;</span> <span class="identifier">address</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">CString</span> <span class="identifier">extract_postcode</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">CString</span><span class="special">&amp;</span> <span class="identifier">address</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="comment">// searches throw address for a UK postcode and returns the result,
 </span>   <span class="comment">// the expression used is by Phil A. on www.regxlib.com:
@@ -155,12 +149,11 @@
 <span class="special">}</span>      
 </pre>
 <a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_search__second_overload_"></a><h5>
-<a name="id2749553"></a>
-            <a class="link" href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_search__second_overload_">regex_search
+<a name="id616211"></a>
+            <a href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_search__second_overload_">regex_search
             (second overload)</a>
           </h5>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">inline</span> <span class="keyword">bool</span> <span class="identifier">regex_search</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">ATL</span><span class="special">::</span><span class="identifier">CSimpleStringT</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">,</span>
                <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">,</span>
                <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">match_default</span><span class="special">)</span>
@@ -171,15 +164,14 @@
             <span class="special">+</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">GetLength</span><span class="special">(),</span> <span class="identifier">e</span><span class="special">,</span> <span class="identifier">f</span><span class="special">);</span></code>
           </p>
 <a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_replace"></a><h5>
-<a name="id2749918"></a>
-            <a class="link" href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_replace">regex_replace</a>
+<a name="id616615"></a>
+            <a href="mfc_algo.html#boost_regex.ref.non_std_strings.mfc_strings.mfc_algo.regex_replace">regex_replace</a>
           </h5>
 <p>
-            There are two additional overloads for <a class="link" href="../../regex_replace.html" title="regex_replace"><code class="computeroutput"><span class="identifier">regex_replace</span></code></a>, the first sends
+            There are two additional overloads for <a href="../../regex_replace.html" title="regex_replace"><code class="computeroutput"><span class="identifier">regex_replace</span></code></a>, the first sends
             output to an output iterator, while the second creates a new string
           </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span>
          <span class="identifier">charT</span><span class="special">&gt;</span>
 <span class="identifier">OutputIterator</span> <span class="identifier">regex_replace</span><span class="special">(</span><span class="identifier">OutputIterator</span> <span class="identifier">out</span><span class="special">,</span>
                            <span class="identifier">BidirectionalIterator</span> <span class="identifier">first</span><span class="special">,</span>
@@ -192,8 +184,7 @@
             <span class="bold"><strong>Effects</strong></span>: returns <code class="computeroutput"><span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_replace</span><span class="special">(</span><span class="identifier">out</span><span class="special">,</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">,</span> <span class="identifier">e</span><span class="special">,</span> <span class="identifier">fmt</span><span class="special">.</span><span class="identifier">GetString</span><span class="special">(),</span>
             <span class="identifier">flags</span><span class="special">);</span></code>
           </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="identifier">charT</span><span class="special">&gt;</span>
 <span class="identifier">ATL</span><span class="special">::</span><span class="identifier">CSimpleStringT</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="identifier">regex_replace</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">ATL</span><span class="special">::</span><span class="identifier">CSimpleStringT</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">,</span>
                            <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">,</span>
                            <span class="keyword">const</span> <span class="identifier">ATL</span><span class="special">::</span><span class="identifier">CSimpleStringT</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
@@ -201,14 +192,13 @@
 </pre>
 <p>
             <span class="bold"><strong>Effects</strong></span>: returns a new string created
-            using <a class="link" href="../../regex_replace.html" title="regex_replace"><code class="computeroutput"><span class="identifier">regex_replace</span></code></a>,
+            using <a href="../../regex_replace.html" title="regex_replace"><code class="computeroutput"><span class="identifier">regex_replace</span></code></a>,
             and the same memory manager as string <span class="emphasis"><em>s</em></span>.
           </p>
 <p>
             <span class="bold"><strong>Example</strong></span>:
           </p>
-<pre class="programlisting">
-<span class="comment">//
+<pre class="programlisting"><span class="comment">//
 </span><span class="comment">// Take a credit card number as a string of digits, 
 </span><span class="comment">// and reformat it as a human readable string with "-"
 </span><span class="comment">// separating each group of four digits:

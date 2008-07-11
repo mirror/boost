@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>regex_split (deprecated)</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Boost.Regex">
 <link rel="up" href="../deprecated_interfaces.html" title="Deprecated Interfaces">
 <link rel="prev" href="regex_grep.html" title="regex_grep (Deprecated)">
@@ -24,28 +24,26 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_regex.ref.deprecated_interfaces.regex_split"></a><a class="link" href="regex_split.html" title="regex_split (deprecated)">
+<a name="boost_regex.ref.deprecated_interfaces.regex_split"></a><a href="regex_split.html" title="regex_split (deprecated)">
         regex_split (deprecated)</a>
 </h4></div></div></div>
 <p>
-          The algorithm <a class="link" href="regex_split.html" title="regex_split (deprecated)"><code class="computeroutput"><span class="identifier">regex_split</span></code></a> has been deprecated
-          in favor of the iterator <a class="link" href="../regex_token_iterator.html" title="regex_token_iterator"><code class="computeroutput"><span class="identifier">regex_token_iterator</span></code></a> which has
+          The algorithm <a href="regex_split.html" title="regex_split (deprecated)"><code class="computeroutput"><span class="identifier">regex_split</span></code></a> has been deprecated
+          in favor of the iterator <a href="../regex_token_iterator.html" title="regex_token_iterator"><code class="computeroutput"><span class="identifier">regex_token_iterator</span></code></a> which has
           a more flexible and powerful interface, as well as following the more usual
           standard library "pull" rather than "push" semantics.
         </p>
 <p>
-          Code which uses <a class="link" href="regex_split.html" title="regex_split (deprecated)"><code class="computeroutput"><span class="identifier">regex_split</span></code></a> will continue to compile,
+          Code which uses <a href="regex_split.html" title="regex_split (deprecated)"><code class="computeroutput"><span class="identifier">regex_split</span></code></a> will continue to compile,
           the following documentation is taken from a previous Boost.Regex version:
         </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> 
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> 
 </pre>
 <p>
-          Algorithm <a class="link" href="regex_split.html" title="regex_split (deprecated)"><code class="computeroutput"><span class="identifier">regex_split</span></code></a> performs a similar
+          Algorithm <a href="regex_split.html" title="regex_split (deprecated)"><code class="computeroutput"><span class="identifier">regex_split</span></code></a> performs a similar
           operation to the perl split operation, and comes in three overloaded forms:
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Alloc1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits2</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Alloc1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits2</span><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">regex_split</span><span class="special">(</span><span class="identifier">OutputIterator</span> <span class="identifier">out</span><span class="special">,</span> 
                         <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">Traits1</span><span class="special">,</span> <span class="identifier">Alloc1</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">,</span> 
                         <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">Traits2</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">,</span>
@@ -90,8 +88,7 @@
           the input string into a series of tokens, and remove each token from the
           string <span class="emphasis"><em>s</em></span>:
         </p>
-<pre class="programlisting">
-<span class="keyword">unsigned</span> <span class="identifier">tokenise</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">list</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;&amp;</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">)</span>
+<pre class="programlisting"><span class="keyword">unsigned</span> <span class="identifier">tokenise</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">list</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;&amp;</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_split</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">back_inserter</span><span class="special">(</span><span class="identifier">l</span><span class="special">),</span> <span class="identifier">s</span><span class="special">);</span>
 <span class="special">}</span>
@@ -100,8 +97,7 @@
           Example: the following short program will extract all of the URL's from
           a html file, and print them out to cout:
         </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">list</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">list</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">fstream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>

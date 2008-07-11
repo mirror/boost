@@ -157,7 +157,7 @@ int main()
    assert(greek == L"\x0391\x039D\x0395\x0398\x0391 2004");
 
    // extract currency symbols with associated value, use iterator interface:
-   std::string text2 = " $100.23 or \xC2\xA3""198.12 "; // \xC2\xA3 is the £ sign encoded in UTF-8
+   std::string text2 = " $100.23 or \xC2\xA3""198.12 "; // \xC2\xA3 is the pound sign encoded in UTF-8
    enumerate_currencies(text2);
    enumerate_currencies2(text2);
 

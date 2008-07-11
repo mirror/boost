@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>match_flag_type</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../ref.html" title="Reference">
 <link rel="prev" href="syntax_option_type/syntax_option_type_literal.html" title="Options for Literal Strings">
@@ -24,16 +24,15 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_regex.ref.match_flag_type"></a><a class="link" href="match_flag_type.html" title="match_flag_type"> match_flag_type</a>
+<a name="boost_regex.ref.match_flag_type"></a><a href="match_flag_type.html" title="match_flag_type"> match_flag_type</a>
 </h3></div></div></div>
 <p>
         The type <code class="computeroutput"><span class="identifier">match_flag_type</span></code>
         is an implementation specific bitmask type (see C++ std 17.3.2.1.2) that
         controls how a regular expression is matched against a character sequence.
-        The behavior of the format flags is described in more detail in the <a class="link" href="../format.html" title="Search and Replace Format String Syntax">format syntax guide</a>.
+        The behavior of the format flags is described in more detail in the <a href="../format.html" title="Search and Replace Format String Syntax">format syntax guide</a>.
       </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">regex_constants</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">regex_constants</span><span class="special">{</span>
 
 <span class="keyword">typedef</span> <span class="identifier">implemenation</span><span class="special">-</span><span class="identifier">specific</span><span class="special">-</span><span class="identifier">bitmask</span><span class="special">-</span><span class="identifier">type</span> <span class="identifier">match_flag_type</span><span class="special">;</span>
 
@@ -70,8 +69,8 @@
 </span><span class="special">}</span> <span class="comment">// namespace boost
 </span></pre>
 <a name="boost_regex.ref.match_flag_type.description"></a><h5>
-<a name="id2736187"></a>
-        <a class="link" href="match_flag_type.html#boost_regex.ref.match_flag_type.description">Description</a>
+<a name="id601531"></a>
+        <a href="match_flag_type.html#boost_regex.ref.match_flag_type.description">Description</a>
       </h5>
 <p>
         The type <code class="computeroutput"><span class="identifier">match_flag_type</span></code>
@@ -328,7 +327,7 @@
 <td>
               <p>
                 Specifies that the expression should be matched according to the
-                POSIX <a class="link" href="../syntax/leftmost_longest_rule.html" title="The Leftmost Longest Rule">leftmost-longest
+                POSIX <a href="../syntax/leftmost_longest_rule.html" title="The Leftmost Longest Rule">leftmost-longest
                 rule</a>, regardless of what kind of expression was compiled.
                 Be warned that these rules do not work well with many Perl-specific
                 features such as non-greedy repeats.
@@ -344,7 +343,7 @@
 <td>
               <p>
                 Specifies that the expression should be matched according to the
-                <a class="link" href="../syntax/perl_syntax.html#boost_regex.syntax.perl_syntax.what_gets_matched">Perl
+                <a href="../syntax/perl_syntax.html#boost_regex.syntax.perl_syntax.what_gets_matched">Perl
                 matching rules</a>, irrespective of what kind of expression was
                 compiled.
               </p>
@@ -359,7 +358,7 @@
 <td>
               <p>
                 Makes the expression behave as if it had no marked subexpressions,
-                no matter how many capturing groups are actually present. The <a class="link" href="match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>
+                no matter how many capturing groups are actually present. The <a href="match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>
                 class will only contain information about the overall match, and
                 not any sub-expressions.
               </p>
@@ -379,7 +378,7 @@
                 Specification, Chapter 15 part 5.4.11 String.prototype.replace. (FWD.1).
               </p>
               <p>
-                This is functionally identical to the <a class="link" href="../format/perl_format.html" title="Perl Format String Syntax">Perl
+                This is functionally identical to the <a href="../format/perl_format.html" title="Perl Format String Syntax">Perl
                 format string rules</a>.
               </p>
               <p>
@@ -401,7 +400,7 @@
                 Specifies that when a regular expression match is to be replaced
                 by a new string, that the new string is constructed using the rules
                 used by the Unix sed utility in IEEE Std 1003.1-2001, Portable Operating
-                SystemInterface (POSIX ), Shells and Utilities. See also the <a class="link" href="../format/sed_format.html" title="Sed Format String Syntax">Sed Format string reference</a>.
+                SystemInterface (POSIX ), Shells and Utilities. See also the <a href="../format/sed_format.html" title="Sed Format String Syntax">Sed Format string reference</a>.
               </p>
               </td>
 </tr>
@@ -414,7 +413,7 @@
 <td>
               <p>
                 Specifies that when a regular expression match is to be replaced
-                by a new string, that the new string is constructed using <a class="link" href="../format/perl_format.html" title="Perl Format String Syntax">the
+                by a new string, that the new string is constructed using <a href="../format/perl_format.html" title="Perl Format String Syntax">the
                 same rules as Perl 5</a>.
               </p>
               </td>
@@ -442,7 +441,7 @@
 <td>
               <p>
                 Specifies that all syntax extensions are enabled, including conditional
-                (?ddexpression1:expression2) replacements: see the <a class="link" href="../format/boost_format_syntax.html" title="Boost-Extended Format String Syntax">format
+                (?ddexpression1:expression2) replacements: see the <a href="../format/boost_format_syntax.html" title="Boost-Extended Format String Syntax">format
                 string guide</a> for more details.
               </p>
               </td>
