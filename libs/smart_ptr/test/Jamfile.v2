@@ -47,5 +47,6 @@ import testing ;
           [ run wp_convertible_test.cpp ]
           [ run ip_convertible_test.cpp ]
           [ run allocate_shared_test.cpp ]
+          [ run sp_atomic_test.cpp ]
         ;
 }

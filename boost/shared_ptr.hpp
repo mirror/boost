@@ -33,6 +33,11 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/detail/sp_convertible.hpp>
 
+#if !defined(BOOST_SP_NO_ATOMIC_ACCESS)
+#include <boost/detail/spinlock_pool.hpp>
+#include <boost/memory_order.hpp>
+#endif
+
 #include <algorithm>            // for std::swap
 #include <functional>           // for std::less
 #include <typeinfo>             // for std::bad_cast
@@ -497,6 +502,65 @@ public:
     {
         return pn.get_deleter( ti );
     }
+
+    // atomic access
+
+#if !defined(BOOST_SP_NO_ATOMIC_ACCESS)
+
+    shared_ptr<T> atomic_load( memory_order /*mo*/ = memory_order_seq_cst ) const
+    {
+        boost::detail::spinlock_pool<2>::scoped_lock lock( this );
+        return *this;
+    }
+
+    void atomic_store( shared_ptr<T> r, memory_order /*mo*/ = memory_order_seq_cst )
+    {
+        boost::detail::spinlock_pool<2>::scoped_lock lock( this );
+        swap( r );
+    }
+
+    shared_ptr<T> atomic_swap( shared_ptr<T> r, memory_order /*mo*/ = memory_order_seq_cst )
+    {
+        boost::detail::spinlock & sp = boost::detail::spinlock_pool<2>::spinlock_for( this );
+
+        sp.lock();
+        swap( r );
+        sp.unlock();
+
+        return r; // return std::move(r)
+    }
+
+    bool atomic_compare_swap( shared_ptr<T> & v, shared_ptr<T> w )
+    {
+        boost::detail::spinlock & sp = boost::detail::spinlock_pool<2>::spinlock_for( this );
+
+        sp.lock();
+
+        if( px == v.px && pn == v.pn )
+        {
+            swap( w );
+
+            sp.unlock();
+
+            return true;
+        }
+        else
+        {
+            shared_ptr tmp( *this );
+
+            sp.unlock();
+
+            tmp.swap( v );
+            return false;
+        }
+    }
+
+    inline bool atomic_compare_swap( shared_ptr<T> & v, shared_ptr<T> w, memory_order /*success*/, memory_order /*failure*/ )
+    {
+        return atomic_compare_swap( v, w ); // std::move( w )
+    }
+
+#endif
 
 // Tasteless as this may seem, making all members public allows member templates
 // to work in the absence of member template friends. (Matthew Langston)
