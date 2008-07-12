@@ -21,12 +21,11 @@ int main(int ac, char* av[])
         desc.add_options()
             ("help", "produce help message")
             ("compression", po::value<int>(), "set compression level")
-            ("verbose", po::value<string>()->zero_tokens()->implicit_value(""))
         ;
 
-        po::variables_map vm;
+        po::variables_map vm;        
         po::store(po::parse_command_line(ac, av, desc), vm);
-        po::notify(vm);
+        po::notify(vm);    
 
         if (vm.count("help")) {
             cout << desc << "\n";
@@ -34,16 +33,10 @@ int main(int ac, char* av[])
         }
 
         if (vm.count("compression")) {
-            cout << "Compression level was set to "
+            cout << "Compression level was set to " 
                  << vm["compression"].as<int>() << ".\n";
         } else {
             cout << "Compression level was not set.\n";
-        }
-
-        if (vm.count("verbose")) {
-            string v = vm["verbose"].as<string>();
-            if (v.size() > 0)
-                cout << "Verbosity is: " << v << ".\n";
         }
     }
     catch(exception& e) {

@@ -185,16 +185,14 @@ desc.add_options()
     ("email", value&lt;string&gt;()->multitoken(), "email to send to")
     ;
       </programlisting>
-      For the first option (<literal>help</literal>), we specify only the name
-      and the description. No value can be specified in the parsed source.
-      For the second option (<literal>compression</literal>), the user must
-      specify a value, using a single token. For the third option
-      (<literal>verbose</literal>), the user may either provide a single token
-      for the value, or no token at all. For the last option
-      (<literal>email</literal>), the value can span several tokens. For
-      example, the following command line is OK:
+      For the first parameter, we specify only the name and the
+      description. No value can be specified in the parsed source.
+      For the first option, the user must specify a value, using a single
+      token. For the third option, the user may either provide a single token
+      for the value, or no token at all. For the last option, the value can
+      span several tokens. For example, the following command line is OK:
       <screen>
-          test --help --compression 10 --verbose --email beagle@mars beagle2@mars
+          test --help --compression 10 --verbose --email beadle@mars beadle2@mars
       </screen>      
       </para>
 
