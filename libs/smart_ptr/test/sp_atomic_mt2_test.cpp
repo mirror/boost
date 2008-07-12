@@ -83,7 +83,7 @@ int read_access( prim_type pt )
 
     case pt_atomics:
         {
-            boost::shared_ptr<X> p2 = ps.atomic_load();
+            boost::shared_ptr<X> p2 = boost::atomic_load( &ps );
             return p2->get();
         }
     }
@@ -109,14 +109,14 @@ void write_access( prim_type pt )
 
     case pt_atomics:
         {
-            boost::shared_ptr<X> p1 = ps.atomic_load();
+            boost::shared_ptr<X> p1 = boost::atomic_load( &ps );
 
             for( ;; )
             {
                 boost::shared_ptr<X> p2( new X( *p1 ) );
                 p2->set();
 
-                if( ps.atomic_compare_swap( p1, p2 ) ) break;
+                if( boost::atomic_compare_exchange( &ps, &p1, p2 ) ) break;
             }
         }
         break;

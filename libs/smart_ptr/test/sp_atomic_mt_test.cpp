@@ -93,7 +93,7 @@ void reader( int r )
 
 #else
 
-        boost::shared_ptr<X> p2 = ps.atomic_load();
+        boost::shared_ptr<X> p2 = boost::atomic_load( &ps );
 
         s += p2->get();
 
@@ -134,7 +134,7 @@ void writer()
         BOOST_TEST( p2->v_ == i );
         p2->set();
 
-        ps.atomic_store( p2 );
+        boost::atomic_store( &ps, p2 );
 
 #endif
     }
