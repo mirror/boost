@@ -27,7 +27,7 @@ enum memory_order
     memory_order_acquire = 1,
     memory_order_release = 2,
     memory_order_acq_rel = 3, // acquire | release
-    memory_order_seq_cst = 7, // acq_rel | 4
+    memory_order_seq_cst = 7  // acq_rel | 4
 };
 
 } // namespace boost
