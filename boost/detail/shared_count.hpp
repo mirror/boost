@@ -28,8 +28,11 @@
 #include <boost/detail/bad_weak_ptr.hpp>
 #include <boost/detail/sp_counted_base.hpp>
 #include <boost/detail/sp_counted_impl.hpp>
-
-#include <memory>           // std::auto_ptr
+// In order to avoid circular dependencies with Boost.TR1
+// we make sure that our include of <memory> doesn't try to
+// pull in the TR1 headers: that's why we use this header 
+// rather than including <memory> directly:
+#include <boost/config/no_tr1/memory.hpp>  // std::auto_ptr
 #include <functional>       // std::less
 #include <new>              // std::bad_alloc
 
@@ -321,9 +324,13 @@ public:
     weak_count & operator= (shared_count const & r) // nothrow
     {
         sp_counted_base * tmp = r.pi_;
-        if(tmp != 0) tmp->weak_add_ref();
-        if(pi_ != 0) pi_->weak_release();
-        pi_ = tmp;
+
+        if( tmp != pi_ )
+        {
+            if(tmp != 0) tmp->weak_add_ref();
+            if(pi_ != 0) pi_->weak_release();
+            pi_ = tmp;
+        }
 
         return *this;
     }
@@ -331,9 +338,13 @@ public:
     weak_count & operator= (weak_count const & r) // nothrow
     {
         sp_counted_base * tmp = r.pi_;
-        if(tmp != 0) tmp->weak_add_ref();
-        if(pi_ != 0) pi_->weak_release();
-        pi_ = tmp;
+
+        if( tmp != pi_ )
+        {
+            if(tmp != 0) tmp->weak_add_ref();
+            if(pi_ != 0) pi_->weak_release();
+            pi_ = tmp;
+        }
 
         return *this;
     }
