@@ -61,13 +61,31 @@ public:
 //
 
     template<class Y>
-    weak_ptr(weak_ptr<Y> const & r): pn(r.pn) // never throws
+#if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
+
+    weak_ptr( weak_ptr<Y> const & r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
+
+#else
+
+    weak_ptr( weak_ptr<Y> const & r )
+
+#endif
+    : pn(r.pn) // never throws
     {
         px = r.lock().get();
     }
 
     template<class Y>
-    weak_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
+#if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
+
+    weak_ptr( shared_ptr<Y> const & r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
+
+#else
+
+    weak_ptr( shared_ptr<Y> const & r )
+
+#endif
+    : px( r.px ), pn( r.pn ) // never throws
     {
     }
 

@@ -104,11 +104,18 @@ public:
 #endif
     }
 
-    template<class P, class D> shared_count(P p, D d): pi_(0)
+#if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, <= 1200 )
+    template<class Y, class D> shared_count( Y * p, D d ): pi_(0)
+#else
+    template<class P, class D> shared_count( P p, D d ): pi_(0)
+#endif
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
+#if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, <= 1200 )
+        typedef Y* P;
+#endif
 #ifndef BOOST_NO_EXCEPTIONS
 
         try

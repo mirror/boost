@@ -31,6 +31,7 @@
 #include <boost/throw_exception.hpp>
 #include <boost/detail/shared_count.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/detail/sp_convertible.hpp>
 
 #include <algorithm>            // for std::swap
 #include <functional>           // for std::less
@@ -228,7 +229,16 @@ public:
     }
 
     template<class Y>
-    shared_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
+#if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
+
+    shared_ptr( shared_ptr<Y> const & r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
+
+#else
+
+    shared_ptr( shared_ptr<Y> const & r )
+
+#endif
+    : px( r.px ), pn( r.pn ) // never throws
     {
     }
 
@@ -337,7 +347,16 @@ public:
     }
 
     template<class Y>
-    shared_ptr( shared_ptr<Y> && r ): px( r.px ), pn() // never throws
+#if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
+
+    shared_ptr( shared_ptr<Y> && r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
+
+#else
+
+    shared_ptr( shared_ptr<Y> && r )
+
+#endif
+    : px( r.px ), pn() // never throws
     {
         pn.swap( r.pn );
         r.px = 0;

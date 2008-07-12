@@ -33,7 +33,7 @@ extern "C" void _ReadWriteBarrier();
 
 #elif defined(__GNUC__)
 
-#define BOOST_COMPILER_FENCE __asm__ __volatile__( "" ::: "memory" );
+#define BOOST_COMPILER_FENCE __asm__ __volatile__( "" : : : "memory" );
 
 #else
 

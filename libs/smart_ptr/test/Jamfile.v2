@@ -42,5 +42,10 @@ import testing ;
           [ run spinlock_try_test.cpp ]
           [ run spinlock_try_test.cpp : : : <threading>multi : spinlock_try_test.mt ]
           [ run spinlock_pool_test.cpp ]
+          [ run make_shared_test.cpp ]
+          [ run sp_convertible_test.cpp ]
+          [ run wp_convertible_test.cpp ]
+          [ run ip_convertible_test.cpp ]
+          [ run allocate_shared_test.cpp ]
         ;
 }
