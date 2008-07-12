@@ -218,7 +218,7 @@ linkend="boostbook.linking"/></simpara></entry>
           </row>
           <row>
             <entry><simpara>&lt;table&gt;, &lt;tr&gt;, &lt;th&gt;, &lt;td&gt;</simpara></entry>
-            <entry><simpara>&lt;table&gt;, &lt;informaltable&gt;, &lt;tgroup&gt;, &lt;thead&gt;, &lt;tfoot&gt;, &lt;tbody&gt;, &lt;row&gt;, &lt;entry&gt;, &lt;entrytbl&gt;; BoostBook tables are equivalent to DocBook tables, for which there is a good <ulink url="http://opensource.bureau-cornavin.com/crash-course/tables.html">tutorial here</ulink></simpara></entry>
+            <entry><simpara>&lt;table&gt;, &lt;informaltable&gt;, &lt;tgroup&gt;, &lt;thead&gt;, &lt;tfoot&gt;, &lt;tbody&gt;, &lt;row&gt;, &lt;entry&gt;, &lt;entrytbl&gt;; BoostBook tables are equivalent to DocBook tables, for which there is a good <ulink url="http://opensource.bureau-cornavin.com/crash-course/en/tables.html">tutorial here</ulink></simpara></entry>
           </row>
         </tbody>
       </tgroup>
