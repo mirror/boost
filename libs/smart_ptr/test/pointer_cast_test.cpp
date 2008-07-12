@@ -1,7 +1,7 @@
 //
 //  pointer_cast_test.cpp - a test for boost/pointer_cast.hpp
 //
-//  Copyright (c) 2005 Ion Gaztañaga
+//  Copyright (c) 2005 Ion Gaztanaga
 //  Copyright (c) 2005 Peter Dimov
 //
 // Distributed under the Boost Software License, Version 1.0. (See
