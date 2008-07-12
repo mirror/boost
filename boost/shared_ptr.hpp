@@ -31,7 +31,14 @@
 #include <algorithm>            // for std::swap
 #include <functional>           // for std::less
 #include <typeinfo>             // for std::bad_cast
+
+#if !defined(BOOST_NO_IOSTREAM)
+#if !defined(BOOST_NO_IOSFWD)
 #include <iosfwd>               // for std::basic_ostream
+#else
+#include <ostream>
+#endif
+#endif
 
 #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
 # pragma warning(push)
@@ -205,6 +212,15 @@ public:
     {
         // it is now safe to copy r.px, as pn(r.pn) did not throw
         px = r.px;
+    }
+
+    template<class Y>
+    shared_ptr( weak_ptr<Y> const & r, boost::detail::sp_nothrow_tag ): px( 0 ), pn( r.pn, boost::detail::sp_nothrow_tag() ) // never throws
+    {
+        if( !pn.empty() )
+        {
+            px = r.px;
+        }
     }
 
     template<class Y>
@@ -555,6 +571,8 @@ template<class T> inline T * get_pointer(shared_ptr<T> const & p)
 
 // operator<<
 
+#if !defined(BOOST_NO_IOSTREAM)
+
 #if defined(__GNUC__) &&  (__GNUC__ < 3)
 
 template<class Y> std::ostream & operator<< (std::ostream & os, shared_ptr<Y> const & p)
@@ -583,6 +601,8 @@ template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::
 #endif // _STLP_NO_IOSTREAMS
 
 #endif // __GNUC__ < 3
+
+#endif // !defined(BOOST_NO_IOSTREAM)
 
 // get_deleter
 
