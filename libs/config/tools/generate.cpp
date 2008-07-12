@@ -156,8 +156,14 @@ void write_test_file(const fs::path& file,
          "#  undef BOOST_ASSERT_CONFIG\n"
          "#endif\n\n";
 
-      ofs << "#include <boost/config.hpp>\n"
-         "#include \"test.hpp\"\n\n"
+	  static const boost::regex tr1_exp("BOOST_HAS_TR1.*");
+
+      ofs << "#include <boost/config.hpp>\n";
+
+	  if(regex_match(macro_name, tr1_exp))
+		  ofs << "#include <boost/tr1/detail/config.hpp>\n";
+
+      ofs << "#include \"test.hpp\"\n\n"
          "#if";
       if(positive_test != expect_success)
          ofs << "n";
@@ -270,7 +276,7 @@ int cpp_main(int argc, char* argv[])
    fs::directory_iterator i(config_path), j;
    while(i != j)
    {
-      if(boost::regex_match(i->leaf(), ipp_match, ipp_mask))
+      if(boost::regex_match(i->path().leaf(), ipp_match, ipp_mask))
       {
          process_ipp_file(*i, ipp_match[1].matched);
       }

@@ -71,6 +71,12 @@ rule test_all
       :   $(file5:B)_std_header
       ] ;
    }
+   for local file6 in [ glob cyclic_depend/*.cpp ]
+   {
+      all_rules += [ compile $(file6) 
+      :  $(TR1_PROPERTIES) 
+      ] ;
+   }
    #ECHO $(all_rules) ;
    return $(all_rules) ;
 }

@@ -1,4 +1,4 @@
-//  This file was automatically generated on Wed Apr 09 16:30:13 2008
+//  This file was automatically generated on Sat Jul 12 12:39:32 2008
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -22,6 +22,7 @@
 #endif
 
 #include <boost/config.hpp>
+#include <boost/tr1/detail/config.hpp>
 #include "test.hpp"
 
 #ifdef BOOST_HAS_TR1_REGEX
