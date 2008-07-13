@@ -1067,28 +1067,22 @@ to_ulong() const
   // beyond the "allowed" positions
   typedef unsigned long result_type;
 
-  /*
-   if find_next() did its job correctly we don't need the if
-   below, because all bits we care about are in the first block
+  const size_type max_size =
+            (std::min)(m_num_bits, static_cast<size_type>(ulong_width));
 
-   if (bits_per_block >= ulong_width)
-     return static_cast<result_type>(m_bits[0]);
-  */
+  const size_type last_block = block_index( max_size - 1 );
 
-  size_type last_block = block_index(
-                (std::min)( m_num_bits, (size_type)ulong_width ) - 1 );
   result_type result = 0;
   for (size_type i = 0; i <= last_block; ++i) {
 
-    assert((size_type)bits_per_block * i < (size_type)ulong_width);
+    const size_type offset = i * bits_per_block;
+    assert( offset < static_cast<size_type>(ulong_width));
 
-    unsigned long piece = m_bits[i];
-    result |= (piece << (bits_per_block * i));
+    result |= (static_cast<result_type>(m_bits[i]) << offset);
   }
 
   return result;
 }
-
 
 template <typename Block, typename Allocator>
 inline typename dynamic_bitset<Block, Allocator>::size_type
