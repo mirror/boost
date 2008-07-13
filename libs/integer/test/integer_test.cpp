@@ -8,19 +8,44 @@
 //  See http://www.boost.org/libs/integer for documentation.
 
 //  Revision History
+//   13 Jul 08  Modernized tests w/ MPL instead of giant macros (Daryle Walker)
+//   07 Jul 08  Changed tests to use the unit-test system (Daryle Walker)
 //   04 Oct 01  Added tests for new templates; rewrote code (Daryle Walker)
 //   10 Mar 01  Boost Test Library now used for tests (Beman Dawes)
 //   31 Aug 99  Initial version
 
 #define BOOST_TEST_MODULE  "Integer size-selection tests"
 
-#include <boost/test/unit_test.hpp>  // unit testing framework
+#include <boost/test/unit_test.hpp>           // unit testing framework
+#include <boost/test/test_case_template.hpp>  // ..BOOST_AUTO_TEST_CASE_TEMPLATE
 
 #include <boost/config.hpp>   // for BOOST_NO_USING_TEMPLATE
 #include <boost/integer.hpp>  // for boost::int_t, boost::uint_t, etc.
+#include <boost/limits.hpp>   // for std::numeric_limits
 
-#include <climits>   // for ULONG_MAX, LONG_MAX, LONG_MIN
-#include <iostream>  // for std::cout (std::endl indirectly)
+#include <boost/mpl/arithmetic.hpp>      // for boost::mpl::plus, divides
+#include <boost/mpl/assert.hpp>          // for BOOST_MPL_ASSERT_RELATION, etc.
+#include <boost/mpl/back.hpp>            // for boost::mpl::back
+#include <boost/mpl/copy.hpp>            // for boost::mpl::copy
+#include <boost/mpl/front_inserter.hpp>  // for boost::mpl::front_inserter
+#include <boost/mpl/integral_c.hpp>      // for boost::mpl::integral_c
+#include <boost/mpl/joint_view.hpp>      // for boost::mpl::joint_view
+#include <boost/mpl/pop_back.hpp>        // for boost::mpl::pop_back
+#include <boost/mpl/push_back.hpp>       // for boost::mpl::push_back 
+#include <boost/mpl/push_front.hpp>      // for boost::mpl::push_front
+#include <boost/mpl/sort.hpp>            // for boost::mpl::sort
+#include <boost/mpl/transform.hpp>       // for boost::mpl::transform
+#include <boost/mpl/transform_view.hpp>  // for boost::mpl::transform_view
+#include <boost/mpl/unpack_args.hpp>     // for boost::mpl::unpack_args
+#include <boost/mpl/vector.hpp>          // for boost::mpl::vector
+#include <boost/mpl/zip_view.hpp>        // for boost::mpl::zip_view
+
+#include <boost/type_traits/is_same.hpp>      // for boost::is_same
+#include <boost/type_traits/make_signed.hpp>  // for boost::make_signed
+
+#include <climits>   // for ULONG_MAX, LONG_MAX, LONG_MIN, etc.
+#include <iostream>  // for std::cout
+#include <ostream>   // for std::endl
 #include <typeinfo>  // for std::type_info
 
 
@@ -43,234 +68,239 @@ namespace boost
 }
 
 
-// Show the types of an integer template version
+// Logging
 #if CONTROL_SHOW_TYPES
-#define SHOW_TYPE(Template, Number, Type)  ::std::cout << "Type \"" \
- #Template "<" #Number ">::" #Type "\" is \"" << typeid(Template <  \
- Number > :: Type).name() << ".\"\n"
+#define PRIVATE_SHOW_MESSAGE( m )  std::cout << m << std::endl
 #else
-#define SHOW_TYPE(Template, Number, Type)
+#define PRIVATE_SHOW_MESSAGE( m )  BOOST_TEST_MESSAGE( m )
 #endif
 
-#define SHOW_TYPES(Template, Type)  SHOW_TYPE(Template, 32, Type); \
- SHOW_TYPE(Template, 31, Type); SHOW_TYPE(Template, 30, Type); \
- SHOW_TYPE(Template, 29, Type); SHOW_TYPE(Template, 28, Type); \
- SHOW_TYPE(Template, 27, Type); SHOW_TYPE(Template, 26, Type); \
- SHOW_TYPE(Template, 25, Type); SHOW_TYPE(Template, 24, Type); \
- SHOW_TYPE(Template, 23, Type); SHOW_TYPE(Template, 22, Type); \
- SHOW_TYPE(Template, 21, Type); SHOW_TYPE(Template, 20, Type); \
- SHOW_TYPE(Template, 19, Type); SHOW_TYPE(Template, 18, Type); \
- SHOW_TYPE(Template, 17, Type); SHOW_TYPE(Template, 16, Type); \
- SHOW_TYPE(Template, 15, Type); SHOW_TYPE(Template, 14, Type); \
- SHOW_TYPE(Template, 13, Type); SHOW_TYPE(Template, 12, Type); \
- SHOW_TYPE(Template, 11, Type); SHOW_TYPE(Template, 10, Type); \
- SHOW_TYPE(Template, 9, Type); SHOW_TYPE(Template, 8, Type); \
- SHOW_TYPE(Template, 7, Type); SHOW_TYPE(Template, 6, Type); \
- SHOW_TYPE(Template, 5, Type); SHOW_TYPE(Template, 4, Type); \
- SHOW_TYPE(Template, 3, Type); SHOW_TYPE(Template, 2, Type); \
- SHOW_TYPE(Template, 1, Type); SHOW_TYPE(Template, 0, Type)
 
-#define SHOW_SHIFTED_TYPE(Template, Number, Type)  SHOW_TYPE(Template, (1UL << Number), Type)
+// Custom types/templates, helper functions, and objects
+namespace
+{
 
-#define SHOW_SHIFTED_TYPES(Template, Type)  SHOW_SHIFTED_TYPE(Template, 30, Type); \
- SHOW_SHIFTED_TYPE(Template, 29, Type); SHOW_SHIFTED_TYPE(Template, 28, Type); \
- SHOW_SHIFTED_TYPE(Template, 27, Type); SHOW_SHIFTED_TYPE(Template, 26, Type); \
- SHOW_SHIFTED_TYPE(Template, 25, Type); SHOW_SHIFTED_TYPE(Template, 24, Type); \
- SHOW_SHIFTED_TYPE(Template, 23, Type); SHOW_SHIFTED_TYPE(Template, 22, Type); \
- SHOW_SHIFTED_TYPE(Template, 21, Type); SHOW_SHIFTED_TYPE(Template, 20, Type); \
- SHOW_SHIFTED_TYPE(Template, 19, Type); SHOW_SHIFTED_TYPE(Template, 18, Type); \
- SHOW_SHIFTED_TYPE(Template, 17, Type); SHOW_SHIFTED_TYPE(Template, 16, Type); \
- SHOW_SHIFTED_TYPE(Template, 15, Type); SHOW_SHIFTED_TYPE(Template, 14, Type); \
- SHOW_SHIFTED_TYPE(Template, 13, Type); SHOW_SHIFTED_TYPE(Template, 12, Type); \
- SHOW_SHIFTED_TYPE(Template, 11, Type); SHOW_SHIFTED_TYPE(Template, 10, Type); \
- SHOW_SHIFTED_TYPE(Template, 9, Type); SHOW_SHIFTED_TYPE(Template, 8, Type); \
- SHOW_SHIFTED_TYPE(Template, 7, Type); SHOW_SHIFTED_TYPE(Template, 6, Type); \
- SHOW_SHIFTED_TYPE(Template, 5, Type); SHOW_SHIFTED_TYPE(Template, 4, Type); \
- SHOW_SHIFTED_TYPE(Template, 3, Type); SHOW_SHIFTED_TYPE(Template, 2, Type); \
- SHOW_SHIFTED_TYPE(Template, 1, Type); SHOW_SHIFTED_TYPE(Template, 0, Type)
-
-#define SHOW_POS_SHIFTED_TYPE(Template, Number, Type)  SHOW_TYPE(Template, +(1L << Number), Type)
-
-#define SHOW_POS_SHIFTED_TYPES(Template, Type)  SHOW_POS_SHIFTED_TYPE(Template, 30, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 29, Type); SHOW_POS_SHIFTED_TYPE(Template, 28, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 27, Type); SHOW_POS_SHIFTED_TYPE(Template, 26, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 25, Type); SHOW_POS_SHIFTED_TYPE(Template, 24, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 23, Type); SHOW_POS_SHIFTED_TYPE(Template, 22, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 21, Type); SHOW_POS_SHIFTED_TYPE(Template, 20, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 19, Type); SHOW_POS_SHIFTED_TYPE(Template, 18, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 17, Type); SHOW_POS_SHIFTED_TYPE(Template, 16, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 15, Type); SHOW_POS_SHIFTED_TYPE(Template, 14, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 13, Type); SHOW_POS_SHIFTED_TYPE(Template, 12, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 11, Type); SHOW_POS_SHIFTED_TYPE(Template, 10, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 9, Type); SHOW_POS_SHIFTED_TYPE(Template, 8, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 7, Type); SHOW_POS_SHIFTED_TYPE(Template, 6, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 5, Type); SHOW_POS_SHIFTED_TYPE(Template, 4, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 3, Type); SHOW_POS_SHIFTED_TYPE(Template, 2, Type); \
- SHOW_POS_SHIFTED_TYPE(Template, 1, Type); SHOW_POS_SHIFTED_TYPE(Template, 0, Type)
-
-#define SHOW_NEG_SHIFTED_TYPE(Template, Number, Type)  SHOW_TYPE(Template, -(1L << Number), Type)
-
-#define SHOW_NEG_SHIFTED_TYPES(Template, Type)  SHOW_NEG_SHIFTED_TYPE(Template, 30, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 29, Type); SHOW_NEG_SHIFTED_TYPE(Template, 28, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 27, Type); SHOW_NEG_SHIFTED_TYPE(Template, 26, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 25, Type); SHOW_NEG_SHIFTED_TYPE(Template, 24, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 23, Type); SHOW_NEG_SHIFTED_TYPE(Template, 22, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 21, Type); SHOW_NEG_SHIFTED_TYPE(Template, 20, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 19, Type); SHOW_NEG_SHIFTED_TYPE(Template, 18, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 17, Type); SHOW_NEG_SHIFTED_TYPE(Template, 16, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 15, Type); SHOW_NEG_SHIFTED_TYPE(Template, 14, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 13, Type); SHOW_NEG_SHIFTED_TYPE(Template, 12, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 11, Type); SHOW_NEG_SHIFTED_TYPE(Template, 10, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 9, Type); SHOW_NEG_SHIFTED_TYPE(Template, 8, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 7, Type); SHOW_NEG_SHIFTED_TYPE(Template, 6, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 5, Type); SHOW_NEG_SHIFTED_TYPE(Template, 4, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 3, Type); SHOW_NEG_SHIFTED_TYPE(Template, 2, Type); \
- SHOW_NEG_SHIFTED_TYPE(Template, 1, Type); SHOW_NEG_SHIFTED_TYPE(Template, 0, Type)
-
-
-// Test if a constant can fit within a certain type
-#define PRIVATE_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK_EQUAL( Template < Number > :: Type ( Value ) , Value )
-
-#if ULONG_MAX > 0xFFFFFFFFL
-#define PRIVATE_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
- PRIVATE_FIT_TEST(Template, 64, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 63, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 62, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 61, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 60, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 59, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 58, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 57, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 56, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 55, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 54, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 53, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 52, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 51, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 50, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 49, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 48, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 47, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 46, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 45, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 44, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 43, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 42, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 41, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 40, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 39, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 38, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 37, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 36, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 35, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 34, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 33, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 32, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 31, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 30, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 29, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 28, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 27, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 26, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 25, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 24, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 23, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 22, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 21, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 20, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 19, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 18, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 17, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 16, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 15, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 14, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 13, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 12, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 11, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 10, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 9, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 8, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 7, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 6, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 5, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 4, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 3, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 2, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 1, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 0, Type, v); } while ( false )
-#else
-#define PRIVATE_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
- PRIVATE_FIT_TEST(Template, 32, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 31, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 30, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 29, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 28, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 27, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 26, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 25, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 24, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 23, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 22, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 21, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 20, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 19, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 18, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 17, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 16, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 15, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 14, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 13, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 12, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 11, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 10, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 9, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 8, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 7, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 6, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 5, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 4, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 3, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 2, Type, v); v >>= 1; \
- PRIVATE_FIT_TEST(Template, 1, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 0, Type, v); } while ( false )
+// List the built-in integral types, excluding the ones that are strong-typedefs
+// of a lower type.
+typedef boost::mpl::vector<
+    unsigned char
+#if USHRT_MAX > UCHAR_MAX
+    , unsigned short
 #endif
+#if UINT_MAX > USHRT_MAX
+    , unsigned int
+#endif
+#if ULONG_MAX > UINT_MAX
+    , unsigned long
+#endif
+>  distinct_unsigned_types;
 
-#define PRIVATE_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK_EQUAL( Template < (ULONG_MAX >> Number) > :: Type ( Value ) , Value )
+typedef boost::mpl::transform<
+    distinct_unsigned_types,
+    boost::make_signed< boost::mpl::_1 >
+>::type  distinct_signed_types;
 
-#define PRIVATE_SHIFTED_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 0, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 1, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 2, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 3, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 4, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 5, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 6, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 7, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 8, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 9, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 10, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 11, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 12, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 13, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 14, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 15, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 16, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 17, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 18, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 19, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 20, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 21, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 22, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 23, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 24, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 25, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 26, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 27, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 28, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 29, Type, v); v >>= 1; \
- PRIVATE_SHIFTED_FIT_TEST(Template, 30, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 31, Type, v); } while ( false )
+// List the digit counts for each integral type
+class dibc_helper
+{
+    template < typename T >
+    struct type_to_digit_count
+        : boost::mpl::integral_c< int, std::numeric_limits<T>::digits >
+    {};
 
-#define PRIVATE_POS_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK_EQUAL( Template < (LONG_MAX >> Number) > :: Type ( Value ) , Value )
+public:
+    typedef boost::mpl::transform<
+        distinct_unsigned_types,
+        type_to_digit_count< boost::mpl::_1 >
+    >::type  type;
+};
 
-#define PRIVATE_POS_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 0, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 1, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 2, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 3, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 4, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 5, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 6, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 7, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 8, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 9, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 10, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 11, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 12, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 13, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 14, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 15, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 16, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 17, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 18, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 19, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 20, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 21, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 22, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 23, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 24, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 25, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 26, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 27, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 28, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 29, Type, v); v >>= 1; \
- PRIVATE_POS_SHIFTED_FIT_TEST(Template, 30, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 31, Type, v); } while ( false )
+typedef dibc_helper::type  distinct_integral_bit_counts;
 
-#define PRIVATE_NEG_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK_EQUAL( Template < (LONG_MIN >> Number) > :: Type ( Value ) , Value )
+// Make list of bit counts between each offical point, plus CHAR_BIT/2
+typedef boost::mpl::transform_view<
+    boost::mpl::zip_view<
+        boost::mpl::vector<
+            boost::mpl::push_front<
+                boost::mpl::pop_back< distinct_integral_bit_counts >::type,
+                boost::mpl::integral_c< int, 0 >
+            >::type,
+            distinct_integral_bit_counts
+        >
+    >,
+    boost::mpl::unpack_args<
+        boost::mpl::divides<
+            boost::mpl::plus< boost::mpl::_1, boost::mpl::_2 >,
+            boost::mpl::integral_c< int, 2 >
+        >
+    >
+>  median_bit_counts;
 
-#define PRIVATE_NEG_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 0, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 1, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 2, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 3, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 4, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 5, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 6, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 7, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 8, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 9, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 10, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 11, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 12, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 13, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 14, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 15, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 16, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 17, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 18, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 19, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 20, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 21, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 22, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 23, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 24, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 25, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 26, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 27, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 28, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 29, Type, v); v >>= 1; \
- PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 30, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 31, Type, v); } while ( false )
+// Maximum number of bits allowed
+int const   intmax_bits = boost::mpl::back<distinct_integral_bit_counts>::type::value;
+    // should be std::numeric_limits<boost::intmax_t>::digits + 1
+int const  uintmax_bits = intmax_bits;
+    // should be std::numeric_limits<boost::uintmax_t>::digits
+
+// Make master lists including an outlier beyond all valid bit counts
+typedef boost::mpl::sort<
+    boost::mpl::copy<
+        boost::mpl::joint_view<
+            distinct_integral_bit_counts,
+            median_bit_counts
+        >,
+        boost::mpl::front_inserter<
+            boost::mpl::vector<
+                boost::mpl::integral_c<int, uintmax_bits + 1>
+            >
+        >
+    >::type
+>::type  bits_list;
+
+// Remove the outlier when all bits counts must be valid
+typedef boost::mpl::pop_back<bits_list>::type  valid_bits_list;
+
+// Replace the maximum bit count with one less, so left-shifting by a stored
+// value doesn't give an invalid result
+typedef boost::mpl::push_back<
+    boost::mpl::pop_back< valid_bits_list >::type,
+    boost::mpl::integral_c< int, uintmax_bits - 1 >
+>::type  valid_to_increase_ubits_list;
+
+// Do it again for signed types since they have one-less bit to use for the
+// mantissa (don't want to shift into the sign bit)
+typedef boost::mpl::push_back<
+    boost::mpl::pop_back< valid_bits_list >::type,
+    boost::mpl::integral_c< int, intmax_bits - 2 >
+>::type  valid_to_increase_sbits_list;
+
+}  // unnamed namespace
 
 
 // Check if given types can support given size parameters
 BOOST_AUTO_TEST_SUITE( show_type_tests )
 
-// Check size parameters given by bit length
-BOOST_AUTO_TEST_CASE( show_bit_length_type_test )
+// Check the specialization type status of given bit lengths
+BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_lengths_test, T, valid_bits_list )
 {
-    SHOW_TYPES( boost::int_t, least );
-    SHOW_TYPES( boost::int_t, fast );
-    SHOW_TYPES( boost::uint_t, least );
-    SHOW_TYPES( boost::uint_t, fast );
+    // This test is supposed to replace the following printouts given in
+    // puesdo-code by:
+    // Routine: Template, Type
+    //  for N := 32 downto 0
+    //      cout << "Type '" << Template << "<" N << ">::" << Type << "' is '"
+    //      << typeid(Template<N>::Type).name << ".'\n"
+    //  end for
+    // end Routine
+    // with Template = {int_t, uint_t}; Type = {least, fast}
+    // But now we'll use template meta-programming instead of macros.  The limit
+    // of type-lists is usually less than 32 (not to mention 64) elements, so we
+    // have to take selected values.  The only interesting part is if the bit
+    // count is too large, and we can't check that yet.
+#ifndef BOOST_NO_USING_TEMPLATE
+    using std::numeric_limits;
+    using boost::int_t;
+    using boost::uint_t;
+#else
+    using namespace std;
+    using namespace boost;
+#endif
+
+    BOOST_MPL_ASSERT_RELATION( numeric_limits<typename
+     int_t<T::value>::least>::digits, >=, T::value - 1 );
+    BOOST_MPL_ASSERT_RELATION( numeric_limits<typename
+     int_t<T::value>::fast>::digits, >=, T::value - 1 );
+    BOOST_MPL_ASSERT_RELATION( numeric_limits<typename
+     uint_t<T::value>::least>::digits, >=, T::value );
+    BOOST_MPL_ASSERT_RELATION( numeric_limits<typename
+     uint_t<T::value>::fast>::digits, >=, T::value );
 }
 
-// Check size parameters given by maximum or minimum (i.e. extreme) value
-BOOST_AUTO_TEST_CASE( show_extreme_type_test )
+// Check size comparisons of given value support, unsigned
+BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_shifted_unsigned_values_test, T,
+ valid_to_increase_ubits_list )
 {
-    SHOW_POS_SHIFTED_TYPES( boost::int_max_value_t, least );
-    SHOW_POS_SHIFTED_TYPES( boost::int_max_value_t, fast );
+    // This test is supposed to replace the following printouts given in
+    // puesdo-code by:
+    // Routine: Type
+    //  for N := 30 downto 0
+    //      cout << "Type '" << uint_value_t << "<" (1ul << N) << ">::" << Type
+    //       << "' is '"<< typeid(uint_value_t<(1ul << N)>::Type).name << ".'\n"
+    //  end for
+    // end Routine
+    // with Type = {least, fast}
+    // But now we'll use template meta-programming instead of macros.  The limit
+    // of type-lists is usually less than 32 (not to mention 64) elements, so we
+    // have to take selected values.  The interesting parts are where N is the
+    // length of a integral type, so 1 << N would have to fit in the next larger
+    // type.  (This is why N can't be more than bitlength(uintmax_t) - 1.)
+#ifndef BOOST_NO_USING_TEMPLATE
+    using boost::is_same;
+    using boost::uint_value_t;
+    using boost::uint_t;
+#else
+    using namespace boost;
+#endif
 
-    SHOW_NEG_SHIFTED_TYPES( boost::int_min_value_t, least );
-    SHOW_NEG_SHIFTED_TYPES( boost::int_min_value_t, fast );
+    unsigned long const  one = 1u;
+    int const            count = T::value;
 
-    SHOW_SHIFTED_TYPES( boost::uint_value_t, least );
-    SHOW_SHIFTED_TYPES( boost::uint_value_t, fast );
+    BOOST_MPL_ASSERT( (is_same<typename uint_value_t<(one << (count -
+     2))>::least, typename uint_t<count - 1>::least>::value) );
+    BOOST_MPL_ASSERT( (is_same<typename uint_value_t<(one << (count -
+     1))>::least, typename uint_t<count>::least>::value) );
+    BOOST_MPL_ASSERT( (is_same<typename uint_value_t<(one << count)>::least,
+     typename uint_t<count + 1>::least>::value) );
+}
+
+// Check size comparisons of given value support, signed
+BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_shifted_signed_values_test, T,
+ valid_to_increase_sbits_list )
+{
+    // This test is supposed to replace the following printouts given in
+    // puesdo-code by:
+    // Routine: Type
+    //  for N := 30 downto 0
+    //      cout << "Type '" << int_max_value_t << "<" +(1ul << N) << ">::" <<
+    //       Type << "' is '" << typeid(int_max_value_t<+(1ul << N)>::Type).name
+    //       << ".'\n"
+    //      cout << "Type '" << int_min_value_t << "<" -(1ul << N) << ">::" <<
+    //       Type << "' is '" << typeid(int_min_value_t<-(1ul << N)>::Type).name
+    //       << ".'\n"
+    //  end for
+    // end Routine
+    // with Type = {least, fast}
+    // But now we'll use template meta-programming instead of macros.  The limit
+    // of type-lists is usually less than 32 (not to mention 64) elements, so we
+    // have to take selected values.  The interesting parts are where N is the
+    // length of a integral type, so 1 << N would have to fit in the next larger
+    // type.  (This is why N can't be more than bitlength(intmax_t) - 1.  Note
+    // that bitlength(intmax_t) + 1 == bitlength(uintmax_t).)
+#ifndef BOOST_NO_USING_TEMPLATE
+    using boost::is_same;
+    using boost::int_max_value_t;
+    using boost::int_t;
+    using boost::int_min_value_t;
+#else
+    using namespace boost;
+#endif
+
+    long const  one = 1;
+    int const   count = T::value;
+
+    BOOST_MPL_ASSERT( (is_same<typename int_max_value_t<+(one << (count -
+     2))>::least, typename int_t<count - 1>::least>::value) );
+    BOOST_MPL_ASSERT( (is_same<typename int_min_value_t<-(one << (count -
+     2))>::least, typename int_t<count - 1>::least>::value) );
+
+    BOOST_MPL_ASSERT( (is_same<typename int_max_value_t<+(one << (count -
+     1))>::least, typename int_t<count>::least>::value) );
+    BOOST_MPL_ASSERT( (is_same<typename int_min_value_t<-(one << (count -
+     1))>::least, typename int_t<count>::least>::value) );
+
+    BOOST_MPL_ASSERT( (is_same<typename int_max_value_t<+(one << count)>::least,
+     typename int_t<count + 1>::least>::value) );
+    BOOST_MPL_ASSERT( (is_same<typename int_min_value_t<-(one << count)>::least,
+     typename int_t<count + 1>::least>::value) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
@@ -278,41 +308,99 @@ BOOST_AUTO_TEST_SUITE_END()
 // Check if given constants can fit in given types
 BOOST_AUTO_TEST_SUITE( fit_type_tests )
 
-// Check against large initial value
-BOOST_AUTO_TEST_CASE( show_bit_length_type_test )
+// Check if large value can fit its minimum required size, by size
+BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_masked_values_test, T,
+ valid_bits_list )
 {
+    // This test is supposed to replace the following checks given in
+    // puesdo-code by:
+    // Routine: Template, Type
+    //  for ( N = 32, V = Template:Max ; N >= 0 ; --N, V >>= 1 )
+    //      Confirm( static_cast<typename Template<N>::Type>(V) == V );
+    //  end for
+    // end Routine
+    // with Template = {int_t, uint_t}; Type = {least, fast};
+    //      Template:Max = { LONG_MAX for int_t, ULONG_MAX for uint_t }
+    // In other words, the selected type doesn't mask out any bits it's not
+    // supposed to.  But now we'll use template meta-programming instead of
+    // macros.  The limit of type-lists is usually less than 32 (not to mention
+    // 64) elements, so we have to take selected values.
 #ifndef BOOST_NO_USING_TEMPLATE
-    using boost::int_t;
     using boost::uint_t;
+    using boost::int_t;
 #else
     using namespace boost;
 #endif
 
-    PRIVATE_FIT_TESTS( int_t, least, long, LONG_MAX );
-    PRIVATE_FIT_TESTS( int_t, fast, long, LONG_MAX );
-    PRIVATE_FIT_TESTS( uint_t, least, unsigned long, ULONG_MAX );
-    PRIVATE_FIT_TESTS( uint_t, fast, unsigned long, ULONG_MAX );
+    int const            count = T::value, shift = uintmax_bits - count;
+    unsigned long const  value_u = ULONG_MAX >> shift;
+    long const           value_s = LONG_MAX >> shift;
+
+    BOOST_CHECK_EQUAL( typename uint_t<count>::least(value_u), value_u );
+    BOOST_CHECK_EQUAL( typename uint_t<count - 1>::least(value_u >> 1), value_u
+     >> 1 );
+    BOOST_CHECK_EQUAL( typename uint_t<count>::fast(value_u), value_u );
+    BOOST_CHECK_EQUAL( typename uint_t<count - 1>::fast(value_u >> 1), value_u
+     >> 1 );
+
+    BOOST_CHECK_EQUAL( typename int_t<count>::least(value_s), value_s );
+    BOOST_CHECK_EQUAL( typename int_t<count - 1>::least(value_s >> 1), value_s
+     >> 1 );
+    BOOST_CHECK_EQUAL( typename int_t<count>::fast(value_s), value_s );
+    BOOST_CHECK_EQUAL( typename int_t<count - 1>::fast(value_s >> 1), value_s >>
+     1 );
 }
 
-// Check against (absolutely) large initial value
-BOOST_AUTO_TEST_CASE( show_extreme_type_test )
+// Check if large value can fit its minimum required size, by value
+BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_shifted_values_test, T,
+ valid_to_increase_ubits_list )
 {
+    // This test is supposed to replace the following checks given in
+    // puesdo-code by:
+    // Routine: Template, Type
+    //  for ( N = 0, V = Template:Extreme ; N < 32 ; ++N, V >>= 1 )
+    //      Confirm( static_cast<typename Template<V>::Type>(V) == V );
+    //  end for
+    // end Routine
+    // with Template = {uint_value_t, int_max_value_t, int_min_value_t}; Type =
+    //      {least, fast}; Template:Extreme = { LONG_MIN for int_min_value_t,
+    //      LONG_MAX for int_max_value_t, ULONG_MAX for uint_value_t }
+    // In other words, the selected type doesn't mask out any bits it's not
+    // supposed to.  But now we'll use template meta-programming instead of
+    // macros.  The limit of type-lists is usually less than 32 (not to mention
+    // 64) elements, so we have to take selected values.
 #ifndef BOOST_NO_USING_TEMPLATE
+    using boost::uint_value_t;
     using boost::int_max_value_t;
     using boost::int_min_value_t;
-    using boost::uint_value_t;
 #else
     using namespace boost;
 #endif
 
-    PRIVATE_POS_FIT_TESTS( int_max_value_t, least, long, LONG_MAX );
-    PRIVATE_POS_FIT_TESTS( int_max_value_t, fast, long, LONG_MAX );
+    int const            shift = T::value;
+    unsigned long const  max_u = ULONG_MAX >> shift;
+    long const           max_s = LONG_MAX >> shift, min_s = LONG_MIN >> shift;
 
-    PRIVATE_NEG_FIT_TESTS( int_min_value_t, least, long, LONG_MIN );
-    PRIVATE_NEG_FIT_TESTS( int_min_value_t, fast, long, LONG_MIN );
+    BOOST_CHECK_EQUAL( typename uint_value_t<max_u>::least(max_u), max_u );
+    BOOST_CHECK_EQUAL( typename uint_value_t<(max_u >> 1)>::least(max_u >> 1),
+     max_u >> 1 );
+    BOOST_CHECK_EQUAL( typename uint_value_t<max_u>::fast(max_u), max_u );
+    BOOST_CHECK_EQUAL( typename uint_value_t<(max_u >> 1)>::fast(max_u >> 1),
+     max_u >> 1 );
 
-    PRIVATE_SHIFTED_FIT_TESTS( uint_value_t, least, unsigned long, ULONG_MAX );
-    PRIVATE_SHIFTED_FIT_TESTS( uint_value_t, fast, unsigned long, ULONG_MAX );
+    BOOST_CHECK_EQUAL( typename int_max_value_t<max_s>::least(max_s), max_s );
+    BOOST_CHECK_EQUAL( typename int_max_value_t<(max_s >> 1)>::least(max_s >>
+     1), max_s >> 1 );
+    BOOST_CHECK_EQUAL( typename int_max_value_t<max_s>::fast(max_s), max_s );
+    BOOST_CHECK_EQUAL( typename int_max_value_t<(max_s >> 1)>::fast(max_s >> 1),
+     max_s >> 1 );
+
+    BOOST_CHECK_EQUAL( typename int_min_value_t<min_s>::least(min_s), min_s );
+    BOOST_CHECK_EQUAL( typename int_min_value_t<(min_s >> 1)>::least(min_s >>
+     1), min_s >> 1 );
+    BOOST_CHECK_EQUAL( typename int_min_value_t<min_s>::fast(min_s), min_s );
+    BOOST_CHECK_EQUAL( typename int_min_value_t<(min_s >> 1)>::fast(min_s >> 1),
+     min_s >> 1 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
