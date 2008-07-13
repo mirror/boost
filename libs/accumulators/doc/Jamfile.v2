@@ -7,10 +7,11 @@ import common ;
 import doxygen ;
 import quickbook ;
 
-# Use Doxygen to emimt a tagfile with the definition of depends_on<>.
-# That tagfile will be used by Doxygen below when generating the Statistics
-# Library Reference. This is all so that the Doxygen-generated documentation
-# for the features shows the dependency relationships between them.
+
+# Use Doxygen to emit a tagfile with the definition of depends_on<>. That
+# tagfile will be used by Doxygen below when generating the Statistics Library
+# Reference. This is all so that the Doxygen-generated documentation for the
+# features shows the dependency relationships between them.
 doxygen tagfile
     :
         ../../../boost/accumulators/framework/depends_on.hpp
@@ -48,9 +49,8 @@ doxygen accdoc
         <reftitle>"Accumulators Framework Reference"
     ;
 
-# Generate the HTML form of the stats documentation, as this
-# causes Doxygen to generate .png images for the LaTeX formulas
-# embedded in the doc comments.
+# Generate the HTML form of the stats documentation, as this causes Doxygen to
+# generate .png images for the LaTeX formulas embedded in the doc comments.
 doxygen statsdoc.html
     :
         [ glob ../../../boost/accumulators/statistics*.hpp ]
@@ -84,8 +84,8 @@ actions copy-latex-pngs
     echo "Stamped" > "$(<)"
 }
 
-# This causes the png files built above to be copied
-# into the html/images/accumulators directory.
+# This causes the png files built above to be copied into the
+# html/images/accumulators directory.
 make statsdoclatex.tag
     : statsdoc.html
     : @copy-latex-pngs
