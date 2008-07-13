@@ -1,18 +1,13 @@
-// --------------------------------------------------
+// -----------------------------------------------------------
 //
-// (C) Copyright Chuck Allison and Jeremy Siek 2001 - 2002.
-// (C) Copyright Gennaro Prota                 2003 - 2006.
+//   Copyright (c) 2001-2002 Chuck Allison and Jeremy Siek
+//           Copyright (c) 2003-2006 Gennaro Prota
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 // -----------------------------------------------------------
-
-//  See http://www.boost.org/libs/dynamic_bitset/ for documentation.
-//
-//  $Revision$ $Date$ - $Name$
-
 
 #ifndef BOOST_DYNAMIC_BITSET_DYNAMIC_BITSET_HPP
 #define BOOST_DYNAMIC_BITSET_DYNAMIC_BITSET_HPP
@@ -769,11 +764,11 @@ dynamic_bitset<Block, Allocator>::operator<<=(size_type n)
             b[div] = b[0];
         }
 
-	// disable std::fill_n deprecated warning in MSVC++ 8.0 (warning C4996)
-	// This will only work in MSVC++ 8.0 SP1, which brings up the warning
-	// in the line of user code; otherwise, the warning will come up
-	// in the line in the header itself, so if the user includes stdlib
-	// headers before dynamic_bitset, he will still get the warning.
+    // disable std::fill_n deprecated warning in MSVC++ 8.0 (warning C4996)
+    // This will only work in MSVC++ 8.0 SP1, which brings up the warning
+    // in the line of user code; otherwise, the warning will come up
+    // in the line in the header itself, so if the user includes stdlib
+    // headers before dynamic_bitset, he will still get the warning.
 #if defined(_MSC_VER) && _MSC_VER >= 1400
 #pragma warning(push)
 #pragma warning(disable:4996)

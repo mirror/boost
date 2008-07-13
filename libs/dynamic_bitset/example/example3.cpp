@@ -27,7 +27,7 @@
 
 int main()
 {
-    boost::dynamic_bitset<> mask(12, 2730ul); 
+    boost::dynamic_bitset<> mask(12, 2730ul);
     std::cout << "mask     = " << mask << std::endl;
 
     boost::dynamic_bitset<> x;
@@ -54,7 +54,7 @@ int main()
         } else {
             std::cout << "(overflow exception)";
         }
-        
+
         std::cout << std::endl;
 
         mask.resize(sz);
