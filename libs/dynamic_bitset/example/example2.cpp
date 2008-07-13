@@ -3,14 +3,17 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
-// Sample output:
+//  Sample output:
+//
 //  bits(0) = 00
 //  bits(1) = 01
 //  bits(2) = 10
 //  bits(3) = 11
 
+
 #include <iostream>
 #include <boost/dynamic_bitset.hpp>
+
 int main()
 {
   const boost::dynamic_bitset<> b0(2, 0ul); 
@@ -25,5 +28,5 @@ int main()
   const boost::dynamic_bitset<> b3(2, 3ul); 
   std::cout << "bits(3) = " << b3 << std::endl;
 
-  return EXIT_SUCCESS;
+  return 0;
 }
