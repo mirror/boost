@@ -14,7 +14,7 @@
 namespace boost_has_tr1_result_of{
 
 typedef std::tr1::result_of<int*(int)> r;
-typedef typename r::type rr;
+typedef r::type rr;
 
 int test()
 {
