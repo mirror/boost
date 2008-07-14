@@ -21,7 +21,7 @@ is particularly useful for solving generic programming problems.</p>
 <ul>
 	<li><a href="#contents">Contents</a></li>
 	<li><a href="#synopsis">Synopsis</a></li>
-	<li><a href="#easy">Easiest-to-Manipulate Types</a></li>
+	<li><a href="#easy">Processor-Optimized Types</a></li>
 	<li><a href="#sized">Sized Types</a></li>
 	<li><a href="#example">Example</a></li>
 	<li><a href="#demo">Demonstration Program</a></li>
@@ -32,7 +32,10 @@ is particularly useful for solving generic programming problems.</p>
 
 <h2><a name="synopsis">Synopsis</a></h2>
 
-<blockquote><pre>namespace boost
+<blockquote><pre>#include &lt;<a href="../../boost/integer_fwd.hpp">boost/integer_fwd.hpp</a>&gt;  // forwarding header
+#include &lt;<a href="cstdint.htm">boost/cstdint.hpp</a>&gt;      // for boost::uintmax_t, intmax_t
+
+namespace boost
 {
   //  fast integers from least integers
   template&lt; typename LeastInt &gt;
@@ -58,14 +61,14 @@ is particularly useful for solving generic programming problems.</p>
   };
 
   //  signed
-  template&lt; long MaxValue &gt;
+  template&lt; intmax_t MaxValue &gt;
   struct int_max_value_t 
   {
       typedef <em>implementation_supplied</em>  least;
       typedef int_fast_t&lt;least&gt;::fast  fast;
   };
 
-  template&lt; long MinValue &gt;
+  template&lt; intmax_t MinValue &gt;
   struct int_min_value_t 
   {
       typedef <em>implementation_supplied</em>  least;
@@ -73,7 +76,7 @@ is particularly useful for solving generic programming problems.</p>
   };
 
   //  unsigned
-  template&lt; unsigned long Value &gt;
+  template&lt; uintmax_t Value &gt;
   struct uint_value_t 
   {
       typedef <em>implementation_supplied</em>  least;
@@ -82,7 +85,7 @@ is particularly useful for solving generic programming problems.</p>
 } // namespace boost
 </pre></blockquote>
 
-<h2><a name="easy">Easiest-to-Manipulate Types</a></h2>
+<h2><a name="easy">Processor-Optimized Types</a></h2>
 
 <p>The <code>int_fast_t</code> class template maps its input type to the
 next-largest type that the processor can manipulate the easiest, or to
@@ -156,7 +159,7 @@ The following table describes each template's criteria.</p>
 
 <h2><a name="example">Example</a></h2>
 
-<blockquote><pre>#include &lt;boost/integer.hpp&gt;
+<blockquote><pre>#include &lt;<a href="../../boost/integer.hpp">boost/integer.hpp</a>&gt;
 
 //...
 
@@ -202,7 +205,7 @@ value-based sized templates.</p>
 
 <hr>
 
-<p>Revised May 20, 2001</p>
+<p>Revised July 14, 2008</p>
 
 <p>&copy; Copyright Beman Dawes 1999.  Use, modification, and distribution are
 subject to the Boost Software License, Version 1.0.  (See accompanying file <a

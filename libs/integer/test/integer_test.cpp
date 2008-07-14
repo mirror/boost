@@ -8,7 +8,8 @@
 //  See http://www.boost.org/libs/integer for documentation.
 
 //  Revision History
-//   14 Jul 08  Improved testing of fast-integer template. (Daryle Walker)
+//   14 Jul 08  Improved testing of processor-optimized integer template; added
+//              extended-integer support. (Daryle Walker)
 //   13 Jul 08  Modernized tests w/ MPL instead of giant macros (Daryle Walker)
 //   07 Jul 08  Changed tests to use the unit-test system (Daryle Walker)
 //   04 Oct 01  Added tests for new templates; rewrote code (Daryle Walker)
@@ -20,9 +21,11 @@
 #include <boost/test/unit_test.hpp>           // unit testing framework
 #include <boost/test/test_case_template.hpp>  // ..BOOST_AUTO_TEST_CASE_TEMPLATE
 
-#include <boost/config.hpp>   // for BOOST_NO_USING_TEMPLATE
-#include <boost/integer.hpp>  // for boost::int_t, boost::uint_t, etc.
-#include <boost/limits.hpp>   // for std::numeric_limits
+#include <boost/config.hpp>          // for BOOST_NO_USING_TEMPLATE, etc.
+#include <boost/cstdint.hpp>         // for boost::uintmax_t, intmax_t
+#include <boost/integer.hpp>         // for boost::int_t, boost::uint_t, etc.
+#include <boost/integer_traits.hpp>  // for boost::integer_traits
+#include <boost/limits.hpp>          // for std::numeric_limits
 
 #include <boost/mpl/arithmetic.hpp>      // for boost::mpl::plus, divides
 #include <boost/mpl/assert.hpp>          // for BOOST_MPL_ASSERT_RELATION, etc.
@@ -101,6 +104,11 @@ typedef boost::mpl::vector<
 #if ULONG_MAX > UINT_MAX
     , unsigned long
 #endif
+#ifdef BOOST_HAS_LONG_LONG
+    , boost::ulong_long_type
+#elif defined(BOOST_HAS_MS_INT64)
+    , unsigned __int64
+#endif
 >  distinct_unsigned_types;
 
 typedef boost::mpl::transform<
@@ -145,10 +153,11 @@ typedef boost::mpl::transform_view<
 >  median_bit_counts;
 
 // Maximum number of bits allowed
-int const   intmax_bits = boost::mpl::back<distinct_integral_bit_counts>::type::value;
-    // should be std::numeric_limits<boost::intmax_t>::digits + 1
-int const  uintmax_bits = intmax_bits;
-    // should be std::numeric_limits<boost::uintmax_t>::digits
+typedef std::numeric_limits<boost:: intmax_t>   intmax_limits;
+typedef std::numeric_limits<boost::uintmax_t>  uintmax_limits;
+
+int const   intmax_bits =  intmax_limits::digits + 1;
+int const  uintmax_bits = uintmax_limits::digits;
 
 // Make master lists including an outlier beyond all valid bit counts
 typedef boost::mpl::sort<
@@ -277,8 +286,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_shifted_unsigned_values_test, T,
     using namespace boost;
 #endif
 
-    unsigned long const  one = 1u;
-    int const            count = T::value;
+    boost::uintmax_t const  one = 1u;
+    int const             count = T::value;
 
     BOOST_MPL_ASSERT( (is_same<typename uint_value_t<(one << (count -
      2))>::least, typename uint_t<count - 1>::least>::value) );
@@ -320,8 +329,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_shifted_signed_values_test, T,
     using namespace boost;
 #endif
 
-    long const  one = 1;
-    int const   count = T::value;
+    boost::intmax_t const  one = 1;
+    int const            count = T::value;
 
     BOOST_MPL_ASSERT( (is_same<typename int_max_value_t<+(one << (count -
      2))>::least, typename int_t<count - 1>::least>::value) );
@@ -356,7 +365,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_masked_values_test, T,
     //  end for
     // end Routine
     // with Template = {int_t, uint_t}; Type = {least, fast};
-    //      Template:Max = { LONG_MAX for int_t, ULONG_MAX for uint_t }
+    //      Template:Max = { intmax_t.Max for int_t, uintmax_t.Max for uint_t }
     // In other words, the selected type doesn't mask out any bits it's not
     // supposed to.  But now we'll use template meta-programming instead of
     // macros.  The limit of type-lists is usually less than 32 (not to mention
@@ -368,9 +377,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_masked_values_test, T,
     using namespace boost;
 #endif
 
-    int const            count = T::value, shift = uintmax_bits - count;
-    unsigned long const  value_u = ULONG_MAX >> shift;
-    long const           value_s = LONG_MAX >> shift;
+    int const                 count = T::value, shift = uintmax_bits - count;
+    boost::uintmax_t const  value_u = uintmax_limits::max
+     BOOST_PREVENT_MACRO_SUBSTITUTION () >> shift;
+    boost::intmax_t const   value_s = intmax_limits::max
+     BOOST_PREVENT_MACRO_SUBSTITUTION () >> shift;
 
     BOOST_CHECK_EQUAL( typename uint_t<count>::least(value_u), value_u );
     BOOST_CHECK_EQUAL( typename uint_t<count - 1>::least(value_u >> 1), value_u
@@ -399,13 +410,16 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_shifted_values_test, T,
     //  end for
     // end Routine
     // with Template = {uint_value_t, int_max_value_t, int_min_value_t}; Type =
-    //      {least, fast}; Template:Extreme = { LONG_MIN for int_min_value_t,
-    //      LONG_MAX for int_max_value_t, ULONG_MAX for uint_value_t }
+    //      {least, fast}; Template:Extreme = {intmax_t.Min for int_min_value_t,
+    //      intmax_t.Max for int_max_value_t, uintmax_t.Max for uint_value_t}
     // In other words, the selected type doesn't mask out any bits it's not
     // supposed to.  But now we'll use template meta-programming instead of
     // macros.  The limit of type-lists is usually less than 32 (not to mention
     // 64) elements, so we have to take selected values.
+    using boost::uintmax_t;
+    using boost::intmax_t;
 #ifndef BOOST_NO_USING_TEMPLATE
+    using boost::integer_traits;
     using boost::uint_value_t;
     using boost::int_max_value_t;
     using boost::int_min_value_t;
@@ -413,9 +427,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_shifted_values_test, T,
     using namespace boost;
 #endif
 
-    int const            shift = T::value;
-    unsigned long const  max_u = ULONG_MAX >> shift;
-    long const           max_s = LONG_MAX >> shift, min_s = LONG_MIN >> shift;
+    int const        shift = T::value;
+    uintmax_t const  max_u = integer_traits<uintmax_t>::const_max >> shift;
+    intmax_t const   max_s = integer_traits<intmax_t>::const_max >> shift,
+                     min_s = integer_traits<intmax_t>::const_min >> shift;
 
     BOOST_CHECK_EQUAL( typename uint_value_t<max_u>::least(max_u), max_u );
     BOOST_CHECK_EQUAL( typename uint_value_t<(max_u >> 1)>::least(max_u >> 1),
