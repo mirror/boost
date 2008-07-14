@@ -24,7 +24,7 @@
 <para> And, of course, function pointers have several advantages over Boost.Function:
 
 <itemizedlist spacing="compact">
-    <listitem><para> Function pointers are smaller (the size of one pointer instead of three) </para></listitem>
+    <listitem><para> Function pointers are smaller (the size of one pointer instead of four or more) </para></listitem>
     <listitem><para> Function pointers are faster (Boost.Function may require two calls through function pointers) </para></listitem>
     <listitem><para> Function pointers are backward-compatible with C libraries.</para></listitem>
     <listitem><para> More readable error messages. </para></listitem>
@@ -37,12 +37,12 @@
 
 <section>
   <title>Function object wrapper size</title>
-<para> Function object wrappers will be the size of two function pointers plus one function pointer or data pointer (whichever is larger). On common 32-bit platforms, this amounts to 12 bytes per wrapper. Additionally, the function object target will be allocated on the heap.</para>
+  <para> Function object wrappers will be the size of a struct containing a member function pointer and two data pointers. The actual size can vary significantly depending on the underlying platform; on 32-bit Mac OS X with GCC, this amounts to 16 bytes, while it is 32 bytes Windows with Visual C++. Additionally, the function object target may be allocated on the heap, if it cannot be placed into the small-object buffer in the <code>boost::function</code> object.</para>
 </section>
 
 <section>
   <title>Copying efficiency</title>
-<para> Copying function object wrappers may require allocating memory for a copy of the function object target. The default allocator may be replaced with a faster custom allocator or one may choose to allow the function object wrappers to only store function object targets by reference (using <computeroutput>ref</computeroutput>) if the cost of this cloning becomes prohibitive.</para>
+  <para> Copying function object wrappers may require allocating memory for a copy of the function object target. The default allocator may be replaced with a faster custom allocator or one may choose to allow the function object wrappers to only store function object targets by reference (using <computeroutput>ref</computeroutput>) if the cost of this cloning becomes prohibitive. Small function objects can be stored within the <code>boost::function</code> object itself, improving copying efficiency.</para>
  </section>
 
 <section>

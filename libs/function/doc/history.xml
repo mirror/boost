@@ -13,6 +13,22 @@
 
 <itemizedlist spacing="compact">
 
+  <listitem><para><bold>Version 1.36.0</bold>: </para>
+    <itemizedlist spacing="compact">
+      <listitem><para>Boost.Function now implements allocator support
+      in the same way that is is provided in C++0x, based on C++
+      committee
+      proposal <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2308.html">N2308</ulink>. This
+      change removes the <computeroutput>Allocator</computeroutput>
+      template parameter of <classname>boost::function</classname> in
+      favor of a constructor that takes an argument. While this is a
+      backward-incompatible change, it is likely to affect only a few
+      users. This change to Function was contributed by Emil
+      Dotchevski, which also authored the corresponding C++ committee
+      proposal.</para></listitem>
+    </itemizedlist>
+  </listitem>
+
   <listitem><para><bold>Version 1.34.0</bold>: </para> 
     <itemizedlist spacing="compact">
       <listitem><para>Boost.Function now implements a small buffer optimization, which can drastically improve the performance when copying or construction Boost.Function objects storing small function objects. For instance, <code>bind(&amp;X:foo, &amp;x, _1, _2)</code> requires no heap allocation when placed into a Boost.Function object. Note that some exception-safety guarantees have changed: assignment provides the basic exception guarantee and <code>swap()</code> may throw.</para></listitem>

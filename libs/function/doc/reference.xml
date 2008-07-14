@@ -141,9 +141,6 @@
       <template-type-parameter name="T2"/>
       <template-varargs/>
       <template-type-parameter name="TN"/>
-      <template-type-parameter name="Allocator">
-        <default><classname>std::allocator</classname>&lt;void&gt;</default>
-      </template-type-parameter>
     </template>
 
     <inherit access="public"><classname>function_base</classname></inherit>
@@ -160,7 +157,6 @@
     </description>
 
     <typedef name="result_type"><type>R</type></typedef>
-    <typedef name="allocator_type"><type>Allocator</type></typedef>
     <typedef name="argument_type">
       <type>T1</type><purpose>If N == 1</purpose>
     </typedef>
@@ -214,6 +210,19 @@
       <parameter name="f"><paramtype>F</paramtype></parameter>
       <requires><simpara>F is a function object Callable from <code>this</code>.</simpara></requires>
       <postconditions><simpara><code>*this</code> targets a copy of <code>f</code> if <code>f</code> is nonempty, or <code>this-&gt;<methodname>empty</methodname>()</code> if <code>f</code> is empty.</simpara></postconditions>
+    </constructor>
+
+    <constructor>
+      <template>
+        <template-type-parameter name="F"/>
+        <template-type-parameter name="Allocator"/>
+      </template>
+      <parameter name="f"><paramtype>F</paramtype></parameter>
+      <parameter name="alloc"><paramtype>Allocator</paramtype></parameter>
+      <requires><simpara>F is a function object Callable from <code>this</code>, Allocator is an allocator. The copy constructor and destructor of Allocator shall not throw.</simpara></requires>
+      <postconditions><simpara><code>*this</code> targets a copy of <code>f</code> if <code>f</code> is nonempty, or <code>this-&gt;<methodname>empty</methodname>()</code> if <code>f</code> is empty.</simpara></postconditions>
+
+      <effects><simpara>If memory allocation is required, the given allocator (or a copy of it) will be used to allocate that memory.</simpara></effects>
     </constructor>
 
     <destructor>
@@ -324,11 +333,10 @@
           <template-type-parameter name="T2"/>
           <template-varargs/>
           <template-type-parameter name="TN"/>
-          <template-type-parameter name="Allocator"/>
         </template>
         <type>void</type>
-        <parameter name="f1"><paramtype><classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
-        <parameter name="f2"><paramtype><classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+        <parameter name="f1"><paramtype><classname>functionN</classname>&lt;T1, T2, ..., TN&gt;&amp;</paramtype></parameter>
+        <parameter name="f2"><paramtype><classname>functionN</classname>&lt;T1, T2, ..., TN&gt;&amp;</paramtype></parameter>
         <effects><simpara><code>f1.<methodname>swap</methodname>(f2)</code></simpara></effects>
       </function>
     </free-function-group>
@@ -341,11 +349,10 @@
             <template-type-parameter name="T2"/>
             <template-varargs/>
             <template-type-parameter name="TN"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
-          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN&gt;&amp;</paramtype></parameter>
           <parameter name="g"><paramtype>Functor</paramtype></parameter>
         </signature>
         <signature>
@@ -354,12 +361,11 @@
             <template-type-parameter name="T2"/>
             <template-varargs/>
             <template-type-parameter name="TN"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
           <parameter name="g"><paramtype>Functor</paramtype></parameter>
-          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN&gt;&amp;</paramtype></parameter>
         </signature>        
         <signature>
           <template>
@@ -367,11 +373,10 @@
             <template-type-parameter name="T2"/>
             <template-varargs/>
             <template-type-parameter name="TN"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
-          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN&gt;&amp;</paramtype></parameter>
           <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
         </signature>
         <signature>
@@ -380,12 +385,11 @@
             <template-type-parameter name="T2"/>
             <template-varargs/>
             <template-type-parameter name="TN"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
           <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
-          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN&gt;&amp;</paramtype></parameter>
         </signature>        
         <signature>
           <template>
@@ -393,16 +397,14 @@
             <template-type-parameter name="T2"/>
             <template-varargs/>
             <template-type-parameter name="TN"/>
-            <template-type-parameter name="Allocator1"/>
             <template-type-parameter name="U1"/>
             <template-type-parameter name="U2"/>
             <template-varargs/>
             <template-type-parameter name="UN"/>
-            <template-type-parameter name="Allocator2"/>
           </template>
           <type>void</type>
-          <parameter name="f1"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator1&gt;&amp;</paramtype></parameter>
-          <parameter name="f2"><paramtype>const <classname>functionN</classname>&lt;U1, U2, ..., UN, Allocator2&gt;&amp;</paramtype></parameter>
+          <parameter name="f1"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN&gt;&amp;</paramtype></parameter>
+          <parameter name="f2"><paramtype>const <classname>functionN</classname>&lt;U1, U2, ..., UN&gt;&amp;</paramtype></parameter>
         </signature>
 
         <returns><simpara>True when <code>f</code> stores an object of
@@ -442,11 +444,10 @@
             <template-type-parameter name="T2"/>
             <template-varargs/>
             <template-type-parameter name="TN"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
-          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN&gt;&amp;</paramtype></parameter>
           <parameter name="g"><paramtype>Functor</paramtype></parameter>
         </signature>
         <signature>
@@ -455,12 +456,11 @@
             <template-type-parameter name="T2"/>
             <template-varargs/>
             <template-type-parameter name="TN"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
           <parameter name="g"><paramtype>Functor</paramtype></parameter>
-          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN&gt;&amp;</paramtype></parameter>
         </signature>        
         <signature>
           <template>
@@ -468,11 +468,10 @@
             <template-type-parameter name="T2"/>
             <template-varargs/>
             <template-type-parameter name="TN"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
-          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN&gt;&amp;</paramtype></parameter>
           <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
         </signature>
         <signature>
@@ -481,12 +480,11 @@
             <template-type-parameter name="T2"/>
             <template-varargs/>
             <template-type-parameter name="TN"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
           <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
-          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN&gt;&amp;</paramtype></parameter>
         </signature>        
         <signature>
           <template>
@@ -494,16 +492,14 @@
             <template-type-parameter name="T2"/>
             <template-varargs/>
             <template-type-parameter name="TN"/>
-            <template-type-parameter name="Allocator1"/>
             <template-type-parameter name="U1"/>
             <template-type-parameter name="U2"/>
             <template-varargs/>
             <template-type-parameter name="UN"/>
-            <template-type-parameter name="Allocator2"/>
           </template>
           <type>void</type>
-          <parameter name="f1"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator1&gt;&amp;</paramtype></parameter>
-          <parameter name="f2"><paramtype>const <classname>functionN</classname>&lt;U1, U2, ..., UN, Allocator2&gt;&amp;</paramtype></parameter>
+          <parameter name="f1"><paramtype>const <classname>functionN</classname>&lt;T1, T2, ..., TN&gt;&amp;</paramtype></parameter>
+          <parameter name="f2"><paramtype>const <classname>functionN</classname>&lt;U1, U2, ..., UN&gt;&amp;</paramtype></parameter>
         </signature>
 
         <returns><simpara>True when <code>f</code> does not store an
@@ -543,11 +539,8 @@
       <template-type-parameter name="Signature">
         <purpose>Function type R (T1, T2, ..., TN)</purpose>
       </template-type-parameter>
-      <template-type-parameter name="Allocator">
-        <default><classname>std::allocator</classname>&lt;void&gt;</default>
-      </template-type-parameter>
     </template>
-    <inherit access="public"><classname>functionN</classname>&lt;R, T1, T2, ..., TN, Allocator&gt;</inherit>
+    <inherit access="public"><classname>functionN</classname>&lt;R, T1, T2, ..., TN&gt;</inherit>
 
     <purpose>A generalized function pointer that can be used for
     callbacks or wrapping function objects.</purpose>
@@ -569,7 +562,6 @@
     </description>
 
     <typedef name="result_type"><type>R</type></typedef>
-    <typedef name="allocator_type"><type>Allocator</type></typedef>
     <typedef name="argument_type">
       <type>T1</type><purpose>If N == 1</purpose>
     </typedef>
@@ -631,6 +623,19 @@
       <parameter name="f"><paramtype>F</paramtype></parameter>
       <requires><simpara>F is a function object Callable from <code>this</code>.</simpara></requires>
       <postconditions><simpara><code>*this</code> targets a copy of <code>f</code> if <code>f</code> is nonempty, or <code>this-&gt;<methodname>empty</methodname>()</code> if <code>f</code> is empty.</simpara></postconditions>
+    </constructor>
+
+    <constructor>
+      <template>
+        <template-type-parameter name="F"/>
+        <template-type-parameter name="Allocator"/>
+      </template>
+      <parameter name="f"><paramtype>F</paramtype></parameter>
+      <parameter name="alloc"><paramtype>Allocator</paramtype></parameter>
+      <requires><simpara>F is a function object Callable from <code>this</code>, Allocator is an allocator. The copy constructor and destructor of Allocator shall not throw.</simpara></requires>
+      <postconditions><simpara><code>*this</code> targets a copy of <code>f</code> if <code>f</code> is nonempty, or <code>this-&gt;<methodname>empty</methodname>()</code> if <code>f</code> is empty.</simpara></postconditions>
+
+      <effects><simpara>If memory allocation is required, the given allocator (or a copy of it) will be used to allocate that memory.</simpara></effects>
     </constructor>
 
     <destructor>
@@ -745,11 +750,10 @@
       <function name="swap">
         <template>
           <template-type-parameter name="Signature"/>
-          <template-type-parameter name="Allocator"/>
         </template>
         <type>void</type>
-        <parameter name="f1"><paramtype><classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
-        <parameter name="f2"><paramtype><classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+        <parameter name="f1"><paramtype><classname>function</classname>&lt;Signature&gt;&amp;</paramtype></parameter>
+        <parameter name="f2"><paramtype><classname>function</classname>&lt;Signature&gt;&amp;</paramtype></parameter>
         <effects><simpara><code>f1.<methodname>swap</methodname>(f2)</code></simpara></effects>
       </function>
     </free-function-group>
@@ -759,53 +763,47 @@
         <signature>
           <template>
             <template-type-parameter name="Signature"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
-          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature&gt;&amp;</paramtype></parameter>
           <parameter name="g"><paramtype>Functor</paramtype></parameter>
         </signature>
         <signature>
           <template>
             <template-type-parameter name="Signature"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
           <parameter name="g"><paramtype>Functor</paramtype></parameter>
-          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature&gt;&amp;</paramtype></parameter>
         </signature>        
         <signature>
           <template>
             <template-type-parameter name="Signature"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
-          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature&gt;&amp;</paramtype></parameter>
           <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
         </signature>
         <signature>
           <template>
             <template-type-parameter name="Signature"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
           <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
-          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature&gt;&amp;</paramtype></parameter>
         </signature>        
         <signature>
           <template>
             <template-type-parameter name="Signature1"/>
-            <template-type-parameter name="Allocator1"/>
             <template-type-parameter name="Signature2"/>
-            <template-type-parameter name="Allocator2"/>
           </template>
           <type>void</type>
-          <parameter name="f1"><paramtype>const <classname>function</classname>&lt;Signature1, Allocator1&gt;&amp;</paramtype></parameter>
-          <parameter name="f2"><paramtype>const <classname>function</classname>&lt;Signature2, Allocator2&gt;&amp;</paramtype></parameter>
+          <parameter name="f1"><paramtype>const <classname>function</classname>&lt;Signature1&gt;&amp;</paramtype></parameter>
+          <parameter name="f2"><paramtype>const <classname>function</classname>&lt;Signature2&gt;&amp;</paramtype></parameter>
         </signature>
 
         <returns><simpara>True when <code>f</code> stores an object of
@@ -840,53 +838,47 @@
         <signature>
           <template>
             <template-type-parameter name="Signature"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
-          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature&gt;&amp;</paramtype></parameter>
           <parameter name="g"><paramtype>Functor</paramtype></parameter>
         </signature>
         <signature>
           <template>
             <template-type-parameter name="Signature"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
           <parameter name="g"><paramtype>Functor</paramtype></parameter>
-          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature&gt;&amp;</paramtype></parameter>
         </signature>        
         <signature>
           <template>
             <template-type-parameter name="Signature"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
-          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature&gt;&amp;</paramtype></parameter>
           <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
         </signature>
         <signature>
           <template>
             <template-type-parameter name="Signature"/>
-            <template-type-parameter name="Allocator"/>
             <template-type-parameter name="Functor"/>
           </template>
           <type>bool</type>
           <parameter name="g"><paramtype><classname>reference_wrapper</classname>&lt;Functor&gt;</paramtype></parameter>
-          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
+          <parameter name="f"><paramtype>const <classname>function</classname>&lt;Signature&gt;&amp;</paramtype></parameter>
         </signature>        
         <signature>
           <template>
             <template-type-parameter name="Signature1"/>
-            <template-type-parameter name="Allocator1"/>
             <template-type-parameter name="Signature2"/>
-            <template-type-parameter name="Allocator2"/>
           </template>
           <type>void</type>
-          <parameter name="f1"><paramtype>const <classname>function</classname>&lt;Signature1, Allocator1&gt;&amp;</paramtype></parameter>
-          <parameter name="f2"><paramtype>const <classname>function</classname>&lt;Signature2, Allocator2&gt;&amp;</paramtype></parameter>
+          <parameter name="f1"><paramtype>const <classname>function</classname>&lt;Signature1&gt;&amp;</paramtype></parameter>
+          <parameter name="f2"><paramtype>const <classname>function</classname>&lt;Signature2&gt;&amp;</paramtype></parameter>
         </signature>
 
         <returns><simpara>True when <code>f</code> does not store an
