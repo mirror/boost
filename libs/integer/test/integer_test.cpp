@@ -8,6 +8,7 @@
 //  See http://www.boost.org/libs/integer for documentation.
 
 //  Revision History
+//   14 Jul 08  Improved testing of fast-integer template. (Daryle Walker)
 //   13 Jul 08  Modernized tests w/ MPL instead of giant macros (Daryle Walker)
 //   07 Jul 08  Changed tests to use the unit-test system (Daryle Walker)
 //   04 Oct 01  Added tests for new templates; rewrote code (Daryle Walker)
@@ -49,6 +50,11 @@
 #include <typeinfo>  // for std::type_info
 
 
+// Control what the "fast" specialization of "short" is
+#ifndef CONTROL_FAST_SHORT
+#define CONTROL_FAST_SHORT  long
+#endif
+
 // Control if the names of the types for each version
 // of the integer templates will be printed.
 #ifndef CONTROL_SHOW_TYPES
@@ -57,13 +63,15 @@
 
 
 // If specializations have not already been done, then we can confirm
-// the effects of the "fast" types by making a specialization.
+// the effects of the "fast" types by making a specialization.  If there
+// is a specialization for "short," make sure that CONTROL_FAST_SHORT
+// is set to a type distinct from "short" and the default implementation.
 namespace boost
 {
     template < >
     struct int_fast_t< short >
     {
-        typedef long  fast;
+        typedef CONTROL_FAST_SHORT  fast;
     };
 }
 
@@ -176,6 +184,34 @@ typedef boost::mpl::push_back<
 
 }  // unnamed namespace
 
+
+// Check the processor-optimzed type system
+BOOST_AUTO_TEST_SUITE( optimized_type_tests )
+
+// Check the optimzed type override of a given type
+BOOST_AUTO_TEST_CASE( fast_type_test )
+{
+#ifndef BOOST_NO_USING_TEMPLATE
+    using std::numeric_limits;
+#else
+    using namespace std;
+#endif
+
+    typedef short                               least_type;
+    typedef boost::int_fast_t<least_type>::fast  fast_type;
+    typedef numeric_limits<least_type>          least_limits;
+    typedef numeric_limits<fast_type>            fast_limits;
+
+    BOOST_MPL_ASSERT_RELATION( (boost::is_same<least_type, fast_type>::value),
+     ==, false );
+    BOOST_MPL_ASSERT_RELATION( fast_limits::is_specialized, ==, true );
+    BOOST_MPL_ASSERT_RELATION( fast_limits::is_signed &&
+     fast_limits::is_bounded, ==, true );
+    BOOST_MPL_ASSERT_RELATION( fast_limits::radix, ==, 2 );
+    BOOST_MPL_ASSERT_RELATION( fast_limits::digits, >=, least_limits::digits );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
 
 // Check if given types can support given size parameters
 BOOST_AUTO_TEST_SUITE( show_type_tests )
@@ -402,5 +438,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_shifted_values_test, T,
     BOOST_CHECK_EQUAL( typename int_min_value_t<(min_s >> 1)>::fast(min_s >> 1),
      min_s >> 1 );
 }
+
+BOOST_AUTO_TEST_SUITE_END()
+
+// Verification of bugs and their fixes
+BOOST_AUTO_TEST_SUITE( bug_fix_tests )
 
 BOOST_AUTO_TEST_SUITE_END()
