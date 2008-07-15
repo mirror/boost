@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// Copyright 2005-2006 Andreas Huber Doenni
+// Copyright 2005-2008 Andreas Huber Doenni
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -31,8 +31,13 @@ namespace mpl = boost::mpl;
 
 struct EvCheckCtorArgs : sc::event< EvCheckCtorArgs >
 {
-  EvCheckCtorArgs( int expectedArgs ) : expectedArgs_( expectedArgs ) {}
-  const int expectedArgs_;
+  public:
+    EvCheckCtorArgs( int expectedArgs ) : expectedArgs_( expectedArgs ) {}
+    const int expectedArgs_;
+
+  private:
+    // avoids C4512 (assignment operator could not be generated)
+    EvCheckCtorArgs & operator=( const EvCheckCtorArgs & );
 };
 
 struct EvTerminate : sc::event< EvTerminate > {};

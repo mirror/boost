@@ -1,7 +1,7 @@
 #ifndef BOOST_STATECHART_IN_STATE_REACTION_HPP_INCLUDED
 #define BOOST_STATECHART_IN_STATE_REACTION_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// Copyright 2005-2006 Andreas Huber Doenni
+// Copyright 2005-2008 Andreas Huber Doenni
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -10,10 +10,7 @@
 
 #include <boost/statechart/result.hpp>
 
-#include <boost/mpl/if.hpp>
-
-#include <boost/cast.hpp> // boost::polymorphic_downcast
-#include <boost/type_traits/is_same.hpp>
+#include <boost/statechart/detail/reaction_dispatcher.hpp>
 
 
 
@@ -27,40 +24,26 @@ namespace statechart
 class event_base;
 
 //////////////////////////////////////////////////////////////////////////////
-template< class Event, 
-          class ReactionContext,
-          void ( ReactionContext::*pAction )( const Event & ) >
+template< class Event,
+          class ReactionContext = detail::no_context< Event >,
+          void ( ReactionContext::*pAction )( const Event & ) =
+            &detail::no_context< Event >::no_function >
 class in_state_reaction
 {
   private:
     //////////////////////////////////////////////////////////////////////////
-    struct react_base
+    template< class State >
+    struct reactions
     {
-      template< class State, class EventBase, class IdType >
-      static detail::reaction_result react(
-        State & stt, const EventBase & evt, const IdType & )
+      static result react_without_action( State & stt )
+      {
+        return stt.discard_event();
+      }
+
+      static result react_with_action( State & stt, const Event & evt )
       {
         ( stt.template context< ReactionContext >().*pAction )( evt );
-        return detail::do_discard_event;
-      }
-    };
-
-    struct react_derived
-    {
-      template< class State, class EventBase, class IdType >
-      static detail::reaction_result react(
-        State & stt, const EventBase & evt, const IdType & eventType )
-      {
-        if ( eventType == Event::static_type() )
-        {
-          ( stt.template context< ReactionContext >().*pAction )(
-            *polymorphic_downcast< const Event * >( &evt ) );
-          return detail::do_discard_event;
-        }
-        else
-        {
-          return detail::no_reaction;
-        }
+        return react_without_action( stt );
       }
     };
 
@@ -73,11 +56,10 @@ class in_state_reaction
     static detail::reaction_result react(
       State & stt, const EventBase & evt, const IdType & eventType )
     {
-      typedef typename mpl::if_<
-        is_same< Event, event_base >, react_base, react_derived
-      >::type impl;
-
-      return impl::react( stt, evt, eventType );
+      typedef detail::reaction_dispatcher<
+        reactions< State >, State, EventBase, Event, ReactionContext, IdType
+      > dispatcher;
+      return dispatcher::react( stt, evt, eventType );
     }
 };
 

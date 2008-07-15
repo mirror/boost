@@ -46,7 +46,8 @@
 
   <ol>
     <li>Implement a choice-point-like class, as discussed in
-    <a href="http://thread.gmane.org/gmane.comp.lib.boost.devel/164460">this thread</a></li>
+    <a href="http://thread.gmane.org/gmane.comp.lib.boost.devel/164460">this
+    thread</a></li>
 
     <li>Optimize state-entry and state-exit for speed and code-size</li>
 
@@ -139,16 +140,33 @@
 
   <p>(<font color="#FF0000">red</font> = points raised during formal
   review)</p>
+  <p>Unreleased (committed to the SVN trunk)</p>
+  <ul>
+    <li>Removed all permanent warning suppressions from library headers
+      and avoided the resulting warnings with other means (suggested by
+      Steven Watanabe; thanks to Peter Dimov and Yuval Ronen for insight
+      into when C4511 & C4512 are issued)</li>
+    <li>Added the FAQ item <a href="faq.html#AssertInStateDestructor">Why
+      do I get an assert when I access the state machine from a state
+      destructor?</a> (due to feedback from Jiang Miao)</li>
+    <li>Added defaults for the last two template parameters of <a href=
+      "reference.html#ClassTemplatein_state_reaction">in_state_reaction<></a>
+      (due to feedback from Sean Kelly)</li>
+    <li>Adapted fifo_scheduler&lt;&gt; to the changed allocator interface of
+      boost::function</li>
+    <li>Changed the PingPong example to demonstrate how the inner workings of
+    an asynchronous_state_machine<> subclass can be hidden</li>
+  </ul>
 
   <p>1.35.0</p>
-
   <ul>
-    <li>Added placement new overload to <code>event&lt;&gt;</code></li>
-    <li>Made <code>event&lt;&gt;</code> copy-assignable</li>
+    <li>Added placement new overload to <code>event&lt;&gt;</code> (due to
+    feedback from Federico J. Fern&aacute;ndez)</li>
+    <li>Made <code>event&lt;&gt;</code> copy-assignable (Federico J.
+    Fern&aacute;ndez)</li>
   </ul>
 
   <p>1.34.0</p>
-
   <ul>
     <li>Fixed a bug that prevented compilation of exception_translator.hpp
     (reported by Oliver Kowalke) and adapted TransitionTest.cpp to also test
@@ -670,11 +688,10 @@
   "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
   height="31" width="88"></a></p>
 
-  <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->09 April, 2007<!--webbot bot="Timestamp" endspan i-checksum="30014" --></p>
+  <p>Revised 05 January, 2008</p>
 
-  <p><i>Copyright &copy; 2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2007<!--webbot bot="Timestamp" endspan i-checksum="778" -->
-  <a href="contact.html">Andreas Huber D&ouml;nni</a></i></p>
+  <p><i>Copyright &copy; 2003-2008 <a href="contact.html">Andreas Huber
+  D&ouml;nni</a></i></p>
 
   <p><i>Distributed under the Boost Software License, Version 1.0. (See
   accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or

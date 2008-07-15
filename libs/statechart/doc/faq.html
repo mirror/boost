@@ -40,6 +40,9 @@
     state machine and modify its layout in the subclass?</a></dt>
 
     <dt><a href="#Uml2">What about UML2.0 features?</a></dt>
+    
+    <dt><a href="#AssertInStateDestructor">Why do I get an assert when I
+    access the state machine from a state destructor?</a></dt>
 
     <dt><a href="#EmbeddedApplications">Is Boost.Statechart suitable for
     embedded applications?</a></dt>
@@ -244,6 +247,8 @@ StopWatch::StopWatch()
   <b>initiate();</b>
 }
 </pre>
+  <p>The PingPong example demonstrates how the inner workings of an
+  asynchronous_state_machine<> subclass can be hidden.</p>
 
   <h2><a name="MachineInheritance" id="MachineInheritance">Is it possible to
   inherit from a given state machine and modify its layout in the
@@ -312,6 +317,40 @@ struct MyPump : PumpBase
     typedef and the latter with a state that is a template (with the
     transition destination as a template parameter)</li>
   </ul>
+
+  <h2><a name="AssertInStateDestructor" id="AssertInStateDestructor">Why do I
+  get an assert when I access the state machine from a state destructor?</a>
+  </h2>
+
+  <p>When compiled with <code>NDEBUG</code> undefined, running the following
+  program results in a failed assert:</p>
+  <pre>#include &lt;boost/statechart/state_machine.hpp&gt;
+#include &lt;boost/statechart/simple_state.hpp&gt;
+#include &lt;iostream&gt;
+
+struct Initial;
+struct Machine : boost::statechart::state_machine&lt; Machine, Initial &gt;
+{
+  Machine() { someMember_ = 42; }
+  int someMember_;
+};
+
+struct Initial : boost::statechart::simple_state&lt; Initial, Machine &gt;
+{
+  ~Initial() { std::cout &lt;&lt; outermost_context().someMember_; }
+};
+
+int main()
+{
+  Machine().initiate();
+  return 0;
+}</pre>
+  <p>The problem arises because <code>state_machine<>::~state_machine</code>
+  inevitably destructs all remaining active states. At this time,
+  <code>Machine::~Machine</code> has already been run, making it illegal to
+  access any of the <code>Machine</code> members. This problem can be avoided
+  by defining the following destructor:</p>
+  <pre>~Machine() { terminate(); }</pre>
 
   <h2><a name="EmbeddedApplications" id="EmbeddedApplications">Is
   Boost.Statechart suitable for embedded applications?</a></h2>
@@ -516,14 +555,13 @@ the culprit close to the bottom in file InconsistentHistoryTest1.cpp on line
   and <a href=
   "reference.html#clear_deep_history">simple_state::clear_deep_history()</a>.
   Calling these functions is often preferable to introducting additional
-  normal transitions when ...
+  normal transitions when ...</p>
   <ul>
     <li>a state with history is the target of many transitions,
     <b>and/or</b></li>
     <li>the decision to ignore history is made in a different place than
     the transition to a state with history</li>
   </ul>
-  </p>
 
   <h2><a name="Dll" id="Dll">How can I compile a state machine into a dynamic
   link library (DLL)?</a></h2>
@@ -732,11 +770,10 @@ Inner::~Inner()
   "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
   height="31" width="88"></a></p>
 
-  <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->15 November, 2007<!--webbot bot="Timestamp" endspan i-checksum="38512" --></p>
+  <p>Revised 05 January, 2008</p>
 
-  <p><i>Copyright &copy; 2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2007<!--webbot bot="Timestamp" endspan i-checksum="770" -->
-  <a href="contact.html">Andreas Huber D&ouml;nni</a></i></p>
+  <p><i>Copyright &copy; 2003-2008 <a href="contact.html">Andreas Huber
+  D&ouml;nni</a></i></p>
 
   <p><i>Distributed under the Boost Software License, Version 1.0. (See
   accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or

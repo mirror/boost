@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// Copyright 2005-2006 Andreas Huber Doenni
+// Copyright 2005-2008 Andreas Huber Doenni
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -24,10 +24,10 @@ struct E : sc::event< E > {};
 struct F : sc::event< F > {};
 struct G : sc::event< G > {};
 struct H : sc::event< H > {};
+struct I : sc::event< I > {};
 
 struct A;
-struct InStateReactionTest :
-  sc::state_machine< InStateReactionTest, A > {};
+struct InStateReactionTest : sc::state_machine< InStateReactionTest, A > {};
 
 struct B;
 struct A : sc::simple_state< A, InStateReactionTest, B >
@@ -59,7 +59,8 @@ struct A : sc::simple_state< A, InStateReactionTest, B >
 
     typedef mpl::list<
       sc::in_state_reaction< F, B, &B::IncrementCount >,
-      sc::in_state_reaction< G, A, &A::IncrementCount >
+      sc::in_state_reaction< G, A, &A::IncrementCount >,
+      sc::in_state_reaction< I >
     > reactions;
 
     unsigned int eventCount_;
@@ -67,29 +68,35 @@ struct A : sc::simple_state< A, InStateReactionTest, B >
 
 
 
+void RequireEventCounts(
+  const InStateReactionTest & machine,
+  unsigned int aCount, unsigned int bCount)
+{
+  BOOST_REQUIRE(
+    machine.state_downcast< const A & >().eventCount_ == aCount );
+  BOOST_REQUIRE(
+    machine.state_downcast< const B & >().eventCount_ == bCount );
+}
+
 int test_main( int, char* [] )
 {
   InStateReactionTest machine;
   machine.initiate();
 
-  BOOST_REQUIRE( machine.state_downcast< const A & >().eventCount_ == 0 );
-  BOOST_REQUIRE( machine.state_downcast< const B & >().eventCount_ == 0 );
+  RequireEventCounts(machine, 0, 0);
   machine.process_event( F() );
-  BOOST_REQUIRE( machine.state_downcast< const A & >().eventCount_ == 0 );
-  BOOST_REQUIRE( machine.state_downcast< const B & >().eventCount_ == 1 );
+  RequireEventCounts(machine, 0, 1);
   machine.process_event( E() );
-  BOOST_REQUIRE( machine.state_downcast< const A & >().eventCount_ == 1 );
-  BOOST_REQUIRE( machine.state_downcast< const B & >().eventCount_ == 1 );
+  RequireEventCounts(machine, 1, 1);
   machine.process_event( E() );
   machine.process_event( F() );
-  BOOST_REQUIRE( machine.state_downcast< const A & >().eventCount_ == 2 );
-  BOOST_REQUIRE( machine.state_downcast< const B & >().eventCount_ == 2 );
+  RequireEventCounts(machine, 2, 2);
   machine.process_event( G() );
-  BOOST_REQUIRE( machine.state_downcast< const A & >().eventCount_ == 3 );
-  BOOST_REQUIRE( machine.state_downcast< const B & >().eventCount_ == 2 );
+  RequireEventCounts(machine, 3, 2);
   machine.process_event( H() );
-  BOOST_REQUIRE( machine.state_downcast< const A & >().eventCount_ == 4 );
-  BOOST_REQUIRE( machine.state_downcast< const B & >().eventCount_ == 2 );
+  RequireEventCounts(machine, 4, 2);
+  machine.process_event( I() );
+  RequireEventCounts(machine, 4, 2);
 
   return 0;
 }

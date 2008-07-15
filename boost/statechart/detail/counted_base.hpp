@@ -61,7 +61,7 @@ class counted_base : private count_base< NeedsLocking >
     // do nothing copy implementation is intentional (the number of
     // referencing pointers of the source and the destination is not changed
     // through the copy operation)
-    counted_base( const counted_base & ) {}
+    counted_base( const counted_base & ) : base_type() {}
     counted_base & operator=( const counted_base & ) { return *this; }
 
   public:

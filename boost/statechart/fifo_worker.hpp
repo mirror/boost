@@ -1,7 +1,7 @@
 #ifndef BOOST_STATECHART_FIFO_WORKER_HPP_INCLUDED
 #define BOOST_STATECHART_FIFO_WORKER_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// Copyright 2002-2006 Andreas Huber Doenni
+// Copyright 2002-2008 Andreas Huber Doenni
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -20,7 +20,17 @@
 #ifdef BOOST_HAS_THREADS
 #  ifdef BOOST_MSVC
 #    pragma warning( push )
-#    pragma warning( disable: 4275 ) // non-dll class used as base for dll class
+     // "conditional expression is constant" in basic_timed_mutex.hpp
+#    pragma warning( disable: 4127 )
+     // "conversion from 'int' to 'unsigned short'" in microsec_time_clock.hpp
+#    pragma warning( disable: 4244 )
+     // "... needs to have dll-interface to be used by clients of class ..."
+#    pragma warning( disable: 4251 )
+     // "... assignment operator could not be generated"
+#    pragma warning( disable: 4512 )
+     // "Function call with parameters that may be unsafe" in
+     // condition_variable.hpp
+#    pragma warning( disable: 4996 )
 #  endif
 
 #  include <boost/thread/mutex.hpp>
@@ -57,7 +67,7 @@ class fifo_worker : noncopyable
     {
     }
 
-    typedef function0< void, Allocator > work_item;
+    typedef function0< void > work_item;
 
     // We take a non-const reference so that we can move (i.e. swap) the item
     // into the queue, what avoids copying the (possibly heap-allocated)

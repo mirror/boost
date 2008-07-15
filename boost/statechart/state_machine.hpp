@@ -1,7 +1,7 @@
 #ifndef BOOST_STATECHART_STATE_MACHINE_HPP_INCLUDED
 #define BOOST_STATECHART_STATE_MACHINE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// Copyright 2002-2006 Andreas Huber Doenni
+// Copyright 2002-2008 Andreas Huber Doenni
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -57,15 +57,6 @@
 
 
 
-#ifdef BOOST_MSVC
-// We permanently turn off the following level 4 warnings because users will
-// have to do so themselves anyway if we turn them back on
-#  pragma warning( disable: 4511 ) // copy constructor could not be generated
-#  pragma warning( disable: 4512 ) // assignment op could not be generated
-#endif
-
-
-
 namespace boost
 {
 namespace statechart
@@ -98,6 +89,9 @@ class send_function
 
   private:
     //////////////////////////////////////////////////////////////////////////
+    // avoids C4512 (assignment operator could not be generated)
+    send_function & operator=( const send_function & );
+
     StateBaseType & toState_;
     const EventBaseType & evt_;
     IdType eventType_;
@@ -219,6 +213,9 @@ class history_key
       historizedOrthogonalRegion_( historizedOrthogonalRegion )
     {
     }
+
+    // avoids C4512 (assignment operator could not be generated)
+    history_key & operator=( const history_key & );
 
     const typename RttiPolicy::id_type historyContextType_;
     const orthogonal_position_type historizedOrthogonalRegion_;
@@ -720,6 +717,10 @@ class state_machine : noncopyable
 
       private:
         //////////////////////////////////////////////////////////////////////
+        // avoids C4512 (assignment operator could not be generated)
+        initial_construct_function & operator=(
+          const initial_construct_function & );
+
         state_machine & machine_;
     };
     friend class initial_construct_function;
@@ -739,6 +740,9 @@ class state_machine : noncopyable
 
       private:
         //////////////////////////////////////////////////////////////////////
+        // avoids C4512 (assignment operator could not be generated)
+        terminate_function & operator=( const terminate_function & );
+
         state_machine & machine_;
     };
     friend class terminate_function;
@@ -814,6 +818,10 @@ class state_machine : noncopyable
 
       private:
         //////////////////////////////////////////////////////////////////////
+        // avoids C4512 (assignment operator could not be generated)
+        exception_event_handler & operator=(
+          const exception_event_handler & );
+
         state_machine & machine_;
         state_base_type * pCurrentState_;
     };
@@ -822,6 +830,7 @@ class state_machine : noncopyable
     class terminator
     {
       public:
+        //////////////////////////////////////////////////////////////////////
         terminator( state_machine & machine ) :
           machine_( machine ), dismissed_( false ) {}
         ~terminator()
@@ -831,6 +840,10 @@ class state_machine : noncopyable
         void dismiss() { dismissed_ = true; }
 
       private:
+        //////////////////////////////////////////////////////////////////////
+        // avoids C4512 (assignment operator could not be generated)
+        terminator & operator=( const terminator & );
+
         state_machine & machine_;
         bool dismissed_;
     };

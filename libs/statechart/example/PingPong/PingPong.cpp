@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// Copyright 2002-2006 Andreas Huber Doenni
+// Copyright 2002-2008 Andreas Huber Doenni
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -29,53 +29,23 @@
 //////////////////////////////////////////////////////////////////////////////
 
 
+#include "Player.hpp"
 
-#include <boost/statechart/event.hpp>
 #include <boost/statechart/asynchronous_state_machine.hpp>
-#include <boost/statechart/state.hpp>
-#include <boost/statechart/transition.hpp>
-#include <boost/statechart/custom_reaction.hpp>
-#include <boost/statechart/fifo_scheduler.hpp>
 #include <boost/statechart/fifo_worker.hpp>
 
 #include <boost/mpl/list.hpp>
-
 #include <boost/config.hpp>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
-
-#ifdef BOOST_MSVC
-#  pragma warning( push )
-#  pragma warning( disable: 4127 ) // conditional expression is constant
-#  pragma warning( disable: 4251 ) // class needs to have dll-interface
-#  pragma warning( disable: 4275 ) // non-dll class used as base for dll class
-#  pragma warning( disable: 4800 ) // forcing value to bool 'true' or 'false'
-#endif
 
 #ifdef BOOST_HAS_THREADS
 #  include <boost/thread/thread.hpp>
 #endif
-#ifdef CUSTOMIZE_MEMORY_MANAGEMENT
-#  ifdef BOOST_HAS_THREADS
-     // for some reason the following is not automatically defined
-#    if defined( BOOST_MSVC ) | defined( BOOST_INTEL )
-#      define __WIN32__
-#    endif
-#  else
-#    define BOOST_NO_MT
-#  endif
-#  include <boost/pool/pool_alloc.hpp>
-#endif
-
-#ifdef BOOST_MSVC
-#  pragma warning( pop )
-#endif
 
 #include <iostream>
 #include <ctime>
-#include <memory> // std::allocator
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std
@@ -94,132 +64,11 @@ namespace std
 
 
 namespace sc = boost::statechart;
-namespace mpl = boost::mpl;
 
 
 
 //////////////////////////////////////////////////////////////////////////////
 const unsigned int noOfEvents = 1000000;
-
-template< class T >
-boost::intrusive_ptr< T > MakeIntrusive( T * pObject )
-{
-  return boost::intrusive_ptr< T >( pObject );
-}
-
-
-//////////////////////////////////////////////////////////////////////////////
-struct BallReturned : sc::event< BallReturned >
-{
-  boost::function1< void, const boost::intrusive_ptr< const BallReturned > & >
-    returnToOpponent;
-  boost::function0< void > abortGame;
-};
-
-struct GameAborted : sc::event< GameAborted > {};
-
-#ifdef CUSTOMIZE_MEMORY_MANAGEMENT
-typedef boost::fast_pool_allocator< int > MyAllocator;
-typedef sc::fifo_scheduler< 
-  sc::fifo_worker< MyAllocator >, MyAllocator > MyScheduler;
-#else
-typedef std::allocator< void > MyAllocator;
-typedef sc::fifo_scheduler<> MyScheduler;
-#endif
-
-struct Waiting;
-struct Player : sc::asynchronous_state_machine<
-  Player, Waiting, MyScheduler, MyAllocator >
-{
-  public:
-    Player( 
-      my_context ctx,
-      unsigned int maxNoOfReturns
-    ) :
-      my_base( ctx ),
-      maxNoOfReturns_( maxNoOfReturns )
-    {
-    }
-
-    static unsigned int & TotalNoOfProcessedEvents()
-    {
-      return totalNoOfProcessedEvents_;
-    }
-
-    unsigned int GetMaxNoOfReturns() const
-    {
-      return maxNoOfReturns_;
-    }
-
-  private:
-    static unsigned int totalNoOfProcessedEvents_;
-    const unsigned int maxNoOfReturns_;
-};
-
-unsigned int Player::totalNoOfProcessedEvents_ = 0;
-
-
-struct Waiting : sc::state< Waiting, Player >
-{
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    typedef mpl::list<
-      sc::custom_reaction< BallReturned >,
-      sc::custom_reaction< GameAborted >
-    > reactions;
-
-    Waiting( my_context ctx ) :
-      my_base( ctx ),
-      noOfReturns_( 0 ),
-      pBallReturned_( new BallReturned() )
-    {
-      outermost_context_type & machine = outermost_context();
-      // as we will always return the same event to the opponent, we construct
-      // and fill it here so that we can reuse it over and over
-      pBallReturned_->returnToOpponent = boost::bind(
-        &MyScheduler::queue_event,
-        &machine.my_scheduler(), machine.my_handle(), _1 );
-      pBallReturned_->abortGame = boost::bind(
-        &MyScheduler::queue_event,
-        &machine.my_scheduler(), machine.my_handle(),
-        MakeIntrusive( new GameAborted() ) );
-    }
-
-    sc::result react( const GameAborted & )
-    {
-      return DestroyMyself();
-    }
-
-    sc::result react( const BallReturned & ballReturned )
-    {
-      outermost_context_type & machine = outermost_context();
-      ++machine.TotalNoOfProcessedEvents();
-
-      if ( noOfReturns_++ < machine.GetMaxNoOfReturns() )
-      {
-        ballReturned.returnToOpponent( pBallReturned_ );
-        return discard_event();
-      }
-      else
-      {
-        ballReturned.abortGame();
-        return DestroyMyself();
-      }
-    }
-
-  private:
-    //////////////////////////////////////////////////////////////////////////
-    sc::result DestroyMyself()
-    {
-      outermost_context_type & machine = outermost_context();
-      machine.my_scheduler().destroy_processor( machine.my_handle() );
-      machine.my_scheduler().terminate();
-      return terminate();
-    }
-
-    unsigned int noOfReturns_;
-    const boost::intrusive_ptr< BallReturned > pBallReturned_;
-};
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -275,15 +124,15 @@ int main()
         MyScheduler & scheduler2 = scheduler1;
         #endif
 
-        MyScheduler::processor_handle player1 = 
+        MyScheduler::processor_handle player1 =
           scheduler1.create_processor< Player >( noOfEvents / 2 );
         scheduler1.initiate_processor( player1 );
-        MyScheduler::processor_handle player2 = 
+        MyScheduler::processor_handle player2 =
           scheduler2.create_processor< Player >( noOfEvents / 2 );
         scheduler2.initiate_processor( player2 );
 
         boost::intrusive_ptr< BallReturned > pInitialBall = new BallReturned();
-        pInitialBall->returnToOpponent = boost::bind( 
+        pInitialBall->returnToOpponent = boost::bind(
           &MyScheduler::queue_event, &scheduler1, player1, _1 );
         pInitialBall->abortGame = boost::bind(
           &MyScheduler::queue_event, 

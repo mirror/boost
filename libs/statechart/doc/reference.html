@@ -4,11 +4,17 @@
 <head>
   <meta http-equiv="Content-Language" content="en-us">
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
-  <meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+  <meta name="GENERATOR" content="Microsoft FrontPage 12.0">
   <meta name="ProgId" content="FrontPage.Editor.Document">
   <link rel="stylesheet" type="text/css" href="../../../boost.css">
 
   <title>The Boost Statechart Library - Reference</title>
+  <style type="text/css">
+    .style1
+    {
+      width: 45%;
+    }
+  </style>
 </head>
 
 <body link="#0000FF" vlink="#800080">
@@ -184,27 +190,27 @@
 
   <table border="3" cellpadding="2" width="100%" summary="Scheduler concept">
     <tr>
-      <td width="24%"><b>Expression</b></td>
+      <td><b>Expression</b></td>
 
-      <td width="25%"><b>Type</b></td>
+      <td><b>Type</b></td>
 
-      <td width="48%"><b>Result</b></td>
+      <td><b>Result</b></td>
     </tr>
 
     <tr>
-      <td width="24%"><code>cpc.my_scheduler()</code></td>
+      <td><code>cpc.my_scheduler()</code></td>
 
-      <td width="25%"><code>S &amp;</code></td>
+      <td><code>S &amp;</code></td>
 
-      <td width="48%">A reference to the scheduler</td>
+      <td>A reference to the scheduler</td>
     </tr>
 
     <tr>
-      <td width="24%"><code>cpc.my_handle()</code></td>
+      <td><code>cpc.my_handle()</code></td>
 
-      <td width="25%"><code>S::processor_handle</code></td>
+      <td><code>S::processor_handle</code></td>
 
-      <td width="48%">The handle identifying the
+      <td>The handle identifying the
       <code>event_processor&lt;&gt;</code> subtype object</td>
     </tr>
   </table>
@@ -235,57 +241,56 @@
   <table border="3" cellpadding="2" width="100%" summary=
   "FifoWorker concept">
     <tr>
-      <td width="36%"><b>Expression/Statement</b></td>
+      <td><b>Expression/Statement</b></td>
 
-      <td width="10%"><b>Type</b></td>
+      <td><b>Type</b></td>
 
-      <td width="52%"><b>Effects/Result</b></td>
+      <td><b>Effects/Result</b></td>
     </tr>
 
     <tr>
-      <td width="36%"><code>F::work_item</code></td>
+      <td><code>F::work_item</code></td>
 
-      <td width="10%"><code>boost::function0&lt;<br>
-      &nbsp; void &gt;</code></td>
+      <td><code>boost::function0&lt; void &gt;</code></td>
 
-      <td width="52%">&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
 
     <tr>
-      <td width="36%"><code>F()</code> or <code>F( false )</code></td>
+      <td><code>F()</code> or <code>F( false )</code></td>
 
-      <td width="10%"><code>F</code></td>
+      <td><code>F</code></td>
 
-      <td width="52%">Constructs a <b>non-blocking</b> (see below) object of
+      <td>Constructs a <b>non-blocking</b> (see below) object of
       the FifoWorker type. In single-threaded builds the second expression is
       not well-formed</td>
     </tr>
 
     <tr>
-      <td width="36%"><code>F( true )</code></td>
+      <td><code>F( true )</code></td>
 
-      <td width="10%"><code>F</code></td>
+      <td><code>F</code></td>
 
-      <td width="52%">Constructs a <b>blocking</b> (see below) object of the
+      <td>Constructs a <b>blocking</b> (see below) object of the
       FifoWorker type. Not well-formed in single-threaded builds</td>
     </tr>
 
     <tr>
-      <td width="36%"><code>f.queue_work_item( w );</code></td>
+      <td><code>f.queue_work_item( w );</code></td>
 
-      <td width="10%">&nbsp;</td>
+      <td>&nbsp;</td>
 
-      <td width="52%">Constructs and queues an object of type
+      <td>Constructs and queues an object of type
       <code>F::work_item</code>, passing <code>w</code> as the only
       argument</td>
     </tr>
 
     <tr>
-      <td width="36%"><code>f.terminate();</code></td>
+      <td><code>f.terminate();</code></td>
 
-      <td width="10%">&nbsp;</td>
+      <td>&nbsp;</td>
 
-      <td width="52%">Creates and queues an object of type
+      <td>Creates and queues an object of type
       <code>F::work_item</code> that, when later executed in
       <code>operator()()</code>, leads to a modification of internal state so
       that <code>terminated()</code> henceforth returns
@@ -293,11 +298,11 @@
     </tr>
 
     <tr>
-      <td width="36%"><code>cf.terminated();</code></td>
+      <td><code>cf.terminated();</code></td>
 
-      <td width="10%"><code>bool</code></td>
+      <td><code>bool</code></td>
 
-      <td width="52%"><code>true</code> if <code>terminate()</code> has been
+      <td><code>true</code> if <code>terminate()</code> has been
       called and the resulting work item has been executed in
       <code>operator()()</code>. Returns <code>false</code> otherwise<br>
       <br>
@@ -306,11 +311,11 @@
     </tr>
 
     <tr>
-      <td width="36%"><code>f( n );</code></td>
+      <td><code>f( n );</code></td>
 
-      <td width="10%"><code>unsigned long</code></td>
+      <td><code>unsigned long</code></td>
 
-      <td width="52%">
+      <td>
         Enters a loop that, with each cycle, dequeues and calls
         <code>operator()()</code> on the oldest work item in the queue.
 
@@ -341,11 +346,11 @@
     </tr>
 
     <tr>
-      <td width="36%"><code>f();</code></td>
+      <td><code>f();</code></td>
 
-      <td width="10%"><code>unsigned long</code></td>
+      <td><code>unsigned long</code></td>
 
-      <td width="52%">Has exactly the same semantics as <code>f( n );</code>
+      <td>Has exactly the same semantics as <code>f( n );</code>
       with <code>n == 0</code> (see above)</td>
     </tr>
   </table>
@@ -367,19 +372,19 @@
   <table border="3" cellpadding="2" width="100%" summary=
   "ExceptionTranslator concept">
     <tr>
-      <td width="299"><b>Expression</b></td>
+      <td><b>Expression</b></td>
 
-      <td width="101"><b>Type</b></td>
+      <td><b>Type</b></td>
 
-      <td width="1129"><b>Effects/Result</b></td>
+      <td><b>Effects/Result</b></td>
     </tr>
 
     <tr>
-      <td width="299"><code>et( a, eh );</code></td>
+      <td><code>et(&nbsp;a,&nbsp;eh&nbsp;);</code></td>
 
-      <td width="101"><code>result</code></td>
+      <td><code>result</code></td>
 
-      <td width="1129">
+      <td>
         <ol>
           <li>Attempts to execute <code>return a();</code></li>
 
@@ -408,29 +413,29 @@
 
   <table border="3" cellpadding="2" width="100%" summary="StateBase concept">
     <tr>
-      <td width="26%"><b>Expression</b></td>
+      <td><b>Expression</b></td>
 
-      <td width="12%"><b>Type</b></td>
+      <td><b>Type</b></td>
 
-      <td width="60%"><b>Result</b></td>
+      <td><b>Result</b></td>
     </tr>
 
     <tr>
-      <td width="26%"><code>cs.outer_state_ptr()</code></td>
+      <td><code>cs.outer_state_ptr()</code></td>
 
-      <td width="12%"><code>const S *</code></td>
+      <td><code>const S *</code></td>
 
-      <td width="60%"><code>0</code> if <code>cs</code> is an <a href=
+      <td><code>0</code> if <code>cs</code> is an <a href=
       "definitions.html#OutermostState">outermost state</a>, a pointer to the
       direct outer state of <code>cs</code> otherwise</td>
     </tr>
 
     <tr>
-      <td width="25%"><code>cs.dynamic_type()</code></td>
+      <td><code>cs.dynamic_type()</code></td>
 
-      <td width="12%"><code>S::id_type</code></td>
+      <td><code>S::id_type</code></td>
 
-      <td width="60%">A value unambiguously identifying the most-derived type
+      <td>A value unambiguously identifying the most-derived type
       of <code>cs</code>. <code>S::id_type</code> values are comparable with
       <code>operator==()</code> and <code>operator!=()</code>. An unspecified
       collating order can be established with <code>std::less&lt; S::id_type
@@ -440,12 +445,12 @@
     </tr>
 
     <tr>
-      <td width="25%"><code>cs.custom_dynamic_type_ptr&lt;<br>
+      <td><code>cs.custom_dynamic_type_ptr&lt;<br>
       &nbsp; Type &gt;()</code></td>
 
-      <td width="12%"><code>const Type *</code></td>
+      <td><code>const Type *</code></td>
 
-      <td width="60%">A pointer to the custom type identifier or
+      <td>A pointer to the custom type identifier or
       <code>0</code>. If <code>!= 0</code>, <code>Type</code> must match the
       type of the previously set pointer. This function is only available if
       <a href=
@@ -466,22 +471,22 @@
   <table border="3" cellpadding="2" width="100%" summary=
   "SimpleState concept">
     <tr>
-      <td width="28%"><b>Expression/Statement</b></td>
+      <td><b>Expression/Statement</b></td>
 
-      <td width="29%"><b>Type</b></td>
+      <td><b>Type</b></td>
 
-      <td width="42%"><b>Effects/Result/Notes</b></td>
+      <td><b>Effects/Result/Notes</b></td>
     </tr>
 
     <tr>
-      <td width="28%"><code><a href=
+      <td><code><a href=
       "#ClassTemplatesimple_state">simple_state</a>&lt;<br>
-      &nbsp; S, C, I, h &gt; * pB =<br>
-      &nbsp;&nbsp;&nbsp; pS;</code></td>
+      &nbsp;&nbsp;S,&nbsp;C,&nbsp;I,&nbsp;h&nbsp;&gt;&nbsp;*&nbsp;pB&nbsp;=<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;pS;</code></td>
 
-      <td width="29%">&nbsp;</td>
+      <td>&nbsp;</td>
 
-      <td width="42%"><code>simple_state&lt; S, C, I, h &gt;</code> must be
+      <td><code>simple_state&lt; S, C, I, h &gt;</code> must be
       an unambiguous public base of <code>S</code>. See <code><a href=
       "#ClassTemplatesimple_state">simple_state&lt;&gt;</a></code>
       documentation for the requirements and semantics of <code>C</code>,
@@ -489,22 +494,22 @@
     </tr>
 
     <tr>
-      <td width="28%"><code>new S()</code></td>
+      <td><code>new S()</code></td>
 
-      <td width="29%"><code>S *</code></td>
+      <td><code>S *</code></td>
 
-      <td width="42%">Enters the state <code>S</code>. Certain functions must
+      <td>Enters the state <code>S</code>. Certain functions must
       not be called from <code>S::S()</code>, see <a href=
       "#ClassTemplatesimple_state"><code>simple_state&lt;&gt;</code></a>
       documentation for more information</td>
     </tr>
 
     <tr>
-      <td width="28%"><code>pS-&gt;exit();</code></td>
+      <td><code>pS-&gt;exit();</code></td>
 
-      <td width="29%">&nbsp;</td>
+      <td>&nbsp;</td>
 
-      <td width="42%">Exits the state <code>S</code> (first stage). The
+      <td>Exits the state <code>S</code> (first stage). The
       definition of an <code>exit</code> member function within models of the
       SimpleState concept is optional since <code>simple_state&lt;&gt;</code>
       already defines the following public member: <code>void exit()
@@ -515,17 +520,17 @@
     </tr>
 
     <tr>
-      <td width="28%"><code>delete pS;</code></td>
+      <td><code>delete pS;</code></td>
 
-      <td width="29%">&nbsp;</td>
+      <td>&nbsp;</td>
 
-      <td width="42%">Exits the state <code>S</code> (second stage)</td>
+      <td>Exits the state <code>S</code> (second stage)</td>
     </tr>
 
     <tr>
-      <td width="28%"><code>S::reactions</code></td>
+      <td><code>S::reactions</code></td>
 
-      <td width="29%">An <code>mpl::list&lt;&gt;</code> that is either empty
+      <td>An <code>mpl::list&lt;&gt;</code> that is either empty
       or contains instantiations of the <code><a href=
       "#ClassTemplatecustom_reaction">custom_reaction</a></code>,
       <code><a href=
@@ -537,7 +542,7 @@
       <code>typedef</code>ed directly, without wrapping it into an
       <code>mpl::list&lt;&gt;</code></td>
 
-      <td width="42%">The declaration of a <code>reactions</code> member
+      <td>The declaration of a <code>reactions</code> member
       <code>typedef</code> within models of the SimpleState concept is
       optional since <code>simple_state&lt;&gt;</code> already defines the
       following public member: <code>typedef mpl::list&lt;&gt;
@@ -558,21 +563,20 @@
 
   <table border="3" cellpadding="2" width="100%" summary="State concept">
     <tr>
-      <td width="28%"><b>Expression/Statement</b></td>
+      <td><b>Expression/Statement</b></td>
 
-      <td width="29%"><b>Type</b></td>
+      <td><b>Type</b></td>
 
-      <td width="42%"><b>Effects/Result/Notes</b></td>
+      <td><b>Effects/Result/Notes</b></td>
     </tr>
 
     <tr>
-      <td width="28%"><code><a href="#ClassTemplatestate">state</a>&lt; S, C,
-      I, h &gt; *<br>
-      &nbsp; pB = pS;</code></td>
+      <td><code><a href="#ClassTemplatestate">state</a>&lt;&nbsp;S,&nbsp;C,&nbsp;I,&nbsp;h&nbsp;&gt;&nbsp;*<br>
+      &nbsp;&nbsp;pB = pS;</code></td>
 
-      <td width="29%">&nbsp;</td>
+      <td>&nbsp;</td>
 
-      <td width="42%"><code>state&lt; S, C, I, h &gt;</code> must be an
+      <td><code>state&lt; S, C, I, h &gt;</code> must be an
       unambiguous public base of <code>S</code>. See <code><a href=
       "#ClassTemplatestate">state&lt;&gt;</a></code> documentation for the
       requirements and semantics of <code>C</code>, <code>I</code> and
@@ -580,11 +584,11 @@
     </tr>
 
     <tr>
-      <td width="28%"><code>new S( mc )</code></td>
+      <td><code>new S( mc )</code></td>
 
-      <td width="29%"><code>S *</code></td>
+      <td><code>S *</code></td>
 
-      <td width="42%">Enters the state <code>S</code>. No restrictions exist
+      <td>Enters the state <code>S</code>. No restrictions exist
       regarding the functions that can be called from <code>S::S()</code> (in
       contrast to the constructors of models of the SimpleState concept).
       <code>mc</code> must be forwarded to <code>state&lt; S, C, I, h
@@ -604,29 +608,29 @@
 
   <table border="3" cellpadding="2" width="100%" summary="Event concept">
     <tr>
-      <td width="28%"><b>Expression/Statement</b></td>
+      <td><b>Expression/Statement</b></td>
 
-      <td width="29%"><b>Type</b></td>
+      <td><b>Type</b></td>
 
-      <td width="42%"><b>Effects/Result/Notes</b></td>
+      <td><b>Effects/Result/Notes</b></td>
     </tr>
 
     <tr>
-      <td width="28%"><code>const <a href="#ClassTemplateevent">event</a>&lt;
+      <td><code>const <a href="#ClassTemplateevent">event</a>&lt;
       E &gt; * pCB = pCE;</code></td>
 
-      <td width="29%">&nbsp;</td>
+      <td>&nbsp;</td>
 
-      <td width="42%"><code>event&lt; E &gt;</code> must be an unambiguous
+      <td><code>event&lt; E &gt;</code> must be an unambiguous
       public base of <code>E</code></td>
     </tr>
 
     <tr>
-      <td width="28%"><code>new E( *pCE )</code></td>
+      <td><code>new E( *pCE )</code></td>
 
-      <td width="29%"><code>E *</code></td>
+      <td><code>E *</code></td>
 
-      <td width="42%">Makes a copy of <code>pE</code></td>
+      <td>Makes a copy of <code>pE</code></td>
     </tr>
   </table>
 
@@ -644,29 +648,29 @@
   <table border="3" cellpadding="2" width="100%" summary=
   "state_machine parameters">
     <tr>
-      <td width="15%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="51%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="18%"><b>Semantics</b></td>
+      <td><b>Semantics</b></td>
 
-      <td width="19%"><b>Default</b></td>
+      <td><b>Default</b></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>MostDerived</code></td>
+      <td><code>MostDerived</code></td>
 
-      <td width="51%">The most-derived subtype of this class template</td>
+      <td>The most-derived subtype of this class template</td>
 
-      <td width="18%">&nbsp;</td>
+      <td>&nbsp;</td>
 
-      <td width="19%">&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
 
     <tr>
-      <td width="15%"><code>InitialState</code></td>
+      <td><code>InitialState</code></td>
 
-      <td width="51%">A model of the <a href="#SimpleState">SimpleState</a>
+      <td>A model of the <a href="#SimpleState">SimpleState</a>
       or <a href="#State">State</a> concepts. The <code>Context</code>
       argument passed to the <code><a href=
       "#ClassTemplatesimple_state">simple_state&lt;&gt;</a></code> or
@@ -676,34 +680,34 @@
       "definitions.html#OutermostState">outermost state</a> of this state
       machine</td>
 
-      <td width="18%">The state that is entered when
+      <td>The state that is entered when
       <code>state_machine&lt;&gt;<br>
       ::initiate()</code> is called</td>
 
-      <td width="19%">&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
 
     <tr>
-      <td width="15%"><code>Allocator</code></td>
+      <td><code>Allocator</code></td>
 
-      <td width="51%">A model of the standard Allocator concept</td>
+      <td>A model of the standard Allocator concept</td>
 
-      <td width="18%"><code>Allocator::rebind&lt;&gt;::other</code> is used
+      <td><code>Allocator::rebind&lt;&gt;::other</code> is used
       to allocate and deallocate all <code>simple_state</code> subtype
       objects and internal objects of dynamic storage duration</td>
 
-      <td width="19%"><code>std::allocator&lt; void &gt;</code></td>
+      <td><code>std::allocator&lt; void &gt;</code></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>ExceptionTranslator</code></td>
+      <td><code>ExceptionTranslator</code></td>
 
-      <td width="51%">A model of the ExceptionTranslator concept</td>
+      <td>A model of the ExceptionTranslator concept</td>
 
-      <td width="18%">see <a href=
+      <td>see <a href=
       "#ExceptionTranslator">ExceptionTranslator</a> concept</td>
 
-      <td width="19%"><code>null_exception_translator</code></td>
+      <td><code>null_exception_translator</code></td>
     </tr>
   </table>
 
@@ -1214,29 +1218,29 @@ state_iterator <a name="state_end" id="state_end">state_end</a>() const;
   <table border="3" cellpadding="2" width="100%" summary=
   "asynchronous_state_machine parameters">
     <tr>
-      <td width="15%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="51%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="18%"><b>Semantics</b></td>
+      <td><b>Semantics</b></td>
 
-      <td width="19%"><b>Default</b></td>
+      <td><b>Default</b></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>MostDerived</code></td>
+      <td><code>MostDerived</code></td>
 
-      <td width="51%">The most-derived subtype of this class template</td>
+      <td>The most-derived subtype of this class template</td>
 
-      <td width="18%">&nbsp;</td>
+      <td>&nbsp;</td>
 
-      <td width="19%">&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
 
     <tr>
-      <td width="15%"><code>InitialState</code></td>
+      <td><code>InitialState</code></td>
 
-      <td width="51%">A model of the <a href="#SimpleState">SimpleState</a>
+      <td>A model of the <a href="#SimpleState">SimpleState</a>
       or <a href="#State">State</a> concepts. The <code>Context</code>
       argument passed to the <code><a href=
       "#ClassTemplatesimple_state">simple_state&lt;&gt;</a></code> or
@@ -1246,41 +1250,41 @@ state_iterator <a name="state_end" id="state_end">state_end</a>() const;
       "definitions.html#OutermostState">outermost state</a> of this state
       machine</td>
 
-      <td width="18%">The state that is entered when the state machine is
+      <td>The state that is entered when the state machine is
       initiated through the <code>Scheduler</code> object</td>
 
-      <td width="19%">&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
 
     <tr>
-      <td width="15%"><code>Scheduler</code></td>
+      <td><code>Scheduler</code></td>
 
-      <td width="51%">A model of the Scheduler concept</td>
+      <td>A model of the Scheduler concept</td>
 
-      <td width="18%">see <a href="#Scheduler">Scheduler</a> concept</td>
+      <td>see <a href="#Scheduler">Scheduler</a> concept</td>
 
-      <td width="19%"><code>fifo_scheduler&lt;&gt;</code></td>
+      <td><code>fifo_scheduler&lt;&gt;</code></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>Allocator</code></td>
+      <td><code>Allocator</code></td>
 
-      <td width="51%">A model of the standard Allocator concept</td>
+      <td>A model of the standard Allocator concept</td>
 
-      <td width="18%">&nbsp;</td>
+      <td>&nbsp;</td>
 
-      <td width="19%"><code>std::allocator&lt; void &gt;</code></td>
+      <td><code>std::allocator&lt; void &gt;</code></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>ExceptionTranslator</code></td>
+      <td><code>ExceptionTranslator</code></td>
 
-      <td width="51%">A model of the ExceptionTranslator concept</td>
+      <td>A model of the ExceptionTranslator concept</td>
 
-      <td width="18%">see <a href=
+      <td>see <a href=
       "#ExceptionTranslator">ExceptionTranslator</a> concept</td>
 
-      <td width="19%"><code>null_exception_translator</code></td>
+      <td><code>null_exception_translator</code></td>
     </tr>
   </table>
 
@@ -1350,23 +1354,19 @@ asynchronous_state_machine(
   <table border="3" cellpadding="2" width="100%" summary=
   "event_processor parameters">
     <tr>
-      <td width="15%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="51%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="18%"><b>Semantics</b></td>
-
-      <td width="19%"><b>Default</b></td>
+      <td><b>Semantics</b></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>Scheduler</code></td>
+      <td><code>Scheduler</code></td>
 
-      <td width="51%">A model of the Scheduler concept</td>
+      <td>A model of the Scheduler concept</td>
 
-      <td width="18%">see <a href="#Scheduler">Scheduler</a> concept</td>
-
-      <td width="19%">&nbsp;</td>
+      <td>see <a href="#Scheduler">Scheduler</a> concept</td>
     </tr>
   </table>
 
@@ -1487,33 +1487,33 @@ processor_handle <a name="my_handle" id="my_handle">my_handle</a>() const;
   <table border="3" cellpadding="2" width="100%" summary=
   "fifo_scheduler parameters">
     <tr>
-      <td width="15%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="28%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="26%"><b>Semantics</b></td>
+      <td><b>Semantics</b></td>
 
-      <td width="29%"><b>Default</b></td>
+      <td><b>Default</b></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>FifoWorker</code></td>
+      <td><code>FifoWorker</code></td>
 
-      <td width="28%">A model of the FifoWorker concept</td>
+      <td>A model of the FifoWorker concept</td>
 
-      <td width="26%">see <a href="#FifoWorker">FifoWorker</a> concept</td>
+      <td>see <a href="#FifoWorker">FifoWorker</a> concept</td>
 
-      <td width="29%"><code>fifo_worker&lt;&gt;</code></td>
+      <td><code>fifo_worker&lt;&gt;</code></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>Allocator</code></td>
+      <td><code>Allocator</code></td>
 
-      <td width="28%">A model of the standard Allocator concept</td>
+      <td>A model of the standard Allocator concept</td>
 
-      <td width="26%">&nbsp;</td>
+      <td>&nbsp;</td>
 
-      <td width="29%"><code>std::allocator&lt; void &gt;</code></td>
+      <td><code>std::allocator&lt;&nbsp;void&nbsp;&gt;</code></td>
     </tr>
   </table>
 
@@ -1787,24 +1787,24 @@ bool <a name="fifo_scheduler::terminated" id=
   <table border="3" cellpadding="2" width="100%" summary=
   "exception_translator parameters">
     <tr>
-      <td width="12%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="30%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="35%"><b>Semantics</b></td>
+      <td><b>Semantics</b></td>
 
-      <td width="24%"><b>Default</b></td>
+      <td><b>Default</b></td>
     </tr>
 
     <tr>
-      <td width="12%"><code>ExceptionEvent</code></td>
+      <td><code>ExceptionEvent</code></td>
 
-      <td width="30%">A model of the <a href="#Event">Event</a> concept</td>
+      <td>A model of the <a href="#Event">Event</a> concept</td>
 
-      <td width="35%">The type of event that is dispatched when an exception
+      <td>The type of event that is dispatched when an exception
       is propagated into the framework</td>
 
-      <td width="24%"><code>exception_thrown</code></td>
+      <td><code>exception_thrown</code></td>
     </tr>
   </table>
 
@@ -1945,29 +1945,29 @@ state_iterator <b>state_end</b>() const;
   <table border="3" cellpadding="2" width="100%" summary=
   "simple_state parameters">
     <tr>
-      <td width="15%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="51%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="18%"><b>Semantics</b></td>
+      <td><b>Semantics</b></td>
 
-      <td width="19%"><b>Default</b></td>
+      <td><b>Default</b></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>MostDerived</code></td>
+      <td><code>MostDerived</code></td>
 
-      <td width="51%">The most-derived subtype of this class template</td>
+      <td>The most-derived subtype of this class template</td>
 
-      <td width="18%">&nbsp;</td>
+      <td>&nbsp;</td>
 
-      <td width="19%">&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
 
     <tr>
-      <td width="15%"><code>Context</code></td>
+      <td><code>Context</code></td>
 
-      <td width="51%">A most-derived direct or indirect subtype of the
+      <td>A most-derived direct or indirect subtype of the
       <code><a href="#ClassTemplatestate_machine">state_machine</a></code> or
       <code><a href=
       "#ClassTemplateasynchronous_state_machine">asynchronous_state_machine</a></code>
@@ -1977,16 +1977,16 @@ state_iterator <b>state_end</b>() const;
       "#ClassTemplatesimple_state">simple_state&lt;&gt;::orthogonal</a></code>
       class template. Must be a complete type</td>
 
-      <td width="18%">Defines the states' position in the state
+      <td>Defines the states' position in the state
       hierarchy</td>
 
-      <td width="19%">&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
 
     <tr>
-      <td width="15%"><code>InnerInitial</code></td>
+      <td><code>InnerInitial</code></td>
 
-      <td width="51%">An <code>mpl::list&lt;&gt;</code> containing models of
+      <td>An <code>mpl::list&lt;&gt;</code> containing models of
       the <a href="#SimpleState">SimpleState</a> or <a href=
       "#State">State</a> concepts or instantiations of the <code><a href=
       "#ClassTemplateshallow_history">shallow_history</a></code> or
@@ -2004,22 +2004,22 @@ state_iterator <b>state_end</b>() const;
       <code>MostDerived::orthogonal&lt; 0 &gt;</code> and
       <code>MostDerived</code> are synonymous</td>
 
-      <td width="18%">Defines the inner initial state for each orthogonal
+      <td>Defines the inner initial state for each orthogonal
       region. By default, a state does not have inner states</td>
 
-      <td width="19%"><i><code>unspecified</code></i></td>
+      <td><i><code>unspecified</code></i></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>historyMode</code></td>
+      <td><code>historyMode</code></td>
 
-      <td width="51%">One of the values defined in the <code><a href=
+      <td>One of the values defined in the <code><a href=
       "#Enumhistory_mode">history_mode</a></code> enumeration</td>
 
-      <td width="18%">Defines whether the state saves shallow, deep or both
+      <td>Defines whether the state saves shallow, deep or both
       histories upon exit</td>
 
-      <td width="19%"><code>has_no_history</code></td>
+      <td><code>has_no_history</code></td>
     </tr>
   </table>
 
@@ -2524,9 +2524,11 @@ outermost_context_type &amp; <a name="outermost_context" id=
 
   <p><b>Requires</b>: If called from a constructor of a direct or indirect
   subtype then the most-derived type must directly or indirectly derive from
-  the <code>state</code> class template<b><br>
-  Returns</b>: A reference to the outermost context, which is always the
-  state machine this state belongs to</p>
+  the <code>state</code> class template. If called from a destructor of a
+  direct or indirect subtype then the <code>state_machine<></code> subclass
+  portion must still exist<br>
+  <b>Returns</b>: A reference to the outermost context, which is always the
+  state machine this state belongs to<br></p>
   <pre>
 const outermost_context_type &amp; <a name="outermost_contextconst" id=
 "outermost_contextconst">outermost_context() const</a>;
@@ -2534,8 +2536,10 @@ const outermost_context_type &amp; <a name="outermost_contextconst" id=
 
   <p><b>Requires</b>: If called from a constructor of a direct or indirect
   subtype then the most-derived type must directly or indirectly derive from
-  the <code>state</code> class template<b><br>
-  Returns</b>: A reference to the const outermost context, which is always
+  the <code>state</code> class template. If called from a destructor of a
+  direct or indirect subtype then the <code>state_machine<></code> subclass
+  portion must still exist<br>
+  <b>Returns</b>: A reference to the const outermost context, which is always
   the state machine this state belongs to</p>
   <pre>
 template&lt; class OtherContext &gt;
@@ -2544,8 +2548,11 @@ OtherContext &amp; <a name="context" id="context">context</a>();
 
   <p><b>Requires</b>: If called from a constructor of a direct or indirect
   subtype then the most-derived type must directly or indirectly derive from
-  the <code>state</code> class template<b><br>
-  Returns</b>: A reference to a direct or indirect context</p>
+  the <code>state</code> class template. If called from a destructor of a
+  direct or indirect subtype with a <code>state_machine<></code> subtype as
+  argument then the <code>state_machine<></code> subclass portion must still
+  exist<br>
+  <b>Returns</b>: A reference to a direct or indirect context</p>
   <pre>
 template&lt; class OtherContext &gt;
 const OtherContext &amp; <a name="contextconst" id=
@@ -2554,8 +2561,11 @@ const OtherContext &amp; <a name="contextconst" id=
 
   <p><b>Requires</b>: If called from a constructor of a direct or indirect
   subtype then the most-derived type must directly or indirectly derive from
-  the <code>state</code> class template<b><br>
-  Returns</b>: A reference to a const direct or indirect context</p>
+  the <code>state</code> class template. If called from a destructor of a
+  direct or indirect subtype with a <code>state_machine<></code> subtype as
+  argument then the <code>state_machine<></code> subclass portion must still
+  exist<br>
+  <b>Returns</b>: A reference to a const direct or indirect context</p>
   <pre>
 template&lt; class Target &gt;
 Target <a name="simple_state::state_cast" id=
@@ -2746,17 +2756,17 @@ namespace statechart
   <table border="3" cellpadding="2" width="100%" summary=
   "shallow_history parameters">
     <tr>
-      <td width="15%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="45%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="24%"><b>Semantics</b></td>
+      <td><b>Semantics</b></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>DefaultState</code></td>
+      <td><code>DefaultState</code></td>
 
-      <td width="45%">A model of the <a href="#SimpleState">SimpleState</a>
+      <td>A model of the <a href="#SimpleState">SimpleState</a>
       or <a href="#State">State</a> concepts. The type passed as
       <code>Context</code> argument to the <code><a href=
       "#ClassTemplatesimple_state">simple_state&lt;&gt;</a></code> or
@@ -2767,8 +2777,7 @@ namespace statechart
       "#ClassTemplatesimple_state">simple_state&lt;&gt;</a></code> or
       <code><a href="#ClassTemplatestate">state&lt;&gt;</a></code> base</td>
 
-      <td width="24%">The state that is entered if shallow history is not
-      available</td>
+      <td>The state that is entered if shallow history is not available</td>
     </tr>
   </table>
 
@@ -2804,17 +2813,17 @@ namespace statechart
   <table border="3" cellpadding="2" width="100%" summary=
   "deep_history parameters">
     <tr>
-      <td width="15%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="45%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="24%"><b>Semantics</b></td>
+      <td><b>Semantics</b></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>DefaultState</code></td>
+      <td><code>DefaultState</code></td>
 
-      <td width="45%">A model of the <a href="#SimpleState">SimpleState</a>
+      <td>A model of the <a href="#SimpleState">SimpleState</a>
       or <a href="#State">State</a> concepts. The type passed as
       <code>Context</code> argument to the <code><a href=
       "#ClassTemplatesimple_state">simple_state&lt;&gt;</a></code> or
@@ -2825,8 +2834,7 @@ namespace statechart
       "#ClassTemplatesimple_state">simple_state&lt;&gt;</a></code> or
       <code><a href="#ClassTemplatestate">state&lt;&gt;</a></code> base</td>
 
-      <td width="24%">The state that is entered if deep history is not
-      available</td>
+      <td>The state that is entered if deep history is not available</td>
     </tr>
   </table>
 
@@ -2944,36 +2952,36 @@ const CustomId * <a name="event_base::custom_dynamic_type_ptr" id=
 
   <table border="3" cellpadding="2" width="100%" summary="event parameters">
     <tr>
-      <td width="15%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="51%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="18%"><b>Semantics</b></td>
+      <td><b>Semantics</b></td>
 
-      <td width="19%"><b>Default</b></td>
+      <td><b>Default</b></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>MostDerived</code></td>
+      <td><code>MostDerived</code></td>
 
-      <td width="51%">The most-derived subtype of this class template</td>
+      <td>The most-derived subtype of this class template</td>
 
-      <td width="18%">&nbsp;</td>
+      <td>&nbsp;</td>
 
-      <td width="19%">&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
 
     <tr>
-      <td width="15%"><code>Allocator</code></td>
+      <td><code>Allocator</code></td>
 
-      <td width="51%">A model of the standard Allocator concept</td>
+      <td>A model of the standard Allocator concept</td>
 
-      <td width="18%"><code>Allocator::rebind&lt; MostDerived
+      <td><code>Allocator::rebind&lt; MostDerived
       &gt;::other</code> is used to allocate and deallocate all event subtype
       objects of dynamic storage duration, see <code><a href=
       "#event::operatornew">operator new</a></code></td>
 
-      <td width="19%"><code>std::allocator&lt; void &gt;</code></td>
+      <td><code>std::allocator&lt; void &gt;</code></td>
     </tr>
   </table>
 
@@ -2989,6 +2997,8 @@ namespace statechart
     public:
       static void * <a href=
 "#event::operatornew">operator new</a>( std::size_t size );
+      static void * <a href=
+"#event::operatornew2">operator new</a>( std::size_t size, void * p );
       static void <a href=
 "#event::operatordelete">operator delete</a>( void * pEvent );
 
@@ -3033,6 +3043,13 @@ static void * <a name="event::operatornew" id=
   );</code><br>
   <b>Returns</b>: The return value of the above call<br>
   <b>Throws</b>: Whatever the above call throws</p>
+  <pre>
+static void * <a name="event::operatornew2" id=
+"event::operatornew2">operator new</a>( std::size_t size, void * p );
+</pre>
+
+  <p><b>Effects</b>: None<br>
+  <b>Returns</b>: <code>p</code></p>
   <pre>
 static void <a name="event::operatordelete" id=
 "event::operatordelete">operator delete</a>( void * pEvent );
@@ -3094,33 +3111,33 @@ static void <a name="event::custom_static_type_ptr1" id=
   <table border="3" cellpadding="2" width="100%" summary=
   "transition parameters">
     <tr>
-      <td width="15%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="45%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="24%"><b>Semantics</b></td>
+      <td><b>Semantics</b></td>
 
-      <td width="19%"><b>Default</b></td>
+      <td><b>Default</b></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>Event</code></td>
+      <td><code>Event</code></td>
 
-      <td width="45%">A model of the <a href="#Event">Event</a> concept or
+      <td>A model of the <a href="#Event">Event</a> concept or
       the class <code><a href="#Classevent_base">event_base</a></code></td>
 
-      <td width="24%">The event triggering the transition. If <code><a href=
+      <td>The event triggering the transition. If <code><a href=
       "#Classevent_base">event_base</a></code> is specified, the transition
       is triggered by all models of the <a href="#Event">Event</a>
       concept</td>
 
-      <td width="19%">&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
 
     <tr>
-      <td width="15%"><code>Destination</code></td>
+      <td><code>Destination</code></td>
 
-      <td width="45%">A model of the <a href="#SimpleState">SimpleState</a>
+      <td>A model of the <a href="#SimpleState">SimpleState</a>
       or <a href="#State">State</a> concepts or an instantiation of the
       <code><a href=
       "#ClassTemplateshallow_history">shallow_history</a></code> or
@@ -3129,35 +3146,35 @@ static void <a name="event::custom_static_type_ptr1" id=
       is defined) and <code>Destination</code> must have a common direct or
       indirect context</td>
 
-      <td width="24%">The destination state to make a transition to</td>
+      <td>The destination state to make a transition to</td>
 
-      <td width="19%">&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
 
     <tr>
-      <td width="15%"><code>TransitionContext</code></td>
+      <td><code>TransitionContext</code></td>
 
-      <td width="45%">A common context of the source and
+      <td>A common context of the source and
       <code>Destination</code> state</td>
 
-      <td width="24%">The state of which the transition action is a
+      <td>The state of which the transition action is a
       member</td>
 
-      <td width="19%"><i><code>unspecified</code></i></td>
+      <td><i><code>unspecified</code></i></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>pTransitionAction</code></td>
+      <td><code>pTransitionAction</code></td>
 
-      <td width="45%">A pointer to a member function of
+      <td>A pointer to a member function of
       <code>TransitionContext</code>. The member function must accept a
       <code>const Event &amp;</code> parameter and return
       <code>void</code></td>
 
-      <td width="24%">The transition action that is executed during the
+      <td>The transition action that is executed during the
       transition. By default no transition action is executed</td>
 
-      <td width="19%"><i><code>unspecified</code></i></td>
+      <td><i><code>unspecified</code></i></td>
     </tr>
   </table>
 
@@ -3212,44 +3229,52 @@ namespace statechart
   <table border="3" cellpadding="2" width="100%" summary=
   "in_state_reaction parameters">
     <tr>
-      <td width="15%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="45%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="24%"><b>Semantics</b></td>
+      <td><b>Semantics</b></td>
+
+      <td><b>Default</b></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>Event</code></td>
+      <td><code>Event</code></td>
 
-      <td width="45%">A model of the <a href="#Event">Event</a> concept or
+      <td>A model of the <a href="#Event">Event</a> concept or
       the class <code><a href="#Classevent_base">event_base</a></code></td>
 
-      <td width="24%">The event triggering the in-state reaction. If
+      <td>The event triggering the in-state reaction. If
       <code><a href="#Classevent_base">event_base</a></code> is specified,
       the in-state reaction is triggered by all models of the <a href=
       "#Event">Event</a> concept</td>
+
+      <td>&nbsp;</td>
     </tr>
 
     <tr>
-      <td width="15%"><code>ReactionContext</code></td>
+      <td><code>ReactionContext</code></td>
 
-      <td width="45%">Either the state defining the in-state reaction itself
+      <td>Either the state defining the in-state reaction itself
       or one of it direct or indirect contexts</td>
 
-      <td width="24%">The state of which the action is a member</td>
+      <td>The state of which the action is a member</td>
+
+      <td><i><code>unspecified</code></i></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>pAction</code></td>
+      <td><code>pAction</code></td>
 
-      <td width="45%">A pointer to a member function of
+      <td>A pointer to a member function of
       <code>ReactionContext</code>. The member function must accept a
       <code>const Event &amp;</code> parameter and return
       <code>void</code></td>
 
-      <td width="24%">The action that is executed during the in-state
+      <td>The action that is executed during the in-state
       reaction</td>
+
+      <td><i><code>unspecified</code></i></td>
     </tr>
   </table>
 
@@ -3261,8 +3286,9 @@ namespace statechart
 {
   template&lt;
     class Event,
-    class ReactionContext,
-    void ( ReactionContext::*pAction )( const Event &amp; ) &gt;
+    class ReactionContext = <i>unspecified</i>,
+    void ( ReactionContext::*pAction )(
+      const Event &amp; ) = <i>unspecified</i> &gt;
   class in_state_reaction
   {
     // <i>implementation-defined</i>
@@ -3273,10 +3299,14 @@ namespace statechart
 
   <h3>Class template <code>in_state_reaction</code> semantics</h3>
 
-  <p>When executed, <code>pAction</code> is called, passing the triggering
-  event as the only argument. Afterwards, a call is made to the
-  <code><a href="#discard_event">discard_event</a></code> member function of
-  the state for which the reaction was defined.</p>
+  <p>When executed then the following happens:</p>
+  <ol>
+    <li>If an action was specified, <code>pAction</code> is called, passing
+    the triggering event as the only argument</li>
+    <li>A call is made to the <code><a href="#discard_event">discard_event</a>
+    </code> member function of the state for which the reaction was defined
+    </li>
+  </ol>
 
   <h1>Header &lt;boost/statechart/<a name="termination.hpp" id=
   "termination.hpp">termination.hpp</a>&gt;</h1>
@@ -3294,20 +3324,20 @@ namespace statechart
   <table border="3" cellpadding="2" width="100%" summary=
   "termination parameters">
     <tr>
-      <td width="15%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="45%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="24%"><b>Semantics</b></td>
+      <td><b>Semantics</b></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>Event</code></td>
+      <td><code>Event</code></td>
 
-      <td width="45%">A model of the <a href="#Event">Event</a> concept or
+      <td>A model of the <a href="#Event">Event</a> concept or
       the class <code><a href="#Classevent_base">event_base</a></code></td>
 
-      <td width="24%">The event triggering the termination. If <code><a href=
+      <td>The event triggering the termination. If <code><a href=
       "#Classevent_base">event_base</a></code> is specified, the termination
       is triggered by all models of the <a href="#Event">Event</a>
       concept</td>
@@ -3351,20 +3381,20 @@ namespace statechart
   <table border="3" cellpadding="2" width="100%" summary=
   "deferral parameters">
     <tr>
-      <td width="15%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="45%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="24%"><b>Semantics</b></td>
+      <td><b>Semantics</b></td>
     </tr>
 
     <tr>
-      <td width="15%"><code>Event</code></td>
+      <td><code>Event</code></td>
 
-      <td width="45%">A model of the <a href="#Event">Event</a> concept or
+      <td>A model of the <a href="#Event">Event</a> concept or
       the class <code><a href="#Classevent_base">event_base</a></code></td>
 
-      <td width="24%">The event triggering the deferral. If <code><a href=
+      <td>The event triggering the deferral. If <code><a href=
       "#Classevent_base">event_base</a></code> is specified, the deferral is
       triggered by all models of the <a href="#Event">Event</a> concept</td>
     </tr>
@@ -3408,20 +3438,20 @@ namespace statechart
   <table border="3" cellpadding="2" width="100%" summary=
   "custom_reaction parameters">
     <tr>
-      <td width="17%"><b>Template parameter</b></td>
+      <td><b>Template parameter</b></td>
 
-      <td width="56%"><b>Requirements</b></td>
+      <td><b>Requirements</b></td>
 
-      <td width="24%"><b>Semantics</b></td>
+      <td><b>Semantics</b></td>
     </tr>
 
     <tr>
-      <td width="17%"><code>Event</code></td>
+      <td><code>Event</code></td>
 
-      <td width="56%">A model of the <a href="#Event">Event</a> concept or
+      <td>A model of the <a href="#Event">Event</a> concept or
       the class <code><a href="#Classevent_base">event_base</a></code></td>
 
-      <td width="24%">The event triggering the custom reaction. If
+      <td>The event triggering the custom reaction. If
       <code><a href="#Classevent_base">event_base</a></code> is specified,
       the custom reaction is triggered by all models of the <a href=
       "#Event">Event</a> concept</td>
@@ -3525,11 +3555,10 @@ namespace statechart
   "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
   height="31" width="88"></a></p>
 
-  <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->09 April, 2007<!--webbot bot="Timestamp" endspan i-checksum="30014" --></p>
+  <p>Revised 06 January, 2008</p>
 
-  <p><i>Copyright &copy; 2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2007<!--webbot bot="Timestamp" endspan i-checksum="778" -->
-   <a href="contact.html">Andreas Huber D&ouml;nni</a></i></p>
+  <p><i>Copyright &copy; 2003-2008 <a href="contact.html">Andreas Huber
+  D&ouml;nni</a></i></p>
 
   <p><i>Distributed under the Boost Software License, Version 1.0. (See
   accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or

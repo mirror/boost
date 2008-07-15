@@ -1,7 +1,7 @@
 #ifndef BOOST_STATECHART_PROCESSOR_CONTAINER_HPP_INCLUDED
 #define BOOST_STATECHART_PROCESSOR_CONTAINER_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// Copyright 2002-2006 Andreas Huber Doenni
+// Copyright 2002-2008 Andreas Huber Doenni
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -70,6 +70,9 @@ class processor_container : noncopyable
       private:
       #endif
 
+        // avoids C4512 (assignment operator could not be generated)
+        processor_context & operator=( const processor_context & );
+
         Scheduler & scheduler_;
         const processor_handle handle_;
 
@@ -86,8 +89,10 @@ class processor_container : noncopyable
         const processor_holder_ptr_type &, const processor_context & );
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl0< Processor >;
-      return bind(
-        pImpl, this, pProcessor, processor_context( scheduler, handle ) );
+      return WorkItem(
+        bind( pImpl, this, pProcessor,
+          processor_context( scheduler, handle ) ),
+        Allocator() );
     }
 
     template< class Processor, typename Arg1 >
@@ -101,8 +106,10 @@ class processor_container : noncopyable
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl1<
           Processor, Arg1 >;
-      return bind(
-        pImpl, this, pProcessor, processor_context( scheduler, handle ), arg1 );
+      return WorkItem(
+        bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
+          arg1 ),
+        Allocator() );
     }
 
     template< class Processor, typename Arg1, typename Arg2 >
@@ -117,9 +124,10 @@ class processor_container : noncopyable
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl2<
           Processor, Arg1, Arg2 >;
-      return bind(
-        pImpl, this, pProcessor, processor_context( scheduler, handle ),
-        arg1, arg2 );
+      return WorkItem(
+        bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
+          arg1, arg2 ),
+        Allocator() );
     }
 
     template< class Processor, typename Arg1, typename Arg2, typename Arg3 >
@@ -136,9 +144,10 @@ class processor_container : noncopyable
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl3<
           Processor, Arg1, Arg2, Arg3 >;
-      return bind(
-        pImpl, this, pProcessor, processor_context( scheduler, handle ),
-        arg1, arg2, arg3 );
+      return WorkItem(
+        bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
+          arg1, arg2, arg3 ),
+        Allocator() );
     }
 
     template<
@@ -157,9 +166,10 @@ class processor_container : noncopyable
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl4<
           Processor, Arg1, Arg2, Arg3, Arg4 >;
-      return bind(
-        pImpl, this, pProcessor, processor_context( scheduler, handle ),
-        arg1, arg2, arg3, arg4 );
+      return WorkItem(
+        bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
+          arg1, arg2, arg3, arg4 ),
+        Allocator() );
     }
 
     template<
@@ -178,9 +188,10 @@ class processor_container : noncopyable
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl5<
           Processor, Arg1, Arg2, Arg3, Arg4, Arg5 >;
-      return bind(
-        pImpl, this, pProcessor, processor_context( scheduler, handle ),
-        arg1, arg2, arg3, arg4, arg5 );
+      return WorkItem(
+        bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
+          arg1, arg2, arg3, arg4, arg5 ),
+        Allocator() );
     }
 
     template<
@@ -199,27 +210,33 @@ class processor_container : noncopyable
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl6<
           Processor, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 >;
-      return bind(
-        pImpl, this, pProcessor, processor_context( scheduler, handle ),
-        arg1, arg2, arg3, arg4, arg5, arg6 );
+      return WorkItem(
+        bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
+          arg1, arg2, arg3, arg4, arg5, arg6 ),
+        Allocator() );
     }
 
     WorkItem destroy_processor( const processor_handle & processor )
     {
-      return bind(
-        &processor_container::destroy_processor_impl, this, processor );
+      return WorkItem(
+        bind( &processor_container::destroy_processor_impl, this, processor ),
+        Allocator() );
     }
 
     WorkItem initiate_processor( const processor_handle & processor )
     {
-      return bind(
-        &processor_container::initiate_processor_impl, this, processor );
+      return WorkItem(
+        bind( &processor_container::initiate_processor_impl, this,
+          processor ),
+        Allocator() );
     }
 
     WorkItem terminate_processor( const processor_handle & processor )
     {
-      return bind(
-        &processor_container::terminate_processor_impl, this, processor );
+      return WorkItem(
+        bind( &processor_container::terminate_processor_impl, this,
+          processor ),
+        Allocator() );
     }
 
     typedef intrusive_ptr< const event_base > event_ptr_type;
@@ -229,8 +246,10 @@ class processor_container : noncopyable
     {
       BOOST_ASSERT( pEvent.get() != 0 );
 
-      return bind(
-        &processor_container::queue_event_impl, this, processor, pEvent );
+      return WorkItem(
+        bind( &processor_container::queue_event_impl, this, processor,
+          pEvent ),
+        Allocator() );
     }
 
   private:

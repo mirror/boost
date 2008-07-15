@@ -444,19 +444,24 @@ typedef std::vector< PerfResult > PerfResultList;
 template< class NoOfBits >
 struct PerfResultBackInserter
 {
-  PerfResultBackInserter( PerfResultList & perfResultList ) :
-    perfResultList_( perfResultList )
-  {
-  }
+  public:
+    PerfResultBackInserter( PerfResultList & perfResultList ) :
+      perfResultList_( perfResultList )
+    {
+    }
 
-  template< class FirstTransitionBit >
-  void operator()( const FirstTransitionBit & )
-  {
-    perfResultList_.push_back(
-      PerformanceTester< NoOfBits, FirstTransitionBit >::Test() );
-  }
+    template< class FirstTransitionBit >
+    void operator()( const FirstTransitionBit & )
+    {
+      perfResultList_.push_back(
+        PerformanceTester< NoOfBits, FirstTransitionBit >::Test() );
+    }
 
-  PerfResultList & perfResultList_;
+  private:
+    // avoids C4512 (assignment operator could not be generated)
+    PerfResultBackInserter & operator=( const PerfResultBackInserter & );
+
+    PerfResultList & perfResultList_;
 };
 
 template< class NoOfBits >

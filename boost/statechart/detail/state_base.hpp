@@ -1,7 +1,7 @@
 #ifndef BOOST_STATECHART_DETAIL_STATE_BASE_HPP_INCLUDED
 #define BOOST_STATECHART_DETAIL_STATE_BASE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// Copyright 2002-2006 Andreas Huber Doenni
+// Copyright 2002-2008 Andreas Huber Doenni
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -30,15 +30,6 @@
 
 #ifdef BOOST_MSVC
 #  pragma warning( pop )
-#endif
-
-
-
-#ifdef BOOST_MSVC
-// We permanently turn off the following level 4 warnings because users will
-// have to do so themselves anyway if we turn them back on
-#  pragma warning( disable: 4511 ) // copy constructor could not be generated
-#  pragma warning( disable: 4512 ) // assignment operator could not be generated
 #endif
 
 
