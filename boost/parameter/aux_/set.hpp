@@ -5,6 +5,8 @@
 #ifndef BOOST_PARAMETER_SET_060912_HPP
 # define BOOST_PARAMETER_SET_060912_HPP
 
+# include <boost/detail/workaround.hpp>
+
 # if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) \
   && !BOOST_WORKAROUND(__GNUC__, < 3)
 #  include <boost/mpl/insert.hpp>

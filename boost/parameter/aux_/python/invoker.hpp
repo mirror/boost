@@ -8,6 +8,7 @@
 # include <boost/mpl/begin.hpp>
 # include <boost/mpl/next.hpp>
 # include <boost/mpl/deref.hpp>
+# include <boost/mpl/size.hpp>
 # include <boost/parameter/keyword.hpp>
 # include <boost/preprocessor/iteration/iterate.hpp>
 
