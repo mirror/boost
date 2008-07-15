@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Windows 2000, XP, 2003, Vista</title>
+<title> Windows 2000, XP, 2003, Vista</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Quickbook 1.4">
-<link rel="up" href="../install.html" title="Installation and configuration">
-<link rel="prev" href="macosx.html" title="Mac OS X">
-<link rel="next" href="linux.html" title="Debian, Ubuntu">
+<link rel="up" href="../install.html" title=" Installation and configuration">
+<link rel="prev" href="macosx.html" title=" Mac OS X">
+<link rel="next" href="linux.html" title=" Debian, Ubuntu">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,8 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="quickbook.install.windows"></a><a class="link" href="windows.html" title="Windows 2000, XP, 2003, Vista"> Windows 2000, XP, 2003, Vista</a>
-</h3></div></div></div>
+<a name="quickbook.install.windows"></a><a href="windows.html" title=" Windows 2000, XP, 2003, Vista"> Windows 2000, XP, 2003, Vista</a></h3></div></div></div>
 <p>
       </p>
 <div class="blockquote"><blockquote class="blockquote">
@@ -45,39 +44,39 @@
       </p>
 <div class="orderedlist"><ol type="1">
 <li>
-          First of all you need to have a copy of <code class="computeroutput"><span class="identifier">xsltproc</span></code>
+          First of all you need to have a copy of <tt class="computeroutput"><span class="identifier">xsltproc</span></tt>
           for Windows. There are many ways to get this tool, but to keep things simple,
           use the <a href="http://www.zlatkovic.com/pub/libxml/" target="_top">binary packages</a>
           made by Igor Zlatkovic. At the very least, you need to download the following
-          packages: <code class="computeroutput"><span class="identifier">iconv</span></code>, <code class="computeroutput"><span class="identifier">zlib</span></code>, <code class="computeroutput"><span class="identifier">libxml2</span></code>
-          and <code class="computeroutput"><span class="identifier">libxslt</span></code>.
+          packages: <tt class="computeroutput"><span class="identifier">iconv</span></tt>, <tt class="computeroutput"><span class="identifier">zlib</span></tt>, <tt class="computeroutput"><span class="identifier">libxml2</span></tt>
+          and <tt class="computeroutput"><span class="identifier">libxslt</span></tt>.
         </li>
 <li>
           Unpack all these packages in the same directory so that you get unique
-          <code class="computeroutput"><span class="identifier">bin</span></code>, <code class="computeroutput"><span class="identifier">include</span></code>
-          and <code class="computeroutput"><span class="identifier">lib</span></code> directories within
-          the hierarchy. These instructions use <code class="computeroutput"><span class="identifier">C</span><span class="special">:\</span><span class="identifier">Users</span><span class="special">\</span><span class="identifier">example</span><span class="special">\</span><span class="identifier">Documents</span><span class="special">\</span><span class="identifier">boost</span><span class="special">\</span><span class="identifier">xml</span></code>
+          <tt class="computeroutput"><span class="identifier">bin</span></tt>, <tt class="computeroutput"><span class="identifier">include</span></tt>
+          and <tt class="computeroutput"><span class="identifier">lib</span></tt> directories within
+          the hierarchy. These instructions use <tt class="computeroutput"><span class="identifier">C</span><span class="special">:\</span><span class="identifier">Users</span><span class="special">\</span><span class="identifier">example</span><span class="special">\</span><span class="identifier">Documents</span><span class="special">\</span><span class="identifier">boost</span><span class="special">\</span><span class="identifier">xml</span></tt>
           as the root for all files.
         </li>
 <li>
-          From the command line, go to the <code class="computeroutput"><span class="identifier">bin</span></code>
-          directory and launch <code class="computeroutput"><span class="identifier">xsltproc</span><span class="special">.</span><span class="identifier">exe</span></code>
+          From the command line, go to the <tt class="computeroutput"><span class="identifier">bin</span></tt>
+          directory and launch <tt class="computeroutput"><span class="identifier">xsltproc</span><span class="special">.</span><span class="identifier">exe</span></tt>
           to ensure it works. You should get usage information on screen.
         </li>
 <li>
           Download <a href="http://www.docbook.org/xml/4.2/docbook-xml-4.2.zip" target="_top">Docbook
           XML 4.2</a> and unpack it in the same directory used above. That is:
-          <code class="computeroutput"><span class="identifier">C</span><span class="special">:\</span><span class="identifier">Users</span><span class="special">\</span><span class="identifier">example</span><span class="special">\</span><span class="identifier">Documents</span><span class="special">\</span><span class="identifier">boost</span><span class="special">\</span><span class="identifier">xml</span><span class="special">\</span><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xml</span></code>.
+          <tt class="computeroutput"><span class="identifier">C</span><span class="special">:\</span><span class="identifier">Users</span><span class="special">\</span><span class="identifier">example</span><span class="special">\</span><span class="identifier">Documents</span><span class="special">\</span><span class="identifier">boost</span><span class="special">\</span><span class="identifier">xml</span><span class="special">\</span><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xml</span></tt>.
         </li>
 <li>
           Download the latest <a href="http://sourceforge.net/project/showfiles.php?group_id=21935&amp;package_id=16608" target="_top">Docbook
           XSL</a> version and unpack it, again in the same directory used before.
           To make things easier, rename the directory created during the extraction
-          to <code class="computeroutput"><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xsl</span></code> (bypassing the version name): <code class="computeroutput"><span class="identifier">C</span><span class="special">:\</span><span class="identifier">Users</span><span class="special">\</span><span class="identifier">example</span><span class="special">\</span><span class="identifier">Documents</span><span class="special">\</span><span class="identifier">boost</span><span class="special">\</span><span class="identifier">xml</span><span class="special">\</span><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xsl</span></code>.
+          to <tt class="computeroutput"><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xsl</span></tt> (bypassing the version name): <tt class="computeroutput"><span class="identifier">C</span><span class="special">:\</span><span class="identifier">Users</span><span class="special">\</span><span class="identifier">example</span><span class="special">\</span><span class="identifier">Documents</span><span class="special">\</span><span class="identifier">boost</span><span class="special">\</span><span class="identifier">xml</span><span class="special">\</span><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xsl</span></tt>.
         </li>
 <li>
-          Add the following to your <code class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></code>
-          file, which should live in your home directory (<code class="computeroutput"><span class="special">%</span><span class="identifier">HOMEDRIVE</span><span class="special">%%</span><span class="identifier">HOMEPATH</span><span class="special">%</span></code>).
+          Add the following to your <tt class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></tt>
+          file, which should live in your home directory (<tt class="computeroutput"><span class="special">%</span><span class="identifier">HOMEDRIVE</span><span class="special">%%</span><span class="identifier">HOMEPATH</span><span class="special">%</span></tt>).
           You must already have it somewhere or otherwise you could not be building
           Boost (i.e. missing tools configuration).
         </li>
@@ -98,20 +97,20 @@
       </p>
 <div class="orderedlist"><ol type="1">
 <li>
-          Go to Quickbook's source directory (<code class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">\</span><span class="identifier">tools</span><span class="special">\</span><span class="identifier">quickbook</span></code>).
+          Go to Quickbook's source directory (<tt class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">\</span><span class="identifier">tools</span><span class="special">\</span><span class="identifier">quickbook</span></tt>).
         </li>
 <li>
-          Build the utility by issuing <code class="computeroutput"><span class="identifier">bjam</span>
-          <span class="special">--</span><span class="identifier">v2</span></code>.
+          Build the utility by issuing <tt class="computeroutput"><span class="identifier">bjam</span>
+          <span class="special">--</span><span class="identifier">v2</span></tt>.
         </li>
 <li>
-          Copy the resulting <code class="computeroutput"><span class="identifier">quickbook</span><span class="special">.</span><span class="identifier">exe</span></code>
-          binary (located under the <code class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">\</span><span class="identifier">bin</span><span class="special">.</span><span class="identifier">v2</span></code> hierarchy)
+          Copy the resulting <tt class="computeroutput"><span class="identifier">quickbook</span><span class="special">.</span><span class="identifier">exe</span></tt>
+          binary (located under the <tt class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">\</span><span class="identifier">bin</span><span class="special">.</span><span class="identifier">v2</span></tt> hierarchy)
           to a safe place. Following our previous example, you can install it into:
-          <code class="computeroutput"><span class="identifier">C</span><span class="special">:\</span><span class="identifier">Users</span><span class="special">\</span><span class="identifier">example</span><span class="special">\</span><span class="identifier">Documents</span><span class="special">\</span><span class="identifier">boost</span><span class="special">\</span><span class="identifier">xml</span><span class="special">\</span><span class="identifier">bin</span></code>.
+          <tt class="computeroutput"><span class="identifier">C</span><span class="special">:\</span><span class="identifier">Users</span><span class="special">\</span><span class="identifier">example</span><span class="special">\</span><span class="identifier">Documents</span><span class="special">\</span><span class="identifier">boost</span><span class="special">\</span><span class="identifier">xml</span><span class="special">\</span><span class="identifier">bin</span></tt>.
         </li>
 <li>
-          Add the following to your <code class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></code>
+          Add the following to your <tt class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></tt>
           file:
         </li>
 </ol></div>

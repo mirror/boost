@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Debian, Ubuntu</title>
+<title> Debian, Ubuntu</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Quickbook 1.4">
-<link rel="up" href="../install.html" title="Installation and configuration">
-<link rel="prev" href="windows.html" title="Windows 2000, XP, 2003, Vista">
-<link rel="next" href="../editors.html" title="Editor Support">
+<link rel="up" href="../install.html" title=" Installation and configuration">
+<link rel="prev" href="windows.html" title=" Windows 2000, XP, 2003, Vista">
+<link rel="next" href="../editors.html" title=" Editor Support">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,30 +24,29 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="quickbook.install.linux"></a><a class="link" href="linux.html" title="Debian, Ubuntu"> Debian, Ubuntu</a>
-</h3></div></div></div>
+<a name="quickbook.install.linux"></a><a href="linux.html" title=" Debian, Ubuntu"> Debian, Ubuntu</a></h3></div></div></div>
 <p>
         The following instructions apply to Debian and its derivatives. They are
         based on a Ubuntu Edgy install but should work on other Debian based systems.
       </p>
 <p>
-        First install the <code class="computeroutput"><span class="identifier">bjam</span></code>,
-        <code class="computeroutput"><span class="identifier">xsltproc</span></code>, <code class="computeroutput"><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xsl</span></code> and
-        <code class="computeroutput"><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xml</span></code> packages. For example, using <code class="computeroutput"><span class="identifier">apt</span><span class="special">-</span><span class="identifier">get</span></code>:
+        First install the <tt class="computeroutput"><span class="identifier">bjam</span></tt>,
+        <tt class="computeroutput"><span class="identifier">xsltproc</span></tt>, <tt class="computeroutput"><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xsl</span></tt> and
+        <tt class="computeroutput"><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xml</span></tt> packages. For example, using <tt class="computeroutput"><span class="identifier">apt</span><span class="special">-</span><span class="identifier">get</span></tt>:
       </p>
 <pre class="programlisting">
 <span class="identifier">sudo</span> <span class="identifier">apt</span><span class="special">-</span><span class="identifier">get</span> <span class="identifier">install</span> <span class="identifier">xsltproc</span> <span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xsl</span> <span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xml</span>
 </pre>
 <p>
         If you're planning on building boost's documentation, you'll also need to
-        install the <code class="computeroutput"><span class="identifier">doxygen</span></code> package
+        install the <tt class="computeroutput"><span class="identifier">doxygen</span></tt> package
         as well.
       </p>
 <p>
         Next, we need to configure Boost Build to compile BoostBook files. Add the
-        following to your <code class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></code> file, which should be in your home
+        following to your <tt class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></tt> file, which should be in your home
         directory. If you don't have one, create a file containing this text. For
-        more information on setting up <code class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></code>, see
+        more information on setting up <tt class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></tt>, see
         the <a href="http://boost.org/boost-build2/doc/html/bbv2/advanced/configuration.html" target="_top">Boost
         Build documentation</a>.
       </p>
@@ -68,19 +67,19 @@
       </p>
 <div class="orderedlist"><ol type="1">
 <li>
-          Go to Quickbook's source directory (<code class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">quickbook</span></code>).
+          Go to Quickbook's source directory (<tt class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">quickbook</span></tt>).
         </li>
 <li>
-          Build the utility by issuing <code class="computeroutput"><span class="identifier">bjam</span>
-          <span class="special">--</span><span class="identifier">v2</span></code>.
+          Build the utility by issuing <tt class="computeroutput"><span class="identifier">bjam</span>
+          <span class="special">--</span><span class="identifier">v2</span></tt>.
         </li>
 <li>
-          Copy the resulting <code class="computeroutput"><span class="identifier">quickbook</span></code>
-          binary (located under the <code class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">/</span><span class="identifier">bin</span><span class="special">.</span><span class="identifier">v2</span></code> hierarchy)
-          to a safe place. The traditional location is <code class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span><span class="special">/</span><span class="identifier">bin</span></code>.
+          Copy the resulting <tt class="computeroutput"><span class="identifier">quickbook</span></tt>
+          binary (located under the <tt class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">/</span><span class="identifier">bin</span><span class="special">.</span><span class="identifier">v2</span></tt> hierarchy)
+          to a safe place. The traditional location is <tt class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span><span class="special">/</span><span class="identifier">bin</span></tt>.
         </li>
 <li>
-          Add the following to your <code class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></code>
+          Add the following to your <tt class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></tt>
           file, using the full path of the quickbook executable:
         </li>
 </ol></div>

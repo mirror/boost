@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Mac OS X</title>
+<title> Mac OS X</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Quickbook 1.4">
-<link rel="up" href="../install.html" title="Installation and configuration">
-<link rel="prev" href="../install.html" title="Installation and configuration">
-<link rel="next" href="windows.html" title="Windows 2000, XP, 2003, Vista">
+<link rel="up" href="../install.html" title=" Installation and configuration">
+<link rel="prev" href="../install.html" title=" Installation and configuration">
+<link rel="next" href="windows.html" title=" Windows 2000, XP, 2003, Vista">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,8 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="quickbook.install.macosx"></a><a class="link" href="macosx.html" title="Mac OS X"> Mac OS X</a>
-</h3></div></div></div>
+<a name="quickbook.install.macosx"></a><a href="macosx.html" title=" Mac OS X"> Mac OS X</a></h3></div></div></div>
 <div class="blockquote"><blockquote class="blockquote">
 <p>
           </p>
@@ -45,13 +44,13 @@
 <p>
         The text below assumes you want to install all the necessary utilities in
         a system-wide location, allowing any user in the machine to have access to
-        them. Therefore, all files will be put in the <code class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span></code>
+        them. Therefore, all files will be put in the <tt class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span></tt>
         hierarchy. If you do not want this, you can choose any other prefix such
-        as <code class="computeroutput"><span class="special">~/</span><span class="identifier">Applications</span></code>
+        as <tt class="computeroutput"><span class="special">~/</span><span class="identifier">Applications</span></tt>
         for a single-user installation.
       </p>
 <p>
-        Mac OS X comes with <code class="computeroutput"><span class="identifier">xsltproc</span></code>
+        Mac OS X comes with <tt class="computeroutput"><span class="identifier">xsltproc</span></tt>
         and all related libraries preinstalled, so you do not need to take any extra
         steps to set them up. It is probable that future versions will include them
         too, but these instructions may not apply to older versions.
@@ -62,16 +61,16 @@
 <div class="orderedlist"><ol type="1">
 <li>
           Download <a href="http://www.docbook.org/xml/4.2/docbook-xml-4.2.zip" target="_top">Docbook
-          XML 4.2</a> and unpack it inside <code class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span><span class="special">/</span><span class="identifier">share</span><span class="special">/</span><span class="identifier">xml</span><span class="special">/</span><span class="identifier">docbook</span><span class="special">/</span><span class="number">4.2</span></code>.
+          XML 4.2</a> and unpack it inside <tt class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span><span class="special">/</span><span class="identifier">share</span><span class="special">/</span><span class="identifier">xml</span><span class="special">/</span><span class="identifier">docbook</span><span class="special">/</span><span class="number">4.2</span></tt>.
         </li>
 <li>
           Download the latest <a href="http://sourceforge.net/project/showfiles.php?group_id=21935&amp;package_id=16608" target="_top">Docbook
-          XSL</a> version and unpack it. Put the results in <code class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span><span class="special">/</span><span class="identifier">share</span><span class="special">/</span><span class="identifier">xsl</span><span class="special">/</span><span class="identifier">docbook</span></code>, thus effectively removing the
+          XSL</a> version and unpack it. Put the results in <tt class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span><span class="special">/</span><span class="identifier">share</span><span class="special">/</span><span class="identifier">xsl</span><span class="special">/</span><span class="identifier">docbook</span></tt>, thus effectively removing the
           version number from the directory name (for simplicity).
         </li>
 <li>
-          Add the following to your <code class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></code>
-          file, which should live in your home directory (<code class="computeroutput"><span class="special">/</span><span class="identifier">Users</span><span class="special">/&lt;</span><span class="identifier">your_username</span><span class="special">&gt;</span></code>).
+          Add the following to your <tt class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></tt>
+          file, which should live in your home directory (<tt class="computeroutput"><span class="special">/</span><span class="identifier">Users</span><span class="special">/&lt;</span><span class="identifier">your_username</span><span class="special">&gt;</span></tt>).
           You must already have it somewhere or otherwise you could not be building
           Boost (i.e. missing tools configuration).
         </li>
@@ -91,20 +90,20 @@
       </p>
 <div class="orderedlist"><ol type="1">
 <li>
-          Go to Quickbook's source directory (<code class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">quickbook</span></code>).
+          Go to Quickbook's source directory (<tt class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">quickbook</span></tt>).
         </li>
 <li>
-          Build the utility by issuing <code class="computeroutput"><span class="identifier">bjam</span>
-          <span class="special">--</span><span class="identifier">v2</span></code>.
+          Build the utility by issuing <tt class="computeroutput"><span class="identifier">bjam</span>
+          <span class="special">--</span><span class="identifier">v2</span></tt>.
         </li>
 <li>
-          Copy the resulting <code class="computeroutput"><span class="identifier">quickbook</span></code>
-          binary (located under the <code class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">/</span><span class="identifier">bin</span><span class="special">.</span><span class="identifier">v2</span></code> hierarchy)
+          Copy the resulting <tt class="computeroutput"><span class="identifier">quickbook</span></tt>
+          binary (located under the <tt class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">/</span><span class="identifier">bin</span><span class="special">.</span><span class="identifier">v2</span></tt> hierarchy)
           to a safe place. Following our previous example, you can install it into:
-          <code class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span><span class="special">/</span><span class="identifier">bin</span></code>.
+          <tt class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span><span class="special">/</span><span class="identifier">bin</span></tt>.
         </li>
 <li>
-          Add the following to your <code class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></code>
+          Add the following to your <tt class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></tt>
           file:
         </li>
 </ol></div>
@@ -120,14 +119,14 @@
 <div class="orderedlist"><ol type="1">
 <li>
           Go to the <a href="http://www.stack.nl/~dimitri/doxygen/download.html#latestsrc" target="_top">downloads
-          section</a> and get the disk image (<code class="computeroutput"><span class="identifier">dmg</span></code>
+          section</a> and get the disk image (<tt class="computeroutput"><span class="identifier">dmg</span></tt>
           file) for Mac OS X.
         </li>
 <li>
-          Open the disk image and drag the Doxygen application to your <code class="computeroutput"><span class="identifier">Applications</span></code> folder to install it.
+          Open the disk image and drag the Doxygen application to your <tt class="computeroutput"><span class="identifier">Applications</span></tt> folder to install it.
         </li>
 <li>
-          Add the following to your <code class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></code>
+          Add the following to your <tt class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></tt>
           file:
         </li>
 </ol></div>

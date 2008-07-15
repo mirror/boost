@@ -12,6 +12,7 @@
 #include <functional>
 #include <boost/bind.hpp>
 #include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/fstream.hpp>
 #include <boost/lexical_cast.hpp>
 #include "./actions.hpp"
 #include "./utils.hpp"
@@ -324,7 +325,11 @@ namespace quickbook
         temp.swap(str);
         phrase.swap(save);
 
-        out << "<programlisting>\n";
+        //
+        // We must not place a \n after the <programlisting> tag
+        // otherwise PDF output starts code blocks with a blank line:
+        //
+        out << "<programlisting>";
         out << str;
         out << "</programlisting>\n";
     }
@@ -376,9 +381,73 @@ namespace quickbook
     {
         fs::path const img_path(std::string(first, last));
 
+        std::string attr_text;
+        if(fs::extension(img_path) == ".svg")
+        {
+           //
+           // SVG's need special handling:
+           //
+           // 1) We must set the "format" attribute, otherwise
+           //    HTML generation produces code that will not display
+           //    the image at all.
+           // 2) We need to set the "contentwidth" and "contentdepth"
+           //    attributes, otherwise the image will be displayed inside
+           //    a tiny box with scrollbars (Firefox), or else cropped to
+           //    fit in a tiny box (IE7).
+           //
+           attr_text = " format=\"SVG\"";
+           //
+           // Image paths are relative to the html subdirectory:
+           //
+           fs::path img;
+           if(img_path.root_path().empty())
+              img = "html" / img_path;  // relative path
+           else
+              img = img_path;   // absolute path
+           //
+           // Now load the SVG file:
+           //
+           std::string svg_text;
+           fs::ifstream fs(img);
+           char c;
+           while(fs.get(c) && fs.good())
+              svg_text.push_back(c);
+           //
+           // Extract the svg header from the file:
+           //
+           std::string::size_type a, b;
+           a = svg_text.find("<svg");
+           b = svg_text.find('>', a);
+           svg_text = (a == std::string::npos) ? "" : svg_text.substr(a, b - a);
+           //
+           // Now locate the "width" and "height" attributes
+           // and borrow their values:
+           //
+           a = svg_text.find("width");
+           a = svg_text.find('=', a);
+           a = svg_text.find('\"', a);
+           b = svg_text.find('\"', a + 1);
+           if(a != std::string::npos)
+           {
+              attr_text.append(" contentwidth=");
+              attr_text.append(svg_text.begin() + a, svg_text.begin() + b + 1);
+           }
+           a = svg_text.find("height");
+           a = svg_text.find('=', a);
+           a = svg_text.find('\"', a);
+           b = svg_text.find('\"', a + 1);
+           if(a != std::string::npos)
+           {
+              attr_text.append(" contentdepth=");
+              attr_text.append(svg_text.begin() + a, svg_text.begin() + b + 1);
+           }
+        }
+
         phrase << "<inlinemediaobject>";
 
-        phrase << "<imageobject><imagedata fileref=\"";
+        phrase << "<imageobject><imagedata ";
+        phrase << attr_text;
+        phrase << " fileref=\"";
         while (first != last)
             detail::print_char(*first++, phrase.get());
         phrase << "\"></imagedata></imageobject>";
@@ -615,7 +684,11 @@ namespace quickbook
             {
                 boost::spirit::file_position const pos = first.get_position();
                 detail::outerr(pos.file,pos.line)
-                    << "Expanding template" << std::endl;
+                    << "Expanding template:" << template_info[0] << std::endl
+                    << "------------------begin------------------" << std::endl
+                    << body
+                    << "------------------end--------------------" << std::endl
+                    << std::endl;
                 actions.pop(); // restore the actions' states
                 --actions.template_depth;
                 return;
@@ -992,7 +1065,7 @@ namespace quickbook
         fs::path include_search(fs::path const & current, std::string const & name)
         {
             fs::path path(name,fs::native);
-            
+
             // If the path is relative, try and resolve it.
             if (!path.is_complete())
             {
@@ -1001,7 +1074,7 @@ namespace quickbook
                 {
                     return current / path;
                 }
-                
+
                 // Search in each of the include path locations.
                 BOOST_FOREACH(std::string const & p, include_path)
                 {
@@ -1013,7 +1086,7 @@ namespace quickbook
                     }
                 }
             }
-            
+
             return path;
         }
     }
