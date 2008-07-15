@@ -7,7 +7,8 @@
 //  See http://www.boost.org/libs/integer for documentation.
 
 //  Revision History
-//   15 Jul 08  Added exact-integer templates. (Daryle Walker)
+//   15 Jul 08  Added exact-integer templates; added MPL-compatible variant of
+//              processor-optimized integer template. (Daryle Walker)
 //   14 Jul 08  Added extended-integer support. (Daryle Walker)
 //   13 Jul 08  Redid implmentation. (Daryle Walker)
 //   22 Sep 01  Added value-based integer templates. (Daryle Walker)
@@ -20,10 +21,11 @@
 
 #include <boost/integer_fwd.hpp>  // self include
 
-#include <boost/config.hpp>          // for BOOST_STATIC_CONSTANT, etc.
-#include <boost/cstdint.hpp>         // for boost::uintmax_t, intmax_t
-#include <boost/integer_traits.hpp>  // for boost::integer_traits
-#include <boost/limits.hpp>          // for std::numeric_limits
+#include <boost/config.hpp>             // for BOOST_STATIC_CONSTANT, etc.
+#include <boost/cstdint.hpp>            // for boost::uintmax_t, intmax_t
+#include <boost/integer_traits.hpp>     // for boost::integer_traits
+#include <boost/limits.hpp>             // for std::numeric_limits
+#include <boost/utility/enable_if.hpp>  // for boost::enable_if_c
 
 #include <climits>  // for UCHAR_MAX, USHRT_MAX, UINT_MAX, ULONG_MAX, etc.
 
@@ -32,10 +34,21 @@ namespace boost
 
   //  integer template mapping a type to its processor-optimized analog  -----//
 
+  //  Some types can be handled better by the processor than others.  This
+  //  template metafunction should map various built-in integral types to
+  //  the processor's perferred type for the given type's value range
+  template < typename BaseInt >
+  struct fast_integral
+  {
+      typedef BaseInt  type;
+  };
+
+  // Platform-specific specializations should go here.
+
   //  fast integers from least integers
   //  int_fast_t<> works correctly for unsigned too, in spite of the name.
   template< typename LeastInt >
-  struct int_fast_t { typedef LeastInt fast; }; // imps may specialize
+  struct int_fast_t { typedef typename fast_integral<LeastInt>::type fast; };
 
 namespace detail
 {

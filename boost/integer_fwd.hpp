@@ -84,6 +84,9 @@ template <  >
 
 //  From <boost/integer.hpp>  ------------------------------------------------//
 
+template < typename BaseInt >
+    struct fast_integral;
+
 template < typename LeastInt >
     struct int_fast_t;
 

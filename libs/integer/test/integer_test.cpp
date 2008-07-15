@@ -8,7 +8,8 @@
 //  See http://www.boost.org/libs/integer for documentation.
 
 //  Revision History
-//   15 Jul 08  Added exact-integer templates. (Daryle Walker)
+//   15 Jul 08  Added exact-integer templates; added MPL-compatible variant of
+//              processor-optimized integer template. (Daryle Walker)
 //   14 Jul 08  Improved testing of processor-optimized integer template; added
 //              extended-integer support. (Daryle Walker)
 //   13 Jul 08  Modernized tests w/ MPL instead of giant macros (Daryle Walker)
@@ -69,15 +70,15 @@
 
 
 // If specializations have not already been done, then we can confirm
-// the effects of the "fast" types by making a specialization.  If there
+// the effects of the fast types by making a specialization.  If there
 // is a specialization for "short," make sure that CONTROL_FAST_SHORT
 // is set to a type distinct from "short" and the default implementation.
 namespace boost
 {
     template < >
-    struct int_fast_t< short >
+    struct fast_integral< short >
     {
-        typedef CONTROL_FAST_SHORT  fast;
+        typedef CONTROL_FAST_SHORT  type;
     };
 }
 
@@ -273,8 +274,10 @@ BOOST_AUTO_TEST_CASE( fast_type_test )
 {
 #ifndef BOOST_NO_USING_TEMPLATE
     using std::numeric_limits;
+    using boost::is_same;
 #else
     using namespace std;
+    using namespace boost;
 #endif
 
     typedef short                               least_type;
@@ -282,8 +285,12 @@ BOOST_AUTO_TEST_CASE( fast_type_test )
     typedef numeric_limits<least_type>          least_limits;
     typedef numeric_limits<fast_type>            fast_limits;
 
-    BOOST_MPL_ASSERT_RELATION( (boost::is_same<least_type, fast_type>::value),
-     ==, false );
+    typedef boost::fast_integral<least_type>::type  real_fast_type;
+
+    BOOST_MPL_ASSERT_RELATION( (is_same<least_type, fast_type>::value), ==,
+     false );
+    BOOST_MPL_ASSERT_RELATION( (is_same<fast_type, real_fast_type>::value), ==,
+     true );
     BOOST_MPL_ASSERT_RELATION( fast_limits::is_specialized, ==, true );
     BOOST_MPL_ASSERT_RELATION( fast_limits::is_signed &&
      fast_limits::is_bounded, ==, true );

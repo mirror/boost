@@ -40,10 +40,27 @@ is particularly useful for solving generic programming problems.</p>
 namespace boost
 {
   //  fast integers from least integers
+  template&lt; typename BaseInt &gt;
+  struct fast_integral
+  {
+      typedef <em>implementation_supplied</em>  type;
+  };
+
   template&lt; typename LeastInt &gt;
   struct int_fast_t
   {
-      typedef <em>implementation_supplied</em>  fast;
+      typedef typename fast_integral&lt;LeastInt&gt;::type  fast;
+  };
+
+  //  MPL-compatible
+  template&lt; int Bits, typename Signedness &gt;
+  struct exact_integral
+  {
+      static  bool const  is_specialized = <em>implementation_supplied</em>;
+      static  bool const  is_signed = <em>implementation_supplied</em>;
+      static  int const   bit_count = Bits;
+
+      typedef <em>implementation_supplied</em>  type;
   };
 
   //  signed
@@ -57,7 +74,7 @@ namespace boost
   template&lt; int Bits &gt;
   struct int_exact_t
   {
-      typedef <em>implementation_supplied</em>  exact;
+      typedef typename exact_integral&lt;Bits, signed&gt;::type  exact;
   };
 
   //  unsigned
@@ -71,7 +88,7 @@ namespace boost
   template&lt; int Bits &gt;
   struct uint_exact_t
   {
-      typedef <em>implementation_supplied</em>  exact;
+      typedef typename exact_integral&lt;Bits, unsigned&gt;::type  exact;
   };
 
   //  signed
@@ -96,31 +113,25 @@ namespace boost
       typedef <em>implementation_supplied</em>  least;
       typedef int_fast_t&lt;least&gt;::fast  fast;
   };
-
-  //  MPL-compatible
-  template&lt; int Bits, typename Signedness &gt;
-  struct exact_integral
-  {
-      static  bool const  is_specialized = <em>implementation_supplied</em>;
-      static  bool const  is_signed = <em>implementation_supplied</em>;
-      static  int const   bit_count = Bits;
-
-      typedef <em>implementation_supplied</em>  type;
-  };
 } // namespace boost
 </pre></blockquote>
 
 <h2><a name="easy">Processor-Optimized Types</a></h2>
 
-<p>The <code>int_fast_t</code> class template maps its input type to the
+<p>The <code>fast_integral</code> class template maps its input type to the
 next-largest type that the processor can manipulate the easiest, or to
 itself if the input type is already an easy-to-manipulate type.  For
 instance, processing a bunch of <code>char</code> objects may go faster
 if they were converted to <code>int</code> objects before processing. 
-The input type, passed as the only template parameter, must be a
-built-in integral type, except <code>bool</code>.  Unsigned integral
-types can be used, as well as signed integral types, despite the name. 
-The output type is given as the class member <code>fast</code>.</p>
+The input type, passed as the only template parameter, can be any built-in
+integral type besides <code>bool</code>.  The output type is given as the class
+member <code>type</code>.</p>
+
+<p>The <code>int_fast_t</code> class template is the classic meta-function for
+this operation.  Despite the name, it works for unsigned integral types just
+like it works for the signed integral types.  The output type is given as the
+class member <code>fast</code>, defined to be the same as the corresponding
+result from the <code>fast_integral</code> meta-function.</p>
 
 <p><strong>Implementation Notes</strong><br>
 By default, the output type is identical to the input type.  Eventually,
@@ -282,7 +293,7 @@ struct <var>name</var>
 		<td><code>type</code></td>
 		<td><code>is_specialized == true</code></td>
 		<td>The meta-function's result.  It appears only if the input parameters
-			satisfy the template's requirements.  It's presence, or lack thereof,
+			satisfy the template's requirements.  Its presence, or lack thereof,
 			enables &quot;Substitution Failure Is Not An Error&quot; (SFINAE)
 			techniques, instead of a hard compiler diagnostic.</td>
 	</tr>
