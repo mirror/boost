@@ -2245,61 +2245,6 @@ namespace boost {
             return true;
         }
 
-        //
-        // hash_value - unordered container hash function.
-        //
-
-        template <typename V, typename K, typename H, typename P, typename A>
-        std::size_t group_hash(BOOST_UNORDERED_TABLE<V, K, H, P, A> const& t,
-                typename BOOST_UNORDERED_TABLE_DATA<A>::link_ptr it,
-                type_wrapper<K>*)
-        {
-            typedef BOOST_UNORDERED_TABLE_DATA<A> data;
-            std::size_t seed = data::group_count(it);
-            std::size_t hashed_key = t.hash_function()(data::get_value(it)); 
-            boost::hash_combine(seed, hashed_key);
-            return seed;
-        }
-
-        template <typename V, typename K, typename H, typename P, typename A>
-        std::size_t group_hash(BOOST_UNORDERED_TABLE<V, K, H, P, A> const& t,
-                typename BOOST_UNORDERED_TABLE_DATA<A>::link_ptr it,
-                void*)
-        {
-            typedef BOOST_UNORDERED_TABLE_DATA<A> data;
-            typedef typename data::link_ptr link_ptr;
-
-            std::size_t seed = t.hash_function()(data::get_value(it).first);
-
-            link_ptr end = data::next_group(it);
-
-            do {
-                boost::hash_combine(seed, data::get_value(it).second);
-                it = it->next_;
-            } while(it != end);
-
-            return seed;
-        }
-
-        template <typename V, typename K, typename H, typename P, typename A>
-        std::size_t hash_value(BOOST_UNORDERED_TABLE<V, K, H, P, A> const& t)
-        {
-            typedef BOOST_UNORDERED_TABLE_DATA<A> data;
-            typedef typename data::link_ptr link_ptr;
-            typedef typename data::bucket_ptr bucket_ptr;
-            
-            std::size_t seed = 0;
-
-            for(bucket_ptr i = t.data_.cached_begin_bucket_,
-                        j = t.data_.buckets_end(); i != j; ++i)
-            {
-                for(link_ptr it(i->next_); BOOST_UNORDERED_BORLAND_BOOL(it); it = data::next_group(it))
-                    seed += group_hash(t, it, (type_wrapper<V>*)0);
-            }
-
-            return seed;
-        }
-
         // Iterators
 
         template <typename Alloc> class BOOST_UNORDERED_ITERATOR;

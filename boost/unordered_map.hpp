@@ -40,8 +40,6 @@ namespace boost
     bool operator!=(unordered_map<K, T, H, P, A> const&,
         unordered_map<K, T, H, P, A> const&);
     template <class K, class T, class H, class P, class A>
-    std::size_t hash_value(unordered_map<K, T, H, P, A> const&);
-    template <class K, class T, class H, class P, class A>
     void swap(unordered_map<K, T, H, P, A>&,
             unordered_map<K, T, H, P, A>&);
 
@@ -57,8 +55,6 @@ namespace boost
     template <class K, class T, class H, class P, class A>
     bool operator!=(unordered_multimap<K, T, H, P, A> const&,
         unordered_multimap<K, T, H, P, A> const&);
-    template <class K, class T, class H, class P, class A>
-    std::size_t hash_value(unordered_multimap<K, T, H, P, A> const&);
     template <class K, class T, class H, class P, class A>
     void swap(unordered_multimap<K, T, H, P, A>&,
             unordered_multimap<K, T, H, P, A>&);
@@ -424,11 +420,9 @@ namespace boost
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         friend bool operator==(unordered_map const&, unordered_map const&);
         friend bool operator!=(unordered_map const&, unordered_map const&);
-        friend std::size_t hash_value(unordered_map const&);
 #else
         friend bool operator==<>(unordered_map const&, unordered_map const&);
         friend bool operator!=<>(unordered_map const&, unordered_map const&);
-        friend std::size_t hash_value<>(unordered_map const&);
 #endif
     }; // class template unordered_map
 
@@ -444,12 +438,6 @@ namespace boost
         unordered_map<K, T, H, P, A> const& m2)
     {
         return !boost::unordered_detail::equals(m1.base, m2.base);
-    }
-
-    template <class K, class T, class H, class P, class A>
-    inline std::size_t hash_value(unordered_map<K, T, H, P, A> const& m)
-    {
-        return boost::unordered_detail::hash_value(m.base);
     }
 
     template <class K, class T, class H, class P, class A>
@@ -804,11 +792,9 @@ namespace boost
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         friend bool operator==(unordered_multimap const&, unordered_multimap const&);
         friend bool operator!=(unordered_multimap const&, unordered_multimap const&);
-        friend std::size_t hash_value(unordered_multimap const&);
 #else
         friend bool operator==<>(unordered_multimap const&, unordered_multimap const&);
         friend bool operator!=<>(unordered_multimap const&, unordered_multimap const&);
-        friend std::size_t hash_value<>(unordered_multimap const&);
 #endif
     }; // class template unordered_multimap
 
@@ -824,12 +810,6 @@ namespace boost
         unordered_multimap<K, T, H, P, A> const& m2)
     {
         return !boost::unordered_detail::equals(m1.base, m2.base);
-    }
-
-    template <class K, class T, class H, class P, class A>
-    inline std::size_t hash_value(unordered_multimap<K, T, H, P, A> const& m)
-    {
-        return boost::unordered_detail::hash_value(m.base);
     }
 
     template <class K, class T, class H, class P, class A>
