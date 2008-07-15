@@ -12,8 +12,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"></td>
 <td align="center"><a href="../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -28,7 +28,7 @@
 </h3></div></div></div>
 <div><p class="copyright">Copyright © 2001 -2007 Beman Dawes, Vesa Karvonen, John Maddock</p></div>
 <div><div class="legalnotice">
-<a name="id2625913"></a><p>
+<a name="id464982"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -61,8 +61,10 @@
       that describe defects</a></span></dt>
 <dt><span class="section"><a href="boost_config/boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_optional_features">Macros
       that describe optional features</a></span></dt>
-<dt><span class="section"><a href="boost_config/boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__0x_features">Macros
-      that describe C++0x features</a></span></dt>
+<dt><span class="section"><a href="boost_config/boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_possible_c__0x_features">Macros
+      that describe possible C++0x features</a></span></dt>
+<dt><span class="section"><a href="boost_config/boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__0x_features_not_supported">Macros
+      that describe C++0x features not supported</a></span></dt>
 <dt><span class="section"><a href="boost_config/boost_macro_reference.html#boost_config.boost_macro_reference.boost_helper_macros">Boost
       Helper Macros</a></span></dt>
 <dt><span class="section"><a href="boost_config/boost_macro_reference.html#boost_config.boost_macro_reference.boost_informational_macros">Boost
@@ -73,6 +75,8 @@
 <dt><span class="section"><a href="boost_config/guidelines_for_boost_authors.html">Guidelines for
     Boost Authors</a></span></dt>
 <dd><dl>
+<dt><span class="section"><a href="boost_config/guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.warnings">
+      Disabling Compiler Warnings</a></span></dt>
 <dt><span class="section"><a href="boost_config/guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_defect_macros">Adding
       New Defect Macros</a></span></dt>
 <dt><span class="section"><a href="boost_config/guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros">Adding
@@ -139,8 +143,7 @@
 <p>
         Boost library implementations access configuration macros via
       </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <a href="../../../../boost/config.hpp" target="_top">&lt;boost/config.hpp&gt;</a>
+<pre class="programlisting"><span class="preprocessor">#include</span> <a href="../../../../boost/config.hpp" target="_top">&lt;boost/config.hpp&gt;</a>
 </pre>
 <p>
         While Boost library users are not required to include that file directly,
@@ -275,8 +278,7 @@
         For example to run the configure script with HP aCC, you might use something
         like:
       </p>
-<pre class="programlisting">
-<span class="keyword">export</span> <span class="identifier">CXX</span><span class="special">=</span><span class="string">"aCC"</span>
+<pre class="programlisting"><span class="keyword">export</span> <span class="identifier">CXX</span><span class="special">=</span><span class="string">"aCC"</span>
 <span class="keyword">export</span> <span class="identifier">CXXFLAGS</span><span class="special">=</span><span class="string">"-Aa -DAportable -D__HPACC_THREAD_SAFE_RB_TREE \
    -DRWSTD_MULTI_THREAD -DRW_MULTI_THREAD -D_REENTRANT -D_THREAD_SAFE"</span>
 <span class="keyword">export</span> <span class="identifier">LDFLAGS</span><span class="special">=</span><span class="string">"-DAportable"</span>
@@ -743,8 +745,7 @@
           there. Finally, open up <a href="../../../../boost/config/user.hpp" target="_top">&lt;boost/config/user.hpp&gt;</a>
           and edit the following defines:
         </p>
-<pre class="programlisting">
-<span class="preprocessor">#define</span> <span class="identifier">BOOST_COMPILER_CONFIG</span> <span class="string">"boost/config/mysetup/visualc.hpp"</span>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_COMPILER_CONFIG</span> <span class="string">"boost/config/mysetup/visualc.hpp"</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_STDLIB_CONFIG</span> <span class="string">"boost/config/mysetup/stlport.hpp"</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_USER_CONFIG</span> <span class="string">"boost/config/mysetup/win32.hpp"</span>
 </pre>
@@ -961,7 +962,7 @@
   </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: March 15, 2008 at 13:57:39 GMT</small></p></td>
+<td align="left"><p><small>Last revised: June 20, 2008 at 00:19:08 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>

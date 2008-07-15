@@ -11,7 +11,7 @@
 
 #include <functional>
 
-namespace boost_has_tr1_bind{
+namespace boost_has_tr1_function{
 
 using std::tr1::function;
 

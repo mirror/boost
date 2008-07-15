@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -31,8 +31,10 @@
       that describe defects</a></span></dt>
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_optional_features">Macros
       that describe optional features</a></span></dt>
-<dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__0x_features">Macros
-      that describe C++0x features</a></span></dt>
+<dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_possible_c__0x_features">Macros
+      that describe possible C++0x features</a></span></dt>
+<dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__0x_features_not_supported">Macros
+      that describe C++0x features not supported</a></span></dt>
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_helper_macros">Boost
       Helper Macros</a></span></dt>
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_informational_macros">Boost
@@ -113,6 +115,24 @@
                 finding overloads of <code class="computeroutput"><span class="identifier">get_pointer</span></code>
                 in namespaces nested inside boost (but not elsewhere). Probably Borland
                 specific.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_ADL_BARRIER</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler locates and searches namespaces that it should <span class="emphasis"><em>*not*</em></span>
+                in fact search when performing argument dependent lookup.
               </p>
               </td>
 </tr>
@@ -258,8 +278,7 @@
                 The compiler fails to compile a nested class that has a dependent
                 base class: 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">foo</span> <span class="special">:</span> <span class="special">{</span>
    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">U</span><span class="special">&gt;</span>
    <span class="keyword">struct</span> <span class="identifier">bar</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">U</span> <span class="special">{};</span>
@@ -285,8 +304,7 @@
                 Template value parameters cannot have a dependent type, for example:
                 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">type</span> <span class="identifier">value</span><span class="special">&gt;</span> 
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">type</span> <span class="identifier">value</span><span class="special">&gt;</span> 
 <span class="keyword">class</span> <span class="identifier">X</span> <span class="special">{</span> <span class="special">...</span> <span class="special">};</span>
 </pre>
 <p>
@@ -367,8 +385,7 @@
                 The compiler does not perform function template ordering or its function
                 template ordering is incorrect. 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="comment">// #1
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="comment">// #1
 </span><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">T</span><span class="special">);</span>
 
 <span class="comment">// #2
@@ -649,6 +666,24 @@
                 at namespace scope, then using'ed to boost. Probably GCC specific.
                 See <a href="../../../../../boost/operators.hpp" target="_top"><code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">operators</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code></a>
                 for example.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not correctly handle partial specializations which
+                depend upon default arguments in the primary template.
               </p>
               </td>
 </tr>
@@ -1014,6 +1049,23 @@
 <tr>
 <td>
               <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_TEMPLATED_IOSTREAMS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide templated iostream classes.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
                 <code class="computeroutput"><span class="identifier">BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS</span></code>
               </p>
               </td>
@@ -1138,8 +1190,7 @@
                 The compiler does not allow a void function to return the result
                 of calling another void function. 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="keyword">void</span> <span class="identifier">f</span><span class="special">()</span> <span class="special">{}</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">void</span> <span class="identifier">f</span><span class="special">()</span> <span class="special">{}</span>
 <span class="keyword">void</span> <span class="identifier">g</span><span class="special">()</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">f</span><span class="special">();</span> <span class="special">}</span>
 </pre>
 <p>
@@ -2061,12 +2112,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.macros_that_describe_c__0x_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__0x_features" title="Macros that describe C++0x features">Macros
-      that describe C++0x features</a>
+<a name="boost_config.boost_macro_reference.macros_that_describe_possible_c__0x_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_possible_c__0x_features" title="Macros that describe possible C++0x features">Macros
+      that describe possible C++0x features</a>
 </h3></div></div></div>
 <p>
         The following macros describe features that are likely to be included in
-        the upcoming ISO C++ standard, C++0x.
+        the upcoming ISO C++ standard, C++0x, but have not yet been approved for
+        inclusion in the language.
       </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -2085,8 +2137,7 @@
               </p>
               </th>
 </tr></thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>
               <p>
                 <code class="computeroutput"><span class="identifier">BOOST_HAS_CONCEPTS</span></code>
@@ -2094,68 +2145,222 @@
               </td>
 <td>
               <p>
-                The compiler supports concepts. Note: concepts have been proposed
-                for C++0x, but have not yet been approved for inclusion in the language.
+                The compiler supports concepts.
+              </p>
+              </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_config.boost_macro_reference.macros_that_describe_c__0x_features_not_supported"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__0x_features_not_supported" title="Macros that describe C++0x features not supported">Macros
+      that describe C++0x features not supported</a>
+</h3></div></div></div>
+<p>
+        The following macros describe features in the upcoming ISO C++ standard,
+        C++0x, that are not yet supported by a particular compiler.
+      </p>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                Macro
+              </p>
+              </th>
+<th>
+              <p>
+                Description
+              </p>
+              </th>
+<td class="auto-generated"> </td>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_CHAR16_T</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support type <code class="computeroutput"><span class="identifier">char16_t</span></code>.
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_CHAR32_T</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support type <code class="computeroutput"><span class="identifier">char32_t</span></code>.
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_CONSTEXPR</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support <code class="computeroutput"><span class="identifier">constexpr</span></code>.
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_DECLTYPE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support <code class="computeroutput"><span class="identifier">decltype</span></code>.
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_DEFAULTED_FUNCTIONS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support defaulted (<code class="computeroutput"><span class="special">=</span>
+                <span class="keyword">default</span></code>) functions. [[<code class="computeroutput"><span class="identifier">BOOST_NO_DELETED_FUNCTIONS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support deleted (<code class="computeroutput"><span class="special">=</span>
+                <span class="keyword">delete</span></code>) functions.
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">BOOST_HAS_DECLTYPE</span></code>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_EXPLICIT_CONVERSION_OPERATIONS</span></code>
               </p>
               </td>
 <td>
               <p>
-                The compiler supports decltype.
+                The compiler does not support explicit conversion operators (<code class="computeroutput"><span class="keyword">explicit</span> <span class="keyword">operator</span>
+                <span class="identifier">T</span><span class="special">()</span></code>).
               </p>
               </td>
+<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">BOOST_HAS_LONG_LONG</span></code>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_EXTERN_TEMPLATE</span></code>
               </p>
               </td>
 <td>
               <p>
-                The compiler supports the long long data type.
+                The compiler does not support explicit instantiation declarations
+                for templates (<code class="computeroutput"><span class="keyword">explicit</span> <span class="keyword">template</span></code>).
               </p>
               </td>
+<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">BOOST_HAS_RVALUE_REFS</span></code>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_LONG_LONG</span></code>
               </p>
               </td>
 <td>
               <p>
-                The compiler supports rvalue references.
+                The compiler does not support <code class="computeroutput"><span class="keyword">long</span>
+                <span class="keyword">long</span></code>.
               </p>
               </td>
+<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">BOOST_HAS_STATIC_ASSERT</span></code>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_RAW_LITERALS</span></code>
               </p>
               </td>
 <td>
               <p>
-                The compiler supports static assertions.
+                The compiler does not support raw string literals.
               </p>
               </td>
+<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">BOOST_HAS_VARIADIC_TMPL</span></code>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_RVALUE_REFERENCES</span></code>
               </p>
               </td>
 <td>
               <p>
-                The compiler supports variadic templates.
+                The compiler does not support r-value references.
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_SCOPED_ENUMS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support scoped enumerations (<code class="computeroutput"><span class="keyword">enum</span> <span class="keyword">class</span></code>).
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STATIC_ASSERT</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support <code class="computeroutput"><span class="identifier">static_assert</span></code>.
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_UNICODE_LITERALS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support Unicode (<code class="computeroutput"><span class="identifier">u8</span></code>,
+                <code class="computeroutput"><span class="identifier">u</span></code>, <code class="computeroutput"><span class="identifier">U</span>#<span class="special">)</span> <span class="identifier">literals</span><span class="special">.</span>
+                <span class="special">]]</span> <span class="special">[[</span></code>BOOST_NO_VARIADIC_TEMPLATES`
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support variadic templates.
               </p>
               </td>
 </tr>
@@ -2280,16 +2485,14 @@
                 us a convenient way to declare such constants. For example instead
                 of: 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="keyword">struct</span> <span class="identifier">foo</span><span class="special">{</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">struct</span> <span class="identifier">foo</span><span class="special">{</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> <span class="identifier">value</span> <span class="special">=</span> <span class="number">2</span><span class="special">;</span>
 <span class="special">};</span>
 </pre>
 <p>
                 use: 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="keyword">struct</span> <span class="identifier">foo</span><span class="special">{</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">struct</span> <span class="identifier">foo</span><span class="special">{</span>
    <span class="identifier">BOOST_STATIC_CONSTANT</span><span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">value</span> <span class="special">=</span> <span class="number">2</span><span class="special">);</span>
 <span class="special">};</span>
 </pre>
@@ -2322,8 +2525,7 @@
                 instantiations if some of the template parameters don't appear in
                 the function parameter list. For instance: 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">ostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">typeinfo</span><span class="special">&gt;</span>
 
@@ -2347,8 +2549,7 @@
                 problem without effects on the calling syntax. For instance, in the
                 case above write: 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">&gt;</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">&gt;</span>
 <span class="keyword">void</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">BOOST_EXPLICIT_TEMPLATE_NON_TYPE</span><span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">n</span><span class="special">))</span> <span class="special">{</span> <span class="special">...</span> <span class="special">}</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -2742,8 +2943,7 @@
 <p>
           <span class="bold"><strong>my_library.hpp</strong></span>
         </p>
-<pre class="programlisting">
-<span class="preprocessor">#ifndef</span> <span class="identifier">MY_INCLUDE_GUARD</span>
+<pre class="programlisting"><span class="preprocessor">#ifndef</span> <span class="identifier">MY_INCLUDE_GUARD</span>
 <span class="preprocessor">#define</span> <span class="identifier">MY_INCLUDE_GUARD</span>
 
 <span class="comment">// all includes go here:
@@ -2765,8 +2965,7 @@
 <p>
           <span class="bold"><strong>my_library.cpp</strong></span>
         </p>
-<pre class="programlisting">
-<span class="special">...</span>
+<pre class="programlisting"><span class="special">...</span>
 <span class="comment">// nothing special need be done in the implementation file
 </span><span class="special">...</span>
 </pre>
@@ -2831,8 +3030,7 @@
 <p>
           <span class="bold"><strong>my_library.hpp</strong></span>
         </p>
-<pre class="programlisting">
-<span class="special">...</span>
+<pre class="programlisting"><span class="special">...</span>
 <span class="comment">//
 </span><span class="comment">// Don't include auto-linking code if the user has disabled it by
 </span><span class="comment">// defining BOOST_ALL_NO_LIB, or BOOST_MY_LIBRARY_NO_LIB, or if this 
@@ -2850,8 +3048,7 @@
 <p>
           <span class="bold"><strong>my_library.cpp</strong></span>
         </p>
-<pre class="programlisting">
-<span class="comment">// define BOOST_MY_LIBRARY_SOURCE so that the header knows that the
+<pre class="programlisting"><span class="comment">// define BOOST_MY_LIBRARY_SOURCE so that the header knows that the
 </span><span class="comment">// library is being built (possibly exporting rather than importing code)
 </span><span class="comment">//
 </span><span class="preprocessor">#define</span> <span class="identifier">BOOST_MY_LIBRARY_SOURCE</span>

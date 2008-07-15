@@ -1,4 +1,4 @@
-//  This file was automatically generated on Fri Oct 19 13:34:11 2007
+//  This file was automatically generated on Sat Jul 12 12:39:34 2008
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -22,6 +22,11 @@
 
 int error_count = 0;
 
+#ifndef BOOST_NO_ADL_BARRIER
+#include "boost_no_adl_barrier.ipp"
+#else
+namespace boost_no_adl_barrier = empty_boost;
+#endif
 #ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #include "boost_no_arg_dep_lookup.ipp"
 #else
@@ -192,6 +197,11 @@ namespace boost_no_operators_in_namespace = empty_boost;
 #else
 namespace boost_no_template_partial_specialization = empty_boost;
 #endif
+#ifndef BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS
+#include "boost_no_part_spec_def_args.ipp"
+#else
+namespace boost_no_partial_specialization_implicit_default_args = empty_boost;
+#endif
 #ifndef BOOST_NO_PRIVATE_IN_AGGREGATE
 #include "boost_no_priv_aggregate.ipp"
 #else
@@ -286,6 +296,11 @@ namespace boost_no_std_wstring = empty_boost;
 #include "boost_no_swprintf.ipp"
 #else
 namespace boost_no_swprintf = empty_boost;
+#endif
+#ifndef BOOST_NO_TEMPLATED_IOSTREAMS
+#include "boost_no_template_streams.ipp"
+#else
+namespace boost_no_templated_iostreams = empty_boost;
 #endif
 #ifndef BOOST_NO_TEMPLATE_TEMPLATES
 #include "boost_no_template_template.ipp"
@@ -841,6 +856,11 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_HAS_WINTHREADS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
+   if(0 != boost_no_adl_barrier::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_ADL_BARRIER at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
    if(0 != boost_no_argument_dependent_lookup::test())
    {
       std::cerr << "Failed test for BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP at: " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -1011,6 +1031,11 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
+   if(0 != boost_no_partial_specialization_implicit_default_args::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
    if(0 != boost_no_private_in_aggregate::test())
    {
       std::cerr << "Failed test for BOOST_NO_PRIVATE_IN_AGGREGATE at: " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -1104,6 +1129,11 @@ int main( int, char *[] )
    if(0 != boost_no_swprintf::test())
    {
       std::cerr << "Failed test for BOOST_NO_SWPRINTF at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_templated_iostreams::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_TEMPLATED_IOSTREAMS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_template_templates::test())

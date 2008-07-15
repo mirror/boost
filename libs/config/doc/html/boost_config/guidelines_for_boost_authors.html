@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -28,6 +28,8 @@
     Boost Authors</a>
 </h2></div></div></div>
 <div class="toc"><dl>
+<dt><span class="section"><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.warnings">
+      Disabling Compiler Warnings</a></span></dt>
 <dt><span class="section"><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_defect_macros">Adding
       New Defect Macros</a></span></dt>
 <dt><span class="section"><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros">Adding
@@ -103,12 +105,91 @@
 </ul></div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
+<a name="boost_config.guidelines_for_boost_authors.warnings"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.warnings" title="Disabling Compiler Warnings">
+      Disabling Compiler Warnings</a>
+</h3></div></div></div>
+<p>
+        The header <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">warning_disable</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        can be used to disable certain compiler warings that are hard or impossible
+        to otherwise remove.
+      </p>
+<p>
+        Note that:
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+          This header <span class="bold"><strong><span class="emphasis"><em>should never be included by
+          another Boost header</em></span></strong></span>, it should only ever be used
+          by a library source file or a test case.
+        </li>
+<li>
+          The header should be included <span class="bold"><strong><span class="emphasis"><em>before you
+          include any other header</em></span></strong></span>.
+        </li>
+<li>
+          This header only disables warnings that are hard or impossible to otherwise
+          deal with, and which are typically emitted by one compiler only, or in
+          one compilers own standard library headers.
+        </li>
+</ul></div>
+<p>
+        Currently it disables the following warnings:
+      </p>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                Compiler
+              </p>
+              </th>
+<th>
+              <p>
+                Warning
+              </p>
+              </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                Visual C++ 8 and later
+              </p>
+              </td>
+<td>
+              <p>
+                <a href="http://msdn2.microsoft.com/en-us/library/ttcz0bys(VS.80).aspx" target="_top">C4996</a>:
+                Error 'function': was declared deprecated
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                Intel C++
+              </p>
+              </td>
+<td>
+              <p>
+                Warning 1786: relates to the use of "deprecated" standard
+                library functions rather like C4996 in Visual C++.
+              </p>
+              </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.guidelines_for_boost_authors.adding_new_defect_macros"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_defect_macros" title="Adding New Defect Macros">Adding
       New Defect Macros</a>
 </h3></div></div></div>
 <p>
-        When you need to add a new defect macro -either to fix a problem with an
-        existing library, or when adding a new library- distil the issue down to
+        When you need to add a new defect macro - either to fix a problem with an
+        existing library, or when adding a new library - distil the issue down to
         a simple test case; often, at this point other (possibly better) workarounds
         may become apparent. Secondly always post the test case code to the boost
         mailing list and invite comments; remember that C++ is complex and that sometimes
@@ -125,22 +206,20 @@
         the test case in a <code class="computeroutput"><span class="special">.</span><span class="identifier">ipp</span></code>
         file with the following comments near the top:
       </p>
-<pre class="programlisting">
-<span class="comment">//  MACRO:         BOOST_NO_FOO
+<pre class="programlisting"><span class="comment">//  MACRO:         BOOST_NO_FOO
 </span><span class="comment">//  TITLE:         foo
 </span><span class="comment">//  DESCRIPTION:   If the compiler fails to support foo
 </span></pre>
 <p>
         These comments are processed by the autoconf script, so make sure the format
         follows the one given. The file should be named "<code class="computeroutput"><span class="identifier">boost_no_foo</span><span class="special">.</span><span class="identifier">ipp</span></code>",
-        where foo is the defect description -try and keep the file name under the
+        where foo is the defect description - try and keep the file name under the
         Mac 30 character filename limit though. You will also need to provide a function
         prototype "<code class="computeroutput"><span class="keyword">int</span> <span class="identifier">test</span><span class="special">()</span></code>" that is declared in a namespace with
         the same name as the macro, but in all lower case, and which returns zero
         on success:
       </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost_no_foo</span> <span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost_no_foo</span> <span class="special">{</span>
 
 <span class="keyword">int</span> <span class="identifier">test</span><span class="special">()</span>
 <span class="special">{</span>
@@ -157,26 +236,25 @@
       </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-          cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">tools</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span>
-          <span class="special">--</span><span class="identifier">v2</span></code>
+          cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">tools</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span></code>
           : this generates the <code class="computeroutput"><span class="special">.</span><span class="identifier">cpp</span></code>
-          file test cases from the <code class="computeroutput"><span class="special">.</span><span class="identifier">ipp</span></code> file, updates the Jamfile, <code class="computeroutput"><span class="identifier">config_test</span><span class="special">.</span><span class="identifier">cpp</span></code> and <code class="computeroutput"><span class="identifier">config_info</span><span class="special">.</span><span class="identifier">cpp</span></code>.
+          file test cases from the <code class="computeroutput"><span class="special">.</span><span class="identifier">ipp</span></code> file, updates the libs/config/test/all/Jamfile.v2,
+          <code class="computeroutput"><span class="identifier">config_test</span><span class="special">.</span><span class="identifier">cpp</span></code> and <code class="computeroutput"><span class="identifier">config_info</span><span class="special">.</span><span class="identifier">cpp</span></code>.
+        </li>
+<li>
+          cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">all</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span>
+          </code><span class="emphasis"><em>MACRONAME<code class="computeroutput"> <span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code></em></span>
+          : where <span class="emphasis"><em>MACRONAME</em></span> is the name of the new macro, and
+          <span class="emphasis"><em><code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code></em></span> is a space separated
+          list of compilers to test with. You should see the tests pass with those
+          compilers that don't have the defect, and fail with those that do.
         </li>
 <li>
           cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">test</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span>
-          <span class="special">--</span><span class="identifier">v2</span>
-          </code><span class="emphasis"><em>MACRONAME</em></span><code class="computeroutput"> <span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code>
-          : where <span class="emphasis"><em>MACRONAME</em></span> is the name of the new macro, and
-          <code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code> is the list of compilers to test
-          with. You should see the tests pass with those compilers that don't have
-          the defect, and fail with those that do.
-        </li>
-<li>
-          cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">test</span></code> and <code class="computeroutput"><span class="identifier">run</span>
-          <span class="identifier">bjam</span> <span class="special">--</span><span class="identifier">v2</span> <span class="identifier">config_info</span>
-          <span class="identifier">config_test</span> <span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code>
+          <span class="identifier">config_info</span> <span class="identifier">config_test</span>
+          </code><span class="emphasis"><em><code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code></em></span>
           : <code class="computeroutput"><span class="identifier">config_info</span></code> should build
-          and run cleanly for all the compilers in <code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code>
+          and run cleanly for all the compilers in <span class="emphasis"><em><code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code></em></span>
           while <code class="computeroutput"><span class="identifier">config_test</span></code> should
           fail for those that have the defect, and pass for those that do not.
         </li>
@@ -265,9 +343,9 @@
       </p>
 <p>
         The compiler/platform/standard library selection code is set up so that unknown
-        platforms are ignored and assumed to be fully standards compliant -this gives
-        unknown platforms a "sporting chance" of working "as is"
-        even without running the configure script.
+        platforms are ignored and assumed to be fully standards compliant - this
+        gives unknown platforms a "sporting chance" of working "as
+        is" even without running the configure script.
       </p>
 <p>
         When adding or modifying the individual mini-configs, assume that future,

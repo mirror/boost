@@ -1,4 +1,4 @@
-//  This file was automatically generated on Sat Jul 12 12:39:32 2008
+//  This file was automatically generated on Mon Apr 21 12:40:41 2008
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -6,14 +6,14 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/config for the most recent version.//
-//  Revision $Id$
+//  Revision $Id: generate.cpp 44422 2008-04-14 18:06:59Z johnmaddock $
 //
 
 
-// Test file for macro BOOST_HAS_TR1_MEM_FN
+// Test file for macro BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS
 // This file should not compile, if it does then
-// BOOST_HAS_TR1_MEM_FN should be defined.
-// See file boost_has_tr1_mem_fn.ipp for details
+// BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS should not be defined.
+// See file boost_no_part_spec_def_args.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
 // the objective of this file:
@@ -22,17 +22,16 @@
 #endif
 
 #include <boost/config.hpp>
-#include <boost/tr1/detail/config.hpp>
 #include "test.hpp"
 
-#ifndef BOOST_HAS_TR1_MEM_FN
-#include "boost_has_tr1_mem_fn.ipp"
+#ifdef BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS
+#include "boost_no_part_spec_def_args.ipp"
 #else
 #error "this file should not compile"
 #endif
 
 int main( int, char *[] )
 {
-   return boost_has_tr1_mem_fn::test();
+   return boost_no_partial_specialization_implicit_default_args::test();
 }
 

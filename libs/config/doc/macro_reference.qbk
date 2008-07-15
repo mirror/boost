@@ -38,6 +38,10 @@ symbol being looked up in the current scope.  For example, using
 in namespaces nested inside boost (but not elsewhere).  Probably
 Borland specific.
 ]]
+[[`BOOST_NO_ADL_BARRIER`][Compiler][
+The compiler locates and searches namespaces that it should /*not*/ in fact 
+search when performing argument dependent lookup.
+]]
 [[`BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP`][Compiler][
 Compiler does not implement argument-dependent lookup (also named
 Koenig lookup); see std::3.4.2 \[basic.koenig.lookup\]
@@ -172,6 +176,10 @@ Compiler requires inherited operator friend functions to be defined at
 namespace scope, then using'ed to boost. Probably GCC specific. See
 [@../../../../boost/operators.hpp `<boost/operators.hpp>`] for example.
 ]]
+[[`BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS`][Compiler][
+The compiler does not correctly handle partial specializations
+which depend upon default arguments in the primary template.
+]]
 [[`BOOST_NO_POINTER_TO_MEMBER_CONST`][Compiler][
 The compiler does not correctly handle pointers to const member functions,
 preventing use of these in overloaded function templates. See
@@ -245,6 +253,9 @@ The platform does not have a conforming version of `swprintf`.
 [[`BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION`][Compiler][
 Class template partial specialization (14.5.4 \[temp.class.spec\]) not
 supported.
+]]
+[[`BOOST_NO_TEMPLATED_IOSTREAMS`][Standard library][
+The standard library does not provide templated iostream classes.
 ]]
 [[`BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS`][Standard library][
 The standard library does not provide templated iterator constructors
@@ -476,36 +487,75 @@ standard).
 
 [endsect]
 
-[section Macros that describe C++0x features]
+[section Macros that describe possible C++0x features]
 
 The following macros describe features that are likely to be included in the
-upcoming ISO C++ standard, C++0x.
+upcoming ISO C++ standard, C++0x, but have not yet been approved for inclusion
+in the language.
 
 
 [table
 [[Macro     ][Description     ]]
 
 [[`BOOST_HAS_CONCEPTS`][
-The compiler supports  concepts. Note: concepts have been proposed for C++0x,
-but have not yet been approved for inclusion in the language.
-]]
-[[`BOOST_HAS_DECLTYPE`][
-The compiler supports decltype.
-]]
-[[`BOOST_HAS_LONG_LONG`][
-The compiler supports the long long data type.
-]]
-[[`BOOST_HAS_RVALUE_REFS`][
-The compiler supports  rvalue references.
-]]
-[[`BOOST_HAS_STATIC_ASSERT`][
-The compiler supports  static assertions.
-]]
-[[`BOOST_HAS_VARIADIC_TMPL`][
-The compiler supports  variadic templates. 
+The compiler supports  concepts.
 ]]
 ]
 
+[endsect]
+
+[section Macros that describe C++0x features not supported]
+
+The following macros describe features in the upcoming ISO C++ standard, C++0x,
+that are not yet supported by a particular compiler.
+
+[table
+[[Macro     ][Description     ]]
+
+[[`BOOST_NO_CHAR16_T`][The compiler does not support
+type `char16_t`. 
+]]                       
+[[`BOOST_NO_CHAR32_T`][The compiler does not support 
+type `char32_t`. 
+]]                       
+[[`BOOST_NO_CONSTEXPR`][The compiler does not support 
+`constexpr`. 
+]]                      
+[[`BOOST_NO_DECLTYPE`][The compiler does not support 
+`decltype`. 
+]]                       
+[[`BOOST_NO_DEFAULTED_FUNCTIONS`][The compiler does not support 
+defaulted (`= default`) functions.              
+[[`BOOST_NO_DELETED_FUNCTIONS`][The compiler does not support 
+deleted (`= delete`) functions.              
+]]              
+[[`BOOST_NO_EXPLICIT_CONVERSION_OPERATIONS`][The compiler does not support 
+explicit conversion operators (`explicit operator T()`).              
+]] 
+[[`BOOST_NO_EXTERN_TEMPLATE`][The compiler does not support 
+explicit instantiation declarations for templates (`explicit template`).
+]]
+[[`BOOST_NO_LONG_LONG`][The compiler does not support `long long`.
+]]                
+[[`BOOST_NO_RAW_LITERALS`][The compiler does not support
+raw string literals. 
+]]                   
+[[`BOOST_NO_RVALUE_REFERENCES`][The compiler does not support
+r-value references. 
+]]              
+[[`BOOST_NO_SCOPED_ENUMS`][The compiler does not support
+scoped enumerations (`enum class`). 
+]]                   
+[[`BOOST_NO_STATIC_ASSERT`][The compiler does not support
+`static_assert`. 
+]]                  
+[[`BOOST_NO_UNICODE_LITERALS`][The compiler does not support
+Unicode (`u8`, `u`, `U') literals. 
+]]               
+[[`BOOST_NO_VARIADIC_TEMPLATES`][The compiler does not support
+variadic templates. 
+]]
+]
 
 [endsect]
 

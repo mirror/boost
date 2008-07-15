@@ -59,10 +59,36 @@ at that.
 majority of compilers, such as namespaces, exceptions, RTTI, or templates.
 
 
+[section:warnings Disabling Compiler Warnings]
+
+The header `<boost/config/warning_disable.hpp>` can be used to disable
+certain compiler warings that are hard or impossible to otherwise remove.
+
+Note that:
+
+* This header [*['should never be included by another Boost header]], it should
+only ever be used by a library source file or a test case.
+* The header should be included [*['before you include any other header]].
+* This header only disables warnings that are hard or impossible to otherwise
+ deal with, and which are typically emitted by one compiler only, or
+ in one compilers own standard library headers.
+ 
+Currently it disables the following warnings:
+
+[table
+[[Compiler][Warning]]
+[[Visual C++ 8 and later][[@http://msdn2.microsoft.com/en-us/library/ttcz0bys(VS.80).aspx C4996]: Error 'function': was declared deprecated]]
+[[Intel C++][Warning 1786: relates to the use of "deprecated" standard 
+   library functions rather like C4996 in Visual C++.]]
+]
+
+[endsect]
+
+
 [section Adding New Defect Macros]
 
-When you need to add a new defect macro -either to fix a problem with an
-existing library, or when adding a new library- distil the issue down to
+When you need to add a new defect macro - either to fix a problem with an
+existing library, or when adding a new library - distil the issue down to
 a simple test case; often, at this point other (possibly better) workarounds
 may become apparent. Secondly always post the test case code to the boost
 mailing list and invite comments; remember that C++ is complex and that
@@ -81,7 +107,7 @@ place the test case in a `.ipp` file with the following comments near the top:
 
 These comments are processed by the autoconf script, so make sure the format
 follows the one given. The file should be named "`boost_no_foo.ipp`", where foo
-is the defect description -try and keep the file name under the Mac 30 character
+is the defect description - try and keep the file name under the Mac 30 character
 filename limit though. You will also need to provide a function prototype
 "`int test()`" that is declared in a namespace with the same name as the macro,
 but in all lower case, and which returns zero on success:
@@ -100,15 +126,15 @@ but in all lower case, and which returns zero on success:
 Once the test code is in place in libs/config/test, updating the configuration
 test system proceeds as:
 
-* cd into `libs/config/tools` and run `bjam --v2` : this generates the `.cpp`
-file test cases from the `.ipp` file, updates the Jamfile, `config_test.cpp` and
-`config_info.cpp`.
-* cd into `libs/config/test` and run `bjam --v2 `['MACRONAME]` compiler-list` : where
-['MACRONAME] is the name of the new macro, and `compiler-list` is the list of
+* cd into `libs/config/tools` and run `bjam` : this generates the `.cpp`
+file test cases from the `.ipp` file, updates the 
+libs/config/test/all/Jamfile.v2, `config_test.cpp` and `config_info.cpp`.
+* cd into `libs/config/test/all` and run `bjam `['MACRONAME` compiler-list`] : where
+['MACRONAME] is the name of the new macro, and ['`compiler-list`] is a space separated list of
 compilers to test with.  You should see the tests pass with those compilers
 that don't have the defect, and fail with those that do.
-* cd into `libs/config/test` and `run bjam --v2 config_info config_test compiler-list` :
-`config_info` should build and run cleanly for all the compilers in `compiler-list`
+* cd into `libs/config/test` and run `bjam config_info config_test `['`compiler-list`] :
+`config_info` should build and run cleanly for all the compilers in ['`compiler-list`]
 while `config_test` should fail for those that have the defect, and pass for those
 that do not.
 
@@ -168,7 +194,7 @@ are included by default and should change only if support for a new
 compiler/standard library/platform is added.
 
 The compiler/platform/standard library selection code is set up so that unknown
-platforms are ignored and assumed to be fully standards compliant -this gives
+platforms are ignored and assumed to be fully standards compliant - this gives
 unknown platforms a "sporting chance" of working "as is" even without running
 the configure script.
 
