@@ -8,6 +8,7 @@
 //  See http://www.boost.org/libs/integer for documentation.
 
 //  Revision History
+//   15 Jul 08  Added exact-integer templates. (Daryle Walker)
 //   14 Jul 08  Improved testing of processor-optimized integer template; added
 //              extended-integer support. (Daryle Walker)
 //   13 Jul 08  Modernized tests w/ MPL instead of giant macros (Daryle Walker)
@@ -19,7 +20,7 @@
 #define BOOST_TEST_MODULE  "Integer size-selection tests"
 
 #include <boost/test/unit_test.hpp>           // unit testing framework
-#include <boost/test/test_case_template.hpp>  // ..BOOST_AUTO_TEST_CASE_TEMPLATE
+#include <boost/test/test_case_template.hpp>
 
 #include <boost/config.hpp>          // for BOOST_NO_USING_TEMPLATE, etc.
 #include <boost/cstdint.hpp>         // for boost::uintmax_t, intmax_t
@@ -47,10 +48,12 @@
 #include <boost/type_traits/is_same.hpp>      // for boost::is_same
 #include <boost/type_traits/make_signed.hpp>  // for boost::make_signed
 
-#include <climits>   // for ULONG_MAX, LONG_MAX, LONG_MIN, etc.
-#include <iostream>  // for std::cout
-#include <ostream>   // for std::endl
-#include <typeinfo>  // for std::type_info
+#include <algorithm>  // for std::binary_search
+#include <climits>    // for ULONG_MAX, LONG_MAX, LONG_MIN, etc.
+#include <cstddef>    // for std::size_t
+#include <iostream>   // for std::cout
+#include <ostream>    // for std::endl
+#include <typeinfo>   // for std::type_info
 
 
 // Control what the "fast" specialization of "short" is
@@ -104,9 +107,9 @@ typedef boost::mpl::vector<
 #if ULONG_MAX > UINT_MAX
     , unsigned long
 #endif
-#ifdef BOOST_HAS_LONG_LONG
+#if defined(BOOST_HAS_LONG_LONG) && ((ULLONG_MAX > ULONG_MAX) || (ULONGLONG_MAX > ULONG_MAX))
     , boost::ulong_long_type
-#elif defined(BOOST_HAS_MS_INT64)
+#elif defined(BOOST_HAS_MS_INT64) && (0xFFFFFFFFFFFFFFFFui64 > ULONG_MAX)
     , unsigned __int64
 #endif
 >  distinct_unsigned_types;
@@ -188,8 +191,76 @@ typedef boost::mpl::push_back<
 // mantissa (don't want to shift into the sign bit)
 typedef boost::mpl::push_back<
     boost::mpl::pop_back< valid_bits_list >::type,
-    boost::mpl::integral_c< int, intmax_bits - 2 >
+    boost::mpl::integral_c< int, intmax_bits - 3 >
 >::type  valid_to_increase_sbits_list;
+
+// List the digit counts for each integral type, this time as an object, an
+// array working as a sorted list
+int const  integral_bit_lengths[] = {
+    std::numeric_limits< unsigned char >::digits
+#if USHRT_MAX > UCHAR_MAX
+    , std::numeric_limits< unsigned short >::digits
+#endif
+#if UINT_MAX > USHRT_MAX
+    , std::numeric_limits< unsigned int >::digits
+#endif
+#if ULONG_MAX > UINT_MAX
+    , std::numeric_limits< unsigned long >::digits
+#endif
+#if defined(BOOST_HAS_LONG_LONG) && ((ULLONG_MAX > ULONG_MAX) || (ULONGLONG_MAX > ULONG_MAX))
+    , std::numeric_limits< boost::ulong_long_type >::digits
+#elif defined(BOOST_HAS_MS_INT64) && (0xFFFFFFFFFFFFFFFFui64 > ULONG_MAX)
+    , std::numeric_limits< unsigned __int64 >::digits
+#endif
+};
+
+std::size_t const  integral_type_count = sizeof(integral_bit_lengths) /
+ sizeof(integral_bit_lengths[0]);
+
+// Use SFINAE to check if a particular bit-count is supported
+template < int Bits >
+bool
+print_out_exact_signed( boost::mpl::integral_c<int, Bits> const &x, int bits,
+ typename boost::exact_integral<Bits, signed>::type *unused = 0 )
+{
+    // Too bad the type-id expression couldn't use the compact form "*unused",
+    // but type-ids of dereferenced null pointers throw by order of C++ 2003,
+    // sect. 5.2.8, para. 2 (although the result is not conceptually needed).
+
+    PRIVATE_SHOW_MESSAGE( "There is an exact_integral<" << bits <<
+     ", signed> specialization, with type '" << typeid(typename
+     boost::exact_integral<Bits, signed>::type).name() << "'." );
+    return true;
+}
+
+template < typename T >
+bool
+print_out_exact_signed( T const &x, int bits )
+{
+    PRIVATE_SHOW_MESSAGE( "There is no exact_integral<" << bits <<
+     ", signed> specialization." );
+    return false;
+}
+
+template < int Bits >
+bool
+print_out_exact_unsigned( boost::mpl::integral_c<int, Bits> const &x, int bits,
+ typename boost::exact_integral<Bits, unsigned>::type *unused = 0 )
+{
+    PRIVATE_SHOW_MESSAGE( "There is an exact_integral<" << bits <<
+     ", unsigned> specialization, with type '" << typeid(typename
+     boost::exact_integral<Bits, unsigned>::type).name() << "'." );
+    return true;
+}
+
+template < typename T >
+bool
+print_out_exact_unsigned( T const &x, int bits )
+{
+    PRIVATE_SHOW_MESSAGE( "There is no exact_integral<" << bits <<
+     ", unsigned> specialization." );
+    return false;
+}
 
 }  // unnamed namespace
 
@@ -225,7 +296,7 @@ BOOST_AUTO_TEST_SUITE_END()
 // Check if given types can support given size parameters
 BOOST_AUTO_TEST_SUITE( show_type_tests )
 
-// Check the specialization type status of given bit lengths
+// Check the specialization type status of given bit lengths, exact or higher
 BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_lengths_test, T, valid_bits_list )
 {
     // This test is supposed to replace the following printouts given in
@@ -348,6 +419,42 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_shifted_signed_values_test, T,
      typename int_t<count + 1>::least>::value) );
 }
 
+// Check the specialization type status of given bit lengths, exact only
+BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_exact_lengths_test, T, bits_list )
+{
+#ifndef BOOST_NO_USING_TEMPLATE
+    using std::binary_search;
+#else
+    using namespace std;
+#endif
+
+    BOOST_CHECK_EQUAL(   print_out_exact_signed(T(), T::value),
+     binary_search(integral_bit_lengths, integral_bit_lengths +
+     integral_type_count, T::value) );
+    BOOST_CHECK_EQUAL( print_out_exact_unsigned(T(), T::value),
+     binary_search(integral_bit_lengths, integral_bit_lengths +
+     integral_type_count, T::value) );
+}
+
+// Check the classic specialization type status of given bit lengths, exact only
+BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_classic_exact_lengths_test, T,
+ distinct_integral_bit_counts )
+{
+#ifndef BOOST_NO_USING_TEMPLATE
+    using std::numeric_limits;
+    using boost::int_exact_t;
+    using boost::uint_exact_t;
+#else
+    using namespace std;
+    using namespace boost;
+#endif
+
+    BOOST_MPL_ASSERT_RELATION( numeric_limits<typename
+     int_exact_t<T::value>::exact>::digits, ==, T::value - 1 );
+    BOOST_MPL_ASSERT_RELATION( numeric_limits<typename
+     uint_exact_t<T::value>::exact>::digits, ==, T::value );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 // Check if given constants can fit in given types
@@ -398,8 +505,36 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_masked_values_test, T,
      1 );
 }
 
-// Check if large value can fit its minimum required size, by value
-BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_shifted_values_test, T,
+// Check if a large value can only fit of its exact bit length
+BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_exact_lengths_test, T,
+ distinct_integral_bit_counts )
+{
+#ifndef BOOST_NO_USING_TEMPLATE
+    using boost::exact_integral;
+#else
+    using namespace boost;
+#endif
+
+    typedef typename exact_integral<T::value, unsigned>::type  uexact_type;
+    typedef typename exact_integral<T::value,   signed>::type  sexact_type;
+
+    uexact_type const  one_u( 1u ), high_bit_u( one_u << (T::value - 1) ),
+                       repeated_bits_u( (high_bit_u << 1) | high_bit_u );
+
+    BOOST_CHECK( high_bit_u );
+    BOOST_CHECK_EQUAL( repeated_bits_u, high_bit_u );
+
+    sexact_type const  one_s( 1 ), high_bit_s( one_s << (T::value - 2) ),
+                       repeated_bits_s( (high_bit_s << 1) | high_bit_s ),
+                       repeated_2bits_s( (repeated_bits_s << 1) | high_bit_s );
+
+    BOOST_CHECK( high_bit_s > 0 );
+    BOOST_CHECK( repeated_bits_s < 0 );
+    BOOST_CHECK_EQUAL( repeated_bits_s, repeated_2bits_s );
+}
+
+// Check if large value can fit its minimum required size, by value, unsigned
+BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_shifted_unsigned_values_test, T,
  valid_to_increase_ubits_list )
 {
     // This test is supposed to replace the following checks given in
@@ -409,28 +544,21 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_shifted_values_test, T,
     //      Confirm( static_cast<typename Template<V>::Type>(V) == V );
     //  end for
     // end Routine
-    // with Template = {uint_value_t, int_max_value_t, int_min_value_t}; Type =
-    //      {least, fast}; Template:Extreme = {intmax_t.Min for int_min_value_t,
-    //      intmax_t.Max for int_max_value_t, uintmax_t.Max for uint_value_t}
+    // with Template = {uint_value_t}; Type = {least, fast}; Template:Extreme =
+    //      {uintmax_t.Max for uint_value_t}
     // In other words, the selected type doesn't mask out any bits it's not
     // supposed to.  But now we'll use template meta-programming instead of
     // macros.  The limit of type-lists is usually less than 32 (not to mention
     // 64) elements, so we have to take selected values.
     using boost::uintmax_t;
-    using boost::intmax_t;
 #ifndef BOOST_NO_USING_TEMPLATE
-    using boost::integer_traits;
     using boost::uint_value_t;
-    using boost::int_max_value_t;
-    using boost::int_min_value_t;
 #else
     using namespace boost;
 #endif
 
-    int const        shift = T::value;
-    uintmax_t const  max_u = integer_traits<uintmax_t>::const_max >> shift;
-    intmax_t const   max_s = integer_traits<intmax_t>::const_max >> shift,
-                     min_s = integer_traits<intmax_t>::const_min >> shift;
+    uintmax_t const  max_u = boost::integer_traits<uintmax_t>::const_max >>
+     T::value;
 
     BOOST_CHECK_EQUAL( typename uint_value_t<max_u>::least(max_u), max_u );
     BOOST_CHECK_EQUAL( typename uint_value_t<(max_u >> 1)>::least(max_u >> 1),
@@ -438,6 +566,38 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_shifted_values_test, T,
     BOOST_CHECK_EQUAL( typename uint_value_t<max_u>::fast(max_u), max_u );
     BOOST_CHECK_EQUAL( typename uint_value_t<(max_u >> 1)>::fast(max_u >> 1),
      max_u >> 1 );
+}
+
+// Check if large value can fit its minimum required size, by value, signed
+BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_shifted_signed_values_test, T,
+ valid_to_increase_sbits_list )
+{
+    // This test is supposed to replace the following checks given in
+    // puesdo-code by:
+    // Routine: Template, Type
+    //  for ( N = 0, V = Template:Extreme ; N < 32 ; ++N, V >>= 1 )
+    //      Confirm( static_cast<typename Template<V>::Type>(V) == V );
+    //  end for
+    // end Routine
+    // with Template = {int_max_value_t, int_min_value_t}; Type = {least, fast};
+    //      Template:Extreme = {intmax_t.Min for int_min_value_t, intmax_t.Max
+    //      for int_max_value_t}
+    // In other words, the selected type doesn't mask out any bits it's not
+    // supposed to.  But now we'll use template meta-programming instead of
+    // macros.  The limit of type-lists is usually less than 32 (not to mention
+    // 64) elements, so we have to take selected values.
+    using boost::intmax_t;
+#ifndef BOOST_NO_USING_TEMPLATE
+    using boost::integer_traits;
+    using boost::int_max_value_t;
+    using boost::int_min_value_t;
+#else
+    using namespace boost;
+#endif
+
+    int const       shift = T::value;
+    intmax_t const  max_s = integer_traits<intmax_t>::const_max >> shift,
+                    min_s = integer_traits<intmax_t>::const_min >> shift;
 
     BOOST_CHECK_EQUAL( typename int_max_value_t<max_s>::least(max_s), max_s );
     BOOST_CHECK_EQUAL( typename int_max_value_t<(max_s >> 1)>::least(max_s >>

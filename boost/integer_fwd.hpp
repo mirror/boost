@@ -87,11 +87,20 @@ template <  >
 template < typename LeastInt >
     struct int_fast_t;
 
+template < int Bits, typename Signedness >
+    struct exact_integral;
+
 template< int Bits >
     struct int_t;
 
 template< int Bits >
+    struct int_exact_t;
+
+template< int Bits >
     struct uint_t;
+
+template< int Bits >
+    struct uint_exact_t;
 
 template< intmax_t MaxValue >
     struct int_max_value_t;
