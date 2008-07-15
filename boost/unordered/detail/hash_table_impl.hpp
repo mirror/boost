@@ -2294,7 +2294,7 @@ namespace boost {
                         j = t.data_.buckets_end(); i != j; ++i)
             {
                 for(link_ptr it(i->next_); BOOST_UNORDERED_BORLAND_BOOL(it); it = data::next_group(it))
-                    seed ^= group_hash(t, it, (type_wrapper<V>*)0);
+                    seed += group_hash(t, it, (type_wrapper<V>*)0);
             }
 
             return seed;
