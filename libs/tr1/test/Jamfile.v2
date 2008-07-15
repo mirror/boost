@@ -46,11 +46,11 @@ rule test_all
    }
    for local file2 in [ glob config/tr1_has_tr1*fail.cpp ]
    {
-      all_rules += [ compile-fail $(file2) : $(TR1_PROPERTIES) ] ;
+      all_rules += [ compile-fail $(file2) ] ;
    }
    for local filec in [ glob config/tr1_has_tr1*pass.cpp ]
    {
-      all_rules += [ compile $(filec) : $(TR1_PROPERTIES) ] ;
+      all_rules += [ compile $(filec) ] ;
    }
    
    for local file3 in [ glob type_traits/*.cpp ]
@@ -71,11 +71,18 @@ rule test_all
       :   $(file5:B)_std_header
       ] ;
    }
+   for local file6 in [ glob cyclic_depend/*.cpp ]
+   {
+      all_rules += [ compile $(file6) 
+      :  $(TR1_PROPERTIES) 
+      ] ;
+   }
    #ECHO $(all_rules) ;
    return $(all_rules) ;
 }
 
 test-suite tr1 : [ test_all r ] ; 
+
 
 
 
