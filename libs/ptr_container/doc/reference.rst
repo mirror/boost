@@ -12,11 +12,11 @@ The documentation is divided into an explanation for
 each container. When containers have the same interface, that common interface is explained only once,
 but links are always provided to more relevant information.
 Please make sure you understand 
-the `Cloneable <reference.html#the-Cloneable-concept>`_ concept and 
+the `Clonable <reference.html#the-Clonable-concept>`_ concept and 
 the `Clone Allocator <reference.html#the-clone-allocator-concept>`_ concept. 
 
 - `Conventions <conventions.html>`_
-- `The Cloneable concept`_
+- `The Clonable concept`_
 - `The Clone Allocator concept`_
 
 - `Class hierarchy`_:
@@ -44,6 +44,7 @@ the `Clone Allocator <reference.html#the-clone-allocator-concept>`_ concept.
       
 - `Serialization`_  
 - `Indirected functions <indirect_fun.html>`_  
+- `Insert iterators <ptr_inserter.html>`_
 - `Class nullable`_     
 - `Exception classes`_   
 - `Disabling the use of exceptions`_      
@@ -74,24 +75,24 @@ the `Clone Allocator <reference.html#the-clone-allocator-concept>`_ concept.
 
 
 
-The Cloneable concept
-+++++++++++++++++++++
+The Clonable concept
+++++++++++++++++++++
 
 **Refinement of**
 
 - Heap Allocable
 - Heap Deallocable
 
-The Cloneable concept is introduced to formalize the requirements for 
-copying heap-allocated objects.  A type ``T`` might be Cloneable even though it 
+The Clonable concept is introduced to formalize the requirements for 
+copying heap-allocated objects.  A type ``T`` might be Clonable even though it 
 is not Assignable or Copy Constructible.  Notice that many operations on 
-the containers do not even require the stored type to be Cloneable.  
+the containers do not even require the stored type to be Clonable.  
 
 **Notation**
 
 ======================= ============================================  =================== =====================
    **Type**                **Object** (``const`` or non-``const``)        **Pointer**        **Describes**
-   ``T``                  ``a``                                           ``ptr``            A Cloneable type
+   ``T``                  ``a``                                           ``ptr``            A Clonable type
 ======================= ============================================  =================== =====================       
        
 **Valid expressions**
@@ -128,7 +129,7 @@ of the two functions is given:
 
 
 Notice that this implementation  makes normal Copy Constructible classes automatically 
-Cloneable unless ``operator new()`` or ``operator delete()`` are hidden. 
+Clonable unless ``operator new()`` or ``operator delete()`` are hidden. 
 
 The two functions represent a layer of indirection which is necessary to support 
 classes that are not Copy Constructible by default.  Notice that the implementation 
@@ -260,7 +261,7 @@ The library consists of the following types of classes:
 The pointer container adapters are used when you
 want to make a pointer container starting from
 your own "normal" container. For example, you
-might have a map class that is extends ``std::map``
+might have a map class that extends ``std::map``
 in some way; the adapter class then allows you
 to use your map class as a basis for a new
 pointer container.
@@ -318,7 +319,7 @@ for each type of "normal" standard container highlighted as links below.
 Serialization
 +++++++++++++
 
-As of version 1.34.0 of Boost, the library support
+As of version 1.34.0 of Boost, the library supports
 serialization via `Boost.Serialization`__.
 
 .. __: ../../serialization/index.html
@@ -471,7 +472,7 @@ of throwing an exception, the library simply calls `BOOST_ASSERT`__.
 
 .. __: ../../utility/assert.html
 
-To disable exceptions, simly define this macro before including any header::
+To disable exceptions, simply define this macro before including any header::
 
         #define BOOST_PTR_CONTAINER_NO_EXCEPTIONS 1
         #include <boost/ptr_container/ptr_vector.hpp>

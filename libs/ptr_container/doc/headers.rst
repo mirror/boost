@@ -28,6 +28,8 @@ Library headers
 ``<boost/ptr_container/ptr_map.hpp>``                      classes `ptr_map <ptr_map.html>`_ and `ptr_multimap <ptr_multimap.html>`_
                                                            (and ``std::map`` and ``std::multimap``)
 
+``<boost/ptr_container/ptr_inserter.hpp>``                 functions `ptr_back_inserter <ptr_inserter.html>`_, `ptr_front_inserter <ptr_inserter.html>`_ and `ptr_inserter <ptr_inserter.html>`_ 
+
 ``<boost/ptr_container/ptr_container.hpp>``                all classes
 
 ``<boost/ptr_container/ptr_sequence_adapter.hpp>``       class `ptr_sequence_adapter <ptr_sequence_adapter.html>`_

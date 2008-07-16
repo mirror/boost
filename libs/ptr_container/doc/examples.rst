@@ -160,8 +160,9 @@ We can also transfer objects from ``ptr_container<Derived>`` to ``ptr_container<
 9. A large example
 ++++++++++++++++++
 
-This examples shows many of the most common
+This example shows many of the most common
 features at work. The example provide lots of comments.
+The source code can also be found `here <../test/tut1.cpp>`_. 
 
 .. raw:: html
         :file: tutorial_example.html

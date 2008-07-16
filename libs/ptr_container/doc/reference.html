@@ -294,11 +294,11 @@ ul.auto-toc {
 each container. When containers have the same interface, that common interface is explained only once,
 but links are always provided to more relevant information.
 Please make sure you understand 
-the <a class="reference" href="reference.html#the-Cloneable-concept">Cloneable</a> concept and 
+the <a class="reference" href="reference.html#the-Clonable-concept">Clonable</a> concept and 
 the <a class="reference" href="reference.html#the-clone-allocator-concept">Clone Allocator</a> concept.</p>
 <ul class="simple">
 <li><a class="reference" href="conventions.html">Conventions</a></li>
-<li><a class="reference" href="#the-cloneable-concept">The Cloneable concept</a></li>
+<li><a class="reference" href="#the-clonable-concept">The Clonable concept</a></li>
 <li><a class="reference" href="#the-clone-allocator-concept">The Clone Allocator concept</a></li>
 <li><a class="reference" href="#class-hierarchy">Class hierarchy</a>:<ul>
 <li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a><ul>
@@ -328,6 +328,7 @@ the <a class="reference" href="reference.html#the-clone-allocator-concept">Clone
 </li>
 <li><a class="reference" href="#serialization">Serialization</a></li>
 <li><a class="reference" href="indirect_fun.html">Indirected functions</a></li>
+<li><a class="reference" href="ptr_inserter.html">Insert iterators</a></li>
 <li><a class="reference" href="#class-nullable">Class nullable</a></li>
 <li><a class="reference" href="#exception-classes">Exception classes</a></li>
 <li><a class="reference" href="#disabling-the-use-of-exceptions">Disabling the use of exceptions</a></li>
@@ -354,16 +355,16 @@ the <a class="reference" href="reference.html#the-clone-allocator-concept">Clone
   - `ptr_map <ptr_map.html>`_
   - `ptr_multimap <ptr_multimap.html>`_ -->
 <div class="section">
-<h1><a id="the-cloneable-concept" name="the-cloneable-concept">The Cloneable concept</a></h1>
+<h1><a id="the-clonable-concept" name="the-clonable-concept">The Clonable concept</a></h1>
 <p><strong>Refinement of</strong></p>
 <ul class="simple">
 <li>Heap Allocable</li>
 <li>Heap Deallocable</li>
 </ul>
-<p>The Cloneable concept is introduced to formalize the requirements for 
-copying heap-allocated objects.  A type <tt class="docutils literal"><span class="pre">T</span></tt> might be Cloneable even though it 
+<p>The Clonable concept is introduced to formalize the requirements for 
+copying heap-allocated objects.  A type <tt class="docutils literal"><span class="pre">T</span></tt> might be Clonable even though it 
 is not Assignable or Copy Constructible.  Notice that many operations on 
-the containers do not even require the stored type to be Cloneable.</p>
+the containers do not even require the stored type to be Clonable.</p>
 <p><strong>Notation</strong></p>
 <table border="1" class="docutils">
 <colgroup>
@@ -381,7 +382,7 @@ the containers do not even require the stored type to be Cloneable.</p>
 <tr><td><tt class="docutils literal"><span class="pre">T</span></tt></td>
 <td><tt class="docutils literal"><span class="pre">a</span></tt></td>
 <td><tt class="docutils literal"><span class="pre">ptr</span></tt></td>
-<td>A Cloneable type</td>
+<td>A Clonable type</td>
 </tr>
 </tbody>
 </table>
@@ -432,7 +433,7 @@ namespace boost
 }
 </pre>
 <p>Notice that this implementation  makes normal Copy Constructible classes automatically 
-Cloneable unless <tt class="docutils literal"><span class="pre">operator</span> <span class="pre">new()</span></tt> or <tt class="docutils literal"><span class="pre">operator</span> <span class="pre">delete()</span></tt> are hidden.</p>
+Clonable unless <tt class="docutils literal"><span class="pre">operator</span> <span class="pre">new()</span></tt> or <tt class="docutils literal"><span class="pre">operator</span> <span class="pre">delete()</span></tt> are hidden.</p>
 <p>The two functions represent a layer of indirection which is necessary to support 
 classes that are not Copy Constructible by default.  Notice that the implementation 
 relies on argument-dependent lookup (ADL) to find the right version of 
@@ -584,7 +585,7 @@ namespace boost
 <p>The pointer container adapters are used when you
 want to make a pointer container starting from
 your own &quot;normal&quot; container. For example, you
-might have a map class that is extends <tt class="docutils literal"><span class="pre">std::map</span></tt>
+might have a map class that extends <tt class="docutils literal"><span class="pre">std::map</span></tt>
 in some way; the adapter class then allows you
 to use your map class as a basis for a new
 pointer container.</p>
@@ -646,7 +647,7 @@ for each type of &quot;normal&quot; standard container highlighted as links belo
 </div>
 <div class="section">
 <h1><a id="serialization" name="serialization">Serialization</a></h1>
-<p>As of version 1.34.0 of Boost, the library support
+<p>As of version 1.34.0 of Boost, the library supports
 serialization via <a class="reference" href="../../serialization/index.html">Boost.Serialization</a>.</p>
 <p>Of course, for serialization to work it is required
 that the stored type itself is serializable. For maps, both
@@ -786,7 +787,7 @@ namespace boost
 completely. This means the library is more fit for domains where exceptions
 are not used. Furthermore, it also speeds up a operations a little. Instead
 of throwing an exception, the library simply calls <a class="reference" href="../../utility/assert.html">BOOST_ASSERT</a>.</p>
-<p>To disable exceptions, simly define this macro before including any header:</p>
+<p>To disable exceptions, simply define this macro before including any header:</p>
 <pre class="literal-block">
 #define BOOST_PTR_CONTAINER_NO_EXCEPTIONS 1
 #include &lt;boost/ptr_container/ptr_vector.hpp&gt;
