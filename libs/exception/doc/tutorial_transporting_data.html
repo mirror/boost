@@ -3,7 +3,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-	<title>tutorial: transporting of arbitrary data to the catch site</title>
+	<title>transporting of arbitrary data to the catch site</title>
 	<link href='reno.css' type='text/css' rel='stylesheet'/>
 </head>
 <body>
@@ -19,10 +19,10 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h2>Tutorial: Transporting of Arbitrary Data to the Catch Site</h2>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h2>Transporting of Arbitrary Data to the Catch Site</h2>
 </div>
 <p>All exception types that derive from boost::<span class="RenoLink"><a href="exception.html">exception</a></span> can be used as type-safe containers of arbitrary data objects, while complying with the no-throw requirements (15.5.1) of the ANSI C++ standard for exception types. Data can be added to a boost::<span class="RenoLink"><a href="exception.html">exception</a></span> at the time of the throw, or at a later time.</p>
-<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>Tutorial: Adding of Arbitrary Data at the Point of the Throw</h3>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>Adding of Arbitrary Data at the Point of the Throw</h3>
 </div>
 <p>The following example demonstrates how errno can be stored in exception objects using Boost Exception:</p>
 <pre>#include &lt;<span class="RenoLink"><a href="exception_hpp.html">boost/exception.hpp</a></span>&gt;
@@ -60,7 +60,7 @@ g()
         }
     }</pre>
 <p>The <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> function template is instantiated with the typedef from (1), and is passed an exception object of a polymorphic type. If the exception object contains the requested value, the returned <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span> will point to it; otherwise an empty <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span> is returned.</p>
-</div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>Tutorial: Adding of Arbitrary Data to Active Exception Objects</h3>
+</div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>Adding of Arbitrary Data to Active Exception Objects</h3>
 </div>
 <p>Sometimes the throw site does not have all the information that is needed at the catch site to make sense of what went wrong. Here is an example:</p>
 <pre>#include &lt;stdio.h&gt;
@@ -141,7 +141,7 @@ parse_file( char const * file_name )
     }</pre>
 <p>The above function is (almost) exception-neutral -- if an exception is emitted by any function call within the try block, parse_file does not need to do any real work, but it intercepts any boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object, stores the file name, and re-throws using a throw-expression with no operand (15.1.6). The rationale for catching any boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object is that the file name is relevant to any failure that occurs in parse_file, <i>even if the failure is unrelated to file I/O</i>.</p>
 <p>As usual, the stored data can be retrieved using <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>.</p>
-</div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>Tutorial: Adding Grouped Data to Exceptions</h3>
+</div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>Adding Grouped Data to Exceptions</h3>
 </div>
 <p>The code snippet below demonstrates how boost::<span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html">tuple</a></span> can be used to bundle the name of the function that failed, together with the reported errno so that they can be added to exception objects more conveniently together:</p>
 <pre>#include &lt;<span class="RenoLink"><a href="exception_error_info_group_hpp.html">boost/exception/info_tuple.hpp</a></span>&gt;
@@ -171,7 +171,7 @@ file_open( char const * name, char const * mode )
 </div></div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
-</a><a href="tutorial_enable_error_info.html">Tutorial: Integrating Boost Exception in Existing Exception Class Hierarchies<br/>
+</a><a href="tutorial_enable_error_info.html">Integrating Boost Exception in Existing Exception Class Hierarchies<br/>
 </a></div>
 </div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
