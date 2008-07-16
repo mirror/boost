@@ -37,6 +37,7 @@ and designs for dealing with OO specific problems
 * FAQ_
 * `Upgrading from Boost v. 1.33.*`_
 * `Upgrading from Boost v. 1.34.*`_
+* `Upgrading from Boost v. 1.35.*`_
 * `Future Developments`_
 * Acknowledgements_
 * References_
@@ -134,9 +135,9 @@ The advantages of pointer containers are
 
 ..
 
-8. Built-in support for deep-copy semantics via the `the Cloneable concept`__
+8. Built-in support for deep-copy semantics via the `the Clonable concept`__
 
-.. __: reference.html#the-cloneable-concept
+.. __: reference.html#the-clonable-concept
 
 The disadvantages are
 
@@ -191,7 +192,7 @@ for pointer containers.
  Upgrading from Boost v. ``1.34.*``
 ====================================
 
-Serialization have now been made optional thanks to Sebastian Ramacher.
+Serialization has now been made optional thanks to Sebastian Ramacher.
 You simply include ``<boost/ptr_container/serialize.hpp>`` or perhaps
 just one of the more specialized headers.
 
@@ -210,7 +211,7 @@ A few general functions have been added::
     const VoidPtrContainer& base() const;
 
 These allow direct access to the wrapped container which is
-somtimes needed when you want to provide extra functionality.
+sometimes needed when you want to provide extra functionality.
     
 A few new functions have been added to sequences::
 
@@ -222,10 +223,32 @@ A few new functions have been added to sequences::
     void transfer( iterator before, T** from, size_type size, bool delete_from = true );
     T**  c_array();
 
-Finally you can now also "copy" and "assign" an ``auto_type`` ptr by calling ``move()``::
+Finally, you can now also "copy" and "assign" an ``auto_type`` ptr by calling ``move()``::
 
     boost::ptr_vector<T>::auto_type move_ptr = ...;
     return boost::ptr_container::move( move_ptr );
+
+====================================
+ Upgrading from Boost v. ``1.35.*``
+====================================
+
+The library has been fairly stable, but a few new containers have been supported:
+
+-  ``boost::ptr_unordered_set<T>`` in ``<boost/ptr_container/ptr_unordered_set.hpp>``
+
+-  ``boost::ptr_unordered_map<Key,T>`` in ``<boost/ptr_container/ptr_unordered_map.hpp>``
+
+-  ``boost::ptr_circular_buffer<T>`` in ``<boost/ptr_container/ptr_circular_buffer.hpp>``
+
+There are no docs for these classes yet, but they are almost identical to
+``boost::ptr_set<T>``, ``boost::ptr_map<Key,T>`` and ``boost::ptr_array<T,N>``, respectively.
+The underlying containers stem from the two boost libraries
+
+- `Boost.Unordered <../../unordered/index.html>`_ 
+
+- `Boost.Circular Buffer <../../circular_buffer/index.html>`_
+
+Furthermore, `insert iterators <ptr_inserter.html>`_ have been added. 
 
 =====================
  Future Developments
@@ -235,6 +258,18 @@ There are indications that the ``void*`` implementation has a slight
 performance overhead compared to a ``T*`` based implementation. Furthermore, a 
 ``T*`` based implementation is so much easier to use type-safely 
 with algorithms. Therefore I anticipate to move to a ``T*`` based implementation.
+
+Furthermore, the clone allocator might be allowed to have state. 
+This design requires some thought, so if you have good ideas and use-cases'
+for this, please don't hesitate to contact me.
+
+Also, support for Boost.Interprocess is on the todo list.
+
+There has been a few request for ``boost::ptr_multi_index_container<T,...>``. 
+I investigated how difficult it would be, and it did turn out to be difficult, albeit
+not impossible. But I don't have the resources to implement this beast 
+for years to come, so if someone really needs this container, I suggest that they
+talk with me in private about how it can be done.
 
 ================
 Acknowledgements
@@ -257,7 +292,7 @@ The following people have been very helpful:
 - Pavel Chikulaev for comments and bug-fixes
 - Andreas Hommel for fixing the nasty Metrowerks bug
 - Charles Brockman for his many comments on the documentation
-- Sebastian Ramacher for implementing the optinal serialization support
+- Sebastian Ramacher for implementing the optional serialization support
 
 ==========
 References

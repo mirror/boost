@@ -13,7 +13,7 @@ Usage Guidelines
 Choosing the right container
 ----------------------------
 
-The recommended usage pattern of the container classes are the same as the 
+The recommended usage pattern of the container classes is the same as 
 for normal standard containers.  
 
 ``ptr_vector``, ``ptr_list`` and ``ptr_deque`` offer the programmer different 

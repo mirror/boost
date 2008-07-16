@@ -325,6 +325,7 @@ and designs for dealing with OO specific problems</p>
 <li><a class="reference" href="faq.html">FAQ</a></li>
 <li><a class="reference" href="#upgrading-from-boost-v-1-33">Upgrading from Boost v. 1.33.*</a></li>
 <li><a class="reference" href="#upgrading-from-boost-v-1-34">Upgrading from Boost v. 1.34.*</a></li>
+<li><a class="reference" href="#upgrading-from-boost-v-1-35">Upgrading from Boost v. 1.35.*</a></li>
 <li><a class="reference" href="#future-developments">Future Developments</a></li>
 <li><a class="reference" href="#acknowledgements">Acknowledgements</a></li>
 <li><a class="reference" href="#references">References</a></li>
@@ -401,7 +402,7 @@ now it is possible for <tt class="docutils literal"><span class="pre">pop_back()
 </ol>
 <!--  -->
 <ol class="arabic simple" start="8">
-<li>Built-in support for deep-copy semantics via the <a class="reference" href="reference.html#the-cloneable-concept">the Cloneable concept</a></li>
+<li>Built-in support for deep-copy semantics via the <a class="reference" href="reference.html#the-clonable-concept">the Clonable concept</a></li>
 </ol>
 <p>The disadvantages are</p>
 <ol class="arabic simple">
@@ -455,7 +456,7 @@ for pointer containers.</p>
 </div>
 <div class="section">
 <h1><a id="upgrading-from-boost-v-1-34" name="upgrading-from-boost-v-1-34">Upgrading from Boost v. <tt class="docutils literal"><span class="pre">1.34.*</span></tt></a></h1>
-<p>Serialization have now been made optional thanks to Sebastian Ramacher.
+<p>Serialization has now been made optional thanks to Sebastian Ramacher.
 You simply include <tt class="docutils literal"><span class="pre">&lt;boost/ptr_container/serialize.hpp&gt;</span></tt> or perhaps
 just one of the more specialized headers.</p>
 <p>All containers are now copy-constructible and assignable. So you can e.g. now
@@ -472,7 +473,7 @@ VoidPtrContainer&amp;       base();
 const VoidPtrContainer&amp; base() const;
 </pre>
 <p>These allow direct access to the wrapped container which is
-somtimes needed when you want to provide extra functionality.</p>
+sometimes needed when you want to provide extra functionality.</p>
 <p>A few new functions have been added to sequences:</p>
 <pre class="literal-block">
 void resize( size_type size );
@@ -483,11 +484,28 @@ void resize( size_type size, T* to_clone );
 void transfer( iterator before, T** from, size_type size, bool delete_from = true );
 T**  c_array();
 </pre>
-<p>Finally you can now also &quot;copy&quot; and &quot;assign&quot; an <tt class="docutils literal"><span class="pre">auto_type</span></tt> ptr by calling <tt class="docutils literal"><span class="pre">move()</span></tt>:</p>
+<p>Finally, you can now also &quot;copy&quot; and &quot;assign&quot; an <tt class="docutils literal"><span class="pre">auto_type</span></tt> ptr by calling <tt class="docutils literal"><span class="pre">move()</span></tt>:</p>
 <pre class="literal-block">
 boost::ptr_vector&lt;T&gt;::auto_type move_ptr = ...;
 return boost::ptr_container::move( move_ptr );
 </pre>
+</div>
+<div class="section">
+<h1><a id="upgrading-from-boost-v-1-35" name="upgrading-from-boost-v-1-35">Upgrading from Boost v. <tt class="docutils literal"><span class="pre">1.35.*</span></tt></a></h1>
+<p>The library has been fairly stable, but a few new containers have been supported:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">boost::ptr_unordered_set&lt;T&gt;</span></tt> in <tt class="docutils literal"><span class="pre">&lt;boost/ptr_container/ptr_unordered_set.hpp&gt;</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">boost::ptr_unordered_map&lt;Key,T&gt;</span></tt> in <tt class="docutils literal"><span class="pre">&lt;boost/ptr_container/ptr_unordered_map.hpp&gt;</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">boost::ptr_circular_buffer&lt;T&gt;</span></tt> in <tt class="docutils literal"><span class="pre">&lt;boost/ptr_container/ptr_circular_buffer.hpp&gt;</span></tt></li>
+</ul>
+<p>There are no docs for these classes yet, but they are almost identical to
+<tt class="docutils literal"><span class="pre">boost::ptr_set&lt;T&gt;</span></tt>, <tt class="docutils literal"><span class="pre">boost::ptr_map&lt;Key,T&gt;</span></tt> and <tt class="docutils literal"><span class="pre">boost::ptr_array&lt;T,N&gt;</span></tt>, respectively.
+The underlying containers stem from the two boost libraries</p>
+<ul class="simple">
+<li><a class="reference" href="../../unordered/index.html">Boost.Unordered</a></li>
+<li><a class="reference" href="../../circular_buffer/index.html">Boost.Circular Buffer</a></li>
+</ul>
+<p>Furthermore, <a class="reference" href="ptr_inserter.html">insert iterators</a> have been added.</p>
 </div>
 <div class="section">
 <h1><a id="future-developments" name="future-developments">Future Developments</a></h1>
@@ -495,6 +513,15 @@ return boost::ptr_container::move( move_ptr );
 performance overhead compared to a <tt class="docutils literal"><span class="pre">T*</span></tt> based implementation. Furthermore, a 
 <tt class="docutils literal"><span class="pre">T*</span></tt> based implementation is so much easier to use type-safely 
 with algorithms. Therefore I anticipate to move to a <tt class="docutils literal"><span class="pre">T*</span></tt> based implementation.</p>
+<p>Furthermore, the clone allocator might be allowed to have state. 
+This design requires some thought, so if you have good ideas and use-cases'
+for this, please don't hesitate to contact me.</p>
+<p>Also, support for Boost.Interprocess is on the todo list.</p>
+<p>There has been a few request for <tt class="docutils literal"><span class="pre">boost::ptr_multi_index_container&lt;T,...&gt;</span></tt>. 
+I investigated how difficult it would be, and it did turn out to be difficult, albeit
+not impossible. But I don't have the resources to implement this beast 
+for years to come, so if someone really needs this container, I suggest that they
+talk with me in private about how it can be done.</p>
 </div>
 <div class="section">
 <h1><a id="acknowledgements" name="acknowledgements">Acknowledgements</a></h1>
@@ -515,7 +542,7 @@ which is used internally</li>
 <li>Pavel Chikulaev for comments and bug-fixes</li>
 <li>Andreas Hommel for fixing the nasty Metrowerks bug</li>
 <li>Charles Brockman for his many comments on the documentation</li>
-<li>Sebastian Ramacher for implementing the optinal serialization support</li>
+<li>Sebastian Ramacher for implementing the optional serialization support</li>
 </ul>
 </div>
 <div class="section">
