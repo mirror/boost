@@ -4,10 +4,11 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-
 //  See http://www.boost.org/libs/integer for documentation.
 
 //  Revision History
+//   16 Jul 08  Added MPL-compatible variants of the minimum-size and value-
+//              based integer templates. (Daryle Walker)
 //   15 Jul 08  Added exact-integer templates; added MPL-compatible variant of
 //              processor-optimized integer template. (Daryle Walker)
 //   14 Jul 08  Improved testing of processor-optimized integer template; added
@@ -33,6 +34,7 @@
 #include <boost/mpl/assert.hpp>          // for BOOST_MPL_ASSERT_RELATION, etc.
 #include <boost/mpl/back.hpp>            // for boost::mpl::back
 #include <boost/mpl/copy.hpp>            // for boost::mpl::copy
+#include <boost/mpl/equal.hpp>           // for boost::mpl::equal
 #include <boost/mpl/front_inserter.hpp>  // for boost::mpl::front_inserter
 #include <boost/mpl/integral_c.hpp>      // for boost::mpl::integral_c
 #include <boost/mpl/joint_view.hpp>      // for boost::mpl::joint_view
@@ -221,13 +223,53 @@ std::size_t const  integral_type_count = sizeof(integral_bit_lengths) /
 // Use SFINAE to check if a particular bit-count is supported
 template < int Bits >
 bool
-print_out_exact_signed( boost::mpl::integral_c<int, Bits> const &x, int bits,
- typename boost::exact_integral<Bits, signed>::type *unused = 0 )
+print_out_sized_signed( boost::mpl::integral_c<int, Bits> const &x, int bits,
+ typename boost::sized_integral<Bits, signed>::type *unused = 0 )
 {
     // Too bad the type-id expression couldn't use the compact form "*unused",
     // but type-ids of dereferenced null pointers throw by order of C++ 2003,
     // sect. 5.2.8, para. 2 (although the result is not conceptually needed).
 
+    PRIVATE_SHOW_MESSAGE( "There is a sized_integral<" << bits <<
+     ", signed> specialization, with type '" << typeid(typename
+     boost::sized_integral<Bits, signed>::type).name() << "'." );
+    return true;
+}
+
+template < typename T >
+bool
+print_out_sized_signed( T const &x, int bits )
+{
+    PRIVATE_SHOW_MESSAGE( "There is no sized_integral<" << bits <<
+     ", signed> specialization." );
+    return false;
+}
+
+template < int Bits >
+bool
+print_out_sized_unsigned( boost::mpl::integral_c<int, Bits> const &x, int bits,
+ typename boost::sized_integral<Bits, unsigned>::type *unused = 0 )
+{
+    PRIVATE_SHOW_MESSAGE( "There is a sized_integral<" << bits <<
+     ", unsigned> specialization, with type '" << typeid(typename
+     boost::sized_integral<Bits, unsigned>::type).name() << "'." );
+    return true;
+}
+
+template < typename T >
+bool
+print_out_sized_unsigned( T const &x, int bits )
+{
+    PRIVATE_SHOW_MESSAGE( "There is no sized_integral<" << bits <<
+     ", unsigned> specialization." );
+    return false;
+}
+
+template < int Bits >
+bool
+print_out_exact_signed( boost::mpl::integral_c<int, Bits> const &x, int bits,
+ typename boost::exact_integral<Bits, signed>::type *unused = 0 )
+{
     PRIVATE_SHOW_MESSAGE( "There is an exact_integral<" << bits <<
      ", signed> specialization, with type '" << typeid(typename
      boost::exact_integral<Bits, signed>::type).name() << "'." );
@@ -260,6 +302,69 @@ print_out_exact_unsigned( T const &x, int bits )
 {
     PRIVATE_SHOW_MESSAGE( "There is no exact_integral<" << bits <<
      ", unsigned> specialization." );
+    return false;
+}
+
+template < boost::intmax_t Value >
+bool
+print_out_maximum_signed( boost::maximum_signed_integral<Value> const &x,
+ boost::intmax_t value, typename boost::maximum_signed_integral<Value>::type
+ *unused = 0 )
+{
+    PRIVATE_SHOW_MESSAGE( "There is a maximum_signed_integral<" << value <<
+     "> specialization, with type '" << typeid(typename
+     boost::maximum_signed_integral<Value>::type).name() << "'." );
+    return true;
+}
+
+template < typename T >
+bool
+print_out_maximum_signed( T const &x, boost::intmax_t value )
+{
+    PRIVATE_SHOW_MESSAGE( "There is no maximum_signed_integral<" << value <<
+     "> specialization." );
+    return false;
+}
+
+template < boost::intmax_t Value >
+bool
+print_out_minimum_signed( boost::minimum_signed_integral<Value> const &x,
+ boost::intmax_t value, typename boost::minimum_signed_integral<Value>::type
+ *unused = 0 )
+{
+    PRIVATE_SHOW_MESSAGE( "There is a minimum_signed_integral<" << value <<
+     "> specialization, with type '" << typeid(typename
+     boost::minimum_signed_integral<Value>::type).name() << "'." );
+    return true;
+}
+
+template < typename T >
+bool
+print_out_minimum_signed( T const &x, boost::intmax_t value )
+{
+    PRIVATE_SHOW_MESSAGE( "There is no minimum_signed_integral<" << value <<
+     "> specialization." );
+    return false;
+}
+
+template < boost::uintmax_t Value >
+bool
+print_out_maximum_unsigned( boost::maximum_unsigned_integral<Value> const &x,
+ boost::uintmax_t value, typename boost::maximum_unsigned_integral<Value>::type
+ *unused = 0 )
+{
+    PRIVATE_SHOW_MESSAGE( "There is a maximum_unsigned_integral<" << value <<
+     "> specialization, with type '" << typeid(typename
+     boost::maximum_unsigned_integral<Value>::type).name() << "'." );
+    return true;
+}
+
+template < typename T >
+bool
+print_out_maximum_unsigned( T const &x, boost::uintmax_t value )
+{
+    PRIVATE_SHOW_MESSAGE( "There is no maximum_unsigned_integral<" << value <<
+     "> specialization." );
     return false;
 }
 
@@ -303,8 +408,18 @@ BOOST_AUTO_TEST_SUITE_END()
 // Check if given types can support given size parameters
 BOOST_AUTO_TEST_SUITE( show_type_tests )
 
-// Check the specialization type status of given bit lengths, exact or higher
-BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_lengths_test, T, valid_bits_list )
+// Check the specialization type status of given bit lengths, minimum
+BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_lengths_test, T, bits_list )
+{
+    BOOST_CHECK_EQUAL(   print_out_sized_signed(T(), T::value), T::value <=
+      intmax_bits );
+    BOOST_CHECK_EQUAL( print_out_sized_unsigned(T(), T::value), T::value <=
+     uintmax_bits );
+}
+
+// Check the classic specialization type status of given bit lengths, minimum
+BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_classic_lengths_test, T,
+ valid_bits_list )
 {
     // This test is supposed to replace the following printouts given in
     // puesdo-code by:
@@ -357,22 +472,23 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_shifted_unsigned_values_test, T,
     // length of a integral type, so 1 << N would have to fit in the next larger
     // type.  (This is why N can't be more than bitlength(uintmax_t) - 1.)
 #ifndef BOOST_NO_USING_TEMPLATE
-    using boost::is_same;
-    using boost::uint_value_t;
-    using boost::uint_t;
+    using boost::mpl::equal;
+    using boost::maximum_unsigned_integral;
+    using boost::sized_integral;
 #else
+    using namespace boost::mpl;
     using namespace boost;
 #endif
 
     boost::uintmax_t const  one = 1u;
     int const             count = T::value;
 
-    BOOST_MPL_ASSERT( (is_same<typename uint_value_t<(one << (count -
-     2))>::least, typename uint_t<count - 1>::least>::value) );
-    BOOST_MPL_ASSERT( (is_same<typename uint_value_t<(one << (count -
-     1))>::least, typename uint_t<count>::least>::value) );
-    BOOST_MPL_ASSERT( (is_same<typename uint_value_t<(one << count)>::least,
-     typename uint_t<count + 1>::least>::value) );
+    BOOST_MPL_ASSERT( (equal< maximum_unsigned_integral<(one << (count - 2))>,
+     sized_integral<count - 1, unsigned> >) );
+    BOOST_MPL_ASSERT( (equal< maximum_unsigned_integral<(one << (count - 1))>,
+     sized_integral<count, unsigned> >) );
+    BOOST_MPL_ASSERT( (equal< maximum_unsigned_integral<(one << count)>,
+     sized_integral<count + 1, unsigned> >) );
 }
 
 // Check size comparisons of given value support, signed
@@ -399,31 +515,32 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_shifted_signed_values_test, T,
     // type.  (This is why N can't be more than bitlength(intmax_t) - 1.  Note
     // that bitlength(intmax_t) + 1 == bitlength(uintmax_t).)
 #ifndef BOOST_NO_USING_TEMPLATE
-    using boost::is_same;
-    using boost::int_max_value_t;
-    using boost::int_t;
-    using boost::int_min_value_t;
+    using boost::mpl::equal;
+    using boost::maximum_signed_integral;
+    using boost::sized_integral;
+    using boost::minimum_signed_integral;
 #else
+    using namespace boost::mpl;
     using namespace boost;
 #endif
 
     boost::intmax_t const  one = 1;
     int const            count = T::value;
 
-    BOOST_MPL_ASSERT( (is_same<typename int_max_value_t<+(one << (count -
-     2))>::least, typename int_t<count - 1>::least>::value) );
-    BOOST_MPL_ASSERT( (is_same<typename int_min_value_t<-(one << (count -
-     2))>::least, typename int_t<count - 1>::least>::value) );
+    BOOST_MPL_ASSERT( (equal< maximum_signed_integral<+(one << (count - 2))>,
+     sized_integral<count - 1, signed> >) );
+    BOOST_MPL_ASSERT( (equal< minimum_signed_integral<-(one << (count - 2))>,
+     sized_integral<count - 1, signed> >) );
 
-    BOOST_MPL_ASSERT( (is_same<typename int_max_value_t<+(one << (count -
-     1))>::least, typename int_t<count>::least>::value) );
-    BOOST_MPL_ASSERT( (is_same<typename int_min_value_t<-(one << (count -
-     1))>::least, typename int_t<count>::least>::value) );
+    BOOST_MPL_ASSERT( (equal< maximum_signed_integral<+(one << (count - 1))>,
+     sized_integral<count, signed> >) );
+    BOOST_MPL_ASSERT( (equal< minimum_signed_integral<-(one << (count - 1))>,
+     sized_integral<count, signed> >) );
 
-    BOOST_MPL_ASSERT( (is_same<typename int_max_value_t<+(one << count)>::least,
-     typename int_t<count + 1>::least>::value) );
-    BOOST_MPL_ASSERT( (is_same<typename int_min_value_t<-(one << count)>::least,
-     typename int_t<count + 1>::least>::value) );
+    BOOST_MPL_ASSERT( (equal< maximum_signed_integral<+(one << count)>,
+     sized_integral<count + 1, signed> >) );
+    BOOST_MPL_ASSERT( (equal< minimum_signed_integral<-(one << count)>,
+     sized_integral<count + 1, signed> >) );
 }
 
 // Check the specialization type status of given bit lengths, exact only
@@ -462,6 +579,88 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( show_types_for_classic_exact_lengths_test, T,
      uint_exact_t<T::value>::exact>::digits, ==, T::value );
 }
 
+// Check if MPL-compatible templates give bad returns for out-of-range values
+BOOST_AUTO_TEST_CASE( show_not_type_for_parameter_test )
+{
+#ifndef BOOST_NO_USING_TEMPLATE
+    using boost::sized_integral;
+    using boost::mpl::integral_c;
+    using boost::exact_integral;
+    using boost::maximum_signed_integral;
+    using boost::minimum_signed_integral;
+    using boost::maximum_unsigned_integral;
+#else
+    using namespace boost;
+    using namespace boost::mpl;
+#endif
+
+    typedef sized_integral< 3, signed>   ssz3_type;
+    typedef sized_integral< 0, signed>   ssz0_type;
+    typedef sized_integral<-3, signed>  ssz3n_type;
+
+    BOOST_CHECK(  print_out_sized_signed(integral_c<int, ssz3_type::bit_count>(),
+     ssz3_type::bit_count) );
+    BOOST_CHECK( !print_out_sized_signed(integral_c<int, ssz0_type::bit_count>(),
+     ssz0_type::bit_count) );
+    BOOST_CHECK( !print_out_sized_signed(integral_c<int, ssz3n_type::bit_count>(),
+     ssz3n_type::bit_count) );
+
+    typedef sized_integral< 3, unsigned>   usz3_type;
+    typedef sized_integral< 0, unsigned>   usz0_type;
+    typedef sized_integral<-3, unsigned>  usz3n_type;
+
+    BOOST_CHECK(  print_out_sized_unsigned(integral_c<int, usz3_type::bit_count>(),
+     usz3_type::bit_count) );
+    BOOST_CHECK(  print_out_sized_unsigned(integral_c<int, usz0_type::bit_count>(),
+     usz0_type::bit_count) );
+    BOOST_CHECK( !print_out_sized_unsigned(integral_c<int, usz3n_type::bit_count>(),
+     usz3n_type::bit_count) );
+
+    typedef exact_integral< 3, signed>   se3_type;
+    typedef exact_integral< 0, signed>   se0_type;
+    typedef exact_integral<-3, signed>  se3n_type;
+
+    BOOST_CHECK( !print_out_exact_signed(integral_c<int, se3_type::bit_count>(),
+     se3_type::bit_count) );
+    BOOST_CHECK( !print_out_exact_signed(integral_c<int, se0_type::bit_count>(),
+     se0_type::bit_count) );
+    BOOST_CHECK( !print_out_exact_signed(integral_c<int, se3n_type::bit_count>(),
+     se3n_type::bit_count) );
+
+    typedef exact_integral< 3, unsigned>   ue3_type;
+    typedef exact_integral< 0, unsigned>   ue0_type;
+    typedef exact_integral<-3, unsigned>  ue3n_type;
+
+    BOOST_CHECK( !print_out_exact_unsigned(integral_c<int, ue3_type::bit_count>(),
+     ue3_type::bit_count) );
+    BOOST_CHECK( !print_out_exact_unsigned(integral_c<int, ue0_type::bit_count>(),
+     ue0_type::bit_count) );
+    BOOST_CHECK( !print_out_exact_unsigned(integral_c<int, ue3n_type::bit_count>(),
+     ue3n_type::bit_count) );
+
+    typedef maximum_signed_integral< 15>   max15_type;
+    typedef maximum_signed_integral<  0>    max0_type;
+    typedef maximum_signed_integral<-15>  max15n_type;
+
+    BOOST_CHECK(  print_out_maximum_signed(max15_type(), max15_type::bound) );
+    BOOST_CHECK( !print_out_maximum_signed(max0_type(), max0_type::bound) );
+    BOOST_CHECK( !print_out_maximum_signed(max15n_type(), max15n_type::bound) );
+
+    typedef minimum_signed_integral< 15>   min15_type;
+    typedef minimum_signed_integral<  0>    min0_type;
+    typedef minimum_signed_integral<-15>  min15n_type;
+
+    BOOST_CHECK( !print_out_minimum_signed(min15_type(), min15_type::bound) );
+    BOOST_CHECK( !print_out_minimum_signed(min0_type(), min0_type::bound) );
+    BOOST_CHECK(  print_out_minimum_signed(min15n_type(), min15n_type::bound) );
+
+    typedef maximum_unsigned_integral<15>   umax15_type;
+    typedef maximum_unsigned_integral< 0>    umax0_type;
+
+    BOOST_CHECK( print_out_maximum_unsigned(umax15_type(), umax15_type::bound) );
+    BOOST_CHECK( print_out_maximum_unsigned(umax0_type(), umax0_type::bound) );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 // Check if given constants can fit in given types
@@ -485,6 +684,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_masked_values_test, T,
     // macros.  The limit of type-lists is usually less than 32 (not to mention
     // 64) elements, so we have to take selected values.
 #ifndef BOOST_NO_USING_TEMPLATE
+    using boost::sized_integral;
     using boost::uint_t;
     using boost::int_t;
 #else
@@ -497,7 +697,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_masked_values_test, T,
     boost::intmax_t const   value_s = intmax_limits::max
      BOOST_PREVENT_MACRO_SUBSTITUTION () >> shift;
 
-    BOOST_CHECK_EQUAL( typename uint_t<count>::least(value_u), value_u );
+    BOOST_CHECK_EQUAL( (typename sized_integral<count, unsigned>::type(value_u)),
+     value_u );
     BOOST_CHECK_EQUAL( typename uint_t<count - 1>::least(value_u >> 1), value_u
      >> 1 );
     BOOST_CHECK_EQUAL( typename uint_t<count>::fast(value_u), value_u );
@@ -505,8 +706,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_masked_values_test, T,
      >> 1 );
 
     BOOST_CHECK_EQUAL( typename int_t<count>::least(value_s), value_s );
-    BOOST_CHECK_EQUAL( typename int_t<count - 1>::least(value_s >> 1), value_s
-     >> 1 );
+    BOOST_CHECK_EQUAL( (typename sized_integral<count - 1, signed>::type(value_s
+     >> 1)), value_s >> 1 );
     BOOST_CHECK_EQUAL( typename int_t<count>::fast(value_s), value_s );
     BOOST_CHECK_EQUAL( typename int_t<count - 1>::fast(value_s >> 1), value_s >>
      1 );

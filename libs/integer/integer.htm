@@ -54,6 +54,16 @@ namespace boost
 
   //  MPL-compatible
   template&lt; int Bits, typename Signedness &gt;
+  struct sized_integral
+  {
+      static  bool const  is_specialized = <em>implementation_supplied</em>;
+      static  bool const  is_signed = <em>implementation_supplied</em>;
+      static  int const   bit_count = Bits;
+
+      typedef <em>implementation_supplied</em>  type;
+  };
+
+  template&lt; int Bits, typename Signedness &gt;
   struct exact_integral
   {
       static  bool const  is_specialized = <em>implementation_supplied</em>;
@@ -63,12 +73,42 @@ namespace boost
       typedef <em>implementation_supplied</em>  type;
   };
 
+  template&lt; intmax_t MaxValue &gt;
+  struct maximum_signed_integral
+  {
+      static  bool const      is_specialized = <em>implementation_supplied</em>;
+      static  bool const      is_signed = true;
+      static  intmax_t const  bound = MaxValue;
+
+      typedef <em>implementation_supplied</em>  type;
+  };
+
+  template&lt; intmax_t MinValue &gt;
+  struct minimum_signed_integral
+  {
+      static  bool const      is_specialized = <em>implementation_supplied</em>;
+      static  bool const      is_signed = true;
+      static  intmax_t const  bound = MinValue;
+
+      typedef <em>implementation_supplied</em>  type;
+  };
+
+  template&lt; uintmax_t Value &gt;
+  struct maximum_unsigned_integral
+  {
+      static  bool const       is_specialized = <em>implementation_supplied</em>;
+      static  bool const       is_signed = false;
+      static  uintmax_t const  bound = Value;
+
+      typedef <em>implementation_supplied</em>  type;
+  };
+
   //  signed
   template&lt; int Bits &gt;
   struct int_t 
   {
-      typedef <em>implementation_supplied</em>  least;
-      typedef int_fast_t&lt;least&gt;::fast  fast;
+      typedef typename sized_integral&lt;Bits, signed&gt;::type  least;
+      typedef int_fast_t&lt;least&gt;::fast                      fast;
   };
 
   template&lt; int Bits &gt;
@@ -81,8 +121,8 @@ namespace boost
   template&lt; int Bits &gt;
   struct uint_t 
   {
-      typedef <em>implementation_supplied</em>  least;
-      typedef int_fast_t&lt;least&gt;::fast  fast;
+      typedef typename sized_integral&lt;Bits, unsigned&gt;::type  least;
+      typedef int_fast_t&lt;least&gt;::fast                        fast;
   };
 
   template&lt; int Bits &gt;
@@ -95,23 +135,23 @@ namespace boost
   template&lt; intmax_t MaxValue &gt;
   struct int_max_value_t 
   {
-      typedef <em>implementation_supplied</em>  least;
-      typedef int_fast_t&lt;least&gt;::fast  fast;
+      typedef typename maximum_signed_integral&lt;MaxValue&gt;::type  least;
+      typedef int_fast_t&lt;least&gt;::fast                           fast;
   };
 
   template&lt; intmax_t MinValue &gt;
   struct int_min_value_t 
   {
-      typedef <em>implementation_supplied</em>  least;
-      typedef int_fast_t&lt;least&gt;::fast  fast;
+      typedef typename minimum_signed_integral&lt;MinValue&gt;::type  least;
+      typedef int_fast_t&lt;least&gt;::fast                           fast;
   };
 
   //  unsigned
   template&lt; uintmax_t Value &gt;
   struct uint_value_t 
   {
-      typedef <em>implementation_supplied</em>  least;
-      typedef int_fast_t&lt;least&gt;::fast  fast;
+      typedef typename maximum_unsigned_integral&lt;Value&gt;::type  least;
+      typedef int_fast_t&lt;least&gt;::fast                          fast;
   };
 } // namespace boost
 </pre></blockquote>
@@ -222,8 +262,10 @@ describes each template's criteria.</p>
 	    incompatible with template meta-programming techniques.</li>
 </ul>
 
-<p>The <code>exact_integral</code> class template provides an MPL-compatible
-alternative.  This alternative has the form:</p>
+<p>The <code>sized_integral</code>, <code>exact_integral</code>,
+<code>maximum_signed_integral</code>, <code>minimum_signed_integral</code>, and
+<code>maximum_unsigned_integral</code> class templates provide MPL-compatible
+alternatives.  These alternatives generally have the form:</p>
 
 <blockquote><pre>
 template&lt; <var>SwitchType</var> <var>SwitchValue</var>, typename Signedness &gt;
@@ -299,6 +341,11 @@ struct <var>name</var>
 	</tr>
 </table>
 
+<p>The exceptions are the extreme-value class templates
+(<code>maximum_signed_integral</code>, <code>minimum_signed_integral</code>, and
+<code>maximum_unsigned_integral</code>), which do not take a <var>Signedness</var>
+template parameter because the meta-functions already inherently have signedness.
+
 <p>The following table describes each template's criteria.  The classic signed
 and unsigned equivalents are the sized-type class templates that each
 MPL-compatible class template emulates.  (The setting of <var>Signedness</var>
@@ -308,14 +355,25 @@ controls the appropriate emulation.)</p>
 	<caption>Criteria for the MPL-Compatible Class Templates</caption>
 	<tr>
 		<th rowspan="2">Class Template (all in name-space <code>boost</code>)</th>
-		<th rowspan="2">Parameter Type</th>
+		<th rowspan="2">Parameter Type (in name-space <code>boost</code> as needed)</th>
 		<th rowspan="2">Parameter Member ID</th>
 		<th colspan="2">Classic Equivalent</th>
-		<th rowspan="2">Template Parameter Mapping (when <code>type</code> is defined)</th>
+		<th rowspan="2" colspan="2">Template Parameter Mapping (when <code>type</code> is defined)</th>
 	</tr>
 	<tr>
 		<th>Signed</th>
 		<th>Unsigned</th>
+	</tr>
+	<tr>
+		<td><code>sized_integral</code></td>
+		<td><code>int</code></td>
+		<td><code>bit_count</code></td>
+		<td><code>int_t</code></td>
+		<td><code>uint_t</code></td>
+		<td colspan="2">The smallest built-in integral type with at least
+			<code>bit_count</code> bits (including the sign bit when
+			<var>Signedness</var> is <code>signed</code>).  Not present if no
+			type qualifies.</td>
 	</tr>
 	<tr>
 		<td><code>exact_integral</code></td>
@@ -323,9 +381,40 @@ controls the appropriate emulation.)</p>
 		<td><code>bit_count</code></td>
 		<td><code>int_exact_t</code></td>
 		<td><code>uint_exact_t</code></td>
-		<td>The smallest built-in integral type with exactly <code>bit_count</code>
-			bits (including the sign bit when <var>Signedness</var> is
-			<code>signed</code>).  Not present if no type qualifies.</td>
+		<td colspan="2">The smallest built-in integral type with exactly
+			<code>bit_count</code> bits (including the sign bit when
+			<var>Signedness</var> is <code>signed</code>).  Not present if no
+			type qualifies.</td>
+	</tr>
+	<tr>
+		<td><code>maximum_signed_integral</code></td>
+		<td><code>intmax_t</code></td>
+		<td><code>bound</code></td>
+		<td colspan="2"><code>int_max_value_t</code></td>
+		<td>The smallest built-in integral type that can perserve the value in
+			<code>bound</code>.  Not present if <code>bound</code> is non-positive.</td>
+		<td rowspan="3">It is possible for a <code>type</code> to be absent if
+			a platform supports really-extended integral types (beyond <code>long
+			long</code> or <code>__int64</code>), support for those types goes
+			into &lt;<a href="../../boost/cstdint.hpp">boost/cstdint.hpp</a>&gt;,
+			but said support hadn't yet been added to &lt;<a
+			href="../../boost/integer.hpp">boost/integer.hpp</a>&gt;</td>
+	</tr>
+	<tr>
+		<td><code>minimum_signed_integral</code></td>
+		<td><code>intmax_t</code></td>
+		<td><code>bound</code></td>
+		<td colspan="2"><code>int_min_value_t</code></td>
+		<td>The smallest built-in integral type that can perserve the value in
+			<code>bound</code>.  Not present if <code>bound</code> is non-negative.</td>
+	</tr>
+	<tr>
+		<td><code>maximum_unsigned_integral</code></td>
+		<td><code>uintmax_t</code></td>
+		<td><code>bound</code></td>
+		<td colspan="2"><code>uint_value_t</code></td>
+		<td>The smallest built-in integral type that can perserve the value in
+			<code>bound</code>.  Should always be present.</td>
 	</tr>
 </table>
 
@@ -406,7 +495,7 @@ exact and value-based sized templates, and the MPL-compatible templates.</p>
 
 <hr>
 
-<p>Revised July 15, 2008</p>
+<p>Revised July 16, 2008</p>
 
 <p>&copy; Copyright Beman Dawes 1999.  Use, modification, and distribution are
 subject to the Boost Software License, Version 1.0.  (See accompanying file <a

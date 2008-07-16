@@ -7,6 +7,8 @@
 //  See http://www.boost.org/libs/integer for documentation.
 
 //  Revision History
+//   16 Jul 08  Added MPL-compatible variants of the minimum-size and value-
+//              based integer templates. (Daryle Walker)
 //   15 Jul 08  Added exact-integer templates; added MPL-compatible variant of
 //              processor-optimized integer template. (Daryle Walker)
 //   14 Jul 08  Added extended-integer support. (Daryle Walker)
@@ -255,6 +257,30 @@ namespace detail
 
   //  MPL-compatible integer-mapping class templates  ------------------------//
 
+  //  minimum number of bits
+  template < int Bits, typename Signedness >
+  struct sized_integral
+  {
+      BOOST_STATIC_CONSTANT( bool, is_specialized = false );
+      BOOST_STATIC_CONSTANT( int, bit_count = Bits );
+  };
+
+  template < int BitsIncludingSign >
+  struct sized_integral< BitsIncludingSign, signed >
+      : detail::integral_rank_to_type<
+         detail::int_rank_helper<BitsIncludingSign>::rank, signed >
+  {
+      BOOST_STATIC_CONSTANT( int, bit_count = BitsIncludingSign );
+  };
+
+  template < int Bits >
+  struct sized_integral< Bits, unsigned >
+      : detail::integral_rank_to_type<
+         detail::uint_rank_helper<Bits>::rank, unsigned >
+  {
+      BOOST_STATIC_CONSTANT( int, bit_count = Bits );
+  };
+
   //  exact number of bits
   template < int Bits, typename Signedness >
   struct exact_integral
@@ -279,17 +305,41 @@ namespace detail
       BOOST_STATIC_CONSTANT( int, bit_count = Bits );
   };
 
+  //  maximum supported (positive) value, signed
+  template < intmax_t MaxValue >
+  struct maximum_signed_integral
+      : detail::integral_rank_to_type<
+         detail::int_max_rank_helper<MaxValue>::rank, signed >
+  {
+      BOOST_STATIC_CONSTANT( intmax_t, bound = MaxValue );
+  };
+
+  //  minimum supported (negative) value
+  template < intmax_t MinValue >
+  struct minimum_signed_integral
+      : detail::integral_rank_to_type<
+         detail::int_min_rank_helper<MinValue>::rank, signed >
+  {
+      BOOST_STATIC_CONSTANT( intmax_t, bound = MinValue );
+  };
+
+  //  maximum supported (nonnegative) value, unsigned
+  template < uintmax_t Value >
+  struct maximum_unsigned_integral
+      : detail::integral_rank_to_type<
+         detail::uint_max_rank_helper<Value>::rank, unsigned >
+  {
+      BOOST_STATIC_CONSTANT( uintmax_t, bound = Value );
+  };
+
   //  integer templates specifying number of bits  ---------------------------//
 
   //  signed
   template< int Bits >   // minimum bits (including sign) required
   struct int_t 
   {
-      typedef typename detail::int_least_helper
-        <
-          detail::int_rank_helper<Bits>::rank,
-        signed>::least  least;
-      typedef typename int_fast_t<least>::fast  fast;
+      typedef typename sized_integral<Bits, signed>::type  least;
+      typedef typename int_fast_t<least>::fast             fast;
   };
 
   template< int Bits >   // exact bits (including sign) desired
@@ -302,11 +352,8 @@ namespace detail
   template< int Bits >   // minimum bits required
   struct uint_t 
   {
-      typedef typename detail::int_least_helper
-        < 
-          detail::uint_rank_helper<Bits>::rank,
-        unsigned>::least  least;
-      typedef typename int_fast_t<least>::fast  fast;
+      typedef typename sized_integral<Bits, unsigned>::type  least;
+      typedef typename int_fast_t<least>::fast               fast;
       // int_fast_t<> works correctly for unsigned too, in spite of the name.
   };
 
@@ -322,32 +369,23 @@ namespace detail
   template< intmax_t MaxValue >   // maximum value to require support
   struct int_max_value_t 
   {
-      typedef typename detail::int_least_helper
-        <
-          detail::int_max_rank_helper<MaxValue>::rank,
-        signed>::least  least;
-      typedef typename int_fast_t<least>::fast  fast;
+      typedef typename maximum_signed_integral<MaxValue>::type  least;
+      typedef typename int_fast_t<least>::fast                  fast;
   };
 
   template< intmax_t MinValue >   // minimum value to require support
   struct int_min_value_t 
   {
-      typedef typename detail::int_least_helper
-        <
-          detail::int_min_rank_helper<MinValue>::rank,
-        signed>::least  least;
-      typedef typename int_fast_t<least>::fast  fast;
+      typedef typename minimum_signed_integral<MinValue>::type  least;
+      typedef typename int_fast_t<least>::fast                  fast;
   };
 
   //  unsigned
   template< uintmax_t Value >   // maximum value to require support
   struct uint_value_t 
   {
-      typedef typename detail::int_least_helper
-        < 
-          detail::uint_max_rank_helper<Value>::rank,
-        unsigned>::least  least;
-      typedef typename int_fast_t<least>::fast  fast;
+      typedef typename maximum_unsigned_integral<Value>::type  least;
+      typedef typename int_fast_t<least>::fast                 fast;
   };
 
 

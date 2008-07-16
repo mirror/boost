@@ -91,7 +91,19 @@ template < typename LeastInt >
     struct int_fast_t;
 
 template < int Bits, typename Signedness >
+    struct sized_integral;
+
+template < int Bits, typename Signedness >
     struct exact_integral;
+
+template < intmax_t MaxValue >
+    struct maximum_signed_integral;
+
+template < intmax_t MinValue >
+    struct minimum_signed_integral;
+
+template < uintmax_t Value >
+    struct maximum_unsigned_integral;
 
 template< int Bits >
     struct int_t;
