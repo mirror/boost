@@ -197,7 +197,6 @@ Semantics: element access
 
     - Effects: ``return *begin();``
 
-    - Throws: ``bad_ptr_container_operation`` if ``empty() == true``
 
 - ``const T& front() const;``
 
@@ -205,7 +204,6 @@ Semantics: element access
 
     - Effects: ``return *begin();``
 
-    - Throws: ``bad_ptr_container_operation`` if ``empty() == true``
 
 - ``T& back();``
 
@@ -213,15 +211,12 @@ Semantics: element access
 
     - Effects: ``return *--end();``
 
-    - Throws: ``bad_ptr_container_operation`` if ``empty() == true``
 
 - ``const T& back() const;``
 
     - Requirements: ``not empty();``
 
     - Effects: ``return *--end();``
-
-    - Throws: ``bad_ptr_container_operation`` if ``empty() == true``
 
 
 .. _`modifiers`:
