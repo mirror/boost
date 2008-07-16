@@ -37,7 +37,7 @@
             <li>Function <a href="#list_of"><code>list_of()</code></a>    
             <li>Function <a href="#map_list_of"><code>map_list_of()</code></a> 
             <li>Function <a href="#tuple_list_of"><code>tuple_list_of()</code></a>
-			<li>Functions <a href="#repeat"><code>repeat()</code>, <code>repeat_fun()</code> and <code>range()</code> </a>
+            <li>Functions <a href="#repeat"><code>repeat()</code>, <code>repeat_fun()</code> and <code>range()</code> </a>
             <li>Functions <a href="#ref_list_of"><code>ref_list_of()</code> and <code>cref_list_of()</code></a>    
             <li>A <a href="#complicated">"complicated"</a> example    
             <li>Functions <a href="#ptr_push_back"><code>ptr_push_back(), ptr_push_front()</code>, 
@@ -51,7 +51,7 @@
         <li><a href="#std">Standard containers</a> </li>
         <li>Functions <a href="#list_of_ref"><code>list_of()</code> and <code>map_list_of()</code></a></li>
         <li>Functions <a href="#repeat_ref"><code>repeat()</code>, 
-			<code>repeat_fun()</code> and <code>range()</code> </a> </li> 
+            <code>repeat_fun()</code> and <code>range()</code> </a> </li> 
         <li>Class <a href="#list_inserter"><code>list_inserter</code></a></li>
         <li>Function <a href="#make_list_inserter"><code>make_list_inserter()</code></a></li>
         <li><a href="#limit"> Customizing</a> argument list sizes</li>   
@@ -285,7 +285,15 @@ list with <code>list_of()</code> if we add parenthesis around the
  Please notice that <code>list_of()</code> can even convert to a 
  <code>boost::<a 
 href="../../array/index.html">array</a>&lt;T,sz></code> and see also the list 
-of <a href="#boost_libs">supported libraries </a>.
+of <a href="#boost_libs">supported libraries </a>. </p>
+           <p>
+               Note that the type returned by 
+               <code>list_of()</code> (and its variants) has overloaded comparison operators. This allows you to
+               write test code such as 
+                   <code>
+                       BOOST_CHECK_EQUAL( my_container, list_of(2)(3)(4)(5) );.
+                   </code>
+               </p>
  
  <h3>Function <code>map_list_of()</code> <a name="map_list_of"></h3>
  This function is defined for pure convenience when working with
@@ -720,8 +728,8 @@ Originally arguments were passed by value (and still is in
         <li><a href="#std">Standard containers</a> </li>
         <li>Functions <a href="#list_of_ref"><code>list_of()</code> and <code>map_list_of()</code></a></li>
         <li>Functions <a href="#repeat_ref"><code>repeat()</code>,<code>repeat_fun()</code> and 
-																	  <code>range()</code>
-																	  </a></li>
+                                                                      <code>range()</code>
+                                                                      </a></li>
         <li>Class <a href="#list_inserter"><code>list_inserter</code></a></li>
         <li>Function <a href="#make_list_inserter"><code>make_list_inserter()</code></a></li>
         <li><a href="#limit">Customizing</a> argument list sizes </li>
@@ -926,9 +934,17 @@ The object returned by the two
         //
         </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>template </span><span class=special>&lt;</span><span class=keyword>class</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>size_t</span><span class=special>&gt; </span><span class=keyword>class </span><span class=identifier>Array</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>U</span><span class=special>, </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>size_t </span><span class=identifier>sz </span><span class=special>&gt; 
         </span><span class=keyword>operator </span><span class=identifier>Array</span><span class=special>&lt;</span><span class=identifier>U</span><span class=special>,</span><span class=identifier>sz</span><span class=special>&gt;() </span><span class=keyword>const</span><span class=special>;
-    </span><span class=special>};
+    </span><span class=special>};</span>
     
-    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    <span class=comment>//
+    // Comparison operators. 'op' can be &lt;,&gt;,&lt;=,&gt;=,==,!=
+    //</span>
+    <span class=keyword>template</span><span class=special>&lt;</span> <span class=keyword>class</span> <span class=identifier>Range</span> <span class=special>&gt;</span>
+    <span class=keyword>bool</span> <span class=identifier>op</span><span class=special>(</span> <span class=keyword>const</span> <span class=identifier>Implementation</span><span class=special>-</span><span class=identifier>defined</span><span class=special>&amp;,</span> <span class=keyword>const</span> <span class=identifier>Range</span><span class=special>&amp;</span> <span class=special>);</span>
+    <span class=keyword>template</span><span class=special>&lt;</span> <span class=keyword>class</span> <span class=identifier>Range</span> <span class=special>&gt;</span>
+    <span class=keyword>bool</span> <span class=identifier>op</span><span class=special>(</span> <span class=keyword>const</span> <span class=identifier>Range</span><span class=special>&amp;,</span> <span class=keyword>const</span> <span class=identifier>Implementation</span><span class=special>-</span><span class=identifier>defined</span><span class=special>&amp;</span> <span class=special>);</span>
+    
+    <span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
     </span><span class=identifier>Implementation</span><span class=special>-</span><span class=identifier>defined</span>   </span><span class=identifier>list_of</span><span class=special>(</span><span class=special>);
 
     </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
@@ -969,7 +985,7 @@ The object returned by the two
           <li> the argument list of <code>repeat_fun()</code> is <code>(std::size_t,Nullary_function)</code>    
       </ul>
       
-	    </p>
+        </p>
   <p>
   The function <code>range()</code> only exists as a member function. The following two overloads are provided:
   <blockquote>
