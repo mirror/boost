@@ -31,7 +31,6 @@ First official release.
 * Emplace support when rvalue references and variadic template are available.
 * More efficient node allocation when rvalue references and variadic template
   are available.
-* Added equality operators and hash functions
-  ([@http://svn.boost.org/trac/boost/ticket/1557 Ticket 1557]).
+* Added equality operators.
 
 [endsect]

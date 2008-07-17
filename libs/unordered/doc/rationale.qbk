@@ -104,8 +104,6 @@ implemented. They are specified
 differently to the standard associative containers, comparing keys
 using the equality predicate rather than `operator==`. This is inconsistent
 with the other containers but it is probably closer to user's expectations.
-I have also added a `hash_value` free function so that the containers can be
-hashed by [classref boost::hash].
 
 [h2 Active Issues and Proposals]
 
