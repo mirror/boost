@@ -204,48 +204,48 @@ __sequence_concepts__).
 
 For Iterators, the return type is derived from one of:
 
-		namespace boost { namespace fusion
-		{
-		    struct incrementable_traversal_tag {};
+        namespace boost { namespace fusion
+        {
+            struct incrementable_traversal_tag {};
 
-		    struct single_pass_traversal_tag
-		        : incrementable_traversal_tag {};
+            struct single_pass_traversal_tag
+                : incrementable_traversal_tag {};
 
-		    struct forward_traversal_tag
-		        : single_pass_traversal_tag {};
+            struct forward_traversal_tag
+                : single_pass_traversal_tag {};
 
-		    struct bidirectional_traversal_tag
-		        : forward_traversal_tag {};
+            struct bidirectional_traversal_tag
+                : forward_traversal_tag {};
 
-		    struct random_access_traversal_tag
-		        : bidirectional_traversal_tag {};
-		}}
+            struct random_access_traversal_tag
+                : bidirectional_traversal_tag {};
+        }}
 
 For Sequences, the return type is derived from one of:
 
-		namespace boost { namespace fusion
-		{
-		    struct incrementable_sequence_tag {};
+        namespace boost { namespace fusion
+        {
+            struct incrementable_sequence_tag {};
 
-		    struct single_pass_sequence_tag
-		        : incrementable_sequence_tag {};
+            struct single_pass_sequence_tag
+                : incrementable_sequence_tag {};
 
-		    struct forward_traversal_tag
-		        : single_pass_sequence_tag {};
+            struct forward_traversal_tag
+                : single_pass_sequence_tag {};
 
-		    struct bidirectional_traversal_tag
-		        : forward_traversal_tag {};
+            struct bidirectional_traversal_tag
+                : forward_traversal_tag {};
 
-		    struct random_access_traversal_tag
-		        : bidirectional_traversal_tag {};
-		}}
+            struct random_access_traversal_tag
+                : bidirectional_traversal_tag {};
+        }}
 
 And optionally from:
 
-		namespace boost { namespace fusion
-		{
-		    struct associative_sequence_tag {};
-		}}
+        namespace boost { namespace fusion
+        {
+            struct associative_sequence_tag {};
+        }}
 
 [*Semantics]: Establishes the conceptual classification of a particular
 __sequence__ or __iterator__.
@@ -372,10 +372,10 @@ It is used as elements in __map__s, for example.
 
     namespace result_of
     {
-        template <typename First, typename Second>
+        template <typename Pair>
         struct first;
 
-        template <typename First, typename Second>
+        template <typename Pair>
         struct second;
 
         template <typename First, typename Second>
@@ -414,7 +414,7 @@ It is used as elements in __map__s, for example.
     [[`P()`]            [Default construction.]]
     [[`P(s)`]           [Construct a pair given value for the second type, `s`.]]
     [[`P(p2)`]          [Copy constructs a pair from another pair, `p2`.]]
-    [[`p.second`]       [Get the data from `p1.]]
+    [[`p.second`]       [Get the data from `p1`.]]
     [[`p = p2`]         [Assigns a pair, `p1`, from another pair, `p2`.]]
     [[make_pair<F>(s)]  [Make a pair given the first type, `F`, and a value for
                         the second type, `s`. The second type assumes the type of `s`]]

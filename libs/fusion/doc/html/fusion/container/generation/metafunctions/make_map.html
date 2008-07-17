@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -26,14 +26,14 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.container.generation.metafunctions.make_map"></a><a href="make_map.html" title="make_map">make_map</a></h5></div></div></div>
 <a name="fusion.container.generation.metafunctions.make_map.description"></a><h6>
-<a name="id552320"></a>
+<a name="id552100"></a>
             <a href="make_map.html#fusion.container.generation.metafunctions.make_map.description">Description</a>
           </h6>
 <p>
             Returns the result type of <a href="../functions/make_map.html" title="make_map"><tt class="computeroutput"><span class="identifier">make_map</span></tt></a>.
           </p>
 <a name="fusion.container.generation.metafunctions.make_map.synopsis"></a><h6>
-<a name="id552370"></a>
+<a name="id552150"></a>
             <a href="make_map.html#fusion.container.generation.metafunctions.make_map.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -45,7 +45,7 @@
 <p>
             The variadic function accepts <tt class="computeroutput"><span class="number">0</span></tt>
             to <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
-            <sup>[<a name="id552558" href="#ftn.id552558">12</a>]</sup>
+            <sup>[<a name="id552339" href="#ftn.id552339">12</a>]</sup>
             elements, where <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
             is a user definable predefined maximum that defaults to <tt class="computeroutput"><span class="number">10</span></tt>. You may define the preprocessor constant
             <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
@@ -55,7 +55,7 @@
 <span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_VECTOR_SIZE</span> <span class="number">20</span>
 </pre>
 <a name="fusion.container.generation.metafunctions.make_map.parameters"></a><h6>
-<a name="id552665"></a>
+<a name="id552445"></a>
             <a href="make_map.html#fusion.container.generation.metafunctions.make_map.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -123,7 +123,7 @@
 </tbody>
 </table></div>
 <a name="fusion.container.generation.metafunctions.make_map.expression_semantics"></a><h6>
-<a name="id552922"></a>
+<a name="id552702"></a>
             <a href="make_map.html#fusion.container.generation.metafunctions.make_map.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -143,7 +143,7 @@
             key types.
           </p>
 <a name="fusion.container.generation.metafunctions.make_map.header"></a><h6>
-<a name="id553261"></a>
+<a name="id553042"></a>
             <a href="make_map.html#fusion.container.generation.metafunctions.make_map.header">Header</a>
           </h6>
 <pre class="programlisting">
@@ -151,14 +151,14 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">make_map</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.container.generation.metafunctions.make_map.example"></a><h6>
-<a name="id553432"></a>
+<a name="id553213"></a>
             <a href="make_map.html#fusion.container.generation.metafunctions.make_map.example">Example</a>
           </h6>
 <pre class="programlisting">
 <span class="identifier">result_of</span><span class="special">::</span><span class="identifier">make_map</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <a name="fusion.container.generation.metafunctions.make_map.see_also"></a><h6>
-<a name="id553537"></a>
+<a name="id553318"></a>
             <a href="make_map.html#fusion.container.generation.metafunctions.make_map.see_also">See
             also</a>
           </h6>
@@ -167,7 +167,7 @@
           </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id552558" href="#id552558">12</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id552339" href="#id552339">12</a>] </sup>
                 <tt class="computeroutput"><span class="identifier">map</span></tt> is implemented
                 in terms of the vector. That is why we reuse <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
               </p></div>

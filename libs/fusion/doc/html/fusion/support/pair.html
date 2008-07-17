@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="fusion.support.pair"></a><a href="pair.html" title="pair">pair</a></h3></div></div></div>
 <a name="fusion.support.pair.description"></a><h4>
-<a name="id466114"></a>
+<a name="id466133"></a>
         <a href="pair.html#fusion.support.pair.description">Description</a>
       </h4>
 <p>
@@ -37,7 +37,7 @@
         for example.
       </p>
 <a name="fusion.support.pair.synopsis"></a><h4>
-<a name="id466219"></a>
+<a name="id466237"></a>
         <a href="pair.html#fusion.support.pair.synopsis">Synopsis</a>
       </h4>
 <pre class="programlisting">
@@ -46,10 +46,10 @@
 
 <span class="keyword">namespace</span> <span class="identifier">result_of</span>
 <span class="special">{</span>
-    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Second</span><span class="special">&gt;</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Pair</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">first</span><span class="special">;</span>
 
-    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Second</span><span class="special">&gt;</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Pair</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">second</span><span class="special">;</span>
 
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Second</span><span class="special">&gt;</span>
@@ -61,7 +61,7 @@
 <span class="identifier">make_pair</span><span class="special">(</span><span class="identifier">Second</span> <span class="keyword">const</span> <span class="special">&amp;);</span>
 </pre>
 <a name="fusion.support.pair.template_parameters"></a><h4>
-<a name="id466662"></a>
+<a name="id466645"></a>
         <a href="pair.html#fusion.support.pair.template_parameters">Template parameters</a>
       </h4>
 <div class="informaltable"><table class="table">
@@ -140,12 +140,11 @@
 </dl>
 </div>
 <a name="fusion.support.pair.expression_semantics"></a><h4>
-<a name="id466942"></a>
+<a name="id466925"></a>
         <a href="pair.html#fusion.support.pair.expression_semantics">Expression Semantics</a>
       </h4>
 <div class="informaltable"><table class="table">
 <colgroup>
-<col>
 <col>
 <col>
 </colgroup>
@@ -160,7 +159,6 @@
                 Semantics
               </p>
               </th>
-<td class="auto-generated"> </td>
 </tr></thead>
 <tbody>
 <tr>
@@ -175,7 +173,6 @@
                 equivalent to <tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">first</span><span class="special">&lt;</span><span class="identifier">P</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>.
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -189,7 +186,6 @@
                 equivalent to <tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">second</span><span class="special">&lt;</span><span class="identifier">P</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>.
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -202,7 +198,6 @@
                 Default construction.
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -215,7 +210,6 @@
                 Construct a pair given value for the second type, <tt class="computeroutput"><span class="identifier">s</span></tt>.
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -228,7 +222,6 @@
                 Copy constructs a pair from another pair, <tt class="computeroutput"><span class="identifier">p2</span></tt>.
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -238,32 +231,84 @@
               </td>
 <td>
               <p>
-                Get the data from <tt class="computeroutput"><span class="identifier">p1</span><span class="special">.]]</span> <span class="special">[[</span></tt>p
-                = p2<tt class="computeroutput"><span class="special">]</span> <span class="special">[</span><span class="identifier">Assigns</span> <span class="identifier">a</span>
-                <span class="identifier">pair</span><span class="special">,</span>
-                </tt>p1<tt class="computeroutput"><span class="special">,</span> <span class="identifier">from</span>
-                <span class="identifier">another</span> <span class="identifier">pair</span><span class="special">,</span> </tt>p2<tt class="computeroutput"><span class="special">.]]</span>
-                <span class="special">[[</span><span class="identifier">make_pair</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)]</span> <span class="special">[</span><span class="identifier">Make</span> <span class="identifier">a</span>
-                <span class="identifier">pair</span> <span class="identifier">given</span>
-                <span class="identifier">the</span> <span class="identifier">first</span>
-                <span class="identifier">type</span><span class="special">,</span>
-                </tt>F<tt class="computeroutput"><span class="special">,</span> <span class="keyword">and</span>
-                <span class="identifier">a</span> <span class="identifier">value</span>
-                <span class="keyword">for</span> <span class="identifier">the</span>
-                <span class="identifier">second</span> <span class="identifier">type</span><span class="special">,</span> </tt>s<tt class="computeroutput"><span class="special">.</span>
-                <span class="identifier">The</span> <span class="identifier">second</span>
-                <span class="identifier">type</span> <span class="identifier">assumes</span>
-                <span class="identifier">the</span> <span class="identifier">type</span>
-                <span class="identifier">of</span> </tt>s<tt class="computeroutput"><span class="special">]]</span>
-                <span class="special">[[</span></tt>o &lt;&lt; p<tt class="computeroutput"><span class="special">]</span> <span class="special">[</span><span class="identifier">Output</span> </tt>p<tt class="computeroutput"> <span class="identifier">to</span>
-                <span class="identifier">output</span> <span class="identifier">stream</span><span class="special">,</span> </tt>o<tt class="computeroutput"><span class="special">.]]</span>
-                <span class="special">[[</span></tt>i &gt;&gt; p<tt class="computeroutput"><span class="special">]</span> <span class="special">[</span><span class="identifier">Input</span> </tt>p<tt class="computeroutput"> <span class="identifier">from</span>
-                <span class="identifier">input</span> <span class="identifier">stream</span><span class="special">,</span> </tt>i<tt class="computeroutput"><span class="special">.]]</span>
-                <span class="special">[[</span></tt>p == p2<tt class="computeroutput"><span class="special">]</span>
-                <span class="special">[</span><span class="identifier">Tests</span>
-                <span class="identifier">two</span> <span class="identifier">pairs</span>
-                <span class="keyword">for</span> <span class="identifier">equality</span><span class="special">.]]</span> <span class="special">[[</span></tt>p
-                != p2`
+                Get the data from <tt class="computeroutput"><span class="identifier">p1</span></tt>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">p</span> <span class="special">=</span>
+                <span class="identifier">p2</span></tt>
+              </p>
+              </td>
+<td>
+              <p>
+                Assigns a pair, <tt class="computeroutput"><span class="identifier">p1</span></tt>,
+                from another pair, <tt class="computeroutput"><span class="identifier">p2</span></tt>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                make_pair&lt;F&gt;(s)
+              </p>
+              </td>
+<td>
+              <p>
+                Make a pair given the first type, <tt class="computeroutput"><span class="identifier">F</span></tt>,
+                and a value for the second type, <tt class="computeroutput"><span class="identifier">s</span></tt>.
+                The second type assumes the type of <tt class="computeroutput"><span class="identifier">s</span></tt>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">o</span> <span class="special">&lt;&lt;</span>
+                <span class="identifier">p</span></tt>
+              </p>
+              </td>
+<td>
+              <p>
+                Output <tt class="computeroutput"><span class="identifier">p</span></tt> to output
+                stream, <tt class="computeroutput"><span class="identifier">o</span></tt>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">i</span> <span class="special">&gt;&gt;</span>
+                <span class="identifier">p</span></tt>
+              </p>
+              </td>
+<td>
+              <p>
+                Input <tt class="computeroutput"><span class="identifier">p</span></tt> from input
+                stream, <tt class="computeroutput"><span class="identifier">i</span></tt>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">p</span> <span class="special">==</span>
+                <span class="identifier">p2</span></tt>
+              </p>
+              </td>
+<td>
+              <p>
+                Tests two pairs for equality.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">p</span> <span class="special">!=</span>
+                <span class="identifier">p2</span></tt>
               </p>
               </td>
 <td>
@@ -275,7 +320,7 @@
 </tbody>
 </table></div>
 <a name="fusion.support.pair.header"></a><h4>
-<a name="id467922"></a>
+<a name="id467702"></a>
         <a href="pair.html#fusion.support.pair.header">Header</a>
       </h4>
 <pre class="programlisting">
@@ -283,7 +328,7 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">pair</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.support.pair.example"></a><h4>
-<a name="id468079"></a>
+<a name="id467858"></a>
         <a href="pair.html#fusion.support.pair.example">Example</a>
       </h4>
 <pre class="programlisting">
