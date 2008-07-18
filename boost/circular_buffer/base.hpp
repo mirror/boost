@@ -907,22 +907,23 @@ public:
 
 // Construction/Destruction
 
-    //! Create an empty <code>circular_buffer</code> with a maximum capacity.
+    //! Create an empty <code>circular_buffer</code> with zero capacity.
     /*!
-        \post <code>capacity() == max_size() \&\& size() == 0</code>
+        \post <code>capacity() == 0 \&\& size() == 0</code>
         \param alloc The allocator.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
         \par Complexity
              Constant.
-        \warning This constructor has been defined only due to compatibility with the STL container definition. Avoid
-                 using it because it may allocate <b>very large</b> amount of memory (depending on allocator's
-                 %max_size()).
+        \warning Since Boost version 1.36 the behaviour of this constructor has changed. Now the constructor does not
+                 allocate any memory and both capacity and size are set to zero. Also note when inserting an element
+                 into a <code>circular_buffer</code> with zero capacity (e.g. by
+                 <code>\link push_back() push_back(const_reference)\endlink</code> or
+                 <code>\link insert(iterator, param_value_type) insert(iterator, value_type)\endlink</code>) nothing
+                 will be inserted and the size (as well as capacity) remains zero.
     */
     explicit circular_buffer(const allocator_type& alloc = allocator_type())
-    : m_size(0), m_alloc(alloc) {
-        initialize(max_size());
-    }
+    : m_buff(0), m_end(0), m_first(0), m_last(0), m_size(0), m_alloc(alloc) {}
 
     //! Create an empty <code>circular_buffer</code> with the specified capacity.
     /*!
