@@ -11,7 +11,7 @@
 #  include <boost/functional/hash.hpp>
 #endif
 
-#include <boost/test/minimal.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #include <boost/limits.hpp>
 #include <boost/mpl/assert.hpp>
@@ -30,20 +30,20 @@ void pointer_tests()
     int int1;
     int int2;
 
-    BOOST_CHECK(x1(0) == x2(0));
-    BOOST_CHECK(x1(&int1) == x2(&int1));
-    BOOST_CHECK(x1(&int2) == x2(&int2));
+    BOOST_TEST(x1(0) == x2(0));
+    BOOST_TEST(x1(&int1) == x2(&int1));
+    BOOST_TEST(x1(&int2) == x2(&int2));
 #if defined(TEST_EXTENSIONS)
-    BOOST_CHECK(x1(&int1) == HASH_NAMESPACE::hash_value(&int1));
-    BOOST_CHECK(x1(&int2) == HASH_NAMESPACE::hash_value(&int2));
+    BOOST_TEST(x1(&int1) == HASH_NAMESPACE::hash_value(&int1));
+    BOOST_TEST(x1(&int2) == HASH_NAMESPACE::hash_value(&int2));
 
     // This isn't specified in Peter's proposal:
-    BOOST_CHECK(x1(0) == 0);
+    BOOST_TEST(x1(0) == 0);
 #endif
 }
 
-int test_main(int, char**)
+int main()
 {
     pointer_tests();
-    return 0;
+    return boost::report_errors();
 }

@@ -7,7 +7,7 @@
 
 #include "./hash_fwd_test.hpp"
 
-#include <boost/test/minimal.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #if defined(TEST_EXTENSIONS) && !defined(TEST_STD_INCLUDES)
 
@@ -24,8 +24,8 @@ void fwd_test1()
     HASH_NAMESPACE::hash<test::test_type1<int> > hasher_test_int;
     HASH_NAMESPACE::hash<test::test_type1<std::string> > hasher_test_string;
 
-    BOOST_CHECK(hasher_int(5) == hasher_test_int(x));
-    BOOST_CHECK(hasher_string("Test") == hasher_test_string(y));
+    BOOST_TEST(hasher_int(5) == hasher_test_int(x));
+    BOOST_TEST(hasher_string("Test") == hasher_test_string(y));
 }
 
 void fwd_test2()
@@ -44,8 +44,8 @@ void fwd_test2()
     HASH_NAMESPACE::hash<test::test_type2<int> > hasher_test_int;
     HASH_NAMESPACE::hash<test::test_type2<std::string> > hasher_test_string;
 
-    BOOST_CHECK(seed1 == hasher_test_int(x));
-    BOOST_CHECK(seed2 == hasher_test_string(y));
+    BOOST_TEST(seed1 == hasher_test_int(x));
+    BOOST_TEST(seed2 == hasher_test_string(y));
 }
 
 void fwd_test3()
@@ -75,19 +75,19 @@ void fwd_test3()
     HASH_NAMESPACE::hash<test::test_type3<int> > hasher_test_int;
     HASH_NAMESPACE::hash<test::test_type3<std::string> > hasher_test_string;
 
-    BOOST_CHECK(seed1 == hasher_test_int(x));
-    BOOST_CHECK(seed2 == hasher_test_string(y));
+    BOOST_TEST(seed1 == hasher_test_int(x));
+    BOOST_TEST(seed2 == hasher_test_string(y));
 }
 
 #endif
 
-int test_main(int, char**)
+int main()
 {
 #ifdef TEST_EXTENSIONS
     fwd_test1();
     fwd_test2();
     fwd_test3();
 #endif
-    return 0;
+    return boost::report_errors();
 }
 

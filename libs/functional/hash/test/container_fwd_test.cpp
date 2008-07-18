@@ -77,7 +77,7 @@ static void test(std::pair<X, Y> const&)
 #include <complex>
 #include <utility>
 
-int main(int, char**)
+int main()
 {
     std::deque<int> x1;
     std::list<std::string> x2;

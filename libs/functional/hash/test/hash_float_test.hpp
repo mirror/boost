@@ -11,7 +11,7 @@
 #  include <boost/functional/hash.hpp>
 #endif
 
-#include <boost/test/minimal.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #include <cmath>
 #include <boost/limits.hpp>
@@ -43,11 +43,11 @@ void float_tests(char const* name, T* = 0)
     T zero = 0;
     T minus_zero = (T) -1 * zero;
 
-    BOOST_CHECK(zero == minus_zero);
-    BOOST_CHECK(x1(zero) == x1(minus_zero));
+    BOOST_TEST(zero == minus_zero);
+    BOOST_TEST(x1(zero) == x1(minus_zero));
 
-    BOOST_CHECK(x1(zero) == HASH_NAMESPACE::hash_value(zero));
-    BOOST_CHECK(x1(minus_zero) == HASH_NAMESPACE::hash_value(minus_zero));
+    BOOST_TEST(x1(zero) == HASH_NAMESPACE::hash_value(zero));
+    BOOST_TEST(x1(minus_zero) == HASH_NAMESPACE::hash_value(minus_zero));
 
     using namespace std;
 
@@ -65,23 +65,23 @@ void float_tests(char const* name, T* = 0)
         T minus_infinity2 = (T) -1. / zero;
         T minus_infinity3 = (T) 1. / minus_zero;
 
-        BOOST_CHECK(x1(infinity) == HASH_NAMESPACE::hash_value(infinity));
-        BOOST_CHECK(x1(minus_infinity)
+        BOOST_TEST(x1(infinity) == HASH_NAMESPACE::hash_value(infinity));
+        BOOST_TEST(x1(minus_infinity)
                 == HASH_NAMESPACE::hash_value(minus_infinity));
 
         if(infinity == infinity2)
-            BOOST_CHECK(x1(infinity) == x1(infinity2));
+            BOOST_TEST(x1(infinity) == x1(infinity2));
         if(infinity == infinity3)
-            BOOST_CHECK(x1(infinity) == x1(infinity3));
+            BOOST_TEST(x1(infinity) == x1(infinity3));
         if(infinity == infinity4)
-            BOOST_CHECK(x1(infinity) == x1(infinity4));
+            BOOST_TEST(x1(infinity) == x1(infinity4));
 
         if(minus_infinity == minus_infinity2)
-            BOOST_CHECK(x1(minus_infinity) == x1(minus_infinity2));
+            BOOST_TEST(x1(minus_infinity) == x1(minus_infinity2));
         if(minus_infinity == minus_infinity3)
-            BOOST_CHECK(x1(minus_infinity) == x1(minus_infinity3));
+            BOOST_TEST(x1(minus_infinity) == x1(minus_infinity3));
 
-        BOOST_CHECK(infinity != minus_infinity);
+        BOOST_TEST(infinity != minus_infinity);
 
         if(x1(infinity) == x1(minus_infinity)) {
             std::cerr<<"x1(infinity) == x1(-infinity) == "<<x1(infinity)<<"\n";
@@ -113,22 +113,22 @@ void float_tests(char const* name, T* = 0)
     T quarter_max = max / 4;
     T three_quarter_max = max - quarter_max;
 
-    BOOST_CHECK(x1(max) == HASH_NAMESPACE::hash_value(max));
-    BOOST_CHECK(x1(half_max) == HASH_NAMESPACE::hash_value(half_max));
-    BOOST_CHECK(x1(quarter_max) == HASH_NAMESPACE::hash_value(quarter_max));
-    BOOST_CHECK(x1(three_quarter_max) == HASH_NAMESPACE::hash_value(three_quarter_max));
+    BOOST_TEST(x1(max) == HASH_NAMESPACE::hash_value(max));
+    BOOST_TEST(x1(half_max) == HASH_NAMESPACE::hash_value(half_max));
+    BOOST_TEST(x1(quarter_max) == HASH_NAMESPACE::hash_value(quarter_max));
+    BOOST_TEST(x1(three_quarter_max) == HASH_NAMESPACE::hash_value(three_quarter_max));
 
     // The '!=' tests could legitimately fail, but with my hash it indicates a bug.
-    BOOST_CHECK(x1(max) == x1(max));
-    BOOST_CHECK(x1(max) != x1(quarter_max));
-    BOOST_CHECK(x1(max) != x1(half_max));
-    BOOST_CHECK(x1(max) != x1(three_quarter_max));
-    BOOST_CHECK(x1(quarter_max) == x1(quarter_max));
-    BOOST_CHECK(x1(quarter_max) != x1(half_max));
-    BOOST_CHECK(x1(quarter_max) != x1(three_quarter_max));
-    BOOST_CHECK(x1(half_max) == x1(half_max));
-    BOOST_CHECK(x1(half_max) != x1(three_quarter_max));
-    BOOST_CHECK(x1(three_quarter_max) == x1(three_quarter_max));
+    BOOST_TEST(x1(max) == x1(max));
+    BOOST_TEST(x1(max) != x1(quarter_max));
+    BOOST_TEST(x1(max) != x1(half_max));
+    BOOST_TEST(x1(max) != x1(three_quarter_max));
+    BOOST_TEST(x1(quarter_max) == x1(quarter_max));
+    BOOST_TEST(x1(quarter_max) != x1(half_max));
+    BOOST_TEST(x1(quarter_max) != x1(three_quarter_max));
+    BOOST_TEST(x1(half_max) == x1(half_max));
+    BOOST_TEST(x1(half_max) != x1(three_quarter_max));
+    BOOST_TEST(x1(three_quarter_max) == x1(three_quarter_max));
 
 // Intel with gcc stdlib sometimes segfaults on calls to asin and acos.
 #if !((defined(__INTEL_COMPILER) || defined(__ICL) || \
@@ -137,35 +137,35 @@ void float_tests(char const* name, T* = 0)
     T v1 = asin((T) 1);
     T v2 = acos((T) 0);
     if(v1 == v2)
-        BOOST_CHECK(x1(v1) == x1(v2));
-    BOOST_CHECK(x1(v1) == HASH_NAMESPACE::hash_value(v1));
-    BOOST_CHECK(x1(v2) == HASH_NAMESPACE::hash_value(v2));
+        BOOST_TEST(x1(v1) == x1(v2));
+    BOOST_TEST(x1(v1) == HASH_NAMESPACE::hash_value(v1));
+    BOOST_TEST(x1(v2) == HASH_NAMESPACE::hash_value(v2));
 #endif
 
-    BOOST_CHECK(x1(boost::hash_detail::limits<T>::epsilon()) ==
+    BOOST_TEST(x1(boost::hash_detail::limits<T>::epsilon()) ==
             HASH_NAMESPACE::hash_value(boost::hash_detail::limits<T>::epsilon()));
 
-    BOOST_CHECK(boost::hash_detail::limits<T>::epsilon() != (T) 0);
+    BOOST_TEST(boost::hash_detail::limits<T>::epsilon() != (T) 0);
     if(x1(boost::hash_detail::limits<T>::epsilon()) == x1((T) 0))
         std::cerr<<"x1(epsilon) == x1(0) == "<<x1((T) 0)<<"\n";
 
-    BOOST_CHECK(-boost::hash_detail::limits<T>::epsilon() != (T) 0);
+    BOOST_TEST(-boost::hash_detail::limits<T>::epsilon() != (T) 0);
     if(x1(-boost::hash_detail::limits<T>::epsilon()) == x1((T) 0))
         std::cerr<<"x1(-epsilon) == x1(0) == "<<x1((T) 0)<<"\n";
 
-    BOOST_CHECK((T) 1 + boost::hash_detail::limits<T>::epsilon() != (T) 1);
+    BOOST_TEST((T) 1 + boost::hash_detail::limits<T>::epsilon() != (T) 1);
     if(x1((T) 1 + boost::hash_detail::limits<T>::epsilon()) == x1((T) 1))
         std::cerr<<"x1(1 + epsilon) == x1(1) == "<<x1((T) 1)<<"\n";
 
-    BOOST_CHECK((T) 1 - boost::hash_detail::limits<T>::epsilon() != (T) 1);
+    BOOST_TEST((T) 1 - boost::hash_detail::limits<T>::epsilon() != (T) 1);
     if(x1((T) 1 - boost::hash_detail::limits<T>::epsilon()) == x1((T) 1))
         std::cerr<<"x1(1 - epsilon) == x1(1) == "<<x1((T) 1)<<"\n";
 
-    BOOST_CHECK((T) -1 + boost::hash_detail::limits<T>::epsilon() != (T) -1);
+    BOOST_TEST((T) -1 + boost::hash_detail::limits<T>::epsilon() != (T) -1);
     if(x1((T) -1 + boost::hash_detail::limits<T>::epsilon()) == x1((T) -1))
         std::cerr<<"x1(-1 + epsilon) == x1(-1) == "<<x1((T) -1)<<"\n";
 
-    BOOST_CHECK((T) -1 - boost::hash_detail::limits<T>::epsilon() != (T) -1);
+    BOOST_TEST((T) -1 - boost::hash_detail::limits<T>::epsilon() != (T) -1);
     if(x1((T) -1 - boost::hash_detail::limits<T>::epsilon()) == x1((T) -1))
         std::cerr<<"x1(-1 - epsilon) == x1(-1) == "<<x1((T) -1)<<"\n";
 
@@ -197,7 +197,7 @@ void float_tests(char const* name, T* = 0)
         if(x1(boost::hash_detail::limits<T>::quiet_NaN()) == x1(1.0)) {
             std::cerr<<"x1(quiet_NaN) == x1(1.0) == "<<x1(1.0)<<"\n";
         }
-        BOOST_CHECK(x1(boost::hash_detail::limits<T>::quiet_NaN()) ==
+        BOOST_TEST(x1(boost::hash_detail::limits<T>::quiet_NaN()) ==
             HASH_NAMESPACE::hash_value(boost::hash_detail::limits<T>::quiet_NaN()));
     }
 #endif

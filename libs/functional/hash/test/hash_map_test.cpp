@@ -13,7 +13,7 @@
 #  endif
 #endif
 
-#include <boost/test/minimal.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #include <map>
 
@@ -29,12 +29,12 @@ using std::multimap;
 
 #endif // TEST_EXTENSTIONS
 
-int test_main(int, char**)
+int main()
 {
 #ifdef TEST_EXTENSIONS
     map_tests::map_hash_integer_tests();
     multimap_tests::multimap_hash_integer_tests();
 #endif
 
-    return 0;
+    return boost::report_errors();
 }

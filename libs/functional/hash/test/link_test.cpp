@@ -6,4 +6,4 @@
 #include <boost/functional/hash.hpp>
 
 extern int f();
-int main(int, char**) { return f(); }
+int main() { return f(); }
