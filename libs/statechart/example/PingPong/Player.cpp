@@ -17,7 +17,7 @@ void Player::initiate_impl()
   // Since we can only initiate at a point where the definitions of all the
   // states in the initial state configuration are known, we duplicate
   // the implementation of asynchronous_state_machine<>::initiate_impl() here
-  state_machine< Player, Waiting, MyAllocator >::initiate();
+  sc::state_machine< Player, Waiting, MyAllocator >::initiate();
 }
 
 
