@@ -5,7 +5,7 @@
 
 #include "hash_float_test.hpp"
 
-int test_main(int, char**)
+int main()
 {
     std::cerr<<"Compiler: "<<BOOST_COMPILER<<"\n";
     std::cerr<<"Platform: "<<BOOST_PLATFORM<<"\n";
@@ -14,5 +14,5 @@ int test_main(int, char**)
     float_tests("float", (float*) 0);
     float_tests("double", (double*) 0);
 
-    return 0;
+    return boost::report_errors();
 }

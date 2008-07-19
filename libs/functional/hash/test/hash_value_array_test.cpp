@@ -16,7 +16,7 @@
 #  endif
 #endif
 
-#include <boost/test/minimal.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #ifdef TEST_EXTENSIONS
 
@@ -37,9 +37,9 @@ void array_int_test()
     int array3[2] = {2, 3};
     HASH_NAMESPACE::hash<int[2]> hasher3;
 
-    BOOST_CHECK(hasher1(array1) == HASH_NAMESPACE::hash_value(array1));
-    BOOST_CHECK(hasher2(array2) == HASH_NAMESPACE::hash_value(array2));
-    BOOST_CHECK(hasher3(array3) == HASH_NAMESPACE::hash_value(array3));
+    BOOST_TEST(hasher1(array1) == HASH_NAMESPACE::hash_value(array1));
+    BOOST_TEST(hasher2(array2) == HASH_NAMESPACE::hash_value(array2));
+    BOOST_TEST(hasher3(array3) == HASH_NAMESPACE::hash_value(array3));
 }
 
 void two_dimensional_array_test()
@@ -47,18 +47,18 @@ void two_dimensional_array_test()
     int array[3][2] = {{-5, 6}, {7, -3}, {26, 1}};
     HASH_NAMESPACE::hash<int[3][2]> hasher;
 
-    BOOST_CHECK(hasher(array) == HASH_NAMESPACE::hash_value(array));
+    BOOST_TEST(hasher(array) == HASH_NAMESPACE::hash_value(array));
 }
 
 #endif
 
-int test_main(int, char**)
+int main()
 {
 #ifdef TEST_EXTENSIONS
     array_int_test();
     two_dimensional_array_test();
 #endif
 
-    return 0;
+    return boost::report_errors();
 }
 

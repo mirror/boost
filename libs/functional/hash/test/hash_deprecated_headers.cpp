@@ -19,7 +19,7 @@
 
 #include <vector>
 
-int main(int, char**) {
+int main() {
     std::vector<int> v;
     boost::hash<std::vector<int> > x;
     x(v);

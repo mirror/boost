@@ -7,11 +7,11 @@
 #include <boost/functional/hash.hpp>
 #define BOOST_HASH_NO_EXTENSIONS
 #include <boost/functional/hash.hpp>
-#include <boost/test/minimal.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <deque>
 #include <cassert>
 
-int test_main(int, char**)
+int main()
 {
     std::deque<int> x;
 
@@ -19,7 +19,7 @@ int test_main(int, char**)
     x.push_back(2);
 
     HASH_NAMESPACE::hash<std::deque<int> > hasher;
-    BOOST_CHECK(hasher(x) == HASH_NAMESPACE::hash_value(x));
+    BOOST_TEST(hasher(x) == HASH_NAMESPACE::hash_value(x));
 
-    return 0;
+    return boost::report_errors();
 }
