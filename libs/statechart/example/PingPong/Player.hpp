@@ -79,12 +79,18 @@ typedef sc::fifo_scheduler<> MyScheduler;
 struct Player;
 struct Waiting;
 
-// The following class member specialization ensures that
-// state_machine<>::initiate is not instantiated at a point where Waiting
-// is not defined yet.
-template<>
-inline void sc::asynchronous_state_machine<
-  Player, Waiting, MyScheduler, MyAllocator >::initiate_impl() {}
+namespace boost
+{
+namespace statechart
+{
+  // The following class member specialization ensures that
+  // state_machine<>::initiate is not instantiated at a point where Waiting
+  // is not defined yet.
+  template<>
+  inline void asynchronous_state_machine<
+    Player, Waiting, MyScheduler, MyAllocator >::initiate_impl() {}
+}
+}
 
 
 struct Player : sc::asynchronous_state_machine<
