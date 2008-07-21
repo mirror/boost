@@ -1,8 +1,8 @@
 
-#ifndef BOOST_MPL_LIST_AUX_FRONT_HPP_INCLUDED
-#define BOOST_MPL_LIST_AUX_FRONT_HPP_INCLUDED
+#ifndef BOOST_MPL_VECTOR_AUX_FRONT_HPP_INCLUDED
+#define BOOST_MPL_VECTOR_AUX_FRONT_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright Aleksey Gurtovoy 2000-2008
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -53,4 +53,4 @@ struct front_impl< aux::vector_tag<n_> >
 
 }}
 
-#endif // BOOST_MPL_LIST_AUX_FRONT_HPP_INCLUDED
+#endif // BOOST_MPL_VECTOR_AUX_FRONT_HPP_INCLUDED
