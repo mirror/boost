@@ -74,15 +74,17 @@ sequence specific and need to be implemented N times over N different
 sequences are now implemented only once.
 
 Fusion provides full round compatibility with __mpl__. Fusion sequences are
-fully conforming __mpl__ sequences and __mpl__ sequences are fully
-compatible with Fusion. You can work with Fusion sequences on __mpl__ if
-you wish to work solely on types. In __mpl__, Fusion sequences follow
-__mpl__'s sequence-type preserving semantics (i.e. algorithms preserve the
-original sequence type. e.g. transforming a vector returns a vector). You
-can also convert from an __mpl__ sequence to a Fusion sequence. For
-example, there are times when it is convenient to work solely on __mpl__
-using pure __mpl__ sequences, then, convert them to Fusion sequences as a
-final step before actual instantiation of real runtime objects with data.
-You have the best of both worlds.
+fully conforming __mpl__ sequences and __mpl__ sequences are fully compatible
+with Fusion. You can work with Fusion sequences on __mpl__ if you wish to work
+solely on types [footnote Choose __mpl__ over fusion when doing pure type
+calculations. Once the static type calculation is finished, you can instantiate
+a fusion sequence (see __conversion__) for the runtime part.]. In __mpl__,
+Fusion sequences follow __mpl__'s sequence-type preserving semantics (i.e.
+algorithms preserve the original sequence type. e.g. transforming a vector
+returns a vector). You can also convert from an __mpl__ sequence to a Fusion
+sequence. For example, there are times when it is convenient to work solely on
+__mpl__ using pure __mpl__ sequences, then, convert them to Fusion sequences as
+a final step before actual instantiation of real runtime objects with data. You
+have the best of both worlds.
 
 [endsect]
