@@ -1,8 +1,8 @@
 /*=============================================================================
-    Copyright (c) 2005-2006 João Abecasis
+    Copyright (c) 2005-2006 Joao Abecasis
     Copyright (c) 2006-2007 Tobias Schwinger
-  
-    Use modification and distribution are subject to the Boost Software 
+
+    Use modification and distribution are subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt).
 ==============================================================================*/
@@ -58,8 +58,8 @@ namespace boost { namespace fusion
     {
         namespace ft = function_types;
 
-        template< 
-            typename Function, class Sequence, 
+        template<
+            typename Function, class Sequence,
             int N = result_of::size<Sequence>::value,
             bool MFP = ft::is_member_function_pointer<Function>::value,
             bool RandomAccess = traits::is_random_access<Sequence>::value
@@ -167,5 +167,5 @@ namespace boost { namespace fusion
 
 #undef N
 #endif // defined(BOOST_PP_IS_ITERATING)
-#endif 
+#endif
 
