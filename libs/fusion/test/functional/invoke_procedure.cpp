@@ -1,8 +1,8 @@
 /*=============================================================================
-    Copyright (c) 2005-2006 João Abecasis
+    Copyright (c) 2005-2006 Joao Abecasis
     Copyright (c) 2006-2007 Tobias Schwinger
-  
-    Use modification and distribution are subject to the Boost Software 
+
+    Use modification and distribution are subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt).
 ==============================================================================*/
@@ -48,10 +48,10 @@ class members
 {
   public:
     int data;
- 
+
     members()
         : data(20)
-    { } 
+    { }
 
     int nullary() { return element1 = data + 1; }
     int nullary_c() const { return element1 = data + 2; }
