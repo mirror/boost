@@ -271,7 +271,7 @@ namespace boost
         void assign( capacity_type capacity, size_type n, 
                      value_type to_clone ) // basic
         {
-            this->assign( std::min(n,capacity), to_clone );
+            this->assign( (std::min)(n,capacity), to_clone );
         }
 
         template< class InputIterator >
