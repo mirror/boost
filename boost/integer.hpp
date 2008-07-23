@@ -182,57 +182,57 @@ namespace detail
   struct int_max_rank_helper
   {
 #ifdef BOOST_HAS_LONG_LONG
-      BOOST_STATIC_CONSTANT( int, extended_ = (MaxValue <= integer_traits<
+      BOOST_STATIC_CONSTANT( int, extended_ = (MaxValue <= boost::integer_traits<
        long_long_type >::const_max) );
 #elif defined(BOOST_HAS_MS_INT64)
-      BOOST_STATIC_CONSTANT( int, extended_ = (MaxValue <= integer_traits<
+      BOOST_STATIC_CONSTANT( int, extended_ = (MaxValue <= boost::integer_traits<
        __int64 >::const_max) );
 #else
       BOOST_STATIC_CONSTANT( int, extended_ = 1 );
 #endif
       BOOST_STATIC_CONSTANT( int, rank = (MaxValue > 0) * (extended_ +
-       (MaxValue <= integer_traits< long >::const_max) +
-       (MaxValue <= integer_traits< int >::const_max) +
-       (MaxValue <= integer_traits< short >::const_max) +
-       (MaxValue <= integer_traits< signed char >::const_max)) );
+       (MaxValue <= boost::integer_traits< long >::const_max) +
+       (MaxValue <= boost::integer_traits< int >::const_max) +
+       (MaxValue <= boost::integer_traits< short >::const_max) +
+       (MaxValue <= boost::integer_traits< signed char >::const_max)) );
   };
 
   template < intmax_t MinValue >
   struct int_min_rank_helper
   {
 #ifdef BOOST_HAS_LONG_LONG
-      BOOST_STATIC_CONSTANT( int, extended_ = (MinValue >= integer_traits<
+      BOOST_STATIC_CONSTANT( int, extended_ = (MinValue >= boost::integer_traits<
        long_long_type >::const_min) );
 #elif defined(BOOST_HAS_MS_INT64)
-      BOOST_STATIC_CONSTANT( int, extended_ = (MinValue >= integer_traits<
+      BOOST_STATIC_CONSTANT( int, extended_ = (MinValue >= boost::integer_traits<
        __int64 >::const_min) );
 #else
       BOOST_STATIC_CONSTANT( int, extended_ = 1 );
 #endif
       BOOST_STATIC_CONSTANT( int, rank = (MinValue < 0) * (extended_ +
-       (MinValue >= integer_traits< long >::const_min) +
-       (MinValue >= integer_traits< int >::const_min) +
-       (MinValue >= integer_traits< short >::const_min) +
-       (MinValue >= integer_traits< signed char >::const_min)) );
+       (MinValue >= boost::integer_traits< long >::const_min) +
+       (MinValue >= boost::integer_traits< int >::const_min) +
+       (MinValue >= boost::integer_traits< short >::const_min) +
+       (MinValue >= boost::integer_traits< signed char >::const_min)) );
   };
 
   template < uintmax_t Value >
   struct uint_max_rank_helper
   {
 #ifdef BOOST_HAS_LONG_LONG
-      BOOST_STATIC_CONSTANT( int, extended_ = (Value <= integer_traits<
+      BOOST_STATIC_CONSTANT( int, extended_ = (Value <= boost::integer_traits<
        ulong_long_type >::const_max) );
 #elif defined(BOOST_HAS_MS_INT64)
-      BOOST_STATIC_CONSTANT( int, extended_ = (Value <= integer_traits< unsigned
+      BOOST_STATIC_CONSTANT( int, extended_ = (Value <= boost::integer_traits< unsigned
        __int64 >::const_max) );
 #else
       BOOST_STATIC_CONSTANT( int, extended_ = 1 );
 #endif
       BOOST_STATIC_CONSTANT( int, rank = extended_ +
-       (Value <= integer_traits< unsigned long >::const_max) +
-       (Value <= integer_traits< unsigned int >::const_max) +
-       (Value <= integer_traits< unsigned short >::const_max) +
-       (Value <= integer_traits< unsigned char >::const_max) );
+       (Value <= boost::integer_traits< unsigned long >::const_max) +
+       (Value <= boost::integer_traits< unsigned int >::const_max) +
+       (Value <= boost::integer_traits< unsigned short >::const_max) +
+       (Value <= boost::integer_traits< unsigned char >::const_max) );
   };
 
   //  convert rank to type, Boost.MPL-style
