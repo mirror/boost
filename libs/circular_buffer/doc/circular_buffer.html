@@ -26,29 +26,82 @@
     </table>
     <h2>
       Contents
-    </h2><a href="#description">Description</a><br>
-    <a href="#briefexample">Introductory Example</a><br>
-    <a href="#synopsis">Synopsis</a><br>
-    <a href="#rationale">Rationale</a><br>
-    - <a href="#threadsafety">Thread-Safety</a><br>
-    - <a href="#overwrite">Overwrite Operation</a><br>
-    - <a href="#fullbuffer">Writing to a Full Buffer</a><br>
-    - <a href="#emptybuffer">Reading/Removing from an Empty Buffer</a><br>
-    - <a href="#iteratorinvalidation">Iterator Invalidation</a><br>
-    <a href="#caveats">Caveats</a><br>
-    <a href="#debug">Debug Support</a><br>
-    <a href="#examples">More Examples</a><br>
-    <a href="#header">Header Files</a><br>
-    <a href="#model">Modelled Concepts</a><br>
-    <a href="#parameters">Template Parameters</a><br>
-    <a href="#types">Public Types</a><br>
-    <a href="#constructors">Constructors and Destructor</a><br>
-    <a href="#methods">Public Member Functions</a><br>
-    <a href="#functions">Standalone Functions</a><br>
-    <a href="#notes">Notes</a><br>
-    <a href="#see">See also</a><br>
-    <a href="#ack">Acknowledgements</a><br>
-    <a href="#relnotes">Release Notes</a>
+    </h2>
+    <dl>
+      <dt>
+        <a href="#description">Description</a>
+      </dt>
+      <dt>
+        <a href="#briefexample">Introductory Example</a>
+      </dt>
+      <dt>
+        <a href="#synopsis">Synopsis</a>
+      </dt>
+      <dt>
+        <a href="#rationale">Rationale</a>
+      </dt>
+      <dd>
+        <ul>
+          <li>
+            <a href="#threadsafety">Thread-Safety</a>
+          </li>
+          <li>
+            <a href="#overwrite">Overwrite Operation</a>
+          </li>
+          <li>
+            <a href="#fullbuffer">Writing to a Full Buffer</a>
+          </li>
+          <li>
+            <a href="#emptybuffer">Reading/Removing from an Empty Buffer</a>
+          </li>
+          <li>
+            <a href="#iteratorinvalidation">Iterator Invalidation</a>
+          </li>
+        </ul>
+      </dd>
+      <dt>
+        <a href="#caveats">Caveats</a>
+      </dt>
+      <dt>
+        <a href="#debug">Debug Support</a>
+      </dt>
+      <dt>
+        <a href="#examples">More Examples</a>
+      </dt>
+      <dt>
+        <a href="#header">Header Files</a>
+      </dt>
+      <dt>
+        <a href="#model">Modelled Concepts</a>
+      </dt>
+      <dt>
+        <a href="#parameters">Template Parameters</a>
+      </dt>
+      <dt>
+        <a href="#types">Public Types</a>
+      </dt>
+      <dt>
+        <a href="#constructors">Constructors and Destructor</a>
+      </dt>
+      <dt>
+        <a href="#methods">Public Member Functions</a>
+      </dt>
+      <dt>
+        <a href="#functions">Standalone Functions</a>
+      </dt>
+      <dt>
+        <a href="#notes">Notes</a>
+      </dt>
+      <dt>
+        <a href="#see">See also</a>
+      </dt>
+      <dt>
+        <a href="#ack">Acknowledgements</a>
+      </dt>
+      <dt>
+        <a href="#relnotes">Release Notes</a>
+      </dt>
+    </dl>
     <table id="table_figure" align="right" border="0">
       <tr>
         <td>
@@ -228,6 +281,9 @@ public:
    const_array_range <a href="#classboost_1_1circular__buffer_10f4b157e27b1170a571417986b239945">array_one</a>() const;
    const_array_range <a href="#classboost_1_1circular__buffer_1bb8eb0f298ad2012c55c5303e1f174d5">array_two</a>() const;
    pointer <a href="#classboost_1_1circular__buffer_1ea728bf57f91aa8946eddf76ce816a4e">linearize</a>();
+   bool <a href="#classboost_1_1circular__buffer_120f64448dc0723cc68c1096f6b00bc0a">is_linearized</a>() const;
+   void <a href=
+"#classboost_1_1circular__buffer_1c591bb9e271b10b5240afcff3bd2c619">rotate</a>(const_iterator new_begin);
    size_type <a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size</a>() const;
    size_type <a href="#classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7">max_size</a>() const;
    bool <a href="#classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583">empty</a>() const;
@@ -589,9 +645,9 @@ template &lt;class T, class Alloc&gt;
 </pre>
     <p>
       The <code>circular_buffer</code> has a capacity of three <code>int</code>. Therefore, the size of the buffer will
-      not exceed three. The <code><a href="http://www.sgi.com/tech/stl/accumulate.html">accumulate</a></code> algorithm
-      evaluates the sum of the stored elements. The semantics of the <code>circular_buffer</code> can be inferred from
-      the assertions.
+      not exceed three. The <code><a href="http://www.sgi.com/tech/stl/accumulate.html">std::accumulate</a></code>
+      algorithm evaluates the sum of the stored elements. The semantics of the <code>circular_buffer</code> can be
+      inferred from the assertions.
     </p>
     <h4>
       <a name="boundedbuffer" id="boundedbuffer">Bounded Buffer Example</a>
@@ -995,6 +1051,27 @@ template &lt;class T, class Alloc&gt;
                 "#classboost_1_1circular__buffer_1aa35dd7ef8eb1d04508494d1835cc82e">push_back(const_reference)</a></code>
                 or <code><a href="#classboost_1_1circular__buffer_128c92740fee1b9deb8c69816e389de95">insert(iterator,
                 value_type)</a></code>) nothing will be inserted and the size (as well as capacity) remains zero.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Note:</b>
+              </dt>
+              <dd>
+                You can explicitly set the capacity by calling the <code><a href=
+                "#classboost_1_1circular__buffer_161714204ef5172d156e2c7eccd04998f">set_capacity(capacity_type)</a></code>
+                method or you can use the other constructor with the capacity specified.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer_1862a64cbc6a49376ecbb8321c3b44974">circular_buffer(capacity_type,
+                const allocator_type&amp; alloc)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_161714204ef5172d156e2c7eccd04998f">set_capacity(capacity_type)</a></code>
               </dd>
             </dl>
           </td>
@@ -3175,7 +3252,183 @@ template &lt;class T, class Alloc&gt;
                 "#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one()</a></code> and
                 <code><a href=
                 "#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code> for the
-                other option how to pass data into a legacy C API.
+                other option how to pass data into a legacy C API; <code><a href=
+                "#classboost_1_1circular__buffer_120f64448dc0723cc68c1096f6b00bc0a">is_linearized()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_1c591bb9e271b10b5240afcff3bd2c619">rotate(const_iterator)</a></code>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="classboost_1_1circular__buffer_120f64448dc0723cc68c1096f6b00bc0a" name=
+            "classboost_1_1circular__buffer_120f64448dc0723cc68c1096f6b00bc0a"></a><code><b>bool is_linearized()
+            const;</b></code><br>
+            <br>
+            Is the <code>circular_buffer</code> linearized?
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                <code>true</code> if the internal buffer is linearized into a continuous array (i.e. the
+                <code>circular_buffer</code> meets a condition <code>&amp;(*this)[0] &lt; &amp;(*this)[1] &lt; ... &lt;
+                &amp;(*this)[<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> -
+                1]</code>); <code>false</code> otherwise.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer_1ea728bf57f91aa8946eddf76ce816a4e">linearize()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="classboost_1_1circular__buffer_1c591bb9e271b10b5240afcff3bd2c619" name=
+            "classboost_1_1circular__buffer_1c591bb9e271b10b5240afcff3bd2c619"></a><code><b>void rotate(<a href=
+            "#classboost_1_1circular__buffer_15cab6d46f03c40d1e52d41843319ddb9">const_iterator</a>
+            new_begin);</b></code><br>
+            <br>
+            Rotate elements in the <code>circular_buffer</code>.
+            <p>
+              A more effective implementation of <code><a href=
+              "http://www.sgi.com/tech/stl/rotate.html">std::rotate</a></code>.
+            </p>
+            <dl>
+              <dt>
+                <b>Precondition:</b>
+              </dt>
+              <dd>
+                <code>new_begin</code> is a valid iterator pointing to the <code>circular_buffer</code> <b>except</b>
+                its end.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                Before calling the method suppose:<br>
+                <br>
+                <code>m == std::distance(new_begin, <a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>)</code><br>
+                <code>n == std::distance(<a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, new_begin)</code><br>
+                <code>val_0 == *new_begin, val_1 == *(new_begin + 1), ... val_m == *(new_begin + m)</code><br>
+                <code>val_r1 == *(new_begin - 1), val_r2 == *(new_begin - 2), ... val_rn == *(new_begin - n)</code><br>
+                <br>
+                then after call to the method:<br>
+                <br>
+                <code>val_0 == (*this)[0] &amp;&amp; val_1 == (*this)[1] &amp;&amp; ... &amp;&amp; val_m == (*this)[m -
+                1] &amp;&amp; val_r1 == (*this)[m + n - 1] &amp;&amp; val_r2 == (*this)[m + n - 2] &amp;&amp; ...
+                &amp;&amp; val_rn == (*this)[m]</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>new_begin</code>
+                  </dt>
+                  <dd>
+                    The new beginning.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic; no-throw if the <code>circular_buffer</code> is full or <code>new_begin</code> points to
+                <code><a href="#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a></code> or
+                if the operations in the <i>Throws</i> section do not throw anything.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                If <code>m &lt; n</code> invalidates iterators pointing to the last <code>m</code> elements
+                (<b>including</b> <code>new_begin</code>, but not iterators equal to <code><a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>) else invalidates
+                iterators pointing to the first <code>n</code> elements; does not invalidate any iterators if the
+                <code>circular_buffer</code> is full.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in <code>std::min(m, n)</code>); constant if the <code>circular_buffer</code> is full.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="http://www.sgi.com/tech/stl/rotate.html">std::rotate</a></code>
               </dd>
             </dl>
           </td>
@@ -4618,6 +4871,9 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 Whatever <code>T::T(const T&amp;)</code> throws.
               </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
+              </dd>
             </dl>
             <dl>
               <dt>
@@ -4699,6 +4955,9 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -6856,9 +7115,41 @@ template &lt;class T, class Alloc&gt;
     <h2>
       <a name="relnotes" id="relnotes">Release Notes</a>
     </h2>
+    <dl>
+      <dd>
+        <h3>
+          Boost 1.36
+        </h3>
+      </dd>
+      <dd>
+        <ul>
+          <li>Changed behaviour of the <code>circular_buffer(const allocator_type&amp;)</code> constructor. Since this
+          version the constructor does not allocate any memory and both capacity and size are set to zero.
+          </li>
+          <li>Added new methods <code>is_linearized()</code> and <code>rotate(const_iterator)</code>.
+          </li>
+          <li>Fixed bugs:<br>
+            #1987 Patch to make <code>circular_buffer.hpp</code> #includes absolute.<br>
+            #1919 Default constructed circular buffer throws <code>std::bad_alloc</code>.<br>
+            #1852 Copy constructor does not copy capacity.
+          </li>
+        </ul>
+      </dd>
+      <dd>
+        <h3>
+          Boost 1.35
+        </h3>
+      </dd>
+      <dd>
+        <ul>
+          <li>Initial release.
+          </li>
+        </ul>
+      </dd>
+    </dl>
     <hr size="1">
     <p>
-      <small>Copyright © 2003-2007 Jan Gaspar</small>
+      <small>Copyright © 2003-2008 Jan Gaspar</small>
     </p>
     <p>
       <small>Use, modification, and distribution is subject to the Boost Software License, Version 1.0.<br>

@@ -1,6 +1,6 @@
 // Implementation of the base circular buffer.
 
-// Copyright (c) 2003-2007 Jan Gaspar
+// Copyright (c) 2003-2008 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -619,7 +619,7 @@ public:
         \warning In general invoking any method which modifies the internal state of the <code>circular_buffer</code>
                  may delinearize the internal buffer and invalidate the returned pointer.
         \sa <code>array_one()</code> and <code>array_two()</code> for the other option how to pass data into a legacy
-            C API.
+            C API; <code>is_linearized()</code>, <code>rotate(const_iterator)</code>
     */
     pointer linearize() {
         if (empty())
@@ -665,6 +665,73 @@ public:
         invalidate_iterators_except(end());
 #endif
         return m_buff;
+    }
+
+    //! Is the <code>circular_buffer</code> linearized?
+    /*!
+        \return <code>true</code> if the internal buffer is linearized into a continuous array (i.e. the
+                <code>circular_buffer</code> meets a condition
+                <code>\&(*this)[0] \< \&(*this)[1] \< ... \< \&(*this)[size() - 1]</code>);
+                <code>false</code> otherwise.
+        \throws Nothing.
+        \par Exception Safety
+             No-throw.
+        \par Iterator Invalidation
+             Does not invalidate any iterators.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer</code>).
+        \sa <code>linearize()</code>, <code>array_one()</code>, <code>array_two()</code>
+    */
+    bool is_linearized() const { return m_first < m_last || m_last == m_buff; }
+
+    //! Rotate elements in the <code>circular_buffer</code>.
+    /*!
+        A more effective implementation of
+        <code><a href="http://www.sgi.com/tech/stl/rotate.html">std::rotate</a></code>.
+        \pre <code>new_begin</code> is a valid iterator pointing to the <code>circular_buffer</code> <b>except</b> its
+             end.
+        \post Before calling the method suppose:<br><br>
+              <code>m == std::distance(new_begin, end())</code><br><code>n == std::distance(begin(), new_begin)</code>
+              <br><code>val_0 == *new_begin, val_1 == *(new_begin + 1), ... val_m == *(new_begin + m)</code><br>
+              <code>val_r1 == *(new_begin - 1), val_r2 == *(new_begin - 2), ... val_rn == *(new_begin - n)</code><br>
+              <br>then after call to the method:<br><br>
+              <code>val_0 == (*this)[0] \&\& val_1 == (*this)[1] \&\& ... \&\& val_m == (*this)[m - 1] \&\& val_r1 ==
+              (*this)[m + n - 1] \&\& val_r2 == (*this)[m + n - 2] \&\& ... \&\& val_rn == (*this)[m]</code>
+        \param new_begin The new beginning.
+        \throws Whatever <code>T::T(const T&)</code> throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \par Exception Safety
+             Basic; no-throw if the <code>circular_buffer</code> is full or <code>new_begin</code> points to
+             <code>begin()</code> or if the operations in the <i>Throws</i> section do not throw anything.
+        \par Iterator Invalidation
+             If <code>m \< n</code> invalidates iterators pointing to the last <code>m</code> elements
+             (<b>including</b> <code>new_begin</code>, but not iterators equal to <code>end()</code>) else invalidates
+             iterators pointing to the first <code>n</code> elements; does not invalidate any iterators if the
+             <code>circular_buffer</code> is full.
+        \par Complexity
+             Linear (in <code>std::min(m, n)</code>); constant if the <code>circular_buffer</code> is full.
+        \sa <code><a href="http://www.sgi.com/tech/stl/rotate.html">std::rotate</a></code>
+    */
+    void rotate(const_iterator new_begin) {
+        BOOST_CB_ASSERT(new_begin.is_valid(this)); // check for uninitialized or invalidated iterator
+        BOOST_CB_ASSERT(new_begin.m_it != 0);      // check for iterator pointing to end()
+        if (full()) {
+            m_first = m_last = const_cast<pointer>(new_begin.m_it);
+        } else {
+            difference_type m = end() - new_begin;
+            difference_type n = new_begin - begin();
+            if (m < n) {
+                for (; m > 0; --m) {
+                    push_front(back());
+                    pop_back();
+                }
+            } else {
+                for (; n > 0; --n) {
+                    push_back(front());
+                    pop_front();
+                }
+            }
+        }
     }
 
 // Size and capacity
@@ -921,6 +988,10 @@ public:
                  <code>\link push_back() push_back(const_reference)\endlink</code> or
                  <code>\link insert(iterator, param_value_type) insert(iterator, value_type)\endlink</code>) nothing
                  will be inserted and the size (as well as capacity) remains zero.
+        \note You can explicitly set the capacity by calling the <code>set_capacity(capacity_type)</code> method or you
+              can use the other constructor with the capacity specified.
+        \sa <code>circular_buffer(capacity_type, const allocator_type& alloc)</code>,
+            <code>set_capacity(capacity_type)</code>
     */
     explicit circular_buffer(const allocator_type& alloc = allocator_type())
     : m_buff(0), m_end(0), m_first(0), m_last(0), m_size(0), m_alloc(alloc) {}
@@ -1305,6 +1376,7 @@ public:
               <code>0</code>, nothing will be inserted.
         \param item The element to be inserted.
         \throws Whatever <code>T::T(const T&)</code> throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -1335,6 +1407,7 @@ public:
               <code>0</code>, nothing will be inserted.
         \param item The element to be inserted.
         \throws Whatever <code>T::T(const T&)</code> throws.
+        \throws Whatever <code>T::operator = (const T&)</code> throws.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation

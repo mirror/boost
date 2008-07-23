@@ -1,6 +1,6 @@
 // Implementation of the circular buffer adaptor.
 
-// Copyright (c) 2003-2007 Jan Gaspar
+// Copyright (c) 2003-2008 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -90,6 +90,8 @@ public:
     using circular_buffer<T, Alloc>::array_one;
     using circular_buffer<T, Alloc>::array_two;
     using circular_buffer<T, Alloc>::linearize;
+    using circular_buffer<T, Alloc>::is_linearized;
+    using circular_buffer<T, Alloc>::rotate;
     using circular_buffer<T, Alloc>::size;
     using circular_buffer<T, Alloc>::max_size;
     using circular_buffer<T, Alloc>::empty;

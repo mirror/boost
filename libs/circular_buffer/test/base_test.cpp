@@ -1,6 +1,6 @@
 // Test of the base circular buffer container.
 
-// Copyright (c) 2003-2007 Jan Gaspar
+// Copyright (c) 2003-2008 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -61,6 +61,7 @@ void iterator_difference_test() {
     BOOST_CHECK(end - end == 0);
     BOOST_CHECK(begin - cb.end() == -5);
     BOOST_CHECK(it1 - cb.begin() == 2);
+    BOOST_CHECK(it1 - begin == 2);
     BOOST_CHECK(end - it1 == 3);
     BOOST_CHECK(it2 - it1 == 1);
     BOOST_CHECK(it1 - it2 == -1);
@@ -504,6 +505,62 @@ void iterator_invalidation_test() {
     BOOST_CHECK(!it2.is_valid(&cb13));
     BOOST_CHECK(!it3.is_valid(&cb13));
     BOOST_CHECK(!it4.is_valid(&cb13));
+
+    circular_buffer<MyInteger> cb14(10);
+    cb14.push_back(1);
+    cb14.push_back(2);
+    cb14.push_back(3);
+    cb14.push_back(4);
+    cb14.push_back(5);
+    cb14.push_back(6);
+    cb14.push_back(7);
+    it1 = cb14.end();
+    it2 = cb14.begin() + 2;
+    it3 = cb14.begin() + 1;
+    it4 = cb14.begin() + 5;
+    cb14.rotate(it2);
+    BOOST_CHECK(it1.is_valid(&cb14));
+    BOOST_CHECK(it2.is_valid(&cb14));
+    BOOST_CHECK(!it3.is_valid(&cb14));
+    BOOST_CHECK(it4.is_valid(&cb14));
+
+    circular_buffer<MyInteger> cb15(7);
+    cb15.push_back(1);
+    cb15.push_back(2);
+    cb15.push_back(3);
+    cb15.push_back(4);
+    cb15.push_back(5);
+    cb15.push_back(6);
+    cb15.push_back(7);
+    cb15.push_back(8);
+    cb15.push_back(9);
+    it1 = cb15.end();
+    it2 = cb15.begin() + 2;
+    it3 = cb15.begin() + 1;
+    it4 = cb15.begin() + 5;
+    cb15.rotate(it3);
+    BOOST_CHECK(it1.is_valid(&cb15));
+    BOOST_CHECK(it2.is_valid(&cb15));
+    BOOST_CHECK(it3.is_valid(&cb15));
+    BOOST_CHECK(it4.is_valid(&cb15));
+
+    circular_buffer<MyInteger> cb16(10);
+    cb16.push_back(1);
+    cb16.push_back(2);
+    cb16.push_back(3);
+    cb16.push_back(4);
+    cb16.push_back(5);
+    cb16.push_back(6);
+    cb16.push_back(7);
+    it1 = cb16.end();
+    it2 = cb16.begin() + 6;
+    it3 = cb16.begin();
+    it4 = cb16.begin() + 5;
+    cb16.rotate(it4);
+    BOOST_CHECK(it1.is_valid(&cb16));
+    BOOST_CHECK(!it2.is_valid(&cb16));
+    BOOST_CHECK(it3.is_valid(&cb16));
+    BOOST_CHECK(!it4.is_valid(&cb16));
 
 #endif // #if !defined(NDEBUG) && !defined(BOOST_CB_DISABLE_DEBUG)
 }

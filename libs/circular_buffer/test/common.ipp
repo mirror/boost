@@ -1,6 +1,6 @@
 // Common tests for the circular buffer and its adaptor.
 
-// Copyright (c) 2003-2007 Jan Gaspar
+// Copyright (c) 2003-2008 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -328,8 +328,16 @@ void linearize_test() {
     cb6.push_back(5);
     cb6.push_back(6);
     cb6.pop_back();
+    CB_CONTAINER<MyInteger> cb7(6);
+    cb7.push_back(0);
+    cb7.push_back(1);
+    cb7.push_back(2);
+    cb7.push_back(3);
+    cb7.push_back(4);
 
+    BOOST_CHECK(!cb1.is_linearized());
     BOOST_CHECK(*cb1.linearize() == 4);
+    BOOST_CHECK(cb1.is_linearized());
     BOOST_CHECK(cb1.linearize() == cb1.array_one().first);
     BOOST_CHECK(&cb1[0] < &cb1[1]
         && &cb1[1] < &cb1[2]
@@ -349,7 +357,9 @@ void linearize_test() {
     BOOST_CHECK(*(cb1.linearize() + 7) == 11);
     BOOST_CHECK(*(cb1.linearize() + 8) == 12);
     BOOST_CHECK(*(cb1.linearize() + 9) == 13);
+    BOOST_CHECK(!cb2.is_linearized());
     BOOST_CHECK(*cb2.linearize() == 8);
+    BOOST_CHECK(cb2.is_linearized());
     BOOST_CHECK(&cb2[0] < &cb2[1]
         && &cb2[1] < &cb2[2]
         && &cb2[2] < &cb2[3]
@@ -368,7 +378,9 @@ void linearize_test() {
     BOOST_CHECK(*(cb2.linearize() + 7) == 15);
     BOOST_CHECK(*(cb2.linearize() + 8) == 16);
     BOOST_CHECK(*(cb2.linearize() + 9) == 17);
+    BOOST_CHECK(cb2.is_linearized());
     BOOST_CHECK(*cb3.linearize() == 6);
+    BOOST_CHECK(cb3.is_linearized());
     BOOST_CHECK(&cb3[0] < &cb3[1]
         && &cb3[1] < &cb3[2]
         && &cb3[2] < &cb3[3]
@@ -384,7 +396,9 @@ void linearize_test() {
     BOOST_CHECK(*(cb3.linearize() + 6) == 12);
     BOOST_CHECK(*(cb3.linearize() + 7) == 13);
     BOOST_CHECK(cb4.linearize() == 0);
+    BOOST_CHECK(cb4.is_linearized());
     BOOST_CHECK(*cb5.linearize() == 10);
+    BOOST_CHECK(cb5.is_linearized());
     BOOST_CHECK(&cb5[0] < &cb5[1]
         && &cb5[1] < &cb5[2]
         && &cb5[2] < &cb5[3]
@@ -396,6 +410,7 @@ void linearize_test() {
     BOOST_CHECK(*(cb5.linearize() + 4) == 14);
     BOOST_CHECK(*(cb5.linearize() + 5) == 15);
     BOOST_CHECK(*cb6.linearize() == 1);
+    BOOST_CHECK(cb6.is_linearized());
     BOOST_CHECK(&cb6[0] < &cb6[1]
         && &cb6[1] < &cb6[2]
         && &cb6[2] < &cb6[3]
@@ -404,6 +419,7 @@ void linearize_test() {
     BOOST_CHECK(*(cb6.linearize() + 2) == 3);
     BOOST_CHECK(*(cb6.linearize() + 3) == 4);
     BOOST_CHECK(*(cb6.linearize() + 4) == 5);
+    BOOST_CHECK(cb7.is_linearized());
 
     generic_test(cb1);
     generic_test(cb2);
@@ -411,6 +427,7 @@ void linearize_test() {
     generic_test(cb4);
     generic_test(cb5);
     generic_test(cb6);
+    generic_test(cb7);
 }
 
 void array_range_test() {
@@ -1813,6 +1830,122 @@ void const_methods_test() {
     BOOST_CHECK(cb.back() == 5);
 }
 
+void rotate_test() {
+
+    CB_CONTAINER<MyInteger> cb1(10);
+    cb1.push_back(1);
+    cb1.push_back(2);
+    cb1.push_back(3);
+    cb1.push_back(4);
+    cb1.push_back(5);
+    cb1.push_back(6);
+    cb1.push_back(7);
+    CB_CONTAINER<MyInteger> cb2 = cb1;
+    CB_CONTAINER<MyInteger>::iterator it1 = cb1.begin() + 2;
+    int v1_0 = *it1;
+    int v1_1 = *(it1 + 1);
+    int v1_2 = *(it1 + 2);
+    int v1_3 = *(it1 + 3);
+    int v1_4 = *(it1 + 4);
+    int v1_r1 = *(it1 - 1);
+    int v1_r2 = *(it1 - 2);
+    cb1.rotate(it1);
+    rotate(cb2.begin(), cb2.begin() + 2, cb2.end());
+
+    CB_CONTAINER<MyInteger> cb3(7);
+    cb3.push_back(1);
+    cb3.push_back(2);
+    cb3.push_back(3);
+    cb3.push_back(4);
+    cb3.push_back(5);
+    cb3.push_back(6);
+    cb3.push_back(7);
+    cb3.push_back(8);
+    cb3.push_back(9);
+    CB_CONTAINER<MyInteger> cb4 = cb3;
+    CB_CONTAINER<MyInteger>::iterator it2 = cb3.begin() + 1;
+    int v2_0 = *it2;
+    int v2_1 = *(it2 + 1);
+    int v2_2 = *(it2 + 2);
+    int v2_3 = *(it2 + 3);
+    int v2_4 = *(it2 + 4);
+    int v2_5 = *(it2 + 5);
+    int v2_r1 = *(it2 - 1);
+    cb3.rotate(it2);
+    rotate(cb4.begin(), cb4.begin() + 1, cb4.end());
+
+    CB_CONTAINER<MyInteger> cb5(10);
+    cb5.push_back(1);
+    cb5.push_back(2);
+    cb5.push_back(3);
+    cb5.push_back(4);
+    cb5.push_back(5);
+    cb5.push_back(6);
+    cb5.push_back(7);
+    CB_CONTAINER<MyInteger> cb6 = cb5;
+    CB_CONTAINER<MyInteger>::iterator it3 = cb5.begin() + 5;
+    int v3_0 = *it3;
+    int v3_1 = *(it3 + 1);
+    int v3_r1 = *(it3 - 1);
+    int v3_r2 = *(it3 - 2);
+    int v3_r3 = *(it3 - 3);
+    int v3_r4 = *(it3 - 4);
+    int v3_r5 = *(it3 - 5);
+    cb5.rotate(it3);
+    rotate(cb6.begin(), cb6.begin() + 5, cb6.end());
+
+    BOOST_CHECK(!cb1.full());
+    BOOST_CHECK(cb1 == cb2);
+    BOOST_CHECK(v1_0 == *it1);
+    BOOST_CHECK(v1_1 == *(it1 + 1));
+    BOOST_CHECK(v1_2 == *(it1 + 2));
+    BOOST_CHECK(v1_3 == *(it1 + 3));
+    BOOST_CHECK(v1_4 == *(it1 + 4));
+    BOOST_CHECK(v1_r1 == *(it1 + 6));
+    BOOST_CHECK(v1_r2 == *(it1 + 5));
+    BOOST_CHECK(cb1.begin() == it1);
+    BOOST_CHECK(v1_0 == cb1[0]);
+    BOOST_CHECK(v1_1 == cb1[1]);
+    BOOST_CHECK(v1_2 == cb1[2]);
+    BOOST_CHECK(v1_3 == cb1[3]);
+    BOOST_CHECK(v1_4 == cb1[4]);
+    BOOST_CHECK(v1_r1 == cb1[6]);
+    BOOST_CHECK(v1_r2 == cb1[5]);
+    BOOST_CHECK(cb3.full());
+    BOOST_CHECK(cb3 == cb4);
+    BOOST_CHECK(v2_0 == *it2);
+    BOOST_CHECK(v2_1 == *(it2 + 1));
+    BOOST_CHECK(v2_2 == *(it2 + 2));
+    BOOST_CHECK(v2_3 == *(it2 + 3));
+    BOOST_CHECK(v2_4 == *(it2 + 4));
+    BOOST_CHECK(v2_5 == *(it2 + 5));
+    BOOST_CHECK(v2_r1 == *(it2 + 6));
+    BOOST_CHECK(cb3.begin() == it2);
+    BOOST_CHECK(v2_0 == cb3[0]);
+    BOOST_CHECK(v2_1 == cb3[1]);
+    BOOST_CHECK(v2_2 == cb3[2]);
+    BOOST_CHECK(v2_3 == cb3[3]);
+    BOOST_CHECK(v2_4 == cb3[4]);
+    BOOST_CHECK(v2_5 == cb3[5]);
+    BOOST_CHECK(v2_r1 == cb3[6]);
+    BOOST_CHECK(!cb5.full());
+    BOOST_CHECK(cb5 == cb6);
+    BOOST_CHECK(v3_0 == cb5[0]);
+    BOOST_CHECK(v3_1 == cb5[1]);
+    BOOST_CHECK(v3_r1 == cb5[6]);
+    BOOST_CHECK(v3_r2 == cb5[5]);
+    BOOST_CHECK(v3_r3 == cb5[4]);
+    BOOST_CHECK(v3_r4 == cb5[3]);
+    BOOST_CHECK(v3_r5 == cb5[2]);
+
+    generic_test(cb1);
+    generic_test(cb2);
+    generic_test(cb3);
+    generic_test(cb4);
+    generic_test(cb5);
+    generic_test(cb6);
+}
+
 int MyInteger::ms_exception_trigger = 0;
 int InstanceCounter::ms_count = 0;
 
@@ -1860,4 +1993,5 @@ void add_common_tests(test_suite* tests) {
     tests->add(BOOST_TEST_CASE(&example_test));
     tests->add(BOOST_TEST_CASE(&element_destruction_test));
     tests->add(BOOST_TEST_CASE(&const_methods_test));
+    tests->add(BOOST_TEST_CASE(&rotate_test));
 }

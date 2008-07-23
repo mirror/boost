@@ -181,6 +181,10 @@ public:
 "circular_buffer.html#classboost_1_1circular__buffer_1bb8eb0f298ad2012c55c5303e1f174d5">array_two</a>() const;
    pointer <a href=
 "circular_buffer.html#classboost_1_1circular__buffer_1ea728bf57f91aa8946eddf76ce816a4e">linearize</a>();
+   bool <a href=
+"circular_buffer.html#classboost_1_1circular__buffer_120f64448dc0723cc68c1096f6b00bc0a">is_linearized</a>() const;
+   void <a href=
+"circular_buffer.html#classboost_1_1circular__buffer_1c591bb9e271b10b5240afcff3bd2c619">rotate</a>(const_iterator new_begin);
    size_type <a href=
 "circular_buffer.html#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size</a>() const;
    size_type <a href=
@@ -4172,9 +4176,39 @@ public:
     <p>
       The idea of the space optimized circular buffer has been introduced by Pavel Vozenilek.
     </p>
+    <h2>
+      <a name="relnotes" id="relnotes">Release Notes</a>
+    </h2>
+    <dl>
+      <dd>
+        <h3>
+          Boost 1.36
+        </h3>
+      </dd>
+      <dd>
+        <ul>
+          <li>Changed behaviour of the <code>circular_buffer_space_optimized(const allocator_type&amp;)</code>
+          constructor. Since this version the constructor sets the capacity to zero.
+          </li>
+          <li>Added new methods <code>is_linearized()</code> and <code>rotate(const_iterator)</code>.
+          </li>
+        </ul>
+      </dd>
+      <dd>
+        <h3>
+          Boost 1.35
+        </h3>
+      </dd>
+      <dd>
+        <ul>
+          <li>Initial release.
+          </li>
+        </ul>
+      </dd>
+    </dl>
     <hr size="1">
     <p>
-      <small>Copyright © 2003-2007 Jan Gaspar</small>
+      <small>Copyright © 2003-2008 Jan Gaspar</small>
     </p>
     <p>
       <small>Use, modification, and distribution is subject to the Boost Software License, Version 1.0.<br>
