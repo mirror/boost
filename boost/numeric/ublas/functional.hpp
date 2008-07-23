@@ -446,6 +446,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_type size (e ().size ());
             for (size_type i = 0; i < size; ++ i) {
                 real_type u (type_traits<value_type>::norm_2 (e () (i)));
+		if ( real_type () /* zero */ == u ) continue;
                 if (scale < u) {
                     real_type v (scale / u);
                     sum_squares = sum_squares * v * v + real_type (1);
@@ -1851,6 +1852,8 @@ namespace boost { namespace numeric { namespace ublas {
             return (std::max) (i, j);
         }
     };
+
+    // the first row only contains a single 1. Thus it is not stored.
     template <class Z>
     struct basic_unit_lower : public basic_lower<Z> {
         typedef Z size_type;
@@ -1879,21 +1882,23 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         size_type element (L, size_type i, size_type size_i, size_type j, size_type size_j) {
             // Zero size strict triangles are bad at this point
-            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0, bad_index ());
-            return L::lower_element (i, size_i - 1, j, size_j - 1);
+            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0 && i != 0, bad_index ());
+            return L::lower_element (i-1, size_i - 1, j, size_j - 1);
         }
 
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return (std::max) (i, j);
+            return (std::max) ( (std::max<size_type>)(1, i), j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return (std::min) (i, j);
+            return (std::min) ( (std::max<size_type>)(1, i), j);
         }
     };
+
+    // the last row only contains a single 1. Thus it is not stored.
     template <class Z>
     struct basic_unit_upper : public basic_upper<Z> {
         typedef Z size_type;
@@ -1922,21 +1927,23 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         size_type element (L, size_type i, size_type size_i, size_type j, size_type size_j) {
             // Zero size strict triangles are bad at this point
-            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0, bad_index ());
-            return L::upper_element (i, size_i - 1, j, size_j - 1);
+            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0 && j != 0, bad_index ());
+            return L::upper_element (i, size_i - 1, j-1, size_j - 1);
         }
 
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return (std::min) (i, j);
+            return (std::min) (i, (std::max<size_type>)(1, j));
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return (std::max) (i, j);
+            return (std::max) (i, (std::max<size_type>)(1, j));
         }
     };
+
+    // the first row only contains a single 1. Thus it is not stored.
     template <class Z>
     struct basic_strict_lower : public basic_lower<Z> {
         typedef Z size_type;
@@ -1970,31 +1977,33 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         size_type element (L, size_type i, size_type size_i, size_type j, size_type size_j) {
             // Zero size strict triangles are bad at this point
-            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0, bad_index ());
-            return L::lower_element (i, size_i - 1, j, size_j - 1);
+            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0 && i != 0, bad_index ());
+            return L::lower_element (i-1, size_i - 1, j, size_j - 1);
         }
 
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return (std::max) (i, j);
+            return (std::max) ( (std::max<size_type>)(1, i), j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return (std::min) (i, j);
+            return (std::min) ( (std::max<size_type>)(1, i), j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return (std::max) (i, j);
+            return (std::max) ( (std::max<size_type>)(1, i), j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return (std::min) (i, j);
+            return (std::min) ( (std::max<size_type>)(1, i), j);
         }
     };
+
+    // the last row only contains a single 1. Thus it is not stored.
     template <class Z>
     struct basic_strict_upper : public basic_upper<Z> {
         typedef Z size_type;
@@ -2028,29 +2037,29 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         size_type element (L, size_type i, size_type size_i, size_type j, size_type size_j) {
             // Zero size strict triangles are bad at this point
-            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0, bad_index ());
-            return L::upper_element (i, size_i - 1, j, size_j - 1);
+            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0 && j != 0, bad_index ());
+            return L::upper_element (i, size_i - 1, j-1, size_j - 1);
         }
 
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return (std::min) (i, j);
+            return (std::min) (i, (std::max<size_type>)(1, j));
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return (std::max) (i, j);
+            return (std::max) (i, (std::max<size_type>)(1, j));
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return (std::min) (i, j);
+            return (std::min) (i, (std::max<size_type>)(1, j));
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return (std::max) (i, j);
+            return (std::max) (i, (std::max<size_type>)(1, j));
         }
     };
 

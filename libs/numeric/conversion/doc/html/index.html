@@ -3,14 +3,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Chapter 1. Boost.NumericConversion</title>
 <link rel="stylesheet" href="boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
 <link rel="start" href="index.html" title="Chapter 1. Boost.NumericConversion">
 <link rel="next" href="boost_numericconversion/definitions.html" title="Definitions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
 <td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
@@ -27,7 +27,7 @@
 </h3></div></div>
 <div><p class="copyright">Copyright © 2004 -2007 Fernando Luis Cacciola Carballal</p></div>
 <div><div class="legalnotice">
-<a name="id2625902"></a><p>
+<a name="id2604942"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -119,49 +119,49 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="numeric_conversion.overview"></a><a class="link" href="index.html#numeric_conversion.overview" title="Overview">Overview</a>
+<a name="numeric_conversion.overview"></a><a href="index.html#numeric_conversion.overview" title="Overview">Overview</a>
 </h2></div></div></div>
 <p>
       The Boost Numeric Conversion library is a collection of tools to describe and
-      perform conversions between values of different <a class="link" href="boost_numericconversion/definitions.html#numeric_conversion_definitions_numeric_types">numeric
+      perform conversions between values of different <a href="boost_numericconversion/definitions.html#numeric_conversion_definitions_numeric_types">numeric
       types</a>.
     </p>
 <p>
-      The library includes a special alternative for a subset of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;</span></code>, the <a class="link" href="index.html#numeric_conversion_bounds">bounds&lt;&gt;</a>
-      traits class, which provides a consistent way to obtain the <a class="link" href="boost_numericconversion/definitions.html#numeric_conversion_definitions_range">boundary</a>
-      values for the <a class="link" href="boost_numericconversion/definitions.html#numeric_conversion_definitions_range">range</a>
+      The library includes a special alternative for a subset of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;</span></code>, the <a href="index.html#numeric_conversion_bounds">bounds&lt;&gt;</a>
+      traits class, which provides a consistent way to obtain the <a href="boost_numericconversion/definitions.html#numeric_conversion_definitions_range">boundary</a>
+      values for the <a href="boost_numericconversion/definitions.html#numeric_conversion_definitions_range">range</a>
       of a numeric type.
     </p>
 <p>
-      It also includes a set of <a class="link" href="index.html#numeric_conversion_traits">trait classes</a>
+      It also includes a set of <a href="index.html#numeric_conversion_traits">trait classes</a>
       which describes the compile-time properties of a conversion from a source to
-      a target numeric type. Both <a class="link" href="boost_numericconversion/definitions.html#numeric_conversion_cpp_arithmetic_types">arithmetic</a>
-      and <a class="link" href="boost_numericconversion/definitions.html#numeric_conversion_definitions_numeric_types">user-defined
+      a target numeric type. Both <a href="boost_numericconversion/definitions.html#numeric_conversion_cpp_arithmetic_types">arithmetic</a>
+      and <a href="boost_numericconversion/definitions.html#numeric_conversion_definitions_numeric_types">user-defined
       numeric types</a> can be used.
     </p>
 <p>
-      A policy-based <a class="link" href="index.html#numeric_conversion_converter">converter</a>
+      A policy-based <a href="index.html#numeric_conversion_converter">converter</a>
       object which uses <code class="computeroutput"><span class="identifier">conversion_traits</span></code>
       to select an optimized implementation is supplied. Such implementation uses
       an optimal range checking code suitable for the source/target combination.
     </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-        The converter's out-of-range behavior can be customized via an <a class="link" href="boost_numericconversion/numeric_converter_policy_classes.html#numeric_conversion_policy_overflow_handler">OverflowHandler</a>
+        The converter's out-of-range behavior can be customized via an <a href="boost_numericconversion/numeric_converter_policy_classes.html#numeric_conversion_policy_overflow_handler">OverflowHandler</a>
         policy.
       </li>
 <li>
         For floating-point to integral conversions, the rounding mode can be selected
-        via the <a class="link" href="boost_numericconversion/numeric_converter_policy_classes.html#numeric_conversion_policy_float_to_int_rounder">Float2IntRounder</a>
+        via the <a href="boost_numericconversion/numeric_converter_policy_classes.html#numeric_conversion_policy_float_to_int_rounder">Float2IntRounder</a>
         policy.
       </li>
 <li>
         A custom low-level conversion routine (for UDTs for instance) can be passed
-        via a <a class="link" href="boost_numericconversion/numeric_converter_policy_classes.html#numeric_conversion_policy_raw_converter">RawConverter</a>
+        via a <a href="boost_numericconversion/numeric_converter_policy_classes.html#numeric_conversion_policy_raw_converter">RawConverter</a>
         policy.
       </li>
 <li>
-        The optimized automatic range-checking logic can be overridden via a <a class="link" href="boost_numericconversion/numeric_converter_policy_classes.html#numeric_conversion_policy_user_range_checker">UserRangeChecker</a>
+        The optimized automatic range-checking logic can be overridden via a <a href="boost_numericconversion/numeric_converter_policy_classes.html#numeric_conversion_policy_user_range_checker">UserRangeChecker</a>
         policy.
       </li>
 </ul></div>
@@ -178,7 +178,7 @@
   </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: March 15, 2008 at 14:03:12 GMT</small></p></td>
+<td align="left"><p><small>Last revised: February 12, 2008 at 22:56:38 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>
