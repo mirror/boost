@@ -17,7 +17,7 @@ int main()
     int x = 0;
 
     {
-		boost::detail::spinlock_pool<0>::scoped_lock lock( &x );
+        boost::detail::spinlock_pool<0>::scoped_lock lock( &x );
         ++x;
     }
 
