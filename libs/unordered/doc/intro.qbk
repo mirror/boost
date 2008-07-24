@@ -36,9 +36,7 @@ which are implemented using hash tables, and they have now been added to the
 __draft__.
 
 This library supplies an almost complete implementation of the specification in
-the __draft__, (it doesn't support `emplace` yet, see the [link
-unordered.rationale.future_developments Implementation Rationale] section for more
-details). If accepted the containers should also be added to __boost-tr1__.
+the __draft__.
 
 `unordered_set` and `unordered_multiset` are defined in the header
 <[headerref boost/unordered_set.hpp]>
