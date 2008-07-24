@@ -106,8 +106,8 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
         <itemizedlist>
           <listitem>Windows with <ulink
                        url="http://www.cygwin.com/">Cygwin</ulink>: select the libxml2 and libxslt packages.</listitem>
-          <listitem>Windows without Cygwin: Download packages <ulink url="http://www.meta-comm.com/engineering/boost/xsltproc-win32.zip">
-              here</ulink>.</listitem>
+          <listitem>Windows without Cygwin: Download the <ulink url="http://www.zlatkovic.com/pub/libxml/">binary packages</ulink>
+            from Igor Zlatkovic. At the very least, you'll need iconv, zlib, libxml2 and libxslt.</listitem>
           <listitem>Mac OS X with Fink: Get the <code>libxslt</code> package.</listitem>
           <listitem>Mac OS X without Fink: <ulink url="http://www.zveno.com/open_source/libxml2xslt.html">Download the libxslt binaries</ulink></listitem>
           <listitem>Any platform: <ulink
