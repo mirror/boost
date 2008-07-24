@@ -30,6 +30,8 @@
 #include <boost/integer_traits.hpp>  // for boost::integer_traits
 #include <boost/limits.hpp>          // for std::numeric_limits
 
+#include <boost/detail/extended_integer.hpp>  // for BOOST_HAS_XINT, etc.
+
 #include <boost/mpl/arithmetic.hpp>      // for boost::mpl::plus, divides
 #include <boost/mpl/assert.hpp>          // for BOOST_MPL_ASSERT_RELATION, etc.
 #include <boost/mpl/back.hpp>            // for boost::mpl::back
@@ -110,10 +112,8 @@ typedef boost::mpl::vector<
 #if ULONG_MAX > UINT_MAX
     , unsigned long
 #endif
-#if defined(BOOST_HAS_LONG_LONG) && ((ULLONG_MAX > ULONG_MAX) || (ULONGLONG_MAX > ULONG_MAX))
-    , boost::ulong_long_type
-#elif defined(BOOST_HAS_MS_INT64) && (0xFFFFFFFFFFFFFFFFui64 > ULONG_MAX)
-    , unsigned __int64
+#if BOOST_HAS_XINT && (BOOST_UXINT_MAX > ULONG_MAX)
+    , boost::detail::uxint_t
 #endif
 >  distinct_unsigned_types;
 
@@ -210,10 +210,8 @@ int const  integral_bit_lengths[] = {
 #if ULONG_MAX > UINT_MAX
     , std::numeric_limits< unsigned long >::digits
 #endif
-#if defined(BOOST_HAS_LONG_LONG) && ((ULLONG_MAX > ULONG_MAX) || (ULONGLONG_MAX > ULONG_MAX))
-    , std::numeric_limits< boost::ulong_long_type >::digits
-#elif defined(BOOST_HAS_MS_INT64) && (0xFFFFFFFFFFFFFFFFui64 > ULONG_MAX)
-    , std::numeric_limits< unsigned __int64 >::digits
+#if BOOST_HAS_XINT && (BOOST_UXINT_MAX > ULONG_MAX)
+    , std::numeric_limits< boost::detail::uxint_t >::digits
 #endif
 };
 

@@ -16,6 +16,8 @@
 #include <boost/cstdint.hpp>  // for boost::uintmax_t, intmax_t
 #include <boost/limits.hpp>   // for std::numeric_limits
 
+#include <boost/detail/extended_integer.hpp>  // for BOOST_HAS_XINT, etc.
+
 
 namespace boost
 {
@@ -73,12 +75,12 @@ template <  >
 template <  >
     class integer_traits< unsigned long >;
 
-#ifdef ULLONG_MAX
+#if !defined(BOOST_NO_INTEGRAL_INT64_T) && !defined(BOOST_NO_INT64_T) && BOOST_HAS_XINT
 template <  >
-    class integer_traits<  ::boost::long_long_type>;
+    class integer_traits< ::boost::detail::xint_t >;
 
 template <  >
-    class integer_traits<  ::boost::ulong_long_type >;
+    class integer_traits< ::boost::detail::uxint_t >;
 #endif
 
 
