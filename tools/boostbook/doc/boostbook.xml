@@ -186,7 +186,7 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
 
           <listitem><para>The DocBook DTD, available as a ZIP archive
           at the <ulink
-          url="http://www.oasis-open.org/docbook/xml/4.2/index.1.shtml">OASIS
+          url="http://www.oasis-open.org/docbook/xml/4.2/">OASIS
           DocBook site</ulink>. The package is called "DocBook XML
           4.2". Extract the DocBook DTD to a directory on your hard
           disk (which we'll refer to as the
