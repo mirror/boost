@@ -18,16 +18,35 @@ library will behave as claimed - at least as far as those items tested
 are concerned - if anyone spots anything that isn't being tested I'd be 
 glad to hear about it.
 
-Directory: [@../../test/regress libs/regex/test/regress].
+Files:
 
-Files: See directory.
+* [@../../test/regress/main.cpp main.cpp]
+* [@../../test/regress/basic_tests.cpp basic_tests.cpp]
+* [@../../test/regress/test_alt.cpp test_alt.cpp]
+* [@../../test/regress/test_anchors.cpp test_anchors.cpp]
+* [@../../test/regress/test_asserts.cpp test_asserts.cpp]
+* [@../../test/regress/test_backrefs.cpp test_backrefs.cpp]
+* [@../../test/regress/test_deprecated.cpp test_deprecated.cpp]
+* [@../../test/regress/test_emacs.cpp test_emacs.cpp]
+* [@../../test/regress/test_escapes.cpp test_escapes.cpp]
+* [@../../test/regress/test_grep.cpp test_grep.cpp]
+* [@../../test/regress/test_icu.cpp test_icu.cpp]
+* [@../../test/regress/test_locale.cpp test_locale.cpp]
+* [@../../test/regress/test_mfc.cpp test_mfc.cpp]
+* [@../../test/regress/test_non_greedy_repeats.cpp test_non_greedy_repeats.cpp]
+* [@../../test/regress/test_operators.cpp test_operators.cpp]
+* [@../../test/regress/test_overloads.cpp test_overloads.cpp]
+* [@../../test/regress/test_perl_ex.cpp test_perl_ex.cpp]
+* [@../../test/regress/test_replace.cpp test_replace.cpp]
+* [@../../test/regress/test_sets.cpp test_sets.cpp]
+* [@../../test/regress/test_simple_repeats.cpp test_simple_repeats.cpp]
+* [@../../test/regress/test_tricky_cases.cpp test_tricky_cases.cpp]
+* [@../../test/regress/test_unicode.cpp test_unicode.cpp]
 
 [*bad_expression_test:]
 
 Verifies that "bad" regular expressions don't cause the matcher to go into 
 infinite loops, but to throw an exception instead.
-
-Directory: [@../../test/pathology libs/regex/test/pathology].
 
 Files: [@../../test/pathology/bad_expression_test.cpp bad_expression_test.cpp].
 
@@ -35,23 +54,17 @@ Files: [@../../test/pathology/bad_expression_test.cpp bad_expression_test.cpp].
 
 Verifies that the matcher can't overrun the stack (no matter what the expression).
 
-Directory: [@../../test/pathology libs/regex/test/pathology].
-
 Files: [@../../test/pathology/recursion_test.cpp recursion_test.cpp].
 
 [*concepts:]
 
 Verifies that the library meets all documented concepts (a compile only test).
 
-Directory: [@../../test/concepts libs/regex/test/concepts].
-
 Files: [@../../test/concepts/concept_check.cpp concept_check.cpp].
 
 [*captures_test:]
 
 Test code for captures.
-
-Directory: [@../../test/captures libs/test/captures].
 
 Files: [@../../test/captures/captures_test.cpp captures_test.cpp].
 
