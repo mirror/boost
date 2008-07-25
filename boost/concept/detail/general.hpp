@@ -31,13 +31,11 @@ struct requirement
 
 struct failed {};
 
-# ifndef BOOST_NO_PARTIAL_SPECIALIZATION
 template <class Model>
 struct requirement<failed ************ Model::************>
 {
     static void failed() { ((Model*)0)->~Model(); }
 };
-# endif
 
 # ifdef BOOST_OLD_CONCEPT_SUPPORT
 
@@ -52,28 +50,17 @@ struct requirement_<void(*)(Model)>
   : mpl::if_<
         concept::not_satisfied<Model>
       , constraint<Model>
-# ifndef BOOST_NO_PARTIAL_SPECIALIZATION
       , requirement<failed ************ Model::************>
-# else
-      , requirement<Model>
-# endif 
     >::type
 {};
   
 # else
 
 // For GCC-2.x, these can't have exactly the same name
-# ifndef BOOST_NO_PARTIAL_SPECIALIZATION
 template <class Model>
 struct requirement_<void(*)(Model)>
     : requirement<failed ************ Model::************>
 {};
-# else
-template <class Model>
-struct requirement_<void(*)(Model)>
-    : requirement<Model>
-{};
-# endif 
   
 # endif
 
