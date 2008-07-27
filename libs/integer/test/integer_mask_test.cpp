@@ -8,104 +8,65 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  27 Jul 2008  Changed tests to use the unit-test system (Daryle Walker)
 //  23 Sep 2001  Initial version (Daryle Walker)
 
-#define  BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>  // for main
+#define BOOST_TEST_MODULE  "Integer mask tests"
+#include <boost/test/unit_test.hpp>  // unit testing framework
 
-#include <boost/cstdlib.hpp>               // for boost::exit_success
+#include <boost/cstdint.hpp>               // for boost::uintmax_t
 #include <boost/integer/integer_mask.hpp>  // for boost::high_bit_mask_t, etc.
+#include <boost/mpl/assert.hpp>            // for BOOST_MPL_ASSERT_RELATION
+#include <boost/mpl/range_c.hpp>           // for boost::mpl::range_c
 
-#include <iostream>  // for std::cout (std::endl indirectly)
-
-
-#define PRIVATE_HIGH_BIT_SLOW_TEST(v)  BOOST_CHECK( ::boost::high_bit_mask_t< \
- (v) >::high_bit == (1ul << (v)) );
-#define PRIVATE_HIGH_BIT_FAST_TEST(v)  BOOST_CHECK( ::boost::high_bit_mask_t< \
- (v) >::high_bit_fast == (1ul << (v)) );
-#define PRIVATE_HIGH_BIT_TEST(v)  do { PRIVATE_HIGH_BIT_SLOW_TEST(v); \
- PRIVATE_HIGH_BIT_FAST_TEST(v); } while (false)
-
-#define PRIVATE_LOW_BITS_SLOW_TEST(v)  BOOST_CHECK( ::boost::low_bits_mask_t< \
- (v) >::sig_bits == ((1ul << (v)) - 1) );
-#define PRIVATE_LOW_BITS_FAST_TEST(v)  BOOST_CHECK( ::boost::low_bits_mask_t< \
- (v) >::sig_bits_fast == ((1ul << (v)) - 1) );
-#define PRIVATE_LOW_BITS_TEST(v)  do { PRIVATE_LOW_BITS_SLOW_TEST(v); \
- PRIVATE_LOW_BITS_FAST_TEST(v); } while (false)
+#include <cstddef>   // for std::size_t
 
 
-int test_main( int, char*[] )
+// Custom types/templates, helper functions, and objects
+namespace
 {
-    using std::cout;
-    using std::endl;
 
-    cout << "Doing high_bit_mask_t tests." << endl;
-    PRIVATE_HIGH_BIT_TEST( 31 );
-    PRIVATE_HIGH_BIT_TEST( 30 );
-    PRIVATE_HIGH_BIT_TEST( 29 );
-    PRIVATE_HIGH_BIT_TEST( 28 );
-    PRIVATE_HIGH_BIT_TEST( 27 );
-    PRIVATE_HIGH_BIT_TEST( 26 );
-    PRIVATE_HIGH_BIT_TEST( 25 );
-    PRIVATE_HIGH_BIT_TEST( 24 );
-    PRIVATE_HIGH_BIT_TEST( 23 );
-    PRIVATE_HIGH_BIT_TEST( 22 );
-    PRIVATE_HIGH_BIT_TEST( 21 );
-    PRIVATE_HIGH_BIT_TEST( 20 );
-    PRIVATE_HIGH_BIT_TEST( 19 );
-    PRIVATE_HIGH_BIT_TEST( 18 );
-    PRIVATE_HIGH_BIT_TEST( 17 );
-    PRIVATE_HIGH_BIT_TEST( 16 );
-    PRIVATE_HIGH_BIT_TEST( 15 );
-    PRIVATE_HIGH_BIT_TEST( 14 );
-    PRIVATE_HIGH_BIT_TEST( 13 );
-    PRIVATE_HIGH_BIT_TEST( 12 );
-    PRIVATE_HIGH_BIT_TEST( 11 );
-    PRIVATE_HIGH_BIT_TEST( 10 );
-    PRIVATE_HIGH_BIT_TEST(  9 );
-    PRIVATE_HIGH_BIT_TEST(  8 );
-    PRIVATE_HIGH_BIT_TEST(  7 );
-    PRIVATE_HIGH_BIT_TEST(  6 );
-    PRIVATE_HIGH_BIT_TEST(  5 );
-    PRIVATE_HIGH_BIT_TEST(  4 );
-    PRIVATE_HIGH_BIT_TEST(  3 );
-    PRIVATE_HIGH_BIT_TEST(  2 );
-    PRIVATE_HIGH_BIT_TEST(  1 );
-    PRIVATE_HIGH_BIT_TEST(  0 );
+// A big one
+boost::uintmax_t const  one = 1u;
 
-    cout << "Doing low_bits_mask_t tests." << endl;
-    PRIVATE_LOW_BITS_TEST( 32 );  // Undefined behavior?  Whoops!
-    PRIVATE_LOW_BITS_TEST( 31 );
-    PRIVATE_LOW_BITS_TEST( 30 );
-    PRIVATE_LOW_BITS_TEST( 29 );
-    PRIVATE_LOW_BITS_TEST( 28 );
-    PRIVATE_LOW_BITS_TEST( 27 );
-    PRIVATE_LOW_BITS_TEST( 26 );
-    PRIVATE_LOW_BITS_TEST( 25 );
-    PRIVATE_LOW_BITS_TEST( 24 );
-    PRIVATE_LOW_BITS_TEST( 23 );
-    PRIVATE_LOW_BITS_TEST( 22 );
-    PRIVATE_LOW_BITS_TEST( 21 );
-    PRIVATE_LOW_BITS_TEST( 20 );
-    PRIVATE_LOW_BITS_TEST( 19 );
-    PRIVATE_LOW_BITS_TEST( 18 );
-    PRIVATE_LOW_BITS_TEST( 17 );
-    PRIVATE_LOW_BITS_TEST( 16 );
-    PRIVATE_LOW_BITS_TEST( 15 );
-    PRIVATE_LOW_BITS_TEST( 14 );
-    PRIVATE_LOW_BITS_TEST( 13 );
-    PRIVATE_LOW_BITS_TEST( 12 );
-    PRIVATE_LOW_BITS_TEST( 11 );
-    PRIVATE_LOW_BITS_TEST( 10 );
-    PRIVATE_LOW_BITS_TEST(  9 );
-    PRIVATE_LOW_BITS_TEST(  8 );
-    PRIVATE_LOW_BITS_TEST(  7 );
-    PRIVATE_LOW_BITS_TEST(  6 );
-    PRIVATE_LOW_BITS_TEST(  5 );
-    PRIVATE_LOW_BITS_TEST(  4 );
-    PRIVATE_LOW_BITS_TEST(  3 );
-    PRIVATE_LOW_BITS_TEST(  2 );
-    PRIVATE_LOW_BITS_TEST(  1 );
+// List the ranges of template parameters tests (ranges are half-open)
+typedef boost::mpl::range_c<std::size_t, 0u, 32u>  high_bit_offsets;
+typedef boost::mpl::range_c<std::size_t, 1u, 33u>  low_bit_lengths;
 
-    return boost::exit_success;
+}  // unnamed namespace
+
+
+// Check the various integer-valued bit-masks
+BOOST_AUTO_TEST_SUITE( integer_mask_tests )
+
+// Check the bit-masks of one offset bit
+BOOST_AUTO_TEST_CASE_TEMPLATE( high_bit_mask_test, T, high_bit_offsets )
+{
+    BOOST_MPL_ASSERT_RELATION( boost::high_bit_mask_t<T::value>::high_bit, ==,
+     (one << T::value) );
+    BOOST_MPL_ASSERT_RELATION( boost::high_bit_mask_t<T::value>::high_bit_fast,
+     ==, (one << T::value) );
 }
+
+// Check the bit-masks of a block of low-valued bits
+BOOST_AUTO_TEST_CASE_TEMPLATE( low_bits_mask_test, T, low_bit_lengths )
+{
+    // One can express (2^x - 1) in two ways
+    // 1. (1 << x) - 1
+    // 2. (1 << (x-1)) | ((1 << (x-1)) - 1)
+    // Since unsigneds have modulo arithmetic, [1] gives the right answer even
+    // when x is the number of bits in the register.  However, that last case
+    // gives warnings about the sole bit flowing past the register.  Applying
+    // distributive property backwards gives [2], which works without overflow.
+    BOOST_MPL_ASSERT_RELATION( boost::low_bits_mask_t<T::value>::sig_bits, ==,
+     (one << ( T::value - 1u )) | (( one << (T::value - 1u) ) - 1u) );
+    BOOST_MPL_ASSERT_RELATION( boost::low_bits_mask_t<T::value>::sig_bits_fast,
+     ==, (one << ( T::value - 1u )) | (( one << (T::value - 1u) ) - 1u) );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+// Verification of bugs and their fixes
+BOOST_AUTO_TEST_SUITE( bug_fix_tests )
+
+BOOST_AUTO_TEST_SUITE_END()
