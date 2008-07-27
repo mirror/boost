@@ -8,7 +8,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
-//  27 Jul 2008  Changed tests to use the unit-test system (Daryle Walker)
+//  27 Jul 2008  Changed tests to use the unit-test system; added
+//               extended-integer support. (Daryle Walker)
 //  23 Sep 2001  Initial version (Daryle Walker)
 
 #define BOOST_TEST_MODULE  "Integer mask tests"
@@ -16,6 +17,7 @@
 
 #include <boost/cstdint.hpp>               // for boost::uintmax_t
 #include <boost/integer/integer_mask.hpp>  // for boost::high_bit_mask_t, etc.
+#include <boost/limits.hpp>                // for std::numeric_limits
 #include <boost/mpl/assert.hpp>            // for BOOST_MPL_ASSERT_RELATION
 #include <boost/mpl/range_c.hpp>           // for boost::mpl::range_c
 
@@ -30,8 +32,10 @@ namespace
 boost::uintmax_t const  one = 1u;
 
 // List the ranges of template parameters tests (ranges are half-open)
-typedef boost::mpl::range_c<std::size_t, 0u, 32u>  high_bit_offsets;
-typedef boost::mpl::range_c<std::size_t, 1u, 33u>  low_bit_lengths;
+int const  max_offset = std::numeric_limits<boost::uintmax_t>::digits;
+
+typedef boost::mpl::range_c<std::size_t, 0, max_offset>     high_bit_offsets;
+typedef boost::mpl::range_c<std::size_t, 1, max_offset + 1>  low_bit_lengths;
 
 }  // unnamed namespace
 

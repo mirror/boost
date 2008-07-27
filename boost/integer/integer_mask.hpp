@@ -15,6 +15,8 @@
 #include <boost/config.hpp>   // for BOOST_STATIC_CONSTANT
 #include <boost/integer.hpp>  // for boost::uint_t
 
+#include <boost/detail/extended_integer.hpp>  // for BOOST_HAS_XINT, etc.
+
 #include <climits>  // for UCHAR_MAX, etc.
 #include <cstddef>  // for std::size_t
 
@@ -82,6 +84,10 @@ BOOST_LOW_BITS_MASK_SPECIALIZE( unsigned int );
 
 #if ULONG_MAX > UINT_MAX
 BOOST_LOW_BITS_MASK_SPECIALIZE( unsigned long );
+#endif
+
+#if BOOST_HAS_XINT && (BOOST_UXINT_MAX > ULONG_MAX)
+BOOST_LOW_BITS_MASK_SPECIALIZE( ::boost::detail::uxint_t );
 #endif
 
 #undef BOOST_LOW_BITS_MASK_SPECIALIZE

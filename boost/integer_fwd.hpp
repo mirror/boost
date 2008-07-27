@@ -155,6 +155,12 @@ template <  >
     struct low_bits_mask_t< ::std::numeric_limits<unsigned long>::digits >;
 #endif
 
+#if BOOST_HAS_XINT && (BOOST_UXINT_MAX > ULONG_MAX)
+template <  >
+    struct low_bits_mask_t< ::std::numeric_limits< ::boost::detail::uxint_t
+     >::digits >;
+#endif
+
 
 //  From <boost/integer/static_log2.hpp>  ------------------------------------//
 
