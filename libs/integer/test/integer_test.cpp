@@ -44,6 +44,7 @@
 #include <boost/mpl/push_back.hpp>       // for boost::mpl::push_back 
 #include <boost/mpl/push_front.hpp>      // for boost::mpl::push_front
 #include <boost/mpl/range_c.hpp>         // for boost::mpl::range_c
+#include <boost/mpl/shift_right.hpp>     // for boost::mpl::shift_right
 #include <boost/mpl/sort.hpp>            // for boost::mpl::sort
 #include <boost/mpl/transform.hpp>       // for boost::mpl::transform
 #include <boost/mpl/transform_view.hpp>  // for boost::mpl::transform_view
@@ -289,6 +290,19 @@ print_out_template( T const &, ValueT setting, char const *template_pre_name,
 #else
 #error "These tests cannot work without Substitution-Failure-Is-Not-An-Error"
 #endif
+
+// Get the extreme values for each integral type
+template < typename T >
+struct minimum_of
+    : boost::mpl::integral_c< T, boost::integer_traits<T>::const_min >
+{
+};
+
+template < typename T >
+struct maximum_of
+    : boost::mpl::integral_c< T, boost::integer_traits<T>::const_max >
+{
+};
 
 }  // unnamed namespace
 
@@ -617,13 +631,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_shifted_unsigned_values_test, T,
     // 64) elements, so we have to take selected values.
     using boost::uintmax_t;
 
-    static  uintmax_t const  maxi = boost::integer_traits<uintmax_t>::const_max
-     >> T::value;
+    typedef boost::mpl::shift_right<maximum_of<uintmax_t>, T>  maxi_type;
+
+    uintmax_t const  maxi = maxi_type::value;
 
     BOOST_CHECK_EQUAL( static_cast<typename
-     boost::uint_value_t<maxi>::least>(maxi), maxi );
+     boost::uint_value_t<maxi_type::value>::least>(maxi), maxi );
     BOOST_CHECK_EQUAL( static_cast<typename
-     boost::uint_value_t<maxi>::fast>(maxi), maxi );
+     boost::uint_value_t<maxi_type::value>::fast>(maxi), maxi );
 }
 
 // Check if large value can fit its minimum required size, by value, signed
@@ -646,20 +661,20 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fit_for_shifted_signed_values_test, T,
     // 64) elements, so we have to take selected values.
     using boost::intmax_t;
 
-    typedef boost::integer_traits<intmax_t>  intmax_traits;
+    typedef boost::mpl::shift_right<minimum_of<intmax_t>, T>  mini_type;
+    typedef boost::mpl::shift_right<maximum_of<intmax_t>, T>  maxi_type;
 
-    static  intmax_t const  maxi = intmax_traits::const_max >> T::value,
-                            mini = intmax_traits::const_min >> T::value;
-
-    BOOST_CHECK_EQUAL( static_cast<typename
-     boost::int_max_value_t<maxi>::least>(maxi), maxi );
-    BOOST_CHECK_EQUAL( static_cast<typename
-     boost::int_max_value_t<maxi>::fast>(maxi), maxi );
+    intmax_t const  maxi = maxi_type::value, mini = mini_type::value;
 
     BOOST_CHECK_EQUAL( static_cast<typename
-     boost::int_min_value_t<mini>::least>(mini), mini );
+     boost::int_max_value_t<maxi_type::value>::least>(maxi), maxi );
     BOOST_CHECK_EQUAL( static_cast<typename
-     boost::int_min_value_t<mini>::fast>(mini), mini );
+     boost::int_max_value_t<maxi_type::value>::fast>(maxi), maxi );
+
+    BOOST_CHECK_EQUAL( static_cast<typename
+     boost::int_min_value_t<mini_type::value>::least>(mini), mini );
+    BOOST_CHECK_EQUAL( static_cast<typename
+     boost::int_min_value_t<mini_type::value>::fast>(mini), mini );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
