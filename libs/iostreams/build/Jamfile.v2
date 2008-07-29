@@ -115,7 +115,7 @@ rule create-library ( library-name : windows-name unix-name : sources + : requir
 }
 
 
-local sources = file_descriptor.cpp mapped_file.cpp file_times.cpp ;
+local sources = file_descriptor.cpp mapped_file.cpp ;
 local z = [ create-library zlib : zll z : adler32 compress 
      crc32 deflate gzio infback inffast inflate inftrees trees uncompr zutil :
      <link>shared:<define>ZLIB_DLL ] ;

@@ -15,7 +15,6 @@
 # pragma once
 #endif
 
-#include <ctime>
 #include <string>
 #include <boost/cstdint.hpp>               // intmax_t.
 #include <boost/iostreams/categories.hpp>  // tags.
@@ -23,7 +22,6 @@
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/config/windows_posix.hpp>
 #include <boost/iostreams/detail/file_handle.hpp>
-#include <boost/iostreams/detail/file_times.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // openmode, seekdir, int types.
 #include <boost/iostreams/detail/path.hpp>
 #include <boost/iostreams/positioning.hpp>
@@ -111,10 +109,6 @@ public:
     std::streamsize write(const char_type* s, std::streamsize n);
     std::streampos seek(stream_offset off, BOOST_IOS::seekdir way);
     handle_type handle() const;
-    std::time_t last_read_time() const;
-    void set_last_read_time(std::time_t) const;
-    std::time_t last_write_time() const;
-    void set_last_write_time(std::time_t) const;
 private:
     void init();
 
@@ -145,10 +139,6 @@ public:
     using file_descriptor::read;
     using file_descriptor::seek;
     using file_descriptor::handle;
-    using file_descriptor::last_read_time;
-    using file_descriptor::set_last_read_time;
-    using file_descriptor::last_write_time;
-    using file_descriptor::set_last_write_time;
 
     // Default constructor
     file_descriptor_source() { }
@@ -215,10 +205,6 @@ public:
     using file_descriptor::write;
     using file_descriptor::seek;
     using file_descriptor::handle;
-    using file_descriptor::last_read_time;
-    using file_descriptor::set_last_read_time;
-    using file_descriptor::last_write_time;
-    using file_descriptor::set_last_write_time;
 
     // Default constructor
     file_descriptor_sink() { }

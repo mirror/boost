@@ -10,7 +10,6 @@
 
 #include <boost/config.hpp>                   // make sure size_t is in std.
 #include <cstddef>                            // size_t.
-#include <ctime>                              // size_t.
 #include <string>                             // pathnames.
 #include <utility>                            // pair.
 #include <boost/config.hpp>                   // BOOST_MSVC.
@@ -202,13 +201,6 @@ public:
     iterator begin() const;
     iterator end() const;
 
-    //--------------File access and modification times------------------------//
-
-    std::time_t last_read_time() const;
-    void set_last_read_time(std::time_t) const;
-    std::time_t last_write_time() const;
-    void set_last_write_time(std::time_t) const;
-
     //--------------Query admissible offsets----------------------------------//
 
     // Returns the allocation granularity for virtual memory. Values passed
@@ -321,10 +313,6 @@ public:
     //--------------File access----------------------------------------------//
 
     void resize(stream_offset new_size);
-    std::time_t last_read_time() const;
-    void set_last_read_time(std::time_t) const;
-    std::time_t last_write_time() const;
-    void set_last_write_time(std::time_t) const;
 private:
     delegate_type delegate_;
 };
@@ -358,10 +346,6 @@ public:
     using mapped_file::end;
     using mapped_file::alignment;
     using mapped_file::resize;
-    using mapped_file::last_read_time;
-    using mapped_file::set_last_read_time;
-    using mapped_file::last_write_time;
-    using mapped_file::set_last_write_time;
 
     // Default constructor
     mapped_file_sink() { }

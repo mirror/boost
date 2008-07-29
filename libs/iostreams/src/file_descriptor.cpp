@@ -59,10 +59,6 @@ struct file_descriptor_impl {
     std::streamsize read(char* s, std::streamsize n);
     std::streamsize write(const char* s, std::streamsize n);
     std::streampos seek(stream_offset off, BOOST_IOS::seekdir way);
-    std::time_t last_read_time() const;
-    void set_last_read_time(std::time_t) const;
-    std::time_t last_write_time() const;
-    void set_last_write_time(std::time_t) const;
     static file_handle invalid_handle();
     enum flags {
         close_on_exit = 1,
@@ -297,18 +293,6 @@ std::streampos file_descriptor_impl::seek
 #endif // #ifdef BOOST_IOSTREAMS_WINDOWS
 }
 
-std::time_t file_descriptor_impl::last_read_time() const
-{ return detail::last_read_time(handle_); }
-
-void file_descriptor_impl::set_last_read_time(std::time_t tm) const
-{ detail::set_last_read_time(handle_, tm); }
-
-std::time_t file_descriptor_impl::last_write_time() const
-{ return detail::last_write_time(handle_); }
-
-void file_descriptor_impl::set_last_write_time(std::time_t tm) const
-{ detail::set_last_write_time(handle_, tm); }
-
 // Returns the value stored in a file_handle variable when no file is open
 file_handle file_descriptor_impl::invalid_handle()
 {
@@ -381,18 +365,6 @@ std::streampos file_descriptor::seek(stream_offset off, BOOST_IOS::seekdir way)
 { return pimpl_->seek(off, way); }
 
 detail::file_handle file_descriptor::handle() const { return pimpl_->handle_; }
-
-std::time_t file_descriptor::last_read_time() const
-{ return pimpl_->last_read_time(); }
-
-void file_descriptor::set_last_read_time(std::time_t tm) const
-{ pimpl_->set_last_read_time(tm); }
-
-std::time_t file_descriptor::last_write_time() const
-{ return pimpl_->last_write_time(); }
-
-void file_descriptor::set_last_write_time(std::time_t tm) const
-{ pimpl_->set_last_write_time(tm); }
 
 void file_descriptor::init() { pimpl_.reset(new impl_type); }
 

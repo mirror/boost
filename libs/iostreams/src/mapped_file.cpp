@@ -12,14 +12,12 @@
 #include <boost/iostreams/detail/config/rtl.hpp>
 #include <boost/iostreams/detail/config/windows_posix.hpp>
 #include <boost/iostreams/detail/file_handle.hpp>
-#include <boost/iostreams/detail/file_times.hpp>
 #include <boost/iostreams/detail/system_failure.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
 
 #ifdef BOOST_IOSTREAMS_WINDOWS
 # define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
 # include <windows.h>
-# include <time.h>
 #else
 # include <errno.h>
 # include <fcntl.h>
@@ -58,10 +56,6 @@ public:
     std::size_t size() const { return size_; }
     char* data() const { return data_; }
 	void resize(stream_offset new_size);
-    std::time_t last_read_time() const;
-    void set_last_read_time(std::time_t) const;
-    std::time_t last_write_time() const;
-    void set_last_write_time(std::time_t) const;
     static int alignment();
 private:
     void open_file(param_type p);
@@ -146,18 +140,6 @@ void mapped_file_impl::resize(stream_offset new_size)
     map_file(p);  // May modify p.hint
     params_ = p;
 }
-
-std::time_t mapped_file_impl::last_read_time() const
-{ return detail::last_read_time(handle_); }
-
-void mapped_file_impl::set_last_read_time(std::time_t tm) const
-{ detail::set_last_read_time(handle_, tm); }
-
-std::time_t mapped_file_impl::last_write_time() const
-{ return detail::last_write_time(handle_); }
-
-void mapped_file_impl::set_last_write_time(std::time_t tm) const
-{ detail::set_last_write_time(handle_, tm); }
 
 int mapped_file_impl::alignment()
 {
@@ -469,19 +451,6 @@ const char* mapped_file_source::data() const { return pimpl_->data(); }
 const char* mapped_file_source::begin() const { return data(); }
 
 const char* mapped_file_source::end() const { return data() + size(); }
-
-std::time_t mapped_file_source::last_read_time() const
-{ return pimpl_->last_read_time(); }
-
-void mapped_file_source::set_last_read_time(std::time_t tm) const
-{ pimpl_->set_last_read_time(tm); }
-
-std::time_t mapped_file_source::last_write_time() const
-{ return pimpl_->last_write_time(); }
-
-void mapped_file_source::set_last_write_time(std::time_t tm) const
-{ pimpl_->set_last_write_time(tm); }
-
 int mapped_file_source::alignment()
 { return detail::mapped_file_impl::alignment(); }
 
@@ -498,18 +467,6 @@ mapped_file::mapped_file(const mapped_file& other)
 
 void mapped_file::resize(stream_offset new_size)
 { delegate_.pimpl_->resize(new_size); }
-
-std::time_t mapped_file::last_read_time() const
-{ return delegate_.pimpl_->last_read_time(); }
-
-void mapped_file::set_last_read_time(std::time_t tm) const
-{ delegate_.pimpl_->set_last_read_time(tm); }
-
-std::time_t mapped_file::last_write_time() const
-{ return delegate_.pimpl_->last_write_time(); }
-
-void mapped_file::set_last_write_time(std::time_t tm) const
-{ delegate_.pimpl_->set_last_write_time(tm); }
 
 //------------------Implementation of mapped_file_sink------------------------//
 
