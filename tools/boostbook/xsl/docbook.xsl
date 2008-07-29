@@ -421,7 +421,7 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
 
   <!-- These DocBook elements have special meaning. Use the annotation mode -->
   <xsl:template match="classname|methodname|functionname|enumname|
-                       macroname|headername">
+                       macroname|headername|globalname">
     <computeroutput>
       <xsl:apply-templates select="." mode="annotation"/>
     </computeroutput>
