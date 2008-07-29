@@ -136,6 +136,8 @@ namespace quickbook
         markup_action           headerref_post;
         link_action             conceptref_pre;
         markup_action           conceptref_post;
+        link_action             globalref_pre;
+        markup_action           globalref_post;
 
         markup_action           bold_pre;
         markup_action           bold_post;
