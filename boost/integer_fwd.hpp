@@ -9,12 +9,10 @@
 #ifndef BOOST_INTEGER_FWD_HPP
 #define BOOST_INTEGER_FWD_HPP
 
-#include <climits>  // for UCHAR_MAX, etc.
 #include <cstddef>  // for std::size_t
 
-#include <boost/config.hpp>   // for BOOST_NO_INTRINSIC_WCHAR_T
+#include <boost/config.hpp>   // for BOOST_NO_INTRINSIC_WCHAR_T, etc.
 #include <boost/cstdint.hpp>  // for boost::uintmax_t, intmax_t
-#include <boost/limits.hpp>   // for std::numeric_limits
 
 #include <boost/detail/extended_integer.hpp>  // for BOOST_HAS_XINT, etc.
 
@@ -131,35 +129,17 @@ template< uintmax_t Value >
 
 //  From <boost/integer/integer_mask.hpp>  -----------------------------------//
 
+template < int Offset >
+    struct integer_hi_mask;
+
+template < int Length >
+    struct integer_lo_mask;
+
 template < std::size_t Bit >
-    struct high_bit_mask_t;
+    class high_bit_mask_t;
 
 template < std::size_t Bits >
-    struct low_bits_mask_t;
-
-template <  >
-    struct low_bits_mask_t< ::std::numeric_limits<unsigned char>::digits >;
-
-#if USHRT_MAX > UCHAR_MAX
-template <  >
-    struct low_bits_mask_t< ::std::numeric_limits<unsigned short>::digits >;
-#endif
-
-#if UINT_MAX > USHRT_MAX
-template <  >
-    struct low_bits_mask_t< ::std::numeric_limits<unsigned int>::digits >;
-#endif
-
-#if ULONG_MAX > UINT_MAX
-template <  >
-    struct low_bits_mask_t< ::std::numeric_limits<unsigned long>::digits >;
-#endif
-
-#if BOOST_HAS_XINT && (BOOST_UXINT_MAX > ULONG_MAX)
-template <  >
-    struct low_bits_mask_t< ::std::numeric_limits< ::boost::detail::uxint_t
-     >::digits >;
-#endif
+    class low_bits_mask_t;
 
 
 //  From <boost/integer/static_log2.hpp>  ------------------------------------//
