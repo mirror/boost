@@ -72,7 +72,7 @@
     [
         [Can be compared using the `==`, `!=`, `<`, `<=`, `>`, `>=` operators.]
         [No comparison operators are defined in the standard, although
-            [link unordered.rationale.equality_operator
+            [link unordered.rationale.equality_operators
             implementations might extend the containers to support `==` and
             `!=`].]
     ]

@@ -96,7 +96,7 @@ efficiency advantage of power of 2 hash tables.
 
 So, this implementation uses a prime number for the hash table size.
 
-[h2 Equality operators and hash functions]
+[h2 Equality operators]
 
 `operator==` and `operator!=` are not included in the standard, but I've
 added them as I think they could be useful and can be efficiently
