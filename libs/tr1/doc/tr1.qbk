@@ -867,7 +867,7 @@ or
    #include <utility>
 
 The existing class template std::pair, can also be accessed using the 
-[link boost_tr1.tuple tuple interface].
+[link boost_tr1.subject_list.tuple tuple interface].
    
    namespace std {
    namespace tr1 {
@@ -1582,85 +1582,85 @@ Not supported.
 
 [section:array_header <array>]
 
-See: [link boost_tr1.array Fixed Size Array]
+See: [link boost_tr1.subject_list.array Fixed Size Array]
 
 [endsect]
 
 [section:cmath_header <cmath>]
 
-See: [link boost_tr1.special Special Functions]
+See: [link boost_tr1.unsupported.special Special Functions]
 
 [endsect]
 
 [section:complex_header <complex>]
 
-See: [link boost_tr1.complex Additional Overloads for Complex Number Algorithms]
+See: [link boost_tr1.subject_list.complex Additional Overloads for Complex Number Algorithms]
 
-See: [link boost_tr1.complex_trig Additional Complex Number Algorithms]
+See: [link boost_tr1.subject_list.complex_trig Additional Complex Number Algorithms]
 
 [endsect]
 
 [section:functional <functional>]
 
-See: [link boost_tr1.ref Reference Wrapper].
+See: [link boost_tr1.subject_list.ref Reference Wrapper].
 
-See: [link boost_tr1.result_of Result_of].
+See: [link boost_tr1.subject_list.result_of Result_of].
 
-See: [link boost_tr1.mem_fn Member Function Wrappers].
+See: [link boost_tr1.subject_list.mem_fn Member Function Wrappers].
 
-See: [link boost_tr1.bind Function Binders].
+See: [link boost_tr1.subject_list.bind Function Binders].
 
-See: [link boost_tr1.function Polymorphic Function Wrappers].
+See: [link boost_tr1.subject_list.function Polymorphic Function Wrappers].
 
-See: [link boost_tr1.hash Hash Functions].
+See: [link boost_tr1.subject_list.hash Hash Functions].
 
 [endsect]
 
 [section:memory <memory>]
 
-See: [link boost_tr1.ptrs Smart Pointers].
+See: [link boost_tr1.subject_list.ptrs Smart Pointers].
 
 [endsect]
 
 [section:random_header <random>]
 
-See: [link boost_tr1.random Random Numbers].
+See: [link boost_tr1.subject_list.random Random Numbers].
 
 [endsect]
 
 [section:regex_header <regex>]
 
-See: [link boost_tr1.regex Regular Expressions].
+See: [link boost_tr1.subject_list.regex Regular Expressions].
 
 [endsect]
 
 [section:tuple_header <tuple>]
 
-See: [link boost_tr1.tuple Tuple Types].
+See: [link boost_tr1.subject_list.tuple Tuple Types].
 
 [endsect]
 
 [section:type_traits_header <type_traits>]
 
-See: [link boost_tr1.type_traits Type Traits].
+See: [link boost_tr1.subject_list.type_traits Type Traits].
 
 [endsect]
 
 [section:unordered_map_header <unordered_map>]
 
-See: [link boost_tr1.unordered_map Unordered Associative Map]
+See: [link boost_tr1.unsupported.unordered_map Unordered Associative Map]
 
 [endsect]
 
 [section:unordered_set_header <unordered_set>]
 
-See: [link boost_tr1.unordered_set Unordered Associative Set].
+See: [link boost_tr1.unsupported.unordered_set Unordered Associative Set].
 
 [endsect]
 
 [section:utility_header <utility>]
 
-See: [link boost_tr1.utility  Tuple Interface to std::pair].
+See: [link boost_tr1.subject_list.utility  Tuple Interface to std::pair].
 
 [endsect]
 
