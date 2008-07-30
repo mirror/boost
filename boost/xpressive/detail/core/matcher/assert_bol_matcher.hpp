@@ -43,7 +43,7 @@ namespace boost { namespace xpressive { namespace detail
                     return false;
                 }
             }
-            else if(!this->is_line_break(state))
+            else if(!this->is_line_break(state, state.cur_))
             {
                 return false;
             }

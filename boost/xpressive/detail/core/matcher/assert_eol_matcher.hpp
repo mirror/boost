@@ -13,6 +13,7 @@
 # pragma once
 #endif
 
+#include <boost/next_prior.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/quant_style.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
@@ -43,7 +44,7 @@ namespace boost { namespace xpressive { namespace detail
                     return false;
                 }
             }
-            else if((state.bos() && !state.flags_.match_prev_avail_) || !this->is_line_break(state))
+            else if((state.bos() && !state.flags_.match_prev_avail_) || !this->is_line_break(state, boost::next(state.cur_)))
             {
                 return false;
             }
