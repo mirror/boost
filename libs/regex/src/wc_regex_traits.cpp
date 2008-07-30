@@ -23,7 +23,8 @@
 #include <memory>
 #include <string>
 
-#if defined(_DLL_CPPLIB) && !defined(_M_CEE_PURE)
+#if defined(_DLL_CPPLIB) && !defined(_M_CEE_PURE) \
+   && !(defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION) || defined(__STD_RWCOMPILER_H__) || defined(_RWSTD_VER))
 //
 // This is a horrible workaround, but without declaring these symbols extern we get
 // duplicate symbol errors when linking if the application is built without
@@ -38,7 +39,7 @@
 namespace std{
 
 #if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
-template BOOST_REGEX_STDLIB_DECL allocator<unsigned short>::allocator();
+template class BOOST_REGEX_STDLIB_DECL allocator<unsigned short>;
 template class BOOST_REGEX_STDLIB_DECL _String_val<unsigned short, allocator<unsigned short> >;
 template class BOOST_REGEX_STDLIB_DECL basic_string<unsigned short, char_traits<unsigned short>,
 	allocator<unsigned short> >;
