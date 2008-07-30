@@ -149,7 +149,7 @@ even if these do not have the <span class="literal">'ll'</span> suffix.</p>
 </table>
 <P dir="ltr"><b><a name="using_custom_lexer"></a>Using a different token type or lexer type in conjunction with Wave </b></P>
 <P dir="ltr">It is possible to use the <tt>Wave</tt> library while using your own token and/or lexer types. This may be achieved by providing your lexer type as the second template parameter while instantiating the <tt>boost::wave::context&lt;&gt;</tt> object. The token type used by the library is derived from the <tt>token_type</tt> typedef to be provided by the lexer type. If you want to provide your own token type only, you may use the <tt>boost::wave::lex_iterator&lt;&gt;</tt> type contained with the library. This type needs to be parametrized with the token type to use. </P>
-<P dir="ltr">To show, how this may be done, the <tt>Wave</tt> library contains several samples illustrating this possibility. The <tt>cpp_tokens</tt> sample shows the usage of a custom lexer and a custom token types. The lexer type used is functionally fully compatible to the <tt>re2c</tt> <a href="references.html#re2c">[3]</a> based lexer used by default. It is implemented based on the <tt>SLex</tt> <a href="references.html#slex">[5]</a> lexer example written by Dan Nuffer. The token type used therein is functionally equivalent to the default token type except for an additional <tt>operator&lt;&lt;</tt> used for dumping the information carried by the token.</P>
+<P dir="ltr">The <tt>Wave</tt> library contains several samples illustrating these possibilities. The <tt>cpp_tokens</tt> sample shows the usage of a custom lexer and a custom token types. The lexer type used is functionally fully compatible to the <tt>re2c</tt> <a href="references.html#re2c">[3]</a> based lexer used by default. It is implemented based on the <tt>SLex</tt> <a href="references.html#slex">[5]</a> lexer example written by Dan Nuffer. The token type used therein is functionally equivalent to the default token type except for an additional <tt>operator&lt;&lt;</tt> used for dumping the information carried by the token.</P>
 <P dir="ltr"><b><a name="compilation_models"></a>Separation and inclusion compilation 
   models</b></P>
 <P dir="ltr">The <tt>Wave</tt> C++ preprocessor iterator library is build almost 
@@ -219,8 +219,8 @@ even if these do not have the <span class="literal">'ll'</span> suffix.</p>
     <td width="75%" class="table_cells"> <p><code><span class="keyword">template</span> wave::grammars::expression_grammar_gen&lt<tt>TokenT</tt>&gt;;<br>
         <span class="keyword"> template</span> wave::grammars::intlit_grammar_gen&lt;<tt>TokenT</tt>&gt;;<br>
         <span class="keyword"> template</span> wave::grammars::chlit_grammar_gen&lt;<tt>TokenT</tt>&gt;;<br>
-        <span class="keyword"> <code>template</code><code></code><code> wave::grammars::cpp_grammar_gen&lt;<tt>LexIteratorT</tt>&gt;;<br>
-        </code>template</span> wave::grammars::predefined_macros_grammar_gen&lt;<tt>LexIteratorT</tt>&gt;;<br>
+        <span class="keyword"> template</span> wave::grammars::cpp_grammar_gen&lt;<tt>LexIteratorT</tt>&gt;;<br>
+        <span class="keyword"> template</span> wave::grammars::predefined_macros_grammar_gen&lt;<tt>LexIteratorT</tt>&gt;;<br>
     <span class="keyword"> template</span> wave::grammars::defined_grammar_gen&lt;<tt>LexIteratorT</tt>&gt;;</code></p></td>
   </tr>
 </table>
@@ -244,7 +244,7 @@ even if these do not have the <span class="literal">'ll'</span> suffix.</p>
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Wednesday, January 31, 2008  16:50<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Tuesday, July 29, 2008  20:38<!-- #EndDate -->
 </span></p>
 </body>
 </html>
