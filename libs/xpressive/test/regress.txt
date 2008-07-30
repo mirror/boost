@@ -3724,3 +3724,17 @@ pat=.$
 flg=
 br0=i
 [end]
+
+[track2157.5]
+str=abc\r\ndef\r\nghi
+pat=^.+$
+flg=m
+br0=abc
+[end]
+
+[track2157.6]
+str=abc\r\ndef\r\nghi
+pat=.$
+flg=m
+br0=c
+[end]

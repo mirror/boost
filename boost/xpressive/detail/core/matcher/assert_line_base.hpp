@@ -38,26 +38,6 @@ namespace boost { namespace xpressive { namespace detail
         {
         }
 
-        template<typename BidiIter>
-        bool is_line_break(match_state<BidiIter> &state, BidiIter where) const
-        {
-            BOOST_ASSERT(where != state.begin_ || state.flags_.match_prev_avail_);
-            BidiIter tmp = where;
-            char_type ch = *--tmp;
-
-            if(traits_cast<Traits>(state).isctype(ch, this->newline_))
-            {
-                // there is no line-break between \r and \n
-                if(this->cr_ != ch || where == state.end_ || this->nl_ != *where)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-    private:
         char_class_type newline_;
         char_type nl_, cr_;
     };
