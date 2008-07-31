@@ -115,13 +115,13 @@ struct compiler_traits
         case BOOST_XPR_CHAR_(char_type, ')'): ++begin; return token_group_end;
         case BOOST_XPR_CHAR_(char_type, '|'): ++begin; return token_alternate;
         case BOOST_XPR_CHAR_(char_type, '['): ++begin; return token_charset_begin;
-        case BOOST_XPR_CHAR_(char_type, ']'): ++begin; return token_charset_end;
 
         case BOOST_XPR_CHAR_(char_type, '*'):
         case BOOST_XPR_CHAR_(char_type, '+'):
         case BOOST_XPR_CHAR_(char_type, '?'):
             return token_invalid_quantifier;
 
+        case BOOST_XPR_CHAR_(char_type, ']'):
         case BOOST_XPR_CHAR_(char_type, '{'):
         default:
             return token_literal;
