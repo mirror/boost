@@ -173,6 +173,11 @@ bool get_test()
     {
         std::getline(in, line);
 
+        if(!line.empty() && '\r' == line[line.size()-1])
+        {
+            line.erase(line.size()-1);
+        }
+
         if(regex_match(line, what, rx_sec))
         {
             if(!first)
