@@ -1203,8 +1203,12 @@ Options are provided for forcing implicit conversions between specific units to 
 
 [section:Acknowledgements Acknowledgements]
 
-Thanks to David Walthall for his assistance in debugging and
-testing on a variety of platforms.
+Matthias C. Schabel would like to acknowledge the Department of Defense for its support of this work under 
+the Prostate Cancer Research Program New Investigator Award W81XWH-04-1-0042 and the National Institutes of Health for their
+support of this work under the NIBIB Mentored Quantitative Research Development Award K25EB005077.
+
+Thanks to David Walthall for his assistance in debugging and testing on a variety of platforms and Torsten Maehne for
+his work on interfacing the Boost Units and Boost Lambda libraries.
 
 Thanks to:
 
@@ -1240,9 +1244,9 @@ the design and implementation of this library.
 
 [section:ReleaseNotes Release Notes]
 
-1.0.0 (June 1, 2008) :
+1.0.0 (August 1, 2008) :
 
-* 
+* Initial release with Boost 1.36
 
 0.7.1 (March 14, 2007) :
 
