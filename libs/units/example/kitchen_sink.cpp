@@ -117,7 +117,7 @@ asin(sin(theta)) = 0.375 rd
 //[kitchen_sink_output_12
 V   = (12.5,0) V
 I   = (3,4) A
-Z   = (1.5,-2) Ω
+Z   = (1.5,-2) Ohm
 I*Z = (12.5,0) V
 //]
 

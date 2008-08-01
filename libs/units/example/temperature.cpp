@@ -21,10 +21,10 @@ Output:
 @verbatim
 
 //[ temperature_output_1
-{ 32 } °F
+{ 32 } F
 { 273.15 } K
 { 273.15 } K
-[ 32 ] °F
+[ 32 ] F
 [ 17.7778 ] K
 [ 17.7778 ] K
 //]
