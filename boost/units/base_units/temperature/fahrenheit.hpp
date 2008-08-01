@@ -26,7 +26,7 @@ namespace temperature {
 struct fahrenheit_base_unit : public base_unit<fahrenheit_base_unit, temperature_dimension, -1007>
 {
     static std::string name()   { return("fahrenheit"); }
-    static std::string symbol() { return("°F"); }
+    static std::string symbol() { return("F"); }
 };
 
 } // namespace temperature

@@ -28,7 +28,7 @@ typedef scaled_base_unit<boost::units::si::meter_base_unit, scale<10, static_rat
 template<>
 struct base_unit_info<metric::angstrom_base_unit> {
     static const char* name()   { return("angstrom"); }
-    static const char* symbol() { return(""); }
+    static const char* symbol() { return("A"); }
 };
 
 }
