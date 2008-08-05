@@ -1337,6 +1337,133 @@ No known problems.
 
 [endsect]
 
+[section:unordered_set Unordered Associative Set (Hash Table).]
+
+   #include <boost/tr1/unordered_set.hpp>
+   
+or
+
+   #include <unordered_set>
+
+For accessing data based on key lookup, the C++ standard library 
+offers std::set, std::map, std::multiset  and std::multimap. 
+These are generally implemented using balanced binary trees so that 
+lookup time has logarithmic complexity. That is generally okay, 
+but in many cases a hash table can perform better, as accessing 
+data has constant complexity, on average. The worst case complexity 
+is linear, but that occurs rarely and with some care, can be avoided.
+
+With this in mind, the C++ Standard Library Technical Report 
+introduced the unordered associative containers, which are 
+implemented using hash tables, and they have now been added to 
+the Working Draft of the C++ Standard.  
+
+Refer to the 
+[@../../libs/unordered/index.html Unordered Library docs] 
+for more information.  
+   
+   namespace std {
+   namespace tr1 {
+
+   template <class Value, 
+            class Hash = hash<Value>, 
+            class Pred = std::equal_to<Value>,
+            class Alloc = std::allocator<Value> >
+   class unordered_set;
+
+   // [6.3.4.5] Class template unordered_multiset
+   template <class Value,
+            class Hash = hash<Value>,
+            class Pred = std::equal_to<Value>,
+            class Alloc = std::allocator<Value> >
+   class unordered_multiset;
+
+   template <class Value, class Hash, class Pred, class Alloc>
+   void swap(unordered_set<Value, Hash, Pred, Alloc>& x,
+            unordered_set<Value, Hash, Pred, Alloc>& y);
+             
+   template <class Value, class Hash, class Pred, class Alloc>
+   void swap(unordered_multiset<Value, Hash, Pred, Alloc>& x,
+            unordered_multiset<Value, Hash, Pred, Alloc>& y);
+
+   } // namespace tr1
+   } // namespace std
+
+[*Configuration:]
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_UNORDERED_SET if your
+standard library implements this part of TR1.
+
+[*Standard Conformity:]
+No known issues for conforming compilers.
+
+[endsect]
+
+[section:unordered_map Unordered Associative Map (Hash Table).]
+
+   #include <boost/tr1/unordered_map.hpp>
+   
+or
+
+   #include <unordered_map>
+   
+For accessing data based on key lookup, the C++ standard library 
+offers std::set, std::map, std::multiset  and std::multimap. 
+These are generally implemented using balanced binary trees so that 
+lookup time has logarithmic complexity. That is generally okay, 
+but in many cases a hash table can perform better, as accessing 
+data has constant complexity, on average. The worst case complexity 
+is linear, but that occurs rarely and with some care, can be avoided.
+
+With this in mind, the C++ Standard Library Technical Report 
+introduced the unordered associative containers, which are 
+implemented using hash tables, and they have now been added to 
+the Working Draft of the C++ Standard.  
+
+Refer to the 
+[@../../libs/unordered/index.html Unordered Library docs] 
+for more information.  
+
+   namespace std {
+   namespace tr1 {
+
+   // [6.3.4.4] Class template unordered_map
+   template <class Key,
+            class T,
+            class Hash = hash<Key>,
+            class Pred = std::equal_to<Key>,
+            class Alloc = std::allocator<std::pair<const Key, T> > >
+   class unordered_map;
+
+   // [6.3.4.6] Class template unordered_multimap
+   template <class Key,
+            class T,
+            class Hash = hash<Key>,
+            class Pred = std::equal_to<Key>,
+            class Alloc = std::allocator<std::pair<const Key, T> > >
+   class unordered_multimap;
+
+   template <class Key, class T, class Hash, class Pred, class Alloc>
+   void swap(unordered_map<Key, T, Hash, Pred, Alloc>& x,
+            unordered_map<Key, T, Hash, Pred, Alloc>& y);
+             
+   template <class Key, class T, class Hash, class Pred, class Alloc>
+   void swap(unordered_multimap<Key, T, Hash, Pred, Alloc>& x,
+            unordered_multimap<Key, T, Hash, Pred, Alloc>& y);
+
+   } // namespace tr1
+   } // namespace std
+
+[*Configuration:]
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_UNORDERED_MAP if your
+standard library implements this part of TR1.
+
+[*Standard Conformity:]
+No known issues for conforming compilers.
+
+[endsect]
+
 [endsect]
 
 [section:unsupported TR By Subject: Unsupported Features]
@@ -1474,105 +1601,6 @@ by this implementation] unless your standard library supports them itself.
 
 [*Standard Conformity:]
 ['[*Not Supported.]]
-
-[endsect]
-
-[section:unordered_set Unordered Associative Set (Hash Table).]
-
-   #include <boost/tr1/unordered_set.hpp>
-   
-or
-
-   #include <unordered_set>
-
-This is not currently supported by Boost, although that situation is
-hoped to change soon.
-   
-   namespace std {
-   namespace tr1 {
-
-   template <class Value, 
-            class Hash = hash<Value>, 
-            class Pred = std::equal_to<Value>,
-            class Alloc = std::allocator<Value> >
-   class unordered_set;
-
-   // [6.3.4.5] Class template unordered_multiset
-   template <class Value,
-            class Hash = hash<Value>,
-            class Pred = std::equal_to<Value>,
-            class Alloc = std::allocator<Value> >
-   class unordered_multiset;
-
-   template <class Value, class Hash, class Pred, class Alloc>
-   void swap(unordered_set<Value, Hash, Pred, Alloc>& x,
-            unordered_set<Value, Hash, Pred, Alloc>& y);
-             
-   template <class Value, class Hash, class Pred, class Alloc>
-   void swap(unordered_multiset<Value, Hash, Pred, Alloc>& x,
-            unordered_multiset<Value, Hash, Pred, Alloc>& y);
-
-   } // namespace tr1
-   } // namespace std
-
-[*Configuration:]
-[@../../libs/config/index.html Boost.Config] should (automatically) define
-the macro BOOST_HAS_TR1_UNORDERED_SET if your
-standard library implements this part of TR1.
-
-[*Standard Conformity:]
-Not supported.
-
-[endsect]
-
-[section:unordered_map Unordered Associative Map (Hash Table).]
-
-   #include <boost/tr1/unordered_map.hpp>
-   
-or
-
-   #include <unordered_map>
-   
-This is not currently supported by Boost, although that situation is
-hoped to change soon.
-   
-   namespace std {
-   namespace tr1 {
-
-   // [6.3.4.4] Class template unordered_map
-   template <class Key,
-            class T,
-            class Hash = hash<Key>,
-            class Pred = std::equal_to<Key>,
-            class Alloc = std::allocator<std::pair<const Key, T> > >
-   class unordered_map;
-
-   // [6.3.4.6] Class template unordered_multimap
-   template <class Key,
-            class T,
-            class Hash = hash<Key>,
-            class Pred = std::equal_to<Key>,
-            class Alloc = std::allocator<std::pair<const Key, T> > >
-   class unordered_multimap;
-
-   template <class Key, class T, class Hash, class Pred, class Alloc>
-   void swap(unordered_map<Key, T, Hash, Pred, Alloc>& x,
-            unordered_map<Key, T, Hash, Pred, Alloc>& y);
-             
-   template <class Key, class T, class Hash, class Pred, class Alloc>
-   void swap(unordered_multimap<Key, T, Hash, Pred, Alloc>& x,
-            unordered_multimap<Key, T, Hash, Pred, Alloc>& y);
-
-   } // namespace tr1
-   } // namespace std
-
-[*Configuration:]
-[@../../libs/config/index.html Boost.Config] should (automatically) define
-the macro BOOST_HAS_TR1_UNORDERED_MAP if your
-standard library implements this part of TR1.
-
-[*Standard Conformity:]
-Not supported.
 
 [endsect]
 
