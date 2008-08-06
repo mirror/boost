@@ -11,9 +11,7 @@ body
 	font-size: 10pt;
 	margin: 0;
 	padding: 0;
-	background-position: left;
-	background-image: url( 'left.png' );
-	background-repeat: repeat-y;
+	background-color: #E5E5E5;
 }
 
 .RenoPageList,
