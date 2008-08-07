@@ -258,8 +258,8 @@ namespace
     // U must be convertible to T
     template <class T, class U>
     class Wrapped6
-        : boost::ordered_euclidian_ring_operators2<Wrapped6<T, U>, U>
-        , boost::ordered_euclidian_ring_operators1<Wrapped6<T, U> >
+        : boost::ordered_euclidean_ring_operators2<Wrapped6<T, U>, U>
+        , boost::ordered_euclidean_ring_operators1<Wrapped6<T, U> >
     {
     public:
         explicit Wrapped6( T v = T() ) : _value(v) {}
