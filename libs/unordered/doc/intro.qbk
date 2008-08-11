@@ -9,7 +9,7 @@
     [@http://www.boost.org/doc/html/boost_tr1.html
     Boost.TR1]]
 [def __draft__
-    [@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2007/n2461.pdf
+    [@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2008/n2691.pdf
     Working Draft of the C++ Standard]]
 [def __hash-table__ [@http://en.wikipedia.org/wiki/Hash_table
     hash table]]
