@@ -299,10 +299,25 @@ struct compiler_traits
         case BOOST_XPR_CHAR_(char_type, '['):
             {
                 FwdIter next = begin; ++next;
-                if(next != end && *next == BOOST_XPR_CHAR_(char_type, ':'))
+                if(next != end)
                 {
-                    begin = ++next;
-                    return token_posix_charset_begin;
+                    detail::ensure(
+                        *next != BOOST_XPR_CHAR_(char_type, '=')
+                      , error_collate
+                      , "equivalence classes are not yet supported"
+                    );
+
+                    detail::ensure(
+                        *next != BOOST_XPR_CHAR_(char_type, '.')
+                      , error_collate
+                      , "collation sequences are not yet supported"
+                    );
+
+                    if(*next == BOOST_XPR_CHAR_(char_type, ':'))
+                    {
+                        begin = ++next;
+                        return token_posix_charset_begin;
+                    }
                 }
             }
             break;
