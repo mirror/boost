@@ -1,0 +1,141 @@
+
+[library Boost.Proto
+    [quickbook 1.3]
+    [authors [Niebler, Eric]]
+    [copyright 2008 Eric Niebler]
+    [category template]
+    [id proto]
+    [dirname proto]
+    [purpose
+        Generic expression template, grammar and
+        tree-transformation framework.
+    ]
+    [license
+        Distributed under the Boost Software License, Version 1.0.
+        (See accompanying file LICENSE_1_0.txt or copy at
+        [@http://www.boost.org/LICENSE_1_0.txt])
+    ]
+]
+
+[/
+ / Copyright (c) 2008 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[/ QuickBook Document version 1.3 ]
+
+[/  Images   ]
+
+[def __note__               [$images/note.png]]
+[def __alert__              [$images/caution.png]]
+[def __detail__             [$images/note.png]]
+[def __tip__                [$images/tip.png]]
+
+[/  Links   ]
+
+[def _PETE_                 [@http://www.codesourcery.com/pooma/download.html PETE]]
+[def _spirit_fx_            [@http://spirit.sourceforge.net Spirit Parser Framework]]
+[def _spirit_               [@http://spirit.sourceforge.net Spirit]]
+[def _xpressive_            [@../../libs/xpressive/index.html Boost.Xpressive]]
+[def _typeof_               [@../../libs/typeof/index.html Boost.Typeof]]
+[def _expr_                 [classref  boost::proto::expr<Tag,Args,1> `expr<>`]]
+[def _deep_copy_            [funcref   boost::proto::deep_copy `deep_copy()`]]
+[def _extends_              [classref  boost::proto::extends `extends<>`]]
+[def _as_expr_              [funcref   boost::proto::as_expr `as_expr()`]]
+[def _as_child_             [funcref   boost::proto::as_child `as_child()`]]
+[def _make_expr_            [funcref   boost::proto::make_expr `make_expr()`]]
+[def _unpack_expr_          [funcref   boost::proto::unpack_expr `unpack_expr()`]]
+[def _matches_              [classref  boost::proto::result_of::matches `matches<>`]]
+[def _or_                   [classref  boost::proto::control::or_ `or_<>`]]
+[def _and_                  [classref  boost::proto::control::and_ `and_<>`]]
+[def _if_                   [classref  boost::proto::control::if_ `if_<>`]]
+[def _not_                  [classref  boost::proto::control::not_ `not_<>`]]
+[def _exact_                [classref  boost::proto::control::exact `exact<>`]]
+[def _convertible_to_       [classref  boost::proto::control::convertible_to `convertible_to<>`]]
+[def _is_expr_              [classref  boost::proto::result_of::is_expr `is_expr<>`]]
+[def _tag_of_               [classref  boost::proto::result_of::tag_of `tag_of<>`]]
+[def _child_                [funcref   boost::proto::child `child()`]]
+[def _child_c_              [funcref   boost::proto::child_c `child_c()`]]
+[def _eval_                 [funcref   boost::proto::eval `eval()`]]
+[def _left_                 [funcref   boost::proto::left `left()`]]
+[def _right_                [funcref   boost::proto::right `right()`]]
+[def _value_                [funcref   boost::proto::value `value()`]]
+[def _terminal_             [classref  boost::proto::op::terminal `terminal<>`]]
+[def _unary_expr_           [classref  boost::proto::op::unary_expr `unary_expr<>`]]
+[def _binary_expr_          [classref  boost::proto::op::binary_expr `binary_expr<>`]]
+[def _literal_              [classref  boost::proto::utility::literal `literal<>`]]
+[def _lit_                  [funcref   boost::proto::lit `lit()`]]
+[def _vararg_               [classref  boost::proto::control::vararg `vararg<>`]]
+[def _default_context_      [classref  boost::proto::context::default_context `default_context`]]
+[def _callable_context_     [classref  boost::proto::context::callable_context `callable_context<>`]]
+[def _null_context_         [classref  boost::proto::context::null_context `null_context<>`]]
+[def _when_                 [classref  boost::proto::when `when<>`]]
+[def _call_                 [classref  boost::proto::call `call<>`]]
+[def _make_                 [classref  boost::proto::make `make<>`]]
+[def _flatten_              [funcref   boost::proto::flatten `flatten()`]]
+
+[include preface.qbk]
+
+[section:users_guide Users' Guide]
+
+This Users' Guide describes how to use Proto to build expression-template
+based Domain-Specific Embedded Langauges. It is broken up in to 5 sections,
+corresponding to the 5 major parts to Proto:
+
+[variablelist
+[[[link boost_proto.users_guide.expression_construction Expression Construction]]
+    [Describes how to use Proto to build expression trees.]]
+[[[link boost_proto.users_guide.expression_evaluation Expression Evaluation]]
+    [Describes the tools Proto provides for making your expression trees do
+     something useful.]]
+[[[link boost_proto.users_guide.expression_introspection Expression Introspection]]
+    [Describes Proto's grammar matching facilities, which make
+     it easy to discover the structure of an expression tree.]]
+[[[link boost_proto.users_guide.expression_transformation Expression Transformation]]
+    [Describes how to write expression transforms that turn an expression tree
+     into some other object.]]
+[[[link boost_proto.users_guide.expression_extension Expression Extension]]
+    [Describes how to extend Proto expressions with additional behaviors and
+     members and how to selectively disable Proto's operator overloads.]]
+]
+
+But before we get started, let's have a look at some very simple Proto examples
+and say a few words about Proto's philosophy.
+
+[include installation.qbk]
+
+[include quick_start.qbk]
+
+[include calculator.qbk]
+
+[include construction.qbk]
+
+[include evaluation.qbk]
+
+[include grammars.qbk]
+
+[include transforms.qbk]
+
+[include extensibility.qbk]
+
+[include examples.qbk]
+
+[include glossary.qbk]
+
+[endsect]
+
+[xinclude proto.xml]
+
+[section Appendices]
+
+[include history.qbk]
+
+[include rationale.qbk]
+
+[include implementation.qbk]
+
+[include acknowledgements.qbk]
+
+[endsect]

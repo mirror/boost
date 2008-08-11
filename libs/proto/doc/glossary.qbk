@@ -1,0 +1,65 @@
+[/
+ / Copyright (c) 2008 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[/===============]
+[section Glossary]
+[/===============]
+
+[def _T_ [~T]]
+
+[variablelist
+  [ [callable transform]
+      [A transform of the form `R(A0,A1,...)` (i.e., a function
+       type) where `proto::is_callable<R>::value` is `true`. 
+       `R` is treated as a polymorphic function object and the
+       arguments are treated as transforms that yield the
+       arguments to the function object.] ]
+  [ [domain-specific language]
+      [A programming language that targets a particular problem
+       space by providing programming idioms, abstractions and
+       constructs that match the constructs within that problem
+       space.]]
+  [ [expression]
+      [A heterogeneous tree where each node is either an
+       instantiation of `boost::proto::expr<>` or some type
+       that is an extension (via `boost::proto::extends<>`
+       or `BOOST_PROTO_EXTENDS()`) of such an instantiation.]]
+  [ [grammar]
+      [A grammar is a type that describes a subset of
+       expression types. Expressions in a domain must conform
+       to that domain's grammar. The `proto::matches<>`
+       metafunction evaluates whether an expression type matches
+       a grammar. Grammars are either primitives such as `proto::_`,
+       composites such as `proto::plus<>`, control structures
+       such as `proto::or_<>`, or some type derived from a grammar.]]
+  [ [object transform]
+      [A transform of the form `R(A0,A1,...)` (i.e., a function
+       type) where `proto::is_callable<R>::value` is `false`.
+       `R` is treated as the type of an object to construct and
+       the arguments are treated as transforms that yield the
+       parameters to the constructor.]]
+  [ [polymorphic function object]
+      [An instance of a class type with an overloaded function
+       call operator and an nested `result_type` typedef or
+       `result<>` template for calculating the return type of
+       the function call operator.]]
+  [ [primitive transform]
+      [A type that defines a kind of polymorphic function object
+       that takes three arguments: expression, state, and data.
+       Primitive transforms can be used to compose callable
+       transforms and object transforms.]]
+  [ [transform]
+      [Transforms are used to manipulate expression trees. They
+       come in three flavors: primitive transforms, callable
+       transforms, or object transforms. A transform `_T_` can
+       be made into a ternary polymorphic function object with
+       `proto::when<>`, as in `proto::when<proto::_, _T_>`. Such
+       a function object accepts /expression/, /state/, and /data/
+       parameters, and computes a result from them.]]
+]
+
+[endsect]
