@@ -237,7 +237,7 @@ namespace boost
         }
 
         template <class... Args>
-        iterator emplace(const_iterator hint, Args&&... args)
+        iterator emplace_hint(const_iterator hint, Args&&... args)
         {
             return iterator(base.insert_hint(get(hint), std::forward<Args>(args)...));
         }
@@ -625,7 +625,7 @@ namespace boost
         }
 
         template <class... Args>
-        iterator emplace(const_iterator hint, Args&&... args)
+        iterator emplace_hint(const_iterator hint, Args&&... args)
         {
             return iterator(base.insert_hint(get(hint), std::forward<Args>(args)...));
         }

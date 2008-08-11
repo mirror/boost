@@ -33,4 +33,9 @@ First official release.
   are available.
 * Added equality operators.
 
+[h2 Development...]
+
+* Rename overload of `emplace` with hint, to `emplace_hint` as specified in
+  [@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2008/n2691.pdf n2691].
+
 [endsect]

@@ -287,7 +287,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>Only available on compilers with support for variadic template arguments and rvalue references.</para>
               </notes>
             </method>
-            <method name="emplace">
+            <method name="emplace_hint">
               <template>
                 <template-type-parameter name="Args" pack="1">
                 </template-type-parameter>
@@ -1016,7 +1016,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>Only available on compilers with support for variadic template arguments and rvalue references.</para>
               </notes>
             </method>
-            <method name="emplace">
+            <method name="emplace_hint">
               <template>
                 <template-type-parameter name="Args" pack="1">
                 </template-type-parameter>
@@ -1757,7 +1757,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>Only available on compilers with support for variadic template arguments and rvalue references.</para>
               </notes>
             </method>
-            <method name="emplace">
+            <method name="emplace_hint">
               <template>
                 <template-type-parameter name="Args" pack="1">
                 </template-type-parameter>
@@ -2535,7 +2535,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>Only available on compilers with support for variadic template arguments and rvalue references.</para>
               </notes>
             </method>
-            <method name="emplace">
+            <method name="emplace_hint">
               <template>
                 <template-type-parameter name="Args" pack="1">
                 </template-type-parameter>
