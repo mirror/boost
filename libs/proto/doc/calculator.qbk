@@ -30,7 +30,7 @@ we'll use the _terminal_ metafunction.
     struct placeholder
     {};
 
-    // Define the Proto-ified placeholder terminals
+    // Define the Protofied placeholder terminals
     proto::terminal<placeholder<0> >::type const _1 = {{}};
     proto::terminal<placeholder<1> >::type const _2 = {{}};
 
@@ -178,7 +178,7 @@ domain's extension wrapper.
 All that remains to be done is to put our placeholders in the calculator domain. We 
 do that by wrapping them in our `calculator<>` wrapper, as below:
 
-    // Define the Proto-ified placeholder terminals, in the
+    // Define the Protofied placeholder terminals, in the
     // calculator domain.
     calculator<proto::terminal<placeholder<0> >::type> const _1;
     calculator<proto::terminal<placeholder<1> >::type> const _2;

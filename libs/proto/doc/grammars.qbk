@@ -387,7 +387,7 @@ like this:
 
 [pre
 group       ::= '(' expression ')'
-factor      ::= double | placeholder1 | placeholder2 | group
+factor      ::= double | '_1' | '_2' | group
 term        ::= factor (('*' factor) | ('/' factor))*
 expression  ::= term (('+' term) | ('-' term))*
 ]

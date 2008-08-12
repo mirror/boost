@@ -107,8 +107,8 @@ terminals.
 Now that we have defined the `calculator<>` expression wrapper, we need to
 wrap the placeholders to imbue them with calculator-ness:
 
-    calculator< proto::terminal< placeholder1 >::type > const _1;
-    calculator< proto::terminal< placeholder2 >::type > const _2;
+    calculator< proto::terminal< placeholder<0> >::type > const _1;
+    calculator< proto::terminal< placeholder<1> >::type > const _2;
 
 [endsect]
 
@@ -151,7 +151,7 @@ follows:
 [section:inhibiting_overloads Controlling Operator Overloads]
 [/==========================================================]
 
-By default, Proto defines every possible operator overload for Proto-ified
+By default, Proto defines every possible operator overload for Protofied
 expressions. This makes it simple to bang together a DSEL, and Proto's grammar
 building and checking facilities make it simple to detect and report invalid
 expressions. In some cases, however, the presence of Proto's promiscuous

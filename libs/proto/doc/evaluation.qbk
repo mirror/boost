@@ -173,7 +173,7 @@ would look something like this:
         >
         struct eval;
 
-        // Handle placeholder1 terminals here...
+        // Handle placeholder terminals here...
         template<typename Expr, int I>
         struct eval<Expr, proto::tag::terminal, placeholder<I> >
         {

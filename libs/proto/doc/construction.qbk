@@ -5,7 +5,7 @@
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
-[def __implelemtation_defined__ [~implementation-defined]]
+[def __unspecified__ [~unspecified]]
 
 [/=======================================================================================]
 [section:expression_construction Expression Construction: Building Proto Expression Trees]
@@ -18,14 +18,16 @@ process expression trees? Now is the time to find out.
 In the calculator example, we defined a placeholder terminal like this:
 
     // Define a placeholder type
-    struct placeholder1 {};
+    template<int I>
+    struct placeholder
+    {};
 
-    // Define the Proto-ified placeholder terminal
-    proto::terminal< placeholder1 >::type const _1 = {{}};
+    // Define the Protofied placeholder terminal
+    proto::terminal< placeholder<0> >::type const _1 = {{}};
 
 The actual type of `_1` looks like this:
 
-    proto::expr< proto::tag::terminal, proto::term< placeholder1 >, 0 >
+    proto::expr< proto::tag::terminal, proto::term< placeholder<0> >, 0 >
 
 The _expr_ template is the most important type in Proto. Although you will
 rarely need to deal with it directly, it's always there behind the scenes
@@ -35,8 +37,8 @@ tree -- branches, leaves and all.
 The _expr_ template makes up the nodes in expression trees. The first template
 parameter is the node type; in this case, `proto::tag::terminal`. That means
 that `_1` is a leaf-node in the expression tree. The second template parameter
-is a list of child types, or in the case of terminals, the type of the terminal's
-value. Terminals will always have only one type in the type list. The last 
+is a list of child types, or in the case of terminals, the terminal's value
+type. Terminals will always have only one type in the type list. The last 
 parameter is the arity of the expression. Terminals have arity 0, unary 
 expressions have arity 1, etc.
 
@@ -58,8 +60,8 @@ prevent static initialization. All _expr_ objects are initialized using
 ['aggregate initialization], with curly braces. In our example, `_1` is
 initialized with the initializer `{{}}`. The outer braces is the initializer
 for the _expr_ struct, and the inner braces are for the member `_1.child0` which
-is of type `placeholder1`. Note that we use braces to initialize `_1.child0`
-because `placeholder1` is also an aggregate.
+is of type `placeholder<0>`. Note that we use braces to initialize `_1.child0`
+because `placeholder<0>` is also an aggregate.
 
 [/=================================]
 [heading Proto's Operator Overloads]
@@ -132,11 +134,11 @@ convertible to a pointer to its child. In other words, the following
 code works and does what you might expect, but not in the obvious way:
 
     typedef
-        proto::terminal< placeholder1 >::type
-    placeholder1_type;
+        proto::terminal< placeholder<0> >::type
+    _1_type;
 
-    placeholder1_type const _1 = {{}};
-    placeholder1_type const * p = &_1; // OK, &_1 implicitly converted
+    _1_type const _1 = {{}};
+    _1_type const * p = &_1; // OK, &_1 implicitly converted
 
 [/================================]
 [heading Building Expression Trees]
@@ -156,7 +158,7 @@ like this:
           , proto::list1<
                 proto::expr<
                     proto::tag::terminal
-                  , proto::term< placeholder1 >
+                  , proto::term< placeholder<0> >
                   , 0
                 > const &
             >
@@ -173,7 +175,7 @@ like this:
           , proto::list2<
                 proto::expr<
                     proto::tag::terminal
-                  , proto::term< placeholder1 >
+                  , proto::term< placeholder<0> >
                   , 0
                 > const &
               , proto::expr<
@@ -198,7 +200,7 @@ There are a few things to note about these types:
 # Non-Proto expressions, such as the integer literal, are turned into Proto
   expressions by making them Proto terminals. These terminal expressions
   are thenselves held by reference, but the object itself /is/. Notice that
-  the type of the Proto-ified `42` literal is `int const &` -- held by
+  the type of the Protofied `42` literal is `int const &` -- held by
   reference.
 
 The types make it clear: everything in a Proto expression tree is held by
@@ -238,7 +240,7 @@ metafunction, as shown below:
         return typename proto::result_of::tag_of<Expr>::type();
     }
 
-    proto::terminal<int>::type const i = {0};
+    proto::terminal<int>::type const i = {42};
 
     // Addition nodes have the "plus" tag type:
     proto::tag::plus plus_tag = get_tag_of( i + 2 );
@@ -252,7 +254,7 @@ and the children correspond to the operands, or arguments of the operator.
 To access them, you can use the _child_c_ function template, as demonstrated
 below:
 
-    proto::terminal<int>::type i = {0};
+    proto::terminal<int>::type i = {42};
 
     // Get the 0-th operand of an addition operation:
     proto::terminal<int>::type &ri = proto::child_c<0>( i + 2 );
@@ -276,7 +278,7 @@ cv-qualifiers have been stripped from it.
     }
 
     // ...
-    terminal<int>::type i = {0};
+    terminal<int>::type i = {42};
     test_result_of_child_c( i + 2 );
 
 However, if you ask for the type of the Nth child of `Expr &` or `Expr const &`
@@ -355,7 +357,11 @@ Fusion to print the function arguments in order.
       , display()
     );
 
-The above invocation of `fusion::for_each()` displays the following:
+Recall from the Introduction that types in the `proto::functional` namespace
+define function objects that correspond to Proto's free functions. So 
+`proto::functional::value()` creates a function object that is equavalent to
+the `proto::value()` function. The above invocation of `fusion::for_each()`
+displays the following:
 
 [pre
 1
@@ -397,7 +403,7 @@ process is evaluated recursively. So the above can correctly be written as:
     fusion::for_each(
         fusion::transform(
             proto::flatten(_1 + 2 + 3 + 4)
-          , functional::child<>()
+          , proto::functional::value()
         )
       , display()
     );
@@ -417,11 +423,10 @@ The above invocation of `fusion::for_each()` displays the following:
 [section:tags_and_metafunctions Operator Tags and Metafunctions]
 [/=============================================================]
 
-The following table lists the overloadable C++ operators, the Proto tag types
-for each, and the name of the Proto metafunction for generating the
-corresponding Proto expression types. The metafunctions are also usable as
-grammars for matching such nodes, as well as pass-through transforms, as
-explained in later sections.
+The following table lists the overloadable C++ operators, the Proto tag types for 
+each, and the name of the metafunctions for generating the corresponding Proto 
+expression types. And as we'll see later, the metafunctions are also usable as 
+grammars for matching such nodes, as well as pass-through transforms.
 
 [table Operators, Tags and Metafunctions
     [[Operator]

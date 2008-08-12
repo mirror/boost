@@ -7,16 +7,16 @@
 
 [import ../test/examples.cpp]
 
-[/==========================================================]
-[section:expression_transformation Expression Transformation]
-[/==========================================================]
+[/============================================================================]
+[section:expression_transformation Expression Transformation: Semantic Actions]
+[/============================================================================]
 
-Sometimes, rather than immediately executing an expression template, you'd
-like to transform it into some other object. Maybe the transformation is simple,
-like converting all references into values. Maybe it's complicated, like
-transforming an expression template into a finite-state automata for matching a
-regular expression. Proto provides a framework for applying tree
-transformations and several canned transformations that are generally useful.
+Sometimes, rather than immediately executing an expression template, you'd like to 
+transform it into some other object. Maybe the transformation is simple, like 
+converting all references into values. Maybe it's complicated, like transforming an 
+expression template into a finite-state automata for matching a regular expression. 
+Proto provides a framework for applying tree transformations and several canned 
+transformations that are generally useful.
 
 [/===============]
 [heading Overview]
@@ -209,18 +209,18 @@ The total arity of a calculator expression is found by recursively evaluating
 the arity of all of the sub-expressions and taking the maximum.
 
 Let's look at the sub-expression for the placeholder `_1`. It is matched by this
-part of our grammar: `proto::terminal< placeholder1 >`. We want to associate this
+part of our grammar: `proto::terminal< placeholder<0> >`. We want to associate this
 part of our grammar with an arity of `1`. We do that by attaching a transform.
 Since the arity of an expression can be evaluated at compile time, let's use
 `mpl::int_<1>` to represent the arity of the first placeholder. The following
 attaches a transform that always evaluates to `mpl::int_<1>`:
 
-    proto::when< proto::terminal< placeholder1 >, mpl::int_<1>() >
+    proto::when< proto::terminal< placeholder<0> >, mpl::int_<1>() >
 
-This grammar rule will match any `placeholder1` terminal, and will transform it
+This grammar rule will match any `placeholder<0>` terminal, and will transform it
 to a (default-constructed) `mpl::int_<1>` object. As described previously,
 `mpl::int_<1>()` is a function type, but Proto interprets it as an object to
-construct. We will have a similar transform to convert `placeholder2` terminals
+construct. We will have a similar transform to convert `placeholder<1>` terminals
 into `mpl::int_<2>`, and other terminals into `mpl::int_<0>`.
 
 Next, let's write a transform for unary operators that returns the arity of the
@@ -273,7 +273,7 @@ is true because `CalcArity` inherits from `proto::or_<>`, which is callable.)]
     which would have the following type:
 
         expr< tag::unary_plus, list1<
-            expr< tag::terminal, term< placeholder1 > >
+            expr< tag::terminal, term< placeholder<0> > >
         > >
 
     If we executed the `unary_expr< _, CalcArity >` transform on this

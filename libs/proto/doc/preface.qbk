@@ -7,7 +7,8 @@
 
 [section Preface]
 
-[:["There are more things in heaven and earth, Horatio, than are dreamt of in your philosophy.]]
+[:["There are more things in heaven and earth, Horatio, than are dreamt of in your 
+    philosophy.]]
 [:[*['-- William Shakespeare]]]
 
 [heading Description]
@@ -19,11 +20,11 @@ executing ['expression templates][footnote See
 More specifically, Proto provides:
 
 * An expression tree data structure.
+* A mechanism for giving expressions additional behaviors and members.
 * Operator overloads for building the tree from an expression.
 * Utilities for defining the grammar to which an expression must conform.
 * An extensible mechanism for immediately executing an expression template.
 * An extensible set of tree transformations to apply to expression trees.
-* A mechanism for giving expressions additional behaviors and members.
 
 [heading Motivation]
 
@@ -33,63 +34,51 @@ technique has been used to create hyper-efficient and easy-to-use libraries
 for linear algebra as well as to define C++ parser generators with a readable
 syntax. But developing such a library involves writing an inordinate amount of
 unreadable and unmaintainable template mumbo-jumbo. Boost.Proto eases the
-development of domain-specific embedded languages (DSELs). Use Proto to define
-the primitives of your mini-language and let Proto handle the operator
-overloading and the construction of the expression parse tree. Immediately
-evaluate the expression tree by passing it a function object. Or transform the
-expression tree by defining the grammar of your mini-language, decorated
-with an assortment of tree transforms provided by Proto or defined by you.
-Then use the grammar to give your users short and readable syntax errors
-for invalid expressions! No more mumbo-jumbo -- an expression template library
-developed with Proto is declarative and readable.
+development of [link boost_proto.users_guide.glossary.dsel domain-specific embedded 
+languages (DSELs)]. Use Proto to define the primitives of your mini-language and 
+let Proto handle the operator overloading and the construction of the expression 
+parse tree. Immediately evaluate the expression tree by passing it a function 
+object. Or transform the expression tree by defining the grammar of your mini-
+language, decoratedwith an assortment of tree transforms provided by Proto or 
+defined by you. Then use the grammar to give your users short and readable syntax 
+errors for invalid expressions! No more mumbo-jumbo -- an expression template 
+library developed with Proto is declarative and readable.
 
 In short, Proto is a DSEL for defining DSELs.
 
-[heading Influences and Related Work]
-
-Proto was initially developed as part of _xpressive_ to simplify the job of
-transforming an expression template into an executable finite state machine
-capable of matching a regular expression. Since then, Proto has found
-application in the redesigned and improved Spirit-2 and the related Karma
-library. As a result of these efforts, Proto evolved into a generic and
-abstract grammar and tree transformation framework applicable in a wide
-variety of DSEL scenarios.
-
-The grammar and tree transformation framework is modelled on Spirit's
-grammar and semantic action framework. The expression tree data structure
-is similar to Fusion data structures in many respects, and is interoperable
-with Fusion's iterators and algorithms.
-
-The syntax for the grammar-matching features of `proto::matches<>` is inspired
-by MPL's lambda expressions, and by Aleksey Gurtovoy's
-[@http://lists.boost.org/Archives/boost/2002/11/39718.php "round" lambda] notation.
-
-[heading Further Reading]
-
-A technical paper about an earlier version of Proto was accepted into the
-[@http://lcsd.cs.tamu.edu/2007/ ACM SIGPLAN Symposium on Library-Centric Software Design LCSD'07],
-and can be found at [@http://lcsd.cs.tamu.edu/2007/final/1/1_Paper.pdf]. The
-tree transforms described in that paper differ from what exists today.
-
+[/====================================]
 [heading How To Use This Documentation]
+[/====================================]
 
 This documentation makes use of the following naming and formatting conventions.
 
 * Code is in `fixed with font` and is syntax-highlighted.
 * Replaceable text that you will need to supply is in [~italics].
-* If a name refers to a free function, it is specified like this: `free_function()`;
-  that is, it is in code font and its name is followed by `()` to indicate that
-  it is a free function.
-* If a name refers to a class template, it is specified like this: `class_template<>`;
-  that is, it is in code font and its name is followed by `<>` to indicate that
-  it is a class template.
+* If a name refers to a free function, it is specified like this:
+  `free_function()`; that is, it is in code font and its name is followed by `()` 
+  to indicate that it is a free function.
+* If a name refers to a class template, it is specified like this:
+  `class_template<>`; that is, it is in code font and its name is followed by `<>` 
+  to indicate that it is a class template.
 * If a name refers to a function-like macro, it is specified like this: `MACRO()`;
-  that is, it is uppercase in code font and its name is followed by `()` to indicate that
-  it is a function-like macro. Object-like macros appear without the trailing `()`.
+  that is, it is uppercase in code font and its name is followed by `()` to
+  indicate that it is a function-like macro. Object-like macros appear without the 
+  trailing `()`.
 * Names that refer to /concepts/ in the generic programming sense are
   specified in CamelCase.
 
 [note In addition, notes such as this one specify non-essential information that
 provides additional background or rationale.]
+
+Finally, you can mentally add the following to any code fragments in this document:
+
+    // Include all of Proto
+    #include <boost/proto/proto.hpp>
+
+    // Create a namespace alias for boost::proto
+    namespace proto = boost::proto;
+
+    // Allow unqualified use of Proto's wildcard pattern
+    using proto::_;
 
 [endsect]
