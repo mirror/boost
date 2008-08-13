@@ -133,7 +133,7 @@ public:
    // constructors and member function
    mersenne_twister(){}
    explicit mersenne_twister(unsigned long value)
-      : m_gen(value == 0 ? 4357UL : value){}
+      : m_gen(value == 0 ? 5489UL : value){}
    template<class Gen> mersenne_twister(Gen& g)
    {
       init1(g, ::boost::is_same<mersenne_twister,Gen>());
