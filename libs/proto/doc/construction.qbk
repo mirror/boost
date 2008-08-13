@@ -198,10 +198,10 @@ There are a few things to note about these types:
   it is held by reference, ['even if it is a temporary object]. This last
   point becomes important later.
 # Non-Proto expressions, such as the integer literal, are turned into Proto
-  expressions by making them Proto terminals. These terminal expressions
-  are thenselves held by reference, but the object itself /is/. Notice that
-  the type of the Protofied `42` literal is `int const &` -- held by
-  reference.
+  expressions by wrapping them in new `expr<>` terminal objects. These new
+  wrappers are not themselves held by reference, but the object wrapped /is/.
+  Notice that the type of the Protofied `42` literal is `int const &` -- held
+  by reference.
 
 The types make it clear: everything in a Proto expression tree is held by
 reference. That means that building an expression tree is exceptionally cheap.
