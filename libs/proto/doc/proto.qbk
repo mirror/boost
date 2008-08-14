@@ -78,7 +78,9 @@
 
 [include preface.qbk]
 
+[/===============================]
 [section:users_guide Users' Guide]
+[/===============================]
 
 This Users' Guide describes how to use Proto to build expression-template
 based Domain-Specific Embedded Langauges. It is broken up in to 5 sections,
@@ -104,11 +106,7 @@ corresponding to the 5 major parts to Proto:
 But before we get started, let's have a look at some very simple Proto examples
 and say a few words about Proto's philosophy.
 
-[include installation.qbk]
-
-[include quick_start.qbk]
-
-[include calculator.qbk]
+[include getting_started.qbk]
 
 [include construction.qbk]
 
@@ -122,7 +120,7 @@ and say a few words about Proto's philosophy.
 
 [include examples.qbk]
 
-[include references.qbk]
+[include resources.qbk]
 
 [include glossary.qbk]
 
@@ -130,7 +128,9 @@ and say a few words about Proto's philosophy.
 
 [xinclude proto.xml]
 
+[/=================]
 [section Appendices]
+[/=================]
 
 [include history.qbk]
 

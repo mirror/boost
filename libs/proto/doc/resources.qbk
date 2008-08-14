@@ -5,9 +5,9 @@
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
-[/=============================================]
-[section:references References and Related Work]
-[/=============================================]
+[/=========================================]
+[section:resources Background and Resources]
+[/=========================================]
 
 Proto was initially developed as part of _xpressive_ to simplify the job of 
 transforming an expression template into an executable finite state machine capable 

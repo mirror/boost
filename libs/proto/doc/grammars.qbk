@@ -12,7 +12,9 @@
 Expression trees can have a very rich and complicated structure. Often, you
 need to know some things about an expression's structure before you can process
 it. This section describes the tools Proto provides for peering inside an
-expression tree and discovering its structure.
+expression tree and discovering its structure. And as you'll see in later
+sections, all the really interesting things you can do with Proto begin right
+here.
 
 [/===============================================]
 [section:patterns Finding Patterns In Expressions]
@@ -286,7 +288,7 @@ _exact_ as follows:
 This says that a `CharString` must be a terminal, /and/ its value type must be
 the same as `char const *`. Notice the template argument of _if_:
 `boost::is_same< proto::_value, char const * >()`. This is Proto transform that 
-compares the value of a terminal to `char const *`.
+compares the value type of a terminal to `char const *`.
 
 The _if_ template has a couple of variants. In additon to `if_<Condition>` you
 can also say `if_<Condition, ThenGrammar>` and

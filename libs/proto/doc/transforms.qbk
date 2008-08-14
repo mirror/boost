@@ -34,10 +34,10 @@ following:
 
     proto::when< proto::terminal<int>, proto::terminal<long>::type(proto::_value) >
 
-`proto::terminal<long>::type(proto::_value)` is an example of a Proto transform. It says to
-create an object of type `proto::terminal<long>::type` and initialize it with the
-result of the `proto::_value` transform. `proto::_value` is a transform defined by Proto which
-extracts the value from a terminal expression.
+`proto::terminal<long>::type(proto::_value)` is an example of a Proto transform. It 
+says to create an object of type `proto::terminal<long>::type` and initialize it 
+with the result of the `proto::_value` transform. `proto::_value` is a transform 
+defined by Proto which extracts the value from a terminal expression.
 
 [note The transform above might look a little strange at first. It appears
 to be constructing a temporary object in place. In fact, it is a
@@ -163,6 +163,12 @@ The arity is determined by the highest placeholder in the expression. Our job
 will be to write a transform that calculates the arity of any calculator
 expression.
 
+[note *Why Bother Calculating Expression Arity?*
+
+This is more than just an intelectual exercise. Knowing the arity of a calculator 
+expression is important if you want to give users a meaningful error message when 
+they specify too few or too many arguments to an expression.]
+
 [/=========================]
 [heading Defining a Grammar]
 [/=========================]
@@ -180,13 +186,12 @@ We can immediately write the calculator grammar as follows:
 
 [CalcGrammar]
 
-We can read this as follows: a calculator expression is either placeholder 1,
-placeholder 2, some other terminal, or some unary or binary operator whose
-operands are calculator expressions. Recall that `proto::_` is a wildcard which
-matches anything. So `proto::terminal< _ >` will match any terminal, and
-`proto::unary_expr< _, CalcArity >` will match any unary expression
-for which the operand matches `CalcArity` (the `_` matches any operator
-tag).
+We can read this as follows: a calculator expression is either placeholder 1, 
+placeholder 2, some other terminal, or some unary or binary operator whose operands 
+are calculator expressions. Recall that `proto::_` is a wildcard that matches 
+anything. So `proto::terminal< _ >` will match any terminal, and
+`proto::unary_expr< _, CalcArity >` will match any unary expression for which the 
+operand matches `CalcArity` (the `_` matches any operator tag).
 
 [/============================]
 [heading Writing the Transform]
@@ -234,15 +239,20 @@ transform to the child node of the unary expression. As you might have noticed,
 differently. Rather than trying to construct a `CalcArity` object, Proto
 knows this is a function object and invokes it instead.
 
-[note When using function types as Proto transforms, they can either represent
-an object to construct or a function to call. It is similar to C++ where the
-syntax `foo(x)` can either be interpreted as an object to construct or a
-function to call, depending on whether `foo` is a type or a function. Proto
-can't know in general which is the case, so it uses a trait, `proto::is_callable<>`,
-to differentiate. `is_callable< mpl::int_<1> >::value` is false so `mpl::int_<1>()`
-is an object to construct, but `is_callable< CalcArity >::value` is true so
-`CalcArity(proto::_child)` is a function to call. (`is_callable< CalcArity >::value`
-is true because `CalcArity` inherits from `proto::or_<>`, which is callable.)]
+[/================================================]
+[note *Object Transforms vs. Callable Transforms*
+
+When using function types as Proto transforms, they can either represent an object 
+to construct or a function to call. It is similar to C++ where the syntax `foo(x)` 
+can either be interpreted as an object to construct or a function to call, 
+depending on whether `foo` is a type or a function. Proto can't know in general 
+which is the case, so it uses a trait, `proto::is_callable<>`, to differentiate. 
+`is_callable< mpl::int_<1> >::value` is false so `mpl::int_<1>()` is an object to 
+construct, but `is_callable< CalcArity >::value` is true so 
+`CalcArity(proto::_child)` is a function to call.
+(`is_callable< CalcArity >::value` is true because `CalcArity` inherits from 
+`proto::or_<>`, which is callable.)]
+[/================================================]
 
 [/
     That begs the question, what does `unary_expr<>`'s transform do? Well,
@@ -352,11 +362,10 @@ Piecing it all together, the complete `CalcArity` looks like this:
 We can use our `CalcArity` transform to calculate the arity of any
 calculator expression:
 
-    int i = 0; // not used, dummy state and data parameter
-
-    std::cout << CalcArity()( lit(100) * 200, i, i) << '\n';
-    std::cout << CalcArity()( (_1 - _1) / _1 * 100, i, i) << '\n';
-    std::cout << CalcArity()( (_2 - _1) / _2 * 100, i, i) << '\n';
+    CalcArity arity_of;
+    std::cout << arity_of( proto::lit(100) * 20 ) << '\n';
+    std::cout << arity_of( (_1 - _1) / _1 * 100 ) << '\n';
+    std::cout << arity_of( (_2 - _1) / _2 * 100 ) << '\n';
 
 This displays the following:
 
