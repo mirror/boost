@@ -104,7 +104,10 @@ struct hash_peek_bitset
 
     void set_bitset(hash_peek_bitset<Char> const &that)
     {
-        this->bset_ |= that.bset_;
+        if(this->test_icase_(that.icase()))
+        {
+            this->bset_ |= that.bset_;
+        }
     }
 
     void set_charset(basic_chset_8bit<Char> const &that, bool icase)
