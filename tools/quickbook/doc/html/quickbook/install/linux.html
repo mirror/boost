@@ -1,21 +1,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Debian, Ubuntu</title>
+<title>Debian, Ubuntu</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
 <link rel="start" href="../../index.html" title="Quickbook 1.4">
-<link rel="up" href="../install.html" title=" Installation and configuration">
-<link rel="prev" href="windows.html" title=" Windows 2000, XP, 2003, Vista">
-<link rel="next" href="../editors.html" title=" Editor Support">
+<link rel="up" href="../install.html" title="Installation and configuration">
+<link rel="prev" href="windows.html" title="Windows 2000, XP, 2003, Vista">
+<link rel="next" href="../editors.html" title="Editor Support">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,34 +24,33 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="quickbook.install.linux"></a><a href="linux.html" title=" Debian, Ubuntu"> Debian, Ubuntu</a></h3></div></div></div>
+<a name="quickbook.install.linux"></a><a class="link" href="linux.html" title="Debian, Ubuntu"> Debian, Ubuntu</a>
+</h3></div></div></div>
 <p>
         The following instructions apply to Debian and its derivatives. They are
         based on a Ubuntu Edgy install but should work on other Debian based systems.
       </p>
 <p>
-        First install the <tt class="computeroutput"><span class="identifier">bjam</span></tt>,
-        <tt class="computeroutput"><span class="identifier">xsltproc</span></tt>, <tt class="computeroutput"><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xsl</span></tt> and
-        <tt class="computeroutput"><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xml</span></tt> packages. For example, using <tt class="computeroutput"><span class="identifier">apt</span><span class="special">-</span><span class="identifier">get</span></tt>:
+        First install the <code class="computeroutput"><span class="identifier">bjam</span></code>,
+        <code class="computeroutput"><span class="identifier">xsltproc</span></code>, <code class="computeroutput"><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xsl</span></code> and
+        <code class="computeroutput"><span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xml</span></code> packages. For example, using <code class="computeroutput"><span class="identifier">apt</span><span class="special">-</span><span class="identifier">get</span></code>:
       </p>
-<pre class="programlisting">
-<span class="identifier">sudo</span> <span class="identifier">apt</span><span class="special">-</span><span class="identifier">get</span> <span class="identifier">install</span> <span class="identifier">xsltproc</span> <span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xsl</span> <span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xml</span>
+<pre class="programlisting"><span class="identifier">sudo</span> <span class="identifier">apt</span><span class="special">-</span><span class="identifier">get</span> <span class="identifier">install</span> <span class="identifier">xsltproc</span> <span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xsl</span> <span class="identifier">docbook</span><span class="special">-</span><span class="identifier">xml</span>
 </pre>
 <p>
         If you're planning on building boost's documentation, you'll also need to
-        install the <tt class="computeroutput"><span class="identifier">doxygen</span></tt> package
+        install the <code class="computeroutput"><span class="identifier">doxygen</span></code> package
         as well.
       </p>
 <p>
         Next, we need to configure Boost Build to compile BoostBook files. Add the
-        following to your <tt class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></tt> file, which should be in your home
+        following to your <code class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></code> file, which should be in your home
         directory. If you don't have one, create a file containing this text. For
-        more information on setting up <tt class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></tt>, see
+        more information on setting up <code class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></code>, see
         the <a href="http://boost.org/boost-build2/doc/html/bbv2/advanced/configuration.html" target="_top">Boost
         Build documentation</a>.
       </p>
-<pre class="programlisting">
-<span class="identifier">using</span> <span class="identifier">xsltproc</span> <span class="special">;</span>
+<pre class="programlisting"><span class="identifier">using</span> <span class="identifier">xsltproc</span> <span class="special">;</span>
 
 <span class="identifier">using</span> <span class="identifier">boostbook</span>
     <span class="special">:</span> <span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">share</span><span class="special">/</span><span class="identifier">xml</span><span class="special">/</span><span class="identifier">docbook</span><span class="special">/</span><span class="identifier">stylesheet</span><span class="special">/</span><span class="identifier">nwalsh</span>
@@ -67,24 +66,23 @@
       </p>
 <div class="orderedlist"><ol type="1">
 <li>
-          Go to Quickbook's source directory (<tt class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">quickbook</span></tt>).
+          Go to Quickbook's source directory (<code class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">quickbook</span></code>).
         </li>
 <li>
-          Build the utility by issuing <tt class="computeroutput"><span class="identifier">bjam</span>
-          <span class="special">--</span><span class="identifier">v2</span></tt>.
+          Build the utility by issuing <code class="computeroutput"><span class="identifier">bjam</span>
+          <span class="special">--</span><span class="identifier">v2</span></code>.
         </li>
 <li>
-          Copy the resulting <tt class="computeroutput"><span class="identifier">quickbook</span></tt>
-          binary (located under the <tt class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">/</span><span class="identifier">bin</span><span class="special">.</span><span class="identifier">v2</span></tt> hierarchy)
-          to a safe place. The traditional location is <tt class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span><span class="special">/</span><span class="identifier">bin</span></tt>.
+          Copy the resulting <code class="computeroutput"><span class="identifier">quickbook</span></code>
+          binary (located under the <code class="computeroutput"><span class="identifier">BOOST_ROOT</span><span class="special">/</span><span class="identifier">bin</span><span class="special">.</span><span class="identifier">v2</span></code> hierarchy)
+          to a safe place. The traditional location is <code class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span><span class="special">/</span><span class="identifier">bin</span></code>.
         </li>
 <li>
-          Add the following to your <tt class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></tt>
+          Add the following to your <code class="computeroutput"><span class="identifier">user</span><span class="special">-</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">jam</span></code>
           file, using the full path of the quickbook executable:
         </li>
 </ol></div>
-<pre class="programlisting">
-<span class="identifier">using</span> <span class="identifier">quickbook</span>
+<pre class="programlisting"><span class="identifier">using</span> <span class="identifier">quickbook</span>
     <span class="special">:</span> <span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span><span class="special">/</span><span class="identifier">bin</span><span class="special">/</span><span class="identifier">quickbook</span>
     <span class="special">;</span>
 </pre>
