@@ -7118,6 +7118,21 @@ template &lt;class T, class Alloc&gt;
     <dl>
       <dd>
         <h3>
+          Boost 1.37
+        </h3>
+      </dd>
+      <dd>
+        <ul>
+          <li>Added new methods <code>is_linearized()</code> and <code>rotate(const_iterator)</code>.
+          </li>
+          <li>Fixed bugs:<br>
+            #1987 Patch to make <code>circular_buffer.hpp</code> #includes absolute.<br>
+            #1852 Copy constructor does not copy capacity.
+          </li>
+        </ul>
+      </dd>
+      <dd>
+        <h3>
           Boost 1.36
         </h3>
       </dd>
@@ -7126,12 +7141,8 @@ template &lt;class T, class Alloc&gt;
           <li>Changed behaviour of the <code>circular_buffer(const allocator_type&amp;)</code> constructor. Since this
           version the constructor does not allocate any memory and both capacity and size are set to zero.
           </li>
-          <li>Added new methods <code>is_linearized()</code> and <code>rotate(const_iterator)</code>.
-          </li>
-          <li>Fixed bugs:<br>
-            #1987 Patch to make <code>circular_buffer.hpp</code> #includes absolute.<br>
+          <li>Fixed bug:<br>
             #1919 Default constructed circular buffer throws <code>std::bad_alloc</code>.<br>
-            #1852 Copy constructor does not copy capacity.
           </li>
         </ul>
       </dd>
