@@ -1,6 +1,6 @@
 // Test of the space optimized adaptor of the circular buffer.
 
-// Copyright (c) 2003-2007 Jan Gaspar
+// Copyright (c) 2003-2008 Jan Gaspar
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -62,7 +62,7 @@ void capacity_control_test() {
 
     circular_buffer_space_optimized<int>::capacity_type c1 = 10;
     circular_buffer_space_optimized<int>::capacity_type c2 =
-        circular_buffer_space_optimized<int>::capacity_type(20, 5);
+    circular_buffer_space_optimized<int>::capacity_type(20, 5);
     circular_buffer_space_optimized<int>::capacity_type c3 = c2;
 
     BOOST_CHECK(c1.capacity() == 10);
@@ -78,10 +78,10 @@ void capacity_control_test() {
     BOOST_CHECK(c1.min_capacity() == 5);
 }
 
-void some_constructors_test() {
+void specific_constructors_test() {
 
     cb_space_optimized cb1;
-    BOOST_CHECK(cb1.capacity() == cb1.max_size());
+    BOOST_CHECK(cb1.capacity() == 0);
     BOOST_CHECK(cb1.capacity().min_capacity() == 0);
     BOOST_CHECK(cb1.internal_capacity() == 0);
     BOOST_CHECK(cb1.size() == 0);
@@ -90,10 +90,15 @@ void some_constructors_test() {
     cb1.push_back(2);
     cb1.push_back(3);
 
-    BOOST_CHECK(cb1.size() == 3);
-    BOOST_CHECK(cb1.capacity() == cb1.max_size());
+    BOOST_CHECK(cb1.size() == 0);
+    BOOST_CHECK(cb1.capacity() == 0);
 
-    cb_space_optimized cb2(cb1.begin(), cb1.end());
+    vector<int> v;
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+
+    cb_space_optimized cb2(v.begin(), v.end());
 
     BOOST_CHECK(cb2.capacity() == 3);
     BOOST_CHECK(cb2.capacity().min_capacity() == 0);
@@ -183,7 +188,7 @@ test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
 
     tests->add(BOOST_TEST_CASE(&min_capacity_test));
     tests->add(BOOST_TEST_CASE(&capacity_control_test));
-    tests->add(BOOST_TEST_CASE(&some_constructors_test));
+    tests->add(BOOST_TEST_CASE(&specific_constructors_test));
     tests->add(BOOST_TEST_CASE(&shrink_to_fit_test));
     tests->add(BOOST_TEST_CASE(&iterator_invalidation_test));
 

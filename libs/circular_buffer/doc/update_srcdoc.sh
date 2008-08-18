@@ -3,7 +3,7 @@
 # Shell script which updates the Circular Buffer library documentation with    #
 # the latest source code documentation (which is in the source files).         #
 #                                                                              #
-# Copyright (c) 2007 Jan Gaspar                                                #
+# Copyright (c) 2003-2008 Jan Gaspar                                           #
 #                                                                              #
 # Use, modification, and distribution is subject to the Boost Software         #
 # License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at      #

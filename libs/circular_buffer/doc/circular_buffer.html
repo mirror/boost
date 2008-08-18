@@ -26,28 +26,82 @@
     </table>
     <h2>
       Contents
-    </h2><a href="#description">Description</a><br>
-    <a href="#briefexample">Introductory Example</a><br>
-    <a href="#synopsis">Synopsis</a><br>
-    <a href="#rationale">Rationale</a><br>
-    - <a href="#threadsafety">Thread-Safety</a><br>
-    - <a href="#overwrite">Overwrite Operation</a><br>
-    - <a href="#fullbuffer">Writing to a Full Buffer</a><br>
-    - <a href="#emptybuffer">Reading/Removing from an Empty Buffer</a><br>
-    - <a href="#iteratorinvalidation">Iterator Invalidation</a><br>
-    <a href="#caveats">Caveats</a><br>
-    <a href="#debug">Debug Support</a><br>
-    <a href="#examples">More Examples</a><br>
-    <a href="#header">Header Files</a><br>
-    <a href="#model">Modelled Concepts</a><br>
-    <a href="#parameters">Template Parameters</a><br>
-    <a href="#types">Public Types</a><br>
-    <a href="#constructors">Constructors and Destructor</a><br>
-    <a href="#methods">Public Member Functions</a><br>
-    <a href="#functions">Standalone Functions</a><br>
-    <a href="#notes">Notes</a><br>
-    <a href="#see">See also</a><br>
-    <a href="#ack">Acknowledgements</a>
+    </h2>
+    <dl>
+      <dt>
+        <a href="#description">Description</a>
+      </dt>
+      <dt>
+        <a href="#briefexample">Introductory Example</a>
+      </dt>
+      <dt>
+        <a href="#synopsis">Synopsis</a>
+      </dt>
+      <dt>
+        <a href="#rationale">Rationale</a>
+      </dt>
+      <dd>
+        <ul>
+          <li>
+            <a href="#threadsafety">Thread-Safety</a>
+          </li>
+          <li>
+            <a href="#overwrite">Overwrite Operation</a>
+          </li>
+          <li>
+            <a href="#fullbuffer">Writing to a Full Buffer</a>
+          </li>
+          <li>
+            <a href="#emptybuffer">Reading/Removing from an Empty Buffer</a>
+          </li>
+          <li>
+            <a href="#iteratorinvalidation">Iterator Invalidation</a>
+          </li>
+        </ul>
+      </dd>
+      <dt>
+        <a href="#caveats">Caveats</a>
+      </dt>
+      <dt>
+        <a href="#debug">Debug Support</a>
+      </dt>
+      <dt>
+        <a href="#examples">More Examples</a>
+      </dt>
+      <dt>
+        <a href="#header">Header Files</a>
+      </dt>
+      <dt>
+        <a href="#model">Modelled Concepts</a>
+      </dt>
+      <dt>
+        <a href="#parameters">Template Parameters</a>
+      </dt>
+      <dt>
+        <a href="#types">Public Types</a>
+      </dt>
+      <dt>
+        <a href="#constructors">Constructors and Destructor</a>
+      </dt>
+      <dt>
+        <a href="#methods">Public Member Functions</a>
+      </dt>
+      <dt>
+        <a href="#functions">Standalone Functions</a>
+      </dt>
+      <dt>
+        <a href="#notes">Notes</a>
+      </dt>
+      <dt>
+        <a href="#see">See also</a>
+      </dt>
+      <dt>
+        <a href="#ack">Acknowledgements</a>
+      </dt>
+      <dt>
+        <a href="#relnotes">Release Notes</a>
+      </dt>
+    </dl>
     <table id="table_figure" align="right" border="0">
       <tr>
         <td>
@@ -200,17 +254,17 @@ public:
    <a href="#classboost_1_1circular__buffer_164250ffbbbdbc62b99e8301fc195b80c">~circular_buffer</a>();
 
    allocator_type <a href=
-"#classboost_1_1circular__buffer_15693ba52e58ef90f1d914cbb63143cd3">get_allocator</a>() const;
+"#classboost_1_1circular__buffer_1a20b7d0e7a4da0af13286df9f53d660c">get_allocator</a>() const;
    allocator_type&amp; <a href="#classboost_1_1circular__buffer_1af7758a36ac2f84a3024b50b4fc7e098">get_allocator</a>();
    iterator <a href="#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin</a>();
    iterator <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end</a>();
-   const_iterator <a href="#classboost_1_1circular__buffer_1ee6c38b2ecdc8dfec79975dbc685c80b">begin</a>() const;
-   const_iterator <a href="#classboost_1_1circular__buffer_19813e1d191cd04c4cfc100bbc4733e92">end</a>() const;
+   const_iterator <a href="#classboost_1_1circular__buffer_10640d3d41c13b6089b6f169224cf1038">begin</a>() const;
+   const_iterator <a href="#classboost_1_1circular__buffer_17890810d07bc595cfb87f9c47cb075ac">end</a>() const;
    reverse_iterator <a href="#classboost_1_1circular__buffer_1db3d6b10b6763549f54d2627228fa7aa">rbegin</a>();
    reverse_iterator <a href="#classboost_1_1circular__buffer_1cff9236a50107188b8942847a4dc2697">rend</a>();
    const_reverse_iterator <a href=
-"#classboost_1_1circular__buffer_146a8356a1aec6abca9c44cfc60b3bb10">rbegin</a>() const;
-   const_reverse_iterator <a href="#classboost_1_1circular__buffer_1a09f7111dde9f52a4d8babfcdef7e798">rend</a>() const;
+"#classboost_1_1circular__buffer_1765d91bf48341907418433a1e3aab026">rbegin</a>() const;
+   const_reverse_iterator <a href="#classboost_1_1circular__buffer_108dbf538b00a14daf5582ece80746fc3">rend</a>() const;
    reference <a href=
 "#classboost_1_1circular__buffer_1d219f0d3203fb43b964a8cf63f1865cd">operator[]</a>(size_type index);
    const_reference <a href=
@@ -220,19 +274,22 @@ public:
 "#classboost_1_1circular__buffer_1b233a298f5845a0fcf2ecc56f4170810">at</a>(size_type index) const;
    reference <a href="#classboost_1_1circular__buffer_10d5fdeabeb352f47d1f7bb1ea8d9819f">front</a>();
    reference <a href="#classboost_1_1circular__buffer_1d985d974020f88bb4255d8edbae0a30a">back</a>();
-   const_reference <a href="#classboost_1_1circular__buffer_13261c47e81bb5e447fb0d70f096728b8">front</a>() const;
-   const_reference <a href="#classboost_1_1circular__buffer_14cd3a019a9d99b4e29918b51c2181a07">back</a>() const;
+   const_reference <a href="#classboost_1_1circular__buffer_10df8595d83bb9d8a7ce50aabc678f90b">front</a>() const;
+   const_reference <a href="#classboost_1_1circular__buffer_1027201797868c6274feb6712f670a132">back</a>() const;
    array_range <a href="#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one</a>();
    array_range <a href="#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two</a>();
-   const_array_range <a href="#classboost_1_1circular__buffer_1586cfbdef335f1d3d31faacec63f7b04">array_one</a>() const;
-   const_array_range <a href="#classboost_1_1circular__buffer_191a0e2c33c0e5b4d7b8c497847bc29ce">array_two</a>() const;
+   const_array_range <a href="#classboost_1_1circular__buffer_10f4b157e27b1170a571417986b239945">array_one</a>() const;
+   const_array_range <a href="#classboost_1_1circular__buffer_1bb8eb0f298ad2012c55c5303e1f174d5">array_two</a>() const;
    pointer <a href="#classboost_1_1circular__buffer_1ea728bf57f91aa8946eddf76ce816a4e">linearize</a>();
-   size_type <a href="#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size</a>() const;
-   size_type <a href="#classboost_1_1circular__buffer_195158ed4d4b03794068e259f85291995">max_size</a>() const;
-   bool <a href="#classboost_1_1circular__buffer_105acab2b9a0b41044b5241cfc9d87663">empty</a>() const;
-   bool <a href="#classboost_1_1circular__buffer_174a305e473c0bba9dcf30abb68bff909">full</a>() const;
-   size_type <a href="#classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338">reserve</a>() const;
-   capacity_type <a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity</a>() const;
+   bool <a href="#classboost_1_1circular__buffer_120f64448dc0723cc68c1096f6b00bc0a">is_linearized</a>() const;
+   void <a href=
+"#classboost_1_1circular__buffer_1c591bb9e271b10b5240afcff3bd2c619">rotate</a>(const_iterator new_begin);
+   size_type <a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size</a>() const;
+   size_type <a href="#classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7">max_size</a>() const;
+   bool <a href="#classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583">empty</a>() const;
+   bool <a href="#classboost_1_1circular__buffer_1fd0eef8ba91210d1575404b7e3e8207a">full</a>() const;
+   size_type <a href="#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve</a>() const;
+   capacity_type <a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity</a>() const;
    void <a href=
 "#classboost_1_1circular__buffer_161714204ef5172d156e2c7eccd04998f">set_capacity</a>(capacity_type new_capacity);
    void <a href=
@@ -588,9 +645,9 @@ template &lt;class T, class Alloc&gt;
 </pre>
     <p>
       The <code>circular_buffer</code> has a capacity of three <code>int</code>. Therefore, the size of the buffer will
-      not exceed three. The <code><a href="http://www.sgi.com/tech/stl/accumulate.html">accumulate</a></code> algorithm
-      evaluates the sum of the stored elements. The semantics of the <code>circular_buffer</code> can be inferred from
-      the assertions.
+      not exceed three. The <code><a href="http://www.sgi.com/tech/stl/accumulate.html">std::accumulate</a></code>
+      algorithm evaluates the sum of the stored elements. The semantics of the <code>circular_buffer</code> can be
+      inferred from the assertions.
     </p>
     <h4>
       <a name="boundedbuffer" id="boundedbuffer">Bounded Buffer Example</a>
@@ -722,6 +779,52 @@ template &lt;class T, class Alloc&gt;
           <th>
             Default
           </th>
+        </tr>
+        <tr>
+          <td>
+            <a id="templateparam_T" name="templateparam_T"><code>T</code></a>
+          </td>
+          <td>
+            The type of the elements stored in the <code>circular_buffer</code>.
+            <dl>
+              <dt>
+                <b>Type Requirements:</b>
+              </dt>
+              <dd>
+                The <code>T</code> has to be <a href="http://www.sgi.com/tech/stl/Assignable.html">SGIAssignable</a>
+                (SGI STL defined combination of <a href="../../utility/Assignable.html">Assignable</a> and <a href=
+                "../../utility/CopyConstructible.html">CopyConstructible</a>). Moreover <code>T</code> has to be
+                <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">DefaultConstructible</a> if supplied as
+                a default parameter when invoking some of the <code>circular_buffer</code>'s methods e.g.
+                <code>insert(iterator pos, const value_type&amp; item = value_type())</code>. And <a href=
+                "http://www.sgi.com/tech/stl/EqualityComparable.html">EqualityComparable</a> and/or <a href=
+                "../../utility/LessThanComparable.html">LessThanComparable</a> if the <code>circular_buffer</code> will
+                be compared with another container.
+              </dd>
+            </dl>
+          </td>
+          <td>
+            <br>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="templateparam_Alloc" name="templateparam_Alloc"><code>Alloc</code></a>
+          </td>
+          <td>
+            The allocator type used for all internal memory management.
+            <dl>
+              <dt>
+                <b>Type Requirements:</b>
+              </dt>
+              <dd>
+                The <code>Alloc</code> has to meet the allocator requirements imposed by STL.
+              </dd>
+            </dl>
+          </td>
+          <td>
+            <code>std::allocator&lt;T&gt;</code>
+          </td>
         </tr>
       </table>
     </div>
@@ -894,15 +997,15 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a>&amp; alloc =
             allocator_type());</b></code><br>
             <br>
-            Create an empty <code>circular_buffer</code> with a maximum capacity.
+            Create an empty <code>circular_buffer</code> with zero capacity.
             <dl>
               <dt>
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> ==
-                <a href="#classboost_1_1circular__buffer_195158ed4d4b03794068e259f85291995">max_size()</a> &amp;&amp;
-                <a href="#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> == 0</code>
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> == 0
+                &amp;&amp; <a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
+                0</code>
               </dd>
             </dl>
             <dl>
@@ -942,9 +1045,33 @@ template &lt;class T, class Alloc&gt;
                 <b>Warning:</b>
               </dt>
               <dd>
-                This constructor has been defined only due to compatibility with the STL container definition. Avoid
-                using it because it may allocate <b>very large</b> amount of memory (depending on allocator's
-                max_size()).
+                Since Boost version 1.36 the behaviour of this constructor has changed. Now the constructor does not
+                allocate any memory and both capacity and size are set to zero. Also note when inserting an element
+                into a <code>circular_buffer</code> with zero capacity (e.g. by <code><a href=
+                "#classboost_1_1circular__buffer_1aa35dd7ef8eb1d04508494d1835cc82e">push_back(const_reference)</a></code>
+                or <code><a href="#classboost_1_1circular__buffer_128c92740fee1b9deb8c69816e389de95">insert(iterator,
+                value_type)</a></code>) nothing will be inserted and the size (as well as capacity) remains zero.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Note:</b>
+              </dt>
+              <dd>
+                You can explicitly set the capacity by calling the <code><a href=
+                "#classboost_1_1circular__buffer_161714204ef5172d156e2c7eccd04998f">set_capacity(capacity_type)</a></code>
+                method or you can use the other constructor with the capacity specified.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer_1862a64cbc6a49376ecbb8321c3b44974">circular_buffer(capacity_type,
+                const allocator_type&amp; alloc)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_161714204ef5172d156e2c7eccd04998f">set_capacity(capacity_type)</a></code>
               </dd>
             </dl>
           </td>
@@ -964,9 +1091,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> ==
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
                 capacity &amp;&amp; <a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> == 0</code>
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == 0</code>
               </dd>
             </dl>
             <dl>
@@ -1029,8 +1156,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> == n
-                &amp;&amp; <a href="#classboost_1_1circular__buffer_174a305e473c0bba9dcf30abb68bff909">full()</a>
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> == n
+                &amp;&amp; <a href="#classboost_1_1circular__buffer_1fd0eef8ba91210d1575404b7e3e8207a">full()</a>
                 &amp;&amp; (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this)[n - 1] ==
                 item</code>
               </dd>
@@ -1117,9 +1244,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> ==
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
                 capacity &amp;&amp; <a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> == n &amp;&amp;
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == n &amp;&amp;
                 (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this)[n - 1] ==
                 item</code>
               </dd>
@@ -1271,9 +1398,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> ==
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
                 std::distance(first, last) &amp;&amp; <a href=
-                "#classboost_1_1circular__buffer_174a305e473c0bba9dcf30abb68bff909">full()</a> &amp;&amp; (*this)[0]==
+                "#classboost_1_1circular__buffer_1fd0eef8ba91210d1575404b7e3e8207a">full()</a> &amp;&amp; (*this)[0]==
                 *first &amp;&amp; (*this)[1] == *(first + 1) &amp;&amp; ... &amp;&amp; (*this)[std::distance(first,
                 last) - 1] == *(last - 1)</code>
               </dd>
@@ -1362,9 +1489,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> ==
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
                 capacity &amp;&amp; <a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> &lt;=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> &lt;=
                 std::distance(first, last) &amp;&amp; (*this)[0]== *(last - capacity) &amp;&amp; (*this)[1] == *(last -
                 capacity + 1) &amp;&amp; ... &amp;&amp; (*this)[capacity - 1] == *(last - 1)</code><br>
                 <br>
@@ -1496,8 +1623,8 @@ template &lt;class T, class Alloc&gt;
       <table id="table_methods" border="1" cellpadding="3">
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_15693ba52e58ef90f1d914cbb63143cd3" name=
-            "classboost_1_1circular__buffer_15693ba52e58ef90f1d914cbb63143cd3"></a><code><b><a href=
+            <a id="classboost_1_1circular__buffer_1a20b7d0e7a4da0af13286df9f53d660c" name=
+            "classboost_1_1circular__buffer_1a20b7d0e7a4da0af13286df9f53d660c"></a><code><b><a href=
             "#classboost_1_1circular__buffer_14e07c6ddfe89debe384e59bed06e7cb7">allocator_type</a> get_allocator()
             const;</b></code><br>
             <br>
@@ -1616,7 +1743,7 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_15693ba52e58ef90f1d914cbb63143cd3">get_allocator()
+                <code><a href="#classboost_1_1circular__buffer_1a20b7d0e7a4da0af13286df9f53d660c">get_allocator()
                 const</a></code>
               </dd>
             </dl>
@@ -1747,8 +1874,8 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_1ee6c38b2ecdc8dfec79975dbc685c80b" name=
-            "classboost_1_1circular__buffer_1ee6c38b2ecdc8dfec79975dbc685c80b"></a><code><b><a href=
+            <a id="classboost_1_1circular__buffer_10640d3d41c13b6089b6f169224cf1038" name=
+            "classboost_1_1circular__buffer_10640d3d41c13b6089b6f169224cf1038"></a><code><b><a href=
             "#classboost_1_1circular__buffer_15cab6d46f03c40d1e52d41843319ddb9">const_iterator</a> begin()
             const;</b></code><br>
             <br>
@@ -1760,7 +1887,7 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 A const random access iterator pointing to the first element of the <code>circular_buffer</code>. If
                 the <code>circular_buffer</code> is empty it returns an iterator equal to the one returned by
-                <code><a href="#classboost_1_1circular__buffer_19813e1d191cd04c4cfc100bbc4733e92">end()
+                <code><a href="#classboost_1_1circular__buffer_17890810d07bc595cfb87f9c47cb075ac">end()
                 const</a></code>.
               </dd>
             </dl>
@@ -1801,10 +1928,10 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_19813e1d191cd04c4cfc100bbc4733e92">end()
+                <code><a href="#classboost_1_1circular__buffer_17890810d07bc595cfb87f9c47cb075ac">end()
                 const</a></code>, <code><a href=
-                "#classboost_1_1circular__buffer_146a8356a1aec6abca9c44cfc60b3bb10">rbegin() const</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_1a09f7111dde9f52a4d8babfcdef7e798">rend()
+                "#classboost_1_1circular__buffer_1765d91bf48341907418433a1e3aab026">rbegin() const</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_108dbf538b00a14daf5582ece80746fc3">rend()
                 const</a></code>
               </dd>
             </dl>
@@ -1812,8 +1939,8 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_19813e1d191cd04c4cfc100bbc4733e92" name=
-            "classboost_1_1circular__buffer_19813e1d191cd04c4cfc100bbc4733e92"></a><code><b><a href=
+            <a id="classboost_1_1circular__buffer_17890810d07bc595cfb87f9c47cb075ac" name=
+            "classboost_1_1circular__buffer_17890810d07bc595cfb87f9c47cb075ac"></a><code><b><a href=
             "#classboost_1_1circular__buffer_15cab6d46f03c40d1e52d41843319ddb9">const_iterator</a> end()
             const;</b></code><br>
             <br>
@@ -1826,7 +1953,7 @@ template &lt;class T, class Alloc&gt;
                 A const random access iterator pointing to the element "one behind" the last element of the
                 <code>circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal
                 to the one returned by <code><a href=
-                "#classboost_1_1circular__buffer_1ee6c38b2ecdc8dfec79975dbc685c80b">begin() const</a></code> const.
+                "#classboost_1_1circular__buffer_10640d3d41c13b6089b6f169224cf1038">begin() const</a></code> const.
               </dd>
             </dl>
             <dl>
@@ -1866,10 +1993,10 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1ee6c38b2ecdc8dfec79975dbc685c80b">begin()
+                <code><a href="#classboost_1_1circular__buffer_10640d3d41c13b6089b6f169224cf1038">begin()
                 const</a></code>, <code><a href=
-                "#classboost_1_1circular__buffer_146a8356a1aec6abca9c44cfc60b3bb10">rbegin() const</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_1a09f7111dde9f52a4d8babfcdef7e798">rend()
+                "#classboost_1_1circular__buffer_1765d91bf48341907418433a1e3aab026">rbegin() const</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_108dbf538b00a14daf5582ece80746fc3">rend()
                 const</a></code>
               </dd>
             </dl>
@@ -2002,8 +2129,8 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_146a8356a1aec6abca9c44cfc60b3bb10" name=
-            "classboost_1_1circular__buffer_146a8356a1aec6abca9c44cfc60b3bb10"></a><code><b><a href=
+            <a id="classboost_1_1circular__buffer_1765d91bf48341907418433a1e3aab026" name=
+            "classboost_1_1circular__buffer_1765d91bf48341907418433a1e3aab026"></a><code><b><a href=
             "#classboost_1_1circular__buffer_1c7317701b511bc5f7a663b06b53e2b73">const_reverse_iterator</a> rbegin()
             const;</b></code><br>
             <br>
@@ -2016,7 +2143,7 @@ template &lt;class T, class Alloc&gt;
                 A const reverse random access iterator pointing to the last element of the
                 <code>circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal
                 to the one returned by <code><a href=
-                "#classboost_1_1circular__buffer_1a09f7111dde9f52a4d8babfcdef7e798">rend() const</a></code>.
+                "#classboost_1_1circular__buffer_108dbf538b00a14daf5582ece80746fc3">rend() const</a></code>.
               </dd>
             </dl>
             <dl>
@@ -2056,10 +2183,10 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1a09f7111dde9f52a4d8babfcdef7e798">rend()
+                <code><a href="#classboost_1_1circular__buffer_108dbf538b00a14daf5582ece80746fc3">rend()
                 const</a></code>, <code><a href=
-                "#classboost_1_1circular__buffer_1ee6c38b2ecdc8dfec79975dbc685c80b">begin() const</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_19813e1d191cd04c4cfc100bbc4733e92">end()
+                "#classboost_1_1circular__buffer_10640d3d41c13b6089b6f169224cf1038">begin() const</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_17890810d07bc595cfb87f9c47cb075ac">end()
                 const</a></code>
               </dd>
             </dl>
@@ -2067,8 +2194,8 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_1a09f7111dde9f52a4d8babfcdef7e798" name=
-            "classboost_1_1circular__buffer_1a09f7111dde9f52a4d8babfcdef7e798"></a><code><b><a href=
+            <a id="classboost_1_1circular__buffer_108dbf538b00a14daf5582ece80746fc3" name=
+            "classboost_1_1circular__buffer_108dbf538b00a14daf5582ece80746fc3"></a><code><b><a href=
             "#classboost_1_1circular__buffer_1c7317701b511bc5f7a663b06b53e2b73">const_reverse_iterator</a> rend()
             const;</b></code><br>
             <br>
@@ -2081,7 +2208,7 @@ template &lt;class T, class Alloc&gt;
                 A const reverse random access iterator pointing to the element "one before" the first element of the
                 <code>circular_buffer</code>. If the <code>circular_buffer</code> is empty it returns an iterator equal
                 to the one returned by <code><a href=
-                "#classboost_1_1circular__buffer_146a8356a1aec6abca9c44cfc60b3bb10">rbegin() const</a></code>.
+                "#classboost_1_1circular__buffer_1765d91bf48341907418433a1e3aab026">rbegin() const</a></code>.
               </dd>
             </dl>
             <dl>
@@ -2121,10 +2248,10 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_146a8356a1aec6abca9c44cfc60b3bb10">rbegin()
+                <code><a href="#classboost_1_1circular__buffer_1765d91bf48341907418433a1e3aab026">rbegin()
                 const</a></code>, <code><a href=
-                "#classboost_1_1circular__buffer_1ee6c38b2ecdc8dfec79975dbc685c80b">begin() const</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_19813e1d191cd04c4cfc100bbc4733e92">end()
+                "#classboost_1_1circular__buffer_10640d3d41c13b6089b6f169224cf1038">begin() const</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_17890810d07bc595cfb87f9c47cb075ac">end()
                 const</a></code>
               </dd>
             </dl>
@@ -2144,7 +2271,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code>0 &lt;= index &amp;&amp; index &lt; <a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a></code>
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>
               </dd>
             </dl>
             <dl>
@@ -2227,7 +2354,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code>0 &lt;= index &amp;&amp; index &lt; <a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a></code>
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>
               </dd>
             </dl>
             <dl>
@@ -2332,7 +2459,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code>std::out_of_range</code> when the <code>index</code> is invalid (when <code>index &gt;= <a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a></code>).
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>).
               </dd>
             </dl>
             <dl>
@@ -2364,7 +2491,7 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1d219f0d3203fb43b964a8cf63f1865cd">operator[]</a></code>
+                <code>operator[]</code>
               </dd>
             </dl>
           </td>
@@ -2407,7 +2534,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code>std::out_of_range</code> when the <code>index</code> is invalid (when <code>index &gt;= <a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a></code>).
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>).
               </dd>
             </dl>
             <dl>
@@ -2577,8 +2704,8 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_13261c47e81bb5e447fb0d70f096728b8" name=
-            "classboost_1_1circular__buffer_13261c47e81bb5e447fb0d70f096728b8"></a><code><b><a href=
+            <a id="classboost_1_1circular__buffer_10df8595d83bb9d8a7ce50aabc678f90b" name=
+            "classboost_1_1circular__buffer_10df8595d83bb9d8a7ce50aabc678f90b"></a><code><b><a href=
             "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> front()
             const;</b></code><br>
             <br>
@@ -2636,7 +2763,7 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_14cd3a019a9d99b4e29918b51c2181a07">back()
+                <code><a href="#classboost_1_1circular__buffer_1027201797868c6274feb6712f670a132">back()
                 const</a></code>
               </dd>
             </dl>
@@ -2644,8 +2771,8 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_14cd3a019a9d99b4e29918b51c2181a07" name=
-            "classboost_1_1circular__buffer_14cd3a019a9d99b4e29918b51c2181a07"></a><code><b><a href=
+            <a id="classboost_1_1circular__buffer_1027201797868c6274feb6712f670a132" name=
+            "classboost_1_1circular__buffer_1027201797868c6274feb6712f670a132"></a><code><b><a href=
             "#classboost_1_1circular__buffer_1a8397191092f5bacee991b623ca4b910">const_reference</a> back()
             const;</b></code><br>
             <br>
@@ -2703,7 +2830,7 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_13261c47e81bb5e447fb0d70f096728b8">front()
+                <code><a href="#classboost_1_1circular__buffer_10df8595d83bb9d8a7ce50aabc678f90b">front()
                 const</a></code>
               </dd>
             </dl>
@@ -2910,15 +3037,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_1586cfbdef335f1d3d31faacec63f7b04" name=
-            "classboost_1_1circular__buffer_1586cfbdef335f1d3d31faacec63f7b04"></a><code><b><a href=
+            <a id="classboost_1_1circular__buffer_10f4b157e27b1170a571417986b239945" name=
+            "classboost_1_1circular__buffer_10f4b157e27b1170a571417986b239945"></a><code><b><a href=
             "#classboost_1_1circular__buffer_11885d7f475b7e7a74c95b2448d243025">const_array_range</a> array_one()
             const;</b></code><br>
             <br>
             Get the first continuous array of the internal buffer.
             <p>
               This method in combination with <code><a href=
-              "#classboost_1_1circular__buffer_191a0e2c33c0e5b4d7b8c497847bc29ce">array_two() const</a></code> can be
+              "#classboost_1_1circular__buffer_1bb8eb0f298ad2012c55c5303e1f174d5">array_two() const</a></code> can be
               useful when passing the stored data into a legacy C API as an array.
             </p>
             <dl>
@@ -2967,7 +3094,7 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_191a0e2c33c0e5b4d7b8c497847bc29ce">array_two()
+                <code><a href="#classboost_1_1circular__buffer_1bb8eb0f298ad2012c55c5303e1f174d5">array_two()
                 const</a></code>; <code><a href=
                 "#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one()</a></code> for more
                 details how to pass data into a legacy C API.
@@ -2977,15 +3104,15 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_191a0e2c33c0e5b4d7b8c497847bc29ce" name=
-            "classboost_1_1circular__buffer_191a0e2c33c0e5b4d7b8c497847bc29ce"></a><code><b><a href=
+            <a id="classboost_1_1circular__buffer_1bb8eb0f298ad2012c55c5303e1f174d5" name=
+            "classboost_1_1circular__buffer_1bb8eb0f298ad2012c55c5303e1f174d5"></a><code><b><a href=
             "#classboost_1_1circular__buffer_11885d7f475b7e7a74c95b2448d243025">const_array_range</a> array_two()
             const;</b></code><br>
             <br>
             Get the second continuous array of the internal buffer.
             <p>
               This method in combination with <code><a href=
-              "#classboost_1_1circular__buffer_1586cfbdef335f1d3d31faacec63f7b04">array_one() const</a></code> can be
+              "#classboost_1_1circular__buffer_10f4b157e27b1170a571417986b239945">array_one() const</a></code> can be
               useful when passing the stored data into a legacy C API as an array.
             </p>
             <dl>
@@ -3035,7 +3162,7 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1586cfbdef335f1d3d31faacec63f7b04">array_one()
+                <code><a href="#classboost_1_1circular__buffer_10f4b157e27b1170a571417986b239945">array_one()
                 const</a></code>
               </dd>
             </dl>
@@ -3057,7 +3184,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code>&amp;(*this)[0] &lt; &amp;(*this)[1] &lt; ... &lt; &amp;(*this)[<a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> - 1]</code>
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - 1]</code>
               </dd>
             </dl>
             <dl>
@@ -3125,15 +3252,191 @@ template &lt;class T, class Alloc&gt;
                 "#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one()</a></code> and
                 <code><a href=
                 "#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code> for the
-                other option how to pass data into a legacy C API.
+                other option how to pass data into a legacy C API; <code><a href=
+                "#classboost_1_1circular__buffer_120f64448dc0723cc68c1096f6b00bc0a">is_linearized()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_1c591bb9e271b10b5240afcff3bd2c619">rotate(const_iterator)</a></code>
               </dd>
             </dl>
           </td>
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213" name=
-            "classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213"></a><code><b><a href=
+            <a id="classboost_1_1circular__buffer_120f64448dc0723cc68c1096f6b00bc0a" name=
+            "classboost_1_1circular__buffer_120f64448dc0723cc68c1096f6b00bc0a"></a><code><b>bool is_linearized()
+            const;</b></code><br>
+            <br>
+            Is the <code>circular_buffer</code> linearized?
+            <dl>
+              <dt>
+                <b>Returns:</b>
+              </dt>
+              <dd>
+                <code>true</code> if the internal buffer is linearized into a continuous array (i.e. the
+                <code>circular_buffer</code> meets a condition <code>&amp;(*this)[0] &lt; &amp;(*this)[1] &lt; ... &lt;
+                &amp;(*this)[<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> -
+                1]</code>); <code>false</code> otherwise.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Nothing.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                No-throw.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Does not invalidate any iterators.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in the size of the <code>circular_buffer</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer_1ea728bf57f91aa8946eddf76ce816a4e">linearize()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_1957cccdcb0c4ef7d80a34a990065818d">array_one()</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_1f5081a54afbc2dfc1a7fb20329df7d5b">array_two()</a></code>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="classboost_1_1circular__buffer_1c591bb9e271b10b5240afcff3bd2c619" name=
+            "classboost_1_1circular__buffer_1c591bb9e271b10b5240afcff3bd2c619"></a><code><b>void rotate(<a href=
+            "#classboost_1_1circular__buffer_15cab6d46f03c40d1e52d41843319ddb9">const_iterator</a>
+            new_begin);</b></code><br>
+            <br>
+            Rotate elements in the <code>circular_buffer</code>.
+            <p>
+              A more effective implementation of <code><a href=
+              "http://www.sgi.com/tech/stl/rotate.html">std::rotate</a></code>.
+            </p>
+            <dl>
+              <dt>
+                <b>Precondition:</b>
+              </dt>
+              <dd>
+                <code>new_begin</code> is a valid iterator pointing to the <code>circular_buffer</code> <b>except</b>
+                its end.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                Before calling the method suppose:<br>
+                <br>
+                <code>m == std::distance(new_begin, <a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>)</code><br>
+                <code>n == std::distance(<a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, new_begin)</code><br>
+                <code>val_0 == *new_begin, val_1 == *(new_begin + 1), ... val_m == *(new_begin + m)</code><br>
+                <code>val_r1 == *(new_begin - 1), val_r2 == *(new_begin - 2), ... val_rn == *(new_begin - n)</code><br>
+                <br>
+                then after call to the method:<br>
+                <br>
+                <code>val_0 == (*this)[0] &amp;&amp; val_1 == (*this)[1] &amp;&amp; ... &amp;&amp; val_m == (*this)[m -
+                1] &amp;&amp; val_r1 == (*this)[m + n - 1] &amp;&amp; val_r2 == (*this)[m + n - 2] &amp;&amp; ...
+                &amp;&amp; val_rn == (*this)[m]</code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>new_begin</code>
+                  </dt>
+                  <dd>
+                    The new beginning.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic; no-throw if the <code>circular_buffer</code> is full or <code>new_begin</code> points to
+                <code><a href="#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a></code> or
+                if the operations in the <i>Throws</i> section do not throw anything.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                If <code>m &lt; n</code> invalidates iterators pointing to the last <code>m</code> elements
+                (<b>including</b> <code>new_begin</code>, but not iterators equal to <code><a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a></code>) else invalidates
+                iterators pointing to the first <code>n</code> elements; does not invalidate any iterators if the
+                <code>circular_buffer</code> is full.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Linear (in <code>std::min(m, n)</code>); constant if the <code>circular_buffer</code> is full.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href="http://www.sgi.com/tech/stl/rotate.html">std::rotate</a></code>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32" name=
+            "classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32"></a><code><b><a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> size()
             const;</b></code><br>
             <br>
@@ -3184,10 +3487,10 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code><a href=
-                "#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a></code>,
+                "#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a></code>,
                 <code><a href=
-                "#classboost_1_1circular__buffer_195158ed4d4b03794068e259f85291995">max_size()</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338">reserve()</a></code>,
+                "#classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7">max_size()</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a></code>,
                 <code><a href="#classboost_1_1circular__buffer_180c2e2e66a8fa9d0b7adc1b54921a8c3">resize(size_type,
                 const_reference)</a></code>
               </dd>
@@ -3196,8 +3499,8 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_195158ed4d4b03794068e259f85291995" name=
-            "classboost_1_1circular__buffer_195158ed4d4b03794068e259f85291995"></a><code><b><a href=
+            <a id="classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7" name=
+            "classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7"></a><code><b><a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> max_size()
             const;</b></code><br>
             <br>
@@ -3248,18 +3551,18 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>,
                 <code><a href=
-                "#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338">reserve()</a></code>
+                "#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a></code>
               </dd>
             </dl>
           </td>
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_105acab2b9a0b41044b5241cfc9d87663" name=
-            "classboost_1_1circular__buffer_105acab2b9a0b41044b5241cfc9d87663"></a><code><b>bool empty()
+            <a id="classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583" name=
+            "classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583"></a><code><b>bool empty()
             const;</b></code><br>
             <br>
             Is the <code>circular_buffer</code> empty?
@@ -3309,15 +3612,15 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_174a305e473c0bba9dcf30abb68bff909">full()</a></code>
+                <code><a href="#classboost_1_1circular__buffer_1fd0eef8ba91210d1575404b7e3e8207a">full()</a></code>
               </dd>
             </dl>
           </td>
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_174a305e473c0bba9dcf30abb68bff909" name=
-            "classboost_1_1circular__buffer_174a305e473c0bba9dcf30abb68bff909"></a><code><b>bool full()
+            <a id="classboost_1_1circular__buffer_1fd0eef8ba91210d1575404b7e3e8207a" name=
+            "classboost_1_1circular__buffer_1fd0eef8ba91210d1575404b7e3e8207a"></a><code><b>bool full()
             const;</b></code><br>
             <br>
             Is the <code>circular_buffer</code> full?
@@ -3367,15 +3670,15 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_105acab2b9a0b41044b5241cfc9d87663">empty()</a></code>
+                <code><a href="#classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583">empty()</a></code>
               </dd>
             </dl>
           </td>
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338" name=
-            "classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338"></a><code><b><a href=
+            <a id="classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de" name=
+            "classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de"></a><code><b><a href=
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> reserve()
             const;</b></code><br>
             <br>
@@ -3386,8 +3689,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> -
-                <a href="#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a></code>
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> -
+                <a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>
               </dd>
             </dl>
             <dl>
@@ -3428,17 +3731,17 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code><a href=
-                "#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_195158ed4d4b03794068e259f85291995">max_size()</a></code>
+                "#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7">max_size()</a></code>
               </dd>
             </dl>
           </td>
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035" name=
-            "classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035"></a><code><b><a href=
+            <a id="classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77" name=
+            "classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77"></a><code><b><a href=
             "#classboost_1_1circular__buffer_1dc642ff2be4db0be1a457810e5d09595">capacity_type</a> capacity()
             const;</b></code><br>
             <br>
@@ -3488,10 +3791,10 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338">reserve()</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>,
                 <code><a href=
-                "#classboost_1_1circular__buffer_195158ed4d4b03794068e259f85291995">max_size()</a></code>,
+                "#classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7">max_size()</a></code>,
                 <code><a href=
                 "#classboost_1_1circular__buffer_161714204ef5172d156e2c7eccd04998f">set_capacity(capacity_type)</a></code>
               </dd>
@@ -3511,14 +3814,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> ==
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
                 new_capacity &amp;&amp; <a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> &lt;=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> &lt;=
                 new_capacity</code><br>
                 <br>
                 If the current number of elements stored in the <code>circular_buffer</code> is greater than the
                 desired new capacity then number of <code>[<a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> - new_capacity]</code>
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_capacity]</code>
                 <b>last</b> elements will be removed and the new size will be equal to <code>new_capacity</code>.
               </dd>
             </dl>
@@ -3573,7 +3876,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Linear (in <code>min[<a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a>, new_capacity]</code>).
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a>, new_capacity]</code>).
               </dd>
             </dl>
             <dl>
@@ -3603,9 +3906,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> ==
+                <code><a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
                 new_size &amp;&amp; <a href=
-                "#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> &gt;=
+                "#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> &gt;=
                 new_size</code><br>
                 <br>
                 If the new size is greater than the current size, copies of <code>item</code> will be inserted at the
@@ -3614,7 +3917,7 @@ template &lt;class T, class Alloc&gt;
                 <code>new_size</code>.<br>
                 If the current number of elements stored in the <code>circular_buffer</code> is greater than the
                 desired new size then number of <code>[<a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> - new_size]</code>
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_size]</code>
                 <b>last</b> elements will be removed. (The capacity will remain unchanged.)
               </dd>
             </dl>
@@ -3709,14 +4012,14 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> ==
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
                 new_capacity &amp;&amp; <a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> &lt;=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> &lt;=
                 new_capacity</code><br>
                 <br>
                 If the current number of elements stored in the <code>circular_buffer</code> is greater than the
                 desired new capacity then number of <code>[<a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> - new_capacity]</code>
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_capacity]</code>
                 <b>first</b> elements will be removed and the new size will be equal to <code>new_capacity</code>.
               </dd>
             </dl>
@@ -3771,7 +4074,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Linear (in <code>min[<a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a>, new_capacity]</code>).
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a>, new_capacity]</code>).
               </dd>
             </dl>
             <dl>
@@ -3801,9 +4104,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> ==
+                <code><a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
                 new_size &amp;&amp; <a href=
-                "#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> &gt;=
+                "#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> &gt;=
                 new_size</code><br>
                 <br>
                 If the new size is greater than the current size, copies of <code>item</code> will be inserted at the
@@ -3812,7 +4115,7 @@ template &lt;class T, class Alloc&gt;
                 <code>new_size</code>.<br>
                 If the current number of elements stored in the <code>circular_buffer</code> is greater than the
                 desired new size then number of <code>[<a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> - new_size]</code>
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> - new_size]</code>
                 <b>first</b> elements will be removed. (The capacity will remain unchanged.)
               </dd>
             </dl>
@@ -3999,8 +4302,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> == n
-                &amp;&amp; <a href="#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> == n
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> == n
+                &amp;&amp; <a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == n
                 &amp;&amp; (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this) [n - 1]
                 == item</code>
               </dd>
@@ -4072,9 +4375,9 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1db1558911b2e251a587aeb3d8b3d797d">operator=</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_1aa10b4e4ec1f1c5918931b04b31d43ca">assign(capacity_type,
-                size_type, const_reference)</a></code>, <code><a href=
+                <code>operator=</code>, <code><a href=
+                "#classboost_1_1circular__buffer_1aa10b4e4ec1f1c5918931b04b31d43ca">assign(capacity_type, size_type,
+                const_reference)</a></code>, <code><a href=
                 "#classboost_1_1circular__buffer_1253302d9bda5d7efbc4a6c311de3790c">assign(InputIterator,
                 InputIterator)</a></code>, <code><a href=
                 "#classboost_1_1circular__buffer_11edb80acdf1f7f1df8217d57256e41f6">assign(capacity_type,
@@ -4111,9 +4414,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> ==
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
                 capacity &amp;&amp; <a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> == n &amp;&amp;
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == n &amp;&amp;
                 (*this)[0] == item &amp;&amp; (*this)[1] == item &amp;&amp; ... &amp;&amp; (*this) [n - 1] ==
                 item</code>
               </dd>
@@ -4195,8 +4498,8 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1db1558911b2e251a587aeb3d8b3d797d">operator=</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_19ba4a81df16f386d31b04b49c82d1ada">assign(size_type,
+                <code>operator=</code>, <code><a href=
+                "#classboost_1_1circular__buffer_19ba4a81df16f386d31b04b49c82d1ada">assign(size_type,
                 const_reference)</a></code>, <code><a href=
                 "#classboost_1_1circular__buffer_1253302d9bda5d7efbc4a6c311de3790c">assign(InputIterator,
                 InputIterator)</a></code>, <code><a href=
@@ -4233,9 +4536,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> ==
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
                 std::distance(first, last) &amp;&amp; <a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> == std::distance(first,
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> == std::distance(first,
                 last) &amp;&amp; (*this)[0]== *first &amp;&amp; (*this)[1] == *(first + 1) &amp;&amp; ... &amp;&amp;
                 (*this)[std::distance(first, last) - 1] == *(last - 1)</code>
               </dd>
@@ -4307,8 +4610,8 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1db1558911b2e251a587aeb3d8b3d797d">operator=</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_19ba4a81df16f386d31b04b49c82d1ada">assign(size_type,
+                <code>operator=</code>, <code><a href=
+                "#classboost_1_1circular__buffer_19ba4a81df16f386d31b04b49c82d1ada">assign(size_type,
                 const_reference)</a></code>, <code><a href=
                 "#classboost_1_1circular__buffer_1aa10b4e4ec1f1c5918931b04b31d43ca">assign(capacity_type, size_type,
                 const_reference)</a></code>, <code><a href=
@@ -4348,9 +4651,9 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a> ==
+                <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a> ==
                 capacity &amp;&amp; <a href=
-                "#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> &lt;=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> &lt;=
                 std::distance(first, last) &amp;&amp; (*this)[0]== *(last - capacity) &amp;&amp; (*this)[1] == *(last -
                 capacity + 1) &amp;&amp; ... &amp;&amp; (*this)[capacity - 1] == *(last - 1)</code><br>
                 <br>
@@ -4438,8 +4741,8 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1db1558911b2e251a587aeb3d8b3d797d">operator=</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_19ba4a81df16f386d31b04b49c82d1ada">assign(size_type,
+                <code>operator=</code>, <code><a href=
+                "#classboost_1_1circular__buffer_19ba4a81df16f386d31b04b49c82d1ada">assign(size_type,
                 const_reference)</a></code>, <code><a href=
                 "#classboost_1_1circular__buffer_1aa10b4e4ec1f1c5918931b04b31d43ca">assign(capacity_type, size_type,
                 const_reference)</a></code>, <code><a href=
@@ -4539,7 +4842,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                if <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a>
+                if <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a>
                 &gt; 0</code> then <code><a href=
                 "#classboost_1_1circular__buffer_1d985d974020f88bb4255d8edbae0a30a">back()</a> == item</code><br>
                 If the <code>circular_buffer</code> is full, the first element will be removed. If the capacity is
@@ -4567,6 +4870,9 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -4621,7 +4927,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                if <code><a href="#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a>
+                if <code><a href="#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a>
                 &gt; 0</code> then <code><a href=
                 "#classboost_1_1circular__buffer_10d5fdeabeb352f47d1f7bb1ea8d9819f">front()</a> == item</code><br>
                 If the <code>circular_buffer</code> is full, the last element will be removed. If the capacity is
@@ -4649,6 +4955,9 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Whatever <code>T::T(const T&amp;)</code> throws.
+              </dd>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws.
               </dd>
             </dl>
             <dl>
@@ -4978,11 +5287,11 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 The number of <code>min[n, (pos - <a href=
                 "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>) + <a href=
-                "#classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338">reserve()</a>]</code> elements will
+                "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>]</code> elements will
                 be inserted at the position <code>pos</code>.<br>
                 The number of <code>min[pos - <a href=
                 "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, max[0, n - <a href=
-                "#classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338">reserve()</a>]]</code> elements
+                "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>]]</code> elements
                 will be overwritten at the beginning of the <code>circular_buffer</code>.<br>
                 (See <i>Example</i> for the explanation.)
               </dd>
@@ -5058,7 +5367,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Linear (in <code>min[<a href=
-                "#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a>, std::distance(pos,
+                "#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a>, std::distance(pos,
                 <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>) + n]</code>).
               </dd>
             </dl>
@@ -5132,12 +5441,12 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 Elements from the range <code>[first + max[0, distance(first, last) - (pos - <a href=
                 "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>) - <a href=
-                "#classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338">reserve()</a>], last)</code> will
+                "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>], last)</code> will
                 be inserted at the position <code>pos</code>.<br>
                 The number of <code>min[pos - <a href=
                 "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, max[0, distance(first,
                 last) - <a href=
-                "#classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338">reserve()</a>]]</code> elements
+                "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>]]</code> elements
                 will be overwritten at the beginning of the <code>circular_buffer</code>.<br>
                 (See <i>Example</i> for the explanation.)
               </dd>
@@ -5215,7 +5524,7 @@ template &lt;class T, class Alloc&gt;
                 Linear (in <code>[std::distance(pos, <a href=
                 "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>) + std::distance(first,
                 last)]</code>; in <code>min[<a href=
-                "#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a>, std::distance(pos,
+                "#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a>, std::distance(pos,
                 <a href="#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>) +
                 std::distance(first, last)]</code> if the <code>InputIterator</code> is a <a href=
                 "http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
@@ -5413,11 +5722,11 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 The number of <code>min[n, (<a href=
                 "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> - pos) + <a href=
-                "#classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338">reserve()</a>]</code> elements will
+                "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>]</code> elements will
                 be inserted before the position <code>pos</code>.<br>
                 The number of <code>min[<a href=
                 "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> - pos, max[0, n -
-                <a href="#classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338">reserve()</a>]]</code>
+                <a href="#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>]]</code>
                 elements will be overwritten at the end of the <code>circular_buffer</code>.<br>
                 (See <i>Example</i> for the explanation.)
               </dd>
@@ -5491,7 +5800,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 Linear (in <code>min[<a href=
-                "#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a>,
+                "#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a>,
                 std::distance(<a href="#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>,
                 pos) + n]</code>).
               </dd>
@@ -5566,12 +5875,12 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 Elements from the range <code>[first, last - max[0, distance(first, last) - (<a href=
                 "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> - pos) - <a href=
-                "#classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338">reserve()</a>])</code> will be
+                "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>])</code> will be
                 inserted before the position <code>pos</code>.<br>
                 The number of <code>min[<a href=
                 "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a> - pos, max[0,
                 distance(first, last) - <a href=
-                "#classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338">reserve()</a>]]</code> elements
+                "#classboost_1_1circular__buffer_10a02c4fbc53385e98569e810be9843de">reserve()</a>]]</code> elements
                 will be overwritten at the end of the <code>circular_buffer</code>.<br>
                 (See <i>Example</i> for the explanation.)
               </dd>
@@ -5647,7 +5956,7 @@ template &lt;class T, class Alloc&gt;
                 Linear (in <code>[std::distance(<a href=
                 "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, pos) +
                 std::distance(first, last)]</code>; in <code>min[<a href=
-                "#classboost_1_1circular__buffer_1da435a5884cad746ed5cd55bcb892035">capacity()</a>,
+                "#classboost_1_1circular__buffer_15ebab2b2538d733790b5752582728e77">capacity()</a>,
                 std::distance(<a href="#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>,
                 pos) + std::distance(first, last)]</code> if the <code>InputIterator</code> is a <a href=
                 "http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
@@ -6161,7 +6470,7 @@ template &lt;class T, class Alloc&gt;
                 <b>Effect:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> ==
+                <code><a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
                 0</code>
               </dd>
             </dl>
@@ -6261,8 +6570,8 @@ template &lt;class T, class Alloc&gt;
                 <b>Returns:</b>
               </dt>
               <dd>
-                <code>lhs.<a href="#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> ==
-                rhs.<a href="#classboost_1_1circular__buffer_1d666f694897465b0d4d7cdd8ddcbc213">size()</a> &amp;&amp;
+                <code>lhs.<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> ==
+                rhs.<a href="#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a> &amp;&amp;
                 <a href="http://www.sgi.com/tech/stl/equal.html">std::equal</a>(lhs.<a href=
                 "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, lhs.<a href=
                 "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>, rhs.<a href=
@@ -6803,25 +7112,60 @@ template &lt;class T, class Alloc&gt;
       version and came with many good ideas and improvements. Also, I would like to thank Howard Hinnant, Nigel Stewart
       and everyone who participated at the formal review for valuable comments and ideas.
     </p>
+    <h2>
+      <a name="relnotes" id="relnotes">Release Notes</a>
+    </h2>
+    <dl>
+      <dd>
+        <h3>
+          Boost 1.37
+        </h3>
+      </dd>
+      <dd>
+        <ul>
+          <li>Added new methods <code>is_linearized()</code> and <code>rotate(const_iterator)</code>.
+          </li>
+          <li>Fixed bugs:<br>
+            #1987 Patch to make <code>circular_buffer.hpp</code> #includes absolute.<br>
+            #1852 Copy constructor does not copy capacity.
+          </li>
+        </ul>
+      </dd>
+      <dd>
+        <h3>
+          Boost 1.36
+        </h3>
+      </dd>
+      <dd>
+        <ul>
+          <li>Changed behaviour of the <code>circular_buffer(const allocator_type&amp;)</code> constructor. Since this
+          version the constructor does not allocate any memory and both capacity and size are set to zero.
+          </li>
+          <li>Fixed bug:<br>
+            #1919 Default constructed circular buffer throws <code>std::bad_alloc</code>.<br>
+          </li>
+        </ul>
+      </dd>
+      <dd>
+        <h3>
+          Boost 1.35
+        </h3>
+      </dd>
+      <dd>
+        <ul>
+          <li>Initial release.
+          </li>
+        </ul>
+      </dd>
+    </dl>
     <hr size="1">
-    <table id="footer" width="100%" border="0">
-      <tr valign="top">
-        <td valign="top" align="left">
-          <p>
-            <small>Copyright © 2003-2007 Jan Gaspar</small>
-          </p>
-          <p>
-            <small>Use, modification, and distribution is subject to the Boost Software License, Version 1.0.<br>
-            (See accompanying file <code>LICENSE_1_0.txt</code> or copy at <a href=
-            "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</small>
-          </p>
-        </td>
-        <td valign="top" align="right">
-          <a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
-          "http://www.w3.org/Icons/valid-html401" alt="This is a Valid HTML 4.01 Transitional Document." height="31"
-          width="88"></a>
-        </td>
-      </tr>
-    </table>
+    <p>
+      <small>Copyright © 2003-2008 Jan Gaspar</small>
+    </p>
+    <p>
+      <small>Use, modification, and distribution is subject to the Boost Software License, Version 1.0.<br>
+      (See accompanying file <code>LICENSE_1_0.txt</code> or copy at <a href=
+      "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</small>
+    </p>
   </body>
 </html>
