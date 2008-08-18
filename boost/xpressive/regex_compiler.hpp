@@ -23,6 +23,8 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_pointer.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/xpressive/basic_regex.hpp>
 #include <boost/xpressive/detail/dynamic/parser.hpp>
@@ -111,7 +113,8 @@ struct regex_compiler
     /// \throw  regex_error when the range of characters has invalid regular
     ///         expression syntax.
     template<typename InputIter>
-    basic_regex<BidiIter> compile(InputIter begin, InputIter end, flag_type flags = regex_constants::ECMAScript)
+    basic_regex<BidiIter>
+    compile(InputIter begin, InputIter end, flag_type flags = regex_constants::ECMAScript)
     {
         typedef typename iterator_category<InputIter>::type category;
         return this->compile_(begin, end, flags, category());
@@ -120,14 +123,16 @@ struct regex_compiler
     /// \overload
     ///
     template<typename InputRange>
-    basic_regex<BidiIter> compile(InputRange const &pat, flag_type flags = regex_constants::ECMAScript)
+    typename disable_if<is_pointer<InputRange>, basic_regex<BidiIter> >::type
+    compile(InputRange const &pat, flag_type flags = regex_constants::ECMAScript)
     {
         return this->compile(boost::begin(pat), boost::end(pat), flags);
     }
 
     /// \overload
     ///
-    basic_regex<BidiIter> compile(char_type const *begin, flag_type flags = regex_constants::ECMAScript)
+    basic_regex<BidiIter>
+    compile(char_type const *begin, flag_type flags = regex_constants::ECMAScript)
     {
         BOOST_ASSERT(0 != begin);
         char_type const *end = begin + std::char_traits<char_type>::length(begin);

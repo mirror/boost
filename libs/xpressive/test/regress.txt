@@ -3738,3 +3738,13 @@ pat=.$
 flg=m
 br0=c
 [end]
+
+[nocasealternate]
+str=common HighLight and Blow this
+pat=highlight|blow
+flg=ig
+sub=<b>$&</b>
+res=common <b>HighLight</b> and <b>Blow</b> this
+br0=HighLight
+br1=Blow
+[end]
