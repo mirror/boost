@@ -28,11 +28,7 @@ namespace boost {
 
 //  classification functors -----------------------------------------------//
 
-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
-#pragma warning(push)
-#pragma warning(disable:4512) //assignment operator could not be generated
-#endif
-            // is_classified functor
+   // is_classified functor
             struct is_classifiedF :
                 public predicate_facade<is_classifiedF>
             {
@@ -42,7 +38,6 @@ namespace boost {
                 // Constructor from a locale
                 is_classifiedF(std::ctype_base::mask Type, std::locale const & Loc = std::locale()) :
                     m_Type(Type), m_Locale(Loc) {}
-
                 // Operation
                 template<typename CharT>
                 bool operator()( CharT Ch ) const
@@ -59,13 +54,10 @@ namespace boost {
                 #endif
 
             private:
-                const std::ctype_base::mask m_Type;
-                const std::locale m_Locale;
+                std::ctype_base::mask m_Type;
+                std::locale m_Locale;
             };
 
-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
-#pragma warning(pop)
-#endif
 
             // is_any_of functor
             /*
@@ -144,31 +136,51 @@ namespace boost {
                 {
                     if(m_Size>FIXED_STORAGE_SIZE && m_Storage.m_dynSet!=0)
                     {
-                        delete m_Storage.m_dynSet;
+                        delete [] m_Storage.m_dynSet;
                     }
                 }
 
                 // Assignment
                 is_any_ofF& operator=(const is_any_ofF& Other)
                 {
-                    // Prepare storage
-                    m_Storage.m_dynSet=0;
-                    m_Size=Other.m_Size;
+                    // Prepare storage             
                     const set_value_type* SrcStorage=0;
                     set_value_type* DestStorage=0;
 
-                    if(m_Size<=FIXED_STORAGE_SIZE)
+                    if(Other.m_Size<=FIXED_STORAGE_SIZE)
                     {
                         // Use fixed storage
                         DestStorage=&m_Storage.m_fixSet[0];
                         SrcStorage=&Other.m_Storage.m_fixSet[0];
+
+                        // Delete old storage if was present
+                        if(m_Size>FIXED_STORAGE_SIZE && m_Storage.m_dynSet!=0)
+                        {
+                            delete [] m_Storage.m_dynSet;
+                        }
+
+                        // Set new size
+                        m_Size=Other.m_Size;
                     }
                     else
                     {
                         // Use dynamic storage
-                        m_Storage.m_dynSet=new set_value_type[m_Size];
-                        DestStorage=m_Storage.m_dynSet;
+
+                        // Create new buffer
+                        set_value_type* pTemp=new set_value_type[Other.m_Size];
+                        DestStorage=pTemp;
                         SrcStorage=Other.m_Storage.m_dynSet;
+                        
+                        // Delete old storage if necessary
+                        if(m_Size>FIXED_STORAGE_SIZE && m_Storage.m_dynSet!=0)
+                        {
+                            delete [] m_Storage.m_dynSet;
+                        }
+
+                        // Store the new storage
+                        m_Storage.m_dynSet=pTemp;
+                        // Set new size
+                        m_Size=Other.m_Size;
                     }
 
                     // Use fixed storage
