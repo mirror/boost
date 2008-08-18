@@ -96,10 +96,28 @@ void predicate_test()
 
 }
 
+template<typename Pred, typename Input>
+void test_pred(const Pred& pred, const Input& input, bool bYes)
+{
+    // test assignment operator
+    Pred pred1=pred;
+    pred1=pred;
+    if(bYes)
+    {
+        BOOST_CHECK( all( input, pred ) );
+        BOOST_CHECK( all( input, pred1 ) );
+    }
+    else
+    {
+        BOOST_CHECK( !all( input, pred ) );
+        BOOST_CHECK( !all( input, pred1 ) );
+    }
+}
+
 #define TEST_CLASS( Pred, YesInput, NoInput )\
 {\
-    BOOST_CHECK( all( string(YesInput), Pred ) );\
-    BOOST_CHECK( !all( string(NoInput), Pred ) );\
+    test_pred(Pred, YesInput, true); \
+    test_pred(Pred, NoInput, false); \
 }
 
 void classification_test()
