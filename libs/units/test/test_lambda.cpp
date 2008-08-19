@@ -142,8 +142,20 @@ int test_main(int, char *[])
     // quantity<Unit1, X> + quantity<Unit2, Y>
     BOOST_CHECK(((bl::_1 + bl::_2)(2.0 * bu::meter, 4.0 * bu::meter) == 6.0 * bu::meter));
 
+    // quantity<dimensionless, X> + Y
+    BOOST_CHECK(((bl::_1 + 1.0f)(bu::quantity<bu::dimensionless>(2.0)) == 3.0));
+
+    // X + quantity<dimensionless, Y>
+    BOOST_CHECK(((1.0f + bl::_1)(bu::quantity<bu::dimensionless>(1.0)) == 2.0));
+
     // quantity<Unit1, X> - quantity<Unit2, Y>
     BOOST_CHECK(((bl::_1 - bl::_2)(2.0 * bu::meter, 4.0 * bu::meter) == -2.0 * bu::meter));
+
+    // quantity<dimensionless, X> - Y
+    BOOST_CHECK(((bl::_1 - 2.0f)(bu::quantity<bu::dimensionless>(1.0)) == -1.0));
+
+    // X - quantity<dimensionless, Y>
+    BOOST_CHECK(((2.0f - bl::_1)(bu::quantity<bu::dimensionless>(1.0)) == 1.0));
 
     // quantity<Unit1, X> * quantity<Unit2, Y>
     BOOST_CHECK(((bl::_1 * bl::_2)(2.0 * bu::kilogram, 4.0 * bu::meter_per_second) == 8.0 * bu::kilogram * bu::meter_per_second));
