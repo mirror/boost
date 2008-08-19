@@ -127,7 +127,7 @@ namespace boost
       const path & source_path, bool no_link_errors )
         // precondition: source_path.is_complete()
     {
-      if(url.empty()) {
+      if(!no_link_errors && url.empty()) {
         ++m_invalid_errors;
         error( library_name, source_path, string(name()) + " empty URL." );
         return;
