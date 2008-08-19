@@ -69,9 +69,7 @@ namespace boost {
             {
             private:
                 // set cannot operate on const value-type
-                typedef typename remove_const<CharT>::type set_value_type;
-                // Size of the static storage (size of pointer*2)
-                static const ::std::size_t FIXED_STORAGE_SIZE = sizeof(set_value_type*)*2;
+                typedef typename ::boost::remove_const<CharT>::type set_value_type;
 
             public:     
                 // Boost.Lambda support
@@ -88,7 +86,7 @@ namespace boost {
                     m_Size=Size;
                     set_value_type* Storage=0;
 
-                    if(m_Size<=FIXED_STORAGE_SIZE)
+                    if(use_fixed_storage(m_Size))
                     {
                         // Use fixed storage
                         Storage=&m_Storage.m_fixSet[0];
@@ -113,7 +111,7 @@ namespace boost {
                     const set_value_type* SrcStorage=0;
                     set_value_type* DestStorage=0;
 
-                    if(m_Size<=FIXED_STORAGE_SIZE)
+                    if(use_fixed_storage(m_Size))
                     {
                         // Use fixed storage
                         DestStorage=&m_Storage.m_fixSet[0];
@@ -134,7 +132,7 @@ namespace boost {
                 // Destructor
                 ~is_any_ofF()
                 {
-                    if(m_Size>FIXED_STORAGE_SIZE && m_Storage.m_dynSet!=0)
+                    if(!use_fixed_storage(m_Size) && m_Storage.m_dynSet!=0)
                     {
                         delete [] m_Storage.m_dynSet;
                     }
@@ -147,14 +145,14 @@ namespace boost {
                     const set_value_type* SrcStorage=0;
                     set_value_type* DestStorage=0;
 
-                    if(Other.m_Size<=FIXED_STORAGE_SIZE)
+                    if(use_fixed_storage(Other.m_Size))
                     {
                         // Use fixed storage
                         DestStorage=&m_Storage.m_fixSet[0];
                         SrcStorage=&Other.m_Storage.m_fixSet[0];
 
                         // Delete old storage if was present
-                        if(m_Size>FIXED_STORAGE_SIZE && m_Storage.m_dynSet!=0)
+                        if(!use_fixed_storage(m_Size) && m_Storage.m_dynSet!=0)
                         {
                             delete [] m_Storage.m_dynSet;
                         }
@@ -172,7 +170,7 @@ namespace boost {
                         SrcStorage=Other.m_Storage.m_dynSet;
                         
                         // Delete old storage if necessary
-                        if(m_Size>FIXED_STORAGE_SIZE && m_Storage.m_dynSet!=0)
+                        if(!use_fixed_storage(m_Size) && m_Storage.m_dynSet!=0)
                         {
                             delete [] m_Storage.m_dynSet;
                         }
@@ -183,7 +181,7 @@ namespace boost {
                         m_Size=Other.m_Size;
                     }
 
-                    // Use fixed storage
+                    // Copy the data
                     ::memcpy(DestStorage, SrcStorage, sizeof(set_value_type)*m_Size);
 
                     return *this;
@@ -194,12 +192,19 @@ namespace boost {
                 bool operator()( Char2T Ch ) const
                 {
                     const set_value_type* Storage=
-                        (m_Size<=FIXED_STORAGE_SIZE)
+                        (use_fixed_storage(m_Size))
                         ? &m_Storage.m_fixSet[0]
                         : m_Storage.m_dynSet;
 
                     return ::std::binary_search(Storage, Storage+m_Size, Ch);
                 }
+            private:
+                // check if the size is eligible for fixed storage
+                static bool use_fixed_storage(std::size_t size)
+                {
+                    return size<=sizeof(set_value_type*)*2;
+                }
+
 
             private:
                 // storage
@@ -207,7 +212,7 @@ namespace boost {
                 union
                 {
                     set_value_type* m_dynSet;
-                    set_value_type m_fixSet[FIXED_STORAGE_SIZE];
+                    set_value_type m_fixSet[sizeof(set_value_type*)*2];
                 } 
                 m_Storage;
         
