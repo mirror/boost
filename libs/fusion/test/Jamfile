@@ -89,6 +89,7 @@ import testing ;
     [ run sequence/tuple_misc.cpp :  :  :  : ]
     [ run sequence/tuple_mutate.cpp :  :  :  : ]
     [ run sequence/tuple_tie.cpp :  :  :  : ]
+    [ run sequence/tr1_tuple_auto_conv.cpp :  :  :  : ]
     [ run sequence/transform_view.cpp :  :  :  : ]
     [ run sequence/vector_comparison.cpp :  :  :  : ]
     [ run sequence/vector_construction.cpp :  :  :  : ]
