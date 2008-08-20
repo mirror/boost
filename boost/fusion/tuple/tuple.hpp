@@ -40,22 +40,20 @@ namespace boost { namespace fusion
         #include <boost/fusion/tuple/detail/tuple_expand.hpp>
 
         template <typename T>
-        tuple&
-        operator=(T const& rhs)
+        tuple& operator=(T const& rhs)
         {
             base_type::operator=(rhs);
             return *this;
         }
 
-        tuple&
-        operator=(tuple const& rhs)
+        tuple& operator=(tuple const& rhs)
         {
             base_type::operator=(rhs);
             return *this;
         }
 
         template <typename U1, typename U2>
-        operator=(std::pair<U1, U2> const& rhs)
+        tuple& operator=(std::pair<U1, U2> const& rhs)
         {
             base_type::operator=(rhs);
             return *this;
