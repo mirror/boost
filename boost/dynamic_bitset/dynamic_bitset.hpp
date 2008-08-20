@@ -1,7 +1,7 @@
 // -----------------------------------------------------------
 //
 //   Copyright (c) 2001-2002 Chuck Allison and Jeremy Siek
-//           Copyright (c) 2003-2006 Gennaro Prota
+//        Copyright (c) 2003-2006, 2008 Gennaro Prota
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -14,8 +14,8 @@
 
 #include <assert.h>
 #include <string>
-#include <stdexcept>    // for std::overflow_error
-#include <algorithm>    // for std::swap, min, copy, fill
+#include <stdexcept>
+#include <algorithm>
 #include <vector>
 #include <climits>      // for CHAR_BIT
 
@@ -38,7 +38,7 @@
 #include "boost/detail/iterator.hpp" // used to implement append(Iter, Iter)
 #include "boost/static_assert.hpp"
 #include "boost/limits.hpp"
-#include "boost/pending/lowest_bit.hpp" // used by find_first/next
+#include "boost/pending/lowest_bit.hpp"
 
 
 namespace boost {
@@ -64,7 +64,7 @@ public:
     typedef Block block_type;
     typedef Allocator allocator_type;
     typedef std::size_t size_type;
-    typedef int block_width_type;
+    typedef block_type block_width_type;
 
     BOOST_STATIC_CONSTANT(block_width_type, bits_per_block = (std::numeric_limits<Block>::digits));
     BOOST_STATIC_CONSTANT(size_type, npos = static_cast<size_type>(-1));
@@ -80,7 +80,7 @@ public:
 
 
         // the one and only non-copy ctor
-        reference(block_type & b, int pos)
+        reference(block_type & b, block_type pos)
             :m_block(b), m_mask(block_type(1) << pos)
         { assert(pos >= 0 && pos < bits_per_block); }
 
@@ -311,7 +311,7 @@ private:
 
     block_width_type count_extra_bits() const { return bit_index(size()); }
     static size_type block_index(size_type pos) { return pos / bits_per_block; }
-    static block_width_type bit_index(size_type pos) { return static_cast<int>(pos % bits_per_block); }
+    static block_width_type bit_index(size_type pos) { return static_cast<block_width_type>(pos % bits_per_block); }
     static Block bit_mask(size_type pos) { return Block(1) << bit_index(pos); }
 
     template <typename CharT, typename Traits, typename Alloc>
@@ -378,6 +378,11 @@ BOOST_DYNAMIC_BITSET_PRIVATE:
       size_type n;
       Block mask;
       Block * current;
+
+      // not implemented
+      bit_appender(const bit_appender &);
+      bit_appender & operator=(const bit_appender &);
+
     public:
         bit_appender(dynamic_bitset & r) : bs(r), n(0), mask(0), current(0) {}
         ~bit_appender() {
@@ -417,7 +422,7 @@ BOOST_DYNAMIC_BITSET_PRIVATE:
 //
 // NOTE:
 //  The compiler is actually right, until core issue 454 will be settled:
-//   http://www.open-std.org/JTC1/SC22/WG21/docs/cwg_active.html#454
+//   <http://www.open-std.org/JTC1/SC22/WG21/docs/cwg_active.html#454>
 //
 //  It's arguable whether we want to mark this with BOOST_WORKAROUND or not.
 
@@ -764,26 +769,11 @@ dynamic_bitset<Block, Allocator>::operator<<=(size_type n)
             b[div] = b[0];
         }
 
-    // disable std::fill_n deprecated warning in MSVC++ 8.0 (warning C4996)
-    // This will only work in MSVC++ 8.0 SP1, which brings up the warning
-    // in the line of user code; otherwise, the warning will come up
-    // in the line in the header itself, so if the user includes stdlib
-    // headers before dynamic_bitset, he will still get the warning.
-#if defined(_MSC_VER) && _MSC_VER >= 1400
-#pragma warning(push)
-#pragma warning(disable:4996)
-#endif
-
         // zero out div blocks at the less significant end
         std::fill_n(b, div, static_cast<block_type>(0));
 
-#if defined(_MSC_VER) && _MSC_VER >= 1400
-#pragma warning(pop)
-#endif
-
         // zero out any 1 bit that flowed into the unused part
         m_zero_unused_bits(); // thanks to Lester Gong
-
 
     }
 
@@ -1072,12 +1062,11 @@ to_ulong() const
 
   const size_type last_block = block_index( max_size - 1 );
 
+  assert((last_block * bits_per_block) < static_cast<size_type>(ulong_width));
+
   result_type result = 0;
   for (size_type i = 0; i <= last_block; ++i) {
-
     const size_type offset = i * bits_per_block;
-    assert( offset < static_cast<size_type>(ulong_width));
-
     result |= (static_cast<result_type>(m_bits[i]) << offset);
   }
 
