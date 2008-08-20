@@ -266,11 +266,11 @@
 // Define BOOST_NO_SLIST and BOOST_NO_HASH if required.
 // Note that this is for backwards compatibility only.
 //
-#  ifndef BOOST_HAS_SLIST
+#  if !defined(BOOST_HAS_SLIST) && !defined(BOOST_NO_SLIST)
 #     define BOOST_NO_SLIST
 #  endif
 
-#  ifndef BOOST_HAS_HASH
+#  if !defined(BOOST_HAS_HASH) && !defined(BOOST_NO_HASH)
 #     define BOOST_NO_HASH
 #  endif
 
