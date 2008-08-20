@@ -105,7 +105,7 @@ boost
         template <class ErrorInfo,class E>
         friend shared_ptr<typename ErrorInfo::value_type const> get_error_info( E const & );
 
-        intrusive_ptr<exception_detail::error_info_container> mutable data_;
+        mutable intrusive_ptr<exception_detail::error_info_container> data_;
         };
 
 #if BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1500) ) //See above.

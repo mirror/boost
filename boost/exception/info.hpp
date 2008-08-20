@@ -201,8 +201,8 @@ virtual //Disable bogus GCC warning.
 
             typedef std::map< typeinfo, shared_ptr<error_info_base const> > error_info_map;
             error_info_map info_;
-            std::string mutable what_;
-            int mutable count_;
+            mutable std::string what_;
+            mutable int count_;
 
             void
             add_ref() const

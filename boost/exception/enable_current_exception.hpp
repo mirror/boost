@@ -98,7 +98,7 @@ boost
 
             private:
 
-            detail::atomic_count mutable count_;
+            mutable detail::atomic_count count_;
 
             void
             add_ref() const
