@@ -131,7 +131,7 @@ private:
 };
 
 /*!
-    \struct capacity_control
+    \class capacity_control
     \brief Capacity controller of the space optimized circular buffer.
 */
 template <class Size>
@@ -166,7 +166,7 @@ public:
 };
 
 /*!
-    \class iterator
+    \struct iterator
     \brief Random access iterator for the circular buffer.
     \param Buff The type of the underlying circular buffer.
     \param Traits Basic iterator types.
@@ -174,7 +174,7 @@ public:
           for iterating from begin() to end() of the circular buffer.
 */
 template <class Buff, class Traits>
-class iterator :
+struct iterator :
     public boost::iterator<
     std::random_access_iterator_tag,
     typename Traits::value_type,
@@ -185,7 +185,6 @@ class iterator :
     , public debug_iterator_base
 #endif // #if BOOST_CB_ENABLE_DEBUG
 {
-private:
 // Helper types
 
     //! Base iterator.
@@ -199,7 +198,6 @@ private:
     //! Non-const iterator.
     typedef iterator<Buff, typename Traits::nonconst_self> nonconst_self;
 
-public:
 // Basic types
 
     //! The type of the elements stored in the circular buffer.
@@ -217,7 +215,6 @@ public:
     //! Difference type.
     typedef typename base_iterator::difference_type difference_type;
 
-public:
 // Member variables
 
     //! The circular buffer where the iterator points to.
@@ -226,7 +223,6 @@ public:
     //! An internal iterator.
     pointer m_it;
 
-public:
 // Construction & assignment
 
     // Default copy constructor.
@@ -392,7 +388,6 @@ public:
     template <class Traits0>
     bool operator >= (const iterator<Buff, Traits0>& it) const { return !(*this < it); }
 
-private:
 // Helpers
 
     //! Get a pointer which would point to the same element as the iterator in case the circular buffer is linearized.
