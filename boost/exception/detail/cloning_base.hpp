@@ -28,6 +28,9 @@ boost
 #if BOOST_WORKAROUND( __GNUC__, BOOST_TESTED_AT(4) )
 virtual //Disable bogus GCC warning.
 #endif
+#if BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1500) )
+virtual //Disable bogus msvc warning.
+#endif
             ~cloning_base() throw()
                 {
                 }
