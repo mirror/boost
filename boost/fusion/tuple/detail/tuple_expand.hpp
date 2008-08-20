@@ -35,11 +35,6 @@
         : base_type(BOOST_PP_ENUM_PARAMS(N, _)) {}
 
     template <BOOST_PP_ENUM_PARAMS(N, typename U)>
-    tuple(BOOST_PP_ENUM_BINARY_PARAMS(
-        N, typename detail::call_param<U, >::type _))
-        : base_type(BOOST_PP_ENUM_PARAMS(N, _)) {}
-
-    template <BOOST_PP_ENUM_PARAMS(N, typename U)>
     tuple(tuple<BOOST_PP_ENUM_PARAMS(N, U)> const& rhs)
         : base_type(rhs) {}
 
