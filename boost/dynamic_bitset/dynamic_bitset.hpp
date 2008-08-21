@@ -953,7 +953,6 @@ dynamic_bitset<Block, Allocator>::operator~() const
     return b;
 }
 
-
 template <typename Block, typename Allocator>
 typename dynamic_bitset<Block, Allocator>::size_type
 dynamic_bitset<Block, Allocator>::count() const
@@ -962,12 +961,14 @@ dynamic_bitset<Block, Allocator>::count() const
 
     const bool no_padding = bits_per_block == CHAR_BIT * sizeof(Block);
     const bool enough_table_width = table_width >= CHAR_BIT;
+    const mode m = (no_padding && enough_table_width)
+                       ? access_by_bytes
+                       : access_by_blocks;
 
-    typedef mode_to_type< (no_padding && enough_table_width ?
-                          access_by_bytes : access_by_blocks) > m;
+    typedef mode_to_type<m> m_type;
 
-    return do_count(m_bits.begin(), num_blocks(), Block(0), static_cast<m*>(0));
-
+    return do_count(m_bits.begin(), num_blocks(), Block(0),
+                                                    static_cast<m_type *>(0));
 }
 
 
