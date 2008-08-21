@@ -102,6 +102,7 @@ void test_pred(const Pred& pred, const Input& input, bool bYes)
     // test assignment operator
     Pred pred1=pred;
     pred1=pred;
+    pred1=pred1;
     if(bYes)
     {
         BOOST_CHECK( all( input, pred ) );

@@ -141,9 +141,12 @@ namespace boost {
                 // Assignment
                 is_any_ofF& operator=(const is_any_ofF& Other)
                 {
+                    // Handle self assignment
+                    if(this==&Other) return *this;
+
                     // Prepare storage             
-                    const set_value_type* SrcStorage=0;
-                    set_value_type* DestStorage=0;
+                    const set_value_type* SrcStorage;
+                    set_value_type* DestStorage;
 
                     if(use_fixed_storage(Other.m_Size))
                     {
@@ -162,23 +165,44 @@ namespace boost {
                     }
                     else
                     {
-                        // Use dynamic storage
-
-                        // Create new buffer
-                        set_value_type* pTemp=new set_value_type[Other.m_Size];
-                        DestStorage=pTemp;
+                        // Other uses dynamic storage
                         SrcStorage=Other.m_Storage.m_dynSet;
-                        
-                        // Delete old storage if necessary
-                        if(!use_fixed_storage(m_Size) && m_Storage.m_dynSet!=0)
-                        {
-                            delete [] m_Storage.m_dynSet;
-                        }
 
-                        // Store the new storage
-                        m_Storage.m_dynSet=pTemp;
-                        // Set new size
-                        m_Size=Other.m_Size;
+                        // Check what kind of storage are we using right now
+                        if(use_fixed_storage(m_Size))
+                        {
+                            // Using fixed storage, allocate new		
+                            set_value_type* pTemp=new set_value_type[Other.m_Size];
+                            DestStorage=pTemp;
+                            m_Storage.m_dynSet=pTemp;
+                            m_Size=Other.m_Size;
+                        }
+                        else
+                        {
+                            // Using dynamic storage, check if can reuse
+                            if(m_Storage.m_dynSet!=0 && m_Size>=Other.m_Size && m_Size<Other.m_Size*2)
+                            {
+                                // Reuse the current storage
+                                DestStorage=m_Storage.m_dynSet;
+                                m_Size=Other.m_Size;
+                            }
+                            else
+                            {
+                                // Allocate the new one
+                                set_value_type* pTemp=new set_value_type[Other.m_Size];
+                                DestStorage=pTemp;
+                        
+                                // Delete old storage if necessary
+                                if(m_Storage.m_dynSet!=0)
+                                {
+                                    delete [] m_Storage.m_dynSet;
+                                }
+                                // Store the new storage
+                                m_Storage.m_dynSet=pTemp;
+                                // Set new size
+                                m_Size=Other.m_Size;
+                            }
+                        }
                     }
 
                     // Copy the data
