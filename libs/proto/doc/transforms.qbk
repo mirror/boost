@@ -1,0 +1,1503 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[import ../test/examples.cpp]
+
+[/============================================================================]
+[section:expression_transformation Expression Transformation: Semantic Actions]
+[/============================================================================]
+
+Sometimes, rather than immediately executing an expression template, you'd like to 
+transform it into some other object. Maybe the transformation is simple, like 
+converting all references into values. Maybe it's complicated, like transforming an 
+expression template into a finite-state automata for matching a regular expression. 
+Proto provides a framework for applying tree transformations and several canned 
+transformations that are generally useful.
+
+[/===============]
+[heading Overview]
+[/===============]
+
+Defining tree transformations involves defining the grammar for your DSEL
+and decorating it with transformations. Each rule in your grammar will
+have an associated transform describing how sub-expressions matching that rule
+are to be transformed. Just as the grammar is defined recursively, so too
+is the tree transformation.
+
+You associate transforms with your grammar rules using _when_. For instance,
+you might want to promote all `int` terminals to `long`. You would say the
+following:
+
+    proto::when< proto::terminal<int>, proto::terminal<long>::type(proto::_value) >
+
+`proto::terminal<long>::type(proto::_value)` is an example of a Proto transform. It 
+says to create an object of type `proto::terminal<long>::type` and initialize it 
+with the result of the `proto::_value` transform. `proto::_value` is a transform 
+defined by Proto which extracts the value from a terminal expression.
+
+[note The transform above might look a little strange at first. It appears
+to be constructing a temporary object in place. In fact, it is a
+/function type/. Since `proto::terminal<long>::type` and `proto::_value`
+are types, `proto::terminal<long>::type(proto::_value)` is actually the type
+of a function that takes `proto::_value` as a parameter and returns 
+`proto::terminal<long>::type`. But no such function actually exists! Rather,
+Proto interprets this function type as a transform, the effect of which is
+described above. The resemblance to an in-place construction of a temporary
+object is intentional. It is a concise and natural notation for specifying
+transforms. Proto transforms use function types extensively, as we'll see.]
+
+A grammar decorated with transforms is a function object that takes three
+parameters:
+
+* `expr`    -- the Proto expression to transform
+* `state`   -- an optional initial state for the transformation
+* `data`    -- any optional mutable state information
+
+Many transforms do no use the state and data parameters, and you can pass
+dummy values for them or leave them off entirely. Later on we'll describe
+the difference between them and see where they are useful.
+
+In addition to being a function object, a grammar decorated with transforms
+is also a grammar. That is, it can be used as the second parameter to
+the _matches_ metafunction to see if an expression type matches the grammar.
+
+The first pararameter to the transform, `expr`, is a Proto expression. Its
+type /must/ match the grammar defined by the transform. It is an error to
+apply a transform to an expression that does not match the transform's
+grammar. If you try it, you're likely to get an ugly compiler error if you're
+lucky. If you're unlucky, it'll compile and do something weird at runtime.
+For instance, consider the following:
+
+  // A grammar that matches an int terminal, and a
+  // transform that promotes it to a long terminal.
+  typedef
+      proto::when<
+          proto::terminal<int>
+        , proto::terminal<long>::type(proto::_value)
+      >
+  Promote;
+
+  // A character terminal
+  proto::terminal<char>::type a = {'a'};
+
+  // ERROR! The Promote transform expects an integer
+  // terminal, not a character terminal.
+  Promote promote;
+  proto::terminal<long>::type i = promote(a);
+
+Grammars with transforms are proper function objects, so you can use
+`boost::result_of<>` to calculate their return types. So, applying a
+transform typically looks like this:
+
+    // Assuming we have an expression to transform,
+    // an initial state, and some auxiliary data ...
+    Expr expr;
+    State state;
+    Data data;
+
+    // ... calculate the result type of applying
+    // Grammar's transform ...
+    typedef typename
+        boost::result_of<Grammar(Expr, State, Data)>::type
+    result_type;
+
+    // ... and apply Grammar's transform:
+    result_type result = Grammar()(expr, state, data);
+
+[/====================================]
+[heading The State and Data Parameters]
+[/====================================]
+
+So in a transform, what are the `state` and `data` parameters used for?
+If you are familiar with the `std::accumulate()` standard algorithm,
+you know that it takes an input sequence, an initial state, and a
+binary function. The algorithm passes the initial state and the first
+element to the binary function to calculate a new state, which is
+then similarly combined with the second element, and so on. Users of
+functional programming languages know this operation as `fold`.
+
+Proto provides several variants of a `fold` transform that behaves
+analogously to `std::accumulate()`. The `fold` transform is described
+in detail later, but here we're just interested in the `state`
+parameter. Any transform that uses `fold` is going to require you
+to pass an initial state. That is what the second parameter of a
+transform is used for.
+
+The `data` parameter is a little different. It can be anything you
+want, and -- unlike the `state` parameter -- none of Proto's built-in
+transforms will touch it. Also unlike the `state` parameter, the
+`data` parameter will be passed around by non-const reference. You
+can use the `data` parameter to pass along data that your
+custom transforms might use or mutate.
+
+So the difference between `state` and `data` is that `state` is an
+accumulation variable that Proto will change, both in type and in
+value, during the transformation, whereas `data` is just a blob of
+bits that you would like available to your transforms. For instance,
+you might want to fold an expression tree to a Fusion list and do
+something locale-specific to each element before you put it in the
+list. In that case, your state parameter would be `fusion::nil`
+(i.e., an empty list), and the data parameter would be a
+`std::locale`.
+
+[/==========================================]
+[section Example: Calculator Arity Transform]
+[/==========================================]
+
+Let's have another look at our trusty calculator example. If you recall, the
+calculator allows the lazy evaluation of arithmetic expressions, with
+placeholders substituted with actual values provided at evaluation time. Valid
+expressions are of the form:
+
+    (_1 + 3)
+    (_2 - _1) / _2 * 100
+
+... and so on. In the first expression, one argument must be provided before
+the expression can be evaluated. In the second, two arguments are needed. We
+could say the /arity/ of the first expression is one and of the second is two.
+The arity is determined by the highest placeholder in the expression. Our job
+will be to write a transform that calculates the arity of any calculator
+expression.
+
+[note *Why Bother Calculating Expression Arity?*
+
+This is more than just an intelectual exercise. Knowing the arity of a calculator 
+expression is important if you want to give users a meaningful error message when 
+they specify too few or too many arguments to an expression.]
+
+[/=========================]
+[heading Defining a Grammar]
+[/=========================]
+
+First, we must write the grammar for the calculator. It's really very simple.
+Calculator expression can be made up of any combination of 5 constituents:
+
+* Placeholder 1
+* Placeholder 2
+* A literal
+* Unary operations
+* Binary operations
+
+We can immediately write the calculator grammar as follows:
+
+[CalcGrammar]
+
+We can read this as follows: a calculator expression is either placeholder 1, 
+placeholder 2, some other terminal, or some unary or binary operator whose operands 
+are calculator expressions. Recall that `proto::_` is a wildcard that matches 
+anything. So `proto::terminal< _ >` will match any terminal, and
+`proto::unary_expr< _, CalcArity >` will match any unary expression for which the 
+operand matches `CalcArity` (the `_` matches any operator tag).
+
+[/============================]
+[heading Writing the Transform]
+[/============================]
+
+It's straightforward to describe in words how the arity of an expression should
+be calculated. First, we describe the arity of each of the 5 constituents in
+the calculator grammar.
+
+[table Calculator Sub-Expression Arities
+    [[Sub-Expression]       [Arity]]
+    [[Placeholder 1]        [`1`]]
+    [[Placeholder 2]        [`2`]]
+    [[Literal]              [`0`]]
+    [[Unary Expression]     [ /arity of the operand/ ]]
+    [[Binary Expression]    [ /max arity of the two operands/ ]]
+]
+
+The total arity of a calculator expression is found by recursively evaluating
+the arity of all of the sub-expressions and taking the maximum.
+
+Let's look at the sub-expression for the placeholder `_1`. It is matched by this
+part of our grammar: `proto::terminal< placeholder<0> >`. We want to associate this
+part of our grammar with an arity of `1`. We do that by attaching a transform.
+Since the arity of an expression can be evaluated at compile time, let's use
+`mpl::int_<1>` to represent the arity of the first placeholder. The following
+attaches a transform that always evaluates to `mpl::int_<1>`:
+
+    proto::when< proto::terminal< placeholder<0> >, mpl::int_<1>() >
+
+This grammar rule will match any `placeholder<0>` terminal, and will transform it
+to a (default-constructed) `mpl::int_<1>` object. As described previously,
+`mpl::int_<1>()` is a function type, but Proto interprets it as an object to
+construct. We will have a similar transform to convert `placeholder<1>` terminals
+into `mpl::int_<2>`, and other terminals into `mpl::int_<0>`.
+
+Next, let's write a transform for unary operators that returns the arity of the
+operand. It is simply:
+
+    proto::when< proto::unary_expr< _, CalcArity >, CalcArity(proto::_child) >
+
+The transform `CalcArity(proto::_child)` recursively applies the `CalcArity`
+transform to the child node of the unary expression. As you might have noticed,
+`CalcArity(proto::_child)` is another function type, but Proto interprets this one
+differently. Rather than trying to construct a `CalcArity` object, Proto
+knows this is a function object and invokes it instead.
+
+[/================================================]
+[note *Object Transforms vs. Callable Transforms*
+
+When using function types as Proto transforms, they can either represent an object 
+to construct or a function to call. It is similar to C++ where the syntax `foo(x)` 
+can either be interpreted as an object to construct or a function to call, 
+depending on whether `foo` is a type or a function. Proto can't know in general 
+which is the case, so it uses a trait, `proto::is_callable<>`, to differentiate. 
+`is_callable< mpl::int_<1> >::value` is false so `mpl::int_<1>()` is an object to 
+construct, but `is_callable< CalcArity >::value` is true so 
+`CalcArity(proto::_child)` is a function to call.
+(`is_callable< CalcArity >::value` is true because `CalcArity` inherits from 
+`proto::or_<>`, which is callable.)]
+[/================================================]
+
+[/
+    That begs the question, what does `unary_expr<>`'s transform do? Well,
+    `unary_expr< _, CalcArity >` has a default transform
+    associated with it. It is a /pass-through/ transform. When an expression
+    of the form `expr< T, list1< X > >` is passed to the transform, its `apply<>`
+    member template will invoke the `CalcArity` transform (which we haven't
+    completely defined yet -- patience) on `X` resulting in `Y`, and then
+    reassemble the expression as `expr< T, list1< Y > >`.
+
+    [note You may have noticed that Proto types like `unary_expr<>` serve several
+    different but related roles. In particular, `unary_expr<>` is ...
+
+    ... [*a metafunction]: `unary_expr<T, X>::type` is a typedef for
+    `expr<T, list1<X> >`.
+
+    ... [*a grammar]: `unary_expr<U, Y>` is a simle grammar that matches
+    `expr<T, list1<X> >` if an only if `U` is `T` or `proto::_`, and `Y` is a
+    grammar that matches `X`.
+
+    ... [*a transform]: `unary_expr<U, Y>::apply<expr<T, list1<X> >, S, V>::type`
+    applies `unary_expr<>`'s pass-through transform to `expr<T, list1<X> >` with
+    state `S` and data `V`. The result is
+    `expr<T, list1< Y::apply<X, S, V>::type > >`.
+    ]
+
+    So, putting a few things together, consider the calculator expression `+_1`,
+    which would have the following type:
+
+        expr< tag::unary_plus, list1<
+            expr< tag::terminal, term< placeholder<0> > >
+        > >
+
+    If we executed the `unary_expr< _, CalcArity >` transform on this
+    expression, we would expect to get:
+
+        expr< tag::unary_plus, list1<
+            mpl::int_<1>
+        > >
+
+    And if we added the `_child<>` transform also, as in
+    `child< unary_expr< _, CalcArity > >`, we expect the result
+    to be:
+
+        mpl::int_<1>
+
+    Which is exactly what we want.
+
+    [note *Default Transforms*
+
+    All the tools Proto provides for defining grammar rules have default transforms
+    associated with them. Just as `unary_expr<>` has a pass-through transform,
+    so too does `binary_expr<>`, `shift_right<>`, and all the others.
+    `proto::or_<>` has a default transform which evaluates the transform of the
+    branch that matched. `proto::and_<>`'s default transform evaluates the
+    transform of the last branch. Even `proto::expr<>`, `proto::if_<>`,
+    `proto::not_<>`, and `proto::_` have no-op default transforms that simply return
+    unmodified the expressions passed to them.
+    ]
+]
+
+The arity of a binary operator is the maximum of the arity of the left and
+right operands. We can specify this with the help of `mpl::max<>`, which is a
+so-called metafunction that computes the maximum of two compile-time integers.
+The transform is described below:
+
+    proto::when< proto::binary_expr< _, CalcArity, CalcArity >,
+       mpl::max< CalcArity(proto::_left), CalcArity(proto::_right) >()
+    >
+
+The above says to match binary calculator expressions and compute their
+arity by first computing the arity of the left and right children and then
+taking their maximum.
+
+[def _X_ [~X]]
+[def _Y_ [~Y]]
+[def _Z_ [~Z]]
+
+There's a lot going on in the above transform, so let's take it one piece
+at a time, starting with the parts we know. `CalcArity(proto::_left)`
+will calculate the arity of the left child, returning a compile-time integer.
+Likewise for `CalcArity(proto::_right)`. What is new is that these two
+transforms are nested within another: `mpl::max<...>()`. Proto notices that
+`mpl::max<...>` is not callable, so this transform is interpreted as an
+object to construct rather than a function to invoke. Using meta-programming
+tricks, Proto disassembles the `mpl::max<...>` template looking for nested
+Proto transforms to apply. It finds two and applies them, resulting in
+`mpl::max< mpl::int_<_X_>, mpl::int_<_Y_> >`.
+
+Having first applied any nested transforms, Proto then looks to see if
+`mpl::max< mpl::int_<_X_>, mpl::int_<_Y_> >` has a nested `::type` typedef.
+This is a common convention used by metafunctions. In this case,
+`mpl::max<...>::type` is a typedef for `mpl::int_< _Z_ >` where `_Z_` is the
+maximum of `_X_` and `_Y_`. The trailing `()` on the transform indicates that
+the result should be default-constructed, so this transform returns 
+`mpl::int_<_Z_>()`. And we're done.
+
+[note Had `mpl::max<>` not had a nested `::type` typedef, the transform
+would have created and returned a default-constructed `mpl::max<>` object
+instead. That is, the result of substituting nested transforms need not
+of necessity have a nested `::type` typedef, but it is used if it is there.]
+
+Piecing it all together, the complete `CalcArity` looks like this:
+
+[CalcArity]
+
+We can use our `CalcArity` transform to calculate the arity of any
+calculator expression:
+
+    CalcArity arity_of;
+    std::cout << arity_of( proto::lit(100) * 20 ) << '\n';
+    std::cout << arity_of( (_1 - _1) / _1 * 100 ) << '\n';
+    std::cout << arity_of( (_2 - _1) / _2 * 100 ) << '\n';
+
+This displays the following:
+
+[pre
+0
+1
+2
+]
+
+(Aside: the output statements use the fact that `mpl::int_<_X_>`
+has a conversion to `int(_X_)`.)
+
+[endsect]
+
+[/========================]
+[section Canned Transforms]
+[/========================]
+
+So far, we've seen how to write custom transforms using function types.
+These were implemented in terms of more primitive transforms provided by
+Proto, such as `_child`, `_left`, and `_right`. This section describes those
+transforms and others in detail.
+
+[/
+
+Why is this here??
+
+All the transforms defined in this section are of the following form:
+
+[def _some_transform_ [~some_transform]]
+
+    struct _some_transform_ : proto::transform< _some_transform_ >
+    {
+        template<typename Expr, typename State, typename Date>
+        struct impl : proto::transform_impl< Expr, State, Data >
+        {
+            typedef ... result_type;
+
+            result_type operator()(
+                typename impl::expr_param expr
+              , typename impl::state_param state
+              , typename impl::data_param data
+            ) const
+            {
+                return ...;
+            }
+        };
+    };
+
+So defined, `_some_transform_` is a transform "in the raw", just like
+`proto::_value` or `proto::_child`. These transforms are the building
+blocks from which you can compose larger transforms using function types.
+
+]
+
+[section:child_c_and_friends [^_value], [^_child], [^_left], and [^_right]]
+
+    namespace boost { namespace proto
+    {
+        struct _value;
+
+        template<long N>
+        struct _child_c;
+
+        typedef _child_c<0> _child0;
+        typedef _child_c<1> _child1;
+        // ... up to BOOST_PROTO_MAX_ARITY-1
+
+        typedef _child_c<0> _child;
+        typedef _child_c<0> _left;
+        typedef _child_c<1> _right;
+    }}
+
+These transforms are useful for extracting the ['[^N]]th argument from an
+expression. The `_left` transform is equivalent to the `_child_c<0>` transform,
+and the `_right` transform is equivalent to the `_child_c<1>` transform. The
+`_value` transform extracts the value from a terminal expression.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`boost::result_of<proto::_value(Expr, State, Data)>::type`]
+        [`proto::result_of::value<Expr>::type`]
+    ]
+    [   [`proto::_value()(expr, state, data)`]
+        [`proto::value(expr)`]
+    ]
+    [   [`boost::result_of<proto::_child_c<N>(Expr, State, Data)>::type`]
+        [`proto::result_of::child_c<Expr, N>::type`]
+    ]
+    [   [`proto::_child_c<N>()(expr, state, data)`]
+        [`proto::child_c<N>(expr)`]
+    ]
+    [   [`boost::result_of<proto::_left(Expr, State, Data)>::type`]
+        [`proto::result_of::left<Expr>::type`]
+    ]
+    [   [`proto::_left()(expr, state, data)`]
+        [`proto::left(expr)`]
+    ]
+    [   [`boost::result_of<proto::_right(Expr, State, Data)>::type`]
+        [`proto::result_of::right<Expr>::type`]
+    ]
+    [   [`proto::_right()(expr, state, data)`]
+        [`proto::right(expr)`]
+    ]
+]
+
+Example:
+
+    // Matches an integer terminal and extracts the int.
+    struct Int
+      : when< terminal<int>, _value >
+    {};
+
+[endsect]
+
+[section:identity_and_friends [^_expr], [^_state] and [^_data]]
+
+    namespace boost { namespace proto
+    {
+        struct _expr;
+        struct _state;
+        struct _data;
+    }}
+
+The `_expr`, `_state` and `_data` transforms merely return the
+`expr`, `state` and `data` arguments, respectively. Proto's
+wildcard pattern, `_`, behaves like `_expr` when used
+as a transform.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`boost::result_of<proto::_(Expr, State, Data)>::type`]
+        [`Expr`]
+    ]
+    [   [`proto::_()(expr, state, data)`]
+        [`expr`]
+    ]
+    [   [`boost::result_of<proto::_expr(Expr, State, Data)>::type`]
+        [`Expr`]
+    ]
+    [   [`proto::_expr()(expr, state, data)`]
+        [`expr`]
+    ]
+    [   [`boost::result_of<proto::_state(Expr, State, Data)>::type`]
+        [`State`]
+    ]
+    [   [`proto::_state()(expr, state, data)`]
+        [`state`]
+    ]
+    [   [`boost::result_of<proto::_data(Expr, State, Data)>::type`]
+        [`Data`]
+    ]
+    [   [`proto::_data()(expr, state, data)`]
+        [`data`]
+    ]
+]
+
+Example:
+
+    // Matches a subscript expression where the left- and right-hand operands
+    // match MyGrammar, returns the expression unmodified
+    struct Subscript
+      : proto::when< proto::subscript<MyGrammar, MyGrammar>, proto::_expr >
+    {};
+
+[endsect]
+
+[section:if [^if_<>]]
+
+    namespace boost { namespace proto
+    {
+        namespace control
+        {
+            template<
+                typename If
+              , typename Then = _
+              , typename Else = not_<_>
+            >
+            struct if_;
+        }
+
+        using control::if_;
+    }}
+
+We've already seen the _if_ template in the context of grammars, but
+_if_ can also be used as a transform. It can be used to conditionally
+apply one transform or another based on some condition. The three
+template parameters are Proto transforms. The result of applying the
+first transform should be a compile-time Boolean. If it is true, then
+the first transform is applied. The second is applied otherwise.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [``boost::result_of<
+    proto::if_<If, Then, Else>(Expr, State, Data)
+>::type``]
+        [``typedef
+    mpl::if_<
+        boost::result_of<proto::when<_, If>(Expr, State, Data)>::type
+      , proto::when<_, Then>
+      , proto::when<_, Else>
+    >::type
+branch;
+
+typedef boost::result_of<branch(Expr, State, Data)>::type type;``]
+    ]
+    [   [`proto::if_<If, Then, Else>()(expr, state, data)`]
+        [``typedef ... branch; // Same as above
+branch()(expr, state, data);``]
+    ]
+]
+
+Example:
+
+    // Match a terminal. If size of the terminal
+    // argument is less than or equal to 4, make
+    // a new terminal that stores the argument by
+    // value. Otherwise, store the argument by
+    // reference.
+    struct ByValOrRef
+      : proto::when<
+            proto::terminal<_>
+          , proto::if_<
+                mpl::less_equal<
+                    mpl::sizeof_<proto::_value>
+                  , mpl::size_t<4>
+                >()
+              , proto::_make_terminal(proto::_value)
+              , proto::_make_terminal(proto::_ref(proto::_value))
+            >
+        >
+    {};
+
+[endsect]
+
+[section:and_or_not [^and_<>], [^or_<>], and [^not_<>]]
+
+    namespace boost { namespace proto
+    {
+        namespace control
+        {
+            template<typename... T>
+            struct and_;
+
+            template<typename... T>
+            struct or_;
+
+            template<typename T>
+            struct not_;
+        }
+
+        using control::and_;
+        using control::or_;
+        using control::not_;
+    }}
+
+As with _if_, the grammar elements _and_, _or_, and _not_ can
+also be used as transforms. At a high level, here is what the
+transforms do:
+
+[variablelist
+[ [`and_<T0,T1,...,Tn>`]
+  [Apply the transform `Tn`.] ]
+[ [`or_<T0,T1,...,Tn>`]
+  [Apply the transform `Tx` where `x` is the lowest number
+   such that `matches<Expr,Tx>::value` is `true`.] ]
+[ [`not_<T>`] [Return the current expression unchanged.] ]
+]
+
+The following table specifies the behaviors described above more
+precisely.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [``boost::result_of<
+    proto::and_<A,B,C>(Expr, State, Data)
+>::type``]
+        [`boost::result_of<C(Expr, State, Data)>::type`]
+    ]
+    [   [`proto::and_<A,B,C>()(expr, state, data)`]
+        [`C()(expr, state, data)`]
+    ]
+    [   [``boost::result_of<
+    proto::or_<A,B,C>(Expr, State, Data)
+>::type``]
+        [``typedef mpl::if_<
+    proto::matches<Expr, A>
+  , A
+  , mpl::if_<
+        proto::matches<Expr, B>
+      , B
+      , C
+    >::type
+>::type which;
+
+typedef boost::result_of<which(Expr, State, Data)>::type type;``]
+    ]
+    [   [`proto::or_<A,B,C>()(expr, state, data)`]
+        [``typedef ... which; // Same as above
+which()(expr, state, data);``]
+    ]
+    [   [``boost::result_of<
+    proto::not_<A>(Expr, State, Data)
+>::type``]
+        [`Expr`]
+    ]
+    [   [`proto::not_<A>()(expr, state, data)`]
+        [`expr`]
+    ]
+]
+
+Example:
+
+    // A transform that matches any expression and
+    // unwraps any reference_wrapped terminals it
+    // finds.
+    struct UnwrapReference
+      : proto::or_<
+            // Pass through terminals that are not
+            // reference_wrappers unchanged:
+            proto::and_<
+                proto::terminal<_>
+              , proto::not_<proto::if_<boost::is_reference_wrapper<proto::_value>()> >
+            >
+            // For other terminals (i.e., reference_wrapper
+            // terminals), unwrap the reference:
+          , proto::when<
+                proto::terminal<_>
+              , proto::terminal<boost::unwrap_reference<proto::_value> >(proto::_value)
+            >
+            // Otherwise, match non-terminals and
+            // recurse.
+          , proto::when<
+                proto::nary_expr<_, proto::vararg<UnwrapReference> >
+            >
+        >
+    {};
+
+The above transform serves to illustrate the behaviors of the _and_,
+_or_, and _not_ transforms, but it is admittedly contrived. The
+transform is more easily written as follows:
+
+    // Functionally identical to the UnwrapReference
+    // transform above:
+    struct UnwrapReference
+      : proto::or_<
+            proto::when<
+                proto::terminal<boost::reference_wrapper<_> >
+              , proto::terminal<boost::unwrap_reference<proto::_value> >(proto::_value)
+            >
+          , proto::terminal<_>
+          , proto::nary_expr<_, proto::vararg<UnwrapReference> >
+        >
+    {};
+
+[endsect]
+
+[section:call [^call<>]]
+
+[def __CALLABLE__ [~[^Callable]]]
+
+    namespace boost { namespace proto
+    {
+        template<typename Fun>
+        struct call;
+    }}
+
+The `call<>` transform is used to invoke callable transforms and evaluate
+their arguments. When you use a callable transform as in
+`when< unary_plus<_>, __CALLABLE__(_child) >`, the `call<>` transform is used behind
+the scenes to evaluate `__CALLABLE__(_child)`. In fact, for any callable
+transform, the following short- and long-forms are equivalent:
+
+[table
+    [ [Short From]
+      [Long Form] ]
+    [ [ `proto::when< Grammar, __CALLABLE__(Tran1, Tran2...) >` ]
+      [ `proto::when< Grammar, proto::call< __CALLABLE__(Tran1, Tran2...) > >` ] ]
+]
+
+You might decide to use `call<>` explicitly in cases when Proto can't figure out
+that a given transform is callable. (See the discussion on the `is_callable<>` trait
+[link boost_proto.users_guide.expression_transformation.is_callable here].)
+Rather than specialize `proto::is_callable<>` for your transform, you can simply
+wrap its use in `call<>`, instead.
+
+[tip For users of legacy compilers like MSVC 7.1, `call<>` is useful to work
+around compiler bugs. Doubly-nested transforms such as `__CALLABLE__(_child1(_child2))`
+cause older compilers problems, but the equivalent `__CALLABLE__(call<_child1(_child2)>)`
+solves the problem.]
+
+The semantics of `call<>` are described in the table below:
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`boost::result_of<proto::call<Fun(A0, A1, ... AN)>(Expr, State, Data)>::type`]
+        [``boost::result_of<Fun(
+    boost::result_of<proto::when<_, A0>(Expr, State, Data)>::type
+  , boost::result_of<proto::when<_, A1>(Expr, State, Data)>::type
+    ...
+  , boost::result_of<proto::when<_, AN>(Expr, State, Data)>::type
+)>::type``]
+    ]
+    [   [`proto::call<Fun(A0, A1, ... AN)>()(expr, state, data)`]
+        [``Fun()(
+    proto::when<_, A0>()(expr, state, data)
+  , proto::when<_, A1>()(expr, state, data)
+    ...
+  , proto::when<_, AN>()(expr, state, data)
+)``]
+    ]
+]
+
+The target of a callable transform can be any function object that implements
+the Boost.ResultOf protocol. Function objects that take up to
+`BOOST_PROTO_MAX_ARITY` are handled.
+
+For callable transforms that take 0, 1, or 2 arguments, special handling is done
+to see if the transform actually expects 3 arguments, as Proto's primitive
+transforms do. (This can be detected with meta-programming tricks.) So, even
+though a transform like `_child1` requires three parameters: expression,
+state and data; it can be "called" with just one, like `_child1(_child2)`. Proto
+treats this as if were `call<_child1(_child2, _state, _data)>`.
+
+If no transform arguments are specified at all, as in `call<_child1>`, this is
+the same as `_child1`. For this reason, `call<_child1>(_child2)` is the same as
+`call<_child1(_child2)>`.
+
+Example:
+
+[LazyMakePair2]
+
+[endsect]
+
+[section:make [^make<>]]
+
+[def __OBJECT__ [~[^Object]]]
+
+    namespace boost { namespace proto
+    {
+        template<typename Fun>
+        struct make;
+    }}
+
+The `make<>` transform is used to construct objects and evaluate
+their constructor arguments. When you use an object transform as in
+`when< unary_plus<_>, __OBJECT__(_child) >`, the `make<>` transform is used behind
+the scenes to evaluate `__OBJECT__(_child)`. In fact, for any object
+transform, the following short- and long-forms are equivalent:
+
+[table
+    [ [Short From]
+      [Long Form] ]
+    [ [ `proto::when< Grammar, __OBJECT__(Tran1, Tran2...) >` ]
+      [ `proto::when< Grammar, proto::make< __OBJECT__(Tran1, Tran2...) > >` ] ]
+]
+
+You might decide to use `make<>` to explicitly differentiate object
+transforms from callable transforms. (See `call<>`.)
+
+[tip For users of legacy compilers like MSVC 7.1, `make<>` is useful to work
+around compiler bugs. Doubly-nested transforms such as `Object1(Object2(_child))`
+cause older compilers problems, but the equivalent `Object1(make<Object2(_child)>)`
+solves the problem.]
+
+The `make<>` transform checks to see if the resulting object type is a template.
+If it is, the template type is disassembled to find nested transforms. Proto
+considers the following types to represent transforms:
+
+[def __type__ [~type]]
+[def __X__  X\']
+[def __X0__ X0\']
+[def __X1__ X1\']
+[def __MakeImpl__ [~[^MakeImpl]]]
+
+* Function types
+* Function pointer types
+* Types for which `proto::is_callable<__type__>::value` is `true`
+
+When an object transform with a template type such as
+`Object<X0,X1,...>(Args...)` is evaluated with a given
+`Expr`, `State`, and `Data`, the result type is
+`__MakeImpl__<Object<X0,X1,...>, Expr, State, Data>::type` which is
+defined as follows. For each `X` in `X0,X1,...`, do:
+
+* If `X` is a transform, then let `__X__` be
+  `boost::result_of<proto::when<_, X>(Expr, State, Data)>::type`.
+  Note that a substitution took place.
+* Otherwise, if `X` is a template like `Object2<Y0,Y1,...>`, then
+  let `__X__` be `__MakeImpl__<Object2<Y0,Y1,...>, Expr, State, Data>::type`
+  (which evaluates this procedure recursively). Note whether any
+  substitutions took place during this operation.
+* Otherwise, let `__X__` be `X`, and note that no substitution
+  took place.
+* If any substitutions took place in any of the above steps and
+  `Object<__X0__,__X1__,...>` has a nested `::type` typedef, the
+  result type is `Object<__X0__,__X1__,...>::type`.
+* Otherwise, the result type is `Object<__X0__,__X1__,...>`.
+
+Note that `when<>` is implemented in terms of `call<>` and `make<>`,
+so the above procedure is evaluated recursively.
+
+Given the above description of the `__MakeImpl__<>` helper, the semantics
+of the `make<>` transform is described as follows:
+
+[def __AN__ A[~N]]
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`boost::result_of<proto::make<Object(A0, A1, ... __AN__)>(Expr, State, Data)>::type`]
+        [`__MakeImpl__<Object, Expr, State, Data>::type`]
+    ]
+    [   [`proto::make<Object(A0, A1, ... __AN__)>()(expr, state, data)`]
+        [``__MakeImpl__<Object, Expr, State, Data>::type(
+    proto::when<_, A0>()(expr, state, data)
+  , proto::when<_, A1>()(expr, state, data)
+    ...
+  , proto::when<_, __AN__>()(expr, state, data)
+)``]
+    ]
+]
+
+Objects with constructors that take up to `BOOST_PROTO_MAX_ARITY` are handled.
+Some types are so-called /aggregates/ that do not have constructors; rather,
+they use /aggregate initialization/. For these types, you can specialize
+`proto::is_aggregate<>` and Proto will use a brace initializer list to
+initialize the object rather than a constructor. Proto knows that `proto::expr<>`
+is such an aggregate, so if you use object transforms to "construct" a
+new node in an expression tree, the right thing happens.
+
+If no transform arguments are specified at all, as in `make<Object>`, this is
+the same as `make<Object()>`.
+
+Example:
+
+[LazyMakePair]
+
+[endsect]
+
+[section:lazy [^lazy<>]]
+
+    namespace boost { namespace proto
+    {
+        template<typename Fun>
+        struct lazy;
+    }}
+
+Sometimes you would like a higher-order transform that returns another
+transform to be evaluated. This can happen when you have a transform
+whose behavior needs to be parameterized on the current state of the
+transformation. For these situations, you can use the `lazy<>` transform,
+which is essentially an invocation of the `make<>` transform (to evaluate
+any nested transforms and create the higher-order transform) followed
+by an invocation of `call<>` (to actually execute the higher-order
+transform).
+
+The behavior of `lazy<>` is easily specified in terms of `make<>` and
+`call<>`.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`boost::result_of<proto::lazy<Object(A0, A1, ... __AN__)>(Expr, State, Data)>::type`]
+        [``boost::result_of<proto::call<
+    boost::result_of<proto::make<Object>(Expr, State, Data)>::type(A0, A1, ... __AN__)
+>(Expr, State, Data)>::type``]
+    ]
+    [   [`proto::lazy<Object(A0, A1, ... __AN__)>()(expr, state, data)`]
+        [``proto::call<
+    boost::result_of<proto::make<Object>(Expr, State, Data)>::type(A0, A1, ... __AN__)
+>()(expr, state, data)``]
+    ]
+]
+
+If no transform arguments are specified at all, as in `lazy<Object>`, this is
+the same as `lazy<Object(_expr, _state, _data)>`.
+
+[endsect]
+
+[section:when [^when<>]]
+
+    namespace boost { namespace proto
+    {
+        template<typename Grammar, typename Transform = Grammar>
+        struct when;
+    }}
+
+`when<>` associates a grammar rule with a transform. It can be used
+in a grammar in place of the rule; that is, it behaves as a grammar
+rule. Expression tree nodes that match the grammar rule are processed
+with the associated transform; that is, `when<>` also behaves like
+a transform.
+
+When no transform is specified, as with `when< unary_plus<Calculator> >`,
+the grammar is treated as the transform. Every grammar element has
+a default transform. For most, such as `unary_plus<>`, the default transform
+is `pass_through<>`.
+
+The `when<>` transform is easily specified in terms of `call<>`,
+`make<>`, and the `is_callable<>` trait.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`boost::result_of<proto::when<Grammar, R(A0, A1, ... __AN__)>(Expr, State, Data)>::type`]
+        [``boost::result_of<boost::mpl::if_<
+    proto::is_callable<R>
+  , proto::call<R(A0, A1, ... __AN__)>
+  , proto::make<R(A0, A1, ... __AN__)>
+>::type(Expr, State, Data)>::type``]
+    ]
+    [   [`proto::when<Grammar, R(A0, A1, ... __AN__)>()(expr, state, data)`]
+        [``boost::mpl::if_<
+    proto::is_callable<R>
+  , proto::call<R(A0, A1, ... __AN__)>
+  , proto::make<R(A0, A1, ... __AN__)>
+>::type()(expr, state, data)``]
+    ]
+]
+
+If no transform arguments are specified, as in `when<Grammar, _child>`, the
+transform is assumed to be callable; that is, it is equivalent to
+`when<Grammar, call<_child> >`.[footnote It is done this way to improve compile
+times.]
+
+[endsect]
+
+[section:fold [^fold<>] and [^reverse_fold<>]]
+
+    namespace boost { namespace proto
+    {
+        template<typename Sequence, typename State0, typename Fun>
+        struct fold;
+
+        template<typename Sequence, typename State0, typename Fun>
+        struct reverse_fold;
+    }}
+
+The transforms `fold<>` and `reverse_fold<>` are akin to the
+`std::accumulate()` algorithm in the STL, or the `fold()` algorithm in
+Boost.Fusion. They iterate over some sequence and
+accumulate some state at each element. The `fold<>`
+transform iterates over the children in order, starting with the 0th child.
+The `reverse_fold<>` transform does it in reverse order, starting with the Nth
+child. (Note that for building things like cons lists, you'll often want to
+built it back-to-front with `reverse_fold<>`.)
+
+Both `fold<>` and `reverse_fold<>` are implemented in terms of `fusion::fold<>`.
+The three template parameters must each be Proto transforms. The have the following
+meaning:
+
+* `Sequence`: A Proto transform that returns a Fusion sequence.
+* `State`: A Proto transform that returns the initial state of the fold.
+* `Fun`: A Proto transform representing the operation to perform at each
+  iteration of the fold algorithm.
+
+Often, the `Sequence` parameter is `proto::_`, which returns the current node
+in the Proto expression tree. Tree nodes are valid Fusion sequences, where
+the children are the elements of the sequence.
+
+[def __AS_CALLABLE__ [~[^AsCallable]]]
+
+The semantics of the `fold<>` and `reverse_fold<>` transforms can both be
+understood in terms of a helper struct, `__AS_CALLABLE__<>`, which binds the
+data and the `Fun` transform into a binary function object for use by
+`fusion::fold()`. `__AS_CALLABLE__<>` has the following behavior:
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`boost::result_of<__AS_CALLABLE__<Fun, Data>(Expr, State)>::type`]
+        [`boost::result_of<proto::when<_, Fun>(Expr, State, Data)>::type`]
+    ]
+    [   [`__AS_CALLABLE__<Fun, Data>(data)(expr, state)`]
+        [`proto::when<_, Fun>()(expr, state, data)`]
+    ]
+]
+
+With the above `__AS_CALLABLE__<>` adaptor, `fold<>` and `reverse_fold<>`
+can be easily implemented in terms of `fusion::fold<>`:
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`boost::result_of<proto::fold<Sequence, State0, Fun>(Expr, State, Data)>::type`]
+        [``fusion::result_of::fold<
+    boost::result_of<proto::when<_, Sequence>(Expr, State, Data)>::type
+  , boost::result_of<proto::when<_, State0>(Expr, State, Data)>::type
+  , __AS_CALLABLE__<Fun, Data>
+>::type``]
+    ]
+    [   [`proto::fold<Sequence, State0, Fun>()(expr, state, data)`]
+        [``fusion::fold(
+    proto::when<_, Sequence>()(expr, state, data)
+  , proto::when<_, State0>()(expr, state, data)
+  , __AS_CALLABLE__<Fun, Data>(data)
+)``]
+    ]
+    [   [`boost::result_of<proto::reverse_fold<Sequence, State0, Fun>(Expr, State, Data)>::type`]
+        [``fusion::result_of::fold<
+    fusion::result_of::reverse<
+        boost::result_of<proto::when<_, Sequence>(Expr, State, Data)>::type
+    >::type
+  , boost::result_of<proto::when<_, State0>(Expr, State, Data)>::type
+  , __AS_CALLABLE__<Fun, Data>
+>::type``]
+    ]
+    [   [`proto::reverse_fold<Sequence, State0, Fun>()(expr, state, data)`]
+        [``fusion::fold(
+    fusion::reverse(
+        proto::when<_, Sequence>()(expr, state, data)
+    )
+  , proto::when<_, State0>()(expr, state, data)
+  , __AS_CALLABLE__<Fun, Data>(data)
+)``]
+    ]
+]
+
+[#reverse_fold_example]Example:
+
+[AsArgList]
+
+[endsect]
+
+[section:fold_tree [^fold_tree<>] and [^reverse_fold_tree<>]]
+
+    namespace boost { namespace proto
+    {
+        template<typename Sequence, typename State0, typename Fun>
+        struct fold_tree;
+
+        template<typename Sequence, typename State0, typename Fun>
+        struct reverse_fold_tree;
+    }}
+
+The `fold_tree<>` and `reverse_fold_tree<>` transforms recursively apply the
+`fold<>` and `reverse_fold<>` transforms to sub-trees that all share a common
+tag type. This is useful for flattening trees into lists; for example, you
+might use `reverse_fold_tree<>` to flatten an expression tree like `a | b | c`
+into a Fusion list like `cons(a, cons(b, cons(c)))`.
+
+The `fold_tree<>` and `reverse_fold_tree<>` transforms are unlike the other
+transforms that Proto provides in that they operate on entire sub-trees rather
+than just single nodes within the tree.
+
+[def __FOLD_TREE_IMPL__ [~[^FoldTreeImpl]]]
+[def __REVERSE_FOLD_TREE_IMPL__ [~[^ReverseFoldTreeImpl]]]
+
+These are higher-level transforms, implemented in terms of the `fold<>`
+and `reverse_fold<>` transforms and helper structs `__FOLD_TREE_IMPL__<>` and
+`__REVERSE_FOLD_TREE_IMPL__<>`, one of which is shown below:
+
+    // FoldTreeImpl either recurses into the expression, if its Grammar
+    // matches, or else ends the recursion by matching Grammar and
+    // applying its transform.
+    template<typename Grammar, typename Fun>
+    struct __FOLD_TREE_IMPL__
+      : proto::or_<
+            proto::when<Grammar, proto::fold<_, proto::_state, __FOLD_TREE_IMPL__<Grammar, Fun> > >
+          , proto::when<_, Fun>
+        >
+    {};
+
+The `__REVERSE_FOLD_TREE_IMPL__<>` helper is specified similarly, only with
+`reverse_fold<>` instead of `fold<>`. With these two helpers, we can
+specify the behavior of `fold_tree<>` and `reverse_fold_tree<>` as
+follows:
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [``boost::result_of<
+    proto::fold_tree<Sequence, State0, Fun>(Expr, State, Data)
+>::type``]
+        [``boost::result_of<
+    proto::fold<
+        Sequence
+      , State0
+      , __FOLD_TREE_IMPL__<
+            proto::nary_expr<Expr::proto_tag, proto::vararg<_> >
+          , Fun
+        >
+    >(Expr, State, Data)
+>::type``]
+    ]
+    [   [`proto::fold_tree<Sequence, State0, Fun>()(expr, state, data)`]
+        [``proto::fold<
+    Sequence
+  , State0
+  , __FOLD_TREE_IMPL__<
+        proto::nary_expr<Expr::proto_tag, proto::vararg<_> >
+      , Fun
+    >
+>()(expr, state, data)``]
+    ]
+    [   [``boost::result_of<
+    proto::reverse_fold_tree<Sequence, State0, Fun>(Expr, State, Data)
+>::type``]
+        [``boost::result_of<
+    proto::reverse_fold<
+        Sequence
+      , State0
+      , __REVERSE_FOLD_TREE_IMPL__<
+            proto::nary_expr<Expr::proto_tag, proto::vararg<_> >
+          , Fun
+        >
+    >(Expr, State, Data)
+>::type``]
+    ]
+    [   [`proto::reverse_fold_tree<Sequence, State0, Fun>()(expr, state, data)`]
+        [``proto::reverse_fold<
+    Sequence
+  , State0
+  , __REVERSE_FOLD_TREE_IMPL__<
+        proto::nary_expr<Expr::proto_tag, proto::vararg<_> >
+      , Fun
+    >
+>()(expr, state, data)``]
+    ]
+]
+
+Example:
+
+[FoldTreeToList]
+
+[endsect]
+
+[section:pass_through [^pass_through<>]]
+
+    namespace boost { namespace proto
+    {
+        template<typename Grammar>
+        struct pass_through;
+    }}
+
+The `pass_through<>` transform iterates over the pairs of
+children in the grammar and the expression, applying the child grammar's
+transform to the corresponding child expression. The resulting transformed
+children expressions are reassembled back into an expression of the same
+type as the parent expression.
+
+As a side-effect, `pass_through<>` transforms all sub-expressions held by
+reference into ones held by value.
+
+Note that all expression generator metafunctions (Eg., `unary_plus<>`,
+`shift_right<>`, `function<>`, `nary_expr<>`, etc.) have a pass-through
+transform by default, so there is rarely any need to use the `pass_through<>`
+transform explicitly.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [``boost::result_of<
+    proto::pass_through<Grammar>(Expr, State, Data)
+>::type``]
+        [``proto::nary_expr<
+    Expr::proto_tag
+  , boost::result_of<Grammar::proto_child0(Expr::proto_child0, State, Data)>::type
+  , boost::result_of<Grammar::proto_child1(Expr::proto_child1, State, Data)>::type
+    // ...
+  , boost::result_of<Grammar::proto_childN(Expr::proto_childN, State, Data)>::type
+>::type``]
+    ]
+    [   [`proto::pass_through<Grammar>()(expr, state, data)`]
+        [``proto::make_expr<Expr::proto_tag>(
+    Grammar::proto_child0()(proto::child_c<0>(expr), state, data)
+    Grammar::proto_child1()(proto::child_c<1>(expr), state, data)
+    // ...
+    Grammar::proto_childN()(proto::child_c<N>(expr), state, data)
+)``]
+    ]
+]
+
+Example:
+
+[Promote]
+
+[endsect]
+
+[endsect]
+
+[/======================================================]
+[section:user_defined_transforms User-Defined Transforms]
+[/======================================================]
+
+In previous sections, we've seen how to compose larger transforms
+out of smaller transforms using function types. The smaller transforms
+from which larger transforms are composed are /primitive transforms/,
+and Proto provides a bunch of common ones such as `_child0` and `_value`.
+In this section we'll see how to author your own primitive transforms.
+
+[note There are a few reasons why you might want to write your own
+primitive transforms. For instance, your transform may be complicated,
+and composing it out of primitives becomes unwieldy. You might also need
+to work around compiler bugs on legacy compilers that makes
+composing transforms using function types problematic. Finally,
+you might also decide to define your own primitive transforms
+to improve compile times. Since Proto can simply invoke a
+primitive transform directly without having to process arguments
+or differentiate callable transforms from object transforms,
+primitive transforms are more efficient.]
+
+[def _N_ [~N]]
+
+Primitive transforms inherit from `proto::transform<>`
+and have a nested `impl<>` template that inherits from 
+`proto::transform_impl<>`. For example, this is how Proto
+defines the `_child_c<_N_>` transform, which returns the
+_N_-th child of the current expression:
+
+    namespace boost { namespace proto
+    {
+        // A primitive transform that returns N-th child
+        // of the current expression.
+        template<int N>
+        struct _child_c : transform<_child_c<N> >
+        {
+            template<typename Expr, typename State, typename Data>
+            struct impl : transform_impl<Expr, State, Data>
+            {
+                typedef
+                    typename result_of::child_c<Expr, N>::type
+                result_type;
+
+                result_type operator ()(
+                    typename impl::expr_param expr
+                  , typename impl::state_param state
+                  , typename impl::data_param data
+                ) const
+                {
+                    return proto::child_c<N>(expr);
+                }
+            };
+        };
+
+        // Note that _child_c<N> is callable, so that
+        // it can be used with arguments, as:
+        //   _child_c<0>(_child_c<1>)
+        template<int N>
+        struct is_callable<_child_c<N> >
+          : mpl::true_
+        {};
+    }}
+
+The `proto::transform<>` base class provides the `operator()` overloads
+and the nested `result<>` template that make your transform a valid
+function object. These are implemented in terms of the nested `impl<>`
+template you define.
+
+The `proto::transform_impl<>` base class is a convenience. It
+provides some nested typedefs that are generally useful. The are
+specified in the table below:
+
+[table proto::transform_impl<Expr, State, Data> typedefs
+[[typedef][Equivalent To]]
+[[`expr`][`typename remove_reference<Expr>::type`]]
+[[`state`][`typename remove_reference<State>::type`]]
+[[`data`][`typename remove_reference<Data>::type`]]
+[[`expr_param`][`typename add_reference<typename add_const<Expr>::type>::type`]]
+[[`state_param`][`typename add_reference<typename add_const<State>::type>::type`]]
+[[`data_param`][`typename add_reference<typename add_const<Data>::type>::type`]]
+]
+
+You'll notice that `_child_c::impl::operator()` takes arguments of types
+`expr_param`, `state_param`, and `data_param`. The typedefs make it easy to
+accept arguments by reference or const reference accordingly.
+
+The only other interesting bit is the `is_callable<>` specialization, which
+will be described in the
+[link boost_proto.users_guide.expression_transformation.is_callable 
+next section].
+
+[endsect]
+
+[/=================================================]
+[section:is_callable Making Your Transform Callable]
+[/=================================================]
+
+Transforms are typically of the form `proto::when< Something, R(A0,A1,...) >`. The
+question is whether `R` represents a function to call or an object to
+construct, and the answer determines how _when_ evaluates the transform.
+_when_ uses the `proto::is_callable<>` trait to disambiguate between the two.
+Proto does its best to guess whether a transform is callable or not, but
+it doesn't always get it right. It's best to know the rules Proto uses,
+so that you know when you need to be more explicit.
+
+For most types `T`, `proto::is_callable<T>` checks for inheritence from
+`proto::callable`. However, if the type `T` is a template specialization,
+Proto assumes that it is /not/ callable ['even if the template inherits from
+`proto::callable`]. We'll see why in a minute. Consider the following erroneous
+callable transform:
+
+    // Proto can't tell this defines a
+    // callable transform!
+    template<typename T>
+    struct times2 : proto::callable
+    {
+        typedef T result_type;
+
+        T operator()(T i) const
+        {
+            return i * 2;
+        }
+    };
+
+    // ERROR! This is not going to
+    // multiply the int by 2.
+    struct IntTimes2
+      : proto::when<
+            proto::terminal<int>
+          , times2<int>(proto::_value)
+        >
+    {};
+
+The problem is that Proto doesn't know that `times2<int>` is a callable
+transform. Instead, it assumes it is an object transform and will try to
+construct a `times2<int>` object and initialize it will an `int`. That
+will not compile.
+
+[note Why can't Proto tell that `times2<int>` is callable? After all,
+it inherits from `proto::callable`, and that is detectable, right?
+The problem is that merely asking whether some type `X<Y>` inherits from
+`callable` will cause the template `X<Y>` to be instantiated. That's a
+problem for a type like `std::vector<_value(_child1)>`. `std::vector<>`
+will not suffer to be instantiated with `_value(_child1)` as a template
+parameter. As a result, Proto has to assume that a type `X<Y>` represents
+an object transform and not a callable transform.]
+
+There are a couple of solutions to the `times2<int>` problem. One
+solution is to wrap the transform in `proto::call<>`. This forces Proto
+to treat `times2<int>` as callable:
+
+    // OK, calls times2<int>
+    struct IntTimes2
+      : proto::when<
+            proto::terminal<int>
+          , proto::call<times2<int>(proto::_value)>
+        >
+    {};
+
+This can be a bit of a pain, because we need to wrap every use of
+`times2<int>`, which can be tedious and error prone, and makes our
+grammar cluttered and harder to read.
+
+Another solution is to specialize `proto::is_callable<>` on our
+`times2<>` template:
+
+    namespace boost { namespace proto
+    {
+        template<typename T>
+        struct is_callable<times2<T> >
+          : mpl::true_
+        {};
+    }}
+
+    // OK, times2<> is callable
+    struct IntTimes2
+      : proto::when<
+            proto::terminal<int>
+          , times2<int>(proto::_value)
+        >
+    {};
+
+This is better, but still a pain because of the need to open
+Proto's namespace.
+
+You could simply make sure that the transform is not
+a template specialization. Consider the following:
+
+    // No longer a template specialization!
+    struct times2int : times2<int> {};
+
+    // OK, times2int is callable
+    struct IntTimes2
+      : proto::when<
+            proto::terminal<int>
+          , times2int(proto::_value)
+        >
+    {};
+
+This works because now Proto can tell that `times2int` inherits
+(indirectly) from `proto::callable`. Any non-template types can
+be safely checked for inheritance because, as they are not
+templates, there is no worry about instantiation errors.
+
+There is one last way to tell Proto that `times2<>` is callable.
+You could add an extra dummy template parameter that defaults
+to `proto::callable`:
+
+    // Proto will recognize this as callable
+    template<typename T, typename Callable = proto::callable>
+    struct times2 : proto::callable
+    {
+        typedef T result_type;
+
+        T operator()(T i) const
+        {
+            return i * 2;
+        }
+    };
+
+    // OK, this works!
+    struct IntTimes2
+      : proto::when<
+            proto::terminal<int>
+          , times2<int>(proto::_value)
+        >
+    {};
+
+Note that in addition to the extra template parameter, `times2<>`
+still inherits from `proto::callable`. That's not necessary in this
+example but it's good style because any types derived from `times2<>`
+(as `times2int` defined above) will still be considered callable.
+
+[endsect]
+
+[endsect]
