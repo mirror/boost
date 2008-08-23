@@ -103,7 +103,7 @@ that the resulting expression node should be binary. After all, there are
 two operands in each expression. It may be surprising at first that what appears
 to be a function call with no arguments, `_1()`, actually creates an expression
 node with one child. The child is `_1` itself. Likewise, the expression `_1(7)`
-has two children: `_1` and `2`.
+has two children: `_1` and `7`.
 
 Because these operators can only be defined as member functions of _expr_, the
 following expressions are invalid:
@@ -139,6 +139,12 @@ code works and does what you might expect, but not in the obvious way:
 
     _1_type const _1 = {{}};
     _1_type const * p = &_1; // OK, &_1 implicitly converted
+
+[/=======================]
+[heading Making Terminals]
+[/=======================]
+
+TODO: describe as_expr(), as_arg(), literal<> and lit().
 
 [/================================]
 [heading Building Expression Trees]

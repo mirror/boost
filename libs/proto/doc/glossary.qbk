@@ -36,9 +36,9 @@
        programming idioms, abstractions and constructs that match the constructs 
        within that problem space.]]
   [ [ [anchor expression] expression]
-      [A heterogeneous tree where each node is either an instantiation of 
-       `boost::proto::expr<>` or some type that is an extension (via 
-       `boost::proto::extends<>` or `BOOST_PROTO_EXTENDS()`) of such an 
+      [In Proto, an /expression/ is a heterogeneous tree where each node is either 
+       an instantiation of `boost::proto::expr<>` or some type that is an extension 
+       (via `boost::proto::extends<>` or `BOOST_PROTO_EXTENDS()`) of such an 
        instantiation.]]
   [ [ [anchor expression_template] expression template]
       [A C++ technique using templates and operator overloading to cause 
@@ -52,12 +52,12 @@
        Often, the generator wraps the expression in an extension wrapper that adds 
        additional members to it.]]
   [ [ [anchor grammar] grammar]
-      [A grammar is a type that describes a subset of expression types. Expressions 
-       in a domain must conform to that domain's grammar. The `proto::matches<>` 
-       metafunction evaluates whether an expression type matches a grammar.
-       Grammars are either primitives such as `proto::_`, composites such as 
-       `proto::plus<>`, control structures such as `proto::or_<>`, or some type 
-       derived from a grammar.]]
+      [In Proto, a /grammar/ is a type that describes a subset of Proto expression 
+       types. Expressions in a domain must conform to that domain's grammar. The 
+       `proto::matches<>` metafunction evaluates whether an expression type matches 
+       a grammar. Grammars are either primitives such as `proto::_`, composites 
+       such as `proto::plus<>`, control structures such as `proto::or_<>`, or some 
+       type derived from a grammar.]]
   [ [ [anchor object_transform] object transform]
       [A transform of the form `R(A0,A1,...)` (i.e., a function type) where 
        `proto::is_callable<R>::value` is `false`. `R` is treated as the type of an 

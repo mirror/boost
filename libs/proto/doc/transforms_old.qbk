@@ -82,12 +82,12 @@ For instance, consider the following:
   Promote;
 
   // A character terminal
-  proto::terminal<char>::type expr = {'a'};
+  proto::terminal<char>::type a = {'a'};
 
   // ERROR! The Promote transform expects an integer
   // terminal, not a character terminal.
   Promote promote;
-  proto::terminal<long>::type expr2 = promote(expr);
+  proto::terminal<long>::type i = promote(a);
 
 Grammars with transforms are proper function objects, so you can use
 `boost::result_of<>` to calculate their return types. So, applying a

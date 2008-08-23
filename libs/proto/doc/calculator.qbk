@@ -195,7 +195,7 @@ can use them with standard algorithms, as shown below:
 
     // Use std::transform() and a calculator expression
     // to calculate percentages given two input sequences:
-    std::transform(a1, a1+4, a2, a3, (_2 - _1) / _2 * 100);        
+    std::transform(a1, a1+4, a2, a3, (_2 - _1) / _2 * 100);
 
 Now, let's use the calculator example to explore some other useful features of Proto.
 
