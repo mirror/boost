@@ -2782,44 +2782,66 @@ This is an overloaded member function, provided for convenience. It differs from
 
 
 
-</para></description><requires><para><computeroutput>is_expr&lt;Expr&gt;::value</computeroutput> is <computeroutput>true</computeroutput>. </para><para><computeroutput>2 == Expr::proto_arity::value</computeroutput> </para></requires><returns><para>A reference to the right child </para></returns><throws><simpara>Will not throw.</simpara></throws></overloaded-function></namespace></namespace></header><header name="boost/proto/transform.hpp"><para>Includes all the transforms in the transform/ sub-directory. </para></header><header name="boost/proto/transform/arg.hpp"><para>Contains definition of the argN transforms. </para><namespace name="boost"><namespace name="proto"><struct name="_expr"><inherit access="public">boost::proto::transform&lt; PrimitiveTransform, Base &gt;</inherit><purpose>A PrimitiveTransform that returns the current expression unmodified. </purpose><struct name="impl"><template>
+</para></description><requires><para><computeroutput>is_expr&lt;Expr&gt;::value</computeroutput> is <computeroutput>true</computeroutput>. </para><para><computeroutput>2 == Expr::proto_arity::value</computeroutput> </para></requires><returns><para>A reference to the right child </para></returns><throws><simpara>Will not throw.</simpara></throws></overloaded-function></namespace></namespace></header><header name="boost/proto/transform.hpp"><para>Includes all the transforms in the transform/ sub-directory. </para></header><header name="boost/proto/transform/arg.hpp"><para>Contains definition of the argN transforms. </para><namespace name="boost"><namespace name="proto"><struct name="_expr"><inherit access="public">boost::proto::transform&lt; PrimitiveTransform, Base &gt;</inherit><purpose>A PrimitiveTransform that returns the current expression unmodified. </purpose><description><para>Example:</para><para><programlisting> proto::terminal&lt;int&gt;::type i = {42};
+ proto::terminal&lt;int&gt;::type &amp; j = proto::_expr()(i);
+ assert( boost::addressof(i) == boost::addressof(j) );
+</programlisting> </para></description><struct name="impl"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Data"/>
-    </template><inherit access="public">boost::proto::transform_impl&lt; Expr, State, Data &gt;</inherit><typedef name="result_type"><type>Expr</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>impl::expr_param</type><parameter name="expr"><paramtype>typename impl::expr_param</paramtype><description><para>An expression </para></description></parameter><parameter name=""><paramtype>typename impl::state_param</paramtype></parameter><parameter name=""><paramtype>typename impl::data_param</paramtype></parameter><description><para>
+    </template><inherit access="public">boost::proto::transform_impl&lt; Expr, State, Data &gt;</inherit><typedef name="result_type"><type>Expr</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>impl::expr_param</type><parameter name="expr"><paramtype>typename impl::expr_param</paramtype><description><para>The current expression. </para></description></parameter><parameter name=""><paramtype>typename impl::state_param</paramtype></parameter><parameter name=""><paramtype>typename impl::data_param</paramtype></parameter><description><para>Returns the current expression. 
 
 
-</para></description><returns><para><computeroutput>expr</computeroutput> </para></returns><throws><simpara>Will not throw.</simpara></throws></method></method-group></struct></struct><struct name="_state"><inherit access="public">boost::proto::transform&lt; PrimitiveTransform, Base &gt;</inherit><purpose>A PrimitiveTransform that returns the current state unmodified. </purpose><struct name="impl"><template>
+</para></description><returns><para><computeroutput>expr</computeroutput> </para></returns><throws><simpara>Will not throw.</simpara></throws></method></method-group></struct></struct><struct name="_state"><inherit access="public">boost::proto::transform&lt; PrimitiveTransform, Base &gt;</inherit><purpose>A PrimitiveTransform that returns the current state unmodified. </purpose><description><para>Example:</para><para><programlisting> proto::terminal&lt;int&gt;::type i = {42};
+ char ch = proto::_state()(i, 'a');
+ assert( ch == 'a' );
+</programlisting> </para></description><struct name="impl"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Data"/>
-    </template><inherit access="public">boost::proto::transform_impl&lt; Expr, State, Data &gt;</inherit><typedef name="result_type"><type>State</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>impl::state_param</type><parameter name=""><paramtype>typename impl::expr_param</paramtype></parameter><parameter name="state"><paramtype>typename impl::state_param</paramtype><description><para>The current state. </para></description></parameter><parameter name=""><paramtype>typename impl::data_param</paramtype></parameter><description><para>
+    </template><inherit access="public">boost::proto::transform_impl&lt; Expr, State, Data &gt;</inherit><typedef name="result_type"><type>State</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>impl::state_param</type><parameter name=""><paramtype>typename impl::expr_param</paramtype></parameter><parameter name="state"><paramtype>typename impl::state_param</paramtype><description><para>The current state. </para></description></parameter><parameter name=""><paramtype>typename impl::data_param</paramtype></parameter><description><para>Returns the current state. 
 
 
-</para></description><returns><para><computeroutput>state</computeroutput> </para></returns><throws><simpara>Will not throw.</simpara></throws></method></method-group></struct></struct><struct name="_data"><inherit access="public">boost::proto::transform&lt; PrimitiveTransform, Base &gt;</inherit><purpose>A PrimitiveTransform that returns the current data unmodified. </purpose><struct name="impl"><template>
+</para></description><returns><para><computeroutput>state</computeroutput> </para></returns><throws><simpara>Will not throw.</simpara></throws></method></method-group></struct></struct><struct name="_data"><inherit access="public">boost::proto::transform&lt; PrimitiveTransform, Base &gt;</inherit><purpose>A PrimitiveTransform that returns the current data unmodified. </purpose><description><para>Example:</para><para><programlisting> proto::terminal&lt;int&gt;::type i = {42};
+ std::string str("hello");
+ std::string &amp; data = proto::_data()(i, 'a', str);
+ assert( &amp;str == &amp;data );
+</programlisting> </para></description><struct name="impl"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Data"/>
-    </template><inherit access="public">boost::proto::transform_impl&lt; Expr, State, Data &gt;</inherit><typedef name="result_type"><type>Data</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>impl::data_param</type><parameter name=""><paramtype>typename impl::expr_param</paramtype></parameter><parameter name=""><paramtype>typename impl::state_param</paramtype></parameter><parameter name="data"><paramtype>typename impl::data_param</paramtype></parameter><description><para>
+    </template><inherit access="public">boost::proto::transform_impl&lt; Expr, State, Data &gt;</inherit><typedef name="result_type"><type>Data</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>impl::data_param</type><parameter name=""><paramtype>typename impl::expr_param</paramtype></parameter><parameter name=""><paramtype>typename impl::state_param</paramtype></parameter><parameter name="data"><paramtype>typename impl::data_param</paramtype><description><para>The current data. </para></description></parameter><description><para>Returns the current data. 
 
 
 </para></description><returns><para><computeroutput>data</computeroutput> </para></returns><throws><simpara>Will not throw.</simpara></throws></method></method-group></struct></struct><struct name="_child_c"><template>
-      <template-nontype-parameter name="I"><type>int</type></template-nontype-parameter>
-    </template><inherit access="public">boost::proto::transform&lt; PrimitiveTransform, Base &gt;</inherit><purpose>A PrimitiveTransform that returns I-th child of the current expression. </purpose><struct name="impl"><template>
+      <template-nontype-parameter name="N"><type>int</type></template-nontype-parameter>
+    </template><inherit access="public">boost::proto::transform&lt; PrimitiveTransform, Base &gt;</inherit><purpose>A PrimitiveTransform that returns N-th child of the current expression. </purpose><description><para>Example:</para><para><programlisting> proto::terminal&lt;int&gt;::type i = {42};
+ proto::terminal&lt;int&gt;::type &amp; j = proto::_child_c&lt;0&gt;()(-i);
+ assert( boost::addressof(i) == boost::addressof(j) );
+</programlisting> </para></description><struct name="impl"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Data"/>
-    </template><inherit access="public">boost::proto::transform_impl&lt; Expr, State, Data &gt;</inherit><typedef name="result_type"><type>result_of::child_c&lt; Expr, I &gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_of::child_c&lt; typename impl::expr_param, I &gt;::type</type><parameter name="expr"><paramtype>typename impl::expr_param</paramtype><description><para>The current expression. </para></description></parameter><parameter name=""><paramtype>typename impl::state_param</paramtype></parameter><parameter name=""><paramtype>typename impl::data_param</paramtype></parameter><description><para>
+    </template><inherit access="public">boost::proto::transform_impl&lt; Expr, State, Data &gt;</inherit><typedef name="result_type"><type>result_of::child_c&lt; Expr, N &gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_of::child_c&lt; typename impl::expr_param, N &gt;::type</type><parameter name="expr"><paramtype>typename impl::expr_param</paramtype><description><para>The current expression. </para></description></parameter><parameter name=""><paramtype>typename impl::state_param</paramtype></parameter><parameter name=""><paramtype>typename impl::data_param</paramtype></parameter><description><para>Returns the N-th child of <computeroutput>expr</computeroutput> 
 
 
-</para></description><returns><para><computeroutput>proto::child_c&lt;I&gt;(expr)</computeroutput> </para></returns><throws><simpara>Will not throw.</simpara></throws></method></method-group></struct></struct><struct name="_value"><inherit access="public">boost::proto::transform&lt; PrimitiveTransform, Base &gt;</inherit><purpose>A PrimitiveTransform that returns the value of the current terminal expression. </purpose><struct name="impl"><template>
+
+</para></description><requires><para><computeroutput>arity_of&lt;Expr&gt;::value &gt; N</computeroutput> </para></requires><returns><para><computeroutput>proto::child_c&lt;N&gt;(expr)</computeroutput> </para></returns><throws><simpara>Will not throw.</simpara></throws></method></method-group></struct></struct><struct name="_value"><inherit access="public">boost::proto::transform&lt; PrimitiveTransform, Base &gt;</inherit><purpose>A PrimitiveTransform that returns the value of the current terminal expression. </purpose><description><para>Example:</para><para><programlisting> proto::terminal&lt;int&gt;::type i = {42};
+ int j = proto::_value()(i);
+ assert( 42 == j );
+</programlisting> </para></description><struct name="impl"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Data"/>
-    </template><inherit access="public">boost::proto::transform_impl&lt; Expr, State, Data &gt;</inherit><typedef name="result_type"><type><classname>result_of::value</classname>&lt; Expr &gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::value</classname>&lt; typename impl::expr_param &gt;::type</type><parameter name="expr"><paramtype>typename impl::expr_param</paramtype><description><para>The current expression. </para></description></parameter><parameter name=""><paramtype>typename impl::state_param</paramtype></parameter><parameter name=""><paramtype>typename impl::data_param</paramtype></parameter><description><para>
+    </template><inherit access="public">boost::proto::transform_impl&lt; Expr, State, Data &gt;</inherit><typedef name="result_type"><type><classname>result_of::value</classname>&lt; Expr &gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::value</classname>&lt; typename impl::expr_param &gt;::type</type><parameter name="expr"><paramtype>typename impl::expr_param</paramtype><description><para>The current expression. </para></description></parameter><parameter name=""><paramtype>typename impl::state_param</paramtype></parameter><parameter name=""><paramtype>typename impl::data_param</paramtype></parameter><description><para>Returns the value of the specified terminal expression. 
 
 
-</para></description><returns><para><computeroutput>proto::value(expr)</computeroutput> </para></returns><throws><simpara>Will not throw.</simpara></throws></method></method-group></struct></struct><struct name="_byref"><inherit access="public">boost::proto::callable</inherit><purpose>A unary CallableTransform that wraps its argument in a <computeroutput>boost::reference_wrapper&lt;&gt;</computeroutput>. </purpose><struct-specialization name="result"><template>
+
+</para></description><requires><para><computeroutput>arity_of&lt;Expr&gt;::value == 0</computeroutput>. </para></requires><returns><para><computeroutput>proto::value(expr)</computeroutput> </para></returns><throws><simpara>Will not throw.</simpara></throws></method></method-group></struct></struct><struct name="_byref"><inherit access="public">boost::proto::callable</inherit><purpose>A unary CallableTransform that wraps its argument in a <computeroutput>boost::reference_wrapper&lt;&gt;</computeroutput>. </purpose><description><para>Example:</para><para><programlisting> proto::terminal&lt;int&gt;::type i = {42};
+ boost::reference_wrapper&lt;proto::terminal&lt;int&gt;::type&gt; j
+     = proto::when&lt;_, proto::_byref(_)&gt;()(i);
+ assert( boost::addressof(i) == boost::addressof(j.get()) );
+</programlisting> </para></description><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="T"/>
     </template><specialization><template-arg>This(T &amp;)</template-arg></specialization><typedef name="type"><type>boost::reference_wrapper&lt; T &gt; const</type></typedef></struct-specialization><struct-specialization name="result"><template>
@@ -2827,12 +2849,16 @@ This is an overloaded member function, provided for convenience. It differs from
       <template-type-parameter name="T"/>
     </template><specialization><template-arg>This(T)</template-arg></specialization><typedef name="type"><type>boost::reference_wrapper&lt; T const  &gt; const</type></typedef></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type>boost::reference_wrapper&lt; T &gt; const</type><template>
           <template-type-parameter name="T"/>
-        </template><parameter name="t"><paramtype>T &amp;</paramtype><description><para>The object to wrap </para></description></parameter><description><para>
+        </template><parameter name="t"><paramtype>T &amp;</paramtype><description><para>The object to wrap </para></description></parameter><description><para>Wrap the parameter <computeroutput>t</computeroutput> in a <computeroutput>boost::reference_wrapper&lt;&gt;</computeroutput> 
 
 
 </para></description><returns><para><computeroutput>boost::ref(t)</computeroutput> </para></returns><throws><simpara>Will not throw.</simpara></throws></method><method name="operator()" cv="const"><type>boost::reference_wrapper&lt; T const  &gt; const</type><template>
           <template-type-parameter name="T"/>
-        </template><parameter name="t"><paramtype>T const &amp;</paramtype></parameter><description><para>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </para></description></method></method-group></struct><struct name="_byval"><inherit access="public">boost::proto::callable</inherit><purpose>A unary CallableTransform that strips references from its argument. </purpose><struct-specialization name="result"><template>
+        </template><parameter name="t"><paramtype>T const &amp;</paramtype></parameter><description><para>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </para></description></method></method-group></struct><struct name="_byval"><inherit access="public">boost::proto::callable</inherit><purpose>A unary CallableTransform that strips references and <computeroutput>boost::reference_wrapper&lt;&gt;</computeroutput> from its argument. </purpose><description><para>Example:</para><para><programlisting> proto::terminal&lt;int&gt;::type i = {42};
+ int j = 67;
+ int k = proto::when&lt;_, proto::_byval(proto::_state)&gt;()(i, boost::ref(j));
+ assert( 67 == k );
+</programlisting> </para></description><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="T"/>
     </template><specialization><template-arg>This(boost::reference_wrapper&lt; T &gt;)</template-arg></specialization><inherit access="public">boost::proto::_byval::result&lt; This(T)&gt;</inherit></struct-specialization><struct-specialization name="result"><template>

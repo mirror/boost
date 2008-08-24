@@ -20,6 +20,14 @@ namespace boost { namespace proto
 
     /// \brief A PrimitiveTransform that returns the current expression
     /// unmodified
+    ///
+    /// Example:
+    ///
+    /// \code
+    /// proto::terminal<int>::type i = {42};
+    /// proto::terminal<int>::type & j = proto::_expr()(i);
+    /// assert( boost::addressof(i) == boost::addressof(j) );
+    /// \endcode
     struct _expr : transform<_expr>
     {
         template<typename Expr, typename State, typename Data>
@@ -27,7 +35,8 @@ namespace boost { namespace proto
         {
             typedef Expr result_type;
 
-            /// \param expr An expression
+            /// Returns the current expression.
+            /// \param expr The current expression.
             /// \return \c expr
             /// \throw nothrow
             typename impl::expr_param operator()(
@@ -43,6 +52,14 @@ namespace boost { namespace proto
 
     /// \brief A PrimitiveTransform that returns the current state
     /// unmodified
+    ///
+    /// Example:
+    ///
+    /// \code
+    /// proto::terminal<int>::type i = {42};
+    /// char ch = proto::_state()(i, 'a');
+    /// assert( ch == 'a' );
+    /// \endcode
     struct _state : transform<_state>
     {
         template<typename Expr, typename State, typename Data>
@@ -50,6 +67,7 @@ namespace boost { namespace proto
         {
             typedef State result_type;
 
+            /// Returns the current state.
             /// \param state The current state.
             /// \return \c state
             /// \throw nothrow
@@ -66,6 +84,15 @@ namespace boost { namespace proto
 
     /// \brief A PrimitiveTransform that returns the current data
     /// unmodified
+    ///
+    /// Example:
+    ///
+    /// \code
+    /// proto::terminal<int>::type i = {42};
+    /// std::string str("hello");
+    /// std::string & data = proto::_data()(i, 'a', str);
+    /// assert( &str == &data );
+    /// \endcode
     struct _data : transform<_data>
     {
         template<typename Expr, typename State, typename Data>
@@ -73,7 +100,8 @@ namespace boost { namespace proto
         {
             typedef Data result_type;
 
-            /// \param state The current data.
+            /// Returns the current data.
+            /// \param data The current data.
             /// \return \c data
             /// \throw nothrow
             typename impl::data_param operator ()(
@@ -87,35 +115,53 @@ namespace boost { namespace proto
         };
     };
 
-    /// \brief A PrimitiveTransform that returns I-th child of the current
+    /// \brief A PrimitiveTransform that returns N-th child of the current
     /// expression.
-    template<int I>
-    struct _child_c : transform<_child_c<I> >
+    ///
+    /// Example:
+    ///
+    /// \code
+    /// proto::terminal<int>::type i = {42};
+    /// proto::terminal<int>::type & j = proto::_child_c<0>()(-i);
+    /// assert( boost::addressof(i) == boost::addressof(j) );
+    /// \endcode
+    template<int N>
+    struct _child_c : transform<_child_c<N> >
     {
         template<typename Expr, typename State, typename Data>
         struct impl : transform_impl<Expr, State, Data>
         {
             typedef
-                typename result_of::child_c<Expr, I>::type
+                typename result_of::child_c<Expr, N>::type
             result_type;
 
+            /// Returns the N-th child of \c expr
+            /// \pre <tt>arity_of\<Expr\>::::value \> N</tt> 
             /// \param expr The current expression.
-            /// \return <tt>proto::child_c\<I\>(expr)</tt>
+            /// \return <tt>proto::child_c\<N\>(expr)</tt>
             /// \throw nothrow
-            typename result_of::child_c<typename impl::expr_param, I>::type
+            typename result_of::child_c<typename impl::expr_param, N>::type
             operator ()(
                 typename impl::expr_param expr
               , typename impl::state_param
               , typename impl::data_param
             ) const
             {
-                return proto::child_c<I>(expr);
+                return proto::child_c<N>(expr);
             }
         };
     };
 
     /// \brief A PrimitiveTransform that returns the value of the
     /// current terminal expression.
+    ///
+    /// Example:
+    ///
+    /// \code
+    /// proto::terminal<int>::type i = {42};
+    /// int j = proto::_value()(i);
+    /// assert( 42 == j );
+    /// \endcode
     struct _value : transform<_value>
     {
         template<typename Expr, typename State, typename Data>
@@ -125,6 +171,8 @@ namespace boost { namespace proto
                 typename result_of::value<Expr>::type
             result_type;
 
+            /// Returns the value of the specified terminal expression.
+            /// \pre <tt>arity_of\<Expr\>::::value == 0</tt>.
             /// \param expr The current expression.
             /// \return <tt>proto::value(expr)</tt>
             /// \throw nothrow
@@ -142,6 +190,15 @@ namespace boost { namespace proto
 
     /// \brief A unary CallableTransform that wraps its argument
     /// in a \c boost::reference_wrapper\<\>.
+    ///
+    /// Example:
+    ///
+    /// \code
+    /// proto::terminal<int>::type i = {42};
+    /// boost::reference_wrapper<proto::terminal<int>::type> j
+    ///     = proto::when<_, proto::_byref(_)>()(i);
+    /// assert( boost::addressof(i) == boost::addressof(j.get()) );
+    /// \endcode
     struct _byref : callable
     {
         template<typename Sig>
@@ -159,6 +216,7 @@ namespace boost { namespace proto
             typedef boost::reference_wrapper<T> const type;
         };
 
+        /// Wrap the parameter \c t in a \c boost::reference_wrapper\<\>
         /// \param t The object to wrap
         /// \return <tt>boost::ref(t)</tt>
         /// \throw nothrow
@@ -178,7 +236,16 @@ namespace boost { namespace proto
     };
 
     /// \brief A unary CallableTransform that strips references
-    /// from its argument.
+    /// and \c boost::reference_wrapper\<\> from its argument.
+    ///
+    /// Example:
+    ///
+    /// \code
+    /// proto::terminal<int>::type i = {42};
+    /// int j = 67;
+    /// int k = proto::when<_, proto::_byval(proto::_state)>()(i, boost::ref(j));
+    /// assert( 67 == k );
+    /// \endcode
     struct _byval : callable
     {
         template<typename Sig>
@@ -241,8 +308,8 @@ namespace boost { namespace proto
 
     /// INTERNAL ONLY
     ///
-    template<int I>
-    struct is_callable<_child_c<I> >
+    template<int N>
+    struct is_callable<_child_c<N> >
       : mpl::true_
     {};
 
