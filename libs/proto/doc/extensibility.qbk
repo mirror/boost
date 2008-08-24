@@ -40,7 +40,7 @@ domain to an expression /generator/. The generator is just a function object tha
 accepts an expression and does something to it, like wrapping it in an expression 
 wrapper.
 
-You can also use a domain to associate expressions with a a grammar. When you 
+You can also use a domain to associate expressions with a grammar. When you 
 specify a domain's grammar, Proto ensures that all the expressions it generates in 
 that domain conform to the domain's grammar. It does that by disabling any operator 
 overloads that would create invalid expressions.
@@ -124,6 +124,11 @@ placeholders to imbue them with calculator-ness:
 
     calculator< proto::terminal< placeholder<0> >::type > const _1;
     calculator< proto::terminal< placeholder<1> >::type > const _2;
+
+[heading Retaining POD-ness with [^BOOST_PROTO_EXTENDS()]]
+
+TODO Describe the `BOOST_PROTO_EXTENDS()` family of macros.
+
 
 [endsect]
 

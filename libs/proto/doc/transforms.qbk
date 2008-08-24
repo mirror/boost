@@ -7,7 +7,9 @@
 
 [import ../test/examples.cpp]
 
-[section Transforms]
+[/============================================================================]
+[section:expression_transformation Expression Transformation: Semantic Actions]
+[/============================================================================]
 
 If you have ever built a parser with the help of a tool like Antlr, yacc or Boost.Spirit, you might be familiar with /semantic actions/. In addition to allowing you to define the grammar of the language recognized by the parser, these tools let you embed code within your grammar that executes when parts of the grammar participate in a parse. Proto has the equivalent of semantic actions. They are called /transforms/. This section describes how to embed transforms within your Proto grammars, turning your grammars into function objects that can manipulate or evaluate expressions in powerful ways.
 
@@ -54,6 +56,19 @@ As with ordinary grammars, we can define an empty struct that inherits from a gr
     proto::terminal<int>::type answer = {42};
     Value get_value;
     int i = get_value( answer );
+
+As already mentioned, `Value` is a grammar that matches terminal expressions and a function object that operates on terminal expressions. It would be an error to pass a non-terminal expression to the `Value` function object. This is a general property of grammars with transforms; when using them as function objects, expressions passed to them must match the grammar.
+
+Proto grammars are valid TR1-style function objects. That means you can use `boost::result_of<>` to ask a grammar what its return type will be, given a particular expression type. For instance, we can access the `Value` grammar's return type as follows:
+
+    // We can use boost::result_of<> to get the return type
+    // of a Proto grammar.
+    typedef
+        typename boost::result_of<Value(proto::terminal<int>::type)>::type
+    result_type;
+
+    // Check that we got the type we expected
+    BOOST_MPL_ASSERT(( boost::is_same<result_type, int> ));
 
 [note A grammar with embedded transforms is both a grammar and a function object. Calling these things "grammars with transforms" would get tedious. We could call them something like "active grammars", but as we'll see /every/ grammar that you can define with Proto is "active"; that is, every grammar has some behavior when used as a function object. So we'll continue calling these things plain "grammars". The term "transform" is reserved for the thing that is used as the second parameter to the _when_ template.]
 
@@ -306,7 +321,96 @@ The point of this exercise was to show that we can write a fairly simple Proto g
 [section:state Transforms With State Accumulation]
 [/===============================================]
 
-TODO
+So far, we've only seen examples of grammars with transforms that accept one argument: the expression to transform. But consider for a moment how, in ordinary procedural code, you would turn a binary tree into a linked list. You would start with an empty list. Then, you would recursively convert the right branch to a list, and use the result as the initial state while converting the left branch to a list. That is, you would need a function that takes two parameters: the current node and the list so far. These sorts of /accumulation/ problems are quite common when processing trees. The linked list is an example of an accumulation variable or /state/. Each iteration of the algorithm takes the current element and state, applies some binary function to the two and creates a new state. In the STL, this algorithm is called `std::accumulate()`. In many other languages, it is called /fold/. Let's see how to implement a fold algorithm with Proto transforms.
+
+All Proto grammars can optionally accept a state parameter in addition to the expression to transform. If you want to fold a tree to a list, you'll need to make use of the state parameter to pass around the list you've built so far. As for the list, the Boost.Fusion library provides a `fusion::cons<>` type from which you can build heterogenous lists. The type `fusion::nil` represents an empty list. 
+
+Below is a grammar that recognizes output expressions like `cout_ << 42 << '\n'` and puts the arguments into a Fusion list. It is explained below.
+
+    // Fold the terminals in output statements like
+    // "cout_ << 42 << '\n'" into a Fusion cons-list.
+    struct FoldToList
+      : proto::or_<
+            // Don't add the ostream terminal to the list
+            proto::when<
+                proto::terminal< std::ostream & >
+              , proto::_state
+            >
+            // Put all other terminals at the head of the
+            // list that we're building in the "state" parameter
+          , proto::when<
+                proto::terminal<_>
+              , fusion::cons<proto::_value, proto::_state>(
+                    proto::_value, proto::_state
+                )
+            >
+            // For left-shift operations, first fold the right
+            // child to a list using the current state. Use
+            // the result as the state parameter when folding
+            // the left child to a list.
+          , proto::when<
+                proto::shift_left<FoldToList, FoldToList>
+              , FoldToList(
+                    proto::_left
+                  , FoldToList(proto::_right, proto::_state)
+                )
+            >
+        >
+    {};
+
+Before reading on, see if you can apply what you know already about object, callable and primitive transforms to figure out how this grammar works.
+
+When you use the `FoldToList` function, you'll need to pass two arguments: the expression to fold, and the initial state: an empty list. Those two arguments get passed around to each transform. We learned previously that `proto::_value` is a primitive transform that accepts a terminal expression and extracts its value. What we didn't know until now was that it also accepts the current state /and ignores it/. `proto::_state` is also a primitive transform. It accepts the current expression, which it ignores, and the current state, which it returns.
+
+When we find a terminal, we stick it at the head of the cons list, using the current state as the tail of the list. (The first alternate causes the `ostream` to be skipped. We don't want `cout` in the list.) When we find a shift-left node, we apply the following transform:
+
+    // Fold the right child and use the result as
+    // state while folding the right.
+    FoldToList(
+        proto::_left
+      , FoldToList(proto::_right, proto::_state)
+    )
+
+You can read this transform as follows: using the current state, fold the right child to a list. Use the new list as the state while folding the left child to a list.
+
+[tip If your compiler is Microsoft Visual C++, you'll find that the above transform does not compile. The compiler has bugs with its handling of nested function types. You can work around the bug by wrapping the inner transform in `proto::call<>` as follows:
+
+``
+    FoldToList(
+        proto::_left
+      , proto::call<FoldToList(proto::_right, proto::_state)>
+    )
+``
+
+`proto::call<>` turns a callable transform into a primitive transform, but more on that later.
+]
+
+Now that we have defined the `FoldToList` function object, we can use it to turn output expressions into lists as follows:
+
+    proto::terminal<std::ostream &>::type const cout_ = {std::cout};
+
+    // This is the type of the list we build below
+    typedef
+        fusion::cons<
+            int
+          , fusion::cons<
+                double
+              , fusion::cons<
+                    char
+                  , fusion::nil
+                >
+            >
+        >
+    result_type;
+
+    // Fold an output expression into a Fusion list, using
+    // fusion::nil as the initial state of the transformation.
+    FoldToList to_list;
+    result_type args = to_list(cout_ << 1 << 3.14 << '\n', fusion::nil());
+
+    // Now "args" is the list: {1, 3.14, '\n'}
+
+When writing transforms, "fold" is such a basic operation that Proto provides a number of built-in fold transforms. We'll get to them later. For now, rest assured that you won't always have to strech your brain so far to do such basic things.
 
 [endsect]
 
@@ -398,7 +502,7 @@ The only other interesting bit is the `is_callable<>` specialization, which will
 
 Transforms are typically of the form `proto::when< Something, R(A0,A1,...) >`. The question is whether `R` represents a function to call or an object to construct, and the answer determines how _when_ evaluates the transform. _when_ uses the `proto::is_callable<>` trait to disambiguate between the two. Proto does its best to guess whether a type is callable or not, but it doesn't always get it right. It's best to know the rules Proto uses, so that you know when you need to be more explicit.
 
-For most types `T`, `proto::is_callable<T>` checks for inheritence from `proto::callable`. However, if the type `T` is a template specialization, Proto assumes that it is /not/ callable ['even if the template inherits from `proto::callable`]. We'll see why in a minute. Consider the following erroneous callable object:
+For most types `R`, `proto::is_callable<R>` checks for inheritence from `proto::callable`. However, if the type `R` is a template specialization, Proto assumes that it is /not/ callable ['even if the template inherits from `proto::callable`]. We'll see why in a minute. Consider the following erroneous callable object:
 
     // Proto can't tell this defines
     // something callable!
