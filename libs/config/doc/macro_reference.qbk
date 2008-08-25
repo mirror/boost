@@ -192,6 +192,10 @@ Pointers to members don't work when used as template parameters.
 The compiler misreads 8.5.1, treating classes as non-aggregate if they
 contain private or protected member functions.
 ]]
+[[`BOOST_NO_RTTI`][Compiler][
+The compiler may (or may not) have the typeid operator, but RTTI on the dynamic type
+of an object is not supported.
+]]
 [[`BOOST_NO_SFINAE`][Compiler][
 The compiler does not support the "Substitution Failure Is Not An Error"
 meta-programming idiom.
