@@ -158,6 +158,13 @@
 #endif
 
 //
+// Without typeid support we have no dynamic RTTI either:
+//
+#if defined(BOOST_NO_TYPEID) && !defined(BOOST_NO_RTTI)
+#  define BOOST_NO_RTTI
+#endif
+
+//
 // If we have a standard allocator, then we have a partial one as well:
 //
 #if !defined(BOOST_NO_STD_ALLOCATOR)
