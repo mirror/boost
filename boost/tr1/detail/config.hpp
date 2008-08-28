@@ -109,7 +109,7 @@
 #  define BOOST_HAS_TR1_SHARED_PTR
 #if (__GNUC__ * 100 + __GNUC_MINOR__) >= 403
 #  define BOOST_HAS_TR1_RANDOM
-#  define BOOST_HAS_TR1_REGEX
+//#  define BOOST_HAS_TR1_REGEX
 #ifdef _GLIBCXX_USE_C99_MATH_TR1
 #  define BOOST_HAS_TR1_CMATH
 #endif
