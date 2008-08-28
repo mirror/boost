@@ -9,6 +9,7 @@
 // 21 Ago 2002 (Created) Fernando Cacciola
 // 15 Jan 2008 (Added tests regarding compiler issues) Fernando Cacciola, Niels Dekker
 // 23 May 2008 (Added tests regarding initialized_value) Niels Dekker
+// 21 Ago 2008 (Added swap test) Niels Dekker
 
 #include <cstring>  // For memcmp.
 #include <iostream>
@@ -181,6 +182,35 @@ struct CopyFunctionCallTester
 };
 
 
+//
+// A struct that allows testing whether its customized swap function is called.
+//
+struct SwapFunctionCallTester
+{
+  bool is_custom_swap_called;
+  int data;
+
+  SwapFunctionCallTester()
+  : is_custom_swap_called(false), data(0) {}
+
+  SwapFunctionCallTester(const SwapFunctionCallTester & arg)
+  : is_custom_swap_called(false), data(arg.data) {}
+
+  void swap(SwapFunctionCallTester & arg)
+  {
+    std::swap(data, arg.data);
+    is_custom_swap_called = true;
+    arg.is_custom_swap_called = true;
+  }
+};
+
+void swap(SwapFunctionCallTester & lhs, SwapFunctionCallTester & rhs)
+{
+  lhs.swap(rhs);
+}
+
+
+
 template<class T>
 void check_initialized_value ( T const& y )
 {
@@ -323,9 +353,20 @@ int test_main(int, char **)
   BOOST_CHECK ( ! get(copyFunctionCallTester3).is_copy_constructed);
   BOOST_CHECK ( get(copyFunctionCallTester3).is_assignment_called);
 
+  boost::value_initialized<SwapFunctionCallTester> swapFunctionCallTester1;
+  boost::value_initialized<SwapFunctionCallTester> swapFunctionCallTester2;
+  get(swapFunctionCallTester1).data = 1;
+  get(swapFunctionCallTester2).data = 2;
+  boost::swap(swapFunctionCallTester1, swapFunctionCallTester2);
+  BOOST_CHECK( get(swapFunctionCallTester1).data == 2 );
+  BOOST_CHECK( get(swapFunctionCallTester2).data == 1 );
+  BOOST_CHECK( get(swapFunctionCallTester1).is_custom_swap_called );
+  BOOST_CHECK( get(swapFunctionCallTester2).is_custom_swap_called );
+
   return 0;
 }
 
 
 unsigned int expected_failures = 0;
+
 
