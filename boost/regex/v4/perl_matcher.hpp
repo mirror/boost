@@ -331,7 +331,7 @@ public:
    typedef typename traits::char_type char_type;
    typedef perl_matcher<BidiIterator, Allocator, traits> self_type;
    typedef bool (self_type::*matcher_proc_type)(void);
-   typedef typename traits::size_type traits_size_type;
+   typedef std::size_t traits_size_type;
    typedef typename is_byte<char_type>::width_type width_type;
    typedef typename regex_iterator_traits<BidiIterator>::difference_type difference_type;
 

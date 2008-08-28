@@ -13,7 +13,7 @@
 #     include_next BOOST_TR1_HEADER(cmath)
 #  else
 #     include <boost/tr1/detail/config_all.hpp>
-#     include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(cmath))
+#     include BOOST_TR1_HEADER(cmath)
 #  endif
 
 #else

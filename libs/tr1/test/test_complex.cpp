@@ -129,10 +129,17 @@ int main()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    verify_return_type(std::tr1::atanh(l), l);
 #endif
+
+   //
+   // There is a bug in the TR text here, that means we can't always
+   // check these as we'd like:
+   //
+#if !(defined(__GNUC__) && defined(BOOST_HAS_TR1_COMPLEX_INVERSE_TRIG) && !defined(_GLIBCXX_INCLUDE_AS_CXX0X))
    verify_return_type(std::tr1::fabs(f), sf);
    verify_return_type(std::tr1::fabs(d), sd);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    verify_return_type(std::tr1::fabs(l), sl);
+#endif
 #endif
    return 0;
 }

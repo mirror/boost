@@ -90,6 +90,9 @@
 #if defined(__GNUC__) && !defined(BOOST_HAS_INCLUDE_NEXT)
 #  define BOOST_HAS_INCLUDE_NEXT
 #endif
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
+#  define BOOST_HAS_CPP_0X
+#endif
 
 //
 // We may be in the middle of parsing boost/config.hpp

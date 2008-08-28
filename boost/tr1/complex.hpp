@@ -8,6 +8,34 @@
 #  include <boost/tr1/detail/config.hpp>
 #  include <complex>
 
+#ifndef BOOST_HAS_TR1_COMPLEX_INVERSE_TRIG
+
+#include <boost/math/complex.hpp>
+
+namespace std {
+namespace tr1 {
+
+using boost::math::acos;
+using boost::math::asin;
+using boost::math::atan;
+using boost::math::acosh;
+using boost::math::asinh;
+using boost::math::atanh;
+using boost::math::fabs;
+
+} }
+
+#else
+
+#  ifdef BOOST_HAS_INCLUDE_NEXT
+#     include_next BOOST_TR1_HEADER(complex)
+#  else
+#     include <boost/tr1/detail/config_all.hpp>
+#     include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(complex))
+#  endif
+
+#endif
+
 #ifndef BOOST_HAS_TR1_COMPLEX_OVERLOADS
 
 #include <boost/tr1/detail/math_overloads.hpp>
@@ -209,34 +237,6 @@ inline complex<typename boost::tr1_detail::promote_to_real<T, U>::type>
 }
 
 }
-
-#endif
-
-#ifndef BOOST_HAS_TR1_COMPLEX_INVERSE_TRIG
-
-#include <boost/math/complex.hpp>
-
-namespace std {
-namespace tr1 {
-
-using boost::math::acos;
-using boost::math::asin;
-using boost::math::atan;
-using boost::math::acosh;
-using boost::math::asinh;
-using boost::math::atanh;
-using boost::math::fabs;
-
-} }
-
-#else
-
-#  ifdef BOOST_HAS_INCLUDE_NEXT
-#     include_next BOOST_TR1_HEADER(complex)
-#  else
-#     include <boost/tr1/detail/config_all.hpp>
-#     include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(complex))
-#  endif
 
 #endif
 

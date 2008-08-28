@@ -87,12 +87,12 @@ struct regex_traits_architype
 public:
    regex_traits_architype();
    typedef charT char_type;
-   typedef std::size_t size_type;
+   // typedef std::size_t size_type;
    typedef std::vector<char_type> string_type;
    typedef copy_constructible_archetype<assignable_archetype<> > locale_type;
    typedef bitmask_archetype char_class_type;
 
-   static size_type length(const char_type* ) { return 0; }
+   static std::size_t length(const char_type* ) { return 0; }
 
    charT translate(charT ) const { return charT(); }
    charT translate_nocase(charT ) const { return static_object<charT>::get(); }
@@ -163,21 +163,21 @@ struct RegexTraitsConcept
    RegexTraitsConcept();
    // required typedefs:
    typedef typename traits::char_type char_type;
-   typedef typename traits::size_type size_type;
+   // typedef typename traits::size_type size_type;
    typedef typename traits::string_type string_type;
    typedef typename traits::locale_type locale_type;
    typedef typename traits::char_class_type char_class_type;
 
    void constraints() 
    {
-      function_requires<UnsignedIntegerConcept<size_type> >();
+      //function_requires<UnsignedIntegerConcept<size_type> >();
       function_requires<RandomAccessContainerConcept<string_type> >();
       function_requires<DefaultConstructibleConcept<locale_type> >();
       function_requires<CopyConstructibleConcept<locale_type> >();
       function_requires<AssignableConcept<locale_type> >();
       function_requires<BitmaskConcept<char_class_type> >();
 
-      size_type n = traits::length(m_pointer);
+      std::size_t n = traits::length(m_pointer);
       ignore_unused_variable_warning(n);
 
       char_type c = m_ctraits.translate(m_char);
