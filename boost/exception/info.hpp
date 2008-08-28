@@ -163,12 +163,6 @@ boost
                 e->data_ = intrusive_ptr<exception_detail::error_info_container>(new exception_detail::error_info_container_impl);
             e->data_->set(x,typeid_);
             }
-
-        inline
-        void
-        set_data( void const *, shared_ptr<exception_detail::error_info_base const> const &, exception_detail::type_info_ const & )
-            {
-            }
         }
 
     template <class E,class Tag,class T>
