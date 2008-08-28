@@ -7,7 +7,7 @@
 #include <boost/exception/info.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
-typedef boost::error_info<struct tag,int> tag_int;
+typedef boost::error_info<struct test_tag,int> tag_int;
 
 struct
 error1:
@@ -48,27 +48,65 @@ int
 main()
     {
     using namespace boost;
+    try
         {
         error1 x;
         BOOST_TEST(x.what()==std::string("error1"));
+        throw x;
+        }
+    catch(
+    std::exception & x )
+        {
         std::string di=get_diagnostic_information(x);
         BOOST_TEST(di.find("type:")!=std::string::npos);
         BOOST_TEST(di.find("error1")!=std::string::npos);
         }
+    catch(
+    ... )
+        {
+        BOOST_TEST(false);
+        }
+    try
         {
         error2 x; x << tag_int(42);
         BOOST_TEST(x.what()==std::string("error2"));
+        throw x;
+        }
+    catch(
+    std::exception & x )
+        {
         std::string di=get_diagnostic_information(x);
         BOOST_TEST(di.find("type:")!=std::string::npos);
+#ifndef BOOST_NO_RTTI
         BOOST_TEST(di.find("error2")!=std::string::npos);
+#endif
+        BOOST_TEST(di.find("test_tag")!=std::string::npos);
         }
+    catch(
+    ... )
+        {
+        BOOST_TEST(false);
+        }
+    try
         {
         error3 x;
         x << tag_int(1);
+        throw x;
+        }
+    catch(
+    boost::exception & x )
+        {
         std::string w1 = x.diagnostic_information();
         x << tag_int(2);
         std::string w2 = x.diagnostic_information();
         BOOST_TEST( w1!=w2 );
+        BOOST_TEST(w1.find("test_tag")!=std::string::npos);
+        BOOST_TEST(w2.find("test_tag")!=std::string::npos);
+        }
+    catch(
+    ... )
+        {
+        BOOST_TEST(false);
         }
     return boost::report_errors();
     }

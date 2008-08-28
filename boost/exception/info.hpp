@@ -6,11 +6,10 @@
 #ifndef UUID_8D22C4CA9CC811DCAA9133D256D89593
 #define UUID_8D22C4CA9CC811DCAA9133D256D89593
 
-#include <boost/type.hpp>
 #include <boost/exception/exception.hpp>
+#include <boost/exception/detail/error_info_base.hpp>
 #include <boost/exception/error_info.hpp>
 #include <boost/exception/to_string_stub.hpp>
-#include <boost/current_function.hpp>
 #include <boost/shared_ptr.hpp>
 #include <map>
 
@@ -25,28 +24,6 @@ boost
     typedef error_info<struct tag_throw_function,char const *> throw_function;
     typedef error_info<struct tag_throw_file,char const *> throw_file;
     typedef error_info<struct tag_throw_line,int> throw_line;
-
-    namespace
-    exception_detail
-        {
-        class
-        error_info_base
-            {
-            public:
-
-            virtual std::type_info const & tag_typeid() const = 0;
-            virtual std::string value_as_string() const = 0;
-
-            protected:
-
-#if BOOST_WORKAROUND( __GNUC__, BOOST_TESTED_AT(4) )
-virtual //Disable bogus GCC warning.
-#endif
-            ~error_info_base()
-                {
-                }
-            };
-        }
 
     template <class Tag,class T>
     class
@@ -70,10 +47,10 @@ virtual //Disable bogus GCC warning.
 
         private:
 
-        std::type_info const &
-        tag_typeid() const
+        char const *
+        tag_typeid_name() const
             {
-            return typeid(type<Tag>);
+            return exception_detail::type_name<Tag>();
             }
 
         std::string
@@ -84,31 +61,6 @@ virtual //Disable bogus GCC warning.
 
         value_type const value_;
         };
-
-    template <class E,class Tag,class T>
-    inline
-    E const &
-    operator<<( E const & x, error_info<Tag,T> const & v )
-        {
-        shared_ptr< error_info<Tag,T> > p( new error_info<Tag,T>(v) );
-        x.set(p);
-        return x;
-        }
-
-    template <class ErrorInfo,class E>
-    inline
-    shared_ptr<typename ErrorInfo::value_type const>
-    get_error_info( E const & some_exception )
-        {
-        if( exception const * x = dynamic_cast<exception const *>(&some_exception) )
-            if( shared_ptr<exception_detail::error_info_base const> eib = x->get(typeid(ErrorInfo)) )
-                {
-                BOOST_ASSERT( 0!=dynamic_cast<ErrorInfo const *>(eib.get()) );
-                ErrorInfo const * w = static_cast<ErrorInfo const *>(eib.get());
-                return shared_ptr<typename ErrorInfo::value_type const>(eib,&w->value());
-                }
-        return shared_ptr<typename ErrorInfo::value_type const>();
-        }
 
     namespace
     exception_detail
@@ -128,30 +80,33 @@ virtual //Disable bogus GCC warning.
                 {
                 }
 
-            shared_ptr<error_info_base const>
-            get( std::type_info const & ti ) const
+            void
+            set( shared_ptr<error_info_base const> const & x, type_info_ const & typeid_ )
                 {
-                error_info_map::const_iterator i=info_.find(typeinfo(ti));
+                BOOST_ASSERT(x);
+                info_[type_info_wrapper(typeid_)] = x;
+                what_.clear();
+                }
+
+            shared_ptr<error_info_base const>
+            get( type_info_ const & ti ) const
+                {
+                error_info_map::const_iterator i=info_.find(type_info_wrapper(ti));
                 if( info_.end()!=i )
                     {
                     shared_ptr<error_info_base const> const & p = i->second;
+    #ifndef BOOST_NO_RTTI
                     BOOST_ASSERT( typeid(*p)==ti );
+    #endif
                     return p;
                     }
                 return shared_ptr<error_info_base const>();
                 }
 
-            void
-            set( shared_ptr<error_info_base const> const & x )
-                {
-                BOOST_ASSERT(x);
-                info_[typeinfo(typeid(*x))] = x;
-                what_.clear();
-                }
-
             char const *
-            diagnostic_information( char const * std_what, std::type_info const & exception_type ) const
+            diagnostic_information( char const * std_what, char const * exception_type_name ) const
                 {
+                BOOST_ASSERT(exception_type_name!=0 && *exception_type_name );
                 if( what_.empty() )
                     {
                     std::string tmp;
@@ -161,13 +116,13 @@ virtual //Disable bogus GCC warning.
                         tmp += '\n';
                         }
                     tmp += "Dynamic exception type: ";
-                    tmp += exception_type.name();
+                    tmp += exception_type_name;
                     tmp += '\n';
                     for( error_info_map::const_iterator i=info_.begin(),end=info_.end(); i!=end; ++i )
                         {
                         shared_ptr<error_info_base const> const & x = i->second;
                         tmp += '[';
-                        tmp += x->tag_typeid().name();
+                        tmp += x->tag_typeid_name();
                         tmp += "] = ";
                         tmp += x->value_as_string();
                         tmp += '\n';
@@ -181,25 +136,7 @@ virtual //Disable bogus GCC warning.
 
             friend class exception;
 
-            struct
-            typeinfo
-                {
-                std::type_info const * type;
-
-                explicit
-                typeinfo( std::type_info const & t ):
-                    type(&t)
-                    {
-                    }
-
-                bool
-                operator<( typeinfo const & b ) const
-                    {
-                    return 0!=(type->before(*b.type));
-                    }
-                };
-
-            typedef std::map< typeinfo, shared_ptr<error_info_base const> > error_info_map;
+            typedef std::map< type_info_wrapper, shared_ptr<error_info_base const> > error_info_map;
             error_info_map info_;
             mutable std::string what_;
             mutable int count_;
@@ -217,27 +154,32 @@ virtual //Disable bogus GCC warning.
                     delete this;
                 }
             };
+
+        inline
+        void
+        set_data( exception const * e, shared_ptr<exception_detail::error_info_base const> const & x, exception_detail::type_info_ const & typeid_ )
+            {
+            if( !e->data_ )
+                e->data_ = intrusive_ptr<exception_detail::error_info_container>(new exception_detail::error_info_container_impl);
+            e->data_->set(x,typeid_);
+            }
+
+        inline
+        void
+        set_data( void const *, shared_ptr<exception_detail::error_info_base const> const &, exception_detail::type_info_ const & )
+            {
+            }
         }
 
+    template <class E,class Tag,class T>
     inline
-    void
-    exception::
-    set( shared_ptr<exception_detail::error_info_base const> const & x ) const
+    E const &
+    operator<<( E const & x, error_info<Tag,T> const & v )
         {
-        if( !data_ )
-            data_ = intrusive_ptr<exception_detail::error_info_container>(new exception_detail::error_info_container_impl);
-        data_->set(x);
-        }
-
-    inline
-    shared_ptr<exception_detail::error_info_base const>
-    exception::
-    get( std::type_info const & ti ) const
-        {
-        if( data_ )
-            return data_->get(ti);
-        else
-            return shared_ptr<exception_detail::error_info_base const>();
+        typedef error_info<Tag,T> error_info_tag_t;
+        shared_ptr<error_info_tag_t> p( new error_info_tag_t(v) );
+        exception_detail::set_data(&x,p,BOOST_EXCEPTION_STATIC_TYPEID(error_info_tag_t));
+        return x;
         }
     }
 

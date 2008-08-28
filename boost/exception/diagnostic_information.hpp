@@ -6,7 +6,7 @@
 #ifndef UUID_0552D49838DD11DD90146B8956D89593
 #define UUID_0552D49838DD11DD90146B8956D89593
 
-#include <boost/exception/exception.hpp>
+#include <boost/exception/detail/get_boost_exception.hpp>
 #include <exception>
 #include <string>
 
@@ -17,10 +17,16 @@ boost
     std::string
     diagnostic_information( std::exception const & x )
         {
-        if( exception const * be = dynamic_cast<exception const *>(&x) )
+        if( exception const * be = exception_detail::get_boost_exception(&x) )
             return be->diagnostic_information();
         else
-            return std::string("[ what: ") + x.what() + ", type: " + typeid(x).name() + " ]";
+            return std::string("[ what: ") + x.what() + ", type: "
+#if defined(BOOST_NO_RTTI) || defined(BOOST_NO_TYPEID)
+                "Unknown type deriving from std::exception"
+#else
+                + typeid(x).name() +
+#endif
+                " ]";
         }
     }
 

@@ -11,6 +11,7 @@
 #include <boost/exception/enable_error_info.hpp>
 #include <boost/exception/error_info.hpp>
 #include <boost/exception/exception.hpp>
+#include <boost/exception/get_error_info.hpp>
 #include <boost/exception/info.hpp>
 #include <boost/exception/info_tuple.hpp>
 #include <boost/exception_ptr.hpp>

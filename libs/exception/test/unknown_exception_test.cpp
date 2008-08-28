@@ -4,6 +4,7 @@
 //file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/exception_ptr.hpp>
+#include <boost/exception/get_error_info.hpp>
 #include <boost/exception/info.hpp>
 #include <boost/detail/lightweight_test.hpp>
 

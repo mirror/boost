@@ -3,6 +3,7 @@
 //Distributed under the Boost Software License, Version 1.0. (See accompanying
 //file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/exception/get_error_info.hpp>
 #include <boost/exception/info_tuple.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
@@ -38,12 +39,20 @@ throws_on_copy
 void
 basic_test()
     {
-    test_exception x;
-    x << test_1(1) << test_2(2u) << test_3(3.14159f);
-    BOOST_TEST(*boost::get_error_info<test_1>(x)==1);
-    BOOST_TEST(*boost::get_error_info<test_2>(x)==2u);
-    BOOST_TEST(*boost::get_error_info<test_3>(x)==3.14159f);
-    BOOST_TEST(!boost::get_error_info<test_4>(x));
+    try
+        {
+        test_exception x;
+        x << test_1(1) << test_2(2u) << test_3(3.14159f);
+        throw x;
+        }
+    catch(
+    test_exception & x )
+        {
+        BOOST_TEST(*boost::get_error_info<test_1>(x)==1);
+        BOOST_TEST(*boost::get_error_info<test_2>(x)==2u);
+        BOOST_TEST(*boost::get_error_info<test_3>(x)==3.14159f);
+        BOOST_TEST(!boost::get_error_info<test_4>(x));
+        }
     }
 
 void
@@ -58,8 +67,8 @@ exception_safety_test()
     catch(
     test_exception & )
         {
+        BOOST_TEST(!boost::get_error_info<test_4>(x));
         }
-    BOOST_TEST(!boost::get_error_info<test_4>(x));
     }
 
 void
@@ -107,7 +116,9 @@ test_empty()
     catch(
     boost::exception & x )
         {
+#ifndef BOOST_NO_RTTI
         BOOST_TEST( dynamic_cast<test_exception *>(&x) );
+#endif
         BOOST_TEST( !boost::get_error_info<test_1>(x) );
         }
     catch(
@@ -124,7 +135,7 @@ test_empty()
     catch(
     test_exception & x )
         {
-        BOOST_TEST( dynamic_cast<boost::exception *>(&x) );
+        BOOST_TEST( boost::exception_detail::get_boost_exception(&x) );
         }
     catch(
     ... )

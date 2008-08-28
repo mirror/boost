@@ -6,7 +6,7 @@
 #ifndef UUID_274DA366004E11DCB1DDFE2E56D89593
 #define UUID_274DA366004E11DCB1DDFE2E56D89593
 
-#include <boost/config.hpp>
+#include <boost/exception/detail/type_info.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/exception/detail/counted_base.hpp>
 #include <boost/intrusive_ptr.hpp>
@@ -15,6 +15,8 @@
 namespace
 boost
     {
+    class exception;
+
     template <class T>
     class shared_ptr;
 
@@ -27,20 +29,16 @@ boost
         error_info_container:
             public exception_detail::counted_base
             {
-            virtual char const * diagnostic_information( char const *, std::type_info const & ) const = 0;
-            virtual shared_ptr<error_info_base const> get( std::type_info const & ) const = 0;
-            virtual void set( shared_ptr<error_info_base const> const & ) = 0;
+            virtual char const * diagnostic_information( char const *, char const * ) const = 0;
+            virtual shared_ptr<error_info_base const> get( type_info_ const & ) const = 0;
+            virtual void set( shared_ptr<error_info_base const> const &, type_info_ const & ) = 0;
             };
+
+        template <class ErrorInfo>
+        shared_ptr<typename ErrorInfo::value_type const> get_data( exception const & );
+
+        void set_data( exception const *, shared_ptr<exception_detail::error_info_base const> const &, exception_detail::type_info_ const & );
         }
-
-    template <class Tag,class T>
-    class error_info;
-
-    template <class E,class Tag,class T>
-    E const & operator<<( E const &, error_info<Tag,T> const & );
-
-    template <class ErrorInfo,class E>
-    shared_ptr<typename ErrorInfo::value_type const> get_error_info( E const & );
 
     class
     exception
@@ -71,14 +69,14 @@ boost
             if( data_ )
                 try
                     {
-                    char const * w = data_->diagnostic_information(std_what,typeid(*this));
-                    BOOST_ASSERT(0!=w);
+                    char const * w = data_->diagnostic_information(std_what,dynamic_type_name());
+                    BOOST_ASSERT(w!=0);
                     return w;
                     }
                 catch(...)
                     {
                     }
-            return std_what ? std_what : typeid(*this).name();
+            return std_what ? std_what : dynamic_type_name();
             }
 
 #if BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1500) )
@@ -96,14 +94,22 @@ boost
 
         private:
 
-        shared_ptr<exception_detail::error_info_base const> get( std::type_info const & ) const;
-        void set( shared_ptr<exception_detail::error_info_base const> const & ) const;
+        friend void exception_detail::set_data( exception const *, shared_ptr<exception_detail::error_info_base const> const &, exception_detail::type_info_ const & );
 
-        template <class E,class Tag,class T>
-        friend E const & operator<<( E const &, error_info<Tag,T> const & );
+        template <class ErrorInfo>
+        friend shared_ptr<typename ErrorInfo::value_type const> exception_detail::get_data( exception const & );
 
-        template <class ErrorInfo,class E>
-        friend shared_ptr<typename ErrorInfo::value_type const> get_error_info( E const & );
+        char const *
+        dynamic_type_name() const
+            {
+            return
+#if defined(BOOST_NO_RTTI) || defined(BOOST_NO_TYPEID)
+                "Unknown type deriving from boost::exception"
+#else
+                typeid(*this).name()
+#endif
+                ;
+            }
 
         mutable intrusive_ptr<exception_detail::error_info_container> data_;
         };

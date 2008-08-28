@@ -40,6 +40,7 @@ compile enable_current_exception_hpp_test.cpp ;
 compile enable_error_info_hpp_test.cpp ;
 compile error_info_hpp_test.cpp ;
 compile exception_hpp_test.cpp ;
+compile get_error_info_hpp_test.cpp ;
 compile info_hpp_test.cpp ;
 compile info_tuple_hpp_test.cpp ;
 compile to_string_hpp_test.cpp ;

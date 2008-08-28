@@ -7,7 +7,7 @@
 #define UUID_FA5836A2CADA11DC8CD47C8555D89593
 
 #include <boost/exception/enable_current_exception.hpp>
-#include <boost/exception/exception.hpp>
+#include <boost/exception/detail/get_boost_exception.hpp>
 #include <boost/exception/detail/cloning_base.hpp>
 #include <stdexcept>
 #include <new>
@@ -72,7 +72,7 @@ boost
         exception_ptr
         current_exception_std_exception( T const & e1 )
             {
-            if( boost::exception const * e2 = dynamic_cast<boost::exception const *>(&e1) )
+            if( boost::exception const * e2 = get_boost_exception(&e1) )
                 return exception_ptr(exception_detail::make_clone(current_exception_std_exception_wrapper<T>(e1,*e2)));
             else
                 return exception_ptr(exception_detail::make_clone(current_exception_std_exception_wrapper<T>(e1)));
@@ -89,7 +89,7 @@ boost
         exception_ptr
         current_exception_unknown_std_exception( std::exception const & e )
             {
-            if( boost::exception const * be = dynamic_cast<boost::exception const *>(&e) )
+            if( boost::exception const * be = get_boost_exception(&e) )
                 return exception_ptr(exception_detail::make_clone(unknown_exception(*be)));
             else
                 return current_exception_unknown_exception();

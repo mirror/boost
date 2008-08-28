@@ -18,6 +18,19 @@ boost
     namespace
     exception_detail
         {
+        inline
+        void
+        copy_boost_exception( exception * a, exception const * b )
+            {
+            *a = *b;
+            }
+
+        inline
+        void
+        copy_boost_exception( void *, void const * )
+            {
+            }
+
         class
         clone_base:
             public counted_base
@@ -64,9 +77,7 @@ boost
             clone_impl( T const & x ):
                 T(x)
                 {
-                if( boost::exception * be1=dynamic_cast<boost::exception *>(this) )
-                    if( boost::exception const * be2=dynamic_cast<boost::exception const *>(&x) )
-                        *be1 = *be2;
+                copy_boost_exception(this,&x);
                 }
 
             private:
@@ -91,9 +102,7 @@ boost
                 T(x),
                 count_(0)
                 {
-                if( boost::exception * be1=dynamic_cast<boost::exception *>(this) )
-                    if( boost::exception const * be2=dynamic_cast<boost::exception const *>(&x) )
-                        *be1 = *be2;
+                copy_boost_exception(this,&x);
                 }
 
             private:

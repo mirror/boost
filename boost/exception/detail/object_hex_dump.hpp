@@ -6,6 +6,7 @@
 #ifndef UUID_6F463AC838DF11DDA3E6909F56D89593
 #define UUID_6F463AC838DF11DDA3E6909F56D89593
 
+#include <boost/exception/detail/type_info.hpp>
 #include <iomanip>
 #include <typeinfo>
 #include <ios>
@@ -24,7 +25,7 @@ boost
         object_hex_dump( T const & x, size_t max_size=16 )
             {
             std::ostringstream s;
-            s << "type: " << typeid(x).name() << ", size: " << sizeof(T) << ", dump: ";
+            s << "type: " << type_name<T>() << ", size: " << sizeof(T) << ", dump: ";
             size_t n=sizeof(T)>max_size?max_size:sizeof(T);
             s.fill('0');
             s.width(2);
