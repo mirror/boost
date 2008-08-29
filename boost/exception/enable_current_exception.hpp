@@ -8,7 +8,6 @@
 
 #include <boost/exception/exception.hpp>
 #include <boost/exception/detail/cloning_base.hpp>
-#include <boost/detail/atomic_count.hpp>
 #include <boost/assert.hpp>
 #include <new>
 
@@ -31,39 +30,8 @@ boost
             {
             }
 
-        class
-        clone_base:
-            public counted_base
-            {
-            public:
-
-            virtual void rethrow() const=0;
-            };
-
-        struct
-        bad_alloc_impl:
-            public clone_base,
-            public std::bad_alloc
-            {
-            void
-            add_ref() const
-                {
-                }
-
-            void
-            release() const
-                {
-                }
-
-            void
-            rethrow() const
-                {
-                throw *this;
-                }
-            };
-
         template <class T>
-        clone_base * make_clone( T const & );
+        new_clone make_clone( T const & );
 
         template <class T>
         class
@@ -80,12 +48,43 @@ boost
                 copy_boost_exception(this,&x);
                 }
 
+            ~clone_impl() throw()
+                {
+                }
+
             private:
 
-            clone_base const *
+            new_clone
             clone() const
                 {
                 return make_clone<T>(*this);
+                }
+            };
+
+        class
+        clone_base
+            {
+            public:
+
+            virtual void rethrow() const=0;
+            virtual ~clone_base() throw()=0;
+            };
+
+        inline
+        clone_base::
+        ~clone_base() throw()
+            {
+            }
+
+        struct
+        bad_alloc_impl:
+            public clone_base,
+            public std::bad_alloc
+            {
+            void
+            rethrow() const
+                {
+                throw *this;
                 }
             };
 
@@ -99,27 +98,15 @@ boost
 
             explicit
             exception_clone( T const & x ):
-                T(x),
-                count_(0)
+                T(x)
                 {
                 copy_boost_exception(this,&x);
                 }
 
             private:
 
-            mutable detail::atomic_count count_;
-
-            void
-            add_ref() const
+            ~exception_clone() throw()
                 {
-                ++count_;
-                }
-
-            void
-            release() const
-                {
-                if( !--count_ )
-                    delete this;
                 }
 
             void
@@ -129,27 +116,44 @@ boost
                 }
             };
 
+        inline
+        void
+        delete_clone( clone_base const * c )
+            {
+            BOOST_ASSERT(c!=0);
+            delete c;
+            }
+
+        inline
+        void
+        delete_clone_noop( clone_base const * )
+            {
+            }
+
         template <class T>
         inline
-        clone_base *
+        new_clone
         make_clone( T const & x )
             {
+            new_clone tmp = {0,0};
             try
                 {
-                return new exception_clone<T>(x);
+                tmp.c_=new exception_clone<T>(x);
+                tmp.d_=&delete_clone;
                 }
             catch(
             std::bad_alloc & )
                 {
                 static bad_alloc_impl bad_alloc;
-                return &bad_alloc;
+                tmp.c_=&bad_alloc;
+                tmp.d_=&delete_clone_noop;
                 }
             catch(
             ... )
                 {
                 BOOST_ASSERT(0);
-                return 0;
                 }
+            return tmp;
             }
         }
 

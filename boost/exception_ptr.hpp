@@ -8,13 +8,76 @@
 
 #include <boost/exception/enable_current_exception.hpp>
 #include <boost/exception/detail/get_boost_exception.hpp>
-#include <boost/exception/detail/cloning_base.hpp>
+#include <boost/detail/atomic_count.hpp>
 #include <stdexcept>
 #include <new>
 
 namespace
 boost
     {
+    namespace
+    exception_detail
+        {
+        class
+        counted_clone:
+            public counted_base
+            {
+            public:
+
+            counted_clone():
+                count_(0),
+                clone_(0)
+                {
+                }
+
+            void
+            set( new_clone const & nc )
+                {
+                clone_ = nc.c_;
+                clone_deleter_ = nc.d_;
+                BOOST_ASSERT(clone_!=0);
+                BOOST_ASSERT(clone_deleter_!=0);
+                }
+
+            void
+            rethrow() const
+                {
+                BOOST_ASSERT(clone_!=0);
+                clone_->rethrow();
+                }
+
+            private:
+
+            counted_clone( counted_clone const & );
+            counted_clone & operator=( counted_clone const & );
+
+            mutable detail::atomic_count count_;
+            clone_base const * clone_;
+            void (*clone_deleter_)(clone_base const *);
+
+            ~counted_clone() throw()
+                {
+                if( clone_ )
+                    clone_deleter_(clone_);
+                }
+
+            void
+            add_ref() const
+                {
+                ++count_;
+                }
+
+            void
+            release() const
+                {
+                if( !--count_ )
+                    delete this;
+                }
+            };
+        }
+
+    typedef intrusive_ptr<exception_detail::counted_clone const> exception_ptr;
+
     class
     unknown_exception:
         public exception,
@@ -36,8 +99,6 @@ boost
             {
             }
         };
-
-    typedef intrusive_ptr<exception_detail::clone_base const> exception_ptr;
 
     namespace
     exception_detail
@@ -72,17 +133,21 @@ boost
         exception_ptr
         current_exception_std_exception( T const & e1 )
             {
+            intrusive_ptr<exception_detail::counted_clone> x(new exception_detail::counted_clone);
             if( boost::exception const * e2 = get_boost_exception(&e1) )
-                return exception_ptr(exception_detail::make_clone(current_exception_std_exception_wrapper<T>(e1,*e2)));
+                x->set(exception_detail::make_clone(current_exception_std_exception_wrapper<T>(e1,*e2)));
             else
-                return exception_ptr(exception_detail::make_clone(current_exception_std_exception_wrapper<T>(e1)));
+                x->set(exception_detail::make_clone(current_exception_std_exception_wrapper<T>(e1)));
+            return x;
             }
 
         inline
         exception_ptr
         current_exception_unknown_exception()
             {
-            return exception_ptr(exception_detail::make_clone(unknown_exception()));
+            intrusive_ptr<exception_detail::counted_clone> x(new exception_detail::counted_clone);
+            x->set(exception_detail::make_clone(unknown_exception()));
+            return x;
             }
 
         inline
@@ -90,7 +155,11 @@ boost
         current_exception_unknown_std_exception( std::exception const & e )
             {
             if( boost::exception const * be = get_boost_exception(&e) )
-                return exception_ptr(exception_detail::make_clone(unknown_exception(*be)));
+                {
+                intrusive_ptr<exception_detail::counted_clone> x(new exception_detail::counted_clone);
+                x->set(exception_detail::make_clone(unknown_exception(*be)));
+                return x;
+                }
             else
                 return current_exception_unknown_exception();
             }
@@ -99,7 +168,9 @@ boost
         exception_ptr
         current_exception_unknown_boost_exception( boost::exception const & e )
             {
-            return exception_ptr(exception_detail::make_clone(unknown_exception(e)));
+            intrusive_ptr<exception_detail::counted_clone> x(new exception_detail::counted_clone);
+            x->set(exception_detail::make_clone(unknown_exception(e)));
+            return x;
             }
         }
 
@@ -114,9 +185,9 @@ boost
         catch(
         exception_detail::cloning_base & e )
             {
-            exception_detail::clone_base const * c = e.clone();
-            BOOST_ASSERT(c!=0);
-            return exception_ptr(c);
+            intrusive_ptr<exception_detail::counted_clone> x(new exception_detail::counted_clone);
+            x->set(e.clone());
+            return x;
             }
         catch(
         std::invalid_argument & e )

@@ -16,12 +16,19 @@ boost
         {
         class clone_base;
 
+        struct
+        new_clone
+            {
+            clone_base const * c_;
+            void (*d_)(clone_base const *);
+            };
+
         class
         cloning_base
             {
             public:
 
-            virtual clone_base const * clone() const = 0;
+            virtual new_clone clone() const = 0;
 
             protected:
 
