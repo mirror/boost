@@ -3,7 +3,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-	<title>get_error_info</title>
+	<title>boost/exception/get_error_info.hpp</title>
 	<link href='reno.css' type='text/css' rel='stylesheet'/>
 </head>
 <body>
@@ -19,32 +19,22 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>get_error_info</h3>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h2>boost/exception/get_error_info.hpp</h2>
 </div>
-<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="boost_exception_get_error_info_hpp.html">boost/exception/get_error_info.hpp</a></span>&gt;</p>
-<pre>namespace
+<h3>Synopsis</h3>
+<div class="RenoIncludeDIV"><pre>#include &lt;boost/shared_ptr.hpp&gt;
+
+namespace
 boost
     {
-<span class="RenoIncludeSPAN">    template &lt;class ErrorInfo,class E&gt;
-    <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span>&lt;typename ErrorInfo::value_type const&gt; <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>( E const &amp; x );</span>
+<span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">template &lt;class ErrorInfo,class E&gt;
+    <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span>&lt;typename ErrorInfo::value_type const&gt; <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>( E const &amp; x );</span></span>
     }</pre>
-</div><h4>Requirements:</h4>
-<div><ul><li> ErrorInfo must be an instance of the <span class="RenoLink"><a href="error_info.html">error_info</a></span> template.</li>
-<li> E must be polymorphic.</li>
-<li> The <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> function must not be called outside of a catch block.</li>
-</ul></div>
-<h4>Returns:</h4>
-<div><ul><li> If dynamic_cast&lt;boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const *&gt;(&amp;x) is 0, or if x does not store an object of type ErrorInfo, the returned value is an empty shared_ptr.</li>
-<li> Otherwise, the returned shared_ptr points to the stored value (use <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span> to store values in exception objects.) The shared_ptr is valid even after x has been destroyed.</li>
-</ul></div>
-<h4>Throws:</h4>
-<p>Nothing.</p>
-</div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
+</div></div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
-</a><a href="boost_exception_get_error_info_hpp.html">boost/exception/get_error_info.hpp<br/>
-</a><a href="error_info.html">error_info<br/>
-</a><a href="exception.html">exception<br/>
+</a><a href="exception_hpp.html">boost/exception.hpp<br/>
+</a><a href="get_error_info.html">get_error_info<br/>
 </a></div>
 </div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->

@@ -27,7 +27,9 @@ boost
     {
 <span class="RenoIncludeSPAN">    std::string <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>( std::exception const &amp; x );</span>
     }</pre>
-</div><h4>Returns:</h4>
+</div><h4>Requirements:</h4>
+<p>The <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> function must not be called outside of a catch block.</p>
+<h4>Returns:</h4>
 <p>If dynamic_cast&lt;boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const *&gt;(&amp;x) is not null, the returned string is initialized by a call to <span class="RenoLink"><a href="exception_diagnostic_information.html">exception::diagnostic_information</a></span>; otherwise, the returned string combines the output of x.what() and typeid(x).name().</p>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>

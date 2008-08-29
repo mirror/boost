@@ -95,9 +95,9 @@ boost
                 if( info_.end()!=i )
                     {
                     shared_ptr<error_info_base const> const & p = i->second;
-    #ifndef BOOST_NO_RTTI
+#ifndef BOOST_NO_RTTI
                     BOOST_ASSERT( typeid(*p)==ti );
-    #endif
+#endif
                     return p;
                     }
                 return shared_ptr<error_info_base const>();
