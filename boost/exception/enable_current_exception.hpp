@@ -7,9 +7,6 @@
 #define UUID_78CC85B2914F11DC8F47B48E55D89593
 
 #include <boost/exception/exception.hpp>
-#include <boost/exception/detail/cloning_base.hpp>
-#include <boost/assert.hpp>
-#include <new>
 
 namespace
 boost
@@ -17,6 +14,22 @@ boost
     namespace
     exception_detail
         {
+        class
+        clone_base
+            {
+            public:
+
+            virtual clone_base const * clone() const = 0;
+            virtual void rethrow() const = 0;
+            virtual ~clone_base() throw() = 0;
+            };
+
+        inline
+        clone_base::
+        ~clone_base() throw()
+            {
+            }
+
         inline
         void
         copy_boost_exception( exception * a, exception const * b )
@@ -31,13 +44,10 @@ boost
             }
 
         template <class T>
-        new_clone make_clone( T const & );
-
-        template <class T>
         class
         clone_impl:
             public T,
-            public cloning_base
+            public clone_base
             {
             public:
 
@@ -54,107 +64,18 @@ boost
 
             private:
 
-            new_clone
+            clone_base const *
             clone() const
                 {
-                return make_clone<T>(*this);
+                return new clone_impl(*this);
                 }
-            };
 
-        class
-        clone_base
-            {
-            public:
-
-            virtual void rethrow() const=0;
-            virtual ~clone_base() throw()=0;
-            };
-
-        inline
-        clone_base::
-        ~clone_base() throw()
-            {
-            }
-
-        struct
-        bad_alloc_impl:
-            public clone_base,
-            public std::bad_alloc
-            {
             void
             rethrow() const
                 {
                 throw *this;
                 }
             };
-
-        template <class T>
-        class
-        exception_clone:
-            public T,
-            public clone_base
-            {
-            public:
-
-            explicit
-            exception_clone( T const & x ):
-                T(x)
-                {
-                copy_boost_exception(this,&x);
-                }
-
-            private:
-
-            ~exception_clone() throw()
-                {
-                }
-
-            void
-            rethrow() const
-                {
-                throw clone_impl<T>(*this);
-                }
-            };
-
-        inline
-        void
-        delete_clone( clone_base const * c )
-            {
-            BOOST_ASSERT(c!=0);
-            delete c;
-            }
-
-        inline
-        void
-        delete_clone_noop( clone_base const * )
-            {
-            }
-
-        template <class T>
-        inline
-        new_clone
-        make_clone( T const & x )
-            {
-            new_clone tmp = {0,0};
-            try
-                {
-                tmp.c_=new exception_clone<T>(x);
-                tmp.d_=&delete_clone;
-                }
-            catch(
-            std::bad_alloc & )
-                {
-                static bad_alloc_impl bad_alloc;
-                tmp.c_=&bad_alloc;
-                tmp.d_=&delete_clone_noop;
-                }
-            catch(
-            ... )
-                {
-                BOOST_ASSERT(0);
-                }
-            return tmp;
-            }
         }
 
     template <class T>

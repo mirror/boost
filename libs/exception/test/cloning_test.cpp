@@ -11,6 +11,25 @@
 
 typedef boost::error_info<struct my_tag,int> my_info;
 
+template <class T>
+struct
+may_throw_on_copy
+    {
+    may_throw_on_copy():
+        throw_(false)
+        {
+        }
+
+    may_throw_on_copy( may_throw_on_copy const & x ):
+        throw_(x.throw_)
+        {
+        if( throw_ )
+            throw T();
+        }
+
+    bool throw_;
+    };
+
 struct
 derives_nothing
     {
@@ -66,6 +85,9 @@ test_std_exception()
     ... )
         {
         boost::exception_ptr p = boost::current_exception();
+        BOOST_TEST(!(p==boost::exception_ptr()));
+        BOOST_TEST(p!=boost::exception_ptr());
+        BOOST_TEST(p);
         try
             {
             rethrow_exception(p);
@@ -74,6 +96,24 @@ test_std_exception()
         catch(
         T & )
             {
+            boost::exception_ptr p = boost::current_exception();
+            BOOST_TEST(!(p==boost::exception_ptr()));
+            BOOST_TEST(p!=boost::exception_ptr());
+            BOOST_TEST(p);
+            try
+                {
+                rethrow_exception(p);
+                BOOST_TEST(false);
+                }
+            catch(
+            T & )
+                {
+                }
+            catch(
+            ... )
+                {
+                BOOST_TEST(false);
+                }
             }
         catch(
         ... )
@@ -95,6 +135,9 @@ test_std_exception_what()
     ... )
         {
         boost::exception_ptr p = boost::current_exception();
+        BOOST_TEST(!(p==boost::exception_ptr()));
+        BOOST_TEST(p!=boost::exception_ptr());
+        BOOST_TEST(p);
         try
             {
             rethrow_exception(p);
@@ -104,6 +147,89 @@ test_std_exception_what()
         T & x )
             {
             BOOST_TEST(std::string("what")==x.what());
+            boost::exception_ptr p = boost::current_exception();
+            BOOST_TEST(!(p==boost::exception_ptr()));
+            BOOST_TEST(p!=boost::exception_ptr());
+            BOOST_TEST(p);
+            try
+                {
+                rethrow_exception(p);
+                BOOST_TEST(false);
+                }
+            catch(
+            T & x )
+                {
+                BOOST_TEST(std::string("what")==x.what());
+                }
+            catch(
+            ... )
+                {
+                BOOST_TEST(false);
+                }
+            }
+        catch(
+        ... )
+            {
+            BOOST_TEST(false);
+            }
+        }
+    }
+
+template <class Throw,class Catch>
+void
+test_throw_on_copy()
+    {
+    try
+        {
+        try
+            {
+            throw boost::enable_current_exception(may_throw_on_copy<Throw>());
+            }
+        catch(
+        may_throw_on_copy<Throw> & x )
+            {
+            x.throw_=true;
+            throw;
+            }
+        catch(
+        ... )
+            {
+            BOOST_TEST(false);
+            }
+        }
+    catch(
+    ... )
+        {
+        boost::exception_ptr p = boost::current_exception();
+        BOOST_TEST(!(p==boost::exception_ptr()));
+        BOOST_TEST(p!=boost::exception_ptr());
+        BOOST_TEST(p);
+        try
+            {
+            rethrow_exception(p);
+            BOOST_TEST(false);
+            }
+        catch(
+        Catch & )
+            {
+            boost::exception_ptr p = boost::current_exception();
+            BOOST_TEST(!(p==boost::exception_ptr()));
+            BOOST_TEST(p!=boost::exception_ptr());
+            BOOST_TEST(p);
+            try
+                {
+                boost::rethrow_exception(p);
+                BOOST_TEST(false);
+                }
+            catch(
+            Catch & )
+                {
+                }
+            catch(
+            ... )
+                {
+                BOOST_TEST(false);
+                }
             }
         catch(
         ... )
@@ -116,6 +242,10 @@ test_std_exception_what()
 int
 main()
     {
+    BOOST_TEST( boost::exception_ptr()==boost::exception_ptr() );
+    BOOST_TEST( !(boost::exception_ptr()!=boost::exception_ptr()) );
+    BOOST_TEST( !boost::exception_ptr() );
+
     int count=0;
     try
         {
@@ -125,6 +255,9 @@ main()
     ... )
         {
         boost::exception_ptr p = boost::current_exception();
+        BOOST_TEST(!(p==boost::exception_ptr()));
+        BOOST_TEST(p!=boost::exception_ptr());
+        BOOST_TEST(p);
         try
             {
             rethrow_exception(p);
@@ -150,6 +283,9 @@ main()
     ... )
         {
         boost::exception_ptr p = boost::current_exception();
+        BOOST_TEST(!(p==boost::exception_ptr()));
+        BOOST_TEST(p!=boost::exception_ptr());
+        BOOST_TEST(p);
         try
             {
             rethrow_exception(p);
@@ -158,6 +294,24 @@ main()
         catch(
         derives_std_exception & )
             {
+            boost::exception_ptr p = boost::current_exception();
+            BOOST_TEST(!(p==boost::exception_ptr()));
+            BOOST_TEST(p!=boost::exception_ptr());
+            BOOST_TEST(p);
+            try
+                {
+                rethrow_exception(p);
+                BOOST_TEST(false);
+                }
+            catch(
+            derives_std_exception & )
+                {
+                }
+            catch(
+            ... )
+                {
+                BOOST_TEST(false);
+                }
             }
         catch(
         ... )
@@ -174,6 +328,9 @@ main()
     ... )
         {
         boost::exception_ptr p = boost::current_exception();
+        BOOST_TEST(!(p==boost::exception_ptr()));
+        BOOST_TEST(p!=boost::exception_ptr());
+        BOOST_TEST(p);
         try
             {
             rethrow_exception(p);
@@ -206,6 +363,9 @@ main()
     ... )
         {
         boost::exception_ptr p = boost::current_exception();
+        BOOST_TEST(!(p==boost::exception_ptr()));
+        BOOST_TEST(p!=boost::exception_ptr());
+        BOOST_TEST(p);
         try
             {
             rethrow_exception(p);
@@ -217,6 +377,27 @@ main()
             BOOST_TEST(boost::get_error_info<my_info>(x));
             if( boost::shared_ptr<int const> p=boost::get_error_info<my_info>(x) )
                 BOOST_TEST(*p==42);
+            boost::exception_ptr p = boost::current_exception();
+            BOOST_TEST(!(p==boost::exception_ptr()));
+            BOOST_TEST(p!=boost::exception_ptr());
+            BOOST_TEST(p);
+            try
+                {
+                rethrow_exception(p);
+                BOOST_TEST(false);
+                }
+            catch(
+            boost::unknown_exception & x )
+                {
+                BOOST_TEST(boost::get_error_info<my_info>(x));
+                if( boost::shared_ptr<int const> p=boost::get_error_info<my_info>(x) )
+                    BOOST_TEST(*p==42);
+                }
+            catch(
+            ... )
+                {
+                BOOST_TEST(false);
+                }
             }
         catch(
         ... )
@@ -233,6 +414,9 @@ main()
     ... )
         {
         boost::exception_ptr p = boost::current_exception();
+        BOOST_TEST(!(p==boost::exception_ptr()));
+        BOOST_TEST(p!=boost::exception_ptr());
+        BOOST_TEST(p);
         try
             {
             rethrow_exception(p);
@@ -244,6 +428,27 @@ main()
             BOOST_TEST(boost::get_error_info<my_info>(x));
             if( boost::shared_ptr<int const> p=boost::get_error_info<my_info>(x) )
                 BOOST_TEST(*p==42);
+            boost::exception_ptr p = boost::current_exception();
+            BOOST_TEST(!(p==boost::exception_ptr()));
+            BOOST_TEST(p!=boost::exception_ptr());
+            BOOST_TEST(p);
+            try
+                {
+                rethrow_exception(p);
+                BOOST_TEST(false);
+                }
+            catch(
+            boost::unknown_exception & x )
+                {
+                BOOST_TEST(boost::get_error_info<my_info>(x));
+                if( boost::shared_ptr<int const> p=boost::get_error_info<my_info>(x) )
+                    BOOST_TEST(*p==42);
+                }
+            catch(
+            ... )
+                {
+                BOOST_TEST(false);
+                }
             }
         catch(
         ... )
@@ -251,6 +456,9 @@ main()
             BOOST_TEST(false);
             }
         }
+
+    test_throw_on_copy<std::bad_alloc,std::bad_alloc>();
+    test_throw_on_copy<int,std::bad_exception>();
 
     return boost::report_errors();
     }
