@@ -169,7 +169,7 @@ rule check-icu-config ( )
 
 if [ check-icu-config ]
 {
-   BOOST_REGEX_ICU_OPTS = "<define>BOOST_HAS_ICU=1" ;
+   BOOST_REGEX_ICU_OPTS = "<define>BOOST_HAS_ICU=1 <target-os>freebsd:<include>/usr/local/include" ;
 
    if $(ICU_PATH)
    {
