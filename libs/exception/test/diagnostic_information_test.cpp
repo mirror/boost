@@ -72,6 +72,9 @@ main()
         std::string di=boost::diagnostic_information(x);
         BOOST_TEST(di.find("type:")!=std::string::npos);
         BOOST_TEST(di.find("error2")!=std::string::npos);
+#ifndef BOOST_NO_RTTI
+        BOOST_TEST(di.find("test_tag")!=std::string::npos);
+#endif
         }
     catch(
     ... )
@@ -89,6 +92,9 @@ main()
         {
         std::string di=boost::diagnostic_information(x);
         BOOST_TEST(di.find("type:")!=std::string::npos);
+#ifndef BOOST_NO_RTTI
+        BOOST_TEST(di.find("error2")!=std::string::npos);
+#endif
         BOOST_TEST(di.find("test_tag")!=std::string::npos);
         }
     catch(
