@@ -418,7 +418,173 @@ When writing transforms, "fold" is such a basic operation that Proto provides a 
 [section:data Passing Auxiliary Data To Transforms]
 [/================================================]
 
-TODO
+In the last section, we saw that we can pass a second parameter to grammars with transforms: an accumulation variable or /state/ that gets updated as your transform executes. There are times when your transforms will need to access auxiliary data that does /not/ accumulate, so bundling it with the state parameter is impractical. Instead, you can pass auxiliary data as a third parameter, known as the /data/ parameter. Below we show an example involving string processing where the data parameter is essential.
+
+[note All Proto grammars are function objects that take one, two or three arguments: the expression, the state, and the data. There are no additional arguments to know about, we promise. In Haskell, there is set of a tree traversal technologies known collectively as "Scrap Your Boilerplate". In that framework, there are also three parameters: the tree, the accumulation, and the context. These are Proto's expression, state and data parameters under different names.]
+
+Expression templates are often used as an optimization to eliminate temporary objects. Condsier the problem of string concatenation: a series of concatenations would result in the needless creation of temporary strings. We can use Proto to make string concatenation very efficient. To make the problem more interesting, we can apply a locale-sensitive transformation to each character during the concatenation. The locale information will be passed as the data parameter.
+
+Consider the following expression template:
+
+    proto::lit("hello") + " " + "world";
+
+We would like to concatenate this string into a statically allocated wide buffer, widening each charater in turn using the current locale. The first step is to write a grammar that describes this expression, with transforms that calculate the total string length. Here it is:
+
+    // A grammar that matches string concatenation expressions, and
+    // a transform that calculates the total string length.
+    struct StringLength
+      : proto::or_<
+            proto::when<
+                // When you find a character array ...
+                proto::terminal<char[proto::N]>
+                // ... the length is the size of the array minus 1.
+              , mpl::prior<mpl::sizeof_<proto::_value> >()
+            >
+          , proto::when<
+                // The length of a concatenated string is ...
+                proto::plus<StringLength, StringLength>
+                // ... the sum of the lengths of each sub-string.
+              , proto::fold<
+                    _
+                  , mpl::size_t<0>()
+                  , mpl::plus<StringLength, proto::_state>()
+                >
+            >
+        >
+    {};
+
+Notice the use of _fold_pt_. It is a primitive transform that takes a sequence, a state, and function, just like `std::accumulate()`. The three template parameters are transforms. The first yields the sequence of expressions over which to fold, the second yields the initial state of the fold, and the third is the function to apply at each iteration. The use of `proto::_` as the first parameter might have you confused. In addition to being Proto's wildcard, `proto::_` is also a primitive transform that returns the current expression, which (if it is a non-terminal) is a sequence of its child expressions.
+
+Next, we need a function object that accepts a narrow string, a wide buffer, and a `std::ctype<>` facet for doing the locale-specific stuff. It's fairly straightforward.
+
+    // A function object that writes a narrow string
+    // into a wide buffer.
+    struct WidenCopy : proto::callable
+    {
+        typedef wchar_t *result_type;
+
+        wchar_t *
+        operator()(char const *str, wchar_t *buf, std::ctype<char> const &ct) const
+        {
+            for(; *str; ++str, ++buf)
+                *buf = ct.widen(*str);
+            return buf;
+        }
+    };
+
+Finally, we need some transforms that actually walk the concatenated string expression, widens the characters and writes them to a buffer. We will pass a `wchar_t*` as the state parameter and update it as we go. We'll also pass the `std::ctype<>` facet as the data parameter. It looks like this:
+
+    // Write concatenated strings into a buffer, widening
+    // them as we go.
+    struct StringCopy
+      : proto::or_<
+            proto::when<
+                proto::terminal<char[proto::N]>
+              , WidenCopy(proto::_value, proto::_state, proto::_data)
+            >
+          , proto::when<
+                proto::plus<StringCopy, StringCopy>
+              , StringCopy(
+                    proto::_right
+                  , StringCopy(proto::_left, proto::_state, proto::_data)
+                  , proto::_data
+                )
+            >
+        >
+    {};
+
+Let's look more closely at the transform associated with non-terminals:
+
+    StringCopy(
+        proto::_right
+      , StringCopy(proto::_left, proto::_state, proto::_data)
+      , proto::_data
+    )
+
+This bears a resemblance to the transform in the previous section that folded an expression tree into a list. First we recurse on the left child, writing its strings into the `wchar_t*` passed in as the state parameter. That returns the new value of the `wchar_t*`, which is passed as state while transforming the right child. Both invocations receive the same `std::ctype<>`, which is passed in as the data parameter.
+
+With these pieces in our pocket, we can implement our concatenate-and-widen function as follows:
+
+    template<typename Expr>
+    void widen( Expr const &expr )
+    {
+        // Make sure the expression conforms to our grammar
+        BOOST_MPL_ASSERT(( proto::matches<Expr, StringLength> ));
+
+        // Calculate the length of the string and allocate a buffer statically
+        static std::size_t const length =
+            boost::result_of<StringLength(Expr)>::type::value;
+        wchar_t buffer[ length + 1 ] = {L'\0'};
+
+        // Get the current ctype facet
+        std::locale loc;
+        std::ctype<char> const &ct(std::use_facet<std::ctype<char> >(loc));
+
+        // Concatenate and widen the string expression
+        StringCopy()(expr, &buffer[0], ct);
+
+        // Write out the buffer.
+        std::wcout << buffer << std::endl;
+    }
+
+    int main()
+    {
+        widen( proto::lit("hello") + " " + "world" );
+    }
+
+The above code displays:
+
+[pre
+hello world
+]
+
+This is a rather round-about way of demonstrating that you can pass extra data to a transform as a third parameter. There are no restrictions on what this parameter can be, and (unlike the state parameter) Proto will never mess with it.
+
+[heading Implicit Parameters to Primitive Transforms]
+
+Let's use the above example to illustrate some other niceties of Proto transforms. We've seen that grammars, when used as function objects, can accept up to 3 parameters, and that when using these grammars in callable transforms, you can also specify up to 3 parameters. Let's take another look at the transform associated with non-terminals above:
+
+    StringCopy(
+        proto::_right
+      , StringCopy(proto::_left, proto::_state, proto::_data)
+      , proto::_data
+    )
+
+Here we specify all three parameters to both invocations of the `StringCopy` grammar. But we don't have to specify all three. If we don't specify a third parameter, `proto::_data` is assumed. Likewise for the second parameter and `proto::_state`. So the above transform could have been writen more simply as:
+
+    StringCopy(
+        proto::_right
+      , StringCopy(proto::_left)
+    )
+
+The same is true for any primitive transform. The following are all equivalent:
+
+[table Implicit Parameters to Primitive Transforms
+  [[Equivalent Transforms]]
+  [[`proto::when<_, StringCopy>`]]
+  [[`proto::when<_, StringCopy(_)>`]]
+  [[`proto::when<_, StringCopy(_, proto::_state)>`]]
+  [[`proto::when<_, StringCopy(_, proto::_state, proto::_data)>`]]
+]
+
+[note *Grammars Are Primitive Transforms Are Function Objects*
+
+So far, we've said that all Proto grammars are function objects. But it's more accurate to say that Proto grammars are primitive transforms -- a special kind of function object that takes between 1 and 3 arguments, and that Proto knows to treat specially when used in a callable transform, as in the table above.]
+
+[note *Not All Function Objects Are Primitive Transforms*
+
+You might be tempted now to drop the `_state` and `_data` parameters to `WidenCopy(proto::_value, proto::_state, proto::_data)`. That would be an error. `WidenCopy` is just a plain function object, not a primimtive transform, so you must specify all its arguments. We'll see later how to write your own primitive transforms.]
+
+Once you know that primitive transforms will always receive all three parameters -- expression, state, and data -- it makes things possible that wouldn't be otherwise. For instance, consider that for binary expressions, these two transforms are equivalent. Can you see why?
+
+[table Two Equivalent Transforms
+  [[Without [^proto::fold<>]][With [^proto::fold<>]]]
+  [[``StringCopy(
+    proto::_right
+  , StringCopy(proto::_left)
+)``
+][``proto::fold<_, proto::_state, StringCopy>``]]
+]
 
 [endsect]
 
@@ -426,7 +592,28 @@ TODO
 [section:built_in Proto's Built-In Transforms]
 [/===========================================]
 
-TODO
+Primitive transforms are the building blocks for more interesting composite transforms. Proto defines a bunch of generally useful primitive transforms. The following table summarizes them.
+
+[table Built-In Primitive Transforms
+ [[Primitive Transform]     [Description]]
+ [[_value_pt_]              [Blah]]
+ [[_child_c_pt_]            [Blah]]
+ [[_child_pt_]              [Blah]]
+ [[_left_pt_]               [Blah]]
+ [[_right_pt_]              [Blah]]
+ [[_wild_pt_]               [Blah]]
+ [[_expr_pt_]               [Blah]]
+ [[_state_pt_]              [Blah]]
+ [[_data_pt_]               [Blah]]
+ [[_call_pt_]               [Blah]]
+ [[_make_pt_]               [Blah]]
+ [[_default_pt_]            [Blah]]
+ [[_fold_pt_]               [Blah]]
+ [[_reverse_fold_pt_]       [Blah]]
+ [[_fold_tree_pt_]          [Blah]]
+ [[_reverse_fold_tree_pt_]  [Blah]]
+ [[_lazy_pt_]               [Blah]]
+]
 
 [endsect]
 

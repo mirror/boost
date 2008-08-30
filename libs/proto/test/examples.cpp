@@ -26,8 +26,9 @@ namespace proto = boost::proto;
 namespace fusion = boost::fusion;
 using proto::_;
 
-struct placeholder1 {};
-struct placeholder2 {};
+template<int I>
+struct placeholder
+{};
 
 namespace test1
 {
@@ -38,10 +39,10 @@ namespace test1
     /*<< A Calculator expression is ... >>*/
     struct CalcArity
       : proto::or_<
-            /*<< placeholder1, or ... >>*/
-            proto::terminal< placeholder1 >
-          /*<< placeholder2, or ... >>*/
-          , proto::terminal< placeholder2 >
+            /*<< _1, or ... >>*/
+            proto::terminal< placeholder<0> >
+          /*<< _2, or ... >>*/
+          , proto::terminal< placeholder<1> >
           /*<< some other terminal, or ... >>*/
           , proto::terminal< _ >
           /*<< a unary expression where the operand is a calculator expression, or ... >>*/
@@ -130,14 +131,14 @@ struct binary_arity
 };
 //]
 
-proto::terminal< placeholder1 >::type const _1 = {{}};
-proto::terminal< placeholder2 >::type const _2 = {{}};
+proto::terminal< placeholder<0> >::type const _1 = {{}};
+proto::terminal< placeholder<1> >::type const _2 = {{}};
 
 //[ CalculatorArityGrammar
 struct CalculatorArity
   : proto::or_<
-        proto::when< proto::terminal< placeholder1 >,    mpl::int_<1>() >
-      , proto::when< proto::terminal< placeholder2 >,    mpl::int_<2>() >
+        proto::when< proto::terminal< placeholder<0> >,  mpl::int_<1>() >
+      , proto::when< proto::terminal< placeholder<1> >,  mpl::int_<2>() >
       , proto::when< proto::terminal<_>,                 mpl::int_<0>() >
       , proto::when< proto::unary_expr<_, _>,            unary_arity >
       , proto::when< proto::binary_expr<_, _, _>,        binary_arity >
@@ -148,10 +149,10 @@ struct CalculatorArity
 //[ CalcArity
 struct CalcArity
   : proto::or_<
-        proto::when< proto::terminal< placeholder1 >,
+        proto::when< proto::terminal< placeholder<0> >,
             mpl::int_<1>()
         >
-      , proto::when< proto::terminal< placeholder2 >,
+      , proto::when< proto::terminal< placeholder<1> >,
             mpl::int_<2>()
         >
       , proto::when< proto::terminal<_>,

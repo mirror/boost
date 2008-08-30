@@ -35,46 +35,120 @@
 
 [/  Links   ]
 
-[def _PETE_                 [@http://www.codesourcery.com/pooma/download.html PETE]]
-[def _spirit_fx_            [@http://spirit.sourceforge.net Spirit Parser Framework]]
-[def _spirit_               [@http://spirit.sourceforge.net Spirit]]
-[def _xpressive_            [@../../libs/xpressive/index.html Boost.Xpressive]]
-[def _typeof_               [@../../libs/typeof/index.html Boost.Typeof]]
-[def _expr_                 [classref  boost::proto::expr<Tag,Args,1> `expr<>`]]
-[def _deep_copy_            [funcref   boost::proto::deep_copy `deep_copy()`]]
-[def _extends_              [classref  boost::proto::extends `extends<>`]]
-[def _as_expr_              [funcref   boost::proto::as_expr `as_expr()`]]
-[def _as_child_             [funcref   boost::proto::as_child `as_child()`]]
-[def _make_expr_            [funcref   boost::proto::make_expr `make_expr()`]]
-[def _unpack_expr_          [funcref   boost::proto::unpack_expr `unpack_expr()`]]
-[def _matches_              [classref  boost::proto::result_of::matches `matches<>`]]
-[def _or_                   [classref  boost::proto::control::or_ `or_<>`]]
-[def _and_                  [classref  boost::proto::control::and_ `and_<>`]]
-[def _if_                   [classref  boost::proto::control::if_ `if_<>`]]
-[def _not_                  [classref  boost::proto::control::not_ `not_<>`]]
-[def _exact_                [classref  boost::proto::control::exact `exact<>`]]
-[def _convertible_to_       [classref  boost::proto::control::convertible_to `convertible_to<>`]]
-[def _is_expr_              [classref  boost::proto::result_of::is_expr `is_expr<>`]]
-[def _tag_of_               [classref  boost::proto::result_of::tag_of `tag_of<>`]]
-[def _child_                [funcref   boost::proto::child `child()`]]
-[def _child_c_              [funcref   boost::proto::child_c `child_c()`]]
-[def _eval_                 [funcref   boost::proto::eval `eval()`]]
-[def _left_                 [funcref   boost::proto::left `left()`]]
-[def _right_                [funcref   boost::proto::right `right()`]]
-[def _value_                [funcref   boost::proto::value `value()`]]
-[def _terminal_             [classref  boost::proto::op::terminal `terminal<>`]]
-[def _unary_expr_           [classref  boost::proto::op::unary_expr `unary_expr<>`]]
-[def _binary_expr_          [classref  boost::proto::op::binary_expr `binary_expr<>`]]
-[def _literal_              [classref  boost::proto::utility::literal `literal<>`]]
-[def _lit_                  [funcref   boost::proto::lit `lit()`]]
-[def _vararg_               [classref  boost::proto::control::vararg `vararg<>`]]
-[def _default_context_      [classref  boost::proto::context::default_context `default_context`]]
-[def _callable_context_     [classref  boost::proto::context::callable_context `callable_context<>`]]
-[def _null_context_         [classref  boost::proto::context::null_context `null_context<>`]]
-[def _when_                 [classref  boost::proto::when `when<>`]]
-[def _call_                 [classref  boost::proto::call `call<>`]]
-[def _make_                 [classref  boost::proto::make `make<>`]]
-[def _flatten_              [funcref   boost::proto::flatten `flatten()`]]
+[def _PETE_                 
+  [@http://www.codesourcery.com/pooma/download.html PETE]]
+[def _spirit_fx_            
+  [@http://spirit.sourceforge.net Spirit Parser Framework]]
+[def _spirit_               
+  [@http://spirit.sourceforge.net Spirit]]
+[def _xpressive_            
+  [@../../libs/xpressive/index.html Boost.Xpressive]]
+[def _typeof_               
+  [@../../libs/typeof/index.html Boost.Typeof]]
+[def _expr_                 
+  [classref  boost::proto::expr<Tag,Args,1> `proto::expr<>`]]
+[def _deep_copy_            
+  [funcref   boost::proto::deep_copy `proto::deep_copy()`]]
+[def _extends_              
+  [classref  boost::proto::extends `proto::extends<>`]]
+[def _as_expr_              
+  [funcref   boost::proto::as_expr `proto::as_expr()`]]
+[def _as_child_             
+  [funcref   boost::proto::as_child `proto::as_child()`]]
+[def _make_expr_            
+  [funcref   boost::proto::make_expr `proto::make_expr()`]]
+[def _unpack_expr_          
+  [funcref   boost::proto::unpack_expr `proto::unpack_expr()`]]
+[def _matches_              
+  [classref  boost::proto::result_of::matches `proto::matches<>`]]
+[def _or_                   
+  [classref  boost::proto::control::or_ `proto::or_<>`]]
+[def _and_                  
+  [classref  boost::proto::control::and_ `proto::and_<>`]]
+[def _if_                   
+  [classref  boost::proto::control::if_ `proto::if_<>`]]
+[def _not_                  
+  [classref  boost::proto::control::not_ `proto::not_<>`]]
+[def _exact_                
+  [classref  boost::proto::control::exact `proto::exact<>`]]
+[def _convertible_to_       
+  [classref  boost::proto::control::convertible_to `proto::convertible_to<>`]]
+[def _is_expr_              
+  [classref  boost::proto::result_of::is_expr `proto::is_expr<>`]]
+[def _tag_of_               
+  [classref  boost::proto::result_of::tag_of `proto::tag_of<>`]]
+[def _child_                
+  [funcref   boost::proto::child `proto::child()`]]
+[def _child_c_              
+  [funcref   boost::proto::child_c `proto::child_c()`]]
+[def _eval_                 
+  [funcref   boost::proto::eval `proto::eval()`]]
+[def _left_                 
+  [funcref   boost::proto::left `proto::left()`]]
+[def _right_                
+  [funcref   boost::proto::right `proto::right()`]]
+[def _value_                
+  [funcref   boost::proto::value `proto::value()`]]
+[def _terminal_             
+  [classref  boost::proto::op::terminal `proto::terminal<>`]]
+[def _unary_expr_           
+  [classref  boost::proto::op::unary_expr `proto::unary_expr<>`]]
+[def _binary_expr_          
+  [classref  boost::proto::op::binary_expr `proto::binary_expr<>`]]
+[def _literal_              
+  [classref  boost::proto::utility::literal `proto::literal<>`]]
+[def _lit_                  
+  [funcref   boost::proto::lit `proto::lit()`]]
+[def _vararg_               
+  [classref  boost::proto::control::vararg `proto::vararg<>`]]
+[def _default_context_      
+  [classref  boost::proto::context::default_context `proto::default_context`]]
+[def _callable_context_     
+  [classref  boost::proto::context::callable_context `proto::callable_context<>`]]
+[def _null_context_         
+  [classref  boost::proto::context::null_context `proto::null_context<>`]]
+[def _when_                 
+  [classref  boost::proto::when `proto::when<>`]]
+[def _call_                 
+  [classref  boost::proto::call `proto::call<>`]]
+[def _make_                 
+  [classref  boost::proto::make `proto::make<>`]]
+[def _flatten_              
+  [funcref   boost::proto::flatten `proto::flatten()`]]
+[def _value_pt_ 
+  [classref boost::proto::_value [^proto::_value]]]
+[def _child_c_pt_ 
+  [classref boost::proto::_child_c [^proto::_child_c<>]]]
+[def _child_pt_ 
+  [classref boost::proto::_child [^proto::_child]]]
+[def _left_pt_
+  [classref boost::proto::_left [^proto::_left]]]
+[def _right_pt_
+  [classref boost::proto::_right [^proto::_right]]]
+[def _wild_pt_ 
+  [classref boost::proto::_ [^proto::_]]]
+[def _expr_pt_ 
+  [classref boost::proto::_expr [^proto::_expr]]]
+[def _state_pt_ 
+  [classref boost::proto::_state [^proto::_state]]]
+[def _data_pt_ 
+  [classref boost::proto::_data [^proto::_data]]]
+[def _call_pt_ 
+  [classref boost::proto::call [^proto::call<>]]]
+[def _make_pt_ 
+  [classref boost::proto::make [^proto::make<>]]]
+[def _default_pt_ 
+  [classref boost::proto::_default [^proto::_default<>]]]
+[def _fold_pt_ 
+  [classref boost::proto::fold [^proto::fold<>]]]
+[def _fold_tree_pt_ 
+  [classref boost::proto::fold_tree [^proto::fold_tree<>]]]
+[def _reverse_fold_pt_ 
+  [classref boost::proto::reverse_fold [^proto::reverse_fold<>]]]
+[def _reverse_fold_tree_pt_ 
+  [classref boost::proto::reverse_fold_tree [^proto::reverse_fold_tree<>]]]
+[def _lazy_pt_ 
+  [classref boost::proto::lazy [^proto::lazy<>]]]
 
 [include preface.qbk]
 
