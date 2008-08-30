@@ -7,9 +7,10 @@
 #define UUID_8D22C4CA9CC811DCAA9133D256D89593
 
 #include <boost/exception/exception.hpp>
-#include <boost/exception/detail/error_info_base.hpp>
 #include <boost/exception/error_info.hpp>
 #include <boost/exception/to_string_stub.hpp>
+#include <boost/exception/detail/error_info_base.hpp>
+#include <boost/exception/detail/type_info.hpp>
 #include <boost/shared_ptr.hpp>
 #include <map>
 
@@ -50,7 +51,7 @@ boost
         char const *
         tag_typeid_name() const
             {
-            return exception_detail::type_name<Tag>();
+            return type_name<Tag>();
             }
 
         std::string
@@ -84,19 +85,19 @@ boost
             set( shared_ptr<error_info_base const> const & x, type_info_ const & typeid_ )
                 {
                 BOOST_ASSERT(x);
-                info_[type_info_wrapper(typeid_)] = x;
-                what_.clear();
+                info_[typeid_] = x;
+                diagnostic_info_str_.clear();
                 }
 
             shared_ptr<error_info_base const>
             get( type_info_ const & ti ) const
                 {
-                error_info_map::const_iterator i=info_.find(type_info_wrapper(ti));
+                error_info_map::const_iterator i=info_.find(ti);
                 if( info_.end()!=i )
                     {
                     shared_ptr<error_info_base const> const & p = i->second;
 #ifndef BOOST_NO_RTTI
-                    BOOST_ASSERT( typeid(*p)==ti );
+                    BOOST_ASSERT( BOOST_EXCEPTION_DYNAMIC_TYPEID(*p)==ti );
 #endif
                     return p;
                     }
@@ -104,20 +105,11 @@ boost
                 }
 
             char const *
-            diagnostic_information( char const * std_what, char const * exception_type_name ) const
+            diagnostic_information() const
                 {
-                BOOST_ASSERT(exception_type_name!=0 && *exception_type_name );
-                if( what_.empty() )
+                if( diagnostic_info_str_.empty() )
                     {
                     std::string tmp;
-                    if( std_what )
-                        {
-                        tmp += std_what;
-                        tmp += '\n';
-                        }
-                    tmp += "Dynamic exception type: ";
-                    tmp += exception_type_name;
-                    tmp += '\n';
                     for( error_info_map::const_iterator i=info_.begin(),end=info_.end(); i!=end; ++i )
                         {
                         shared_ptr<error_info_base const> const & x = i->second;
@@ -127,18 +119,18 @@ boost
                         tmp += x->value_as_string();
                         tmp += '\n';
                         }
-                    what_.swap(tmp);
+                    diagnostic_info_str_.swap(tmp);
                     }
-                return what_.c_str();
+                return diagnostic_info_str_.c_str();
                 }
 
             private:
 
             friend class exception;
 
-            typedef std::map< type_info_wrapper, shared_ptr<error_info_base const> > error_info_map;
+            typedef std::map< type_info_, shared_ptr<error_info_base const> > error_info_map;
             error_info_map info_;
-            mutable std::string what_;
+            mutable std::string diagnostic_info_str_;
             mutable int count_;
 
             void

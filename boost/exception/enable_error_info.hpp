@@ -32,12 +32,6 @@ boost
             ~error_info_injector() throw()
                 {
                 }
-
-            char const *
-            diagnostic_information() const throw()
-                {
-                return boost::exception::_diagnostic_information(T::what());
-                }
             };
 
         struct large_size { char c[256]; };

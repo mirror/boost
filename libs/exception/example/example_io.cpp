@@ -41,7 +41,7 @@ error: //Base for all exception objects we throw.
     char const *
     what() const throw()
         {
-        return boost::exception::diagnostic_information();
+        return "example_io error";
         }
 
     protected:
@@ -170,7 +170,7 @@ dump_all_info( boost::exception const & x )
     dump_file_info(x);
     dump_clib_info(x);
     std::cout << "\nOutput from diagnostic_information():\n";
-    std::cout << x.diagnostic_information();
+    std::cout << diagnostic_information(x);
     }
 
 int

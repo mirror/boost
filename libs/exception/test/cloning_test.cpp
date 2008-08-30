@@ -351,8 +351,10 @@ main()
     test_std_exception_what<std::out_of_range>();
     test_std_exception_what<std::logic_error>();
     test_std_exception<std::bad_alloc>();
+#ifndef BOOST_NO_TYPEID
     test_std_exception<std::bad_cast>();
     test_std_exception<std::bad_typeid>();
+#endif
     test_std_exception<std::bad_exception>();
 
     try

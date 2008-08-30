@@ -12,10 +12,10 @@
 namespace
 boost
     {
-    template <class ErrorInfoTag>
+    template <class T>
     inline
     char const *
-    error_info_value()
+    type_name()
         {
         return BOOST_CURRENT_FUNCTION;
         }
@@ -23,40 +23,99 @@ boost
     namespace
     exception_detail
         {
-        typedef detail::sp_typeinfo type_info_;
-
 #ifdef BOOST_NO_TYPEID
-        typedef type_info_ type_info_wrapper;
-#else
         struct
-        type_info_wrapper
+        type_info_
             {
-            type_info_ const * type;
+            detail::sp_typeinfo type_;
+            char const * name_;
 
             explicit
-            type_info_wrapper( type_info_ const & t ):
-                type(&t)
+            type_info_( detail::sp_typeinfo type, char const * name ):
+                type_(type),
+                name_(name)
                 {
                 }
 
+            friend
             bool
-            operator<( type_info_wrapper const & b ) const
+            operator==( type_info_ const & a, type_info_ const & b )
                 {
-                return 0!=(type->before(*b.type));
+                return a.type_==b.type_;
+                }
+
+            friend
+            bool
+            operator!=( type_info_ const & a, type_info_ const & b )
+                {
+                return !(a==b);
+                }
+
+            friend
+            bool
+            operator<( type_info_ const & a, type_info_ const & b )
+                {
+                return a.type_<b.type_;
+                }
+
+            char const *
+            name() const
+                {
+                return name_;
+                }
+            };
+#else
+        struct
+        type_info_
+            {
+            detail::sp_typeinfo const * type_;
+
+            explicit
+            type_info_( detail::sp_typeinfo const & type ):
+                type_(&type)
+                {
+                }
+
+            type_info_( detail::sp_typeinfo const & type, char const * ):
+                type_(&type)
+                {
+                }
+
+            friend
+            bool
+            operator==( type_info_ const & a, type_info_ const & b )
+                {
+                return (*a.type_)==(*b.type_);
+                }
+
+            friend
+            bool
+            operator!=( type_info_ const & a, type_info_ const & b )
+                {
+                return !(a==b);
+                }
+
+            friend
+            bool
+            operator<( type_info_ const & a, type_info_ const & b )
+                {
+                return 0!=(a.type_->before(*b.type_));
+                }
+
+            char const *
+            name() const
+                {
+                return type_->name();
                 }
             };
 #endif
-
-        template <class ErrorInfoTag>
-        inline
-        char const *
-        type_name()
-            {
-            return error_info_value<ErrorInfoTag>();
-            }
         }
     }
 
-#define BOOST_EXCEPTION_STATIC_TYPEID(T) BOOST_SP_TYPEID(T)
+#define BOOST_EXCEPTION_STATIC_TYPEID(T) ::boost::exception_detail::type_info_(BOOST_SP_TYPEID(T),::boost::type_name<T>())
+
+#ifndef BOOST_NO_RTTI
+#define BOOST_EXCEPTION_DYNAMIC_TYPEID(x) ::boost::exception_detail::type_info_(typeid(x))
+#endif
 
 #endif

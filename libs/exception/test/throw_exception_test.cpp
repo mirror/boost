@@ -47,9 +47,26 @@ tester()
         catch(
         T & y )
             {
-            BOOST_TEST(boost::get_error_info<test_data>(y));
-            if( boost::shared_ptr<int const> d=boost::get_error_info<test_data>(y) )
-                BOOST_TEST(*d==42);
+#ifdef BOOST_NO_RTTI
+            try
+                {
+                throw;
+                }
+            catch(
+            boost::exception & y )
+                {
+#endif
+                BOOST_TEST(boost::get_error_info<test_data>(y));
+                if( boost::shared_ptr<int const> d=boost::get_error_info<test_data>(y) )
+                    BOOST_TEST(*d==42);
+#ifdef BOOST_NO_RTTI
+                }
+            catch(
+            ... )
+                {
+                BOOST_TEST(false);
+                }
+#endif
             BOOST_TEST(y.x_==42);
             }
         catch(

@@ -6,8 +6,8 @@
 #ifndef UUID_FA5836A2CADA11DC8CD47C8555D89593
 #define UUID_FA5836A2CADA11DC8CD47C8555D89593
 
-#include <boost/exception/detail/get_boost_exception.hpp>
 #include <boost/exception/enable_current_exception.hpp>
+#include <boost/exception/detail/type_info.hpp>
 #include <boost/detail/atomic_count.hpp>
 #include <stdexcept>
 #include <new>
@@ -257,6 +257,34 @@ boost
                 }
             };
 
+#ifdef BOOST_NO_RTTI
+        template <class T>
+        exception const *
+        get_boost_exception( T const * )
+            {
+            try
+                {
+                throw;
+                }
+            catch(
+            exception & x )
+                {
+                return &x;
+                }
+            catch(...)
+                {
+                return 0;
+                }
+            }
+#else
+        template <class T>
+        exception const *
+        get_boost_exception( T const * x )
+            {
+            return dynamic_cast<exception const *>(x);
+            }
+#endif
+
         template <class T>
         inline
         exception_ptr
@@ -340,6 +368,7 @@ boost
                 {
                 return exception_detail::current_exception_std_exception(e);
                 }
+#ifndef BOOST_NO_TYPEID
             catch(
             std::bad_cast & e )
                 {
@@ -350,6 +379,7 @@ boost
                 {
                 return exception_detail::current_exception_std_exception(e);
                 }
+#endif
             catch(
             std::bad_exception & e )
                 {

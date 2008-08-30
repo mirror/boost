@@ -6,9 +6,10 @@
 #ifndef UUID_1A590226753311DD9E4CCF6156D89593
 #define UUID_1A590226753311DD9E4CCF6156D89593
 
-#include <boost/shared_ptr.hpp>
-#include <boost/exception/detail/get_boost_exception.hpp>
+#include <boost/exception/exception.hpp>
 #include <boost/exception/detail/error_info_base.hpp>
+#include <boost/exception/detail/type_info.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace
 boost
@@ -34,16 +35,26 @@ boost
             }
         }
 
+#ifdef BOOST_NO_RTTI
+    template <class ErrorInfo>
+    inline
+    shared_ptr<typename ErrorInfo::value_type const>
+    get_error_info( boost::exception const & x )
+        {
+        return exception_detail::get_data<ErrorInfo>(x);
+        }
+#else
     template <class ErrorInfo,class E>
     inline
     shared_ptr<typename ErrorInfo::value_type const>
     get_error_info( E const & some_exception )
         {
-        if( exception const * x = exception_detail::get_boost_exception(&some_exception) )
+        if( exception const * x = dynamic_cast<exception const *>(&some_exception) )
             return exception_detail::get_data<ErrorInfo>(*x);
         else
             return shared_ptr<typename ErrorInfo::value_type const>();
         }
+#endif
     }
 
 #endif
