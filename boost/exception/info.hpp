@@ -126,7 +126,7 @@ boost
 
             private:
 
-            friend class exception;
+			friend class boost::exception;
 
             typedef std::map< type_info_, shared_ptr<error_info_base const> > error_info_map;
             error_info_map info_;
