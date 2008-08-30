@@ -22,8 +22,16 @@ data structures in many respects, and is interoperable with Fusion's iterators a
 algorithms.
 
 The syntax for the grammar-matching features of `proto::matches<>` is inspired by 
-MPL's lambda expressions, and by Aleksey Gurtovoy's
+MPL's lambda expressions.
+
+The idea for using function types for Proto's composite transforms is inspired by Aleksey Gurtovoy's
 [@http://lists.boost.org/Archives/boost/2002/11/39718.php "round" lambda] notation.
+
+[/=================]
+[heading References]
+[/=================]
+
+[:[#boost_proto.users_guide.resources.SYB]Ren, D. and Erwig, M. 2006. A generic recursion toolbox for Haskell or: scrap your boilerplate systematically. In ['Proceedings of the 2006 ACM SIGPLAN Workshop on Haskell] (Portland, Oregon, USA, September 17 - 17, 2006). Haskell '06. ACM, New York, NY, 13-24. DOI=[@http://doi.acm.org/10.1145/1159842.1159845]]
 
 [/======================]
 [heading Further Reading]

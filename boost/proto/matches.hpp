@@ -484,8 +484,8 @@
             {};
         }
 
-        namespace wildcardns_
-        {
+        BOOST_PROTO_BEGIN_ADL_NAMESPACE(wildcardns_)
+
             /// \brief A wildcard grammar element that matches any expression,
             /// and a transform that returns the current expression unchanged.
             ///
@@ -548,7 +548,8 @@
                     }
                 };
             };
-        }
+
+        BOOST_PROTO_END_ADL_NAMESPACE(wildcardns_)
 
         namespace control
         {

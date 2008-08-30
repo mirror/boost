@@ -91,10 +91,16 @@
   [funcref   boost::proto::value `proto::value()`]]
 [def _terminal_             
   [classref  boost::proto::op::terminal `proto::terminal<>`]]
+[def _unary_plus_
+  [classref  boost::proto::op::unary_plus `proto::unary_plus<>`]]
+[def _plus_
+  [classref  boost::proto::op::plus `proto::plus<>`]]
 [def _unary_expr_           
   [classref  boost::proto::op::unary_expr `proto::unary_expr<>`]]
 [def _binary_expr_          
   [classref  boost::proto::op::binary_expr `proto::binary_expr<>`]]
+[def _nary_expr_          
+  [classref  boost::proto::op::nary_expr `proto::nary_expr<>`]]
 [def _literal_              
   [classref  boost::proto::utility::literal `proto::literal<>`]]
 [def _lit_                  
@@ -149,6 +155,8 @@
   [classref boost::proto::reverse_fold_tree [^proto::reverse_fold_tree<>]]]
 [def _lazy_pt_ 
   [classref boost::proto::lazy [^proto::lazy<>]]]
+[def _SYB_ 
+  [link boost_proto.users_guide.resources.SYB ["Scrap Your Boilerplate]]]
 
 [include preface.qbk]
 

@@ -247,7 +247,7 @@ The transform for binary expressions has a few new tricks. Let's look more close
 
 This is an object transform; it default-constructs ... what exactly? The `mpl::max<>` template is an MPL metafunction that accepts two compile-time integers. It has a nested `::type` typedef (not shown) that is the maximum of the two. But here, we appear to be passing it two things that are /not/ compile-time integers; they're Proto callable transforms. Proto is smart enough to recognize that fact. It first evaluates the two nested callable transforms, computing the arities of the left and right child expressions. Then it puts the resulting integers into `mpl::max<>` and evaluates the metafunction by asking for the nested `::type`. That is the type of the object that gets default-constructed and returned.
 
-More generally, when evaluating object transforms, Proto looks as the object type and checks whether it is a template specialization, like `mpl::max<>`. If it is, Proto looks for nested transforms that it can evaluate. After any nested transforms have been evaluated and substituted back into the template, the new template specialization is the result type, unless that type has a nested `::type`, in which case that becomes the result.
+More generally, when evaluating object transforms, Proto looks at the object type and checks whether it is a template specialization, like `mpl::max<>`. If it is, Proto looks for nested transforms that it can evaluate. After any nested transforms have been evaluated and substituted back into the template, the new template specialization is the result type, unless that type has a nested `::type`, in which case that becomes the result.
 
 Now that we can calculate the arity of a calculator expression, let's redefine the `calculator<>` expression wrapper we wrote in the Getting Started guide to use the `CalcArity` grammar and some macros from Boost.MPL to issue compile-time errors when users specify too many or too few arguments.
 
@@ -420,7 +420,7 @@ When writing transforms, "fold" is such a basic operation that Proto provides a 
 
 In the last section, we saw that we can pass a second parameter to grammars with transforms: an accumulation variable or /state/ that gets updated as your transform executes. There are times when your transforms will need to access auxiliary data that does /not/ accumulate, so bundling it with the state parameter is impractical. Instead, you can pass auxiliary data as a third parameter, known as the /data/ parameter. Below we show an example involving string processing where the data parameter is essential.
 
-[note All Proto grammars are function objects that take one, two or three arguments: the expression, the state, and the data. There are no additional arguments to know about, we promise. In Haskell, there is set of a tree traversal technologies known collectively as "Scrap Your Boilerplate". In that framework, there are also three parameters: the tree, the accumulation, and the context. These are Proto's expression, state and data parameters under different names.]
+[note All Proto grammars are function objects that take one, two or three arguments: the expression, the state, and the data. There are no additional arguments to know about, we promise. In Haskell, there is set of a tree traversal technologies known collectively as _SYB_. In that framework, there are also three parameters: the term, the accumulator, and the context. These are Proto's expression, state and data parameters under different names.]
 
 Expression templates are often used as an optimization to eliminate temporary objects. Condsier the problem of string concatenation: a series of concatenations would result in the needless creation of temporary strings. We can use Proto to make string concatenation very efficient. To make the problem more interesting, we can apply a locale-sensitive transformation to each character during the concatenation. The locale information will be passed as the data parameter.
 
@@ -428,7 +428,7 @@ Consider the following expression template:
 
     proto::lit("hello") + " " + "world";
 
-We would like to concatenate this string into a statically allocated wide buffer, widening each charater in turn using the current locale. The first step is to write a grammar that describes this expression, with transforms that calculate the total string length. Here it is:
+We would like to concatenate this string into a statically allocated wide character buffer, widening each charater in turn using the specified locale. The first step is to write a grammar that describes this expression, with transforms that calculate the total string length. Here it is:
 
     // A grammar that matches string concatenation expressions, and
     // a transform that calculates the total string length.
@@ -455,7 +455,7 @@ We would like to concatenate this string into a statically allocated wide buffer
 
 Notice the use of _fold_pt_. It is a primitive transform that takes a sequence, a state, and function, just like `std::accumulate()`. The three template parameters are transforms. The first yields the sequence of expressions over which to fold, the second yields the initial state of the fold, and the third is the function to apply at each iteration. The use of `proto::_` as the first parameter might have you confused. In addition to being Proto's wildcard, `proto::_` is also a primitive transform that returns the current expression, which (if it is a non-terminal) is a sequence of its child expressions.
 
-Next, we need a function object that accepts a narrow string, a wide buffer, and a `std::ctype<>` facet for doing the locale-specific stuff. It's fairly straightforward.
+Next, we need a function object that accepts a narrow string, a wide character buffer, and a `std::ctype<>` facet for doing the locale-specific stuff. It's fairly straightforward.
 
     // A function object that writes a narrow string
     // into a wide buffer.
@@ -573,7 +573,7 @@ So far, we've said that all Proto grammars are function objects. But it's more a
 
 [note *Not All Function Objects Are Primitive Transforms*
 
-You might be tempted now to drop the `_state` and `_data` parameters to `WidenCopy(proto::_value, proto::_state, proto::_data)`. That would be an error. `WidenCopy` is just a plain function object, not a primimtive transform, so you must specify all its arguments. We'll see later how to write your own primitive transforms.]
+You might be tempted now to drop the `_state` and `_data` parameters to `WidenCopy(proto::_value, proto::_state, proto::_data)`. That would be an error. `WidenCopy` is just a plain function object, not a primitive transform, so you must specify all its arguments. We'll see later how to write your own primitive transforms.]
 
 Once you know that primitive transforms will always receive all three parameters -- expression, state, and data -- it makes things possible that wouldn't be otherwise. For instance, consider that for binary expressions, these two transforms are equivalent. Can you see why?
 
@@ -592,27 +592,250 @@ Once you know that primitive transforms will always receive all three parameters
 [section:built_in Proto's Built-In Transforms]
 [/===========================================]
 
-Primitive transforms are the building blocks for more interesting composite transforms. Proto defines a bunch of generally useful primitive transforms. The following table summarizes them.
+[def _N_ [~N]]
+[def _G_ [~G]]
+[def _G0_ [~G0]]
+[def _G1_ [~G1]]
+[def _CT_ [~CT]]
+[def _OT_ [~OT]]
+[def _ET_ [~ET]]
+[def _ST_ [~ST]]
+[def _FT_ [~FT]]
 
-[table Built-In Primitive Transforms
- [[Primitive Transform]     [Description]]
- [[_value_pt_]              [Blah]]
- [[_child_c_pt_]            [Blah]]
- [[_child_pt_]              [Blah]]
- [[_left_pt_]               [Blah]]
- [[_right_pt_]              [Blah]]
- [[_wild_pt_]               [Blah]]
- [[_expr_pt_]               [Blah]]
- [[_state_pt_]              [Blah]]
- [[_data_pt_]               [Blah]]
- [[_call_pt_]               [Blah]]
- [[_make_pt_]               [Blah]]
- [[_default_pt_]            [Blah]]
- [[_fold_pt_]               [Blah]]
- [[_reverse_fold_pt_]       [Blah]]
- [[_fold_tree_pt_]          [Blah]]
- [[_reverse_fold_tree_pt_]  [Blah]]
- [[_lazy_pt_]               [Blah]]
+Primitive transforms are the building blocks for more interesting composite transforms. Proto defines a bunch of generally useful primitive transforms. They are summarized below.
+
+[variablelist
+ [[_value_pt_]
+      [Given a terminal expression, return the value of the terminal.]]
+ [[_child_c_pt_]
+      [Given a non-terminal expression, `proto::_child_c<_N_>` returns the _N_-th 
+       child.]]
+ [[_child_pt_]
+      [A synonym for `proto::_child_c<0>`.]]
+ [[_left_pt_]
+      [A synonym for `proto::_child_c<0>`.]]
+ [[_right_pt_]
+      [A synonym for `proto::_child_c<1>`.]]
+ [[_expr_pt_]
+      [Returns the current expression unmodified.]]
+ [[_state_pt_]
+      [Returns the current state unmodified.]]
+ [[_data_pt_]
+      [Returns the current data unmodified.]]
+ [[_call_pt_]
+      [For a given callable transform `_CT_`, `proto::call<_CT_>` turns the 
+       callable transform into a primitive transform. This is useful for 
+       disambiguating callable transforms from object transforms, and also for 
+       working around compiler bugs with nested function types.]]
+ [[_make_pt_]
+      [For a given object transform `_OT_`, `proto::make<_OT_>` turns the 
+       object transform into a primitive transform. This is useful for 
+       disambiguating object transforms from callable transforms, and also for 
+       working around compiler bugs with nested function types.]]
+ [[_default_pt_]
+      [Given a grammar _G_, `proto::_default<G>` evaluates the current node 
+       according to the standard C++ meaning of the operation the node represents.
+       For instance, if the current node is a binary plus node, the two children 
+       will both be evaluated according to `_G_` and the results will be added and
+       returned. The return type is deduced with the help of the Boost.Typeof 
+       library.]]
+ [[_fold_pt_]
+      [Given three transforms `_ET_`, `_ST_`, and `_FT_`, 
+       `proto::fold<_ET_, _ST_, _FT_>` first evaluates `_ET_` to obtain a Fusion 
+       sequence and `_ST_` to obtain an initial state for the fold, and then 
+       evaluates `_FT_` for each element in the sequnce to generate the next 
+       state from the previous.]]
+ [[_reverse_fold_pt_]
+      [Like _fold_pt_, except the elements in the Fusion sequence are iterated in 
+       reverse order.]]
+ [[_fold_tree_pt_]
+      [Like `proto::fold<_ET_, _ST_, _FT_>`, except that the result of the `_ET_` 
+       transform is treated as an expression tree that is /flattened/ to generate 
+       the sequence to be folded. Flattening an expression tree causes child nodes 
+       with the same tag type as the parent to be put into sequence. For instance, 
+       `a >> b >> c` would be flattened to the sequence \[`a`, `b`, `c`\], and this 
+       is the sequence that would be folded.]]
+ [[_reverse_fold_tree_pt_]
+      [Like _fold_tree_pt_, except that the flattened sequence is iterated in 
+       reverse order.]]
+ [[_lazy_pt_]
+      [A combination of _make_pt_ and _call_pt_ that is useful when the nature of 
+       the transform depends on the expression, state and/or data parameters. 
+       `proto::lazy<R(A0,A1...An)>` first evaluates `proto::make<R()>` to compute a 
+       callable type `R2`. Then, it evaluates `proto::call<R2(A0,A1...An)>`.]]
+]
+
+[/============================================]
+[heading All Grammars Are Primitive Transforms]
+[/============================================]
+
+In addition to the above primitive transforms, all of Proto's grammar elements are also primitive transforms. Their behaviors are described below.
+
+[variablelist
+ [[_wild_pt_]
+      [Returns the current expression unmodified.]]
+ [[_or_]
+      [For the specified set of alternate sub-grammars, find the one that matches 
+       the given expression and apply its associated transform.]]
+ [[_and_]
+      [For the given set of sub-grammars, take the /last/ sub-grammar and apply its 
+       associated transform.]]
+ [[_not_]
+      [Returns the current expression unmodified.]]
+ [[_if_]
+      [Given three transforms, evaluate the first and treat the result as a 
+       compile-time Boolean value. If it is true, evaluate the second transform. 
+       Otherwise, evaluate the third.]]
+ [[_terminal_]
+      [Returns the current terminal expression unmodified.]]
+ [[_plus_, _nary_expr_, et. al.]
+      [A Proto grammar that matches a non-terminal such as
+       `proto::plus<_G0_, _G1_>`, when used as a primitive transform, creates a new 
+       plus node where the left child is transformed according to `_G0_` and the 
+       right child with `_G1_`.]]
+]
+
+[/=================================]
+[heading The Pass-Through Transform]
+[/=================================]
+
+Note the primitive transform associated with grammar elements such as _plus_ described above. They possess a so-called /pass-through/ transform. The pass-through transform accepts an expression of a certain tag type (say, `proto::tag::plus`) and creates a new expression of the same tag type, where each child expression is transformed according to the corresponding child grammar of the pass-through transform. So for instance this grammar ...
+
+    proto::function< X, proto::vararg<Y> >
+
+... matches function expressions where the first child matches the `X` grammar and the rest match the `Y` grammar. When used as a transform, the above grammar will create a new function expression where the first child is transformed according to `X` and the rest are transformed according to `Y`.
+
+The following class templates in Proto can be used as grammars with pass-through transforms:
+
+[table Class Templates With Pass-Through Transforms
+    [[Templates with Pass-Through Transforms]]
+    [[`proto::unary_plus<>`]]
+    [[`proto::negate<>`]]
+    [[`proto::dereference<>`]]
+    [[`proto::complement<>`]]
+    [[`proto::address_of<>`]]
+    [[`proto::logical_not<>`]]
+    [[`proto::pre_inc<>`]]
+    [[`proto::pre_dec<>`]]
+    [[`proto::post_inc<>`]]
+    [[`proto::post_dec<>`]]
+    [[`proto::shift_left<>`]]
+    [[`proto::shift_right<>`]]
+    [[`proto::multiplies<>`]]
+    [[`proto::divides<>`]]
+    [[`proto::modulus<>`]]
+    [[`proto::plus<>`]]
+    [[`proto::minus<>`]]
+    [[`proto::less<>`]]
+    [[`proto::greater<>`]]
+    [[`proto::less_equal<>`]]
+    [[`proto::greater_equal<>`]]
+    [[`proto::equal_to<>`]]
+    [[`proto::not_equal_to<>`]]
+    [[`proto::logical_or<>`]]
+    [[`proto::logical_and<>`]]
+    [[`proto::bitwise_and<>`]]
+    [[`proto::bitwise_or<>`]]
+    [[`proto::bitwise_xor<>`]]
+    [[`proto::comma<>`]]
+    [[`proto::mem_ptr<>`]]
+    [[`proto::assign<>`]]
+    [[`proto::shift_left_assign<>`]]
+    [[`proto::shift_right_assign<>`]]
+    [[`proto::multiplies_assign<>`]]
+    [[`proto::divides_assign<>`]]
+    [[`proto::modulus_assign<>`]]
+    [[`proto::plus_assign<>`]]
+    [[`proto::minus_assign<>`]]
+    [[`proto::bitwise_and_assign<>`]]
+    [[`proto::bitwise_or_assign<>`]]
+    [[`proto::bitwise_xor_assign<>`]]
+    [[`proto::subscript<>`]]
+    [[`proto::if_else_<>`]]
+    [[`proto::function<>`]]
+    [[`proto::unary_expr<>`]]
+    [[`proto::binary_expr<>`]]
+    [[`proto::nary_expr<>`]]
+]
+
+[/=====================================================]
+[heading The Many Roles of Proto Operator Metafunctions]
+[/=====================================================]
+
+We've seen templates such as _terminal_, _plus_ and _nary_expr_ fill many roles. They are metafunction that generate expression types. They are grammars that match expression types. And they are primitive transforms. The following code samples show examples of each.
+
+[*As Metafunctions ...]
+
+    // proto::terminal<> and proto::plus<> are metafunctions
+    // that generate expression types:
+    typedef proto::terminal<int>::type int_;
+    typedef proto::plus<int_, int_>::type plus_;
+
+    int_ i = {42}, j = {24};
+    plus_ p = {i, j};
+
+[*As Grammars ...]
+
+    // proto::terminal<> and proto::plus<> are grammars that
+    // match expression types
+    struct Int : proto::terminal<int> {};
+    struct Plus : proto::plus<Int, Int> {};
+
+    BOOST_MPL_ASSERT(( proto::matches< int_, Int > ));
+    BOOST_MPL_ASSERT(( proto::matches< plus_, Plus > ));
+
+[*As Primitive Transforms ...]
+
+    // A transform that removes all unary_plus nodes in an expression
+    struct RemoveUnaryPlus
+      : proto::or_<
+            proto::when<
+                proto::unary_plus<RemoveUnaryPlus>
+              , RemoveUnaryPlus(proto::_child)
+            >
+            // Use proto::terminal<> and proto::nary_expr<>
+            // both as grammars and as primitive transforms.
+          , proto::terminal<_>
+          , proto::nary_expr<_, proto::vararg<RemoveUnaryPlus> >
+        >
+    {};
+
+    int main()
+    {
+        proto::literal<int> i(0);
+
+        proto::display_expr( 
+            +i - +(i - +i)
+        );
+
+        proto::display_expr( 
+            RemoveUnaryPlus()( +i - +(i - +i) )
+        );
+    }
+
+The above code displays the following, which shows that unary plus nodes have been stripped from the expression:
+
+[pre
+minus(
+    unary_plus(
+        terminal(0)
+    )
+  , unary_plus(
+        minus(
+            terminal(0)
+          , unary_plus(
+                terminal(0)
+            )
+        )
+    )
+)
+minus(
+    terminal(0)
+  , minus(
+        terminal(0)
+      , terminal(0)
+    )
+)
 ]
 
 [endsect]
@@ -624,8 +847,6 @@ Primitive transforms are the building blocks for more interesting composite tran
 In previous sections, we've seen how to compose larger transforms out of smaller transforms using function types. The smaller transforms from which larger transforms are composed are /primitive transforms/, and Proto provides a bunch of common ones such as `_child0` and `_value`. In this section we'll see how to author your own primitive transforms.
 
 [note There are a few reasons why you might want to write your own primitive transforms. For instance, your transform may be complicated, and composing it out of primitives becomes unwieldy. You might also need to work around compiler bugs on legacy compilers that makes composing transforms using function types problematic. Finally, you might also decide to define your own primitive transforms to improve compile times. Since Proto can simply invoke a primitive transform directly without having to process arguments or differentiate callable transforms from object transforms, primitive transforms are more efficient.]
-
-[def _N_ [~N]]
 
 Primitive transforms inherit from `proto::transform<>` and have a nested `impl<>` template that inherits from `proto::transform_impl<>`. For example, this is how Proto defines the `_child_c<_N_>` transform, which returns the _N_-th child of the current expression:
 
@@ -655,7 +876,7 @@ Primitive transforms inherit from `proto::transform<>` and have a nested `impl<>
         };
 
         // Note that _child_c<N> is callable, so that
-        // it can be used with arguments, as:
+        // it can be used in callable transforms, as:
         //   _child_c<0>(_child_c<1>)
         template<int N>
         struct is_callable<_child_c<N> >
@@ -691,8 +912,7 @@ Transforms are typically of the form `proto::when< Something, R(A0,A1,...) >`. T
 
 For most types `R`, `proto::is_callable<R>` checks for inheritence from `proto::callable`. However, if the type `R` is a template specialization, Proto assumes that it is /not/ callable ['even if the template inherits from `proto::callable`]. We'll see why in a minute. Consider the following erroneous callable object:
 
-    // Proto can't tell this defines
-    // something callable!
+    // Proto can't tell this defines something callable!
     template<typename T>
     struct times2 : proto::callable
     {
@@ -704,8 +924,7 @@ For most types `R`, `proto::is_callable<R>` checks for inheritence from `proto::
         }
     };
 
-    // ERROR! This is not going to
-    // multiply the int by 2.
+    // ERROR! This is not going to multiply the int by 2:
     struct IntTimes2
       : proto::when<
             proto::terminal<int>
