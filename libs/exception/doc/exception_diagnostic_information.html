@@ -28,7 +28,7 @@
 <p>Nothing.</p>
 <h4>Notes:</h4>
 <div><ul><li>The return value remains valid until the exception object from which it was obtained is destroyed or modified.</li>
-<li>The header <span class="RenoLink"><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span> provides a namespace-scope function <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> which takes a std::exception. It calls <span class="RenoLink"><a href="exception_diagnostic_information.html">exception::diagnostic_information</a></span> if its argument can be converted to boost::<span class="RenoLink"><a href="exception.html">exception</a></span>; otherwise it returns a string that combines the value of std::exception::what and the exception's dynamic type.</li>
+<li>The header <span class="RenoLink"><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span> provides a namespace-scope function <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> which works with any exception. If its argument can be converted to boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, the output from <span class="RenoLink"><a href="exception_diagnostic_information.html">exception::diagnostic_information</a></span> is combined with other implementation-defined information into a std::string.</li>
 </ul></div>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>

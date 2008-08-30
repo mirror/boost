@@ -119,7 +119,8 @@ boost
 <span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">template &lt;class T&gt;
     ---unspecified--- <span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>( T const &amp; x );</span></span>
 
-<span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">std::string <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>( std::exception const &amp; x );</span></span>
+<span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">template &lt;class T&gt;
+    std::string <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>( T const &amp; x );</span></span>
 
 <span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">class
     <span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span>:
@@ -202,7 +203,7 @@ boost
 <p>Nothing.</p>
 <h4>Notes:</h4>
 <div><ul><li>The return value remains valid until the exception object from which it was obtained is destroyed or modified.</li>
-<li>The header <span class="RenoLink"><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span> provides a namespace-scope function <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> which takes a std::exception. It calls <span class="RenoLink"><a href="exception_diagnostic_information.html">exception::diagnostic_information</a></span> if its argument can be converted to boost::<span class="RenoLink"><a href="exception.html">exception</a></span>; otherwise it returns a string that combines the value of std::exception::what and the exception's dynamic type.</li>
+<li>The header <span class="RenoLink"><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span> provides a namespace-scope function <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> which works with any exception. If its argument can be converted to boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, the output from <span class="RenoLink"><a href="exception_diagnostic_information.html">exception::diagnostic_information</a></span> is combined with other implementation-defined information into a std::string.</li>
 </ul></div>
 </div></div><h2>Transporting of Arbitrary Data to the Catch Site</h2>
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>error_info</h3>
@@ -426,12 +427,15 @@ boost
 <pre>namespace
 boost
     {
-<span class="RenoIncludeSPAN">    std::string <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>( std::exception const &amp; x );</span>
+<span class="RenoIncludeSPAN">    template &lt;class T&gt;
+    std::string <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>( T const &amp; x );</span>
     }</pre>
-</div><h4>Requirements:</h4>
-<p>The <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> function must not be called outside of a catch block.</p>
-<h4>Returns:</h4>
-<p>If dynamic_cast&lt;boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const *&gt;(&amp;x) is not null, the returned string is initialized by a call to <span class="RenoLink"><a href="exception_diagnostic_information.html">exception::diagnostic_information</a></span>; otherwise, the returned string combines the output of x.what() and typeid(x).name().</p>
+</div><h4>Returns:</h4>
+<p>Platform-specific diagnostic information about x.</p>
+<h4>Notes:</h4>
+<div><ul><li>If dynamic_cast&lt;std::exception const *&gt;(&amp;x) is not null, the returned string includes the output from std::exception::what.</li>
+<li>If dynamic_cast&lt;boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const *&gt;(&amp;x) is not null, the returned string includes the output from boost::<span class="RenoLink"><a href="exception_diagnostic_information.html">exception::diagnostic_information</a></span>.</li>
+</ul></div>
 </div><h2>Throwing Exceptions</h2>
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>throw_exception</h3>
 </div>
@@ -456,7 +460,9 @@ boost
 <div><ul><li> If BOOST_NO_EXCEPTIONS is not defined, boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e) is equivalent to throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(e)), unless BOOST_EXCEPTION_DISABLE is defined, in which case boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e) is equivalent to throw e;</li>
 <li> If BOOST_NO_EXCEPTIONS is defined, the function is left undefined, and the user is expected to supply an appropriate definition. Callers of <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span> are allowed to assume that the function never returns; therefore, if the user-defined <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span> returns, the behavior is undefined.</li>
 </ul></div>
-</div><!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
+</div><h2>Acknowledgements</h2>
+<p>Peter Dimov has been continuously influencing the design and evolution of Boost Exception. Also thanks to Tobias Schwinger, Tom Brinkman, Pavel Vozenilek and everyone who participated in the review process.</p>
+<!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <div id="footer">
