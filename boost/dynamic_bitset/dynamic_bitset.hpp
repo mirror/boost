@@ -1003,7 +1003,12 @@ dynamic_bitset<Block, Allocator>::count() const
 {
     using namespace detail::dynamic_bitset_impl;
 
-    const bool no_padding = bits_per_block == CHAR_BIT * sizeof(Block);
+    // NOTE: I'm explicitly qualifying "bits_per_block" to workaround
+    //       regressions of gcc 3.4.x
+    const bool no_padding =
+        dynamic_bitset<Block, Allocator>::bits_per_block
+        == CHAR_BIT * sizeof(Block);
+
     const bool enough_table_width = table_width >= CHAR_BIT;
 
     const bool mode = (no_padding && enough_table_width)
@@ -1145,7 +1150,8 @@ dynamic_bitset<Block, Allocator>::max_size() const
     // his own allocator.
     //
 
-    const size_type m = detail::vector_max_size_workaround(m_bits);
+    const size_type m = detail::dynamic_bitset_impl::
+                        vector_max_size_workaround(m_bits);
 
     return m <= (size_type(-1)/bits_per_block) ?
         m * bits_per_block :

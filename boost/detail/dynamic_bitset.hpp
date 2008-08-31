@@ -62,6 +62,7 @@ namespace boost {
     template <bool value>
     struct value_to_type
     {
+        value_to_type() {}
     };
     const bool access_by_bytes = true;
     const bool access_by_blocks = false;
