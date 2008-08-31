@@ -37,8 +37,7 @@
 #endif
 
 #if !defined( BOOST_NO_EXCEPTIONS ) && !defined( BOOST_EXCEPTION_DISABLE )
-# include <boost/exception/enable_current_exception.hpp>
-# include <boost/exception/enable_error_info.hpp>
+# include <boost/exception/exception.hpp>
 #endif
 
 namespace boost

@@ -6,7 +6,7 @@
 #ifndef UUID_FA5836A2CADA11DC8CD47C8555D89593
 #define UUID_FA5836A2CADA11DC8CD47C8555D89593
 
-#include <boost/exception/enable_current_exception.hpp>
+#include <boost/exception/exception.hpp>
 #include <boost/exception/detail/type_info.hpp>
 #include <boost/detail/atomic_count.hpp>
 #include <boost/intrusive_ptr.hpp>

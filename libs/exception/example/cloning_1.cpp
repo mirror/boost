@@ -5,7 +5,6 @@
 
 //This example shows how to enable cloning when throwing a boost::exception.
 
-#include <boost/exception/enable_current_exception.hpp>
 #include <boost/exception/info.hpp>
 #include <stdio.h>
 #include <errno.h>

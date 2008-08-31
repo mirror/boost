@@ -37,8 +37,6 @@ compile-fail throw_exception_fail.cpp ;
 
 compile exception_ptr_hpp_test.cpp ;
 compile diagnostic_information_hpp_test.cpp ;
-compile enable_current_exception_hpp_test.cpp ;
-compile enable_error_info_hpp_test.cpp ;
 compile error_info_hpp_test.cpp ;
 compile exception_hpp_test.cpp ;
 compile get_error_info_hpp_test.cpp ;

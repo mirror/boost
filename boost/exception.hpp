@@ -7,8 +7,6 @@
 #define UUID_1D94A7C6054E11DB9804B622A1EF5492
 
 #include <boost/exception/diagnostic_information.hpp>
-#include <boost/exception/enable_current_exception.hpp>
-#include <boost/exception/enable_error_info.hpp>
 #include <boost/exception/error_info.hpp>
 #include <boost/exception/exception.hpp>
 #include <boost/exception/get_error_info.hpp>
