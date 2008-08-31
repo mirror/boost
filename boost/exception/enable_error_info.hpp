@@ -7,7 +7,6 @@
 #define UUID_0C5D492E909711DCB658AD4556D89593
 
 #include <boost/exception/exception.hpp>
-#include <stddef.h>
 
 namespace
 boost
@@ -38,7 +37,7 @@ boost
         struct small_size { };
         small_size dispatch( void * );
 
-        template <class,size_t>
+        template <class,int>
         struct enable_error_info_helper;
 
         template <class T>
