@@ -119,6 +119,12 @@ boost
     template <class>
     class shared_ptr;
 
+    template <class Tag,class T>
+    class error_info;
+
+	template <class E,class Tag,class T>
+	E const & operator<<( E const &, error_info<Tag,T> const & );
+
     namespace
     exception_detail
         {
@@ -135,9 +141,7 @@ boost
             };
 
         template <class ErrorInfo>
-        shared_ptr<typename ErrorInfo::value_type const> get_data( exception const & );
-
-        void set_data( exception const *, shared_ptr<exception_detail::error_info_base const> const &, type_info_ const & );
+        shared_ptr<typename ErrorInfo::value_type const> get_info( exception const & );
         }
 
     class
@@ -177,10 +181,11 @@ boost
 
         private:
 
-        template <class ErrorInfo>
-        friend shared_ptr<typename ErrorInfo::value_type const> exception_detail::get_data( exception const & );
+		template <class E,class Tag,class T>
+		friend E const & operator<<( E const &, error_info<Tag,T> const & );
 
-        friend void exception_detail::set_data( exception const *, shared_ptr<exception_detail::error_info_base const> const &, exception_detail::type_info_ const & );
+        template <class ErrorInfo>
+        friend shared_ptr<typename ErrorInfo::value_type const> exception_detail::get_info( exception const & );
 
         mutable exception_detail::refcount_ptr<exception_detail::error_info_container> data_;
         };

@@ -146,16 +146,6 @@ boost
                     delete this;
                 }
             };
-
-        inline
-        void
-        set_data( exception const * e, shared_ptr<exception_detail::error_info_base const> const & x, exception_detail::type_info_ const & typeid_ )
-            {
-            exception_detail::error_info_container * c;
-            if( !(c=e->data_.get()) )
-                e->data_.adopt(c=new exception_detail::error_info_container_impl);
-            c->set(x,typeid_);
-            }
         }
 
     template <class E,class Tag,class T>
@@ -165,8 +155,11 @@ boost
         {
         typedef error_info<Tag,T> error_info_tag_t;
         shared_ptr<error_info_tag_t> p( new error_info_tag_t(v) );
-        exception_detail::set_data(&x,p,BOOST_EXCEPTION_STATIC_TYPEID(error_info_tag_t));
-        return x;
+        exception_detail::error_info_container * c;
+        if( !(c=x.data_.get()) )
+            x.data_.adopt(c=new exception_detail::error_info_container_impl);
+        c->set(p,BOOST_EXCEPTION_STATIC_TYPEID(error_info_tag_t));
+		return x;
         }
     }
 

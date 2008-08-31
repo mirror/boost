@@ -20,7 +20,7 @@ boost
         template <class ErrorInfo>
         inline
         shared_ptr<typename ErrorInfo::value_type const>
-        get_data( exception const & x )
+        get_info( exception const & x )
             {
             if( exception_detail::error_info_container * c=x.data_.get() )
                 if( shared_ptr<exception_detail::error_info_base const> eib = c->get(BOOST_EXCEPTION_STATIC_TYPEID(ErrorInfo)) )
@@ -41,7 +41,7 @@ boost
     shared_ptr<typename ErrorInfo::value_type const>
     get_error_info( boost::exception const & x )
         {
-        return exception_detail::get_data<ErrorInfo>(x);
+        return exception_detail::get_info<ErrorInfo>(x);
         }
 #else
     template <class ErrorInfo,class E>
@@ -50,7 +50,7 @@ boost
     get_error_info( E const & some_exception )
         {
         if( exception const * x = dynamic_cast<exception const *>(&some_exception) )
-            return exception_detail::get_data<ErrorInfo>(*x);
+            return exception_detail::get_info<ErrorInfo>(*x);
         else
             return shared_ptr<typename ErrorInfo::value_type const>();
         }
