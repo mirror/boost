@@ -14,7 +14,7 @@ boost
     {
     class exception;
 
-    template <class T>
+    template <class>
     class shared_ptr;
 
     namespace
@@ -56,11 +56,6 @@ boost
             {
             }
 
-        exception( exception const & e ):
-            data_(e.data_)
-            {
-            }
-
         virtual ~exception() throw()=0;
 
         char const *
@@ -80,10 +75,10 @@ boost
 
         private:
 
-        friend void exception_detail::set_data( exception const *, shared_ptr<exception_detail::error_info_base const> const &, exception_detail::type_info_ const & );
-
         template <class ErrorInfo>
         friend shared_ptr<typename ErrorInfo::value_type const> exception_detail::get_data( exception const & );
+
+        friend void exception_detail::set_data( exception const *, shared_ptr<exception_detail::error_info_base const> const &, exception_detail::type_info_ const & );
 
         mutable exception_detail::refcount_ptr<exception_detail::error_info_container> data_;
         };
