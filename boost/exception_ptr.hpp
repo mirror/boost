@@ -9,6 +9,7 @@
 #include <boost/exception/enable_current_exception.hpp>
 #include <boost/exception/detail/type_info.hpp>
 #include <boost/detail/atomic_count.hpp>
+#include <boost/intrusive_ptr.hpp>
 #include <stdexcept>
 #include <new>
 

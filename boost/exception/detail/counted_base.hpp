@@ -6,8 +6,6 @@
 #ifndef UUID_DBA0D90C930911DCBA7B675A56D89593
 #define UUID_DBA0D90C930911DCBA7B675A56D89593
 
-#include <boost/detail/workaround.hpp>
-
 namespace
 boost
     {
@@ -36,12 +34,7 @@ boost
 
             protected:
 
-#if BOOST_WORKAROUND( __GNUC__, BOOST_TESTED_AT(4) )
-virtual //Disable bogus GCC warning.
-#endif
-#if BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1500) )
-virtual //Disable bogus msvc warning.
-#endif
+            virtual
             ~counted_base() throw()
                 {
                 }

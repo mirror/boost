@@ -29,6 +29,7 @@ run throw_exception_test.cpp helper2.cpp ;
 run errno_test.cpp ;
 run error_info_test.cpp ;
 run diagnostic_information_test.cpp ;
+run refcount_ptr_test.cpp ;
 compile-fail exception_fail.cpp ;
 compile-fail throw_exception_fail.cpp ;
 

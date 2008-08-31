@@ -126,7 +126,7 @@ boost
 
             private:
 
-			friend class boost::exception;
+            friend class boost::exception;
 
             typedef std::map< type_info_, shared_ptr<error_info_base const> > error_info_map;
             error_info_map info_;
@@ -151,9 +151,10 @@ boost
         void
         set_data( exception const * e, shared_ptr<exception_detail::error_info_base const> const & x, exception_detail::type_info_ const & typeid_ )
             {
-            if( !e->data_ )
-                e->data_ = intrusive_ptr<exception_detail::error_info_container>(new exception_detail::error_info_container_impl);
-            e->data_->set(x,typeid_);
+            exception_detail::error_info_container * c;
+            if( !(c=e->data_.get()) )
+                e->data_.adopt(c=new exception_detail::error_info_container_impl);
+            c->set(x,typeid_);
             }
         }
 

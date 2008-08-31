@@ -7,7 +7,7 @@
 #define UUID_274DA366004E11DCB1DDFE2E56D89593
 
 #include <boost/exception/detail/counted_base.hpp>
-#include <boost/intrusive_ptr.hpp>
+#include <boost/exception/detail/refcount_ptr.hpp>
 
 namespace
 boost
@@ -61,28 +61,16 @@ boost
             {
             }
 
-#if BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1500) )
-        //Force class exception to be abstract.
-        //Otherwise, MSVC bug allows throw exception(), even though the copy constructor is protected.
         virtual ~exception() throw()=0;
-#else
-#if BOOST_WORKAROUND( __GNUC__, BOOST_TESTED_AT(4) )
-        virtual //Disable bogus GCC warning.
-#endif
-        ~exception() throw()
-            {
-            }
-#endif
 
         char const *
         _diagnostic_information() const throw()
             {
-            if( data_ )
+            if( exception_detail::error_info_container * c=data_.get() )
                 try
                     {
-                    char const * w = data_->diagnostic_information();
-                    BOOST_ASSERT(w!=0);
-                    return w;
+                    if( char const * w = c->diagnostic_information() )
+                        return w;
                     }
                 catch(...)
                     {
@@ -97,16 +85,14 @@ boost
         template <class ErrorInfo>
         friend shared_ptr<typename ErrorInfo::value_type const> exception_detail::get_data( exception const & );
 
-        mutable intrusive_ptr<exception_detail::error_info_container> data_;
+        mutable exception_detail::refcount_ptr<exception_detail::error_info_container> data_;
         };
 
-#if BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1500) ) //See above.
     inline
     exception::
     ~exception() throw()
         {
         }
-#endif
     }
 
 #endif

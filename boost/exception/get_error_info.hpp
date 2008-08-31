@@ -22,8 +22,8 @@ boost
         shared_ptr<typename ErrorInfo::value_type const>
         get_data( exception const & x )
             {
-            if( x.data_ )
-                if( shared_ptr<exception_detail::error_info_base const> eib = x.data_->get(BOOST_EXCEPTION_STATIC_TYPEID(ErrorInfo)) )
+            if( exception_detail::error_info_container * c=x.data_.get() )
+                if( shared_ptr<exception_detail::error_info_base const> eib = c->get(BOOST_EXCEPTION_STATIC_TYPEID(ErrorInfo)) )
                     {
 #ifndef BOOST_NO_RTTI
                     BOOST_ASSERT( 0!=dynamic_cast<ErrorInfo const *>(eib.get()) );
