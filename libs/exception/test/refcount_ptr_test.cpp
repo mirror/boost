@@ -22,19 +22,17 @@ test_type
         count_=42;
         }
 
-    friend
     void
-    intrusive_ptr_add_ref( test_type const * c )
+    add_ref()
         {
-        ++c->count_;
+        ++count_;
         }
 
-    friend
     void
-    intrusive_ptr_release( test_type const * c )
+    release()
         {
-        if( !--c->count_ )
-            delete c;
+        if( !--count_ )
+            delete this;
         }
 
     private:

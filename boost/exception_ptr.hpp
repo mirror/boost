@@ -8,161 +8,63 @@
 
 #include <boost/exception/exception.hpp>
 #include <boost/exception/detail/type_info.hpp>
-#include <boost/detail/atomic_count.hpp>
-#include <boost/intrusive_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include <new>
 
 namespace
 boost
     {
-    namespace
-    exception_detail
+    class exception_ptr;
+    exception_ptr current_exception();
+    void rethrow_exception( exception_ptr const & );
+
+    class
+    exception_ptr
         {
-        class
-        counted_clone:
-            public counted_base
-            {
-            public:
+        typedef bool exception_ptr::*unspecified_bool_type;
+        friend exception_ptr current_exception();
+        friend void rethrow_exception( exception_ptr const & );
 
-            counted_clone():
-                count_(0),
-                clone_(0)
-                {
-                }
-
-            void
-            set( clone_base const * c )
-                {
-                clone_ = c;
-                BOOST_ASSERT(clone_!=0);
-                }
-
-            void
-            rethrow() const
-                {
-                if( clone_ )
-                    clone_->rethrow();
-                else
-                    throw enable_current_exception(std::bad_alloc());
-                }
-
-            private:
-
-            counted_clone( counted_clone const & );
-            counted_clone & operator=( counted_clone const & );
-
-            mutable detail::atomic_count count_;
-            clone_base const * clone_;
-            void (*clone_deleter_)(clone_base const *);
-
-            ~counted_clone() throw()
-                {
-                if( clone_ )
-                    delete clone_;
-                }
-
-            void
-            add_ref() const
-                {
-                ++count_;
-                }
-
-            void
-            release() const
-                {
-                if( !--count_ )
-                    delete this;
-                }
-            };
+        shared_ptr<exception_detail::clone_base const> c_;
+        bool bad_alloc_;
 
         struct
         bad_alloc_tag
             {
             };
 
-        struct
-        bad_exception_tag
+        explicit
+        exception_ptr( bad_alloc_tag ):
+            bad_alloc_(true)
             {
-            };
-        }
-
-    class exception_ptr;
-    void rethrow_exception( exception_ptr const & );
-
-    class
-    exception_ptr
-        {
-        private:
-
-        friend void rethrow_exception( exception_ptr const & );
-
-        enum
-            {
-            bad_alloc_caught,
-            clone_failed,
-            ok
-            } what_happened_;
-
-        intrusive_ptr<exception_detail::counted_clone> c_;
-
-        void
-        rethrow() const
-            {
-            switch(
-            what_happened_ )
-                {
-                case
-                bad_alloc_caught:
-                    throw enable_current_exception(std::bad_alloc());
-                case
-                clone_failed:
-                    throw enable_current_exception(std::bad_exception());
-                case
-                ok:
-                    BOOST_ASSERT(c_.get()!=0);
-                    c_->rethrow();
-                }
-            BOOST_ASSERT(0);
             }
 
-        typedef intrusive_ptr<exception_detail::counted_clone> exception_ptr::*unspecified_bool_type;
+        explicit
+        exception_ptr( shared_ptr<exception_detail::clone_base const> const & c ):
+            c_(c),
+            bad_alloc_(false)
+            {
+            BOOST_ASSERT(c);
+            }
 
         public:
 
-        explicit
-        exception_ptr( exception_detail::bad_alloc_tag ):
-            what_happened_(bad_alloc_caught)
-            {
-            }
-
-        explicit
-        exception_ptr( exception_detail::bad_exception_tag ):
-            what_happened_(clone_failed)
-            {
-            }
-
         exception_ptr():
-            what_happened_(ok)
+            bad_alloc_(false)
             {
             }
 
-        explicit
-        exception_ptr( intrusive_ptr<exception_detail::counted_clone> const & c ):
-            what_happened_(ok),
-            c_(c)
+        operator unspecified_bool_type() const
             {
-            BOOST_ASSERT(c_.get()!=0);
+            return (bad_alloc_ || c_) ? &exception_ptr::bad_alloc_ : 0;
             }
 
         friend
         bool
         operator==( exception_ptr const & a, exception_ptr const & b )
             {
-            return
-                a.what_happened_==ok &&
-                b.what_happened_==ok &&
-                a.c_==b.c_;
+            return a.c_==b.c_ && a.bad_alloc_==b.bad_alloc_;
             }
 
         friend
@@ -170,11 +72,6 @@ boost
         operator!=( exception_ptr const & a, exception_ptr const & b )
             {
             return !(a==b);
-            }
-
-        operator unspecified_bool_type() const
-            {
-            return (what_happened_!=ok || c_) ? &exception_ptr::c_ : 0;
             }
         };
 
@@ -211,7 +108,7 @@ boost
         void
         rethrow() const
             {
-            throw *this;
+            throw*this;
             }
         };
 
@@ -288,55 +185,42 @@ boost
 
         template <class T>
         inline
-        exception_ptr
+        shared_ptr<clone_base const>
         current_exception_std_exception( T const & e1 )
             {
-            intrusive_ptr<exception_detail::counted_clone> x(new exception_detail::counted_clone);
             if( boost::exception const * e2 = get_boost_exception(&e1) )
-                x->set(new current_exception_std_exception_wrapper<T>(e1,*e2));
+                return shared_ptr<clone_base const>(new current_exception_std_exception_wrapper<T>(e1,*e2));
             else
-                x->set(new current_exception_std_exception_wrapper<T>(e1));
-            return exception_ptr(x);
+                return shared_ptr<clone_base const>(new current_exception_std_exception_wrapper<T>(e1));
             }
 
         inline
-        exception_ptr
+        shared_ptr<clone_base const>
         current_exception_unknown_exception()
             {
-            intrusive_ptr<exception_detail::counted_clone> x(new exception_detail::counted_clone);
-            x->set(new unknown_exception());
-            return exception_ptr(x);
+            return shared_ptr<clone_base const>(new unknown_exception());
             }
 
         inline
-        exception_ptr
+        shared_ptr<clone_base const>
+        current_exception_unknown_boost_exception( boost::exception const & e )
+            {
+            return shared_ptr<clone_base const>(new unknown_exception(e));
+            }
+
+        inline
+        shared_ptr<clone_base const>
         current_exception_unknown_std_exception( std::exception const & e )
             {
             if( boost::exception const * be = get_boost_exception(&e) )
-                {
-                intrusive_ptr<exception_detail::counted_clone> x(new exception_detail::counted_clone);
-                x->set(new unknown_exception(*be));
-                return exception_ptr(x);
-                }
+                return current_exception_unknown_boost_exception(*be);
             else
                 return current_exception_unknown_exception();
             }
 
         inline
-        exception_ptr
-        current_exception_unknown_boost_exception( boost::exception const & e )
-            {
-            intrusive_ptr<exception_detail::counted_clone> x(new exception_detail::counted_clone);
-            x->set(new unknown_exception(e));
-            return exception_ptr(x);
-            }
-        }
-
-    inline
-    exception_ptr
-    current_exception()
-        {
-        try
+        shared_ptr<clone_base const>
+        current_exception_impl()
             {
             try
                 {
@@ -345,9 +229,7 @@ boost
             catch(
             exception_detail::clone_base & e )
                 {
-                intrusive_ptr<exception_detail::counted_clone> x(new exception_detail::counted_clone);
-                x->set(e.clone());
-                return exception_ptr(x);
+                return shared_ptr<exception_detail::clone_base const>(e.clone());
                 }
             catch(
             std::invalid_argument & e )
@@ -402,16 +284,38 @@ boost
                 return exception_detail::current_exception_unknown_exception();
                 }
             }
+        }
+
+    inline
+    exception_ptr
+    current_exception()
+        {
+        try
+            {
+            return exception_ptr(exception_detail::current_exception_impl());
+            }
         catch(
         std::bad_alloc & )
             {
-            return exception_ptr( exception_detail::bad_alloc_tag() );
             }
         catch(
         ... )
             {
-            return exception_ptr( exception_detail::bad_exception_tag() );
+            try
+                {
+                return exception_ptr(exception_detail::current_exception_std_exception(std::bad_exception()));
+                }
+            catch(
+            std::bad_alloc & )
+                {
+                }
+            catch(
+            ... )
+                {
+                BOOST_ASSERT(0);
+                }
             }
+        return exception_ptr(exception_ptr::bad_alloc_tag());
         }
 
     template <class T>
@@ -423,7 +327,8 @@ boost
             {
             throw enable_current_exception(e);
             }
-        catch( ... )
+        catch(
+        ... )
             {
             return current_exception();
             }
@@ -433,7 +338,11 @@ boost
     void
     rethrow_exception( exception_ptr const & p )
         {
-        p.rethrow();
+        BOOST_ASSERT(p);
+        if( p.bad_alloc_ )
+            throw enable_current_exception(std::bad_alloc());
+        else
+            p.c_->rethrow();
         }
     }
 

@@ -46,13 +46,6 @@ boost
 
             friend
             bool
-            operator!=( type_info_ const & a, type_info_ const & b )
-                {
-                return !(a==b);
-                }
-
-            friend
-            bool
             operator<( type_info_ const & a, type_info_ const & b )
                 {
                 return a.type_<b.type_;
@@ -90,13 +83,6 @@ boost
 
             friend
             bool
-            operator!=( type_info_ const & a, type_info_ const & b )
-                {
-                return !(a==b);
-                }
-
-            friend
-            bool
             operator<( type_info_ const & a, type_info_ const & b )
                 {
                 return 0!=(a.type_->before(*b.type_));
@@ -109,6 +95,13 @@ boost
                 }
             };
 #endif
+
+        inline
+        bool
+        operator!=( type_info_ const & a, type_info_ const & b )
+            {
+            return !(a==b);
+            }
         }
     }
 

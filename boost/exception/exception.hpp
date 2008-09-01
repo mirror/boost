@@ -9,9 +9,6 @@
 namespace
 boost
     {
-
-    ////////////////////////////////////////////////////////////////////////
-
     namespace
     exception_detail
         {
@@ -66,64 +63,76 @@ boost
             add_ref()
                 {
                 if( px_ )
-                    intrusive_ptr_add_ref(px_);
+                    px_->add_ref();
                 }
 
             void
             release()
                 {
                 if( px_ )
-                    intrusive_ptr_release(px_);
+                    px_->release();
                 }
             };
         }
 
     ////////////////////////////////////////////////////////////////////////
 
-    namespace
-    exception_detail
+    template <class Tag,class T>
+    class error_info;
+
+    typedef error_info<struct tag_throw_function,char const *> throw_function;
+    typedef error_info<struct tag_throw_file,char const *> throw_file;
+    typedef error_info<struct tag_throw_line,int> throw_line;
+
+    template <>
+    class
+    error_info<tag_throw_function,char const *>
         {
-        class
-        counted_base
+        public:
+        typedef char const * value_type;
+        value_type v_;
+        explicit
+        error_info( value_type v ):
+            v_(v)
             {
-            friend
-            void
-            intrusive_ptr_add_ref( counted_base const * c )
-                {
-                c->add_ref();
-                }
+            }
+        };
 
-            friend
-            void
-            intrusive_ptr_release( counted_base const * c )
-                {
-                c->release();
-                }
+    template <>
+    class
+    error_info<tag_throw_file,char const *>
+        {
+        public:
+        typedef char const * value_type;
+        value_type v_;
+        explicit
+        error_info( value_type v ):
+            v_(v)
+            {
+            }
+        };
 
-            virtual void add_ref() const=0;
-            virtual void release() const=0;
+    template <>
+    class
+    error_info<tag_throw_line,int>
+        {
+        public:
+        typedef int value_type;
+        value_type v_;
+        explicit
+        error_info( value_type v ):
+            v_(v)
+            {
+            }
+        };
 
-            protected:
-
-            virtual
-            ~counted_base() throw()
-                {
-                }
-            };
-        }
-
-    ////////////////////////////////////////////////////////////////////////
+    template <class E,class Tag,class T>
+    E const & operator<<( E const &, error_info<Tag,T> const & );
 
     class exception;
 
     template <class>
     class shared_ptr;
-
-    template <class Tag,class T>
-    class error_info;
-
-	template <class E,class Tag,class T>
-	E const & operator<<( E const &, error_info<Tag,T> const & );
 
     namespace
     exception_detail
@@ -132,62 +141,83 @@ boost
         struct type_info_;
 
         struct
-        error_info_container:
-            public exception_detail::counted_base
+        error_info_container
             {
             virtual char const * diagnostic_information() const = 0;
             virtual shared_ptr<error_info_base const> get( type_info_ const & ) const = 0;
             virtual void set( shared_ptr<error_info_base const> const &, type_info_ const & ) = 0;
+            virtual void add_ref() const = 0;
+            virtual void release() const = 0;
+
+            protected:
+
+            virtual
+            ~error_info_container() throw()
+                {
+                }
             };
 
-        template <class ErrorInfo>
-        shared_ptr<typename ErrorInfo::value_type const> get_info( exception const & );
+        template <class>
+        struct get_info;
+
+        char const * get_diagnostic_information( exception const & );
         }
 
     class
     exception
         {
-        public:
-
-        virtual
-        char const *
-        diagnostic_information() const throw()
-            {
-            return _diagnostic_information();
-            }
-
         protected:
 
-        exception()
+        exception():
+            throw_function_(0),
+            throw_file_(0),
+            throw_line_(-1)
             {
             }
 
-        virtual ~exception() throw()=0;
-
-        char const *
-        _diagnostic_information() const throw()
-            {
-            if( exception_detail::error_info_container * c=data_.get() )
-                try
-                    {
-                    if( char const * w = c->diagnostic_information() )
-                        return w;
-                    }
-                catch(...)
-                    {
-                    }
-            return "";
-            }
+        virtual ~exception() throw() = 0;
 
         private:
 
-		template <class E,class Tag,class T>
-		friend E const & operator<<( E const &, error_info<Tag,T> const & );
+        template <class E>
+        friend
+        E const &
+        operator<<( E const & x, throw_function y )
+            {
+            x.throw_function_=y.v_;
+            return x;
+            }
 
-        template <class ErrorInfo>
-        friend shared_ptr<typename ErrorInfo::value_type const> exception_detail::get_info( exception const & );
+        template <class E>
+        friend
+        E const &
+        operator<<( E const & x, throw_file y )
+            {
+            x.throw_file_=y.v_;
+            return x;
+            }
+
+        template <class E>
+        friend
+        E const &
+        operator<<( E const & x, throw_line y )
+            {
+            x.throw_line_=y.v_;
+            return x;
+            }
+
+        friend char const * exception_detail::get_diagnostic_information( exception const & );
+
+        template <class E,class Tag,class T>
+        friend E const & operator<<( E const &, error_info<Tag,T> const & );
+
+        template <class>
+        friend struct exception_detail::get_info;
 
         mutable exception_detail::refcount_ptr<exception_detail::error_info_container> data_;
+        mutable char const * throw_function_;
+        mutable char const * throw_file_;
+        mutable int throw_line_;
         };
 
     inline
@@ -270,14 +300,12 @@ boost
 
             virtual clone_base const * clone() const = 0;
             virtual void rethrow() const = 0;
-            virtual ~clone_base() throw() = 0;
-            };
 
-        inline
-        clone_base::
-        ~clone_base() throw()
-            {
-            }
+			virtual
+			~clone_base() throw()
+				{
+				}
+            };
 
         inline
         void
@@ -322,7 +350,7 @@ boost
             void
             rethrow() const
                 {
-                throw *this;
+                throw*this;
                 }
             };
         }
@@ -334,9 +362,6 @@ boost
         {
         return exception_detail::clone_impl<T>(x);
         }
-
-    ////////////////////////////////////////////////////////////////////////
-
     }
 
 #endif

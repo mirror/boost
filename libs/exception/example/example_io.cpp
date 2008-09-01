@@ -66,11 +66,11 @@ my_fopen( char const * name, char const * mode )
     if( FILE * f = ::fopen(name,mode) )
         return boost::shared_ptr<FILE>(f,fclose);
     else
-        throw fopen_error() << BOOST_ERROR_INFO <<
+        BOOST_THROW_EXCEPTION(fopen_error() <<
             errno_info(errno) <<
             file_name_info(name) <<
             open_mode_info(mode) <<
-            function_info("fopen");
+            function_info("fopen"));
     }
 
 void
@@ -78,10 +78,10 @@ my_fread( void * buffer, size_t size, size_t count, boost::shared_ptr<FILE> cons
     {
     assert(stream);
     if( count!=fread(buffer,size,count,stream.get()) || ferror(stream.get()) )
-        throw fread_error() << BOOST_ERROR_INFO <<
+        BOOST_THROW_EXCEPTION(fread_error() <<
             function_info("fread") <<
             errno_info(errno) <<
-            file_stream_info(boost::weak_ptr<FILE>(stream));
+            file_stream_info(boost::weak_ptr<FILE>(stream)));
     }
 
 void
@@ -89,10 +89,10 @@ my_fwrite( void const * buffer, size_t size, size_t count, boost::shared_ptr<FIL
     {
     assert(stream);
     if( count!=fwrite(buffer,size,count,stream.get()) || ferror(stream.get()) )
-        throw fwrite_error() << BOOST_ERROR_INFO <<
+        BOOST_THROW_EXCEPTION(fwrite_error() <<
             function_info("fwrite") <<
             errno_info(errno) <<
-            file_stream_info(boost::weak_ptr<FILE>(stream));
+            file_stream_info(boost::weak_ptr<FILE>(stream)));
     }
 
 void

@@ -7,25 +7,14 @@
 #define UUID_8D22C4CA9CC811DCAA9133D256D89593
 
 #include <boost/exception/exception.hpp>
-#include <boost/exception/error_info.hpp>
 #include <boost/exception/to_string_stub.hpp>
 #include <boost/exception/detail/error_info_base.hpp>
-#include <boost/exception/detail/type_info.hpp>
 #include <boost/shared_ptr.hpp>
 #include <map>
-
-#define BOOST_ERROR_INFO\
-    ::boost::throw_function(BOOST_CURRENT_FUNCTION) <<\
-    ::boost::throw_file(__FILE__) <<\
-    ::boost::throw_line((int)__LINE__)
 
 namespace
 boost
     {
-    typedef error_info<struct tag_throw_function,char const *> throw_function;
-    typedef error_info<struct tag_throw_file,char const *> throw_file;
-    typedef error_info<struct tag_throw_line,int> throw_line;
-
     template <class Tag,class T>
     class
     error_info:
@@ -39,6 +28,10 @@ boost
             value_(value)
             {
             }
+
+		~error_info() throw()
+			{
+			}
 
         value_type const &
         value() const
@@ -159,7 +152,7 @@ boost
         if( !(c=x.data_.get()) )
             x.data_.adopt(c=new exception_detail::error_info_container_impl);
         c->set(p,BOOST_EXCEPTION_STATIC_TYPEID(error_info_tag_t));
-		return x;
+        return x;
         }
     }
 

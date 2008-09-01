@@ -6,7 +6,6 @@
 #ifndef UUID_CE6983AC753411DDA764247956D89593
 #define UUID_CE6983AC753411DDA764247956D89593
 
-#include <boost/detail/workaround.hpp>
 #include <string>
 
 namespace
@@ -25,10 +24,8 @@ boost
 
             protected:
 
-#if BOOST_WORKAROUND( __GNUC__, BOOST_TESTED_AT(4) )
-virtual //Disable bogus GCC warning.
-#endif
-            ~error_info_base()
+            virtual
+            ~error_info_base() throw()
                 {
                 }
             };

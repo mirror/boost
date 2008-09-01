@@ -38,6 +38,13 @@
 
 #if !defined( BOOST_NO_EXCEPTIONS ) && !defined( BOOST_EXCEPTION_DISABLE )
 # include <boost/exception/exception.hpp>
+# include <boost/current_function.hpp>
+# define BOOST_THROW_EXCEPTION(x) ::boost::throw_exception(::boost::enable_error_info(x) <<\
+    ::boost::throw_function(BOOST_CURRENT_FUNCTION) <<\
+    ::boost::throw_file(__FILE__) <<\
+    ::boost::throw_line((int)__LINE__))
+#else
+# define BOOST_THROW_EXCEPTION(x) ::boost::throw_exception(x)
 #endif
 
 namespace boost

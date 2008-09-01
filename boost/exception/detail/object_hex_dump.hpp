@@ -8,7 +8,6 @@
 
 #include <boost/exception/detail/type_info.hpp>
 #include <iomanip>
-#include <typeinfo>
 #include <ios>
 #include <string>
 #include <sstream>

@@ -23,7 +23,6 @@ run cloning_test.cpp ;
 run copy_exception_test.cpp ;
 run unknown_exception_test.cpp ;
 run exception_test.cpp ;
-run boost_error_info_test.cpp ;
 run enable_error_info_test.cpp helper1.cpp ;
 run throw_exception_test.cpp helper2.cpp ;
 run errno_test.cpp ;
