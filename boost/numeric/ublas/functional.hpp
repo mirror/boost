@@ -2020,13 +2020,13 @@ namespace boost { namespace numeric { namespace ublas {
 	static
 	BOOST_UBLAS_INLINE
 	size_type global_restrict1 (size_type index1, size_type size1, size_type index2, size_type size2) {
-	    return global_mutable_restrict1(index1, index2, size1, size2);
+	    return global_mutable_restrict1(index1, size1, index2, size2);
 	}
 	// return an index between the first and (1+last) filled column
 	static
 	BOOST_UBLAS_INLINE
 	size_type global_restrict2 (size_type index1, size_type size1, size_type index2, size_type size2) {
-	    return global_mutable_restrict2(index1, index2, size1, size2);
+	    return global_mutable_restrict2(index1, size1, index2, size2);
 	}
     };
 
