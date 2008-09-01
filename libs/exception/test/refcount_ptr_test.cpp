@@ -42,7 +42,7 @@ test_type
     test_type( test_type const & );
     test_type & operator=( test_type const & );
 
-    mutable int & count_;
+    int & count_;
     };
 
 int
