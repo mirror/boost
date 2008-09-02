@@ -8,7 +8,7 @@
 
 #include <boost/exception/exception.hpp>
 #include <boost/exception/to_string_stub.hpp>
-#include <boost/exception/detail/error_info_base.hpp>
+#include <boost/exception/detail/error_info_impl.hpp>
 #include <boost/shared_ptr.hpp>
 #include <map>
 
@@ -16,45 +16,37 @@ namespace
 boost
     {
     template <class Tag,class T>
-    class
-    error_info:
-        public exception_detail::error_info_base
+    inline
+    error_info<Tag,T>::
+    error_info( value_type const & value ):
+        value_(value)
         {
-        public:
+        }
 
-        typedef T value_type;
+    template <class Tag,class T>
+    inline
+    error_info<Tag,T>::
+    ~error_info() throw()
+        {
+        }
 
-        error_info( value_type const & value ):
-            value_(value)
-            {
-            }
+    template <class Tag,class T>
+    inline
+    char const *
+    error_info<Tag,T>::
+    tag_typeid_name() const
+        {
+        return type_name<Tag>();
+        }
 
-        ~error_info() throw()
-            {
-            }
-
-        value_type const &
-        value() const
-            {
-            return value_;
-            }
-
-        private:
-
-        char const *
-        tag_typeid_name() const
-            {
-            return type_name<Tag>();
-            }
-
-        std::string
-        value_as_string() const
-            {
-            return to_string_stub(value_);
-            }
-
-        value_type const value_;
-        };
+    template <class Tag,class T>
+    inline
+    std::string
+    error_info<Tag,T>::
+    value_as_string() const
+        {
+        return to_string_stub(value_);
+        }
 
     namespace
     exception_detail

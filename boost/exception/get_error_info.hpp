@@ -7,7 +7,7 @@
 #define UUID_1A590226753311DD9E4CCF6156D89593
 
 #include <boost/exception/exception.hpp>
-#include <boost/exception/detail/error_info_base.hpp>
+#include <boost/exception/detail/error_info_impl.hpp>
 #include <boost/exception/detail/type_info.hpp>
 #include <boost/shared_ptr.hpp>
 #include <string.h>
