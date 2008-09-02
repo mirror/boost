@@ -61,13 +61,9 @@
 
 // Dinkumware.
 #elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
-// Overloaded float functions were probably introduced in an earlier version
-// than this.
-#  if defined(_CPPLIB_VER) && (_CPPLIB_VER >= 402)
-#    define BOOST_HASH_USE_OVERLOAD_FLOAT_FUNCS
-#  else
-#    define BOOST_HASH_USE_C99_FLOAT_FUNCS
-#  endif
+// I'm not sure which versions of Dinkumware have the C++ overloads
+// but they all seem to have the C99 float functions so I'll use them.
+#  define BOOST_HASH_USE_C99_FLOAT_FUNCS
 
 // Digital Mars
 #elif defined(__DMC__)
