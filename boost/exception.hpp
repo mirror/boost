@@ -13,6 +13,5 @@
 #include <boost/exception/info.hpp>
 #include <boost/exception/info_tuple.hpp>
 #include <boost/exception_ptr.hpp>
-#include <boost/throw_exception.hpp>
 
 #endif
