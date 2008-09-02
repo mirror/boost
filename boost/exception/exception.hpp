@@ -160,13 +160,13 @@ boost
         template <class>
         struct get_info;
 
-		template <>
+        template <>
         struct get_info<throw_function>;
 
-		template <>
+        template <>
         struct get_info<throw_file>;
 
-		template <>
+        template <>
         struct get_info<throw_line>;
 
         char const * get_diagnostic_information( exception const & );
@@ -313,10 +313,10 @@ boost
             virtual clone_base const * clone() const = 0;
             virtual void rethrow() const = 0;
 
-			virtual
-			~clone_base() throw()
-				{
-				}
+            virtual
+            ~clone_base() throw()
+                {
+                }
             };
 
         inline

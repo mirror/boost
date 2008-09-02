@@ -30,28 +30,6 @@ boost
                     }
             return 0;
             }
-
-        template <class T>
-        std::string
-        std_exception_diagnostic_information( std::exception const * x, T const & )
-            {
-            if( char const * s=x->what() )
-                if( *s )
-                    return std::string("\nstd::exception::what(): ")+s;
-            return std::string();
-            }
-
-        template <class T>
-        std::string
-        std_exception_diagnostic_information( void const *, T const & e )
-            {
-#ifndef BOOST_NO_RTTI
-            if( std::exception const * x=dynamic_cast<std::exception const *>(&e) )
-                return std_exception_diagnostic_information(x,e);
-            else
-#endif
-                return std::string();
-            }
         }
 
     inline
@@ -61,8 +39,10 @@ boost
         std::ostringstream tmp;
         tmp <<
             "boost::exception diagnostic information:"
-#if !defined(BOOST_NO_RTTI) && !defined(BOOST_NO_TYPEID)
-            "\nDynamic exception type: " << BOOST_EXCEPTION_DYNAMIC_TYPEID(x).name()
+#ifndef BOOST_NO_RTTI
+            "\nDynamic exception type: " << BOOST_EXCEPTION_DYNAMIC_TYPEID(x).name();
+        if( std::exception const * e=dynamic_cast<std::exception const *>(&x) )
+            tmp << "\nstd::exception::what: " << e->what()
 #endif
             ;
         if( boost::shared_ptr<char const * const> f=get_error_info<throw_function>(x) )
@@ -71,7 +51,7 @@ boost
             tmp << "\nThrow file name: " << *f;
         if( boost::shared_ptr<int const> l=get_error_info<throw_line>(x) )
             tmp << "\nThrow file line: " << *l;
-		if( char const * s=exception_detail::get_diagnostic_information(x) )
+        if( char const * s=exception_detail::get_diagnostic_information(x) )
             if( *s )
                 tmp << "\n" << s;
         return tmp.str();

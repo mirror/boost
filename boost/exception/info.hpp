@@ -29,9 +29,9 @@ boost
             {
             }
 
-		~error_info() throw()
-			{
-			}
+        ~error_info() throw()
+            {
+            }
 
         value_type const &
         value() const
