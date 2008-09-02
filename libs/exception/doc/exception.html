@@ -28,10 +28,6 @@ boost
 <span class="RenoIncludeSPAN">    class
     <span class="RenoLink"><a href="exception.html">exception</a></span>
         {
-        public:
-    
-    <span class="RenoIncludeSPAN">    virtual char const * <span class="RenoLink"><a href="exception_diagnostic_information.html">diagnostic_information</a></span>() const throw();</span>    
-    
         protected:
     
     <span class="RenoIncludeSPAN">    <span class="RenoLink"><a href="exception_constructors.html">exception</a></span>();
@@ -59,21 +55,10 @@ boost
 <p>Frees all resources associated with a boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object.</p>
 <h4>Throws:</h4>
 <p>Nothing.</p>
-</div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>exception::diagnostic_information</h3>
-</div>
-<div class="RenoIncludeDIV"><pre>virtual char const * <span class="RenoLink"><a href="exception_diagnostic_information.html">diagnostic_information</a></span>() const throw();</pre>
-</div><h4>Returns:</h4>
-<p>A string representation of all data stored in the boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object by the <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span> function. See "<span class="RenoLink"><a href="tutorial_diagnostic_information.html">Diagnostic Information</a></span>" for details.</p>
-<h4>Throws:</h4>
-<p>Nothing.</p>
-<h4>Notes:</h4>
-<div><ul><li>The return value remains valid until the exception object from which it was obtained is destroyed or modified.</li>
-<li>The header <span class="RenoLink"><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span> provides a namespace-scope function <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> which works with any exception. If its argument can be converted to boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, the output from <span class="RenoLink"><a href="exception_diagnostic_information.html">exception::diagnostic_information</a></span> is combined with other implementation-defined information into a std::string.</li>
-</ul></div>
 </div></div><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
-<div class="RenoPageList"><a href="BOOST_ERROR_INFO.html">BOOST_ERROR_INFO<br/>
-</a><a href="boost-exception.html">Boost Exception<br/>
+<div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
+</a><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp<br/>
 </a><a href="exception_exception_hpp.html">boost/exception/exception.hpp<br/>
 </a><a href="current_exception.html">current_exception<br/>
 </a><a href="tutorial_diagnostic_information.html">Diagnostic Information<br/>
@@ -81,7 +66,6 @@ boost
 </a><a href="enable_current_exception.html">enable_current_exception<br/>
 </a><a href="enable_error_info.html">enable_error_info<br/>
 </a><a href="error_info.html">error_info<br/>
-</a><a href="exception_diagnostic_information.html">exception::diagnostic_information<br/>
 </a><a href="exception_constructors.html">exception::exception<br/>
 </a><a href="exception_destructor.html">exception::~exception<br/>
 </a><a href="get_error_info.html">get_error_info<br/>
