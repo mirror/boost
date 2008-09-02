@@ -10,7 +10,7 @@
 #include <boost/exception/detail/error_info_base.hpp>
 #include <boost/exception/detail/type_info.hpp>
 #include <boost/shared_ptr.hpp>
-#include <memory.h>
+#include <string.h>
 
 namespace
 boost

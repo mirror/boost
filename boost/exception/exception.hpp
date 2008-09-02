@@ -160,6 +160,15 @@ boost
         template <class>
         struct get_info;
 
+		template <>
+        struct get_info<throw_function>;
+
+		template <>
+        struct get_info<throw_file>;
+
+		template <>
+        struct get_info<throw_line>;
+
         char const * get_diagnostic_information( exception const & );
         }
 
@@ -213,6 +222,9 @@ boost
 
         template <class>
         friend struct exception_detail::get_info;
+        friend struct exception_detail::get_info<throw_function>;
+        friend struct exception_detail::get_info<throw_file>;
+        friend struct exception_detail::get_info<throw_line>;
 
         mutable exception_detail::refcount_ptr<exception_detail::error_info_container> data_;
         mutable char const * throw_function_;
