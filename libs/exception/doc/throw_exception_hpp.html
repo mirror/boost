@@ -34,17 +34,20 @@
     #define <span class="RenoLink"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION</a></span>(x) ::boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(x)
 #endif</span>
 
+namespace
+boost
+    {
 <span class="RenoIncludeSPAN">#ifdef BOOST_NO_EXCEPTIONS
     void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( std::exception const &amp; e ); // user defined
 #else
     template &lt;class E&gt;
     void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( E const &amp; e );
-#endif</span></pre>
+#endif</span>
+    }</pre>
 </div></div></div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION<br/>
 </a><a href="boost-exception.html">Boost Exception<br/>
-</a><a href="exception_hpp.html">boost/exception.hpp<br/>
 </a><a href="throw_exception.html">throw_exception<br/>
 </a></div>
 </div>

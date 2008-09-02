@@ -38,24 +38,7 @@ boost
 </div><p>Class boost::<span class="RenoLink"><a href="exception.html">exception</a></span> is designed to be used as a universal base for user-defined exception types.</p>
 <p>An object of any type deriving from boost::<span class="RenoLink"><a href="exception.html">exception</a></span> can store data of arbitrary types, using the <span class="RenoLink"><a href="error_info.html">error_info</a></span> wrapper and <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>.</p>
 <p>To retrieve data from a boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object, use the <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> function template.</p>
-<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>exception::exception</h3>
-</div>
-<div class="RenoIncludeDIV"><pre><span class="RenoLink"><a href="exception_constructors.html">exception</a></span>();
-<span class="RenoLink"><a href="exception_constructors.html">exception</a></span>( <span class="RenoLink"><a href="exception.html">exception</a></span> const &amp; x );</pre>
-</div><h4>Effects:</h4>
-<div><ul><li> Default constructor: initializes an empty boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object.</li>
-<li> Copy constructor: initializes a boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object which shares with x all data added through <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>, including data that is added at a future time.</li>
-</ul></div>
-<h4>Throws:</h4>
-<p>Nothing.</p>
-</div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>exception::~exception</h3>
-</div>
-<div class="RenoIncludeDIV"><pre><span class="RenoLink"><a href="exception_destructor.html">~exception</a></span>();</pre>
-</div><h4>Effects:</h4>
-<p>Frees all resources associated with a boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object.</p>
-<h4>Throws:</h4>
-<p>Nothing.</p>
-</div></div><div class="RenoHR"><hr/></div>
+</div><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
 </a><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp<br/>

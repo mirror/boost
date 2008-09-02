@@ -25,12 +25,12 @@
 <pre>namespace
 boost
     {
-<span class="RenoIncludeSPAN">    #ifdef BOOST_NO_EXCEPTIONS
-        void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( std::exception const &amp; e ); // user defined
-    #else
-        template &lt;class E&gt;
-        void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( E const &amp; e );
-    #endif</span>
+<span class="RenoIncludeSPAN">#ifdef BOOST_NO_EXCEPTIONS
+    void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( std::exception const &amp; e ); // user defined
+#else
+    template &lt;class E&gt;
+    void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( E const &amp; e );
+#endif</span>
     }</pre>
 </div><h4>Requirements:</h4>
 <p>E must derive publicly from std::exception.</p>
