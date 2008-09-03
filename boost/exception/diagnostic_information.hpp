@@ -17,6 +17,7 @@ boost
     namespace
     exception_detail
         {
+        inline
         char const *
         get_diagnostic_information( exception const & x )
             {
