@@ -294,7 +294,7 @@ boost
 <h4>Thread safety</h4>
 <div><ul><li> It is legal for multiple threads to hold <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> references to the same exception object.</li>
 <li> It is illegal for multiple threads to modify the same <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> object concurrently.</li>
-<li> While calling <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> makes a copy of the current exception object, it is still possible for the two copies to share internal state. Therefore, in general it is not safe to call <span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span> to throw the same exception object concurrently into multiple threads.</li>
+<li> While calling <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> makes a copy of the current exception object, it is still possible for the two copies to share internal state. Therefore, in general it is not safe to call <span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span> concurrently to throw the same exception object into multiple threads.</li>
 </ul></div>
 </div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>enable_current_exception</h3>
 </div>
