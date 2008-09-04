@@ -17,7 +17,11 @@ boost
     char const *
     type_name()
         {
+#ifdef BOOST_NO_TYPEID
         return BOOST_CURRENT_FUNCTION;
+#else
+        return typeid(T).name();
+#endif
         }
 
     namespace
