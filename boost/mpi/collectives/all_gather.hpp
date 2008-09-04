@@ -40,10 +40,7 @@ namespace detail {
   all_gather_impl(const communicator& comm, const T* in_values, int n, 
                   T* out_values, mpl::false_)
   {
-    std::cerr << comm.rank() << ": gathering " << n << " values to root 0..." << std::endl;
-    std::cerr << in_values << ", " << out_values << std::endl;
     gather(comm, in_values, n, out_values, 0);
-    std::cerr << comm.rank() << ":  broadcasting from root 0..." << std::endl;
     broadcast(comm, out_values, comm.size() * n, 0);
   }
 } // end namespace detail

@@ -105,8 +105,6 @@ private:
 
     void load_impl(void * p, int l)
     {
-      if (position+l > static_cast<int>(buffer_.size()))
-        std::cerr << position << " " << l << " " << buffer_.size() << "\n";
       assert(position+l<=static_cast<int>(buffer_.size()));
       std::memcpy(p,&buffer_[position],l);
       position += l;
