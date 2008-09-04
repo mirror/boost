@@ -18,7 +18,7 @@
 
 #include <boost/config.hpp>
 
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 
 namespace boost {
 

@@ -13,7 +13,7 @@
 //#include <cstring> // memcpy
 
 #include <boost/detail/endian.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 #include <boost/archive/archive_exception.hpp>
 
 #include "portable_binary_iarchive.hpp"
@@ -33,7 +33,7 @@ portable_binary_iarchive::load_impl(boost::intmax_t & l, char maxsize){
         size = -size;
 
     if(size > maxsize)
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             portable_binary_iarchive_exception()
         );
 
@@ -62,7 +62,7 @@ portable_binary_iarchive::load_override(
     cn.reserve(BOOST_SERIALIZATION_MAX_KEY_SIZE);
     load_override(cn, 0);
     if(cn.size() > (BOOST_SERIALIZATION_MAX_KEY_SIZE - 1))
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             boost::archive::archive_exception(
                 boost::archive::archive_exception::invalid_class_name)
             );
@@ -77,8 +77,8 @@ portable_binary_iarchive::init(unsigned int flags){
         // read signature in an archive version independent manner
         std::string file_signature;
         * this >> file_signature;
-        if(file_signature != boost::archive::ARCHIVE_SIGNATURE())
-            boost::throw_exception(
+        if(file_signature != boost::archive::BOOST_ARCHIVE_SIGNATURE())
+            boost::serialization::throw_exception(
                 boost::archive::archive_exception(
                     boost::archive::archive_exception::invalid_signature
                 )
@@ -89,8 +89,8 @@ portable_binary_iarchive::init(unsigned int flags){
         * this >> input_library_version;
 
         // extra little .t is to get around borland quirk
-        if(boost::archive::ARCHIVE_VERSION() < input_library_version.t)
-            boost::throw_exception(
+        if(boost::archive::BOOST_ARCHIVE_VERSION() < input_library_version.t)
+            boost::serialization::throw_exception(
                 boost::archive::archive_exception(
                     boost::archive::archive_exception::unsupported_version
                 )

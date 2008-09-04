@@ -20,7 +20,7 @@
 
 #include "test_tools.hpp"
 #include <boost/detail/no_exceptions_support.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 #include <boost/serialization/split_member.hpp>
 
 #include "B.hpp"

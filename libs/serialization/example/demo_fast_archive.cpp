@@ -11,7 +11,7 @@
 
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_array.hpp>
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 
 #define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/binary_oarchive_impl.hpp>

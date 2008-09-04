@@ -20,11 +20,11 @@
 
 #include <typeinfo>
 #include <cstdarg>
-
+#include <cassert>
 #include <boost/config.hpp>
 
 #include <boost/static_assert.hpp>
-#include <boost/static_warning.hpp>
+#include <boost/serialization/static_warning.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
 #include <boost/type_traits/remove_const.hpp>
 
@@ -112,8 +112,15 @@ public:
             return NULL;
         }
     }
-    void destroy(void const * const p) const{
-        delete static_cast<T const *>(p) ;
+    void destroy(void const * const p) const {
+        // the only current usage of extended type info is in the
+        // serialization library.  The statement below requires
+        // that destructor of type T be public and this creates
+        // a problem for some users.  So, for now, comment this
+        // out 
+        //delete static_cast<T const *>(p);
+        // and trap any attempt to invoke this function
+        assert(false);
     }
 };
 

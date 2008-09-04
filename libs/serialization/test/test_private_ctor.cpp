@@ -16,29 +16,36 @@
 #include <boost/archive/text_oarchive.hpp>
 
 class V {
-    int m_i;    
+    friend int test_main(int /* argc */, char * /* argv */[]);
     friend class boost::serialization::access;
-    V() {}
+    int m_i;    
+    V() :
+        m_i(0)
+    {}
+    ~V(){}
     template<class Archive>
     void serialize(Archive& ar, unsigned version)
     {
         ar & m_i;
-    }    
+    }
+    bool operator==(const V & v) const {
+        return m_i == v.m_i;
+    }
 };
 
 int test_main(int /* argc */, char * /* argv */[])
 {
     std::stringstream ss;
-    const std::vector<V> v;
+    const V v;
     {
         boost::archive::text_oarchive oa(ss);
         oa << v;
     }
-    std::vector<V> v1;
+    V v1;
     {
         boost::archive::text_iarchive ia(ss);
         ia >> v1;
     }
-    //BOOST_CHECK(v == v1);
+    BOOST_CHECK(v == v1);
     return EXIT_SUCCESS;
 }

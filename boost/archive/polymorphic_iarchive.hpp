@@ -29,7 +29,7 @@ namespace std{
 #include <string>
 #include <boost/cstdint.hpp>
 
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 #include <boost/archive/detail/iserializer.hpp>
 #include <boost/archive/detail/interface_iarchive.hpp>
 #include <boost/serialization/nvp.hpp>

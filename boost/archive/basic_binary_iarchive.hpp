@@ -25,7 +25,7 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 
 #include <boost/archive/detail/common_iarchive.hpp>
 #include <boost/serialization/collection_size_type.hpp>

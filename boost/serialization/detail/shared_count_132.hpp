@@ -24,7 +24,7 @@
 #endif
 
 #include <boost/checked_delete.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 #include <boost/detail/lightweight_mutex.hpp>
 
 #if defined(BOOST_SP_USE_QUICK_ALLOCATOR)
@@ -134,7 +134,7 @@ public:
 #if defined(BOOST_HAS_THREADS)
         mutex_type::scoped_lock lock(mtx_);
 #endif
-        if(use_count_ == 0) boost::throw_exception(bad_weak_ptr());
+        if(use_count_ == 0) boost::serialization::throw_exception(bad_weak_ptr());
         ++use_count_;
     }
 
@@ -357,7 +357,7 @@ public:
         if(pi_ == 0)
         {
             d(p); // delete p
-            boost::throw_exception(std::bad_alloc());
+            boost::serialization::throw_exception(std::bad_alloc());
         }
 
 #endif
@@ -551,7 +551,7 @@ inline shared_count::shared_count(weak_count const & r): pi_(r.pi_)
     }
     else
     {
-        boost::throw_exception(bad_weak_ptr());
+        boost::serialization::throw_exception(bad_weak_ptr());
     }
 }
 

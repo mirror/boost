@@ -16,7 +16,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/checked_delete.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 #include <boost/detail/atomic_count.hpp>
 
 #ifndef BOOST_NO_AUTO_PTR
@@ -62,7 +62,7 @@ public:
         if(pn == 0)
         {
             boost::checked_delete(p);
-            boost::throw_exception(std::bad_alloc());
+            boost::serialization::throw_exception(std::bad_alloc());
         }
 
 #endif

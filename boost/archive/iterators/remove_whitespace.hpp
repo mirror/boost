@@ -20,7 +20,7 @@
 
 #include <boost/config.hpp> // for BOOST_DEDUCED_TYPENAME
 
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/iterator/filter_iterator.hpp>

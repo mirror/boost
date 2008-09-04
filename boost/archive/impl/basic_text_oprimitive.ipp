@@ -9,7 +9,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cstddef> // NULL
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 
 #include <boost/archive/basic_text_oprimitive.hpp>
 #include <boost/archive/codecvt_null.hpp>
@@ -36,7 +36,9 @@ basic_text_oprimitive<OStream>::save_binary(
         return;
     
     if(os.fail())
-        boost::throw_exception(archive_exception(archive_exception::stream_error));
+        boost::serialization::throw_exception(
+            archive_exception(archive_exception::stream_error)
+        );
         
     os.put('\n');
     

@@ -1,5 +1,5 @@
-#ifndef BOOST_SERIALIZATION_IS_ABSTRACT_CLASS_HPP
-#define BOOST_SERIALIZATION_IS_ABSTRACT_CLASS_HPP
+#ifndef BOOST_SERIALIZATION_ASSUME_ABSTRACT_HPP
+#define BOOST_SERIALIZATION_ASSUME_ABSTRACT_HPP
 
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
@@ -7,7 +7,7 @@
 #endif
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// is_abstract_class.hpp:
+// assume_abstract_class.hpp:
 
 // (C) Copyright 2008 Robert Ramey
 // Use, modification and distribution is subject to the Boost Software
@@ -56,4 +56,4 @@ struct is_abstract< const T > : boost::true_type {};  \
 
 #endif // BOOST_NO_IS_ABSTRACT
 
-#endif //BOOST_SERIALIZATION_IS_ABSTRACT_CLASS_HPP
+#endif //BOOST_SERIALIZATION_ASSUME_ABSTRACT_HPP

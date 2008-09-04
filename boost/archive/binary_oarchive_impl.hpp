@@ -17,7 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <ostream>
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 #include <boost/archive/basic_binary_oprimitive.hpp>
 #include <boost/archive/basic_binary_oarchive.hpp>
 

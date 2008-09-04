@@ -82,18 +82,18 @@ extended_type_info_typeid_0::type_unregister()
     if(NULL == m_ti)
         return;
     
-    tkmap & x = singleton<tkmap>::get_mutable_instance();
-    tkmap::iterator start = x.lower_bound(this);
-    tkmap::iterator end = x.upper_bound(this);
-    assert(start != end);
+        tkmap & x = singleton<tkmap>::get_mutable_instance();
+        tkmap::iterator start = x.lower_bound(this);
+        tkmap::iterator end = x.upper_bound(this);
+        assert(start != end);
 
-    // remove entry in map which corresponds to this type
-    do{
-        if(this == *start){
-            x.erase(start);
-            break;
-    }
-    }while(++start != end);
+        // remove entry in map which corresponds to this type
+        do{
+            if(this == *start)
+            	start = x.erase(start);
+     	else
+                ++start;
+        }while(start != end);
 
     m_ti = NULL;
 }

@@ -19,8 +19,8 @@
 #include <cassert>
 
 #include <boost/config.hpp> // for BOOST_DEDUCED_TYPENAME
-#include <boost/throw_exception.hpp>
-#include <boost/pfto.hpp>
+#include <boost/serialization/throw_exception.hpp>
+#include <boost/serialization/pfto.hpp>
 
 #include <boost/archive/iterators/unescape.hpp>
 #include <boost/archive/iterators/dataflow_exception.hpp>
@@ -61,7 +61,7 @@ template<class Base>
 void xml_unescape<Base>::drain_residue(const char * literal){
     do{
         if(* literal != * ++(this->base_reference()))
-            boost::throw_exception(
+            boost::serialization::throw_exception(
                 dataflow_exception(
                     dataflow_exception::invalid_xml_escape_sequence
                 )

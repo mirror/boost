@@ -108,6 +108,7 @@ private:
         return t;
     }
 public:
+    static bool is_destroyed;
     BOOST_DLLEXPORT static T & get_mutable_instance(){
         assert(! is_locked());
         return get_instance();
@@ -115,10 +116,16 @@ public:
     BOOST_DLLEXPORT static const T & get_const_instance(){
         return get_instance();
     }
+    ~singleton(){
+        is_destroyed = true;
+    }
 };
 
 template<class T>
 BOOST_DLLEXPORT T & singleton<T>::instance = singleton<T>::get_instance();
+
+template<class T>
+bool singleton<T>::is_destroyed = false;
 
 } // namespace serialization
 } // namespace boost

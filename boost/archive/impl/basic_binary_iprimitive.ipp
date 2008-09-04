@@ -22,7 +22,7 @@ namespace std{
 
 #include <boost/detail/workaround.hpp> // fixup for RogueWave
 
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include <boost/archive/archive_exception.hpp>
@@ -45,22 +45,22 @@ basic_binary_iprimitive<Archive, Elem, Tr>::init()
     unsigned char size;
     this->This()->load(size);
     if(sizeof(int) != size)
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             archive_exception(archive_exception::incompatible_native_format)
         );
     this->This()->load(size);
     if(sizeof(long) != size)
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             archive_exception(archive_exception::incompatible_native_format)
         );
     this->This()->load(size);
     if(sizeof(float) != size)
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             archive_exception(archive_exception::incompatible_native_format)
         );
     this->This()->load(size);
     if(sizeof(double) != size)
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             archive_exception(archive_exception::incompatible_native_format)
         );
 
@@ -68,7 +68,7 @@ basic_binary_iprimitive<Archive, Elem, Tr>::init()
     int i;
     this->This()->load(i);
     if(1 != i)
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             archive_exception(archive_exception::incompatible_native_format)
         );
 }
@@ -186,7 +186,7 @@ basic_binary_iprimitive<Archive, Elem, Tr>::~basic_binary_iprimitive(){
         m_sb
     ).sync();
     if(0 != result){ 
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             archive_exception(archive_exception::stream_error)
         );
     }

@@ -26,13 +26,13 @@
 
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/static_warning.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
 
 #ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO   
     #include <boost/serialization/extended_type_info_typeid.hpp>   
 #endif 
+#include <boost/serialization/static_warning.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/force_include.hpp>

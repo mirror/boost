@@ -19,7 +19,7 @@
 #include <cassert>
 
 #include <boost/config.hpp> // for BOOST_DEDUCED_TYPENAME
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 
 #include <boost/iterator/transform_iterator.hpp>
 #include <boost/archive/iterators/dataflow_exception.hpp>

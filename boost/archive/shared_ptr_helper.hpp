@@ -24,7 +24,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/shared_ptr_132.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 
 #include <boost/archive/archive_exception.hpp>
 
@@ -93,7 +93,7 @@ public:
         // note:if this exception is thrown, be sure that derived pointer
         // is either registered or exported.
         if(NULL == true_type)
-            boost::throw_exception(
+            boost::serialization::throw_exception(
                 boost::archive::archive_exception(
                     boost::archive::archive_exception::unregistered_class
                 )

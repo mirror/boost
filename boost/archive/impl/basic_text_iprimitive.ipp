@@ -18,8 +18,8 @@ namespace std{
 } // namespace std
 #endif
 
-#include <boost/throw_exception.hpp>
-#include <boost/pfto.hpp>
+#include <boost/serialization/throw_exception.hpp>
+#include <boost/serialization/pfto.hpp>
 
 #include <boost/archive/basic_text_iprimitive.hpp>
 #include <boost/archive/codecvt_null.hpp>
@@ -52,7 +52,9 @@ basic_text_iprimitive<IStream>::load_binary(
     );
         
     if(is.fail())
-        boost::throw_exception(archive_exception(archive_exception::stream_error));
+        boost::serialization::throw_exception(
+            archive_exception(archive_exception::stream_error)
+        );
     // convert from base64 to binary
     typedef BOOST_DEDUCED_TYPENAME
         iterators::transform_width<

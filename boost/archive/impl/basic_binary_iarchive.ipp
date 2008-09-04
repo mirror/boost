@@ -35,7 +35,7 @@ basic_binary_iarchive<Archive>::load_override(class_name_type & t, int){
     cn.reserve(BOOST_SERIALIZATION_MAX_KEY_SIZE);
     load_override(cn, 0);
     if(cn.size() > (BOOST_SERIALIZATION_MAX_KEY_SIZE - 1))
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             archive_exception(archive_exception::invalid_class_name)
         );
     std::memcpy(t, cn.data(), cn.size());
@@ -49,8 +49,8 @@ basic_binary_iarchive<Archive>::init(){
     // read signature in an archive version independent manner
     std::string file_signature;
     * this->This() >> file_signature;
-    if(file_signature != ARCHIVE_SIGNATURE())
-        boost::throw_exception(
+    if(file_signature != BOOST_ARCHIVE_SIGNATURE())
+        boost::serialization::throw_exception(
             archive_exception(archive_exception::invalid_signature)
         );
 
@@ -69,8 +69,8 @@ basic_binary_iarchive<Archive>::init(){
     #endif
     
     // extra little .t is to get around borland quirk
-    if(ARCHIVE_VERSION() < input_library_version.t)
-        boost::throw_exception(
+    if(BOOST_ARCHIVE_VERSION() < input_library_version.t)
+        boost::serialization::throw_exception(
             archive_exception(archive_exception::unsupported_version)
         );
 }

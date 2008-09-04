@@ -28,7 +28,7 @@ namespace std{
 } // namespace std
 #endif
 
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
 
 namespace boost { 

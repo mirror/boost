@@ -17,7 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <istream>
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 #include <boost/archive/basic_binary_iprimitive.hpp>
 #include <boost/archive/basic_binary_iarchive.hpp>
 
