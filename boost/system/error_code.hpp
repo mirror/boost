@@ -382,6 +382,9 @@ namespace boost
 
     };
 
+    //  predefined error_code object used as "throw on error" tag
+    BOOST_SYSTEM_DECL extern error_code throws;
+
     //  non-member functions  ------------------------------------------------//
 
     inline bool operator!=( const error_code & lhs,

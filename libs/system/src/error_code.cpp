@@ -396,6 +396,12 @@ namespace boost
   namespace system
   {
 
+    BOOST_SYSTEM_DECL error_code throws; // "throw on error" special error_code;
+                                         //  note that it doesn't matter if this
+                                         //  isn't initialized before use since
+                                         //  the only use is to take its
+                                         //  address for comparison purposes
+
     BOOST_SYSTEM_DECL const error_category & get_system_category()
     {
       static const system_error_category  system_category_const;
