@@ -100,7 +100,7 @@ public:
 
   // Load it directly using the primnivites
   template<class T>
-  void load_override(T& x, int version, mpl::true_)
+  void load_override(T& x, int /*version*/, mpl::true_)
   {
     iprimitive::load(x);
   }
