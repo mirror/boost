@@ -9,7 +9,7 @@
 #ifndef BOOST_MPI_DETAIL_IGNORE_SKELETON_OARCHIVE_HPP
 #define BOOST_MPI_DETAIL_IGNORE_SKELETON_OARCHIVE_HPP
 
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/detail/common_oarchive.hpp>

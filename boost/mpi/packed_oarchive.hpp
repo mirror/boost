@@ -90,7 +90,7 @@ public:
 
   // Save it directly using the primnivites
   template<class T>
-  void save_override(T const& x, int version, mpl::true_)
+  void save_override(T const& x, int /*version*/, mpl::true_)
   {
     oprimitive::save(x);
   }
