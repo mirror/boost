@@ -93,7 +93,7 @@ extended_type_info::key_unregister() {
     // remove entry in map which corresponds to this type
     do{
         if(this == *start)
-            start = x.erase(start);
+            x.erase(start++);
         else
 		++start;
     }while(start != end);
