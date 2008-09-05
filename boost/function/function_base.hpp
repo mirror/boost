@@ -30,6 +30,7 @@
 #  include "boost/mpl/bool.hpp"
 #endif
 #include <boost/function_equal.hpp>
+#include <boost/function/function_fwd.hpp>
 
 #if defined(BOOST_MSVC)
 #   pragma warning( push )
@@ -63,21 +64,6 @@
 #  define BOOST_FUNCTION_TARGET_FIX(x)
 #endif // not MSVC
 
-#if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730 && !defined(BOOST_STRICT_CONFIG)
-// Work around a compiler bug.
-// boost::python::objects::function has to be seen by the compiler before the
-// boost::function class template.
-namespace boost { namespace python { namespace objects {
-  class function;
-}}}
-#endif
-
-#if defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)                    \
- || defined(BOOST_BCB_PARTIAL_SPECIALIZATION_BUG)                         \
- || !(BOOST_STRICT_CONFIG || !defined(__SUNPRO_CC) || __SUNPRO_CC > 0x540)
-#  define BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX
-#endif
-
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x600)
 #  define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)              \
       typename ::boost::enable_if_c<(::boost::type_traits::ice_not<          \
@@ -91,22 +77,6 @@ namespace boost { namespace python { namespace objects {
                    (::boost::is_integral<Functor>::value)>::value), \
                        Type>::type
 #endif
-
-#if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
-namespace boost {
-
-template<typename Signature>
-class function;
-
-template<typename Signature>
-inline void swap(function<Signature>& f1,
-                 function<Signature>& f2)
-{
-  f1.swap(f2);
-}
-
-} // end namespace boost
-#endif // have partial specialization
 
 namespace boost {
   namespace detail {
