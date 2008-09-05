@@ -22,7 +22,8 @@ struct result_of<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))>
     : mpl::if_<
           mpl::or_< is_pointer<F>, is_member_function_pointer<F> >
         , detail::result_of_impl<
-              F, F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), false
+            typename remove_cv<F>::type, 
+            typename remove_cv<F>::type(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), false
           >
         , detail::result_of_decltype_impl<
               F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))
@@ -61,7 +62,16 @@ public:
 template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
          BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct result_of<F(BOOST_RESULT_OF_ARGS)>
-    : boost::detail::result_of_impl<F, F(BOOST_RESULT_OF_ARGS), (boost::detail::has_result_type<F>::value)> {};
+    : mpl::if_<
+          mpl::or_< is_pointer<F>, is_member_function_pointer<F> >
+        , boost::detail::result_of_impl<
+            typename remove_cv<F>::type, 
+            typename remove_cv<F>::type(BOOST_RESULT_OF_ARGS), 
+            (boost::detail::has_result_type<F>::value)>
+        , boost::detail::result_of_impl<
+            F,
+            F(BOOST_RESULT_OF_ARGS), 
+            (boost::detail::has_result_type<F>::value)> >::type { };
 #endif
 
 #undef BOOST_RESULT_OF_ARGS

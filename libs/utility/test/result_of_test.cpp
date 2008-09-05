@@ -177,6 +177,10 @@ int main()
   BOOST_STATIC_ASSERT((is_same<result_of<result_of_member_function_template(int volatile &, int)>::type, int volatile &>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<result_of_member_function_template(int const volatile &, int)>::type, int const volatile &>::value));
 
+  typedef int (*pf_t)(int);
+  BOOST_STATIC_ASSERT((is_same<result_of<pf_t(int)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<result_of<pf_t const(int)>::type,int>::value));
+
 #if defined(BOOST_HAS_DECLTYPE)
   BOOST_STATIC_ASSERT((is_same<result_of<no_result_type_or_result_of(double)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<no_result_type_or_result_of(void)>::type, unsigned int>::value));

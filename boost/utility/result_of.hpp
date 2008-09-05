@@ -21,6 +21,7 @@
 #include <boost/mpl/or.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_member_function_pointer.hpp>
+#include <boost/type_traits/remove_cv.hpp>
 
 #ifndef BOOST_RESULT_OF_NUM_ARGS
 #  define BOOST_RESULT_OF_NUM_ARGS 10
@@ -55,6 +56,11 @@ struct result_of_void_impl<R (&)(void)>
 {
   typedef R type;
 };
+
+// Determine the return type of a function pointer or pointer to member.
+template<typename F, typename FArgs>
+struct result_of_pointer
+  : result_of_impl<typename remove_cv<F>::type, FArgs, false> { };
 
 template<typename F, typename FArgs>
 struct result_of_impl<F, FArgs, true>
