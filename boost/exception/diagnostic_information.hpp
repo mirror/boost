@@ -38,23 +38,25 @@ boost
     diagnostic_information( exception const & x )
         {
         std::ostringstream tmp;
-        tmp <<
-            "boost::exception diagnostic information:"
-#ifndef BOOST_NO_RTTI
-            "\nDynamic exception type: " << BOOST_EXCEPTION_DYNAMIC_TYPEID(x).name();
-        if( std::exception const * e=dynamic_cast<std::exception const *>(&x) )
-            tmp << "\nstd::exception::what: " << e->what()
-#endif
-            ;
-        if( boost::shared_ptr<char const * const> f=get_error_info<throw_function>(x) )
-            tmp << "\nThrow function: " << *f;
         if( boost::shared_ptr<char const * const> f=get_error_info<throw_file>(x) )
-            tmp << "\nThrow file name: " << *f;
-        if( boost::shared_ptr<int const> l=get_error_info<throw_line>(x) )
-            tmp << "\nThrow file line: " << *l;
+            {
+            tmp << *f;
+            if( boost::shared_ptr<int const> l=get_error_info<throw_line>(x) )
+                tmp << '(' << *l << "): ";
+            }
+        tmp << "Throw in function ";
+        if( boost::shared_ptr<char const * const> fn=get_error_info<throw_function>(x) )
+            tmp << *fn;
+        else
+            tmp << "(unknown)";
+#ifndef BOOST_NO_RTTI
+        tmp << "\nDynamic exception type: " << BOOST_EXCEPTION_DYNAMIC_TYPEID(x).name();
+        if( std::exception const * e=dynamic_cast<std::exception const *>(&x) )
+            tmp << "\nstd::exception::what: " << e->what();
+#endif
         if( char const * s=exception_detail::get_diagnostic_information(x) )
             if( *s )
-                tmp << "\n" << s;
+                tmp << '\n' << s;
         return tmp.str();
         }
     }
