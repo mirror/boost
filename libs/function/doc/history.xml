@@ -18,6 +18,10 @@
       <listitem><para>Improved the performance of Boost.Function's
       swap() operation for large function objects. Original patch
       contributed by Niels Dekker.</para></listitem>
+
+      <listitem><para>Added a new header &lt;boost/function/function_typeof.hpp&gt; that provides support for using the Boost.Typeof library on Boost.Function objects.</para></listitem>
+
+      <listitem><para>Added a new header &lt;boost/function/function_fwd.hpp&gt; that provides support for using the Boost.Typeof library on Boost.Function objects.</para></listitem>
     </itemizedlist>
   </listitem>
 

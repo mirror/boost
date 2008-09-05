@@ -59,6 +59,8 @@ import testing ;
   [ run libs/function/test/contains2_test.cpp : : : : ]
    
   [ run libs/function/test/nothrow_swap.cpp :  :  :  :  ]
+
+  [ compile libs/function/test/function_typeof_test.cpp ]
  ;
 }
       

@@ -66,4 +66,5 @@ namespace boost {
            typename T10> 
     class function10;
 }
+
 #endif
