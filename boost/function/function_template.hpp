@@ -516,11 +516,9 @@ namespace boost {
                   function_buffer& functor, function_obj_ref_tag)
         {
           if (!boost::detail::function::has_empty_target(f.get_pointer())) {
-            // DPG TBD: We might need to detect constness of
-            // FunctionObj to assign into obj_ptr or const_obj_ptr to
-            // be truly legit, but no platform in existence makes
-            // const void* different from void*.
-            functor.const_obj_ptr = f.get_pointer();
+            functor.obj_ref.obj_ptr = (void *)f.get_pointer();
+            functor.obj_ref.is_const = is_const<FunctionObj>::value;
+            functor.obj_ref.is_volatile = is_volatile<FunctionObj>::value;
             return true;
           } else {
             return false;

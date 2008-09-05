@@ -88,6 +88,15 @@ static void target_test()
   BOOST_CHECK(!f.target<int (*)()>());
   BOOST_CHECK(f.target<Seventeen>());
   BOOST_CHECK(f.target<Seventeen>() == &this_seventeen);
+
+  const Seventeen const_seventeen = this_seventeen;
+  f = boost::ref(const_seventeen);
+  BOOST_CHECK(!f.target<int (*)()>());
+  BOOST_CHECK(f.target<const Seventeen>());
+  BOOST_CHECK(f.target<const Seventeen>() == &const_seventeen);
+  BOOST_CHECK(f.target<const volatile Seventeen>());
+  BOOST_CHECK(!f.target<Seventeen>());
+  BOOST_CHECK(!f.target<volatile Seventeen>());
 }
 
 static void equal_test()

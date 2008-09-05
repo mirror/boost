@@ -22,6 +22,14 @@
       <listitem><para>Added a new header &lt;boost/function/function_typeof.hpp&gt; that provides support for using the Boost.Typeof library on Boost.Function objects.</para></listitem>
 
       <listitem><para>Added a new header &lt;boost/function/function_fwd.hpp&gt; that provides support for using the Boost.Typeof library on Boost.Function objects.</para></listitem>
+
+      <listitem><para>The <methodname alt="boost::function::target">target</methodname>()
+      function now respects the cv-qualifiers of function objects
+      stored by reference
+      (using <classname>boost::reference_wrapper</classname>), such
+      that a reference to a <code>const</code> function object cannot
+      be accessed as a reference to a non-<code>const</code> function
+      object.</para></listitem>
     </itemizedlist>
   </listitem>
 
