@@ -26,6 +26,8 @@ namespace boost { namespace python { namespace objects {
 #endif
 
 namespace boost {
+  class bad_function_call;
+
 #if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
   // Preferred syntax
   template<typename Signature> class function;

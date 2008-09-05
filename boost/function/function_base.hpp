@@ -92,7 +92,7 @@ namespace boost {
       union function_buffer
       {
         // For pointers to function objects
-        void* obj_ptr;
+        mutable void* obj_ptr;
 
         // For pointers to std::type_info objects
         // (get_functor_type_tag, check_functor_type_tag).
@@ -138,6 +138,7 @@ namespace boost {
       // The operation type to perform on the given functor/function pointer
       enum functor_manager_operation_type {
         clone_functor_tag,
+        move_functor_tag,
         destroy_functor_tag,
         check_functor_type_tag,
         get_functor_type_tag
@@ -180,6 +181,11 @@ namespace boost {
           switch (op) {
           case clone_functor_tag: 
             out_buffer.obj_ptr = in_buffer.obj_ptr;
+            return;
+
+          case move_functor_tag:
+            out_buffer.obj_ptr = in_buffer.obj_ptr;
+            in_buffer.obj_ptr = 0;
             return;
 
           case destroy_functor_tag:
@@ -247,7 +253,10 @@ namespace boost {
         {
           if (op == clone_functor_tag)
             out_buffer.func_ptr = in_buffer.func_ptr;
-          else if (op == destroy_functor_tag)
+          else if (op == move_functor_tag) {
+            out_buffer.func_ptr = in_buffer.func_ptr;
+            in_buffer.func_ptr = 0;
+          } else if (op == destroy_functor_tag)
             out_buffer.func_ptr = 0;
           else /* op == check_functor_type_tag */ {
             const BOOST_FUNCTION_STD_NS::type_info& check_type = 
@@ -264,10 +273,14 @@ namespace boost {
         manage_small(const function_buffer& in_buffer, function_buffer& out_buffer, 
                 functor_manager_operation_type op)
         {
-          if (op == clone_functor_tag) {
+          if (op == clone_functor_tag || op == move_functor_tag) {
             const functor_type* in_functor = 
               reinterpret_cast<const functor_type*>(&in_buffer.data);
             new ((void*)&out_buffer.data) functor_type(*in_functor);
+
+            if (op == move_functor_tag) {
+              reinterpret_cast<functor_type*>(&in_buffer.data)->~Functor();
+            }
           } else if (op == destroy_functor_tag) {
             // Some compilers (Borland, vc6, ...) are unhappy with ~functor_type.
             reinterpret_cast<functor_type*>(&out_buffer.data)->~Functor();
@@ -317,6 +330,9 @@ namespace boost {
               (const functor_type*)(in_buffer.obj_ptr);
             functor_type* new_f = new functor_type(*f);
             out_buffer.obj_ptr = new_f;
+          } else if (op == move_functor_tag) {
+            out_buffer.obj_ptr = in_buffer.obj_ptr;
+            in_buffer.obj_ptr = 0;
           } else if (op == destroy_functor_tag) {
             /* Cast from the void pointer to the functor pointer type */
             functor_type* f =
@@ -409,6 +425,9 @@ namespace boost {
             // Get back to the original pointer type
             functor_wrapper_type* new_f = static_cast<functor_wrapper_type*>(copy);
             out_buffer.obj_ptr = new_f;
+          } else if (op == move_functor_tag) {
+            out_buffer.obj_ptr = in_buffer.obj_ptr;
+            in_buffer.obj_ptr = 0;
           } else if (op == destroy_functor_tag) {
             /* Cast from the void pointer to the functor_wrapper_type */
             functor_wrapper_type* victim =

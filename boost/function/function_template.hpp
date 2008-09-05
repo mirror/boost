@@ -729,9 +729,10 @@ namespace boost {
       if (&other == this)
         return;
 
-      BOOST_FUNCTION_FUNCTION tmp = *this;
-      *this = other;
-      other = tmp;
+      BOOST_FUNCTION_FUNCTION tmp;
+      tmp.move_assign(*this);
+      this->move_assign(other);
+      other.move_assign(tmp);
     }
 
     // Clear out a target, if there is one
@@ -785,6 +786,32 @@ namespace boost {
       static vtable_type stored_vtable(f,a);
       if (stored_vtable.assign_to_a(f, functor, a)) vtable = &stored_vtable;
       else vtable = 0;
+    }
+
+    // Moves the value from the specified argument to *this. If the argument 
+    // has its function object allocated on the heap, move_assign will pass 
+    // its buffer to *this, and set the argument's buffer pointer to NULL. 
+    void move_assign(BOOST_FUNCTION_FUNCTION& f) 
+    { 
+      if (&f == this)
+        return;
+
+#if !defined(BOOST_NO_EXCEPTIONS)      
+      try {
+#endif
+        if (!f.empty()) {
+          this->vtable = f.vtable;
+          f.vtable->manager(f.functor, this->functor,
+                            boost::detail::function::move_functor_tag);
+#if !defined(BOOST_NO_EXCEPTIONS)      
+        } else {
+          clear();
+        }
+      } catch (...) {
+        vtable = 0;
+        throw;
+      }
+#endif
     }
   };
 

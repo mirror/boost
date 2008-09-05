@@ -13,6 +13,14 @@
 
 <itemizedlist spacing="compact">
 
+  <listitem><para><bold>Version 1.37.0</bold>: </para>
+    <itemizedlist spacing="compact">
+      <listitem><para>Improved the performance of Boost.Function's
+      swap() operation for large function objects. Original patch
+      contributed by Niels Dekker.</para></listitem>
+    </itemizedlist>
+  </listitem>
+
   <listitem><para><bold>Version 1.36.0</bold>: </para>
     <itemizedlist spacing="compact">
       <listitem><para>Boost.Function now implements allocator support
