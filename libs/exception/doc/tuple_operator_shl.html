@@ -3,7 +3,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-	<title>operator&lt;&lt;/exception</title>
+	<title>tuple/operator&lt;&lt;</title>
 	<link href='reno.css' type='text/css' rel='stylesheet'/>
 </head>
 <body>
@@ -19,34 +19,31 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>operator&lt;&lt;/exception</h3>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>tuple/operator&lt;&lt;</h3>
 </div>
-<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;<span class="RenoBR">&nbsp;</span><br/></p>
+<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_error_info_group_hpp.html">boost/exception/info_tuple.hpp</a></span>&gt;</p>
 <pre>namespace
 boost
     {
-<span class="RenoIncludeSPAN">    template &lt;class E, class Tag, class T&gt;
-    E const &amp; <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>( E const &amp; x, <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; const &amp; v );</span>
+<span class="RenoIncludeSPAN">    template &lt;class E, class Tag1, class T1, ..., class TagN, class TN&gt;
+    E const &amp; <span class="RenoLink"><a href="tuple_operator_shl.html">operator&lt;&lt;</a></span>( E const &amp; x,
+        <span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html">tuple</a></span>&lt;
+            <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag1,T1&gt;,
+            ...,
+            <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;TagN,TN&gt; &gt; const &amp; v );</span>
     }</pre>
 </div><h4>Requirements:</h4>
 <p>E must be boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, or a type that derives (indirectly) from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p>
 <h4>Effects:</h4>
-<p>Stores a copy of v into x. If x already contains data of type <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt;, that data is overwritten.</p>
+<p>Equivalent to x &lt;&lt; v.<span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html#accessing_elements">get</a></span>&lt;0&gt;() &lt;&lt; ... &lt;&lt; v.<span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html#accessing_elements">get</a></span>&lt;N&gt;().</p>
 <h4>Returns:</h4>
 <p>x.</p>
 <div class="RenoIncludeDIV"><h4>Throws:</h4>
-<p>std::bad_alloc, or any exception emitted by the T copy constructor.</p>
+<p>std::bad_alloc, or any exception emitted by T1..TN copy constructor.</p>
 </div></div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
-</a><a href="exception_error_info_hpp.html">boost/exception/info.hpp<br/>
-</a><a href="tutorial_diagnostic_information.html">Diagnostic Information<br/>
-</a><a href="diagnostic_information.html">diagnostic_information<br/>
-</a><a href="error_info.html">error_info<br/>
-</a><a href="exception.html">exception<br/>
-</a><a href="exception_constructors.html">exception::exception<br/>
-</a><a href="get_error_info.html">get_error_info<br/>
-</a><a href="tutorial_enable_error_info.html">Integrating Boost Exception in Existing Exception Class Hierarchies<br/>
+</a><a href="exception_error_info_group_hpp.html">boost/exception/info_tuple.hpp<br/>
 </a></div>
 </div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
