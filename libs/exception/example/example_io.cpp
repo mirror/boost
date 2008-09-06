@@ -150,7 +150,7 @@ void
 dump_file_info( boost::exception const & x )
     {
     if( boost::shared_ptr<std::string const> fn = boost::get_error_info<file_name_info>(x) )
-        std::cout << "Source file name: " << *fn << "\n";
+        std::cout << "File name: " << *fn << "\n";
     }
 
 void

@@ -8,6 +8,9 @@
 
 #include <boost/detail/sp_typeinfo.hpp>
 #include <boost/current_function.hpp>
+#ifndef BOOST_NO_TYPEID
+#include <boost/type.hpp>
+#endif
 
 namespace
 boost
@@ -20,7 +23,7 @@ boost
 #ifdef BOOST_NO_TYPEID
         return BOOST_CURRENT_FUNCTION;
 #else
-        return typeid(T).name();
+        return typeid(type<T>).name();
 #endif
         }
 
