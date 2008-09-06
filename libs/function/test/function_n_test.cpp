@@ -651,6 +651,8 @@ struct MyLargeFunctor {
   MyLargeFunctor(const MyLargeFunctor &) { ++construction_count; }
   ~MyLargeFunctor() { ++destruction_count; }
   int operator()() { return 0; }
+
+  float data[128];
  };
 
 void test_construct_destroy_count()
