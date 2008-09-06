@@ -636,6 +636,52 @@ test_ref()
   }
 }
 
+static unsigned construction_count = 0;
+static unsigned destruction_count = 0;
+
+struct MySmallFunctor {
+  MySmallFunctor() { ++construction_count; }
+  MySmallFunctor(const MySmallFunctor &) { ++construction_count; }
+  ~MySmallFunctor() { ++destruction_count; }
+  int operator()() { return 0; }
+ };
+
+struct MyLargeFunctor {
+  MyLargeFunctor() { ++construction_count; }
+  MyLargeFunctor(const MyLargeFunctor &) { ++construction_count; }
+  ~MyLargeFunctor() { ++destruction_count; }
+  int operator()() { return 0; }
+ };
+
+void test_construct_destroy_count()
+{
+  {
+    boost::function0<int> f;
+    boost::function0<int> g;
+    f = MySmallFunctor();
+    g = MySmallFunctor();
+    f.swap(g);
+  }
+
+  // MySmallFunctor objects should be constructed as many times as
+  // they are destroyed.
+  BOOST_CHECK(construction_count == destruction_count);
+ 
+  construction_count = 0;
+  destruction_count = 0;
+  {
+    boost::function0<int> f;
+    boost::function0<int> g;
+    f = MyLargeFunctor();
+    g = MyLargeFunctor();
+    f.swap(g);
+   }
+
+   // MyLargeFunctor objects should be constructed as many times as
+   // they are destroyed.
+   BOOST_CHECK(construction_count == destruction_count);
+}
+
 int test_main(int, char* [])
 {
   test_zero_args();
@@ -644,5 +690,6 @@ int test_main(int, char* [])
   test_emptiness();
   test_member_functions();
   test_ref();
+  test_construct_destroy_count();
   return 0;
 }

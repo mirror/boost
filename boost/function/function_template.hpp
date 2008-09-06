@@ -517,8 +517,8 @@ namespace boost {
         {
           if (!boost::detail::function::has_empty_target(f.get_pointer())) {
             functor.obj_ref.obj_ptr = (void *)f.get_pointer();
-            functor.obj_ref.is_const = is_const<FunctionObj>::value;
-            functor.obj_ref.is_volatile = is_volatile<FunctionObj>::value;
+            functor.obj_ref.is_const_qualified = is_const<FunctionObj>::value;
+            functor.obj_ref.is_volatile_qualified = is_volatile<FunctionObj>::value;
             return true;
           } else {
             return false;
@@ -801,6 +801,7 @@ namespace boost {
           this->vtable = f.vtable;
           f.vtable->manager(f.functor, this->functor,
                             boost::detail::function::move_functor_tag);
+		  f.vtable = 0;
 #if !defined(BOOST_NO_EXCEPTIONS)      
         } else {
           clear();

@@ -99,12 +99,12 @@ namespace boost {
         // For pointers to std::type_info objects
         struct type_t {
           // (get_functor_type_tag, check_functor_type_tag).
-          const std::type_info* type;
+          const BOOST_FUNCTION_STD_NS::type_info* type;
 
           // Whether the type is const-qualified.
-          bool const_qualified : 1;
+          bool const_qualified;
           // Whether the type is volatile-qualified.
-          bool volatile_qualified : 1;
+          bool volatile_qualified;
         } type;
 
         // For function pointers of all kinds
@@ -120,8 +120,8 @@ namespace boost {
         // track of the cv-qualifiers on the object referenced.
         struct obj_ref_t {
           mutable void* obj_ptr;
-          bool is_const : 1;
-          bool is_volatile : 1;
+          bool is_const_qualified;
+          bool is_volatile_qualified;
         } obj_ref;
 
         // To relax aliasing constraints
@@ -217,9 +217,9 @@ namespace boost {
               // Check whether we have the same type. We can add
               // cv-qualifiers, but we can't take them away.
               if (BOOST_FUNCTION_COMPARE_TYPE_ID(check_type, typeid(F))
-                  && (!in_buffer.obj_ref.is_const 
+                  && (!in_buffer.obj_ref.is_const_qualified 
                       || out_buffer.type.const_qualified)
-                  && (!in_buffer.obj_ref.is_volatile
+                  && (!in_buffer.obj_ref.is_volatile_qualified
                       || out_buffer.type.volatile_qualified))
                 out_buffer.obj_ptr = in_buffer.obj_ref.obj_ptr;
               else
@@ -229,8 +229,8 @@ namespace boost {
 
           case get_functor_type_tag:
             out_buffer.type.type = &typeid(F);
-            out_buffer.type.const_qualified = in_buffer.obj_ref.is_const;
-            out_buffer.type.volatile_qualified = in_buffer.obj_ref.is_volatile;
+            out_buffer.type.const_qualified = in_buffer.obj_ref.is_const_qualified;
+            out_buffer.type.volatile_qualified = in_buffer.obj_ref.is_volatile_qualified;
             return;
           }
         }
