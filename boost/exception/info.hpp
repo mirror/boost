@@ -36,7 +36,7 @@ boost
     error_info<Tag,T>::
     tag_typeid_name() const
         {
-        return type_name<Tag>();
+        return tag_type_name<Tag>();
         }
 
     template <class Tag,class T>
