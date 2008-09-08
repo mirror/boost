@@ -191,7 +191,7 @@ boost
         template <class E>
         friend
         E const &
-        operator<<( E const & x, throw_function y )
+        operator<<( E const & x, throw_function const & y )
             {
             x.throw_function_=y.v_;
             return x;
@@ -200,7 +200,7 @@ boost
         template <class E>
         friend
         E const &
-        operator<<( E const & x, throw_file y )
+        operator<<( E const & x, throw_file const & y )
             {
             x.throw_file_=y.v_;
             return x;
@@ -209,7 +209,7 @@ boost
         template <class E>
         friend
         E const &
-        operator<<( E const & x, throw_line y )
+        operator<<( E const & x, throw_line const & y )
             {
             x.throw_line_=y.v_;
             return x;
