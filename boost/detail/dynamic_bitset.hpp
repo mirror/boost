@@ -187,7 +187,7 @@ namespace boost {
 
 #   define BOOST_dynamic_bitset_is_numeric(x)       \
                 template<>                          \
-                struct is_numeric<x> {              \
+                struct is_numeric< x > {            \
                     enum { value = true };          \
                 }                                /**/
 
