@@ -177,8 +177,7 @@ namespace boost { namespace xpressive { namespace detail
             {
                 if(this->leading_)
                 {
-                    // BUGBUG
-                    state.next_search_ = boost::next(tmp);
+                    state.next_search_ = (tmp == state.end_) ? tmp : boost::next(tmp);
                 }
                 return false;
             }
