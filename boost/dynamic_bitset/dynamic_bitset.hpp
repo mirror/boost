@@ -1001,9 +1001,12 @@ template <typename Block, typename Allocator>
 typename dynamic_bitset<Block, Allocator>::size_type
 dynamic_bitset<Block, Allocator>::count() const
 {
-    using namespace detail::dynamic_bitset_impl;
+    using detail::dynamic_bitset_impl::table_width;
+    using detail::dynamic_bitset_impl::access_by_bytes;
+    using detail::dynamic_bitset_impl::access_by_blocks;
+    using detail::dynamic_bitset_impl::value_to_type;
 
-    // NOTE: I'm explicitly qualifying "bits_per_block" to workaround
+    // NOTE: Explicitly qualifying "bits_per_block" to workaround
     //       regressions of gcc 3.4.x
     const bool no_padding =
         dynamic_bitset<Block, Allocator>::bits_per_block
