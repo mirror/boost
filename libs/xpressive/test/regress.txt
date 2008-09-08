@@ -3748,3 +3748,9 @@ res=common <b>HighLight</b> and <b>Blow</b> this
 br0=HighLight
 br1=Blow
 [end]
+
+[track2296]
+str=> "" 
+pat=(?P<f>.+):(?P<l>[0-9]+):((?P<c>[0-9]+):)?.*
+flg=
+[end]
