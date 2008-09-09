@@ -184,7 +184,23 @@ boost
             {
             }
 
-        virtual ~exception() throw() = 0;
+#ifdef __HP_aCC
+        //On HP aCC, this protected copy constructor prevents throwing boost::exception.
+        //On all other platforms, the same effect is achieved by the pure virtual destructor.
+        exception( exception const & x ) throw():
+            data_(x.data_),
+            throw_function_(x.throw_function_),
+            throw_file_(x.throw_file_),
+            throw_line_(x.throw_line_)
+            {
+            }
+#endif
+
+        virtual ~exception() throw()
+#ifndef __HP_aCC
+            = 0 //Workaround for HP aCC, =0 incorrectly leads to link errors.
+#endif
+            ;
 
         private:
 
