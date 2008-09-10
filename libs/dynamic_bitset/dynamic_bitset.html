@@ -574,11 +574,20 @@ Constructible</a>.)
 
 <b>Effects:</b> Constructs a bitset from an integer. The first
 <tt>M</tt> bits are initialized to the corresponding bits in
-<tt>val</tt> and all other bits, if any, to zero (where <tt>M =
+<tt>value</tt> and all other bits, if any, to zero (where <tt>M =
 min(num_bits, std::numeric_limits&lt;unsigned long&gt;::digits)</tt>). A copy of
 the <tt>alloc</tt> object will be used in subsequent bitset
-operations such as <tt>resize</tt> to allocate memory.<br />
- <b>Postconditions:</b>
+operations such as <tt>resize</tt> to allocate memory. Note that, e.g., the
+following
+<br /><br />
+<tt>
+dynamic_bitset b<>( 16, 7 );
+</tt><br /><br />
+will match the <a href="#cons4">constructor from an iterator range</a> (not this
+one), but the underlying implementation will still "do the right thing" and
+construct a bitset of 16 bits, from the value 7.
+<br />
+<b>Postconditions:</b>
 
 <ul>
 <li><tt>this-&gt;size() == num_bits</tt></li>
@@ -620,24 +629,56 @@ explicit
                const Allocator&amp; alloc = Allocator());
 </pre>
 
-<b>Effects:</b> Constructs a bitset based on a range of blocks.
-Let <tt>*first</tt> be block number 0, <tt>*++first</tt> block
-number 1, etc. Block number <tt>b</tt> is used to initialize the
-bits of the dynamic_bitset in the position range
-<tt>[b*bits_per_block, (b+1)*bits_per_block)</tt>. For each block
-number <tt>b</tt> with value <tt>bval</tt>, the bit <tt>(bval
-&gt;&gt; i) &amp; 1</tt> corresponds to the bit at position
-<tt>(b * bits_per_block + i)</tt> in the bitset (where <tt>i</tt>
-goes through the range <tt>[0, bits_per_block)</tt>).<br />
- <b>Requires:</b> The type <tt>BlockInputIterator</tt> must be a
-model of <a href=
-"http://www.sgi.com/tech/stl/InputIterator.html">Input
-Iterator</a> and its <tt>value_type</tt> must be the same type as
-<tt>Block</tt>.<br />
- <b>Throws:</b> An allocation error if memory is exhausted
-(<tt>std::bad_alloc</tt> if
-<tt>Allocator=std::allocator</tt>).<br />
+<b>Effects:</b>
+<ul>
+<li>
+If this constructor is called with a type <tt>BlockInputIterator</tt> which
+<i>is actually an integral type</i>, the library behaves as if the constructor
+from <tt>unsigned long</tt> had been called, with arguments
+<tt>static_cast&lt;size_type&gt;(first), last and alloc</tt>, in that order.
 
+Example:
+<pre>
+// b is constructed as if by calling the constructor
+//
+//   dynamic_bitset(size_type num_bits,
+//                  unsigned long value = 0,
+//                  const Allocator&amp; alloc = Allocator())
+//
+// with arguments
+//
+//   static_cast&lt;dynamic_bitset&lt;unsigned short&gt;::size_type&gt;(8),
+//   7,
+//   Allocator()
+//
+dynamic_bitset&lt;unsigned short&gt; b(8, 7);
+</pre><br />
+<i>Note:</i><br/>
+This is analogous to what the standard mandates for sequence containers (namely,
+that if the type on which the template constructor is intantiated "does not
+qualify as an input iterator" then the other constructor is called; "the extent
+to which an implementation determines that a type cannot be an input iterator is
+unspecified, except that as a minimum integral types shall not qualify as input
+iterators").<br /><br />
+</li>
+<li>
+<i>Otherwise</i> (<i>i.e.</i> if the template argument is not an integral
+type), constructs&mdash;under the condition in the <tt>requires</tt>
+clause&mdash;a bitset based on a range of blocks. Let <tt>*first</tt> be block
+number 0, <tt>*++first</tt> block number 1, etc. Block number <tt>b</tt> is used
+to initialize the bits of the dynamic_bitset in the position range
+<tt>[b*bits_per_block, (b+1)*bits_per_block)</tt>. For each block number
+<tt>b</tt> with value <tt>bval</tt>, the bit <tt>(bval &gt;&gt; i) &amp; 1</tt>
+corresponds to the bit at position <tt>(b * bits_per_block + i)</tt> in the
+bitset (where <tt>i</tt> goes through the range <tt>[0, bits_per_block)</tt>).
+</li>
+</ul>
+<br />
+<b>Requires:</b> <tt>BlockInputIterator</tt> must be either an integral type or
+a model of <a href= "http://www.sgi.com/tech/stl/InputIterator.html">Input
+    Iterator</a> whose <tt>value_type</tt> is the same type as
+<tt>Block</tt>.<br /> <b>Throws:</b> An allocation error if memory is exhausted
+(<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).<br />
 
 <hr />
 <pre>
@@ -1436,10 +1477,16 @@ from the stream.
 <h3><a id="exception-guarantees">Exception guarantees</a></h3>
 
 All of <tt>dynamic_bitset</tt> functions offer at least the basic
-exception guarantee. 
+exception guarantee.
 
 <hr />
 <h3><a id="changes-from-previous-ver">Changes from previous version(s)</a></h3>
+
+<h4><i>Changes in Boost 1.37.0</i></h4>
+<ul>
+<li>The constructor from a block-range implements a <i>do-the-right-thing</i>
+behavior, a la standard sequences.</li>
+</ul>
 
 <!-- Changes from Boost 1.31.0 -->
 <h4><i>Changes from Boost 1.31.0</i></h4>
@@ -1514,9 +1561,19 @@ href="http://freshsources.com">Chuck Allison</a>, Senior Editor,
 C/C++ Users Journal (<a
 href="mailto:cda@freshsources.com">cda@freshsources.com</a>)<br
 /></td> </tr> <tr>
-<td>Copyright &copy; 2003-2004, 2008</td> <td>Gennaro Prota</td>
+<td>Copyright &copy; 2003-2004, 2008</td> <td><a
+        href="http://gennaro-prota.50webs.com/">Gennaro Prota</a>
+    (name.surname yahoo.com)</td>
 </tr>
 </table>
+<br />
+<div class="legalnotice">
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file <a href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</a>
+    or copy at <a class="ulink" href="http://www.boost.org/LICENSE_1_0.txt">
+http://www.boost.org/LICENSE_1_0.txt</a>)
+</div>
+
 
 </div>
 </div>
