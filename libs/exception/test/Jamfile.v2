@@ -19,6 +19,10 @@ compile-fail to_string_fail.cpp ;
 
 #exception
 
+run 1-throw_exception_test.cpp ;
+run 2-throw_exception_no_exceptions_test.cpp ;
+run 3-throw_exception_no_integration_test.cpp ;
+run 4-throw_exception_no_both_test.cpp ;
 run cloning_test.cpp ;
 run copy_exception_test.cpp ;
 run unknown_exception_test.cpp ;
