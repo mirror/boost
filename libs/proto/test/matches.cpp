@@ -7,6 +7,8 @@
 
 #include <string>
 #include <iostream>
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/placeholders.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -184,9 +186,15 @@ void test_matches()
     assert_not_matches< terminal<std::basic_string<_,_,_> > >( as_child(1) );
     assert_not_matches< terminal<std::basic_string<_,_,_> > >( as_expr(1) );
 
-    assert_matches< terminal<std::basic_string<_> const & > >( lit(std::string("hello")) );
-    assert_matches< terminal<std::basic_string<_> const & > >( as_child(std::string("hello")) );
-    assert_not_matches< terminal<std::basic_string<_> const & > >( as_expr(std::string("hello")) );
+    #if BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(61700))
+    typedef std::string const const_string;
+    #else
+    typedef std::string const_string;
+    #endif
+    
+    assert_matches< terminal<std::basic_string<_> const & > >( lit(const_string("hello")) );
+    assert_matches< terminal<std::basic_string<_> const & > >( as_child(const_string("hello")) );
+    assert_not_matches< terminal<std::basic_string<_> const & > >( as_expr(const_string("hello")) );
 
     assert_matches< terminal< void(&)() > >( lit(a_function) );
     assert_matches< terminal< void(&)() > >( as_child(a_function) );
