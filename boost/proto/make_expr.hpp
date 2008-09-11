@@ -14,6 +14,8 @@
 
     #include <boost/proto/detail/prefix.hpp>
     #include <boost/version.hpp>
+    #include <boost/config.hpp>
+    #include <boost/detail/workaround.hpp>
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/control/if.hpp>
     #include <boost/preprocessor/control/expr_if.hpp>
@@ -54,6 +56,8 @@
     #include <boost/type_traits/is_same.hpp>
     #include <boost/type_traits/add_const.hpp>
     #include <boost/type_traits/add_reference.hpp>
+    #include <boost/type_traits/remove_cv.hpp>
+    #include <boost/type_traits/remove_const.hpp>
     #include <boost/type_traits/remove_reference.hpp>
     #include <boost/proto/proto_fwd.hpp>
     #include <boost/proto/traits.hpp>
@@ -495,6 +499,73 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, void BOOST_PP_INTERCEPT)>
               : make_expr_<tag::terminal, default_domain, A>
             {};
+
+            template<typename Base, typename Expr>
+            Expr implicit_expr_wrap(Base const &expr, mpl::false_, Expr *)
+            {
+                return Expr(expr);
+            }
+
+            template<typename Base, typename Expr>
+            Expr implicit_expr_wrap(Base const &expr, mpl::true_, Expr *)
+            {
+                Expr that = {expr};
+                return that;
+            }
+
+            template<typename A0, typename Void = void>
+            struct implicit_expr_1
+            {
+                A0 &a0;
+
+                template<typename Args>
+                operator proto::expr<tag::terminal, Args, 0>() const
+                {
+                    proto::expr<tag::terminal, Args, 0> that = {this->a0};
+                    return that;
+                };
+
+                template<typename Expr>
+                operator Expr() const
+                {
+                    typename Expr::proto_base_expr that = *this;
+                    return detail::implicit_expr_wrap(that, is_aggregate<Expr>(), static_cast<Expr *>(0));
+                }
+            };
+
+            template<typename A0>
+            struct implicit_expr_1<A0, typename A0::proto_is_expr_>
+            {
+                A0 &a0;
+
+            #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, BOOST_TESTED_AT(1010))
+                typedef typename remove_cv<A0>::type uncv_a0_type;
+
+                operator uncv_a0_type &() const
+                {
+                    return const_cast<uncv_a0_type &>(this->a0);
+                }
+            #else
+                operator A0 &() const
+                {
+                    return this->a0;
+                }
+            #endif
+
+                template<typename Tag, typename Args>
+                operator proto::expr<Tag, Args, 1>() const
+                {
+                    proto::expr<Tag, Args, 1> that = {this->a0};
+                    return that;
+                };
+
+                template<typename Expr>
+                operator Expr() const
+                {
+                    typename Expr::proto_base_expr that = *this;
+                    return detail::implicit_expr_wrap(that, is_aggregate<Expr>(), static_cast<Expr *>(0));
+                }
+            };
 
         #define BOOST_PP_ITERATION_PARAMS_1                                                         \
             (4, (1, BOOST_PROTO_MAX_ARITY, <boost/proto/make_expr.hpp>, 1))                         \
@@ -1008,6 +1079,7 @@
     #define N BOOST_PP_ITERATION()
     #define M BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N)
 
+    #if N > 1
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>
         struct BOOST_PP_CAT(implicit_expr_, N)
         {
@@ -1015,21 +1087,6 @@
             BOOST_PP_REPEAT(N, M0, ~)
             #undef M0
 
-            #if N == 1
-            operator A0 &() const
-            {
-                return this->a0;
-            }
-
-            template<typename Args>
-            operator proto::expr<tag::terminal, Args, 0>() const
-            {
-                proto::expr<tag::terminal, Args, 0> that = {this->a0};
-                return that;
-            };
-            #endif
-
-            #if N > 0
             template<typename Tag, typename Args>
             operator proto::expr<Tag, Args, N>() const
             {
@@ -1043,29 +1100,15 @@
                 proto::expr<Tag, Args, N> that = {BOOST_PP_ENUM_PARAMS(N, c)};
                 return that;
             };
-            #endif
 
             template<typename Expr>
             operator Expr() const
             {
                 typename Expr::proto_base_expr that = *this;
-                return this->wrap(that, is_aggregate<Expr>(), static_cast<Expr *>(0));
-            }
-
-        private:
-            template<typename Base, typename Expr>
-            static Expr wrap(Base const &expr, mpl::false_, Expr *)
-            {
-                return Expr(expr);
-            }
-
-            template<typename Base, typename Expr>
-            static Expr wrap(Base const &expr, mpl::true_, Expr *)
-            {
-                Expr that = {expr};
-                return that;
+                return detail::implicit_expr_wrap(that, is_aggregate<Expr>(), static_cast<Expr *>(0));
             }
         };
+    #endif
 
         template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename T)>
         struct select_nth<BOOST_PP_DEC(N), BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, T)>
