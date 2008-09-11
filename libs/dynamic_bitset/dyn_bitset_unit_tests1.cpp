@@ -81,9 +81,22 @@ void run_numeric_ctor_tests( BOOST_EXPLICIT_TEMPLATE_TYPE(Tests)
           // can match ctor from ulong or templated one
           Tests::from_unsigned_long(sizes[s], numbers[n]);
 
-          // can match templated ctor only (so we test dispatching)
-          assert( sizes[s] < (std::numeric_limits<char>::max)() );
-          Tests::from_unsigned_long(static_cast<T>(sizes[s]), numbers[n]);
+          typedef std::size_t compare_type;
+          const compare_type sz = sizes[s];
+          // this condition is to be sure that size is representable in T, so
+          // that for signed T's we avoid implementation-defined behavior [if ma
+          // is larger than what std::size_t can hold then this is ok for our
+          // purposes: our sizes are anyhow < max(size_t)], which in turn could
+          // make the first argument of from_unsigned_long() a small negative,
+          // later converted to a very large unsigned. Example: signed 8-bit
+          // char (CHAR_MAX=127), bits_per_block=64, sz = 192 > 127.
+          const bool fits =
+              sz <= static_cast<compare_type>(ma);
+
+          if (fits) {
+            // can match templated ctor only (so we test dispatching)
+            Tests::from_unsigned_long(static_cast<T>(sizes[s]), numbers[n]);
+          }
 
       }
     }
