@@ -64,10 +64,11 @@ basic_text_oprimitive<OStream>::save_binary(
         ),
         oi
     );
-    std::size_t padding = 2 - count % 3;
-    if(padding > 1)
+    
+    std::size_t tail = count % 3;
+    if(tail > 0)
         *oi = '=';
-        if(padding > 2)
+        if(tail < 2)
             *oi = '=';
 
 }

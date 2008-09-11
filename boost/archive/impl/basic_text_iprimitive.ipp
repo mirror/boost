@@ -33,6 +33,23 @@ namespace std{
 namespace boost { 
 namespace archive {
 
+namespace {
+    template<class CharType>
+    bool is_whitespace(CharType c);
+
+    template<>
+    bool is_whitespace(char t){
+        return std::isspace(t);
+    }
+
+    #ifndef BOOST_NO_CWCHAR
+    template<>
+    bool is_whitespace(wchar_t t){
+        return std::iswspace(t);
+    }
+    #endif
+}
+
 // translate base64 text into binary and copy into buffer
 // until buffer is full.
 template<class IStream>
@@ -77,7 +94,6 @@ basic_text_iprimitive<IStream>::load_binary(
     );
                 
     char * caddr = static_cast<char *>(address);
-    std::size_t padding = 2 - count % 3;
     
     // take care that we don't increment anymore than necessary
     while(--count > 0){
@@ -86,10 +102,8 @@ basic_text_iprimitive<IStream>::load_binary(
     }
     *caddr++ = static_cast<char>(*ti_begin);
     
-    if(padding > 1)
+    while(! is_whitespace(*ti_begin))
         ++ti_begin;
-        if(padding > 2)
-            ++ti_begin;
 }
 
 template<class IStream>
