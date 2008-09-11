@@ -81,8 +81,11 @@ public:
 
         // the one and only non-copy ctor
         reference(block_type & b, block_type pos)
-            :m_block(b), m_mask(block_type(1) << pos)
-        { assert( pos < bits_per_block); }
+            :m_block(b),
+             m_mask( (assert(pos < bits_per_block),
+                      block_type(1) << pos )
+                   )
+        { }
 
         void operator&(); // left undefined
 
