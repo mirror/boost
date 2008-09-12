@@ -17,32 +17,14 @@ namespace boost { namespace proto
 {
     namespace detail
     {
-        struct int_
-        {
-            int_() {}
-            int_(int) {}
-        };
-
         template<typename T>
-        T &as_lvalue(T &t, int = 0)
+        T &as_lvalue(T &t)
         {
             return t;
         }
 
         template<typename T>
-        T const &as_lvalue(T const &t, int = 0)
-        {
-            return t;
-        }
-
-        template<typename Ret, typename T>
-        Ret as_lvalue(T &t, int_ = int_() BOOST_PROTO_DISABLE_IF_IS_CONST(T))
-        {
-            return t;
-        }
-
-        template<typename Ret, typename T>
-        Ret as_lvalue(T const &t, int_ = int_())
+        T const &as_lvalue(T const &t)
         {
             return t;
         }

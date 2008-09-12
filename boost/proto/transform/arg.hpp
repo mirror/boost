@@ -271,7 +271,7 @@ namespace boost { namespace proto
         /// \return <tt>t</tt>
         /// \throw nothrow
         template<typename T>
-        T const &operator ()(T const &t) const
+        T operator ()(T const &t) const
         {
             return t;
         }
@@ -279,7 +279,7 @@ namespace boost { namespace proto
         /// \overload
         ///
         template<typename T>
-        T &operator ()(boost::reference_wrapper<T> const &t) const
+        T operator ()(boost::reference_wrapper<T> const &t) const
         {
             return t;
         }

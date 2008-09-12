@@ -94,12 +94,41 @@ namespace boost { namespace proto
 
     /// INTERNAL ONLY
     ///
-    #define BOOST_PROTO_DEFINE_FUN_OP_CONST(Z, N, DATA)                                             \
+    #define BOOST_PROTO_DEFINE_FUN_OP_VARIADIC_IMPL_(Const)                                         \
+        template<typename... A>                                                                     \
+        typename boost::result_of<                                                                  \
+            proto_domain(                                                                           \
+                typename boost::proto::result_of::funop<                                            \
+                    proto_derived_expr BOOST_PROTO_CONST ## Const(A const &...)                     \
+                  , proto_derived_expr                                                              \
+                  , proto_domain                                                                    \
+                >::type                                                                             \
+            )                                                                                       \
+        >::type const                                                                               \
+        operator ()(A const &...a) BOOST_PROTO_CONST ## Const                                       \
+        {                                                                                           \
+            typedef boost::proto::result_of::funop<                                                 \
+                proto_derived_expr BOOST_PROTO_CONST ## Const(A const &...)                         \
+              , proto_derived_expr                                                                  \
+              , proto_domain                                                                        \
+            > funop;                                                                                \
+            return proto_domain()(                                                                  \
+                funop::call(                                                                        \
+                    *static_cast<proto_derived_expr BOOST_PROTO_CONST ## Const *>(this)             \
+                  , a...                                                                            \
+                )                                                                                   \
+            );                                                                                      \
+        }                                                                                           \
+        /**/
+
+    /// INTERNAL ONLY
+    ///
+    #define BOOST_PROTO_DEFINE_FUN_OP_CONST(Z, N, DATA)                                         \
         BOOST_PROTO_DEFINE_FUN_OP_IMPL_(Z, N, DATA, 1)
 
     /// INTERNAL ONLY
     ///
-    #define BOOST_PROTO_DEFINE_FUN_OP_NON_CONST(Z, N, DATA)                                         \
+    #define BOOST_PROTO_DEFINE_FUN_OP_NON_CONST(Z, N, DATA)                                     \
         BOOST_PROTO_DEFINE_FUN_OP_IMPL_(Z, N, DATA, 0)
 
     /// INTERNAL ONLY
@@ -323,35 +352,53 @@ namespace boost { namespace proto
         };                                                                                          \
         /**/
 
-    #define BOOST_PROTO_EXTENDS_FUNCTION_CONST()                                                    \
-        BOOST_PROTO_EXTENDS_FUNCTION_()                                                             \
-        BOOST_PP_REPEAT_FROM_TO(                                                                    \
-            0                                                                                       \
-          , BOOST_PROTO_MAX_FUNCTION_CALL_ARITY                                                     \
-          , BOOST_PROTO_DEFINE_FUN_OP_CONST                                                         \
-          , ~                                                                                       \
-        )                                                                                           \
-        /**/
+    #ifdef BOOST_HAS_VARIADIC_TMPL
+        #define BOOST_PROTO_EXTENDS_FUNCTION_CONST()                                                \
+            BOOST_PROTO_EXTENDS_FUNCTION_()                                                         \
+            BOOST_PROTO_DEFINE_FUN_OP_VARIADIC_IMPL_(1)                                             \
+            /**/
 
-    #define BOOST_PROTO_EXTENDS_FUNCTION_NON_CONST()                                                \
-        BOOST_PROTO_EXTENDS_FUNCTION_()                                                             \
-        BOOST_PP_REPEAT_FROM_TO(                                                                    \
-            0                                                                                       \
-          , BOOST_PROTO_MAX_FUNCTION_CALL_ARITY                                                     \
-          , BOOST_PROTO_DEFINE_FUN_OP_NON_CONST                                                     \
-          , ~                                                                                       \
-        )                                                                                           \
-        /**/
+        #define BOOST_PROTO_EXTENDS_FUNCTION_NON_CONST()                                            \
+            BOOST_PROTO_EXTENDS_FUNCTION_()                                                         \
+            BOOST_PROTO_DEFINE_FUN_OP_VARIADIC_IMPL_(0)                                             \
+            /**/
 
-    #define BOOST_PROTO_EXTENDS_FUNCTION()                                                          \
-        BOOST_PROTO_EXTENDS_FUNCTION_()                                                             \
-        BOOST_PP_REPEAT_FROM_TO(                                                                    \
-            0                                                                                       \
-          , BOOST_PROTO_MAX_FUNCTION_CALL_ARITY                                                     \
-          , BOOST_PROTO_DEFINE_FUN_OP                                                               \
-          , ~                                                                                       \
-        )                                                                                           \
-        /**/
+        #define BOOST_PROTO_EXTENDS_FUNCTION()                                                      \
+            BOOST_PROTO_EXTENDS_FUNCTION_()                                                         \
+            BOOST_PROTO_DEFINE_FUN_OP_VARIADIC_IMPL_(0)                                             \
+            BOOST_PROTO_DEFINE_FUN_OP_VARIADIC_IMPL_(1)                                             \
+            /**/
+    #else
+        #define BOOST_PROTO_EXTENDS_FUNCTION_CONST()                                                \
+            BOOST_PROTO_EXTENDS_FUNCTION_()                                                         \
+            BOOST_PP_REPEAT_FROM_TO(                                                                \
+                0                                                                                   \
+              , BOOST_PROTO_MAX_FUNCTION_CALL_ARITY                                                 \
+              , BOOST_PROTO_DEFINE_FUN_OP_CONST                                                     \
+              , ~                                                                                   \
+            )                                                                                       \
+            /**/
+
+        #define BOOST_PROTO_EXTENDS_FUNCTION_NON_CONST()                                            \
+            BOOST_PROTO_EXTENDS_FUNCTION_()                                                         \
+            BOOST_PP_REPEAT_FROM_TO(                                                                \
+                0                                                                                   \
+              , BOOST_PROTO_MAX_FUNCTION_CALL_ARITY                                                 \
+              , BOOST_PROTO_DEFINE_FUN_OP_NON_CONST                                                 \
+              , ~                                                                                   \
+            )                                                                                       \
+            /**/
+
+        #define BOOST_PROTO_EXTENDS_FUNCTION()                                                      \
+            BOOST_PROTO_EXTENDS_FUNCTION_()                                                         \
+            BOOST_PP_REPEAT_FROM_TO(                                                                \
+                0                                                                                   \
+              , BOOST_PROTO_MAX_FUNCTION_CALL_ARITY                                                 \
+              , BOOST_PROTO_DEFINE_FUN_OP                                                           \
+              , ~                                                                                   \
+            )                                                                                       \
+            /**/
+    #endif
 
     #define BOOST_PROTO_EXTENDS(Expr, Derived, Domain)                                              \
         BOOST_PROTO_BASIC_EXTENDS(Expr, Derived, Domain)                                            \
@@ -421,6 +468,9 @@ namespace boost { namespace proto
         // the operator() overloads, which is more efficient.
         BOOST_PROTO_EXTENDS_FUNCTION_()
 
+    #ifdef BOOST_HAS_VARIADIC_TMPL
+        BOOST_PROTO_DEFINE_FUN_OP_VARIADIC_IMPL_(1)
+    #else
         /// INTERNAL ONLY
         ///
     #define BOOST_PP_LOCAL_MACRO(N)                                                             \
@@ -431,6 +481,8 @@ namespace boost { namespace proto
         ///
     #define BOOST_PP_LOCAL_LIMITS (0, BOOST_PP_DEC(BOOST_PROTO_MAX_FUNCTION_CALL_ARITY))
     #include BOOST_PP_LOCAL_ITERATE()
+
+    #endif
     };
 
     /// \brief extends\<\> class template for adding behaviors to a Proto expression template
@@ -459,6 +511,11 @@ namespace boost { namespace proto
         // the operator() overloads, which is more efficient.
         BOOST_PROTO_EXTENDS_FUNCTION_()
 
+    #ifdef BOOST_HAS_VARIADIC_TMPL
+        BOOST_PROTO_DEFINE_FUN_OP_VARIADIC_IMPL_(0)
+        BOOST_PROTO_DEFINE_FUN_OP_VARIADIC_IMPL_(1)
+    #else
+
         /// INTERNAL ONLY
         ///
     #define BOOST_PP_LOCAL_MACRO(N)                                                             \
@@ -469,6 +526,8 @@ namespace boost { namespace proto
         ///
     #define BOOST_PP_LOCAL_LIMITS (0, BOOST_PP_DEC(BOOST_PROTO_MAX_FUNCTION_CALL_ARITY))
     #include BOOST_PP_LOCAL_ITERATE()
+
+    #endif
     };
 
     /// INTERNAL ONLY
