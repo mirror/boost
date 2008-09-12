@@ -291,7 +291,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_rep()
    // Always copy the repeat count, so that the state is restored
    // when we exit this scope:
    //
-   repeater_count<BidiIterator> r(rep->id, &next_count, position);
+   repeater_count<BidiIterator> r(rep->state_id, &next_count, position);
    //
    // If we've had at least one repeat already, and the last one 
    // matched the NULL string then set the repeat count to

@@ -248,7 +248,7 @@ class repeater_count
 {
    repeater_count** stack;
    repeater_count* next;
-   int id;
+   int state_id;
    std::size_t count;        // the number of iterations so far
    BidiIterator start_pos;   // where the last repeat started
 public:
@@ -256,22 +256,22 @@ public:
    {
       stack = s;
       next = 0;
-      id = -1;
+      state_id = -1;
       count = 0;
    }
    repeater_count(int i, repeater_count** s, BidiIterator start)
       : start_pos(start)
    {
-      id = i;
+      state_id = i;
       stack = s;
       next = *stack;
       *stack = this;
-      if(id > next->id)
+      if(state_id > next->state_id)
          count = 0;
       else
       {
          repeater_count* p = next;
-         while(p->id != id)
+         while(p->state_id != state_id)
             p = p->next;
          count = p->count;
          start_pos = p->start_pos;
@@ -282,7 +282,7 @@ public:
       *stack = next;
    }
    std::size_t get_count() { return count; }
-   int get_id() { return id; }
+   int get_id() { return state_id; }
    std::size_t operator++() { return ++count; }
    bool check_null_repeat(const BidiIterator& pos, std::size_t max)
    {
@@ -487,7 +487,7 @@ private:
    void push_assertion(const re_syntax_base* ps, bool positive);
    void push_alt(const re_syntax_base* ps);
    void push_repeater_count(int i, repeater_count<BidiIterator>** s);
-   void push_single_repeat(std::size_t c, const re_repeat* r, BidiIterator last_position, int id);
+   void push_single_repeat(std::size_t c, const re_repeat* r, BidiIterator last_position, int state_id);
    void push_non_greedy_repeat(const re_syntax_base* ps);
 
 

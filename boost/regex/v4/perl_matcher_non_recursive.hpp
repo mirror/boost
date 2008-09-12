@@ -50,13 +50,13 @@ inline void inplace_destroy(T* p)
 struct saved_state
 {
    union{
-      unsigned int id;
+      unsigned int state_id;
       // this padding ensures correct alignment on 64-bit platforms:
       std::size_t padding1;
       std::ptrdiff_t padding2;
       void* padding3;
    };
-   saved_state(unsigned i) : id(i) {}
+   saved_state(unsigned i) : state_id(i) {}
 };
 
 template <class BidiIterator>
@@ -298,7 +298,7 @@ inline void perl_matcher<BidiIterator, Allocator, traits>::push_repeater_count(i
 }
 
 template <class BidiIterator, class Allocator, class traits>
-inline void perl_matcher<BidiIterator, Allocator, traits>::push_single_repeat(std::size_t c, const re_repeat* r, BidiIterator last_position, int id)
+inline void perl_matcher<BidiIterator, Allocator, traits>::push_single_repeat(std::size_t c, const re_repeat* r, BidiIterator last_position, int state_id)
 {
    saved_single_repeat<BidiIterator>* pmp = static_cast<saved_single_repeat<BidiIterator>*>(m_backup_state);
    --pmp;
@@ -308,7 +308,7 @@ inline void perl_matcher<BidiIterator, Allocator, traits>::push_single_repeat(st
       pmp = static_cast<saved_single_repeat<BidiIterator>*>(m_backup_state);
       --pmp;
    }
-   (void) new (pmp)saved_single_repeat<BidiIterator>(c, r, last_position, id);
+   (void) new (pmp)saved_single_repeat<BidiIterator>(c, r, last_position, state_id);
    m_backup_state = pmp;
 }
 
@@ -477,13 +477,13 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_rep()
       take_second = can_start(*position, rep->_map, (unsigned char)mask_skip);
    }
 
-   if((m_backup_state->id != saved_state_repeater_count) 
-      || (static_cast<saved_repeater<BidiIterator>*>(m_backup_state)->count.get_id() != rep->id)
-      || (next_count->get_id() != rep->id))
+   if((m_backup_state->state_id != saved_state_repeater_count) 
+      || (static_cast<saved_repeater<BidiIterator>*>(m_backup_state)->count.get_id() != rep->state_id)
+      || (next_count->get_id() != rep->state_id))
    {
       // we're moving to a different repeat from the last
       // one, so set up a counter object:
-      push_repeater_count(rep->id, &next_count);
+      push_repeater_count(rep->state_id, &next_count);
    }
    //
    // If we've had at least one repeat already, and the last one 
@@ -884,7 +884,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::unwind(bool have_match)
    //
    do
    {
-      unwinder = s_unwind_table[m_backup_state->id];
+      unwinder = s_unwind_table[m_backup_state->state_id];
       cont = (this->*unwinder)(m_recursive_result);
    }while(cont);
    //
