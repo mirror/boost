@@ -24,6 +24,20 @@
 #include <boost/type_traits.hpp>
 #include <complex>
 
+// anonymous namespace to avoid ADL issues
+namespace {
+  template<class T> T boost_numeric_ublas_sqrt (const T& t) {
+    using namespace std;
+    // we'll find either std::sqrt or else another version via ADL:
+    return sqrt (t);
+  }
+  template<class T> T boost_numeric_ublas_abs (const T& t) {
+    using namespace std;
+    // we'll find either std::abs or else another version via ADL:
+    return abs (t);
+  }
+}
+
 namespace boost { namespace numeric { namespace ublas {
 
     // Use Joel de Guzman's return type deduction
@@ -84,17 +98,13 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         real_type type_abs (const_reference t) {
-            // we'll find either std::abs or else another version via ADL:
-            using namespace std;
-            return abs (t);
+            return boost_numeric_ublas_abs (t);
         }
         static
         BOOST_UBLAS_INLINE
         value_type type_sqrt (const_reference t) {
-            using namespace std;
             // force a type conversion back to value_type for intgral types
-            // we'll find either std::sqrt or else another version via ADL:
-            return value_type (sqrt (t));
+            return value_type (boost_numeric_ublas_sqrt (t));
         }
 
         static
