@@ -185,11 +185,12 @@ basic_binary_iprimitive<Archive, Elem, Tr>::~basic_binary_iprimitive(){
     int result = static_cast<detail::input_streambuf_access<Elem, Tr> &>(
         m_sb
     ).sync();
-    if(0 != result){ 
-        boost::serialization::throw_exception(
-            archive_exception(archive_exception::stream_error)
-        );
-    }
+    //destructor can't throw !
+    //if(0 != result){ 
+    //    boost::serialization::throw_exception(
+    //        archive_exception(archive_exception::stream_error)
+    //    );
+    //}
 }
 
 } // namespace archive
