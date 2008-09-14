@@ -10,12 +10,13 @@
 # right now it is used only be release scripts
 
 # User configuration
+# (MAINTANERS: please, keep in synch with setup_boostbook.sh)
 DOCBOOK_XSL_VERSION = "1.73.2"
 DOCBOOK_DTD_VERSION = "4.2"
 FOP_VERSION = "0.94"
 FOP_JDK_VERSION="1.4"
-FOP_MIRROR = "http://mirrors.ibiblio.org/pub/mirrors/apache/xmlgraphics/fop"
-SOURCEFORGE_MIRROR = "http://puzzle.dl.sourceforge.net"
+FOP_MIRROR = "http://mirrors.ibiblio.org/pub/mirrors/apache/xmlgraphics/fop/binaries"
+SOURCEFORGE_MIRROR = "http://dl.sourceforge.net"
 
 # No user configuration below this point-------------------------------------
 

@@ -1,14 +1,12 @@
-// --------------------------------------------------------
-//        (C) Copyright Jeremy Siek   2001.
-//        (C) Copyright Gennaro Prota 2003 - 2006.
+// -----------------------------------------------------------
+//              Copyright (c) 2001 Jeremy Siek
+//           Copyright (c) 2003-2006 Gennaro Prota
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 // -----------------------------------------------------------
-//
-// $Id$
 
 #include "bitset_test.hpp"
 #include "boost/dynamic_bitset/dynamic_bitset.hpp"
@@ -17,7 +15,7 @@
 
 #include "boost/detail/workaround.hpp"
 
-#define BOOST_BITSET_TEST_COUNT_OF(x) (sizeof(x)/sizeof(x[0]))
+#define BOOST_BITSET_TEST_COUNT(x) (sizeof(x)/sizeof(x[0]))
 
 
 // Codewarrior 8.3 for Win fails without this.
@@ -56,6 +54,56 @@ void run_string_tests(const String& s
 
 }
 
+// tests the do-the-right-thing constructor dispatch
+template <typename Tests, typename T>
+void run_numeric_ctor_tests( BOOST_EXPLICIT_TEMPLATE_TYPE(Tests)
+                             BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T) )
+{
+
+    const int bits_per_block = Tests::bits_per_block;
+    const int width = std::numeric_limits<T>::digits;
+    const T ma = (std::numeric_limits<T>::max)();
+    const T mi = (std::numeric_limits<T>::min)();
+
+    int sizes[] = {
+        0, 7*width/10,          width,          13*width/10,          3*width,
+           7*bits_per_block/10, bits_per_block, 13*bits_per_block/10, 3*bits_per_block
+    };
+
+    const T numbers[] = {
+           T(-1), T(-3), T(-8), T(-15), mi/2, mi,
+        0,    1,     3,     8,     15,  ma/2, ma
+    };
+
+    for (std::size_t s = 0; s < BOOST_BITSET_TEST_COUNT(sizes); ++s) {
+      for (std::size_t n = 0; n < BOOST_BITSET_TEST_COUNT(numbers); ++n ) {
+
+          // can match ctor from ulong or templated one
+          Tests::from_unsigned_long(sizes[s], numbers[n]);
+
+          typedef std::size_t compare_type;
+          const compare_type sz = sizes[s];
+          // this condition is to be sure that size is representable in T, so
+          // that for signed T's we avoid implementation-defined behavior [if ma
+          // is larger than what std::size_t can hold then this is ok for our
+          // purposes: our sizes are anyhow < max(size_t)], which in turn could
+          // make the first argument of from_unsigned_long() a small negative,
+          // later converted to a very large unsigned. Example: signed 8-bit
+          // char (CHAR_MAX=127), bits_per_block=64, sz = 192 > 127.
+          const bool fits =
+              sz <= static_cast<compare_type>(ma);
+
+          if (fits) {
+            // can match templated ctor only (so we test dispatching)
+            Tests::from_unsigned_long(static_cast<T>(sizes[s]), numbers[n]);
+          }
+
+      }
+    }
+
+}
+
+
 template <typename Block>
 void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
 {
@@ -69,24 +117,52 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
   //=====================================================================
   // Test construction from unsigned long
   {
-    typedef unsigned long source_type;
-    const std::size_t source_width = std::numeric_limits<source_type>::digits;
-    const source_type source_max =(std::numeric_limits<source_type>::max)();
+    typedef typename bitset_type::size_type size_type;
 
-    source_type numbers[] = { 0, 1, 40247, source_max >> 1, source_max };
-    std::size_t sizes[] =
-    { 0, 7 * source_width / 10, source_width, 13 * source_width / 10,
-         7 * bits_per_block / 10, bits_per_block, 13 * bits_per_block / 10,
-         3 * bits_per_block };
 
-    const std::size_t value_count = BOOST_BITSET_TEST_COUNT_OF(numbers);
-    const std::size_t size_count = BOOST_BITSET_TEST_COUNT_OF(sizes);
+    // NOTE:
+    //
+    // 1. keep this in sync with the numeric types supported
+    //    for constructor dispatch (of course)
+    // 2. bool is tested separately; ugly and inelegant, but
+    //    we don't have much time to think of a better solution
+    //    which is likely to work on broken compilers
+    //
+    const int sizes[] = {
+        0,                     1,                                  3,
+           7*bits_per_block/10, bits_per_block, 13*bits_per_block/10, 3*bits_per_block 
+    };
+    
+    const bool values[] = { false, true };
 
-    for (std::size_t v = 0; v < value_count; ++v) {
-      for (std::size_t s = 0; s < size_count; ++s) {
-        Tests::from_unsigned_long(sizes[s], numbers[v]);
+    for (std::size_t s = 0; s < BOOST_BITSET_TEST_COUNT(sizes); ++s) {
+      for (std::size_t v = 0; v < BOOST_BITSET_TEST_COUNT(values); ++v) {
+          Tests::from_unsigned_long(sizes[s], values[v]);
+          Tests::from_unsigned_long(sizes[s] != 0, values[v]);
       }
     }
+
+    run_numeric_ctor_tests<Tests, char>();
+
+#if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+    run_numeric_ctor_tests<Tests, wchar_t>();
+#endif
+
+    run_numeric_ctor_tests<Tests, signed char>();
+    run_numeric_ctor_tests<Tests, short int>();
+    run_numeric_ctor_tests<Tests, int>();
+    run_numeric_ctor_tests<Tests, long int>();
+
+    run_numeric_ctor_tests<Tests, unsigned char>();
+    run_numeric_ctor_tests<Tests, unsigned short>();
+    run_numeric_ctor_tests<Tests, unsigned int>();
+    run_numeric_ctor_tests<Tests, unsigned long>();
+
+#if defined(BOOST_HAS_LONG_LONG)
+    run_numeric_ctor_tests<Tests, ::boost::long_long_type>();
+    run_numeric_ctor_tests<Tests, ::boost::ulong_long_type>();
+#endif
+
   }
   //=====================================================================
   // Test construction from a string

@@ -6,11 +6,12 @@
 #   http://www.boost.org/LICENSE_1_0.txt)
 
 # User configuration
+# (MAINTANERS: please, keep in synch with setup_boostbook.py)
 DOCBOOK_XSL_VERSION=1.73.2
 DOCBOOK_DTD_VERSION=4.2
 FOP_VERSION=0.94
 FOP_JDK_VERSION=1.4
-FOP_MIRROR=http://mirrors.ibiblio.org/pub/mirrors/apache/xmlgraphics/fop
+FOP_MIRROR=http://mirrors.ibiblio.org/pub/mirrors/apache/xmlgraphics/fop/binaries
 SOURCEFORGE_MIRROR=http://dl.sourceforge.net
 HTTP_GET_CMD="curl -O"
 

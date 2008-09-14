@@ -1,14 +1,12 @@
-// --------------------------------------------------
-//        (C) Copyright Jeremy Siek   2001.
-//        (C) Copyright Gennaro Prota 2003 - 2006.
+// -----------------------------------------------------------
+//              Copyright (c) 2001 Jeremy Siek
+//        Copyright (c) 2003-2006, 2008 Gennaro Prota
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 // -----------------------------------------------------------
-//
-// $Id$
 
 #ifndef BOOST_BITSET_TEST_HPP_GP_20040319
 #define BOOST_BITSET_TEST_HPP_GP_20040319
@@ -110,32 +108,43 @@ bool has_flags(const Stream& s, std::ios::iostate flags)
 // constructors
 //   default (can't do this generically)
 
-//   from unsigned long
-
 template <typename Bitset>
 struct bitset_test {
 
   typedef typename Bitset::block_type Block;
   BOOST_STATIC_CONSTANT(int, bits_per_block = Bitset::bits_per_block);
 
-
-  static void from_unsigned_long(std::size_t sz, unsigned long num)
+  // from unsigned long
+  //
+  // Note: this is templatized so that we check that the do-the-right-thing
+  // constructor dispatch is working correctly.
+  //
+  template <typename NumBits, typename Value>
+  static void from_unsigned_long(NumBits num_bits, Value num)
   {
-    // An object of size N = sz is constructed:
-    // - the first M bit positions are initialized to the corresponding bit
-    //   values in num (M being the smaller of N and the width of unsigned
-    //   long)
+    // An object of size sz = num_bits is constructed:
+    // - the first m bit positions are initialized to the corresponding
+    //   bit values in num (m being the smaller of sz and ulong_width)
     //
-    // - if M < N remaining bit positions are initialized to zero
+    // - any remaining bit positions are initialized to zero
+    //
 
-    Bitset b(sz, num);
+    Bitset b(num_bits, num);
+
+    // OK, we can now cast to size_type
+    typedef typename Bitset::size_type size_type;
+    const size_type sz = static_cast<size_type>(num_bits);
+
     BOOST_CHECK(b.size() == sz);
 
     const std::size_t ulong_width = std::numeric_limits<unsigned long>::digits;
-    std::size_t m = (std::min)(sz, ulong_width);
-    std::size_t i;
-    for (i = 0; i < m; ++i)
-      BOOST_CHECK(b.test(i) == nth_bit(num, i));
+    size_type m = sz;
+    if (ulong_width < sz)
+        m = ulong_width;
+
+    size_type i = 0;
+    for ( ; i < m; ++i)
+      BOOST_CHECK(b.test(i) == nth_bit(static_cast<unsigned long>(num), i));
     for ( ; i < sz; ++i)
       BOOST_CHECK(b.test(i) == 0);
   }
@@ -980,7 +989,7 @@ struct bitset_test {
   //-------------------------------------------------------------------------
 
   // operator<<( [basic_]ostream,
-  template<typename Stream>
+  template <typename Stream>
   static void stream_inserter(const Bitset & b,
                               Stream & s,
                               const char * file_name
@@ -1060,7 +1069,7 @@ struct bitset_test {
   }
 
   // operator>>( [basic_]istream
-  template<typename Stream, typename String>
+  template <typename Stream, typename String>
   static void stream_extractor(Bitset& b,
                                Stream& is,
                                String& str
