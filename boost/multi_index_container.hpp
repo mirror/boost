@@ -267,11 +267,10 @@ public:
   }
 
   multi_index_container<Value,IndexSpecifierList,Allocator>& operator=(
-    const multi_index_container<Value,IndexSpecifierList,Allocator>& x)
+    multi_index_container<Value,IndexSpecifierList,Allocator> x)
   {
     BOOST_MULTI_INDEX_CHECK_INVARIANT;
-    multi_index_container<Value,IndexSpecifierList,Allocator> tmp(x);
-    this->swap(tmp);
+    this->swap(x);
     return *this;
   }
 
