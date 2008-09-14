@@ -47,6 +47,15 @@ namespace boost { namespace fusion
           : is_empty<Sequence>
         {};
 
+        ////////////////////////////////////////////////////////////////////////////
+        struct not_is_empty_pred
+        {
+            template<typename Sequence>
+            struct apply
+              : not_<is_empty<Sequence> >
+            {};
+        };
+
         struct segmented_range_tag;
 
         ////////////////////////////////////////////////////////////////////////////
@@ -64,7 +73,7 @@ namespace boost { namespace fusion
             // If this is a range of segments, skip over the empty ones
             typedef typename mpl::if_<
                 is_segmented
-              , filter_view<Sequence, not_<is_empty<_> > >
+              , filter_view<Sequence, not_is_empty_pred>
               , Sequence
             >::type sequence_non_ref_type;
 
@@ -196,7 +205,7 @@ namespace boost { namespace fusion
         {
             typedef typename result_of::segments<Sequence>::type segments;
             typedef typename remove_reference<segments>::type sequence;
-            typedef typename result_of::begin<filter_view<sequence, not_<is_empty<_> > > >::type begin;
+            typedef typename result_of::begin<filter_view<sequence, not_is_empty_pred> >::type begin;
             typedef segmented_range<sequence, begin, true> type;
 
             static type call(Sequence &seq)
