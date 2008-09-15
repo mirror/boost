@@ -66,11 +66,11 @@ basic_text_oprimitive<OStream>::save_binary(
     );
     
     std::size_t tail = count % 3;
-    if(tail > 0)
-        *oi = '=';
+    if(tail > 0){
+        *oi++ = '=';
         if(tail < 2)
             *oi = '=';
-
+    }
 }
 
 template<class OStream>

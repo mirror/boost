@@ -102,8 +102,15 @@ basic_text_iprimitive<IStream>::load_binary(
     }
     *caddr++ = static_cast<char>(*ti_begin);
     
-    while(! is_whitespace(*ti_begin))
-        ++ti_begin;
+    iterators::istream_iterator<CharType> i;
+    for(;;){
+        CharType c;
+        c = is.get();
+        if(is.eof())
+            break;
+        if(is_whitespace(c))
+            break;
+    }
 }
 
 template<class IStream>
