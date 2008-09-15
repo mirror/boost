@@ -79,7 +79,6 @@ int test_main( int /* argc */, char* /* argv */[] )
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << BOOST_SERIALIZATION_NVP(a);
         boost::serialization::make_nvp(
             "s1", boost::serialization::make_binary_object(s1, sizeof(s1))
         );
@@ -92,6 +91,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         oa << boost::serialization::make_nvp(
             "s4", boost::serialization::make_binary_object(s4, sizeof(s4))
         );
+        oa << BOOST_SERIALIZATION_NVP(a);
         // note: add a little bit on the end of the archive to detect
         // failure of text mode binary.
         oa << BOOST_SERIALIZATION_NVP(i);
@@ -99,7 +99,6 @@ int test_main( int /* argc */, char* /* argv */[] )
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> BOOST_SERIALIZATION_NVP(a1);
         boost::serialization::make_nvp(
             "s1", boost::serialization::make_binary_object(s1_1, sizeof(s1))
         );
@@ -112,6 +111,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         ia >> boost::serialization::make_nvp(
             "s4", boost::serialization::make_binary_object(s1_4, sizeof(s4))
         );
+        ia >> BOOST_SERIALIZATION_NVP(a1);
         // note: add a little bit on the end of the archive to detect
         // failure of text mode binary.
         ia >> BOOST_SERIALIZATION_NVP(i1);
