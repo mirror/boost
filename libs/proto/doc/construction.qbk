@@ -1,0 +1,1130 @@
+[/
+ / Copyright (c) 2007 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[def __unspecified__ [~unspecified]]
+
+[/=======================================================================================]
+[section:expression_construction Expression Construction: Building Proto Expression Trees]
+[/=======================================================================================]
+
+We've seen some simple examples of how to use Proto, but we haven't really said
+much about what is going on under the hood. How exactly does Proto build and
+process expression trees? Now is the time to find out.
+
+In the calculator example, we defined a placeholder terminal like this:
+
+    // Define a placeholder type
+    template<int I>
+    struct placeholder
+    {};
+
+    // Define the Protofied placeholder terminal
+    proto::terminal< placeholder<0> >::type const _1 = {{}};
+
+The actual type of `_1` looks like this:
+
+    proto::expr< proto::tag::terminal, proto::term< placeholder<0> >, 0 >
+
+The _expr_ template is the most important type in Proto. Although you will
+rarely need to deal with it directly, it's always there behind the scenes
+holding your expression trees together. In fact, _expr_ /is/ the expression
+tree -- branches, leaves and all.
+
+The _expr_ template makes up the nodes in expression trees. The first template
+parameter is the node type; in this case, `proto::tag::terminal`. That means
+that `_1` is a leaf-node in the expression tree. The second template parameter
+is a list of child types, or in the case of terminals, the terminal's value
+type. Terminals will always have only one type in the type list. The last 
+parameter is the arity of the expression. Terminals have arity 0, unary 
+expressions have arity 1, etc.
+
+The _expr_ struct is defined as follows:
+
+    template< typename Tag, typename Args, long Arity = Args::arity >
+    struct expr;
+
+    template< typename Tag, typename Args >
+    struct expr< Tag, Args, 1 >
+    {
+        typedef typename Args::child0 proto_child0;
+        proto_child0 child0;
+        // ...
+    };
+
+The _expr_ struct does not define a constructor, or anything else that would
+prevent static initialization. All _expr_ objects are initialized using
+['aggregate initialization], with curly braces. In our example, `_1` is
+initialized with the initializer `{{}}`. The outer braces is the initializer
+for the _expr_ struct, and the inner braces are for the member `_1.child0` which
+is of type `placeholder<0>`. Note that we use braces to initialize `_1.child0`
+because `placeholder<0>` is also an aggregate.
+
+[/=================================]
+[heading Proto's Operator Overloads]
+[/=================================]
+
+Once we have some Proto terminals, expressions involving those terminals build
+expression trees for us. Proto defines overloads for each of C++'s overloadable
+operators in the `boost::proto` namespace. As long as one operand is a Proto
+expression, the result of the operation is a tree node representing that operation.
+
+[note The _expr_ struct lives in the `boost::proto` namespace, as do all of
+Proto's operator overloads. The overloads are found via ADL (argument-dependent
+lookup). That is why expressions must be "tainted" with Proto-ness for Proto to
+be able to build trees out of expressions.]
+
+As a result of Proto's operator overloads, we can say:
+
+    -_1;        // OK, build a unary-negate tree node
+    _1 + 42;    // OK, build a binary-plus tree node
+
+[/=========================================================]
+[heading Assignment, Subscript, and Function Call Operators]
+[/=========================================================]
+
+The _expr_ type defines overloads of `operator=`, `operator[]`, and `operator()`
+as member functions. That's because these operators cannot be overloaded at
+namespace scope. Because _expr_ defines them as member functions, the following
+are valid Proto expressions:
+
+    _1 = 5;     // OK, builds a binary assign tree node
+    _1[6];      // OK, builds a binary subscript tree node
+    _1();       // OK, builds a unary function tree node
+    _1(7);      // OK, builds a binary function tree node
+    _1(8,9);    // OK, builds a ternary function tree node
+    // ... etc.
+
+For the first two lines, assigment and subscript, it should be fairly unsurprising
+that the resulting expression node should be binary. After all, there are
+two operands in each expression. It may be surprising at first that what appears
+to be a function call with no arguments, `_1()`, actually creates an expression
+node with one child. The child is `_1` itself. Likewise, the expression `_1(7)`
+has two children: `_1` and `7`.
+
+Because these operators can only be defined as member functions of _expr_, the
+following expressions are invalid:
+
+    int i;
+    i = _1;         // ERROR: cannot assign _1 to an int
+
+    int *p;
+    p[_1];          // ERROR: cannot use _1 as an index
+
+    std::sin(_1);   // ERROR: cannot call std::sin() with _1
+
+Also, C++ has special rules for overloads of `operator->` that make it useless
+for building expression templates, so Proto does not overload it.
+
+[/==============================]
+[heading The Address-Of Operator]
+[/==============================]
+
+Proto overloads the address-of operator for expression types, so that the
+following code creates a new unary address-of tree node:
+
+    &_1;    // OK, creates a unary address-of tree node
+
+It does /not/ return the address of the `_1` object. However, there is
+special code in Proto such that a unary address-of node is implicitly
+convertible to a pointer to its child. In other words, the following
+code works and does what you might expect, but not in the obvious way:
+
+    typedef
+        proto::terminal< placeholder<0> >::type
+    _1_type;
+
+    _1_type const _1 = {{}};
+    _1_type const * p = &_1; // OK, &_1 implicitly converted
+
+[/=======================]
+[heading Making Terminals]
+[/=======================]
+
+TODO: describe as_expr(), as_arg(), literal<> and lit().
+
+[/================================]
+[heading Building Expression Trees]
+[/================================]
+
+The `_1` node is an instantiation of _expr_, and expressions containing
+`_1` are also instantiations of _expr_. To use Proto effectively, you
+won't have to bother yourself with the actual types that Proto generates.
+These are details, but you're likely to encounter these types in compiler
+error messages, so it's helpful to be familiar with them. The types look
+like this:
+
+    // The type of the expression -_1
+    typedef
+        proto::expr<
+            proto::tag::negate
+          , proto::list1<
+                proto::expr<
+                    proto::tag::terminal
+                  , proto::term< placeholder<0> >
+                  , 0
+                > const &
+            >
+          , 1
+        >
+    negate_placeholder_type;
+    
+    negate_placeholder_type x = -_1;
+
+    // The type of the expression _1 + 42
+    typedef
+        proto::expr<
+            proto::tag::plus
+          , proto::list2<
+                proto::expr<
+                    proto::tag::terminal
+                  , proto::term< placeholder<0> >
+                  , 0
+                > const &
+              , proto::expr<
+                    proto::tag::terminal
+                  , proto::term< int const & >
+                  , 0
+                >
+            >
+          , 2
+        >
+    placeholder_plus_int_type;
+    
+    placeholder_plus_int_type y = _1 + 42;
+
+There are a few things to note about these types:
+
+# Terminals have arity 0, unary expressions have arity 1 and binary expressions
+  have arity 2.
+# When one Proto expression is made a child node of another Proto expression,
+  it is held by reference, ['even if it is a temporary object]. This last
+  point becomes important later.
+# Non-Proto expressions, such as the integer literal, are turned into Proto
+  expressions by wrapping them in new `expr<>` terminal objects. These new
+  wrappers are not themselves held by reference, but the object wrapped /is/.
+  Notice that the type of the Protofied `42` literal is `int const &` -- held
+  by reference.
+
+The types make it clear: everything in a Proto expression tree is held by
+reference. That means that building an expression tree is exceptionally cheap.
+It involves no copying at all.
+
+[note An astute reader will notice that the object `y` defined above will be
+left holding a dangling reference to a temporary int. In the sorts of 
+high-performance applications Proto addresses, it is typical to build and
+evaluate an expression tree before any temporary objects go out of scope, so
+this dangling reference situation often doesn't arise, but it is certainly
+something to be aware of. Proto provides utilities for deep-copying expression
+trees so they can be passed around as value types without concern for dangling
+references.]
+
+[/=============================================]
+[section:left_right_child Accessing Child Nodes]
+[/=============================================]
+
+After assembling an expression into a tree, you'll naturally want to be
+able to do the reverse, and access a node's children. You may even want
+to be able to iterate over the children with algorithms from the
+Boost.Fusion library. This section shows how.
+
+[heading [^tag_of<>]]
+
+A node in an expression tree is nothing more than a collection of child
+nodes and a tag type. You can access the tag type of any Proto expression type
+`Expr` directly as `typename Expr::proto_tag`, or you can use the _tag_of_
+metafunction, as shown below:
+
+    template<typename Expr>
+    typename proto::result_of::tag_of<Expr>::type
+    get_tag_of(Expr const &)
+    {
+        // Tag types are required to be default-constructible
+        return typename proto::result_of::tag_of<Expr>::type();
+    }
+
+    proto::terminal<int>::type const i = {42};
+
+    // Addition nodes have the "plus" tag type:
+    proto::tag::plus plus_tag = get_tag_of( i + 2 );
+
+[/===================]
+[heading [^child_c()]]
+[/===================]
+
+Each node in an expression tree corresponds to an operator in an expression,
+and the children correspond to the operands, or arguments of the operator.
+To access them, you can use the _child_c_ function template, as demonstrated
+below:
+
+    proto::terminal<int>::type i = {42};
+
+    // Get the 0-th operand of an addition operation:
+    proto::terminal<int>::type &ri = proto::child_c<0>( i + 2 );
+
+    // Assert that we got back what we put in:
+    assert( &i == &ri );
+
+You can use the `result_of::child_c<>` metafunction to get the type of the Nth
+child of an expression node. Usually you don't care to know whether a child
+is stored by value or by reference, so when you ask for the type of the Nth
+child of an expression `Expr`, you get the child's type after references and
+cv-qualifiers have been stripped from it.
+
+    template<typename Expr>
+    void test_result_of_child_c(Expr const &expr)
+    {
+        typedef typename proto::result_of::child_c<Expr, 0>::type type;
+
+        // ::type is a non-cv qualified, non-reference
+        BOOST_MPL_ASSERT((is_same< type, terminal<int>::type>));
+    }
+
+    // ...
+    terminal<int>::type i = {42};
+    test_result_of_child_c( i + 2 );
+
+However, if you ask for the type of the Nth child of `Expr &` or `Expr const &`
+(note the reference), the result type will be a reference, regardless of whether
+the child is actually stored by reference or not. If you need to know exactly
+how the child is stored in the node, whether by reference or by value, you can
+use `fusion::result_of::value_at<Expr, N>::type`. The following table summarizes
+the behavior of the `child_c<>` metafunction.
+
+[table Accessing Child Types
+    [[Metafunction Invocation][When the Child Is ...][The Result Is ...]]
+    [[`proto::result_of::child_c<Expr, N>::type`][T][T]]
+    [[][T &][T]]
+    [[][T const &][T]]
+    [[`proto::result_of::child_c<Expr &, N>::type`][T][T &]]
+    [[][T &][T &]]
+    [[][T const &][T const &]]
+    [[`proto::result_of::child_c<Expr const &, N>::type`][T][T const &]]
+    [[][T &][T &]]
+    [[][T const &][T const &]]
+    [[`fusion::result_of::value_at<Expr, N>::type`][T][T]]
+    [[][T &][T &]]
+    [[][T const &][T const &]]
+]
+
+[/========================================================]
+[heading [^value()], [^child()], [^left()], and [^right()]]
+[/========================================================]
+
+Most operators in C++ are unary or binary. For that reason, accessing the
+only operand, or the left and right operands, are very common operations. For
+this reason, Proto provides the _child_, _left_, and _right_ functions. _child_
+and _left_ are synonomous with `child_c<0>()`, and _right_ is synonomous with
+`child_c<1>()`.
+
+Another very common operation is accessing the value stored within a Proto
+terminal. You can use the _value_ function for that.
+
+There are also `result_of::child<>`, `result_of::left<>`, and `result_of::right<>`
+metafunctions that merely forward to their `result_of::child_c<>` counterparts.
+Likewise, there is a `result_of::value<>` metafunction that returns the type of the
+value stored in a terminal node.
+
+[/===========================================]
+[heading Expression Nodes as Fusion Sequences]
+[/===========================================]
+
+Proto expression nodes are valid Fusion random-access sequences of their
+child nodes. That means you can apply Fusion algorithms to them,
+transform them, apply Fusion filters and views to them, and access their
+elements using `fusion::at()`. The things Fusion can do to heterogeneous
+sequences is beyond the scope of this users' guide, but below is a simple
+example. It takes a lazy function invocation like `fun(1,2,3,4)` and uses
+Fusion to print the function arguments in order.
+
+    struct display
+    {
+        template<typename T>
+        void operator()(T const &t) const
+        {
+            std::cout << t << std::endl;
+        }
+    };
+
+    struct fun_t {};
+    proto::terminal<fun_t>::type const fun = {{}};
+
+    // ...
+    fusion::for_each(
+        fusion::transform(
+            // pop_front() removes the "fun" child
+            fusion::pop_front(fun(1,2,3,4))
+            // Extract the ints from the terminal nodes
+          , proto::functional::value()
+        )
+      , display()
+    );
+
+Recall from the Introduction that types in the `proto::functional` namespace
+define function objects that correspond to Proto's free functions. So 
+`proto::functional::value()` creates a function object that is equavalent to
+the `proto::value()` function. The above invocation of `fusion::for_each()`
+displays the following:
+
+[pre
+1
+2
+3
+4
+]
+
+[/========================================]
+[heading Flattening Proto Expression Tress]
+[/========================================]
+
+Imagine a slight variation of the above example where, instead of iterating
+over the arguments of a lazy function invocation, we would like to iterate
+over the terminals in an addition expression:
+
+    proto::terminal<int>::type const _1 = {1};
+
+    // ERROR: this doesn't work! Why?
+    fusion::for_each(
+        fusion::transform(
+            _1 + 2 + 3 + 4
+          , proto::functional::value()
+        )
+      , display()
+    );
+
+The reason this doesn't work is because the expression `_1 + 2 + 3 + 4` does
+not describe a flat sequence of terminals --- it describes a binary tree. We
+can treat it as a flat sequence of terminals, however, using Proto's _flatten_
+function. _flatten_ returns a view which makes a tree appear as a flat Fusion
+sequence. If the top-most node has a tag type `T`, then the elements of the
+flattened sequence are the child nodes that do /not/ have tag type `T`. This
+process is evaluated recursively. So the above can correctly be written as:
+
+    proto::terminal<int>::type const _1 = {1};
+
+    // OK, iterate over a flattened view
+    fusion::for_each(
+        fusion::transform(
+            proto::flatten(_1 + 2 + 3 + 4)
+          , proto::functional::value()
+        )
+      , display()
+    );
+
+The above invocation of `fusion::for_each()` displays the following:
+
+[pre
+1
+2
+3
+4
+]
+
+[endsect]
+
+[/=============================================================]
+[section:tags_and_metafunctions Operator Tags and Metafunctions]
+[/=============================================================]
+
+The following table lists the overloadable C++ operators, the Proto tag types for 
+each, and the name of the metafunctions for generating the corresponding Proto 
+expression types. And as we'll see later, the metafunctions are also usable as 
+grammars for matching such nodes, as well as pass-through transforms.
+
+[table Operators, Tags and Metafunctions
+    [[Operator]
+    [Proto Tag]
+    [Proto Metafunction]]
+
+    [[unary `+`]
+    [`proto::tag::unary_plus`]
+    [`proto::unary_plus<>`]]
+
+    [[unary `-`]
+    [`proto::tag::negate`]
+    [`proto::negate<>`]]
+
+    [[unary `*`]
+    [`proto::tag::dereference`]
+    [`proto::dereference<>`]]
+
+    [[unary `~`]
+    [`proto::tag::complement`]
+    [`proto::complement<>`]]
+
+    [[unary `&`]
+    [`proto::tag::address_of`]
+    [`proto::address_of<>`]]
+
+    [[unary `!`]
+    [`proto::tag::logical_not`]
+    [`proto::logical_not<>`]]
+
+    [[unary prefix `++`]
+    [`proto::tag::pre_inc`]
+    [`proto::pre_inc<>`]]
+
+    [[unary prefix `--`]
+    [`proto::tag::pre_dec`]
+    [`proto::pre_dec<>`]]
+
+    [[unary postfix `++`]
+    [`proto::tag::post_inc`]
+    [`proto::post_inc<>`]]
+
+    [[unary postfix `--`]
+    [`proto::tag::post_dec`]
+    [`proto::post_dec<>`]]
+
+    [[binary `<<`]
+    [`proto::tag::shift_left`]
+    [`proto::shift_left<>`]]
+
+    [[binary `>>`]
+    [`proto::tag::shift_right`]
+    [`proto::shift_right<>`]]
+
+    [[binary `*`]
+    [`proto::tag::multiplies`]
+    [`proto::multiplies<>`]]
+
+    [[binary `/`]
+    [`proto::tag::divides`]
+    [`proto::divides<>`]]
+
+    [[binary `%`]
+    [`proto::tag::modulus`]
+    [`proto::modulus<>`]]
+
+    [[binary `+`]
+    [`proto::tag::plus`]
+    [`proto::plus<>`]]
+
+    [[binary `-`]
+    [`proto::tag::minus`]
+    [`proto::minus<>`]]
+
+    [[binary `<`]
+    [`proto::tag::less`]
+    [`proto::less<>`]]
+
+    [[binary `>`]
+    [`proto::tag::greater`]
+    [`proto::greater<>`]]
+
+    [[binary `<=`]
+    [`proto::tag::less_equal`]
+    [`proto::less_equal<>`]]
+
+    [[binary `>=`]
+    [`proto::tag::greater_equal`]
+    [`proto::greater_equal<>`]]
+
+    [[binary `==`]
+    [`proto::tag::equal_to`]
+    [`proto::equal_to<>`]]
+
+    [[binary `!=`]
+    [`proto::tag::not_equal_to`]
+    [`proto::not_equal_to<>`]]
+
+    [[binary `||`]
+    [`proto::tag::logical_or`]
+    [`proto::logical_or<>`]]
+
+    [[binary `&&`]
+    [`proto::tag::logical_and`]
+    [`proto::logical_and<>`]]
+
+    [[binary `&`]
+    [`proto::tag::bitwise_and`]
+    [`proto::bitwise_and<>`]]
+
+    [[binary `|`]
+    [`proto::tag::bitwise_or`]
+    [`proto::bitwise_or<>`]]
+
+    [[binary `^`]
+    [`proto::tag::bitwise_xor`]
+    [`proto::bitwise_xor<>`]]
+
+    [[binary `,`]
+    [`proto::tag::comma`]
+    [`proto::comma<>`]]
+
+    [[binary `->*`]
+    [`proto::tag::mem_ptr`]
+    [`proto::mem_ptr<>`]]
+
+    [[binary `=`]
+    [`proto::tag::assign`]
+    [`proto::assign<>`]]
+
+    [[binary `<<=`]
+    [`proto::tag::shift_left_assign`]
+    [`proto::shift_left_assign<>`]]
+
+    [[binary `>>=`]
+    [`proto::tag::shift_right_assign`]
+    [`proto::shift_right_assign<>`]]
+
+    [[binary `*=`]
+    [`proto::tag::multiplies_assign`]
+    [`proto::multiplies_assign<>`]]
+
+    [[binary `/=`]
+    [`proto::tag::divides_assign`]
+    [`proto::divides_assign<>`]]
+
+    [[binary `%=`]
+    [`proto::tag::modulus_assign`]
+    [`proto::modulus_assign<>`]]
+
+    [[binary `+=`]
+    [`proto::tag::plus_assign`]
+    [`proto::plus_assign<>`]]
+
+    [[binary `-=`]
+    [`proto::tag::minus_assign`]
+    [`proto::minus_assign<>`]]
+
+    [[binary `&=`]
+    [`proto::tag::bitwise_and_assign`]
+    [`proto::bitwise_and_assign<>`]]
+
+    [[binary `|=`]
+    [`proto::tag::bitwise_or_assign`]
+    [`proto::bitwise_or_assign<>`]]
+
+    [[binary `^=`]
+    [`proto::tag::bitwise_xor_assign`]
+    [`proto::bitwise_xor_assign<>`]]
+
+    [[binary subscript]
+    [`proto::tag::subscript`]
+    [`proto::subscript<>`]]
+
+    [[ternary `?:`]
+    [`proto::tag::if_else_`]
+    [`proto::if_else_<>`]]
+
+    [[n-ary function call]
+    [`proto::tag::function`]
+    [`proto::function<>`]]
+]
+
+[endsect]
+
+[/===========================================================]
+[section:construction_utils Expression Construction Utilities]
+[/===========================================================]
+
+Proto gives you many other ways of creating expression trees besides the operator
+overloads. These are useful for building nodes with custom tag types that don't
+correspond to any C++ operator. They're also useful when writing tree transforms
+that manipulate the structure of the expression tree, as we'll see.
+
+Below are the tools and a brief description of each.
+
+[variablelist
+[ [_make_expr_]
+  [A function that takes a tag type and child nodes and
+   builds a parent node of the requested type.]]
+[ [_unpack_expr_]
+  [A function that does the same as _make_expr_ except
+   the child nodes are specified as a Fusion sequence.]]
+[ [`BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE()`]
+  [A macro that generates a number of overloads of a
+   user-specified function template that behaves like
+   _make_expr_.]]
+]
+
+[/====================================================]
+[heading Building Expression Trees With [^make_expr()]]
+[/====================================================]
+
+[:[*Synopsys:]]
+
+    namespace proto
+    {
+        namespace result_of
+        {
+            // Metafunction for calculating the return type
+            // of the make_expr() function
+            template<
+                typename Tag
+              , typename DomainOrArg
+              , typename... A
+            >
+            struct make_expr
+            {
+                typedef __implelemtation_defined__ type;
+            };
+        }
+
+        namespace functional
+        {
+            // A callable function object equivalent of the
+            // make_expr() function.
+            template<typename Tag, typename Domain = default_domain>
+            struct make_expr : callable
+            {
+                template<typename Sig> struct result;
+
+                template<typename This, typename... A>
+                struct result<This(A...)>
+                  : result_of::make_expr<Tag, Domain, A...>
+                {};
+
+                template<typename... A>
+                typename result_of::make_expr<Tag, Domain, const A...>::type
+                operator ()(A const &... a) const;
+            };
+        }
+
+        // The make_expr() function
+        template<typename Tag, typename Domain, typename... A>
+        typename result_of::make_expr<Tag, Domain, A...>::type
+        make_expr(A const &... a);
+    }
+
+You can use the _make_expr_ function to build an expression tree node with
+a specified tag type, as follows.
+
+    // Some user-defined tag type
+    struct MyTag {};
+
+    // Construct a node with MyTag tag type, and
+    // two terminals as children.
+    int i = 0;
+    proto::make_expr<MyTag, default_domain>(i, 'a');
+
+You are not required to specify a domain. If you choose not to, `default_domain`
+is assumed. So the above is equivalent to:
+
+    // Construct a node with MyTag tag type, and
+    // two terminals as children.
+    int i = 0;
+    proto::make_expr<MyTag>(i, 'a');
+
+The return type of the above function invocation can be calculated with the
+`result_of::make_expr<>` metafunction.
+
+    // Use result_of::make_expr<> to compute the return type:
+    int i = 0;
+    typedef
+        proto::result_of::make_expr<
+            MyTag
+          , int
+          , char
+        >::type
+    expr_type;
+
+    expr_type expr = proto::make_expr<MyTag>(i, 'a');
+
+    // expr_type is the same as this type:
+    typedef
+        proto::binary_expr<
+            MyTag
+          , proto::terminal<int>::type
+          , proto::terminal<char>::type
+        >::type
+    expr_type2;
+
+    BOOST_MPL_ASSERT((is_same<expr_type2, expr_type>));
+
+Notice that the children, an int and a char, are wrapped in terminal
+nodes and held by value. If you would like an argument to be beld by
+reference in the resulting tree node, you can use `boost::ref()`:
+
+    // One terminal held by reference:
+    int i = 0;
+
+    typedef
+        proto::result_of::make_expr<
+            MyTag
+          , int &   // <-- Note reference here
+          , char
+        >::type
+    expr_type;
+
+    expr_type expr = proto::make_expr<MyTag>(boost::ref(i), 'a');
+
+In the return type calculation, we can specify by-ref with
+`int &`, but we need `boost::ref()` in the actual function invocation.
+That's because the _make_expr_ function can't tell from the function
+arguments whether you want to store the arguments by value or by
+reference.
+
+Non-terminals are handled similarly. Given the non-terminal `expr` as
+defined above, we could wrap it in a unary plus node by value or by
+reference as follows:
+
+    // Make "expr" a child node of a new unary plus node, where
+    // "expr" is held by-value:
+    typedef
+        proto::result_of::make_expr<
+            proto::tag::unary_plus
+          , expr_type
+        >::type
+    posit_val_type;
+
+    posit_val_type p1 = proto::make_expr<proto::tag::unary_plus>(expr);
+
+    // Same as above, except "expr" is held by-reference:
+    typedef
+        proto::result_of::make_expr<
+            proto::tag::unary_plus
+          , expr_type &     // <-- Note reference here
+        >::type
+    posit_ref_type;
+
+    posit_ref_type p2 = proto::make_expr<proto::tag::unary_plus>(boost::ref(expr));
+
+    // Equivalent to "by-ref" line directly above:
+    posit_ref_type p3 = +expr;
+
+The application of unary `operator+` on the last line is equivalent to
+the by-ref invocation of _make_expr_ because Proto's operator overloads
+always build trees by holding nodes by reference.
+
+If you specify a domain when invoking _make_expr_, then _make_expr_
+will use that domain's generator to wrap the resulting node in a
+domain-specific wrapper. In the example below, expressions within the
+`MyDomain` domain are wrapped in a `MyExpr<>` wrapper.
+
+    template<typename Expr>
+    struct MyExpr;
+
+    struct MyDomain
+      : proto::domain<proto::generator<MyExpr> >
+    {};
+
+    // ...
+
+    // Use result_of::make_expr<> to compute the return type:
+    int i = 0;
+    typedef
+        proto::result_of::make_expr<
+            MyTag
+          , MyDomain // <-- Note second template
+          , int      //     param can be a domain.
+          , char
+        >::type
+    expr_type;
+
+    // Construct an expression within MyDomain:
+    expr_type expr = proto::make_expr<MyTag, MyDomain>(i, 'a');
+
+    // expr_type is the same as this type:
+    typedef
+        // New node is wrapped in MyExpr<>
+        MyExpr<proto::binary_expr<
+            MyTag
+            // Terminals are also wrapped.
+          , MyExpr<proto::terminal<int>::type>
+          , MyExpr<proto::terminal<char>::type>
+        >::type>
+    expr_type2;
+
+    BOOST_MPL_ASSERT((is_same<expr_type2, expr_type>));
+
+[/======================================================]
+[heading Building Expression Trees With [^unpack_expr()]]
+[/======================================================]
+
+[:[*Synopsys:]]
+
+    namespace proto
+    {
+        namespace result_of
+        {
+            // Metafunction for calculating the return type
+            // of the unpack_expr() function
+            template<
+                typename Tag
+              , typename DomainOrSequence
+              , typename SequenceOrVoid = void
+            >
+            struct unpack_expr
+            {
+                typedef __implelemtation_defined__ type;
+            };
+        }
+
+        namespace functional
+        {
+            // A callable function object equivalent of the
+            // unpack_expr() function.
+            template<typename Tag, typename Domain = default_domain>
+            struct unpack_expr : callable
+            {
+                template<typename Sig> struct result;
+
+                template<typename This, typename Sequence>
+                struct result<This(Sequence)>
+                  : result_of::unpack_expr<Tag, Domain, Sequence>
+                {};
+
+                template<typename Sequence>
+                typename result_of::unpack_expr<Tag, Domain, Sequence>::type
+                operator ()(Sequence const &sequence) const;
+            };
+        }
+
+        // The unpack_expr() function
+        template<typename Tag, typename Domain, typename Sequence>
+        typename result_of::unpack_expr<Tag, Domain, Sequence>::type
+        unpack_expr(Sequence const &sequence);
+    }
+
+Once you understand _make_expr_, understanding _unpack_expr_ is
+simple. It behaves exactly the same way, except that rather than
+passing children individually, you pass the children as a Fusion
+sequence. So for instance, the following are equivalent:
+
+    // Build an expression with make_expr():
+    int i = 0;
+    proto::make_expr<Tag>(i, 'a');
+
+    // Build the same expression with unpack_expr():
+    proto::unpack_expr<Tag>(fusion::make_tuple(i, 'a'));
+
+    // Also the same as the above:
+    fusion::tuple<int, char> args(i, 'a');
+    proto::unpack_expr<Tag>(args);
+
+If you would like the arguments to be stored by reference, you can
+use `boost::ref()`, just as with _make_expr_.
+
+    // Hold one argument by reference:
+    int i = 0;
+    proto::unpack_expr<Tag>(fusion::make_tuple(boost::ref(i), 'a'));
+
+    // Also the same as the above:
+    fusion::tuple<int &, char> args(i, 'a');
+    proto::unpack_expr<Tag>(args);
+
+As with _make_expr_, _unpack_expr_ has a corresponding metafunction
+in the `proto::result_of` namespace for calculating its return type, as
+well as a callable function object form in the `proto::functional`
+namespace.
+
+One last interesting point about _unpack_expr_: Proto expression
+nodes are themselves valid Fusion sequences. Here, for instance, is
+a clever way to use _unpack_expr_ to turn a binary plus node into
+a binary minus node:
+
+    // Use unpack_expr() to turn an addition into a subtraction
+    proto::literal<int> i(8), j(42);
+    proto::unpack_expr<proto::tag::minus>( i + j );
+
+The expression `i + j` creates an expression tree which _unpack_expr_
+interprets as a sequence of its children `i` and `j`. The result is a
+new node with the `tag::minus` tag and `i` and `j` as children.
+
+[/=====================================================]
+[heading Generating Custom Expression Factory Functions]
+[/=====================================================]
+
+[:[*Synopsys:]]
+
+    // Generate BOOST_PROTO_MAX_ARITY overloads of a
+    // function template named NAME within a particular
+    // DOMAIN that generates expressions with a given
+    // TAG and optionally has some arguments bound.
+    #define BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE(    \
+        NAME                                                \
+      , DOMAIN                                              \
+      , TAG                                                 \
+      , BOUNDARGS                                           \
+    )
+
+The `proto::functional::make_expr<>` function object makes it very simple
+to create something that behaves like an expression factory function. For
+instance, the following defines a factory named `invert()` that
+"complements" its argument; that is, it builds a new node with type
+`tag::complement` as if Proto's `operator~` had been applied:
+
+    // invert(x) is now a synonym for ~proto::as_expr(x)
+    proto::functional::make_expr<proto::tag::complement> const invert = {};
+
+Such named "operators" are very important for domain-specific embedded
+languages. What's more, when defined as above, the `invert()` factory can
+accept up to `BOOST_PROTO_MAX_ARITY` arguments, although in this case
+that wouldn't be particularly meaningful.
+
+But imagine if you have a custom tag type `foo_tag<>` that is a template.
+You would like to define a `foo()` factory function that itself was a template,
+like this:
+
+    template<typename T, typename A0>
+    typename proto::result_of::make_expr<
+        foo_tag<T>
+      , A0 const &
+    >::type foo(A0 const &a0)
+    {
+        return proto::make_expr<foo_tag<T> >(boost::ref(a0));
+    }
+
+Now, users of your function can invoke it like this: `foo<int>("foo!")`. If
+you want to seamlessly handle up to /N/ argument, you have to write all /N/
+overloads yourself --- `functional::make_expr<>` can't help you. For this
+situation, Proto provides the `BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE()`
+macro. You can invoke it as follows:
+
+    // Generate overloads of the foo() function template
+    // like the one above
+    BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE(            \
+        foo                                                 \
+      , proto::default_domain                               \
+      , (foo_tag)(typename)                                 \
+      , BOOST_PP_SEQ_NIL                                    \
+    )
+
+The first macro parameter specified the name of the function template, `foo`.
+The second parameter is the domain of the resulting expression. The third
+parameter is the tag type, specified as a Boost.Preprocessor sequence. A
+tag template like `foo_tag<typename>` is represented as a PP sequence like
+`(foo_tag)(typename)`. Had `foo_tag<>` been defined instead as
+`template<typename, int> struct foo_tag`, that would be a PP sequence like
+`(foo_tag)(typename)(int)`.
+
+The last macro parammeter, `BOOST_PP_SEQ_NIL`, is used for specifying any
+additional implicit arguments. There are none in this case, so
+`BOOST_PP_SEQ_NIL` is used to represent an empty sequence.
+
+As another example, consider a DSEL like the Boost Lambda Library, for
+which you might want a function named `construct()` for doing deferred
+construction of objects. You might want users to be able to use it like
+this:
+
+    std::vector<S> buffer;
+
+    // Use a lambda to construct S objects using two
+    // sequences as constructor arguments:
+    std::transform(
+        sequence1.begin()
+      , sequence1.end()
+      , sequence2.begin()
+      , std::back_inserter(buffer)
+      , construct<S>(_1, _2)    // From a hypothetical lambda DSEL
+    );
+
+How might the `construct()` function be defined? We would like it to return
+a lazy function invocation that, when evaluated with two arguments, causes
+`S` objects to be constructed. Lazy functions in Proto look like this:
+
+    // The type of a Proto lazy function
+    proto::function<
+        TheFunctionToCall
+      , Argument1
+      , Argument2
+      , ...
+    >::type
+
+In the above, `TheFunctionToCall` might be an ordinary function object, so
+let's define a `construct_helper<>` function object that constructs an object.
+
+    template<typename T>
+    struct construct_helper
+    {
+        typedef T result_type; // for TR1 result_of
+
+        T operator()() const { return T(); }
+
+        template<typename A0>
+        T operator()(A0 const &a0) const { return T(a0); }
+
+        // ... other overloads ...
+    };
+
+With such a function object, we can say `construct_helper<S>()(1, 'a')` to
+immediately construct an `S` object using `1` and `'a'` as constructor
+arguments. We want this to be lazy, so we can wrap `construct_helper<S>` in
+a Proto terminal.
+
+    // A lazy S constructor
+    terminal<construct_helper<S> >::type const construct_S = {{}};
+
+    // OK, make a lazy function invocation but don't call it.
+    construct_S(1, 'a');
+
+    // Calls the lazy function and constructs an S
+    proto::default_context ctx;
+    S s = proto::eval( construct_S(1, 'a'), ctx );
+
+We're closer, but this is not the syntax we want. Recall that we want
+users to create objects lazily with `construct<S>(_1, _2)`. We can
+get that syntax with the following:
+
+    // Define the construct() function template that
+    // constructs an object lazily.
+    template<typename T, typename A0, typename A1>
+    typename proto::result_of::make_expr<
+        proto::tag::function
+      , construct_helper<T> const
+      , A0 const &
+      , A1 const &
+    >::type const
+    construct(A0 const &a0, A1 const &a1)
+    {
+        return proto::make_expr<proto::tag::function>(
+            construct_helper<T>()
+          , boost::ref(a0)
+          , boost::ref(a1)
+        );
+    }
+
+Now users can say `construct<S>(_1, _2)` and get the lazy object
+construction they want. (Making it work with `std::transform()`
+takes a little more effort, but that's covered in the
+[link boost_proto.users_guide.examples.lambda Lambda] example.)
+Now we need /N/ overloads to handle up to /N/ arguments. That's a lot
+of boiler plate, so we can use the `BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE()`
+macro to simplify our job.
+
+    // Generate BOOST_PROTO_MAX_ARITY-1 overloads of the
+    // construct function template like the one defined above.
+    BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE(            \
+        construct                                           \
+      , MyLambdaDomain                                      \
+      , (proto::tag::function)                              \
+      , ((construct_helper)(typename))                      \
+    )
+
+What is new in this case is the fourth macro argument, which specifies
+that there is an implicit first argument to `construct()` of type
+`construct_helper<X>`, where `X` is a template parameter of the function.
+The fourth argument to the macro is actually a PP sequence of PP
+sequences. Each sequence describes one implicit argument.
+
+To see `BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE()` and `construct()` in
+action, please check out the
+[link boost_proto.users_guide.examples.lambda Lambda] example.
+
+[blurb [*Ugly Macros]
+
+You may find this use of the preprocessor distasteful and decide to
+write out the overloads yourself. That's fine, but there are some good
+reasons to consider the macro.
+
+1) You may not be able to anticipate the maximum number of arguments
+   your users will require. If users decide to increase
+   `BOOST_PROTO_MAX_ARITY`, the macro will automatically generate
+   the additional overloads for you.
+
+2) On compilers that support variadic templates, you'd rather this
+   generated just one variadic function instead of /N/ overloads,
+   but you'd like your code to be portable to compilers that don't
+   support variadic templates. This is possible if you use the macro,
+   but not otherwise. (Proto doesn't yet support variadic templates
+   but it will in the future.)
+]
+
+[endsect]
+
+[endsect]

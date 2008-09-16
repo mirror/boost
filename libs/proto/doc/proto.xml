@@ -1,0 +1,11 @@
+<?xml version="1.0" standalone="yes"?>
+<!--id="reference"-->
+<library-reference xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Reference</title>
+  <xi:include href="concepts/CallableTransform.xml"/>
+  <xi:include href="concepts/ObjectTransform.xml"/>
+  <xi:include href="concepts/PrimitiveTransform.xml"/>
+  <xi:include href="concepts/Transform.xml"/>
+  <xi:include href="concepts/PolymorphicFunctionObject.xml"/>
+  <xi:include href="protodoc.xml" xpointer="xpointer(//header)"/>
+</library-reference>
