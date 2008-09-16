@@ -191,7 +191,7 @@ class basic_regex : public regbase
 {
 public:
    // typedefs:
-   typedef typename traits::size_type            traits_size_type;
+   typedef std::size_t                           traits_size_type;
    typedef typename traits::string_type          traits_string_type;
    typedef charT                                 char_type;
    typedef traits                                traits_type;

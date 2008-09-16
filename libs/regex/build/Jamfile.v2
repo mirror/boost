@@ -169,7 +169,8 @@ rule check-icu-config ( )
 
 if [ check-icu-config ]
 {
-   BOOST_REGEX_ICU_OPTS = "<define>BOOST_HAS_ICU=1" ;
+   BOOST_REGEX_ICU_OPTS = "<target-os>freebsd:<include>/usr/local/include" ;
+   BOOST_REGEX_ICU_OPTS += "<define>BOOST_HAS_ICU=1" ;
 
    if $(ICU_PATH)
    {
@@ -247,6 +248,7 @@ lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE)
 alias icu_options : $(ICU_EXTRA_SOURCE) : : : $(BOOST_REGEX_ICU_OPTS) ;
 
 boost-install boost_regex ;
+
 
 
 

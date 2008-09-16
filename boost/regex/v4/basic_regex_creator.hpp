@@ -236,7 +236,7 @@ protected:
                                  m_traits;             // convenience reference to traits class
    re_syntax_base*               m_last_state;         // the last state we added
    bool                          m_icase;              // true for case insensitive matches
-   unsigned                      m_repeater_id;        // the id of the next repeater
+   unsigned                      m_repeater_id;        // the state_id of the next repeater
    bool                          m_has_backrefs;       // true if there are actually any backrefs
    unsigned                      m_backrefs;           // bitmask of permitted backrefs
    boost::uintmax_t              m_bad_repeats;        // bitmask of repeats we can't deduce a startmap for;
@@ -718,8 +718,8 @@ void basic_regex_creator<charT, traits>::fixup_pointers(re_syntax_base* state)
       case syntax_element_char_rep:
       case syntax_element_short_set_rep:
       case syntax_element_long_set_rep:
-         // set the id of this repeat:
-         static_cast<re_repeat*>(state)->id = m_repeater_id++;
+         // set the state_id of this repeat:
+         static_cast<re_repeat*>(state)->state_id = m_repeater_id++;
          // fall through:
       case syntax_element_alt:
          std::memset(static_cast<re_alt*>(state)->_map, 0, sizeof(static_cast<re_alt*>(state)->_map));
@@ -1194,11 +1194,11 @@ bool basic_regex_creator<charT, traits>::is_bad_repeat(re_syntax_base* pt)
    case syntax_element_short_set_rep:
    case syntax_element_long_set_rep:
       {
-         unsigned id = static_cast<re_repeat*>(pt)->id;
-         if(id > sizeof(m_bad_repeats) * CHAR_BIT)
+         unsigned state_id = static_cast<re_repeat*>(pt)->state_id;
+         if(state_id > sizeof(m_bad_repeats) * CHAR_BIT)
             return true;  // run out of bits, assume we can't traverse this one.
          static const boost::uintmax_t one = 1uL;
-         return m_bad_repeats & (one << id);
+         return m_bad_repeats & (one << state_id);
       }
    default:
       return false;
@@ -1216,10 +1216,10 @@ void basic_regex_creator<charT, traits>::set_bad_repeat(re_syntax_base* pt)
    case syntax_element_short_set_rep:
    case syntax_element_long_set_rep:
       {
-         unsigned id = static_cast<re_repeat*>(pt)->id;
+         unsigned state_id = static_cast<re_repeat*>(pt)->state_id;
          static const boost::uintmax_t one = 1uL;
-         if(id <= sizeof(m_bad_repeats) * CHAR_BIT)
-            m_bad_repeats |= (one << id);
+         if(state_id <= sizeof(m_bad_repeats) * CHAR_BIT)
+            m_bad_repeats |= (one << state_id);
       }
    default:
       break;

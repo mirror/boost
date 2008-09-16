@@ -134,8 +134,8 @@ inline bool is_separator<char>(char c)
 BOOST_REGEX_DECL std::string BOOST_REGEX_CALL lookup_default_collate_name(const std::string& name);
 
 //
-// get the id of a character clasification, the individual
-// traits classes then transform that id into a bitmask:
+// get the state_id of a character clasification, the individual
+// traits classes then transform that state_id into a bitmask:
 //
 template <class charT>
 struct character_pointer_range

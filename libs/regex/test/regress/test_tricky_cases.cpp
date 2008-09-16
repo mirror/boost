@@ -377,6 +377,9 @@ void test_tricky_cases3()
    TEST_REGEX_SEARCH("(?:\\d{9}.*){2}", perl, "123456789dfsdfsdfsfsdfds123456789b", match_default, make_array(0, 34, -2, -2));
    TEST_REGEX_SEARCH("(?:\\d{9}.*){2}", perl, "123456789dfsdfsdfsfsdfds12345678", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("(?:\\d{9}.*){2}", perl, "123456789dfsdfsdfsfsdfds", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]?[0-9])(\\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]?[0-9])){3}$", perl, "1.2.03", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]?[0-9])(\\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]?[0-9])){3,4}$", perl, "1.2.03", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]?[0-9])(\\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]?[0-9])){3,4}?$", perl, "1.2.03", match_default, make_array(-2, -2));
 
 
    //

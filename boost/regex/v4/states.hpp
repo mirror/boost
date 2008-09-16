@@ -240,7 +240,7 @@ Repeat a section of the machine
 struct re_repeat : public re_alt
 {
    std::size_t   min, max;  // min and max allowable repeats
-   int           id;        // Unique identifier for this repeat
+   int           state_id;        // Unique identifier for this repeat
    bool          leading;   // True if this repeat is at the start of the machine (lets us optimize some searches)
    bool          greedy;    // True if this is a greedy repeat
 };

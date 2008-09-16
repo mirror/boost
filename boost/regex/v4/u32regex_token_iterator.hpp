@@ -271,7 +271,7 @@ typedef u32regex_token_iterator<const char*> utf8regex_token_iterator;
 typedef u32regex_token_iterator<const UChar*> utf16regex_token_iterator;
 typedef u32regex_token_iterator<const UChar32*> utf32regex_token_iterator;
 
-// construction from an integral sub_match id:
+// construction from an integral sub_match state_id:
 inline u32regex_token_iterator<const char*> make_u32regex_token_iterator(const char* p, const u32regex& e, int submatch = 0, regex_constants::match_flag_type m = regex_constants::match_default)
 {
    return u32regex_token_iterator<const char*>(p, p+std::strlen(p), e, submatch, m);
@@ -282,7 +282,7 @@ inline u32regex_token_iterator<const wchar_t*> make_u32regex_token_iterator(cons
    return u32regex_token_iterator<const wchar_t*>(p, p+std::wcslen(p), e, submatch, m);
 }
 #endif
-#ifndef U_WCHAR_IS_UTF16
+#if !defined(U_WCHAR_IS_UTF16) && (U_SIZEOF_WCHAR_T != 2)
 inline u32regex_token_iterator<const UChar*> make_u32regex_token_iterator(const UChar* p, const u32regex& e, int submatch = 0, regex_constants::match_flag_type m = regex_constants::match_default)
 {
    return u32regex_token_iterator<const UChar*>(p, p+u_strlen(p), e, m);
@@ -313,7 +313,7 @@ inline u32regex_token_iterator<const wchar_t*> make_u32regex_token_iterator(cons
    return u32regex_token_iterator<const wchar_t*>(p, p+std::wcslen(p), e, submatch, m);
 }
 #endif
-#ifndef U_WCHAR_IS_UTF16
+#if !defined(U_WCHAR_IS_UTF16) && (U_SIZEOF_WCHAR_T != 2)
 template <std::size_t N>
 inline u32regex_token_iterator<const UChar*> make_u32regex_token_iterator(const UChar* p, const u32regex& e, const int (&submatch)[N], regex_constants::match_flag_type m = regex_constants::match_default)
 {
@@ -333,7 +333,7 @@ inline u32regex_token_iterator<const UChar*> make_u32regex_token_iterator(const 
 }
 #endif // BOOST_MSVC < 1300
 
-// construction from a vector of sub_match id's:
+// construction from a vector of sub_match state_id's:
 inline u32regex_token_iterator<const char*> make_u32regex_token_iterator(const char* p, const u32regex& e, const std::vector<int>& submatch, regex_constants::match_flag_type m = regex_constants::match_default)
 {
    return u32regex_token_iterator<const char*>(p, p+std::strlen(p), e, submatch, m);
@@ -344,7 +344,7 @@ inline u32regex_token_iterator<const wchar_t*> make_u32regex_token_iterator(cons
    return u32regex_token_iterator<const wchar_t*>(p, p+std::wcslen(p), e, submatch, m);
 }
 #endif
-#ifndef U_WCHAR_IS_UTF16
+#if !defined(U_WCHAR_IS_UTF16) && (U_SIZEOF_WCHAR_T != 2)
 inline u32regex_token_iterator<const UChar*> make_u32regex_token_iterator(const UChar* p, const u32regex& e, const std::vector<int>& submatch, regex_constants::match_flag_type m = regex_constants::match_default)
 {
    return u32regex_token_iterator<const UChar*>(p, p+u_strlen(p), e, m);
