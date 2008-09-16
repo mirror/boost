@@ -581,7 +581,8 @@ Once you know that primitive transforms will always receive all three parameters
   [[Without [^proto::fold<>]][With [^proto::fold<>]]]
   [[``StringCopy(
     proto::_right
-  , StringCopy(proto::_left)
+  , StringCopy(proto::_left, proto::_state, proto::_data)
+  , proto::_data
 )``
 ][``proto::fold<_, proto::_state, StringCopy>``]]
 ]
@@ -633,7 +634,7 @@ Primitive transforms are the building blocks for more interesting composite tran
        disambiguating object transforms from callable transforms, and also for 
        working around compiler bugs with nested function types.]]
  [[_default_pt_]
-      [Given a grammar _G_, `proto::_default<G>` evaluates the current node 
+      [Given a grammar _G_, `proto::_default<_G_>` evaluates the current node 
        according to the standard C++ meaning of the operation the node represents.
        For instance, if the current node is a binary plus node, the two children 
        will both be evaluated according to `_G_` and the results will be added and
