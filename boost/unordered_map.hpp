@@ -13,11 +13,7 @@
 # pragma once
 #endif
 
-#include <boost/config.hpp>
-
-#include <functional>
-#include <memory>
-
+#include <boost/unordered/unordered_map_fwd.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/unordered/detail/hash_table.hpp>
 
@@ -27,38 +23,6 @@
 
 namespace boost
 {
-    template <class Key,
-        class T,
-        class Hash = hash<Key>,
-        class Pred = std::equal_to<Key>,
-        class Alloc = std::allocator<std::pair<const Key, T> > >
-    class unordered_map;
-    template <class K, class T, class H, class P, class A>
-    bool operator==(unordered_map<K, T, H, P, A> const&,
-        unordered_map<K, T, H, P, A> const&);
-    template <class K, class T, class H, class P, class A>
-    bool operator!=(unordered_map<K, T, H, P, A> const&,
-        unordered_map<K, T, H, P, A> const&);
-    template <class K, class T, class H, class P, class A>
-    void swap(unordered_map<K, T, H, P, A>&,
-            unordered_map<K, T, H, P, A>&);
-
-    template <class Key,
-        class T,
-        class Hash = hash<Key>,
-        class Pred = std::equal_to<Key>,
-        class Alloc = std::allocator<std::pair<const Key, T> > >
-    class unordered_multimap;
-    template <class K, class T, class H, class P, class A>
-    bool operator==(unordered_multimap<K, T, H, P, A> const&,
-        unordered_multimap<K, T, H, P, A> const&);
-    template <class K, class T, class H, class P, class A>
-    bool operator!=(unordered_multimap<K, T, H, P, A> const&,
-        unordered_multimap<K, T, H, P, A> const&);
-    template <class K, class T, class H, class P, class A>
-    void swap(unordered_multimap<K, T, H, P, A>&,
-            unordered_multimap<K, T, H, P, A>&);
-
     template <class Key, class T, class Hash, class Pred, class Alloc>
     class unordered_map
     {

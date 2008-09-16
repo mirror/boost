@@ -13,11 +13,7 @@
 # pragma once
 #endif
 
-#include <boost/config.hpp>
-
-#include <functional>
-#include <memory>
-
+#include <boost/unordered/unordered_set_fwd.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/unordered/detail/hash_table.hpp>
 
@@ -27,36 +23,6 @@
 
 namespace boost
 {
-    template <class Value,
-        class Hash = hash<Value>,
-        class Pred = std::equal_to<Value>,
-        class Alloc = std::allocator<Value> >
-    class unordered_set;
-    template <class T, class H, class P, class A>
-    bool operator==(unordered_set<T, H, P, A> const&,
-        unordered_set<T, H, P, A> const&);
-    template <class T, class H, class P, class A>
-    bool operator!=(unordered_set<T, H, P, A> const&,
-        unordered_set<T, H, P, A> const&);
-    template <class T, class H, class P, class A>
-    void swap(unordered_set<T, H, P, A> &m1,
-            unordered_set<T, H, P, A> &m2);
-
-    template <class Value,
-        class Hash = hash<Value>,
-        class Pred = std::equal_to<Value>,
-        class Alloc = std::allocator<Value> >
-    class unordered_multiset;
-    template <class T, class H, class P, class A>
-    bool operator==(unordered_multiset<T, H, P, A> const&,
-        unordered_multiset<T, H, P, A> const&);
-    template <class T, class H, class P, class A>
-    bool operator!=(unordered_multiset<T, H, P, A> const&,
-        unordered_multiset<T, H, P, A> const&);
-    template <class T, class H, class P, class A>
-    void swap(unordered_multiset<T, H, P, A> &m1,
-            unordered_multiset<T, H, P, A> &m2);
-
     template <class Value, class Hash, class Pred, class Alloc>
     class unordered_set
     {

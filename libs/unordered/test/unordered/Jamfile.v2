@@ -14,6 +14,8 @@ project unordered-test/unordered
 
 test-suite unordered
     :
+        [ run fwd_set_test.cpp ]
+        [ run fwd_map_test.cpp ]
         [ run compile_set.cpp ]
         [ run compile_map.cpp ]
         [ run link_test_1.cpp link_test_2.cpp ]
