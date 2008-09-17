@@ -15,6 +15,10 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
 
+#if defined( __ia64__ ) && defined( __INTEL_COMPILER )
+# include <ia64intrin.h>
+#endif
+
 namespace boost
 {
 
