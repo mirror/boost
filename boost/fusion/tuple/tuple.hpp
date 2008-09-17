@@ -16,7 +16,7 @@
 #include <boost/fusion/sequence/io.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_const.hpp>
-#include <utility>
+#include <boost/config/no_tr1/utility.hpp>
 
 namespace boost { namespace fusion
 {
