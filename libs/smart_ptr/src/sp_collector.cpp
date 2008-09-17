@@ -104,6 +104,8 @@ static void find_unreachable_objects_impl(map_type const & m, map2_type & m2)
 
             BOOST_ASSERT(p->use_count() != 0); // there should be no inactive counts in the map
 
+            m2[ i->first ];
+
             scan_and_count(i->second.first, i->second.second, m, m2);
         }
 
@@ -121,7 +123,7 @@ static void find_unreachable_objects_impl(map_type const & m, map2_type & m2)
             if(p->use_count() != i->second) open.push_back(p);
         }
 
-        std::cout << "... " << m2.size() << " objects in open.\n";
+        std::cout << "... " << open.size() << " objects in open.\n";
 
         for(open_type::iterator j = open.begin(); j != open.end(); ++j)
         {
