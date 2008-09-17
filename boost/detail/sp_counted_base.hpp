@@ -46,7 +46,7 @@
 #elif defined( __GNUC__ ) && ( defined( __powerpc__ ) || defined( __ppc__ ) || defined( __ppc ) )
 # include <boost/detail/sp_counted_base_gcc_ppc.hpp>
 
-#elif defined(__GNUC__) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 401 ) && !defined( __arm__ ) && !defined( __hppa )
+#elif defined(__GNUC__) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 401 ) && !defined( __arm__ ) && !defined( __hppa ) && ( !defined( __INTEL_COMPILER ) || defined( __ia64__ ) )
 # include <boost/detail/sp_counted_base_sync.hpp>
 
 #elif defined(__GNUC__) && ( defined( __sparcv8 ) || defined( __sparcv9 ) )

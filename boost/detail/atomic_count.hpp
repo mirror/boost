@@ -98,7 +98,7 @@ typedef long atomic_count;
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #  include <boost/detail/atomic_count_win32.hpp>
 
-#elif defined( __GNUC__ ) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 401 ) && !defined( __arm__ ) && !defined( __hppa )
+#elif defined( __GNUC__ ) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 401 ) && !defined( __arm__ ) && !defined( __hppa ) && ( !defined( __INTEL_COMPILER ) || defined( __ia64__ ) )
 #  include <boost/detail/atomic_count_sync.hpp>
 
 #elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
