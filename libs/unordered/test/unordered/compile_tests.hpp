@@ -290,7 +290,7 @@ void unordered_test(X&, Key& k, T& t, Hash& hf, Pred& eq)
     const_iterator q = a.cbegin();
     test::check_return_type<iterator>::equals(a.insert(q, t));
 #if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
-    test::check_return_type<iterator>::equals(a.emplace(q, t));
+    test::check_return_type<iterator>::equals(a.emplace_hint(q, t));
 #endif
 
     a.insert(i, j);

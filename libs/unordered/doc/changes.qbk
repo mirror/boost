@@ -33,4 +33,13 @@ First official release.
   are available.
 * Added equality operators.
 
+[h2 Boost 1.37.0]
+
+* Rename overload of `emplace` with hint, to `emplace_hint` as specified in
+  [@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2008/n2691.pdf n2691].
+* Provide forwarding headers at `<boost/unordered/unordered_map_fwd.hpp>` and
+  `<boost/unordered/unordered_set_fwd.hpp>`.
+* Move all the implementation inside `boost/unordered`, to assist
+  modularization and hopefully make it easier to track changes in subversion.
+
 [endsect]
