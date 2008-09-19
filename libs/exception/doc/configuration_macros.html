@@ -3,7 +3,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-	<title>boost/exception/diagnostic_information.hpp</title>
+	<title>configuration macros</title>
 	<link href='reno.css' type='text/css' rel='stylesheet'/>
 </head>
 <body>
@@ -19,22 +19,19 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h2>boost/exception/diagnostic_information.hpp</h2>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>Configuration Macros</h3>
 </div>
-<h3>Synopsis</h3>
-<div class="RenoIncludeDIV"><pre>#include &lt;exception&gt;
-
-namespace
-boost
-    {
-<span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">std::string <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>( std::exception const &amp; x );</span></span>
-    }</pre>
-</div></div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
+<p>Boost Exception responds to the following configuration macros:</p>
+<p><b>BOOST_NO_RTTI</b><span class="RenoBR">&nbsp;</span><br/><b>BOOST_NO_TYPEID</b></p>
+<p>The first macro prevents Boost Exception from using dynamic_cast and dynamic typeid. If the second macro is also defined, Boost Exception does not use static typeid either. There are no observable degrading effects on the library functionality, except for the following:</p>
+<blockquote><p>By default, the <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> function template can be called with any exception type. If BOOST_NO_RTTI is defined, <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> can be used only with objects of type boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p></blockquote>
+<p><b>BOOST_EXCEPTION_DISABLE</b></p>
+<p>By default, <span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span> and <span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span> are integrated directly in the <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span> function. Defining BOOST_EXCEPTION_DISABLE disables this integration.</p>
+<p>Note that on some non-conformant compilers, for example MSVC 7.0 and older, as well as BCC, BOOST_EXCEPTION_DISABLE is implicitly defined in <span class="RenoLink"><a href="throw_exception_hpp.html">boost/throw_exception.hpp</a></span>.</p>
+</div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
-</a><a href="exception_hpp.html">boost/exception.hpp<br/>
-</a><a href="diagnostic_information.html">diagnostic_information<br/>
-</a><a href="exception_diagnostic_information.html">exception::diagnostic_information<br/>
+</a><a href="get_error_info.html">get_error_info<br/>
 </a></div>
 </div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->

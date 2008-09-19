@@ -4,6 +4,7 @@
 //file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "helper1.hpp"
+#include <boost/exception/get_error_info.hpp>
 #include <boost/exception/info.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/detail/lightweight_test.hpp>
@@ -44,7 +45,26 @@ main()
     catch(
     std::exception & x )
         {
-        BOOST_TEST( 42==*boost::get_error_info<test_int>(x) );
+#ifdef BOOST_NO_RTTI
+        try
+            {
+            throw;
+            }
+        catch(
+        boost::exception & x )
+            {
+#endif
+            BOOST_TEST( boost::get_error_info<test_int>(x) );
+            if( boost::shared_ptr<int const> p=boost::get_error_info<test_int>(x) )
+                BOOST_TEST( 42==*p );
+#ifdef BOOST_NO_RTTI
+            }
+        catch(
+        ... )
+            {
+            BOOST_TEST(false);
+            }
+#endif
         BOOST_TEST( std::string(x.what())==std::string("exception test length error") );
         }
     catch(

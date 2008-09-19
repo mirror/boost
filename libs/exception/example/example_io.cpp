@@ -41,7 +41,7 @@ error: //Base for all exception objects we throw.
     char const *
     what() const throw()
         {
-        return boost::exception::diagnostic_information();
+        return "example_io error";
         }
 
     protected:
@@ -66,11 +66,11 @@ my_fopen( char const * name, char const * mode )
     if( FILE * f = ::fopen(name,mode) )
         return boost::shared_ptr<FILE>(f,fclose);
     else
-        throw fopen_error() << BOOST_ERROR_INFO <<
+        BOOST_THROW_EXCEPTION(fopen_error() <<
             errno_info(errno) <<
             file_name_info(name) <<
             open_mode_info(mode) <<
-            function_info("fopen");
+            function_info("fopen"));
     }
 
 void
@@ -78,10 +78,10 @@ my_fread( void * buffer, size_t size, size_t count, boost::shared_ptr<FILE> cons
     {
     assert(stream);
     if( count!=fread(buffer,size,count,stream.get()) || ferror(stream.get()) )
-        throw fread_error() << BOOST_ERROR_INFO <<
+        BOOST_THROW_EXCEPTION(fread_error() <<
             function_info("fread") <<
             errno_info(errno) <<
-            file_stream_info(boost::weak_ptr<FILE>(stream));
+            file_stream_info(boost::weak_ptr<FILE>(stream)));
     }
 
 void
@@ -89,10 +89,10 @@ my_fwrite( void const * buffer, size_t size, size_t count, boost::shared_ptr<FIL
     {
     assert(stream);
     if( count!=fwrite(buffer,size,count,stream.get()) || ferror(stream.get()) )
-        throw fwrite_error() << BOOST_ERROR_INFO <<
+        BOOST_THROW_EXCEPTION(fwrite_error() <<
             function_info("fwrite") <<
             errno_info(errno) <<
-            file_stream_info(boost::weak_ptr<FILE>(stream));
+            file_stream_info(boost::weak_ptr<FILE>(stream)));
     }
 
 void
@@ -150,7 +150,7 @@ void
 dump_file_info( boost::exception const & x )
     {
     if( boost::shared_ptr<std::string const> fn = boost::get_error_info<file_name_info>(x) )
-        std::cout << "Source file name: " << *fn << "\n";
+        std::cout << "File name: " << *fn << "\n";
     }
 
 void
@@ -170,7 +170,7 @@ dump_all_info( boost::exception const & x )
     dump_file_info(x);
     dump_clib_info(x);
     std::cout << "\nOutput from diagnostic_information():\n";
-    std::cout << x.diagnostic_information();
+    std::cout << diagnostic_information(x);
     }
 
 int

@@ -25,16 +25,12 @@
 <pre>namespace
 boost
     {
-<span class="RenoIncludeSPAN">    #ifdef BOOST_NO_EXCEPTIONS
-    
+<span class="RenoIncludeSPAN">#ifdef BOOST_NO_EXCEPTIONS
     void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( std::exception const &amp; e ); // user defined
-    
-    #else
-    
+#else
     template &lt;class E&gt;
     void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( E const &amp; e );
-    
-    #endif</span>
+#endif</span>
     }</pre>
 </div><h4>Requirements:</h4>
 <p>E must derive publicly from std::exception.</p>
@@ -44,8 +40,10 @@ boost
 </ul></div>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
-<div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
+<div class="RenoPageList"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION<br/>
+</a><a href="boost-exception.html">Boost Exception<br/>
 </a><a href="throw_exception_hpp.html">boost/throw_exception.hpp<br/>
+</a><a href="configuration_macros.html">Configuration Macros<br/>
 </a><a href="enable_current_exception.html">enable_current_exception<br/>
 </a><a href="tutorial_exception_ptr.html">Transporting of Exceptions Between Threads<br/>
 </a></div>

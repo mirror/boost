@@ -7,11 +7,12 @@
 #include <boost/exception/info.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
-typedef boost::error_info<struct tag,int> tag_int;
+typedef boost::error_info<struct test_tag,int> tag_int;
 
 struct
 error1:
-    public std::exception
+    public std::exception,
+    public boost::exception
     {
     char const *
     what() const throw()
@@ -22,53 +23,55 @@ error1:
 
 struct
 error2:
-    public std::exception,
-    public boost::exception
-    {
-    char const *
-    what() const throw()
-        {
-        return "error2";
-        }
-    };
-
-struct
-error3:
     public boost::exception
     {
     };
-
-std::string
-get_diagnostic_information( std::exception const & x )
-    {
-    return boost::diagnostic_information(x);
-    }
 
 int
 main()
     {
     using namespace boost;
+    try
         {
-        error1 x;
+        error1 x; x << tag_int(42);
         BOOST_TEST(x.what()==std::string("error1"));
-        std::string di=get_diagnostic_information(x);
+        throw x;
+        }
+    catch(
+    boost::exception & x )
+        {
+        std::string di=boost::diagnostic_information(x);
+#ifndef BOOST_NO_RTTI
         BOOST_TEST(di.find("type:")!=std::string::npos);
         BOOST_TEST(di.find("error1")!=std::string::npos);
+#endif
+        BOOST_TEST(di.find("test_tag")!=std::string::npos);
         }
+    catch(
+    ... )
         {
-        error2 x; x << tag_int(42);
-        BOOST_TEST(x.what()==std::string("error2"));
-        std::string di=get_diagnostic_information(x);
-        BOOST_TEST(di.find("type:")!=std::string::npos);
-        BOOST_TEST(di.find("error2")!=std::string::npos);
+        BOOST_TEST(false);
         }
+    try
         {
-        error3 x;
+        error2 x;
         x << tag_int(1);
-        std::string w1 = x.diagnostic_information();
+        throw x;
+        }
+    catch(
+    boost::exception & x )
+        {
+        std::string w1 = diagnostic_information(x);
         x << tag_int(2);
-        std::string w2 = x.diagnostic_information();
+        std::string w2 = diagnostic_information(x);
         BOOST_TEST( w1!=w2 );
+        BOOST_TEST(w1.find("test_tag")!=std::string::npos);
+        BOOST_TEST(w2.find("test_tag")!=std::string::npos);
+        }
+    catch(
+    ... )
+        {
+        BOOST_TEST(false);
         }
     return boost::report_errors();
     }

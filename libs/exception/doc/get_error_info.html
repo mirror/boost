@@ -21,7 +21,7 @@
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>get_error_info</h3>
 </div>
-<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;</p>
+<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_get_error_info_hpp.html">boost/exception/get_error_info.hpp</a></span>&gt;</p>
 <pre>namespace
 boost
     {
@@ -31,17 +31,22 @@ boost
 </div><h4>Requirements:</h4>
 <div><ul><li> ErrorInfo must be an instance of the <span class="RenoLink"><a href="error_info.html">error_info</a></span> template.</li>
 <li> E must be polymorphic.</li>
+<li> The <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> function must not be called outside of a catch block.</li>
 </ul></div>
 <h4>Returns:</h4>
 <div><ul><li> If dynamic_cast&lt;boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const *&gt;(&amp;x) is 0, or if x does not store an object of type ErrorInfo, the returned value is an empty shared_ptr.</li>
-<li> Otherwise, the returned shared_ptr points to the stored value (use <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span> to store values in exception objects.) The shared_ptr is valid even after x has been destroyed.</li>
+<li> Otherwise, the returned shared_ptr points to the stored value (use <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span> to store values in exception objects.) The shared_ptr is valid even after x has been destroyed.</li>
 </ul></div>
 <h4>Throws:</h4>
 <p>Nothing.</p>
+<h4>Note:</h4>
+<p>The interface of <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> may be affected by the build <span class="RenoLink"><a href="configuration_macros.html">configuration macros</a></span>.</p>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
-<div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
-</a><a href="exception_error_info_hpp.html">boost/exception/info.hpp<br/>
+<div class="RenoPageList"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION<br/>
+</a><a href="boost-exception.html">Boost Exception<br/>
+</a><a href="exception_get_error_info_hpp.html">boost/exception/get_error_info.hpp<br/>
+</a><a href="configuration_macros.html">Configuration Macros<br/>
 </a><a href="error_info.html">error_info<br/>
 </a><a href="exception.html">exception<br/>
 </a></div>

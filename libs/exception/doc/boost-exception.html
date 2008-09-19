@@ -33,11 +33,10 @@
 </li>
 <li>Documentation<div><ol><li>Class <span class="RenoLink"><a href="exception.html">exception</a></span></li>
 <li>Transporting of Arbitrary Data to the Catch Site<div><ol><li><span class="RenoLink"><a href="error_info.html">error_info</a></span></li>
-<li><span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;/exception</a></span></li>
-<li><span class="RenoLink"><a href="operator_shl_tuple.html">operator&lt;&lt;/tuple</a></span></li>
+<li><span class="RenoLink"><a href="exception_operator_shl.html">exception/operator&lt;&lt;</a></span></li>
+<li><span class="RenoLink"><a href="tuple_operator_shl.html">tuple/operator&lt;&lt;</a></span></li>
 <li><span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span></li>
 <li><span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span></li>
-<li><span class="RenoLink"><a href="BOOST_ERROR_INFO.html">BOOST_ERROR_INFO</a></span></li>
 </ol></div>
 </li>
 <li><span class="RenoLink"><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2179.html">N2179</a></span> Transporting of Exceptions between Threads<div><ol><li><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></li>
@@ -49,13 +48,15 @@
 </ol></div>
 </li>
 <li><span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span></li>
-<li><span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span></li>
+<li><span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>, <span class="RenoLink"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION</a></span></li>
+<li><span class="RenoLink"><a href="configuration_macros.html">Configuration Macros</a></span></li>
 <li>Headers<div><ol><li><span class="RenoLink"><a href="exception_hpp.html">boost/exception.hpp</a></span></li>
-<li><span class="RenoLink"><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span></li>
-<li><span class="RenoLink"><a href="exception_enable_exception_cloning_hpp.html">boost/exception/enable_current_exception.hpp</a></span></li>
+<li><span class="RenoLink"><a href="exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span></li>
+<li><span class="RenoLink"><a href="exception_enable_current_exception_hpp.html">boost/exception/enable_current_exception.hpp</a></span></li>
 <li><span class="RenoLink"><a href="exception_enable_error_info_hpp.html">boost/exception/enable_error_info.hpp</a></span></li>
 <li><span class="RenoLink"><a href="exception_error_info_value_hpp.html">boost/exception/error_info.hpp</a></span></li>
 <li><span class="RenoLink"><a href="exception_exception_hpp.html">boost/exception/exception.hpp</a></span></li>
+<li><span class="RenoLink"><a href="exception_get_error_info_hpp.html">boost/exception/get_error_info.hpp</a></span></li>
 <li><span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span></li>
 <li><span class="RenoLink"><a href="exception_error_info_group_hpp.html">boost/exception/info_tuple.hpp</a></span></li>
 <li><span class="RenoLink"><a href="exception_cloning_hpp.html">boost/exception_ptr.hpp</a></span></li>
@@ -74,16 +75,19 @@ boost
 <span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">class
     <span class="RenoLink"><a href="exception.html">exception</a></span>
         {
-        public:
-    
-    <span class="RenoIncludeSPAN">    virtual char const * <span class="RenoLink"><a href="exception_diagnostic_information.html">diagnostic_information</a></span>() const throw();</span>    
-    
         protected:
     
     <span class="RenoIncludeSPAN">    <span class="RenoLink"><a href="exception_constructors.html">exception</a></span>();
         <span class="RenoLink"><a href="exception_constructors.html">exception</a></span>( <span class="RenoLink"><a href="exception.html">exception</a></span> const &amp; x );</span>    
     <span class="RenoIncludeSPAN">    <span class="RenoLink"><a href="exception_destructor.html">~exception</a></span>();</span>    
-        };</span></span>
+        };</span>    
+    
+    <span class="RenoIncludeSPAN">template &lt;class Tag,class T&gt;
+    class <span class="RenoLink"><a href="error_info.html">error_info</a></span>;</span>    
+    
+    typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_throw_function,char const *&gt; throw_function;
+    typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_throw_file,char const *&gt; throw_file;
+    typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_throw_line,int&gt; throw_line;</span>
 
 <span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">template &lt;class Tag,class T&gt;
     class
@@ -96,23 +100,11 @@ boost
         error_info( value_type const &amp; );
         };</span>    
     
-    <span class="RenoIncludeSPAN">template &lt;class ErrorInfo,class E&gt;
-    <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span>&lt;typename ErrorInfo::value_type const&gt; <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>( E const &amp; x );</span>    
-    
-    <span class="RenoIncludeSPAN">typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_throw_function,char const *&gt; throw_function;
-    typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_throw_file,char const *&gt; throw_file;
-    typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_throw_line,int&gt; throw_line;
-    
-    #define <span class="RenoLink"><a href="BOOST_ERROR_INFO.html">BOOST_ERROR_INFO</a></span>\
-        ::boost::throw_function(BOOST_CURRENT_FUNCTION) &lt;&lt;\
-        ::boost::throw_file(__FILE__) &lt;&lt;\
-        ::boost::throw_line((int)__LINE__)</span>    
-    
     <span class="RenoIncludeSPAN">template &lt;class E, class Tag, class T&gt;
-    E const &amp; <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>( E const &amp; x, <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; const &amp; v );</span></span>
+    E const &amp; <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span>( E const &amp; x, <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; const &amp; v );</span></span>
 
 <span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">template &lt;class E, class Tag1, class T1, ..., class TagN, class TN&gt;
-    E const &amp; <span class="RenoLink"><a href="operator_shl_tuple.html">operator&lt;&lt;</a></span>( E const &amp; x,
+    E const &amp; <span class="RenoLink"><a href="tuple_operator_shl.html">operator&lt;&lt;</a></span>( E const &amp; x,
         <span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html">tuple</a></span>&lt;
             <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag1,T1&gt;,
             ...,
@@ -121,7 +113,7 @@ boost
 <span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">template &lt;class T&gt;
     ---unspecified--- <span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>( T const &amp; x );</span></span>
 
-<span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">std::string <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>( std::exception const &amp; x );</span></span>
+<span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">std::string <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>( boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const &amp; x );</span></span>
 
 <span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">class
     <span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span>:
@@ -142,18 +134,30 @@ boost
 
 <span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">template &lt;class T&gt;
     ---unspecified--- <span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>( T const &amp; e );</span></span>
+    }</pre>
+<p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="throw_exception_hpp.html">boost/throw_exception.hpp</a></span>&gt;</p>
+<pre><span class="RenoIncludeSPAN"><span class="RenoIncludeSPAN">#if !defined( BOOST_NO_EXCEPTIONS ) &amp;&amp; !defined( BOOST_EXCEPTION_DISABLE )
+    #include &lt;<span class="RenoLink"><a href="exception_exception_hpp.html">boost/exception/exception.hpp</a></span>&gt;
+    #include &lt;boost/current_function.hpp&gt;
+    #define <span class="RenoLink"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION</a></span>(x)\
+        ::boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( ::boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(x) &lt;&lt;\
+        ::boost::<span class="RenoLink"><a href="exception_exception_hpp.html">throw_function</a></span>(BOOST_CURRENT_FUNCTION) &lt;&lt;\
+        ::boost::<span class="RenoLink"><a href="exception_exception_hpp.html">throw_file</a></span>(__FILE__) &lt;&lt;\
+        ::boost::<span class="RenoLink"><a href="exception_exception_hpp.html">throw_line</a></span>((int)__LINE__) )
+#else
+    #define <span class="RenoLink"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION</a></span>(x) ::boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(x)
+#endif</span>
 
-<span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">#ifdef BOOST_NO_EXCEPTIONS
-    
+namespace
+boost
+    {
+<span class="RenoIncludeSPAN">#ifdef BOOST_NO_EXCEPTIONS
     void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( std::exception const &amp; e ); // user defined
-    
-    #else
-    
+#else
     template &lt;class E&gt;
     void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( E const &amp; e );
-    
-    #endif</span></span>
-    }</pre>
+#endif</span>
+    }</span></pre>
 <h2>Class exception</h2>
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>exception</h3>
 </div>
@@ -164,10 +168,6 @@ boost
 <span class="RenoIncludeSPAN">    class
     <span class="RenoLink"><a href="exception.html">exception</a></span>
         {
-        public:
-    
-    <span class="RenoIncludeSPAN">    virtual char const * <span class="RenoLink"><a href="exception_diagnostic_information.html">diagnostic_information</a></span>() const throw();</span>    
-    
         protected:
     
     <span class="RenoIncludeSPAN">    <span class="RenoLink"><a href="exception_constructors.html">exception</a></span>();
@@ -176,37 +176,9 @@ boost
         };</span>
     }</pre>
 </div><p>Class boost::<span class="RenoLink"><a href="exception.html">exception</a></span> is designed to be used as a universal base for user-defined exception types.</p>
-<p>An object of any type deriving from boost::<span class="RenoLink"><a href="exception.html">exception</a></span> can store data of arbitrary types, using the <span class="RenoLink"><a href="error_info.html">error_info</a></span> wrapper and <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>.</p>
+<p>An object of any type deriving from boost::<span class="RenoLink"><a href="exception.html">exception</a></span> can store data of arbitrary types, using the <span class="RenoLink"><a href="error_info.html">error_info</a></span> wrapper and <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span>.</p>
 <p>To retrieve data from a boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object, use the <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> function template.</p>
-<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>exception::exception</h3>
-</div>
-<div class="RenoIncludeDIV"><pre><span class="RenoLink"><a href="exception_constructors.html">exception</a></span>();
-<span class="RenoLink"><a href="exception_constructors.html">exception</a></span>( <span class="RenoLink"><a href="exception.html">exception</a></span> const &amp; x );</pre>
-</div><h4>Effects:</h4>
-<div><ul><li> Default constructor: initializes an empty boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object.</li>
-<li> Copy constructor: initializes a boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object which shares with x all data added through <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>, including data that is added at a future time.</li>
-</ul></div>
-<h4>Throws:</h4>
-<p>Nothing.</p>
-</div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>exception::~exception</h3>
-</div>
-<div class="RenoIncludeDIV"><pre><span class="RenoLink"><a href="exception_destructor.html">~exception</a></span>();</pre>
-</div><h4>Effects:</h4>
-<p>Frees all resources associated with a boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object.</p>
-<h4>Throws:</h4>
-<p>Nothing.</p>
-</div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>exception::diagnostic_information</h3>
-</div>
-<div class="RenoIncludeDIV"><pre>virtual char const * <span class="RenoLink"><a href="exception_diagnostic_information.html">diagnostic_information</a></span>() const throw();</pre>
-</div><h4>Returns:</h4>
-<p>A string representation of all data stored in the boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object by the <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span> function. See "<span class="RenoLink"><a href="tutorial_diagnostic_information.html">Diagnostic Information</a></span>" for details.</p>
-<h4>Throws:</h4>
-<p>Nothing.</p>
-<h4>Notes:</h4>
-<div><ul><li>The return value remains valid until the exception object from which it was obtained is destroyed or modified.</li>
-<li>The header <span class="RenoLink"><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span> provides a namespace-scope function <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> which takes a std::exception. It calls <span class="RenoLink"><a href="exception_diagnostic_information.html">exception::diagnostic_information</a></span> if its argument can be converted to boost::<span class="RenoLink"><a href="exception.html">exception</a></span>; otherwise it returns a string that combines the value of std::exception::what and the exception's dynamic type.</li>
-</ul></div>
-</div></div><h2>Transporting of Arbitrary Data to the Catch Site</h2>
+</div><h2>Transporting of Arbitrary Data to the Catch Site</h2>
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>error_info</h3>
 </div>
 <div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;</p>
@@ -227,21 +199,21 @@ boost
 </div><h4>Requirements:</h4>
 <p>T must have accessible copy constructor and must not be a reference (there is no requirement that T's copy constructor does not throw.)</p>
 <h4>Description:</h4>
-<p>This class template is used to associate a Tag type with a value type T. Objects of type <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; can be passed to <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span> to be stored in objects of type boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p>
+<p>This class template is used to associate a Tag type with a value type T. Objects of type <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; can be passed to <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span> to be stored in objects of type boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p>
 <h4>Note:</h4>
 <p>The header &lt;<span class="RenoLink"><a href="exception_error_info_value_hpp.html">boost/exception/error_info.hpp</a></span>&gt; provides a declaration of the <span class="RenoLink"><a href="error_info.html">error_info</a></span> template, which is sufficient for the purpose of typedefing an instance for specific Tag and T, like this:</p>
 <pre>#include &lt;<span class="RenoLink"><a href="exception_error_info_value_hpp.html">boost/exception/error_info.hpp</a></span>&gt;
 
 typedef boost::<span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_errno,int&gt; errno_info;</pre>
-<p>Of course, to actually add an <span class="RenoLink"><a href="error_info.html">error_info</a></span> object to <span class="RenoLink"><a href="exception.html">exceptions</a></span> using <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>, or to retrieve it using <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>, you must first #include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;.</p>
-</div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>operator&lt;&lt;/exception</h3>
+<p>Of course, to actually add an <span class="RenoLink"><a href="error_info.html">error_info</a></span> object to <span class="RenoLink"><a href="exception.html">exceptions</a></span> using <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span>, or to retrieve it using <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>, you must first #include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;.</p>
+</div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>exception/operator&lt;&lt;</h3>
 </div>
 <div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;<span class="RenoBR">&nbsp;</span><br/></p>
 <pre>namespace
 boost
     {
 <span class="RenoIncludeSPAN">    template &lt;class E, class Tag, class T&gt;
-    E const &amp; <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>( E const &amp; x, <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; const &amp; v );</span>
+    E const &amp; <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span>( E const &amp; x, <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; const &amp; v );</span>
     }</pre>
 </div><h4>Requirements:</h4>
 <p>E must be boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, or a type that derives (indirectly) from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p>
@@ -251,14 +223,14 @@ boost
 <p>x.</p>
 <div class="RenoIncludeDIV"><h4>Throws:</h4>
 <p>std::bad_alloc, or any exception emitted by the T copy constructor.</p>
-</div></div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>operator&lt;&lt;/tuple</h3>
+</div></div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>tuple/operator&lt;&lt;</h3>
 </div>
 <div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_error_info_group_hpp.html">boost/exception/info_tuple.hpp</a></span>&gt;</p>
 <pre>namespace
 boost
     {
 <span class="RenoIncludeSPAN">    template &lt;class E, class Tag1, class T1, ..., class TagN, class TN&gt;
-    E const &amp; <span class="RenoLink"><a href="operator_shl_tuple.html">operator&lt;&lt;</a></span>( E const &amp; x,
+    E const &amp; <span class="RenoLink"><a href="tuple_operator_shl.html">operator&lt;&lt;</a></span>( E const &amp; x,
         <span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html">tuple</a></span>&lt;
             <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag1,T1&gt;,
             ...,
@@ -274,7 +246,7 @@ boost
 <p>std::bad_alloc, or any exception emitted by T1..TN copy constructor.</p>
 </div></div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>get_error_info</h3>
 </div>
-<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;</p>
+<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_get_error_info_hpp.html">boost/exception/get_error_info.hpp</a></span>&gt;</p>
 <pre>namespace
 boost
     {
@@ -284,13 +256,16 @@ boost
 </div><h4>Requirements:</h4>
 <div><ul><li> ErrorInfo must be an instance of the <span class="RenoLink"><a href="error_info.html">error_info</a></span> template.</li>
 <li> E must be polymorphic.</li>
+<li> The <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> function must not be called outside of a catch block.</li>
 </ul></div>
 <h4>Returns:</h4>
 <div><ul><li> If dynamic_cast&lt;boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const *&gt;(&amp;x) is 0, or if x does not store an object of type ErrorInfo, the returned value is an empty shared_ptr.</li>
-<li> Otherwise, the returned shared_ptr points to the stored value (use <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span> to store values in exception objects.) The shared_ptr is valid even after x has been destroyed.</li>
+<li> Otherwise, the returned shared_ptr points to the stored value (use <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span> to store values in exception objects.) The shared_ptr is valid even after x has been destroyed.</li>
 </ul></div>
 <h4>Throws:</h4>
 <p>Nothing.</p>
+<h4>Note:</h4>
+<p>The interface of <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> may be affected by the build <span class="RenoLink"><a href="configuration_macros.html">configuration macros</a></span>.</p>
 </div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>enable_error_info</h3>
 </div>
 <div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_enable_error_info_hpp.html">boost/exception/enable_error_info.hpp</a></span>&gt;</p>
@@ -301,29 +276,13 @@ boost
     ---unspecified--- <span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>( T const &amp; x );</span>
     }</pre>
 </div><h4>Requirements:</h4>
-<p>T must be a user-defined type with accessible no-throw copy constructor as per (15.5.1).</p>
+<p>T must be a class with an accessible no-throw copy constructor as per (15.5.1).</p>
 <h4>Returns:</h4>
 <div><ul><li> If T derives from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, the returned object is of type T and is a copy of x.</li>
 <li> Otherwise, the returned object is of an unspecified type that derives publicly from both T and boost::<span class="RenoLink"><a href="exception.html">exception</a></span>. The T sub-object is initialized from x by the T copy constructor.</li>
 </ul></div>
 <h4>Throws:</h4>
 <p>Nothing.</p>
-</div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>BOOST_ERROR_INFO</h3>
-</div>
-<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;</p>
-<pre>namespace
-boost
-    {
-<span class="RenoIncludeSPAN">    typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_throw_function,char const *&gt; throw_function;
-    typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_throw_file,char const *&gt; throw_file;
-    typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_throw_line,int&gt; throw_line;
-    
-    #define <span class="RenoLink"><a href="BOOST_ERROR_INFO.html">BOOST_ERROR_INFO</a></span>\
-        ::boost::throw_function(BOOST_CURRENT_FUNCTION) &lt;&lt;\
-        ::boost::throw_file(__FILE__) &lt;&lt;\
-        ::boost::throw_line((int)__LINE__)</span>
-    }</pre>
-</div><p>This macro is designed to be used with <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span> when throwing a boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, to store information about the location of the throw statement. It can be chained with other <span class="RenoLink"><a href="error_info.html">error_infos</a></span> in a single throw expression.</p>
 </div><h2>Transporting of Exceptions between Threads</h2>
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>exception_ptr</h3>
 </div>
@@ -336,9 +295,14 @@ boost
 </div><p>The <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> type can be used to refer to a copy of an exception object. It is Default Constructible, Copy Constructible, Assignable and Equality Comparable; <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span>'s operations do not throw.</p>
 <p>Two instances of <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> are equivalent and compare equal if and only if they refer to the same exception.</p>
 <p>The default constructor of <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> produces the null value of the type. The null value is equivalent only to itself.</p>
+<h4>Thread safety</h4>
+<div><ul><li> It is legal for multiple threads to hold <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> references to the same exception object.</li>
+<li> It is illegal for multiple threads to modify the same <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> object concurrently.</li>
+<li> While calling <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> makes a copy of the current exception object, it is still possible for the two copies to share internal state. Therefore, in general it is not safe to call <span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span> concurrently to throw the same exception object into multiple threads.</li>
+</ul></div>
 </div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>enable_current_exception</h3>
 </div>
-<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_enable_exception_cloning_hpp.html">boost/exception/enable_current_exception.hpp</a></span>&gt;</p>
+<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_enable_current_exception_hpp.html">boost/exception/enable_current_exception.hpp</a></span>&gt;</p>
 <pre>namespace
 boost
     {
@@ -346,7 +310,7 @@ boost
     ---unspecified--- <span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>( T const &amp; e );</span>
     }</pre>
 </div><h4>Requirements:</h4>
-<p>T must be of user-defined type with an accessible no-throw copy constructor.</p>
+<p>T must be a class with an accessible no-throw copy constructor.</p>
 <h4>Returns:</h4>
 <p>An object of <i>unspecified</i> type which derives publicly from T. That is, the returned object can be intercepted by a catch(T &amp;).</p>
 <h4>Description:</h4>
@@ -392,7 +356,15 @@ boost
     <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> <span class="RenoLink"><a href="copy_exception.html">copy_exception</a></span>( T const &amp; e );</span>
     }</pre>
 </div><h4>Effects:</h4>
-<p>As if try { throw e; } catch( ... ) { return <span class="RenoLink"><a href="current_exception.html">current_exception</a></span>(); }</p>
+<p>As if</p>
+<pre>try
+    {
+    throw <span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(e);
+    }
+catch(...)
+    {
+    return <span class="RenoLink"><a href="current_exception.html">current_exception</a></span>();
+    }</pre>
 </div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>rethrow_exception</h3>
 </div>
 <div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_cloning_hpp.html">boost/exception_ptr.hpp</a></span>&gt;</p>
@@ -423,14 +395,23 @@ boost
 </div><h2>Printing Diagnostic Information</h2>
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>diagnostic_information</h3>
 </div>
-<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span>&gt;</p>
+<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span>&gt;<span class="RenoBR">&nbsp;</span><br/></p>
 <pre>namespace
 boost
     {
-<span class="RenoIncludeSPAN">    std::string <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>( std::exception const &amp; x );</span>
+<span class="RenoIncludeSPAN">    std::string <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>( boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const &amp; x );</span>
     }</pre>
 </div><h4>Returns:</h4>
-<p>If dynamic_cast&lt;boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const *&gt;(&amp;x) is not null, the returned string is initialized by a call to <span class="RenoLink"><a href="exception_diagnostic_information.html">exception::diagnostic_information</a></span>; otherwise, the returned string combines the output of x.what() and typeid(x).name().</p>
+<p>This function iterates over all data objects stored in the boost::<span class="RenoLink"><a href="exception.html">exception</a></span> through <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span>. The returned string is constructed by converting each data object to string and then concatenating these strings together.</p>
+<p>When the <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; template is instantiated, the system attempts overload resolution for an unqualified call to to_string(x), where x is of type T. If this is successful, the to_string overload is expected to return std::string and is used to convert objects of type T to string.</p>
+<p>Otherwise, the system attempts overload resolution for s &lt;&lt; x, where s is a std::ostringstream and x is of type T. If this is successful, the operator&lt;&lt; overload is used to convert objects of type T to string.</p>
+<p>Otherwise the system is unable to convert objects of type T to string, and an unspecified stub string value is used without issuing a compile error.</p>
+<h4>Notes:</h4>
+<div><ul><li>The format of the returned string is unspecified.</li>
+<li>The returned string is <i>not</i> user-friendly.</li>
+<li>If dynamic_cast&lt;std::exception const *&gt;(&amp;x) is not null, the returned string includes the output from std::exception::what.</li>
+<li>The returned string may include additional platform-specific diagnostic information.</li>
+</ul></div>
 </div><h2>Throwing Exceptions</h2>
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>throw_exception</h3>
 </div>
@@ -438,16 +419,12 @@ boost
 <pre>namespace
 boost
     {
-<span class="RenoIncludeSPAN">    #ifdef BOOST_NO_EXCEPTIONS
-    
+<span class="RenoIncludeSPAN">#ifdef BOOST_NO_EXCEPTIONS
     void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( std::exception const &amp; e ); // user defined
-    
-    #else
-    
+#else
     template &lt;class E&gt;
     void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( E const &amp; e );
-    
-    #endif</span>
+#endif</span>
     }</pre>
 </div><h4>Requirements:</h4>
 <p>E must derive publicly from std::exception.</p>
@@ -455,7 +432,9 @@ boost
 <div><ul><li> If BOOST_NO_EXCEPTIONS is not defined, boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e) is equivalent to throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(e)), unless BOOST_EXCEPTION_DISABLE is defined, in which case boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e) is equivalent to throw e;</li>
 <li> If BOOST_NO_EXCEPTIONS is defined, the function is left undefined, and the user is expected to supply an appropriate definition. Callers of <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span> are allowed to assume that the function never returns; therefore, if the user-defined <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span> returns, the behavior is undefined.</li>
 </ul></div>
-</div><!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
+</div><h2>Acknowledgements</h2>
+<p>Peter Dimov has been continuously influencing the design and evolution of Boost Exception. Also thanks to Tobias Schwinger, Tom Brinkman, Pavel Vozenilek and everyone who participated in the review process.</p>
+<!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <div id="footer">

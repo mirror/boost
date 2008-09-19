@@ -20,6 +20,6 @@ g()
     catch(
     boost::exception & e )
         {
-        std::cerr << e.diagnostic_information();
+        std::cerr << diagnostic_information(e);
         }
     }

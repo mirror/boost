@@ -30,6 +30,11 @@ boost
 </div><p>The <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> type can be used to refer to a copy of an exception object. It is Default Constructible, Copy Constructible, Assignable and Equality Comparable; <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span>'s operations do not throw.</p>
 <p>Two instances of <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> are equivalent and compare equal if and only if they refer to the same exception.</p>
 <p>The default constructor of <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> produces the null value of the type. The null value is equivalent only to itself.</p>
+<h4>Thread safety</h4>
+<div><ul><li> It is legal for multiple threads to hold <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> references to the same exception object.</li>
+<li> It is illegal for multiple threads to modify the same <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> object concurrently.</li>
+<li> While calling <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> makes a copy of the current exception object, it is still possible for the two copies to share internal state. Therefore, in general it is not safe to call <span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span> concurrently to throw the same exception object into multiple threads.</li>
+</ul></div>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>

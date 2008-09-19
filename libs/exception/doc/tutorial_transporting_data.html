@@ -41,7 +41,7 @@ f()
 </pre>
 <p>First, we instantiate the <span class="RenoLink"><a href="error_info.html">error_info</a></span> template using a unique identifier -- tag_errno, and the type of the info it identifies -- int. This provides compile-time type safety for the various values stored in exception objects.</p>
 <p>Second, we define class my_error, which derives from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p>
-<p>Finally, (3) illustrates how the typedef from (1) can be used with <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span> to store values in exception objects at the point of the throw.</p>
+<p>Finally, (3) illustrates how the typedef from (1) can be used with <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span> to store values in exception objects at the point of the throw.</p>
 <p>The stored errno value can be recovered at a later time like this:</p>
 <pre>// ...continued
 

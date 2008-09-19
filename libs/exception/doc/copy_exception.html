@@ -29,7 +29,15 @@ boost
     <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> <span class="RenoLink"><a href="copy_exception.html">copy_exception</a></span>( T const &amp; e );</span>
     }</pre>
 </div><h4>Effects:</h4>
-<p>As if try { throw e; } catch( ... ) { return <span class="RenoLink"><a href="current_exception.html">current_exception</a></span>(); }</p>
+<p>As if</p>
+<pre>try
+    {
+    throw <span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(e);
+    }
+catch(...)
+    {
+    return <span class="RenoLink"><a href="current_exception.html">current_exception</a></span>();
+    }</pre>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
