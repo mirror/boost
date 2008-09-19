@@ -40,10 +40,11 @@
    // we shouldn't really need this - but too many things choke
    // without it, this needs more investigation:
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#  define BOOST_NO_TYPENAME_WITH_CTOR    // Cannot use typename keyword when making temporaries of a dependant type
+#  define BOOST_NO_NESTED_FRIENDSHIP     // TC1 gives nested classes access rights as any other member
 
-//  Still need tests writing
-//  #  define BOOST_NO_TYPENAME_WITH_CTOR    // Cannot use typename keyword when making temporaries of a dependant type
-//  #  define BOOST_NO_NESTED_FRIENDSHIP     // TC1 gives nested classes access rights as any other member
+// Temporary hack, until specific MPL preprocessed headers are generated
+#  define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
 
 #  ifdef NDEBUG
       // fix broken <cstring> so that Boost.test works:

@@ -12,11 +12,18 @@
 
 namespace boost_no_is_abstract{
 
+#if defined(__CODEGEARC__)
 template<class T>
 struct is_abstract_test
 {
-   // Deduction fails if T is void, function type, 
-   // reference type (14.8.2/2)or an abstract class type 
+   enum{ value = __is_abstract(T) };
+};
+#else
+template<class T>
+struct is_abstract_test
+{
+   // Deduction fails if T is void, function type,
+   // reference type (14.8.2/2)or an abstract class type
    // according to review status issue #337
    //
    template<class U>
@@ -29,9 +36,10 @@ struct is_abstract_test
 #else
    enum{ s1 = sizeof(check_sig<T>(0)) };
 #endif
-    
+
    enum{ value = (s1 == sizeof(char)) };
 };
+#endif
 
 struct non_abstract{};
 struct abstract{ virtual void foo() = 0; };
@@ -42,11 +50,4 @@ int test()
 }
 
 }
-
-
-
-
-
-
-
 

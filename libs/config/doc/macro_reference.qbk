@@ -171,6 +171,10 @@ There is no specialization for `numeric_limits<__int64>` and
 specializations as a standard library "fix", only if the compiler supports
 the `__int64` datatype.
 ]]
+[[`BOOST_NO_NESTED_FRIENDSHIP`][Compiler][
+Compiler doesn't allow a nested class to access private members of its
+containing class. Probably Borland/CodeGear specific.
+]]
 [[`BOOST_NO_OPERATORS_IN_NAMESPACE`][Compiler][
 Compiler requires inherited operator friend functions to be defined at
 namespace scope, then using'ed to boost. Probably GCC specific. See
@@ -270,6 +274,10 @@ The compiler does not support template template parameters.
 ]]
 [[`BOOST_NO_TYPEID`][Compiler][
 The compiler does not support the typeid operator at all.
+]]
+[[`BOOST_NO_TYPENAME_WITH_CTOR`][Compiler][
+The typename keyword cannot be used when creating a temporary of a
+Dependent type.
 ]]
 [[`BOOST_NO_UNREACHABLE_RETURN_DETECTION`][Compiler][
 If a return is unreachable, then no return statement should be required,

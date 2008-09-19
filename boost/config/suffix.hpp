@@ -442,6 +442,12 @@ namespace std {
 #  define BOOST_DEDUCED_TYPENAME
 #endif
 
+#ifndef BOOST_NO_TYPENAME_WITH_CTOR
+#  define BOOST_CTOR_TYPENAME typename
+#else
+#  define BOOST_CTOR_TYPENAME
+#endif
+
 // long long workaround ------------------------------------------//
 // On gcc (and maybe other compilers?) long long is alway supported
 // but it's use may generate either warnings (with -ansi), or errors
