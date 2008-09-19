@@ -15,6 +15,7 @@ test-suite utility
         [ run ../assert_test.cpp ]
         [ run ../base_from_member_test.cpp ]
         [ run ../binary_search_test.cpp ]
+        [ run ../binary_test.cpp ]
         [ run ../call_traits_test.cpp : -u ]
         [ compile-fail ../checked_delete_test.cpp ]
         [ run ../compressed_pair_test.cpp ../../test/build//boost_test_exec_monitor/<link>static : -u ]

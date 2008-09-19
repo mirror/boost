@@ -23,6 +23,8 @@
 			<li>
 				Function template <a href="#addressof">addressof()</a></li>
                         <li>Class template <a href="#result_of">result_of</a></li>
+                        <li>
+				Macro <a href="#BOOST_BINARY">BOOST_BINARY</a></li>
                         <li><a href="index.html">Other utilities not part of <code>utility.hpp</code></a></li>
 		</ul>
 		<h2>
@@ -181,9 +183,63 @@ void f() {
 
 		<h2>Class templates for the Base-from-Member Idiom</h2>
 		<p>See <a href="base_from_member.html">separate documentation</a>.</p>
+		<h2><a name="BOOST_BINARY">Macro BOOST_BINARY</a></h2>
+
+		<p>The macro <code>BOOST_BINARY</code> is used for the
+                representation of binary literals. It takes as an argument
+                a binary number arranged as an arbitrary amount of 1s and 0s in
+                groupings of length 1 to 8, with groups separated
+                by spaces. The type of the literal yielded is determined by
+                the same rules as those of hex and octal
+                literals (<i>2.13.1p1</i>). By implementation, this macro
+                expands directly to an octal literal during preprocessing, so
+                there is no overhead at runtime and the result is useable in
+                any place that an octal literal would be.</p>
+
+		<p>In order to directly support binary literals with suffixes,
+                additional macros of the form BOOST_BINARY_XXX are also
+                provided, where XXX is a standard integer suffix in all capital
+                letters. In addition, LL and ULL suffixes may be used for representing
+                long long and unsigned long long types in compilers which provide
+                them as an extension.</p>
+
+
+                <p>The BOOST_BINARY family of macros resides in the header
+                <a
+                href="../../boost/utility/binary.hpp">&lt;boost/utility/binary.hpp&gt;</a>
+                which is automatically included by
+                <a
+                href="../../boost/utility.hpp">&lt;boost/utility.hpp&gt;</a>.
+
+		<p>Contributed by Matt Calabrese.</p><p>
+		</p><h3>Example</h3>
+		<blockquote>
+			<pre>
+void foo( int );
+
+void foo( unsigned long );
+
+void bar()
+{
+  int value1 = BOOST_BINARY( 100 111000 01 1 110 );
+
+  unsigned long value2 = BOOST_BINARY_UL( 100 001 ); // unsigned long
+
+  long long value3 = BOOST_BINARY_LL( 11 000 ); // long long if supported
+
+  assert(    BOOST_BINARY( 10010 )
+          &  BOOST_BINARY( 11000 )
+          == BOOST_BINARY( 10000 )
+        );
+
+  foo( BOOST_BINARY( 1010 ) ); // calls the first foo
+
+  foo( BOOST_BINARY_LU( 1010 ) ); // calls the second foo
+}
+</pre></blockquote>
 		<hr>
 		<p>Revised&nbsp; <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan
--->07 November, 2007<!--webbot bot="Timestamp" endspan i-checksum="39369"
+-->04 September, 2008<!--webbot bot="Timestamp" endspan i-checksum="39369"
 -->
 		</p>
 		<p>&copy; Copyright Beman Dawes 1999-2003.</p>
