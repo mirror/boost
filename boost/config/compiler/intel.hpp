@@ -152,6 +152,11 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  define BOOST_NO_TWO_PHASE_NAME_LOOKUP
 #endif
 
+// Intel on Altix Itanium
+#if defined(__itanium__) && defined(__INTEL_COMPILER)
+#  define BOOST_NO_TWO_PHASE_NAME_LOOKUP
+#endif
+
 //
 // last known and checked version:
 #if (BOOST_INTEL_CXX_VERSION > 1010)
