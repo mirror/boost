@@ -1,4 +1,4 @@
-//  This file was automatically generated on Sat Jul 12 12:39:34 2008
+//  This file was automatically generated on Mon Aug 25 10:51:52 2008
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -216,6 +216,11 @@ namespace boost_no_pointer_to_member_const = empty_boost;
 #include "boost_no_ret_det.ipp"
 #else
 namespace boost_no_unreachable_return_detection = empty_boost;
+#endif
+#ifndef BOOST_NO_RTTI
+#include "boost_no_rtti.ipp"
+#else
+namespace boost_no_rtti = empty_boost;
 #endif
 #ifndef BOOST_NO_SFINAE
 #include "boost_no_sfinae.ipp"
@@ -1049,6 +1054,11 @@ int main( int, char *[] )
    if(0 != boost_no_unreachable_return_detection::test())
    {
       std::cerr << "Failed test for BOOST_NO_UNREACHABLE_RETURN_DETECTION at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_rtti::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_RTTI at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_sfinae::test())

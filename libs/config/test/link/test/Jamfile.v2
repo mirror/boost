@@ -72,40 +72,41 @@ autolink-lib link_test : ../link_test.cpp
 explicit link_test ;
 
 run ../main.cpp link_test
-  : : : <toolset>msvc-8.0:<build>no <link>static <runtime-link>static <threading>single debug : link_test_static_single_debug ;
+  : : : <toolset>msvc-8.0:<build>no <link>static <runtime-link>static <threading>single debug : link_test_ssd ;
 
 run ../main.cpp link_test
-  : : : <toolset>msvc-8.0:<build>no <link>static <runtime-link>static <threading>single release : link_test_static_single_release ;
+  : : : <toolset>msvc-8.0:<build>no <link>static <runtime-link>static <threading>single release : link_test_ssr ;
 
 run ../main.cpp link_test
-  : : : <link>static <runtime-link>static <threading>multi debug : link_test_static_multi_debug ;
+  : : : <link>static <runtime-link>static <threading>multi debug : link_test_smd ;
 
 run ../main.cpp link_test
-  : : : <link>static <runtime-link>static <threading>multi release : link_test_static_multi_release ;
+  : : : <link>static <runtime-link>static <threading>multi release : link_test_smr ;
 
 run ../main.cpp link_test
-  : : : <link>static <runtime-link>shared <threading>multi debug : link_test_dyn_multi_debug ;
+  : : : <link>static <runtime-link>shared <threading>multi debug : link_test_dmd ;
 
 run ../main.cpp link_test
-  : : : <link>static <runtime-link>shared <threading>multi release : link_test_dyn_multi_release ;
+  : : : <link>static <runtime-link>shared <threading>multi release : link_test_dmr ;
 
 run ../main.cpp link_test
-  : : : <link>static <runtime-link>shared <threading>single debug : link_test_dyn_single_debug ;
+  : : : <link>static <runtime-link>shared <threading>single debug : link_test_dsd ;
 
 run ../main.cpp link_test
-  : : : <link>static <runtime-link>shared <threading>single release : link_test_dyn_single_release ;
+  : : : <link>static <runtime-link>shared <threading>single release : link_test_dsr ;
 
 run ../main.cpp link_test
-  : : : <define>BOOST_DYN_LINK=1 <link>shared <runtime-link>shared <threading>multi debug : link_test_dll_dyn_multi_debug ;
+  : : : <define>BOOST_DYN_LINK=1 <link>shared <runtime-link>shared <threading>multi debug : link_test_dll_dmd ;
 
 run ../main.cpp link_test
-  : : : <define>BOOST_DYN_LINK=1 <link>shared <runtime-link>shared <threading>multi release : link_test_dll_dyn_multi_release ;
+  : : : <define>BOOST_DYN_LINK=1 <link>shared <runtime-link>shared <threading>multi release : link_test_dll_dmr ;
 
 run ../main.cpp link_test
-  : : : <define>BOOST_DYN_LINK=1 <link>shared <runtime-link>shared <threading>single debug : link_test_dll_dyn_single_debug ;
+  : : : <define>BOOST_DYN_LINK=1 <link>shared <runtime-link>shared <threading>single debug : link_test_dll_dsd ;
 
 run ../main.cpp link_test
-  : : : <define>BOOST_DYN_LINK=1 <link>shared <runtime-link>shared <threading>single release : link_test_dll_dyn_single_release ;
+  : : : <define>BOOST_DYN_LINK=1 <link>shared <runtime-link>shared <threading>single release : link_test_dll_dsr ;
+
 
 
 

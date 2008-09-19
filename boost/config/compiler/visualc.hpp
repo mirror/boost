@@ -123,6 +123,9 @@
 #ifndef _MSC_EXTENSIONS
 #  define BOOST_DISABLE_WIN32
 #endif
+#ifndef _CPPRTTI
+#  define BOOST_NO_RTTI
+#endif
 
 //
 // all versions support __declspec:
