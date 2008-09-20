@@ -86,10 +86,11 @@ struct map_list_of_expr
     BOOST_PROTO_BASIC_EXTENDS(Expr, map_list_of_expr, map_list_of_dom)
     BOOST_PROTO_EXTENDS_FUNCTION()
 
-    template<typename Map>
-    operator Map() const
+    template<typename Key, typename Value, typename Cmp, typename Al>
+    operator std::map<Key, Value, Cmp, Al> () const
     {
-        Map map;
+        BOOST_MPL_ASSERT((proto::matches<Expr, MapListOf>));
+        std::map<Key, Value, Cmp, Al> map;
         return MapListOf()(*this, 0, map);
     }
 };
@@ -101,11 +102,11 @@ int main()
     // Initialize a map:
     std::map<std::string, int> op =
         map_list_of
-            ("<",1)
+            ("<", 1)
             ("<=",2)
-            (">",3)
+            (">", 3)
             (">=",4)
-            ("=",5)
+            ("=", 5)
             ("<>",6)
         ;
 
@@ -119,3 +120,4 @@ int main()
     return 0;
 }
 //]
+
