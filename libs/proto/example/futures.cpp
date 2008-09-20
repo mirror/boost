@@ -6,7 +6,7 @@
 // This is an example of using Proto transforms to implement
 // Howard Hinnant's future group proposal.
 
-#include <boost/fusion/tuple.hpp>
+#include <boost/fusion/include/vector.hpp>
 #include <boost/fusion/include/as_vector.hpp>
 #include <boost/fusion/include/joint_view.hpp>
 #include <boost/fusion/include/single_view.hpp>
@@ -39,8 +39,8 @@ struct FutureGroup
       , proto::when<
             proto::logical_and<FutureGroup, FutureGroup>
           , fusion::joint_view<
-                boost::add_const<FutureGroup(proto::_left)>,
-                boost::add_const<FutureGroup(proto::_right)>
+                boost::add_const<FutureGroup(proto::_left)>
+              , boost::add_const<FutureGroup(proto::_right)>
             >(FutureGroup(proto::_left), FutureGroup(proto::_right))
         >
         // (a || b) becomes the sequence for 'a', so long
@@ -109,19 +109,19 @@ struct C {};
 
 int main()
 {
-    using fusion::tuple;
+    using fusion::vector;
     future<A> a;
     future<B> b;
     future<C> c;
-    future<tuple<A,B> > ab;
+    future<vector<A,B> > ab;
 
     // Verify that various future groups have the
     // correct return types.
     A                       t0 = a.get();
-    tuple<A, B, C>          t1 = (a && b && c).get();
-    tuple<A, C>             t2 = ((a || a) && c).get();
-    tuple<A, B, C>          t3 = ((a && b || a && b) && c).get();
-    tuple<tuple<A, B>, C>   t4 = ((ab || ab) && c).get();
+    vector<A, B, C>         t1 = (a && b && c).get();
+    vector<A, C>            t2 = ((a || a) && c).get();
+    vector<A, B, C>         t3 = ((a && b || a && b) && c).get();
+    vector<vector<A, B>, C> t4 = ((ab || ab) && c).get();
 
     return 0;
 }
