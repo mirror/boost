@@ -80,9 +80,10 @@ expression with calculator-ness. It is described below.
         // assignment operator hides the extends<>::operator=
         using base_type::operator =;
 
+        typedef double result_type;
+
         // Hide base_type::operator() by defining our own which
         // evaluates the calculator expression with a calculator context.
-        typedef double result_type;
         result_type operator()( double d1 = 0.0, double d2 = 0.0 ) const
         {
             // As defined in the Hello Calculator section.
@@ -127,8 +128,95 @@ placeholders to imbue them with calculator-ness:
 
 [heading Retaining POD-ness with [^BOOST_PROTO_EXTENDS()]]
 
-TODO Describe the `BOOST_PROTO_EXTENDS()` family of macros.
+To use _extends_, your extension type must derive from _extends_. Unfortunately, that means that your extension type is no longer POD and its instances cannot be /statically initialized/. (See the [link boost_proto.appendices.rationale.static_initialization Static
+Initialization] section in the [link boost_proto.appendices.rationale Rationale]
+appendix for why this matters.) In particular, as defined above, the global placeholder objects `_1` and `_2` will need to be initialized at runtime, which could lead to subtle order of initialization bugs.
 
+There is another way to make an expression extension that doesn't sacrifice POD-ness : the `BOOST_PROTO_EXTENDS()` macro. You can use it much like you use _extends_. We can use `BOOST_PROTO_EXTENDS()` to keep `calculator<>` a POD and our placeholders statically initialized.
+
+    // The calculator<> expression wrapper makes expressions
+    // function objects.
+    template< typename Expr >
+    struct calculator
+    {
+        // Use BOOST_PROTO_EXTENDS() instead of proto::extends<> to
+        // make this type a Proto expression extension.
+        BOOST_PROTO_EXTENDS(Expr, calculator<Expr>, calculator_domain)
+
+        typedef double result_type;
+
+        result_type operator()( double d1 = 0.0, double d2 = 0.0 ) const
+        {
+            /* ... as before ... */
+        }
+    };
+
+With the new `calculator<>` type, we can redefine our placeholders to be statically initialized:
+
+    calculator< proto::terminal< placeholder<0> >::type > const _1 = {{{}}};
+    calculator< proto::terminal< placeholder<1> >::type > const _2 = {{{}}};
+
+We need to make one additional small change to accomodate the POD-ness of our expression extension, which we'll describe below in the section on expression generators.
+
+What does `BOOST_PROTO_EXTENDS()` do? It defines a data member of expression type being extended; some nested typedefs that Proto requires; `operator=`, `operator[]` and `operator()` overloads for building expression templates; and a nested `result<>` template for calculating the return type of `operator()`. In this case, however, the `operator()` overloads and the `result<>` template are not needed because we are defining our own `operator()` in the `calculator<>` type. Proto provides additional macros for finer control over which member functions are defined. We could improve our `calculator<>` type as follows:
+
+    // The calculator<> expression wrapper makes expressions
+    // function objects.
+    template< typename Expr >
+    struct calculator
+    {
+        // Use BOOST_PROTO_BASIC_EXTENDS() instead of proto::extends<> to
+        // make this type a Proto expression extension:
+        BOOST_PROTO_BASIC_EXTENDS(Expr, calculator<Expr>, calculator_domain)
+
+        // Define operator[] to build expression templates:
+        BOOST_PROTO_EXTENDS_SUBSCRIPT()
+
+        // Define operator= to build expression templates:
+        BOOST_PROTO_EXTENDS_ASSIGN()
+
+        typedef double result_type;
+
+        result_type operator()( double d1 = 0.0, double d2 = 0.0 ) const
+        {
+            /* ... as before ... */
+        }
+    };
+
+Notice that we are now using `BOOST_PROTO_BASIC_EXTENDS()` instead of `BOOST_PROTO_EXTENDS()`. This just adds the data member and the nested typedefs but not any of the overloaded operators. Those are added separately with `BOOST_PROTO_EXTENDS_ASSIGN()` and `BOOST_PROTO_EXTENDS_SUBSCRIPT()`. We are leaving out the function call operator and the nested `result<>` tempate that could have been defined with Proto's `BOOST_PROTO_EXTENDS_FUNCTION()` macro.
+
+In summary, here are the macros you can use to define expression extensions, and a brief description of each.
+
+[def __expression__ [~expression]]
+[def __extension__ [~extension]]
+[def __domain__ [~domain]]
+
+[table Expression Extension Macros
+ [[Macro]
+  [Purpose]]
+ [[``BOOST_PROTO_BASIC_EXTENDS(
+    __expression__
+  , __extension__
+  , __domain__
+)``]
+  [Defines a data member of type `__expression__` and some nested typedefs that Proto requires.]]
+ [[`BOOST_PROTO_EXTENDS_ASSIGN()`]
+  [Defines `operator=`. Only valid when preceeded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
+ [[`BOOST_PROTO_EXTENDS_SUBSCRIPT()`]
+  [Defines `operator[]`. Only valid when preceeded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
+ [[`BOOST_PROTO_EXTENDS_FUNCTION()`]
+  [Defines `operator()` and a nested `result<>` template for return type calculation. Only valid when preceeded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
+ [[``BOOST_PROTO_EXTENDS(
+    __expression__
+  , __extension__
+  , __domain__
+)``]
+  [Equivalent to:``
+    BOOST_PROTO_BASIC_EXTENDS(__expression__, __extension__, __domain__)
+    BOOST_PROTO_EXTENDS_ASSIGN()
+    BOOST_PROTO_EXTENDS_SUBSCRIPT()
+    BOOST_PROTO_EXTENDS_FUNCTION()``]]
+]
 
 [endsect]
 
@@ -151,14 +239,18 @@ generator when we define our `calculator_domain`, as follows:
 
 The first template parameter to `proto::domain<>` is the generator. "Generator" is just a fancy name for a function object that accepts an expression and does something to it. `proto::generator<>` is a very simple one --- it wraps an expression in the wrapper you specify. `proto::domain<>` inherits from its generator parameter, so all domains are themselves function objects.
 
-[def __domain__ [~Domain]]
+If we used `BOOST_PROTO_EXTENDS()` to keep our expression extension type POD, then we need to use `proto::pod_generatro<>` instead of `proto::generator<>`, as follows:
 
-After Proto has calculated a new  expression type, it checks the domains of the 
-child expressions. They must match. Assuming they do, Proto creates the new 
-expression and passes it to `__domain__::operator()` for any additional processing. 
-If we don't specify a generator, the new expression gets passed through unchanged. 
-But since we've specified a generator above, `calculator_domain::operator()` 
-returns `calculator<>` objects.
+    // If calculator<> uses BOOST_PROTO_EXTENDS() instead of 
+    // use proto::extends<>, use proto::pod_generator<> instead
+    // of proto::generator<>.
+    struct calculator_domain
+      : proto::domain< proto::pod_generator< calculator > >
+    {};
+
+[def __Domain__ [~Domain]]
+
+After Proto has calculated a new expression type, it checks the domains of the  child expressions. They must match. Assuming they do, Proto creates the new expression and passes it to `__Domain__::operator()` for any additional processing.  If we don't specify a generator, the new expression gets passed through unchanged.  But since we've specified a generator above, `calculator_domain::operator()`  returns `calculator<>` objects.
 
 Now we can use calculator expressions as function objects to STL algorithms, as
 follows:

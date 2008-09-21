@@ -14,7 +14,6 @@ and then execute it.
 
     #include <iostream>
     #include <boost/proto/proto.hpp>
-    #include <boost/proto/context.hpp>
     #include <boost/typeof/std/ostream.hpp>
     using namespace boost;
 

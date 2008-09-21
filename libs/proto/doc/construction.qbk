@@ -144,7 +144,57 @@ code works and does what you might expect, but not in the obvious way:
 [heading Making Terminals]
 [/=======================]
 
-TODO: describe as_expr(), as_arg(), literal<> and lit().
+Proto's expression-building operator overloads are only considered when at least one operand is itself a Proto expression. We've seen how to define Protofied terminals with _terminal_, but that method can be a little awkward at times. Proto provides an easier-to-use wrapper for literals that can be used to construct Protofied terminal expressions. It's called _literal_.
+
+    // Define a literal integer Proto expression.
+    proto::literal<int> i = 0;
+
+    // Proto literals are really just Proto terminal expressions.
+    // For example, this build a proto expression template:
+    i + 1;
+
+There is also a _lit_ function for constructing a _literal_ in-place. The above expression can simply be written as:
+
+    // proto::lit(0) creates an integer terminal expression
+    proto::lit(0) + 1;
+
+Sometimes you might want to Protofy an object, but only if it has not already been Protofied. This is especially common when writing lazy functions for your DSEL. For these situations there is _as_expr_ and _as_child_. Imagine that for the calculator DSEL described in the Getting Started guide that you wanted to define a `pow()` function that lazily raises its argument to an integral exponent. You would want expressions like `pow<2>(_1)` to work (where `_1` is an argument placeholder), and you also want to allow `pow<2>(42)`. In the first case, `_1` is already a Proto expression type, but in the second, `42` is not. Here's how you would do it.
+
+    // Define a pow_fun function object
+    template<int Exp>
+    struct pow_fun
+    {
+        typedef double result_type;
+        double operator()(double d) const
+        {
+            return std::pow(d, Exp);
+        }
+    };
+
+    // Define a lazy pow() function for the calculator DSEL. Use
+    // proto::as_child() to Protofying the argument, but only if it
+    // is not a Proto expression type to begin with!
+    template<int Exp, typename Arg>
+    typename proto::function<
+        typename proto::terminal<pow_fun<Exp> >::type
+      , typename proto::result_of::as_child<Arg const>::type
+    >::type
+    pow(Arg const &arg)
+    {
+        typedef
+            typename proto::function<
+                typename proto::terminal<pow_fun<Exp> >::type
+              , typename proto::result_of::as_child<Arg const>::type
+            >::type
+        result_type;
+
+        result_type result = {{{}}, proto::as_child(arg)};
+        return result;
+    }
+
+In the above, `pow()` uses _as_child_ to Protofy its argument, but only if the argument is not already a Proto expression. When passed a Proto expression, _as_child_ returns it unmolested. When passed a non-Proto object, it is turned into a Proto expression by wrapping it in a Proto terminal /by reference/. So for instance, the expression created by `pow<2>(42)` holds `42` by const reference.
+
+If you don't want the resulting terminal expression to hold its value by reference, you can use _as_expr_ instead. _as_expr_ behaves exactly as _as_child_ except that, when passed a non-Proto object, _as_expr_ wraps it in a Proto terminal expression /by value/.
 
 [/================================]
 [heading Building Expression Trees]
