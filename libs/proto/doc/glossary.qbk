@@ -19,6 +19,14 @@
        `proto::is_callable<R>::value` is `true`. `R` is treated as a polymorphic 
        function object and the arguments are treated as transforms that yield the 
        arguments to the function object.] ]
+  [ [ [anchor context] context]
+      [In Proto, the term /context/ refers to an object that can be passed, along 
+       with an expression to evaluate, to the `proto::eval()` function. The context 
+       determines how the expression is evaluated. All context structs define a 
+       nested `eval<>` template that, when instantiated with a node tag type (e.g., 
+       `proto::tag::plus`), is a binary polymorphic function object that accepts an 
+       expression of that type and the context object. In this way, contexts
+       associate behaviors with expression nodes.] ]
   [ [ [anchor domain] domain]
       [In Proto, the term /domain/ refers to a type that associates expressions 
        within that domain with a /generator/ for that domain and optionally a 

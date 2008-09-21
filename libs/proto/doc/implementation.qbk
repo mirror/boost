@@ -163,10 +163,12 @@ for functions up to some predefined function arity, and you're done.
 
 [endsect]
 
-[section:ppmp_vs_tmp Avoiding Template Instiations With The Preprocessor]
+[/
+    [section:ppmp_vs_tmp Avoiding Template Instiations With The Preprocessor]
 
-TODO
+    TODO
 
-[endsect]
+    [endsect]
+]
 
 [endsect]

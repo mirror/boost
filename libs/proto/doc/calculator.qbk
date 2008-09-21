@@ -54,7 +54,7 @@ say things like:
     (_2 - _1) / _2 * 100;
 
 This creates an expression tree with a node for each operator. The type of the
-resulting object is large and complex, but we are not terribly interested in it.
+resulting object is large and complex, but we are not terribly interested in it right now.
 
 So far, the object is just a tree representing the expression. It has no
 behavior. In particular, it is not yet a calculator. Below we'll see how

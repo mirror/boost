@@ -297,6 +297,14 @@ or another based on the `Condition`.
 
 [endsect]
 
+[/==========================]
+[section:switch [^switch_<>]]
+[/==========================]
+
+TODO document proto::switch_<>
+
+[endsect]
+
 [/==================================]
 [section Matching Vararg Expressions]
 [/==================================]
