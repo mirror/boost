@@ -6,6 +6,7 @@
 #include <boost/exception/get_error_info.hpp>
 #include <boost/exception/info_tuple.hpp>
 #include <boost/detail/lightweight_test.hpp>
+#include <boost/detail/workaround.hpp>
 
 struct throws_on_copy;
 struct non_printable { };
@@ -33,6 +34,16 @@ user_data
         --count;
         }
     };
+
+#if BOOST_WORKAROUND(__CODEGEARC__, BOOST_TESTED_AT(0x610))
+struct tag_test_1 {};
+struct tag_test_2 {};
+struct tag_test_3 {};
+struct tag_test_4 {};
+struct tag_test_5 {};
+struct tag_test_6 {};
+struct tag_user_data {};
+#endif
 
 typedef boost::error_info<struct tag_test_1,int> test_1;
 typedef boost::error_info<struct tag_test_2,unsigned int> test_2;
