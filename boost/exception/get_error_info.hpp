@@ -22,12 +22,16 @@ boost
             {
 			std::string str;
             char const * ptr;
+
+            explicit
             strwrap( char const * s ):
                 str(s),
                 ptr(&str[0])
                 {
                 }
+
             private:
+
             strwrap( strwrap const & );
             strwrap & operator=( strwrap const & );
             };
