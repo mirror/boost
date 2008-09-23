@@ -9,7 +9,10 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
-  <xsl:param name="boost.max.id.length">26</xsl:param>
+  <!-- Maximum length of directory and file names is 31 characters.
+       '.html' uses 5 characters.
+       31 - 5 = 26 -->
+  <xsl:param name="boost.max.id.part.length">26</xsl:param>
 
   <!-- Generate an ID for the entity referenced -->
   <xsl:template name="generate.id">
@@ -125,42 +128,31 @@
   <!-- Build the fully-qualified id of the given node -->
   <xsl:template name="fully-qualified-id">
     <xsl:param name="node"/>
-    <xsl:variable name="name">
-      <xsl:apply-templates select="$node" mode="fully-qualified-name">
-        <xsl:with-param name="separator" select="'@'"/>
-      </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:value-of select="translate(normalize-space(translate($name, '.', ' ')), ' @', '_.')"/>
-    <xsl:if test="$node/ancestor-or-self::class-specialization|
-      $node/ancestor-or-self::struct-specialization|
-      $node/ancestor-or-self::union-specialization">
-      <xsl:text>_</xsl:text>
-      <xsl:value-of select="generate-id($node)"/>
-    </xsl:if>
+
+    <xsl:apply-templates select="$node" mode="fully-qualified-name">
+      <xsl:with-param name="is.id" select="true()"/>
+    </xsl:apply-templates>
   </xsl:template>
 
   <!-- Build the fully-qualified name of the given node -->
   <xsl:template name="fully-qualified-name">
     <xsl:param name="node"/>
-    <xsl:param name="separator" select="'::'"/>
-    <xsl:apply-templates select="$node" mode="fully-qualified-name">
-      <xsl:with-param name="separator" select="$separator"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="$node" mode="fully-qualified-name"/>
   </xsl:template>
 
   <!-- Hack to make the node we are building the current node so that the
        ancestor:: syntax will work -->
   <xsl:template match="*" mode="fully-qualified-name">
-    <xsl:param name="separator" select="'::'"/>
+    <xsl:param name="is.id" select="false()" />
     <xsl:call-template name="build-fully-qualified-name">
-      <xsl:with-param name="separator" select="$separator"/>
+      <xsl:with-param name="is.id" select="$is.id"/>
     </xsl:call-template>
   </xsl:template>
 
   <!-- The real routine that builds a fully-qualified name for the current
        node. -->
   <xsl:template name="build-fully-qualified-name">
-    <xsl:param name="separator" select="'::'"/>
+    <xsl:param name="is.id" select="false()" />
 
     <!-- The depth of qualified name element that we will print now-->
     <xsl:param name="depth" select="1"/>
@@ -173,20 +165,67 @@
 
     <xsl:choose>
       <xsl:when test="$depth &gt; count($ancestors)">
-        <xsl:apply-templates select="." mode="print-name"/>
+        <xsl:apply-templates select="." mode="print-id-part">
+          <xsl:with-param name="is.id" select="$is.id"/>
+        </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
         <xsl:if test="name($ancestors[$depth])='namespace' or
                       count(ancestor::free-function-group)=0">
-          <xsl:apply-templates select="$ancestors[$depth]" mode="print-name"/>
-          <xsl:value-of select="$separator"/>
+          <xsl:apply-templates select="$ancestors[$depth]" mode="print-id-part">
+            <xsl:with-param name="is.id" select="$is.id"/>
+          </xsl:apply-templates>
+          <xsl:choose>
+            <xsl:when test="$is.id"><xsl:text>.</xsl:text></xsl:when>
+            <xsl:otherwise><xsl:text>::</xsl:text></xsl:otherwise>
+          </xsl:choose>
         </xsl:if>
         <xsl:call-template name="build-fully-qualified-name">
-          <xsl:with-param name="separator" select="$separator"/>
+          <xsl:with-param name="is.id" select="$is.id"/>
           <xsl:with-param name="depth" select="$depth + 1"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <!-- Print the part of a fully qualified name for a single element -->
+  <xsl:template match="*" mode="print-id-part">
+    <xsl:param name="is.id"/>
+
+    <xsl:variable name="part">
+      <xsl:apply-templates select="." mode="print-name"/>
+    </xsl:variable>
+
+    <xsl:variable name="unique-name">
+      <xsl:apply-templates select="." mode="unique.name"/>
+    </xsl:variable>
+
+    <xsl:choose>
+      <xsl:when test=
+        "$is.id and (
+          string-length($part) &gt; $boost.max.id.part.length or
+          $unique-name = 0 or
+          translate($part, '.&lt;&gt;;\:*?&quot;| ', '') != $part
+        )">
+        <xsl:variable name="normalized" select="translate(normalize-space(translate($part, '.&lt;&gt;;\:*?&quot;|_', '            ')), ' ', '_')"/>
+        <xsl:value-of select =
+          "concat(
+            substring($normalized, 1, $boost.max.id.part.length - string-length(generate-id(.) - 1)),
+            concat('_', generate-id(.)))"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$part"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- Override this if an id might not be unique -->
+  <xsl:template match="*" mode="unique.name">
+    <xsl:value-of select="1"/>
+  </xsl:template>
+
+  <xsl:template match="function|overloaded-function" mode="unique.name">
+    <xsl:value-of select="number(count(key('named-entities', @name)) = 1)"/>
   </xsl:template>
 
   <!-- Print the name of the current node -->

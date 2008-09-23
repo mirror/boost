@@ -20,27 +20,9 @@
   <xsl:key name="named-entities" match="class|struct|union|concept|function|overloaded-function|macro|library|namespace/data-member|header/data-member|*[attribute::id]" use="@name|@id"/>
 
   <xsl:template match="function|overloaded-function" mode="generate.id">
-    <xsl:variable name="name" select="normalize-space(@name)"/>
-    <xsl:variable name="translated-name"
-                  select="translate($name,
-                                    '~!%^&amp;*()[].,&lt;&gt;|/ +-=',
-                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')"/>
-
-    <xsl:choose>
-      <xsl:when test="count(key('named-entities', $name))=1
-                      and ($translated-name=$name)">
-        <xsl:call-template name="fully-qualified-id">
-          <xsl:with-param name="node" select="."/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="fully-qualified-id">
-          <xsl:with-param name="node" select="."/>
-        </xsl:call-template>
-        <xsl:text>_</xsl:text>
-        <xsl:value-of select="generate-id(.)"/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="fully-qualified-id">
+      <xsl:with-param name="node" select="."/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="classname" mode="annotation">
