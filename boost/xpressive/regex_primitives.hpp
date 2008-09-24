@@ -12,6 +12,7 @@
 #include <vector>
 #include <climits>
 #include <boost/config.hpp>
+#include <boost/assert.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/assert.hpp>
@@ -42,6 +43,8 @@ namespace boost { namespace xpressive { namespace detail
     {
         mark_tag(int mark_nbr)
         {
+            // Marks numbers must be integers greater than 0.
+            BOOST_ASSERT(mark_nbr > 0);
             mark_placeholder mark = {mark_nbr};
             proto::arg(*this) = mark;
         }
