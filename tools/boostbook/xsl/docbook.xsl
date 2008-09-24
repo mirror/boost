@@ -152,7 +152,7 @@
 
   <xsl:template match="header" mode="generate.id">
     <xsl:text>header.</xsl:text>
-    <xsl:value-of select="translate(@name, '/','.')"/>
+    <xsl:value-of select="translate(@name, '/.', '._')"/>
   </xsl:template>
 
   <xsl:template match="*" mode="passthrough">

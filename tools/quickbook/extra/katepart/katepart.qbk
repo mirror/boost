@@ -18,10 +18,10 @@ constructs of Quickbook 1.4 including tables, list, templates and macros.
 
 [variablelist
 [[.qbk loaded in a text editor][
-[$images/extra/katepart/table.text.editor.png]
+[$../../tools/quickbook/doc/html/images/extra/katepart/table.text.editor.png]
 ]]
 [[.qbk loaded with boost::hs support][
-[$images/extra/katepart/table.boost.hs.png]
+[$../../tools/quickbook/doc/html/images/extra/katepart/table.boost.hs.png]
 ]]
 ]
 
@@ -93,7 +93,7 @@ proposed sintaxis.                                                          ]]
 
 [heading About boost::hs]
 
-[$images/extra/katepart/boost.hs.logo.png]
+[$../../tools/quickbook/doc/html/images/extra/katepart/boost.hs.logo.png]
 
 boost::hs::quickbook is a component of boost::hs, a syntax highlighting
 for C++, doxygen, Boost.Build jamfiles and QuickBook.
