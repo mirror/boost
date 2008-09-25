@@ -48,16 +48,19 @@ BOOST_SERIALIZATION_DECL(bool)
 extended_type_info_typeid_0::is_less_than(
     const boost::serialization::extended_type_info & rhs
 ) const {
-    return m_ti->before(
+    return static_cast<bool>(m_ti->before(
         *(static_cast<const extended_type_info_typeid_0 &>(rhs).m_ti)
-    );
+    ));
 }
 
 BOOST_SERIALIZATION_DECL(bool) 
 extended_type_info_typeid_0::is_equal(
     const boost::serialization::extended_type_info & rhs
 ) const {
-    return * m_ti == *(static_cast<const extended_type_info_typeid_0 &>(rhs).m_ti);
+    return static_cast<bool>(
+        * m_ti 
+        == *(static_cast<const extended_type_info_typeid_0 &>(rhs).m_ti)
+    );
 }
 
 BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())
@@ -79,22 +82,22 @@ extended_type_info_typeid_0::type_register(const std::type_info & ti){
 BOOST_SERIALIZATION_DECL(void) 
 extended_type_info_typeid_0::type_unregister()
 {
-    if(NULL == m_ti)
-        return;
-    
-        tkmap & x = singleton<tkmap>::get_mutable_instance();
-        tkmap::iterator start = x.lower_bound(this);
-        tkmap::iterator end = x.upper_bound(this);
-        assert(start != end);
+    if(NULL == m_ti){
+        if(! singleton<tkmap>::is_destroyed()){
+            tkmap & x = singleton<tkmap>::get_mutable_instance();
+            tkmap::iterator start = x.lower_bound(this);
+            tkmap::iterator end = x.upper_bound(this);
+            assert(start != end);
 
-        // remove entry in map which corresponds to this type
-        do{
-          if(this == *start)
+            // remove entry in map which corresponds to this type
+            do{
+            if(this == *start)
             	x.erase(start++);
-     	else
+     	    else
                 ++start;
-        }while(start != end);
-
+            }while(start != end);
+        }
+    }
     m_ti = NULL;
 }
 

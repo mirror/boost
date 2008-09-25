@@ -8,7 +8,7 @@
 
 project boost/serialization
     : source-location ../src
-    : requirements <dependency>../../config/test/all//BOOST_NO_STD_LOCALE
+    : requirements
       <conditional>@include-spirit
 ;
 
@@ -100,7 +100,6 @@ lib boost_wserialization
     : $(WSOURCES).cpp boost_serialization 
     :     
     <toolset>msvc:<cxxflags>/Gy 
-    <dependency>../../config/test/all//BOOST_NO_STD_WSTREAMBUF
     <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
     ;
 
