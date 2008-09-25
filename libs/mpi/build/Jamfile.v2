@@ -102,7 +102,7 @@ libraries += boost_mpi ;
       ;
   }
 }
-else if ( --without-mpi in  [ modules.peek : ARGV ] )
+else if ! ( --without-mpi in  [ modules.peek : ARGV ] )
 {
   ECHO "warning: skipping optional Message Passing Interface (MPI) library." ;
   ECHO "note: to enable MPI support, add \"using mpi ;\" to user-config.jam." ;
