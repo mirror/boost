@@ -97,6 +97,7 @@ template <class T>
 class singleton : public singleton_module
 {
 private:
+    static bool m_is_destroyed;
     BOOST_DLLEXPORT static T & instance;
     // include this to provoke instantiation at pre-execution time
     static void use(T const &) {}
@@ -104,11 +105,11 @@ private:
         static T t;
         // refer to instance, causing it to be instantiated (and
         // initialized at startup on working compilers)
+        assert(! m_is_destroyed);
         use(instance);
         return t;
     }
 public:
-    static bool is_destroyed;
     BOOST_DLLEXPORT static T & get_mutable_instance(){
         assert(! is_locked());
         return get_instance();
@@ -116,8 +117,11 @@ public:
     BOOST_DLLEXPORT static const T & get_const_instance(){
         return get_instance();
     }
+    BOOST_DLLEXPORT static bool is_destroyed(){
+        return m_is_destroyed;
+    }
     ~singleton(){
-        is_destroyed = true;
+        m_is_destroyed = true;
     }
 };
 
@@ -125,7 +129,7 @@ template<class T>
 BOOST_DLLEXPORT T & singleton<T>::instance = singleton<T>::get_instance();
 
 template<class T>
-bool singleton<T>::is_destroyed = false;
+bool singleton<T>::m_is_destroyed = false;
 
 } // namespace serialization
 } // namespace boost

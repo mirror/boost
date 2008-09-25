@@ -292,12 +292,12 @@ public:
 
     void * operator new(std::size_t)
     {
-        return quick_allocator<this_type>::alloc();
+        return boost::detail::quick_allocator<this_type>::alloc();
     }
 
     void operator delete(void * p)
     {
-        quick_allocator<this_type>::dealloc(p);
+        boost::detail::quick_allocator<this_type>::dealloc(p);
     }
 
 #endif
