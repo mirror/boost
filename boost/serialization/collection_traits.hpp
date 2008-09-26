@@ -54,7 +54,11 @@ struct implementation_level< C < T > > {                            \
 #if defined(BOOST_NO_INT64_T)  
      #define BOOST_NO_INTRINSIC_INT64_T  
 #else   
-    #if defined(ULONG_MAX)  
+    #if defined(ULLONG_MAX)  
+        #if(ULONG_MAX == 18446744073709551615ul) // 2**64 - 1  
+            #define BOOST_NO_INTRINSIC_INT64_T  
+        #endif  
+    #elif defined(ULONG_MAX)  
         #if(ULONG_MAX != 0xffffffff && ULONG_MAX == 18446744073709551615ul) // 2**64 - 1  
             #define BOOST_NO_INTRINSIC_INT64_T  
         #endif  
