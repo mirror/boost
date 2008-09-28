@@ -81,7 +81,7 @@
 			conversions, such as where precision or formatting need tighter control than is 
 			offered by the default behavior of <code>lexical_cast</code>, the conventional <code>
 				stringstream</code> approach is recommended. Where the conversions are 
-			numeric to numeric, <code><a href="../numeric/conversion/doc/numeric_cast.html">numeric_cast</a></code>
+			numeric to numeric, <code><a href="../numeric/conversion/doc/html/boost_numericconversion/improved_numeric_cast__.html">numeric_cast</a></code>
 			may offer more reasonable behavior than <code>lexical_cast</code>.
 		<p>
 			For a good discussion of the options and issues involved in string-based 
@@ -213,9 +213,9 @@ Eliminate an overhead of <code>std::locale</code> if your program runs in the "C
     Lexical conversion to these types is simply reading a byte from source but since the source has
     more than one byte, the exception is thrown.
     <p>Please use other integer types such as <code>int</code> or <code>short int</code>. If bounds checking
-    is important, you can also call <a href="../../libs/numeric/conversion/doc/numeric_cast.html">numeric_cast</a>:
+    is important, you can also call <a href="../../libs/numeric/conversion/doc/html/boost_numericconversion/improved_numeric_cast__.html">numeric_cast</a>:
 
-<pre><a href="../../libs/numeric/conversion/doc/numeric_cast.html">numeric_cast</a>&lt;int8_t&gt;(lexical_cast&lt;int&gt;("127"));</pre>
+<pre><a href="../../libs/numeric/conversion/doc/html/boost_numericconversion/improved_numeric_cast__.html">numeric_cast</a>&lt;int8_t&gt;(lexical_cast&lt;int&gt;("127"));</pre>
 
     <p> Q: What does <code>lexical_cast&lt;std::string&gt;</code> of an <code>int8_t</code> or <code>uint8_t</code> not do what I expect?
     <br> A: As above, note that <code>int8_t</code> and <code>uint8_t</code> are actually chars and are formatted as such.  To avoid this, cast to an integer type first:
