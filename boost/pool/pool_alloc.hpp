@@ -127,6 +127,21 @@ class pool_allocator
     }
 };
 
+template<
+    typename UserAllocator,
+    typename Mutex,
+    unsigned NextSize>
+class pool_allocator<void, UserAllocator, Mutex, NextSize>
+{
+public:
+    typedef void*       pointer;
+    typedef const void* const_pointer;
+    typedef void        value_type;
+    template <class U> struct rebind {
+	typedef pool_allocator<U, UserAllocator, Mutex, NextSize> other;
+    };
+};
+
 struct fast_pool_allocator_tag { };
 
 template <typename T,
@@ -245,6 +260,21 @@ class fast_pool_allocator
       singleton_pool<fast_pool_allocator_tag, sizeof(T),
           UserAllocator, Mutex, NextSize>::free(ptr);
     }
+};
+
+template<
+    typename UserAllocator,
+    typename Mutex,
+    unsigned NextSize>
+class fast_pool_allocator<void, UserAllocator, Mutex, NextSize>
+{
+public:
+    typedef void*       pointer;
+    typedef const void* const_pointer;
+    typedef void        value_type;
+    template <class U> struct rebind {
+	typedef fast_pool_allocator<U, UserAllocator, Mutex, NextSize> other;
+    };
 };
 
 } // namespace boost

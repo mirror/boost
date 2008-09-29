@@ -304,11 +304,28 @@ void test_mem_usage()
     std::cout << "Memory error" << std::endl;
 }
 
+void test_void()
+{
+#ifdef VERBOSE
+    std::cout << "Testing void specialization. . ." << std::endl;
+#endif
+
+    typedef boost::pool_allocator<void> void_allocator;
+    typedef boost::fast_pool_allocator<void> fast_void_allocator;
+
+    typedef void_allocator::rebind<int>::other int_allocator;
+    typedef fast_void_allocator::rebind<int>::other fast_int_allocator;
+
+    std::vector<int, int_allocator> v1;
+    std::vector<int, fast_int_allocator> v2;
+}
+
 int test_main(int, char * [])
 {
   test();
   test_alloc();
   test_mem_usage();
+  test_void();
 
 #ifdef VERBOSE
   std::cout << "main() exiting. . ." << std::endl;
