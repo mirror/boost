@@ -14,6 +14,7 @@
 // new, std::bad_alloc
 #include <new>
 
+#include <boost/throw_exception.hpp>
 #include <boost/pool/poolfwd.hpp>
 
 // boost::singleton_pool
@@ -57,7 +58,15 @@ class pool_allocator
     };
 
   public:
-    pool_allocator() { }
+    pool_allocator()
+    {
+      // Required to ensure construction of singleton_pool IFF an
+      // instace of this allocator is constructed during global
+      // initialization. See ticket #2359 for a complete explaination
+      // ( http://svn.boost.org/trac/boost/ticket/2359 )
+      singleton_pool<pool_allocator_tag, sizeof(T), UserAllocator, Mutex,
+	             NextSize>::is_from(0);
+    }
 
     // default copy constructor
 
@@ -66,7 +75,14 @@ class pool_allocator
     // not explicit, mimicking std::allocator [20.4.1]
     template <typename U>
     pool_allocator(const pool_allocator<U, UserAllocator, Mutex, NextSize> &)
-    { }
+    {
+      // Required to ensure construction of singleton_pool IFF an
+      // instace of this allocator is constructed during global
+      // initialization. See ticket #2359 for a complete explaination
+      // ( http://svn.boost.org/trac/boost/ticket/2359 )
+      singleton_pool<pool_allocator_tag, sizeof(T), UserAllocator, Mutex,
+	             NextSize>::is_from(0);
+    }
 
     // default destructor
 
@@ -95,7 +111,7 @@ class pool_allocator
           singleton_pool<pool_allocator_tag, sizeof(T), UserAllocator, Mutex,
               NextSize>::ordered_malloc(n) );
       if (ret == 0)
-        throw std::bad_alloc();
+        boost::throw_exception(std::bad_alloc());
       return ret;
     }
     static pointer allocate(const size_type n, const void * const)
@@ -139,8 +155,16 @@ class fast_pool_allocator
     };
 
   public:
-    fast_pool_allocator() { }
-
+    fast_pool_allocator()
+    {
+      // Required to ensure construction of singleton_pool IFF an
+      // instace of this allocator is constructed during global
+      // initialization. See ticket #2359 for a complete explaination
+      // ( http://svn.boost.org/trac/boost/ticket/2359 )
+      singleton_pool<fast_pool_allocator_tag, sizeof(T),
+	             UserAllocator, Mutex, NextSize>::is_from(0);
+    }
+    
     // default copy constructor
 
     // default assignment operator
@@ -149,7 +173,14 @@ class fast_pool_allocator
     template <typename U>
     fast_pool_allocator(
         const fast_pool_allocator<U, UserAllocator, Mutex, NextSize> &)
-    { }
+    {
+      // Required to ensure construction of singleton_pool IFF an
+      // instace of this allocator is constructed during global
+      // initialization. See ticket #2359 for a complete explaination
+      // ( http://svn.boost.org/trac/boost/ticket/2359 )
+      singleton_pool<fast_pool_allocator_tag, sizeof(T),
+	             UserAllocator, Mutex, NextSize>::is_from(0);
+    }
 
     // default destructor
 
@@ -182,7 +213,7 @@ class fast_pool_allocator
               singleton_pool<fast_pool_allocator_tag, sizeof(T),
                   UserAllocator, Mutex, NextSize>::ordered_malloc(n) );
       if (ret == 0)
-        throw std::bad_alloc();
+	boost::throw_exception(std::bad_alloc());
       return ret;
     }
     static pointer allocate(const size_type n, const void * const)
@@ -193,7 +224,7 @@ class fast_pool_allocator
           singleton_pool<fast_pool_allocator_tag, sizeof(T),
               UserAllocator, Mutex, NextSize>::malloc() );
       if (ret == 0)
-        throw std::bad_alloc();
+	boost::throw_exception(std::bad_alloc());
       return ret;
     }
     static void deallocate(const pointer ptr, const size_type n)
