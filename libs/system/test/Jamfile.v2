@@ -10,7 +10,6 @@
 project
     : requirements
       <library>/boost/system//boost_system
-      <define>BOOST_ALL_NO_LIB
       <toolset>msvc:<asynch-exceptions>on
     ;
 
