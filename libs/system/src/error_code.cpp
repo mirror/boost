@@ -131,10 +131,14 @@ namespace
       {
         msg = ( ( result == invalid_argument ) ? "Unknown error" : bp );
       }
+
+#   ifndef BOOST_NO_EXCEPTIONS
+      // See ticket #2098
       catch(...)
       {
         // just eat the exception
       }
+#   endif
 
       if ( sz > sizeof(buf) ) std::free( bp );
       sz = 0;
