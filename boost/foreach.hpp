@@ -39,7 +39,7 @@
 // These compilers make it impossible to for BOOST_FOREACH to detect
 // temporaries and avoid reevaluation of the collection expression.
 # if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)                                                      \
-  || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))                                     \
+  || BOOST_WORKAROUND(__BORLANDC__, < 0x593)                                                    \
   || (BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 700) && defined(_MSC_VER))                   \
   || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))                                      \
   || BOOST_WORKAROUND(__DECCXX_VER, <= 60590042)
@@ -55,7 +55,8 @@
   || (BOOST_WORKAROUND(__GNUC__, == 3) && (__GNUC_MINOR__ <= 2))                                \
   || (BOOST_WORKAROUND(__GNUC__, == 3) && (__GNUC_MINOR__ <= 3) && defined(__APPLE_CC__))       \
   || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))                                         \
-  || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))
+  || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))                                      \
+  || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x590))
 #  define BOOST_FOREACH_NO_CONST_RVALUE_DETECTION
 # else
 #  define BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
