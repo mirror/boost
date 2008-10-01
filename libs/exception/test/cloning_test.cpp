@@ -41,8 +41,8 @@ derives_nothing
     int & count;
 
     explicit
-    derives_nothing( int & count ):
-        count(count)
+    derives_nothing( int & c ):
+        count(c)
         {
         ++count;
         }
