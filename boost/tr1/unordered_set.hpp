@@ -9,7 +9,12 @@
 
 #ifdef BOOST_HAS_TR1_UNORDERED_SET
 
-#  include BOOST_TR1_HEADER(unordered_set)
+#  ifdef BOOST_HAS_INCLUDE_NEXT
+#     include_next BOOST_TR1_HEADER(unordered_set)
+#  else
+#     include <boost/tr1/detail/config_all.hpp>
+#     include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(unordered_set))
+#  endif
 
 #else
 
