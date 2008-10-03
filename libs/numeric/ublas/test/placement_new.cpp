@@ -12,6 +12,7 @@
 
 #include <boost/numeric/ublas/storage.hpp>
 #include <iostream>
+#include <new>
 
 // User defined type to capture base pointer on construction
 
