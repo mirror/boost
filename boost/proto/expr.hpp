@@ -146,7 +146,10 @@
 
     #endif // BOOST_PROTO_EXPR_HPP_EAN_04_01_2005
 
-#elif BOOST_PP_ITERATION_DEPTH() == 1
+// For gcc 4.4 compatability, we must include the
+// BOOST_PP_ITERATION_DEPTH test inside an #else clause.
+#else // BOOST_PP_IS_ITERATING
+#if BOOST_PP_ITERATION_DEPTH() == 1
 
     #define ARG_COUNT BOOST_PP_MAX(1, BOOST_PP_ITERATION())
     #define IS_TERMINAL 0 == BOOST_PP_ITERATION()
@@ -477,4 +480,5 @@
 
     #undef N
 
+#endif // BOOST_PP_ITERATION_DEPTH()
 #endif
