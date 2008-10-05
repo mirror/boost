@@ -297,11 +297,153 @@ or another based on the `Condition`.
 
 [endsect]
 
-[/==========================]
-[section:switch [^switch_<>]]
-[/==========================]
+[/=======================================================]
+[section:switch Improving Compile Times With [^switch_<>]]
+[/=======================================================]
 
-TODO document proto::switch_<>
+When your Proto grammar gets large, you'll start to run into some scalability problems with _or_, the construct you use to specify alternate sub-grammars. First, due to limitations in C++, _or_ can only accept up to a certain number of sub-grammars, controlled by the `BOOST_PROTO_MAX_LOGICAL_ARITY` macro. This macro defaults to eight, and you can set it higher, but doing so will aggravate another scalability problem: long compile times. With _or_, alternate sub-grammars are tried in order -- like a series of cascading `if`'s -- leading to lots of unnecessary template instantiations. What you would prefer instead is something like `switch` that avoids the expense of cascading `if`'s. That's the purpose of _switch_; although less convenient than _or_, it improves compile times for larger grammars and does not have an arbitrary fixed limit on the number of sub-grammars. 
+
+Let's illustrate how to use _switch_ by first writing a big grammar with _or_ and then translating it to an equivalent grammar using _switch_:
+
+    // Here is a big, inneficient grammar
+    struct ABigGrammar
+      : proto::or_<
+            proto::terminal<int>
+          , proto::terminal<double>
+          , proto::unary_plus<ABigGrammar>
+          , proto::negate<ABigGrammar>
+          , proto::complement<ABigGrammar>
+          , proto::plus<ABigGrammar, ABigGrammar>
+          , proto::minus<ABigGrammar, ABigGrammar>
+          , proto::or_<
+                proto::multiplies<ABigGrammar, ABigGrammar>
+              , proto::divides<ABigGrammar, ABigGrammar>
+              , proto::modulus<ABigGrammar, ABigGrammar>
+            >
+        >
+    {};
+
+The above might be the grammar to a more ellaborate calculator DSEL. Notice that since there are more than eight sub-grammars, we had to chain the sub-grammars with a nested _or_ -- not nice.
+
+The idea behind _switch_ is to dispatch based on an expression's tag type to a sub-grammar that handles expressions of that type. To use _switch_, you define a struct with a nested `case_<>` template, specialized on tag types. The above grammar can be expressed using _switch_ as follows. It is described below.
+
+    // Redefine ABigGrammar more efficiently using proto::switch_<>
+    struct ABigGrammar;
+
+    struct ABigGrammarCases
+    {
+        // The primary template matches nothing:
+        template<typename Tag>
+        struct case_
+          : proto::not_<_>
+        {};
+    };
+
+    // Terminal expressions are handled here
+    template<>
+    struct ABigGrammarCases::case_<proto::tag::terminal>
+      : proto::or_<
+            proto::terminal<int>
+          , proto::terminal<double>
+        >
+    {};
+
+    // Non-terminals are handled similarly
+    template<>
+    struct ABigGrammarCases::case_<proto::tag::unary_plus>
+      : proto::unary_plus<ABigGrammar>
+    {};
+
+    template<>
+    struct ABigGrammarCases::case_<proto::tag::negate>
+      : proto::negate<ABigGrammar>
+    {};
+
+    template<>
+    struct ABigGrammarCases::case_<proto::tag::complement>
+      : proto::complement<ABigGrammar>
+    {};
+
+    template<>
+    struct ABigGrammarCases::case_<proto::tag::plus>
+      : proto::plus<ABigGrammar, ABigGrammar>
+    {};
+
+    template<>
+    struct ABigGrammarCases::case_<proto::tag::minus>
+      : proto::minus<ABigGrammar, ABigGrammar>
+    {};
+
+    template<>
+    struct ABigGrammarCases::case_<proto::tag::multiplies>
+      : proto::multiplies<ABigGrammar, ABigGrammar>
+    {};
+
+    template<>
+    struct ABigGrammarCases::case_<proto::tag::divides>
+      : proto::divides<ABigGrammar, ABigGrammar>
+    {};
+
+    template<>
+    struct ABigGrammarCases::case_<proto::tag::modulus>
+      : proto::modulus<ABigGrammar, ABigGrammar>
+    {};
+
+    // Define ABigGrammar in terms of ABigGrammarCases
+    // using proto::switch_<>
+    struct ABigGrammar
+      : proto::switch_<ABigGrammarCases>
+    {};
+
+Matching an expression type `E` against `proto::switch_<C>` is equivalent to matching it against `C::case_<E::proto_tag>`. By dispatching on the expression's tag type, we can jump to the sub-grammar that handles expressions of that type, skipping over all the other sub-grammars that couldn't possibly match. If there is no specialization of `case_<>` for a particular tag type, we select the primary template. In this case, the primary template inherits from `proto::not_<_>` which matches no expressions.
+
+Notice the specialization that handles terminals:
+
+    // Terminal expressions are handled here
+    template<>
+    struct ABigGrammarCases::case_<proto::tag::terminal>
+      : proto::or_<
+            proto::terminal<int>
+          , proto::terminal<double>
+        >
+    {};
+
+The `proto::tag::terminal` type by itself isn't enough to select an appropriate sub-grammar, so we use _or_ to list the alternate sub-grammars that match terminals.
+
+[note You might be tempted to define your `case_<>` specializations /in situ/ as follows:
+
+``
+    struct ABigGrammarCases
+    {
+        template<typename Tag>
+        struct case_ : proto::not_<_> {};
+
+        // ERROR: not legal C++
+        template<>
+        struct case_<proto::tag::terminal>
+        /* ... as defined above ... */
+    };
+``
+
+Unfortunately, for arcane reasons, it is not legal to define an explicit nested specialization /in situ/ like this. It is, however, perfectly legal to define /partial/ specializations /in situ/, so you can add a extra dummy template parameter that has a default, as follows:
+
+``
+    struct ABigGrammarCases
+    {
+        // Note extra "Dummy" template parameter here:
+        template<typename Tag, int Dummy = 0>
+        struct case_ : proto::not_<_> {};
+
+        // OK: "Dummy" makes this a partial specialization
+        // instead of an explicit specialization.
+        template<int Dummy>
+        struct case_<proto::tag::terminal, Dummy>
+        /* ... as defined above */
+    };
+``
+
+You might find this cleaner that defining explicit `case_<>` specializations outside of their enclosing struct.
+]
 
 [endsect]
 

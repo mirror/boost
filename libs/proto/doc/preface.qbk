@@ -25,7 +25,7 @@ More specifically, Proto provides:
 
 [heading Motivation]
 
-Expression Templates are an advanced technique that C++ library developers use to define embedded mini-languages that target specific problem domains. The technique has been used to create efficient and easy-to-use libraries for linear algebra as well as to define C++ parser generators with a readable syntax. But developing such a library involves writing an inordinate amount of unreadable and unmaintainable template mumbo-jumbo. Boost.Proto eases the development of [link boost_proto.users_guide.glossary.dsel domain-specific embedded languages (DSELs)]. Use Proto to define the primitives of your mini-language and let Proto handle the operator overloading and the construction of the expression parse tree. Immediately evaluate the expression tree by passing it a function object. Or transform the expression tree by defining the grammar of your mini-language, decoratedwith an assortment of tree transforms provided by Proto or defined by you. Then use the grammar to give your users short and readable syntax errors for invalid expressions! No more mumbo-jumbo -- an expression template library developed with Proto is declarative and readable.
+Expression Templates are an advanced technique that C++ library developers use to define embedded mini-languages that target specific problem domains. The technique has been used to create efficient and easy-to-use libraries for linear algebra as well as to define C++ parser generators with a readable syntax. But developing such a library involves writing an inordinate amount of unreadable and unmaintainable template mumbo-jumbo. Boost.Proto eases the development of [link boost_proto.users_guide.glossary.dsel domain-specific embedded languages (DSELs)]. Use Proto to define the primitives of your mini-language and let Proto handle the operator overloading and the construction of the expression parse tree. Immediately evaluate the expression tree by passing it a function object. Or transform the expression tree by defining the grammar of your mini-language, decorated with an assortment of tree transforms provided by Proto or defined by you. Then use the grammar to give your users short and readable syntax errors for invalid expressions! No more mumbo-jumbo -- an expression template library developed with Proto is declarative and readable.
 
 In short, Proto is a DSEL for defining DSELs.
 
@@ -65,7 +65,5 @@ Finally, you can mentally add the following to any code fragments in this docume
 
     // Allow unqualified use of Proto's wildcard pattern
     using proto::_;
-
-In addition to the above, `mpl` is a namespace alias for `boost::mpl`, and `fusion` is an alias for `boost::fusion`.
 
 [endsect]

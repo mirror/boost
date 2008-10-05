@@ -69,6 +69,8 @@
   [classref  boost::proto::control::if_ `proto::if_<>`]]
 [def _not_                  
   [classref  boost::proto::control::not_ `proto::not_<>`]]
+[def _switch_                  
+  [classref  boost::proto::control::switch_ `proto::switch_<>`]]
 [def _exact_                
   [classref  boost::proto::control::exact `proto::exact<>`]]
 [def _convertible_to_       
