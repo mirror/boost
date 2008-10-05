@@ -57,6 +57,8 @@
       &nbsp;&nbsp;&nbsp;<a href="#Class-error_condition-constructors">Class <code>error_condition</code> constructors</a><br>
       &nbsp;&nbsp;&nbsp;<a href="#Class-error_condition-modifiers">Class <code>error_condition</code> modifiers</a><br>
       &nbsp;&nbsp;&nbsp;<a href="#Class-error_condition-observers">Class <code>error_condition</code> observers</a><br>
+      <a href="#throws-object"><code>throws</code> object</a><br>
+      <a href="#Semantics-of-throws">Semantics of <code>throws</code> object</a><br>
       <a href="#Non-member-functions">Non-member functions</a><br>
       <a href="#Header-system_error">Header &lt;boost/system/system_error.hpp&gt;</a><br>
       &nbsp;&nbsp;&nbsp;<a href="#Class-system_error">Class <code>system_error</code></a><br>
@@ -223,6 +225,11 @@ provided, so users may ignore these macros if they prefer.</p>
     template<> struct is_error_condition_enum<posix::posix_errno>&lt;errc::errc_t&gt;
       { static const bool value = true; };
 
+    // predefined error_code object used as &quot;throw on error&quot; tag
+    extern error_code <a href="#throws-object">throws</a>;
+
+    //  <a href="#Non-member-functions">non-member functions</a>
+
     bool operator==( const error_code &amp; lhs, const error_code &amp; rhs );
     bool operator==( const error_code &amp; code, const error_condition &amp; condition );
     bool operator==( const error_condition &amp; condition, const error_code &amp; code );
@@ -370,7 +377,7 @@ non-member functions</a></h3>
 <h3><a name="Class-error_category-predefined-objects">Class <code>error_category</code> 
 predefined objects</a></h3>
 <p>Predefined objects <code>system_category</code> 
-and <code>generic_category</code> identify operating system error codes and portable error conditions, respectively.</p>
+and <code>generic_category</code> identify system specific error codes and portable error conditions, respectively.</p>
 <h2><a name="Class-error_code">Class <code>
 error_code</code></a></h2>
 <p>The class <code>error_code</code> describes an object used to hold error code 
@@ -603,7 +610,29 @@ observers</a></h3>
   eliminating some sources of user error. One possible implementation choice for 
   this type is pointer to member. <i>--end note</i> <i>]</i></p>
 </blockquote>
-  <h2><a name="Non-member-functions">Non-member functions</a></h2>
+  <h2><a name="throws-object"><code>throws</code> object</a></h2>
+  <pre>extern error_code throws;</pre>
+<p>The predefined <code>error_code</code> object <code>throws</code> is supplied 
+for use as a &quot;throw on error&quot; tag.</p>
+<h2><a name="Semantics-of-throws">Semantics of <code>throws</code></a> object</h2>
+<p>Functions that specify an argument in the form <code>error_code&amp; ec=throws</code>, 
+with appropriate namespace qualifiers, have the following error handling 
+semantics:</p>
+<blockquote>
+  <p><i>Effects:</i> If <code>ec != throws</code>:</p>
+  <ul>
+    <li>If an error occurs, and sets <code>ec</code> to an appropriate <code>
+    <a href="#Class-error_code">error_code</a></code> that identifies the error 
+    value and category. The category should be the most specific <code>
+    <a href="#Class-error_category">error_category</a></code> applicable to the 
+    particular error.</li>
+    <li>if an error does not occur, <code>ec.clear()</code>.</li>
+  </ul>
+  <p><i>Throws:</i> If <code>ec == throws</code>, throws an exception of type
+  <code><a href="#Class-system_error">system_error</a></code> or of a type 
+  derived from <code><a href="#Class-system_error">system_error</a></code>.</p>
+</blockquote>
+<h2><a name="Non-member-functions">Non-member functions</a></h2>
   <pre>bool operator==( const error_code &amp; lhs, const error_code &amp; rhs );</pre>
 <blockquote>
   <p><i>Returns:</i> <code>lhs.category() == rhs.category() &amp;&amp; lhs.value() == 
@@ -677,8 +706,7 @@ bool operator!=( const error_condition &amp; condition, const error_code &amp; c
 <h3><a name="Class-system_error">Class <code>
 system_error</code></a></h3>
 <p>The class <code>system_error</code> describes an exception object used to 
-report error conditions that have an associated error code. Such error 
-conditions typically originate from the operating system or other low-level 
+report errors that have an associated <code><a href="#Class-error_code">error_code</a></code>. Such errors typically originate from operating system or other low-level 
 application program interfaces.</p>
 <blockquote>
 <pre>namespace boost
@@ -754,13 +782,14 @@ application program interfaces.</p>
 </blockquote>
 <hr>
 
-<p>© Copyright Beman Dawes, 2006, 2007<br>
-Distributed under the Boost Software License, Version 1.0. See
-<a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</a></p>
-
 <p>Revised 
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->June 25, 2008<!--webbot bot="Timestamp" endspan i-checksum="14296" --> </font>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->October 05, 2008<!--webbot bot="Timestamp" endspan i-checksum="30983" --> </font>
 </p>
+
+<p>© Copyright Beman Dawes, 2006, 2007, 2008</p>
+
+<p>Distributed under the Boost Software License, Version 1.0. See
+<a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</a></p>
 
 </body>
 
