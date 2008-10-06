@@ -472,6 +472,8 @@ namespace boost
 # pragma warning( push )
 // C4146: unary minus operator applied to unsigned type, result still unsigned
 # pragma warning( disable : 4146 )
+#elif defined( __BORLANDC__ )
+# pragma option push -w-8041
 #endif
         template<class T>
         inline
@@ -483,6 +485,8 @@ namespace boost
         }
 #if (defined _MSC_VER)
 # pragma warning( pop )
+#elif defined( __BORLANDC__ )
+# pragma option pop
 #endif
     }
 
