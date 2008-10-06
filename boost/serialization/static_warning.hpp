@@ -77,8 +77,6 @@
 
 //------------------Configure-------------------------------------------------//
 # if defined(BOOST_INTEL)
-# elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x600)
-#  define BOOST_HAS_DESCRIPTIVE_UNREFERENCED_VARIABLE_WARNING
 # elif defined(__PGI)
 #  define BOOST_HAS_DESCRIPTIVE_DIVIDE_BY_ZERO_WARNING
 # elif defined(__GNUC__) && !defined(BOOST_INTEL) // && (__GNUC__ * 100 + __GNUC_MINOR__ <= 302)

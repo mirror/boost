@@ -116,11 +116,17 @@ public:
 
     // we provide an optimized save for all fundamental types
     // typedef serialization::is_bitwise_serializable<mpl::_1> 
-    //  use_array_optimization;
+    // use_array_optimization;
     // workaround without using mpl lambdas
     struct use_array_optimization {
-      template <class T>
-      struct apply : public boost::serialization::is_bitwise_serializable<T> {};
+        template <class T>  
+        #if defined(BOOST_NO_DEPENDENT_NESTED_DERIVATIONS)  
+            struct apply {  
+                typedef BOOST_DEDUCED_TYPENAME boost::serialization::is_bitwise_serializable<T>::type type;  
+            };
+        #else
+            struct apply : public boost::serialization::is_bitwise_serializable<T> {};  
+        #endif
     };
     
 
