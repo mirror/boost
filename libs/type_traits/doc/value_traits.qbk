@@ -31,43 +31,43 @@ then use the `std::numeric_limits template` instead.
 [*Synopsis:]
 
    template <class T>
-   struct __is_array<T>;
+   struct __is_array;
      
    template <class T>
-   struct __is_class<T>;
+   struct __is_class;
    
    template <class T>
-   struct __is_complex<T>;
+   struct __is_complex;
      
    template <class T>
-   struct __is_enum<T>;
+   struct __is_enum;
      
    template <class T>
-   struct __is_floating_point<T>;
+   struct __is_floating_point;
      
    template <class T>
-   struct __is_function<T>;
+   struct __is_function;
 
    template <class T>
-   struct __is_integral<T>;
+   struct __is_integral;
      
    template <class T>
-   struct __is_member_function_pointer<T>;
+   struct __is_member_function_pointer;
      
    template <class T>
-   struct __is_member_object_pointer<T>;
+   struct __is_member_object_pointer;
      
    template <class T>
-   struct __is_pointer<T>;
+   struct __is_pointer;
      
    template <class T>
-   struct __is_reference<T>;
+   struct __is_reference;
      
    template <class T>
-   struct __is_union<T>;
+   struct __is_union;
      
    template <class T>
-   struct __is_void<T>;
+   struct __is_void;
      
 The following traits are made up of the union of one or more type
 categorizations. A type may belong to more than one of these categories, 
