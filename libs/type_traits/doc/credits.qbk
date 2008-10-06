@@ -8,7 +8,7 @@
 [section:credits Credits]
 
 This documentation was pulled together by John Maddock, using 
-[@../../../../tools/quickbook/doc/html/index.html Boost.Quickbook]
+[@../../../../doc/html/quickbook.html Boost.Quickbook]
 and [@../../../../doc/html/boostbook.html Boost.DocBook].
  
 The original version of this library was created by Steve Cleary, 
