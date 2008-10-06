@@ -18,7 +18,11 @@ rule include-spirit ( properties * )
     local old-compiler ;
     if <toolset>borland in $(properties)
     {
-        old-compiler = true ;
+        if ! <toolset-borland:version>6.1.0 in $(properties)  
+        {  
+            old-compiler = true ;  
+        }  
+
     }
     else if <toolset>msvc in $(properties)
     {
