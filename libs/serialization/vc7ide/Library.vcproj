@@ -692,6 +692,9 @@
 				RelativePath="..\..\..\boost\serialization\state_saver.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\static_warning.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\strong_typedef.hpp">
 			</File>
 			<File
