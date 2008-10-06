@@ -49,7 +49,7 @@ along with suitable workarounds when available.
   <li><a href="#acc_612_ia64">HP aC++ A.06.12 and later for HP-UX IA64</a></li>
   <li><a href="#acc_380_pa_risc">HP aC++ A.03.80 for HP-UX PA-RISC</a></li>
   <li><a href="#va_60">IBM VisualAge C++ V6.0 for AIX</a></li>
-  <li><a href="#va_90">IBM VisualAge C++ V9.0 for AIX</a></li>
+  <li><a href="#xl_90">IBM XL C/C++ V9.0 for AIX and later</a></li>
   <li><a href="#intel_81_lin">Intel C++ Compiler for Linux 8.1 and later</a></li>
   <li><a href="#intel_91_mac">Intel C++ Compiler for Mac OS 9.1 and later</a></li>
   <li><a href="#intel_80_win">Intel C++ Compiler for Windows 32-bit 8.0 and later</a></li>
@@ -93,7 +93,7 @@ along with suitable workarounds when available.
 
 <p>
 Currently, Boost.MultiIndex cannot be used with any of BCB 6.4 up to BCB 2006
-and CodeGear C++Builder 2007.
+and CodeGear C++Builder 2009.
 The number of problems encountered during the tests makes it unlikely that
 future versions of the library can be made to work under these compilers.
 </p>
@@ -122,13 +122,15 @@ starting from 3.2. The following versions have been explicitly tested:
   <li>GCC 3.2 20020927 (prerelease) under Cygwin 1.5.7,</li>
   <li>GCC 3.4.2 under HP-UX PA-RISC,</li>
   <li>GCC 3.4.3 under Linux x86-64,</li>
-  <li>GCC 3.4.6 under Solaris, 20060404 (Red Hat 3.4.6-3) under Linux IA64,</li>
+  <li>GCC 3.4.6 under Solaris,</li>
   <li>GCC 4.0.1 under Linux x86-64, (Apple build 5363) under Mac OS,</li>
-  <li>GCC 4.1.1 20070105 (Red Hat 4.1.1-52) under Linux x86-64,</li>
+  <li>GCC 4.1.2 20061021 prerelease (NetBSD nb3 20061125) under Linux and Linux x86-64, 20070115 (prerelease) (SUSE Linux) under Linux x86-64, 20071124 (Red Hat 4.1.2-42) under Linux x86-64,</li>
   <li>GCC 4.2.1 under HP-UX IA64 and Linux x86-64, (SUSE Linux) under Linux,</li>
   <li>GCC 4.2.3 (Ubuntu 4.2.3-2ubuntu7) under Linux and Linux x86-64,</li>
-  <li>GCC 4.3.0 under Linux x86-64, with Apache C++ Standard Library 4.2.2 under Linux and Linux x86-64,</li>
-  <li>GCC 4.3.0 gnu++0x under Linux x86-64.</li>
+  <li>GCC 4.2.4 under Linux x86-64, (Ubuntu 4.2.4-1ubuntu1) under Linux x86-64,</li>
+  <li>GCC 4.3.0 with Apache C++ Standard Library 4.2.2 under Linux x86-64,</li>
+  <li>GCC 4.3.2 under Linux x86-64,</li>
+  <li>GCC 4.3.2 gnu++0x under Linux x86-64.</li>
 </ul>
 Boost.MultiIndex does not work with versions 3.1 and prior of GCC.
 </p>
@@ -165,13 +167,14 @@ upgrade.
 
 <p>
 No problems have been detected with this compiler.
-Last tested for version A.06.14.
+Last tested for version A.06.17.
 </p>
 
 <h2><a name="acc_380_pa_risc">HP aC++ A.03.80 for HP-UX PA-RISC</a></h2>
 
 <p>
 No problems have been detected with this compiler.
+Last tested for version A.03.85.
 </p>
 
 <h2><a name="va_60">IBM VisualAge C++ V6.0 for AIX</a></h2>
@@ -208,7 +211,7 @@ Serialization capabilities are not available as Boost.Serialization is not
 supported on this platform.
 </p>
 
-<h2><a name="va_90">IBM VisualAge C++ V9.0 for AIX</a></h2>
+<h2><a name="xl_90">IBM XL C/C++ V9.0 for AIX and later</a></h2>
 
 <p>
 <a href="reference/key_extraction.html#member"><code>member</code></a> not supported,
@@ -228,13 +231,14 @@ by inserting the following preprocessor directive:
 This latter pragma, however, may also eliminate other warnings not related
 to the use of <code>offsetof</code>.
 Other than this, Boost.MultiIndex works without problems.
+Last tested for version V10.1.
 </p>
 
 <h2><a name="intel_81_lin">Intel C++ Compiler for Linux 8.1 and later</a></h2>
 
 <p>
 No problems have been detected with this compiler.
-Tested from version 8.1 to 10.0.
+Tested from version 8.1 to 10.1.
 </p>
 
 <h2><a name="intel_91_mac">Intel C++ Compiler for Mac OS 9.1 and later</a></h2>
@@ -264,6 +268,10 @@ Last tested for compiler version 10.1.
 </p>
 
 <h2><a name="cw_83">Metrowerks CodeWarrior 8.3</a></h2>
+
+<p>
+<b>Note:</b> Last tested in Boost 1.36. The information might be no longer accurate.
+</p>
 
 <p>
 Predefined key extractors instantiated on a given type do not accept
@@ -299,6 +307,12 @@ Boost.MultiIndex works correctly with versions of this compiler from 9.0 to
 </p>
 
 <h2><a name="msvc_60">Microsoft Visual C++ 6.0 Service Pack 5</a></h2>
+
+<p>
+<b>Note:</b> Last tested in Boost 1.36. The information might be no longer accurate.
+</p>
+
+<blockquote><hr></blockquote>
 
 <p>
 Beginning with Boost.1.36, Boost.Serialization is no longer supported in this
@@ -506,6 +520,10 @@ The following measures can help alleviate these problems:
 <a name="msvc_60_stlport_453">Microsoft Visual C++ 6.0 Service Pack 5
 + STLport 4.5.3 and later</a>
 </h3>
+
+<p>
+<b>Note:</b> Last tested in Boost 1.36. The information might be no longer accurate.
+</p>
 
 <p>
 Boost.MultiIndex works for this configuration. The same limitations apply as
@@ -1093,7 +1111,7 @@ Performance
 
 <br>
 
-<p>Revised July 8th 2008</p>
+<p>Revised October 6th 2008</p>
 
 <p>&copy; Copyright 2003-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
