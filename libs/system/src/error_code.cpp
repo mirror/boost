@@ -126,7 +126,7 @@ namespace
             return std::string( "ENOMEM" );
         }
       }
-      std::string msg();
+      std::string msg;
       try
       {
         msg = ( ( result == invalid_argument ) ? "Unknown error" : bp );
