@@ -11,6 +11,8 @@
 
 #include <iostream>
 #include <cstring>
+#include <string>
+#include <list>
 #include <boost/filesystem/path.hpp>
 #include <boost/version.hpp>
 #include "bcp.hpp"
@@ -74,6 +76,7 @@ int cpp_main(int argc, char* argv[])
    // object what ir needs to do:
    //
    bool list_mode = false;
+   std::list<const char*> positional_args;
    for(int i = 1; i < argc; ++i)
    {
       if(0 == std::strcmp("-h", argv[i])
@@ -138,11 +141,19 @@ int cpp_main(int argc, char* argv[])
       }
       else
       {
-         if(!list_mode && (i == argc - 1))
-            papp->set_destination(argv[i]);
-         else
-            papp->add_module(argv[i]);
+         positional_args.push_back(argv[i]);
       }
+   }
+   //
+   // Handle positional args last:
+   //
+   for(std::list<const char*>::const_iterator i = positional_args.begin();
+      i != positional_args.end(); ++i)
+   {
+      if(!list_mode && (i == --positional_args.end()))
+         papp->set_destination(*i);
+      else
+         papp->add_module(*i);
    }
    //
    // run the application object:
