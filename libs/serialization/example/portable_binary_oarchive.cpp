@@ -59,19 +59,19 @@ portable_binary_oarchive::save_impl(
 void 
 portable_binary_oarchive::init(unsigned int flags) {
     if(m_flags == (endian_big | endian_little)){
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             portable_binary_oarchive_exception()
         );
     }
     if(0 == (flags & boost::archive::no_header)){
         // write signature in an archive version independent manner
         const std::string file_signature(
-            boost::archive::ARCHIVE_SIGNATURE()
+            boost::archive::BOOST_ARCHIVE_SIGNATURE()
         );
         * this << file_signature;
         // write library version
         const boost::archive::version_type v(
-            boost::archive::ARCHIVE_VERSION()
+            boost::archive::BOOST_ARCHIVE_VERSION()
         );
         * this << v;
     }

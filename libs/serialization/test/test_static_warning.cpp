@@ -8,7 +8,7 @@
 // note: this is a compile only test.
 
 #include <boost/config.hpp> // BOOST_STATIC_CONST
-#include <boost/static_warning.hpp>
+#include <boost/serialization/static_warning.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
 
 #pragma warning(disable:4094)

@@ -28,35 +28,35 @@ namespace archive {
 
 extern 
 BOOST_ARCHIVE_DECL(const char *)
-OBJECT_ID();
+BOOST_ARCHIVE_XML_OBJECT_ID();
 
 extern 
 BOOST_ARCHIVE_DECL(const char *)
-OBJECT_REFERENCE();
+BOOST_ARCHIVE_XML_OBJECT_REFERENCE();
 
 extern 
 BOOST_ARCHIVE_DECL(const char *)
-CLASS_ID();
+BOOST_ARCHIVE_XML_CLASS_ID();
 
 extern 
 BOOST_ARCHIVE_DECL(const char *)
-CLASS_ID_REFERENCE();
+BOOST_ARCHIVE_XML_CLASS_ID_REFERENCE();
 
 extern 
 BOOST_ARCHIVE_DECL(const char *)
-CLASS_NAME();
+BOOST_ARCHIVE_XML_CLASS_NAME();
 
 extern 
 BOOST_ARCHIVE_DECL(const char *)
-TRACKING();
+BOOST_ARCHIVE_XML_TRACKING();
 
 extern 
 BOOST_ARCHIVE_DECL(const char *)
-VERSION();
+BOOST_ARCHIVE_XML_VERSION();
 
 extern 
 BOOST_ARCHIVE_DECL(const char *)
-SIGNATURE();
+BOOST_ARCHIVE_XML_SIGNATURE();
 
 }// namespace archive
 }// namespace boost

@@ -74,21 +74,22 @@ namespace boost {
 namespace archive {
     char * test_filename(char * dir = NULL, char *fname = NULL){
         static char ibuffer [512];
-
-        if(NULL == dir)
+        int i;
+        ibuffer[0] = '\0';
+        if(NULL == dir){
             dir = boost::archive::tmpdir();
-
+        }
+        STRCPY(ibuffer, dir);
+        std::strcat(ibuffer, "/");
+        i = std::strlen(ibuffer);
         if(NULL == fname){
             char old_dir[256];
             _getcwd(old_dir, sizeof(old_dir) - 1);
             chdir(dir);
-
-            std::tmpnam(ibuffer);
+            std::tmpnam(ibuffer + i);
             chdir(old_dir);
         }
         else{
-            STRCPY(ibuffer, dir);
-            std::strcat(ibuffer, "/");
             std::strcat(ibuffer, fname);
         }
         return ibuffer;

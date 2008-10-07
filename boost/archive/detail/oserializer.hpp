@@ -27,10 +27,10 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
-#include <boost/throw_exception.hpp>
-#include <boost/smart_cast.hpp>
+#include <boost/serialization/throw_exception.hpp>
+#include <boost/serialization/smart_cast.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/static_warning.hpp>
+#include <boost/serialization/static_warning.hpp>
 
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_enum.hpp>
@@ -142,7 +142,7 @@ BOOST_DLLEXPORT void oserializer<Archive, T>::save_object_data(
     // be specialized by the user.
     BOOST_STATIC_ASSERT(boost::is_const<T>::value == false);
     boost::serialization::serialize_adl(
-        boost::smart_cast_reference<Archive &>(ar),
+        boost::serialization::smart_cast_reference<Archive &>(ar),
         * static_cast<T *>(const_cast<void *>(x)),
         version()
     );
@@ -180,7 +180,8 @@ BOOST_DLLEXPORT void pointer_oserializer<Archive, T>::save_object_ptr(
     // be specialized by the user.
     T * t = static_cast<T *>(const_cast<void *>(x));
     const unsigned int file_version = boost::serialization::version<T>::value;
-    Archive & ar_impl = boost::smart_cast_reference<Archive &>(ar);
+    Archive & ar_impl 
+        = boost::serialization::smart_cast_reference<Archive &>(ar);
     boost::serialization::save_construct_data_adl<Archive, T>(
         ar_impl, 
         t, 
@@ -369,7 +370,7 @@ struct save_pointer_type {
             // note:if this exception is thrown, be sure that derived pointer
             // is either registered or exported.
             if(NULL == true_type){
-                boost::throw_exception(
+                boost::serialization::throw_exception(
                     archive_exception(archive_exception::unregistered_class)
                 );
             }
@@ -389,7 +390,7 @@ struct save_pointer_type {
                 static_cast<const void *>(&t)
             );
             if(NULL == vp){
-                boost::throw_exception(
+                boost::serialization::throw_exception(
                     archive_exception(archive_exception::unregistered_cast)
                 );
             }
@@ -401,7 +402,7 @@ struct save_pointer_type {
                 = archive_pointer_oserializer<Archive>::find(* true_type);
             assert(NULL != bpos);
             if(NULL == bpos)
-                boost::throw_exception(
+                boost::serialization::throw_exception(
                     archive_exception(archive_exception::unregistered_class)
                 );
             ar.save_pointer(vp, bpos);
@@ -447,7 +448,8 @@ struct save_pointer_type {
         #endif
         register_type(ar, * t);
         if(NULL == t){
-            basic_oarchive & boa = boost::smart_cast_reference<basic_oarchive &>(ar);
+            basic_oarchive & boa 
+                = boost::serialization::smart_cast_reference<basic_oarchive &>(ar);
             boa.save_null_pointer();
             save_access::end_preamble(ar);
             return;

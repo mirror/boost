@@ -85,19 +85,20 @@ extended_type_info::key_register(const char *key) {
 BOOST_SERIALIZATION_DECL(void)  
 extended_type_info::key_unregister() {
     assert(NULL != m_key);
-    detail::ktmap & x = singleton<detail::ktmap>::get_mutable_instance();
-    detail::ktmap::iterator start = x.lower_bound(this);
-    detail::ktmap::iterator end = x.upper_bound(this);
-    assert(start != end);
+    if(! singleton<detail::ktmap>::is_destroyed()){
+        detail::ktmap & x = singleton<detail::ktmap>::get_mutable_instance();
+        detail::ktmap::iterator start = x.lower_bound(this);
+        detail::ktmap::iterator end = x.upper_bound(this);
+        assert(start != end);
 
-    // remove entry in map which corresponds to this type
-    do{
-        if(this == *start){
-            x.erase(start);
-            break;
-        }
-    }while(++start != end);
-
+        // remove entry in map which corresponds to this type
+        do{
+            if(this == *start)
+                x.erase(start++);
+            else
+		    ++start;
+        }while(start != end);
+    }
     m_key = NULL;
 }
 

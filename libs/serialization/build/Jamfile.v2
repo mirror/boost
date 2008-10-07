@@ -8,7 +8,7 @@
 
 project boost/serialization
     : source-location ../src
-    : requirements <dependency>../../config/test/all//BOOST_NO_STD_LOCALE
+    : requirements
       <conditional>@include-spirit
 ;
 
@@ -18,7 +18,11 @@ rule include-spirit ( properties * )
     local old-compiler ;
     if <toolset>borland in $(properties)
     {
-        old-compiler = true ;
+        if ! <toolset-borland:version>6.1.0 in $(properties)  
+        {  
+            old-compiler = true ;  
+        }  
+
     }
     else if <toolset>msvc in $(properties)
     {
@@ -100,7 +104,6 @@ lib boost_wserialization
     : $(WSOURCES).cpp boost_serialization 
     :     
     <toolset>msvc:<cxxflags>/Gy 
-    <dependency>../../config/test/all//BOOST_NO_STD_WSTREAMBUF
     <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
     ;
 

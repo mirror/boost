@@ -34,28 +34,7 @@ namespace boost {
 namespace serialization {
 namespace void_cast_detail {
 
-#if 0
-// registry of casting objects
-struct void_caster_compare
-{
-    bool
-    operator()(
-        const void_caster * lhs, 
-        const void_caster * rhs 
-    ) const {
-        if( lhs->m_derived < rhs->m_derived )
-            return true;
-        if( lhs->m_base < rhs->m_base )
-            return true;
-        return false;
-    }
-};
-
-typedef std::set<const void_caster *, void_caster_compare> set_type;
-#endif
-
 typedef std::vector<const void_caster *> set_type;
-
 typedef boost::serialization::singleton<set_type> void_caster_registry;
 
 inline bool
@@ -93,21 +72,23 @@ void_caster::static_register() const {
 
 BOOST_SERIALIZATION_DECL(void)
 void_caster::static_unregister() const {
-    void_cast_detail::set_type & st 
-        = void_caster_registry::get_mutable_instance();
-    void_cast_detail::set_type::iterator it;
-    it = std::find(st.begin(), st.end(), this);
-    assert(st.end() != it);
-    st.erase(it);
-    // to do - remove all void_caster_derived entries
-    // which depend upon this primitive
-    /*
-    while(){
-        if(!truncate_down(this)
-        && !truncate_up(this))
-            break;
+    if(! void_caster_registry::is_destroyed()){
+        void_cast_detail::set_type & st 
+            = void_caster_registry::get_mutable_instance();
+        void_cast_detail::set_type::iterator it;
+        it = std::find(st.begin(), st.end(), this);
+        assert(st.end() != it);
+        st.erase(it);
+        // to do - remove all void_caster_derived entries
+        // which depend upon this primitive
+        /*
+        while(){
+            if(!truncate_down(this)
+            && !truncate_up(this))
+                break;
+        }
+        */
     }
-    */
 }
 
 #if 0

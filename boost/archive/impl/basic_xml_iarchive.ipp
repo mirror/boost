@@ -12,7 +12,7 @@
 #include <cstddef> // NULL
 #include <algorithm>
 
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 
 #include <boost/archive/basic_xml_iarchive.hpp>
 #include <boost/serialization/tracking.hpp>
@@ -31,7 +31,7 @@ basic_xml_iarchive<Archive>::load_start(const char *name){
         return;
     bool result = this->This()->gimpl->parse_start_tag(this->This()->get_is());
     if(true != result){
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             archive_exception(archive_exception::stream_error)
         );
     }
@@ -48,7 +48,7 @@ basic_xml_iarchive<Archive>::load_end(const char *name){
         return;
     bool result = this->This()->gimpl->parse_end_tag(this->This()->get_is());
     if(true != result){
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             archive_exception(archive_exception::stream_error)
         );
     }
@@ -66,7 +66,7 @@ basic_xml_iarchive<Archive>::load_end(const char *name){
                 name
             )
         ){
-            boost::throw_exception(
+            boost::serialization::throw_exception(
                 archive_exception(archive_exception::stream_error)
             );
         }

@@ -33,7 +33,7 @@
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/empty.hpp>
 
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 
 #include <boost/variant.hpp>
 
@@ -137,7 +137,7 @@ void load(
     ar >> BOOST_SERIALIZATION_NVP(which);
     if(which >=  mpl::size<types>::value)
         // this might happen if a type was removed from the list of variant types
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             boost::archive::archive_exception(
                 boost::archive::archive_exception::unsupported_version
             )
@@ -158,4 +158,3 @@ inline void serialize(
 } // namespace boost
 
 #endif //BOOST_SERIALIZATION_VARIANT_HPP
-

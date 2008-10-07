@@ -17,7 +17,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <boost/smart_cast.hpp>
+#include <boost/serialization/smart_cast.hpp>
 #include <boost/serialization/singleton.hpp>
 #include <boost/serialization/force_include.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
@@ -33,7 +33,7 @@
 namespace boost { 
 namespace serialization { 
 
-BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) class extended_type_info;
+class extended_type_info;
 
 // Given a void *, assume that it really points to an instance of one type
 // and alter it so that it would point to an instance of a related type.
@@ -127,15 +127,17 @@ class void_caster_primitive :
     public void_caster
 {
     virtual void const * downcast(void const * const t) const {
-        const Derived * d = boost::smart_cast<const Derived *, const Base *>(
-            static_cast<const Base *>(t)
-        );
+        const Derived * d = 
+            boost::serialization::smart_cast<const Derived *, const Base *>(
+                static_cast<const Base *>(t)
+            );
         return d;
     }
     virtual void const * upcast(void const * const t) const {
-        const Base * b = boost::smart_cast<const Base *, const Derived *>(
-            static_cast<const Derived *>(t)
-        );
+        const Base * b = 
+            boost::serialization::smart_cast<const Base *, const Derived *>(
+                static_cast<const Derived *>(t)
+            );
         return b;
     }
 public:

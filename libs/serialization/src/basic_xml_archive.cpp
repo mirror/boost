@@ -15,35 +15,35 @@ namespace boost {
 namespace archive {
 
 BOOST_ARCHIVE_DECL(const char *)
-OBJECT_ID(){
+BOOST_ARCHIVE_XML_OBJECT_ID(){
     return "object_id";
 }
 BOOST_ARCHIVE_DECL(const char *)
-OBJECT_REFERENCE(){
+BOOST_ARCHIVE_XML_OBJECT_REFERENCE(){
     return "object_id_reference";
 }
 BOOST_ARCHIVE_DECL(const char *)
-CLASS_ID(){
+BOOST_ARCHIVE_XML_CLASS_ID(){
     return "class_id";
 }
 BOOST_ARCHIVE_DECL(const char *)
-CLASS_ID_REFERENCE(){
+BOOST_ARCHIVE_XML_CLASS_ID_REFERENCE(){
     return "class_id_reference";
 }
 BOOST_ARCHIVE_DECL(const char *)
-CLASS_NAME(){
+BOOST_ARCHIVE_XML_CLASS_NAME(){
     return "class_name";
 }
 BOOST_ARCHIVE_DECL(const char *)
-TRACKING(){
+BOOST_ARCHIVE_XML_TRACKING(){
     return "tracking_level";
 }
 BOOST_ARCHIVE_DECL(const char *)
-VERSION(){
+BOOST_ARCHIVE_XML_VERSION(){
     return "version";
 }
 BOOST_ARCHIVE_DECL(const char *)
-SIGNATURE(){
+BOOST_ARCHIVE_XML_SIGNATURE(){
     return "signature";
 }
 

@@ -65,12 +65,32 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_REQUIRE(NULL != testfile);
 
     const A a;
-    A a1;
+    char s1[] = "a";
+    char s2[] = "ab";
+    char s3[] = "abc";
+    char s4[] = "abcd";
     const int i = 12345;
+    A a1;
+    char s1_1[10];
+    char s1_2[10];
+    char s1_3[10];
+    char s1_4[10];
     int i1 = 34790;
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
+        boost::serialization::make_nvp(
+            "s1", boost::serialization::make_binary_object(s1, sizeof(s1))
+        );
+        oa << boost::serialization::make_nvp(
+            "s2", boost::serialization::make_binary_object(s2, sizeof(s2))
+        );
+        oa << boost::serialization::make_nvp(
+            "s3", boost::serialization::make_binary_object(s3, sizeof(s3))
+        );
+        oa << boost::serialization::make_nvp(
+            "s4", boost::serialization::make_binary_object(s4, sizeof(s4))
+        );
         oa << BOOST_SERIALIZATION_NVP(a);
         // note: add a little bit on the end of the archive to detect
         // failure of text mode binary.
@@ -79,7 +99,21 @@ int test_main( int /* argc */, char* /* argv */[] )
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
+        boost::serialization::make_nvp(
+            "s1", boost::serialization::make_binary_object(s1_1, sizeof(s1))
+        );
+        ia >> boost::serialization::make_nvp(
+            "s2", boost::serialization::make_binary_object(s1_2, sizeof(s2))
+        );
+        ia >> boost::serialization::make_nvp(
+            "s3", boost::serialization::make_binary_object(s1_3, sizeof(s3))
+        );
+        ia >> boost::serialization::make_nvp(
+            "s4", boost::serialization::make_binary_object(s1_4, sizeof(s4))
+        );
         ia >> BOOST_SERIALIZATION_NVP(a1);
+        // note: add a little bit on the end of the archive to detect
+        // failure of text mode binary.
         ia >> BOOST_SERIALIZATION_NVP(i1);
     }
     BOOST_CHECK(i == i1);

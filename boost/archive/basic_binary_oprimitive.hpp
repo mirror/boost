@@ -41,7 +41,7 @@ namespace std{
 //#include <boost/limits.hpp>
 //#include <boost/io/ios_state.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 
 #include <boost/archive/basic_streambuf_locale_saver.hpp>
 #include <boost/archive/archive_exception.hpp>
@@ -116,11 +116,17 @@ public:
 
     // we provide an optimized save for all fundamental types
     // typedef serialization::is_bitwise_serializable<mpl::_1> 
-    //  use_array_optimization;
+    // use_array_optimization;
     // workaround without using mpl lambdas
     struct use_array_optimization {
-      template <class T>
-      struct apply : public boost::serialization::is_bitwise_serializable<T> {};
+        template <class T>  
+        #if defined(BOOST_NO_DEPENDENT_NESTED_DERIVATIONS)  
+            struct apply {  
+                typedef BOOST_DEDUCED_TYPENAME boost::serialization::is_bitwise_serializable<T>::type type;  
+            };
+        #else
+            struct apply : public boost::serialization::is_bitwise_serializable<T> {};  
+        #endif
     };
     
 
@@ -148,7 +154,9 @@ basic_binary_oprimitive<Archive, Elem, Tr>::save_binary(
     // mode where by cr characters recieve special treatment.
     // be sure that the output stream is opened with ios::binary
     //if(os.fail())
-    //    boost::throw_exception(archive_exception(archive_exception::stream_error));
+    //    boost::serialization::throw_exception(
+    //        archive_exception(archive_exception::stream_error)
+    //    );
     // figure number of elements to output - round up
     count = ( count + sizeof(Elem) - 1) 
         / sizeof(Elem);
@@ -157,7 +165,9 @@ basic_binary_oprimitive<Archive, Elem, Tr>::save_binary(
         count
     );
     if(count != static_cast<std::size_t>(scount))
-        boost::throw_exception(archive_exception(archive_exception::stream_error));
+        boost::serialization::throw_exception(
+            archive_exception(archive_exception::stream_error)
+        );
     //os.write(
     //    static_cast<const BOOST_DEDUCED_TYPENAME OStream::char_type *>(address), 
     //    count

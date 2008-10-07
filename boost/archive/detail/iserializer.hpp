@@ -33,10 +33,10 @@ namespace std{
     using ::size_t; 
 } // namespace std
 #endif
-#include <boost/throw_exception.hpp>
-#include <boost/smart_cast.hpp>
+#include <boost/serialization/throw_exception.hpp>
+#include <boost/serialization/smart_cast.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/static_warning.hpp>
+#include <boost/serialization/static_warning.hpp>
 #include <boost/detail/no_exceptions_support.hpp>
 
 #include <boost/type_traits/is_pointer.hpp>
@@ -150,7 +150,7 @@ BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
     // make sure call is routed through the higest interface that might
     // be specialized by the user.
     boost::serialization::serialize_adl(
-        boost::smart_cast_reference<Archive &>(ar),
+        boost::serialization::smart_cast_reference<Archive &>(ar),
         * static_cast<T *>(x), 
         file_version
     );
@@ -252,11 +252,12 @@ BOOST_DLLEXPORT void pointer_iserializer<Archive, T>::load_object_ptr(
     const unsigned int file_version
 ) const
 {
-    Archive & ar_impl = boost::smart_cast_reference<Archive &>(ar);
+    Archive & ar_impl = 
+        boost::serialization::smart_cast_reference<Archive &>(ar);
 
     auto_ptr_with_deleter<T> ap(heap_allocator<T>::invoke());
     if(NULL == ap.get())
-        boost::throw_exception(std::bad_alloc()) ;
+        boost::serialization::throw_exception(std::bad_alloc()) ;
 
     T * t = ap.get();
     x = t;
@@ -480,7 +481,7 @@ struct load_array_type {
         int count;
         ar >> BOOST_SERIALIZATION_NVP(count);
         if(count > current_count)
-            boost::throw_exception(archive::archive_exception(
+            boost::serialization::throw_exception(archive::archive_exception(
                 boost::archive::archive_exception::array_size_too_short
             ));
         ar >> serialization::make_array(static_cast<value_type*>(&t[0]),count);

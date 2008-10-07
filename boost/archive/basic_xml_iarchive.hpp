@@ -17,7 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 #include <boost/detail/workaround.hpp>
 
 #include <boost/archive/detail/common_iarchive.hpp>

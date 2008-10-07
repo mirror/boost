@@ -25,7 +25,7 @@
 // or 3 8 bit characters
 
 #include <boost/config.hpp> // for BOOST_DEDUCED_TYPENAME & PTFO
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/iterator/iterator_traits.hpp>

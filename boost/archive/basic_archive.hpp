@@ -17,7 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
-#include <boost/strong_typedef.hpp>
+#include <boost/serialization/strong_typedef.hpp>
 #include <boost/noncopyable.hpp>
 
 #include <boost/archive/detail/auto_link_archive.hpp>
@@ -93,10 +93,10 @@ enum archive_flags {
 #define NULL_POINTER_TAG class_id_type(-1)
 
 BOOST_ARCHIVE_DECL(const char *)
-ARCHIVE_SIGNATURE();
+BOOST_ARCHIVE_SIGNATURE();
 
 BOOST_ARCHIVE_DECL(unsigned char)
-ARCHIVE_VERSION();
+BOOST_ARCHIVE_VERSION();
 
 }// namespace archive
 }// namespace boost

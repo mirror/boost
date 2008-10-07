@@ -15,8 +15,8 @@
 #include <cstddef> // NULL
 
 #include <boost/limits.hpp>
-#include <boost/state_saver.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/state_saver.hpp>
+#include <boost/serialization/throw_exception.hpp>
 
 // including this here to work around an ICC in intel 7.0
 // normally this would be part of basic_oarchive.hpp below.
@@ -289,7 +289,7 @@ basic_oarchive_impl::save_object(
     if(stored_pointers.end() != stored_pointers.find(oid)){
         // this has to be a user error.  loading such an archive
         // would create duplicate objects
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             archive_exception(archive_exception::pointer_conflict)
         );
     }
@@ -329,7 +329,7 @@ basic_oarchive_impl::save_pointer(
                 else
                     // without an external class name
                     // we won't be able to de-serialize it so bail now
-                    boost::throw_exception(
+                    boost::serialization::throw_exception(
                         archive_exception(archive_exception::unregistered_class)
                     );
             }
@@ -348,8 +348,8 @@ basic_oarchive_impl::save_pointer(
     if(! bos.tracking(m_flags)){
         // just save the data itself
         ar.end_preamble();
-        state_saver<const void *> x(pending_object);
-        state_saver<const basic_oserializer *> y(pending_bos);
+        serialization::state_saver<const void *> x(pending_object);
+        serialization::state_saver<const basic_oserializer *> y(pending_bos);
         pending_object = t;
         pending_bos = & bpos_ptr->get_basic_serializer();
         bpos_ptr->save_object_ptr(ar, t);
@@ -376,8 +376,8 @@ basic_oarchive_impl::save_pointer(
     ar.end_preamble();
 
     // and save the object itself
-    state_saver<const void *> x(pending_object);
-    state_saver<const basic_oserializer *> y(pending_bos);
+    serialization::state_saver<const void *> x(pending_object);
+    serialization::state_saver<const basic_oserializer *> y(pending_bos);
     pending_object = t;
     pending_bos = & bpos_ptr->get_basic_serializer();
     bpos_ptr->save_object_ptr(ar, t);
@@ -430,7 +430,7 @@ basic_oarchive::register_basic_serializer(const basic_oserializer & bos){
 
 BOOST_ARCHIVE_DECL(unsigned int)
 basic_oarchive::get_library_version() const{
-    return ARCHIVE_VERSION();
+    return BOOST_ARCHIVE_VERSION();
 }
 
 BOOST_ARCHIVE_DECL(unsigned int)

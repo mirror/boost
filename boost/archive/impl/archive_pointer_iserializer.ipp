@@ -70,11 +70,16 @@ archive_pointer_iserializer<Archive>::find(
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 archive_pointer_iserializer<Archive>::~archive_pointer_iserializer(){
-    std::size_t count;
-    count = serialization::singleton<
+    if(! serialization::singleton<
             iserializer_map<Archive> 
-        >::get_mutable_instance().erase(this);
-    assert(count);
+        >::is_destroyed()
+    ){
+        std::size_t count;
+        count = serialization::singleton<
+                iserializer_map<Archive> 
+            >::get_mutable_instance().erase(this);
+        assert(count);
+    }
 }
 
 } // namespace detail

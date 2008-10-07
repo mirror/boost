@@ -23,7 +23,7 @@
 namespace std{ using ::memcpy; }
 #endif
 
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/iterator/iterator_traits.hpp>

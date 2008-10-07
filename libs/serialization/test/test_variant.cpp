@@ -29,7 +29,7 @@ namespace std{
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 
 #if defined(_MSC_VER) && (_MSC_VER <= 1020)
 #  pragma warning (disable : 4786) // too long name, harmless warning

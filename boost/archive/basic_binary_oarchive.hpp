@@ -24,7 +24,7 @@
 // ON PLATFORM APART FROM THE ONE THEY ARE CREATE ON
 
 #include <boost/config.hpp>
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 
 #include <boost/detail/workaround.hpp>
 #include <boost/archive/detail/common_oarchive.hpp>

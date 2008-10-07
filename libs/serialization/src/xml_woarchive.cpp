@@ -38,7 +38,7 @@ operator<<(std::wostream &os, const char *t){
         if(0 == result)
             break;
         else
-            boost::throw_exception(
+            boost::serialization::throw_exception(
                 iterators::dataflow_exception(
                     iterators::dataflow_exception::invalid_conversion
                 )

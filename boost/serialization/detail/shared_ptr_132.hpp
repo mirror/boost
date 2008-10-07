@@ -17,12 +17,12 @@
 #include <boost/config.hpp>   // for broken compiler workarounds
 
 #if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
-#include <boost/serializaition/detail/shared_ptr_nmt_132.hpp>
+#include <boost/serialization/detail/shared_ptr_nmt_132.hpp>
 #else
 
 #include <boost/assert.hpp>
 #include <boost/checked_delete.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 #include <boost/detail/workaround.hpp>
 
 #include <boost/serialization/access.hpp>
@@ -40,10 +40,6 @@
 #endif
 
 namespace boost_132 {
-
-#if !BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x560) ) 
-using namespace boost;
-#endif
 
 template<class T> class weak_ptr;
 template<class T> class enable_shared_from_this;
@@ -126,10 +122,10 @@ public:
 
 #if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x564) )
     template<class Y>
-    explicit shared_ptr(Y * p): px(p), pn(p,boost::checked_deleter<Y>()) // Y must be complete
+    explicit shared_ptr(Y * p): px(p), pn(p, boost::checked_deleter<Y>()) // Y must be complete
 #else
     template<class Y>
-    explicit shared_ptr(Y * p): px(p), pn(p, checked_deleter<Y>()) // Y must be complete
+    explicit shared_ptr(Y * p): px(p), pn(p, boost::checked_deleter<Y>()) // Y must be complete
 #endif
     {
         detail::sp_enable_shared_from_this( pn, p, p );
@@ -196,7 +192,7 @@ public:
     {
         if(px == 0)
         {
-            boost::throw_exception(std::bad_cast());
+            boost::serialization::throw_exception(std::bad_cast());
         }
     }
 

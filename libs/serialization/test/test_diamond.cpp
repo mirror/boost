@@ -30,8 +30,6 @@ namespace std{
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/export.hpp>
 
-using namespace boost;
-
 int save_count = 0; // used to detect when base class is saved multiple times
 int load_count = 0; // used to detect when base class is loaded multiple times
 

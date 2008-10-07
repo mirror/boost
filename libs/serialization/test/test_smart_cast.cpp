@@ -8,12 +8,12 @@
 // <gennadiy.rozental@tfn.com>
 
 #include <exception>
-#include <boost/smart_cast.hpp>
+#include <boost/serialization/smart_cast.hpp>
 
 #include "test_tools.hpp"
 #include <boost/noncopyable.hpp>
 
-using namespace boost;
+using namespace boost::serialization;
 
 class Base1 : public boost::noncopyable
 {

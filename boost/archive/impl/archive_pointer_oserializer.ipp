@@ -70,11 +70,16 @@ BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 archive_pointer_oserializer<Archive>::~archive_pointer_oserializer(){
     // note: we need to check that the map still exists as we can't depend
     // on static variables being constructed in a specific sequence
-    unsigned int count;
-    count = serialization::singleton<
-            oserializer_map<Archive>
-        >::get_mutable_instance().erase(this);
-    assert(count);
+    if(! serialization::singleton<
+            oserializer_map<Archive> 
+        >::is_destroyed()
+    ){
+        unsigned int count;
+        count = serialization::singleton<
+                oserializer_map<Archive>
+            >::get_mutable_instance().erase(this);
+        assert(count);
+    }
 }
 
 } // namespace detail

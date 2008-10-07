@@ -30,7 +30,7 @@ namespace std{ using ::wcslen; }
 
 #include <boost/detail/workaround.hpp>
 
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/archive/archive_exception.hpp>
 #include <boost/archive/add_facet.hpp>
@@ -155,11 +155,12 @@ basic_binary_oprimitive<Archive, Elem, Tr>::~basic_binary_oprimitive(){
     int result = static_cast<detail::output_streambuf_access<Elem, Tr> &>(
         m_sb
     ).sync();
-    if(0 != result){ 
-        boost::throw_exception(
-            archive_exception(archive_exception::stream_error)
-        );
-    }
+    //destructor can't throw
+    //if(0 != result){ 
+    //    boost::serialization::throw_exception(
+    //        archive_exception(archive_exception::stream_error)
+    //    );
+    //}
 }
 
 } // namespace archive

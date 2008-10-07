@@ -20,7 +20,7 @@ namespace std{
 
 #include "test_tools.hpp"
 #include <boost/detail/no_exceptions_support.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/split_member.hpp>
@@ -42,7 +42,7 @@ class A
         static int i = 0;
         ar >> BOOST_SERIALIZATION_NVP(next_);
         if(++i == 3)
-            boost::throw_exception(boost::archive::archive_exception(
+            boost::serialization::throw_exception(boost::archive::archive_exception(
                 boost::archive::archive_exception::no_exception
             ));
     }

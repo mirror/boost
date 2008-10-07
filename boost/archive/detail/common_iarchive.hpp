@@ -20,7 +20,7 @@
 #include <boost/archive/detail/interface_iarchive.hpp>
 #include <boost/archive/detail/iserializer.hpp>
 #include <boost/archive/detail/register_archive.hpp>
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 
 namespace boost {
 namespace archive {

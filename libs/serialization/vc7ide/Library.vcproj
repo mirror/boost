@@ -147,7 +147,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization-vc71-sgd-1_34_1.lib"/>
+				OutputFile="$(OutDir)/libboost_serialization-vc71-sgd-1_37.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -183,7 +183,7 @@
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
 				SmallerTypeCheck="FALSE"
-				RuntimeLibrary="1"
+				RuntimeLibrary="5"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
@@ -198,7 +198,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization-vc71-mt-sgd-1_34_1.lib"/>
+				OutputFile="$(OutDir)/libboost_serialization-vc71-sgd-1_3y.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -463,6 +463,9 @@
 				RelativePath="..\..\..\boost\serialization\hash_set.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\is_bitwise_serializable.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\list.hpp">
 			</File>
 			<File
@@ -503,6 +506,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\weak_ptr.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\wrapper.hpp">
 			</File>
 			<Filter
 				Name="detail"
@@ -674,22 +680,25 @@
 				RelativePath="..\..\..\boost\serialization\force_include.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\boost\pfto.hpp">
+				RelativePath="..\..\..\boost\serialization\pfto.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\singleton.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\boost\smart_cast.hpp">
+				RelativePath="..\..\..\boost\serialization\smart_cast.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\boost\state_saver.hpp">
+				RelativePath="..\..\..\boost\serialization\state_saver.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\boost\static_warning.hpp">
+				RelativePath="..\..\..\boost\serialization\static_warning.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\boost\strong_typedef.hpp">
+				RelativePath="..\..\..\boost\serialization\strong_typedef.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\throw_exception.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\tmpdir.hpp">

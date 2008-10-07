@@ -124,7 +124,7 @@ array<T> make_array( T* t, std::size_t s){
 
 template <class Archive, class T, std::size_t N>
 
-void serialize(Archive& ar, boost::array<T,N>& a, const unsigned int version)
+void serialize(Archive& ar, boost::array<T,N>& a, const unsigned int /* version */)
 {
   ar & make_nvp("elems",a.elems);
 }

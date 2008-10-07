@@ -42,7 +42,7 @@ namespace archive {
 //This should never ever change. note that is not an std::string
 // string.
 BOOST_ARCHIVE_DECL(const char *) 
-ARCHIVE_SIGNATURE(){
+BOOST_ARCHIVE_SIGNATURE(){
     return "serialization::archive";
 }
 
@@ -59,7 +59,7 @@ ARCHIVE_SIGNATURE(){
 //     types caused backwards compatibility breaking change in 1.35
 
 BOOST_ARCHIVE_DECL(unsigned char)
-ARCHIVE_VERSION(){
+BOOST_ARCHIVE_VERSION(){
     return 5;
 }
 
