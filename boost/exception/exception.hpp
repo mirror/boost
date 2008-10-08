@@ -313,7 +313,8 @@ boost
     exception_detail::enable_error_info_return_type<T>::type
     enable_error_info( T const & x )
         {
-        return typename exception_detail::enable_error_info_return_type<T>::type(x);
+        typedef typename exception_detail::enable_error_info_return_type<T>::type rt;
+        return rt(x);
         }
 
     ////////////////////////////////////////////////////////////////////////

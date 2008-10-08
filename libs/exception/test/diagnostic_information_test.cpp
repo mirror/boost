@@ -6,6 +6,11 @@
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/exception/info.hpp>
 #include <boost/detail/lightweight_test.hpp>
+#include <boost/detail/workaround.hpp>
+
+#if BOOST_WORKAROUND(__CODEGEARC__, BOOST_TESTED_AT(0x610))
+struct test_tag {};
+#endif
 
 typedef boost::error_info<struct test_tag,int> tag_int;
 

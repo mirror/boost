@@ -10,7 +10,6 @@
 #include <boost/exception/detail/error_info_impl.hpp>
 #include <boost/exception/detail/type_info.hpp>
 #include <boost/shared_ptr.hpp>
-#include <string.h>
 
 namespace
 boost
@@ -21,30 +20,20 @@ boost
         struct
         strwrap
             {
-            char const * str;
+			std::string str;
+            char const * ptr;
+
+            explicit
             strwrap( char const * s ):
-                str(init(s))
+                str(s),
+                ptr(&str[0])
                 {
-                }
-            ~strwrap()
-                {
-                delete[] str;
                 }
 
             private:
 
             strwrap( strwrap const & );
             strwrap & operator=( strwrap const & );
-
-            static
-            char const *
-            init( char const * s )
-                {
-                size_t n=1+strlen(s);
-                char * str = new char[n];
-                (void) memcpy(str,s,n);
-                return str;
-                }
             };
 
         template <>
@@ -55,10 +44,10 @@ boost
             shared_ptr<char const * const>
             get( exception const & x )
                 {
-                if( x.throw_function_ )
+                if( x.throw_function_ && *x.throw_function_ )
                     {
                     shared_ptr<strwrap> s(new strwrap(x.throw_function_));
-                    return shared_ptr<char const *>(s,&s->str);
+                    return shared_ptr<char const *>(s,&s->ptr);
                     }
                 else
                     return shared_ptr<char const * const>();
@@ -73,10 +62,10 @@ boost
             shared_ptr<char const * const>
             get( exception const & x )
                 {
-                if( x.throw_file_ )
+                if( x.throw_file_ && *x.throw_file_ )
                     {
                     shared_ptr<strwrap> s(new strwrap(x.throw_file_));
-                    return shared_ptr<char const *>(s,&s->str);
+                    return shared_ptr<char const *>(s,&s->ptr);
                     }
                 else
                     return shared_ptr<char const * const>();
