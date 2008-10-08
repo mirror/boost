@@ -27,6 +27,7 @@ http://www.boost.org/LICENSE_1_0.txt)
 <hr>
 <dl class="index">
   <dt><a href="#requirements">Requirements</a></dt>
+  <dt><a href="#differences_1_37">Differences from version 1.37</a></dt>
   <dt><a href="#differences_1_35">Differences from version 1.35</a></dt>
   <dt><a href="#differences_1_34">Differences from version 1.34</a></dt>
   <dt><a href="#differences_1_33">Differences from version 1.33</a></dt>
@@ -36,7 +37,7 @@ http://www.boost.org/LICENSE_1_0.txt)
 As of this is written, there are no known bugs. However, due to compiler/library quirks and or 
 bugs, some tests fail with some combinations of compilers and libraries.
 <h2><a name="requirements"></a>Requirements</h2>
-This library has been tested on Boost version 1.34 and 1.35.
+This library has been tested on Boost version 1.37.
 
 <!--
 <p>
@@ -55,6 +56,10 @@ If you're not using bjam and the Jamfile to build the library, be sure that
 the directory which contains the version of spirit you plan to use is placed
 at the front of the list of include paths.
 -->
+
+<h2><a name="differences_1_36"></a>Differences from Boost 1.36</h2>
+There are no new features in this version. As of this writing,
+all bug reports filed as TRAK tickets have been addressed.
 
 <h2><a name="differences_1_35"></a>Differences from Boost 1.35</h2>
 <ul>
@@ -120,6 +125,7 @@ at the front of the list of include paths.
 
 <h2><a name="todo"></a>Pending issues</h2>
 <ul>
+    <li>Pointers to pointers cannot currently be serialized
     <li>currently can't serialize through a pointer an object a of class
     that implements its own <code style="white-space: normal">new/delete</code> operators.
     <li>Its possible that <code style="white-space: normal">std::string</code>
