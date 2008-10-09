@@ -25,7 +25,7 @@
 
 #include <boost/mpl/aux_/config/ttp.hpp>
 
-#if defined(BOOST_MPL_CFG_NO_TEMPLATE_TEMPLATE_PARAMETERS)
+#if defined(BOOST_MPL_CFG_NO_TEMPLATE_TEMPLATE_PARAMETERS) && !BOOST_WORKAROUND( __BORLANDC__, >=0x590 )
 #   define BOOST_MPL_CFG_NO_QUOTE_TEMPLATE
 #endif
 
@@ -123,17 +123,26 @@ template<
 struct BOOST_PP_CAT(quote,i_)
 {
     template< BOOST_MPL_PP_PARAMS(i_, typename U) > struct apply
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x590 ))
+    {
+        typedef typename quote_impl<
+              F< BOOST_MPL_PP_PARAMS(i_, U) >
+            , aux::has_type< F< BOOST_MPL_PP_PARAMS(i_, U) > >::value
+            >::type type;
+    };
+#elif !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
         : quote_impl<
               F< BOOST_MPL_PP_PARAMS(i_, U) >
             , aux::has_type< F< BOOST_MPL_PP_PARAMS(i_, U) > >::value
             >
+    {
+    };
 #else
         : quote_impl< aux::has_type< F< BOOST_MPL_PP_PARAMS(i_, U) > >::value >
             ::template result_< F< BOOST_MPL_PP_PARAMS(i_, U) > >
-#endif
     {
     };
+#endif
 };
 
 #undef i_
