@@ -65,13 +65,13 @@ boost::wave::util::file_position_type current_position;
         typedef boost::wave::context<std::string::iterator, lex_iterator_type>
             context_type;
 
-    // The preprocessor iterator shouldn't be constructed directly. It is 
-    // to be generated through a wave::context<> object. This wave:context<> 
-    // object is to be used additionally to initialize and define different 
-    // parameters of the actual preprocessing (not done here).
+    //  The preprocessor iterator shouldn't be constructed directly. It is 
+    //  to be generated through a wave::context<> object. This wave:context<> 
+    //  object is to be used additionally to initialize and define different 
+    //  parameters of the actual preprocessing (not done here).
     //
-    // The preprocessing of the input stream is done on the fly behind the 
-    // scenes during iteration over the context_type::iterator_type stream.
+    //  The preprocessing of the input stream is done on the fly behind the 
+    //  scenes during iteration over the context_type::iterator_type stream.
     context_type ctx (instring.begin(), instring.end(), argv[1]);
 
     //  Get the preprocessor iterators and use them to generate 
