@@ -181,6 +181,25 @@ namespace quickbook { namespace detail
         }
     }
 
+    // Copy a string, converting mac and windows style newlines to unix
+    // newlines.
+
+    template <class InputIterator, class OutputIterator>
+    void normalize_newlines(InputIterator begin, InputIterator end,
+            OutputIterator out)
+    {
+        while(begin != end) {
+            if(*begin == '\r') {
+                *out++ = '\n';
+                ++begin;
+                if(begin != end && *begin == '\n') ++begin;
+            }
+            else {
+                *out++ = *begin++;
+            }
+        }
+    }
+
     int load(std::string const& filename, std::string& storage)
     {
         using std::cerr;
@@ -200,7 +219,7 @@ namespace quickbook { namespace detail
         // Turn off white space skipping on the stream
         in.unsetf(ios::skipws);
 
-        std::copy(
+        normalize_newlines(
             istream_iterator<char>(in),
             istream_iterator<char>(),
             std::back_inserter(storage));
