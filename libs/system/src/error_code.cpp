@@ -166,7 +166,9 @@ namespace
     case EADDRNOTAVAIL: return make_error_condition( address_not_available );
     case EAFNOSUPPORT: return make_error_condition( address_family_not_supported );
     case EAGAIN: return make_error_condition( resource_unavailable_try_again );
+#   if EALREADY != EBUSY  //  EALREADY and EBUSY are the same on QNX Neutrino
     case EALREADY: return make_error_condition( connection_already_in_progress );
+#   endif
     case EBADF: return make_error_condition( bad_file_descriptor );
     case EBADMSG: return make_error_condition( bad_message );
     case EBUSY: return make_error_condition( device_or_resource_busy );
