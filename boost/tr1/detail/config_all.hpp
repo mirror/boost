@@ -46,6 +46,8 @@
 #     ifdef __SUNPRO_CC
          // can't use <../stlport/name> since some compilers put stlport in a different directory:
 #        define BOOST_TR1_STD_HEADER(name) <../stlport4/name>
+#     elif defined(__PGI)
+#        define BOOST_TR1_STD_HEADER(name) <../CC/name>
 #     else
 #        define BOOST_TR1_STD_HEADER(name) <../stlport/name>
 #     endif
@@ -89,6 +91,9 @@
 
 #if defined(__GNUC__) && !defined(BOOST_HAS_INCLUDE_NEXT)
 #  define BOOST_HAS_INCLUDE_NEXT
+#endif
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
+#  define BOOST_HAS_CPP_0X
 #endif
 
 //

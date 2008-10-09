@@ -92,7 +92,7 @@ int test_main(int, char*[])
       a1 = a2;
       validate("mt11213b", a2, 3809585648u);
       validate("mt11213b", a1, 3809585648u);
-      a1.seed(0u);
+      a1.seed(5489UL);
       validate("mt11213b", a1, 3809585648u);
       a1 = mt11213b(5489u);
       validate("mt11213b", a1, 3809585648u);

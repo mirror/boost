@@ -9,7 +9,12 @@
 #  include <boost/tr1/detail/config.hpp>
 
 #ifdef BOOST_HAS_TR1_RANDOM
-#  include BOOST_TR1_HEADER(random)
+#  ifdef BOOST_HAS_INCLUDE_NEXT
+#     include_next BOOST_TR1_HEADER(random)
+#  else
+#     include <boost/tr1/detail/config_all.hpp>
+#     include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(random))
+#  endif
 #else
 // Boost.Random:
 #include <boost/random.hpp>
@@ -133,7 +138,7 @@ public:
    // constructors and member function
    mersenne_twister(){}
    explicit mersenne_twister(unsigned long value)
-      : m_gen(value == 0 ? 4357UL : value){}
+      : m_gen(value == 0 ? 5489UL : value){}
    template<class Gen> mersenne_twister(Gen& g)
    {
       init1(g, ::boost::is_same<mersenne_twister,Gen>());

@@ -1337,16 +1337,142 @@ No known problems.
 
 [endsect]
 
+[section:unordered_set Unordered Associative Set (Hash Table).]
+
+   #include <boost/tr1/unordered_set.hpp>
+   
+or
+
+   #include <unordered_set>
+
+For accessing data based on key lookup, the C++ standard library 
+offers std::set, std::map, std::multiset  and std::multimap. 
+These are generally implemented using balanced binary trees so that 
+lookup time has logarithmic complexity. That is generally okay, 
+but in many cases a hash table can perform better, as accessing 
+data has constant complexity, on average. The worst case complexity 
+is linear, but that occurs rarely and with some care, can be avoided.
+
+With this in mind, the C++ Standard Library Technical Report 
+introduced the unordered associative containers, which are 
+implemented using hash tables, and they have now been added to 
+the Working Draft of the C++ Standard.  
+
+Refer to the 
+[@../../libs/unordered/index.html Unordered Library docs] 
+for more information.  
+   
+   namespace std {
+   namespace tr1 {
+
+   template <class Value, 
+            class Hash = hash<Value>, 
+            class Pred = std::equal_to<Value>,
+            class Alloc = std::allocator<Value> >
+   class unordered_set;
+
+   // [6.3.4.5] Class template unordered_multiset
+   template <class Value,
+            class Hash = hash<Value>,
+            class Pred = std::equal_to<Value>,
+            class Alloc = std::allocator<Value> >
+   class unordered_multiset;
+
+   template <class Value, class Hash, class Pred, class Alloc>
+   void swap(unordered_set<Value, Hash, Pred, Alloc>& x,
+            unordered_set<Value, Hash, Pred, Alloc>& y);
+             
+   template <class Value, class Hash, class Pred, class Alloc>
+   void swap(unordered_multiset<Value, Hash, Pred, Alloc>& x,
+            unordered_multiset<Value, Hash, Pred, Alloc>& y);
+
+   } // namespace tr1
+   } // namespace std
+
+[*Configuration:]
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_UNORDERED_SET if your
+standard library implements this part of TR1.
+
+[*Standard Conformity:]
+No known issues for conforming compilers.
+
 [endsect]
 
-[section:unsupported TR By Subject: Unsupported Features]
+[section:unordered_map Unordered Associative Map (Hash Table).]
+
+   #include <boost/tr1/unordered_map.hpp>
+   
+or
+
+   #include <unordered_map>
+   
+For accessing data based on key lookup, the C++ standard library 
+offers std::set, std::map, std::multiset  and std::multimap. 
+These are generally implemented using balanced binary trees so that 
+lookup time has logarithmic complexity. That is generally okay, 
+but in many cases a hash table can perform better, as accessing 
+data has constant complexity, on average. The worst case complexity 
+is linear, but that occurs rarely and with some care, can be avoided.
+
+With this in mind, the C++ Standard Library Technical Report 
+introduced the unordered associative containers, which are 
+implemented using hash tables, and they have now been added to 
+the Working Draft of the C++ Standard.  
+
+Refer to the 
+[@../../libs/unordered/index.html Unordered Library docs] 
+for more information.  
+
+   namespace std {
+   namespace tr1 {
+
+   // [6.3.4.4] Class template unordered_map
+   template <class Key,
+            class T,
+            class Hash = hash<Key>,
+            class Pred = std::equal_to<Key>,
+            class Alloc = std::allocator<std::pair<const Key, T> > >
+   class unordered_map;
+
+   // [6.3.4.6] Class template unordered_multimap
+   template <class Key,
+            class T,
+            class Hash = hash<Key>,
+            class Pred = std::equal_to<Key>,
+            class Alloc = std::allocator<std::pair<const Key, T> > >
+   class unordered_multimap;
+
+   template <class Key, class T, class Hash, class Pred, class Alloc>
+   void swap(unordered_map<Key, T, Hash, Pred, Alloc>& x,
+            unordered_map<Key, T, Hash, Pred, Alloc>& y);
+             
+   template <class Key, class T, class Hash, class Pred, class Alloc>
+   void swap(unordered_multimap<Key, T, Hash, Pred, Alloc>& x,
+            unordered_multimap<Key, T, Hash, Pred, Alloc>& y);
+
+   } // namespace tr1
+   } // namespace std
+
+[*Configuration:]
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_UNORDERED_MAP if your
+standard library implements this part of TR1.
+
+[*Standard Conformity:]
+No known issues for conforming compilers.
+
+[endsect]
 
 [section:special Mathematical Special Functions.]
 
 The TR adds 23 special functions (plus float and long double overloads)
-to header <cmath>.  However, at present there is no Boost License
-compatible implementation of these functions, so these are [*unsupported
-by this implementation] unless your standard library supports them itself.
+to header <cmath>.
+
+Refer to the 
+[@../../libs/math/doc/sf_and_dist/html/math_toolkit/main_overview/tr1.html Math Library docs] 
+for more information.  
+
    
    namespace std {
    namespace tr1 {
@@ -1473,109 +1599,264 @@ by this implementation] unless your standard library supports them itself.
 
 
 [*Standard Conformity:]
-['[*Not Supported.]]
+The following functions are not supported in the Boost version of this component:
+
+   // [5.2.1.7] confluent hypergeometric functions:
+   double conf_hyperg(double a, double c, double x);
+   float conf_hypergf(float a, float c, float x);
+   long double conf_hypergl(long double a, long double c, long double x);
+
+   // [5.2.1.17] hypergeometric functions:
+   double hyperg(double a, double b, double c, double x);
+   float hypergf(float a, float b, float c, float x);
+   long double hypergl(long double a, long double b, long double c, long double x);
 
 [endsect]
 
-[section:unordered_set Unordered Associative Set (Hash Table).]
+[section:c99_special C99 Mathematical Special Functions.]
 
-   #include <boost/tr1/unordered_set.hpp>
-   
-or
+The TR adds a number of special functions which were first introduced in the C99 standard
+to header <cmath>.
 
-   #include <unordered_set>
+Refer to the 
+[@../../libs/math/doc/sf_and_dist/html/math_toolkit/main_overview/tr1.html Math Library docs] 
+for more information.  
 
-This is not currently supported by Boost, although that situation is
-hoped to change soon.
    
    namespace std {
    namespace tr1 {
+   
+      // types
+      typedef floating-type double_t;
+      typedef floating-type float_t;
 
-   template <class Value, 
-            class Hash = hash<Value>, 
-            class Pred = std::equal_to<Value>,
-            class Alloc = std::allocator<Value> >
-   class unordered_set;
+      // functions
+      double acosh(double x);
+      float acoshf(float x);
+      long double acoshl(long double x);
 
-   // [6.3.4.5] Class template unordered_multiset
-   template <class Value,
-            class Hash = hash<Value>,
-            class Pred = std::equal_to<Value>,
-            class Alloc = std::allocator<Value> >
-   class unordered_multiset;
+      double asinh(double x);
+      float asinhf(float x);
+      long double asinhl(long double x);
 
-   template <class Value, class Hash, class Pred, class Alloc>
-   void swap(unordered_set<Value, Hash, Pred, Alloc>& x,
-            unordered_set<Value, Hash, Pred, Alloc>& y);
-             
-   template <class Value, class Hash, class Pred, class Alloc>
-   void swap(unordered_multiset<Value, Hash, Pred, Alloc>& x,
-            unordered_multiset<Value, Hash, Pred, Alloc>& y);
+      double atanh(double x);
+      float atanhf(float x);
+      long double atanhl(long double x);
 
-   } // namespace tr1
-   } // namespace std
+      double cbrt(double x);
+      float cbrtf(float x);
+      long double cbrtl(long double x);
 
-[*Configuration:]
-[@../../libs/config/index.html Boost.Config] should (automatically) define
-the macro BOOST_HAS_TR1_UNORDERED_SET if your
-standard library implements this part of TR1.
+      double copysign(double x, double y);
+      float copysignf(float x, float y);
+      long double copysignl(long double x, long double y);
+
+      double erf(double x);
+      float erff(float x);
+      long double erfl(long double x);
+
+      double erfc(double x);
+      float erfcf(float x);
+      long double erfcl(long double x);
+
+      double exp2(double x);
+      float exp2f(float x);
+      long double exp2l(long double x);
+
+      double expm1(double x);
+      float expm1f(float x);
+      long double expm1l(long double x);
+
+      double fdim(double x, double y);
+      float fdimf(float x, float y);
+      long double fdiml(long double x, long double y);
+
+      double fma(double x, double y, double z);
+      float fmaf(float x, float y, float z);
+      long double fmal(long double x, long double y, long double z);
+
+      double fmax(double x, double y);
+      float fmaxf(float x, float y);
+      long double fmaxl(long double x, long double y);
+
+      double fmin(double x, double y);
+      float fminf(float x, float y);
+      long double fminl(long double x, long double y);
+
+      double hypot(double x, double y);
+      float hypotf(float x, float y);
+      long double hypotl(long double x, long double y);
+
+      int ilogb(double x);
+      int ilogbf(float x);
+      int ilogbl(long double x);
+
+      double lgamma(double x);
+      float lgammaf(float x);
+      long double lgammal(long double x);
+
+      long long llrint(double x);
+      long long llrintf(float x);
+      long long llrintl(long double x);
+
+      long long llround(double x);
+      long long llroundf(float x);
+      long long llroundl(long double x);
+
+      double log1p(double x);
+      float log1pf(float x);
+      long double log1pl(long double x);
+
+      double log2(double x);
+      float log2f(float x);
+      long double log2l(long double x);
+
+      double logb(double x);
+      float logbf(float x);
+      long double logbl(long double x);
+
+      long lrint(double x);
+      long lrintf(float x);
+      long lrintl(long double x);
+
+      long lround(double x);
+      long lroundf(float x);
+      long lroundl(long double x);
+
+      double nan(const char *str);
+      float nanf(const char *str);
+      long double nanl(const char *str);
+
+      double nearbyint(double x);
+      float nearbyintf(float x);
+      long double nearbyintl(long double x);
+
+      double nextafter(double x, double y);
+      float nextafterf(float x, float y);
+      long double nextafterl(long double x, long double y);
+
+      double nexttoward(double x, long double y);
+      float nexttowardf(float x, long double y);
+      long double nexttowardl(long double x, long double y);
+
+      double remainder(double x, double y);
+      float remainderf(float x, float y);
+      long double remainderl(long double x, long double y);
+
+      double remquo(double x, double y, int *pquo);
+      float remquof(float x, float y, int *pquo);
+      long double remquol(long double x, long double y, int *pquo);
+
+      double rint(double x);
+      float rintf(float x);
+      long double rintl(long double x);
+
+      double round(double x);
+      float roundf(float x);
+      long double roundl(long double x);
+
+      double scalbln(double x, long ex);
+      float scalblnf(float x, long ex);
+      long double scalblnl(long double x, long ex);
+      double scalbn(double x, int ex);
+      float scalbnf(float x, int ex);
+      long double scalbnl(long double x, int ex);
+
+      double tgamma(double x);
+      float tgammaf(float x);
+      long double tgammal(long double x);
+
+      double trunc(double x);
+      float truncf(float x);
+      long double truncl(long double x);
+
+      // C99 macros defined as C++ templates
+      template<class T> bool signbit(T x);
+      template<class T> int fpclassify(T x);
+      template<class T> bool isfinite(T x);
+      template<class T> bool isinf(T x);
+      template<class T> bool isnan(T x);
+      template<class T> bool isnormal(T x);
+      template<class T> bool isgreater(T x, T y);
+      template<class T> bool isgreaterequal(T x, T y);
+      template<class T> bool isless(T x, T y);
+      template<class T> bool islessequal(T x, T y);
+      template<class T> bool islessgreater(T x, T y);
+      template<class T> bool isunordered(T x, T y);
+
+   }} // namespaces
 
 [*Standard Conformity:]
-Not supported.
+The following functions are not supported in the Boost version of this component:
+
+      double exp2(double x);
+      float exp2f(float x);
+      long double exp2l(long double x);
+
+      double fdim(double x, double y);
+      float fdimf(float x, float y);
+      long double fdiml(long double x, long double y);
+
+      double fma(double x, double y, double z);
+      float fmaf(float x, float y, float z);
+      long double fmal(long double x, long double y, long double z);
+
+      int ilogb(double x);
+      int ilogbf(float x);
+      int ilogbl(long double x);
+
+      long long llrint(double x);
+      long long llrintf(float x);
+      long long llrintl(long double x);
+
+      double log2(double x);
+      float log2f(float x);
+      long double log2l(long double x);
+
+      double logb(double x);
+      float logbf(float x);
+      long double logbl(long double x);
+
+      long lrint(double x);
+      long lrintf(float x);
+      long lrintl(long double x);
+
+      double nan(const char *str);
+      float nanf(const char *str);
+      long double nanl(const char *str);
+
+      double nearbyint(double x);
+      float nearbyintf(float x);
+      long double nearbyintl(long double x);
+
+      double remainder(double x, double y);
+      float remainderf(float x, float y);
+      long double remainderl(long double x, long double y);
+
+      double remquo(double x, double y, int *pquo);
+      float remquof(float x, float y, int *pquo);
+      long double remquol(long double x, long double y, int *pquo);
+
+      double rint(double x);
+      float rintf(float x);
+      long double rintl(long double x);
+
+      double scalbln(double x, long ex);
+      float scalblnf(float x, long ex);
+      long double scalblnl(long double x, long ex);
+      double scalbn(double x, int ex);
+      float scalbnf(float x, int ex);
+      long double scalbnl(long double x, int ex);
+
+      // C99 macros defined as C++ templates
+      template<class T> bool isgreater(T x, T y);
+      template<class T> bool isgreaterequal(T x, T y);
+      template<class T> bool isless(T x, T y);
+      template<class T> bool islessequal(T x, T y);
+      template<class T> bool islessgreater(T x, T y);
+      template<class T> bool isunordered(T x, T y);
 
 [endsect]
-
-[section:unordered_map Unordered Associative Map (Hash Table).]
-
-   #include <boost/tr1/unordered_map.hpp>
-   
-or
-
-   #include <unordered_map>
-   
-This is not currently supported by Boost, although that situation is
-hoped to change soon.
-   
-   namespace std {
-   namespace tr1 {
-
-   // [6.3.4.4] Class template unordered_map
-   template <class Key,
-            class T,
-            class Hash = hash<Key>,
-            class Pred = std::equal_to<Key>,
-            class Alloc = std::allocator<std::pair<const Key, T> > >
-   class unordered_map;
-
-   // [6.3.4.6] Class template unordered_multimap
-   template <class Key,
-            class T,
-            class Hash = hash<Key>,
-            class Pred = std::equal_to<Key>,
-            class Alloc = std::allocator<std::pair<const Key, T> > >
-   class unordered_multimap;
-
-   template <class Key, class T, class Hash, class Pred, class Alloc>
-   void swap(unordered_map<Key, T, Hash, Pred, Alloc>& x,
-            unordered_map<Key, T, Hash, Pred, Alloc>& y);
-             
-   template <class Key, class T, class Hash, class Pred, class Alloc>
-   void swap(unordered_multimap<Key, T, Hash, Pred, Alloc>& x,
-            unordered_multimap<Key, T, Hash, Pred, Alloc>& y);
-
-   } // namespace tr1
-   } // namespace std
-
-[*Configuration:]
-[@../../libs/config/index.html Boost.Config] should (automatically) define
-the macro BOOST_HAS_TR1_UNORDERED_MAP if your
-standard library implements this part of TR1.
-
-[*Standard Conformity:]
-Not supported.
-
-[endsect]
-
 [endsect]
 
 [section:header_list TR1 By Header]
