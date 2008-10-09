@@ -39,11 +39,20 @@ struct type_compare
     }
 };
 
-typedef std::multiset<
-    const extended_type_info_typeid_0 *,
-    type_compare
-> tkmap;
-    
+struct tkmap :
+    public std::multiset<const extended_type_info_typeid_0 *,type_compare>
+{
+    static bool m_destroyed;
+    static bool is_destroyed(){
+        return m_destroyed;
+    }
+    ~tkmap(){
+        m_destroyed = true;
+    }
+};
+
+bool tkmap::m_destroyed = false;
+
 BOOST_SERIALIZATION_DECL(bool) 
 extended_type_info_typeid_0::is_less_than(
     const boost::serialization::extended_type_info & rhs
@@ -82,21 +91,21 @@ extended_type_info_typeid_0::type_register(const std::type_info & ti){
 BOOST_SERIALIZATION_DECL(void) 
 extended_type_info_typeid_0::type_unregister()
 {
-    if(NULL == m_ti){
-        if(! singleton<tkmap>::is_destroyed()){
-            tkmap & x = singleton<tkmap>::get_mutable_instance();
-            tkmap::iterator start = x.lower_bound(this);
-            tkmap::iterator end = x.upper_bound(this);
-            assert(start != end);
+    if(NULL == m_ti)
+        return;
+    if(! tkmap::is_destroyed()){
+        tkmap & x = singleton<tkmap>::get_mutable_instance();
+        tkmap::iterator start = x.lower_bound(this);
+        tkmap::iterator end = x.upper_bound(this);
+        assert(start != end);
 
-            // remove entry in map which corresponds to this type
-            do{
-            if(this == *start)
-            	x.erase(start++);
-     	    else
-                ++start;
-            }while(start != end);
-        }
+        // remove entry in map which corresponds to this type
+        do{
+        if(this == *start)
+            x.erase(start++);
+     	else
+            ++start;
+        }while(start != end);
     }
     m_ti = NULL;
 }

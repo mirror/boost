@@ -58,7 +58,19 @@ struct key_compare
     }
 };
 
-typedef std::multiset<const extended_type_info *, key_compare> ktmap;
+struct ktmap : 
+    public std::multiset<const extended_type_info *, key_compare>
+{
+    static bool m_destroyed;
+    static bool is_destroyed(){
+        return m_destroyed;
+    }
+    ~ktmap(){
+        m_destroyed = true;
+    }
+};
+
+bool ktmap::m_destroyed = false;
 
 class extended_type_info_arg : public extended_type_info
 {
@@ -85,7 +97,7 @@ extended_type_info::key_register(const char *key) {
 BOOST_SERIALIZATION_DECL(void)  
 extended_type_info::key_unregister() {
     assert(NULL != m_key);
-    if(! singleton<detail::ktmap>::is_destroyed()){
+    if(detail::ktmap::is_destroyed()){
         detail::ktmap & x = singleton<detail::ktmap>::get_mutable_instance();
         detail::ktmap::iterator start = x.lower_bound(this);
         detail::ktmap::iterator end = x.upper_bound(this);
@@ -96,7 +108,7 @@ extended_type_info::key_unregister() {
             if(this == *start)
                 x.erase(start++);
             else
-		    ++start;
+		        ++start;
         }while(start != end);
     }
     m_key = NULL;
