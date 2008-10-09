@@ -60,7 +60,7 @@
 #  endif
 
 // Dinkumware.
-#elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
+#elif ((defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)) && !defined(__BORLANDC__)
 // Some versions of Visual C++ don't seem to have the C++ overloads but they
 // all seem to have the c99 float overloads
 #  if defined(BOOST_MSVC)
