@@ -11,7 +11,7 @@
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-// $HeadURL$
+// $Id$
 // $Date$
 // $Revision$
 
