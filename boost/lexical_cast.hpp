@@ -698,9 +698,9 @@ namespace boost
 
         public:
 
-            lexical_stream_limited_src(CharT* start, CharT* finish)
-              : start(start)
-              , finish(finish)
+            lexical_stream_limited_src(CharT* sta, CharT* fin)
+              : start(sta)
+              , finish(fin)
             {}
 
         public: // output
