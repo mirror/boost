@@ -44,7 +44,7 @@
 #if defined(BOOST_NO_STRINGSTREAM) || \
     defined(BOOST_NO_STD_WSTRING) || \
     defined(BOOST_NO_STD_LOCALE) 
-#define DISABLE_WIDE_CHAR_SUPPORT
+#define BOOST_LCAST_NO_WCHAR_T
 #endif
 
 namespace boost
@@ -106,7 +106,7 @@ namespace boost
         };
 #endif
 
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#ifndef BOOST_LCAST_NO_WCHAR_T
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
         template<>
         struct stream_char<wchar_t>
@@ -231,7 +231,7 @@ namespace boost
         // lcast_src_length<char, signed char const*>
         // lcast_src_length<char, unsigned char const*>
 
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#ifndef BOOST_LCAST_NO_WCHAR_T
         template<>
         struct lcast_src_length<wchar_t, bool>
         {
@@ -270,7 +270,7 @@ namespace boost
             static void check_coverage() {}
         };
 
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#ifndef BOOST_LCAST_NO_WCHAR_T
         template<>
         struct lcast_src_length<wchar_t, wchar_t const*>
         {
@@ -301,7 +301,7 @@ namespace boost
             static void check_coverage() {}
         };
 
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#ifndef BOOST_LCAST_NO_WCHAR_T
         template<>
         struct lcast_src_length< wchar_t, std::basic_string<wchar_t> >
         {
@@ -339,34 +339,35 @@ namespace boost
 #endif
         };
 
-#define BOOST_AUX_LEXICAL_CAST_DEF1(CharT, T) template<>             \
-    struct lcast_src_length<CharT, T> : lcast_src_length_integral<T> \
+#define BOOST_LCAST_DEF1(CharT, T)               \
+    template<> struct lcast_src_length<CharT, T> \
+        : lcast_src_length_integral<T>           \
     { static void check_coverage() {} };
 
-#ifdef DISABLE_WIDE_CHAR_SUPPORT
-#define BOOST_AUX_LEXICAL_CAST_DEF(T) BOOST_AUX_LEXICAL_CAST_DEF1(char, T)
+#ifdef BOOST_LCAST_NO_WCHAR_T
+#define BOOST_LCAST_DEF(T) BOOST_LCAST_DEF1(char, T)
 #else
-#define BOOST_AUX_LEXICAL_CAST_DEF(T)          \
-        BOOST_AUX_LEXICAL_CAST_DEF1(char, T)   \
-        BOOST_AUX_LEXICAL_CAST_DEF1(wchar_t, T)
+#define BOOST_LCAST_DEF(T)          \
+        BOOST_LCAST_DEF1(char, T)   \
+        BOOST_LCAST_DEF1(wchar_t, T)
 #endif
 
-        BOOST_AUX_LEXICAL_CAST_DEF(short)
-        BOOST_AUX_LEXICAL_CAST_DEF(unsigned short)
-        BOOST_AUX_LEXICAL_CAST_DEF(int)
-        BOOST_AUX_LEXICAL_CAST_DEF(unsigned int)
-        BOOST_AUX_LEXICAL_CAST_DEF(long)
-        BOOST_AUX_LEXICAL_CAST_DEF(unsigned long)
+        BOOST_LCAST_DEF(short)
+        BOOST_LCAST_DEF(unsigned short)
+        BOOST_LCAST_DEF(int)
+        BOOST_LCAST_DEF(unsigned int)
+        BOOST_LCAST_DEF(long)
+        BOOST_LCAST_DEF(unsigned long)
 #if defined(BOOST_HAS_LONG_LONG)
-        BOOST_AUX_LEXICAL_CAST_DEF(boost::ulong_long_type)
-        BOOST_AUX_LEXICAL_CAST_DEF(boost::long_long_type )
+        BOOST_LCAST_DEF(boost::ulong_long_type)
+        BOOST_LCAST_DEF(boost::long_long_type )
 #elif defined(BOOST_HAS_MS_INT64)
-        BOOST_AUX_LEXICAL_CAST_DEF(unsigned __int64)
-        BOOST_AUX_LEXICAL_CAST_DEF(         __int64)
+        BOOST_LCAST_DEF(unsigned __int64)
+        BOOST_LCAST_DEF(         __int64)
 #endif
 
-#undef BOOST_AUX_LEXICAL_CAST_DEF
-#undef BOOST_AUX_LEXICAL_CAST_DEF1
+#undef BOOST_LCAST_DEF
+#undef BOOST_LCAST_DEF1
 
 #ifndef BOOST_LCAST_NO_COMPILE_TIME_PRECISION
         // Helper for floating point types.
@@ -412,7 +413,7 @@ namespace boost
             static void check_coverage() {}
         };
 
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#ifndef BOOST_LCAST_NO_WCHAR_T
     template<>
     struct lcast_src_length<wchar_t,float>
       : lcast_src_length_floating<float>
@@ -434,7 +435,7 @@ namespace boost
         static void check_coverage() {}
     };
 
-#endif // #ifndef DISABLE_WIDE_CHAR_SUPPORT
+#endif // #ifndef BOOST_LCAST_NO_WCHAR_T
 #endif // #ifndef BOOST_LCAST_NO_COMPILE_TIME_PRECISION
     }
 
@@ -449,7 +450,7 @@ namespace boost
             BOOST_STATIC_CONSTANT(char, minus = '-');
         };
 
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#ifndef BOOST_LCAST_NO_WCHAR_T
         template<>
         struct lcast_char_constants<wchar_t>
         {
@@ -608,7 +609,7 @@ namespace boost
                 stream.str().swap(output);
                 return true;
             }
-            #ifndef DISABLE_WIDE_CHAR_SUPPORT
+            #ifndef BOOST_LCAST_NO_WCHAR_T
             bool operator>>(std::wstring &output)
             {
                 stream.str().swap(output);
@@ -664,7 +665,7 @@ namespace boost
                 Traits::assign(*p, ch);
             }
 
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#ifndef BOOST_LCAST_NO_WCHAR_T
             static void widen_and_assign(wchar_t* p, char ch)
             {
                 // TODO: use BOOST_NO_STD_LOCALE
@@ -715,7 +716,7 @@ namespace boost
 
             bool operator<<(bool);
             bool operator<<(char);
-#if !defined(DISABLE_WIDE_CHAR_SUPPORT) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
             bool operator<<(wchar_t);
 #endif
             bool operator<<(CharT const*);
@@ -780,7 +781,7 @@ namespace boost
 
             bool operator>>(std::string&);
 
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#ifndef BOOST_LCAST_NO_WCHAR_T
             bool operator>>(std::wstring&);
 #endif
 
@@ -815,7 +816,7 @@ namespace boost
             return true;
         }
 
-#if !defined(DISABLE_WIDE_CHAR_SUPPORT) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
         template<typename CharT, class Base, class Traits>
         inline bool lexical_stream_limited_src<CharT,Base,Traits>::operator<<(
                 wchar_t ch)
@@ -989,7 +990,7 @@ namespace boost
             return true;
         }
 
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#ifndef BOOST_LCAST_NO_WCHAR_T
         template<typename CharT, class Base, class Traits>
         inline bool lexical_stream_limited_src<CharT,Base,Traits>::operator>>(
                 std::wstring& str)
@@ -1044,7 +1045,7 @@ namespace boost
             BOOST_STATIC_CONSTANT(bool, value = false);
         };
 
-#if !defined(DISABLE_WIDE_CHAR_SUPPORT) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
         template<>
         struct lcast_streambuf_for_target<wchar_t>
         {
@@ -1060,7 +1061,7 @@ namespace boost
             BOOST_STATIC_CONSTANT(bool, value = false);
         };
 
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#ifndef BOOST_LCAST_NO_WCHAR_T
         template<class Traits, class Alloc>
         struct lcast_streambuf_for_target<
                     std::basic_string<wchar_t,Traits,Alloc> >
@@ -1075,7 +1076,7 @@ namespace boost
             BOOST_STATIC_CONSTANT(bool, value = false);
         };
 
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#ifndef BOOST_LCAST_NO_WCHAR_T
         template<>
         struct lcast_streambuf_for_target<std::wstring>
         {
@@ -1196,5 +1197,5 @@ namespace boost
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#undef DISABLE_WIDE_CHAR_SUPPORT
+#undef BOOST_LCAST_NO_WCHAR_T
 #endif
