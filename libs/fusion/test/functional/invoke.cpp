@@ -1,8 +1,8 @@
 /*=============================================================================
-    Copyright (c) 2005-2006 João Abecasis
+    Copyright (c) 2005-2006 Joao Abecasis
     Copyright (c) 2006-2007 Tobias Schwinger
-  
-    Use modification and distribution are subject to the Boost Software 
+
+    Use modification and distribution are subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt).
 ==============================================================================*/
@@ -127,10 +127,10 @@ class members
 {
   public:
     int data;
- 
+
     members()
         : data(20)
-    { } 
+    { }
 
     int nullary() { return data + 1; }
     int nullary_c() const { return data + 2; }
@@ -340,17 +340,17 @@ void result_type_tests()
     using boost::is_same;
 
     BOOST_TEST(( is_same<
-      fusion::result_of::invoke<int (*)(), fusion::vector0 >::type, int 
+      fusion::result_of::invoke<int (*)(), fusion::vector0 >::type, int
     >::value ));
 // disabled until boost::result_of supports it
 //    BOOST_TEST(( is_same<
-//      fusion::result_of::invoke<int (*)(...), fusion::vector1<int> >::type, int 
+//      fusion::result_of::invoke<int (*)(...), fusion::vector1<int> >::type, int
 //    >::value ));
-    BOOST_TEST(( is_same< 
-      fusion::result_of::invoke<int (members::*)(), fusion::vector1<members*> >::type, int 
+    BOOST_TEST(( is_same<
+      fusion::result_of::invoke<int (members::*)(), fusion::vector1<members*> >::type, int
     >::value ));
 // disabled until boost::result_of supports it
-//    BOOST_TEST(( is_same< 
+//    BOOST_TEST(( is_same<
 //      fusion::result_of::invoke<int (members::*)(...), fusion::vector2<members*,int> >::type, int
 //    >::value ));
 }

@@ -1,8 +1,8 @@
 /*=============================================================================
-    Copyright (c) 2005-2006 João Abecasis
+    Copyright (c) 2005-2006 Joao Abecasis
     Copyright (c) 2006-2007 Tobias Schwinger
-  
-    Use modification and distribution are subject to the Boost Software 
+
+    Use modification and distribution are subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt).
 ==============================================================================*/
@@ -41,7 +41,7 @@ struct object_nc : boost::noncopyable {};
 struct fobj
 {
     // Handle nullary separately to exercise result_of support
-    template <typename Sig> 
+    template <typename Sig>
     struct result;
 
     template <class Self, typename T0>
@@ -97,7 +97,7 @@ struct fobj_nc
     {
         typedef int type;
     };
-    
+
     int operator()(int i)       { return 14 + i; }
     int operator()(int i) const { return 15 + i; }
 };
