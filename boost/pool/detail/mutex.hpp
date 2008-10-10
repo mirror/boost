@@ -64,23 +64,23 @@ namespace pool {
 class win32_mutex
 {
   private:
-    CRITICAL_SECTION mtx;
+    ::CRITICAL_SECTION mtx;
 
     win32_mutex(const win32_mutex &);
     void operator=(const win32_mutex &);
 
   public:
     win32_mutex()
-    { InitializeCriticalSection(&mtx); }
+    { ::InitializeCriticalSection(&mtx); }
 
     ~win32_mutex()
-    { DeleteCriticalSection(&mtx); }
+    { ::DeleteCriticalSection(&mtx); }
 
     void lock()
-    { EnterCriticalSection(&mtx); }
+    { ::EnterCriticalSection(&mtx); }
 
     void unlock()
-    { LeaveCriticalSection(&mtx); }
+    { ::LeaveCriticalSection(&mtx); }
 };
 
 #endif // defined(BOOST_WINDOWS)
@@ -90,23 +90,23 @@ class win32_mutex
 class pthread_mutex
 {
   private:
-    pthread_mutex_t mtx;
+    ::pthread_mutex_t mtx;
 
     pthread_mutex(const pthread_mutex &);
     void operator=(const pthread_mutex &);
 
   public:
     pthread_mutex()
-    { pthread_mutex_init(&mtx, 0); }
+    { ::pthread_mutex_init(&mtx, 0); }
 
     ~pthread_mutex()
-    { pthread_mutex_destroy(&mtx); }
+    { ::pthread_mutex_destroy(&mtx); }
 
     void lock()
-    { pthread_mutex_lock(&mtx); }
+    { ::pthread_mutex_lock(&mtx); }
 
     void unlock()
-    { pthread_mutex_unlock(&mtx); }
+    { ::pthread_mutex_unlock(&mtx); }
 };
 
 #endif // defined(_POSIX_THREADS) || defined(BOOST_HAS_PTHREADS)
