@@ -16,16 +16,6 @@ template<
     >
 struct apply_wrap_impl0;
 
-template< typename F, bool F_has_apply >
-struct apply_wrap_impl0_bcb {
-    typedef typename F::template apply<na> type;
-};
-
-template< typename F >
-struct apply_wrap_impl0_bcb< F,true > {
-    typedef typename F::apply type;
-};
-
 template<
       typename F
     >
@@ -35,7 +25,12 @@ struct apply_wrap_impl0<
        
         >
 {
-    typedef apply_wrap_impl0_bcb< F, aux::has_apply<F>::value >::type type;
+    typedef typename F::template apply<
+         
+/// since the defaults are "lost", we have to pass *something* even for nullary
+/// metafunction classes
+        na
+        > type;
 };
 
 template<

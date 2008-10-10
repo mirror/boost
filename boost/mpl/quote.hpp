@@ -6,7 +6,7 @@
 #ifndef BOOST_MPL_QUOTE_HPP_INCLUDED
 #define BOOST_MPL_QUOTE_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright Aleksey Gurtovoy 2000-2008
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -23,9 +23,11 @@
 #   include <boost/mpl/aux_/has_type.hpp>
 #endif
 
+#include <boost/mpl/aux_/config/bcc.hpp>
 #include <boost/mpl/aux_/config/ttp.hpp>
 
-#if defined(BOOST_MPL_CFG_NO_TEMPLATE_TEMPLATE_PARAMETERS) && !BOOST_WORKAROUND( __BORLANDC__, >=0x590 )
+#if defined(BOOST_MPL_CFG_NO_TEMPLATE_TEMPLATE_PARAMETERS) \
+    && !defined(BOOST_MPL_CFG_BCC590_WORKAROUNDS)
 #   define BOOST_MPL_CFG_NO_QUOTE_TEMPLATE
 #endif
 
@@ -123,7 +125,7 @@ template<
 struct BOOST_PP_CAT(quote,i_)
 {
     template< BOOST_MPL_PP_PARAMS(i_, typename U) > struct apply
-#if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x590 ))
+#if defined(BOOST_MPL_CFG_BCC590_WORKAROUNDS)
     {
         typedef typename quote_impl<
               F< BOOST_MPL_PP_PARAMS(i_, U) >
