@@ -5,7 +5,7 @@
 
 ///// header body
 
-// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright Aleksey Gurtovoy 2000-2008
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -124,9 +124,13 @@ namespace boost { namespace mpl {
     BOOST_PP_ENUM_PARAMS(n, AUX778076_SEQUENCE_TEMPLATE_PARAM) \
     /**/
 
+#   if !defined(AUX778076_SEQUENCE_CONVERT_CN_TO)
+#       define AUX778076_SEQUENCE_CONVERT_CN_TO(z,n,TARGET) BOOST_PP_CAT(C,n)
+#   endif
+
 #   define AUX778076_SEQUENCE_N_ARGS(n) \
     T BOOST_PP_COMMA_IF(n) \
-    BOOST_PP_ENUM_PARAMS(n,C) \
+    BOOST_PP_ENUM(n,AUX778076_SEQUENCE_CONVERT_CN_TO,T) \
     /**/
 
 #   define AUX778076_SEQUENCE_N_PARTIAL_SPEC_ARGS(n) \
@@ -204,6 +208,7 @@ struct AUX778076_SEQUENCE_NAME
 
 #   undef AUX778076_SEQUENCE_N_PARTIAL_SPEC_ARGS
 #   undef AUX778076_SEQUENCE_N_ARGS
+#   undef AUX778076_SEQUENCE_CONVERT_CN_TO
 #   undef AUX778076_SEQUENCE_N_PARAMS
 #   undef AUX778076_SEQUENCE_DEFAULT_PARAMS
 #   undef AUX778076_SEQUENCE_ARGS
