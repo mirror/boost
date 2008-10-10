@@ -1,24 +1,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Improved
-    numeric_cast&lt;&gt;</title>
+<title>Improved numeric_cast&lt;&gt;</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
 <link rel="start" href="../index.html" title="Chapter 1. Boost.NumericConversion">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.NumericConversion">
-<link rel="prev" href="numeric_converter_policy_classes.html" title="Numeric
-    Converter Policy Classes">
-<link rel="next" href="../numeric_conversion/history_and_acknowledgments.html" title="History
-    and Acknowledgments">
+<link rel="prev" href="numeric_converter_policy_classes.html" title="Numeric Converter Policy Classes">
+<link rel="next" href="../numeric_conversion/history_and_acknowledgments.html" title="History and Acknowledgments">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,8 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_numericconversion.improved_numeric_cast__"></a><a href="improved_numeric_cast__.html" title="Improved
-    numeric_cast&lt;&gt;">Improved
+<a name="boost_numericconversion.improved_numeric_cast__"></a><a class="link" href="improved_numeric_cast__.html" title="Improved numeric_cast&lt;&gt;">Improved
     numeric_cast&lt;&gt;</a>
 </h2></div></div></div>
 <div class="toc"><dl>
@@ -38,12 +34,12 @@
 </dl></div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_numericconversion.improved_numeric_cast__.introduction"></a><a href="improved_numeric_cast__.html#boost_numericconversion.improved_numeric_cast__.introduction" title="Introduction">Introduction</a>
+<a name="boost_numericconversion.improved_numeric_cast__.introduction"></a><a class="link" href="improved_numeric_cast__.html#boost_numericconversion.improved_numeric_cast__.introduction" title="Introduction">Introduction</a>
 </h3></div></div></div>
 <p>
         The lack of preservation of range makes conversions between numeric types
         error prone. This is true for both implicit conversions and explicit conversions
-        (through <code class="computeroutput"><span class="keyword">static_cast</span></code>). <a href="improved_numeric_cast__.html#numeric_conversion_numeric_cast"><code class="computeroutput"><span class="identifier">numeric_cast</span></code></a>
+        (through <code class="computeroutput"><span class="keyword">static_cast</span></code>). <a class="link" href="improved_numeric_cast__.html#numeric_conversion_numeric_cast"><code class="computeroutput"><span class="identifier">numeric_cast</span></code></a>
         detects loss of range when a numeric type is converted, and throws an exception
         if the range cannot be preserved.
       </p>
@@ -84,10 +80,9 @@
     </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_numericconversion.improved_numeric_cast__.numeric_cast"></a><a href="improved_numeric_cast__.html#boost_numericconversion.improved_numeric_cast__.numeric_cast" title="numeric_cast">numeric_cast</a>
+<a name="boost_numericconversion.improved_numeric_cast__.numeric_cast"></a><a class="link" href="improved_numeric_cast__.html#boost_numericconversion.improved_numeric_cast__.numeric_cast" title="numeric_cast">numeric_cast</a>
 </h3></div></div></div>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Target</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Source</span><span class="special">&gt;</span> <span class="keyword">inline</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Target</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Source</span><span class="special">&gt;</span> <span class="keyword">inline</span>
 <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">numeric</span><span class="special">::</span><span class="identifier">converter</span><span class="special">&lt;</span><span class="identifier">Target</span><span class="special">,</span><span class="identifier">Source</span><span class="special">&gt;::</span><span class="identifier">result_type</span>
 <span class="identifier">numeric_cast</span> <span class="special">(</span> <span class="identifier">Source</span> <span class="identifier">arg</span> <span class="special">)</span>
 <span class="special">{</span>
@@ -97,15 +92,15 @@
 <p>
         <code class="computeroutput"><span class="identifier">numeric_cast</span></code> returns the
         result of converting a value of type Source to a value of type Target. If
-        out-of-range is detected, an exception is thrown (see <a href="numeric_converter_policy_classes.html#numeric_conversion_bad_numeric_cast">bad_numeric_cast</a>,
-        <a href="numeric_converter_policy_classes.html#numeric_conversion_negative_overflow">negative_overflow</a>
-        and <a href="numeric_converter_policy_classes.html#numeric_conversion_possitive_overflow">positive_overflow</a>
+        out-of-range is detected, an exception is thrown (see <a class="link" href="numeric_converter_policy_classes.html#numeric_conversion_bad_numeric_cast">bad_numeric_cast</a>,
+        <a class="link" href="numeric_converter_policy_classes.html#numeric_conversion_negative_overflow">negative_overflow</a>
+        and <a class="link" href="numeric_converter_policy_classes.html#numeric_conversion_possitive_overflow">positive_overflow</a>
         ).
       </p>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_numericconversion.improved_numeric_cast__.examples"></a><a href="improved_numeric_cast__.html#boost_numericconversion.improved_numeric_cast__.examples" title="Examples">Examples</a>
+<a name="boost_numericconversion.improved_numeric_cast__.examples"></a><a class="link" href="improved_numeric_cast__.html#boost_numericconversion.improved_numeric_cast__.examples" title="Examples">Examples</a>
 </h3></div></div></div>
 <p>
         The following example performs some typical conversions between numeric types:
@@ -118,8 +113,7 @@
           include &lt;iostream&gt;
         </li>
 </ol></div>
-<pre class="programlisting">
-<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
     <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">numeric_cast</span><span class="special">;</span>
 

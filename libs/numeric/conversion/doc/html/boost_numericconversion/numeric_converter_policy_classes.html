@@ -1,24 +1,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Numeric
-    Converter Policy Classes</title>
+<title>Numeric Converter Policy Classes</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
 <link rel="start" href="../index.html" title="Chapter 1. Boost.NumericConversion">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.NumericConversion">
-<link rel="prev" href="conversion_traits___traits_class.html" title="conversion_traits&lt;&gt;
-    traits class">
-<link rel="next" href="improved_numeric_cast__.html" title="Improved
-    numeric_cast&lt;&gt;">
+<link rel="prev" href="conversion_traits___traits_class.html" title="conversion_traits&lt;&gt; traits class">
+<link rel="next" href="improved_numeric_cast__.html" title="Improved numeric_cast&lt;&gt;">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,8 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_numericconversion.numeric_converter_policy_classes"></a><a href="numeric_converter_policy_classes.html" title="Numeric
-    Converter Policy Classes">Numeric
+<a name="boost_numericconversion.numeric_converter_policy_classes"></a><a class="link" href="numeric_converter_policy_classes.html" title="Numeric Converter Policy Classes">Numeric
     Converter Policy Classes</a>
 </h2></div></div></div>
 <div class="toc"><dl>
@@ -47,12 +43,10 @@
     </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_numericconversion.numeric_converter_policy_classes.enum_range_check_result"></a><a href="numeric_converter_policy_classes.html#boost_numericconversion.numeric_converter_policy_classes.enum_range_check_result" title="enum
-      range_check_result">enum
+<a name="boost_numericconversion.numeric_converter_policy_classes.enum_range_check_result"></a><a class="link" href="numeric_converter_policy_classes.html#boost_numericconversion.numeric_converter_policy_classes.enum_range_check_result" title="enum range_check_result">enum
       range_check_result</a>
 </h3></div></div></div>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">numeric</span> <span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">numeric</span> <span class="special">{</span>
 
     <span class="keyword">enum</span> <span class="identifier">range_check_result</span>
     <span class="special">{</span>
@@ -71,8 +65,7 @@
     </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_numericconversion.numeric_converter_policy_classes.policy_overflowhandler"></a><a href="numeric_converter_policy_classes.html#boost_numericconversion.numeric_converter_policy_classes.policy_overflowhandler" title="Policy
-      OverflowHandler">Policy
+<a name="boost_numericconversion.numeric_converter_policy_classes.policy_overflowhandler"></a><a class="link" href="numeric_converter_policy_classes.html#boost_numericconversion.numeric_converter_policy_classes.policy_overflowhandler" title="Policy OverflowHandler">Policy
       OverflowHandler</a>
 </h3></div></div></div>
 <p>
@@ -85,8 +78,7 @@
 <p>
         It must have the following interface (it does not has to be a template class):
       </p>
-<pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">YourOverflowHandlerPolicy</span>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">YourOverflowHandlerPolicy</span>
 <span class="special">{</span>
     <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()</span> <span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">range_check_result</span> <span class="special">)</span> <span class="special">;</span> <span class="comment">// throw bad_cast or derived
 </span><span class="special">}</span> <span class="special">;</span>
@@ -97,8 +89,7 @@
 <p>
         These are the two overflow handler classes provided by the library:
       </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">numeric</span> <span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">numeric</span> <span class="special">{</span>
 
     <span class="keyword">struct</span> <span class="identifier">def_overflow_handler</span>
     <span class="special">{</span>
@@ -121,11 +112,10 @@
 </pre>
 <p>
         And these are the Exception Classes thrown by the default overflow handler
-        <a href="numeric_converter_policy_classes.html#numeric_conversion_policy_overflow_handler_important_note">(see
+        <a class="link" href="numeric_converter_policy_classes.html#numeric_conversion_policy_overflow_handler_important_note">(see
         IMPORTANT note)</a>
       </p>
-<a name="numeric_conversion_bad_numeric_cast"></a><a name="numeric_conversion_negative_overflow"></a><a name="numeric_conversion_possitive_overflow"></a><pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">numeric</span> <span class="special">{</span>
+<a name="numeric_conversion_bad_numeric_cast"></a><a name="numeric_conversion_negative_overflow"></a><a name="numeric_conversion_possitive_overflow"></a><pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">numeric</span> <span class="special">{</span>
 
     
     <span class="keyword">class</span> <span class="identifier">bad_numeric_cast</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">bad_cast</span>
@@ -187,8 +177,7 @@
     </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_numericconversion.numeric_converter_policy_classes.policy_float2introunder"></a><a href="numeric_converter_policy_classes.html#boost_numericconversion.numeric_converter_policy_classes.policy_float2introunder" title="Policy
-      Float2IntRounder">Policy
+<a name="boost_numericconversion.numeric_converter_policy_classes.policy_float2introunder"></a><a class="link" href="numeric_converter_policy_classes.html#boost_numericconversion.numeric_converter_policy_classes.policy_float2introunder" title="Policy Float2IntRounder">Policy
       Float2IntRounder</a>
 </h3></div></div></div>
 <p>
@@ -201,8 +190,7 @@
 <p>
         The policy must have the following interface:
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">S</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">S</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">YourFloat2IntRounderPolicy</span>
 <span class="special">{</span>
     <span class="keyword">typedef</span> <span class="identifier">S</span>               <span class="identifier">source_type</span> <span class="special">;</span>
@@ -229,8 +217,7 @@
           objects.
         </p></td></tr>
 </table></div>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">numeric</span> <span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">numeric</span> <span class="special">{</span>
 
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">S</span><span class="special">&gt;</span>
@@ -287,8 +274,8 @@
 <span class="special">}</span> <span class="special">}</span> <span class="comment">// namespace numeric, namespace boost
 </span></pre>
 <a name="boost_numericconversion.numeric_converter_policy_classes.policy_float2introunder.math_functions_used_by_the_rounder_policies"></a><h5>
-<a name="id2634042"></a>
-        <a href="numeric_converter_policy_classes.html#boost_numericconversion.numeric_converter_policy_classes.policy_float2introunder.math_functions_used_by_the_rounder_policies">Math
+<a name="id2857201"></a>
+        <a class="link" href="numeric_converter_policy_classes.html#boost_numericconversion.numeric_converter_policy_classes.policy_float2introunder.math_functions_used_by_the_rounder_policies">Math
         Functions used by the rounder policies</a>
       </h5>
 <p>
@@ -306,7 +293,7 @@
         This technique allows the default rounder policies to be used directly with
         user defined types. The user only requires that suitable overloads of <code class="computeroutput"><span class="identifier">floor</span><span class="special">()</span></code>
         and <code class="computeroutput"><span class="identifier">ceil</span><span class="special">()</span></code>
-        be visible. See also <a href="../index.html#numeric_conversion_requirements">User
+        be visible. See also <a class="link" href="../index.html#numeric_conversion_requirements">User
         Defined Numeric Types</a> support.
       </p>
 </div>
@@ -314,8 +301,7 @@
     </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_numericconversion.numeric_converter_policy_classes.policy_rawconverter"></a><a href="numeric_converter_policy_classes.html#boost_numericconversion.numeric_converter_policy_classes.policy_rawconverter" title="Policy
-      RawConverter">Policy
+<a name="boost_numericconversion.numeric_converter_policy_classes.policy_rawconverter"></a><a class="link" href="numeric_converter_policy_classes.html#boost_numericconversion.numeric_converter_policy_classes.policy_rawconverter" title="Policy RawConverter">Policy
       RawConverter</a>
 </h3></div></div></div>
 <p>
@@ -327,8 +313,7 @@
 <p>
         The policy must have the following interface:
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">YourRawConverterPolicy</span>
 <span class="special">{</span>
     <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">Traits</span><span class="special">::</span><span class="identifier">result_type</span>   <span class="identifier">result_type</span>   <span class="special">;</span>
@@ -345,8 +330,7 @@
 <p>
         This is the only raw converter policy class provided by the library:
       </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">numeric</span> <span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">numeric</span> <span class="special">{</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">raw_numeric_converter</span>
@@ -367,8 +351,7 @@
     </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_numericconversion.numeric_converter_policy_classes.policy_userrangechecker"></a><a href="numeric_converter_policy_classes.html#boost_numericconversion.numeric_converter_policy_classes.policy_userrangechecker" title="Policy
-      UserRangeChecker">Policy
+<a name="boost_numericconversion.numeric_converter_policy_classes.policy_userrangechecker"></a><a class="link" href="numeric_converter_policy_classes.html#boost_numericconversion.numeric_converter_policy_classes.policy_userrangechecker" title="Policy UserRangeChecker">Policy
       UserRangeChecker</a>
 </h3></div></div></div>
 <p>
@@ -382,8 +365,7 @@
 <p>
         The policy must have the following interface:
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">YourRangeCheckerPolicy</span>
 <span class="special">{</span>
     <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">Traits</span><span class="special">::</span><span class="identifier">argument_type</span> <span class="identifier">argument_type</span> <span class="special">;</span>

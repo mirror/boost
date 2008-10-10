@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -34,8 +34,7 @@
       but also requires the existence of a fully constructed object, often temporary,
       just to follow the copy from:
     </p>
-<pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">X</span>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">X</span>
 <span class="special">{</span>
     <span class="identifier">X</span> <span class="special">(</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">:::</span><span class="identifier">string</span> <span class="special">)</span> <span class="special">;</span>
 <span class="special">}</span> <span class="special">;</span>
@@ -60,8 +59,7 @@
       object right in the container's storage. In this scheme, the user only needs
       to supply the arguments to the constructor to use in the wrapped object construction.
     </p>
-<pre class="programlisting">
-<span class="keyword">class</span> <span class="identifier">W</span>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">W</span>
 <span class="special">{</span>
     <span class="identifier">X</span> <span class="identifier">wrapped_</span> <span class="special">;</span>
 
@@ -94,8 +92,7 @@
 <p>
       For example, one member of this family looks like:
     </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span><span class="keyword">class</span> <span class="identifier">A0</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A1</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span><span class="keyword">class</span> <span class="identifier">A0</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A1</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">TypedInPlaceFactory2</span>
 <span class="special">{</span>
     <span class="identifier">A0</span> <span class="identifier">m_a0</span> <span class="special">;</span> <span class="identifier">A1</span> <span class="identifier">m_a1</span> <span class="special">;</span>
@@ -110,8 +107,7 @@
 <p>
       A wrapper class aware of this can use it as:
     </p>
-<pre class="programlisting">
-<span class="keyword">class</span> <span class="identifier">W</span>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">W</span>
 <span class="special">{</span>
     <span class="identifier">X</span> <span class="identifier">wrapped_</span> <span class="special">;</span>
 
@@ -150,8 +146,7 @@
       This library provides an overloaded set of helper template functions to construct
       these factories without requiring unnecessary template parameters:
     </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">A0</span><span class="special">,...,</span><span class="keyword">class</span> <span class="identifier">AN</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">A0</span><span class="special">,...,</span><span class="keyword">class</span> <span class="identifier">AN</span><span class="special">&gt;</span>
 <span class="identifier">InPlaceFactoryN</span> <span class="special">&lt;</span><span class="identifier">A0</span><span class="special">,...,</span><span class="identifier">AN</span><span class="special">&gt;</span> <span class="identifier">in_place</span> <span class="special">(</span> <span class="identifier">A0</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">a0</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">AN</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">aN</span><span class="special">)</span> <span class="special">;</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span><span class="keyword">class</span> <span class="identifier">A0</span><span class="special">,...,</span><span class="keyword">class</span> <span class="identifier">AN</span><span class="special">&gt;</span>
@@ -160,8 +155,7 @@
 <p>
       In-place factories can be used generically by the wrapper and user as follows:
     </p>
-<pre class="programlisting">
-<span class="keyword">class</span> <span class="identifier">W</span>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">W</span>
 <span class="special">{</span>
     <span class="identifier">X</span> <span class="identifier">wrapped_</span> <span class="special">;</span>
 

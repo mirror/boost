@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -33,7 +33,7 @@
     </p>
 <p>
       First, it is functionally similar to a tristate boolean (false,maybe,true)
-      &#8212;such as <a href="../../../../tribool/index.html" target="_top">boost::tribool</a>&#8212;
+      &#8212;such as <a href="../../../../../doc/html/tribool.html" target="_top">boost::tribool</a>&#8212;
       except that in a tristate boolean, the maybe state <span class="underline">represents
       a valid value</span>, unlike the corresponding state of an uninitialized
       <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">&gt;</span></code>. It
@@ -49,8 +49,7 @@
       lead to subtle errors due to the implicit <code class="computeroutput"><span class="keyword">bool</span></code>
       conversion:
     </p>
-<pre class="programlisting">
-<span class="keyword">void</span> <span class="identifier">foo</span> <span class="special">(</span> <span class="keyword">bool</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">foo</span> <span class="special">(</span> <span class="keyword">bool</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
 <span class="keyword">void</span> <span class="identifier">bar</span><span class="special">()</span>
 <span class="special">{</span>
     <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">v</span> <span class="special">=</span> <span class="keyword">try</span><span class="special">();</span>

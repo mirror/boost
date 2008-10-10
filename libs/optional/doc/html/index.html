@@ -12,8 +12,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"></td>
 <td align="center"><a href="../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,7 +27,7 @@
 </h3></div></div>
 <div><p class="copyright">Copyright © 2003 -2007 Fernando Luis Cacciola Carballal</p></div>
 <div><div class="legalnotice">
-<a name="id2625900"></a><p>
+<a name="id2826039"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -142,16 +142,14 @@
       the function would conceptually return. For example, the last two functions
       could have the following interface:
     </p>
-<pre class="programlisting">
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span><span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">get_async_input</span><span class="special">();</span>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span><span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">get_async_input</span><span class="special">();</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">point</span><span class="special">,</span><span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">polygon</span><span class="special">::</span><span class="identifier">get_any_point_effectively_inside</span><span class="special">();</span>
 </pre>
 <p>
       These functions use a consistent interface for dealing with possibly inexistent
       results:
     </p>
-<pre class="programlisting">
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">point</span><span class="special">,</span><span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">poly</span><span class="special">.</span><span class="identifier">get_any_point_effectively_inside</span><span class="special">();</span>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">point</span><span class="special">,</span><span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">poly</span><span class="special">.</span><span class="identifier">get_any_point_effectively_inside</span><span class="special">();</span>
 <span class="keyword">if</span> <span class="special">(</span> <span class="identifier">p</span><span class="special">.</span><span class="identifier">second</span> <span class="special">)</span>
     <span class="identifier">flood_fill</span><span class="special">(</span><span class="identifier">p</span><span class="special">.</span><span class="identifier">first</span><span class="special">);</span>
 </pre>
@@ -174,7 +172,7 @@
   </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: March 15, 2008 at 13:58:42 GMT</small></p></td>
+<td align="left"><p><small>Last revised: October 10, 2008 at 20:53:37 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>

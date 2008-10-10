@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -41,8 +41,7 @@
 <a name="boost_optional.examples.optional_return_values"></a><a class="link" href="examples.html#boost_optional.examples.optional_return_values" title="Optional return values">Optional
       return values</a>
 </h3></div></div></div>
-<pre class="programlisting">
-<span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">get_async_input</span><span class="special">()</span>
+<pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">get_async_input</span><span class="special">()</span>
 <span class="special">{</span>
     <span class="keyword">if</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">queue</span><span class="special">.</span><span class="identifier">empty</span><span class="special">()</span> <span class="special">)</span>
         <span class="keyword">return</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;(</span><span class="identifier">queue</span><span class="special">.</span><span class="identifier">top</span><span class="special">());</span>
@@ -63,8 +62,7 @@
 <a name="boost_optional.examples.optional_local_variables"></a><a class="link" href="examples.html#boost_optional.examples.optional_local_variables" title="Optional local variables">Optional
       local variables</a>
 </h3></div></div></div>
-<pre class="programlisting">
-<span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="identifier">name</span> <span class="special">;</span>
+<pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="identifier">name</span> <span class="special">;</span>
 <span class="keyword">if</span> <span class="special">(</span> <span class="identifier">database</span><span class="special">.</span><span class="identifier">open</span><span class="special">()</span> <span class="special">)</span>
 <span class="special">{</span>
     <span class="identifier">name</span><span class="special">.</span><span class="identifier">reset</span> <span class="special">(</span> <span class="identifier">database</span><span class="special">.</span><span class="identifier">lookup</span><span class="special">(</span><span class="identifier">employer_name</span><span class="special">)</span> <span class="special">)</span> <span class="special">;</span>
@@ -85,8 +83,7 @@
 <a name="boost_optional.examples.optional_data_members"></a><a class="link" href="examples.html#boost_optional.examples.optional_data_members" title="Optional data members">Optional
       data members</a>
 </h3></div></div></div>
-<pre class="programlisting">
-<span class="keyword">class</span> <span class="identifier">figure</span>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">figure</span>
 <span class="special">{</span>
     <span class="keyword">public</span><span class="special">:</span>
 
@@ -124,8 +121,7 @@
 <a name="boost_optional.examples.bypassing_expensive_unnecessary_default_construction"></a><a class="link" href="examples.html#boost_optional.examples.bypassing_expensive_unnecessary_default_construction" title="Bypassing expensive unnecessary default construction">Bypassing
       expensive unnecessary default construction</a>
 </h3></div></div></div>
-<pre class="programlisting">
-<span class="keyword">class</span> <span class="identifier">ExpensiveCtor</span> <span class="special">{</span> <span class="special">...</span> <span class="special">}</span> <span class="special">;</span>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">ExpensiveCtor</span> <span class="special">{</span> <span class="special">...</span> <span class="special">}</span> <span class="special">;</span>
 <span class="keyword">class</span> <span class="identifier">Fred</span>
 <span class="special">{</span>
     <span class="identifier">Fred</span><span class="special">()</span> <span class="special">:</span> <span class="identifier">mLargeVector</span><span class="special">(</span><span class="number">10000</span><span class="special">)</span> <span class="special">{}</span>

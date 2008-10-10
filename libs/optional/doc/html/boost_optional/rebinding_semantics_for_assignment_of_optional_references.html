@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -32,8 +32,7 @@
       the effect is to bind (for the first time) to the object. Clearly, there is
       no other choice.
     </p>
-<pre class="programlisting">
-<span class="keyword">int</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
 <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">rx</span> <span class="special">=</span> <span class="identifier">x</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">ora</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">orb</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">;</span>
@@ -45,8 +44,7 @@
       If you assign to a bare C++ reference, the assignment is forwarded to the referenced
       object; it's value changes but the reference is never rebound.
     </p>
-<pre class="programlisting">
-<span class="keyword">int</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
 <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">ra</span> <span class="special">=</span> <span class="identifier">a</span> <span class="special">;</span>
 <span class="keyword">int</span> <span class="identifier">b</span> <span class="special">=</span> <span class="number">2</span> <span class="special">;</span>
 <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">rb</span> <span class="special">=</span> <span class="identifier">b</span> <span class="special">;</span>
@@ -60,8 +58,7 @@
       the effect is to <span class="bold"><strong>rebind</strong></span> to the new object
       instead of assigning the referee. This is unlike bare C++ references.
     </p>
-<pre class="programlisting">
-<span class="keyword">int</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
 <span class="keyword">int</span> <span class="identifier">b</span> <span class="special">=</span> <span class="number">2</span> <span class="special">;</span>
 <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">ra</span> <span class="special">=</span> <span class="identifier">a</span> <span class="special">;</span>
 <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">rb</span> <span class="special">=</span> <span class="identifier">b</span> <span class="special">;</span>
@@ -73,7 +70,7 @@
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">b</span><span class="special">==</span><span class="number">3</span><span class="special">);</span> 
 </pre>
 <a name="boost_optional.rebinding_semantics_for_assignment_of_optional_references.rationale"></a><h4>
-<a name="id2660242"></a>
+<a name="id2860344"></a>
       <a class="link" href="rebinding_semantics_for_assignment_of_optional_references.html#boost_optional.rebinding_semantics_for_assignment_of_optional_references.rationale">Rationale</a>
     </h4>
 <p>
@@ -93,8 +90,7 @@
       forwarding assignment to the referenced object (thus changing the referenced
       object value but not rebinding), and consider the following code:
     </p>
-<pre class="programlisting">
-<span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">a</span> <span class="special">=</span> <span class="identifier">get</span><span class="special">();</span>
+<pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">a</span> <span class="special">=</span> <span class="identifier">get</span><span class="special">();</span>
 <span class="keyword">int</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
 <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">rx</span> <span class="special">=</span> <span class="identifier">x</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">b</span><span class="special">(</span><span class="identifier">rx</span><span class="special">);</span>
@@ -132,8 +128,7 @@
       for the first time is OK while rebinding is not which is IMO very unlikely.
       In such scenario, you can assign the value itself directly, as in:
     </p>
-<pre class="programlisting">
-<span class="identifier">assert</span><span class="special">(!!</span><span class="identifier">opt</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">assert</span><span class="special">(!!</span><span class="identifier">opt</span><span class="special">);</span>
 <span class="special">*</span><span class="identifier">opt</span><span class="special">=</span><span class="identifier">value</span><span class="special">;</span>
 </pre>
 </div>

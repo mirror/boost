@@ -1,24 +1,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Type
-    Requirements and User-defined-types support</title>
+<title>Type Requirements and User-defined-types support</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
 <link rel="start" href="../index.html" title="Chapter 1. Boost.NumericConversion">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.NumericConversion">
-<link rel="prev" href="converter___function_object.html" title="converter&lt;&gt;
-    function object">
-<link rel="next" href="bounds___traits_class.html" title="bounds&lt;&gt;
-    traits class">
+<link rel="prev" href="converter___function_object.html" title="converter&lt;&gt; function object">
+<link rel="next" href="bounds___traits_class.html" title="bounds&lt;&gt; traits class">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,8 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_numericconversion.type_requirements_and_user_defined_types_support"></a><a href="type_requirements_and_user_defined_types_support.html" title="Type
-    Requirements and User-defined-types support">Type
+<a name="boost_numericconversion.type_requirements_and_user_defined_types_support"></a><a class="link" href="type_requirements_and_user_defined_types_support.html" title="Type Requirements and User-defined-types support">Type
     Requirements and User-defined-types support</a>
 </h2></div></div></div>
 <div class="toc"><dl>
@@ -41,8 +37,7 @@
 </dl></div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_numericconversion.type_requirements_and_user_defined_types_support.type_requirements"></a><a href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.type_requirements" title="Type
-      Requirements">Type
+<a name="boost_numericconversion.type_requirements_and_user_defined_types_support.type_requirements"></a><a class="link" href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.type_requirements" title="Type Requirements">Type
       Requirements</a>
 </h3></div></div></div>
 <p>
@@ -60,8 +55,7 @@
         policies uses unqualified calls to functions <code class="computeroutput"><span class="identifier">floor</span><span class="special">()</span></code> and <code class="computeroutput"><span class="identifier">ceil</span><span class="special">()</span></code>; but the standard functions are introduced
         in scope by a using directive:
       </p>
-<pre class="programlisting">
-<span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">floor</span> <span class="special">;</span> <span class="keyword">return</span> <span class="identifier">floor</span><span class="special">(</span><span class="identifier">s</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">floor</span> <span class="special">;</span> <span class="keyword">return</span> <span class="identifier">floor</span><span class="special">(</span><span class="identifier">s</span><span class="special">);</span>
 </pre>
 <p>
         Therefore, for builtin arithmetic types, the std functions will be used.
@@ -81,18 +75,17 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics"></a><a href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics" title="UDT's
-      special semantics">UDT's
+<a name="boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics"></a><a class="link" href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics" title="UDT's special semantics">UDT's
       special semantics</a>
 </h3></div></div></div>
 <a name="boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics.conversion_traits"></a><h5>
-<a name="id2625386"></a>
-        <a href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics.conversion_traits">Conversion
+<a name="id2848594"></a>
+        <a class="link" href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics.conversion_traits">Conversion
         Traits</a>
       </h5>
 <p>
         If a User Defined Type is involved in a conversion, it is <span class="emphasis"><em>assumed</em></span>
-        that the UDT has <a href="definitions.html#numeric_conversion_definitions_range">wider
+        that the UDT has <a class="link" href="definitions.html#numeric_conversion_definitions_range">wider
         range</a> than any built-in type, and consequently the values of some
         <code class="computeroutput"><span class="identifier">converter_traits</span><span class="special">&lt;&gt;</span></code>
         members are hardwired regardless of the reality. The following table summarizes
@@ -130,8 +123,8 @@
         above.
       </p>
 <a name="boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics.range_checking"></a><h5>
-<a name="id2625806"></a>
-        <a href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics.range_checking">Range
+<a name="id2848983"></a>
+        <a class="link" href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics.range_checking">Range
         Checking</a>
       </h5>
 <p>
@@ -141,7 +134,7 @@
         Target or Source are not built-in types, the bundled range checking of the
         <code class="computeroutput"><span class="identifier">converter</span><span class="special">&lt;&gt;</span></code>
         function object is automatically disabled. However, it is possible to supply
-        a user-defined range-checker. See <a href="type_requirements_and_user_defined_types_support.html#numeric_conversion_requirements_hooks">Special
+        a user-defined range-checker. See <a class="link" href="type_requirements_and_user_defined_types_support.html#numeric_conversion_requirements_hooks">Special
         Policies</a>
       </p>
 </div>
@@ -149,8 +142,7 @@
     </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_numericconversion.type_requirements_and_user_defined_types_support.special_policies"></a><a href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.special_policies" title="Special
-      Policies">Special
+<a name="boost_numericconversion.type_requirements_and_user_defined_types_support.special_policies"></a><a class="link" href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.special_policies" title="Special Policies">Special
       Policies</a>
 </h3></div></div></div>
 <p>
@@ -166,7 +158,7 @@
 <p>
         However, this internal logic is disabled when either type is User Defined.
         In this case, the user can specify an <span class="emphasis"><em>external</em></span> range
-        checking policy which will be used in place of the internal code. See <a href="numeric_converter_policy_classes.html#numeric_conversion_policy_user_range_checker">UserRangeChecker</a>
+        checking policy which will be used in place of the internal code. See <a class="link" href="numeric_converter_policy_classes.html#numeric_conversion_policy_user_range_checker">UserRangeChecker</a>
         policy for details.
       </p>
 <p>
@@ -176,7 +168,7 @@
 <p>
         However, if the a UDT is involved, the <code class="computeroutput"><span class="keyword">static_cast</span></code>
         might not work. In this case, the user can implement and pass a different
-        raw converter policy. See <a href="numeric_converter_policy_classes.html#numeric_conversion_policy_raw_converter">RawConverter</a>
+        raw converter policy. See <a class="link" href="numeric_converter_policy_classes.html#numeric_conversion_policy_raw_converter">RawConverter</a>
         policy for details
       </p>
 </div>

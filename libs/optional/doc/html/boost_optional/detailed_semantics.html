@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -64,7 +64,7 @@
       <span class="inlinemediaobject"><img src="../images/space.png" alt="space"></span>
     </p>
 <a name="boost_optional.detailed_semantics.optional_class_member_functions"></a><h4>
-<a name="id2640940"></a>
+<a name="id2841077"></a>
       <a class="link" href="detailed_semantics.html#boost_optional.detailed_semantics.optional_class_member_functions">optional
       class member functions</a>
     </h4>
@@ -97,8 +97,7 @@
         called.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">def</span> <span class="special">)</span> <span class="special">;</span>
 </pre>
 </li>
@@ -134,8 +133,7 @@
         The expression <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">none</span></code> denotes an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">none_t</span></code> that can be used as the parameter.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">none</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">none</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">n</span><span class="special">(</span><span class="identifier">none</span><span class="special">)</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">n</span> <span class="special">)</span> <span class="special">;</span>
 </pre>
@@ -180,8 +178,7 @@
         has no effect.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">opt</span> <span class="special">==</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
 </pre>
@@ -212,8 +209,7 @@
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">vref</span> <span class="special">=</span> <span class="identifier">v</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">vref</span><span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">opt</span> <span class="special">==</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
@@ -338,8 +334,7 @@
         has no effect.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">uninit</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">uninit</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(!</span><span class="identifier">uninit</span><span class="special">);</span>
 
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">uinit2</span> <span class="special">(</span> <span class="identifier">uninit</span> <span class="special">)</span> <span class="special">;</span>
@@ -387,8 +382,7 @@
         will reefer to the same object (they alias).
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="identifier">uninit</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="identifier">uninit</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(!</span><span class="identifier">uninit</span><span class="special">);</span>
 
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="identifier">uinit2</span> <span class="special">(</span> <span class="identifier">uninit</span> <span class="special">)</span> <span class="special">;</span>
@@ -454,8 +448,7 @@
         has no effect.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">x</span><span class="special">(</span><span class="number">123.4</span><span class="special">);</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">x</span><span class="special">(</span><span class="number">123.4</span><span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">x</span> <span class="special">==</span> <span class="number">123.4</span> <span class="special">)</span> <span class="special">;</span>
 
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">y</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">;</span>
@@ -515,8 +508,7 @@
         constructor used by the factory; in that case, this constructor has no effect.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="keyword">class</span> <span class="identifier">C</span> <span class="special">{</span> <span class="identifier">C</span> <span class="special">(</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">)</span> <span class="special">;</span> <span class="special">}</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="keyword">class</span> <span class="identifier">C</span> <span class="special">{</span> <span class="identifier">C</span> <span class="special">(</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">)</span> <span class="special">;</span> <span class="special">}</span> <span class="special">;</span>
 
 <span class="identifier">C</span> <span class="identifier">v</span><span class="special">(</span><span class="char">'A'</span><span class="special">,</span><span class="number">123.4</span><span class="special">,</span><span class="string">"hello"</span><span class="special">);</span>
 
@@ -574,8 +566,7 @@
         <span class="emphasis"><em>copy constructor</em></span> fails, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is left properly uninitialized.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">T</span> <span class="identifier">x</span><span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">x</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">;</span>
 
@@ -617,8 +608,7 @@
         details on this behavior.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="keyword">int</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="keyword">int</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
 <span class="keyword">int</span> <span class="identifier">b</span> <span class="special">=</span> <span class="number">2</span> <span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">ra</span> <span class="special">=</span> <span class="identifier">a</span> <span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">rb</span> <span class="special">=</span> <span class="identifier">b</span> <span class="special">;</span>
@@ -687,8 +677,7 @@
         <span class="emphasis"><em>copy constructor</em></span> fails, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is left properly uninitialized.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 
@@ -725,8 +714,7 @@
         for details on this behavior.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="keyword">int</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="keyword">int</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
 <span class="keyword">int</span> <span class="identifier">b</span> <span class="special">=</span> <span class="number">2</span> <span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">ra</span> <span class="special">=</span> <span class="identifier">a</span> <span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">rb</span> <span class="special">=</span> <span class="identifier">b</span> <span class="special">;</span>
@@ -800,8 +788,7 @@
         converting constructor fails, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is left properly uninitialized.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt0</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">U</span><span class="special">&gt;</span> <span class="identifier">opt1</span><span class="special">;</span>
 
@@ -930,8 +917,7 @@
         <code class="computeroutput"><span class="identifier">BOOST_ASSERT</span><span class="special">()</span></code>.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">T</span> <span class="identifier">v</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
 <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">u</span> <span class="special">=</span> <span class="special">*</span><span class="identifier">opt</span><span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">u</span> <span class="special">==</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
@@ -1005,8 +991,7 @@
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">T</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">z</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">z</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span><span class="special">;</span>
 <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">def</span><span class="special">.</span><span class="identifier">get_value_or</span><span class="special">(</span><span class="identifier">z</span><span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">y</span> <span class="special">==</span> <span class="identifier">z</span> <span class="special">)</span> <span class="special">;</span>
@@ -1099,8 +1084,7 @@
         <code class="computeroutput"><span class="identifier">BOOST_ASSERT</span><span class="special">()</span></code>.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">T</span> <span class="identifier">v</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span> <span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">vref</span> <span class="special">=</span> <span class="identifier">v</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="identifier">opt</span> <span class="special">(</span> <span class="identifier">vref</span> <span class="special">);</span>
 <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">vref2</span> <span class="special">=</span> <span class="special">*</span><span class="identifier">opt</span><span class="special">;</span>
@@ -1173,8 +1157,7 @@
         so you should not hold nor delete this pointer
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="identifier">copt</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">T</span><span class="special">*</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">opt</span><span class="special">.</span><span class="identifier">get_ptr</span><span class="special">()</span> <span class="special">;</span>
@@ -1226,8 +1209,7 @@
         <code class="computeroutput"><span class="identifier">BOOST_ASSERT</span><span class="special">()</span></code>.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">X</span> <span class="special">{</span> <span class="keyword">int</span> <span class="identifier">mdata</span> <span class="special">;</span> <span class="special">}</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">X</span> <span class="special">{</span> <span class="keyword">int</span> <span class="identifier">mdata</span> <span class="special">;</span> <span class="special">}</span> <span class="special">;</span>
 <span class="identifier">X</span> <span class="identifier">x</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
 <span class="identifier">opt</span><span class="special">-&gt;</span><span class="identifier">mdata</span> <span class="special">=</span> <span class="number">2</span> <span class="special">;</span>
@@ -1257,8 +1239,7 @@
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">def</span> <span class="special">==</span> <span class="number">0</span> <span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">(</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">opt</span> <span class="special">);</span>
@@ -1294,8 +1275,7 @@
         in certain boolean contexts.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">opt</span> <span class="special">);</span>
 <span class="special">*</span><span class="identifier">opt</span> <span class="special">=</span> <span class="identifier">some_T</span> <span class="special">;</span>
 
@@ -1328,8 +1308,7 @@
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">def</span><span class="special">.</span><span class="identifier">is_initialized</span><span class="special">()</span> <span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">(</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">opt</span><span class="special">.</span><span class="identifier">is_initialized</span><span class="special">()</span> <span class="special">);</span>
@@ -1340,7 +1319,7 @@
       <span class="inlinemediaobject"><img src="../images/space.png" alt="space"></span>
     </p>
 <a name="boost_optional.detailed_semantics.free_functions"></a><h4>
-<a name="id2653594"></a>
+<a name="id2853708"></a>
       <a class="link" href="detailed_semantics.html#boost_optional.detailed_semantics.free_functions">Free functions</a>
     </h4>
 <p>
@@ -1364,8 +1343,7 @@
         of <code class="computeroutput"><span class="identifier">v</span></code>.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="identifier">foo</span> <span class="special">(</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">opt</span> <span class="special">)</span> <span class="special">;</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="identifier">foo</span> <span class="special">(</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">opt</span> <span class="special">)</span> <span class="special">;</span>
 
 <span class="identifier">foo</span> <span class="special">(</span> <span class="identifier">make_optional</span><span class="special">(</span><span class="number">1</span><span class="special">+</span><span class="number">1</span><span class="special">)</span> <span class="special">)</span> <span class="special">;</span> <span class="comment">// Creates an optional&lt;int&gt;
 </span></pre>
@@ -1393,8 +1371,7 @@
         of <code class="computeroutput"><span class="identifier">v</span></code>.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">calculate_foo</span><span class="special">()</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">calculate_foo</span><span class="special">()</span>
 <span class="special">{</span>
   <span class="keyword">double</span> <span class="identifier">val</span> <span class="special">=</span> <span class="identifier">compute_foo</span><span class="special">();</span>
   <span class="keyword">return</span> <span class="identifier">make_optional</span><span class="special">(</span><span class="identifier">is_not_nan_and_finite</span><span class="special">(</span><span class="identifier">val</span><span class="special">),</span><span class="identifier">val</span><span class="special">);</span>
@@ -1441,8 +1418,7 @@
         instead
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">T</span> <span class="identifier">x</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">x</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
 <span class="identifier">T</span> <span class="identifier">y</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
 <span class="identifier">T</span> <span class="identifier">z</span><span class="special">(</span><span class="number">21</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def0</span> <span class="special">;</span>
@@ -1503,8 +1479,7 @@
         instead.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">T</span> <span class="identifier">x</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">x</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
 <span class="identifier">T</span> <span class="identifier">y</span><span class="special">(</span><span class="number">34</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">optX</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
@@ -1674,8 +1649,7 @@
         If only one is initialized, it has the same basic guarantee as <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">reset</span><span class="special">(</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code>.
       </li>
 <li>
-<span class="bold"><strong>Example:</strong></span><pre class="programlisting">
-<span class="identifier">T</span> <span class="identifier">x</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
+<span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">x</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
 <span class="identifier">T</span> <span class="identifier">y</span><span class="special">(</span><span class="number">21</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def0</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def1</span> <span class="special">;</span>
