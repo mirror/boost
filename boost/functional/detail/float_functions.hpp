@@ -6,7 +6,7 @@
 #if !defined(BOOST_FUNCTIONAL_DETAIL_FLOAT_FUNCTIONS_HPP)
 #define BOOST_FUNCTIONAL_DETAIL_FLOAT_FUNCTIONS_HPP
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once

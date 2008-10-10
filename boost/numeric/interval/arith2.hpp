@@ -23,7 +23,7 @@
 #include <boost/numeric/interval/policies.hpp>
 #include <algorithm>
 #include <cassert>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 namespace boost {
 namespace numeric {

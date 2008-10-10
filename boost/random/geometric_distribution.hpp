@@ -16,7 +16,7 @@
 #ifndef BOOST_RANDOM_GEOMETRIC_DISTRIBUTION_HPP
 #define BOOST_RANDOM_GEOMETRIC_DISTRIBUTION_HPP
 
-#include <cmath>          // std::log
+#include <boost/config/no_tr1/cmath.hpp>          // std::log
 #include <cassert>
 #include <iostream>
 #include <boost/random/uniform_01.hpp>

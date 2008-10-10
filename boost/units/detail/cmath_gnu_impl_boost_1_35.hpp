@@ -13,7 +13,7 @@
 
 #if (__GNUC__ && __cplusplus && __GNUC__ >= 3)
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 namespace boost {
 

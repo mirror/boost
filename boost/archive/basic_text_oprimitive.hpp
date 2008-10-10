@@ -26,7 +26,7 @@
 
 #include <iomanip>
 #include <locale>
-#include <cmath> // isnan
+#include <boost/config/no_tr1/cmath.hpp> // isnan
 #include <cassert>
 #include <cstddef> // size_t
 

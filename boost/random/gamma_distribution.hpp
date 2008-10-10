@@ -14,7 +14,7 @@
 #ifndef BOOST_RANDOM_GAMMA_DISTRIBUTION_HPP
 #define BOOST_RANDOM_GAMMA_DISTRIBUTION_HPP
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <cassert>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>

@@ -16,11 +16,11 @@
 #ifndef BOOST_RANDOM_LAGGED_FIBONACCI_HPP
 #define BOOST_RANDOM_LAGGED_FIBONACCI_HPP
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <iostream>
 #include <algorithm>     // std::max
 #include <iterator>
-#include <cmath>         // std::pow
+#include <boost/config/no_tr1/cmath.hpp>         // std::pow
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>

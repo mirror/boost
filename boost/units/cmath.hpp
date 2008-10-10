@@ -19,7 +19,7 @@
     #include <boost/units/detail/cmath_boost_1_35.hpp>
 #else
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <cstdlib>
 
 #include <boost/math/special_functions/fpclassify.hpp>

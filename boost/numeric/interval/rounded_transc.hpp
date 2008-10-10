@@ -12,7 +12,7 @@
 
 #include <boost/numeric/interval/rounding.hpp>
 #include <boost/numeric/interval/detail/bugs.hpp>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 namespace boost {
 namespace numeric {

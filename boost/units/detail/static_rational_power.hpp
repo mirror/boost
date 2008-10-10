@@ -11,7 +11,7 @@
 #ifndef BOOST_UNITS_DETAIL_STATIC_RATIONAL_POWER_HPP
 #define BOOST_UNITS_DETAIL_STATIC_RATIONAL_POWER_HPP
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 #include <boost/units/detail/one.hpp>
 #include <boost/units/operators.hpp>

@@ -15,7 +15,7 @@
 
 #include <iterator>
 #include <complex>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 #include <boost/numeric/ublas/detail/config.hpp>
 #include <boost/numeric/ublas/detail/iterator.hpp>

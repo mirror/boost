@@ -8,7 +8,7 @@
 #ifndef BOOST_ACCUMULATORS_STATISTICS_MOMENT_HPP_EAN_15_11_2005
 #define BOOST_ACCUMULATORS_STATISTICS_MOMENT_HPP_EAN_15_11_2005
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/placeholders.hpp>

@@ -14,7 +14,7 @@
 #include <boost/config.hpp>
 
 #include <cstddef>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <algorithm>
 #include <utility>
 #include <stdexcept>

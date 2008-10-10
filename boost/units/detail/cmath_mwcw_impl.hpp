@@ -13,7 +13,7 @@
 
 #if __MWERKS__
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 #include <boost/config.hpp>
 
