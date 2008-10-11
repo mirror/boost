@@ -78,7 +78,8 @@ void bcp_implementation::enable_unix_lines()
 
 void bcp_implementation::set_boost_path(const char* p)
 {
-   m_boost_path = fs::path(p, fs::native);
+   // Hack to strip trailing slashes from the path 
+   m_boost_path = (fs::path(p, fs::native) / "boost").parent_path(); 
    fs::path check = m_boost_path / "boost" / "version.hpp";
    if(!fs::exists(check))
    {
@@ -124,6 +125,13 @@ int bcp_implementation::run()
       msg.append(m_dest_path.native_file_string());
       std::runtime_error e(msg);
       boost::throw_exception(e);
+   }
+   //
+   // Check Boost path is OK if it hasn't been checked already:
+   //
+   if(m_boost_path == "")
+   {
+      set_boost_path("");
    }
    // start by building a list of permitted files
    // if m_cvs_mode is true:

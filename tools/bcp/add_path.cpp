@@ -253,7 +253,7 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
          }
          include_file = i->str();
       }
-      catch(const fs::filesystem_error& e)
+      catch(const fs::filesystem_error&)
       {
          std::cerr << "Can't parse filename " << *i << " included by file " << p.string() << std::endl;
          ++i;
@@ -292,7 +292,7 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
       try{
          include_file = i->str();
       }
-      catch(const fs::filesystem_error& e)
+      catch(const fs::filesystem_error&)
       {
          std::cerr << "Can't parse filename " << *i << " included by file " << p.string() << std::endl;
          ++i;
