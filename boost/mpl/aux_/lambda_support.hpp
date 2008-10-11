@@ -110,7 +110,7 @@ template< typename T > struct has_rebind_tag;
     typedef BOOST_PP_CAT(name,_rebind) rebind; \
 /**/
 
-#if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x610))
 #   define BOOST_MPL_AUX_LAMBDA_SUPPORT_HAS_REBIND(i, name, params) \
 template< BOOST_MPL_PP_PARAMS(i,typename T) > \
 ::boost::mpl::aux::yes_tag operator|( \

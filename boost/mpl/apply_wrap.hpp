@@ -177,6 +177,31 @@ struct BOOST_PP_CAT(apply_wrap,i_)<AUX778076_APPLY_WRAP_SPEC_PARAMS(i_, int)>
 
 #   define j_ BOOST_PP_FRAME_ITERATION(2)
 
+#if (i_ == 0) && (j_ == 0) && BOOST_WORKAROUND( __BORLANDC__, >= 0x590) && !defined( BOOST_MPL_CFG_NO_HAS_APPLY)
+
+template< typename F, bool F_has_apply >
+struct apply_wrap_impl0_bcb {
+    typedef typename F::template apply< na > type;
+};
+
+template< typename F >
+struct apply_wrap_impl0_bcb< F, true > {
+    typedef typename F::apply type;
+};
+
+template<
+      typename F BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, typename T)
+    >
+struct BOOST_PP_CAT(apply_wrap_impl,i_)<
+          BOOST_MPL_PP_ADD(i_, j_)
+        , F
+        BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, T)
+        >
+{
+    typedef apply_wrap_impl0_bcb< F, aux::has_apply< F >::value >::type type;
+};
+#else
+
 template<
       typename F BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, typename T)
     >
@@ -197,6 +222,8 @@ struct BOOST_PP_CAT(apply_wrap_impl,i_)<
 #endif
         > type;
 };
+
+#endif
 
 #   undef j_
 
