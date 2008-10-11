@@ -79,7 +79,7 @@ void bcp_implementation::enable_unix_lines()
 void bcp_implementation::set_boost_path(const char* p)
 {
    // Hack to strip trailing slashes from the path 
- 	m_boost_path = (fs::path(p, fs::native) / "boost").parent_path(); 
+   m_boost_path = (fs::path(p, fs::native) / "boost").parent_path(); 
    fs::path check = m_boost_path / "boost" / "version.hpp";
    if(!fs::exists(check))
    {
