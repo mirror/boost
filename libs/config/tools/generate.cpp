@@ -156,12 +156,12 @@ void write_test_file(const fs::path& file,
          "#  undef BOOST_ASSERT_CONFIG\n"
          "#endif\n\n";
 
-	  static const boost::regex tr1_exp("BOOST_HAS_TR1.*");
+      static const boost::regex tr1_exp("BOOST_HAS_TR1.*");
 
       ofs << "#include <boost/config.hpp>\n";
 
-	  if(regex_match(macro_name, tr1_exp))
-		  ofs << "#include <boost/tr1/detail/config.hpp>\n";
+      if(regex_match(macro_name, tr1_exp))
+         ofs << "#include <boost/tr1/detail/config.hpp>\n";
 
       ofs << "#include \"test.hpp\"\n\n"
          "#if";
