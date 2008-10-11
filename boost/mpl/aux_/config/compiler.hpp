@@ -2,7 +2,7 @@
 #ifndef BOOST_MPL_AUX_CONFIG_COMPILER_HPP_INCLUDED
 #define BOOST_MPL_AUX_CONFIG_COMPILER_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2001-2004
+// Copyright Aleksey Gurtovoy 2001-2008
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -35,8 +35,10 @@
 #   elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x610))
 #       if !defined(BOOST_MPL_CFG_NO_DEFAULT_PARAMETERS_IN_NESTED_TEMPLATES)
 #           define BOOST_MPL_CFG_COMPILER_DIR bcc551
-#       else
+#       elseif BOOST_WORKAROUND(__BORLANDC__, >= 0x590)
 #           define BOOST_MPL_CFG_COMPILER_DIR bcc
+#       else
+#           define BOOST_MPL_CFG_COMPILER_DIR bcc_pre590
 #       endif
 
 #   elif BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x840))

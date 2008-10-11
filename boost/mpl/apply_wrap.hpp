@@ -6,7 +6,7 @@
 #ifndef BOOST_MPL_APPLY_WRAP_HPP_INCLUDED
 #define BOOST_MPL_APPLY_WRAP_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright Aleksey Gurtovoy 2000-2008
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -39,9 +39,10 @@
 #   include <boost/mpl/aux_/preprocessor/params.hpp>
 #   include <boost/mpl/aux_/preprocessor/enum.hpp>
 #   include <boost/mpl/aux_/preprocessor/add.hpp>
+#   include <boost/mpl/aux_/config/bcc.hpp>
+#   include <boost/mpl/aux_/config/ctps.hpp>
 #   include <boost/mpl/aux_/config/dtp.hpp>
 #   include <boost/mpl/aux_/config/eti.hpp>
-#   include <boost/mpl/aux_/config/ctps.hpp>
 #   include <boost/mpl/aux_/config/msvc.hpp>
 #   include <boost/mpl/aux_/config/workaround.hpp>
 
@@ -177,7 +178,9 @@ struct BOOST_PP_CAT(apply_wrap,i_)<AUX778076_APPLY_WRAP_SPEC_PARAMS(i_, int)>
 
 #   define j_ BOOST_PP_FRAME_ITERATION(2)
 
-#if (i_ == 0) && (j_ == 0) && BOOST_WORKAROUND( __BORLANDC__, >= 0x590) && !defined( BOOST_MPL_CFG_NO_HAS_APPLY)
+#if i_ == 0 && j_ == 0 \
+    && defined(BOOST_MPL_CFG_BCC590_WORKAROUNDS) \
+    && !defined(BOOST_MPL_CFG_NO_HAS_APPLY)
 
 template< typename F, bool F_has_apply >
 struct apply_wrap_impl0_bcb {
