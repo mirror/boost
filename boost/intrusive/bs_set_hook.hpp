@@ -34,7 +34,7 @@ struct get_bs_set_node_algo
 
 //! Helper metafunction to define a \c bs_set_base_hook that yields to the same
 //! type when the same options (either explicitly or implicitly) are used.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class ...Options>
 #else
 template<class O1 = none, class O2 = none, class O3 = none>
@@ -43,7 +43,12 @@ struct make_bs_set_base_hook
 {
    /// @cond
    typedef typename pack_options
-      < hook_defaults, O1, O2, O3>::type packed_options;
+   #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      < hook_defaults, O1, O2, O3>
+   #else
+      < hook_defaults, Options...>
+   #endif
+   ::type packed_options;
 
    //Scapegoat trees can't be auto unlink trees
    BOOST_STATIC_ASSERT(((int)packed_options::link_mode != (int)auto_unlink));
@@ -75,15 +80,22 @@ struct make_bs_set_base_hook
 //!
 //! \c link_mode<> will specify the linking mode of the hook (\c normal_link,
 //! \c auto_unlink or \c safe_link).
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class ...Options>
 #else
 template<class O1, class O2, class O3>
 #endif
 class bs_set_base_hook
-   :  public make_bs_set_base_hook<O1, O2, O3>::type
+   :  public make_bs_set_base_hook
+   #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      <O1, O2, O3>
+   #else
+      <Options...>
+   #endif
+   ::type
+
 {
-   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+   #if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state.
    //! 
@@ -152,7 +164,7 @@ class bs_set_base_hook
 
 //! Helper metafunction to define a \c bs_set_member_hook that yields to the same
 //! type when the same options (either explicitly or implicitly) are used.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class ...Options>
 #else
 template<class O1 = none, class O2 = none, class O3 = none>
@@ -161,7 +173,13 @@ struct make_bs_set_member_hook
 {
    /// @cond
    typedef typename pack_options
-      < hook_defaults, O1, O2, O3>::type packed_options;
+   #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      < hook_defaults, O1, O2, O3>
+   #else
+      < hook_defaults, Options...>
+   #endif
+
+   ::type packed_options;
 
    //Scapegoat trees can't be auto unlink trees
    BOOST_STATIC_ASSERT(((int)packed_options::link_mode != (int)auto_unlink));
@@ -187,15 +205,21 @@ struct make_bs_set_member_hook
 //!
 //! \c link_mode<> will specify the linking mode of the hook (\c normal_link,
 //! \c auto_unlink or \c safe_link).
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class ...Options>
 #else
 template<class O1, class O2, class O3>
 #endif
 class bs_set_member_hook
-   :  public make_bs_set_member_hook<O1, O2, O3>::type
+   :  public make_bs_set_member_hook
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      <O1, O2, O3>
+      #else
+      <Options...>
+      #endif
+      ::type
 {
-   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+   #if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state.
    //! 
@@ -261,24 +285,6 @@ class bs_set_member_hook
    void unlink();
    #endif
 };
-
-/// @cond
-
-template <class T>
-struct internal_default_bs_set_hook
-{
-   template <class U> static detail::one test(...);
-   template <class U> static detail::two test(typename U::default_bs_set_hook* = 0);
-   static const bool value = sizeof(test<T>(0)) == sizeof(detail::two);
-};
-
-template <class T>
-struct get_default_bs_set_hook
-{
-   typedef typename T::default_bs_set_hook type;
-};
-
-/// @endcond
 
 } //namespace intrusive 
 } //namespace boost 

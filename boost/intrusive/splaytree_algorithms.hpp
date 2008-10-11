@@ -870,7 +870,7 @@ class splaytree_algorithms
          if(NodeTraits::get_parent(g) == p)
             NodeTraits::set_parent(g, n);
          else{//must be ( g->right == p )
-            assert(0);
+            BOOST_INTRUSIVE_INVARIANT_ASSERT(0);
             NodeTraits::set_right(g, n);
          }
       }

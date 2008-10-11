@@ -14,6 +14,7 @@
 #define BOOST_INTRUSIVE_POINTER_PLUS_BITS_HPP
 
 #include <boost/intrusive/detail/mpl.hpp> //ls_zeros
+#include <boost/intrusive/detail/assert.hpp> //BOOST_INTRUSIVE_INVARIANT_ASSERT
 
 namespace boost {
 namespace intrusive {
@@ -28,7 +29,7 @@ struct max_pointer_plus_bits
    static const std::size_t value = 0;
 };
 
-//!This is an specialization for raw pointers.
+//!This is a specialization for raw pointers.
 //!Raw pointers can embed extra bits in the lower bits
 //!if the alignment is multiple of 2pow(NumBits).
 template<std::size_t Alignment>
@@ -61,7 +62,7 @@ struct pointer_plus_bits<T*, NumBits>
 
    static void set_pointer(pointer &n, pointer p)
    {
-      assert(0 == (std::size_t(p) & Mask));
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(0 == (std::size_t(p) & Mask));
       n = pointer(std::size_t(p) | (std::size_t(n) & Mask)); 
    }
 
@@ -70,7 +71,7 @@ struct pointer_plus_bits<T*, NumBits>
 
    static void set_bits(pointer &n, std::size_t c)
    {
-      assert(c <= Mask);
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(c <= Mask);
       n = pointer(std::size_t(get_pointer(n)) | c);
    }
 };

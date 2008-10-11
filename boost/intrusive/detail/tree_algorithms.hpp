@@ -1391,14 +1391,14 @@ class tree_algorithms
       //Taken from:
       //"Tree rebalancing in optimal time and space"
       //Quentin F. Stout and Bette L. Warren
-      std::size_t len;
+      std::size_t len = 0;
       subtree_to_vine(NodeTraits::get_parent(header), &len);
       vine_to_subtree(NodeTraits::get_parent(header), len);
    }
 
    static node_ptr rebalance_subtree(node_ptr old_root)
    {
-      std::size_t len;
+      std::size_t len = 0;
       node_ptr new_root = subtree_to_vine(old_root, &len);
       return vine_to_subtree(new_root, len);
    }

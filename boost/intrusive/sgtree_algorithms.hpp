@@ -683,7 +683,7 @@ class sgtree_algorithms
          for(std::size_t i = 1; true; ++i){
             bool rebalance = false;
             if(i == depth){
-               assert(tree_size == count(s));
+               BOOST_INTRUSIVE_INVARIANT_ASSERT(tree_size == count(s));
                rebalance = true;
             }
             else if(i > h_alpha(size)){

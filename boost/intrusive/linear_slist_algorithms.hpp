@@ -58,7 +58,7 @@ class linear_slist_algorithms
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
    typedef NodeTraits                           node_traits;
 
-   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+   #if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 
    //! <b>Effects</b>: Constructs an non-used list element, putting the next
    //!   pointer to null:
@@ -127,7 +127,7 @@ class linear_slist_algorithms
    //! <b>Throws</b>: Nothing.
    static void transfer_after(node_ptr p, node_ptr b, node_ptr e);
 
-   #endif   //#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+   #endif   //#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 
    //! <b>Effects</b>: Constructs an empty list, making this_node the only
    //!   node of the circular list:

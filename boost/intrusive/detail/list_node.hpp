@@ -161,6 +161,9 @@ class list_iterator
          return 0;
    }
 
+   list_iterator<Container, false> unconst() const
+   {  return list_iterator<Container, false>(this->pointed_node(), this->get_container());   }
+
    private:
    struct members
       :  public detail::select_constptr

@@ -151,7 +151,7 @@ struct alpha_holder<false>
 
    void set_alpha(float)
    {  //alpha CAN't be changed.
-      assert(0);
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(0);
    }
 
    h_alpha_t get_h_alpha_t() const
@@ -176,13 +176,7 @@ template <class T>
 struct sg_set_defaults
    :  pack_options
       < none
-      , base_hook
-         <  typename detail::eval_if_c
-               < internal_default_bs_set_hook<T>::value
-               , get_default_bs_set_hook<T>
-               , detail::identity<none>
-               >::type
-         >
+      , base_hook<detail::default_bs_set_hook>
       , floating_point<true>
       , size_type<std::size_t>
       , compare<std::less<T> >
@@ -204,7 +198,7 @@ struct sg_set_defaults
 //! \c base_hook<>/member_hook<>/value_traits<>,
 //! \c floating_point<>, \c size_type<> and
 //! \c compare<>.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
@@ -1212,29 +1206,34 @@ class sgtree_impl
    }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
+   //!   Cloner should yield to nodes equivalent to the original nodes.
    //!
    //! <b>Effects</b>: Erases all the elements from *this
    //!   calling Disposer::operator()(pointer), clones all the 
    //!   elements from src calling Cloner::operator()(const_reference )
-   //!   and inserts them on *this.
+   //!   and inserts them on *this. Copies the predicate from the source container.
    //!
    //!   If cloner throws, all cloned elements are unlinked and disposed
    //!   calling Disposer::operator()(pointer).
    //!   
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //! 
-   //! <b>Throws</b>: If cloner throws.
+   //! <b>Throws</b>: If cloner throws or predicate copy assignment throws. Basic guarantee.
    template <class Cloner, class Disposer>
    void clone_from(const sgtree_impl &src, Cloner cloner, Disposer disposer)
    {
       this->clear_and_dispose(disposer);
       if(!src.empty()){
+         detail::exception_disposer<sgtree_impl, Disposer>
+            rollback(*this, disposer);
          node_algorithms::clone
             (const_node_ptr(&src.priv_header())
             ,node_ptr(&this->priv_header())
             ,detail::node_cloner<Cloner, sgtree_impl>(cloner, this)
             ,detail::node_disposer<Disposer, sgtree_impl>(disposer, this));
          this->priv_size_traits().set_size(src.priv_size_traits().get_size());
+         this->priv_comp() = src.priv_comp();
+         rollback.release();
       }
    }
 
@@ -1469,26 +1468,26 @@ class sgtree_impl
    {  return priv_container_from_end_iterator(it.end_iterator_from_it());   }
 };
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator<
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const sgtree_impl<T, Options...> &x, const sgtree_impl<T, Options...> &y)
 #else
 (const sgtree_impl<Config> &x, const sgtree_impl<Config> &y)
 #endif
 {  return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 bool operator==
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const sgtree_impl<T, Options...> &x, const sgtree_impl<T, Options...> &y)
 #else
 (const sgtree_impl<Config> &x, const sgtree_impl<Config> &y)
@@ -1520,65 +1519,65 @@ bool operator==
    }
 }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator!=
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const sgtree_impl<T, Options...> &x, const sgtree_impl<T, Options...> &y)
 #else
 (const sgtree_impl<Config> &x, const sgtree_impl<Config> &y)
 #endif
 {  return !(x == y); }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator>
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const sgtree_impl<T, Options...> &x, const sgtree_impl<T, Options...> &y)
 #else
 (const sgtree_impl<Config> &x, const sgtree_impl<Config> &y)
 #endif
 {  return y < x;  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator<=
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const sgtree_impl<T, Options...> &x, const sgtree_impl<T, Options...> &y)
 #else
 (const sgtree_impl<Config> &x, const sgtree_impl<Config> &y)
 #endif
 {  return !(y < x);  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator>=
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const sgtree_impl<T, Options...> &x, const sgtree_impl<T, Options...> &y)
 #else
 (const sgtree_impl<Config> &x, const sgtree_impl<Config> &y)
 #endif
 {  return !(x < y);  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline void swap
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (sgtree_impl<T, Options...> &x, sgtree_impl<T, Options...> &y)
 #else
 (sgtree_impl<Config> &x, sgtree_impl<Config> &y)
@@ -1586,15 +1585,22 @@ inline void swap
 {  x.swap(y);  }
 
 /// @cond
+#if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class T, class O1 = none, class O2 = none
-                , class O3 = none, class O4 = none
-                , class O5 = none, class O6 = none
-                , class O7 = none
-                >
+                , class O3 = none, class O4 = none>
+#else
+template<class T, class ...Options>
+#endif
 struct make_sgtree_opt
 {
    typedef typename pack_options
-      < sg_set_defaults<T>, O1, O2, O3, O4>::type packed_options;
+      < sg_set_defaults<T>, 
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      O1, O2, O3, O4
+      #else
+      Options...
+      #endif
+      >::type packed_options;
    typedef typename detail::get_value_traits
       <T, typename packed_options::value_traits>::type value_traits;
 
@@ -1609,7 +1615,7 @@ struct make_sgtree_opt
 
 //! Helper metafunction to define a \c sgtree that yields to the same type when the
 //! same options (either explicitly or implicitly) are used.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class T, class ...Options>
 #else
 template<class T, class O1 = none, class O2 = none
@@ -1619,19 +1625,41 @@ struct make_sgtree
 {
    /// @cond
    typedef sgtree_impl
-      < typename make_sgtree_opt<T, O1, O2, O3, O4>::type
+      < typename make_sgtree_opt<T, 
+         #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+         O1, O2, O3, O4
+         #else
+         Options...
+         #endif
+      >::type
       > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
 };
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class T, class O1, class O2, class O3, class O4>
+#else
+template<class T, class ...Options>
+#endif
 class sgtree
-   :  public make_sgtree<T, O1, O2, O3, O4>::type
+   :  public make_sgtree<T, 
+         #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+         O1, O2, O3, O4
+         #else
+         Options...
+         #endif
+      >::type
 {
    typedef typename make_sgtree
-      <T, O1, O2, O3, O4>::type   Base;
+      <T, 
+         #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+         O1, O2, O3, O4
+         #else
+         Options...
+         #endif
+      >::type   Base;
 
    public:
    typedef typename Base::value_compare      value_compare;

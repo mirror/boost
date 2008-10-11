@@ -682,10 +682,10 @@ class avltree_algorithms
                // x is right child
                // a is left child
                node_ptr a = NodeTraits::get_left(x_parent);
-               assert(a);
+               BOOST_INTRUSIVE_INVARIANT_ASSERT(a);
                if (NodeTraits::get_balance(a) == NodeTraits::positive()) {
                   // a MUST have a right child
-                  assert(NodeTraits::get_right(a));
+                  BOOST_INTRUSIVE_INVARIANT_ASSERT(NodeTraits::get_right(a));
                   rotate_left_right(x_parent, root);
                   
                   x = NodeTraits::get_parent(x_parent);
@@ -714,10 +714,10 @@ class avltree_algorithms
                // x is left child
                // a is right child
                node_ptr a = NodeTraits::get_right(x_parent);
-               assert(a);
+               BOOST_INTRUSIVE_INVARIANT_ASSERT(a);
                if (NodeTraits::get_balance(a) == NodeTraits::negative()) {
                   // a MUST have then a left child
-                  assert(NodeTraits::get_left(a));
+                  BOOST_INTRUSIVE_INVARIANT_ASSERT(NodeTraits::get_left(a));
                   rotate_right_left(x_parent, root);
 
                   x = NodeTraits::get_parent(x_parent);
@@ -735,7 +735,7 @@ class avltree_algorithms
             }
          }
          else{
-            assert(false);  // never reached
+            BOOST_INTRUSIVE_INVARIANT_ASSERT(false);  // never reached
          }
       }
       NodeTraits::set_parent(header, root);
@@ -784,7 +784,7 @@ class avltree_algorithms
             break;
          }
          else{
-            assert(false);  // never reached
+            BOOST_INTRUSIVE_INVARIANT_ASSERT(false);  // never reached
          }
       }
       NodeTraits::set_parent(header, root);
@@ -842,7 +842,7 @@ class avltree_algorithms
          NodeTraits::set_balance(b, NodeTraits::negative());
       }
       else{
-         assert(false); // never reached
+         BOOST_INTRUSIVE_INVARIANT_ASSERT(false); // never reached
       }
       NodeTraits::set_balance(c, NodeTraits::zero());
    }
@@ -899,7 +899,7 @@ class avltree_algorithms
          NodeTraits::set_balance(b, NodeTraits::zero());
       }
       else{
-         assert(false);
+         BOOST_INTRUSIVE_INVARIANT_ASSERT(false);
       }
       NodeTraits::set_balance(c, NodeTraits::zero());
    }

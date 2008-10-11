@@ -35,20 +35,6 @@ namespace intrusive {
 
 /// @cond
 
-template <class T>
-struct internal_default_list_hook
-{
-   template <class U> static detail::one test(...);
-   template <class U> static detail::two test(typename U::default_list_hook* = 0);
-   static const bool value = sizeof(test<T>(0)) == sizeof(detail::two);
-};
-
-template <class T>
-struct get_default_list_hook
-{
-   typedef typename T::default_list_hook type;
-};
-
 template <class ValueTraits, class SizeType, bool ConstantTimeSize>
 struct listopt
 {
@@ -57,17 +43,12 @@ struct listopt
    static const bool constant_time_size = ConstantTimeSize;
 };
 
+
 template <class T>
 struct list_defaults
    :  pack_options
       < none
-      , base_hook
-         <  typename detail::eval_if_c
-               < internal_default_list_hook<T>::value
-               , get_default_list_hook<T>
-               , detail::identity<none>
-               >::type
-         >
+      , base_hook<detail::default_list_hook>
       , constant_time_size<true>
       , size_type<std::size_t>
       >::type
@@ -85,7 +66,7 @@ struct list_defaults
 //! The container supports the following options:
 //! \c base_hook<>/member_hook<>/value_traits<>,
 //! \c constant_time_size<> and \c size_type<>.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
@@ -225,7 +206,7 @@ class list_impl
    {
       this->priv_size_traits().set_size(size_type(0));
       node_algorithms::init_header(this->get_root_node());
-      this->insert(this->end(), b, e);
+      this->insert(this->cend(), b, e);
    }
 
    //! <b>Effects</b>: If it's not a safe-mode or an auto-unlink value_type 
@@ -583,7 +564,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references) to the
    //!   erased element.
-   iterator erase(iterator i)
+   iterator erase(const_iterator i)
    {  return this->erase_and_dispose(i, detail::null_disposer());  }
 
    //! <b>Requires</b>: b and e must be valid iterators to elements in *this.
@@ -601,14 +582,14 @@ class list_impl
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references) to the 
    //!   erased elements.
-   iterator erase(iterator b, iterator e)
+   iterator erase(const_iterator b, const_iterator e)
    {
       if(safemode_or_autounlink || constant_time_size){
          return this->erase_and_dispose(b, e, detail::null_disposer());
       }
       else{
          node_algorithms::unlink(b.pointed_node(), e.pointed_node());
-         return e;
+         return e.unconst();
       }
    }
 
@@ -628,7 +609,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references) to the 
    //!   erased elements.
-   iterator erase(iterator b, iterator e, difference_type n)
+   iterator erase(const_iterator b, const_iterator e, difference_type n)
    {
       BOOST_INTRUSIVE_INVARIANT_ASSERT(std::distance(b, e) == difference_type(n));
       if(safemode_or_autounlink || constant_time_size){
@@ -639,7 +620,7 @@ class list_impl
             this->priv_size_traits().set_size(this->priv_size_traits().get_size() - n);
          }
          node_algorithms::unlink(b.pointed_node(), e.pointed_node());
-         return e;
+         return e.unconst();
       }
    }
 
@@ -658,7 +639,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Invalidates the iterators to the erased element.
    template <class Disposer>
-   iterator erase_and_dispose(iterator i, Disposer disposer)
+   iterator erase_and_dispose(const_iterator i, Disposer disposer)
    {
       node_ptr to_erase(i.pointed_node());
       ++i;
@@ -667,7 +648,7 @@ class list_impl
       if(safemode_or_autounlink)
          node_algorithms::init(to_erase);
       disposer(this->get_real_value_traits().to_value_ptr(to_erase));
-      return i;
+      return i.unconst();
    }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
@@ -685,7 +666,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Invalidates the iterators to the erased elements.
    template <class Disposer>
-   iterator erase_and_dispose(iterator b, iterator e, Disposer disposer)
+   iterator erase_and_dispose(const_iterator b, const_iterator e, Disposer disposer)
    {
       node_ptr bp(b.pointed_node()), ep(e.pointed_node());
       node_algorithms::unlink(bp, ep);
@@ -697,7 +678,7 @@ class list_impl
          disposer(get_real_value_traits().to_value_ptr(to_erase));
          this->priv_size_traits().decrement();
       }
-      return e;
+      return e.unconst();
    }
 
    //! <b>Effects</b>: Erases all the elements of the container.
@@ -734,7 +715,7 @@ class list_impl
    template <class Disposer>
    void clear_and_dispose(Disposer disposer)
    {
-      iterator it(this->begin()), itend(this->end());
+      const_iterator it(this->begin()), itend(this->end());
       while(it != itend){
          node_ptr to_erase(it.pointed_node());
          ++it;
@@ -747,6 +728,7 @@ class list_impl
    }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
+   //!   Cloner should yield to nodes equivalent to the original nodes.
    //!
    //! <b>Effects</b>: Erases all the elements from *this
    //!   calling Disposer::operator()(pointer), clones all the 
@@ -783,7 +765,7 @@ class list_impl
    //! <b>Complexity</b>: Constant time. No copy constructors are called.
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
-   iterator insert(iterator p, reference value)
+   iterator insert(const_iterator p, reference value)
    {
       node_ptr to_insert = this->get_real_value_traits().to_node_ptr(value);
       if(safemode_or_autounlink)
@@ -805,7 +787,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    template<class Iterator>
-   void insert(iterator p, Iterator b, Iterator e)
+   void insert(const_iterator p, Iterator b, Iterator e)
    {
       for (; b != e; ++b)
          this->insert(p, *b);
@@ -830,7 +812,7 @@ class list_impl
    void assign(Iterator b, Iterator e)
    {
       this->clear();
-      this->insert(this->end(), b, e);
+      this->insert(this->cend(), b, e);
    }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
@@ -853,7 +835,7 @@ class list_impl
    void dispose_and_assign(Disposer disposer, Iterator b, Iterator e)
    {
       this->clear_and_dispose(disposer);
-      this->insert(this->end(), b, e);
+      this->insert(this->cend(), b, e);
    }
 
    //! <b>Requires</b>: p must be a valid iterator of *this.
@@ -867,7 +849,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Iterators of values obtained from list x now point to elements of
    //!    this list. Iterators of this list and all the references are not invalidated.
-   void splice(iterator p, list_impl& x)
+   void splice(const_iterator p, list_impl& x)
    {
       if(!x.empty()){
          size_traits &thist = this->priv_size_traits();
@@ -892,7 +874,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Iterators of values obtained from list x now point to elements of this
    //!   list. Iterators of this list and all the references are not invalidated.
-   void splice(iterator p, list_impl&x, iterator new_ele)
+   void splice(const_iterator p, list_impl&x, const_iterator new_ele)
    {
       node_algorithms::transfer(p.pointed_node(), new_ele.pointed_node());
       x.priv_size_traits().decrement();
@@ -912,7 +894,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Iterators of values obtained from list x now point to elements of this
    //!   list. Iterators of this list and all the references are not invalidated.
-   void splice(iterator p, list_impl&x, iterator start, iterator end)
+   void splice(const_iterator p, list_impl&x, const_iterator start, const_iterator end)
    {
       if(constant_time_size)
          this->splice(p, x, start, end, std::distance(start, end));
@@ -933,7 +915,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Iterators of values obtained from list x now point to elements of this
    //!   list. Iterators of this list and all the references are not invalidated.
-   void splice(iterator p, list_impl&x, iterator start, iterator end, difference_type n)
+   void splice(const_iterator p, list_impl&x, const_iterator start, const_iterator end, difference_type n)
    {
       if(n){
          if(constant_time_size){
@@ -988,7 +970,7 @@ class list_impl
          list_impl counter[64];
          int fill = 0;
          while(!this->empty()){
-            carry.splice(carry.begin(), *this, this->begin());
+            carry.splice(carry.cbegin(), *this, this->cbegin());
             int i = 0;
             while(i < fill && !counter[i].empty()) {
                carry.merge(counter[i++], p);
@@ -1034,13 +1016,13 @@ class list_impl
    template<class Predicate>
    void merge(list_impl& x, Predicate p)
    {
-      iterator e(this->end());
-      iterator bx(x.begin());
-      iterator ex(x.end());
+      const_iterator e(this->end());
+      const_iterator bx(x.begin());
+      const_iterator ex(x.end());
 
-      for (iterator b = this->begin(); b != e; ++b) {
+      for (const_iterator b = this->cbegin(); b != e; ++b) {
          size_type n(0);
-         iterator ix(bx);
+         const_iterator ix(bx);
          while(ix != ex && p(*ix, *b)){
             ++ix; ++n;
          }
@@ -1116,8 +1098,8 @@ class list_impl
    template<class Pred, class Disposer>
    void remove_and_dispose_if(Pred pred, Disposer disposer)
    {
-      iterator cur(this->begin());
-      iterator last(this->end());
+      const_iterator cur(this->cbegin());
+      const_iterator last(this->cend());
       while(cur != last) {
          if(pred(*cur)){
             cur = this->erase_and_dispose(cur, disposer);
@@ -1185,11 +1167,11 @@ class list_impl
    template<class BinaryPredicate, class Disposer>
    void unique_and_dispose(BinaryPredicate pred, Disposer disposer)
    {
-      iterator itend(this->end());
-      iterator cur(this->begin());
+      const_iterator itend(this->cend());
+      const_iterator cur(this->cbegin());
 
       if(cur != itend){
-         iterator after(cur);
+         const_iterator after(cur);
          ++after;
          while(after != itend){
             if(pred(*cur, *after)){
@@ -1284,26 +1266,26 @@ class list_impl
    /// @endcond
 };
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator<
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const list_impl<T, Options...> &x, const list_impl<T, Options...> &y)
 #else
 (const list_impl<Config> &x, const list_impl<Config> &y)
 #endif
 {  return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 bool operator==
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const list_impl<T, Options...> &x, const list_impl<T, Options...> &y)
 #else
 (const list_impl<Config> &x, const list_impl<Config> &y)
@@ -1336,65 +1318,65 @@ bool operator==
    }
 }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator!=
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const list_impl<T, Options...> &x, const list_impl<T, Options...> &y)
 #else
 (const list_impl<Config> &x, const list_impl<Config> &y)
 #endif
 {  return !(x == y); }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator>
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const list_impl<T, Options...> &x, const list_impl<T, Options...> &y)
 #else
 (const list_impl<Config> &x, const list_impl<Config> &y)
 #endif
 {  return y < x;  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator<=
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const list_impl<T, Options...> &x, const list_impl<T, Options...> &y)
 #else
 (const list_impl<Config> &x, const list_impl<Config> &y)
 #endif
 {  return !(y < x);  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator>=
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const list_impl<T, Options...> &x, const list_impl<T, Options...> &y)
 #else
 (const list_impl<Config> &x, const list_impl<Config> &y)
 #endif
 {  return !(x < y);  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline void swap
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (list_impl<T, Options...> &x, list_impl<T, Options...> &y)
 #else
 (list_impl<Config> &x, list_impl<Config> &y)
@@ -1403,7 +1385,7 @@ inline void swap
 
 //! Helper metafunction to define a \c list that yields to the same type when the
 //! same options (either explicitly or implicitly) are used.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class T, class ...Options>
 #else
 template<class T, class O1 = none, class O2 = none, class O3 = none>
@@ -1412,7 +1394,14 @@ struct make_list
 {
    /// @cond
    typedef typename pack_options
-      < list_defaults<T>, O1, O2, O3>::type packed_options;
+      < list_defaults<T>, 
+         #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+         O1, O2, O3
+         #else
+         Options...
+         #endif
+      >::type packed_options;
+
    typedef typename detail::get_value_traits
       <T, typename packed_options::value_traits>::type value_traits;
 
@@ -1430,12 +1419,29 @@ struct make_list
 
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+
+#if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class T, class O1, class O2, class O3>
+#else
+template<class T, class ...Options>
+#endif
 class list
-   :  public make_list<T, O1, O2, O3>::type
+   :  public make_list<T, 
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      O1, O2, O3
+      #else
+      Options...
+      #endif
+   >::type
 {
    typedef typename make_list
-      <T, O1, O2, O3>::type      Base;
+      <T, 
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      O1, O2, O3
+      #else
+      Options...
+      #endif
+      >::type      Base;
    typedef typename Base::real_value_traits     real_value_traits;
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename real_value_traits::value_type, T>::value));

@@ -128,6 +128,9 @@ class slist_iterator
          return 0;
    }
 
+   slist_iterator<Container, false> unconst() const
+   {  return slist_iterator<Container, false>(this->pointed_node(), this->get_container());   }
+
    const real_value_traits *get_real_value_traits() const
    {
       if(store_container_ptr)

@@ -31,7 +31,7 @@ namespace intrusive {
 //! \c base_hook<>/member_hook<>/value_traits<>,
 //! \c constant_time_size<>, \c size_type<> and
 //! \c compare<>.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
@@ -323,18 +323,19 @@ class avl_set_impl
    { tree_.swap(other.tree_); }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
+   //!   Cloner should yield to nodes equivalent to the original nodes.
    //!
    //! <b>Effects</b>: Erases all the elements from *this
    //!   calling Disposer::operator()(pointer), clones all the 
    //!   elements from src calling Cloner::operator()(const_reference )
-   //!   and inserts them on *this.
+   //!   and inserts them on *this. Copies the predicate from the source container.
    //!
    //!   If cloner throws, all cloned elements are unlinked and disposed
    //!   calling Disposer::operator()(pointer).
    //!   
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //! 
-   //! <b>Throws</b>: If cloner throws.
+   //! <b>Throws</b>: If cloner throws or predicate copy assignment throws. Basic guarantee.
    template <class Cloner, class Disposer>
    void clone_from(const avl_set_impl &src, Cloner cloner, Disposer disposer)
    {  tree_.clone_from(src.tree_, cloner, disposer);  }
@@ -996,65 +997,65 @@ class avl_set_impl
    /// @endcond
 };
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator!=
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const avl_set_impl<T, Options...> &x, const avl_set_impl<T, Options...> &y)
 #else
 (const avl_set_impl<Config> &x, const avl_set_impl<Config> &y)
 #endif
 {  return !(x == y); }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator>
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const avl_set_impl<T, Options...> &x, const avl_set_impl<T, Options...> &y)
 #else
 (const avl_set_impl<Config> &x, const avl_set_impl<Config> &y)
 #endif
 {  return y < x;  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator<=
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const avl_set_impl<T, Options...> &x, const avl_set_impl<T, Options...> &y)
 #else
 (const avl_set_impl<Config> &x, const avl_set_impl<Config> &y)
 #endif
 {  return !(y < x);  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator>=
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const avl_set_impl<T, Options...> &x, const avl_set_impl<T, Options...> &y)
 #else
 (const avl_set_impl<Config> &x, const avl_set_impl<Config> &y)
 #endif
 {  return !(x < y);  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline void swap
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (avl_set_impl<T, Options...> &x, avl_set_impl<T, Options...> &y)
 #else
 (avl_set_impl<Config> &x, avl_set_impl<Config> &y)
@@ -1063,7 +1064,7 @@ inline void swap
 
 //! Helper metafunction to define a \c avl_set that yields to the same type when the
 //! same options (either explicitly or implicitly) are used.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class T, class ...Options>
 #else
 template<class T, class O1 = none, class O2 = none
@@ -1073,19 +1074,41 @@ struct make_avl_set
 {
    /// @cond
    typedef avl_set_impl
-      < typename make_avltree_opt<T, O1, O2, O3, O4>::type
+      < typename make_avltree_opt
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      <T, O1, O2, O3, O4>
+      #else
+      <T, Options...>
+      #endif
+      ::type
       > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
 };
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+
+#if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class T, class O1, class O2, class O3, class O4>
+#else
+template<class T, class ...Options>
+#endif
 class avl_set
-   :  public make_avl_set<T, O1, O2, O3, O4>::type
+   :  public make_avl_set
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      <T, O1, O2, O3, O4>
+      #else
+      <T, Options...>
+      #endif
+      ::type
 {
    typedef typename make_avl_set
-      <T, O1, O2, O3, O4>::type   Base;
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      <T, O1, O2, O3, O4>
+      #else
+      <T, Options...>
+      #endif
+      ::type   Base;
 
    public:
    typedef typename Base::value_compare      value_compare;
@@ -1134,7 +1157,7 @@ class avl_set
 //! \c base_hook<>/member_hook<>/value_traits<>,
 //! \c constant_time_size<>, \c size_type<> and
 //! \c compare<>.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
@@ -1422,18 +1445,19 @@ class avl_multiset_impl
    { tree_.swap(other.tree_); }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
+   //!   Cloner should yield to nodes equivalent to the original nodes.
    //!
    //! <b>Effects</b>: Erases all the elements from *this
    //!   calling Disposer::operator()(pointer), clones all the 
    //!   elements from src calling Cloner::operator()(const_reference )
-   //!   and inserts them on *this.
+   //!   and inserts them on *this. Copies the predicate from the source container.
    //!
    //!   If cloner throws, all cloned elements are unlinked and disposed
    //!   calling Disposer::operator()(pointer).
    //!   
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //! 
-   //! <b>Throws</b>: If cloner throws. Basic guarantee.
+   //! <b>Throws</b>: If cloner throws or predicate copy assignment throws. Basic guarantee.
    template <class Cloner, class Disposer>
    void clone_from(const avl_multiset_impl &src, Cloner cloner, Disposer disposer)
    {  tree_.clone_from(src.tree_, cloner, disposer);  }
@@ -2002,65 +2026,65 @@ class avl_multiset_impl
    /// @endcond
 };
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator!=
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const avl_multiset_impl<T, Options...> &x, const avl_multiset_impl<T, Options...> &y)
 #else
 (const avl_multiset_impl<Config> &x, const avl_multiset_impl<Config> &y)
 #endif
 {  return !(x == y); }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator>
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const avl_multiset_impl<T, Options...> &x, const avl_multiset_impl<T, Options...> &y)
 #else
 (const avl_multiset_impl<Config> &x, const avl_multiset_impl<Config> &y)
 #endif
 {  return y < x;  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator<=
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const avl_multiset_impl<T, Options...> &x, const avl_multiset_impl<T, Options...> &y)
 #else
 (const avl_multiset_impl<Config> &x, const avl_multiset_impl<Config> &y)
 #endif
 {  return !(y < x);  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline bool operator>=
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (const avl_multiset_impl<T, Options...> &x, const avl_multiset_impl<T, Options...> &y)
 #else
 (const avl_multiset_impl<Config> &x, const avl_multiset_impl<Config> &y)
 #endif
 {  return !(x < y);  }
 
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
 inline void swap
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 (avl_multiset_impl<T, Options...> &x, avl_multiset_impl<T, Options...> &y)
 #else
 (avl_multiset_impl<Config> &x, avl_multiset_impl<Config> &y)
@@ -2069,7 +2093,7 @@ inline void swap
 
 //! Helper metafunction to define a \c avl_multiset that yields to the same type when the
 //! same options (either explicitly or implicitly) are used.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class T, class ...Options>
 #else
 template<class T, class O1 = none, class O2 = none
@@ -2079,19 +2103,41 @@ struct make_avl_multiset
 {
    /// @cond
    typedef avl_multiset_impl
-      < typename make_avltree_opt<T, O1, O2, O3, O4>::type
+      < typename make_avltree_opt
+         #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+         <T, O1, O2, O3, O4>
+         #else
+         <T, Options...>
+         #endif
+         ::type
       > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
 };
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+
+#if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class T, class O1, class O2, class O3, class O4>
+#else
+template<class T, class ...Options>
+#endif
 class avl_multiset
-   :  public make_avl_multiset<T, O1, O2, O3, O4>::type
+   :  public make_avl_multiset<T, 
+   #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+   O1, O2, O3, O4
+   #else
+   Options...
+   #endif
+   >::type
 {
    typedef typename make_avl_multiset
-      <T, O1, O2, O3, O4>::type   Base;
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      <T, O1, O2, O3, O4>
+      #else
+      <T, Options...>
+      #endif
+      ::type   Base;
 
    public:
    typedef typename Base::value_compare      value_compare;

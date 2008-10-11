@@ -56,7 +56,7 @@ namespace intrusive {
 //!
 //! Since no automatic rehashing is done, iterators are never invalidated when
 //! inserting or erasing elements. Iterators are only invalidated when rehasing.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
@@ -268,18 +268,24 @@ class unordered_set_impl
    { table_.swap(other.table_); }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
+   //!   Cloner should yield to nodes that compare equal and produce the same
+   //!   hash than the original node.
    //!
    //! <b>Effects</b>: Erases all the elements from *this
    //!   calling Disposer::operator()(pointer), clones all the 
    //!   elements from src calling Cloner::operator()(const_reference )
-   //!   and inserts them on *this.
+   //!   and inserts them on *this. The hash function and the equality
+   //!   predicate are copied from the source.
    //!
-   //!   If cloner throws, all cloned elements are unlinked and disposed
+   //!   If store_hash option is true, this method does not use the hash function.
+   //!
+   //!   If any operation throws, all cloned elements are unlinked and disposed
    //!   calling Disposer::operator()(pointer).
    //!   
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //! 
-   //! <b>Throws</b>: If cloner throws. Basic guarantee.
+   //! <b>Throws</b>: If cloner or hasher throw or hash or equality predicate copying
+   //!   throws. Basic guarantee.
    template <class Cloner, class Disposer>
    void clone_from(const unordered_set_impl &src, Cloner cloner, Disposer disposer)
    {  table_.clone_from(src.table_, cloner, disposer);  }
@@ -920,12 +926,40 @@ class unordered_set_impl
    //!
    //! <b>Effects</b>: Updates the internal reference with the new bucket erases
    //!   the values from the old bucket and inserts then in the new one. 
+   //!
+   //!   If store_hash option is true, this method does not use the hash function.
    //! 
    //! <b>Complexity</b>: Average case linear in this->size(), worst case quadratic.
    //! 
    //! <b>Throws</b>: If the hasher functor throws. Basic guarantee.
    void rehash(const bucket_traits &new_bucket_traits)
    {  table_.rehash(new_bucket_traits); }
+
+   //! <b>Requires</b>:
+   //!
+   //! <b>Effects</b>: 
+   //! 
+   //! <b>Complexity</b>: 
+   //! 
+   //! <b>Throws</b>:
+   //!
+   //! <b>Note</b>: this method is only available if incremental<true> option is activated.
+   bool incremental_rehash(bool grow = true)
+   {  return table_.incremental_rehash(grow);  }
+
+   //! <b>Note</b>: this method is only available if incremental<true> option is activated.
+   bool incremental_rehash(const bucket_traits &new_bucket_traits)
+   {  return table_.incremental_rehash(new_bucket_traits);  }
+
+   //! <b>Requires</b>:
+   //!
+   //! <b>Effects</b>: 
+   //! 
+   //! <b>Complexity</b>: 
+   //! 
+   //! <b>Throws</b>: 
+   size_type split_count() const
+   {  return table_.split_count(); }
 
    //! <b>Effects</b>: Returns the nearest new bucket count optimized for
    //!   the container that is bigger than n. This suggestion can be used
@@ -954,14 +988,14 @@ class unordered_set_impl
 
 //! Helper metafunction to define an \c unordered_set that yields to the same type when the
 //! same options (either explicitly or implicitly) are used.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class T, class ...Options>
 #else
 template<class T, class O1 = none, class O2 = none
                 , class O3 = none, class O4 = none
                 , class O5 = none, class O6 = none
                 , class O7 = none, class O8 = none
-                , class O9 = none
+                , class O9 = none, class O10= none
                 >
 #endif
 struct make_unordered_set
@@ -969,19 +1003,42 @@ struct make_unordered_set
    /// @cond
    typedef unordered_set_impl
       <  typename make_hashtable_opt
-            <T, true, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type
+            <T, true, 
+               #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+               O1, O2, O3, O4, O5, O6, O7, O8, O9, O10
+               #else
+               Options...
+               #endif
+            >::type
       > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
 };
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7, class O8, class O9>
+
+#if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7, class O8, class O9, class O10>
+#else
+template<class T, class ...Options>
+#endif
 class unordered_set
-   :  public make_unordered_set<T, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type
+   :  public make_unordered_set<T, 
+         #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+         O1, O2, O3, O4, O5, O6, O7, O8, O9, O10
+         #else
+         Options...
+         #endif
+      >::type
 {
    typedef typename make_unordered_set
-      <T, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type   Base;
+      <T, 
+         #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+         O1, O2, O3, O4, O5, O6, O7, O8, O9, O10
+         #else
+         Options...
+         #endif
+      >::type   Base;
 
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename Base::value_traits::value_type, T>::value));
@@ -1052,7 +1109,7 @@ class unordered_set
 //!
 //! Since no automatic rehashing is done, iterators are never invalidated when
 //! inserting or erasing elements. Iterators are only invalidated when rehasing.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
 template<class T, class ...Options>
 #else
 template<class Config>
@@ -1265,18 +1322,24 @@ class unordered_multiset_impl
    { table_.swap(other.table_); }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
+   //!   Cloner should yield to nodes that compare equal and produce the same
+   //!   hash than the original node.
    //!
    //! <b>Effects</b>: Erases all the elements from *this
    //!   calling Disposer::operator()(pointer), clones all the 
    //!   elements from src calling Cloner::operator()(const_reference )
-   //!   and inserts them on *this.
+   //!   and inserts them on *this. The hash function and the equality
+   //!   predicate are copied from the source.
    //!
-   //!   If cloner throws, all cloned elements are unlinked and disposed
+   //!   If store_hash option is true, this method does not use the hash function.
+   //!
+   //!   If any operation throws, all cloned elements are unlinked and disposed
    //!   calling Disposer::operator()(pointer).
    //!   
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //! 
-   //! <b>Throws</b>: If cloner throws.
+   //! <b>Throws</b>: If cloner or hasher throw or hash or equality predicate copying
+   //!   throws. Basic guarantee.
    template <class Cloner, class Disposer>
    void clone_from(const unordered_multiset_impl &src, Cloner cloner, Disposer disposer)
    {  table_.clone_from(src.table_, cloner, disposer);  }
@@ -1854,12 +1917,40 @@ class unordered_multiset_impl
    //!
    //! <b>Effects</b>: Updates the internal reference with the new bucket erases
    //!   the values from the old bucket and inserts then in the new one. 
+   //!
+   //!   If store_hash option is true, this method does not use the hash function.
    //! 
    //! <b>Complexity</b>: Average case linear in this->size(), worst case quadratic.
    //! 
    //! <b>Throws</b>: If the hasher functor throws.
    void rehash(const bucket_traits &new_bucket_traits)
    {  table_.rehash(new_bucket_traits); }
+
+   //! <b>Requires</b>:
+   //!
+   //! <b>Effects</b>: 
+   //! 
+   //! <b>Complexity</b>: 
+   //! 
+   //! <b>Throws</b>:
+   //!
+   //! <b>Note</b>: this method is only available if incremental<true> option is activated.
+   bool incremental_rehash(bool grow = true)
+   {  return table_.incremental_rehash(grow);  }
+
+   //! <b>Note</b>: this method is only available if incremental<true> option is activated.
+   bool incremental_rehash(const bucket_traits &new_bucket_traits)
+   {  return table_.incremental_rehash(new_bucket_traits);  }
+
+   //! <b>Requires</b>:
+   //!
+   //! <b>Effects</b>: 
+   //! 
+   //! <b>Complexity</b>: 
+   //! 
+   //! <b>Throws</b>: 
+   size_type split_count() const
+   {  return table_.split_count(); }
 
    //! <b>Effects</b>: Returns the nearest new bucket count optimized for
    //!   the container that is bigger than n. This suggestion can be used
@@ -1888,14 +1979,14 @@ class unordered_multiset_impl
 
 //! Helper metafunction to define an \c unordered_multiset that yields to the same type when the
 //! same options (either explicitly or implicitly) are used.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class T, class ...Options>
 #else
 template<class T, class O1 = none, class O2 = none
                 , class O3 = none, class O4 = none
                 , class O5 = none, class O6 = none
                 , class O7 = none, class O8 = none
-                , class O9 = none
+                , class O9 = none, class O10= none
                 >
 #endif
 struct make_unordered_multiset
@@ -1903,19 +1994,42 @@ struct make_unordered_multiset
    /// @cond
    typedef unordered_multiset_impl
       <  typename make_hashtable_opt
-            <T, false, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type
+            <T, false, 
+               #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+               O1, O2, O3, O4, O5, O6, O7, O8, O9, O10
+               #else
+               Options...
+               #endif
+            >::type
       > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
 };
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7, class O8, class O9>
+
+#if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7, class O8, class O9, class O10>
+#else
+template<class T, class ...Options>
+#endif
 class unordered_multiset
-   :  public make_unordered_multiset<T, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type
+   :  public make_unordered_multiset<T, 
+         #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+         O1, O2, O3, O4, O5, O6, O7, O8, O9, O10
+         #else
+         Options...
+         #endif
+      >::type
 {
    typedef typename make_unordered_multiset
-      <T, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type   Base;
+      <T, 
+         #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+         O1, O2, O3, O4, O5, O6, O7, O8, O9, O10
+         #else
+         Options...
+         #endif
+      >::type   Base;
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename Base::value_traits::value_type, T>::value));
 
