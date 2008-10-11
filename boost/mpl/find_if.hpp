@@ -34,7 +34,7 @@ struct find_if
     typedef typename iter_fold_if<
           Sequence
         , void
-        , arg<1> // ignore
+        , mpl::arg<1> // ignore
         , protect< aux::find_if_pred<Predicate> >
         >::type result_;
 
