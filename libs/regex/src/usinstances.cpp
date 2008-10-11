@@ -40,8 +40,7 @@ namespace std{
 #if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
 template class BOOST_REGEX_STDLIB_DECL allocator<unsigned short>;
 template class BOOST_REGEX_STDLIB_DECL _String_val<unsigned short, allocator<unsigned short> >;
-template class BOOST_REGEX_STDLIB_DECL basic_string<unsigned short, char_traits<unsigned short>,
-	allocator<unsigned short> >;
+template class BOOST_REGEX_STDLIB_DECL basic_string<unsigned short, char_traits<unsigned short>, allocator<unsigned short> >;
 #endif
 
 #if BOOST_WORKAROUND(BOOST_MSVC, > 1300) && BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
