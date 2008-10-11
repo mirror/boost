@@ -267,6 +267,9 @@
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\utilities.hpp">
 				</File>
+				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\workaround.hpp">
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

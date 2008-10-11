@@ -25,9 +25,9 @@
 
 using namespace boost::intrusive;
 
-static const std::size_t BucketSize = 11;
+static const std::size_t BucketSize = 8;
 
-template<class ValueTraits, bool CacheBegin, bool CompareHash>
+template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
 struct test_unordered_multiset
 {
    typedef typename ValueTraits::value_type value_type;
@@ -35,14 +35,16 @@ struct test_unordered_multiset
    static void test_sort(std::vector<value_type>& values);
    static void test_insert(std::vector<value_type>& values);
    static void test_swap(std::vector<value_type>& values);
-   static void test_rehash(std::vector<value_type>& values);
+   static void test_rehash(std::vector<value_type>& values, detail::true_);
+   static void test_rehash(std::vector<value_type>& values, detail::false_);
    static void test_find(std::vector<value_type>& values);
    static void test_impl();
    static void test_clone(std::vector<value_type>& values);
 };
 
-template<class ValueTraits, bool CacheBegin, bool CompareHash>
-void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_all (std::vector<typename ValueTraits::value_type>& values)
+template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
+void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>::
+   test_all (std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_multiset
@@ -51,6 +53,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_all (st
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
       , compare_hash<CompareHash>
+      , incremental<Incremental>
       > unordered_multiset_type;
    {
       typedef typename unordered_multiset_type::bucket_traits bucket_traits;
@@ -71,15 +74,16 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_all (st
    test_sort(values);
    test_insert(values);
    test_swap(values);
-   test_rehash(values);
+   test_rehash(values, detail::bool_<Incremental>());
    test_find(values);
    test_impl();
    test_clone(values);
 }
 
 //test case due to an error in tree implementation:
-template<class ValueTraits, bool CacheBegin, bool CompareHash>
-void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_impl()
+template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
+void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
+   ::test_impl()
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_multiset
@@ -88,6 +92,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_impl()
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
       , compare_hash<CompareHash>
+      , incremental<Incremental>
       > unordered_multiset_type;
    typedef typename unordered_multiset_type::bucket_traits bucket_traits;
 
@@ -110,8 +115,9 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_impl()
 }
 
 //test: constructor, iterator, clear, reverse_iterator, front, back, size:
-template<class ValueTraits, bool CacheBegin, bool CompareHash>
-void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_sort(std::vector<typename ValueTraits::value_type>& values)
+template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
+void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
+   ::test_sort(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_multiset
@@ -120,21 +126,29 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_sort(st
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
       , compare_hash<CompareHash>
+      , incremental<Incremental>
       > unordered_multiset_type;
    typedef typename unordered_multiset_type::bucket_traits bucket_traits;
 
    typename unordered_multiset_type::bucket_type buckets [BucketSize];
    unordered_multiset_type testset1(values.begin(), values.end(), bucket_traits(buckets, BucketSize));
 
-   {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
-      TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+   if(Incremental){
+      {  int init_values [] = { 4, 5, 1, 2, 2, 3 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+   }
+   else{
+      {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+   }
    testset1.clear();
    BOOST_TEST (testset1.empty());
 }  
-  
+
 //test: insert, const_iterator, const_reverse_iterator, erase, iterator_to:
-template<class ValueTraits, bool CacheBegin, bool CompareHash>
-void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_insert(std::vector<typename ValueTraits::value_type>& values)
+template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
+void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
+   ::test_insert(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_multiset
@@ -143,54 +157,100 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_insert(
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
       , compare_hash<CompareHash>
+      , incremental<Incremental>
       > unordered_multiset_type;
    typedef typename unordered_multiset_type::bucket_traits bucket_traits;
    typedef typename unordered_multiset_type::iterator iterator;
-   {
-      typename unordered_multiset_type::bucket_type buckets [BucketSize];
-      unordered_multiset_type testset(bucket_traits(buckets, BucketSize));
+   typename unordered_multiset_type::bucket_type buckets [BucketSize];
+   unordered_multiset_type testset(bucket_traits(buckets, BucketSize));
 
-      testset.insert(&values[0] + 2, &values[0] + 5);
+   testset.insert(&values[0] + 2, &values[0] + 5);
 
-      const unordered_multiset_type& const_testset = testset;
-      {  int init_values [] = { 1, 4, 5 };
-         TEST_INTRUSIVE_SEQUENCE( init_values, const_testset.begin() );  }
+   const unordered_multiset_type& const_testset = testset;
 
-      typename unordered_multiset_type::iterator i = testset.begin();
-      BOOST_TEST (i->value_ == 1);
+   if(Incremental){
+      {
+         {  int init_values [] = { 4, 5, 1 };
+            TEST_INTRUSIVE_SEQUENCE( init_values, const_testset.begin() );  }
 
-      i = testset.insert (values[0]);
-      BOOST_TEST (&*i == &values[0]);
-        
-      i = testset.iterator_to (values[2]);
-      BOOST_TEST (&*i == &values[2]);
-      testset.erase(i);
+         typename unordered_multiset_type::iterator i = testset.begin();
+         BOOST_TEST (i->value_ == 4);
 
-      {  int init_values [] = { 1, 3, 5 };
-         TEST_INTRUSIVE_SEQUENCE( init_values, const_testset.begin() );  }
-      testset.clear();
-      testset.insert(&values[0], &values[0] + values.size());
+         i = testset.insert (values[0]);
+         BOOST_TEST (&*i == &values[0]);
+            
+         i = testset.iterator_to (values[2]);
+         BOOST_TEST (&*i == &values[2]);
+         testset.erase(i);
 
-      {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
-         TEST_INTRUSIVE_SEQUENCE( init_values, const_testset.begin() );  }
+         {  int init_values [] = { 5, 1, 3 };
+            TEST_INTRUSIVE_SEQUENCE( init_values, const_testset.begin() );  }
+         testset.clear();
+         testset.insert(&values[0], &values[0] + values.size());
 
-      BOOST_TEST (testset.erase(1) == 1);
-      BOOST_TEST (testset.erase(2) == 2);
-      BOOST_TEST (testset.erase(3) == 1);
-      BOOST_TEST (testset.erase(4) == 1);
-      BOOST_TEST (testset.erase(5) == 1);
-      BOOST_TEST (testset.empty() == true);
+         {  int init_values [] = { 4, 5, 1, 2, 2, 3 };
+            TEST_INTRUSIVE_SEQUENCE( init_values, const_testset.begin() );  }
 
-      //Now with a single bucket
-      typename unordered_multiset_type::bucket_type single_bucket[1];
-      unordered_multiset_type testset2(bucket_traits(single_bucket, 1));
-      testset2.insert(&values[0], &values[0] + values.size());
-      BOOST_TEST (testset2.erase(5) == 1);
-      BOOST_TEST (testset2.erase(2) == 2);
-      BOOST_TEST (testset2.erase(1) == 1);
-      BOOST_TEST (testset2.erase(4) == 1);
-      BOOST_TEST (testset2.erase(3) == 1);
-      BOOST_TEST (testset2.empty() == true);
+         BOOST_TEST (testset.erase(1) == 1);
+         BOOST_TEST (testset.erase(2) == 2);
+         BOOST_TEST (testset.erase(3) == 1);
+         BOOST_TEST (testset.erase(4) == 1);
+         BOOST_TEST (testset.erase(5) == 1);
+         BOOST_TEST (testset.empty() == true);
+
+         //Now with a single bucket
+         typename unordered_multiset_type::bucket_type single_bucket[1];
+         unordered_multiset_type testset2(bucket_traits(single_bucket, 1));
+         testset2.insert(&values[0], &values[0] + values.size());
+         BOOST_TEST (testset2.erase(5) == 1);
+         BOOST_TEST (testset2.erase(2) == 2);
+         BOOST_TEST (testset2.erase(1) == 1);
+         BOOST_TEST (testset2.erase(4) == 1);
+         BOOST_TEST (testset2.erase(3) == 1);
+         BOOST_TEST (testset2.empty() == true);
+      }
+   }
+   else{
+      {
+         {  int init_values [] = { 1, 4, 5 };
+            TEST_INTRUSIVE_SEQUENCE( init_values, const_testset.begin() );  }
+
+         typename unordered_multiset_type::iterator i = testset.begin();
+         BOOST_TEST (i->value_ == 1);
+
+         i = testset.insert (values[0]);
+         BOOST_TEST (&*i == &values[0]);
+            
+         i = testset.iterator_to (values[2]);
+         BOOST_TEST (&*i == &values[2]);
+         testset.erase(i);
+
+         {  int init_values [] = { 1, 3, 5 };
+            TEST_INTRUSIVE_SEQUENCE( init_values, const_testset.begin() );  }
+         testset.clear();
+         testset.insert(&values[0], &values[0] + values.size());
+
+         {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+            TEST_INTRUSIVE_SEQUENCE( init_values, const_testset.begin() );  }
+
+         BOOST_TEST (testset.erase(1) == 1);
+         BOOST_TEST (testset.erase(2) == 2);
+         BOOST_TEST (testset.erase(3) == 1);
+         BOOST_TEST (testset.erase(4) == 1);
+         BOOST_TEST (testset.erase(5) == 1);
+         BOOST_TEST (testset.empty() == true);
+
+         //Now with a single bucket
+         typename unordered_multiset_type::bucket_type single_bucket[1];
+         unordered_multiset_type testset2(bucket_traits(single_bucket, 1));
+         testset2.insert(&values[0], &values[0] + values.size());
+         BOOST_TEST (testset2.erase(5) == 1);
+         BOOST_TEST (testset2.erase(2) == 2);
+         BOOST_TEST (testset2.erase(1) == 1);
+         BOOST_TEST (testset2.erase(4) == 1);
+         BOOST_TEST (testset2.erase(3) == 1);
+         BOOST_TEST (testset2.empty() == true);
+      }
    }
    {
       //Now erase just one per loop
@@ -270,11 +330,12 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_insert(
          }
       }
    }
-}  
+}
 
 //test: insert (seq-version), swap, erase (seq-version), size:
-template<class ValueTraits, bool CacheBegin, bool CompareHash>
-void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_swap(std::vector<typename ValueTraits::value_type>& values)
+template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
+void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>::
+   test_swap(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_multiset
@@ -283,17 +344,30 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_swap(st
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
       , compare_hash<CompareHash>
+      , incremental<Incremental>
       > unordered_multiset_type;
    typedef typename unordered_multiset_type::bucket_traits bucket_traits;
    typename unordered_multiset_type::bucket_type buckets [BucketSize];
-   {
-      typename unordered_multiset_type::bucket_type buckets2 [BucketSize];
-      unordered_multiset_type testset1(&values[0], &values[0] + 2, bucket_traits(buckets, BucketSize));
-      unordered_multiset_type testset2(bucket_traits(buckets2, BucketSize));
 
-      testset2.insert (&values[0] + 2, &values[0] + 6);
-      testset1.swap (testset2);
+   typename unordered_multiset_type::bucket_type buckets2 [BucketSize];
+   unordered_multiset_type testset1(&values[0], &values[0] + 2, bucket_traits(buckets, BucketSize));
+   unordered_multiset_type testset2(bucket_traits(buckets2, BucketSize));
 
+   testset2.insert (&values[0] + 2, &values[0] + 6);
+   testset1.swap (testset2);
+
+   if(Incremental){
+      {  int init_values [] = { 4, 5, 1, 2 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+
+      {  int init_values [] = { 2, 3 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testset2.begin() );  }
+      testset1.erase (testset1.iterator_to(values[4]), testset1.end());
+      BOOST_TEST (testset1.size() == 1);
+      //  BOOST_TEST (&testset1.front() == &values[3]);
+      BOOST_TEST (&*testset1.begin() == &values[2]);
+   }
+   else{
       {  int init_values [] = { 1, 2, 4, 5 };
          TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
@@ -306,9 +380,13 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_swap(st
    }
 }  
 
+
+
 //test: rehash:
-template<class ValueTraits, bool CacheBegin, bool CompareHash>
-void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_rehash(std::vector<typename ValueTraits::value_type>& values)
+
+template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
+void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
+   ::test_rehash(std::vector<typename ValueTraits::value_type>& values, detail::true_)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_multiset
@@ -317,6 +395,135 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_rehash(
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
       , compare_hash<CompareHash>
+      , incremental<Incremental>
+      > unordered_multiset_type;
+   typedef typename unordered_multiset_type::bucket_traits bucket_traits;
+   //Build a uset
+   typename unordered_multiset_type::bucket_type buckets1 [BucketSize];
+   typename unordered_multiset_type::bucket_type buckets2 [BucketSize*2];
+   unordered_multiset_type testset1(&values[0], &values[0] + values.size(), bucket_traits(buckets1, BucketSize));
+   //Test current state
+   BOOST_TEST(testset1.split_count() == BucketSize/2);
+   {  int init_values [] = { 4, 5, 1, 2, 2, 3 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+   //Incremental rehash step
+   BOOST_TEST (testset1.incremental_rehash() == true);
+   BOOST_TEST(testset1.split_count() == (BucketSize/2+1));
+   {  int init_values [] = { 5, 1, 2, 2, 3, 4 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+   //Rest of incremental rehashes should lead to the same sequence
+   for(std::size_t split_bucket = testset1.split_count(); split_bucket != BucketSize; ++split_bucket){
+      BOOST_TEST (testset1.incremental_rehash() == true);
+      BOOST_TEST(testset1.split_count() == (split_bucket+1));
+      {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+   }
+   //This incremental rehash should fail because we've reached the end of the bucket array
+   BOOST_TEST (testset1.incremental_rehash() == false);
+   BOOST_TEST(testset1.split_count() == BucketSize);
+   {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+   TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+
+   //
+   //Try incremental hashing specifying a new bucket traits pointing to the same array
+   //
+   //This incremental rehash should fail because the new size is not twice the original
+   BOOST_TEST(testset1.incremental_rehash(bucket_traits(buckets1, BucketSize)) == false);
+   BOOST_TEST(testset1.split_count() == BucketSize);
+   {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+   TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+
+   //This incremental rehash should success because the new size is twice the original
+   //and split_count is the same as the old bucket count
+   BOOST_TEST(testset1.incremental_rehash(bucket_traits(buckets1, BucketSize*2)) == true);
+   BOOST_TEST(testset1.split_count() == BucketSize);
+   {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+   TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+
+   //This incremental rehash should also success because the new size is half the original
+   //and split_count is the same as the new bucket count
+   BOOST_TEST(testset1.incremental_rehash(bucket_traits(buckets1, BucketSize)) == true);
+   BOOST_TEST(testset1.split_count() == BucketSize);
+   {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+   TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+
+   //
+   //Try incremental hashing specifying a new bucket traits pointing to the same array
+   //
+   //This incremental rehash should fail because the new size is not twice the original
+   BOOST_TEST(testset1.incremental_rehash(bucket_traits(buckets2, BucketSize)) == false);
+   BOOST_TEST(testset1.split_count() == BucketSize);
+   {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+   TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+
+   //This incremental rehash should success because the new size is twice the original
+   //and split_count is the same as the old bucket count
+   BOOST_TEST(testset1.incremental_rehash(bucket_traits(buckets2, BucketSize*2)) == true);
+   BOOST_TEST(testset1.split_count() == BucketSize);
+   {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+   TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+
+   //This incremental rehash should also success because the new size is half the original
+   //and split_count is the same as the new bucket count
+   BOOST_TEST(testset1.incremental_rehash(bucket_traits(buckets1, BucketSize)) == true);
+   BOOST_TEST(testset1.split_count() == BucketSize);
+   {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+   TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+
+   //Full shrink rehash
+   testset1.rehash(bucket_traits(buckets1, 4));
+   BOOST_TEST (testset1.size() == values.size());
+   BOOST_TEST (testset1.incremental_rehash() == false);
+   {  int init_values [] = { 4, 5, 1, 2, 2, 3 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+   //Full shrink rehash again
+   testset1.rehash(bucket_traits(buckets1, 2));
+   BOOST_TEST (testset1.size() == values.size());
+   BOOST_TEST (testset1.incremental_rehash() == false);
+   {  int init_values [] = { 2, 2, 4, 3, 5, 1 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+   //Full growing rehash
+   testset1.rehash(bucket_traits(buckets1, BucketSize));
+   BOOST_TEST (testset1.size() == values.size());
+   BOOST_TEST (testset1.incremental_rehash() == false);
+   {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+   //Incremental rehash shrinking
+   //First incremental rehashes should lead to the same sequence
+   for(std::size_t split_bucket = testset1.split_count(); split_bucket > 6; --split_bucket){
+      BOOST_TEST (testset1.incremental_rehash(false) == true);
+      BOOST_TEST(testset1.split_count() == (split_bucket-1));
+      {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+   }
+   //Incremental rehash step
+   BOOST_TEST (testset1.incremental_rehash(false) == true);
+   BOOST_TEST(testset1.split_count() == (BucketSize/2+1));
+   {  int init_values [] = { 5, 1, 2, 2, 3, 4 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+   //Incremental rehash step 2
+   BOOST_TEST (testset1.incremental_rehash(false) == true);
+   BOOST_TEST(testset1.split_count() == (BucketSize/2));
+   {  int init_values [] = { 4, 5, 1, 2, 2, 3 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+   //This incremental rehash should fail because we've reached the half of the bucket array
+   BOOST_TEST(testset1.incremental_rehash(false) == false);
+   BOOST_TEST(testset1.split_count() == BucketSize/2);
+   {  int init_values [] = { 4, 5, 1, 2, 2, 3 };
+   TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+}
+template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
+void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
+   ::test_rehash(std::vector<typename ValueTraits::value_type>& values, detail::false_)
+{
+   typedef typename ValueTraits::value_type value_type;
+   typedef unordered_multiset
+      <value_type
+      , value_traits<ValueTraits>
+      , constant_time_size<value_type::constant_time_size>
+      , cache_begin<CacheBegin>
+      , compare_hash<CompareHash>
+      , incremental<Incremental>
       > unordered_multiset_type;
    typedef typename unordered_multiset_type::bucket_traits bucket_traits;
 
@@ -325,36 +532,37 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_rehash(
    typename unordered_multiset_type::bucket_type buckets3 [BucketSize*2];
 
    unordered_multiset_type testset1(&values[0], &values[0] + 6, bucket_traits(buckets1, BucketSize));
-   BOOST_TEST (testset1.size() == 6);
+   BOOST_TEST (testset1.size() == values.size());
    {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
    testset1.rehash(bucket_traits(buckets2, 2));
-   BOOST_TEST (testset1.size() == 6);
+   BOOST_TEST (testset1.size() == values.size());
    {  int init_values [] = { 4, 2, 2, 5, 3, 1 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
    testset1.rehash(bucket_traits(buckets3, BucketSize*2));
-   BOOST_TEST (testset1.size() == 6);
+   BOOST_TEST (testset1.size() == values.size());
    {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
    //Now rehash reducing the buckets
    testset1.rehash(bucket_traits(buckets3, 2));
-   BOOST_TEST (testset1.size() == 6);
+   BOOST_TEST (testset1.size() == values.size());
    {  int init_values [] = { 4, 2, 2, 5, 3, 1 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
    //Now rehash increasing the buckets
    testset1.rehash(bucket_traits(buckets3, BucketSize*2));
-   BOOST_TEST (testset1.size() == 6);
+   BOOST_TEST (testset1.size() == values.size());
    {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 }  
 
 //test: find, equal_range (lower_bound, upper_bound):
-template<class ValueTraits, bool CacheBegin, bool CompareHash>
-void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_find(std::vector<typename ValueTraits::value_type>& values)
+template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
+void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>::
+   test_find(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_multiset
@@ -363,6 +571,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_find(st
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
       , compare_hash<CompareHash>
+      , incremental<Incremental>
       > unordered_multiset_type;
    typedef typename unordered_multiset_type::bucket_traits bucket_traits;
 
@@ -387,8 +596,8 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>::test_find(st
 } 
 
 
-template<class ValueTraits, bool CacheBegin, bool CompareHash>
-void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>
+template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
+void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
    ::test_clone(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
@@ -398,6 +607,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
       , compare_hash<CompareHash>
+      , incremental<Incremental>
       > unordered_multiset_type;
    typedef typename unordered_multiset_type::bucket_traits bucket_traits;
    {
@@ -442,7 +652,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>
       unordered_multiset_type testset2 (bucket_traits(buckets2, BucketSize*2));
 
       testset2.clone_from(testset1, test::new_cloner<value_type>(), test::delete_disposer<value_type>());
-      //Ordering is not guarantee in the cloning so insert data in a set and test
+      //Ordering is not guaranteed in the cloning so insert data in a set and test
       std::multiset<typename ValueTraits::value_type>
          src(testset1.begin(), testset1.end());
       std::multiset<typename ValueTraits::value_type>
@@ -453,7 +663,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash>
    }
 }
 
-template<class VoidPointer, bool constant_time_size>
+template<class VoidPointer, bool constant_time_size, bool Incremental>
 class test_main_template
 {
    public:
@@ -471,6 +681,7 @@ class test_main_template
                   >::type
                 , true
                 , false
+                , Incremental
                 >::test_all(data);
 
       test_unordered_multiset < typename detail::get_member_value_traits
@@ -482,14 +693,15 @@ class test_main_template
                   >::type
                 , false
                 , false
+                , Incremental
                 >::test_all(data);
 
       return 0;
    }
 };
 
-template<class VoidPointer>
-class test_main_template<VoidPointer, false>
+template<class VoidPointer, bool Incremental>
+class test_main_template<VoidPointer, false, Incremental>
 {
    public:
    int operator()()
@@ -506,6 +718,7 @@ class test_main_template<VoidPointer, false>
                   >::type
                 , true
                 , false
+                , Incremental
                 >::test_all(data);
 
       test_unordered_multiset < typename detail::get_member_value_traits
@@ -517,6 +730,7 @@ class test_main_template<VoidPointer, false>
                   >::type
                 , false
                 , false
+                , Incremental
                 >::test_all(data);
 
       test_unordered_multiset < typename detail::get_base_value_traits
@@ -525,6 +739,7 @@ class test_main_template<VoidPointer, false>
                   >::type
                 , true
                 , true
+                , Incremental
                 >::test_all(data);
 
       test_unordered_multiset < typename detail::get_member_value_traits
@@ -536,6 +751,7 @@ class test_main_template<VoidPointer, false>
                   >::type
                 , false
                 , true
+                , Incremental
                 >::test_all(data);
       return 0;
    }
@@ -543,10 +759,14 @@ class test_main_template<VoidPointer, false>
 
 int main( int, char* [] ) 
 {
-   test_main_template<void*, false>()();
-   test_main_template<smart_ptr<void>, false>()();
-   test_main_template<void*, true>()();
-   test_main_template<smart_ptr<void>, true>()();
+   test_main_template<void*, false, true>()();
+   test_main_template<smart_ptr<void>, false, true>()();
+   test_main_template<void*, true, true>()();
+   test_main_template<smart_ptr<void>, true, true>()();
+   test_main_template<void*, false, false>()();
+   test_main_template<smart_ptr<void>, false, false>()();
+   test_main_template<void*, true, true>()();
+   test_main_template<smart_ptr<void>, true, false>()();
    return boost::report_errors();
 }
 

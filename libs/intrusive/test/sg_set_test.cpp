@@ -17,8 +17,18 @@
 
 namespace boost { namespace intrusive { namespace test {
 
+#if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class T, class O1, class O2, class O3, class O4>
-struct has_rebalance<boost::intrusive::sg_set<T, O1, O2, O3, O4> >
+#else
+template<class T, class ...Options>
+#endif
+struct has_rebalance<boost::intrusive::sg_set<T, 
+   #if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+   O1, O2, O3, O4
+   #else
+   Options...
+   #endif
+> >
 {
    static const bool value = true;
 };
