@@ -146,7 +146,7 @@ class pretty:
         self.copyright = None
         
         self.re_header_name_comment = re.compile( 
-              r'^\s*//\s+\$[S]ource: /cvsroot/boost/boost/(.*?%s\.hpp),v\s*\$$'
+              r'^\s*//\s+\$[I]d:\s+(.*?%s\.hpp)\s+[^$]+[$]$'
                 % os.path.splitext( name )[0]
             )
         
@@ -199,7 +199,7 @@ class pretty:
                 match = self.re_header_name_comment.match( line )
                 self.output.write( \
                     '\n%s\n' \
-                    '// Preprocessed version of "%s" header\n' \
+                    '// *Preprocessed* version of the main "%s" header\n' \
                     '// -- DO NOT modify by hand!\n\n' \
                     % ( self.copyright, match.group(1) )
                     )
