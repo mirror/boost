@@ -39,6 +39,7 @@
     <td width="100%" bgcolor="#E8F5FF">
       <a href="#Introduction">Introduction</a><br>
       <a href="#Macros">Macros</a><br>
+      <a href="#Deprecated-names">Deprecated names</a><br>
       <a href="#Header-error_code">Header &lt;boost/system/error_code.hpp&gt;</a><br>
       <a href="#Class-error_category">Class <code>error_category</code></a><br>
       &nbsp;&nbsp;&nbsp;<a href="#Class-error_category-synopsis">Class <code>error_category</code> synopsis</a><br>
@@ -114,6 +115,45 @@ provided, so users may ignore these macros if they prefer.</p>
     <td valign="top"><code>BOOST_SYSTEM_NO_DEPRECATED</code></td>
     <td valign="top">Not defined.</td>
     <td valign="top">Deprecated features are excluded.</td>
+  </tr>
+</table>
+<h2><a name="Deprecated-names">Deprecated names</a></h2>
+<p>In the process of adding Boost.System to C++0x standard library, some of the 
+names are being changed. To ease transition, Boost.System deprecates the old 
+names, but continues to provide them unless macro <code>BOOST_SYSTEM_NO_DEPRECATED</code> 
+is defined.</p>
+<table border="1" cellpadding="5" cellspacing="1" style="border-collapse: collapse" bordercolor="#111111">
+  <tr>
+    <td><b><i>Old name, now deprecated</i></b></td>
+    <td><b><i>New name</i></b></td>
+  </tr>
+  <tr>
+    <td><code>namespace posix</code></td>
+    <td><code>namespace errc</code></td>
+  </tr>
+  <tr>
+    <td><code>namespace posix_error</code></td>
+    <td><code>namespace errc</code></td>
+  </tr>
+  <tr>
+    <td><code>enum posix_errno</code></td>
+    <td><code>enum errc_t</code></td>
+  </tr>
+  <tr>
+    <td><code>get_posix_category()</code></td>
+    <td><code>get_generic_category()</code></td>
+  </tr>
+  <tr>
+    <td><code>posix_category</code></td>
+    <td><code>generic_category</code></td>
+  </tr>
+  <tr>
+    <td><code>errno_ecat</code></td>
+    <td><code>generic_category</code></td>
+  </tr>
+  <tr>
+    <td><code>native_ecat</code></td>
+    <td><code>system_category</code></td>
   </tr>
 </table>
 <h2><a name="Header-error_code">Header &lt;boost/system/error_code.hpp&gt;</a></h2>
@@ -286,7 +326,7 @@ types should create a single object of each such type. <i>—end note</i> ]</p>
       virtual ~error_category();
 
       virtual const char *     name() const = 0;
-      virtual string           message( error_code::value_type ev ) const = 0;
+      virtual string           message( int ev ) const = 0;
       virtual error_condition  default_error_condition( int ev ) const;
       virtual bool             equivalent( int code, const error_condition &amp; condition ) const;
       virtual bool             equivalent( const error_code &amp; code, int condition ) const;
@@ -312,7 +352,7 @@ this subclause.</p>
   <p><i>Returns: </i>a string naming the error category.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
-<pre>virtual string message( error_code::value_type ev ) const=0;</pre>
+<pre>virtual string message( int ev ) const=0;</pre>
 <blockquote>
   <p><i>Returns:</i> A string that describes the error denoted by
   <code>ev</code>.</p>
@@ -399,7 +439,7 @@ error_code</code> synopsis</a></h3>
       error_code();
       error_code( val, const error_category &amp; cat );
       template &lt;class <code>ErrorCodeEnum</code>&gt;
-        error_code(<code> errorCodeEnum</code> e,
+        error_code(<code> ErrorCodeEnum</code> e,
          typename enable_if&lt;is_error_code_enum&lt;<code>ErrorCodeEnum</code>&gt; &gt;::type* = 0);
 
       // modifiers:
@@ -418,7 +458,7 @@ error_code</code> synopsis</a></h3>
 
     private:
       int val_;                     // <i>exposition only</i>
-      const error_category &amp; cat_;  // <i>exposition only</i>
+      const error_category * cat_;  // <i>exposition only</i>
     };
   }
 }</pre>
@@ -449,7 +489,7 @@ error_code</code> constructors</a></h3>
 error_code</code> modifiers</a></h3>
 <pre>void assign( int val, const error_category &amp; cat );</pre>
 <blockquote>
-  <p><i>Postconditions:</i> <code>val_ == val &amp;&amp; cat_ == cat</code>.</p>
+  <p><i>Postconditions:</i> <code>val_ == val &amp;&amp; cat_ == &amp;cat</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>template&lt;typename <code>ErrorCodeEnum</code>&gt;
@@ -470,9 +510,9 @@ error_code</code> observers</a></h3>
 <p><i>Returns:</i> <code>val_</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
-  <p><code>error_category category() const;</code></p>
+  <p><code>const error_category &amp; category() const;</code></p>
 <blockquote>
-<p><i>Returns:</i> <code>cat_</code>.</p>
+<p><i>Returns:</i> <code>*cat_</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
   <pre>error_condition default_error_condition() const;</pre>
@@ -487,7 +527,7 @@ error_code</code> observers</a></h3>
 </blockquote>
 <p><code>operator <i>unspecified-bool-type</i>() const;</code></p>
 <blockquote>
-<p><i>Returns:</i> if <code>value() != value_type()</code>, returns a value that will evaluate
+<p><i>Returns:</i> if <code>value() != 0</code>, returns a value that will evaluate
 <code>true</code> in a boolean context; otherwise, returns a value that will 
 evaluate <code>false</code> in a boolean context. The value type returned shall 
 not be convertible to <code>int</code>.</p>
@@ -534,8 +574,8 @@ implementation specific. <i>--end note ]</i></p>
       operator unspecified-bool-type () const;
 
     private:
-      int val_;                     // <i>exposition only</i>
-      const error_category &amp; cat_;   // <i>exposition only</i>
+      int val_;                      // <i>exposition only</i>
+      const error_category * cat_;   // <i>exposition only</i>
     };
   }
 }</pre>
@@ -545,13 +585,13 @@ constructors</a></h3>
 <pre>error_condition(); </pre>
 <blockquote>
   <p><i>Effects:</i> Constructs an object of type <code>error_condition</code>.</p>
-  <p><i>Postconditions:</i> <code>val_ == 0 and cat_ == generic_category</code>.</p>
+  <p><i>Postconditions:</i> <code>val_ == 0 and cat_ == &amp;generic_category</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
-<pre>error_condition( value_type val, const error_category &amp; cat );</pre>
+<pre>error_condition( int val, const error_category &amp; cat );</pre>
 <blockquote>
   <p><i>Effects: </i>Constructs an object of type error_condition.</p>
-  <p><i>Postconditions:</i> <code>val_ == val and cat_ == cat</code>.</p>
+  <p><i>Postconditions:</i> <code>val_ == val and cat_ == &amp;cat</code>.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>template &lt;class ErrorConditionEnum&gt;
@@ -564,9 +604,9 @@ constructors</a></h3>
 </blockquote>
 <h3><a name="Class-error_condition-modifiers">Class <code>error_condition</code> 
 modifiers</a></h3>
-<pre>void assign( value_type val, const error_category &amp; cat ); </pre>
+<pre>void assign( int val, const error_category &amp; cat ); </pre>
 <blockquote>
-  <p><i>Postconditions:</i> <code>val_ == val and cat_ == cat</code>. </p>
+  <p><i>Postconditions:</i> <code>val_ == val and cat_ == &amp;cat</code>. </p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
 <pre>template&lt;typename ErrorConditionEnum&gt;
@@ -582,14 +622,14 @@ modifiers</a></h3>
 </blockquote>
 <h3><a name="Class-error_condition-observers">Class <code>error_condition</code> 
 observers</a></h3>
-<pre>value_type value() const;</pre>
+<pre>int value() const;</pre>
 <blockquote>
   <p><i>Returns:</i> <code>val_</code>.</p>
   <p><i>Throws:</i> Nothing</p>
 </blockquote>
 <pre>const error_category &amp; category() const;</pre>
 <blockquote>
-  <p><i>Returns:</i> <code>cat_</code>.</p>
+  <p><i>Returns:</i> <code>*cat_</code>.</p>
   <p>Throws: Nothing.</p>
 </blockquote>
 <pre>string message() const;</pre>
@@ -694,7 +734,7 @@ bool operator!=( const error_condition &amp; condition, const error_code &amp; c
 </blockquote>
 <pre>error_condition make_error_condition( errc::errc_t e );</pre>
 <blockquote>
-  <p><i>Returns:</i> <code>error_condition( e, generic_category)</code>.</p>
+  <p><i>Returns:</i> <code>error_condition( static_cast&lt;int&gt;( e ), generic_category)</code>.</p>
 </blockquote>
 
 <pre>template &lt;class charT, class traits&gt;
@@ -727,11 +767,11 @@ application program interfaces.</p>
       system_error( error_code ec );
       system_error( error_code ec, const char * what_arg );
       system_error( error_code ec, const std::string &amp; what_arg );
-      system_error( error_code::value_type ev, const error_category &amp; ecat,
+      system_error( int ev, const error_category &amp; ecat,
                     const char * what_arg );
-      system_error( error_code::value_type ev, const error_category &amp; ecat,
+      system_error( int ev, const error_category &amp; ecat,
                     const std::string &amp; what_arg );
-      system_error( error_code::value_type ev, const error_category &amp; ecat);
+      system_error( int ev, const error_category &amp; ecat);
 
       const error_code &amp; code() const throw();
       const char *       what() const throw();
@@ -757,21 +797,21 @@ application program interfaces.</p>
   <p><i>Postcondition:</i> <code>code() == ec <br>
 &nbsp; &amp;&amp; std::strcmp( this-&gt;runtime_error::what(), what_arg.c_str() ) == 0</code></p>
 </blockquote>
-<pre>system_error( error_code::value_type ev, const error_category &amp; ecat,
+<pre>system_error( int ev, const error_category &amp; ecat,
              const char * what_arg );</pre>
 <blockquote>
   <p><i>Effects:</i> Constructs an object of class <code>system_error</code>.</p>
   <p><i>Postcondition:</i> <code>code() == error_code( ev, ecat )<br>
 &nbsp; &amp;&amp; std::strcmp( this-&gt;runtime_error::what(), what_arg ) == 0</code></p>
 </blockquote>
-<pre>system_error( error_code::value_type ev, const error_category &amp; ecat,
+<pre>system_error( int ev, const error_category &amp; ecat,
              const std::string &amp; what_arg );</pre>
 <blockquote>
   <p><i>Effects:</i> Constructs an object of class <code>system_error</code>.</p>
   <p><i>Postcondition:</i> <code>code() == error_code( ev, ecat )<br>
 &nbsp; &amp;&amp; std::strcmp( this-&gt;runtime_error::what(), what_arg.c_str() ) == 0</code></p>
 </blockquote>
-<pre>system_error( error_code::value_type ev, const error_category &amp; ecat );</pre>
+<pre>system_error( int ev, const error_category &amp; ecat );</pre>
 <blockquote>
   <p><i>Effects:</i> Constructs an object of class <code>system_error</code>.</p>
   <p><i>Postcondition:</i> <code>code() == error_code( ev, ecat )<br>
@@ -791,7 +831,7 @@ application program interfaces.</p>
 <hr>
 
 <p>Revised 
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->October 08, 2008<!--webbot bot="Timestamp" endspan i-checksum="30989" --> </font>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->October 11, 2008<!--webbot bot="Timestamp" endspan i-checksum="30976" --> </font>
 </p>
 
 <p>© Copyright Beman Dawes, 2006, 2007, 2008</p>
