@@ -61,7 +61,7 @@ public:
       std::size_t c = count();
       value_type * t = address();
       while(0 < c--)
-            ar & make_nvp("item", *t++);
+            ar & boost::serialization::make_nvp("item", *t++);
     }
 
     // optimized implementation
@@ -126,7 +126,7 @@ template <class Archive, class T, std::size_t N>
 
 void serialize(Archive& ar, boost::array<T,N>& a, const unsigned int /* version */)
 {
-  ar & make_nvp("elems",a.elems);
+  ar & boost::serialization::make_nvp("elems",a.elems);
 }
 
 
