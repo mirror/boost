@@ -79,8 +79,8 @@
 // specialized on those types for this to work.
 
 #include <locale>
-#include <cwchar>  // for mbstate_t
-#include <cstddef> // for std::size_t
+#include <cwchar>   // for mbstate_t
+#include <cstddef>  // for std::size_t
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
@@ -88,6 +88,7 @@
 #if defined(BOOST_NO_STDC_NAMESPACE)
     using ::codecvt;
     using ::mbstate_t;
+    using ::size_t
 #endif
 
 #if !defined(__MSL_CPP__) && !defined(__LIBCOMO__)
