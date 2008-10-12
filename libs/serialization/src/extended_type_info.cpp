@@ -151,7 +151,7 @@ extended_type_info::operator==(const extended_type_info &rhs) const {
         return false;
     }
     return is_equal(rhs);
-};
+}
 
 } // namespace serialization
 } // namespace boost
