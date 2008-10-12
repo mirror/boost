@@ -181,7 +181,13 @@ void construct(void* p,const Type& t)
 template<typename Type>
 void destroy(const Type* p)
 {
+
+#if BOOST_WORKAROUND(__SUNPRO_CC,BOOST_TESTED_AT(0x590))
+  const_cast<Type*>(p)->~Type();
+#else
   p->~Type();
+#endif
+
 }
 
 } /* namespace boost::detail::allocator */
