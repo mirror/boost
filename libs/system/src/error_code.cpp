@@ -61,11 +61,12 @@ namespace
 
   const char * generic_error_category::name() const
   {
-    return "GENERIC";
+    return "generic";
   }
 
   std::string generic_error_category::message( int ev ) const
   {
+    static std::string unknown_err( "Unknown error" );
   // strerror_r is preferred because it is always thread safe,
   // however, we fallback to strerror in certain cases because:
   //   -- Windows doesn't provide strerror_r.
@@ -81,15 +82,19 @@ namespace
      || (defined(__osf__) && !defined(_REENTRANT))\
      || (defined(__vms))
       const char * c_str = std::strerror( ev );
-      return std::string( c_str ? c_str : "Unknown error" );
-  # else
+      return  c_str
+        ? std::string( c_str )
+        : unknown_err;
+  # else  // use strerror_r
       char buf[64];
       char * bp = buf;
       std::size_t sz = sizeof(buf);
   #  if defined(__CYGWIN__) || defined(__USE_GNU)
       // Oddball version of strerror_r
       const char * c_str = strerror_r( ev, bp, sz );
-      return std::string( c_str ? c_str : "Unknown error" );
+      return  c_str
+        ? std::string( c_str )
+        : unknown_err;
   #  else
       // POSIX version of strerror_r
       int result;
@@ -100,7 +105,9 @@ namespace
   #  if defined (__sgi)
         const char * c_str = strerror( ev );
         result = 0;
-        return std::string( c_str ? c_str : "Unknown error" );
+      return  c_str
+        ? std::string( c_str )
+        : unknown_err;
   #  else
         result = strerror_r( ev, bp, sz );
   #  endif
@@ -113,26 +120,31 @@ namespace
           result = errno;
   #  endif
           if ( result !=  ERANGE ) break;
-        if ( sz > sizeof(buf) ) std::free( bp );
-        sz *= 2;
-        if ( (bp = static_cast<char*>(std::malloc( sz ))) == 0 )
-          return std::string( "ENOMEM" );
+          if ( sz > sizeof(buf) ) std::free( bp );
+          sz *= 2;
+          if ( (bp = static_cast<char*>(std::malloc( sz ))) == 0 )
+            return std::string( "ENOMEM" );
         }
       }
+      std::string msg;
       try
       {
-      std::string msg( ( result == invalid_argument ) ? "Unknown error" : bp );
-      if ( sz > sizeof(buf) ) std::free( bp );
-        sz = 0;
-      return msg;
+        msg = ( ( result == invalid_argument ) ? "Unknown error" : bp );
       }
+
+#   ifndef BOOST_NO_EXCEPTIONS
+      // See ticket #2098
       catch(...)
       {
-        if ( sz > sizeof(buf) ) std::free( bp );
-        throw;
+        // just eat the exception
       }
-  #  endif
-  # endif
+#   endif
+
+      if ( sz > sizeof(buf) ) std::free( bp );
+      sz = 0;
+      return msg;
+  #  endif   // else POSIX version of strerror_r
+  # endif  // else use strerror_r
   }
   //  system_error_category implementation  --------------------------------// 
 
@@ -154,7 +166,9 @@ namespace
     case EADDRNOTAVAIL: return make_error_condition( address_not_available );
     case EAFNOSUPPORT: return make_error_condition( address_family_not_supported );
     case EAGAIN: return make_error_condition( resource_unavailable_try_again );
+#   if EALREADY != EBUSY  //  EALREADY and EBUSY are the same on QNX Neutrino
     case EALREADY: return make_error_condition( connection_already_in_progress );
+#   endif
     case EBADF: return make_error_condition( bad_file_descriptor );
     case EBADMSG: return make_error_condition( bad_message );
     case EBUSY: return make_error_condition( device_or_resource_busy );
@@ -395,6 +409,12 @@ namespace boost
 {
   namespace system
   {
+
+    BOOST_SYSTEM_DECL error_code throws; // "throw on error" special error_code;
+                                         //  note that it doesn't matter if this
+                                         //  isn't initialized before use since
+                                         //  the only use is to take its
+                                         //  address for comparison purposes
 
     BOOST_SYSTEM_DECL const error_category & get_system_category()
     {
