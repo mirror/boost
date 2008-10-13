@@ -18,6 +18,7 @@
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <cstddef>
+#include <boost/intrusive/detail/mpl.hpp> 
 
 namespace boost {
 namespace intrusive {
@@ -238,6 +239,10 @@ class any_node_traits
 template<class VoidPointer>
 class any_algorithms
 {
+   template <class T>
+   static void function_not_available_for_any_hooks(typename detail::enable_if<detail::is_same<T, bool> >::type)
+   {}
+
    public:
    typedef any_node<VoidPointer>             node;
    typedef typename boost::pointer_to_other
@@ -269,28 +274,18 @@ class any_algorithms
    static bool unique(const_node_ptr node)
    {  return 0 == node->node_ptr_1; }
 
-
-#if defined(__EDG__) && defined(__STD_STRICT_ANSI)
-   // For compilers checking the full source code at compile time, regardless
-   // of whether the code is instantiated or not, we turn the compile error
-   // below into a link error.
-   static void unlink(node_ptr);
-   static void swap_nodes(node_ptr l, node_ptr r);
-#else
    static void unlink(node_ptr)
    {
-      //Auto-unlink hooks and unlink() call for safe hooks are not
-      //available for any hooks!!!
-      any_algorithms<VoidPointer>::unlink_not_available_for_any_hooks();
+      //Auto-unlink hooks and unlink() are not available for any hooks
+      any_algorithms<VoidPointer>::template function_not_available_for_any_hooks<node_ptr>();
    }
 
    static void swap_nodes(node_ptr l, node_ptr r)
    {
       //Any nodes have no swap_nodes capability because they don't know
-      //what algorithm they must use from unlink them from the container
-      any_algorithms<VoidPointer>::swap_nodes_not_available_for_any_hooks();
+      //what algorithm they must use to unlink the node from the container
+      any_algorithms<VoidPointer>::template function_not_available_for_any_hooks<node_ptr>();
    }
-#endif
 };
 
 } //namespace intrusive 

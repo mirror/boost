@@ -31,6 +31,26 @@ struct member_tag;
 
 namespace detail{
 
+struct default_hook_tag{};
+
+#define BOOST_INTRUSIVE_DEFAULT_HOOK_MARKER_DEFINITION(BOOST_INTRUSIVE_DEFAULT_HOOK_MARKER) \
+struct BOOST_INTRUSIVE_DEFAULT_HOOK_MARKER : public default_hook_tag\
+{\
+   template <class T>\
+   struct apply\
+   {  typedef typename T::BOOST_INTRUSIVE_DEFAULT_HOOK_MARKER type;  };\
+}\
+
+BOOST_INTRUSIVE_DEFAULT_HOOK_MARKER_DEFINITION(default_list_hook);
+BOOST_INTRUSIVE_DEFAULT_HOOK_MARKER_DEFINITION(default_slist_hook);
+BOOST_INTRUSIVE_DEFAULT_HOOK_MARKER_DEFINITION(default_set_hook);
+BOOST_INTRUSIVE_DEFAULT_HOOK_MARKER_DEFINITION(default_uset_hook);
+BOOST_INTRUSIVE_DEFAULT_HOOK_MARKER_DEFINITION(default_avl_set_hook);
+BOOST_INTRUSIVE_DEFAULT_HOOK_MARKER_DEFINITION(default_splay_set_hook);
+BOOST_INTRUSIVE_DEFAULT_HOOK_MARKER_DEFINITION(default_bs_set_hook);
+
+#undef BOOST_INTRUSIVE_DEFAULT_HOOK_MARKER_DEFINITION
+
 template <class ValueTraits>
 struct eval_value_traits
 {
@@ -116,8 +136,12 @@ struct get_member_node_traits
 template<class T, class SupposedValueTraits>
 struct get_value_traits
 {
-   typedef SupposedValueTraits supposed_value_traits;
-   //...if it's a base hook
+   typedef typename detail::eval_if_c
+      <detail::is_convertible<SupposedValueTraits*, detail::default_hook_tag*>::value
+      ,detail::apply<SupposedValueTraits, T>
+      ,detail::identity<SupposedValueTraits>
+   >::type supposed_value_traits;
+   //...if it's a default hook
    typedef typename detail::eval_if_c
       < internal_base_hook_bool_is_true<supposed_value_traits>::value
       //...get it's internal value traits using
@@ -336,7 +360,7 @@ struct void_pointer
 };
 
 //!This option setter specifies the type of
-//!the tag of a base hook. A type can not have two
+//!the tag of a base hook. A type cannot have two
 //!base hooks of the same type, so a tag can be used
 //!to differentiate two base hooks with otherwise same type
 template<class Tag>
@@ -509,7 +533,28 @@ struct compare_hash
 /// @endcond
 };
 
+//!This option setter specifies if the hash container will use incremental
+//!hashing. With incremental hashing the cost of hash table expansion is spread
+//!out across each hash table insertion operation, as opposed to be incurred all at once. 
+//!Therefore linear hashing is well suited for interactive applications or real-time
+//!appplications where the worst-case insertion time of non-incremental hash containers
+//!(rehashing the whole bucket array) is not admisible.
+template<bool Enabled>
+struct incremental
+{
+   /// @cond
+   template<class Base>
+   struct pack : Base
+   {
+      static const bool incremental = Enabled;
+   };
+   /// @endcond
+};
+
 /// @cond
+
+//To-do: pass to variadic templates
+#if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 
 template<class Prev, class Next>
 struct do_pack
@@ -525,7 +570,6 @@ struct do_pack<Prev, none>
    typedef Prev type;
 };
 
-
 template
    < class DefaultOptions
    , class O1         = none
@@ -537,7 +581,8 @@ template
    , class O7         = none
    , class O8         = none
    , class O9         = none
-   , class Option10   = none
+   , class O10        = none
+   , class O11        = none
    >
 struct pack_options
 {
@@ -553,29 +598,164 @@ struct pack_options
                         <  typename do_pack
                            <  typename do_pack
                               <  typename do_pack
-                                 < DefaultOptions
-                                 , O1
+                                 <  typename do_pack
+                                    < DefaultOptions
+                                    , O1
+                                    >::type
+                                 , O2
                                  >::type
-                              , O2
+                              , O3
                               >::type
-                           , O3
+                           , O4
                            >::type
-                        , O4
+                        , O5
                         >::type
-                     , O5
+                     , O6
                      >::type
-                  , O6
+                  , O7
                   >::type
-               , O7
+               , O8
                >::type
-            , O8
+            , O9
             >::type
-         , O9
-         >::type
-      , Option10
+         , O10
+         >::type 
+      , O11
       >::type 
    type;
 };
+#else
+
+//index_tuple
+template<int... Indexes>
+struct index_tuple{};
+
+//build_number_seq
+template<std::size_t Num, typename Tuple = index_tuple<> >
+struct build_number_seq;
+
+template<std::size_t Num, int... Indexes> 
+struct build_number_seq<Num, index_tuple<Indexes...> >
+   : build_number_seq<Num - 1, index_tuple<Indexes..., sizeof...(Indexes)> >
+{};
+
+template<int... Indexes>
+struct build_number_seq<0, index_tuple<Indexes...> >
+{  typedef index_tuple<Indexes...> type;  };
+
+template<class ...Types>
+struct typelist
+{};
+
+//invert_typelist
+template<class T>
+struct invert_typelist;
+
+template<int I, typename Tuple>
+struct typelist_element;
+
+template<int I, typename Head, typename... Tail>
+struct typelist_element<I, typelist<Head, Tail...> >
+{
+   typedef typename typelist_element<I-1, typelist<Tail...> >::type type;
+};
+
+template<typename Head, typename... Tail>
+struct typelist_element<0, typelist<Head, Tail...> >
+{
+   typedef Head type;
+};
+
+template<int ...Ints, class ...Types>
+typelist<typename typelist_element<(sizeof...(Types) - 1) - Ints, typelist<Types...> >::type...>
+   inverted_typelist(index_tuple<Ints...>, typelist<Types...>)
+{
+   return typelist<typename typelist_element<(sizeof...(Types) - 1) - Ints, typelist<Types...> >::type...>();
+}
+
+//sizeof_typelist
+template<class Typelist>
+struct sizeof_typelist;
+
+template<class ...Types>
+struct sizeof_typelist< typelist<Types...> >
+{
+   static const std::size_t value = sizeof...(Types);
+};
+
+//invert_typelist_impl
+template<class Typelist, class Indexes>
+struct invert_typelist_impl;
+
+
+template<class Typelist, int ...Ints>
+struct invert_typelist_impl< Typelist, index_tuple<Ints...> >
+{
+   static const std::size_t last_idx = sizeof_typelist<Typelist>::value - 1;
+   typedef typelist
+      <typename typelist_element<last_idx - Ints, Typelist>::type...> type;
+};
+
+template<class Typelist, int Int>
+struct invert_typelist_impl< Typelist, index_tuple<Int> >
+{
+   typedef Typelist type;
+};
+
+template<class Typelist>
+struct invert_typelist_impl< Typelist, index_tuple<> >
+{
+   typedef Typelist type;
+};
+
+//invert_typelist
+template<class Typelist>
+struct invert_typelist;
+
+template<class ...Types>
+struct invert_typelist< typelist<Types...> >
+{
+   typedef typelist<Types...> typelist_t;
+   typedef typename build_number_seq<sizeof...(Types)>::type indexes_t;
+   typedef typename invert_typelist_impl<typelist_t, indexes_t>::type type;
+};
+
+//Do pack
+template<class Typelist>
+struct do_pack;
+
+template<>
+struct do_pack<typelist<> >;
+
+template<class Prev>
+struct do_pack<typelist<Prev> >
+{
+   typedef Prev type;
+};
+
+template<class Prev, class Last>
+struct do_pack<typelist<Prev, Last> >
+{
+   typedef typename Prev::template pack<Last> type;
+};
+
+template<class Prev, class ...Others>
+struct do_pack<typelist<Prev, Others...> >
+{
+   typedef typename Prev::template pack
+      <typename do_pack<typelist<Others...>>::type> type;
+};
+
+
+template<class ...Options>
+struct pack_options
+{
+   typedef typelist<Options...> typelist_t;
+   typedef typename invert_typelist<typelist_t>::type inverted_typelist;
+   typedef typename do_pack<inverted_typelist>::type type;
+};
+
+#endif
 
 struct hook_defaults
    :  public pack_options

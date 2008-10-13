@@ -51,6 +51,12 @@ struct enable_if_c<false, T> {};
 template <class Cond, class T = void>
 struct enable_if : public enable_if_c<Cond::value, T>{};
 
+template<class F, class Param>
+struct apply
+{
+   typedef typename F::template apply<Param>::type type;
+};
+
 template <class T, class U>
 class is_convertible
 {
@@ -127,83 +133,127 @@ struct identity
 #define BOOST_INTRUSIVE_TT_TEST_MSC_FUNC_SIGS
 #endif
 
-no_type BOOST_INTRUSIVE_TT_DECL is_function_ptr_tester(...);
-
-template <class R >
-yes_type is_function_ptr_tester(R (*)());
-
-template <class R >
-yes_type is_function_ptr_tester(R (*)( ...));
-
-#ifdef BOOST_INTRUSIVE_TT_TEST_MSC_FUNC_SIGS
-template <class R >
-yes_type is_function_ptr_tester(R (__stdcall*)());
-template <class R >
-yes_type is_function_ptr_tester(R (__stdcall*)( ...));
-
-template <class R >
-yes_type is_function_ptr_tester(R (__fastcall*)());
-template <class R >
-yes_type is_function_ptr_tester(R (__fastcall*)( ...));
-
-template <class R >
-yes_type is_function_ptr_tester(R (__cdecl*)());
-template <class R >
-yes_type is_function_ptr_tester(R (__cdecl*)( ...));
-#endif
-
-template <class R , class T0 >
-yes_type is_function_ptr_tester(R (*)( T0));
-
-template <class R , class T0 >
-yes_type is_function_ptr_tester(R (*)( T0 ...));
-
-#ifdef BOOST_INTRUSIVE_TT_TEST_MSC_FUNC_SIGS
-template <class R , class T0 >
-yes_type is_function_ptr_tester(R (__stdcall*)( T0));
-template <class R , class T0 >
-yes_type is_function_ptr_tester(R (__stdcall*)( T0 ...));
-
-template <class R , class T0 >
-yes_type is_function_ptr_tester(R (__fastcall*)( T0));
-template <class R , class T0 >
-yes_type is_function_ptr_tester(R (__fastcall*)( T0 ...));
-
-template <class R , class T0 >
-yes_type is_function_ptr_tester(R (__cdecl*)( T0));
-#endif
-template <class R , class T0 , class T1 >
-yes_type is_function_ptr_tester(R (*)( T0 , T1));
-
-#ifdef BOOST_INTRUSIVE_TT_TEST_MSC_FUNC_SIGS
-template <class R , class T0 , class T1 >
-yes_type is_function_ptr_tester(R (__stdcall*)( T0 , T1));
-
-template <class R , class T0 , class T1 >
-yes_type is_function_ptr_tester(R (__fastcall*)( T0 , T1));
-
-template <class R , class T0 , class T1 >
-yes_type is_function_ptr_tester(R (__cdecl*)( T0 , T1));
-#endif
-
 template <typename T>
 struct is_unary_or_binary_function_impl
-{
-   static T* t;
-   static const bool value = sizeof(is_function_ptr_tester(t)) == sizeof(yes_type);
-};
+{  static const bool value = false; };
 
+template <typename R>
+struct is_unary_or_binary_function_impl<R (*)()>
+{  static const bool value = true;  };
+
+template <typename R>
+struct is_unary_or_binary_function_impl<R (*)(...)>
+{  static const bool value = true;  };
+/*
+#ifdef BOOST_INTRUSIVE_TT_TEST_MSC_FUNC_SIGS
+
+template <typename R>
+struct is_unary_or_binary_function_impl<R (__stdcall*)()>
+{  static const bool value = true;  };
+
+template <typename R>
+struct is_unary_or_binary_function_impl<R (__stdcall*)(...)>
+{  static const bool value = true;  };
+
+template <typename R>
+struct is_unary_or_binary_function_impl<R (__stdcall*)(...)>
+{  static const bool value = true;  };
+
+template <typename R>
+struct is_unary_or_binary_function_impl<R (__fastcall*)()>
+{  static const bool value = true;  };
+
+template <typename R>
+struct is_unary_or_binary_function_impl<R (__fastcall*)(...)>
+{  static const bool value = true;  };
+
+template <typename R>
+struct is_unary_or_binary_function_impl<R (__cdecl*)()>
+{  static const bool value = true;  };
+
+template <typename R>
+struct is_unary_or_binary_function_impl<R (__cdecl*)(...)>
+{  static const bool value = true;  };
+#endif
+*/
+template <typename R, class T0>
+struct is_unary_or_binary_function_impl<R (*)(T0)>
+{  static const bool value = true;  };
+
+template <typename R, class T0>
+struct is_unary_or_binary_function_impl<R (*)(T0...)>
+{  static const bool value = true;  };
+
+#ifdef BOOST_INTRUSIVE_TT_TEST_MSC_FUNC_SIGS
+
+template <typename R, class T0>
+struct is_unary_or_binary_function_impl<R (__stdcall*)(T0)>
+{  static const bool value = true;  };
+/*
+template <typename R, class T0>
+struct is_unary_or_binary_function_impl<R (__stdcall*)(T0...)>
+{  static const bool value = true;  };
+
+template <typename R, class T0>
+struct is_unary_or_binary_function_impl<R (__fastcall*)(T0)>
+{  static const bool value = true;  };
+
+template <typename R, class T0>
+struct is_unary_or_binary_function_impl<R (__fastcall*)(T0...)>
+{  static const bool value = true;  };
+
+template <typename R, class T0>
+struct is_unary_or_binary_function_impl<R (__cdecl*)(T0)>
+{  static const bool value = true;  };
+
+template <typename R, class T0>
+struct is_unary_or_binary_function_impl<R (__cdecl*)(T0...)>
+{  static const bool value = true;  };
+*/
+#endif
+
+template <typename R, class T0, class T1>
+struct is_unary_or_binary_function_impl<R (*)(T0, T1)>
+{  static const bool value = true;  };
+
+template <typename R, class T0, class T1>
+struct is_unary_or_binary_function_impl<R (*)(T0, T1...)>
+{  static const bool value = true;  };
+/*
+#ifdef BOOST_INTRUSIVE_TT_TEST_MSC_FUNC_SIGS
+
+template <typename R, class T0, class T1>
+struct is_unary_or_binary_function_impl<R (__stdcall*)(T0, T1)>
+{  static const bool value = true;  };
+
+template <typename R, class T0, class T1>
+struct is_unary_or_binary_function_impl<R (__stdcall*)(T0, T1...)>
+{  static const bool value = true;  };
+
+template <typename R, class T0, class T1>
+struct is_unary_or_binary_function_impl<R (__fastcall*)(T0, T1)>
+{  static const bool value = true;  };
+
+template <typename R, class T0, class T1>
+struct is_unary_or_binary_function_impl<R (__fastcall*)(T0, T1...)>
+{  static const bool value = true;  };
+
+template <typename R, class T0, class T1>
+struct is_unary_or_binary_function_impl<R (__cdecl*)(T0, T1)>
+{  static const bool value = true;  };
+
+template <typename R, class T0, class T1>
+struct is_unary_or_binary_function_impl<R (__cdecl*)(T0, T1...)>
+{  static const bool value = true;  };
+#endif
+*/
 template <typename T>
 struct is_unary_or_binary_function_impl<T&>
-{
-   static const bool value = false;
-};
+{  static const bool value = false; };
 
 template<typename T>
 struct is_unary_or_binary_function
-{
-   static const bool value = is_unary_or_binary_function_impl<T>::value;
-};
+{  static const bool value = is_unary_or_binary_function_impl<T>::value;   };
 
 //boost::alignment_of yields to 10K lines of preprocessed code, so we
 //need an alternative

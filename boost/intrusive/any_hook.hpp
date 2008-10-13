@@ -34,7 +34,7 @@ struct get_any_node_algo
 
 //! Helper metafunction to define a \c \c any_base_hook that yields to the same
 //! type when the same options (either explicitly or implicitly) are used.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class ...Options>
 #else
 template<class O1 = none, class O2 = none, class O3 = none>
@@ -43,8 +43,14 @@ struct make_any_base_hook
 {
    /// @cond
    typedef typename pack_options
-      < hook_defaults, O1, O2, O3>::type packed_options;
-
+      < hook_defaults,
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      O1, O2, O3
+      #else
+      Options...
+      #endif
+      >::type packed_options;
+   
    typedef detail::generic_hook
    < get_any_node_algo<typename packed_options::void_pointer>
    , typename packed_options::tag
@@ -70,15 +76,21 @@ struct make_any_base_hook
 //!
 //! \c void_pointer<> is the pointer type that will be used internally in the hook
 //! and the the container configured to use this hook.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class ...Options>
 #else
 template<class O1, class O2, class O3>
 #endif
 class any_base_hook
-   :  public make_any_base_hook<O1, O2, O3>::type
+   :  public make_any_base_hook
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      <O1, O2, O3>
+      #else
+      <Options...>
+      #endif
+      ::type
 {
-   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+   #if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
    public:
    //! <b>Effects</b>: If link_mode is or \c safe_link
    //!   initializes the node to an unlinked state.
@@ -127,7 +139,7 @@ class any_base_hook
 
 //! Helper metafunction to define a \c \c any_member_hook that yields to the same
 //! type when the same options (either explicitly or implicitly) are used.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class ...Options>
 #else
 template<class O1 = none, class O2 = none, class O3 = none>
@@ -136,7 +148,13 @@ struct make_any_member_hook
 {
    /// @cond
    typedef typename pack_options
-      < hook_defaults, O1, O2, O3>::type packed_options;
+      < hook_defaults, 
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      O1, O2, O3
+      #else
+      Options...
+      #endif
+      >::type packed_options;
 
    typedef detail::generic_hook
    < get_any_node_algo<typename packed_options::void_pointer>
@@ -158,15 +176,21 @@ struct make_any_member_hook
 //!
 //! \c void_pointer<> is the pointer type that will be used internally in the hook
 //! and the the container configured to use this hook.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class ...Options>
 #else
 template<class O1, class O2, class O3>
 #endif
 class any_member_hook
-   :  public make_any_member_hook<O1, O2, O3>::type
+   :  public make_any_member_hook
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      <O1, O2, O3>
+      #else
+      <Options...>
+      #endif
+      ::type
 {
-   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+   #if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
    public:
    //! <b>Effects</b>: If link_mode is or \c safe_link
    //!   initializes the node to an unlinked state.

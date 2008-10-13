@@ -34,7 +34,7 @@ struct get_avl_set_node_algo
 
 //! Helper metafunction to define a \c avl_set_base_hook that yields to the same
 //! type when the same options (either explicitly or implicitly) are used.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class ...Options>
 #else
 template<class O1 = none, class O2 = none, class O3 = none, class O4 = none>
@@ -43,7 +43,12 @@ struct make_avl_set_base_hook
 {
    /// @cond
    typedef typename pack_options
-      < hook_defaults, O1, O2, O3, O4>::type packed_options;
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      <hook_defaults, O1, O2, O3, O4>
+      #else
+      <hook_defaults, Options...>
+      #endif
+      ::type packed_options;
 
    typedef detail::generic_hook
    < get_avl_set_node_algo<typename packed_options::void_pointer
@@ -76,15 +81,21 @@ struct make_avl_set_base_hook
 //!
 //! \c optimize_size<> will tell the hook to optimize the hook for size instead
 //! of speed.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class ...Options>
 #else
 template<class O1, class O2, class O3, class O4>
 #endif
 class avl_set_base_hook
-   :  public make_avl_set_base_hook<O1, O2, O3, O4>::type
+   :  public make_avl_set_base_hook
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      <O1, O2, O3, O4>
+      #else
+      <Options...>
+      #endif
+      ::type
 {
-   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+   #if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state.
    //! 
@@ -153,7 +164,7 @@ class avl_set_base_hook
 
 //! Helper metafunction to define a \c avl_set_member_hook that yields to the same
 //! type when the same options (either explicitly or implicitly) are used.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class ...Options>
 #else
 template<class O1 = none, class O2 = none, class O3 = none, class O4 = none>
@@ -162,7 +173,12 @@ struct make_avl_set_member_hook
 {
    /// @cond
    typedef typename pack_options
-      < hook_defaults, O1, O2, O3, O4>::type packed_options;
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      <hook_defaults, O1, O2, O3, O4>
+      #else
+      <hook_defaults, Options...>
+      #endif
+      ::type packed_options;
 
    typedef detail::generic_hook
    < get_avl_set_node_algo<typename packed_options::void_pointer
@@ -190,15 +206,21 @@ struct make_avl_set_member_hook
 //!
 //! \c optimize_size<> will tell the hook to optimize the hook for size instead
 //! of speed.
-#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+#if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED) || defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
 template<class ...Options>
 #else
 template<class O1, class O2, class O3, class O4>
 #endif
 class avl_set_member_hook
-   :  public make_avl_set_member_hook<O1, O2, O3, O4>::type
+   :  public make_avl_set_member_hook
+      #if !defined(BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+      <O1, O2, O3, O4>
+      #else
+      <Options...>
+      #endif
+      ::type
 {
-   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+   #if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state.
    //! 
