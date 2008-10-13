@@ -99,7 +99,7 @@ public:
     {
         return mp.shared->ftor->has_include_guards(guard_name);
     }
-#endif    
+#endif
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -156,7 +156,7 @@ struct make_multi_pass
     typedef boost::spirit::multi_pass_policies::no_check check_policy;
 #endif
     typedef boost::spirit::multi_pass_policies::split_std_deque storage_policy;
-    
+
     typedef boost::spirit::multi_pass_policies::default_policy<
             ownership_policy, check_policy, input_policy, storage_policy>
         policy_type;
@@ -169,20 +169,20 @@ class lex_iterator
 :   public make_multi_pass<impl::lex_iterator_functor_shim<TokenT> >::type
 {
     typedef impl::lex_iterator_functor_shim<TokenT> input_policy_type;
-    
+
     typedef typename make_multi_pass<input_policy_type>::type base_type;
     typedef typename make_multi_pass<input_policy_type>::functor_data_type 
         functor_data_type;
 
     typedef typename input_policy_type::unique unique_functor_type;
     typedef typename input_policy_type::shared shared_functor_type;
-    
+
 public:
     typedef TokenT token_type;
-    
+
     lex_iterator()
     {}
-    
+
     template <typename IteratorT>
     lex_iterator(IteratorT const &first, IteratorT const &last, 
             typename TokenT::position_type const &pos, 
@@ -199,7 +199,7 @@ public:
     void set_position(typename TokenT::position_type const &pos)
     {
         typedef typename TokenT::position_type position_type;
-        
+
     // set the new position in the current token
     token_type& currtoken = this->base_type::dereference(*this);
     position_type currpos = currtoken.get_position();
@@ -207,7 +207,7 @@ public:
         currpos.set_file(pos.get_file());
         currpos.set_line(pos.get_line());
         currtoken.set_position(currpos);
-        
+
     // set the new position for future tokens as well
         if (token_type::string_type::npos != 
             currtoken.get_value().find_first_of('\n'))
@@ -216,7 +216,7 @@ public:
         }
         unique_functor_type::set_position(*this, currpos);
     }
-    
+
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     // return, whether the current file has include guards
     // this function returns meaningful results only if the file was scanned 
@@ -225,7 +225,7 @@ public:
     {
         return unique_functor_type::has_include_guards(*this, guard_name);
     }
-#endif    
+#endif
 };
 
 ///////////////////////////////////////////////////////////////////////////////
