@@ -670,7 +670,7 @@ public:
                         }
                         break;
                     }
-                    
+
                     result = token_type(id, token_val, pos);
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
                     return guards.detect_guard(result);
@@ -678,13 +678,13 @@ public:
                     return result;
 #endif
                 }
-            
+
             // skip the T_CONTLINE token
             } while (true);
         }
         return result = token_type();   // return T_EOI
     }
-    
+
     void set_position(PositionT const &pos) 
     { 
         // set position has to change the file name and line number only

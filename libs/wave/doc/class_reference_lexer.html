@@ -34,7 +34,7 @@
 <h2><b><a name="introduction"></a>Introduction</b></h2>
 <p>Every lexer, which should be used in conjunction with the <tt>Wave</tt> library, has to return tokens formed from the input stream. These tokens should conform to the synopsis described in the topic <a href="class_reference_tokentype.html">The Token Type</a>. The lexer type should expose an interface which conforms at least to a <tt>forward_iterator</tt> (in the sense defined by the the C++ Standard) returning the token type. The code sample below does not show the definition of this forward iterator interface because this is highly implementation defined.</p>
 <h2><a name="header_synopsis"></a>Wave lexer  
-  synopsis (header: <a href="http://cvs.sourceforge.net/viewcvs.py/boost/boost/boost/wave/cpplexer/cpp_lex_interface.hpp?view=markup">wave/cpplexer/cpp_lexer_interface.hpp</a>)</h2>
+  synopsis (header: <a href="http://svn.boost.org/trac/boost/browser/trunk/boost/wave/cpplexer/cpp_lex_interface.hpp">wave/cpplexer/cpp_lexer_interface.hpp</a>)</h2>
 <pre>    <span class="keyword">struct</span> lex_iterator
     {
         <span class="keyword">typedef</span> boost::wave::lex_token&lt;&gt; <a href="class_reference_lexer.html#public_typedefs">token_type</a>;
@@ -53,7 +53,7 @@
     };
 
 </pre>
-<p>Please note, that the <tt>lex_iterator</tt> defined in the library header <a href="http://cvs.sourceforge.net/viewcvs.py/boost/boost/boost/wave/cpplexer/cpp_lex_interface.hpp?view=markup">wave/cpplexer/cpp_lexer_interface.hpp</a> actually is a template class taking the token type to use as its template parameter. This is omitted in the synopsis above because it is an implementation detail of the  Re2C lexer provided as part of the Wave library.</p>
+<p>Please note, that the <tt>lex_iterator</tt> defined in the library header <a href="http://svn.boost.org/trac/boost/browser/trunk/boost/wave/cpplexer/cpp_lex_interface.hpp">wave/cpplexer/cpp_lexer_interface.hpp</a> actually is a template class taking the token type to use as its template parameter. This is omitted in the synopsis above because it is an implementation detail of the  Re2C lexer provided as part of the Wave library.</p>
 <p>If you want to use Wave in conjunction with your own lexing component this will have to conform to the interface described above only. </p>
 <h2><a name="public_typedefs" id="public_typedefs"></a>Public Typedefs</h2>
 <p>Besides the typedefs mandated for a <tt>forward_iterator</tt> by the C++ standard every lexer to be used with the <tt>Wave</tt> library should define the following typedefs: </p>
@@ -97,7 +97,7 @@
   <br>
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Thursday, December 1, 2005  11:53<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Sunday, October 12, 2008  20:15<!-- #EndDate -->
   </span>
 </p>
 </body>
