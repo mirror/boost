@@ -14,7 +14,7 @@
 #ifndef BOOST_RANDOM_BINOMIAL_DISTRIBUTION_HPP
 #define BOOST_RANDOM_BINOMIAL_DISTRIBUTION_HPP
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <cassert>
 #include <boost/random/bernoulli_distribution.hpp>
 

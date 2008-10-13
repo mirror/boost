@@ -19,7 +19,7 @@
 
 #include <string>                       // std::abs
 #include <algorithm>                    // std::min
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/config.hpp>
 #include <boost/utility.hpp>            // noncopyable
 #include <boost/integer_traits.hpp>     // compile-time integral limits

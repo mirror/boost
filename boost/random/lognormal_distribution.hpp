@@ -16,7 +16,7 @@
 #ifndef BOOST_RANDOM_LOGNORMAL_DISTRIBUTION_HPP
 #define BOOST_RANDOM_LOGNORMAL_DISTRIBUTION_HPP
 
-#include <cmath>      // std::exp, std::sqrt
+#include <boost/config/no_tr1/cmath.hpp>      // std::exp, std::sqrt
 #include <cassert>
 #include <iostream>
 #include <boost/limits.hpp>

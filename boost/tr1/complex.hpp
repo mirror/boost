@@ -41,7 +41,7 @@ using boost::math::fabs;
 #include <boost/tr1/detail/math_overloads.hpp>
 #include <boost/assert.hpp>
 #include <boost/detail/workaround.hpp>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 namespace std{ 
 

@@ -11,7 +11,7 @@
 #ifndef BOOST_UNITS_ANGLE_DEGREE_HPP
 #define BOOST_UNITS_ANGLE_DEGREE_HPP
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 #include <boost/units/conversion.hpp>
 #include <boost/units/io.hpp>

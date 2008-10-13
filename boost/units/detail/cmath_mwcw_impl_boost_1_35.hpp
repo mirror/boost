@@ -13,7 +13,7 @@
 
 #if __MWERKS__
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 // BOOST_PREVENT_MACRO_SUBSTITUTION is used for all functions even though it
 // isn't necessary -- I didn't want to think :)

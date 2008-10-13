@@ -11,7 +11,7 @@
 #ifndef BOOST_UNITS_CONSTANTS_HPP
 #define BOOST_UNITS_CONSTANTS_HPP
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <iosfwd>
 #include <iomanip>
 

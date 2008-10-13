@@ -11,7 +11,7 @@
 #ifndef BOOST_UNITS_CMATH_BOOST_1_35_HPP 
 #define BOOST_UNITS_CMATH_BOOST_1_35_HPP
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <cstdlib>
 
 #include <boost/units/dimensionless_quantity.hpp>

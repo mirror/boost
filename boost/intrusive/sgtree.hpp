@@ -24,7 +24,7 @@
 #include <functional>
 #include <iterator>
 #include <utility>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <cstddef>
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/static_assert.hpp>

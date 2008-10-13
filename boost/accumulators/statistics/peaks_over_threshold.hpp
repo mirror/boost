@@ -12,7 +12,7 @@
 #include <limits>
 #include <numeric>
 #include <functional>
-#include <cmath> // pow
+#include <boost/config/no_tr1/cmath.hpp> // pow
 #include <sstream> // stringstream
 #include <stdexcept> // runtime_error
 #include <boost/throw_exception.hpp>

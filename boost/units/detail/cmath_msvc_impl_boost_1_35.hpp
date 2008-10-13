@@ -16,7 +16,7 @@
 #if defined(BOOST_MSVC) || (defined(__COMO__) && defined(_MSC_VER))
 
 #include <cfloat>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 #include <boost/static_warning.hpp>
 #include <boost/mpl/bool.hpp>
