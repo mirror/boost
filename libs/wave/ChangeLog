@@ -24,8 +24,11 @@ TODO (known issues):
 
 CHANGELOG
 
-Boost V1.36
-- Wave Version 2.0
+Boost V1.36.0
+- Wave Version 2.0 is a new major release introducing some breaking API changes, 
+  preventing it to be used with Boost versions earlier than V1.36.0. The API 
+  and hook interface have been streamlined for more consistency.
+
 - Added an additional template parameter to the context object, allowing to 
   specify any possibly derived type. This change propagates to the preprocessing
   hooks, which now get passed the most derived context type as its first 
@@ -47,6 +50,7 @@ Boost V1.36
   preprocessing two consecutive tokens.
 - Adjusted Spirit header includes to point to conform to the new directory 
   structure, removed support for Spirit versions earlier than V1.7.
+- Started to migrate to new multi_pass iterators from Spirit V2.0.
   
 Boost V1.35.0
 - Wave Version 1.3
