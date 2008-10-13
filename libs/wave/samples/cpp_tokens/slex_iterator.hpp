@@ -64,7 +64,7 @@ public:
     typedef lex_input_interface<TokenT>* shared;
 
     BOOST_WAVE_EOF_PREFIX result_type const eof;
-    
+
     template <typename MultiPass>
     static result_type& get_next(MultiPass& mp, result_type& result)
     { 
@@ -84,14 +84,14 @@ public:
     {
         mp.shared->ftor->set_position(pos);
     }
-    
+
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     template <typename MultiPass>
     static bool has_include_guards(MultiPass& mp, std::string& guard_name) 
     {
         return mp.shared->ftor->has_include_guards(guard_name);
     }
-#endif    
+#endif
 
 private:
     boost::shared_ptr<lex_input_interface<TokenT> > functor_ptr;
@@ -149,7 +149,7 @@ struct make_multi_pass
     typedef boost::spirit::multi_pass_policies::no_check check_policy;
 #endif
     typedef boost::spirit::multi_pass_policies::split_std_deque storage_policy;
-    
+
     typedef boost::spirit::multi_pass_policies::default_policy<
             ownership_policy, check_policy, input_policy, storage_policy>
         policy_type;
@@ -169,13 +169,13 @@ class slex_iterator
 
     typedef typename input_policy_type::unique unique_functor_type;
     typedef typename input_policy_type::shared shared_functor_type;
-    
+
 public:
     typedef TokenT token_type;
-    
+
     slex_iterator()
     {}
-    
+
     template <typename IteratorT>
     slex_iterator(IteratorT const &first, IteratorT const &last, 
             typename TokenT::position_type const &pos, 
@@ -192,22 +192,22 @@ public:
     void set_position(typename TokenT::position_type const &pos)
     {
         typedef typename token_type::position_type position_type;
-        
+
     // set the new position in the current token
-    token_type const& currtoken = base_type::get_input();
+    token_type& currtoken = this->base_type::dereference(*this);
     position_type currpos = currtoken.get_position();
-    
+
         currpos.set_file(pos.get_file());
         currpos.set_line(pos.get_line());
-        base_type::get_input().set_position(currpos);
-        
+        currtoken.set_position(currpos);
+
     // set the new position for future tokens as well
         if (token_type::string_type::npos != 
             currtoken.get_value().find_first_of('\n'))
         {
             currpos.set_line(pos.get_line() + 1);
         }
-        unique_functor_type::get_functor().set_position(currpos);
+        unique_functor_type::set_position(*this, currpos);
     }
 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
@@ -216,9 +216,9 @@ public:
     // completely
     bool has_include_guards(std::string& guard_name) const
     {
-        return unique_functor_type::has_include_guards(guard_name);
+        return unique_functor_type::has_include_guards(*this, guard_name);
     }
-#endif    
+#endif
 };
 
 ///////////////////////////////////////////////////////////////////////////////

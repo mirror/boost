@@ -15,7 +15,7 @@
 //  provided in the preprocess_pragma_output_hooks policy class. This 
 //  #pragma preprocesses the provided arguments in the current context.
 #pragma wave pp (                                                             \
-        "#define A() \"some text\" and more\n"                                         \
+        "#define A() \"some text\" and more\n"                                \
         "#define B() 1.0\n"                                                   \
     )                                                                         \
     /**/
