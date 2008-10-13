@@ -15,19 +15,24 @@ TODO (known issues):
   function.
 - Fix the trigraph backslash problem in the re2c (C/C++ and IDL) scanners, if 
   there is the end of the (internal) buffer just in between a '??/' and a '\n'.
-- Change the cpp_exception::what() function to return more meaningful error 
-  texts.
-  
+
 - Do a sourceforge release.
 
 -------------------------------------------------------------------------------
 
 CHANGELOG
 
+Boost V1.37.0
+- Updated examples to reflect the recent changes in the used multi_pass 
+  iterator.
+- Fixed documentation links still pointing to the old Boost CVS (thanks to 
+  Jürgen Hunold for providing the patch).
+
 Boost V1.36.0
 - Wave Version 2.0 is a new major release introducing some breaking API changes, 
   preventing it to be used with Boost versions earlier than V1.36.0. The API 
-  and hook interface have been streamlined for more consistency.
+  and hook interface have been streamlined for more consistency. See the 
+  documentation for more details.
 
 - Added an additional template parameter to the context object, allowing to 
   specify any possibly derived type. This change propagates to the preprocessing
@@ -51,7 +56,7 @@ Boost V1.36.0
 - Adjusted Spirit header includes to point to conform to the new directory 
   structure, removed support for Spirit versions earlier than V1.7.
 - Started to migrate to new multi_pass iterators from Spirit V2.0.
-  
+
 Boost V1.35.0
 - Wave Version 1.3
 - Changed the return value of the 'evaluated_conditional_expression()' pp hook
