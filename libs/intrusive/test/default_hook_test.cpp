@@ -13,6 +13,9 @@
 #include <boost/intrusive/slist.hpp>
 #include <boost/intrusive/set.hpp>
 #include <boost/intrusive/unordered_set.hpp>
+#include <boost/intrusive/splay_set.hpp>
+#include <boost/intrusive/avl_set.hpp>
+#include <boost/intrusive/sg_set.hpp>
 #include "smart_ptr.hpp"
 #include <vector>
 
@@ -27,6 +30,12 @@ class MyClass
 ,  public set_base_hook
    < void_pointer<smart_ptr<void> >, link_mode<normal_link> >
 ,  public unordered_set_base_hook
+   < void_pointer<smart_ptr<void> >, link_mode<normal_link> >
+,  public avl_set_base_hook
+   < void_pointer<smart_ptr<void> >, link_mode<normal_link> >
+,  public splay_set_base_hook
+   < void_pointer<smart_ptr<void> >, link_mode<normal_link> >
+,  public bs_set_base_hook
    < void_pointer<smart_ptr<void> >, link_mode<normal_link> >
 {
    int int_;
@@ -51,6 +60,9 @@ typedef list<MyClass>            List;
 typedef slist<MyClass>           Slist;
 typedef set<MyClass>             Set;
 typedef unordered_set<MyClass>   USet;
+typedef avl_set<MyClass>         AvlSet;
+typedef splay_set<MyClass>       SplaySet;
+typedef sg_set<MyClass>          SgSet;
 
 int main()
 {
@@ -67,6 +79,9 @@ int main()
    Slist my_slist;
    Set   my_set;
    USet  my_uset(USet::bucket_traits(buckets, 100));
+   AvlSet   my_avlset;
+   SplaySet my_splayset;
+   SgSet    my_sgset;
 
    //Now insert them in the reverse order
    //in the base hook intrusive list
@@ -75,6 +90,9 @@ int main()
       my_slist.push_front(*it);
       my_set.insert(*it);
       my_uset.insert(*it);
+      my_avlset.insert(*it);
+      my_splayset.insert(*it);
+      my_sgset.insert(*it);
    }
 
    //Now test lists
@@ -82,13 +100,24 @@ int main()
       List::const_iterator  list_it(my_list.cbegin());
       Slist::const_iterator slist_it(my_slist.cbegin());
       Set::const_reverse_iterator set_rit(my_set.crbegin());
+      AvlSet::const_reverse_iterator avl_set_rit(my_avlset.crbegin());
+      SplaySet::const_reverse_iterator splay_set_rit(my_splayset.crbegin());
+      SgSet::const_reverse_iterator sg_set_rit(my_sgset.crbegin());
+
       VectRit vect_it(values.rbegin()), vect_itend(values.rend());
 
       //Test the objects inserted in the base hook list
-      for(; vect_it != vect_itend; ++vect_it, ++list_it, ++slist_it, ++set_rit){
-         if(&*list_it  != &*vect_it)   return 1;
-         if(&*slist_it != &*vect_it)   return 1;
-         if(&*set_rit  != &*vect_it)   return 1;
+      for(; vect_it != vect_itend
+          ; ++vect_it, ++list_it
+          , ++slist_it, ++set_rit
+          , ++avl_set_rit, ++splay_set_rit
+          , ++sg_set_rit){
+         if(&*list_it  != &*vect_it)      return 1;
+         if(&*slist_it != &*vect_it)      return 1;
+         if(&*set_rit  != &*vect_it)      return 1;
+         if(&*avl_set_rit  != &*vect_it)  return 1;
+         if(&*splay_set_rit  != &*vect_it)return 1;
+         if(&*sg_set_rit  != &*vect_it)   return 1;
          if(my_uset.find(*set_rit) == my_uset.cend())  return 1;
       }
    }

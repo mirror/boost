@@ -596,7 +596,7 @@ Apart from that, [*Boost.Intrusive] offers additional features:
    be configured to use any type of pointer. This configuration information is also
    transmitted to the containers, so all the internal pointers used by intrusive containers
    configured with these hooks will be smart pointers. As an example,
-   [*Boost.Interprocess] defines an mart pointer compatible with shared memory,
+   [*Boost.Interprocess] defines a smart pointer compatible with shared memory,
    called `offset_ptr`. [*Boost.Intrusive] can be configured to use this smart pointer
    to allow shared memory intrusive containers.
 
@@ -656,6 +656,15 @@ want to redefine intrusive safe-mode assertions without modifying the global
    used in hooks' destructors to check that the hook is in a default state.
 
 If any of these macros is not redefined, the assertion will default to `BOOST_ASSERT`.
+If `BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT` or `BOOST_INTRUSIVE_SAFE_HOOK_DESTRUCTOR_ASSERT`
+is defined and the programmer needs to include a file to configure that assertion, it can define
+`BOOST_INTRUSIVE_SAFE_HOOK_DESTRUCTOR_ASSERT_INCLUDE` or `BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT_INCLUDE`
+with the name of the file to include:
+
+[c++]
+
+   #define BOOST_INTRUSIVE_SAFE_HOOK_DESTRUCTOR_ASSERT          MYASSERT
+   #define BOOST_INTRUSIVE_SAFE_HOOK_DESTRUCTOR_ASSERT_INCLUDE <myassert.h>
 
 [endsect]
 
@@ -1032,8 +1041,9 @@ the same options explained in the section
 *  [*`optimize_size<bool Enable>`]: The hook will be optimized for size
    instead of speed. The hook will embed the color bit of the red-black
    tree node in the parent pointer if pointer alignment is even.
-   Optimizing the size will reduce speed performance a bit since masking
-   operations will be needed to access parent pointer and color attributes.
+   In some platforms, optimizing the size might reduce speed performance a bit
+   since masking operations will be needed to access parent pointer and color attributes,
+   in other platforms this option improves performance due to improved memory locality.
    Default: `optimize_size<false>`.
 
 [endsect]
@@ -1283,10 +1293,16 @@ And they also can receive additional options:
    (e.g. strings with a long common predicate) sometimes (specially when the
    load factor is high or we have many equivalent elements in an
    [classref boost::intrusive::unordered_multiset unordered_multiset] and
-   no `optimize_multikey<>` is activatedin the hook)
+   no `optimize_multikey<>` is activated in the hook)
    the equality function is a performance problem. Two equal values must have
    equal hashes, so comparing the hash values of two elements before using the
    comparison functor can speed up some implementations.
+
+*  [*`incremental<bool Enabled>`]: Activates incremental hashing (also known as Linear Hashing).
+   This option implies `power_2_buckets<true>` and the container will require power of two buckets.
+   For more information on incremental hashing, see 
+   [@http://en.wikipedia.org/wiki/Linear_hashing `Linear hash` on Wikipedia]
+   Default: `incremental<false>`
 
 [endsect]
 
@@ -1558,8 +1574,9 @@ the size of the node:
 *  [*`optimize_size<bool Enable>`]: The hook will be optimized for size
    instead of speed. The hook will embed the balance bits of the AVL
    tree node in the parent pointer if pointer alignment is multiple of 4.
-   Optimizing the size will reduce speed performance a bit since masking
-   operations will be needed to access parent pointer and balance factor attributes.
+   In some platforms, optimizing the size might reduce speed performance a bit
+   since masking operations will be needed to access parent pointer and balance factor attributes,
+   in other platforms this option improves performance due to improved memory locality.
    Default: `optimize_size<false>`.
 
 [endsect]
@@ -1890,7 +1907,7 @@ and [classref boost::intrusive::unordered_set unordered_set] reference for more 
 
 With multiple ordered and unordered associative containers
 ([classref boost::intrusive::multiset multiset] and 
-[classref boost::intrusive::unordered_multiset unordered_multiset]) there's
+[classref boost::intrusive::unordered_multiset unordered_multiset]) there  is
 no need for these advanced insertion functions, since insertions are always succesful.
 
 [endsect]
@@ -1982,7 +1999,7 @@ The cloning function works as follows:
    all the constructed elements are disposed using the disposer function object.
 
 
-Here's an example of `clone_from`:
+Here is an example of `clone_from`:
 
 [import ../example/doc_clone_from.cpp]
 [doc_clone_from]
@@ -2116,7 +2133,7 @@ These hooks support these options:
 be inserted container. Additionally, these hooks don't support `unlink()` and
 `swap_nodes()` operations for the same reason.
 
-Here's an example that creates a class with two any hooks, and uses one to insert the
+Here is an example that creates a class with two any hooks, and uses one to insert the
 class in a [classref slist] and the other one in a [classref list].
 
 [import ../example/doc_any_hook.cpp]
@@ -2699,7 +2716,7 @@ used in node algorithms, since these types can be different. Apart from this,
 Instead of using [*Boost.Intrusive] predefined hooks
 a user might want to develop customized containers, for example, using nodes that are
 optimized for a specific
-application or that are compatible with a a legacy ABI. A user might want
+application or that are compatible with a legacy ABI. A user might want
 to have only two additional pointers in his class and insert the class in a doubly
 linked list sometimes and in a singly linked list in other situations. You can't
 achieve this using [*Boost.Intrusive] predefined hooks. Now, instead of using
@@ -3459,7 +3476,7 @@ The disperse list is again the slowest.
 
 [section:performance_results_conclusions Conclusions]
 
-Intrusive containers can offer performance benefits that can not be achieved with
+Intrusive containers can offer performance benefits that cannot be achieved with
 equivalent non-intrusive containers. Memory locality improvements are noticeable
 when the objects to be inserted are small. Minimizing memory allocation/deallocation calls is also
 an important factor and intrusive containers make this simple if the user allocates
@@ -3470,6 +3487,17 @@ all the objects to be inserted in intrusive containers in containers like `std::
 [endsect]
 
 [section:release_notes Release Notes]
+
+[section:release_notes_boost_1_37_00 Boost 1.37 Release]
+
+*  Intrusive now takes advantage of compilers with variadic templates.
+*  `clone_from` functions now copy predicates and hash functions of associative containers.
+*  Added incremental hashing to unordered containers via `incremental<>` option.
+*  Update some function parameters from `iterator` to `const_iterator` in containers
+   to keep up with the draft of the next standard.
+*  Added an option to specify include files for intrusive configurable assertion macros.
+
+[endsect]
 
 [section:release_notes_boost_1_36_00 Boost 1.36 Release]
 
@@ -3512,7 +3540,7 @@ all the objects to be inserted in intrusive containers in containers like `std::
 
 [endsect]
 
-[section:acknowledgments Acknowledgements]
+[section:acknowledgements Acknowledegements]
 
 [*Olaf Krzikalla] would like to thank:
 

@@ -15,10 +15,7 @@
 
 #define TEST_INTRUSIVE_SEQUENCE( INTVALUES, ITERATOR )\
 {  \
-   const int init_values_size = sizeof(INTVALUES)/sizeof(INTVALUES[0]); \
-   std::vector<int> expected; \
-   expected.assign(&INTVALUES[0], &INTVALUES[0] + init_values_size); \
-   BOOST_TEST (std::equal(expected.begin(), expected.end(), ITERATOR) ); \
+   BOOST_TEST (std::equal(&INTVALUES[0], &INTVALUES[0] + sizeof(INTVALUES)/sizeof(INTVALUES[0]), ITERATOR) ); \
 }
 
 #define TEST_INTRUSIVE_SEQUENCE_EXPECTED( EXPECTEDVECTOR, ITERATOR )\

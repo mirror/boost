@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="unordered_set"
-	ProjectGUID="{9101EE76-BB6C-2C91-F4B7-A27B94908F19}"
+	Name="named_construct_test"
+	ProjectGUID="{5183C8CE-F2E1-3620-237A-B765C9896390}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -12,36 +12,37 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="Debug"
-			IntermediateDirectory="Debug"
+			OutputDirectory="../../Bin/Win32/Debug"
+			IntermediateDirectory="Debug/named_construct_test"
 			ConfigurationType="1"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../../../"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
-				GeneratePreprocessedFile="0"
+				AdditionalIncludeDirectories="../../../.."
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_DATE_TIME_NO_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
-				DisableLanguageExtensions="TRUE"
+				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="TRUE"
-				ForceConformanceInForLoopScope="TRUE"
+				ForceConformanceInForLoopScope="FALSE"
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
 				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="4"/>
+				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/unordered_set.exe"
-				LinkIncremental="2"
+				AdditionalDependencies="winmm.lib"
+				OutputFile="$(OutDir)/named_construct_test_d.exe"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="../../../../stage/lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/unordered_set.pdb"
+				ProgramDatabaseFile="$(OutDir)/named_construct_test.pdb"
 				SubSystem="1"
-				TargetMachine="1"/>
+				TargetMachine="1"
+				FixedBaseAddress="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -65,25 +66,29 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="Release"
-			IntermediateDirectory="Release"
+			OutputDirectory="../../Bin/Win32/Release"
+			IntermediateDirectory="Release/named_construct_test"
 			ConfigurationType="1"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../../../../../"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="4"
+				AdditionalIncludeDirectories="../../../.."
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BOOST_DATE_TIME_NO_LIB"
+				RuntimeLibrary="2"
+				TreatWChar_tAsBuiltInType="TRUE"
+				ForceConformanceInForLoopScope="FALSE"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				DebugInformationFormat="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/unordered_set.exe"
+				AdditionalDependencies="winmm.lib"
+				OutputFile="$(OutDir)/named_construct_test.exe"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="../../../../stage/lib"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -117,9 +122,9 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4F3C77F1-B78A-C745-4726-252AD75C322E}">
+			UniqueIdentifier="{C4F7133F-ACA5-6B60-4367-22A3F2752AFA}">
 			<File
-				RelativePath="..\..\..\test\unordered_set_test.cpp">
+				RelativePath="..\..\test\named_construct_test.cpp">
 			</File>
 		</Filter>
 	</Files>

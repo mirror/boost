@@ -21,7 +21,7 @@ class Window : public list_base_hook<>
    //This is a container those value is an abstract class: you can't do this with std::list.
    typedef list<Window> win_list;
 
-   //An static intrusive list declaration
+   //A static intrusive list declaration
    static win_list all_windows;
 
    //Constructor. Includes this window in the list

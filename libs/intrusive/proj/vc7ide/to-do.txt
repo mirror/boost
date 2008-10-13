@@ -1,0 +1,3 @@
+-> Implement C++0x features (variadic templates & rvalue references)
+-> Offer bidirectional iterator for hashtables
+-> Non-array buckets
