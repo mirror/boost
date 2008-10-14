@@ -193,8 +193,8 @@ namespace boost {
       struct reference_manager
       {
         static inline void
-        get(const function_buffer& in_buffer, function_buffer& out_buffer, 
-            functor_manager_operation_type op)
+        manage(const function_buffer& in_buffer, function_buffer& out_buffer, 
+               functor_manager_operation_type op)
         {
           switch (op) {
           case clone_functor_tag: 
@@ -396,6 +396,14 @@ namespace boost {
                   mpl::bool_<(function_allows_small_object_optimization<functor_type>::value)>());
         }
 
+        // For member pointers, we use the small-object optimization buffer.
+        static inline void
+        manager(const function_buffer& in_buffer, function_buffer& out_buffer, 
+                functor_manager_operation_type op, member_ptr_tag)
+        {
+          manager(in_buffer, out_buffer, op, mpl::true_());
+        }
+
       public:
         /* Dispatch to an appropriate manager based on whether we have a
            function pointer or a function object pointer. */
@@ -589,7 +597,6 @@ namespace boost {
        */
       struct vtable_base
       {
-        vtable_base() : manager(0) { }
         void (*manager)(const function_buffer& in_buffer, 
                         function_buffer& out_buffer, 
                         functor_manager_operation_type op);
