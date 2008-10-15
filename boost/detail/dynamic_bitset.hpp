@@ -45,19 +45,19 @@ namespace boost {
 
     typedef unsigned char byte_type;
 
-    // This two entities
+    // These two entities
     //
     //     enum mode { access_by_bytes, access_by_blocks };
     //     template <mode> struct mode_to_type {};
     //
-    // were removed, since the regression logs (as of 24 Aug 2008) show
-    // that several compilers have troubles with recognizing
+    // were removed, since the regression logs (as of 24 Aug 2008)
+    // showed that several compilers had troubles with recognizing
     //
     //   const mode m = access_by_bytes
     //
     // as a constant expression
     //
-    // *We'll use a bool, instead *.
+    // * So, we'll use bool, instead of enum *.
     //
     template <bool value>
     struct value_to_type
