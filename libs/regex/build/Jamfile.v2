@@ -33,8 +33,6 @@ rule check-icu-config ( )
       
          if [ GLOB $(dir)/include/unicode : utypes.h ]
          {
-            ECHO Building Boost.Regex with Unicode/ICU support enabled ;
-            ECHO Using ICU in $(ICU_PATH:J=" ")/include ;
             gHAS_ICU = true ;
             
             # try and find ICU libraries, look for NT versions first:
@@ -153,25 +151,42 @@ rule check-icu-config ( )
    
    if $(gHAS_ICU)
    {
+      message icu_config ;
+      message icu_config2 
+         : Note: Building Boost.Regex with Unicode/ICU support enabled
+         : "    Using ICU in " $(ICU_PATH:J=" ")/include ;
       return true ;
    }
    else
    {
-      ECHO Building Boost.Regex with the optional Unicode/ICU support disabled. ;
-      ECHO Please refer to the Boost.Regex documentation for more information ;
-      ECHO (don't panic: this is a strictly optional feature). ;
+      message icu_config
+		: "Building Boost.Regex with the optional Unicode/ICU support disabled."
+		: "Note: Please refer to the Boost.Regex documentation for more information"
+		: "Note: this is a strictly optional feature." ;
+
       if $(ICU_PATH)
       {
-         ECHO Couldn't find utypes.h in $(ICU_PATH:J=" ")/include/unicode ;
+         message icu_config2 
+           : WARNING! ICU configuration failed
+           : "    Couldn't find utypes.h in " $(ICU_PATH:J=" ")/include/unicode ;
+      }
+      else
+      {
+         message icu_config2 ;
       }
    }
 }
 
+explicit icu_config ;
+explicit icu_config2 ;
+
 if [ check-icu-config ]
+{
+if $(gHAS_ICU)
 {
    BOOST_REGEX_ICU_OPTS = "<target-os>freebsd:<include>/usr/local/include" ;
    BOOST_REGEX_ICU_OPTS += "<define>BOOST_HAS_ICU=1" ;
-
+   
    if $(ICU_PATH)
    {
       if $(ICU_PATH) != "/usr" && $(ICU_PATH) != "/usr/local"
@@ -212,6 +227,7 @@ if [ check-icu-config ]
       }
 #End of addition by Tommy Nordgren
    }
+   }
 }
 
 SOURCES = 
@@ -234,7 +250,7 @@ SOURCES =
    usinstances.cpp ;
 
 
-lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE)
+lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE) icu_config2 icu_config
     :         
         #<link>static:<define>BOOST_REGEX_NO_LIB=1
         #<link>static:<define>BOOST_REGEX_STATIC_LINK=1
@@ -248,6 +264,8 @@ lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE)
 alias icu_options : $(ICU_EXTRA_SOURCE) : : : $(BOOST_REGEX_ICU_OPTS) ;
 
 boost-install boost_regex ;
+
+
 
 
 
