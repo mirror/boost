@@ -184,11 +184,15 @@ function vc6_gen()
 	if test ${subdir} = "vc80" ; then
 	   VC8_CHECK='MSVCDIR=$(VS80COMNTOOLS)..\..\VC'
 	   echo setting VC8 setup to: ${VC8_CHECK}
-    else
+          else
 	 if test ${subdir} = "vc71" ; then
 	   VC8_CHECK='MSVCDIR=$(VS71COMNTOOLS)..\..\VC7'
 	   echo setting VC71 setup to: ${VC8_CHECK}
-     fi
+          fi
+	if test ${subdir} = "vc90" ; then
+	   VC8_CHECK='MSVCDIR=$(VS90COMNTOOLS)..\..\VC'
+	   echo setting VC9 setup to: ${VC8_CHECK}
+	fi
     fi
    	
 	cat > $out << EOF
@@ -468,11 +472,24 @@ out="vc8.mak"
 no_single="no"
 subdir="vc80"
 vc6_gen
+#
+# generate vc8 makefile:
+EH_OPTS="/EHsc"
+PROC_OPTS=""
+debug_extra="$EH_OPTS"
+is_stlport="no"
+out="vc9.mak"
+no_single="no"
+subdir="vc90"
+vc6_gen
 
 
 #
 # remove tmep files;
 rm -f $tout $iout
+
+
+
 
 
 
