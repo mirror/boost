@@ -13,6 +13,26 @@
 
 <itemizedlist spacing="compact">
 
+  <listitem><para><bold>Version 1.37.0</bold>: </para>
+    <itemizedlist spacing="compact">
+      <listitem><para>Improved the performance of Boost.Function's
+      swap() operation for large function objects. Original patch
+      contributed by Niels Dekker.</para></listitem>
+
+      <listitem><para>Added a new header &lt;boost/function/function_typeof.hpp&gt; that provides support for using the Boost.Typeof library on Boost.Function objects.</para></listitem>
+
+      <listitem><para>Added a new header &lt;boost/function/function_fwd.hpp&gt; that provides support for using the Boost.Typeof library on Boost.Function objects.</para></listitem>
+
+      <listitem><para>The <methodname alt="boost::function::target">target</methodname>()
+      function now respects the cv-qualifiers of function objects
+      stored by reference
+      (using <classname>boost::reference_wrapper</classname>), such
+      that a reference to a <code>const</code> function object cannot
+      be accessed as a reference to a non-<code>const</code> function
+      object.</para></listitem>
+    </itemizedlist>
+  </listitem>
+
   <listitem><para><bold>Version 1.36.0</bold>: </para>
     <itemizedlist spacing="compact">
       <listitem><para>Boost.Function now implements allocator support
