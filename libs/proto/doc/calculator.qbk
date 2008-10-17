@@ -112,9 +112,9 @@ Later, we'll see how to define more interesting evaluation contexts and
 expression transforms that give you total control over how your expressions
 are evaluated.
 
-[/=================================]
-[heading Customing Expression Trees]
-[/=================================]
+[/===================================]
+[heading Customizing Expression Trees]
+[/===================================]
 
 Our calculator DSEL is already pretty useful, and for many DSEL scenarios, no more 
 would be needed. But let's keep going. Imagine how much nicer it would be if all 
@@ -158,36 +158,31 @@ below in the definition of `calculator<>`. Read on for a description.
 
         // Overload operator() to invoke proto::eval() with
         // our calculator_context.
-        double operator()(double a1 = 0, double a2 = 0, double a3 = 0) const
+        double operator()(double a1 = 0, double a2 = 0) const
         {
             calculator_context ctx;
             ctx.args.push_back(a1);
             ctx.args.push_back(a2);
-            ctx.args.push_back(a3);
             
             return proto::eval(*this, ctx);
         }
     };
 
-The `calculator<>` struct is an expression /extension/. It uses `proto::extends<>` 
-to effectively add additional members to an expression type. When composing larger 
-expressions from smaller ones, Proto notes what domain the smaller expressions are 
-in. The larger expression is in the same domain and is automatically wrapped in the 
-domain's extension wrapper.
+The `calculator<>` struct is an expression /extension/. It uses `proto::extends<>` to effectively add additional members to an expression type. When composing larger expressions from smaller ones, Proto notes what domain the smaller expressions are in. The larger expression is in the same domain and is automatically wrapped in the domain's extension wrapper.
 
-All that remains to be done is to put our placeholders in the calculator domain. We 
-do that by wrapping them in our `calculator<>` wrapper, as below:
+All that remains to be done is to put our placeholders in the calculator domain. We do that by wrapping them in our `calculator<>` wrapper, as below:
 
     // Define the Protofied placeholder terminals, in the
     // calculator domain.
     calculator<proto::terminal<placeholder<0> >::type> const _1;
     calculator<proto::terminal<placeholder<1> >::type> const _2;
 
-Any larger expression that contain these placeholders will automatically be wrapped 
-in the `calculator<>` wrapper and have our `operator()` overload.
+Any larger expression that contain these placeholders will automatically be wrapped in the `calculator<>` wrapper and have our `operator()` overload. That means we can use them as function objects as follows.
 
-Now that we've extended calculator expressions to make them function objects, we 
-can use them with standard algorithms, as shown below:
+    double result = ((_2 - _1) / _2 * 100)(45.0, 50.0);
+    assert(result == (50.0 - 45.0) / 50.0 * 100));
+
+Since calculator expressions are now valid function objects, we can use them with standard algorithms, as shown below:
 
     double a1[4] = { 56, 84, 37, 69 };
     double a2[4] = { 65, 120, 60, 70 };
@@ -226,27 +221,18 @@ grammar of the calculator DSEL. It looks as follows:
         >
     {};
 
-You can read the above grammar as follows: an expression tree conforms to the 
-calculator grammar if it is a binary plus, minus, multiplies or divides node, where 
-both child nodes also conform to the calculator grammar; or if it is a terminal. In 
-a Proto grammar, `proto::_` is a wildcard that matches any type, so 
-`proto::terminal< proto::_ >` matches any terminal, whether it is a placeholder or 
-a literal.
+You can read the above grammar as follows: an expression tree conforms to the calculator grammar if it is a binary plus, minus, multiplies or divides node, where both child nodes also conform to the calculator grammar; or if it is a terminal. In a Proto grammar, _wild_ is a wildcard that matches any type, so `proto::terminal< proto::_ >` matches any terminal, whether it is a placeholder or a literal.
 
-[note This grammar is actually a little looser than we would like. Only 
-placeholders and literals that are convertible to doubles are valid terminals. 
-Later on we'll see how to express things like that in Proto grammars.]
+[note This grammar is actually a little looser than we would like. Only placeholders and literals that are convertible to doubles are valid terminals. Later on we'll see how to express things like that in Proto grammars.]
 
-Once you have defined the grammar of your DSEL, you can use the `proto::matches<>` 
-metafunction to check whether a given expression type conforms to the grammar. For 
-instance, we might add the following to our `calculator::operator()` overload:
+Once you have defined the grammar of your DSEL, you can use the _matches_ metafunction to check whether a given expression type conforms to the grammar. For instance, we might add the following to our `calculator::operator()` overload:
 
     template<typename Expr>
     struct calculator
       : proto::extends< /* ... as before ... */ >
     {
         /* ... */
-        double operator()(double a1 = 0, double a2 = 0, double a3 = 0) const
+        double operator()(double a1 = 0, double a2 = 0) const
         {
             // Check here that the expression we are about to
             // evaluate actually conforms to the calcuator grammar.

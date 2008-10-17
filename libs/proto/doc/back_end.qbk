@@ -1,9 +1,555 @@
 [/
- / Copyright (c) 2006 Eric Niebler
+ / Copyright (c) 2007 Eric Niebler
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
+
+[/================================================================================]
+[section:back_end Back Ends:
+    Making Expression Templates Do Useful Work]
+[/================================================================================]
+
+[section:expression_evaluation Expression Evaluation: Imparting Behaviors With A Context]
+
+Once you have constructed a Proto expression tree, either by using Proto's
+operator overloads or with _make_expr_ and friends, you probably want to
+actually /do/ something with it. The simplest option is to use `proto::eval()`,
+a generic expression evaluator. To use _eval_, you'll need to define a
+/context/ that tells _eval_ how each node should be evaluated. This section
+goes through the nuts and bolts of using _eval_, defining evaluation contexts,
+and using the contexts that Proto provides.
+
+[note `proto::eval()` is a less powerful but easier-to-use evaluation technique
+than Proto transforms, which are covered later. Although very powerful,
+transforms have a steep learning curve and can be more difficult to debug.
+`proto::eval()` is a rather weak tree traversal algorithm. Dan Marsden has
+been working on a more general and powerful tree traversal library. When it is
+ready, I anticipate that it will eliminate the need for `proto::eval()`.]
+
+[/================================================================]
+[section:proto_eval Evaluating An Expression with [^proto::eval()]]
+[/================================================================]
+
+[:[*Synopsis:]]
+
+    namespace proto
+    {
+        namespace result_of
+        {
+            // A metafunction for calculating the return
+            // type of proto::eval() given certain Expr
+            // and Context types.
+            template<typename Expr, typename Context>
+            struct eval
+            {
+                typedef
+                    typename Context::template eval<Expr>::result_type
+                type;
+            };
+        }
+
+        namespace functional
+        {
+            // A callable function object type for evaluating
+            // a Proto expression with a certain context.
+            struct eval : callable
+            {
+                template<typename Sig>
+                struct result;
+
+                template<typename Expr, typename Context>
+                typename proto::result_of::eval<Expr, Context>::type
+                operator ()(Expr &expr, Context &context) const;
+
+                template<typename Expr, typename Context>
+                typename proto::result_of::eval<Expr, Context>::type
+                operator ()(Expr &expr, Context const &context) const;
+            };
+        }
+
+        template<typename Expr, typename Context>
+        typename proto::result_of::eval<Expr, Context>::type
+        eval(Expr &expr, Context &context);
+
+        template<typename Expr, typename Context>
+        typename proto::result_of::eval<Expr, Context>::type
+        eval(Expr &expr, Context const &context);
+    }
+
+Given an expression and an evaluation context, using _eval_ is quite simple.
+Simply pass the expression and the context to _eval_ and it does the rest and
+returns the result. You can use the `eval<>` metafunction in the
+`proto::result_of` namespace to compute the return type of _eval_. The
+following demonstrates a use of _eval_:
+
+    template<typename Expr>
+    typename proto::result_of::eval<Expr const, MyContext>::type
+    MyEvaluate(Expr const &expr)
+    {
+        // Some user-defined context type
+        MyContext ctx;
+
+        // Evaluate an expression with the context
+        return proto::eval(expr, ctx);
+    }
+
+What _eval_ does is also very simple. It defers most of the work to the
+context itself. Here essentially is the implementation of _eval_:
+
+    // eval() dispatches to a nested "eval<>" function
+    // object within the Context:
+    template<typename Expr, typename Context>
+    typename Context::template eval<Expr>::result_type
+    eval(Expr &expr, Context &ctx)
+    {
+        typename Context::template eval<Expr> eval_fun;
+        return eval_fun(expr, ctx);
+    }
+
+Really, _eval_ is nothing more than a thin wrapper that dispatches to the
+appropriate handler within the context class. In the next section, we'll see
+how to implement a context class from scratch.
+
+[endsect]
+
+[/==============================================]
+[section:contexts Defining an Evaluation Context]
+[/==============================================]
+
+As we saw in the previous section, there is really not much to the _eval_
+function. Rather, all the interesting expression evaluation goes on within
+a context class. This sections shows how to implement one from scratch.
+
+All context classes have roughly the following form:
+
+    // A prototypical user-defined context.
+    struct MyContext
+    {
+        // A nested eval<> class template
+        template<
+            typename Expr
+          , typename Tag = typename proto::tag_of<Expr>::type
+        >
+        struct eval;
+
+        // Handle terminal nodes here...
+        template<typename Expr>
+        struct eval<Expr, proto::tag::terminal>
+        {
+            // Must have a nested result_type typedef.
+            typedef ... result_type;
+
+            // Must have a function call operator that takes
+            // an expression and the context.
+            result_type operator()(Expr &expr, MyContext &ctx) const
+            {
+                return ...;
+            }
+        };
+
+        // ... other specializations of struct eval<> ...
+    };
+
+Context classes are nothing more than a collection of specializations of a
+nested `eval<>` class template. Each specialization handles a different
+expression type.
+
+In the [link boost_proto.users_guide.hello_calculator Hello Calculator]
+section, we saw an example of a user-defined context class for evaluating
+calculator expressions. That context class was implemented with the help
+of Proto's _callable_context_. If we were to implement it from scratch, it
+would look something like this:
+
+    // The calculator_contest from the "Hello Calculator" section,
+    // implemented from scratch.
+    struct calculator_context
+    {
+        // The values with which we'll replace the placeholders
+        std::vector<double> args;
+
+        template<
+            typename Expr
+            // defaulted template parameters, so we can
+            // specialize on the expressions that need
+            // special handling.
+          , typename Tag = typename proto::tag_of<Expr>::type
+          , typename Arg0 = typename proto::child_c<Expr, 0>::type
+        >
+        struct eval;
+
+        // Handle placeholder terminals here...
+        template<typename Expr, int I>
+        struct eval<Expr, proto::tag::terminal, placeholder<I> >
+        {
+            typedef double result_type;
+
+            result_type operator()(Expr &, MyContext &ctx) const
+            {
+                return ctx.args[I];
+            }
+        };
+
+        // Handle other terminals here...
+        template<typename Expr, typename Arg0>
+        struct eval<Expr, proto::tag::terminal, Arg0>
+        {
+            typedef double result_type;
+
+            result_type operator()(Expr &expr, MyContext &) const
+            {
+                return proto::child(expr);
+            }
+        };
+
+        // Handle addition here...
+        template<typename Expr, typename Arg0>
+        struct eval<Expr, proto::tag::plus, Arg0>
+        {
+            typedef double result_type;
+
+            result_type operator()(Expr &expr, MyContext &ctx) const
+            {
+                return proto::eval(proto::left(expr), ctx)
+                     + proto::eval(proto::right(expr), ctx);
+            }
+        };
+
+        // ... other eval<> specializations for other node types ...
+    };
+
+Now we can use _eval_ with the context class above to evaluate calculator
+expressions as follows:
+
+    // Evaluate an expression with a calculator_context
+    calculator_context ctx;
+    ctx.args.push_back(5);
+    ctx.args.push_back(6);
+    double d = proto::eval(_1 + _2, ctx);
+    assert(11 == d);
+
+Defining a context from scratch this way is tedious and verbose, but it gives
+you complete control over how the expression is evaluated. The context class in
+the [link boost_proto.users_guide.hello_calculator Hello Calculator] example
+was much simpler. In the next section we'll see the helper class Proto provides
+to ease the job of implementing context classes.
+
+[endsect]
+
+[/======================================]
+[section:canned_contexts Canned Contexts]
+[/======================================]
+
+Proto provides some ready-made context classes that you can use as-is, or that
+you can use to help while implementing your own contexts. They are:
+
+[variablelist
+  [ [[link boost_proto.users_guide.expression_evaluation.canned_contexts.default_context [^default_context]]]
+    [An evaluation context that assigns the usual C++ meanings to all the
+     operators. For example, addition nodes are handled by evaluating the
+     left and right children and then adding the results. The _default_context_
+     uses Boost.Typeof to deduce the types of the expressions it evaluates.] ]
+  [ [[link boost_proto.users_guide.expression_evaluation.canned_contexts.null_context [^null_context]]]
+    [A simple context that recursively evaluates children but does not combine
+     the results in any way and returns void.] ]
+  [ [[link boost_proto.users_guide.expression_evaluation.canned_contexts.callable_context [^callable_context<>]]]
+    [A helper that simplifies the job of writing context classes. Rather than
+     writing template specializations, with _callable_context_ you write a
+     function object with an overloaded function call operator. Any expressions
+     not handled by an overload are automatically dispatched to a default
+     evaluation context that you can specify.] ]
+]
+
+[/=========================================]
+[section:default_context [^default_context]]
+[/=========================================]
+
+The _default_context_ is an evaluation context that assigns the usual C++
+meanings to all the operators. For example, addition nodes are handled by
+evaluating the left and right children and then adding the results. The
+_default_context_ uses Boost.Typeof to deduce the types of the expressions it
+evaluates.
+
+For example, consider the following "Hello World" example:
+
+    #include <iostream>
+    #include <boost/proto/proto.hpp>
+    #include <boost/proto/context.hpp>
+    #include <boost/typeof/std/ostream.hpp>
+    using namespace boost;
+
+    proto::terminal< std::ostream & >::type cout_ = { std::cout };
+
+    template< typename Expr >
+    void evaluate( Expr const & expr )
+    {
+        // Evaluate the expression with default_context,
+        // to give the operators their C++ meanings:
+        proto::default_context ctx;
+        proto::eval(expr, ctx);
+    }
+
+    int main()
+    {
+        evaluate( cout_ << "hello" << ',' << " world" );
+        return 0;
+    }
+
+This program outputs the following:
+
+[pre
+hello, world
+]
+
+_default_context_ is trivially defined in terms of a `default_eval<>`
+template, as follows:
+
+    // Definition of default_context
+    struct default_context
+    {
+        template<typename Expr>
+        struct eval
+          : default_eval<
+                Expr
+              , default_context const
+              , typename tag_of<Expr>::type
+            >
+        {};
+    };
+
+There are a bunch of `default_eval<>` specializations, each of which handles
+a different C++ operator. Here, for instance, is the specialization for binary
+addition:
+
+    // A default expression evaluator for binary addition
+    template<typename Expr, typename Context>
+    struct default_eval<Expr, Context, proto::tag::plus>
+    {
+    private:
+        static Expr    & s_expr;
+        static Context & s_ctx;
+
+    public:
+        typedef
+            decltype(
+                proto::eval(proto::child_c<0>(s_expr), s_ctx)
+              + proto::eval(proto::child_c<1>(s_expr), s_ctx)
+            )
+        result_type;
+
+        result_type operator ()(Expr &expr, Context &ctx) const
+        {
+            return proto::eval(proto::child_c<0>(expr), ctx)
+                 + proto::eval(proto::child_c<1>(expr), ctx);
+        }
+    };
+
+The above code uses `decltype` to calculate the return type of the function
+call operator. `decltype` is a new keyword in the next version of C++ that gets
+the type of any expression. Most compilers do not yet support `decltype`
+directly, so `default_eval<>` uses the Boost.Typeof library to emulate it. On
+some compilers, that may mean that `default_context` either doesn't work or
+that it requires you to register your types with the Boost.Typeof library.
+Check the documentation for Boost.Typeof to see.
+
+[endsect]
+
+[/===================================]
+[section:null_context [^null_context]]
+[/===================================]
+
+The _null_context_ is a simple context that recursively evaluates children
+but does not combine the results in any way and returns void. It is useful
+in conjunction with `callable_context<>`, or when defining your own contexts
+which mutate an expression tree in-place rather than accumulate a result, as
+we'll see below.
+
+_null_context_ is trivially implemented in terms of `null_eval<>` as follows:
+
+    // Definition of null_context
+    struct null_context
+    {
+        template<typename Expr>
+        struct eval
+          : null_eval<Expr, null_context const, Expr::proto_arity::value>
+        {};
+    };
+
+And `null_eval<>` is also trivially implemented. Here, for instance is
+a binary `null_eval<>`:
+
+    // Binary null_eval<>
+    template<typename Expr, typename Context>
+    struct null_eval<Expr, Context, 2>
+    {
+        typedef void result_type;
+
+        void operator()(Expr &expr, Context &ctx) const
+        {
+            proto::eval(proto::child_c<0>(expr), ctx);
+            proto::eval(proto::child_c<1>(expr), ctx);
+        }
+    };
+
+When would such classes be useful? Imagine you have an expression tree with
+integer terminals, and you would like to increment each integer in-place. You
+might define an evaluation context as follows:
+
+    struct increment_ints
+    {
+        // By default, just evaluate all children by defering
+        // to the null_eval<>
+        template<typename Expr, typename Arg = proto::result_of::child<Expr>::type>
+        struct eval
+          : null_eval<Expr, increment_ints const>
+        {};
+
+        // Increment integer terminals
+        template<typename Expr>
+        struct eval<Expr, int>
+        {
+            typedef void result_type;
+
+            void operator()(Expr &expr, increment_ints const &) const
+            {
+                ++proto::child(expr);
+            }
+        };
+    };
+
+In the next section on _callable_context_, we'll see an even simpler way to
+achieve the same thing.
+
+[endsect]
+
+[/=============================================]
+[section:callable_context [^callable_context<>]]
+[/=============================================]
+
+The _callable_context_ is a helper that simplifies the job of writing context
+classes. Rather than writing template specializations, with _callable_context_
+you write a function object with an overloaded function call operator. Any
+expressions not handled by an overload are automatically dispatched to a
+default evaluation context that you can specify.
+
+Rather than an evaluation context in its own right, _callable_context_ is more
+properly thought of as a context adaptor. To use it, you must define your own
+context that inherits from _callable_context_.
+
+In the [link boost_proto.users_guide.expression_evaluation.canned_contexts.null_context [^null_context]]
+section, we saw how to implement an evaluation context that increments all the
+integers within an expression tree. Here is how to do the same thing with the
+_callable_context_:
+
+    // An evaluation context that increments all
+    // integer terminals in-place.
+    struct increment_ints
+      : callable_context<
+            increment_ints const // derived context
+          , null_context const  // fall-back context
+        >
+    {
+        typedef void result_type;
+
+        // Handle int terminals here:
+        void operator()(proto::tag::terminal, int &i) const
+        {
+            ++i;
+        }
+    };
+
+With such a context, we can do the following:
+
+    literal<int> i = 0, j = 10;
+    proto::eval( i - j * 3.14, increment_ints() );
+
+    std::cout << "i = " << i.get() << std::endl;
+    std::cout << "j = " << j.get() << std::endl;
+
+This program outputs the following, which shows that the integers `i` and `j`
+have been incremented by `1`:
+
+[pre
+i = 1
+j = 11
+]
+
+In the `increment_ints` context, we didn't have to define any nested `eval<>`
+templates. That's because _callable_context_ implements them for us.
+_callable_context_ takes two template parameters: the derived context and a
+fall-back context. For each node in the expression tree being evaluated,
+_callable_context_ checks to see if there is an overloaded `operator()` in the
+derived context that accepts it. Given some expression `expr` of type `Expr`,
+and a context `ctx`, it attempts to call:
+
+    ctx(
+        typename Expr::proto_tag()
+      , proto::child_c<0>(expr)
+      , proto::child_c<1>(expr)
+        ...
+    );
+
+Using function overloading and metaprogramming tricks, _callable_context_ can
+detect at compile-time whether such a function exists or not. If so, that
+function is called. If not, the current expression is passed to the fall-back
+evaluation context to be processed.
+
+We saw another example of the _callable_context_ when we looked at the simple
+calculator expression evaluator. There, we wanted to customize the evaluation
+of placeholder terminals, and delegate the handling of all other nodes to the
+_default_context_. We did that as follows:
+
+    // An evaluation context for calculator expressions that
+    // explicitly handles placeholder terminals, but defers the
+    // processing of all other nodes to the default_context.
+    struct calculator_context
+      : proto::callable_context< calculator_context const >
+    {
+        std::vector<double> args;
+
+        // Define the result type of the calculator.
+        typedef double result_type;
+
+        // Handle the placeholders:
+        template<int I>
+        double operator()(proto::tag::terminal, placeholder<I>) const
+        {
+            return this->args[I];
+        }
+    };
+
+In this case, we didn't specify a fall-back context. In that case,
+_callable_context_ uses the _default_context_. With the above
+`calculator_context` and a couple of appropriately defined placeholder
+terminals, we can evaluate calculator expressions, as demonstrated
+below:
+
+    template<int I>
+    struct placeholder
+    {};
+
+    terminal<placeholder<0> >::type const _1 = {{}};
+    terminal<placeholder<1> >::type const _2 = {{}};
+    // ...
+
+    calculator_context ctx;
+    ctx.args.push_back(4);
+    ctx.args.push_back(5);
+
+    double j = proto::eval( (_2 - _1) / _2 * 100, ctx );
+    std::cout << "j = " << j << std::endl;
+
+The above code displays the following:
+
+[pre
+j = 20
+]
+
+[endsect]
+
+[endsect]
+
+[endsect]
 
 [import ../test/examples.cpp]
 
@@ -199,12 +745,11 @@ This works because we gave calculator expressions an `operator()` that evaluates
     // our calculator_context.
     template<typename Expr>
     double
-    calculator<Expr>::operator()(double a1 = 0, double a2 = 0, double a3 = 0) const
+    calculator<Expr>::operator()(double a1 = 0, double a2 = 0) const
     {
         calculator_context ctx;
         ctx.args.push_back(a1);
         ctx.args.push_back(a2);
-        ctx.args.push_back(a3);
         
         return proto::eval(*this, ctx);
     }
@@ -289,7 +834,14 @@ Now that we can calculate the arity of a calculator expression, let's redefine t
             return proto::eval(*this, ctx);
         }
 
-        // ... and additional operator() overloads to handle more arguments ...
+        double operator()(double a1, double a2) const
+        {
+            BOOST_MPL_ASSERT_RELATION(2, ==, arity);
+            calculator_context ctx;
+            ctx.args.push_back(a1);
+            ctx.args.push_back(a2);
+            return proto::eval(*this, ctx);
+        }
     };
 
 Note the use of `boost::result_of<>` to access the return type of the `CalcArity` function object. Since we used compile-time integers in our transforms, the arity of the expression is encoded in the return type of the `CalcArity` function object. Proto grammars are valid TR1-style function objects, so you can use `boost::result_of<>` to figure out their return types.
@@ -673,7 +1225,7 @@ Primitive transforms are the building blocks for more interesting composite tran
 In addition to the above primitive transforms, all of Proto's grammar elements are also primitive transforms. Their behaviors are described below.
 
 [variablelist
- [[_wild_pt_]
+ [[_wild_]
       [Returns the current expression unmodified.]]
  [[_or_]
       [For the specified set of alternate sub-grammars, find the one that matches 
@@ -1008,6 +1560,8 @@ There is one last way to tell Proto that `times2<>` is callable. You could add a
     {};
 
 Note that in addition to the extra template parameter, `times2<>` still inherits from `proto::callable`. That's not necessary in this example but it's good style because any types derived from `times2<>` (as `times2int` defined above) will still be considered callable.
+
+[endsect]
 
 [endsect]
 
