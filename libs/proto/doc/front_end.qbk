@@ -1,0 +1,553 @@
+[/
+ / Copyright (c) 2007 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[/================================================================================]
+[section:front_end Fronts Ends:
+    Defining Terminals and Non-Terminals of Your DSEL]
+[/================================================================================]
+
+Here is the fun part: designing your own mini-programming language. In this section we'll talk about the nuts and bolts of designing a DSEL interface using Proto. We'll cover the definition of terminals and lazy functions that the users of your DSEL will get to program with. We'll also talk about Proto's expression template-building operator overloads, and about ways to add additional members to expressions within your domain.
+
+[/=======================]
+[section Making Terminals]
+[/=======================]
+
+As we saw with the Calculator example from the Introduction, the simplest way to get a DSEL up and running is simply to define some terminals, as follows.
+
+    // Define a literal integer Proto expression.
+    proto::terminal<int>::type i = {0};
+
+    // This creates an expression template.
+    i + 1;
+
+With some terminals and Proto's operator overloads, you can immediately start creating expression templates. 
+
+Defining terminals -- with aggregate initialization -- can be a little awkward at times. Proto provides an easier-to-use wrapper for literals that can be used to construct Protofied terminal expressions. It's called _literal_.
+
+    // Define a literal integer Proto expression.
+    proto::literal<int> i = 0;
+
+    // Proto literals are really just Proto terminal expressions.
+    // For example, this build a Proto expression template:
+    i + 1;
+
+There is also a _lit_ function for constructing a _literal_ in-place. The above expression can simply be written as:
+
+    // proto::lit(0) creates an integer terminal expression
+    proto::lit(0) + 1;
+
+[endsect]
+
+[/=================================]
+[section Proto's Operator Overloads]
+[/=================================]
+
+Once we have some Proto terminals, expressions involving those terminals build expression trees for us. Proto defines overloads for each of C++'s overloadable operators in the `boost::proto` namespace. As long as one operand is a Proto expression, the result of the operation is a tree node representing that operation. 
+
+[note Proto's operator overloads live in the `boost::proto` namespace and are found via ADL (argument-dependent lookup). That is why expressions must be "tainted" with Proto-ness for Proto to be able to build trees out of expressions.]
+
+As a result of Proto's operator overloads, we can say:
+
+    -_1;        // OK, build a unary-negate tree node
+    _1 + 42;    // OK, build a binary-plus tree node
+
+For the most part, this Just Works and you don't need to think about it, but a few operators are special and it can be helpful to know how Proto handles them.
+
+[/=========================================================]
+[heading Assignment, Subscript, and Function Call Operators]
+[/=========================================================]
+
+Proto also overloads `operator=`, `operator[]`, and `operator()`, but these operators are member functions of the expression template rather than free functions in Proto's namespace. The following are valid Proto expressions:
+
+    _1 = 5;     // OK, builds a binary assign tree node
+    _1[6];      // OK, builds a binary subscript tree node
+    _1();       // OK, builds a unary function tree node
+    _1(7);      // OK, builds a binary function tree node
+    _1(8,9);    // OK, builds a ternary function tree node
+    // ... etc.
+
+For the first two lines, assigment and subscript, it should be fairly unsurprising
+that the resulting expression node should be binary. After all, there are
+two operands in each expression. It may be surprising at first that what appears
+to be a function call with no arguments, `_1()`, actually creates an expression
+node with one child. The child is `_1` itself. Likewise, the expression `_1(7)`
+has two children: `_1` and `7`.
+
+Because these operators can only be defined as member functions, the following expressions are invalid:
+
+    int i;
+    i = _1;         // ERROR: cannot assign _1 to an int
+
+    int *p;
+    p[_1];          // ERROR: cannot use _1 as an index
+
+    std::sin(_1);   // ERROR: cannot call std::sin() with _1
+
+Also, C++ has special rules for overloads of `operator->` that make it useless
+for building expression templates, so Proto does not overload it.
+
+[/==============================]
+[heading The Address-Of Operator]
+[/==============================]
+
+Proto overloads the address-of operator for expression types, so that the
+following code creates a new unary address-of tree node:
+
+    &_1;    // OK, creates a unary address-of tree node
+
+It does /not/ return the address of the `_1` object. However, there is
+special code in Proto such that a unary address-of node is implicitly
+convertible to a pointer to its child. In other words, the following
+code works and does what you might expect, but not in the obvious way:
+
+    typedef
+        proto::terminal< placeholder<0> >::type
+    _1_type;
+
+    _1_type const _1 = {{}};
+    _1_type const * p = &_1; // OK, &_1 implicitly converted
+
+[endsect]
+
+[/============================]
+[section Making Lazy Functions]
+[/============================]
+
+If we limitted ourselves to nothing but terminals and operator overloads, our domain-specific embedded languages wouldn't be very expressive. Imagine that we wanted to extend our calculator DSEL with a full suite of math functions like `sin()` and `pow()` that we could invoke lazily as follows.
+
+    // A calculator expression that takes one argument
+    // and takes the sine of it.
+    sin(_1);
+
+We would like the above to create an expression template representing a function invocation. When that expression is evaluated, it should cause the function to be invoked. (At least, that's the meaning of function invocation we'd like the calculator DSEL to have.) You can define `sin` quite simply as follows.
+
+    // "sin" is a Proto terminal containing a function pointer
+    proto::terminal< double(*)(double) >::type const sin = {&std::sin};
+
+In the above, we define `sin` as a Proto terminal containing a pointer to the `std::sin()` function. Now we can use `sin` as a lazy function. The `default_context` that we saw in the Introduction knows how to evaluate lazy functions. Consider the following:
+
+    double pi = 3.1415926535;
+    proto::default_context ctx;
+    // Create a lazy "sin" invocation and immediately evaluate it
+    std::cout << proto::eval( sin(pi/2), ctx ) << std::endl;
+
+The above code prints out:
+
+[pre 1]
+
+It is important to note that there is nothing special about terminals that contain function pointers. /Any/ Proto expression has an overloaded function call operator. Consider:
+
+    // This compiles!
+    proto::lit(1)(2)(3,4)(5,6,7,8);
+
+That may look strange at first. It creates an integer terminal with _lit_, and then invokes it like a function again and again. What does it mean? To be sure, the `default_context` wouldn't know what to do with it. The `default_context` only knows how to evaluate expressions that are sufficiently C++-like. In the case of function call expressions, the left hand side must evaluate to something that can be invoked: a pointer to a function, a reference to a function, or a TR1-style function object. That doesn't stop you from defining your own evaluation context that gives that expression a meaning. But more on that later.
+
+[/=======================================]
+[heading Making Lazy Functions, Continued]
+[/=======================================]
+
+Now, what if we wanted to add a `pow()` function to our calculator DSEL that users could invoke as follow.
+
+    // A calculator expression that takes one argument
+    // and raises it to the 2nd power
+    pow< 2 >(_1);
+
+The simple technique described above of making `pow` a terminal containing a function pointer doesn't work here. If `pow` is an object, then the expression `pow< 2 >(_1)` is not valid C++. `pow` needs to be a real function template. But it must be an unusual function; it must return an expression template.
+
+Before we can write the `pow()` function, we need a function object that wraps an invocation of `std::pow()`. 
+
+    // Define a pow_fun function object
+    template<int Exp>
+    struct pow_fun
+    {
+        typedef double result_type;
+        double operator()(double d) const
+        {
+            return std::pow(d, Exp);
+        }
+    };
+
+Now, let's try to define a function template that returns an expression template. We'll use the `proto::function<>` metafunction to calculate the type of a Proto expression that represents a function call. It is analogous to _terminal_. (We'll see a couple of different ways to solve this problem, and each will demonstrate another utility for defining Proto front-ends.)
+
+    // Define a lazy pow() function for the calculator DSEL.
+    // Can be used as: pow< 2 >(_1)
+    template<int Exp, typename Arg>
+    typename proto::function<
+        typename proto::terminal<pow_fun<Exp> >::type
+      , Arg const &
+    >::type
+    pow(Arg const &arg)
+    {
+        typedef
+            typename proto::function<
+                typename proto::terminal<pow_fun<Exp> >::type
+              , Arg const &
+            >::type
+        result_type;
+
+        result_type result = {{{}}, arg};
+        return result;
+    }
+
+In the code above, notice how the `proto::function<>` and _terminal_ metafunctions are used to calculate the return type: `pow()` returns an expression template representing a function call where the first child is the function to call and the second is the argument to the function. (Unfortunately, the same type calculation is repeated in the body of the function so that we can initialize a local variable of the correct type. We'll see in a moment how to avoid that.)
+
+[note As with `proto::function<>`, there are metafunctions corresponding to all of the overloadable C++ operators for calculation expression types.]
+
+With the above definition of the `pow()` function, we can create calculator expressions like the one below and evaluate them using the `calcuator_context` we implemented in the Introduction.
+
+    // Initialize a calculator context
+    calculator_context ctx;
+    ctx.args.push_back(3); // let _1 be 3
+
+    // Create a calculator expression that takes one argument,
+    // adds one to it, and raises it to the 2nd power; and then
+    // immediately evaluate it using the calculator_context.
+    assert( 16 == proto::eval( pow<2>( _1 + 1 ), ctx ) );
+
+[/=========================================]
+[heading Protofying Lazy Function Arguments]
+[/=========================================]
+
+Above, we defined a `pow()` function template that returns an expression template representing a lazy function invocation. But if we tried to call it as below, we'll run into a problem.
+
+    // ERROR: pow() as defined above doesn't work when
+    // called with a non-Proto argument.
+    pow< 2 >( 4 );
+
+Proto expressions can only have other Proto expressions as children. But if we look at `pow()`'s function signature, we can see that if we pass it a non-Proto object, it will try to make it a child.
+
+    template<int Exp, typename Arg>
+    typename proto::function<
+        typename proto::terminal<pow_fun<Exp> >::type
+      , Arg const & // <=== ERROR! This may not be a Proto type!
+    >::type
+    pow(Arg const &arg)
+
+What we want is a way to make `Arg` into a Proto terminal if it is not a Proto expression already, and leave it alone if it is. For that, we can use _as_child_. The following implementation of the `pow()` function handles all argument types, expression templates or otherwise.
+
+    // Define a lazy pow() function for the calculator DSEL. Use
+    // proto::as_child() to Protofy the argument, but only if it
+    // is not a Proto expression type to begin with!
+    template<int Exp, typename Arg>
+    typename proto::function<
+        typename proto::terminal<pow_fun<Exp> >::type
+      , typename proto::result_of::as_child<Arg const>::type
+    >::type
+    pow(Arg const &arg)
+    {
+        typedef
+            typename proto::function<
+                typename proto::terminal<pow_fun<Exp> >::type
+              , typename proto::result_of::as_child<Arg const>::type
+            >::type
+        result_type;
+
+        result_type result = {{{}}, proto::as_child(arg)};
+        return result;
+    }
+
+Notice how we use the `proto::result_of::as_child<>` metafunction to calculate the return type, and the `proto::as_child()` function to actually normalize the argument.
+
+[/=====================================================]
+[heading Lazy Functions Made Simple With [^make_expr()]]
+[/=====================================================]
+
+The versions of the `pow()` function we've seen above are rather verbose. In the return type calculation, you have to be very explicit about wrapping non-Proto types. Worse, you have to restate the return type calculation in the body of `pow()` itself. Proto provides a helper for building expression templates directly that handle these mundane details for you. It's called _make_expr_. We can redefine `pow()` with it as below.
+
+    // Define a lazy pow() function for the calculator DSEL.
+    // Can be used as: pow< 2 >(_1)
+    template<int Exp, typename Arg>
+    typename proto::result_of::make_expr<
+        proto::tag::function  // Tag type
+      , pow_fun<Exp>          // First child (by value)
+      , Arg const &           // Second child (by reference)
+    >::type
+    pow(Arg const &arg)
+    {
+        return proto::make_expr<proto::tag::function>(
+            pow_fun<Exp>()    // First child (by value)
+          , boost::ref(arg)   // Second child (by reference)
+        );
+    }
+
+There are some things to notice about the above code. We use `proto::result_of::make_expr<>` to calculate the return type. The first template parameter is the tag type for the expression node we're building -- in this case, `proto::tag::function`, which is the tag type Proto uses for function call expressions.
+
+Subsequent template parameters to `proto::result_of::make_expr<>` represent children nodes. If a child type is not already a Proto expression, it is made into a terminal with _as_child_. A type such as `pow_fun<Exp>` results in terminal that is held by value, whereas a type like `Arg const &` (note the reference) indicates that the result should be held by reference.
+
+In the function body is the runtime invocation of _make_expr_. It closely mirrors the return type calculation. _make_expr_ requires you to specify the node's tag type as a template parameter. The arguments to the function become the node's children. When a child should be stored by value, nothing special needs to be done. When a child should be stored by reference, you must use the `boost::ref()` function to wrap the argument. Without this extra information, the _make_expr_ function couldn't know whether to store a child by value or by reference.
+
+[endsect]
+
+[/==============================================]
+[section Adding Members By Extending Expressions]
+[/==============================================]
+
+In this section, we'll see how to associate Proto expressions with a /domain/, how to add members to expressions within a domain, and how to control which operators are overloaded in a domain.
+
+[/==============]
+[section Domains]
+[/==============]
+
+In the [link boost_proto.users_guide.getting_started.hello_calculator Hello Calculator] section, we looked into making calculator expressions directly usable as lambda expressions in calls to STL algorithms, as below:
+
+    double data[] = {1., 2., 3., 4.};
+
+    // Use the calculator DSEL to square each element ... HOW?
+    std::transform( data, data + 4, data, _1 * _1 );
+
+The difficulty, if you recall, was that by default Proto expressions don't have interesting behaviors of their own. They're just trees. In particular, the expression `_1 * _1` won't have an `operator()` that takes a double and returns a double like `std::transform()` expects -- unless we give it one. To make this work, we needed to define an expression wrapper type that defined the `operator()` member function, and we needed to associate the wrapper with the calculator /domain/.
+
+In Proto, the term /domain/ refers to a type that associates expressions in that domain to an expression /generator/. The generator is just a function object that accepts an expression and does something to it, like wrapping it in an expression wrapper.
+
+You can also use a domain to associate expressions with a grammar. When you specify a domain's grammar, Proto ensures that all the expressions it generates in that domain conform to the domain's grammar. It does that by disabling any operator overloads that would create invalid expressions.
+
+[endsect]
+
+[/==================================================]
+[section:extends The [^extends<>] Expression Wrapper]
+[/==================================================]
+
+The first step to giving your calculator expressions extra behaviors is to define a calculator domain. All expressions within the calculator domain will be imbued with calculator-ness, as we'll see.
+
+    // A type to be used as a domain tag (to be defined below)
+    struct calculator_domain;
+
+We use this domain type when extending the _expr_ type, which we do with the _extends_ class template. Here is our expression wrapper, which imbues an expression with calculator-ness. It is described below.
+
+    // The calculator<> expression wrapper makes expressions
+    // function objects.
+    template< typename Expr >
+    struct calculator
+      : proto::extends< Expr, calculator< Expr >, calculator_domain >
+    {
+        typedef
+            proto::extends< Expr, calculator< Expr >, calculator_domain >
+        base_type;
+
+        calculator( Expr const &expr = Expr() )
+          : base_type( expr )
+        {}
+
+        // This is usually needed because by default, the compiler-
+        // generated assignment operator hides extends<>::operator=
+        using base_type::operator =;
+
+        typedef double result_type;
+
+        // Hide base_type::operator() by defining our own which
+        // evaluates the calculator expression with a calculator context.
+        result_type operator()( double d1 = 0.0, double d2 = 0.0 ) const
+        {
+            // As defined in the Hello Calculator section.
+            calculator_context ctx;
+
+            // ctx.args is a vector<double> that holds the values
+            // with which we replace the placeholders (e.g., _1 and _2)
+            // in the expression.
+            ctx.args.push_back( d1 ); // _1 gets the value of d1
+            ctx.args.push_back( d2 ); // _2 gets the value of d2
+
+            return proto::eval(*this, ctx ); // evaluate the expression
+        }
+    };
+
+We want calculator expressions to be function objects, so we have to define an `operator()` that takes and returns doubles. The `calculator<>` wrapper above does that with the help of the _extends_ template. The first template to _extends_ parameter is the expression type we are extending. The second is the type of the wrapped expression. The third parameter is the domain that this wrapper is associated with. A wrapper type like `calculator<>` that inherits from _extends_ behaves just like the expression type it has extended, with any additional behaviors you choose to give it.
+
+Although not strictly necessary in this case, we bring `extends<>::operator=` into scope with a `using` declaration. This is really only necessary if you want expressions like `_1 = 3` to create a lazily evaluated assignment. _extends_ defines the appropriate `operator=` for you, but the compiler-generated `calculator<>::operator=` will hide it unless you make it available with the `using` declaration.
+
+Note that in the implementation of `calculator<>::operator()`, we evaluate the expression with the `calculator_context` we defined earlier. As we saw before, the context is what gives the operators their meaning. In the case of the calculator, the context is also what defines the meaning of the placeholder terminals.
+
+Now that we have defined the `calculator<>` expression wrapper, we need to wrap the placeholders to imbue them with calculator-ness:
+
+    calculator< proto::terminal< placeholder<0> >::type > const _1;
+    calculator< proto::terminal< placeholder<1> >::type > const _2;
+
+[/=======================================================]
+[heading Retaining POD-ness with [^BOOST_PROTO_EXTENDS()]]
+[/=======================================================]
+
+To use _extends_, your extension type must derive from _extends_. Unfortunately, that means that your extension type is no longer POD and its instances cannot be /statically initialized/. (See the [link boost_proto.appendices.rationale.static_initialization Static
+Initialization] section in the [link boost_proto.appendices.rationale Rationale] appendix for why this matters.) In particular, as defined above, the global placeholder objects `_1` and `_2` will need to be initialized at runtime, which could lead to subtle order of initialization bugs.
+
+There is another way to make an expression extension that doesn't sacrifice POD-ness : the `BOOST_PROTO_EXTENDS()` macro. You can use it much like you use _extends_. We can use `BOOST_PROTO_EXTENDS()` to keep `calculator<>` a POD and our placeholders statically initialized.
+
+    // The calculator<> expression wrapper makes expressions
+    // function objects.
+    template< typename Expr >
+    struct calculator
+    {
+        // Use BOOST_PROTO_EXTENDS() instead of proto::extends<> to
+        // make this type a Proto expression extension.
+        BOOST_PROTO_EXTENDS(Expr, calculator<Expr>, calculator_domain)
+
+        typedef double result_type;
+
+        result_type operator()( double d1 = 0.0, double d2 = 0.0 ) const
+        {
+            /* ... as before ... */
+        }
+    };
+
+With the new `calculator<>` type, we can redefine our placeholders to be statically initialized:
+
+    calculator< proto::terminal< placeholder<0> >::type > const _1 = {{{}}};
+    calculator< proto::terminal< placeholder<1> >::type > const _2 = {{{}}};
+
+We need to make one additional small change to accomodate the POD-ness of our expression extension, which we'll describe below in the section on expression generators.
+
+What does `BOOST_PROTO_EXTENDS()` do? It defines a data member of expression type being extended; some nested typedefs that Proto requires; `operator=`, `operator[]` and `operator()` overloads for building expression templates; and a nested `result<>` template for calculating the return type of `operator()`. In this case, however, the `operator()` overloads and the `result<>` template are not needed because we are defining our own `operator()` in the `calculator<>` type. Proto provides additional macros for finer control over which member functions are defined. We could improve our `calculator<>` type as follows:
+
+    // The calculator<> expression wrapper makes expressions
+    // function objects.
+    template< typename Expr >
+    struct calculator
+    {
+        // Use BOOST_PROTO_BASIC_EXTENDS() instead of proto::extends<> to
+        // make this type a Proto expression extension:
+        BOOST_PROTO_BASIC_EXTENDS(Expr, calculator<Expr>, calculator_domain)
+
+        // Define operator[] to build expression templates:
+        BOOST_PROTO_EXTENDS_SUBSCRIPT()
+
+        // Define operator= to build expression templates:
+        BOOST_PROTO_EXTENDS_ASSIGN()
+
+        typedef double result_type;
+
+        result_type operator()( double d1 = 0.0, double d2 = 0.0 ) const
+        {
+            /* ... as before ... */
+        }
+    };
+
+Notice that we are now using `BOOST_PROTO_BASIC_EXTENDS()` instead of `BOOST_PROTO_EXTENDS()`. This just adds the data member and the nested typedefs but not any of the overloaded operators. Those are added separately with `BOOST_PROTO_EXTENDS_ASSIGN()` and `BOOST_PROTO_EXTENDS_SUBSCRIPT()`. We are leaving out the function call operator and the nested `result<>` tempate that could have been defined with Proto's `BOOST_PROTO_EXTENDS_FUNCTION()` macro.
+
+In summary, here are the macros you can use to define expression extensions, and a brief description of each.
+
+[def __expression__ [~expression]]
+[def __extension__ [~extension]]
+[def __domain__ [~domain]]
+
+[table Expression Extension Macros
+ [[Macro]
+  [Purpose]]
+ [[``BOOST_PROTO_BASIC_EXTENDS(
+    __expression__
+  , __extension__
+  , __domain__
+)``]
+  [Defines a data member of type `__expression__` and some nested typedefs that Proto requires.]]
+ [[`BOOST_PROTO_EXTENDS_ASSIGN()`]
+  [Defines `operator=`. Only valid when preceeded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
+ [[`BOOST_PROTO_EXTENDS_SUBSCRIPT()`]
+  [Defines `operator[]`. Only valid when preceeded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
+ [[`BOOST_PROTO_EXTENDS_FUNCTION()`]
+  [Defines `operator()` and a nested `result<>` template for return type calculation. Only valid when preceeded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
+ [[``BOOST_PROTO_EXTENDS(
+    __expression__
+  , __extension__
+  , __domain__
+)``]
+  [Equivalent to:``
+    BOOST_PROTO_BASIC_EXTENDS(__expression__, __extension__, __domain__)
+    BOOST_PROTO_EXTENDS_ASSIGN()
+    BOOST_PROTO_EXTENDS_SUBSCRIPT()
+    BOOST_PROTO_EXTENDS_FUNCTION()``]]
+]
+
+[endsect]
+
+[/============================]
+[section Expression Generators]
+[/============================]
+
+The last thing that remains to be done is to tell Proto that it needs to wrap all of our calculator expressions in our `calculator<>` wrapper. We have already wrapped the placeholders, but we want /all/ expressions that involve the calculator placeholders to be calculators. We can do that by specifying an expression generator when we define our `calculator_domain`, as follows:
+
+    // Define the calculator_domain we forward-declared above.
+    // Specify that all expression in this domain should be wrapped
+    // in the calculator<> expression wrapper.
+    struct calculator_domain
+      : proto::domain< proto::generator< calculator > >
+    {};
+
+The first template parameter to `proto::domain<>` is the generator. "Generator" is just a fancy name for a function object that accepts an expression and does something to it. `proto::generator<>` is a very simple one --- it wraps an expression in the wrapper you specify. `proto::domain<>` inherits from its generator parameter, so all domains are themselves function objects.
+
+If we used `BOOST_PROTO_EXTENDS()` to keep our expression extension type POD, then we need to use `proto::pod_generatro<>` instead of `proto::generator<>`, as follows:
+
+    // If calculator<> uses BOOST_PROTO_EXTENDS() instead of 
+    // use proto::extends<>, use proto::pod_generator<> instead
+    // of proto::generator<>.
+    struct calculator_domain
+      : proto::domain< proto::pod_generator< calculator > >
+    {};
+
+[def __Domain__ [~Domain]]
+
+After Proto has calculated a new expression type, it checks the domains of the  child expressions. They must match. Assuming they do, Proto creates the new expression and passes it to `__Domain__::operator()` for any additional processing.  If we don't specify a generator, the new expression gets passed through unchanged.  But since we've specified a generator above, `calculator_domain::operator()`  returns `calculator<>` objects.
+
+Now we can use calculator expressions as function objects to STL algorithms, as follows:
+
+    double data[] = {1., 2., 3., 4.};
+
+    // Use the calculator DSEL to square each element ... WORKS! :-)
+    std::transform( data, data + 4, data, _1 * _1 );
+
+[endsect]
+
+[/==========================================================]
+[section:inhibiting_overloads Controlling Operator Overloads]
+[/==========================================================]
+
+By default, Proto defines every possible operator overload for Protofied
+expressions. This makes it simple to bang together a DSEL. In some cases, however, the presence of Proto's promiscuous overloads can lead to confusion or worse. When that happens, you'll have to disable some of Proto's overloaded operators. That is done by defining the grammar for your domain and specifying it as the second parameter of the _domain_ template.
+
+In the [link boost_proto.users_guide.getting_started.hello_calculator Hello Calculator] section, we saw an example of a Proto grammar, which is repeated here:
+
+    // Define the grammar of calculator expressions
+    struct calculator_grammar
+      : proto::or_<
+            proto::plus< calculator_grammar, calculator_grammar >
+          , proto::minus< calculator_grammar, calculator_grammar >
+          , proto::multiplies< calculator_grammar, calculator_grammar >
+          , proto::divides< calculator_grammar, calculator_grammar >
+          , proto::terminal< proto::_ >
+        >
+    {};
+
+We'll have much more to say about grammars in subsequent sections, but for now, we'll just say that the `calculator_grammar` struct describes a subset of all expression types -- the subset that comprise valid calculator expressions. We would like to prohibit Proto from creating a calculator expression that does not conform to this grammar. We do that by changing the definition of the `calculator_domain` struct.
+
+[def __calculator_grammar__ [*calculator_grammar]]
+
+    // Define the calculator_domain. Expressions in the calculator
+    // domain are wrapped in the calculator<> wrapper, and they must
+    // conform to the calculator_grammar:
+    struct calculator_domain
+      : proto::domain< proto::generator< calculator >, __calculator_grammar__  >
+    {};
+
+The only new addition is `calculator_grammar` as the second template parameter to the _domain_ template. That has the effect of disabling any of Proto's operator overloads that would create an invalid calculator expression.
+
+Another common use for this feature would be to disable Proto's unary `operator&` overload. It may be surprising for users of your DSEL that they cannot take the address of their expressions! You can very easily disable Proto's unary `operator&` overload for your domain with a very simple grammar, as below:
+
+    // For expressions in my_domain, disable Proto's
+    // unary address-of operator.
+    struct my_domain
+      : proto::domain<
+            proto::generator< my_wrapper >
+            // A simple grammar that matches any expression that
+            // is not a unary address-of expression.
+          , proto::not_< proto::address_of< _ > >
+        >
+    {};
+
+The type `proto::not_< proto::address_of< _ > >` is a very simple grammar that matches all expressions except unary address-of expressions. In the section describing Proto's intermediate form, we'll have much more to say about grammars.
+
+[endsect]
+
+[endsect]
+
+[endsect]
