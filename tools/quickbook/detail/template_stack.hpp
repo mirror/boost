@@ -17,6 +17,7 @@
 #include <boost/spirit/iterator/position_iterator.hpp>
 #include <boost/spirit/utility/functor_parser.hpp>
 #include <boost/spirit/symbols/symbols.hpp>
+#include <boost/next_prior.hpp>
 
 namespace quickbook
 {
@@ -63,7 +64,7 @@ namespace quickbook
                     scan.first = f;
                 }
                 if (len >= 0)
-                    scan.first = f+len;
+                    scan.first = boost::next(f, len);
                 return len;
             }
             
