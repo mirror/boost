@@ -634,9 +634,9 @@ explicit
 <li>
 If this constructor is called with a type <tt>BlockInputIterator</tt> which
 <i>is actually an integral type</i>, the library behaves as if the constructor
-from <tt>unsigned long</tt> had been called, with arguments
+from <tt>unsigned long</tt> were called, with arguments
 <tt>static_cast&lt;size_type&gt;(first), last and alloc</tt>, in that order.
-
+<br /><br />
 Example:
 <pre>
 // b is constructed as if by calling the constructor
@@ -654,31 +654,44 @@ Example:
 dynamic_bitset&lt;unsigned short&gt; b(8, 7);
 </pre><br />
 <i>Note:</i><br/>
-This is analogous to what the standard mandates for sequence containers (namely,
-that if the type on which the template constructor is intantiated "does not
-qualify as an input iterator" then the other constructor is called; "the extent
-to which an implementation determines that a type cannot be an input iterator is
-unspecified, except that as a minimum integral types shall not qualify as input
-iterators").<br /><br />
+At the time of writing (October 2008) this is aligned with the
+proposed resolution for <a href=
+    "http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#438">library
+    issue 438</a>. That is a <em>post <tt>C++03</tt></em>
+change, and is currently in the working paper for
+<tt>C++0x</tt>. Informally speaking, the critical changes with
+respect to <tt>C++03</tt> are the drop of a <tt>static_cast</tt>
+on the second argument, and more leeway as to <em>when</em> the
+templated constructor should have the same effect as the (size,
+value) one: only when <tt>InputIterator</tt> is an integral
+type, in <tt>C++03</tt>; when it is either an integral type or
+any other type that the implementation might detect as
+impossible to be an input iterator, with the proposed
+resolution. For the purposes of <tt>dynamic_bitset</tt> we limit
+ourselves to the first of these two changes.<br /><br />
 </li>
 <li>
-<i>Otherwise</i> (<i>i.e.</i> if the template argument is not an integral
-type), constructs&mdash;under the condition in the <tt>requires</tt>
-clause&mdash;a bitset based on a range of blocks. Let <tt>*first</tt> be block
-number 0, <tt>*++first</tt> block number 1, etc. Block number <tt>b</tt> is used
-to initialize the bits of the dynamic_bitset in the position range
-<tt>[b*bits_per_block, (b+1)*bits_per_block)</tt>. For each block number
-<tt>b</tt> with value <tt>bval</tt>, the bit <tt>(bval &gt;&gt; i) &amp; 1</tt>
-corresponds to the bit at position <tt>(b * bits_per_block + i)</tt> in the
-bitset (where <tt>i</tt> goes through the range <tt>[0, bits_per_block)</tt>).
+<i>Otherwise</i> (<i>i.e.</i> if the template argument is not an
+integral type), constructs&mdash;under the condition in the
+<tt>requires</tt> clause&mdash;a bitset based on a range of
+blocks. Let <tt>*first</tt> be block number 0, <tt>*++first</tt>
+block number 1, etc. Block number <tt>b</tt> is used to
+initialize the bits of the dynamic_bitset in the position range
+<tt>[b*bits_per_block, (b+1)*bits_per_block)</tt>. For each
+block number <tt>b</tt> with value <tt>bval</tt>, the bit
+<tt>(bval &gt;&gt; i) &amp; 1</tt> corresponds to the bit at
+position <tt>(b * bits_per_block + i)</tt> in the bitset (where
+<tt>i</tt> goes through the range <tt>[0, bits_per_block)</tt>).
 </li>
 </ul>
 <br />
-<b>Requires:</b> <tt>BlockInputIterator</tt> must be either an integral type or
-a model of <a href= "http://www.sgi.com/tech/stl/InputIterator.html">Input
+<b>Requires:</b> <tt>BlockInputIterator</tt> must be either an
+integral type or a model of <a href=
+    "http://www.sgi.com/tech/stl/InputIterator.html">Input
     Iterator</a> whose <tt>value_type</tt> is the same type as
-<tt>Block</tt>.<br /> <b>Throws:</b> An allocation error if memory is exhausted
-(<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).<br />
+<tt>Block</tt>.<br /> <b>Throws:</b> An allocation error if
+memory is exhausted (<tt>std::bad_alloc</tt> if
+<tt>Allocator=std::allocator</tt>).<br />
 
 <hr />
 <pre>
@@ -1484,7 +1497,7 @@ exception guarantee.
 
 <h4><i>Changes in Boost 1.37.0</i></h4>
 <ul>
-<li>The constructor from a block-range implements a <i>do-the-right-thing</i>
+<li>The constructor from a block range implements a "do the right thing"
 behavior, a la standard sequences.</li>
 </ul>
 
@@ -1492,21 +1505,24 @@ behavior, a la standard sequences.</li>
 <h4><i>Changes from Boost 1.31.0</i></h4>
 <ul>
 <li>
-The stream extractor has completely different semantics: as
-natural for a dynamic structure, it now expands the bitset as needed
-during extraction. The new behaviour mimics that of the basic_string
-extractor but there are some differences the user should be aware
-of; so, please, look at the <a href="#op-in">documentation</a>.
-(One of the differences concerns the case where
-<code>stream.width() > bitset.max_size() > 0</code>
-In that circumstance the extractor of dynamic_bitset never attempts to
-extract more than max_size() characters, whereas the extractor of
-basic_string goes on and, on conforming implementations, eventually
-throws a length_error. Note: That's what the standard mandates -see
-especially library issue 83- but not all implementations conform)
+The stream extractor has completely different semantics: as natural
+for a dynamic structure, it now expands the bitset as needed during
+extraction. The new behaviour mimics that of the <tt>basic_string</tt>
+extractor but there are some differences the user should be aware of;
+so, please, check the <a href="#op-in">documentation</a>. (One
+difference concerns the case where <code>stream.width() &gt;
+    bitset.max_size() &gt; 0</code>. In that circumstance the
+extractor of <tt>dynamic_bitset</tt> never attempts to extract more
+than <tt>max_size()</tt> characters, whereas the extractor of
+<tt>basic_string</tt> goes on and, on conforming implementations,
+eventually throws a <tt>length_error</tt> exception. Note: That's what
+the standard mandates -see especially <a
+    href="http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#83">library
+    issue 83</a>- but not all implementations conform)
 <br /><br />
-The stream extractor is now also 'exception-aware' in the sense that
-it works correctly when setting exception masks on the stream.<br /><br />
+The stream extractor is now also "exception-aware" in the sense that
+it works correctly when setting exception masks on the stream.
+<br /><br />
 </li>
 <li>
 Several member functions (<tt>empty()</tt>, <tt>find_first()</tt>
@@ -1515,7 +1531,7 @@ Several member functions (<tt>empty()</tt>, <tt>find_first()</tt>
 have been added.
 </li>
 <li>
-The constructor from basic_string has a new parameter that was totally
+The constructor from <tt>basic_string</tt> has a new parameter that was totally
 forgotten before.
 </li>
 
