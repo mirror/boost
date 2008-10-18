@@ -16,7 +16,7 @@ redesigned and improved Spirit-2 and the related Karma library. As a result of
 these efforts, Proto evolved into a generic and abstract grammar and tree 
 transformation framework applicable in a wide variety of DSEL scenarios.
 
-The grammar and tree transformation framework is modelled on Spirit's grammar and 
+The grammar and tree transformation framework is modeled on Spirit's grammar and 
 semantic action framework. The expression tree data structure is similar to Fusion 
 data structures in many respects, and is interoperable with Fusion's iterators and 
 algorithms.

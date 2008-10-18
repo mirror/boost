@@ -4,7 +4,7 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-// This is an example of using BOOST_PROTO_DEFINE_OPERATORS to proto-ify
+// This is an example of using BOOST_PROTO_DEFINE_OPERATORS to Protofy
 // expressions using std::vector<> and std::list, non-proto types. It is a port
 // of the Mixed example from PETE.
 // (http://www.codesourcery.com/pooma/download.html).

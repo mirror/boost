@@ -30,7 +30,7 @@ Expression Templates are an advanced technique that C++ library developers use t
 In short, Proto is a DSEL for defining DSELs.
 
 [/====================================]
-[heading How To Use This Documentation]
+[heading How to Use This Documentation]
 [/====================================]
 
 This documentation makes use of the following naming and formatting conventions.
