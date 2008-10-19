@@ -10,7 +10,23 @@
     Making Expression Templates Do Useful Work]
 [/================================================================================]
 
-[section:expression_evaluation Expression Evaluation: Imparting Behaviors With A Context]
+Now that you've written the front end for your DSEL compiler, and you've learned a bit about the intermediate form it produces, it's time to think about what to /do/ with the intermediate form. This is where you put your domain-specific algorithms and optimizations. Proto gives you two ways to evaluate and manipulate expression templates: contexts and transforms.
+
+* A /context/ is like a function object that you pass along with an expression to 
+  the _eval_ function. It associates behaviors with node types. _eval_ walks the 
+  expression and invokes your context at each node.
+* A /transform/ is a way to associate behaviors, not with node types in an 
+  expression, but with rules in a Proto grammar. In this way, they are like 
+  semantic actions in other compiler-construction toolkits.
+
+Two ways to evaluate expressions! How to choose? Contexts are a bit simpler to understand and to debug, since they are largely procedural, so contexts are a good place to start. But although transforms are more advanced, they are also more powerful; since they are associated with rules in your grammar, you can select the proper transform based on the entire /structure/ of a sub-expression rather than simply on the type of its top-most node.
+
+Also, transforms have a concise and declarative syntax that can be confusing at first, but highly expressive and fungible once you become accustomed to it. And -- this is admittedly very subjective -- the author finds programming with Proto transforms to be an inordinate amount of /fun!/ Your mileage may vary.
+
+[/================================================================================]
+[section:expression_evaluation Expression Evaluation:
+    Imparting Behaviors with a Context]
+[/================================================================================]
 
 Once you have constructed a Proto expression tree, either by using Proto's
 operator overloads or with _make_expr_ and friends, you probably want to
@@ -28,7 +44,7 @@ been working on a more general and powerful tree traversal library. When it is
 ready, I anticipate that it will eliminate the need for `proto::eval()`.]
 
 [/================================================================]
-[section:proto_eval Evaluating An Expression with [^proto::eval()]]
+[section:proto_eval Evaluating an Expression with [^proto::eval()]]
 [/================================================================]
 
 [:[*Synopsis:]]
@@ -119,7 +135,7 @@ how to implement a context class from scratch.
 
 As we saw in the previous section, there is really not much to the _eval_
 function. Rather, all the interesting expression evaluation goes on within
-a context class. This sections shows how to implement one from scratch.
+a context class. This section shows how to implement one from scratch.
 
 All context classes have roughly the following form:
 
@@ -161,7 +177,7 @@ calculator expressions. That context class was implemented with the help
 of Proto's _callable_context_. If we were to implement it from scratch, it
 would look something like this:
 
-    // The calculator_contest from the "Hello Calculator" section,
+    // The calculator_context from the "Hello Calculator" section,
     // implemented from scratch.
     struct calculator_context
     {
@@ -236,9 +252,9 @@ to ease the job of implementing context classes.
 
 [endsect]
 
-[/======================================]
-[section:canned_contexts Canned Contexts]
-[/======================================]
+[/================================================]
+[section:canned_contexts Proto's Built-In Contexts]
+[/================================================]
 
 Proto provides some ready-made context classes that you can use as-is, or that
 you can use to help while implementing your own contexts. They are:
@@ -397,7 +413,7 @@ might define an evaluation context as follows:
 
     struct increment_ints
     {
-        // By default, just evaluate all children by defering
+        // By default, just evaluate all children by delegating
         // to the null_eval<>
         template<typename Expr, typename Arg = proto::result_of::child<Expr>::type>
         struct eval
@@ -624,7 +640,7 @@ Proto grammars are valid TR1-style function objects. That means you can use `boo
 [section Handling Alternation and Recursion]
 [/=========================================]
 
-Most grammars are a little more complicated than the one in the preceeding section. For the sake of illustration, let's define a rather nonsensical grammar that matches any expression and recurses to the leftmost terminal and returns its value. It will demonstrate how two key concepts of Proto grammars -- alternation and recursion -- interact with transforms. The grammar is described below.
+Most grammars are a little more complicated than the one in the preceding section. For the sake of illustration, let's define a rather nonsensical grammar that matches any expression and recurses to the leftmost terminal and returns its value. It will demonstrate how two key concepts of Proto grammars -- alternation and recursion -- interact with transforms. The grammar is described below.
 
     // A grammar that matches any expression, and a function object
     // that returns the value of the leftmost terminal.
@@ -667,7 +683,7 @@ The next section describes this grammar further.
 
 [def __bold_transform__ [*LeftmostLeaf( proto::_child0 )]]
 
-In the grammar defined in the preceeding section, the transform associated with non-terminals is a little strange-looking:
+In the grammar defined in the preceding section, the transform associated with non-terminals is a little strange-looking:
 
     proto::when<
         _
@@ -761,7 +777,7 @@ Although this works, it's not ideal because it doesn't warn users if they supply
 
 The expression `_1 * _1` defines a unary calculator expression; it takes one argument and squares it. If we pass more than one argument, the extra arguments will be silently ignored, which might be surprising to users. The next expression, `_2 * _2` defines a binary calculator expression; it takes two arguments, ignores the first and squares the second. If we only pass one argument, the code silently fills in `0.0` for the second argument, which is also probably not what users expect. What can be done?
 
-We can say that the /arity/ of a calculator expression is the number of arguments it expects, and it is equal to the largest placeholder in the expression. So, the arity of `_1 * _1` is one, and the arity of `_2 * _2` is two. We can increase the type-safety of our calculator DSEL by making sure the artiy of an expression equals the actual number of arguments supplied. Computing the artiy of an expression is simple with the help of Proto transforms.
+We can say that the /arity/ of a calculator expression is the number of arguments it expects, and it is equal to the largest placeholder in the expression. So, the arity of `_1 * _1` is one, and the arity of `_2 * _2` is two. We can increase the type-safety of our calculator DSEL by making sure the arity of an expression equals the actual number of arguments supplied. Computing the arity of an expression is simple with the help of Proto transforms.
 
 It's straightforward to describe in words how the arity of an expression should
 be calculated. Consider that calculator expressions can be made of `_1`, `_2`, literals, unary expressions and binary expressions. The following table shows the arities for each of these 5 constituents.
@@ -875,7 +891,7 @@ The point of this exercise was to show that we can write a fairly simple Proto g
 
 So far, we've only seen examples of grammars with transforms that accept one argument: the expression to transform. But consider for a moment how, in ordinary procedural code, you would turn a binary tree into a linked list. You would start with an empty list. Then, you would recursively convert the right branch to a list, and use the result as the initial state while converting the left branch to a list. That is, you would need a function that takes two parameters: the current node and the list so far. These sorts of /accumulation/ problems are quite common when processing trees. The linked list is an example of an accumulation variable or /state/. Each iteration of the algorithm takes the current element and state, applies some binary function to the two and creates a new state. In the STL, this algorithm is called `std::accumulate()`. In many other languages, it is called /fold/. Let's see how to implement a fold algorithm with Proto transforms.
 
-All Proto grammars can optionally accept a state parameter in addition to the expression to transform. If you want to fold a tree to a list, you'll need to make use of the state parameter to pass around the list you've built so far. As for the list, the Boost.Fusion library provides a `fusion::cons<>` type from which you can build heterogenous lists. The type `fusion::nil` represents an empty list. 
+All Proto grammars can optionally accept a state parameter in addition to the expression to transform. If you want to fold a tree to a list, you'll need to make use of the state parameter to pass around the list you've built so far. As for the list, the Boost.Fusion library provides a `fusion::cons<>` type from which you can build heterogeneous lists. The type `fusion::nil` represents an empty list. 
 
 Below is a grammar that recognizes output expressions like `cout_ << 42 << '\n'` and puts the arguments into a Fusion list. It is explained below.
 
@@ -962,25 +978,25 @@ Now that we have defined the `FoldToList` function object, we can use it to turn
 
     // Now "args" is the list: {1, 3.14, '\n'}
 
-When writing transforms, "fold" is such a basic operation that Proto provides a number of built-in fold transforms. We'll get to them later. For now, rest assured that you won't always have to strech your brain so far to do such basic things.
+When writing transforms, "fold" is such a basic operation that Proto provides a number of built-in fold transforms. We'll get to them later. For now, rest assured that you won't always have to stretch your brain so far to do such basic things.
 
 [endsect]
 
 [/================================================]
-[section:data Passing Auxiliary Data To Transforms]
+[section:data Passing Auxiliary Data to Transforms]
 [/================================================]
 
 In the last section, we saw that we can pass a second parameter to grammars with transforms: an accumulation variable or /state/ that gets updated as your transform executes. There are times when your transforms will need to access auxiliary data that does /not/ accumulate, so bundling it with the state parameter is impractical. Instead, you can pass auxiliary data as a third parameter, known as the /data/ parameter. Below we show an example involving string processing where the data parameter is essential.
 
-[note All Proto grammars are function objects that take one, two or three arguments: the expression, the state, and the data. There are no additional arguments to know about, we promise. In Haskell, there is set of a tree traversal technologies known collectively as _SYB_. In that framework, there are also three parameters: the term, the accumulator, and the context. These are Proto's expression, state and data parameters under different names.]
+[note All Proto grammars are function objects that take one, two or three arguments: the expression, the state, and the data. There are no additional arguments to know about, we promise. In Haskell, there is set of tree traversal technologies known collectively as _SYB_. In that framework, there are also three parameters: the term, the accumulator, and the context. These are Proto's expression, state and data parameters under different names.]
 
-Expression templates are often used as an optimization to eliminate temporary objects. Condsier the problem of string concatenation: a series of concatenations would result in the needless creation of temporary strings. We can use Proto to make string concatenation very efficient. To make the problem more interesting, we can apply a locale-sensitive transformation to each character during the concatenation. The locale information will be passed as the data parameter.
+Expression templates are often used as an optimization to eliminate temporary objects. Consider the problem of string concatenation: a series of concatenations would result in the needless creation of temporary strings. We can use Proto to make string concatenation very efficient. To make the problem more interesting, we can apply a locale-sensitive transformation to each character during the concatenation. The locale information will be passed as the data parameter.
 
 Consider the following expression template:
 
     proto::lit("hello") + " " + "world";
 
-We would like to concatenate this string into a statically allocated wide character buffer, widening each charater in turn using the specified locale. The first step is to write a grammar that describes this expression, with transforms that calculate the total string length. Here it is:
+We would like to concatenate this string into a statically allocated wide character buffer, widening each character in turn using the specified locale. The first step is to write a grammar that describes this expression, with transforms that calculate the total string length. Here it is:
 
     // A grammar that matches string concatenation expressions, and
     // a transform that calculates the total string length.
@@ -1102,7 +1118,7 @@ Let's use the above example to illustrate some other niceties of Proto transform
       , proto::_data
     )
 
-Here we specify all three parameters to both invocations of the `StringCopy` grammar. But we don't have to specify all three. If we don't specify a third parameter, `proto::_data` is assumed. Likewise for the second parameter and `proto::_state`. So the above transform could have been writen more simply as:
+Here we specify all three parameters to both invocations of the `StringCopy` grammar. But we don't have to specify all three. If we don't specify a third parameter, `proto::_data` is assumed. Likewise for the second parameter and `proto::_state`. So the above transform could have been written more simply as:
 
     StringCopy(
         proto::_right
@@ -1141,9 +1157,9 @@ Once you know that primitive transforms will always receive all three parameters
 
 [endsect]
 
-[/===========================================]
-[section:built_in Proto's Built-In Transforms]
-[/===========================================]
+[/====================================================]
+[section:canned_transforms Proto's Built-In Transforms]
+[/====================================================]
 
 [def _N_ [~N]]
 [def _G_ [~G]]
@@ -1196,7 +1212,7 @@ Primitive transforms are the building blocks for more interesting composite tran
       [Given three transforms `_ET_`, `_ST_`, and `_FT_`, 
        `proto::fold<_ET_, _ST_, _FT_>` first evaluates `_ET_` to obtain a Fusion 
        sequence and `_ST_` to obtain an initial state for the fold, and then 
-       evaluates `_FT_` for each element in the sequnce to generate the next 
+       evaluates `_FT_` for each element in the sequence to generate the next 
        state from the previous.]]
  [[_reverse_fold_pt_]
       [Like _fold_pt_, except the elements in the Fusion sequence are iterated in 
@@ -1226,7 +1242,7 @@ In addition to the above primitive transforms, all of Proto's grammar elements a
 
 [variablelist
  [[_wild_]
-      [Returns the current expression unmodified.]]
+      [Return the current expression unmodified.]]
  [[_or_]
       [For the specified set of alternate sub-grammars, find the one that matches 
        the given expression and apply its associated transform.]]
@@ -1234,13 +1250,16 @@ In addition to the above primitive transforms, all of Proto's grammar elements a
       [For the given set of sub-grammars, take the /last/ sub-grammar and apply its 
        associated transform.]]
  [[_not_]
-      [Returns the current expression unmodified.]]
+      [Return the current expression unmodified.]]
  [[_if_]
       [Given three transforms, evaluate the first and treat the result as a 
        compile-time Boolean value. If it is true, evaluate the second transform. 
        Otherwise, evaluate the third.]]
+ [[_switch_]
+      [As with _or_, find the sub-grammar that matches the given expression and 
+       apply its associated transform.]]
  [[_terminal_]
-      [Returns the current terminal expression unmodified.]]
+      [Return the current terminal expression unmodified.]]
  [[_plus_, _nary_expr_, et. al.]
       [A Proto grammar that matches a non-terminal such as
        `proto::plus<_G0_, _G1_>`, when used as a primitive transform, creates a new 
@@ -1399,7 +1418,7 @@ minus(
 
 In previous sections, we've seen how to compose larger transforms out of smaller transforms using function types. The smaller transforms from which larger transforms are composed are /primitive transforms/, and Proto provides a bunch of common ones such as `_child0` and `_value`. In this section we'll see how to author your own primitive transforms.
 
-[note There are a few reasons why you might want to write your own primitive transforms. For instance, your transform may be complicated, and composing it out of primitives becomes unwieldy. You might also need to work around compiler bugs on legacy compilers that makes composing transforms using function types problematic. Finally, you might also decide to define your own primitive transforms to improve compile times. Since Proto can simply invoke a primitive transform directly without having to process arguments or differentiate callable transforms from object transforms, primitive transforms are more efficient.]
+[note There are a few reasons why you might want to write your own primitive transforms. For instance, your transform may be complicated, and composing it out of primitives becomes unwieldy. You might also need to work around compiler bugs on legacy compilers that make composing transforms using function types problematic. Finally, you might also decide to define your own primitive transforms to improve compile times. Since Proto can simply invoke a primitive transform directly without having to process arguments or differentiate callable transforms from object transforms, primitive transforms are more efficient.]
 
 Primitive transforms inherit from `proto::transform<>` and have a nested `impl<>` template that inherits from `proto::transform_impl<>`. For example, this is how Proto defines the `_child_c<_N_>` transform, which returns the _N_-th child of the current expression:
 
@@ -1439,7 +1458,7 @@ Primitive transforms inherit from `proto::transform<>` and have a nested `impl<>
 
 The `proto::transform<>` base class provides the `operator()` overloads and the nested `result<>` template that make your transform a valid function object. These are implemented in terms of the nested `impl<>` template you define.
 
-The `proto::transform_impl<>` base class is a convenience. It provides some nested typedefs that are generally useful. The are specified in the table below:
+The `proto::transform_impl<>` base class is a convenience. It provides some nested typedefs that are generally useful. They are specified in the table below:
 
 [table proto::transform_impl<Expr, State, Data> typedefs
 [[typedef][Equivalent To]]
@@ -1463,7 +1482,7 @@ The only other interesting bit is the `is_callable<>` specialization, which will
 
 Transforms are typically of the form `proto::when< Something, R(A0,A1,...) >`. The question is whether `R` represents a function to call or an object to construct, and the answer determines how _when_ evaluates the transform. _when_ uses the `proto::is_callable<>` trait to disambiguate between the two. Proto does its best to guess whether a type is callable or not, but it doesn't always get it right. It's best to know the rules Proto uses, so that you know when you need to be more explicit.
 
-For most types `R`, `proto::is_callable<R>` checks for inheritence from `proto::callable`. However, if the type `R` is a template specialization, Proto assumes that it is /not/ callable ['even if the template inherits from `proto::callable`]. We'll see why in a minute. Consider the following erroneous callable object:
+For most types `R`, `proto::is_callable<R>` checks for inheritance from `proto::callable`. However, if the type `R` is a template specialization, Proto assumes that it is /not/ callable ['even if the template inherits from `proto::callable`]. We'll see why in a minute. Consider the following erroneous callable object:
 
     // Proto can't tell this defines something callable!
     template<typename T>
@@ -1559,7 +1578,7 @@ There is one last way to tell Proto that `times2<>` is callable. You could add a
         >
     {};
 
-Note that in addition to the extra template parameter, `times2<>` still inherits from `proto::callable`. That's not necessary in this example but it's good style because any types derived from `times2<>` (as `times2int` defined above) will still be considered callable.
+Note that in addition to the extra template parameter, `times2<>` still inherits from `proto::callable`. That's not necessary in this example but it is good style because any types derived from `times2<>` (as `times2int` defined above) will still be considered callable.
 
 [endsect]
 

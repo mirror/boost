@@ -36,8 +36,8 @@
        never created. Domains are empty structs that inherit from
        `proto::domain<>`.]]
   [ [ [anchor dsel] domain-specific embedded language]
-      [A domain-specific language implemented as a library. The langauge in which 
-       the library is written is called the "host" langauge, and the language 
+      [A domain-specific language implemented as a library. The language in which 
+       the library is written is called the "host" language, and the language 
        implemented by the library is called the "embedded" language.]]
   [ [ [anchor dsl] domain-specific language]
       [A programming language that targets a particular problem space by providing 
@@ -72,7 +72,7 @@
        object to construct and the arguments are treated as transforms that yield 
        the parameters to the constructor.]]
   [ [ [anchor polymorphic_function_object] polymorphic function object]
-      [An instance of a class type with an overloaded function call operator and an 
+      [An instance of a class type with an overloaded function call operator and a 
        nested `result_type` typedef or `result<>` template for calculating the 
        return type of the function call operator.]]
   [ [ [anchor primitive_transform] primitive transform]

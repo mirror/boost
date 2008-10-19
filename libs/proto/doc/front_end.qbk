@@ -32,7 +32,7 @@ Defining terminals -- with aggregate initialization -- can be a little awkward a
     proto::literal<int> i = 0;
 
     // Proto literals are really just Proto terminal expressions.
-    // For example, this build a Proto expression template:
+    // For example, this builds a Proto expression template:
     i + 1;
 
 There is also a _lit_ function for constructing a _literal_ in-place. The above expression can simply be written as:
@@ -70,7 +70,7 @@ Proto also overloads `operator=`, `operator[]`, and `operator()`, but these oper
     _1(8,9);    // OK, builds a ternary function tree node
     // ... etc.
 
-For the first two lines, assigment and subscript, it should be fairly unsurprising
+For the first two lines, assignment and subscript, it should be fairly unsurprising
 that the resulting expression node should be binary. After all, there are
 two operands in each expression. It may be surprising at first that what appears
 to be a function call with no arguments, `_1()`, actually creates an expression
@@ -117,7 +117,7 @@ code works and does what you might expect, but not in the obvious way:
 [section Making Lazy Functions]
 [/============================]
 
-If we limitted ourselves to nothing but terminals and operator overloads, our domain-specific embedded languages wouldn't be very expressive. Imagine that we wanted to extend our calculator DSEL with a full suite of math functions like `sin()` and `pow()` that we could invoke lazily as follows.
+If we limited ourselves to nothing but terminals and operator overloads, our domain-specific embedded languages wouldn't be very expressive. Imagine that we wanted to extend our calculator DSEL with a full suite of math functions like `sin()` and `pow()` that we could invoke lazily as follows.
 
     // A calculator expression that takes one argument
     // and takes the sine of it.
@@ -150,7 +150,7 @@ That may look strange at first. It creates an integer terminal with _lit_, and t
 [heading Making Lazy Functions, Continued]
 [/=======================================]
 
-Now, what if we wanted to add a `pow()` function to our calculator DSEL that users could invoke as follow.
+Now, what if we wanted to add a `pow()` function to our calculator DSEL that users could invoke as follows?
 
     // A calculator expression that takes one argument
     // and raises it to the 2nd power
@@ -197,7 +197,7 @@ In the code above, notice how the `proto::function<>` and _terminal_ metafunctio
 
 [note As with `proto::function<>`, there are metafunctions corresponding to all of the overloadable C++ operators for calculation expression types.]
 
-With the above definition of the `pow()` function, we can create calculator expressions like the one below and evaluate them using the `calcuator_context` we implemented in the Introduction.
+With the above definition of the `pow()` function, we can create calculator expressions like the one below and evaluate them using the `calculator_context` we implemented in the Introduction.
 
     // Initialize a calculator context
     calculator_context ctx;
@@ -256,7 +256,7 @@ Notice how we use the `proto::result_of::as_child<>` metafunction to calculate t
 [heading Lazy Functions Made Simple With [^make_expr()]]
 [/=====================================================]
 
-The versions of the `pow()` function we've seen above are rather verbose. In the return type calculation, you have to be very explicit about wrapping non-Proto types. Worse, you have to restate the return type calculation in the body of `pow()` itself. Proto provides a helper for building expression templates directly that handle these mundane details for you. It's called _make_expr_. We can redefine `pow()` with it as below.
+The versions of the `pow()` function we've seen above are rather verbose. In the return type calculation, you have to be very explicit about wrapping non-Proto types. Worse, you have to restate the return type calculation in the body of `pow()` itself. Proto provides a helper for building expression templates directly that handles these mundane details for you. It's called _make_expr_. We can redefine `pow()` with it as below.
 
     // Define a lazy pow() function for the calculator DSEL.
     // Can be used as: pow< 2 >(_1)
@@ -283,7 +283,7 @@ In the function body is the runtime invocation of _make_expr_. It closely mirror
 [endsect]
 
 [/==============================================]
-[section Adding Members By Extending Expressions]
+[section Adding Members by Extending Expressions]
 [/==============================================]
 
 In this section, we'll see how to associate Proto expressions with a /domain/, how to add members to expressions within a domain, and how to control which operators are overloaded in a domain.
@@ -397,7 +397,7 @@ With the new `calculator<>` type, we can redefine our placeholders to be statica
     calculator< proto::terminal< placeholder<0> >::type > const _1 = {{{}}};
     calculator< proto::terminal< placeholder<1> >::type > const _2 = {{{}}};
 
-We need to make one additional small change to accomodate the POD-ness of our expression extension, which we'll describe below in the section on expression generators.
+We need to make one additional small change to accommodate the POD-ness of our expression extension, which we'll describe below in the section on expression generators.
 
 What does `BOOST_PROTO_EXTENDS()` do? It defines a data member of expression type being extended; some nested typedefs that Proto requires; `operator=`, `operator[]` and `operator()` overloads for building expression templates; and a nested `result<>` template for calculating the return type of `operator()`. In this case, however, the `operator()` overloads and the `result<>` template are not needed because we are defining our own `operator()` in the `calculator<>` type. Proto provides additional macros for finer control over which member functions are defined. We could improve our `calculator<>` type as follows:
 
@@ -424,7 +424,7 @@ What does `BOOST_PROTO_EXTENDS()` do? It defines a data member of expression typ
         }
     };
 
-Notice that we are now using `BOOST_PROTO_BASIC_EXTENDS()` instead of `BOOST_PROTO_EXTENDS()`. This just adds the data member and the nested typedefs but not any of the overloaded operators. Those are added separately with `BOOST_PROTO_EXTENDS_ASSIGN()` and `BOOST_PROTO_EXTENDS_SUBSCRIPT()`. We are leaving out the function call operator and the nested `result<>` tempate that could have been defined with Proto's `BOOST_PROTO_EXTENDS_FUNCTION()` macro.
+Notice that we are now using `BOOST_PROTO_BASIC_EXTENDS()` instead of `BOOST_PROTO_EXTENDS()`. This just adds the data member and the nested typedefs but not any of the overloaded operators. Those are added separately with `BOOST_PROTO_EXTENDS_ASSIGN()` and `BOOST_PROTO_EXTENDS_SUBSCRIPT()`. We are leaving out the function call operator and the nested `result<>` template that could have been defined with Proto's `BOOST_PROTO_EXTENDS_FUNCTION()` macro.
 
 In summary, here are the macros you can use to define expression extensions, and a brief description of each.
 
@@ -442,11 +442,11 @@ In summary, here are the macros you can use to define expression extensions, and
 )``]
   [Defines a data member of type `__expression__` and some nested typedefs that Proto requires.]]
  [[`BOOST_PROTO_EXTENDS_ASSIGN()`]
-  [Defines `operator=`. Only valid when preceeded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
+  [Defines `operator=`. Only valid when preceded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
  [[`BOOST_PROTO_EXTENDS_SUBSCRIPT()`]
-  [Defines `operator[]`. Only valid when preceeded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
+  [Defines `operator[]`. Only valid when preceded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
  [[`BOOST_PROTO_EXTENDS_FUNCTION()`]
-  [Defines `operator()` and a nested `result<>` template for return type calculation. Only valid when preceeded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
+  [Defines `operator()` and a nested `result<>` template for return type calculation. Only valid when preceded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
  [[``BOOST_PROTO_EXTENDS(
     __expression__
   , __extension__
@@ -476,7 +476,7 @@ The last thing that remains to be done is to tell Proto that it needs to wrap al
 
 The first template parameter to `proto::domain<>` is the generator. "Generator" is just a fancy name for a function object that accepts an expression and does something to it. `proto::generator<>` is a very simple one --- it wraps an expression in the wrapper you specify. `proto::domain<>` inherits from its generator parameter, so all domains are themselves function objects.
 
-If we used `BOOST_PROTO_EXTENDS()` to keep our expression extension type POD, then we need to use `proto::pod_generatro<>` instead of `proto::generator<>`, as follows:
+If we used `BOOST_PROTO_EXTENDS()` to keep our expression extension type POD, then we need to use `proto::pod_generator<>` instead of `proto::generator<>`, as follows:
 
     // If calculator<> uses BOOST_PROTO_EXTENDS() instead of 
     // use proto::extends<>, use proto::pod_generator<> instead

@@ -76,7 +76,7 @@ The following example should make it clear. It is explained below.
         std::vector<double> args;
         
         // Define the result type of the calculator.
-        // (This makes the the calculator_context "callable".)
+        // (This makes the calculator_context "callable".)
         typedef double result_type;
 
         // Handle the placeholders:
@@ -235,7 +235,7 @@ Once you have defined the grammar of your DSEL, you can use the _matches_ metafu
         double operator()(double a1 = 0, double a2 = 0) const
         {
             // Check here that the expression we are about to
-            // evaluate actually conforms to the calcuator grammar.
+            // evaluate actually conforms to the calculator grammar.
             BOOST_MPL_ASSERT((proto::matches<Expr, calculator_grammar>));
             /* ... */
         }
@@ -256,7 +256,7 @@ just `#include <boost/mpl/assert.hpp>`.]
 
 Grammars and `proto::matches<>` make it possible to detect when a user has created 
 an invalid expression and issue a compile-time error. But what if you want to 
-prevent users from creating invlid expressions in the first place? By using 
+prevent users from creating invalid expressions in the first place? By using 
 grammars and domains together, you can disable any of Proto's operator overloads 
 that would create an invalid expression. It is as simple as specifying the DSEL's 
 grammar when you define the domain, as shown below:

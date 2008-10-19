@@ -40,7 +40,7 @@ struct insert
     }
 };
 
-// The grammmar for valid map-list expressions, and a
+// The grammar for valid map-list expressions, and a
 // transform that populates the map.
 struct MapListOf
   : proto::or_<

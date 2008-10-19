@@ -4,8 +4,8 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 // This example enhances the simple arithmetic expression evaluator
-// in calc1.cpp by using proto::extends to make arithemetic
-// expressions immediately evaluatable with operator (), a-la a
+// in calc1.cpp by using proto::extends to make arithmetic
+// expressions immediately evaluable with operator (), a-la a
 // function object
 
 #include <iostream>

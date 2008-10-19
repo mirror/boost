@@ -5,7 +5,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 // This is a simple example of doing arbitrary type manipulations with proto
-// transforms. It takes some expression involving primiary colors and combines
+// transforms. It takes some expression involving primary colors and combines
 // the colors according to arbitrary rules. It is a port of the RGB example
 // from PETE (http://www.codesourcery.com/pooma/download.html).
 
