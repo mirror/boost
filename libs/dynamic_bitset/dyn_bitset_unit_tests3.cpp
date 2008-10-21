@@ -1,14 +1,12 @@
-// --------------------------------------------------------
-//        (C) Copyright Jeremy Siek   2001.
-//        (C) Copyright Gennaro Prota 2003 - 2006.
+// -----------------------------------------------------------
+//              Copyright (c) 2001 Jeremy Siek
+//           Copyright (c) 2003-2006 Gennaro Prota
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 // -----------------------------------------------------------
-//
-// $Id$
 
 #include <assert.h>
 #include "bitset_test.hpp"
