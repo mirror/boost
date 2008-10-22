@@ -468,8 +468,6 @@ and template parameters should be assigned according to the following table:
 <tr><td><code>IsWrapper</code></td><td><code></code>is the type a wrapper?</td><td><code>mpl::false_<br>mpl::true_</code></td><td><code>mpl::false_</code></td></tr>
 </table>
 
-<<<<<<< .working
-
 <h3><a name="tracking">Bitwise serialization</a></h3>
 Some simple classes could be serialized just by directly copying all bits
 of the class. This is, in particular, the case for POD data types containing
@@ -495,34 +493,6 @@ is made easy by the corresponding macro:
 BOOST_IS_BITWISE_SERIALIZABLE(my_class)
 </code></pre>
 
-=======
-
-<h3><a name="tracking">Bitwise serialization</a></h3>
-Some simple classes could be serialized just by directly copying all bits
-of the class. This is, in particular, the case for POD data types containing
-no pointer members, and which are neither versioned nor tracked. Some archives, 
-such as non-portable binary archives can make us of this information to 
-substantially speed up Serialization.
-
-To indicate the possibility of bitwise serialization the type trait defined 
-in the header
-file <a href="../../../boost/serialization/is_bitwise_serializable.hpp" target="is_bitwise_serializable">is_bitwise_serializable.hpp</a>
-is used:
-<pre><code>
-namespace boost { namespace serialization {
-    template<class T>
-    struct is_bitwise_serializable
-     : public is_arithmetic<T>
-    {};
-} }
-</code></pre>
-is used, and can be specialized for other classes. The specialization
-is made easy by the corresponding macro:
-<pre><code>
-BOOST_IS_BITWISE_SERIALIZABLE(my_class)
-</code></pre>
-
->>>>>>> .merge-right.r41077
 <hr>
 <p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2002-2004 and Matthias Troyer 2006. 
 Distributed under the Boost Software License, Version 1.0. (See
