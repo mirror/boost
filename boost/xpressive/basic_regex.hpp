@@ -35,6 +35,14 @@
 namespace boost { namespace xpressive
 {
 
+namespace detail
+{
+    inline void throw_on_stack_error(bool stack_error)
+    {
+        BOOST_XPR_ENSURE_(!stack_error, regex_constants::error_stack, "Regex stack space exhausted");
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // basic_regex
 //
@@ -214,7 +222,7 @@ private:
             stack_error = true;
             _resetstkoflw();
         }
-        detail::ensure(!stack_error, regex_constants::error_stack, "Regex stack space exhausted");
+        detail::throw_on_stack_error(stack_error);
         return success;
         #else
         return proto::arg(*this)->xpr_->match(state);

@@ -102,7 +102,7 @@ struct char_overflow_handler_
     {
         if(numeric::cInRange != result)
         {
-            boost::throw_exception(
+            BOOST_THROW_EXCEPTION(
                 regex_error(
                     regex_constants::error_escape
                   , "character escape too large to fit in target character type"
@@ -801,7 +801,7 @@ private:
                 return this->sub_matches_[ this->named_marks_[i].mark_nbr_ ];
             }
         }
-        boost::throw_exception(
+        BOOST_THROW_EXCEPTION(
             regex_error(regex_constants::error_badmark, "invalid named back-reference")
         );
         // Should never execute, but if it does, this returns
@@ -1032,7 +1032,7 @@ private:
     {
         detail::case_converting_iterator<OutputIterator, char_type> iout(out, this->traits_.get());
         iout = this->format_all_impl_(cur, end, iout);
-        detail::ensure(cur == end
+        BOOST_XPR_ENSURE_(cur == end
           , regex_constants::error_paren, "unbalanced parentheses in format string");
         return iout.base();
     }
@@ -1066,16 +1066,16 @@ private:
 
             case BOOST_XPR_CHAR_(char_type, '('):
                 out = this->format_all_impl_(++cur, end, out);
-                detail::ensure(BOOST_XPR_CHAR_(char_type, ')') == *(cur-1)
+                BOOST_XPR_ENSURE_(BOOST_XPR_CHAR_(char_type, ')') == *(cur-1)
                   , regex_constants::error_paren, "unbalanced parentheses in format string");
                 break;
 
             case BOOST_XPR_CHAR_(char_type, '?'):
-                detail::ensure(++cur != end
+                BOOST_XPR_ENSURE_(++cur != end
                   , regex_constants::error_subreg, "malformed conditional in format string");
                 max = static_cast<int>(this->size() - 1);
                 sub = detail::toi(cur, end, *this->traits_, 10, max);
-                detail::ensure(0 != sub, regex_constants::error_subreg, "invalid back-reference");
+                BOOST_XPR_ENSURE_(0 != sub, regex_constants::error_subreg, "invalid back-reference");
                 if(this->sub_matches_[ sub ].matched)
                 {
                     out = this->format_all_impl_(cur, end, out, true);
@@ -1145,7 +1145,7 @@ private:
         {
             int max = static_cast<int>(this->size() - 1);
             int sub = detail::toi(cur, end, *this->traits_, 10, max);
-            detail::ensure(0 != sub, regex_constants::error_subreg, "invalid back-reference");
+            BOOST_XPR_ENSURE_(0 != sub, regex_constants::error_subreg, "invalid back-reference");
             if(this->sub_matches_[ sub ].matched)
                 out = std::copy(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
         }
@@ -1214,27 +1214,27 @@ private:
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'x'):
-            detail::ensure(cur != end, error_escape, "unexpected end of format found");
+            BOOST_XPR_ENSURE_(cur != end, error_escape, "unexpected end of format found");
             if(BOOST_XPR_CHAR_(char_type, '{') == *cur)
             {
-                detail::ensure(++cur != end, error_escape, "unexpected end of format found");
+                BOOST_XPR_ENSURE_(++cur != end, error_escape, "unexpected end of format found");
                 tmp = cur;
                 *out++ = converter(detail::toi(cur, end, *this->traits_, 16, 0xffff));
-                detail::ensure(4 == std::distance(tmp, cur) && cur != end && BOOST_XPR_CHAR_(char_type, '}') == *cur++
+                BOOST_XPR_ENSURE_(4 == std::distance(tmp, cur) && cur != end && BOOST_XPR_CHAR_(char_type, '}') == *cur++
                   , error_escape, "invalid hex escape : must be \\x { HexDigit HexDigit HexDigit HexDigit }");
             }
             else
             {
                 tmp = cur;
                 *out++ = converter(detail::toi(cur, end, *this->traits_, 16, 0xff));
-                detail::ensure(2 == std::distance(tmp, cur), error_escape
+                BOOST_XPR_ENSURE_(2 == std::distance(tmp, cur), error_escape
                   , "invalid hex escape : must be \\x HexDigit HexDigit");
             }
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'c'):
-            detail::ensure(cur != end, error_escape, "unexpected end of format found");
-            detail::ensure
+            BOOST_XPR_ENSURE_(cur != end, error_escape, "unexpected end of format found");
+            BOOST_XPR_ENSURE_
             (
                 this->traits_->in_range(BOOST_XPR_CHAR_(char_type, 'a'), BOOST_XPR_CHAR_(char_type, 'z'), *cur)
              || this->traits_->in_range(BOOST_XPR_CHAR_(char_type, 'A'), BOOST_XPR_CHAR_(char_type, 'Z'), *cur)
@@ -1310,12 +1310,12 @@ private:
     ) const
     {
         using namespace regex_constants;
-        detail::ensure(cur != end && BOOST_XPR_CHAR_(char_type, '<') == *cur++
+        BOOST_XPR_ENSURE_(cur != end && BOOST_XPR_CHAR_(char_type, '<') == *cur++
             , error_badmark, "invalid named back-reference");
         ForwardIterator begin = cur;
         for(; cur != end && BOOST_XPR_CHAR_(char_type, '>') != *cur; ++cur)
         {}
-        detail::ensure(cur != begin && cur != end && BOOST_XPR_CHAR_(char_type, '>') == *cur
+        BOOST_XPR_ENSURE_(cur != begin && cur != end && BOOST_XPR_CHAR_(char_type, '>') == *cur
             , error_badmark, "invalid named back-reference");
 
         string_type name(begin, cur++);
@@ -1328,7 +1328,7 @@ private:
             }
         }
 
-        boost::throw_exception(regex_error(error_badmark, "invalid named back-reference"));
+        BOOST_THROW_EXCEPTION(regex_error(error_badmark, "invalid named back-reference"));
         // Should never get here
         return out;
     }

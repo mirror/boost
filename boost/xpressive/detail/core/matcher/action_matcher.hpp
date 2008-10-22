@@ -188,7 +188,7 @@ namespace boost { namespace xpressive { namespace detail
                 action_args_type::const_iterator where_ = ctx.args().find(&typeid(proto::arg(expr)));
                 if(where_ == ctx.args().end())
                 {
-                    boost::throw_exception(
+                    BOOST_THROW_EXCEPTION(
                         regex_error(
                             regex_constants::error_badarg
                           , "An argument to an action was unspecified"
@@ -331,7 +331,7 @@ namespace boost { namespace xpressive { namespace detail
 
         operator reference() const
         {
-            detail::ensure(0 != this->t_, regex_constants::error_badattr, "Use of uninitialized regex attribute");
+            BOOST_XPR_ENSURE_(0 != this->t_, regex_constants::error_badattr, "Use of uninitialized regex attribute");
             return *this->t_;
         }
 
