@@ -66,9 +66,10 @@
 
 // spirit stuff
 #if (defined __BORLANDC__) && (__BORLANDC__ < 0x593) \
-|| (defined _MSC_VER) && #if (_MSC_VER <= 1300) 
+    || (defined _MSC_VER) && (_MSC_VER <= 1300) 
+#include <boost/spirit/utility/chset.hpp>
 #else
-#include <boost/spirit/classic_chset.hpp>
+#include <boost/spirit/include/classic_chset.hpp>
 #endif
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
