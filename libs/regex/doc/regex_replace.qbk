@@ -190,7 +190,7 @@ syntax highlighted HTML code.
    }
 
    extern const char* pre_expression = "(<)|(>)|(&)|\\r";
-   extern const char* pre_format = "(?1<)(?2>)(?3&amp;)";
+   extern const char* pre_format = "(?1&lt;)(?2&gt;)(?3&amp;)";
 
 
    const char* expression_text = 
