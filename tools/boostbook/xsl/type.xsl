@@ -1133,29 +1133,29 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
                       ancestor::struct|ancestor::struct-specialization|
                       ancestor::union|ancestor::union-specialization">
 
-    <!-- Spacing -->
-    <xsl:if
-      test="not(local-name(preceding-sibling::*[position()=1])=local-name(.)) and (position() &gt; 1)">
-      <xsl:text>&#10;</xsl:text>
-    </xsl:if>
+        <!-- Spacing -->
+        <xsl:if
+          test="not(local-name(preceding-sibling::*[position()=1])=local-name(.)) and (position() &gt; 1)">
+          <xsl:text>&#10;</xsl:text>
+        </xsl:if>
 
-    <!-- Indent -->
-    <xsl:text>&#10;</xsl:text>
-    <xsl:call-template name="indent">
-      <xsl:with-param name="indentation" select="$indentation"/>
-    </xsl:call-template>
+        <!-- Indent -->
+        <xsl:text>&#10;</xsl:text>
+        <xsl:call-template name="indent">
+          <xsl:with-param name="indentation" select="$indentation"/>
+        </xsl:call-template>
 
-    <xsl:if test="@specifiers">
-      <xsl:call-template name="highlight-keyword">
-        <xsl:with-param name="keyword" select="@specifiers"/>
-      </xsl:call-template>
-      <xsl:text> </xsl:text>
-    </xsl:if>
+        <xsl:if test="@specifiers">
+          <xsl:call-template name="highlight-keyword">
+            <xsl:with-param name="keyword" select="@specifiers"/>
+          </xsl:call-template>
+          <xsl:text> </xsl:text>
+        </xsl:if>
 
-    <xsl:apply-templates select="type" mode="highlight"/>
-    <xsl:text> </xsl:text>
-    <xsl:value-of select="@name"/>
-    <xsl:text>;</xsl:text>
+        <xsl:apply-templates select="type" mode="highlight"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="@name"/>
+        <xsl:text>;</xsl:text>
 
       </xsl:when>
       <xsl:otherwise>
@@ -1164,6 +1164,22 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
+
+    <!-- If there is a <purpose>, then add it as an
+         inline comment immediately following the data
+         member definition in the synopsis -->
+    <xsl:if test="purpose">
+      <xsl:call-template name="indent">
+        <xsl:with-param name="indentation" select="$indentation"/>
+      </xsl:call-template>
+      <xsl:call-template name="highlight-comment">
+        <xsl:with-param name="text">
+          <xsl:text>// </xsl:text>
+          <xsl:apply-templates select="purpose/*|purpose/text()"
+            mode="purpose"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
   </xsl:template>
 
   <!-- Data member reference -->
