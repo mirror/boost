@@ -9,16 +9,20 @@
 CXX=g++
 CXXFLAGS=-I$(BOOST_ROOT)
 
-all: vector_construction vector_iteration vector_intrinsic
+TEST_SRCS=\
+	vector_construction.cpp\
+	vector_iteration.cpp\
+	vector_intrinsic.cpp\
+	fold.cpp
 
-vector_construction: vector_construction.cpp
-	time $(CXX) $(CXXFLAGS) vector_construction.cpp -o vector_construction
+TEST_OBJS=$(TEST_SRCS:.cpp=.o)
 
-vector_iteration: vector_iteration.cpp
-	time $(CXX) $(CXXFLAGS) vector_iteration.cpp -o vector_iteration
+TEST_TARGETS=$(TEST_SRCS:.cpp=.test)
 
-vector_intrinsic: vector_intrinsic.cpp
-	time $(CXX) $(CXXFLAGS) vector_intrinsic.cpp -o vector_intrinsic
+all: $(TEST_TARGETS)
+
+%.test : %.cpp
+	time $(CXX) $(CXXFLAGS) $< -o $@
 
 clean:
-	rm -f vector_construction vector_construction.o vector_iteration vector_iteration.o vector_intrinsic vector_intrinsic.o
+	rm -f $(TEST_TARGETS) $(TEST_OBJS)
