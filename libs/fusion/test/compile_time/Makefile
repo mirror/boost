@@ -13,7 +13,8 @@ TEST_SRCS=\
 	vector_construction.cpp\
 	vector_iteration.cpp\
 	vector_intrinsic.cpp\
-	fold.cpp
+	fold.cpp\
+	transform.cpp
 
 TEST_OBJS=$(TEST_SRCS:.cpp=.o)
 
