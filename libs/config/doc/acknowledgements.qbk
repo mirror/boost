@@ -15,7 +15,7 @@
 Beman Dawes provided the original `config.hpp` and part of this document.
 
 Vesa Karvonen provided a description of the principles (see
-[link config_rationale rationale]) and put together an early version of
+[link boost_config.rationale rationale]) and put together an early version of
 the current configuration setup.
 
 John Maddock put together the configuration current code, the test
