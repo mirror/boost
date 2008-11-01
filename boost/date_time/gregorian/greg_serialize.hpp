@@ -72,10 +72,10 @@ void load(Archive & ar,
   ar & make_nvp("date", ds);
   try{
     d = ::boost::gregorian::from_undelimited_string(ds);
-  }catch(bad_lexical_cast be) {
+  }catch(bad_lexical_cast&) {
     gregorian::special_values sv = gregorian::special_value_from_string(ds);
     if(sv == gregorian::not_special) {
-      throw(be); // no match found, rethrow original exception
+      throw; // no match found, rethrow original exception
     }
     else {
       d = gregorian::date(sv);

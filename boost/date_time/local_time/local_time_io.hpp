@@ -8,12 +8,15 @@
  * $Date$
  */
 
+#include <locale>
 #include <iostream>
-#include "boost/date_time/local_time/local_date_time.hpp"
-#include "boost/date_time/local_time/posix_time_zone.hpp"
-#include "boost/date_time/time_facet.hpp"
-#include "boost/date_time/string_convert.hpp"
-#include "boost/io/ios_state.hpp"
+#include <iterator> // i/ostreambuf_iterator
+#include <boost/io/ios_state.hpp>
+#include <boost/date_time/time_facet.hpp>
+#include <boost/date_time/string_convert.hpp>
+#include <boost/date_time/local_time/local_date_time.hpp>
+#include <boost/date_time/local_time/posix_time_zone.hpp>
+#include <boost/date_time/local_time/conversion.hpp> // to_tm will be needed in the facets
 
 namespace boost {
 namespace local_time {
@@ -106,13 +109,79 @@ namespace local_time {
           // if the user want's to fail quietly, we simply set the failbit
           is.setstate(std::ios_base::failbit); 
         } 
-            
+
       }
     }
     return is;
   }
 
-  
+  //! output operator for local_time_period
+  template <class CharT, class TraitsT>
+  inline 
+  std::basic_ostream<CharT, TraitsT>&
+  operator<<(std::basic_ostream<CharT, TraitsT>& os, 
+             const boost::local_time::local_time_period& p) {
+    boost::io::ios_flags_saver iflags(os);
+    typedef boost::date_time::time_facet<local_date_time, CharT> custom_facet;
+    typedef std::time_put<CharT> std_time_facet;
+    std::ostreambuf_iterator<CharT> oitr(os);
+    if (std::has_facet<custom_facet>(os.getloc())) {
+      std::use_facet<custom_facet>(os.getloc()).put(oitr, os, os.fill(), p);
+    }
+    else {
+      //instantiate a custom facet for dealing with periods since the user
+      //has not put one in the stream so far.  This is for efficiency 
+      //since we would always need to reconstruct for every time period
+      //if the local did not already exist.  Of course this will be overridden
+      //if the user imbues as some later point.
+      std::ostreambuf_iterator<CharT> oitr(os);
+      custom_facet* f = new custom_facet();
+      std::locale l = std::locale(os.getloc(), f);
+      os.imbue(l);
+      f->put(oitr, os, os.fill(), p);
+    }
+    return os;
+  }
+
+  //! input operator for local_time_period
+  template <class CharT, class Traits>
+  inline
+  std::basic_istream<CharT, Traits>&
+  operator>>(std::basic_istream<CharT, Traits>& is, boost::local_time::local_time_period& tp)
+  {
+    boost::io::ios_flags_saver iflags(is);
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    if (strm_sentry) {
+      try {
+        typedef typename date_time::time_input_facet<local_date_time, CharT> time_input_facet;
+
+        std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
+        if(std::has_facet<time_input_facet>(is.getloc())) {
+          std::use_facet<time_input_facet>(is.getloc()).get(sit, str_end, is, tp);
+        }
+        else {
+          time_input_facet* f = new time_input_facet();
+          std::locale l = std::locale(is.getloc(), f);
+          is.imbue(l);
+          f->get(sit, str_end, is, tp);
+        }
+      }
+      catch(...) { 
+        std::ios_base::iostate exception_mask = is.exceptions();
+        if(std::ios_base::failbit & exception_mask) {
+          try { is.setstate(std::ios_base::failbit); } 
+          catch(std::ios_base::failure&) {}
+          throw; // rethrow original exception
+        }
+        else {
+          is.setstate(std::ios_base::failbit); 
+        } 
+
+      }
+    }
+    return is;
+  }
+
 } } // namespaces
 
 #endif // BOOST_DATE_TIME_LOCAL_TIME_IO_HPP__

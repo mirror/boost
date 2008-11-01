@@ -9,14 +9,16 @@
  * $Date$
  */
 
-#include "boost/date_time/time_facet.hpp"
-#include "boost/date_time/period_formatter.hpp"
-#include "boost/date_time/posix_time/time_period.hpp"
-#include "boost/date_time/posix_time/posix_time_duration.hpp"
-//#include "boost/date_time/gregorian/gregorian_io.hpp"
-#include "boost/io/ios_state.hpp"
-#include <iostream>
 #include <locale>
+#include <iostream>
+#include <iterator> // i/ostreambuf_iterator
+#include <boost/io/ios_state.hpp>
+#include <boost/date_time/time_facet.hpp>
+#include <boost/date_time/period_formatter.hpp>
+#include <boost/date_time/posix_time/ptime.hpp>
+#include <boost/date_time/posix_time/time_period.hpp>
+#include <boost/date_time/posix_time/posix_time_duration.hpp>
+#include <boost/date_time/posix_time/conversion.hpp> // to_tm will be needed in the facets
 
 namespace boost {
 namespace posix_time {
@@ -75,7 +77,6 @@ namespace posix_time {
     if (strm_sentry) {
       try {
         typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
-        
         std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
         if(std::has_facet<time_input_facet>(is.getloc())) {
           std::use_facet<time_input_facet>(is.getloc()).get(sit, str_end, is, pt);
@@ -101,7 +102,6 @@ namespace posix_time {
           // if the user want's to fail quietly, we simply set the failbit
           is.setstate(std::ios_base::failbit); 
         } 
-            
       }
     }
     return is;
@@ -146,7 +146,6 @@ namespace posix_time {
     if (strm_sentry) {
       try {
         typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
-
         std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
         if(std::has_facet<time_input_facet>(is.getloc())) {
           std::use_facet<time_input_facet>(is.getloc()).get(sit, str_end, is, tp);
@@ -168,7 +167,6 @@ namespace posix_time {
         else {
           is.setstate(std::ios_base::failbit); 
         } 
-            
       }
     }
     return is;
@@ -214,7 +212,6 @@ namespace posix_time {
     if (strm_sentry) {
       try {
         typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
-
         std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
         if(std::has_facet<time_input_facet>(is.getloc())) {
           std::use_facet<time_input_facet>(is.getloc()).get(sit, str_end, is, td);
@@ -236,7 +233,6 @@ namespace posix_time {
         else {
           is.setstate(std::ios_base::failbit); 
         } 
-            
       }
     }
     return is;
