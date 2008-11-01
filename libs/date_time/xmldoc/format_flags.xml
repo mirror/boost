@@ -301,6 +301,14 @@
           </row>
 
           <row>
+            <entry valign="top" morerows="1"><screen>%O</screen></entry>
+            <entry>The number of hours in a time duration as a decimal number (range 0 to max. representable duration); single digits are preceded by a zero.</entry>
+          </row>
+          <row>
+            <entry><screen></screen></entry>
+          </row>
+
+          <row>
             <entry valign="top" morerows="1"><screen>%I !</screen></entry>
             <entry>The hour as a decimal number using a 12-hour clock</entry>
           </row>
