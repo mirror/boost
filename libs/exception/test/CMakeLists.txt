@@ -1,0 +1,34 @@
+
+boost_test_run(is_output_streamable_test)
+boost_test_run(has_to_string_test)
+boost_test_run(to_string_test)
+boost_test_run(to_string_stub_test)
+boost_test_compile_fail(to_string_fail)
+
+#exception
+
+boost_test_run(cloning_test)
+boost_test_run(copy_exception_test)
+boost_test_run(unknown_exception_test)
+boost_test_run(exception_test)
+#boost_test_run(boost_error_info_test)
+boost_test_run(enable_error_info_test enable_error_info_test.cpp helper1.cpp)
+boost_test_run(throw_exception_test throw_exception_test.cpp helper2.cpp)
+boost_test_run(errno_test)
+boost_test_run(error_info_test)
+boost_test_run(diagnostic_information_test)
+boost_test_compile_fail(exception_fail)
+boost_test_compile_fail(throw_exception_fail)
+
+#headers
+
+boost_test_compile(exception_ptr_hpp_test)
+boost_test_compile(diagnostic_information_hpp_test)
+boost_test_compile(enable_current_exception_hpp_test)
+boost_test_compile(enable_error_info_hpp_test)
+boost_test_compile(error_info_hpp_test)
+boost_test_compile(exception_hpp_test)
+boost_test_compile(info_hpp_test)
+boost_test_compile(info_tuple_hpp_test)
+boost_test_compile(to_string_hpp_test)
+boost_test_compile(to_string_stub_hpp_test)

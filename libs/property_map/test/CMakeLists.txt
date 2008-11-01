@@ -1,0 +1,2 @@
+boost_test_compile(property_map_cc)
+boost_test_run(dynamic_properties_test)

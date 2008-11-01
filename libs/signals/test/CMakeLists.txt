@@ -1,0 +1,6 @@
+boost_test_run(dead_slot_test DEPENDS boost_signals)
+boost_test_run(deletion_test DEPENDS boost_signals)
+boost_test_run(ordering_test DEPENDS boost_signals)
+boost_test_run(signal_n_test DEPENDS boost_signals)
+boost_test_run(signal_test DEPENDS boost_signals)
+boost_test_run(trackable_test DEPENDS boost_signals)

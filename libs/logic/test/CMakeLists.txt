@@ -1,0 +1,3 @@
+boost_test_run(tribool_test)
+boost_test_run(tribool_rename_test)
+boost_test_run(tribool_io_test)
