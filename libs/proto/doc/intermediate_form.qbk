@@ -1084,7 +1084,7 @@ like this:
 [pre
 group       ::= '(' expression ')'
 factor      ::= double | '_1' | '_2' | group
-term        ::= factor (('*' factor) | ('/' factor))*
+term        ::= factor (('\*' factor) | ('/' factor))\*
 expression  ::= term (('+' term) | ('-' term))*
 ]
 

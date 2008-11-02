@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<library-reference xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <!-- classes -->
+  <!--<section id="proto.reference.classes">
+    <title>Classes</title>
+    <itemizedlist>
+      <listitem>
+        <classname alt="boost::proto::deduce_domain">proto::deduce_domain</classname>
+      </listitem>
+      <listitem>
+        <classname alt="boost::proto::default_domain">proto::default_domain</classname>
+      </listitem>
+      <listitem>
+        <classname alt="boost::proto::domain">proto::domain&lt;&gt;</classname>
+      </listitem>
+      <listitem>
+        <classname alt="boost::proto::domain_of">proto::domain_of&lt;&gt;</classname>
+      </listitem>
+      <listitem>
+        <classname alt="boost::proto::expr">proto::expr&lt;&gt;</classname>
+      </listitem>
+      <listitem>
+        <classname alt="boost::proto::is_domain">proto::is_domain&lt;&gt;</classname>
+      </listitem>
+      <listitem>
+        <classname alt="boost::proto::term">proto::term&lt;&gt;</classname>
+      </listitem>
+      <listitem>
+        <classname alt="boost::proto::listN">proto::list1&lt;&gt;, proto::list2&lt;&gt;, ...</classname>
+      </listitem>
+      <listitem>
+        <classname alt="boost::proto::functional::display_expr">proto::functional::display_expr</classname>
+      </listitem>
+    </itemizedlist>
+  </section>-->
+
+  <!-- headers -->
+  <xi:include href="reference/args.xml"/>
+  <xi:include href="reference/core.xml"/>
+  <xi:include href="reference/debug.xml"/>
+  <xi:include href="reference/deep_copy.xml"/>
+  <xi:include href="reference/domain.xml"/>
+  <xi:include href="reference/eval.xml"/>
+  <xi:include href="reference/expr.xml"/>
+  <xi:include href="reference/extends.xml"/>
+  <xi:include href="reference/fusion.xml"/>
+  <xi:include href="reference/generate.xml"/>
+  <xi:include href="reference/literal.xml"/>
+  <xi:include href="reference/make_expr.xml"/>
+  <xi:include href="reference/matches.xml"/>
+  <xi:include href="reference/operators.xml"/>
+  <xi:include href="reference/proto.xml"/>
+  <xi:include href="reference/proto_fwd.xml"/>
+  <xi:include href="reference/tags.xml"/>
+  <xi:include href="reference/traits.xml"/>
+  <xi:include href="reference/transform/arg.xml"/>
+  <xi:include href="reference/transform/call.xml"/>
+  <xi:include href="reference/transform/default.xml"/>
+  <xi:include href="reference/transform/fold.xml"/>
+  <xi:include href="reference/transform/fold_tree.xml"/>
+  <xi:include href="reference/transform/impl.xml"/>
+  <xi:include href="reference/transform/lazy.xml"/>
+  <xi:include href="reference/transform/make.xml"/>
+  <xi:include href="reference/transform/pass_through.xml"/>
+  <xi:include href="reference/transform/when.xml"/>
+  <xi:include href="reference/context/callable.xml"/>
+  <xi:include href="reference/context/default.xml"/>
+  <xi:include href="reference/context/null.xml"/>
+
+  <!-- concepts -->
+  <xi:include href="reference/concepts/CallableTransform.xml"/>
+  <xi:include href="reference/concepts/ObjectTransform.xml"/>
+  <xi:include href="reference/concepts/PrimitiveTransform.xml"/>
+  <xi:include href="reference/concepts/Transform.xml"/>
+  <xi:include href="reference/concepts/PolymorphicFunctionObject.xml"/>
+
+</library-reference>

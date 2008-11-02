@@ -46,7 +46,7 @@
 [def _typeof_               
   [@../../libs/typeof/index.html Boost.Typeof]]
 [def _expr_                 
-  [classref  boost::proto::expr<Tag,Args,1> `proto::expr<>`]]
+  [classref  boost::proto::expr `proto::expr<>`]]
 [def _deep_copy_            
   [funcref   boost::proto::deep_copy `proto::deep_copy()`]]
 [def _domain_              
@@ -62,25 +62,25 @@
 [def _unpack_expr_          
   [funcref   boost::proto::unpack_expr `proto::unpack_expr()`]]
 [def _matches_              
-  [classref  boost::proto::result_of::matches `proto::matches<>`]]
+  [classref  boost::proto::matches `proto::matches<>`]]
 [def _or_                   
-  [classref  boost::proto::control::or_ `proto::or_<>`]]
+  [classref  boost::proto::or_ `proto::or_<>`]]
 [def _and_                  
-  [classref  boost::proto::control::and_ `proto::and_<>`]]
+  [classref  boost::proto::and_ `proto::and_<>`]]
 [def _if_                   
-  [classref  boost::proto::control::if_ `proto::if_<>`]]
+  [classref  boost::proto::if_ `proto::if_<>`]]
 [def _not_                  
-  [classref  boost::proto::control::not_ `proto::not_<>`]]
+  [classref  boost::proto::not_ `proto::not_<>`]]
 [def _switch_                  
-  [classref  boost::proto::control::switch_ `proto::switch_<>`]]
+  [classref  boost::proto::switch_ `proto::switch_<>`]]
 [def _exact_                
-  [classref  boost::proto::control::exact `proto::exact<>`]]
+  [classref  boost::proto::exact `proto::exact<>`]]
 [def _convertible_to_       
-  [classref  boost::proto::control::convertible_to `proto::convertible_to<>`]]
+  [classref  boost::proto::convertible_to `proto::convertible_to<>`]]
 [def _is_expr_              
-  [classref  boost::proto::result_of::is_expr `proto::is_expr<>`]]
+  [classref  boost::proto::is_expr `proto::is_expr<>`]]
 [def _tag_of_               
-  [classref  boost::proto::result_of::tag_of `proto::tag_of<>`]]
+  [classref  boost::proto::tag_of `proto::tag_of<>`]]
 [def _child_                
   [funcref   boost::proto::child `proto::child()`]]
 [def _child_c_              
@@ -94,23 +94,23 @@
 [def _value_                
   [funcref   boost::proto::value `proto::value()`]]
 [def _terminal_             
-  [classref  boost::proto::op::terminal `proto::terminal<>`]]
+  [classref  boost::proto::terminal `proto::terminal<>`]]
 [def _unary_plus_
-  [classref  boost::proto::op::unary_plus `proto::unary_plus<>`]]
+  [classref  boost::proto::unary_plus `proto::unary_plus<>`]]
 [def _plus_
-  [classref  boost::proto::op::plus `proto::plus<>`]]
+  [classref  boost::proto::plus `proto::plus<>`]]
 [def _unary_expr_           
-  [classref  boost::proto::op::unary_expr `proto::unary_expr<>`]]
+  [classref  boost::proto::unary_expr `proto::unary_expr<>`]]
 [def _binary_expr_          
-  [classref  boost::proto::op::binary_expr `proto::binary_expr<>`]]
+  [classref  boost::proto::binary_expr `proto::binary_expr<>`]]
 [def _nary_expr_          
-  [classref  boost::proto::op::nary_expr `proto::nary_expr<>`]]
+  [classref  boost::proto::nary_expr `proto::nary_expr<>`]]
 [def _literal_              
-  [classref  boost::proto::utility::literal `proto::literal<>`]]
+  [classref  boost::proto::literal `proto::literal<>`]]
 [def _lit_                  
   [funcref   boost::proto::lit `proto::lit()`]]
 [def _vararg_               
-  [classref  boost::proto::control::vararg `proto::vararg<>`]]
+  [classref  boost::proto::vararg `proto::vararg<>`]]
 [def _default_context_      
   [classref  boost::proto::context::default_context `proto::default_context`]]
 [def _callable_context_     
@@ -207,7 +207,7 @@ After that, you may be interested in seeing some [link boost_proto.users_guide.e
 
 [endsect]
 
-[xinclude proto.xml]
+[xinclude reference.xml]
 
 [/=================]
 [section Appendices]

@@ -3,62 +3,7 @@
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 import path ;
-import doxygen ;
 import quickbook ;
-
-wave-command = [ path.native $(BOOST_ROOT)/dist/bin/wave ] ;
-
-# Generate reference section using Doxygen
-doxygen protodoc
-    :
-        ../../../boost/proto/args.hpp
-        ../../../boost/proto/context.hpp
-        ../../../boost/proto/core.hpp
-        ../../../boost/proto/debug.hpp
-        ../../../boost/proto/deep_copy.hpp
-        ../../../boost/proto/domain.hpp
-        ../../../boost/proto/eval.hpp
-        ../../../boost/proto/expr.hpp
-        ../../../boost/proto/extends.hpp
-        ../../../boost/proto/fusion.hpp
-        ../../../boost/proto/generate.hpp
-        ../../../boost/proto/literal.hpp
-        ../../../boost/proto/make_expr.hpp
-        ../../../boost/proto/matches.hpp
-        ../../../boost/proto/operators.hpp
-        ../../../boost/proto/proto.hpp
-        ../../../boost/proto/proto_fwd.hpp
-#        ../../../boost/proto/proto_typeof.hpp
-        ../../../boost/proto/tags.hpp
-        ../../../boost/proto/traits.hpp
-        ../../../boost/proto/transform.hpp
-        ../../../boost/proto/context/callable.hpp
-        ../../../boost/proto/context/default.hpp
-        ../../../boost/proto/context/null.hpp
-        ../../../boost/proto/transform/arg.hpp
-        ../../../boost/proto/transform/call.hpp
-        ../../../boost/proto/transform/default.hpp
-        ../../../boost/proto/transform/fold.hpp
-        ../../../boost/proto/transform/fold_tree.hpp
-        ../../../boost/proto/transform/impl.hpp
-        ../../../boost/proto/transform/lazy.hpp
-        ../../../boost/proto/transform/make.hpp
-        ../../../boost/proto/transform/pass_through.hpp
-        ../../../boost/proto/transform/when.hpp
-    :
-        <doxygen:param>EXTRACT_ALL=YES
-        <doxygen:param>HIDE_UNDOC_MEMBERS=NO
-        # Use Boost.Wave to preprocess Proto's source
-#        <doxygen:param>INPUT_FILTER=./wave.sh
-        <doxygen:param>"INPUT_FILTER=\"$(wave-command) -S ../../.. \\
-                                        -S $(BOOST_ROOT) \\
-                                        -S \\\"C:\\Program Files\\Microsoft Visual Studio .NET 2003\\vc7\\include\\\" \\
-                                        -D _WIN32 \\
-                                        -D BOOST_PROTO_BUILDING_DOCS \\
-                                        -p 1 \""
-        # This ensures that Wave is actually built before we try to execute it
-        <dependency>$(BOOST_ROOT)/tools/wave/build release
-    ;
 
 xml proto
     :
@@ -106,6 +51,4 @@ boostbook standalone
         # default png graphics are awful in PDF form,
         # better use SVG's instead:
         # <format>pdf:<xsl:param>admon.graphics.extension=".svg"
-
-#        <dependency>protodoc
     ;

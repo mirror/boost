@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/proto/transform/fold_tree.hpp">
+  <para>Contains definition of the fold_tree&lt;&gt; and reverse_fold_tree&lt;&gt; transforms. </para>
+  <namespace name="boost">
+    <namespace name="proto">
+      <struct name="fold_tree">
+        <template>
+          <template-type-parameter name="Sequence"/>
+          <template-type-parameter name="State0"/>
+          <template-type-parameter name="Fun"/>
+        </template>
+        <inherit><classname>proto::transform</classname>&lt; fold_tree&lt;Sequence, State0, Fun&gt; &gt;</inherit>
+        <purpose>A <conceptname>PrimitiveTransform</conceptname> that recursively applies the
+          <computeroutput><classname>proto::fold</classname>&lt;&gt;</computeroutput> transform to sub-trees
+          that all share a common tag type.</purpose>
+        <description>
+          <para>
+            <computeroutput>proto::fold_tree&lt;&gt;</computeroutput> is useful for flattening trees into lists;
+            for example, you might use <computeroutput>proto::fold_tree&lt;&gt;</computeroutput> to flatten an
+            expression tree like <computeroutput>a | b | c</computeroutput> into a Fusion list like
+            <computeroutput>cons(c, cons(b, cons(a)))</computeroutput>.
+          </para>
+          <para>
+            <computeroutput>proto::fold_tree&lt;&gt;</computeroutput> is easily understood in terms of a
+            <computeroutput>recurse_if_&lt;&gt;</computeroutput> helper, defined as follows:
+            <programlisting> template&lt;typename Tag, typename Fun&gt;
+struct recurse_if_ :
+  proto::if_&lt;
+    // If the current node has type type "Tag" ...
+    boost::is_same&lt;proto::tag_of&lt;proto::_&gt;, Tag&gt;(),
+    // ... recurse, otherwise ...
+    proto::fold&lt;proto::_, proto::_state, recurse_if_&lt;Tag, Fun&gt; &gt;,
+    // ... apply the Fun transform.
+    Fun
+  &gt;
+{};</programlisting>
+          </para>
+          <para>
+            With <computeroutput>recurse_if_&lt;&gt;</computeroutput> as defined above,
+            <computeroutput>proto::fold_tree&lt;Sequence, State0, Fun&gt;()(expr, state, data)</computeroutput>
+            is equivalent to:
+            <programlisting><classname>proto::fold</classname>&lt;
+  Sequence,
+  State0,
+  recurse_if_&lt;typename Expr::proto_tag, Fun&gt;
+&gt;()(expr, state, data).</programlisting>
+            It has the effect of folding a tree front-to-back, recursing into child nodes that share a
+            tag type with the parent node.
+          </para>
+        </description>
+        <struct name="impl">
+          <template>
+            <template-type-parameter name="Expr"/>
+            <template-type-parameter name="State"/>
+            <template-type-parameter name="Data"/>
+          </template>
+          <inherit>
+            <type>
+    <classname>proto::fold</classname>&lt;Sequence, State0, recurse_if_&lt;typename Expr::proto_tag, Fun&gt; &gt;
+      ::template impl&lt;Expr, State, Data&gt;</type>
+          </inherit>
+        </struct>
+      </struct>
+
+      <struct name="reverse_fold_tree">
+        <template>
+          <template-type-parameter name="Sequence"/>
+          <template-type-parameter name="State0"/>
+          <template-type-parameter name="Fun"/>
+        </template>
+        <inherit><classname>proto::transform</classname>&lt; reverse_fold_tree&lt;Sequence, State0, Fun&gt; &gt;</inherit>
+        <purpose>A <conceptname>PrimitiveTransform</conceptname> that recursively applies the 
+          <computeroutput><classname>proto::reverse_fold&lt;&gt;</classname></computeroutput> transform to
+          sub-trees that all share a common tag type.</purpose>
+        <description>
+          <para>
+            <computeroutput>proto::reverse_fold_tree&lt;&gt;</computeroutput> is useful for flattening trees
+            into lists; for example, you might use <computeroutput>proto::reverse_fold_tree&lt;&gt;</computeroutput>
+            to flatten an expression tree like <computeroutput>a | b | c</computeroutput> into a Fusion list like
+            <computeroutput>cons(a, cons(b, cons(c)))</computeroutput>.
+          </para>
+          <para>
+            <computeroutput>proto::reverse_fold_tree&lt;&gt;</computeroutput> is easily understood in terms of
+            a <computeroutput>recurse_if_&lt;&gt;</computeroutput> helper, defined as follows:
+            <programlisting> template&lt;typename Tag, typename Fun&gt;
+struct recurse_if_ :
+  proto::if_&lt;
+    // If the current node has type type "Tag" ...
+    boost::is_same&lt;proto::tag_of&lt;proto::_&gt;, Tag&gt;(),
+    // ... recurse, otherwise ...
+    proto::reverse_fold&lt;proto::_, proto::_state, recurse_if_&lt;Tag, Fun&gt; &gt;,
+    // ... apply the Fun transform.
+    Fun
+  &gt;
+{};</programlisting>
+          </para>
+          <para>
+            With <computeroutput>recurse_if_&lt;&gt;</computeroutput> as defined above,
+            <computeroutput>proto::reverse_fold_tree&lt;Sequence, State0, Fun&gt;()(expr, state, data)</computeroutput>
+            is equivalent to:
+            <programlisting>proto::reverse_fold&lt;
+  Sequence,
+  State0,
+  recurse_if_&lt;typename Expr::proto_tag, Fun&gt;
+&gt;()(expr, state, data).</programlisting>
+            It has the effect of folding a tree back-to-front, recursing into child nodes that share a
+            tag type with the parent node.
+          </para>
+        </description>
+        <struct name="impl">
+          <template>
+            <template-type-parameter name="Expr"/>
+            <template-type-parameter name="State"/>
+            <template-type-parameter name="Data"/>
+          </template>
+          <inherit>
+            <type>
+    <classname>proto::reverse_fold</classname>&lt;Sequence, State0, recurse_if_&lt;typename Expr::proto_tag, Fun&gt; &gt;
+      ::template impl&lt;Expr, State, Data&gt;</type>
+          </inherit>
+        </struct>
+      </struct>
+    </namespace>
+  </namespace>
+</header>
