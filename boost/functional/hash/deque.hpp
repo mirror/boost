@@ -3,5 +3,5 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#error "boost/functional/hash/deque.hpp is deprecated, use boost/functional/hash.hpp instead."
+#error "boost/functional/hash/deque.hpp is no longer supported, use boost/functional/hash.hpp instead."
 #include <boost/functional/hash.hpp>
