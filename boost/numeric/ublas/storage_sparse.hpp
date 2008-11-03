@@ -410,6 +410,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
         void erase (iterator it1, iterator it2) {
+            if (it1 == it2) return /* nothing to erase */;
             BOOST_UBLAS_CHECK (begin () <= it1 && it1 < it2 && it2 <= end (), bad_index ());
             std::copy (it2, end (), it1);
             resize (size () - (it2 - it1));
