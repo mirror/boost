@@ -390,7 +390,6 @@ namespace boost { namespace numeric { namespace ublas {
             if (it != end () && it->first == p.first)
                 return std::make_pair (it, false);
             difference_type n = it - begin ();
-            BOOST_UBLAS_CHECK (size () == 0 || size () == size_type (n), external_logic ());
             resize (size () + 1);
             it = begin () + n;    // allow for invalidation
             std::copy_backward (it, end () - 1, end ());
