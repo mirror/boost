@@ -22,6 +22,11 @@
 #  define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
 #  define BOOST_NO_VOID_RETURNS
 #  define BOOST_NO_EXCEPTION_STD_NAMESPACE
+
+#  if BOOST_MSVC == 1202
+#    define BOOST_NO_STD_TYPEINFO
+#  endif
+
    // disable min/max macro defines on vc6:
    //
 #endif

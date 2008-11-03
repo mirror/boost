@@ -42,7 +42,7 @@
 #endif       
 
 // Define BOOST_FUNCTION_STD_NS to the namespace that contains type_info.
-#ifdef BOOST_NO_EXCEPTION_STD_NAMESPACE
+#ifdef BOOST_NO_STD_TYPEINFO
 // Embedded VC++ does not have type_info in namespace std
 #  define BOOST_FUNCTION_STD_NS
 #else
