@@ -7,7 +7,7 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
-        <purpose>Make the given <conceptname>Transform</conceptname> into a <conceptname>PrimitiveTransform</conceptname>.</purpose>
+        <purpose>Make the given <conceptname>CallableTransform</conceptname> into a <conceptname>PrimitiveTransform</conceptname>.</purpose>
 
         <description>
           <para>
@@ -36,12 +36,12 @@
             <template-type-parameter name="State"/>
             <template-type-parameter name="Data"/>
           </template>
-          <inherit><type><classname>proto::transform_impl&lt;Expr, State, Data&gt;</classname></type></inherit>
+          <inherit><type><classname>proto::transform_impl</classname>&lt;Expr, State, Data&gt;</type></inherit>
           <typedef name="result_type">
             <type><replaceable>see-below</replaceable></type>
             <description>
               <para>
-                <computeroutput>proto::call&lt;T&gt;::impl&lt;Expr,State,Data&gt;::result_type</computeroutput>
+                <computeroutput><classname>proto::call</classname>&lt;T&gt;::impl&lt;Expr,State,Data&gt;::result_type</computeroutput>
                 is computed as follows:
                 <itemizedlist>
                   <listitem>
@@ -56,10 +56,10 @@
                   <listitem>
                     <para>
                       If <computeroutput>T</computeroutput> is of the form
-                      <computeroutput><conceptname>PrimitiveTransform</conceptname>(T0)</computeroutput>, then
+                      <computeroutput><conceptname>PrimitiveTransform</conceptname>(A<subscript>0</subscript>)</computeroutput>, then
                       <computeroutput>result_type</computeroutput> is:
                       <programlisting>typename boost::result_of&lt;PrimitiveTransform(
-  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,T0&gt;(Expr, State, Data)&gt;::type,
+  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,A<subscript>0</subscript>&gt;(Expr, State, Data)&gt;::type,
   State, 
   Data
 )&gt;::type</programlisting>
@@ -68,11 +68,11 @@
                   <listitem>
                     <para>
                       If <computeroutput>T</computeroutput> is of the form
-                      <computeroutput><conceptname>PrimitiveTransform</conceptname>(T0, T1)</computeroutput>, then
+                      <computeroutput><conceptname>PrimitiveTransform</conceptname>(A<subscript>0</subscript>, A<subscript>1</subscript>)</computeroutput>, then
                       <computeroutput>result_type</computeroutput> is:
                       <programlisting>typename boost::result_of&lt;PrimitiveTransform(
-  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,T0&gt;(Expr, State, Data)&gt;::type,
-  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,T1&gt;(Expr, State, Data)&gt;::type,
+  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,A<subscript>0</subscript>&gt;(Expr, State, Data)&gt;::type,
+  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,A<subscript>1</subscript>&gt;(Expr, State, Data)&gt;::type,
   Data
 )&gt;::type</programlisting>
                     </para>
@@ -80,24 +80,24 @@
                   <listitem>
                     <para>
                       If <computeroutput>T</computeroutput> is of the form
-                      <computeroutput><conceptname>PrimitiveTransform</conceptname>(T0, T1, T2)</computeroutput>, then
+                      <computeroutput><conceptname>PrimitiveTransform</conceptname>(A<subscript>0</subscript>, A<subscript>1</subscript>, A<subscript>2</subscript>)</computeroutput>, then
                       <computeroutput>result_type</computeroutput> is:
                       <programlisting>typename boost::result_of&lt;PrimitiveTransform(
-  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,T0&gt;(Expr, State, Data)&gt;::type,
-  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,T1&gt;(Expr, State, Data)&gt;::type,
-  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,T2&gt;(Expr, State, Data)&gt;::type
+  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,A<subscript>0</subscript>&gt;(Expr, State, Data)&gt;::type,
+  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,A<subscript>1</subscript>&gt;(Expr, State, Data)&gt;::type,
+  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,A<subscript>2</subscript>&gt;(Expr, State, Data)&gt;::type
 )&gt;::type</programlisting>
                     </para>
                   </listitem>
                   <listitem>
                     <para>
                       If <computeroutput>T</computeroutput> is of the form
-                      <computeroutput><conceptname>PolymorphicFunctionObject</conceptname>(T0,...TN)</computeroutput>, then
+                      <computeroutput><conceptname>PolymorphicFunctionObject</conceptname>(A<subscript>0</subscript>,...A<subscript>n</subscript>)</computeroutput>, then
                       <computeroutput>result_type</computeroutput> is:
                       <programlisting>typename boost::result_of&lt;PolymorphicFunctionObject(
-  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,T0&gt;(Expr, State, Data)&gt;::type,
+  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,A<subscript>0</subscript>&gt;(Expr, State, Data)&gt;::type,
   ...
-  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,TN&gt;(Expr, State, Data)&gt;::type
+  typename boost::result_of&lt;<classname>when</classname>&lt;<classname>_</classname>,A<subscript>n</subscript>&gt;(Expr, State, Data)&gt;::type
 &gt;::type</programlisting>
                     </para>
                   </listitem>
@@ -119,7 +119,7 @@
               </parameter>
               <description>
               <para>
-                <computeroutput>proto::call&lt;T&gt;::impl&lt;Expr,State,Data&gt;::operator()</computeroutput> behaves as follows:
+                <computeroutput><classname>proto::call</classname>&lt;T&gt;::impl&lt;Expr,State,Data&gt;::operator()</computeroutput> behaves as follows:
                 <itemizedlist>
                   <listitem>
                     <para>
@@ -133,10 +133,10 @@
                   <listitem>
                     <para>
                       If <computeroutput>T</computeroutput> is of the form
-                      <computeroutput><conceptname>PrimitiveTransform</conceptname>(T0)</computeroutput>, then
+                      <computeroutput><conceptname>PrimitiveTransform</conceptname>(A<subscript>0</subscript>)</computeroutput>, then
                       return
                       <programlisting>PrimitiveTransform()(
-  <classname>when</classname>&lt;<classname>_</classname>,T0&gt;()(expr, state, data),
+  <classname>when</classname>&lt;<classname>_</classname>,A<subscript>0</subscript>&gt;()(expr, state, data),
   state, 
   sata
 )</programlisting>
@@ -145,11 +145,11 @@
                   <listitem>
                     <para>
                       If <computeroutput>T</computeroutput> is of the form
-                      <computeroutput><conceptname>PrimitiveTransform</conceptname>(T0, T1)</computeroutput>, then
+                      <computeroutput><conceptname>PrimitiveTransform</conceptname>(A<subscript>0</subscript>, A<subscript>1</subscript>)</computeroutput>, then
                       return:
                       <programlisting>PrimitiveTransform()(
-  <classname>when</classname>&lt;<classname>_</classname>,T0&gt;()(expr, state, data),
-  <classname>when</classname>&lt;<classname>_</classname>,T1&gt;()(expr, state, data),
+  <classname>when</classname>&lt;<classname>_</classname>,A<subscript>0</subscript>&gt;()(expr, state, data),
+  <classname>when</classname>&lt;<classname>_</classname>,A<subscript>1</subscript>&gt;()(expr, state, data),
   Data
 )</programlisting>
                     </para>
@@ -157,24 +157,24 @@
                   <listitem>
                     <para>
                       If <computeroutput>T</computeroutput> is of the form
-                      <computeroutput><conceptname>PrimitiveTransform</conceptname>(T0, T1, T2)</computeroutput>, then
+                      <computeroutput><conceptname>PrimitiveTransform</conceptname>(A<subscript>0</subscript>, A<subscript>1</subscript>, A<subscript>2</subscript>)</computeroutput>, then
                       return
                       <programlisting>PrimitiveTransform()(
-  <classname>when</classname>&lt;<classname>_</classname>,T0&gt;()(expr, state, data),
-  <classname>when</classname>&lt;<classname>_</classname>,T1&gt;()(expr, state, data),
-  <classname>when</classname>&lt;<classname>_</classname>,T2&gt;()(expr, state, data)
+  <classname>when</classname>&lt;<classname>_</classname>,A<subscript>0</subscript>&gt;()(expr, state, data),
+  <classname>when</classname>&lt;<classname>_</classname>,A<subscript>1</subscript>&gt;()(expr, state, data),
+  <classname>when</classname>&lt;<classname>_</classname>,A<subscript>2</subscript>&gt;()(expr, state, data)
 )</programlisting>
                     </para>
                   </listitem>
                   <listitem>
                     <para>
                       If <computeroutput>T</computeroutput> is of the form
-                      <computeroutput><conceptname>PolymorphicFunctionObject</conceptname>(T0,...TN)</computeroutput>, then
+                      <computeroutput><conceptname>PolymorphicFunctionObject</conceptname>(A<subscript>0</subscript>,...A<subscript>n</subscript>)</computeroutput>, then
                       return:
                       <programlisting>PolymorphicFunctionObject()(
-  <classname>when</classname>&lt;<classname>_</classname>,T0&gt;()(expr, state, data),
+  <classname>when</classname>&lt;<classname>_</classname>,A<subscript>0</subscript>&gt;()(expr, state, data),
   ...
-  <classname>when</classname>&lt;<classname>_</classname>,TN&gt;()(expr, state, data)
+  <classname>when</classname>&lt;<classname>_</classname>,A<subscript>n</subscript>&gt;()(expr, state, data)
 )</programlisting>
                     </para>
                   </listitem>

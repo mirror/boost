@@ -1,7 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <header name="boost/proto/matches.hpp">
-  <para>Contains definition of the <classname alt="boost::proto::matches">proto::matches&lt;&gt;</classname>
-    metafunction for determining if a given expression matches a given pattern.</para>
+  <para>
+    Contains definition of the
+    <computeroutput>
+      <classname alt="boost::proto::matches">proto::matches&lt;&gt;</classname>
+    </computeroutput>
+    metafunction for determining if a given expression matches a given pattern.
+  </para>
   <namespace name="boost">
     <namespace name="proto">
       <struct name="_">

@@ -19,7 +19,7 @@
             <template-arg>This(Expr)</template-arg>
           </specialization>
           <typedef name="type">
-            <type>typename PrimitiveTransform::template impl&lt; Expr, int, int &gt;::result_type</type>
+            <type>typename PrimitiveTransform::template impl&lt; Expr, <replaceable>unspecified</replaceable>, <replaceable>unspecified</replaceable> &gt;::result_type</type>
           </typedef>
         </struct-specialization>
         <struct-specialization name="result">
@@ -32,7 +32,7 @@
             <template-arg>This(Expr, State)</template-arg>
           </specialization>
           <typedef name="type">
-            <type>typename PrimitiveTransform::template impl&lt; Expr, State, int &gt;::result_type</type>
+            <type>typename PrimitiveTransform::template impl&lt; Expr, State, <replaceable>unspecified</replaceable> &gt;::result_type</type>
           </typedef>
         </struct-specialization>
         <struct-specialization name="result">
@@ -61,6 +61,11 @@
             <parameter name="expr">
               <paramtype>Expr &amp;</paramtype>
             </parameter>
+            <returns>
+              <computeroutput>
+                typename PrimitiveTransform::template impl&lt;Expr &amp;, <replaceable>unspecified</replaceable>, <replaceable>unspecified</replaceable>&gt;()(expr, <replaceable>unspecified</replaceable>, <replaceable>unspecified</replaceable>)
+              </computeroutput>
+            </returns>
           </method>
           <method name="operator()" cv="const">
             <type>typename PrimitiveTransform::template impl&lt;Expr &amp;, State &amp;, <replaceable>unspecified</replaceable>&gt;::result_type</type>
@@ -74,6 +79,11 @@
             <parameter name="state">
               <paramtype>State &amp;</paramtype>
             </parameter>
+            <returns>
+              <computeroutput>
+                typename PrimitiveTransform::template impl&lt;Expr &amp;, State &amp;, <replaceable>unspecified</replaceable>&gt;()(expr, state, <replaceable>unspecified</replaceable>)
+              </computeroutput>
+            </returns>
           </method>
           <method name="operator()" cv="const">
             <type>typename PrimitiveTransform::template impl&lt;Expr &amp;, State const &amp;, <replaceable>unspecified</replaceable>&gt;::result_type</type>
@@ -87,6 +97,11 @@
             <parameter name="state">
               <paramtype>State const &amp;</paramtype>
             </parameter>
+            <returns>
+              <computeroutput>
+                typename PrimitiveTransform::template impl&lt;Expr &amp;, State const &amp;, <replaceable>unspecified</replaceable>&gt;()(expr, state, <replaceable>unspecified</replaceable>)
+              </computeroutput>
+            </returns>
           </method>
           <method name="operator()" cv="const">
             <type>typename PrimitiveTransform::template impl&lt;Expr &amp;, State &amp;, Data &amp;&gt;::result_type</type>
@@ -104,6 +119,11 @@
             <parameter name="data">
               <paramtype>Data &amp;</paramtype>
             </parameter>
+            <returns>
+              <computeroutput>
+                typename PrimitiveTransform::template impl&lt;Expr &amp;, State &amp;, Data &amp;&gt;()(expr, state, data)
+              </computeroutput>
+            </returns>
           </method>
           <method name="operator()" cv="const">
             <type>typename PrimitiveTransform::template impl&lt;Expr &amp;, State const &amp;, Data &amp;&gt;::result_type</type>
@@ -121,6 +141,11 @@
             <parameter name="data">
               <paramtype>Data &amp;</paramtype>
             </parameter>
+            <returns>
+              <computeroutput>
+                typename PrimitiveTransform::template impl&lt;Expr &amp;, State const &amp;, Data &amp;&gt;()(expr, state, data)
+              </computeroutput>
+            </returns>
           </method>
         </method-group>
       </struct>

@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <header name="boost/proto/eval.hpp">
-  <para>Contains the <functionname alt="boost::proto::eval">proto::eval()</functionname> expression evaluator.</para>
+  <para>
+    Contains the
+    <computeroutput>
+      <functionname alt="boost::proto::eval">proto::eval()</functionname>
+    </computeroutput> expression evaluator.
+  </para>
   <namespace name="boost">
     <namespace name="proto">
       <namespace name="functional">
@@ -23,8 +28,8 @@
             <inherit>
               <type>
     <classname>proto::result_of::eval</classname>&lt;
-      typename remove_reference&lt; Expr &gt;::type, 
-      typename remove_reference&lt; Context &gt;::type 
+      typename boost::remove_reference&lt; Expr &gt;::type, 
+      typename boost::remove_reference&lt; Context &gt;::type 
     &gt;</type>
             </inherit>
           </struct-specialization>

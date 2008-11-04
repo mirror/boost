@@ -34,10 +34,13 @@
           <para>
             <computeroutput>Args</computeroutput> is a list of types representing
             the children of this expression. It is an instantiation of one of
-            <computeroutput>proto::list1&lt;&gt;</computeroutput>,
-            <computeroutput>proto::list2&lt;&gt;</computeroutput>, etc. The child types
-            must all themselves be either <computeroutput>expr&lt;&gt;</computeroutput>
-            or <computeroutput>proto::expr&lt;&gt;&amp;</computeroutput>, unless
+            <computeroutput><classname alt="proto::listN">proto::list1&lt;&gt;</classname></computeroutput>,
+            <computeroutput><classname alt="proto::listN">proto::list2&lt;&gt;</classname></computeroutput>,
+            etc. The child types
+            must all themselves be either <computeroutput>proto::expr&lt;&gt;</computeroutput>
+            or <computeroutput>proto::expr&lt;&gt;&amp;</computeroutput> (or extensions thereof via
+            <computeroutput><classname>proto::extends&lt;&gt;</classname></computeroutput> or
+            <computeroutput><macroname>BOOST_PROTO_EXTENDS</macroname>()</computeroutput>), unless
             <computeroutput>Arity</computeroutput> is 0, in which case
             <computeroutput>Args</computeroutput> must be
             <computeroutput>proto::term&lt;T&gt;</computeroutput>, where
@@ -65,7 +68,7 @@
         </typedef>
 
         <typedef name="proto_domain">
-          <type><classname>default_domain</classname></type>
+          <type><classname>proto::default_domain</classname></type>
         </typedef>
 
         <typedef name="proto_base_expr">
@@ -87,8 +90,8 @@
           </template>
           <description>
             <para>
-              Encodes the return type of <computeroutput>expr&lt;&gt;::operator()</computeroutput>.
-              Makes <computeroutput>expr&lt;&gt;</computeroutput> a TR1-style function object type
+              Encodes the return type of <computeroutput><classname>proto::expr&lt;&gt;</classname>::operator()</computeroutput>.
+              Makes <computeroutput><classname>proto::expr&lt;&gt;</classname></computeroutput> a TR1-style function object type
               usable with <computeroutput>boost::result_of&lt;&gt;</computeroutput>
             </para>
           </description>
@@ -316,12 +319,24 @@
         </template>
         <purpose>Lets you inherit the interface of an expression while hiding from Proto the fact that
           the type is a Proto expression.</purpose>
+        <inherit><type>Expr</type></inherit>
         <method-group name="public member functions"/>
         <constructor>
           <parameter name="expr">
             <paramtype>Expr const &amp;</paramtype>
           </parameter>
         </constructor>
+        <description>
+          <para>
+            For an expression type <computeroutput>E</computeroutput>,
+            <computeroutput>
+              <classname>proto::is_expr</classname>&lt;E&gt;::value
+            </computeroutput> is <computeroutput>true</computeroutput>, but
+            <computeroutput>
+              <classname>proto::is_expr</classname>&lt;proto::unexpr&lt;E&gt; &gt;::value
+            </computeroutput> is <computeroutput>false</computeroutput>.
+          </para>
+        </description>
       </struct>
 
     </namespace>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <header name="boost/proto/transform/pass_through.hpp">
-  <para>Definition of the <classname alt="boost::proto::pass_through">proto::pass_through&lt;&gt;</classname> transform,
-    which is the default transform of all of the expression generator metafunctions such as
-    <classname alt="boost::proto::unary_plus">proto::unary_plus&lt;&gt;</classname>,
-    <classname alt="boost::proto::plus">proto::plus&lt;&gt;</classname> and
-    <classname alt="boost::proto::nary_expr">proto::nary_expr&lt;&gt;</classname>.</para>
+  <para>Definition of the
+    <computeroutput><classname alt="boost::proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
+    transform, which is the default transform of all of the expression generator metafunctions such as
+    <computeroutput><classname alt="boost::proto::unary_plus">proto::unary_plus&lt;&gt;</classname></computeroutput>,
+    <computeroutput><classname alt="boost::proto::plus">proto::plus&lt;&gt;</classname></computeroutput> and
+    <computeroutput><classname alt="boost::proto::nary_expr">proto::nary_expr&lt;&gt;</classname></computeroutput>.</para>
   <namespace name="boost">
     <namespace name="proto">
       <struct name="pass_through">
@@ -123,7 +124,11 @@ struct Promote :
               </requires>
               <returns>
                 <para>
-                  <computeroutput>result_type::make(G0()(proto::child_c&lt;0&gt;(expr),state,data),...GN()(proto::child_c&lt;N&gt;(expr),state,data))</computeroutput>
+                  <programlisting>result_type::make(
+  G0()(<functionname>proto::child_c</functionname>&lt;0&gt;(expr), state, data),
+  ...
+  GN()(<functionname>proto::child_c</functionname>&lt;N&gt;(expr), state, data)
+)</programlisting>
                 </para>
               </returns>
             </method>

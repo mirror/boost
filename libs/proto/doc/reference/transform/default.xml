@@ -23,7 +23,7 @@
             <template-type-parameter name="State"/>
             <template-type-parameter name="Data"/>
           </template>
-          <inherit><type><classname>proto::transform_impl&lt;Expr, State, Data&gt;</classname></type></inherit>
+          <inherit><type><classname>proto::transform_impl</classname>&lt;Expr, State, Data&gt;</type></inherit>
           <typedef name="Tag">
             <purpose>For exposition only</purpose>
             <type>typename Expr::tag_type</type>
