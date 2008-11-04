@@ -13,7 +13,7 @@
           <para>
             <computeroutput>proto::is_callable&lt;&gt;</computeroutput> is used by the
             <computeroutput><classname alt="proto::when">proto::when&lt;&gt;</classname></computeroutput>
-            transform to determine whether a function type <computeroutput>R(A<subscript>1</subscript>,...<subscript>n</subscript>)</computeroutput>
+            transform to determine whether a function type <computeroutput>R(A<subscript>1</subscript>,...A<subscript>n</subscript>)</computeroutput>
             is a <conceptname>CallableTransform</conceptname> or an <conceptname>ObjectTransform</conceptname>.
             The former are evaluated using <computeroutput><classname>proto::call&lt;&gt;</classname></computeroutput>
             and the later with <computeroutput><classname>proto::make&lt;&gt;</classname></computeroutput>.
@@ -50,6 +50,7 @@
             </itemizedlist>
           </para>
         </description>
+        <inherit><type>mpl::bool_&lt;<replaceable>true-or-false</replaceable>&gt;</type></inherit>
       </struct>
 
       <struct name="is_aggregate">
@@ -66,13 +67,16 @@
             If <computeroutput>proto::is_aggregate&lt;T&gt;::value</computeroutput> is <computeroutput>true</computeroutput>,
             then an object of type <computeroutput>T</computeroutput> will be initialized as
             <computeroutput>T t = {a<subscript>0</subscript>,...a<subscript>n</subscript>};</computeroutput>.
-            Otherwise, it will be initialized as <computeroutput>T t(a<subscript>0</subscript>,...a<subscript>n</subscript>)</computeroutput>.
+            Otherwise, it will be initialized as
+            <computeroutput>T t(a<subscript>0</subscript>,...a<subscript>n</subscript>)</computeroutput>.
           </para>
           <para>
             Note: <computeroutput><classname>proto::expr&lt;&gt;</classname> is an aggregate.</computeroutput>
           </para>
         </description>
+        <inherit><type>mpl::bool_&lt;<replaceable>true-or-false</replaceable>&gt;</type></inherit>
       </struct>
+
       <namespace name="functional">
         <struct name="as_expr">
           <template>
@@ -113,7 +117,7 @@
               </description>
               <returns>
                 <para>
-                  <computeroutput>proto::as_expr&lt;Domain&gt;(t)</computeroutput>
+                  <computeroutput><functionname>proto::as_expr</functionname>&lt;Domain&gt;(t)</computeroutput>
                 </para>
               </returns>
             </method>
@@ -172,7 +176,7 @@
               </description>
               <returns>
                 <para>
-                  <computeroutput>proto::as_child&lt;Domain&gt;(t)</computeroutput>
+                  <computeroutput><functionname>proto::as_child</functionname>&lt;Domain&gt;(t)</computeroutput>
                 </para>
               </returns>
             </method>
@@ -563,7 +567,7 @@
           </typedef>
           <method-group name="public member functions">
             <method name="operator()" cv="const">
-              <type>impl::expr_param</type>
+              <type>typename impl::expr_param</type>
               <parameter name="expr">
                 <paramtype>typename impl::expr_param</paramtype>
                 <description>
@@ -1964,7 +1968,7 @@
           </inherit>
         </struct>
         <typedef name="type">
-          <type><classname>proto::expr</classname>&lt; Tag, <classname alt="proto::listN">proto::list<replaceable>N</replaceable></classname>&lt; A0 &gt; &gt;</type>
+          <type><classname>proto::expr</classname>&lt; Tag, <classname alt="proto::listN">proto::list<replaceable>N</replaceable></classname>&lt; A... &gt; &gt;</type>
         </typedef>
         <typedef name="proto_base_expr">
           <type>type</type>
@@ -2129,7 +2133,7 @@
                   </listitem>
                   <listitem>
                     <para>
-                      <computeroutput>R(&amp;)(A0,...)</computeroutput> becomes <computeroutput>R(&amp;)(A0,...)</computeroutput>
+                      <computeroutput>R(&amp;)(A...)</computeroutput> becomes <computeroutput>R(&amp;)(A...)</computeroutput>
                     </para>
                   </listitem>
                   <listitem>
@@ -2170,7 +2174,7 @@
                   </listitem>
                   <listitem>
                     <para>
-                      <computeroutput>R(&amp;)(A0,...)</computeroutput> becomes <computeroutput>R(&amp;)(A0,...)</computeroutput>
+                      <computeroutput>R(&amp;)(A...)</computeroutput> becomes <computeroutput>R(&amp;)(A...)</computeroutput>
                     </para>
                   </listitem>
                   <listitem>
@@ -2211,7 +2215,7 @@
                   </listitem>
                   <listitem>
                     <para>
-                      <computeroutput>R(&amp;)(A0,...)</computeroutput> becomes <computeroutput>R(&amp;)(A0,...)</computeroutput>
+                      <computeroutput>R(&amp;)(A...)</computeroutput> becomes <computeroutput>R(&amp;)(A...)</computeroutput>
                     </para>
                   </listitem>
                   <listitem>

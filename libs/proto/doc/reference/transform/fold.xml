@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <header name="boost/proto/transform/fold.hpp">
-  <para>Contains definition of the fold&lt;&gt; and reverse_fold&lt;&gt; transforms. </para>
+  <para>Contains definition of the
+    <computeroutput>
+      <classname alt="boost::proto::fold">proto::fold&lt;&gt;</classname>
+    </computeroutput> and
+    <computeroutput>
+      <classname alt="boost::proto::reverse_fold">proto::reverse_fold&lt;&gt;</classname>
+    </computeroutput>
+    transforms.</para>
   <namespace name="boost">
     <namespace name="proto">
       <struct name="fold">
@@ -75,12 +82,12 @@
               <description>
                 <para>
                   Let <computeroutput>seq</computeroutput> be
-                  <computeroutput>when&lt;_, Sequence&gt;()(expr, state, data)</computeroutput>,
+                  <computeroutput><classname>when</classname>&lt;<classname>_</classname>, Sequence&gt;()(expr, state, data)</computeroutput>,
                   let <computeroutput>state0</computeroutput> be
-                  <computeroutput>when&lt;_, State0&gt;()(expr, state, data)</computeroutput>,
+                  <computeroutput><classname>when</classname>&lt;<classname>_</classname>, State0&gt;()(expr, state, data)</computeroutput>,
                   and let <computeroutput>fun(data)</computeroutput> be an object such that
                   <computeroutput>fun(data)(expr, state)</computeroutput> is equivalent to
-                  <computeroutput>when&lt;_, Fun&gt;()(expr, state, data)</computeroutput>. Then,
+                  <computeroutput><classname>when</classname>&lt;<classname>_</classname>, Fun&gt;()(expr, state, data)</computeroutput>. Then,
                   this function returns <computeroutput>fusion::fold(seq, state0, fun(data))</computeroutput>.
                 </para>
               </description>
@@ -97,7 +104,7 @@
         </template>
         <inherit><classname>proto::fold</classname>&lt; <classname>proto::_reverse</classname>(Sequence), State0, Fun &gt;</inherit>
         <purpose>
-          A PrimitiveTransform that is the same as the <computeroutput><classname>proto::fold&lt;&gt;</classname></computeroutput>
+          A <conceptname>PrimitiveTransform</conceptname> that is the same as the <computeroutput><classname>proto::fold&lt;&gt;</classname></computeroutput>
           transform, except that it folds back-to-front instead of front-to-back. It uses the
           <computeroutput>
             <classname>proto::_reverse</classname>

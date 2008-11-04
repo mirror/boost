@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <header name="boost/proto/transform/make.hpp">
-  <para>Contains definition of the make&lt;&gt; transform. </para>
+  <para>
+    Contains definition of the
+    <computeroutput>
+      <classname alt="boost::proto::make">proto::make&lt;&gt;</classname>
+    </computeroutput>
+    and
+    <computeroutput>
+      <classname alt="boost::proto::protect">proto::protect&lt;&gt;</classname>
+    </computeroutput>
+    transforms.
+  </para>
   <namespace name="boost">
     <namespace name="proto">
       <struct name="protect">
@@ -33,10 +43,10 @@ struct Bar
 {};
 
 struct Foo :
-  proto::when&lt;_, Bar&lt;_&gt;() &gt;
+  <classname>proto::when</classname>&lt;<classname>proto::_</classname>, Bar&lt;<classname>proto::_</classname>&gt;() &gt;
 {};
 
-proto::terminal&lt;int&gt;::type i = {0};
+<classname>proto::terminal</classname>&lt;int&gt;::type i = {0};
 
 int main() {
   Foo()(i);
@@ -45,14 +55,14 @@ int main() {
           </para>
           <para>
             If you actually wanted to default-construct an object of type
-            <computeroutput>Bar&lt;_&gt;</computeroutput>, you would have to protect the
+            <computeroutput>Bar&lt;proto::_&gt;</computeroutput>, you would have to protect the
             <computeroutput>_</computeroutput> to prevent it from being applied. You can
             use <computeroutput>proto::protect&lt;&gt;</computeroutput> as follows:
           </para>
           <para>
             <programlisting>// OK: replace anything with Bar&lt;_&gt;()
 struct Foo :
-  proto::when&lt;_, Bar&lt;protect&lt;_&gt; &gt;() &gt;
+  <classname>proto::when</classname>&lt;<classname>proto::_</classname>, Bar&lt;<classname>proto::protect</classname>&lt;<classname>proto::_</classname>&gt; &gt;() &gt;
 {};</programlisting>
           </para>
         </description>
@@ -108,27 +118,35 @@ struct Foo :
             <type><emphasis>see-below</emphasis></type>
             <description>
               <para>
-                <computeroutput>proto::make&lt;T&gt;::impl&lt;Expr, State, Data&gt;::result_type</computeroutput> is
+                <computeroutput><classname>proto::make</classname>&lt;T&gt;::impl&lt;Expr, State, Data&gt;::result_type</computeroutput> is
                 computed as follows:
               </para>
 
               <para>
                 If <computeroutput>T</computeroutput> is an <conceptname>ObjectTransform</conceptname> of the form
-                <computeroutput>Object(T0,...TN)</computeroutput>, then let <computeroutput>O</computeroutput> be
+                <computeroutput>
+                  Object(A<subscript>0</subscript>,...A<subscript>n</subscript>)
+                </computeroutput>, then let <computeroutput>O</computeroutput> be
                 the return type <computeroutput>Object</computeroutput>. Otherwise, let <computeroutput>O</computeroutput>
                 be <computeroutput>T</computeroutput>. The <computeroutput>result_type</computeroutput> typedef is
                 then computed as follows:
+              </para>
+              <para>
                 <itemizedlist>
                   <listitem>
                     If <computeroutput>O</computeroutput> is a template like
-                    <computeroutput>S&lt;X0,...XN&gt;</computeroutput>, then the result type is calculated as follows:
+                    <computeroutput>
+                      S&lt;X<subscript>0</subscript>,...X<subscript>n</subscript>&gt;
+                    </computeroutput>, then the result type is calculated as follows:
                     <itemizedlist>
                       <listitem>
                         <para>
-                          For each <computeroutput>X</computeroutput> in
-                          <computeroutput>X0,...XN</computeroutput>, let <computeroutput>X'</computeroutput> be
+                          For each <computeroutput>i</computeroutput> in
+                          <computeroutput>[0,n]</computeroutput>, let <computeroutput>
+                            X<subscript>i</subscript>'
+                          </computeroutput> be
                           <computeroutput>
-                            <classname>proto::make</classname>&lt;X&gt;::impl&lt;Expr, State, Data&gt;::result_type
+                            <classname>proto::make</classname>&lt;X<subscript>i</subscript>&gt;::impl&lt;Expr, State, Data&gt;::result_type
                           </computeroutput>
                           (which evaluates this procedure recursively). Note whether any substitutions took place during
                           this operation.
@@ -137,15 +155,21 @@ struct Foo :
                       <listitem>
                         <para>
                           If any substitutions took place in the above step and
-                          <computeroutput>S&lt;X0',...XN'&gt;</computeroutput> has a nested
+                          <computeroutput>
+                            S&lt;X<subscript>0</subscript>',...X<subscript>n</subscript>'&gt;
+                          </computeroutput> has a nested
                           <computeroutput>type</computeroutput> typedef, the result type is
-                          <computeroutput>S&lt;X0',...XN'&gt;::type</computeroutput>.
+                          <computeroutput>
+                            S&lt;X<subscript>0</subscript>',...X<subscript>n</subscript>'&gt;::type
+                          </computeroutput>.
                         </para>
                       </listitem>
                       <listitem>
                         <para>
                           Otherwise, the result type is
-                          <computeroutput>S&lt;X0',...XN'&gt;</computeroutput>.
+                          <computeroutput>
+                            S&lt;X<subscript>0</subscript>',...X<subscript>n</subscript>'&gt;
+                          </computeroutput>.
                         </para>
                       </listitem>
                     </itemizedlist>
@@ -155,7 +179,7 @@ struct Foo :
                       Otherwise, if <computeroutput>O</computeroutput> is a <conceptname>Transform</conceptname>, then let
                       the result type be
                       <computeroutput>
-                        <classname>when</classname>&lt;<classname>_</classname>, O&gt;::impl&lt;Expr, State, Data&gt;::result_type
+                        <classname>proto::when</classname>&lt;<classname>_</classname>, O&gt;::impl&lt;Expr, State, Data&gt;::result_type
                       </computeroutput>.
                       Note that a substitution took place.
                     </para>
@@ -165,6 +189,8 @@ struct Foo :
                     substitution took place.
                   </listitem>
                 </itemizedlist>
+              </para>
+              <para>
                 Note that <computeroutput><classname alt="proto::when">proto::when&lt;&gt;</classname></computeroutput> is implemented
                 in terms of <computeroutput><classname alt="proto::call">proto::call&lt;&gt;</classname></computeroutput>
                 and <computeroutput><classname alt="proto::make">proto::make&lt;&gt;</classname></computeroutput>, so the
@@ -186,12 +212,17 @@ struct Foo :
               </parameter>
               <description>
                 <para>
-                  <computeroutput>proto::make&lt;T&gt;::impl&lt;Expr,State,Data&gt;::operator()</computeroutput> behaves as follows:
+                  <computeroutput>
+                    <classname>proto::make</classname>&lt;T&gt;::impl&lt;Expr,State,Data&gt;::operator()
+                  </computeroutput>
+                  behaves as follows:
+                </para>
+                <para>
                   <itemizedlist>
                     <listitem>
                       <para>
                         If <computeroutput>T</computeroutput> if of the form
-                        <computeroutput>O(T0,...TN)</computeroutput>, then:
+                        <computeroutput>O(A<subscript>0</subscript>,...A<subscript>n</subscript>)</computeroutput>, then:
                       </para>
                       <itemizedlist>
                         <listitem>
@@ -201,9 +232,9 @@ struct Foo :
                             </computeroutput> is <computeroutput>true</computeroutput>, then construct
                             and return an object <computeroutput>that</computeroutput> as follows:
                             <programlisting>result_type that = {
-  proto::when&lt;_, T0&gt;()(expr, state, data),
+  <classname>proto::when</classname>&lt;<classname>_</classname>, A<subscript>0</subscript>&gt;()(expr, state, data),
   ...
-  proto::when&lt;_, TN&gt;()(expr, state, data)
+  <classname>proto::when</classname>&lt;<classname>_</classname>, A<subscript>n</subscript>&gt;()(expr, state, data)
 };</programlisting>
                           </para>
                         </listitem>
@@ -212,9 +243,9 @@ struct Foo :
                             Otherwise, construct
                             and return an object <computeroutput>that</computeroutput> as follows:
                             <programlisting>result_type that(
-  proto::when&lt;_, T0&gt;()(expr, state, data),
+  <classname>proto::when</classname>&lt;<classname>_</classname>, A<subscript>0</subscript>&gt;()(expr, state, data),
   ...
-  proto::when&lt;_, TN&gt;()(expr, state, data)
+  <classname>proto::when</classname>&lt;<classname>_</classname>, A<subscript>n</subscript>&gt;()(expr, state, data)
 );</programlisting>
                           </para>
                         </listitem>

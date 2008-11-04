@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <header name="boost/proto/transform/when.hpp">
-  <para>Definition of when transform. </para>
+  <para>
+    Definition of the
+    <computeroutput>
+      <classname alt="boost::proto::when">proto::when&lt;&gt;</classname>
+    </computeroutput> and
+    <computeroutput>
+      <classname alt="boost::proto::otherwise">proto::otherwise&lt;&gt;</classname>
+    </computeroutput> transforms.
+  </para>
   <namespace name="boost">
     <namespace name="proto">
       <struct name="when">
@@ -21,9 +29,9 @@
             <programlisting>// Count the terminals in an expression tree.
 // Must be invoked with initial state == mpl::int_&lt;0&gt;().
 struct CountLeaves :
-  proto::or_&lt;
-    proto::when&lt;proto::terminal&lt;proto::_&gt;, mpl::next&lt;proto::_state&gt;()&gt;,
-    proto::otherwise&lt;proto::fold&lt;proto::_, proto::_state, CountLeaves&gt; &gt;
+  <classname>proto::or_</classname>&lt;
+    proto::when&lt;<classname>proto::terminal</classname>&lt;<classname>proto::_</classname>&gt;, mpl::next&lt;<classname>proto::_state</classname>&gt;()&gt;,
+    proto::otherwise&lt;<classname>proto::fold</classname>&lt;<classname>proto::_</classname>, <classname>proto::_state</classname>, CountLeaves&gt; &gt;
   &gt;
 {};</programlisting>
           </para>
@@ -31,20 +39,27 @@ struct CountLeaves :
             In <computeroutput>proto::when&lt;G, T&gt;</computeroutput>, when <computeroutput>T</computeroutput>
             is a class type it is a <conceptname>PrimitiveTransform</conceptname> and the following equivalencies hold:
           </para>
-          <para>
-            <computeroutput>proto::when&lt;G,T&gt;::impl&lt;E,S,V&gt;::type</computeroutput> is the same as
-            <computeroutput>T::impl&lt;E,S,V&gt;::type</computeroutput>.
-          </para>
-          <para>
-            <computeroutput>proto::when&lt;G,T&gt;()(e,s,v)</computeroutput> is the same as
-            <computeroutput>T()(e,s,v)</computeroutput>.
-          </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+                <computeroutput>boost::result_of&lt;proto::when&lt;G,T&gt;(E,S,V)&gt;::type</computeroutput> is the same as
+                <computeroutput>boost::result_of&lt;T(E,S,V)&gt;::type</computeroutput>.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <computeroutput>proto::when&lt;G,T&gt;()(e,s,v)</computeroutput> is the same as
+                <computeroutput>T()(e,s,v)</computeroutput>.
+              </para>
+            </listitem>
+          </itemizedlist>
         </description>
         <inherit><type>PrimitiveTransform</type></inherit>
         <typedef name="proto_base_expr">
           <type>typename Grammar::proto_base_expr</type>
         </typedef>
       </struct>
+
       <struct-specialization name="when">
         <template>
           <template-type-parameter name="Grammar"/>
@@ -54,7 +69,7 @@ struct CountLeaves :
           <template-arg>Grammar</template-arg>
           <template-arg>Fun *</template-arg>
         </specialization>
-        <inherit>proto::when&lt; Grammar, Fun &gt;</inherit>
+        <inherit><classname>proto::when</classname>&lt; Grammar, Fun &gt;</inherit>
         <purpose>A specialization that treats function pointer <conceptname>Transform</conceptname>s as if they
           were function type <conceptname>Transform</conceptname>s.</purpose>
         <description>
@@ -88,7 +103,7 @@ struct CountLeaves :
         <description>
           <para>
             Use <computeroutput>proto::when&lt;&gt;</computeroutput> to override a grammar's default
-            transform with a custom transform. It is for used when composing larger transforms by associating
+            transform with a custom transform. It is for use when composing larger transforms by associating
             smaller transforms with individual rules in your grammar.
           </para>
           <para>
@@ -123,7 +138,7 @@ struct CountLeaves :
             <type>typename mpl::if_&lt;<classname>proto::is_callable</classname>&lt;R&gt;,call_,make_&gt;::type</type>
           </typedef>
           <typedef name="result_type">
-            <type>typename which::template impl&lt; Expr, State, Data &gt;::result_type</type>
+            <type>typename boost::result_of&lt;which(Expr, State, Data)&gt;::type</type>
           </typedef>
           <method-group name="public member functions">
             <method name="operator()" cv="const">
@@ -148,7 +163,7 @@ struct CountLeaves :
               </parameter>
               <description>
                 <para>
-                  Evaluate <computeroutput>R(A0,A1,...)</computeroutput> as a transform either with
+                  Evaluate <computeroutput>R(A...)</computeroutput> as a transform either with
                   <computeroutput><classname>proto::call&lt;&gt;</classname></computeroutput> or with
                   <computeroutput><classname>proto::make&lt;&gt;</classname></computeroutput> depending
                   on whether <computeroutput><classname>proto::is_callable</classname>&lt;R&gt;::value</computeroutput>
@@ -170,7 +185,7 @@ struct CountLeaves :
           </method-group>
         </struct>
         <typedef name="proto_base_expr">
-          <type>typenme Grammar::proto_base_expr</type>
+          <type>typename Grammar::proto_base_expr</type>
         </typedef>
       </struct-specialization>
       
@@ -193,9 +208,9 @@ struct CountLeaves :
             <programlisting>// Count the terminals in an expression tree.
 // Must be invoked with initial state == mpl::int_&lt;0&gt;().
 struct CountLeaves :
-  proto::or_&lt;
-    proto::when&lt;proto::terminal&lt;proto::_&gt;, mpl::next&lt;proto::_state&gt;()&gt;,
-    proto::otherwise&lt;proto::fold&lt;proto::_, proto::_state, CountLeaves&gt; &gt;
+  <classname>proto::or_</classname>&lt;
+    proto::when&lt;<classname>proto::terminal</classname>&lt;<classname>proto::_</classname>&gt;, mpl::next&lt;<classname>proto::_state</classname>&gt;()&gt;,
+    proto::otherwise&lt;<classname>proto::fold</classname>&lt;<classname>proto::_</classname>, <classname>proto::_state</classname>, CountLeaves&gt; &gt;
   &gt;
 {};</programlisting>
           </para>

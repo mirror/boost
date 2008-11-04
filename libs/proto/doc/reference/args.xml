@@ -2,9 +2,11 @@
 <header name="boost/proto/args.hpp">
   <para>
     Contains definitions of the <computeroutput>
-    <classname alt="boost::proto::term">proto::term&lt;&gt;</classname></computeroutput> and <computeroutput>
-    <classname alt="boost::proto::listN">proto::list<replaceable>N</replaceable>&lt;&gt;</classname>
-    </computeroutput> class templates.</para>
+    <classname alt="boost::proto::term">proto::term&lt;&gt;</classname></computeroutput>,
+    <computeroutput><classname alt="boost::proto::listN">proto::list1&lt;&gt;</classname></computeroutput>,
+    <computeroutput><classname alt="boost::proto::listN">proto::list2&lt;&gt;</classname></computeroutput>, etc.
+    class templates.
+  </para>
 
   <namespace name="boost">
     <namespace name="proto">
@@ -12,7 +14,7 @@
       <!-- proto::term<> -->
       <struct name="term">
         <template>
-          <template-type-parameter name="Arg0"/>
+          <template-type-parameter name="T"/>
         </template>
         <purpose>A type sequence, for use as the 2<superscript>nd</superscript> parameter to the <computeroutput>
           <classname alt="proto::expr">proto::expr&lt;&gt;</classname></computeroutput> class template.</purpose>
@@ -28,7 +30,7 @@
           <type>const long</type>
         </data-member>
         <typedef name="child0">
-          <type>Arg0</type>
+          <type>T</type>
         </typedef>
       </struct>
 
@@ -37,13 +39,18 @@
         <template>
           <template-type-parameter name="Arg" pack="1"/>
         </template>
-        <purpose>A type sequence, for use as the 2<superscript>nd</superscript> parameter to the <computeroutput>
-          <classname alt="proto::expr">proto::expr&lt;&gt;</classname></computeroutput> class template.</purpose>
+        <purpose><computeroutput>proto::list1&lt;&gt;</computeroutput>, <computeroutput>proto::list2&lt;&gt;</computeroutput>, etc.,
+          are type sequences for use as the 2<superscript>nd</superscript> parameter to the <computeroutput>
+          <classname>proto::expr&lt;&gt;</classname></computeroutput> class template.</purpose>
         <description>
           <para>
-            A type sequence, for use as the 2<superscript>nd</superscript> parameter to the <computeroutput>
-            <classname alt="proto::expr">proto::expr&lt;&gt;</classname></computeroutput> class template. The
+            Type sequences, for use as the 2<superscript>nd</superscript> parameter to the <computeroutput>
+            <classname>proto::expr&lt;&gt;</classname></computeroutput> class template. The
             types in the sequence correspond to the children of a node in an expression tree.
+            There is no type literally named "<computeroutput>listN</computeroutput>"; rather, there is
+            a set of types named
+            <computeroutput>proto::list1&lt;&gt;</computeroutput>,
+            <computeroutput>proto::list2&lt;&gt;</computeroutput>, etc.
           </para>
         </description>
         <data-member name="arity" specifiers="static">

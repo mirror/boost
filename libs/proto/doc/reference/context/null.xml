@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <header name="boost/proto/context/null.hpp">
-  <para>Definintion of
+  <para>
+    Definintion of
     <computeroutput><classname alt="boost::proto::context::null_context">proto::context::null_context&lt;&gt;</classname></computeroutput>,
-    an evaluation context for <functionname alt="boost::proto::eval">proto::eval()</functionname> that simply evaluates
-    each child expression, doesn't combine the results at all, and returns void. </para>
+    an evaluation context for
+    <computeroutput><functionname alt="boost::proto::eval">proto::eval()</functionname></computeroutput>
+    that simply evaluates each child expression, doesn't combine the results at all, and returns void.
+  </para>
   <namespace name="boost">
     <namespace name="proto">
       <namespace name="context">

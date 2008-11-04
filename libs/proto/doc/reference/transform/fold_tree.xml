@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <header name="boost/proto/transform/fold_tree.hpp">
-  <para>Contains definition of the fold_tree&lt;&gt; and reverse_fold_tree&lt;&gt; transforms. </para>
+  <para>
+    Contains definition of the
+    <computeroutput>
+      <classname alt="boost::proto::fold_tree">proto::fold_tree&lt;&gt;</classname>
+    </computeroutput> and
+    <computeroutput>
+      <classname alt="boost::proto::reverse_fold_tree">proto::reverse_fold_tree&lt;&gt;</classname>
+    </computeroutput>
+    transforms.
+  </para>
   <namespace name="boost">
     <namespace name="proto">
       <struct name="fold_tree">
@@ -25,11 +34,11 @@
             <computeroutput>recurse_if_&lt;&gt;</computeroutput> helper, defined as follows:
             <programlisting> template&lt;typename Tag, typename Fun&gt;
 struct recurse_if_ :
-  proto::if_&lt;
+  <classname>proto::if_</classname>&lt;
     // If the current node has type type "Tag" ...
-    boost::is_same&lt;proto::tag_of&lt;proto::_&gt;, Tag&gt;(),
+    boost::is_same&lt;<classname>proto::tag_of</classname>&lt;<classname>proto::_</classname>&gt;, Tag&gt;(),
     // ... recurse, otherwise ...
-    proto::fold&lt;proto::_, proto::_state, recurse_if_&lt;Tag, Fun&gt; &gt;,
+    <classname>proto::fold</classname>&lt;<classname>proto::_</classname>, <classname>proto::_state</classname>, recurse_if_&lt;Tag, Fun&gt; &gt;,
     // ... apply the Fun transform.
     Fun
   &gt;
@@ -84,11 +93,11 @@ struct recurse_if_ :
             a <computeroutput>recurse_if_&lt;&gt;</computeroutput> helper, defined as follows:
             <programlisting> template&lt;typename Tag, typename Fun&gt;
 struct recurse_if_ :
-  proto::if_&lt;
+  <classname>proto::if_</classname>&lt;
     // If the current node has type type "Tag" ...
-    boost::is_same&lt;proto::tag_of&lt;proto::_&gt;, Tag&gt;(),
+    boost::is_same&lt;<classname>proto::tag_of</classname>&lt;<classname>proto::_</classname>&gt;, Tag&gt;(),
     // ... recurse, otherwise ...
-    proto::reverse_fold&lt;proto::_, proto::_state, recurse_if_&lt;Tag, Fun&gt; &gt;,
+    <classname>proto::reverse_fold</classname>&lt;<classname>proto::_</classname>, <classname>proto::_state</classname>, recurse_if_&lt;Tag, Fun&gt; &gt;,
     // ... apply the Fun transform.
     Fun
   &gt;
@@ -98,7 +107,7 @@ struct recurse_if_ :
             With <computeroutput>recurse_if_&lt;&gt;</computeroutput> as defined above,
             <computeroutput>proto::reverse_fold_tree&lt;Sequence, State0, Fun&gt;()(expr, state, data)</computeroutput>
             is equivalent to:
-            <programlisting>proto::reverse_fold&lt;
+            <programlisting><classname>proto::reverse_fold</classname>&lt;
   Sequence,
   State0,
   recurse_if_&lt;typename Expr::proto_tag, Fun&gt;

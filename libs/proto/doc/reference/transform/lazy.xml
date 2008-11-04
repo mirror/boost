@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <header name="boost/proto/transform/lazy.hpp">
-  <para>Contains definition of the lazy&lt;&gt; transform. </para>
+  <para>
+    Contains definition of the
+    <computeroutput>
+      <classname alt="boost::proto::lazy">proto::lazy&lt;&gt;</classname>
+    </computeroutput> transform.
+  </para>
   <namespace name="boost">
     <namespace name="proto">
       <struct name="lazy">
@@ -46,24 +51,30 @@
             <type><replaceable>see-below</replaceable></type>
             <description>
               <para>
-                <computeroutput>proto::lazy&lt;T&gt;::impl&lt;Expr,State,Data&gt;::result_type</computeroutput> 
+                <computeroutput><classname>proto::lazy</classname>&lt;T&gt;::impl&lt;Expr,State,Data&gt;::result_type</computeroutput> 
                 is calculated as follows:
                 <itemizedlist>
                   <listitem>
                     <para>
                       If <computeroutput>T</computeroutput> if of the form
-                      <computeroutput>O(T0,...TN)</computeroutput>, then let <computeroutput>O'</computeroutput>
-                      be <computeroutput>boost::result_of&lt;<classname>proto::make</classname>&lt;O&gt;(Expr, State, Data)&gt;::type</computeroutput>.
+                      <computeroutput>O(A<subscript>0</subscript>,...A<subscript>n</subscript>)</computeroutput>, then let <computeroutput>O'</computeroutput>
+                      be <computeroutput>boost::result_of&lt;<classname>proto::make</classname>&lt;O&gt;(Expr, State, Data)&gt;::type</computeroutput>
+                      and let <computeroutput>T'</computeroutput> be <computeroutput>O'(A<subscript>0</subscript>,...A<subscript>n</subscript>)</computeroutput>.
                     </para>
                   </listitem>
                   <listitem>
                     <para>
-                      Otherwise, let <computeroutput>O'</computeroutput>
+                      Otherwise, let <computeroutput>T'</computeroutput>
                       be <computeroutput>boost::result_of&lt;<classname>proto::make</classname>&lt;T&gt;(Expr, State, Data)&gt;::type</computeroutput>.
                     </para>
                   </listitem>
                 </itemizedlist>
-                The result type is <computeroutput>boost::result_of&lt;<classname>proto::call</classname>&lt;O'(T0,...TN)&gt;(Expr, State, Data)&gt;::type</computeroutput>.
+                <para>
+                  The result type is
+                  <computeroutput>
+                    boost::result_of&lt;<classname>proto::call</classname>&lt;T'&gt;(Expr, State, Data)&gt;::type
+                  </computeroutput>.
+                </para>
               </para>
             </description>
           </typedef>
@@ -81,18 +92,19 @@
               </parameter>
               <description>
                 <para>
-                  <computeroutput>proto::lazy&lt;T&gt;::impl&lt;Expr,State,Data&gt;::operator()</computeroutput> behaves as follows:
+                  <computeroutput><classname>proto::lazy</classname>&lt;T&gt;::impl&lt;Expr,State,Data&gt;::operator()</computeroutput> behaves as follows:
                   <itemizedlist>
                     <listitem>
                       <para>
                         If <computeroutput>T</computeroutput> if of the form
-                        <computeroutput>O(T0,...TN)</computeroutput>, then let <computeroutput>O'</computeroutput>
-                        be <computeroutput>boost::result_of&lt;<classname>proto::make</classname>&lt;O&gt;(Expr, State, Data)&gt;::type</computeroutput>.
+                        <computeroutput>O(A<subscript>0</subscript>,...A<subscript>n</subscript>)</computeroutput>, then let <computeroutput>O'</computeroutput>
+                        be <computeroutput>boost::result_of&lt;<classname>proto::make</classname>&lt;O&gt;(Expr, State, Data)&gt;::type</computeroutput>
+                        and let <computeroutput>T'</computeroutput> be <computeroutput>O'(A<subscript>0</subscript>,...A<subscript>n</subscript>)</computeroutput>.
                       </para>
                     </listitem>
                     <listitem>
                       <para>
-                        Otherwise, let <computeroutput>O'</computeroutput>
+                        Otherwise, let <computeroutput>T'</computeroutput>
                         be <computeroutput>boost::result_of&lt;<classname>proto::make</classname>&lt;T&gt;(Expr, State, Data)&gt;::type</computeroutput>.
                       </para>
                     </listitem>
@@ -100,9 +112,11 @@
                 </para>
               </description>
               <returns>
-                <computeroutput>
-                  <classname>proto::call</classname>&lt;O'(T0,...TN)&gt;()(expr, state, data)
-                </computeroutput>
+                <para>
+                  <computeroutput>
+                    <classname>proto::call</classname>&lt;T'&gt;()(expr, state, data)
+                  </computeroutput>
+                </para>
               </returns>
             </method>
           </method-group>
