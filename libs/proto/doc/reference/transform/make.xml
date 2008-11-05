@@ -146,7 +146,7 @@ struct Foo :
                             X<subscript>i</subscript>'
                           </computeroutput> be
                           <computeroutput>
-                            <classname>proto::make</classname>&lt;X<subscript>i</subscript>&gt;::impl&lt;Expr, State, Data&gt;::result_type
+                            boost::result_of&lt;<classname>proto::make</classname>&lt;X<subscript>i</subscript>&gt;(Expr, State, Data)&gt;::type
                           </computeroutput>
                           (which evaluates this procedure recursively). Note whether any substitutions took place during
                           this operation.
@@ -179,7 +179,7 @@ struct Foo :
                       Otherwise, if <computeroutput>O</computeroutput> is a <conceptname>Transform</conceptname>, then let
                       the result type be
                       <computeroutput>
-                        <classname>proto::when</classname>&lt;<classname>_</classname>, O&gt;::impl&lt;Expr, State, Data&gt;::result_type
+                        boost::result_of&lt;<classname>proto::when</classname>&lt;<classname>_</classname>, O&gt;(Expr, State, Data)&gt;::type
                       </computeroutput>.
                       Note that a substitution took place.
                     </para>
@@ -221,7 +221,7 @@ struct Foo :
                   <itemizedlist>
                     <listitem>
                       <para>
-                        If <computeroutput>T</computeroutput> if of the form
+                        If <computeroutput>T</computeroutput> is of the form
                         <computeroutput>O(A<subscript>0</subscript>,...A<subscript>n</subscript>)</computeroutput>, then:
                       </para>
                       <itemizedlist>

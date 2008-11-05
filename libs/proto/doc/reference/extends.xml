@@ -289,7 +289,7 @@
     </macro-parameter>
     <macro-parameter name="Derived"/>
     <macro-parameter name="Domain"/>
-    <purpose>For creating expression wrappers that to a Proto expression template, like
+    <purpose>For creating expression wrappers that add members to a Proto expression template, like
       <computeroutput><classname alt="boost::proto::extends">proto::extends&lt;&gt;</classname></computeroutput>,
       but while retaining POD-ness of the expression wrapper.</purpose>
     <description>
