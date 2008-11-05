@@ -50,5 +50,8 @@ boostbook standalone
         # Set this one for PDF generation *only*:
         # default png graphics are awful in PDF form,
         # better use SVG's instead:
-        # <format>pdf:<xsl:param>admon.graphics.extension=".svg"
+        #<format>pdf:<xsl:param>admon.graphics.extension=".svg"
+        #<format>pdf:<xsl:param>img.src.path="C:/Program Files/docbook-xsl-1.73.2/images/"
+        #<format>pdf:<xsl:param>admon.graphics.path="C:/Program Files/docbook-xsl-1.73.2/images/"
+        #<format>pdf:<xsl:param>callout.graphics.path="C:/Program Files/docbook-xsl-1.73.2/images/callouts/"
     ;

@@ -14,7 +14,7 @@
           <purpose>A <conceptname>PolymorphicFunctionObject</conceptname> type for evaluating a given Proto
             expression with a given context.</purpose>
           <inherit>
-            <type>proto::callable</type>
+            <type><classname>proto::callable</classname></type>
           </inherit>
           <struct-specialization name="result">
             <template>

@@ -171,7 +171,7 @@ Context classes are nothing more than a collection of specializations of a
 nested `eval<>` class template. Each specialization handles a different
 expression type.
 
-In the [link boost_proto.users_guide.hello_calculator Hello Calculator]
+In the [link boost_proto.users_guide.getting_started.hello_calculator Hello Calculator]
 section, we saw an example of a user-defined context class for evaluating
 calculator expressions. That context class was implemented with the help
 of Proto's _callable_context_. If we were to implement it from scratch, it
@@ -246,7 +246,7 @@ expressions as follows:
 
 Defining a context from scratch this way is tedious and verbose, but it gives
 you complete control over how the expression is evaluated. The context class in
-the [link boost_proto.users_guide.hello_calculator Hello Calculator] example
+the [link boost_proto.users_guide.getting_started.hello_calculator Hello Calculator] example
 was much simpler. In the next section we'll see the helper class Proto provides
 to ease the job of implementing context classes.
 
@@ -260,15 +260,15 @@ Proto provides some ready-made context classes that you can use as-is, or that
 you can use to help while implementing your own contexts. They are:
 
 [variablelist
-  [ [[link boost_proto.users_guide.expression_evaluation.canned_contexts.default_context [^default_context]]]
+  [ [[link boost_proto.users_guide.back_end.expression_evaluation.canned_contexts.default_context [^default_context]]]
     [An evaluation context that assigns the usual C++ meanings to all the
      operators. For example, addition nodes are handled by evaluating the
      left and right children and then adding the results. The _default_context_
      uses Boost.Typeof to deduce the types of the expressions it evaluates.] ]
-  [ [[link boost_proto.users_guide.expression_evaluation.canned_contexts.null_context [^null_context]]]
+  [ [[link boost_proto.users_guide.back_end.expression_evaluation.canned_contexts.null_context [^null_context]]]
     [A simple context that recursively evaluates children but does not combine
      the results in any way and returns void.] ]
-  [ [[link boost_proto.users_guide.expression_evaluation.canned_contexts.callable_context [^callable_context<>]]]
+  [ [[link boost_proto.users_guide.back_end.expression_evaluation.canned_contexts.callable_context [^callable_context<>]]]
     [A helper that simplifies the job of writing context classes. Rather than
      writing template specializations, with _callable_context_ you write a
      function object with an overloaded function call operator. Any expressions
@@ -452,7 +452,7 @@ Rather than an evaluation context in its own right, _callable_context_ is more
 properly thought of as a context adaptor. To use it, you must define your own
 context that inherits from _callable_context_.
 
-In the [link boost_proto.users_guide.expression_evaluation.canned_contexts.null_context [^null_context]]
+In the [link boost_proto.users_guide.back_end.expression_evaluation.canned_contexts.null_context [^null_context]]
 section, we saw how to implement an evaluation context that increments all the
 integers within an expression tree. Here is how to do the same thing with the
 _callable_context_:
@@ -1472,7 +1472,7 @@ The `proto::transform_impl<>` base class is a convenience. It provides some nest
 
 You'll notice that `_child_c::impl::operator()` takes arguments of types `expr_param`, `state_param`, and `data_param`. The typedefs make it easy to accept arguments by reference or const reference accordingly.
 
-The only other interesting bit is the `is_callable<>` specialization, which will be described in the [link boost_proto.users_guide.expression_transformation.is_callable next section].
+The only other interesting bit is the `is_callable<>` specialization, which will be described in the [link boost_proto.users_guide.back_end.expression_transformation.is_callable next section].
 
 [endsect]
 
