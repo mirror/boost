@@ -15,9 +15,12 @@ namespace fs = boost::filesystem;
 
 namespace
 {
-  boost::regex url_regex(
+  boost::regex html_url_regex(
     "<\\s*[^>]*\\s+(?:HREF|SRC)" // HREF or SRC
     "\\s*=\\s*(['\"])(.*?)\\1",
+    boost::regbase::normal | boost::regbase::icase);
+  boost::regex css_url_regex(
+    "(\\@import\\s*[\"']|url\\s*\\(\\s*[\"']?)([^\"')]*)",
     boost::regbase::normal | boost::regbase::icase);
 
   // Regular expression for parsing URLS from:
@@ -26,15 +29,36 @@ namespace
     "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$",
     boost::regbase::normal);
 
-  // Decode percent encoded characters and html escapsed ampersands,
-  // returns an empty string if there's an error.
-  // The urls should really be fully HTML decoded at the beginning.
-  std::string decode_url(std::string const& url_path) {
+  // Decode html escapsed ampersands, returns an empty string if there's an error.
+  std::string decode_ampersands(std::string const& url_path) {
     std::string::size_type pos = 0, next;
     std::string result;
     result.reserve(url_path.length());
 
-    while((next = url_path.find_first_of("&%", pos)) != std::string::npos) {
+    while((next = url_path.find('&', pos)) != std::string::npos) {
+      result.append(url_path, pos, next - pos);
+      pos = next;
+      if(url_path.substr(pos, 5) == "&amp;") {
+        result += '&'; pos += 5;
+      }
+      else {
+        result += '&'; pos += 1;
+      }
+      break;
+    }
+
+    result.append(url_path, pos, url_path.length());
+
+    return result;
+  }
+
+  // Decode percent encoded characters, returns an empty string if there's an error.
+  std::string decode_percents(std::string const& url_path) {
+    std::string::size_type pos = 0, next;
+    std::string result;
+    result.reserve(url_path.length());
+
+    while((next = url_path.find('%', pos)) != std::string::npos) {
       result.append(url_path, pos, next - pos);
       pos = next;
       switch(url_path[pos]) {
@@ -47,21 +71,16 @@ namespace
           pos = next + 3;
           break;
         }
-        case '&': {
-          if(url_path.substr(pos, 5) == "&amp;") {
-            result += '&'; pos += 5;
-          }
-          else {
-            result += '&'; pos += 1;
-          }
-          break;
-        }
       }
     }
 
     result.append(url_path, pos, url_path.length());
 
     return result;
+  }
+
+  bool is_css(const path & p) {
+      return p.extension() == ".css";
   }
 
 } // unnamed namespace
@@ -77,6 +96,9 @@ namespace boost
      : m_broken_errors(0), m_unlinked_errors(0), m_invalid_errors(0),
        m_bookmark_errors(0)
    {
+       // HTML signatures are already registered by the base class,
+       // 'hypertext_inspector' 
+       register_signature(".css");
    }
 
 //  inspect (all)  -----------------------------------------------------------//
@@ -90,7 +112,7 @@ namespace boost
         m_paths[ relative_to( full_path, fs::initial_path() ) ] |= m_present;
     }
 
-//  inspect ( .htm, .html )  -------------------------------------------------//
+//  inspect ( .htm, .html, .shtml, .css )  -----------------------------------//
 
    void link_check::inspect(
       const string & library_name,
@@ -107,6 +129,9 @@ namespace boost
       string::const_iterator end( contents.end() );
       boost::match_results< string::const_iterator > what;
       boost::match_flag_type flags = boost::match_default;
+
+      boost::regex const& url_regex =
+          is_css(full_path) ? css_url_regex : html_url_regex;
 
       while( boost::regex_search( start, end, what, url_regex, flags) )
       {
@@ -127,11 +152,27 @@ namespace boost
       const path & source_path, bool no_link_errors )
         // precondition: source_path.is_complete()
     {
-      boost::smatch m;
-      if(!boost::regex_match(url, m, url_decompose_regex)) {
+      if(!no_link_errors && url.empty()) {
+        ++m_invalid_errors;
+        error( library_name, source_path, string(name()) + " empty URL." );
+        return;
+      }
+
+      // Decode ampersand encoded characters.
+      string decoded_url = is_css(source_path) ? url : decode_ampersands(url);
+      if(decoded_url.empty()) {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL: " + url );
+          error( library_name, source_path, string(name()) + " invalid URL (invalid ampersand encodings): " + url );
+        }
+        return;
+      }
+    
+      boost::smatch m;
+      if(!boost::regex_match(decoded_url, m, url_decompose_regex)) {
+        if(!no_link_errors) {
+          ++m_invalid_errors;
+          error( library_name, source_path, string(name()) + " invalid URL: " + decoded_url );
         }
         return;
       }
@@ -156,7 +197,7 @@ namespace boost
           if(!authority_matched) {
             if(!no_link_errors) {
               ++m_invalid_errors;
-              error( library_name, source_path, string(name()) + " no hostname: " + url );
+              error( library_name, source_path, string(name()) + " no hostname: " + decoded_url );
             }
           }
 
@@ -165,13 +206,19 @@ namespace boost
         else if(scheme == "file") {
           if(!no_link_errors) {
             ++m_invalid_errors;
-            error( library_name, source_path, string(name()) + " invalid URL (hardwired file): " + url );
+            error( library_name, source_path, string(name()) + " invalid URL (hardwired file): " + decoded_url );
           }
         }
-        else if(!(scheme == "mailto" || scheme == "ftp" || scheme == "news" || scheme == "javascript")) {
+        else if(scheme == "mailto" || scheme == "ftp" || scheme == "news" || scheme == "javascript") {
+          if ( !no_link_errors && is_css(source_path) ) {
+            ++m_invalid_errors;
+            error( library_name, source_path, string(name()) + " invalid protocol for css: " + decoded_url );
+          }
+        }
+        else {
           if(!no_link_errors) {
             ++m_invalid_errors;
-            error( library_name, source_path, string(name()) + " unknown protocol: " + url );
+            error( library_name, source_path, string(name()) + " unknown protocol: " + decoded_url );
           }
         }
 
@@ -182,16 +229,24 @@ namespace boost
       if(authority_matched) {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL (hostname without protocol): " + url );
+          error( library_name, source_path, string(name()) + " invalid URL (hostname without protocol): " + decoded_url );
         }
       }
 
       // Check the fragment identifier
-      if(fragment_matched) {
-        if ( !no_link_errors && fragment.find( '#' ) != string::npos )
-        {
-          ++m_bookmark_errors;
-          error( library_name, source_path, string(name()) + " invalid bookmark: " + url );
+      if ( fragment_matched ) {
+        if ( is_css(source_path) ) {
+            if ( !no_link_errors ) {
+              ++m_invalid_errors;
+              error( library_name, source_path, string(name()) + " fragment link in CSS: " + decoded_url );
+            }
+        }
+        else {
+          if ( !no_link_errors && fragment.find( '#' ) != string::npos )
+          {
+            ++m_bookmark_errors;
+            error( library_name, source_path, string(name()) + " invalid bookmark: " + decoded_url );
+          }
         }
 
         // No more to do if it's just a fragment identifier
@@ -199,26 +254,26 @@ namespace boost
       }
 
       // Detect characters banned by RFC2396:
-      if ( !no_link_errors && url.find_first_of( " <>\"{}|\\^[]'" ) != string::npos )
+      if ( !no_link_errors && decoded_url.find_first_of( " <>\"{}|\\^[]'" ) != string::npos )
       {
         ++m_invalid_errors;
-        error( library_name, source_path, string(name()) + " invalid character in URL: " + url );
+        error( library_name, source_path, string(name()) + " invalid character in URL: " + decoded_url );
       }
 
       // Check that we actually have a path.
       if(url_path.empty()) {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL (empty path in relative url): " + url );
+          error( library_name, source_path, string(name()) + " invalid URL (empty path in relative url): " + decoded_url );
         }
       }
 
       // Decode percent and ampersand encoded characters.
-      string decoded_path = decode_url(url_path);
+      string decoded_path = decode_percents(url_path);
       if(decoded_path.empty()) {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL (invalid character encodings): " + url );
+          error( library_name, source_path, string(name()) + " invalid URL (invalid character encodings): " + decoded_url );
         }
         return;
       }
@@ -234,7 +289,7 @@ namespace boost
       {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL (error resolving path): " + url );
+          error( library_name, source_path, string(name()) + " invalid URL (error resolving path): " + decoded_url );
         }
         return;
       }
@@ -256,7 +311,7 @@ namespace boost
       if ( !no_link_errors && (itr->second & m_present) == 0 )
       {
         ++m_broken_errors;
-        error( library_name, source_path, string(name()) + " broken link: " + url );
+        error( library_name, source_path, string(name()) + " broken link: " + decoded_url );
       }
     }
 
@@ -271,7 +326,8 @@ namespace boost
        if ( (itr->second & m_linked_to) != m_linked_to
          && (itr->second & m_nounlinked_errors) != m_nounlinked_errors
          && (itr->first.rfind( ".html" ) == itr->first.size()-5
-          || itr->first.rfind( ".htm" ) == itr->first.size()-4)
+          || itr->first.rfind( ".htm" ) == itr->first.size()-4
+          || itr->first.rfind( ".css" ) == itr->first.size()-4)
          // because they may be redirectors, it is OK if these are unlinked:
          && itr->first.rfind( "index.html" ) == string::npos
          && itr->first.rfind( "index.htm" ) == string::npos )

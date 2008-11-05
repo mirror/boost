@@ -104,19 +104,29 @@ namespace
 
 //  get info (as a string) if inspect_root is svn working copy  --------------//
 
-  string info( const fs::path & inspect_root )
-  {
-    string rev;
-    string repos;
-    fs::path entries( inspect_root / ".svn" / "entries" );
-    fs::ifstream entries_file( entries );
-    if ( entries_file )
+  void extract_info( fs::ifstream & entries_file, string & rev, string & repos )
     {
       std::getline( entries_file, rev );
       std::getline( entries_file, rev );
       std::getline( entries_file, rev );
       std::getline( entries_file, rev );    // revision number as a string
       std::getline( entries_file, repos );  // repository as a string
+    }
+
+  string info( const fs::path & inspect_root )
+  {
+    string rev( "?" );
+    string repos( "unknown" );
+    fs::path entries( inspect_root / ".svn" / "entries" );
+    fs::ifstream entries_file( entries );
+    if ( entries_file )
+      extract_info( entries_file, rev, repos );
+    else
+    {
+      entries = inspect_root / ".." / "svn_info" / ".svn" / "entries";
+      fs::ifstream entries_file( entries );
+      if ( entries_file )
+        extract_info( entries_file, rev, repos );
     }
     return repos + " at revision " + rev;
   }
@@ -146,6 +156,8 @@ namespace
       && leaf != ".htaccess"
       // ignore svn files:
       && leaf != ".svn"
+      // ignore OS X directory info files:
+      && leaf != ".DS_Store"
       ;
   }
 
