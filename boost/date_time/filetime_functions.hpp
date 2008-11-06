@@ -74,7 +74,7 @@ extern "C" {
 #elif defined(BOOST_NO_GETSYSTEMTIMEASFILETIME)
         system_time st;
         GetSystemTime(&st);
-        SystemTimeToFileTime(&st, ftp);
+        SystemTimeToFileTime(&st, &ft);
 #else
         GetSystemTimeAsFileTime(&ft);
 #endif
