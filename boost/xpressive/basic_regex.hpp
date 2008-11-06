@@ -24,7 +24,7 @@
 // Doxygen can't handle proto :-(
 #ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
 # include <boost/xpressive/detail/static/grammar.hpp>
-# include <boost/xpressive/proto/extends.hpp>
+# include <boost/proto/extends.hpp>
 #endif
 
 #if BOOST_XPRESSIVE_HAS_MS_STACK_GUARD
@@ -85,7 +85,7 @@ public:
     /// \return *this
     basic_regex<BidiIter> &operator =(basic_regex<BidiIter> const &that)
     {
-        proto::arg(*this) = proto::arg(that);
+        proto::value(*this) = proto::value(that);
         return *this;
     }
 
@@ -123,14 +123,14 @@ public:
     ///
     std::size_t mark_count() const
     {
-        return proto::arg(*this) ? proto::arg(*this)->mark_count_ : 0;
+        return proto::value(*this) ? proto::value(*this)->mark_count_ : 0;
     }
 
     /// Returns a token which uniquely identifies this regular expression.
     ///
     regex_id_type regex_id() const
     {
-        return proto::arg(*this) ? proto::arg(*this)->xpr_.get() : 0;
+        return proto::value(*this) ? proto::value(*this)->xpr_.get() : 0;
     }
 
     /// Swaps the contents of this basic_regex object with another.
@@ -145,7 +145,7 @@ public:
     /// \throw      nothrow
     void swap(basic_regex<BidiIter> &that) // throw()
     {
-        proto::arg(*this).swap(proto::arg(that));
+        proto::value(*this).swap(proto::value(that));
     }
 
     /// Factory method for building a regex object from a range of characters.
@@ -215,7 +215,7 @@ private:
         bool success = false, stack_error = false;
         __try
         {
-            success = proto::arg(*this)->xpr_->match(state);
+            success = proto::value(*this)->xpr_->match(state);
         }
         __except(_exception_code() == 0xC00000FDUL)
         {
@@ -225,7 +225,7 @@ private:
         detail::throw_on_stack_error(stack_error);
         return success;
         #else
-        return proto::arg(*this)->xpr_->match(state);
+        return proto::value(*this)->xpr_->match(state);
         #endif
     }
 
@@ -233,7 +233,7 @@ private:
     /// INTERNAL ONLY
     bool invalid_() const
     {
-        return !proto::arg(*this) || !proto::arg(*this)->xpr_;
+        return !proto::value(*this) || !proto::value(*this)->xpr_;
     }
 
     // Compiles valid static regexes into a state machine.
@@ -241,7 +241,7 @@ private:
     template<typename Expr>
     void compile_(Expr const &expr, mpl::true_)
     {
-        detail::static_compile(expr, proto::arg(*this).get());
+        detail::static_compile(expr, proto::value(*this).get());
     }
 
     // No-op for invalid static regexes.

@@ -32,7 +32,7 @@ struct core_access
 
     static std::size_t get_hidden_mark_count(basic_regex<BidiIter> const &rex)
     {
-        return proto::arg(rex)->hidden_mark_count_;
+        return proto::value(rex)->hidden_mark_count_;
     }
 
     static bool invalid(basic_regex<BidiIter> const &rex)
@@ -48,7 +48,7 @@ struct core_access
     static shared_ptr<detail::regex_impl<BidiIter> > const &
     get_regex_impl(basic_regex<BidiIter> const &rex)
     {
-        return proto::arg(rex).get();
+        return proto::value(rex).get();
     }
 
     static void init_sub_match_vector

@@ -57,8 +57,8 @@
 #include <boost/xpressive/detail/utility/literals.hpp>
 #include <boost/xpressive/detail/utility/algorithm.hpp>
 #include <boost/xpressive/detail/utility/counted_base.hpp>
-#include <boost/xpressive/proto/proto_fwd.hpp>
-#include <boost/xpressive/proto/eval.hpp>
+#include <boost/proto/proto_fwd.hpp>
+#include <boost/proto/eval.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -668,11 +668,11 @@ public:
     {
         typedef typename proto::result_of::left<Arg>::type left_type;
         typedef typename proto::result_of::right<Arg>::type right_type;
-        typedef typename proto::result_of::arg<left_type>::type arg_left_type;
-        typedef typename proto::result_of::arg<right_type>::type arg_right_type;
+        typedef typename proto::result_of::value<left_type>::type arg_left_type;
+        typedef typename proto::result_of::value<right_type>::type arg_right_type;
         BOOST_MPL_ASSERT((proto::matches<Arg, detail::ActionArgBinding>));
         BOOST_MPL_ASSERT((is_same<typename arg_left_type::type, arg_right_type>));
-        this->args_[&typeid(proto::arg(proto::left(arg)))] = &proto::arg(proto::right(arg));
+        this->args_[&typeid(proto::value(proto::left(arg)))] = &proto::value(proto::right(arg));
         return *this;
     }
 

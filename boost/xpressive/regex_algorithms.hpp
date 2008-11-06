@@ -51,7 +51,7 @@ namespace boost { namespace xpressive
 /// \param end The end of the sequence.
 /// \param what The \c match_results struct into which the sub_matches will be written
 /// \param re The regular expression object to use
-/// \param flags Optional match flags, used to control how the expression is matched 
+/// \param flags Optional match flags, used to control how the expression is matched
 ///        against the sequence. (See \c match_flag_type.)
 /// \return \c true if a match is found, \c false otherwise
 /// \throw \c regex_error on stack exhaustion
@@ -569,7 +569,7 @@ inline OutIter regex_replace_impl
 ///
 /// \pre Type \c BidiIter meets the requirements of a Bidirectional Iterator (24.1.4).
 /// \pre Type \c OutIter meets the requirements of an Output Iterator (24.1.2).
-/// \pre Type \c Formatter models \c ForwardRange, <tt>Callable\<match_results\<BidiIter\> \></tt>, 
+/// \pre Type \c Formatter models \c ForwardRange, <tt>Callable\<match_results\<BidiIter\> \></tt>,
 ///      <tt>Callable\<match_results\<BidiIter\>, OutIter\></tt>, or
 ///      <tt>Callable\<match_results\<BidiIter\>, OutIter, regex_constants::match_flag_type\></tt>;
 ///      or else it is a null-terminated format string, or an expression template
