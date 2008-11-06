@@ -15,6 +15,7 @@
 */
 
 #include <ctime>
+#include <string> // to be able to convert from string literals to exceptions
 #include <stdexcept>
 #include <boost/throw_exception.hpp>
 #include <boost/date_time/compiler_config.hpp>
