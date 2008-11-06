@@ -22,15 +22,15 @@ bool failure_tests(std::string date_spec,
   try {
     d = from_simple_string(date_spec);
   }
-  catch(bad_year by){ // ex: "205-Jan-15"
+  catch(bad_year& by){ // ex: "205-Jan-15"
     result = true;
     output_str = by.what();
   }
-  catch(bad_month bm){ // ex: "2005-Jsn-15"
+  catch(bad_month& bm){ // ex: "2005-Jsn-15"
     result = true;
     output_str = bm.what();
   }
-  catch(bad_day_of_month bd){ // ex: "2005-Jan-51"
+  catch(bad_day_of_month& bd){ // ex: "2005-Jan-51"
     result = true;
     output_str = bd.what();
   }
@@ -236,7 +236,7 @@ main()
       std::cout << "Shouldn't be reached." << 
         boost::gregorian::to_simple_string(bd) << std::endl;
     }
-    catch(boost::gregorian::bad_month){
+    catch(boost::gregorian::bad_month&){
       check("bad spelling 'Jull'", true);
     }
     catch(std::exception& e){
@@ -256,7 +256,7 @@ main()
               << boost::gregorian::to_iso_string(bad_day) << std::endl;
 
   }
-  catch(boost::gregorian::bad_day_of_month) { //expected
+  catch(boost::gregorian::bad_day_of_month&) { //expected
     check("check bad day", true);
   }
   catch(std::exception& e) {
@@ -275,7 +275,7 @@ main()
               << boost::gregorian::to_iso_string(bad_day) << std::endl;
 
   }
-  catch(boost::gregorian::bad_day_of_month) { //expected
+  catch(boost::gregorian::bad_day_of_month&) { //expected
     check("check bad leap year", true);
   }
   catch(std::exception& e) {
@@ -294,7 +294,7 @@ main()
               << boost::gregorian::to_iso_string(bad_month) << std::endl;
 
   }
-  catch(boost::gregorian::bad_month) { //expected
+  catch(boost::gregorian::bad_month&) { //expected
     check("check bad month", true);
   }
   catch(std::exception& e) {

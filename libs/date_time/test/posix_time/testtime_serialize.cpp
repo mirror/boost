@@ -75,7 +75,7 @@ int main(){
     save_to(oa, td);
     save_to(oa, sv_td);
 #endif // DATE_TIME_XML_SERIALIZE
-  }catch(archive::archive_exception ae){
+  }catch(archive::archive_exception& ae){
     std::string s(ae.what());
     check("Error writing to archive: " + s, false);
     ofs.close();
@@ -107,7 +107,7 @@ int main(){
     ia >> td2;
     ia >> sv_td2;
 #endif // DATE_TIME_XML_SERIALIZE
-  }catch(archive::archive_exception ae){
+  }catch(archive::archive_exception& ae){
     std::string s(ae.what());
     check("Error readng from archive: " + s, false);
     ifs.close();

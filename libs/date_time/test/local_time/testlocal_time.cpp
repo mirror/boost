@@ -288,7 +288,7 @@ main()
         local_date_time ldt(not_a_date_time);
         tm ldt_tm = to_tm(ldt);
         check("Exception not thrown (special_value to_tm)", false);
-      }catch(std::out_of_range e){
+      }catch(std::out_of_range& e){
         check("Caught expected exception (special_value to_tm)", true);
       }catch(...){
         check("Caught un-expected exception (special_value to_tm)", false);

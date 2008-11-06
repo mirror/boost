@@ -136,7 +136,7 @@ main()
     //never reached if working -- but stops compiler warnings :-)
     std::cout << "Oops: " << to_iso_string(d9) << std::endl;
   }
-  catch (bad_day_of_month) {
+  catch (bad_day_of_month&) {
     check("day out of range", true);
   }
   try {
@@ -145,7 +145,7 @@ main()
     //never reached if working -- but stops compiler warnings :-)
     std::cout << "Oops: " << to_iso_string(d9) << std::endl;
   }
-  catch (bad_day_of_month) {
+  catch (bad_day_of_month&) {
     check("day out of range", true);
   }
 
@@ -155,7 +155,7 @@ main()
     //never reached if working -- but stops compiler warnings :-)
     std::cout << "Oops: " << to_iso_string(d20) << std::endl;
   }
-  catch (bad_day_of_month) {
+  catch (bad_day_of_month&) {
     check("day out of range", true);
   }
 
@@ -166,7 +166,7 @@ main()
     //never reached if working -- but stops compiler warnings :-)
     std::cout << "Oops: " << to_iso_string(d21) << std::endl;
   }
-  catch (bad_day_of_month) {
+  catch (bad_day_of_month&) {
     check("day out of range", true);
   }
 
@@ -176,7 +176,7 @@ main()
     check("last day of month ok", true);
     std::cout << to_iso_string(d22) << std::endl; //stop compiler warning
   }
-  catch (bad_day_of_month) {
+  catch (bad_day_of_month&) {
     check("last day of month -- oops bad exception", false);
   }
 
@@ -187,7 +187,7 @@ main()
     //never reached if working -- but stops compiler warnings :-)
     std::cout << "Oops: " << to_iso_string(d23) << std::endl;
   }
-  catch (bad_day_of_month) {
+  catch (bad_day_of_month&) {
     check("day out of range", true);
   }
 
@@ -281,7 +281,7 @@ main()
     date d(neg_infin);
     tm d_tm = to_tm(d);
     check("Exception not thrown (special_value to_tm)", false);
-  }catch(std::out_of_range e){
+  }catch(std::out_of_range& e){
     check("Caught expected exception (special_value to_tm)", true);
   }catch(...){
     check("Caught un-expected exception (special_value to_tm)", false);

@@ -71,7 +71,7 @@ int main(){
     save_to(oa, BOOST_SERIALIZATION_NVP(lkd));
     save_to(oa, BOOST_SERIALIZATION_NVP(fkdb));
     save_to(oa, BOOST_SERIALIZATION_NVP(fkda));
-  }catch(archive::archive_exception ae){
+  }catch(archive::archive_exception& ae){
     std::string s(ae.what());
     check("Error writing to archive: " + s, false);
     ofs.close();
@@ -94,7 +94,7 @@ int main(){
     save_to(oa, lkd);
     save_to(oa, fkdb);
     save_to(oa, fkda);
-  }catch(archive::archive_exception ae){
+  }catch(archive::archive_exception& ae){
     std::string s(ae.what());
     check("Error writing to archive: " + s, false);
     ofs.close();
@@ -143,7 +143,7 @@ int main(){
     ia >> BOOST_SERIALIZATION_NVP(lkd2);
     ia >> BOOST_SERIALIZATION_NVP(fkdb2);
     ia >> BOOST_SERIALIZATION_NVP(fkda2);
-  }catch(archive::archive_exception ae){
+  }catch(archive::archive_exception& ae){
     std::string s(ae.what());
     check("Error reading from archive: " + s, false);
     ifs.close();
@@ -166,7 +166,7 @@ int main(){
     ia >> lkd2;
     ia >> fkdb2;
     ia >> fkda2;
-  }catch(archive::archive_exception ae){
+  }catch(archive::archive_exception& ae){
     std::string s(ae.what());
     check("Error reading from archive: " + s, false);
     ifs.close();
