@@ -1,1 +1,1 @@
-boost_module(accumulators DEPENDS parameter range typeof foreach)
+boost_module(accumulators DEPENDS parameter typeof foreach)

@@ -1,1 +1,1 @@
-boost_module(multi_index DEPENDS serialization functional)
+boost_module(multi_index DEPENDS serialization functional math)

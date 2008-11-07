@@ -1,1 +1,1 @@
-boost_module(wave DEPENDS filesystem program_options spirit thread pool intrusive)
+boost_module(wave DEPENDS filesystem program_options spirit thread intrusive)

@@ -1,1 +1,1 @@
-boost_module(iostreams DEPENDS range)
+boost_module(iostreams DEPENDS range random)

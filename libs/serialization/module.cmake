@@ -1,3 +1,3 @@
-boost_module(serialization DEPENDS spirit preprocessor io smart_ptr bind array)
+boost_module(serialization DEPENDS spirit io bind array variant)
 
 # bind is in there because we have a dependency on boost/mem_fn.hpp

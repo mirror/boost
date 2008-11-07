@@ -1,1 +1,1 @@
-boost_module(xpressive DEPENDS fusion)
+boost_module(xpressive DEPENDS fusion proto intrusive numeric)

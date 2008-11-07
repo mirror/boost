@@ -1,1 +1,1 @@
-boost_module(mpl DEPENDS preprocessor)
+boost_module(mpl DEPENDS preprocessor config detail)

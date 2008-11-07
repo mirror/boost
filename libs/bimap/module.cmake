@@ -1,1 +1,1 @@
-boost_module(bimap DEPENDS xpressive)
+boost_module(bimap DEPENDS xpressive property_map)

@@ -1,1 +1,1 @@
-boost_module(iterator DEPENDS config mpl type_traits function)
+boost_module(iterator DEPENDS mpl type_traits function concept_check)
