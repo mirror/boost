@@ -829,6 +829,7 @@
             struct vararg
               : Grammar
             {
+                /// INTERNAL ONLY
                 typedef void proto_is_vararg_;
             };
         }

@@ -33,11 +33,12 @@
         #define BOOST_PROTO_DEFINE_CHILD_N(Z, N, DATA)                                              \
             typedef BOOST_PP_CAT(Arg, N) BOOST_PP_CAT(child, N);                                    \
             typedef expr_ref<BOOST_PP_CAT(Arg, N)> BOOST_PP_CAT(child_ref, N);                      \
+            /**< INTERNAL ONLY */
 
         #define BOOST_PROTO_DEFINE_VOID_N(z, n, data)                                               \
             typedef mpl::void_ BOOST_PP_CAT(child, n);                                              \
             typedef mpl::void_ BOOST_PP_CAT(child_ref, n);                                          \
-            /**/
+            /**< INTERNAL ONLY */
 
         /// INTERNAL ONLY
         template<typename Expr>

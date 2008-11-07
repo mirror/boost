@@ -378,7 +378,14 @@
             >
             {
                 // BUGBUG should be able to hold this guy by reference, no?
+                #if BOOST_WORKAROUND(BOOST_MSVC, == 1310) || \
+                    BOOST_WORKAROUND(BOOST_INTEL, BOOST_TESTED_AT(1010))
+                // These compilers don't strip top-level cv qualifiers
+                // on arguments in function types
+                typedef typename Domain::template result<void(typename T::proto_derived_expr)>::type type;
+                #else
                 typedef typename Domain::template result<void(T)>::type type;
+                #endif
 
                 /// INTERNAL ONLY
                 ///

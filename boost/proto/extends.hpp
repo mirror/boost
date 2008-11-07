@@ -159,7 +159,7 @@ namespace boost { namespace proto
         typedef typename proto_base_expr::proto_args proto_args;                                    \
         typedef typename proto_base_expr::proto_arity proto_arity;                                  \
         typedef typename proto_base_expr::address_of_hack_type_ proto_address_of_hack_type_;        \
-        typedef void proto_is_expr_;                                                                \
+        typedef void proto_is_expr_; /**< INTERNAL ONLY */                                          \
         BOOST_PROTO_FUSION_DEFINE_TAG(boost::proto::tag::proto_expr)                                \
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXTENDS_CHILD, ~)                        \
                                                                                                     \
@@ -188,7 +188,7 @@ namespace boost { namespace proto
     #define BOOST_PROTO_BASIC_EXTENDS(Expr, Derived, Domain)                                        \
         BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, Domain)                                           \
         typedef void proto_is_aggregate_;                                                           \
-        /**/
+        /**< INTERNAL ONLY */
 
         /// INTERNAL ONLY
         ///
@@ -544,10 +544,10 @@ namespace boost { namespace proto
         typedef typename proto_base_expr::proto_args proto_args;
         typedef typename proto_base_expr::proto_arity proto_arity;
         typedef typename proto_base_expr::address_of_hack_type_ proto_address_of_hack_type_;
-        typedef void proto_is_expr_;
+        typedef void proto_is_expr_; /**< INTERNAL ONLY */
         BOOST_PROTO_FUSION_DEFINE_TAG(boost::proto::tag::proto_expr)
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXTENDS_CHILD, ~)
-        typedef void proto_is_aggregate_;
+        typedef void proto_is_aggregate_; /**< INTERNAL ONLY */
 
         BOOST_PROTO_EXTENDS_ASSIGN()
         BOOST_PROTO_EXTENDS_SUBSCRIPT()

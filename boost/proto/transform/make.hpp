@@ -189,7 +189,7 @@
         /// \code
         /// // OK: replace anything with Bar<_>()
         /// struct Foo
-        ///   : proto::when<_, Bar<_>() >
+        ///   : proto::when<_, Bar<protect<_> >() >
         /// {};
         /// \endcode
         template<typename PrimitiveTransform>
