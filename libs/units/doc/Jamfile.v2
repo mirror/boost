@@ -184,6 +184,8 @@ xml units
     <dependency>abstract_reference
 ;
 
+path-constant images_location : ../../../doc/html ;
+
 boostbook standalone
   :
     units
@@ -191,8 +193,31 @@ boostbook standalone
     <xsl:param>toc.max.depth=1
     <xsl:param>toc.section.depth=8
     <xsl:param>chunk.section.depth=8
-    <xsl:param>fop1.extensions=1
-    <xsl:param>fop.extensions=0
     <xsl:param>boost.root="../../../.."
     <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
-  ;
+
+        # PDF Options:
+        # TOC generation: uses XEP extensions at present, change to fop1 to use Apache FOP.
+        <format>pdf:<xsl:param>xep.extensions=1
+        <format>pdf:<xsl:param>fop.extensions=0
+        <format>pdf:<xsl:param>fop1.extensions=0
+        # No indent on body text:
+        <format>pdf:<xsl:param>body.start.indent=0pt
+        # Margin size:
+        <format>pdf:<xsl:param>page.margin.inner=0.5in
+        # Margin size:
+        <format>pdf:<xsl:param>page.margin.outer=0.5in
+        # Paper type = A4
+        <format>pdf:<xsl:param>paper.type=A4
+        # Yes, we want graphics for admonishments:
+        <xsl:param>admon.graphics=1
+        # Set this one for PDF generation *only*:
+        # default pnd graphics are awful in PDF form,
+        # better use SVG's instead:
+        <format>pdf:<xsl:param>admon.graphics.extension=".svg"
+        <format>pdf:<xsl:param>img.src.path=$(images_location)/
+        <format>pdf:<xsl:param>admon.graphics.path=../../../doc/src/images
+        <format>pdf:<xsl:param>draft.mode="no"
+;
+
+
