@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(typeof BOOST_DEPENDS test)
+
 set(COMPILE_TESTS 
   test_predicates
   test_negative_denominator

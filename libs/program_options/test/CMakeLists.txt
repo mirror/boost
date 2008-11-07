@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(program_options BOOST_DEPENDS test)
+
 set(PROGRAM_OPTIONS_LIBRARIES
   boost_program_options
   boost_test_exec_monitor)

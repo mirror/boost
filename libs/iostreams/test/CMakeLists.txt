@@ -1,3 +1,6 @@
+boost_additional_test_dependencies(iostreams BOOST_DEPENDS test)
+
+
 # Helper macro to create tests for the iostreams library
 macro(iostreams_test TESTNAME)
   boost_test_run(${TESTNAME} 

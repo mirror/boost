@@ -12,7 +12,7 @@ endif(GCC)
 
 #-------------------------------------------------------------------------
 #-- Needed include directories for the tests
-boost_test_add_dependent_includes("utility;detail;config;preprocessor;type_traits;mpl;static_assert")
+  boost_additional_test_dependencies(functional BOOST_DEPENDS test)
 #-------------------------------------------------------------------------
 
 SET(tests

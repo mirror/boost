@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(mpl BOOST_DEPENDS test bind) 
+
 boost_test_compile(largest_int aux_/largest_int.cpp)
 boost_test_compile(msvc_is_class aux_/msvc_is_class.cpp)
 boost_test_compile(template_arity aux_/template_arity.cpp)

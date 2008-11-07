@@ -1,3 +1,6 @@
+boost_additional_test_dependencies(multi_array BOOST_DEPENDS test)
+
+
 boost_test_compile_fail(fail_cbracket)
 boost_test_compile_fail(fail_cdata)
 boost_test_compile_fail(fail_citerator)

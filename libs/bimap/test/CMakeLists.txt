@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(bimap BOOST_DEPENDS test serialization multi_index functional typeof lambda assign)
+
 boost_test_run(test_tagged)
 boost_test_run(test_structured_pair)
 boost_test_run(test_mutant)

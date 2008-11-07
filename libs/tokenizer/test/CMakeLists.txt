@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(tokenizer BOOST_DEPENDS test config detail iterator utility array intrusive)
+
 boost_test_run(examples examples.cpp 
   DEPENDS boost_test_exec_monitor)
 boost_test_run(simple_example_1 simple_example_1.cpp)

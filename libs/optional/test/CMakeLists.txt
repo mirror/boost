@@ -1,3 +1,6 @@
+boost_additional_test_dependencies(optional BOOST_DEPENDS test tuple)
+
+
 boost_test_run(optional_test)
 boost_test_run(optional_test_tie)
 boost_test_run(optional_test_ref)

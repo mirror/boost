@@ -1,10 +1,13 @@
+boost_additional_test_dependencies(tr1 BOOST_DEPENDS test)
+
+
 include_directories(${Boost_SOURCE_DIR}/boost/tr1/tr1)
 include_directories(${Boost_SOURCE_DIR}/libs/tr1/include/boost/tr1/tr1)
 
 if (BORLAND)
   # Borland's broken include mechanism needs these extra headers:
   include_directories(${Boost_SOURCE_DIR}/boost/tr1/tr1/bcc32)  
-  include_directories(${Boost_SOURCE_DIR}/libs/tr1/include//boost/tr1/tr1/bcc32)
+  include_directories(${Boost_SOURCE_DIR}/libs/tr1/include/boost/tr1/tr1/bcc32)
 endif (BORLAND)
 
 macro(boost_glob_test_compile path glob_par compile_flags)
@@ -53,6 +56,7 @@ boost_glob_test_run(. run*.cpp "" WITH_STD)
 boost_glob_test_compile_fail(config tr1_has_tr1*fail.cpp "")
 boost_glob_test_compile(config tr1_has_tr1*pass.cpp "")
 boost_glob_test_run(type_traits *.cpp "")
+
 # TODO: there's a problem here where the testing code is generating duplicate 
 # target names.
 message(STATUS "TR1 tests need some love")

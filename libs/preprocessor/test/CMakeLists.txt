@@ -1,3 +1,6 @@
+boost_additional_test_dependencies(preprocessor BOOST_DEPENDS test)
+
+
 boost_test_compile(arithmetic)
 boost_test_compile(array)
 boost_test_compile(comparison)

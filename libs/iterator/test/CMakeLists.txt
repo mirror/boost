@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(iterator BOOST_DEPENDS test tuple smart_ptr)
+
 # These first two tests will run last, and are expected to fail
 # for many less-capable compilers.
 

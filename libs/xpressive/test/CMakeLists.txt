@@ -7,6 +7,7 @@
 # TODO: Fix these
 # boost_test_fail("multipledefs")
 # boost_test_fail("msvc-stlport")
+boost_additional_test_dependencies(xpressive BOOST_DEPENDS test intrusive numeric range typeof function_types)
 
 if (NOT ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
   FILE(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/libs/date_time/data")
@@ -50,7 +51,7 @@ SET(runtests
   )
 
 foreach(runtest ${runtests})
-  boost_test_run(${runtest} DEPENDS boost_unit_test_framework)
+  boost_test_run(${runtest} DEPENDS boost_unit_test_framework )
 endforeach(runtest ${runtests})
 
 set(compiletests

@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(ptr_container BOOST_DEPENDS test assign numeric)
+
 boost_test_run(ptr_inserter DEPENDS boost_unit_test_framework)
 boost_test_run(ptr_vector DEPENDS boost_unit_test_framework)
 boost_test_run(ptr_list DEPENDS boost_unit_test_framework)

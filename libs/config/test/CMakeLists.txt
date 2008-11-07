@@ -13,13 +13,11 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
   set(BOOST_CONFIG_STATIC_THREAD_LIBS LINK_LIBS pthread rt)
 endif(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
-#-------------------------------------------------------------------------
-#-- Needed include directories for the tests
-boost_test_add_dependent_includes("utility;detail;config;test;preprocessor;type_traits;smart_ptr;mpl;exception;static_assert")
-#-------------------------------------------------------------------------
+boost_additional_test_dependencies(config BOOST_DEPENDS test)
 
 boost_test_run(config_test_threaded config_test.cpp 
   EXTRA_OPTIONS MULTI_THREADED)
+  
 boost_test_run(config_test 
   EXTRA_OPTIONS SINGLE_THREADED ${BOOST_CONFIG_MSVC_STATIC_OPTIONS}
                 ${BOOST_CONFIG_STATIC_THREAD_LIBS})

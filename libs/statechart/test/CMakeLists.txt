@@ -1,3 +1,7 @@
+boost_additional_test_dependencies(statechart BOOST_DEPENDS test numeric)
+
+
+
 macro(statechart_compile_fail TESTNAME)
   boost_test_compile_fail("${TESTNAME}Normal"
     ${TESTNAME}.cpp
@@ -68,6 +72,8 @@ statechart_run(StateCastTest)
 statechart_run(TypeInfoTest)
 statechart_run(StateIterationTest)
 statechart_run(FifoSchedulerTest)
+
+message(STATUS "Statechart Testing needs intermediate libraries created")
 # TODO: We need to create some libraries (just for testing!?), then link
 # and run tests against them. Ick.
 #statechart-st-lib-run LibTestNormal

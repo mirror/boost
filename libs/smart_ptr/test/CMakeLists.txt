@@ -1,3 +1,6 @@
+boost_additional_test_dependencies(tokenizer BOOST_DEPENDS test intrusive)
+
+
 boost_test_run(smart_ptr_test)
 boost_test_run(shared_ptr_basic_test)
 boost_test_run(shared_ptr_test)

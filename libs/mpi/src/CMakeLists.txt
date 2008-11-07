@@ -1,3 +1,14 @@
+#-- Make sure MPI is installed on the users system
+FIND_PACKAGE(MPI)
+
+if (NOT MPI_FOUND)
+ message(STATUS "MPI Not Found")
+endif (NOT MPI_FOUND)
+
+if (MPI_FOUND)
+message(STATUS "MPI Found")
+
+
 add_definitions(-DBOOST_MPI_SOURCE=1)
 include_directories(${MPI_INCLUDE_PATH})
 
@@ -29,4 +40,6 @@ boost_add_library(
   )
 
 message(STATUS "boost::mpi::python needs love")
+
+endif (MPI_FOUND)
 

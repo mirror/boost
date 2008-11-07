@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(range BOOST_DEPENDS test)
+
 message(STATUS "libs/range/test: need -Wall -Wunused here when under gcc")
 set( test_compile_flags "")
 IF(CMAKE_COMPILER_IS_GNUCC)

@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(date_time BOOST_DEPENDS test bind)
+
 # Core
 boost_test_run(testint_adapter)
 boost_test_run(testtime_resolution_traits)

@@ -1,3 +1,6 @@
+boost_additional_test_dependencies(optional BOOST_DEPENDS test timer)
+
+
 boost_test_run(basics)
 boost_test_run(sfinae)
 boost_test_run(macros)

@@ -1,3 +1,6 @@
+boost_additional_test_dependencies(function BOOST_DEPENDS test lambda) 
+
+
 boost_test_run(lib_function_test function_test.cpp)
 boost_test_run(function_n_test)
 boost_test_run(allocator_test)

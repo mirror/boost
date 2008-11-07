@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(bind BOOST_DEPENDS test)
+
 SET(tests 
     bind_test
     bind_dm_test

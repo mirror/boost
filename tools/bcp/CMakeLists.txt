@@ -2,11 +2,8 @@ boost_tool_project(bcp
 DESCRIPTION "The bcp utility is a tool for extracting subsets of Boost."
 AUTHORS "John Maddock")
 
-option(BOOST_BUILD_BCP "Build the bcp tool" ON)
-IF (BOOST_BUILD_BCP)
+IF (BUILD_BCP)
 
-# add_definitions("-DBOOST_REGEX_NO_LIB=1")
-boost_test_add_dependent_includes("filesystem;smart_ptr;config;detail;system;iterator;exception;type_traits;static_assert;utility;mpl;preprocessor;integer;regex;date_time;algorithm")
 
 set (bcp_sources
   add_path.cpp 
@@ -22,10 +19,12 @@ set (bcp_sources
   output_licence_info.cpp
 )
 
+boost_tool_dependencies( BOOST_DEPENDS filesystem test regex)
+
 boost_add_executable(
   bcp
   ${bcp_sources}
-  DEPENDS boost_filesystem boost_prg_exec_monitor boost_regex
+  DEPENDS boost_system boost_filesystem boost_prg_exec_monitor boost_regex
 )
 
-ENDIF (BOOST_BUILD_BCP)
+ENDIF (BUILD_BCP)

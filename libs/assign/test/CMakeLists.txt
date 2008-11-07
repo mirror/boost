@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(assign BOOST_DEPENDS test multi_index)
+
 SET(TESTS 
  basic
  std

@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(regex BOOST_DEPENDS test)
+
 # TODO: Default to multi-threaded?
 macro(regex_test TESTNAME)
   parse_arguments(REGEX_TEST "" "" ${ARGN})

@@ -1,3 +1,4 @@
+boost_additional_test_dependencies(exception BOOST_DEPENDS test)
 
 boost_test_run(is_output_streamable_test)
 boost_test_run(has_to_string_test)
@@ -20,15 +21,21 @@ boost_test_run(diagnostic_information_test)
 boost_test_compile_fail(exception_fail)
 boost_test_compile_fail(throw_exception_fail)
 
-#headers
+# Compile headers tests
+set (compile_tests
+  diagnostic_information_hpp_test
+  error_info_hpp_test
+  exception_ptr_hpp_test
+  exception_hpp_test
+  get_error_info_hpp_test
+  info_hpp_test
+  info_tuple_hpp_test
+  to_string_hpp_test
+  to_string_stub_hpp_test
+  )
 
-boost_test_compile(exception_ptr_hpp_test)
-boost_test_compile(diagnostic_information_hpp_test)
-boost_test_compile(enable_current_exception_hpp_test)
-boost_test_compile(enable_error_info_hpp_test)
-boost_test_compile(error_info_hpp_test)
-boost_test_compile(exception_hpp_test)
-boost_test_compile(info_hpp_test)
-boost_test_compile(info_tuple_hpp_test)
-boost_test_compile(to_string_hpp_test)
-boost_test_compile(to_string_stub_hpp_test)
+#-- Create a Compile test for each source
+foreach(test ${compile_tests})
+    boost_test_compile(${test} "${test}.cpp") 
+endforeach(test ${compile_tests})
+

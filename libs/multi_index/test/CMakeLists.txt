@@ -1,3 +1,6 @@
+boost_additional_test_dependencies(multi_index BOOST_DEPENDS test)
+
+
 boost_test_run(test_basic test_basic.cpp            test_basic_main.cpp)
 boost_test_run(test_capacity test_capacity.cpp         test_capacity_main.cpp)
 boost_test_run(test_comparison test_comparison.cpp       test_comparison_main.cpp)

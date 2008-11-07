@@ -1,3 +1,6 @@
+boost_additional_test_dependencies(typeof BOOST_DEPENDS test)
+
+
 file(GLOB TEST_FILES "*.cpp")
 foreach(TEST_FILE ${TEST_FILES})
   if (TEST_FILE MATCHES "odr.*cpp")

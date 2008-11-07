@@ -18,5 +18,3 @@ boost_library_project(
            "Herve Bronnimann <hbr -at- poly.edu>"
   #  MAINTAINERS 
 )
-
-

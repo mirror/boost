@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(lambda BOOST_DEPENDS test any)
+
 boost_test_run(algorithm_test DEPENDS boost_test_exec_monitor)
 boost_test_run(bind_tests_simple DEPENDS boost_test_exec_monitor)
 boost_test_run(bind_tests_advanced DEPENDS boost_test_exec_monitor)

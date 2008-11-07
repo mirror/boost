@@ -87,6 +87,9 @@ macro(serialization_test_allarchives testname)
   endforeach(ARCHIVE ${BOOST_ARCHIVE_LIST})
 endmacro(serialization_test_allarchives)
 
+boost_additional_test_dependencies(serialization BOOST_DEPENDS test)
+
+
 serialization_test_allarchives(test_array test_array.cpp A.cpp)
 serialization_test_allarchives(test_binary)
 serialization_test_allarchives(test_complex)

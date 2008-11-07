@@ -22,7 +22,7 @@ add_definitions(-DBOOST_UBLAS_NO_EXCEPTIONS)
 
 #-------------------------------------------------------------------------
 #-- Needed include directories for the tests
-boost_test_add_dependent_includes("utility;detail;config;test;mpl;serialization;type_traits;static_assert;preprocessor;array;iterator;exception;concept_check;concept")
+boost_additional_test_dependencies(numeric BOOST_DEPENDS test)
 #-------------------------------------------------------------------------
 
 
@@ -57,8 +57,15 @@ boost_test_run(ublas_test6
 
 boost_test_run(placement_new)
 
-#TODO:
-#            <toolset>intel-linux:<cxxflags>"-Xc"
-#			<toolset>darwin:<cxxflags>"-fabi-version=0"
+
+SET(test_compile_flags "-DEXTERNAL")
+#-- Intel Compiler flags
+IF( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
+    SET(test_compile_flags "${test_compile_flags} -Xc")  
+ENDIF( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
+
+IF (APPLE)
+    SET(test_compile_flags "${test_compile_flags} -fabi-version=0") 
+ENDIF (APPLE)
 
 boost_test_compile(concepts COMPILE_FLAGS "-DEXTERNAL")

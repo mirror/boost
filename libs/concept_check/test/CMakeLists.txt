@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(concept_check BOOST_DEPENDS utility)
+
 # this fails but looks like it isn't the build
 # boost_test_run(../stl_concept_covering)
 boost_test_run(concept_check_test ../concept_check_test.cpp)

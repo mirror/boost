@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(foreach BOOST_DEPENDS test )
+
 set(TESTS 
 stl_byval
 stl_byval_r

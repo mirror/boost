@@ -26,6 +26,9 @@
 #       <toolset>intel-win:<iterator_debugging>off
 #     ;
 
+boost_additional_test_dependencies(accumulators BOOST_DEPENDS test)
+
+
 set(TESTS 
 count
 covariance

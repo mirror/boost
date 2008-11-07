@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(utility BOOST_DEPENDS test)
+
 boost_test_run(addressof_test ../addressof_test.cpp)
 boost_test_run(assert_test ../assert_test.cpp)
 boost_test_run(base_from_member_test ../base_from_member_test.cpp)

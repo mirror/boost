@@ -1,3 +1,6 @@
+boost_additional_test_dependencies(random BOOST_DEPENDS test)
+
+
 boost_test_run(random_test ../random_test.cpp)
 boost_test_run(random_demo ../random_demo.cpp)
 # TODO: These tests were commented out in the Jamfile.v2:

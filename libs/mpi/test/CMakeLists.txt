@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(mpi BOOST_DEPENDS test )
+
 include_directories(${MPI_INCLUDE_PATH})
 
 # Declare a test for the Boost.MPI library, which may involve both
