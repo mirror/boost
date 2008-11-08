@@ -137,16 +137,16 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Expr, typename Char>
     struct width_of<Expr, Char, proto::tag::shift_right>
       : add_widths<
-            width_of<typename Expr::proto_child_ref0::proto_base_expr, Char>::value
-          , width_of<typename Expr::proto_child_ref1::proto_base_expr, Char>::value
+            width_of<typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr, Char>::value
+          , width_of<typename remove_reference<typename Expr::proto_child1>::type::proto_base_expr, Char>::value
         >
     {};
 
     template<typename Expr, typename Char>
     struct width_of<Expr, Char, proto::tag::bitwise_or>
       : or_widths<
-            width_of<typename Expr::proto_child_ref0::proto_base_expr, Char>::value
-          , width_of<typename Expr::proto_child_ref1::proto_base_expr, Char>::value
+            width_of<typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr, Char>::value
+          , width_of<typename remove_reference<typename Expr::proto_child1>::type::proto_base_expr, Char>::value
         >
     {};
 
@@ -156,7 +156,7 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Expr, typename Char>
     struct width_of_assign<Expr, Char, mark_placeholder>
-      : width_of<typename Expr::proto_child_ref1::proto_base_expr, Char>
+      : width_of<typename remove_reference<typename Expr::proto_child1>::type::proto_base_expr, Char>
     {};
 
     template<typename Expr, typename Char>
@@ -176,14 +176,14 @@ namespace boost { namespace xpressive { namespace detail
             Expr
           , Char
           , typename proto::result_of::value<
-                typename Expr::proto_child_ref0::proto_base_expr
+                typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr
             >::type
         >
     {};
 
     template<typename Expr, typename Char>
     struct width_of<Expr, Char, modifier_tag>
-      : width_of<typename Expr::proto_child_ref1::proto_base_expr, Char>
+      : width_of<typename remove_reference<typename Expr::proto_child1>::type::proto_base_expr, Char>
     {};
 
     template<typename Expr, typename Char>
@@ -231,10 +231,10 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Expr, typename Char, uint_t Count>
     struct width_of<Expr, Char, generic_quant_tag<Count, Count> >
       : mpl::if_<
-            mpl::equal_to<unknown_width, width_of<typename Expr::proto_child_ref0::proto_base_expr, Char> >
+            mpl::equal_to<unknown_width, width_of<typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr, Char> >
           , unknown_width
           , mpl::times<
-                width_of<typename Expr::proto_child_ref0::proto_base_expr, Char>
+                width_of<typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr, Char>
               , mpl::size_t<Count>
             >
         >::type
@@ -242,13 +242,13 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Expr, typename Char>
     struct width_of<Expr, Char, proto::tag::negate>
-      : width_of<typename Expr::proto_child_ref0::proto_base_expr, Char>
+      : width_of<typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr, Char>
     {};
 
     // when complementing a set or an assertion, the width is that of the set (1) or the assertion (0)
     template<typename Expr, typename Char>
     struct width_of<Expr, Char, proto::tag::complement>
-      : width_of<typename Expr::proto_child_ref0::proto_base_expr, Char>
+      : width_of<typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr, Char>
     {};
 
     // The comma is used in list-initialized sets, and the width of sets are 1
@@ -272,12 +272,12 @@ namespace boost { namespace xpressive { namespace detail
         BOOST_MPL_ASSERT_RELATION(
             1
           , ==
-          , (width_of<typename Expr::proto_child_ref1::proto_base_expr, Char>::value));
+          , (width_of<typename remove_reference<typename Expr::proto_child1>::type::proto_base_expr, Char>::value));
     };
 
     template<typename Expr, typename Char>
     struct width_of<Expr, Char, proto::tag::subscript>
-      : width_of_subscript<Expr, Char, typename Expr::proto_child_ref0::proto_base_expr>
+      : width_of_subscript<Expr, Char, typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr>
     {};
 
 }}} // namespace boost::xpressive::detail

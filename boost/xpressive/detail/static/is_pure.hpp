@@ -69,8 +69,8 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Expr, typename Char>
     struct use_simple_repeat_<Expr, Char, proto::tag::shift_right>
       : mpl::and_<
-            use_simple_repeat_<typename Expr::proto_child_ref0::proto_base_expr, Char>
-          , use_simple_repeat_<typename Expr::proto_child_ref1::proto_base_expr, Char>
+            use_simple_repeat_<typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr, Char>
+          , use_simple_repeat_<typename remove_reference<typename Expr::proto_child1>::type::proto_base_expr, Char>
         >
     {};
 
@@ -78,8 +78,8 @@ namespace boost { namespace xpressive { namespace detail
     struct use_simple_repeat_<Expr, Char, proto::tag::bitwise_or>
       : mpl::and_<
             mpl::not_equal_to<unknown_width, width_of<Expr, Char> >
-          , use_simple_repeat_<typename Expr::proto_child_ref0::proto_base_expr, Char>
-          , use_simple_repeat_<typename Expr::proto_child_ref1::proto_base_expr, Char>
+          , use_simple_repeat_<typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr, Char>
+          , use_simple_repeat_<typename remove_reference<typename Expr::proto_child1>::type::proto_base_expr, Char>
         >
     {};
 
@@ -107,14 +107,14 @@ namespace boost { namespace xpressive { namespace detail
     struct use_simple_repeat_<Expr, Char, proto::tag::assign>
       : use_simple_repeat_assign<
             typename proto::result_of::value<
-                typename Expr::proto_child_ref0::proto_base_expr
+                typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr
             >::type
         >
     {};
 
     template<typename Expr, typename Char>
     struct use_simple_repeat_<Expr, Char, modifier_tag>
-      : use_simple_repeat_<typename Expr::proto_child_ref1::proto_base_expr, Char>
+      : use_simple_repeat_<typename remove_reference<typename Expr::proto_child1>::type::proto_base_expr, Char>
     {};
 
     template<typename Expr, typename Char>
@@ -135,7 +135,7 @@ namespace boost { namespace xpressive { namespace detail
     // when complementing a set or an assertion, the purity is that of the set (true) or the assertion
     template<typename Expr, typename Char>
     struct use_simple_repeat_<Expr, Char, proto::tag::complement>
-      : use_simple_repeat_<typename Expr::proto_child_ref0::proto_base_expr, Char>
+      : use_simple_repeat_<typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr, Char>
     {};
 
     // The comma is used in list-initialized sets, which are pure
@@ -158,7 +158,7 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Expr, typename Char>
     struct use_simple_repeat_<Expr, Char, proto::tag::subscript>
-      : use_simple_repeat_subscript<Expr, Char, typename Expr::proto_child_ref0::proto_base_expr>
+      : use_simple_repeat_subscript<Expr, Char, typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr>
     {};
 
     // Quantified expressions are variable-width and cannot use the simple quantifier
@@ -184,12 +184,12 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Expr, typename Char, uint_t Count>
     struct use_simple_repeat_<Expr, Char, generic_quant_tag<Count, Count> >
-      : use_simple_repeat_<typename Expr::proto_child_ref0::proto_base_expr, Char>
+      : use_simple_repeat_<typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr, Char>
     {};
 
     template<typename Expr, typename Char>
     struct use_simple_repeat_<Expr, Char, proto::tag::negate>
-      : use_simple_repeat_<typename Expr::proto_child_ref0::proto_base_expr, Char>
+      : use_simple_repeat_<typename remove_reference<typename Expr::proto_child0>::type::proto_base_expr, Char>
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
