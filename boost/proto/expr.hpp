@@ -45,14 +45,12 @@
         #define BOOST_PROTO_CHILD(Z, N, DATA)                                                       \
             typedef typename Args::BOOST_PP_CAT(child, N) BOOST_PP_CAT(proto_child, N);             \
             BOOST_PP_CAT(proto_child, N) BOOST_PP_CAT(child, N);                                    \
-            typedef typename Args::BOOST_PP_CAT(child_ref, N) BOOST_PP_CAT(proto_child_ref, N);     \
             /**< INTERNAL ONLY */
 
         /// INTERNAL ONLY
         ///
         #define BOOST_PROTO_VOID(Z, N, DATA)                                                        \
             typedef void BOOST_PP_CAT(proto_child, N);                                              \
-            typedef void BOOST_PP_CAT(proto_child_ref, N);                                          \
             /**< INTERNAL ONLY */
 
             struct not_a_valid_type

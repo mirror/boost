@@ -144,9 +144,6 @@ namespace boost { namespace proto
         typedef                                                                                     \
             typename proto_base_expr::BOOST_PP_CAT(proto_child, N)                                  \
         BOOST_PP_CAT(proto_child, N);                                                               \
-        typedef                                                                                     \
-            typename proto_base_expr::BOOST_PP_CAT(proto_child_ref, N)                              \
-        BOOST_PP_CAT(proto_child_ref, N);                                                           \
         /**/
 
     #define BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, Domain)                                       \

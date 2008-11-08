@@ -325,12 +325,12 @@
 
             template<typename Tag, typename Args1, typename Args2>
             struct matches_< proto::expr<Tag, Args1, 1>, proto::expr<Tag, Args2, 1> >
-              : matches_<typename Args1::child_ref0::proto_base_expr, typename Args2::child0::proto_base_expr>
+              : matches_<typename detail::expr_traits<typename Args1::child0>::value_type::proto_base_expr, typename Args2::child0::proto_base_expr>
             {};
 
             template<typename Tag, typename Args1, typename Args2>
             struct matches_< proto::expr<Tag, Args1, 1>, proto::expr<proto::_, Args2, 1> >
-              : matches_<typename Args1::child_ref0::proto_base_expr, typename Args2::child0::proto_base_expr>
+              : matches_<typename detail::expr_traits<typename Args1::child0>::value_type::proto_base_expr, typename Args2::child0::proto_base_expr>
             {};
 
             template<typename Args1, typename Args2>
@@ -340,7 +340,7 @@
 
         #define BOOST_PROTO_MATCHES_N_FUN(Z, N, DATA)                                               \
             matches_<                                                                               \
-                typename Args1::BOOST_PP_CAT(child_ref, N)::proto_base_expr                         \
+                typename detail::expr_traits<typename Args1::BOOST_PP_CAT(child, N)>::value_type::proto_base_expr\
               , typename Args2::BOOST_PP_CAT(child, N)::proto_base_expr                             \
             >
 
@@ -944,14 +944,14 @@
             template<typename Args, typename Back, long To>
             struct vararg_matches_impl<Args, Back, N, To>
               : and2<
-                    matches_<typename Args::BOOST_PP_CAT(child_ref, BOOST_PP_DEC(N))::proto_base_expr, Back>::value
+                    matches_<typename detail::expr_traits<typename Args::BOOST_PP_CAT(child, BOOST_PP_DEC(N))>::value_type::proto_base_expr, Back>::value
                   , vararg_matches_impl<Args, Back, N + 1, To>
                 >
             {};
 
             template<typename Args, typename Back>
             struct vararg_matches_impl<Args, Back, N, N>
-              : matches_<typename Args::BOOST_PP_CAT(child_ref, BOOST_PP_DEC(N))::proto_base_expr, Back>
+              : matches_<typename detail::expr_traits<typename Args::BOOST_PP_CAT(child, BOOST_PP_DEC(N))>::value_type::proto_base_expr, Back>
             {};
 
             template<

@@ -456,7 +456,7 @@
                 /// \li <tt>T const &</tt> becomes <tt>T</tt>
                 /// \li <tt>T &</tt> becomes <tt>T</tt>
                 /// \li <tt>T</tt> becomes <tt>T</tt>
-                typedef typename Expr::proto_child_ref0::value_type type;
+                typedef typename detail::term_traits<typename Expr::proto_child0>::value_type type;
             };
 
             template<typename Expr>
@@ -475,7 +475,7 @@
                 /// \li <tt>T const &</tt> becomes <tt>T const &</tt>
                 /// \li <tt>T &</tt> becomes <tt>T &</tt>
                 /// \li <tt>T</tt> becomes <tt>T &</tt>
-                typedef typename Expr::proto_child_ref0::reference type;
+                typedef typename detail::term_traits<typename Expr::proto_child0>::reference type;
             };
 
             template<typename Expr>
@@ -494,7 +494,7 @@
                 /// \li <tt>T const &</tt> becomes <tt>T const &</tt>
                 /// \li <tt>T &</tt> becomes <tt>T &</tt>
                 /// \li <tt>T</tt> becomes <tt>T const &</tt>
-                typedef typename Expr::proto_child_ref0::const_reference type;
+                typedef typename detail::term_traits<typename Expr::proto_child0>::const_reference type;
             };
 
             // TODO left<> and right<> force the instantiation of Expr.
@@ -1727,7 +1727,7 @@
                 /// \brief Return the Nth child of the given expression.
                 /// \param expr The expression node.
                 /// \pre <tt>is_expr\<Expr\>::::value</tt> is \c true
-                /// \pre <tt>N == 0 || N \< Expr::proto_arity::value</tt>
+                /// \pre <tt>N \< Expr::proto_arity::value</tt>
                 /// \return <tt>proto::child_c\<N\>(expr)</tt>
                 /// \throw nothrow
                 template<typename Expr>
@@ -1770,7 +1770,7 @@
                 /// \brief Return the Nth child of the given expression.
                 /// \param expr The expression node.
                 /// \pre <tt>is_expr\<Expr\>::::value</tt> is \c true
-                /// \pre <tt>N::value == 0 || N::value \< Expr::proto_arity::value</tt>
+                /// \pre <tt>N::value \< Expr::proto_arity::value</tt>
                 /// \return <tt>proto::child\<N\>(expr)</tt>
                 /// \throw nothrow
                 template<typename Expr>
@@ -2018,13 +2018,12 @@
         /// Return the Nth child of the specified Proto expression. If
         /// \c N is not specified, as in \c child(expr), then \c N is assumed
         /// to be <tt>mpl::long_\<0\></tt>. The child is returned by
-        /// reference. If the expression is holding the child in a
-        /// <tt>ref_\<\></tt> wrapper, it is unwrapped before it is returned.
+        /// reference.
         ///
         /// \param expr The Proto expression.
         /// \pre <tt>is_expr\<Expr\>::::value</tt> is \c true.
         /// \pre \c N is an MPL Integral Constant.
-        /// \pre <tt>N::value == 0 || N::value \< Expr::proto_arity::value</tt>
+        /// \pre <tt>N::value \< Expr::proto_arity::value</tt>
         /// \throw nothrow
         /// \return A reference to the Nth child
         template<typename N, typename Expr>
@@ -2046,7 +2045,7 @@
         /// \overload
         ///
         template<typename Expr2>
-        typename Expr2::proto_base_expr::proto_child_ref0::reference
+        typename detail::expr_traits<typename Expr2::proto_base_expr::proto_child0>::reference
         child(Expr2 &expr2 BOOST_PROTO_DISABLE_IF_IS_CONST(Expr2))
         {
             return expr2.proto_base().child0;
@@ -2055,7 +2054,7 @@
         /// \overload
         ///
         template<typename Expr2>
-        typename Expr2::proto_base_expr::proto_child_ref0::const_reference
+        typename detail::expr_traits<typename Expr2::proto_base_expr::proto_child0>::const_reference
         child(Expr2 const &expr2)
         {
             return expr2.proto_base().child0;
@@ -2064,12 +2063,11 @@
         /// \brief Return the Nth child of the specified Proto expression.
         ///
         /// Return the Nth child of the specified Proto expression. The child
-        /// is returned by reference. If the expression is holding the child in
-        /// a <tt>ref_\<\></tt> wrapper, it is unwrapped before it is returned.
+        /// is returned by reference.
         ///
         /// \param expr The Proto expression.
         /// \pre <tt>is_expr\<Expr\>::::value</tt> is \c true.
-        /// \pre <tt>N == 0 || N \< Expr::proto_arity::value</tt>
+        /// \pre <tt>N \< Expr::proto_arity::value</tt>
         /// \throw nothrow
         /// \return A reference to the Nth child
         template<long N, typename Expr>
@@ -2325,7 +2323,7 @@
                 /// \li <tt>T const &</tt> becomes <tt>T</tt>
                 /// \li <tt>T &</tt> becomes <tt>T</tt>
                 /// \li <tt>T</tt> becomes <tt>T</tt>
-                typedef typename Expr::BOOST_PP_CAT(proto_child_ref, N)::value_type type;
+                typedef typename detail::expr_traits<typename Expr::BOOST_PP_CAT(proto_child, N)>::value_type type;
             };
 
             template<typename Expr>
@@ -2340,7 +2338,7 @@
                 /// \li <tt>T const &</tt> becomes <tt>T const &</tt>
                 /// \li <tt>T &</tt> becomes <tt>T &</tt>
                 /// \li <tt>T</tt> becomes <tt>T &</tt>
-                typedef typename Expr::BOOST_PP_CAT(proto_child_ref, N)::reference type;
+                typedef typename detail::expr_traits<typename Expr::BOOST_PP_CAT(proto_child, N)>::reference type;
 
                 /// INTERNAL ONLY
                 ///
@@ -2362,7 +2360,7 @@
                 /// \li <tt>T const &</tt> becomes <tt>T const &</tt>
                 /// \li <tt>T &</tt> becomes <tt>T &</tt>
                 /// \li <tt>T</tt> becomes <tt>T const &</tt>
-                typedef typename Expr::BOOST_PP_CAT(proto_child_ref, N)::const_reference type;
+                typedef typename detail::expr_traits<typename Expr::BOOST_PP_CAT(proto_child, N)>::const_reference type;
 
                 /// INTERNAL ONLY
                 ///

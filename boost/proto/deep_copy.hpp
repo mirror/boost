@@ -136,7 +136,9 @@
         {
         #define BOOST_PROTO_DEFINE_DEEP_COPY_TYPE(Z, N, DATA)                                       \
             typename deep_copy_impl<                                                                \
-                typename Expr::BOOST_PP_CAT(proto_child_ref, N)::proto_derived_expr                 \
+                typename remove_reference<                                                          \
+                  typename Expr::BOOST_PP_CAT(proto_child, N)                                       \
+                >::type::proto_derived_expr                                                         \
             >::type                                                                                 \
             /**/
 
