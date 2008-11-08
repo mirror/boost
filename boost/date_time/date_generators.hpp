@@ -154,6 +154,9 @@ namespace date_time {
  };
 
 
+  //! Returns nth arg as string. 1 -> "first", 2 -> "second", max is 5.
+  BOOST_DATE_TIME_DECL const char* nth_as_str(int n);
+
   //! Useful generator functor for finding holidays
   /*! Based on the idea in Cal. Calc. for finding holidays that are
    *  the 'first Monday of September'. When instantiated with
@@ -242,9 +245,6 @@ namespace date_time {
     day_of_week_type dow_;
   };
   
-  //! Returns nth arg as string. 1 -> "first", 2 -> "second", max is 5.
-  BOOST_DATE_TIME_DECL const char* nth_as_str(int n);
-
   //! Useful generator functor for finding holidays and daylight savings
   /*! Similar to nth_kday_of_month, but requires less paramters
    *  \ingroup date_alg
