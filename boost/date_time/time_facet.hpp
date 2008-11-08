@@ -968,7 +968,7 @@ namespace date_time {
                     try {
                       t_year = this->m_parser.parse_year(sitr, stream_end, s, mr);
                     }
-                    catch(std::out_of_range& bad_year) { // base class for bad_year exception
+                    catch(std::out_of_range&) { // base class for bad_year exception
                       if(this->m_sv_parser.match(sitr, stream_end, mr)) {
                         t = time_type(static_cast<special_values>(mr.current_match));
                         return sitr;
@@ -989,13 +989,13 @@ namespace date_time {
                     try {
                       t_month = this->m_parser.parse_month(sitr, stream_end, s, mr);
                     }
-                    catch(std::out_of_range& bad_month) { // base class for bad_month exception
+                    catch(std::out_of_range&) { // base class for bad_month exception
                       if(this->m_sv_parser.match(sitr, stream_end, mr)) {
                         t = time_type(static_cast<special_values>(mr.current_match));
                         return sitr;
                       }
                       else {
-                        throw; // rethrow bad_year
+                        throw; // rethrow bad_month
                       }
                     }
                     // did m_parser already advance sitr to next char?
@@ -1016,7 +1016,7 @@ namespace date_time {
                     try {
                       wd = this->m_parser.parse_weekday(sitr, stream_end, s, mr);
                     }
-                    catch(std::out_of_range& bad_weekday) { // base class for bad_weekday exception
+                    catch(std::out_of_range&) { // base class for bad_weekday exception
                       if(this->m_sv_parser.match(sitr, stream_end, mr)) {
                         t = time_type(static_cast<special_values>(mr.current_match));
                         return sitr;
@@ -1052,14 +1052,14 @@ namespace date_time {
                     try {
                       t_day = this->m_parser.parse_day_of_month(sitr, stream_end);
                     }
-                    catch(std::out_of_range& bad_day_of_month) { // base class for exception
+                    catch(std::out_of_range&) { // base class for exception bad_day_of_month
                       match_results mr;
                       if(this->m_sv_parser.match(sitr, stream_end, mr)) {
                         t = time_type(static_cast<special_values>(mr.current_match));
                         return sitr;
                       }
                       else {
-                        throw; // rethrow bad_year
+                        throw; // rethrow bad_day_of_month
                       }
                     }
                     break;
