@@ -12,8 +12,8 @@
 
 #include <boost/functional/hash_fwd.hpp>
 #include <functional>
-#include <boost/functional/detail/hash_float.hpp>
-#include <boost/functional/detail/container_fwd.hpp>
+#include <boost/functional/hash/detail/hash_float.hpp>
+#include <boost/detail/container_fwd.hpp>
 #include <string>
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
