@@ -410,6 +410,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           </xsl:call-template>
         </xsl:with-param>
         <xsl:with-param name="synopsis">
+          <xsl:call-template name="header-link"/>
           <xsl:call-template name="type.typedef.display.aligned">
             <xsl:with-param name="compact" select="false()"/>
             <xsl:with-param name="indentation" select="0"/>
@@ -1056,6 +1057,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
         <xsl:call-template name="type.display.name"/>
       </xsl:with-param>
       <xsl:with-param name="synopsis">
+        <xsl:call-template name="header-link"/>
         <xsl:call-template name="class-type-synopsis">
           <xsl:with-param name="indentation" select="$indentation"/>
           <xsl:with-param name="allow-synopsis-anchors" select="true()"/>
@@ -1300,6 +1302,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           </xsl:call-template>
         </xsl:with-param>
         <xsl:with-param name="synopsis">
+          <xsl:call-template name="header-link"/>
           <xsl:call-template name="type.enum.display"/>
         </xsl:with-param>
 
