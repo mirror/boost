@@ -153,7 +153,8 @@ thus can be solved with Boost.MultiIndex as follows:
 
 <p>
 Instead of a single comparison predicate type, as it happens for STL associative
-containers, <code>multi_index_container</code> is passed a <i>typelist</i> of index
+containers, <code>multi_index_container</code> is passed a 
+<a href="../reference/multi_index_container.html#multi_index_container">list</a> of index
 specifications (<code>indexed_by</code>), each one inducing the corresponding index.
 Indices are accessed via
 <a href="../reference/multi_index_container.html#index_retrieval"><code>get</code></a><code>&lt;N>()</code>
@@ -471,26 +472,6 @@ means of user-defined <code>typedef</code>s:
 <span class=keyword>typedef</span> <span class=identifier>employee_set</span><span class=special>::</span><span class=identifier>nth_index</span><span class=special>&lt;</span><span class=number>1</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>employee_set_by_name</span><span class=special>;</span>
 <span class=identifier>employee_set_by_name</span><span class=special>::</span><span class=identifier>iterator</span> <span class=identifier>it</span><span class=special>=</span>
   <span class=identifier>es</span><span class=special>.</span><span class=identifier>get</span><span class=special>&lt;</span><span class=number>1</span><span class=special>&gt;().</span><span class=identifier>find</span><span class=special>(</span><span class=string>&quot;Judy Smith&quot;</span><span class=special>);</span>
-</pre></blockquote>
-
-<p>
-Additionally, <code>multi_index_container</code>s provide shortcut
-definitions to the iterator types of their constituent indices:
-</p>
-
-<blockquote><pre>
-<span class=identifier>employee_set</span><span class=special>::</span><span class=identifier>nth_index_iterator</span><span class=special>&lt;</span><span class=number>1</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>it</span><span class=special>=</span>
-  <span class=identifier>es</span><span class=special>.</span><span class=identifier>get</span><span class=special>&lt;</span><span class=number>1</span><span class=special>&gt;().</span><span class=identifier>find</span><span class=special>(</span><span class=string>&quot;Judy Smith&quot;</span><span class=special>);</span>
-</pre></blockquote>
-
-<p>
-There is a variation of the expression above for use with
-<a href="#tagging">tags</a>:
-</p>
-
-<blockquote><pre>
-<span class=identifier>employee_set</span><span class=special>::</span><span class=identifier>index_iterator</span><span class=special>&lt;</span><span class=identifier>name</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>it</span><span class=special>=</span>
-  <span class=identifier>es</span><span class=special>.</span><span class=identifier>get</span><span class=special>&lt;</span><span class=identifier>name</span><span class=special>&gt;().</span><span class=identifier>find</span><span class=special>(</span><span class=string>&quot;Judy Smith&quot;</span><span class=special>);</span>         <span class=comment>// get&lt;1&gt; would also work</span>
 </pre></blockquote>
 
 <h2>
@@ -1208,7 +1189,7 @@ A slightly more interesting example:
 
 <span class=comment>// prepend &quot;older&quot; to all occurrences of &quot;sister&quot;</span>
 
-<span class=identifier>text_container</span><span class=special>::</span><span class=identifier>nth_index_iterator</span><span class=special>&lt;</span><span class=number>1</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>it1</span><span class=special>=</span>
+<span class=identifier>text_container</span><span class=special>::</span><span class=identifier>nth_index</span><span class=special>&lt;</span><span class=number>1</span><span class=special>&gt;::</span><span class=identifier>type</span><span class=special>::</span><span class=identifier>iterator</span> <span class=identifier>it1</span><span class=special>=</span>
   <span class=identifier>sorted_index</span><span class=special>.</span><span class=identifier>lower_bound</span><span class=special>(</span><span class=string>&quot;sister&quot;</span><span class=special>);</span>
   
 <span class=keyword>while</span><span class=special>(</span><span class=identifier>it1</span><span class=special>!=</span><span class=identifier>sorted_index</span><span class=special>.</span><span class=identifier>end</span><span class=special>()&amp;&amp;*</span><span class=identifier>it1</span><span class=special>==</span><span class=string>&quot;sister&quot;</span><span class=special>){</span>
@@ -1259,9 +1240,9 @@ Index types
 
 <br>
 
-<p>Revised July 17th 2007</p>
+<p>Revised November 7th 2008</p>
 
-<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

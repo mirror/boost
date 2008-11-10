@@ -285,7 +285,7 @@ definition of the <code>multi_index_container</code>:
 Each of these types is an MPL sequence with as many elements as indices
 comprise the <code>multi_index_container</code>: for instance, the <code>n</code>-th
 element of <code>iterator_type_list</code> is the same as
-<code>nth_index_iterator&lt;n>::type</code>.
+<code>nth_index&lt;n>::type::iterator</code>.
 </p>
 
 <p>
@@ -392,9 +392,9 @@ Boost.MultiIndex reference
 
 <br>
 
-<p>Revised February 6th 2006</p>
+<p>Revised November 7th 2008</p>
 
-<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

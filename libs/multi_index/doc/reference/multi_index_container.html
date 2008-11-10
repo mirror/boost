@@ -99,10 +99,15 @@ synopsis</a>
 
 <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>&gt;</span> <span class=keyword>struct</span> <span class=identifier>nth_index</span><span class=special>;</span>
 <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span> <span class=keyword>struct</span> <span class=identifier>index</span><span class=special>;</span>
-<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>&gt;</span> <span class=keyword>struct</span> <span class=identifier>nth_index_iterator</span><span class=special>;</span>
-<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>&gt;</span> <span class=keyword>struct</span> <span class=identifier>nth_index_const_iterator</span><span class=special>;</span>
-<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span> <span class=keyword>struct</span> <span class=identifier>index_iterator</span><span class=special>;</span>
-<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span> <span class=keyword>struct</span> <span class=identifier>index_const_iterator</span><span class=special>;</span>
+
+<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>&gt;</span>
+<span class=keyword>struct</span> <span class=identifier>nth_index_iterator</span><span class=special>;</span>                          <span class=comment><b>// deprecated</b></span>
+<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>&gt;</span>
+<span class=keyword>struct</span> <span class=identifier>nth_index_const_iterator</span><span class=special>;</span>                    <span class=comment><b>// deprecated</b></span>
+<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span>
+<span class=keyword>struct</span> <span class=identifier>index_iterator</span><span class=special>;</span>                              <span class=comment><b>// deprecated</b></span>
+<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span>
+<span class=keyword>struct</span> <span class=identifier>index_const_iterator</span><span class=special>;</span>                        <span class=comment><b>// deprecated</b></span>
 
 <span class=comment>// multi_index_container global functions for index retrieval:</span>
 
@@ -144,9 +149,9 @@ synopsis</a>
   <span class=keyword>int</span> <span class=identifier>N</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IteratorType</span><span class=special>,</span>
   <span class=keyword>typename</span> <span class=identifier>Value</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Allocator</span>
 <span class=special>&gt;</span>
-<span class=keyword>typename</span> <span class=identifier>nth_index_iterator</span><span class=special>&lt;</span>
+<span class=keyword>typename</span> <span class=identifier>nth_index</span><span class=special>&lt;</span>
   <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;,</span><span class=identifier>N</span>
-<span class=special>&gt;::</span><span class=identifier>type</span>
+<span class=special>&gt;::</span><span class=identifier>type</span><span class=special>::</span><span class=identifier>iterator</span>
 <span class=identifier>project</span><span class=special>(</span>
   <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;&amp;</span> <span class=identifier>m</span><span class=special>,</span>
   <span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>);</span>
@@ -155,9 +160,9 @@ synopsis</a>
   <span class=keyword>int</span> <span class=identifier>N</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IteratorType</span><span class=special>,</span>
   <span class=keyword>typename</span> <span class=identifier>Value</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Allocator</span>
 <span class=special>&gt;</span>
-<span class=keyword>typename</span> <span class=identifier>nth_index_const_iterator</span><span class=special>&lt;</span>
+<span class=keyword>typename</span> <span class=identifier>nth_index</span><span class=special>&lt;</span>
   <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;,</span><span class=identifier>N</span>
-<span class=special>&gt;::</span><span class=identifier>type</span>
+<span class=special>&gt;::</span><span class=identifier>type</span><span class=special>::</span><span class=identifier>const_iterator</span>
 <span class=identifier>project</span><span class=special>(</span>
   <span class=keyword>const</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;&amp;</span> <span class=identifier>m</span><span class=special>,</span>
   <span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>);</span>
@@ -166,9 +171,9 @@ synopsis</a>
   <span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IteratorType</span><span class=special>,</span>
   <span class=keyword>typename</span> <span class=identifier>Value</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Allocator</span>
 <span class=special>&gt;</span>
-<span class=keyword>typename</span> <span class=identifier>index_iterator</span><span class=special>&lt;</span>
+<span class=keyword>typename</span> <span class=identifier>index</span><span class=special>&lt;</span>
   <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;,</span><span class=identifier>Tag</span>
-<span class=special>&gt;::</span><span class=identifier>type</span>
+<span class=special>&gt;::</span><span class=identifier>type</span><span class=special>::</span><span class=identifier>iterator</span>
 <span class=identifier>project</span><span class=special>(</span>
   <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;&amp;</span> <span class=identifier>m</span><span class=special>,</span>
   <span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>);</span>
@@ -177,9 +182,9 @@ synopsis</a>
   <span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IteratorType</span><span class=special>,</span>
   <span class=keyword>typename</span> <span class=identifier>Value</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Allocator</span>
 <span class=special>&gt;</span>
-<span class=keyword>typename</span> <span class=identifier>index_const_iterator</span><span class=special>&lt;</span>
+<span class=keyword>typename</span> <span class=identifier>index</span><span class=special>&lt;</span>
   <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;,</span><span class=identifier>Tag</span>
-<span class=special>&gt;::</span><span class=identifier>type</span>
+<span class=special>&gt;::</span><span class=identifier>type</span><span class=special>::</span><span class=identifier>const_iterator</span>
 <span class=identifier>project</span><span class=special>(</span>
   <span class=keyword>const</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;&amp;</span> <span class=identifier>m</span><span class=special>,</span>
   <span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>);</span>
@@ -265,14 +270,20 @@ operators and functions associated with the index (vg. comparison and
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span>
   <span class=keyword>struct</span> <span class=identifier>index</span>                    <span class=special>{</span><span class=keyword>typedef</span> <b>implementation defined</b> <span class=identifier>type</span><span class=special>;};</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>&gt;</span>
-  <span class=keyword>struct</span> <span class=identifier>nth_index_iterator</span>       <span class=special>{</span><span class=keyword>typedef</span> <b>implementation defined</b> <span class=identifier>type</span><span class=special>;};</span>
-  <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>&gt;</span>
-  <span class=keyword>struct</span> <span class=identifier>nth_index_const_iterator</span> <span class=special>{</span><span class=keyword>typedef</span> <b>implementation defined</b> <span class=identifier>type</span><span class=special>;};</span>
-  <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span>
-  <span class=keyword>struct</span> <span class=identifier>index_iterator</span>           <span class=special>{</span><span class=keyword>typedef</span> <b>implementation defined</b> <span class=identifier>type</span><span class=special>;};</span>
-  <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span>
-  <span class=keyword>struct</span> <span class=identifier>index_const_iterator</span>     <span class=special>{</span><span class=keyword>typedef</span> <b>implementation defined</b> <span class=identifier>type</span><span class=special>;};</span>
 
+  <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>&gt;</span>
+  <span class=keyword>struct</span> <span class=identifier>nth_index_iterator</span>        <span class=comment><b>// deprecated</b></span>
+  <span class=special>{</span><span class=keyword>typedef</span> <b><span class=identifier>implementation</span> <span class=identifier>defined</span></b> <span class=identifier>type</span><span class=special>;};</span>
+  <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>&gt;</span>
+  <span class=keyword>struct</span> <span class=identifier>nth_index_const_iterator</span>  <span class=comment><b>// deprecated</b></span>
+  <span class=special>{</span><span class=keyword>typedef</span> <b><span class=identifier>implementation</span> <span class=identifier>defined</span></b> <span class=identifier>type</span><span class=special>;};</span>
+  <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span>
+  <span class=keyword>struct</span> <span class=identifier>index_iterator</span>            <span class=comment><b>// deprecated</b></span>
+  <span class=special>{</span><span class=keyword>typedef</span> <b><span class=identifier>implementation</span> <span class=identifier>defined</span></b> <span class=identifier>type</span><span class=special>;};</span>
+  <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span>
+  <span class=keyword>struct</span> <span class=identifier>index_const_iterator</span>      <span class=comment><b>// deprecated</b></span>
+  <span class=special>{</span><span class=keyword>typedef</span> <b><span class=identifier>implementation</span> <span class=identifier>defined</span></b> <span class=identifier>type</span><span class=special>;};</span>
+  
   <span class=comment>// construct/copy/destroy:</span>
 
   <span class=keyword>explicit</span> <span class=identifier>multi_index_container</span><span class=special>(
@@ -304,13 +315,13 @@ operators and functions associated with the index (vg. comparison and
   <span class=comment>// projection of iterators</span>
 
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IteratorType</span><span class=special>&gt;</span>
-    <span class=keyword>typename</span> <span class=identifier>nth_index_iterator</span><span class=special>&lt;</span><span class=identifier>N</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>project</span><span class=special>(</span><span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>);</span>
+    <span class=keyword>typename</span> <span class=identifier>nth_index</span><span class=special>&lt;</span><span class=identifier>N</span><span class=special>&gt;::</span><span class=identifier>type</span><span class=special>::</span><span class=identifier>iterator</span> <span class=identifier>project</span><span class=special>(</span><span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>);</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IteratorType</span><span class=special>&gt;</span>
-    <span class=keyword>typename</span> <span class=identifier>nth_index_const_iterator</span><span class=special>&lt;</span><span class=identifier>N</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>project</span><span class=special>(</span><span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+    <span class=keyword>typename</span> <span class=identifier>nth_index</span><span class=special>&lt;</span><span class=identifier>N</span><span class=special>&gt;::</span><span class=identifier>type</span><span class=special>::</span><span class=identifier>const_iterator</span> <span class=identifier>project</span><span class=special>(</span><span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IteratorType</span><span class=special>&gt;</span>
-    <span class=keyword>typename</span> <span class=identifier>index_iterator</span><span class=special>&lt;</span><span class=identifier>Tag</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>project</span><span class=special>(</span><span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>);</span>
+    <span class=keyword>typename</span> <span class=identifier>index</span><span class=special>&lt;</span><span class=identifier>Tag</span><span class=special>&gt;::</span><span class=identifier>type</span><span class=special>::</span><span class=identifier>iterator</span> <span class=identifier>project</span><span class=special>(</span><span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>);</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IteratorType</span><span class=special>&gt;</span>
-    <span class=keyword>typename</span> <span class=identifier>index_const_iterator</span><span class=special>&lt;</span><span class=identifier>Tag</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>project</span><span class=special>(</span><span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+    <span class=keyword>typename</span> <span class=identifier>index</span><span class=special>&lt;</span><span class=identifier>Tag</span><span class=special>&gt;::</span><span class=identifier>type</span><span class=special>::</span><span class=identifier>const_iterator</span> <span class=identifier>project</span><span class=special>(</span><span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 <span class=special>};</span>
 
 <span class=comment>// multi_index_container associated global class templates:</span>
@@ -325,22 +336,26 @@ operators and functions associated with the index (vg. comparison and
   <span class=keyword>typedef</span> <span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>::</span><span class=identifier>index</span><span class=special>&lt;</span><span class=identifier>Tag</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>type</span><span class=special>;</span>
 <span class=special>};</span>
 
-<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>&gt;</span> <span class=keyword>struct</span> <span class=identifier>nth_index_iterator</span>
+<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>&gt;</span>
+<span class=keyword>struct</span> <span class=identifier>nth_index_iterator</span>       <span class=comment><b>// deprecated</b></span>
 <span class=special>{</span>
   <span class=keyword>typedef</span> <span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>::</span><span class=identifier>nth_index_iterator</span><span class=special>&lt;</span><span class=identifier>N</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>type</span><span class=special>;</span>
 <span class=special>};</span>
 
-<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>&gt;</span> <span class=keyword>struct</span> <span class=identifier>nth_index_const_iterator</span>
+<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>N</span><span class=special>&gt;</span>
+<span class=keyword>struct</span> <span class=identifier>nth_index_const_iterator</span> <span class=comment><b>// deprecated</b></span>
 <span class=special>{</span>
   <span class=keyword>typedef</span> <span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>::</span><span class=identifier>nth_index_const_iterator</span><span class=special>&lt;</span><span class=identifier>N</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>type</span><span class=special>;</span>
 <span class=special>};</span>
 
-<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span> <span class=keyword>struct</span> <span class=identifier>index_iterator</span>
+<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span>
+<span class=keyword>struct</span> <span class=identifier>index_iterator</span>           <span class=comment><b>// deprecated</b></span>
 <span class=special>{</span>
   <span class=keyword>typedef</span> <span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>::</span><span class=identifier>index_iterator</span><span class=special>&lt;</span><span class=identifier>Tag</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>type</span><span class=special>;</span>
 <span class=special>};</span>
 
-<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span> <span class=keyword>struct</span> <span class=identifier>index_const_iterator</span>
+<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>&gt;</span>
+<span class=keyword>struct</span> <span class=identifier>index_const_iterator</span>     <span class=comment><b>// deprecated</b></span>
 <span class=special>{</span>
   <span class=keyword>typedef</span> <span class=keyword>typename</span> <span class=identifier>MultiIndexContainer</span><span class=special>::</span><span class=identifier>index_const_iterator</span><span class=special>&lt;</span><span class=identifier>Tag</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>type</span><span class=special>;</span>
 <span class=special>};</span>
@@ -397,56 +412,56 @@ operators and functions associated with the index (vg. comparison and
   <span class=keyword>int</span> <span class=identifier>N</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IteratorType</span><span class=special>,</span>
   <span class=keyword>typename</span> <span class=identifier>Value</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Allocator</span>
 <span class=special>&gt;</span>
-<span class=keyword>typename</span> <span class=identifier>nth_index_iterator</span><span class=special>&lt;</span>
+<span class=keyword>typename</span> <span class=identifier>nth_index</span><span class=special>&lt;</span>
   <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;,</span><span class=identifier>N</span>
-<span class=special>&gt;::</span><span class=identifier>type</span>
+<span class=special>&gt;::</span><span class=identifier>type</span><span class=special>::</span><span class=identifier>iterator</span>
 <span class=identifier>project</span><span class=special>(</span>
   <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;&amp;</span> <span class=identifier>m</span><span class=special>,</span>
   <span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>)</span>
 <span class=special>{</span>
-  <span class=keyword>return</span> <span class=identifier>m</span><span class=special>.</span><span class=identifier>project</span><span class=special>&lt;</span><span class=identifier>N</span><span class=special>&gt;(</span><span class=identifier>it</span><span class=special>);</span>
+  <span class=keyword>return</span> <span class=identifier>m</span><span class=special>.</span><span class=keyword>template</span> <span class=identifier>project</span><span class=special>&lt;</span><span class=identifier>N</span><span class=special>&gt;(</span><span class=identifier>it</span><span class=special>);</span>
 <span class=special>}</span>
 
 <span class=keyword>template</span><span class=special>&lt;</span>
   <span class=keyword>int</span> <span class=identifier>N</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IteratorType</span><span class=special>,</span>
   <span class=keyword>typename</span> <span class=identifier>Value</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Allocator</span>
 <span class=special>&gt;</span>
-<span class=keyword>typename</span> <span class=identifier>nth_index_const_iterator</span><span class=special>&lt;</span>
+<span class=keyword>typename</span> <span class=identifier>nth_index</span><span class=special>&lt;</span>
   <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;,</span><span class=identifier>N</span>
-<span class=special>&gt;::</span><span class=identifier>type</span>
+<span class=special>&gt;::</span><span class=identifier>type</span><span class=special>::</span><span class=identifier>const_iterator</span>
 <span class=identifier>project</span><span class=special>(</span>
   <span class=keyword>const</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;&amp;</span> <span class=identifier>m</span><span class=special>,</span>
   <span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>)</span>
 <span class=special>{</span>
-  <span class=keyword>return</span> <span class=identifier>m</span><span class=special>.</span><span class=identifier>project</span><span class=special>&lt;</span><span class=identifier>N</span><span class=special>&gt;(</span><span class=identifier>it</span><span class=special>);</span>
+  <span class=keyword>return</span> <span class=identifier>m</span><span class=special>.</span><span class=keyword>template</span> <span class=identifier>project</span><span class=special>&lt;</span><span class=identifier>N</span><span class=special>&gt;(</span><span class=identifier>it</span><span class=special>);</span>
 <span class=special>}</span>
 
 <span class=keyword>template</span><span class=special>&lt;</span>
   <span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IteratorType</span><span class=special>,</span>
   <span class=keyword>typename</span> <span class=identifier>Value</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Allocator</span>
 <span class=special>&gt;</span>
-<span class=keyword>typename</span> <span class=identifier>index_iterator</span><span class=special>&lt;</span>
+<span class=keyword>typename</span> <span class=identifier>index</span><span class=special>&lt;</span>
   <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;,</span><span class=identifier>Tag</span>
-<span class=special>&gt;::</span><span class=identifier>type</span>
+<span class=special>&gt;::</span><span class=identifier>type</span><span class=special>::</span><span class=identifier>iterator</span>
 <span class=identifier>project</span><span class=special>(</span>
   <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;&amp;</span> <span class=identifier>m</span><span class=special>,</span>
   <span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>)</span>
 <span class=special>{</span>
-  <span class=keyword>return</span> <span class=identifier>m</span><span class=special>.</span><span class=identifier>project</span><span class=special>&lt;</span><span class=identifier>Tag</span><span class=special>&gt;(</span><span class=identifier>it</span><span class=special>);</span>
+  <span class=keyword>return</span> <span class=identifier>m</span><span class=special>.</span><span class=keyword>template</span> <span class=identifier>project</span><span class=special>&lt;</span><span class=identifier>Tag</span><span class=special>&gt;(</span><span class=identifier>it</span><span class=special>);</span>
 <span class=special>}</span>
 
 <span class=keyword>template</span><span class=special>&lt;</span>
   <span class=keyword>typename</span> <span class=identifier>Tag</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IteratorType</span><span class=special>,</span>
   <span class=keyword>typename</span> <span class=identifier>Value</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Allocator</span>
 <span class=special>&gt;</span>
-<span class=keyword>typename</span> <span class=identifier>index_const_iterator</span><span class=special>&lt;</span>
+<span class=keyword>typename</span> <span class=identifier>index</span><span class=special>&lt;</span>
   <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;,</span><span class=identifier>Tag</span>
-<span class=special>&gt;::</span><span class=identifier>type</span>
+<span class=special>&gt;::</span><span class=identifier>type</span><span class=special>::</span><span class=identifier>const_iterator</span>
 <span class=identifier>project</span><span class=special>(</span>
   <span class=keyword>const</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>,</span><span class=identifier>IndexSpecifierList</span><span class=special>,</span><span class=identifier>Allocator</span><span class=special>&gt;&amp;</span> <span class=identifier>m</span><span class=special>,</span>
   <span class=identifier>IteratorType</span> <span class=identifier>it</span><span class=special>)</span>
 <span class=special>{</span>
-  <span class=keyword>return</span> <span class=identifier>m</span><span class=special>.</span><span class=identifier>project</span><span class=special>&lt;</span><span class=identifier>Tag</span><span class=special>&gt;(</span><span class=identifier>it</span><span class=special>);</span>
+  <span class=keyword>return</span> <span class=identifier>m</span><span class=special>.</span><span class=keyword>template</span> <span class=identifier>project</span><span class=special>&lt;</span><span class=identifier>Tag</span><span class=special>&gt;(</span><span class=identifier>it</span><span class=special>);</span>
 <span class=special>}</span>
 
 <span class=comment>// comparison:</span>
@@ -620,6 +635,7 @@ as an associated tag type.
 <blockquote>
 <code>nth_index_iterator&lt;N>::type</code> is equivalent to
 <code>nth_index&lt;N>::type::iterator</code>.<br>
+<b>Note:</b> The use of <code>nth_index_iterator</code> is deprecated.
 </blockquote>
 
 <code>template&lt;int N> struct nth_index_const_iterator</code>
@@ -627,6 +643,7 @@ as an associated tag type.
 <blockquote>
 <code>nth_index_const_iterator&lt;N>::type</code> is equivalent to
 <code>nth_index&lt;N>::type::const_iterator</code>.<br>
+<b>Note:</b> The use of <code>nth_index_const_iterator</code> is deprecated.
 </blockquote>
 
 <code>template&lt;typename Tag> struct index_iterator</code>
@@ -634,6 +651,7 @@ as an associated tag type.
 <blockquote>
 <code>index_iterator&lt;Tag>::type</code> is equivalent to
 <code>index&lt;Tag>::type::iterator</code>.<br>
+<b>Note:</b> The use of <code>index_iterator</code> is deprecated.
 </blockquote>
 
 <code>template&lt;typename Tag> struct index_const_iterator</code>
@@ -641,6 +659,7 @@ as an associated tag type.
 <blockquote>
 <code>index_const_iterator&lt;Tag>::type</code> is equivalent to
 <code>index&lt;Tag>::type::const_iterator</code>.<br>
+<b>Note:</b> The use of <code>index_const_iterator</code> is deprecated.
 </blockquote>
 
 <h4><a name="constructors">Constructors, copy and assignment</a></h4>
@@ -787,21 +806,21 @@ are <i>equivalent</i> if:
 </p>
 
 <code>template&lt;int N,typename IteratorType><br>
-typename nth_index_iterator&lt;N>::type project(IteratorType it);</code>
+typename nth_index&lt;N>::type::iterator project(IteratorType it);</code>
 
 <blockquote>
 <b>Requires:</b> <code>0 &lt;= N &lt; I</code>. <code>IteratorType</code>
 belongs to <code>iterator_type_list</code>. <code>it</code> is a valid
 iterator of some index of <code>*this</code> (i.e. does not refer to some
 other <code>multi_index_container</code>.)<br>
-<b>Effects:</b> Returns an <code>nth_index_iterator&lt;N>::type</code> iterator
+<b>Effects:</b> Returns an <code>nth_index&lt;N>::type::iterator</code> 
 equivalent to <code>it</code>.<br>
 <b>Complexity:</b> Constant.<br>
 <b>Exception safety:</b> <code>nothrow</code>.
 </blockquote>
 
 <code>template&lt;int N,typename IteratorType><br>
-typename nth_index_const_iterator&lt;N>::type project(IteratorType it)const;</code>
+typename nth_index&lt;N>::type::const_iterator project(IteratorType it)const;</code>
 
 <blockquote>
 <b>Requires:</b> <code>0 &lt;= N &lt; I</code>. <code>IteratorType</code>
@@ -809,38 +828,38 @@ belongs to <code>const_iterator_type_list</code> or
 <code>iterator_type_list</code>. <code>it</code> is a
 valid (constant or non-constant) iterator of some index of <code>*this</code>
 (i.e. does not refer to some other <code>multi_index_container</code>.)<br>
-<b>Effects:</b> Returns an <code>nth_index_const_iterator&lt;N>::type</code>
-iterator equivalent to <code>it</code>.<br>
-<b>Complexity:</b> Constant.<br>
-<b>Exception safety:</b> <code>nothrow</code>.
-</blockquote>
-
-<code>template&lt;typename Tag,typename IteratorType><br>
-typename index_iterator&lt;Tag>::type project(IteratorType it);</code>
-
-<blockquote>
-<b>Requires:</b> <code>Tag</code> is such that
-<code>index_iterator&lt;Tag>::type</code> is valid. <code>IteratorType</code>
-belongs to <code>iterator_type_list</code>. <code>it</code> is a valid
-iterator of some index of <code>*this</code> (i.e. does not refer to some
-other <code>multi_index_container</code>.)<br>
-<b>Effects:</b> Returns an <code>index_iterator&lt;Tag>::type</code> iterator
+<b>Effects:</b> Returns an <code>nth_index&lt;N>::type::const_iterator</code>
 equivalent to <code>it</code>.<br>
 <b>Complexity:</b> Constant.<br>
 <b>Exception safety:</b> <code>nothrow</code>.
 </blockquote>
 
 <code>template&lt;typename Tag,typename IteratorType><br>
-typename index_const_iterator&lt;Tag>::type project(IteratorType it)const;</code>
+typename index&lt;Tag>::type::iterator project(IteratorType it);</code>
 
 <blockquote>
 <b>Requires:</b> <code>Tag</code> is such that
-<code>index_const_iterator&lt;Tag>::type</code> is valid. <code>IteratorType</code>
+<code>index&lt;Tag>::type</code> is valid. <code>IteratorType</code>
+belongs to <code>iterator_type_list</code>. <code>it</code> is a valid
+iterator of some index of <code>*this</code> (i.e. does not refer to some
+other <code>multi_index_container</code>.)<br>
+<b>Effects:</b> Returns an <code>index&lt;Tag>::type::iterator</code>
+equivalent to <code>it</code>.<br>
+<b>Complexity:</b> Constant.<br>
+<b>Exception safety:</b> <code>nothrow</code>.
+</blockquote>
+
+<code>template&lt;typename Tag,typename IteratorType><br>
+typename index&lt;Tag>::type::const_iterator project(IteratorType it)const;</code>
+
+<blockquote>
+<b>Requires:</b> <code>Tag</code> is such that
+<code>index&lt;Tag>::type</code> is valid. <code>IteratorType</code>
 belongs to <code>const_iterator_type_list</code> or
 <code>iterator_type_list</code>. <code>it</code> is a valid
 (constant or non-constant) iterator of some index of <code>*this</code>
 (i.e. does not refer to some other <code>multi_index_container</code>.)<br>
-<b>Effects:</b> Returns an <code>index_const_iterator&lt;Tag>::type</code>
+<b>Effects:</b> Returns an <code>index&lt;Tag>::type::const_iterator</code>
 iterator equivalent to <code>it</code>.<br>
 <b>Complexity:</b> Constant.<br>
 <b>Exception safety:</b> <code>nothrow</code>.
@@ -911,7 +930,7 @@ Index reference
 
 <br>
 
-<p>Revised June 25th 2008</p>
+<p>Revised November 6th 2008</p>
 
 <p>&copy; Copyright 2003-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 

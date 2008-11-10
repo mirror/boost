@@ -245,7 +245,7 @@ int main()
 
     /* find all the cars for the manufacturer given */
 
-    index_iterator<car_table,manufacturer>::type ic0,ic1;
+    boost::multi_index::index<car_table,manufacturer>::type::iterator ic0,ic1;
     boost::tuples::tie(ic0,ic1)=get<manufacturer>(ct).equal_range(cm);
 
     /* construct a view (indexed by price) with these */
@@ -280,7 +280,7 @@ int main()
 
     /* find the cars in the range given */
 
-    index_iterator<car_table,price>::type ic0,ic1;
+    boost::multi_index::index<car_table,price>::type::iterator ic0,ic1;
     ic0=get<price>(ct).lower_bound(min_price);
     ic1=get<price>(ct).upper_bound(max_price);
 
