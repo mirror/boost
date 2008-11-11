@@ -1,3 +1,6 @@
+if (MPI_FOUND)
+message(STATUS "MPI Found")
+
 boost_additional_test_dependencies(mpi BOOST_DEPENDS test )
 
 include_directories(${MPI_INCLUDE_PATH})
@@ -63,3 +66,6 @@ boost_mpi_test(ring_test SCHEDULE 2 3 4 7 8 13 17)
 boost_mpi_test(scan_test)
 boost_mpi_test(scatter_test)
 boost_mpi_test(skeleton_content_test SCHEDULE 2 3 4 7 8 13 17)
+
+
+endif (MPI_FOUND)
