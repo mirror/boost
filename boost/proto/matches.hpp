@@ -537,14 +537,14 @@
                     typedef Expr result_type;
 
                     /// \param expr An expression
-                    /// \return \c expr
+                    /// \return \c e
                     typename impl::expr_param operator()(
-                        typename impl::expr_param expr
+                        typename impl::expr_param e
                       , typename impl::state_param
                       , typename impl::data_param
                     ) const
                     {
-                        return expr;
+                        return e;
                     }
                 };
             };
@@ -570,16 +570,16 @@
                 {
                     typedef Expr result_type;
 
-                    /// \param expr An expression
+                    /// \param e An expression
                     /// \pre <tt>matches\<Expr,not_\>::::value</tt> is \c true.
-                    /// \return \c expr
+                    /// \return \c e
                     typename impl::expr_param operator()(
-                        typename impl::expr_param expr
+                        typename impl::expr_param e
                       , typename impl::state_param
                       , typename impl::data_param
                     ) const
                     {
-                        return expr;
+                        return e;
                     }
                 };
             };
@@ -660,17 +660,17 @@
 
                     typedef typename which::template impl<Expr, State, Data>::result_type result_type;
 
-                    /// \param expr An expression
-                    /// \param state The current state
-                    /// \param data A data of arbitrary type
-                    /// \return <tt>which::impl<Expr, State, Data>()(expr, state, data)</tt>
+                    /// \param e An expression
+                    /// \param s The current state
+                    /// \param d A data of arbitrary type
+                    /// \return <tt>which::impl<Expr, State, Data>()(e, s, d)</tt>
                     result_type operator ()(
-                        typename impl::expr_param expr
-                      , typename impl::state_param state
-                      , typename impl::data_param data
+                        typename impl::expr_param e
+                      , typename impl::state_param s
+                      , typename impl::data_param d
                     ) const
                     {
-                        return typename which::template impl<Expr, State, Data>()(expr, state, data);
+                        return typename which::template impl<Expr, State, Data>()(e, s, d);
                     }
                 };
             };
@@ -692,11 +692,11 @@
             {
                 typedef or_ proto_base_expr;
 
-                /// \param expr An expression
-                /// \param state The current state
-                /// \param data A data of arbitrary type
+                /// \param e An expression
+                /// \param s The current state
+                /// \param d A data of arbitrary type
                 /// \pre <tt>matches\<Expr,or_\>::::value</tt> is \c true.
-                /// \return <tt>result\<void(Expr, State, Data)\>::::which()(expr, state, data)</tt>
+                /// \return <tt>result\<void(Expr, State, Data)\>::::which()(e, s, d)</tt>
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
@@ -730,11 +730,11 @@
                 struct impl
                   : detail::last<and_>::type::template impl<Expr, State, Data>
                 {
-                    /// \param expr An expression
-                    /// \param state The current state
-                    /// \param data A data of arbitrary type
+                    /// \param e An expression
+                    /// \param s The current state
+                    /// \param d A data of arbitrary type
                     /// \pre <tt>matches\<Expr,and_\>::::value</tt> is \c true.
-                    /// \return <tt>result\<void(Expr, State, Data)\>::::which()(expr, state, data)</tt>
+                    /// \return <tt>result\<void(Expr, State, Data)\>::::which()(e, s, d)</tt>
                 };
             };
 
@@ -759,11 +759,11 @@
             {
                 typedef switch_ proto_base_expr;
 
-                /// \param expr An expression
-                /// \param state The current state
-                /// \param data A data of arbitrary type
+                /// \param e An expression
+                /// \param s The current state
+                /// \param d A data of arbitrary type
                 /// \pre <tt>matches\<Expr,switch_\>::::value</tt> is \c true.
-                /// \return <tt>result\<void(Expr, State, Data)\>::::which()(expr, state, data)</tt>
+                /// \return <tt>result\<void(Expr, State, Data)\>::::which()(e, s, d)</tt>
 
                 template<typename Expr, typename State, typename Data>
                 struct impl

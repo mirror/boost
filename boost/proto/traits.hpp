@@ -539,17 +539,17 @@
                 {
                     typedef Expr result_type;
 
-                    /// \param expr The current expression
+                    /// \param e The current expression
                     /// \pre <tt>matches\<Expr, terminal\<T\> \>::::value</tt> is \c true.
-                    /// \return \c expr
+                    /// \return \c e
                     /// \throw nothrow
                     typename impl::expr_param operator ()(
-                        typename impl::expr_param expr
+                        typename impl::expr_param e
                       , typename impl::state_param
                       , typename impl::data_param
                     ) const
                     {
-                        return expr;
+                        return e;
                     }
                 };
 

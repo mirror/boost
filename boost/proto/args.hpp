@@ -1,7 +1,8 @@
 #ifndef BOOST_PP_IS_ITERATING
     ///////////////////////////////////////////////////////////////////////////////
     /// \file args.hpp
-    /// Contains definition of args\<\> class template.
+    /// Contains definition of \c term\<\>, \c list1\<\>, \c list2\<\>, ...
+    /// class templates.
     //
     //  Copyright 2008 Eric Niebler. Distributed under the Boost
     //  Software License, Version 1.0. (See accompanying file
