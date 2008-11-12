@@ -17,15 +17,21 @@
 template<class temporal_type, typename charT>
 inline
 void
-teststreaming(std::string testname,
+teststreaming(std::string const& testname,
               temporal_type value,
-              std::basic_string<charT> expected_result,
+              std::basic_string<charT> const& expected_result,
               const std::locale& locale)
 {
   std::basic_stringstream<charT> ss;
   ss.imbue(locale);
   ss << value;
-  check(testname, ss.str() == expected_result);
+
+  if (!check(testname, ss.str() == expected_result))
+#if !defined(BOOST_NO_STD_WSTRING)
+    std::wcout << L"Expected: \"" << expected_result.c_str() << L"\"\nGot:      \"" << ss.str().c_str() << L"\"" << std::endl;
+#else
+    std::cout << "Expected: \"" << expected_result.c_str() << "\"\nGot:      \"" << ss.str().c_str() << L"\"" << std::endl;
+#endif
 }
 
 int main(){
@@ -72,8 +78,10 @@ int main(){
   local_date_time ldt4(b_time, la);
   local_date_time ldt5(a_time, nyc);
   local_date_time ldt6(b_time, phx);
-      
- 
+
+  local_time_period ltp1(ldt1, hours(10) + minutes(24) + seconds(5));
+  local_time_period ltp2(ldt4, hours(15) + minutes(20) + seconds(41));
+
   typedef boost::date_time::time_facet<local_date_time, char> ldt_facet;
   //ldt_facet* timefacet = new ldt_facet("%c %Z"); // full name
   ldt_facet* timefacet = new ldt_facet("%a %b %d %H:%M:%S %Y %Z"); // full name
@@ -94,7 +102,10 @@ int main(){
   teststreaming("Los Angeles in summer", ldt4, std::string("Sun Aug 15 05:00:00 2004 Pacific Daylight Time"), loc1);
   teststreaming("New York in winter", ldt5, std::string("Wed Dec 15 07:00:00 2004 Eastern Standard Time"), loc1);
   teststreaming("Phoenix in Summer", ldt6, std::string("Sun Aug 15 05:00:00 2004 Mountain Standard Time"), loc1);
- 
+
+  teststreaming("UTC local_time_period", ltp1, std::string("[Wed Dec 15 12:00:00 2004 Coordinated Universal Time/Wed Dec 15 22:24:04 2004 Coordinated Universal Time]"), loc1);
+  teststreaming("LA local_time_period", ltp2, std::string("[Sun Aug 15 05:00:00 2004 Pacific Daylight Time/Sun Aug 15 20:20:40 2004 Pacific Daylight Time]"), loc1);
+
   //ptimefacet1->format("%c %z"); // show that zone abbrev is ignored
   ptimefacet1->format("%a %b %d %H:%M:%S %Y %z"); // show that zone abbrev is ignored
   std::cout << "\nTime zone abbreviation tests" << std::endl;
@@ -169,6 +180,9 @@ int main(){
   teststreaming("UTC local_date_time", ldt1, std::wstring(L"Wed Dec 15 12:00:00 2004 Coordinated Universal Time"), loc3);
   teststreaming("Chicago in summer", ldt2, std::wstring(L"Sun Aug 15 07:00:00 2004 Central Daylight Time") , loc3);
  
+  teststreaming("UTC local_time_period", ltp1, std::wstring(L"[Wed Dec 15 12:00:00 2004 Coordinated Universal Time/Wed Dec 15 22:24:04 2004 Coordinated Universal Time]"), loc3);
+  teststreaming("LA local_time_period", ltp2, std::wstring(L"[Sun Aug 15 05:00:00 2004 Pacific Daylight Time/Sun Aug 15 20:20:40 2004 Pacific Daylight Time]"), loc3);
+
   //wtimefacet->format(L"%c %z"); // abbrev
   wtimefacet->format(L"%a %b %d %H:%M:%S %Y %z"); // abbrev
   std::cout << "\nAbbreviated time zone names tests - wide stream" << std::endl;

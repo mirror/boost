@@ -40,7 +40,7 @@
 
   <para>
     The construction of a date validates all input so that it is not possible to
-    construct and 'invalid' date.  That is 2001-Feb-29 cannot be constructed as a date. 
+    construct an 'invalid' date.  That is 2001-Feb-29 cannot be constructed as a date. 
     Various exceptions derived from std::out_of_range are thrown to indicate which aspect 
     of the date input is invalid.  Note that the
     special value not-a-date-time can be used as 'invalid' or 'null' date if so desired.
@@ -230,7 +230,7 @@ date::ymd_type ymd = d.year_month_day();
         
 	<row>
 	  <entry valign="top" morerows="1"><screen>greg_day_of_week day_of_week() const</screen></entry>
-	  <entry>Get the day of the week (eg: Sunday, Monday, etc.</entry>
+	  <entry>Get the day of the week (Sunday, Monday, etc.)</entry>
 	</row>
 	<row>
 	  <entry><screen>date d(2002,Jan,10);
@@ -364,7 +364,7 @@ date eom = d.end_of_month_day();</screen></entry>
       <tbody>
         <row>
 	  <entry valign="top" morerows="1"><screen>std::string to_simple_string(date d)</screen></entry>
-          <entry>To <code>YYYY-mmm-DD</code> string where <code>mmm</code> 3 char month name.</entry>
+          <entry>To <code>YYYY-mmm-DD</code> string where <code>mmm</code> is a 3 char month name.</entry>
 	</row>
 	<row>
 	  <entry><screen>"2002-Jan-01"</screen></entry>
@@ -447,7 +447,7 @@ date d2 = d + dd;</screen>
         
 	<row>
 	  <entry valign="top" morerows="1"><screen>date operator-(date_duration) const</screen></entry>
-	  <entry>Return a date by adding a day offset</entry>
+	  <entry>Return a date by substracting a day offset</entry>
 	</row>
 	<row>
 	  <entry><screen>date d(2002,Jan,1);

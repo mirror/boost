@@ -9,15 +9,15 @@
  * $Date$
  */
 
-#include "boost/tokenizer.hpp"
-#include "boost/lexical_cast.hpp"
-#include "boost/date_time/compiler_config.hpp"
-#include "boost/date_time/parse_format_base.hpp"
 #include <string>
 #include <iterator>
 #include <algorithm>
+#include <boost/tokenizer.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/date_time/compiler_config.hpp>
+#include <boost/date_time/parse_format_base.hpp>
 
-#if defined(BOOST_NO_STD_LOCALE)
+#if defined(BOOST_DATE_TIME_NO_LOCALE)
 #include <cctype> // ::tolower(int)
 #else
 #include <locale> // std::tolower(char, locale)
@@ -34,38 +34,38 @@ namespace date_time {
    */
   inline
   std::string 
-  convert_to_lower(const std::string& inp) {
-    std::string tmp;
-    unsigned i = 0;
-#if defined(BOOST_NO_STD_LOCALE)
-    while(i < inp.length()) {
-      tmp += static_cast<char>(std::tolower(inp.at(i++)));
+  convert_to_lower(std::string inp)
+  {
+#if !defined(BOOST_DATE_TIME_NO_LOCALE)
+    const std::locale loc(std::locale::classic());
+#endif
+    std::string::size_type i = 0, n = inp.length();
+    for (; i < n; ++i) {
+      inp[i] =
+#if defined(BOOST_DATE_TIME_NO_LOCALE)
+        static_cast<char>(std::tolower(inp[i]));
 #else
-      static const std::locale loc(std::locale::classic());
-      while(i < inp.length()) {
         // tolower and others were brought in to std for borland >= v564
         // in compiler_config.hpp
-        std::string::value_type c(inp.at(i++));
-        tmp += std::tolower(c, loc);
+        std::tolower(inp[i], loc);
 #endif
-        
-      }
-      return tmp;
     }
-    
+    return inp;
+  }
+
     //! Helper function for parse_date.
     /* Used by-value parameter because we change the string and may
      * want to preserve the original argument */
     template<class month_type>
-    unsigned short 
-    month_str_to_ushort(std::string s) {
+    inline unsigned short 
+    month_str_to_ushort(std::string const& s) {
       if((s.at(0) >= '0') && (s.at(0) <= '9')) {
         return boost::lexical_cast<unsigned short>(s);
       } 
       else {
-        s = convert_to_lower(s);
+        std::string str = convert_to_lower(s);
         typename month_type::month_map_ptr_type ptr = month_type::get_month_map_ptr();
-        typename month_type::month_map_type::iterator iter = ptr->find(s);
+        typename month_type::month_map_type::iterator iter = ptr->find(str);
         if(iter != ptr->end()) { // required for STLport
           return iter->second;
         }
@@ -101,7 +101,7 @@ namespace date_time {
     template<class date_type>
     date_type
     parse_date(const std::string& s, int order_spec = ymd_order_iso) {
-      std::string spec_str("");
+      std::string spec_str;
       if(order_spec == ymd_order_iso) {
         spec_str = "ymd";
       } 
@@ -196,7 +196,7 @@ namespace date_time {
                      iterator_type& end,
                      char) 
     {
-      std::stringstream ss("");
+      std::ostringstream ss;
       while(beg != end) {
         ss << *beg++;
       }
@@ -228,7 +228,7 @@ namespace date_time {
                                iterator_type& end,
                                wchar_t) 
     {
-      std::stringstream ss("");
+      std::ostringstream ss;
       while(beg != end) {
 #if !defined(BOOST_DATE_TIME_NO_LOCALE)
         ss << std::use_facet<std::ctype<wchar_t> >(std::locale()).narrow(*beg++, 'X'); // 'X' will cause exception to be thrown
@@ -249,7 +249,7 @@ namespace date_time {
                      iterator_type& end,
                      std::wstring) {
       std::wstring ws = *beg;
-      std::stringstream ss("");
+      std::ostringstream ss;
       std::wstring::iterator wsb = ws.begin(), wse = ws.end();
       while(wsb != wse) {
 #if !defined(BOOST_DATE_TIME_NO_LOCALE)
@@ -289,7 +289,7 @@ namespace date_time {
       return period<date_type, typename date_type::duration_type>(d1, d2); 
     }
 #endif
-    
+
 } } //namespace date_time
 
 

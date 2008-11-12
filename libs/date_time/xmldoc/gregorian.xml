@@ -24,7 +24,7 @@
   </para>
   <para>All types for the gregorian system are found in namespace boost::gregorian. The library supports a convenience header boost/date_time/gregorian/gregorian_types.hpp that will include all the classes of the library with no input/output dependency. Another header boost/date_time/gregorian/gregorian.hpp will include the types and the input/output code. 
   </para>
-  <para>The class <link linkend="date_time.gregorian.date_class">boost::gregorian::date</link> is the primary temporal type for users. If you are interested in learning about writing programs do specialized date calculations such as finding the "first sunday in april" see the date <link linkend="date_time.gregorian.date_algorithms">generators and algorithms page</link>. 
+  <para>The class <link linkend="date_time.gregorian.date_class">boost::gregorian::date</link> is the primary temporal type for users. If you are interested in learning about writing programs that do specialized date calculations such as finding the "first sunday in april" see the date <link linkend="date_time.gregorian.date_algorithms">generators and algorithms page</link>. 
   </para>
 
   <anchor id="greg_ex" />

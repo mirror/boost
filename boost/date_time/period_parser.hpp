@@ -10,8 +10,9 @@
  * $Date$
  */
 
-#include "boost/date_time/string_parse_tree.hpp"
-#include "boost/date_time/string_convert.hpp"
+#include <boost/throw_exception.hpp>
+#include <boost/date_time/string_parse_tree.hpp>
+#include <boost/date_time/string_convert.hpp>
 
 
 namespace boost { namespace date_time {
@@ -170,7 +171,8 @@ namespace boost { namespace date_time {
         ++sitr;
       }
       if(s != delim) {
-        throw std::ios_base::failure("Parse failed. Expected '" + convert_string_type<char_type,char>(delim) + "' but found '" + convert_string_type<char_type,char>(s) + "'");
+        boost::throw_exception(std::ios_base::failure("Parse failed. Expected '"
+          + convert_string_type<char_type,char>(delim) + "' but found '" + convert_string_type<char_type,char>(s) + "'"));
       }
     }
   };

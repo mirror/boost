@@ -12,7 +12,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/posix_time/time_serialize.hpp>
 #include <boost/date_time/testfrmwk.hpp>
-#include <fstream>
+#include <sstream>
 
 using namespace boost;
 using namespace posix_time;
@@ -47,16 +47,16 @@ int main(){
   ptime sv_pt4(min_date_time);
   time_duration sv_td2(0,0,0);
   
-  std::ofstream ofs("tmp_file");
+  std::ostringstream oss;
 
   // NOTE: DATE_TIME_XML_SERIALIZE is only used in testing and is
   // defined in the testing Jamfile
 #if defined(DATE_TIME_XML_SERIALIZE)
   std::cout << "Running xml archive tests" << std::endl;
-  archive::xml_oarchive oa(ofs);
+  archive::xml_oarchive oa(oss);
 #else
   std::cout << "Running text archive tests" << std::endl;
-  archive::text_oarchive oa(ofs);
+  archive::text_oarchive oa(oss);
 #endif // DATE_TIME_XML_SERIALIZE
 
   try{
@@ -75,20 +75,17 @@ int main(){
     save_to(oa, td);
     save_to(oa, sv_td);
 #endif // DATE_TIME_XML_SERIALIZE
-  }catch(archive::archive_exception ae){
+  }catch(archive::archive_exception& ae){
     std::string s(ae.what());
-    check("Error writing to archive: " + s, false);
-    ofs.close();
+    check("Error writing to archive: " + s + "\nWritten data: \"" + oss.str() + "\"", false);
     return printTestStats();
   }
 
-  ofs.close();
-
-  std::ifstream ifs("tmp_file");
+  std::istringstream iss(oss.str());
 #if defined(DATE_TIME_XML_SERIALIZE)
-  archive::xml_iarchive ia(ifs);
+  archive::xml_iarchive ia(iss);
 #else
-  archive::text_iarchive ia(ifs);
+  archive::text_iarchive ia(iss);
 #endif // DATE_TIME_XML_SERIALIZE
 
   try{
@@ -107,15 +104,12 @@ int main(){
     ia >> td2;
     ia >> sv_td2;
 #endif // DATE_TIME_XML_SERIALIZE
-  }catch(archive::archive_exception ae){
+  }catch(archive::archive_exception& ae){
     std::string s(ae.what());
-    check("Error readng from archive: " + s, false);
-    ifs.close();
+    check("Error readng from archive: " + s + "\nWritten data: \"" + oss.str() + "\"", false);
     return printTestStats();
   }
 
-  ifs.close();
- 
   check("ptime", pt == pt2);
   check("special_values ptime (nadt)", sv_pt1 == sv_pt3);
   check("special_values ptime (pos_infin)", sv_pt2 == sv_pt4);

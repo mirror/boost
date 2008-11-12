@@ -18,7 +18,7 @@
 template<class temporal_type, class exception_type>
 bool failure_test(temporal_type component,
                   const std::string& input,
-                  exception_type /*except*/,
+                  exception_type const& /*except*/,
                   boost::posix_time::time_input_facet* facet)
 {
   using namespace boost::posix_time;
@@ -29,7 +29,7 @@ bool failure_test(temporal_type component,
   try {
     iss >> component;
   }
-  catch(exception_type e) {
+  catch(exception_type& e) {
     std::cout << "Expected exception caught: \"" 
               << e.what() << "\"" << std::endl;
     result = iss.fail(); // failbit must be set to pass test

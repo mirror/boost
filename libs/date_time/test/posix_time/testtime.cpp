@@ -302,7 +302,7 @@ main()
     ptime pt(pos_infin);
     tm pt_tm = to_tm(pt);
     check("Exception not thrown (special_value to_tm)", false);
-  }catch(std::out_of_range e){
+  }catch(std::out_of_range& e){
     check("Caught expected exception (special_value to_tm)", true);
   }catch(...){
     check("Caught un-expected exception (special_value to_tm)", false);
@@ -314,7 +314,7 @@ main()
     pt += time_duration(pos_infin);
     tm pt_tm = to_tm(pt);
     check("Exception not thrown (special_value to_tm)", false);
-  }catch(std::out_of_range e){
+  }catch(std::out_of_range& e){
     check("Caught expected exception (special_value to_tm)", true);
   }catch(...){
     check("Caught un-expected exception (special_value to_tm)", false);

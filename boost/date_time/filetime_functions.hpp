@@ -16,59 +16,138 @@
  */
 
 #include <boost/date_time/compiler_config.hpp>
+
 #if defined(BOOST_HAS_FTIME) // skip this file if no FILETIME
-#include <windows.h>
+
+#if defined(BOOST_USE_WINDOWS_H)
+#  include <windows.h>
+#endif
+
 #include <boost/cstdint.hpp>
 #include <boost/date_time/time.hpp>
-
 
 namespace boost {
 namespace date_time {
 
+namespace winapi {
+
+#if !defined(BOOST_USE_WINDOWS_H)
+
+extern "C" {
+
+    struct FILETIME
+    {
+        boost::uint32_t dwLowDateTime;
+        boost::uint32_t dwHighDateTime;
+    };
+    struct SYSTEMTIME
+    {
+        boost::uint16_t wYear;
+        boost::uint16_t wMonth;
+        boost::uint16_t wDayOfWeek;
+        boost::uint16_t wDay;
+        boost::uint16_t wHour;
+        boost::uint16_t wMinute;
+        boost::uint16_t wSecond;
+        boost::uint16_t wMilliseconds; 
+    };
+
+    __declspec(dllimport) void __stdcall GetSystemTimeAsFileTime(FILETIME* lpFileTime); 
+    __declspec(dllimport) int __stdcall FileTimeToLocalFileTime(const FILETIME* lpFileTime, FILETIME* lpLocalFileTime); 
+    __declspec(dllimport) void __stdcall GetSystemTime(SYSTEMTIME* lpSystemTime); 
+    __declspec(dllimport) int __stdcall SystemTimeToFileTime(const SYSTEMTIME* lpSystemTime, FILETIME* lpFileTime); 
+
+} // extern "C"
+
+#endif // defined(BOOST_USE_WINDOWS_H)
+
+    typedef FILETIME file_time;
+    typedef SYSTEMTIME system_time;
+
+    inline void get_system_time_as_file_time(file_time& ft)
+    {
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
+        // Some runtime library implementations expect local times as the norm for ctime.
+        file_time ft_utc;
+        GetSystemTimeAsFileTime(&ft_utc);
+        FileTimeToLocalFileTime(&ft_utc, &ft);
+#elif defined(BOOST_NO_GETSYSTEMTIMEASFILETIME)
+        system_time st;
+        GetSystemTime(&st);
+        SystemTimeToFileTime(&st, &ft);
+#else
+        GetSystemTimeAsFileTime(&ft);
+#endif
+    }
+
+    /*!
+     * The function converts file_time into number of nanoseconds elapsed since 1970-Jan-01
+     *
+     * \note The function is templated on the FILETIME type, so that
+     *       it can be used with both native FILETIME and the ad-hoc
+     *       boost::date_time::winapi::file_time type.
+     */
+    template< typename FileTimeT >
+    inline boost::uint64_t file_time_to_nanoseconds(FileTimeT const& ft)
+    {
+        /* shift is difference between 1970-Jan-01 & 1601-Jan-01 
+        * in 100-nanosecond intervals */
+        const uint64_t c1 = 27111902UL;
+        const uint64_t c2 = 3577643008UL; // issues warning without 'UL'
+        const uint64_t shift = (c1 << 32) + c2;
+
+        union {
+            FileTimeT as_file_time;
+            uint64_t as_integer;
+        } caster;
+        caster.as_file_time = ft;
+
+        caster.as_integer -= shift; // filetime is now 100-nanos since 1970-Jan-01
+        return (caster.as_integer * 100); // upscale to nanoseconds
+    }
+
+} // namespace winapi
 
   //! Create a time object from an initialized FILETIME struct.
-  /*! Create a time object from an initialized FILETIME struct.
+  /*!
+   * Create a time object from an initialized FILETIME struct.
    * A FILETIME struct holds 100-nanosecond units (0.0000001). When 
-   * built with microsecond resolution the FILETIME's sub second value 
-   * will be truncated. Nanosecond resolution has no truncation. */
-  template<class time_type>
+   * built with microsecond resolution the file_time's sub second value 
+   * will be truncated. Nanosecond resolution has no truncation.
+   *
+   * \note The function is templated on the FILETIME type, so that
+   *       it can be used with both native FILETIME and the ad-hoc
+   *       boost::date_time::winapi::file_time type.
+   */
+  template< typename TimeT, typename FileTimeT >
   inline
-  time_type time_from_ftime(const FILETIME& ft){
-    typedef typename time_type::date_type date_type;
-    typedef typename time_type::date_duration_type date_duration_type;
-    typedef typename time_type::time_duration_type time_duration_type;
+  TimeT time_from_ftime(const FileTimeT& ft)
+  {
+    typedef typename TimeT::date_type date_type;
+    typedef typename TimeT::date_duration_type date_duration_type;
+    typedef typename TimeT::time_duration_type time_duration_type;
 
-    /* OFFSET is difference between 1970-Jan-01 & 1601-Jan-01 
-     * in 100-nanosecond intervals */
-    uint64_t c1 = 27111902UL; 
-    uint64_t c2 = 3577643008UL; // issues warning without 'UL'
-    const uint64_t OFFSET = (c1 << 32) + c2;
-    const long sec_pr_day = 86400; // seconds per day
+    uint64_t nanos = winapi::file_time_to_nanoseconds(ft);
 
-    uint64_t filetime = ft.dwHighDateTime;
-    filetime <<= 32;
-    filetime += ft.dwLowDateTime;
-    filetime -= OFFSET; // filetime is now 100-nanos since 1970-Jan-01
-
-    uint64_t sec = filetime / 10000000;
-#if defined(BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
-    uint64_t sub_sec = (filetime % 10000000) * 100; // nanoseconds
-#else
-    uint64_t sub_sec = (filetime % 10000000) / 10; // truncate to microseconds
+    uint64_t sec = nanos / 1000000000UL;
+    uint32_t sub_sec = (nanos % 1000000000UL); // nanoseconds since the last second
+#if !defined(BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
+    sub_sec /= 1000; // truncate to microseconds
 #endif
 
     // split sec into usable chunks: days, hours, minutes, & seconds
-    long _d = sec / sec_pr_day;
-    long tmp = sec % sec_pr_day;
-    long _h = tmp / 3600; // sec_pr_hour
+    const uint32_t sec_per_day = 86400; // seconds per day
+    uint32_t days = static_cast< uint32_t >(sec / sec_per_day);
+    uint32_t tmp = static_cast< uint32_t >(sec % sec_per_day);
+    uint32_t hours = tmp / 3600; // sec_per_hour
     tmp %= 3600;
-    long _m = tmp / 60; // sec_pr_min
+    uint32_t minutes = tmp / 60; // sec_per_min
     tmp %= 60;
-    long _s = tmp; // seconds
+    uint32_t seconds = tmp; // seconds
 
-    date_duration_type dd(_d);
+    date_duration_type dd(days);
     date_type d = date_type(1970, Jan, 01) + dd;
-    return time_type(d, time_duration_type(_h, _m, _s, sub_sec));
+    return TimeT(d, time_duration_type(hours, minutes, seconds, sub_sec));
   }
 
 }} // boost::date_time

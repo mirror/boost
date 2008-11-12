@@ -13,7 +13,7 @@
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/gregorian/greg_serialize.hpp>
 #include <boost/date_time/testfrmwk.hpp>
-#include <fstream>
+#include <sstream>
 
 using namespace boost;
 using namespace gregorian;
@@ -25,16 +25,16 @@ void save_to(archive_type& ar, const temporal_type& tt)
 }
 
 int main(){
-  std::ofstream ofs("tmp_file");
+  std::ostringstream oss;
   
   // NOTE: DATE_TIME_XML_SERIALIZE is only used in testing and is
   // defined in the testing Jamfile
 #if defined(DATE_TIME_XML_SERIALIZE)
   std::cout << "Running xml archive tests" << std::endl;
-  archive::xml_oarchive oa(ofs);
+  archive::xml_oarchive oa(oss);
 #else
   std::cout << "Running text archive tests" << std::endl;
-  archive::text_oarchive oa(ofs);
+  archive::text_oarchive oa(oss);
 #endif
   
   date d(2002,Feb,12);
@@ -54,8 +54,8 @@ int main(){
   first_kday_after fkda(Thursday);
 
   // load up the archive
-#if defined(DATE_TIME_XML_SERIALIZE)
   try{
+#if defined(DATE_TIME_XML_SERIALIZE)
     save_to(oa, BOOST_SERIALIZATION_NVP(d));
     save_to(oa, BOOST_SERIALIZATION_NVP(sv_d1));
     save_to(oa, BOOST_SERIALIZATION_NVP(sv_d2));
@@ -71,14 +71,7 @@ int main(){
     save_to(oa, BOOST_SERIALIZATION_NVP(lkd));
     save_to(oa, BOOST_SERIALIZATION_NVP(fkdb));
     save_to(oa, BOOST_SERIALIZATION_NVP(fkda));
-  }catch(archive::archive_exception ae){
-    std::string s(ae.what());
-    check("Error writing to archive: " + s, false);
-    ofs.close();
-    return printTestStats();
-  }
 #else
-  try{
     save_to(oa, d);
     save_to(oa, sv_d1);
     save_to(oa, sv_d2);
@@ -94,20 +87,18 @@ int main(){
     save_to(oa, lkd);
     save_to(oa, fkdb);
     save_to(oa, fkda);
-  }catch(archive::archive_exception ae){
+#endif
+  }catch(archive::archive_exception& ae){
     std::string s(ae.what());
-    check("Error writing to archive: " + s, false);
-    ofs.close();
+    check("Error writing to archive: " + s + "\nWritten data: \"" + oss.str() + "\"", false);
     return printTestStats();
   }
-#endif // DATE_TIME_XML_SERIALIZE
-  ofs.close();
 
-  std::ifstream ifs("tmp_file");
+  std::istringstream iss(oss.str());
 #if defined(DATE_TIME_XML_SERIALIZE)
-  archive::xml_iarchive ia(ifs);
+  archive::xml_iarchive ia(iss);
 #else
-  archive::text_iarchive ia(ifs);
+  archive::text_iarchive ia(iss);
 #endif
   
   // read from the archive
@@ -126,8 +117,9 @@ int main(){
   last_kday_of_month lkd2(Monday,Jan);
   first_kday_before fkdb2(Monday);
   first_kday_after fkda2(Monday);
-#if defined(DATE_TIME_XML_SERIALIZE)
+
   try{
+#if defined(DATE_TIME_XML_SERIALIZE)
     ia >> BOOST_SERIALIZATION_NVP(d2);
     ia >> BOOST_SERIALIZATION_NVP(sv_d3);
     ia >> BOOST_SERIALIZATION_NVP(sv_d4);
@@ -143,14 +135,7 @@ int main(){
     ia >> BOOST_SERIALIZATION_NVP(lkd2);
     ia >> BOOST_SERIALIZATION_NVP(fkdb2);
     ia >> BOOST_SERIALIZATION_NVP(fkda2);
-  }catch(archive::archive_exception ae){
-    std::string s(ae.what());
-    check("Error reading from archive: " + s, false);
-    ifs.close();
-    return printTestStats();
-  }
 #else
-  try{
     ia >> d2;
     ia >> sv_d3;
     ia >> sv_d4;
@@ -166,14 +151,12 @@ int main(){
     ia >> lkd2;
     ia >> fkdb2;
     ia >> fkda2;
-  }catch(archive::archive_exception ae){
+#endif
+  }catch(archive::archive_exception& ae){
     std::string s(ae.what());
-    check("Error reading from archive: " + s, false);
-    ifs.close();
+    check("Error reading from archive: " + s + "\nWritten data: \"" + oss.str() + "\"", false);
     return printTestStats();
   }
-#endif // DATE_TIME_XML_SERIALIZE
-  ifs.close();
   
   check("date", d == d2);
   check("special_value date (nadt)", sv_d1 == sv_d3);

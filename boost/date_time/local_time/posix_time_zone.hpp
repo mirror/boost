@@ -10,15 +10,16 @@
 
 #include <string>
 #include <sstream>
-#include "boost/date_time/gregorian/gregorian.hpp"
-#include "boost/date_time/time_zone_names.hpp"
-#include "boost/date_time/time_zone_base.hpp"
-#include "boost/date_time/local_time/dst_transition_day_rules.hpp"
-#include "boost/date_time/posix_time/posix_time.hpp"
-#include "boost/date_time/string_convert.hpp"
-#include "boost/date_time/time_parsing.hpp"
-#include "boost/tokenizer.hpp"
 #include <stdexcept>
+#include <boost/tokenizer.hpp>
+#include <boost/throw_exception.hpp>
+#include <boost/date_time/gregorian/gregorian.hpp>
+#include <boost/date_time/time_zone_names.hpp>
+#include <boost/date_time/time_zone_base.hpp>
+#include <boost/date_time/local_time/dst_transition_day_rules.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/date_time/string_convert.hpp>
+#include <boost/date_time/time_parsing.hpp>
 
 namespace boost{
 namespace local_time{
@@ -26,12 +27,14 @@ namespace local_time{
   //! simple exception for UTC and Daylight savings start/end offsets
   struct bad_offset : public std::out_of_range
   {
-    bad_offset(std::string _msg="") : std::out_of_range(std::string("Offset out of range: " + _msg)) {}
+    bad_offset(std::string const& msg = std::string()) :
+      std::out_of_range(std::string("Offset out of range: " + msg)) {}
   };
   //! simple exception for UTC daylight savings adjustment
   struct bad_adjustment : public std::out_of_range
   {
-    bad_adjustment(std::string _msg="") : std::out_of_range(std::string("Adjustment out of range: " + _msg)) {}
+    bad_adjustment(std::string const& msg = std::string()) :
+      std::out_of_range(std::string("Adjustment out of range: " + msg)) {}
   };
   
   typedef boost::date_time::dst_adjustment_offsets<boost::posix_time::time_duration> dst_adjustment_offsets;
@@ -231,7 +234,7 @@ namespace local_time{
     void calc_zone(const string_type& obj){
       const char_type empty_string[2] = {'\0'};
       stringstream_type ss(empty_string);
-      typename string_type::const_iterator sit = obj.begin();
+      typename string_type::const_pointer sit = obj.c_str(), obj_end = sit + obj.size();
       string_type l_std_zone_abbrev, l_dst_zone_abbrev;
 
       // get 'std' name/abbrev
@@ -242,37 +245,37 @@ namespace local_time{
       ss.str(empty_string);
 
       // get UTC offset
-      if(sit != obj.end()){
+      if(sit != obj_end){
         // get duration
-        while(sit != obj.end() && !std::isalpha(*sit)){
-        ss << *sit++;
+        while(sit != obj_end && !std::isalpha(*sit)){
+          ss << *sit++;
         }
         base_utc_offset_ = date_time::str_from_delimited_time_duration<time_duration_type,char_type>(ss.str()); 
         ss.str(empty_string);
 
         // base offset must be within range of -12 hours to +12 hours
         if(base_utc_offset_ < time_duration_type(-12,0,0) ||
-            base_utc_offset_ > time_duration_type(12,0,0))
+          base_utc_offset_ > time_duration_type(12,0,0))
         {
-            throw bad_offset(posix_time::to_simple_string(base_utc_offset_));
+          boost::throw_exception(bad_offset(posix_time::to_simple_string(base_utc_offset_)));
         }
       }
 
       // get DST data if given
-      if(sit != obj.end()){
+      if(sit != obj_end){
         has_dst_ = true;
     
         // get 'dst' name/abbrev
-        while(sit != obj.end() && std::isalpha(*sit)){
+        while(sit != obj_end && std::isalpha(*sit)){
           ss << *sit++;
         }
         l_dst_zone_abbrev = ss.str(); 
         ss.str(empty_string);
 
         // get DST offset if given
-        if(sit != obj.end()){
+        if(sit != obj_end){
           // get duration
-          while(sit != obj.end() && !std::isalpha(*sit)){
+          while(sit != obj_end && !std::isalpha(*sit)){
             ss << *sit++;
           }
           dst_offsets_.dst_adjust_ = date_time::str_from_delimited_time_duration<time_duration_type,char_type>(ss.str());  
@@ -286,7 +289,7 @@ namespace local_time{
         if(dst_offsets_.dst_adjust_ <= time_duration_type(-24,0,0) ||
             dst_offsets_.dst_adjust_ >= time_duration_type(24,0,0))
         {
-          throw bad_adjustment(posix_time::to_simple_string(dst_offsets_.dst_adjust_));
+          boost::throw_exception(bad_adjustment(posix_time::to_simple_string(dst_offsets_.dst_adjust_)));
         }
       }
       // full names not extracted so abbrevs used in their place
@@ -328,7 +331,7 @@ namespace local_time{
       if(dst_offsets_.dst_start_offset_ < time_duration_type(0,0,0) ||
           dst_offsets_.dst_start_offset_ >= time_duration_type(24,0,0))
       {
-        throw bad_offset(posix_time::to_simple_string(dst_offsets_.dst_start_offset_));
+        boost::throw_exception(bad_offset(posix_time::to_simple_string(dst_offsets_.dst_start_offset_)));
       }
 
       // ending offset
@@ -343,7 +346,7 @@ namespace local_time{
       if(dst_offsets_.dst_end_offset_ < time_duration_type(0,0,0) ||
         dst_offsets_.dst_end_offset_ >= time_duration_type(24,0,0))
       {
-        throw bad_offset(posix_time::to_simple_string(dst_offsets_.dst_end_offset_));
+        boost::throw_exception(bad_offset(posix_time::to_simple_string(dst_offsets_.dst_end_offset_)));
       }
     }
 

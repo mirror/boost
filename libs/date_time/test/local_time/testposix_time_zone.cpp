@@ -127,31 +127,31 @@ int main(){
   try {
     posix_time_zone badz("EST-13");
     check("Exception not thrown: bad UTC offset", false);
-  }catch(bad_offset boff){
+  }catch(bad_offset& boff){
     std::string msg(boff.what());
     check("Exception caught: "+msg , true);
   }
   try {
     posix_time_zone badz("EST-5EDT24:00:01,J124/1:30,J310");
     check("Exception not thrown: bad DST adjust", false);
-  }catch(bad_adjustment badj){
+  }catch(bad_adjustment& badj){
     std::string msg(badj.what());
     check("Exception caught: "+msg , true);
   }
   try {
     posix_time_zone badz("EST-5EDT01:00:00,J124/-1:30,J310");
     check("Exception not thrown: bad DST start/end offset", false);
-  }catch(bad_offset boff){
+  }catch(bad_offset& boff){
     std::string msg(boff.what());
     check("Exception caught: "+msg , true);
   }
   try {
     posix_time_zone badz("EST-5EDT01:00:00,J124/1:30,J370");
     check("Exception not thrown: invalid date spec", false);
-  }catch(boost::gregorian::bad_day_of_month boff){
+  }catch(boost::gregorian::bad_day_of_month& boff){
     std::string msg(boff.what());
     check("Exception caught: "+msg , true);
-  }catch(boost::gregorian::bad_month boff){
+  }catch(boost::gregorian::bad_month& boff){
     std::string msg(boff.what());
     check("Exception caught: "+msg , true);
   }catch(...){
@@ -200,7 +200,7 @@ int main(){
     try{
       check("Non-Julian First/last of month", fl_2.dst_local_start_time(2003) ==
           ptime(date(2003,Mar,1),hours(2)));
-    }catch(std::exception e){
+    }catch(std::exception& e){
       check("Expected exception caught for Non-Julian day of 59, in non-leap year (Feb-29)", true);
     }
     check("Non-Julian First/last of month", fl_2.dst_local_end_time(2003) == 

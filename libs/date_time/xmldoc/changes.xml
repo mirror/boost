@@ -12,6 +12,98 @@
   
   <!-- if each new change tgroup has a "Bug Fix" as the first "Type", the columns will line up nicely -->
 
+  <bridgehead renderas="sect3">Changes from Boost 1.34 to 1.38 (date_time 1.05 to 1.06)</bridgehead>
+  <informaltable frame="all">
+    <tgroup cols="2">
+      <thead>
+    <row>
+      <entry>Type</entry>
+      <entry>Description</entry>
+    </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>Feature</entry>
+          <entry>
+            Added support for formatting and reading time durations longer than 24 hours.
+            A new formatter <code>%O</code> is used indicate such long durations in the
+            format string. The old <code>%H</code> format specifier is thus restricted
+            to represent durations that fit into two characters, in order to retain support
+            for reading durations in ISO format.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug fix</entry>
+          <entry>
+            Added support for GCC 4.3. Several compilation issues were solved, as well as
+            compiler warnings were taken care of.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug fix</entry>
+          <entry>
+            Added missing streaming operators for the <code>local_time_period</code> class.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug fix</entry>
+          <entry>
+            Added several missing includes in different places. Some includes that are
+            not needed in some configurations were made conditional.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug fix</entry>
+          <entry>
+            Solved compilation problem that was caused by not finding streaming operators
+            for <code>gregorian::date_duration</code> via ADL. The type is now made actually
+            a class rather a typedef for the <code>date_time::date_duration</code> template.
+            The similar change was done for <code>gregorian::weeks</code>.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug fix</entry>
+          <entry>
+            Added a correctly spelled <code>date_time::hundredth</code> time resolution enum
+            value. The old one <code>date_time::hundreth</code> is considered deprecated and
+            to be removed in future releases.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug fix</entry>
+          <entry>
+            Fixed compilation error in <code>format_date_parser.hpp</code> because of incorrect
+            stream type being used.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug fix</entry>
+          <entry>
+            On Windows platform made inclusion of <code>windows.h</code> optional. The header is only used
+            when the <code>BOOST_USE_WINDOWS_H</code> macro is defined. Otherwise (and by default),
+            the library uses internal definitions of symbols from this header.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>
+          </entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </informaltable>
+
+
+
   <bridgehead renderas="sect3">Changes from Boost 1.33 to 1.34 (date_time 1.04 to 1.05)</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">

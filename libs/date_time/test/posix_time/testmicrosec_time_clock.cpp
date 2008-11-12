@@ -8,7 +8,9 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/microsec_time_clock.hpp"
 #include "boost/date_time/testfrmwk.hpp"
-
+#if defined(BOOST_HAS_FTIME)
+#include <windows.h>
+#endif
 
 int
 main() 

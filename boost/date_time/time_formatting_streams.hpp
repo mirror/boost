@@ -9,11 +9,15 @@
  * $Date$
  */
 
-
-#include "boost/date_time/date_formatting_locales.hpp" 
-#include "boost/date_time/time_resolution_traits.hpp"
+#include <boost/date_time/compiler_config.hpp>
 
 #ifndef BOOST_DATE_TIME_NO_LOCALE
+
+#include <locale>
+#include <iomanip>
+#include <iostream>
+#include <boost/date_time/date_formatting_locales.hpp>
+#include <boost/date_time/time_resolution_traits.hpp>
 
 namespace boost {
 namespace date_time {
@@ -116,4 +120,3 @@ namespace date_time {
 #endif //BOOST_DATE_TIME_NO_LOCALE
 
 #endif
-
