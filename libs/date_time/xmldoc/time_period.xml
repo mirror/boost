@@ -126,11 +126,13 @@ tp.shift(minutes(5));
 	    <entry>Add duration to both begin and end.</entry>
 	  </row>
 	  <row>
+	    <entry>
               <screen>
 time_period tp(ptime(date(2005,Jan,1),hours(1)), hours(2));
 tp.expand(minutes(5)); 
 // tp == 2005-Jan-01 00:55:00 to 2005-Jan-01 03:05:00
              </screen>
+	    </entry>
 	  </row>
 
 	</tbody>
