@@ -66,7 +66,7 @@ namespace boost {
          if (y < 2007) return Apr;
          return Mar;
        }
-       static day_of_week_type end_day(year_type y) {return Sunday;}
+       static day_of_week_type end_day(year_type) {return Sunday;}
        static month_type end_month(year_type y) 
        {
          if (y < 2007) return Oct;

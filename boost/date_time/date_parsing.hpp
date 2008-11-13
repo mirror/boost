@@ -210,7 +210,7 @@ namespace date_time {
     inline 
     date_type
     from_stream_type(iterator_type& beg, 
-                     iterator_type& end,
+                     iterator_type& /* end */,
                      std::string) 
     {
       return parse_date<date_type>(*beg);
@@ -246,7 +246,7 @@ namespace date_time {
     inline 
     date_type
     from_stream_type(iterator_type& beg, 
-                     iterator_type& end,
+                     iterator_type& /* end */,
                      std::wstring) {
       std::wstring ws = *beg;
       std::ostringstream ss;
