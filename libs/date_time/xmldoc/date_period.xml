@@ -116,11 +116,13 @@ dp.shift(days(3));
 	    <entry>Add duration to both begin and end.</entry>
 	  </row>
 	  <row>
+	    <entry>
               <screen>
 date_period dp(date(2005,Jan,2), days(2));
 dp.expand(days(1)); 
 // dp == 2005-Jan-01 to 2005-Jan-04
-             </screen>
+              </screen>
+            </entry>
 	  </row>
 
 	</tbody>
