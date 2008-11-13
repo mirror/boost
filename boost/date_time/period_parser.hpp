@@ -120,7 +120,7 @@ namespace boost { namespace date_time {
     period_type get_period(stream_itr_type& sitr, 
                            stream_itr_type& stream_end,
                            std::ios_base& a_ios, 
-                           const period_type& p,
+                           const period_type& /* p */,
                            const duration_type& dur_unit,
                            const facet_type& facet) const 
     {

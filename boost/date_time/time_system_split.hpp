@@ -76,7 +76,7 @@ namespace date_time {
 
     static time_rep_type get_time_rep(const date_type& day,
                                       const time_duration_type& tod,
-                                      date_time::dst_flags dst=not_dst)
+                                      date_time::dst_flags /* dst */ = not_dst)
     {
       if(day.is_special() || tod.is_special()) {
         if(day.is_not_a_date() || tod.is_not_a_date_time()) {
