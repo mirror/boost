@@ -41,9 +41,9 @@ namespace posix_time {
   typedef boost::date_time::time_input_facet<ptime, char>         time_input_facet;
 
   template <class CharT, class TraitsT>
-  inline 
+  inline
   std::basic_ostream<CharT, TraitsT>&
-  operator<<(std::basic_ostream<CharT, TraitsT>& os, 
+  operator<<(std::basic_ostream<CharT, TraitsT>& os,
              const ptime& p) {
     boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::time_facet<ptime, CharT> custom_ptime_facet;
@@ -57,7 +57,6 @@ namespace posix_time {
       //since we would always need to reconstruct for every time period
       //if the locale did not already exist.  Of course this will be overridden
       //if the user imbues as some later point.
-      std::ostreambuf_iterator<CharT> oitr(os);
       custom_ptime_facet* f = new custom_ptime_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
@@ -73,7 +72,7 @@ namespace posix_time {
   operator>>(std::basic_istream<CharT, Traits>& is, ptime& pt)
   {
     boost::io::ios_flags_saver iflags(is);
-    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false);
     if (strm_sentry) {
       try {
         typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
@@ -88,30 +87,30 @@ namespace posix_time {
           f->get(sit, str_end, is, pt);
         }
       }
-      catch(...) { 
+      catch(...) {
         // mask tells us what exceptions are turned on
         std::ios_base::iostate exception_mask = is.exceptions();
         // if the user wants exceptions on failbit, we'll rethrow our 
         // date_time exception & set the failbit
         if(std::ios_base::failbit & exception_mask) {
-          try { is.setstate(std::ios_base::failbit); } 
+          try { is.setstate(std::ios_base::failbit); }
           catch(std::ios_base::failure&) {} // ignore this one
           throw; // rethrow original exception
         }
         else {
           // if the user want's to fail quietly, we simply set the failbit
-          is.setstate(std::ios_base::failbit); 
-        } 
+          is.setstate(std::ios_base::failbit);
+        }
       }
     }
     return is;
   }
-  
+
 
   template <class CharT, class TraitsT>
   inline 
   std::basic_ostream<CharT, TraitsT>&
-  operator<<(std::basic_ostream<CharT, TraitsT>& os, 
+  operator<<(std::basic_ostream<CharT, TraitsT>& os,
              const boost::posix_time::time_period& p) {
     boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::time_facet<ptime, CharT> custom_ptime_facet;
@@ -126,7 +125,6 @@ namespace posix_time {
       //since we would always need to reconstruct for every time period
       //if the local did not already exist.  Of course this will be overridden
       //if the user imbues as some later point.
-      std::ostreambuf_iterator<CharT> oitr(os);
       custom_ptime_facet* f = new custom_ptime_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
@@ -142,7 +140,7 @@ namespace posix_time {
   operator>>(std::basic_istream<CharT, Traits>& is, time_period& tp)
   {
     boost::io::ios_flags_saver iflags(is);
-    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false);
     if (strm_sentry) {
       try {
         typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
@@ -157,21 +155,21 @@ namespace posix_time {
           f->get(sit, str_end, is, tp);
         }
       }
-      catch(...) { 
+      catch(...) {
         std::ios_base::iostate exception_mask = is.exceptions();
         if(std::ios_base::failbit & exception_mask) {
-          try { is.setstate(std::ios_base::failbit); } 
+          try { is.setstate(std::ios_base::failbit); }
           catch(std::ios_base::failure&) {}
           throw; // rethrow original exception
         }
         else {
-          is.setstate(std::ios_base::failbit); 
-        } 
+          is.setstate(std::ios_base::failbit);
+        }
       }
     }
     return is;
   }
-  
+
 
   //! ostream operator for posix_time::time_duration 
   //  todo fix to use facet --  place holder for now...
@@ -192,7 +190,6 @@ namespace posix_time {
       //since we would always need to reconstruct for every time period
       //if the locale did not already exist.  Of course this will be overridden
       //if the user imbues as some later point.
-      std::ostreambuf_iterator<CharT> oitr(os);
       custom_ptime_facet* f = new custom_ptime_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
@@ -208,7 +205,7 @@ namespace posix_time {
   operator>>(std::basic_istream<CharT, Traits>& is, time_duration& td)
   {
     boost::io::ios_flags_saver iflags(is);
-    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false);
     if (strm_sentry) {
       try {
         typedef typename date_time::time_input_facet<ptime, CharT> time_input_facet;
@@ -223,20 +220,20 @@ namespace posix_time {
           f->get(sit, str_end, is, td);
         }
       }
-      catch(...) { 
+      catch(...) {
         std::ios_base::iostate exception_mask = is.exceptions();
         if(std::ios_base::failbit & exception_mask) {
-          try { is.setstate(std::ios_base::failbit); } 
+          try { is.setstate(std::ios_base::failbit); }
           catch(std::ios_base::failure&) {}
           throw; // rethrow original exception
         }
         else {
-          is.setstate(std::ios_base::failbit); 
-        } 
+          is.setstate(std::ios_base::failbit);
+        }
       }
     }
     return is;
   }
-  
+
 } } // namespaces
 #endif // DATE_TIME_POSIX_TIME_IO_HPP__

@@ -26,7 +26,7 @@ namespace local_time {
 
   typedef boost::date_time::time_input_facet<local_date_time::utc_time_type,wchar_t> wlocal_time_input_facet;
   typedef boost::date_time::time_input_facet<local_date_time::utc_time_type,char>     local_time_input_facet;
-  
+
   //! operator<< for local_date_time - see local_time docs for formatting details
   template<class CharT, class TraitsT>
   inline
@@ -38,7 +38,7 @@ namespace local_time {
     typedef date_time::time_facet<time_type, CharT> custom_time_facet;
     typedef std::time_put<CharT> std_time_facet;
     std::ostreambuf_iterator<CharT> oitr(os);
-    
+
     if(std::has_facet<custom_time_facet>(os.getloc())) {
       std::use_facet<custom_time_facet>(os.getloc()).put(oitr, 
                                                          os, 
@@ -63,7 +63,7 @@ namespace local_time {
   operator>>(std::basic_istream<CharT, Traits>& is, local_date_time& ldt)
   {
     boost::io::ios_flags_saver iflags(is);
-    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false);
     if (strm_sentry) {
       try {
         typedef typename local_date_time::utc_time_type utc_time_type;
@@ -72,7 +72,7 @@ namespace local_time {
         // intermediate objects
         std::basic_string<CharT> tz_str;
         utc_time_type pt(not_a_date_time); 
-        
+
         std::istreambuf_iterator<CharT,Traits> sit(is), str_end;
         if(std::has_facet<time_input_facet>(is.getloc())) {
           std::use_facet<time_input_facet>(is.getloc()).get_local_time(sit, str_end, is, pt, tz_str);
@@ -95,20 +95,20 @@ namespace local_time {
           ldt = local_date_time(pt.date(), pt.time_of_day(), tz_ptr, local_date_time::EXCEPTION_ON_ERROR);
         }
       }
-      catch(...) { 
+      catch(...) {
         // mask tells us what exceptions are turned on
         std::ios_base::iostate exception_mask = is.exceptions();
         // if the user wants exceptions on failbit, we'll rethrow our 
         // date_time exception & set the failbit
         if(std::ios_base::failbit & exception_mask) {
-          try { is.setstate(std::ios_base::failbit); } 
+          try { is.setstate(std::ios_base::failbit); }
           catch(std::ios_base::failure&) {} // ignore this one
           throw; // rethrow original exception
         }
         else {
           // if the user want's to fail quietly, we simply set the failbit
-          is.setstate(std::ios_base::failbit); 
-        } 
+          is.setstate(std::ios_base::failbit);
+        }
 
       }
     }
@@ -117,9 +117,9 @@ namespace local_time {
 
   //! output operator for local_time_period
   template <class CharT, class TraitsT>
-  inline 
+  inline
   std::basic_ostream<CharT, TraitsT>&
-  operator<<(std::basic_ostream<CharT, TraitsT>& os, 
+  operator<<(std::basic_ostream<CharT, TraitsT>& os,
              const boost::local_time::local_time_period& p) {
     boost::io::ios_flags_saver iflags(os);
     typedef boost::date_time::time_facet<local_date_time, CharT> custom_facet;
@@ -134,7 +134,6 @@ namespace local_time {
       //since we would always need to reconstruct for every time period
       //if the local did not already exist.  Of course this will be overridden
       //if the user imbues as some later point.
-      std::ostreambuf_iterator<CharT> oitr(os);
       custom_facet* f = new custom_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
@@ -150,7 +149,7 @@ namespace local_time {
   operator>>(std::basic_istream<CharT, Traits>& is, boost::local_time::local_time_period& tp)
   {
     boost::io::ios_flags_saver iflags(is);
-    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false); 
+    typename std::basic_istream<CharT, Traits>::sentry strm_sentry(is, false);
     if (strm_sentry) {
       try {
         typedef typename date_time::time_input_facet<local_date_time, CharT> time_input_facet;
@@ -166,16 +165,16 @@ namespace local_time {
           f->get(sit, str_end, is, tp);
         }
       }
-      catch(...) { 
+      catch(...) {
         std::ios_base::iostate exception_mask = is.exceptions();
         if(std::ios_base::failbit & exception_mask) {
-          try { is.setstate(std::ios_base::failbit); } 
+          try { is.setstate(std::ios_base::failbit); }
           catch(std::ios_base::failure&) {}
           throw; // rethrow original exception
         }
         else {
-          is.setstate(std::ios_base::failbit); 
-        } 
+          is.setstate(std::ios_base::failbit);
+        }
 
       }
     }
