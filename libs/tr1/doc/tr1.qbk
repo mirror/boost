@@ -102,7 +102,11 @@ set up the include paths as follows:
 
 Sun's compiler has a particularly interesting form of `#include`, that
 will actually look for a file named `array.SUNWCCh` if you `#include <array>`.
-In order to make this library work with Sun's compiler you will need to
+What's more it won't include a standard header file that it thinks it's
+already seen.
+In order to make this library work with Sun's compiler you can either
+pass the undocumented compiler switch ['"-Qoption ccfe -nosunwcch"] to
+the compiler, or else you will need to
 set up the include paths as follows:
 
 1) boost-root/boost/tr1/tr1/sun\n
@@ -2014,6 +2018,7 @@ as the Boost-specific ones. This will allow these tests to be used against the s
 library's own TR1 implementation as well as the Boost one.
 
 [endsect]
+
 
 
 
