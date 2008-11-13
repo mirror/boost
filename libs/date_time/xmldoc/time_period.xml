@@ -60,8 +60,9 @@ or
 	  </row>
 	  <row>
 	    <entry><screen>date d(2002,Jan,01);
-ptime t(d, seconds(10)); //10 sec after midnight
-time_period tp(t, hours(3));</screen>
+ptime t1(d, seconds(10)); //10 sec after midnight
+ptime t2(d, hours(10)); //10 hours after midnight
+time_period tp(t1, t2);</screen>
 	    </entry>
           </row>
 
@@ -72,9 +73,8 @@ time_period tp(t, hours(3));</screen>
 	  </row>
 	  <row>
 	    <entry><screen>date d(2002,Jan,01);
-ptime t1(d, seconds(10)); //10 sec after midnight
-ptime t2(d, hours(10)); //10 hours after midnight
-time_period tp(t1, t2);</screen>
+ptime t(d, seconds(10)); //10 sec after midnight
+time_period tp(t, hours(3));</screen>
 	    </entry>
           </row>
           
