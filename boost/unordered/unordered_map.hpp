@@ -21,6 +21,15 @@
 #include <boost/unordered/detail/move.hpp>
 #endif
 
+#if defined(BOOST_MSVC)
+#pragma warning(push)
+#if BOOST_MSVC >= 1400
+#pragma warning(disable:4396) //the inline specifier cannot be used when a
+                              // friend declaration refers to a specialization
+                              // of a function template
+#endif
+#endif
+
 namespace boost
 {
     template <class Key, class T, class Hash, class Pred, class Alloc>
@@ -784,5 +793,9 @@ namespace boost
     }
 
 } // namespace boost
+
+#if defined(BOOST_MSVC)
+#pragma warning(pop)
+#endif
 
 #endif // BOOST_UNORDERED_UNORDERED_MAP_HPP_INCLUDED
