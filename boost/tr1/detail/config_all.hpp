@@ -42,6 +42,13 @@
 //
 #include <cstddef>
 
+#  if defined(_RWSTD_VER) && _RWSTD_VER >= 0x04010200
+#     if !defined (__SUNPRO_CC) && !defined (__DECCXX)
+#        define BOOST_TR1_STD_CHEADER(name) <../include/ansi/name>
+#     endif
+#  endif
+
+
 #  if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) && !defined(__BORLANDC__)
 #     ifdef __SUNPRO_CC
          // can't use <../stlport/name> since some compilers put stlport in a different directory:
@@ -88,6 +95,10 @@
 #  else
 #     define BOOST_TR1_STD_HEADER(name) <../include/name>
 #  endif
+
+#if !defined(BOOST_TR1_STD_CHEADER)
+#  define BOOST_TR1_STD_CHEADER(name) BOOST_TR1_STD_HEADER(name)
+#endif
 
 #if defined(__GNUC__) && !defined(BOOST_HAS_INCLUDE_NEXT)
 #  define BOOST_HAS_INCLUDE_NEXT
