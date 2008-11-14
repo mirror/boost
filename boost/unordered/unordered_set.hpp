@@ -357,8 +357,8 @@ namespace boost
         friend bool operator==(unordered_set const&, unordered_set const&);
         friend bool operator!=(unordered_set const&, unordered_set const&);
 #else
-        friend bool operator==<>(unordered_set const&, unordered_set const&);
-        friend bool operator!=<>(unordered_set const&, unordered_set const&);
+        friend bool operator==<Value, Hash, Pred, Alloc>(unordered_set const&, unordered_set const&);
+        friend bool operator!=<Value, Hash, Pred, Alloc>(unordered_set const&, unordered_set const&);
 #endif
     }; // class template unordered_set
 
@@ -714,8 +714,8 @@ namespace boost
         friend bool operator==(unordered_multiset const&, unordered_multiset const&);
         friend bool operator!=(unordered_multiset const&, unordered_multiset const&);
 #else
-        friend bool operator==<>(unordered_multiset const&, unordered_multiset const&);
-        friend bool operator!=<>(unordered_multiset const&, unordered_multiset const&);
+        friend bool operator==<Value, Hash, Pred, Alloc>(unordered_multiset const&, unordered_multiset const&);
+        friend bool operator!=<Value, Hash, Pred, Alloc>(unordered_multiset const&, unordered_multiset const&);
 #endif
     }; // class template unordered_multiset
 

@@ -385,8 +385,8 @@ namespace boost
         friend bool operator==(unordered_map const&, unordered_map const&);
         friend bool operator!=(unordered_map const&, unordered_map const&);
 #else
-        friend bool operator==<>(unordered_map const&, unordered_map const&);
-        friend bool operator!=<>(unordered_map const&, unordered_map const&);
+        friend bool operator==<Key, T, Hash, Pred, Alloc>(unordered_map const&, unordered_map const&);
+        friend bool operator!=<Key, T, Hash, Pred, Alloc>(unordered_map const&, unordered_map const&);
 #endif
     }; // class template unordered_map
 
@@ -757,8 +757,8 @@ namespace boost
         friend bool operator==(unordered_multimap const&, unordered_multimap const&);
         friend bool operator!=(unordered_multimap const&, unordered_multimap const&);
 #else
-        friend bool operator==<>(unordered_multimap const&, unordered_multimap const&);
-        friend bool operator!=<>(unordered_multimap const&, unordered_multimap const&);
+        friend bool operator==<Key, T, Hash, Pred, Alloc>(unordered_multimap const&, unordered_multimap const&);
+        friend bool operator!=<Key, T, Hash, Pred, Alloc>(unordered_multimap const&, unordered_multimap const&);
 #endif
     }; // class template unordered_multimap
 
