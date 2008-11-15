@@ -143,8 +143,8 @@ namespace boost {
 
                 void swap(allocators& x)
                 {
-                    unordered_detail::hash_swap(node_alloc_, x.node_alloc_);
-                    unordered_detail::hash_swap(bucket_alloc_, x.bucket_alloc_);
+                    boost::swap(node_alloc_, x.node_alloc_);
+                    boost::swap(bucket_alloc_, x.bucket_alloc_);
                 }
 
                 bool operator==(allocators const& x)
@@ -238,10 +238,10 @@ namespace boost {
 
                 void swap(allocators& x)
                 {
-                    unordered_detail::hash_swap(node_alloc_, x.node_alloc_);
-                    unordered_detail::hash_swap(bucket_alloc_, x.bucket_alloc_);
-                    unordered_detail::hash_swap(value_alloc_, x.value_alloc_);
-                    unordered_detail::hash_swap(node_base_alloc_, x.node_base_alloc_);
+                    boost::swap(node_alloc_, x.node_alloc_);
+                    boost::swap(bucket_alloc_, x.bucket_alloc_);
+                    boost::swap(value_alloc_, x.value_alloc_);
+                    boost::swap(node_base_alloc_, x.node_base_alloc_);
                 }
 
                 bool operator==(allocators const& x)

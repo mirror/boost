@@ -42,4 +42,8 @@ First official release.
 * Move all the implementation inside `boost/unordered`, to assist
   modularization and hopefully make it easier to track changes in subversion.
 
+[h2 Boost 1.38.0]
+
+* Use [@../../libs/utility/swap.html `boost::swap`].
+
 [endsect]
