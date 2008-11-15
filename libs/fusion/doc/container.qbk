@@ -48,7 +48,6 @@ sequence container, and in many cases the most efficient.
 
 [*Numbered forms]
 
-    template <>
     struct vector0;
 
     template <typename T0>
