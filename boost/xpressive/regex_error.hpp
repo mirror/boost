@@ -65,6 +65,11 @@ struct regex_error
         return this->code_;
     }
 
+    /// Destructor for class regex_error
+    /// \throw nothrow
+    virtual ~regex_error() throw()
+    {}
+
 private:
 
     regex_constants::error_type code_;
