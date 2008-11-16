@@ -29,5 +29,6 @@ test-suite "proto"
         [ run proto_fusion_s.cpp ]
         [ run toy_spirit.cpp ]
         [ run toy_spirit2.cpp ]
+        [ compile bug2407.cpp ]
     ;
 

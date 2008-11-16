@@ -18,7 +18,6 @@
     #include <boost/utility/enable_if.hpp>
     #include <boost/proto/proto_fwd.hpp>
     #include <boost/proto/args.hpp>
-    #include <boost/proto/matches.hpp>
     #include <boost/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto
@@ -26,21 +25,6 @@
 
         namespace detail
         {
-            template<typename Domain, typename Expr>
-            struct generate_if
-              : lazy_enable_if<
-                    matches<Expr, typename Domain::proto_grammar>
-                  , typename Domain::template result<void(Expr)>
-                >
-            {};
-
-            // Optimization, generate fewer templates...
-            template<typename Expr>
-            struct generate_if<proto::default_domain, Expr>
-            {
-                typedef Expr type;
-            };
-
             template<typename Expr>
             struct expr_params;
 
