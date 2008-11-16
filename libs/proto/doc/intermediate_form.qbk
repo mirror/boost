@@ -29,7 +29,7 @@ By now, you know a bit about how to build a front-end for your DSEL "compiler" -
 [heading The [^expr<>] Type]
 [/=========================]
 
-All Proto expressions are an instantiation of a template called `expr<>` (or a wrapper around such an instantiation). When we define a terminal as below, we are really initializing an instance of the _expr_ template.
+All Proto expressions are an instantiation of a template called _expr_ (or a wrapper around such an instantiation). When we define a terminal as below, we are really initializing an instance of the _expr_ template.
 
     // Define a placeholder type
     template<int I>
@@ -129,12 +129,12 @@ like this:
 
 There are a few things to note about these types:
 
-# Terminals have arity 0, unary expressions have arity 1 and binary expressions
-  have arity 2.
-# When one Proto expression is made a child node of another Proto expression,
+* Terminals have arity zero, unary expressions have arity one and binary
+  expressions have arity two.
+* When one Proto expression is made a child node of another Proto expression,
   it is held by reference, ['even if it is a temporary object]. This last
   point becomes important later.
-# Non-Proto expressions, such as the integer literal, are turned into Proto
+* Non-Proto expressions, such as the integer literal, are turned into Proto
   expressions by wrapping them in new `expr<>` terminal objects. These new
   wrappers are not themselves held by reference, but the object wrapped /is/.
   Notice that the type of the Protofied `42` literal is `int const &` -- held
@@ -153,43 +153,79 @@ something to be aware of. Proto provides utilities for deep-copying expression
 trees so they can be passed around as value types without concern for dangling
 references.]
 
-[/=============================================]
-[section:left_right_child Accessing Child Nodes]
-[/=============================================]
+[/========================================================]
+[section:left_right_child Accessing Parts of an Expression]
+[/========================================================]
 
 After assembling an expression into a tree, you'll naturally want to be
 able to do the reverse, and access a node's children. You may even want
 to be able to iterate over the children with algorithms from the
 Boost.Fusion library. This section shows how.
 
-[heading [^tag_of<>]]
+[/==========================================]
+[heading Getting Expression Tags and Arities]
+[/==========================================]
 
-A node in an expression tree is nothing more than a collection of child
-nodes and a tag type. You can access the tag type of any Proto expression type
-`Expr` directly as `typename Expr::proto_tag`, or you can use the _tag_of_
-metafunction, as shown below:
+Every node in an expression tree has both a /tag/ type that describes the node, and an /arity/ corresponding to the number of child nodes it has. You can use the _tag_of_ and _arity_of_ metafunctions to fetch them. Consider the following:
 
     template<typename Expr>
-    typename proto::result_of::tag_of<Expr>::type
-    get_tag_of(Expr const &)
+    void check_plus_node(Expr const &)
     {
-        // Tag types are required to be default-constructible
-        return typename proto::result_of::tag_of<Expr>::type();
+        // Assert that the tag type is proto::tag::plus
+        BOOST_STATIC_ASSERT((
+            boost::is_same<
+                typename proto::tag_of<Expr>::type
+              , proto::tag::plus
+            >::value
+        ));
+
+        // Assert that the arity is 2
+        BOOST_STATIC_ASSERT( proto::arity_of<Expr>::value == 2 );
     }
 
-    proto::terminal<int>::type const i = {42};
+    // Create a binary plus node and use check_plus_node()
+    // to verify its tag type and arity:
+    check_plus_node( proto::lit(1) + 2 );
 
-    // Addition nodes have the "plus" tag type:
-    proto::tag::plus plus_tag = get_tag_of( i + 2 );
+For a given type `Expr`, you could access the tag and arity directly as `Expr::proto_tag` and `Expr::proto_arity`, where `Expr::proto_arity` is an MPL Integral Constant.
 
-[/===================]
-[heading [^child_c()]]
-[/===================]
+[/==============================]
+[heading Getting Terminal Values]
+[/==============================]
 
-Each node in an expression tree corresponds to an operator in an expression,
-and the children correspond to the operands, or arguments of the operator.
-To access them, you can use the _child_c_ function template, as demonstrated
-below:
+There is no simpler expression than a terminal, and no more basic operation than extracting its value. As we've already seen, that is what _value_ is for.
+
+    proto::terminal< std::ostream & >::type cout_ = {std::cout};
+
+    // Get the value of the cout_ terminal:
+    std::ostream & sout = proto::value( cout_ );
+
+    // Assert that we got back what we put in:
+    assert( &sout == &std::cout );
+
+To compute the return type of the _value_ function, you can use _result_of_value_. When the parameter to _result_of_value_ is a non-reference type, the result type of the metafunction is the type of the value as suitable for storage by value; that is, top-level reference and qualifiers are stripped from it. But when instantiated with a reference type, the result type has a reference /added/ to it, yielding a type suitable for storage by reference. If you want to know the actual type of the terminal's value including whether it is stored by value or reference, you can use `fusion::result_of::value_at<Expr, 0>::type`.
+
+The following table summarizes the above paragraph.
+
+[def _unless_ [footnote If `T` is a reference-to-function type, then the result type is simply `T`.]]
+
+[table Accessing Value Types
+    [[Metafunction Invocation][When the Value Type Is ...][The Result Is ...]]
+    [[`proto::result_of::value<Expr>::type`][`T`][``typename boost::remove_const<
+    typename boost::remove_reference<T>::type
+>::type _unless_``]]
+    [[`proto::result_of::value<Expr &>::type`][`T`][``typename boost::add_reference<T>::type``]]
+    [[`proto::result_of::value<Expr const &>::type`][`T`][``typename boost::add_reference<
+    typename boost::add_const<T>::type
+>::type``]]
+    [[`fusion::result_of::value_at<Expr, 0>::type`][`T`][`T`]]
+]
+
+[/================================]
+[heading Getting Child Expressions]
+[/================================]
+
+Each non-terminal node in an expression tree corresponds to an operator in an expression, and the children correspond to the operands, or arguments of the operator. To access them, you can use the _child_c_ function template, as demonstrated below:
 
     proto::terminal<int>::type i = {42};
 
@@ -199,23 +235,23 @@ below:
     // Assert that we got back what we put in:
     assert( &i == &ri );
 
-You can use the `result_of::child_c<>` metafunction to get the type of the Nth
-child of an expression node. Usually you don't care to know whether a child
-is stored by value or by reference, so when you ask for the type of the Nth
-child of an expression `Expr`, you get the child's type after references and
-cv-qualifiers have been stripped from it.
+You can use the _result_of_child_c_ metafunction to get the type of the Nth child of an expression node. Usually you don't care to know whether a child is stored by value or by reference, so when you ask for the type of the Nth child of an expression `Expr` (where `Expr` is not a reference type), you get the child's type after references and cv-qualifiers have been stripped from it.
 
     template<typename Expr>
     void test_result_of_child_c(Expr const &expr)
     {
         typedef typename proto::result_of::child_c<Expr, 0>::type type;
 
-        // ::type is a non-cv qualified, non-reference
-        BOOST_MPL_ASSERT((is_same< type, terminal<int>::type>));
+        // Since Expr is not a reference type,
+        // result_of::child_c<Expr, 0>::type is a
+        // non-cv qualified, non-reference type:
+        BOOST_MPL_ASSERT((
+            boost::is_same< type, proto::terminal<int>::type >
+        ));
     }
 
     // ...
-    terminal<int>::type i = {42};
+    proto::terminal<int>::type i = {42};
     test_result_of_child_c( i + 2 );
 
 However, if you ask for the type of the Nth child of `Expr &` or `Expr const &`
@@ -223,136 +259,120 @@ However, if you ask for the type of the Nth child of `Expr &` or `Expr const &`
 the child is actually stored by reference or not. If you need to know exactly
 how the child is stored in the node, whether by reference or by value, you can
 use `fusion::result_of::value_at<Expr, N>::type`. The following table summarizes
-the behavior of the `child_c<>` metafunction.
+the behavior of the _result_of_child_c_ metafunction.
 
 [table Accessing Child Types
     [[Metafunction Invocation][When the Child Is ...][The Result Is ...]]
-    [[`proto::result_of::child_c<Expr, N>::type`][T][T]]
-    [[][T &][T]]
-    [[][T const &][T]]
-    [[`proto::result_of::child_c<Expr &, N>::type`][T][T &]]
-    [[][T &][T &]]
-    [[][T const &][T const &]]
-    [[`proto::result_of::child_c<Expr const &, N>::type`][T][T const &]]
-    [[][T &][T &]]
-    [[][T const &][T const &]]
-    [[`fusion::result_of::value_at<Expr, N>::type`][T][T]]
-    [[][T &][T &]]
-    [[][T const &][T const &]]
+    [[`proto::result_of::child_c<Expr, N>::type`][`T`][``typename boost::remove_const<
+    typename boost::remove_reference<T>::type
+>::type``]]
+    [[`proto::result_of::child_c<Expr &, N>::type`][`T`][``typename boost::add_reference<T>::type``]]
+    [[`proto::result_of::child_c<Expr const &, N>::type`][`T`][``typename boost::add_reference<
+    typename boost::add_const<T>::type
+>::type``]]
+    [[`fusion::result_of::value_at<Expr, N>::type`][`T`][`T`]]
 ]
 
-[/========================================================]
-[heading [^value()], [^child()], [^left()], and [^right()]]
-[/========================================================]
+[/=======================]
+[heading Common Shortcuts]
+[/=======================]
 
-Most operators in C++ are unary or binary. For that reason, accessing the
-only operand, or the left and right operands, are very common operations. For
-this reason, Proto provides the _child_, _left_, and _right_ functions. _child_
-and _left_ are synonymous with `child_c<0>()`, and _right_ is synonymous with
-`child_c<1>()`.
+Most operators in C++ are unary or binary, so accessing the only operand, or the left and right operands, are very common operations. For this reason, Proto provides the _child_, _left_, and _right_ functions. _child_ and _left_ are synonymous with `proto::child_c<0>()`, and _right_ is synonymous with `proto::child_c<1>()`.
 
-Another very common operation is accessing the value stored within a Proto
-terminal. You can use the _value_ function for that.
+There are also _result_of_child_, _result_of_left_, and _result_of_right_ metafunctions that merely forward to their _result_of_child_c_ counterparts.
 
-There are also `result_of::child<>`, `result_of::left<>`, and `result_of::right<>`
-metafunctions that merely forward to their `result_of::child_c<>` counterparts.
-Likewise, there is a `result_of::value<>` metafunction that returns the type of the
-value stored in a terminal node.
+[endsect]
 
-[/===========================================]
-[heading Expression Nodes as Fusion Sequences]
-[/===========================================]
+[/===============================]
+[section Deep-copying Expressions]
+[/===============================]
 
-Proto expression nodes are valid Fusion random-access sequences of their
-child nodes. That means you can apply Fusion algorithms to them,
-transform them, apply Fusion filters and views to them, and access their
-elements using `fusion::at()`. The things Fusion can do to heterogeneous
-sequences are beyond the scope of this users' guide, but below is a simple
-example. It takes a lazy function invocation like `fun(1,2,3,4)` and uses
-Fusion to print the function arguments in order.
+When you build an expression template with Proto, all the intermediate child nodes are held /by reference/. The avoids needless copies, which is crucial if you want your DSEL to perform well at runtime. Naturally, there is a danger if the temporary objects go out of scope before you try to evaluate your expression template. This is especially a problem in C++0x with the new `decltype` and `auto` keywords. Consider:
 
-    struct display
+    // OOPS: "ex" is left holding dangling references
+    auto ex = proto::lit(1) + 2;
+
+The problem can happen in today's C++ also if you use `BOOST_TYPEOF()` or `BOOST_AUTO()`, or if you try to pass an expression template outside the scope of its constituents.
+
+In these cases, you want to deep-copy your expression template so that all intermediate nodes and the terminals are held /by value/. That way, you can safely assign the expression template to a local variable or return it from a function without worrying about dangling references. You can do this with _deep_copy_ as fo
+llows:
+
+    // OK, "ex" has no dangling references
+    auto ex = proto::deep_copy( proto::lit(1) + 2 );
+
+If you are using _typeof_, it would look like this:
+
+    // OK, use BOOST_AUTO() and proto::deep_copy() to
+    // store an expression template in a local variable 
+    BOOST_AUTO( ex, proto::deep_copy( proto::lit(1) + 2 ) );
+
+For the above code to work, you must include the [headerref boost/proto/proto_typeof.hpp] header, which also defines the _AUTO_ macro which automatically deep-copies its argument. With _AUTO_, the above code can be writen as:
+
+    // OK, BOOST_PROTO_AUTO() automatically deep-copies
+    // its argument: 
+    BOOST_PROTO_AUTO( ex, proto::lit(1) + 2 );
+
+When deep-copying an expression tree, all intermediate nodes and all terminals are stored by value. The only exception is terminals that are function references, which are left alone.
+
+[note _deep_copy_ makes no exception for arrays, which it stores by value. That can potentially cause a large amount of data to be copied.]
+
+[endsect]
+
+[/============================]
+[section Debugging Expressions]
+[/============================]
+
+Proto provides a utility for pretty-printing expression trees that comes in very handy when you're trying to debug your DSEL. It's called _display_expr_, and you pass it the expression to print and optionally, an `std::ostream` to which to send the output. Consider:
+
+    // Use display_expr() to pretty-print an expression tree
+    proto::display_expr(
+        proto::lit("hello") + 42
+    );
+
+The above code writes this to `std::cout`:
+
+[pre plus(
+    terminal(hello)
+  , terminal(42)
+)]
+
+In order to call _display_expr_, all the terminals in the expression must be Streamable (that is, they can be written to a `std::ostream`). In addition, the tag types must all be Streamable as well. Here is an example that includes a custom terminal type and a custom tag:
+
+    // A custom tag type that is Streamable
+    struct MyTag
     {
-        template<typename T>
-        void operator()(T const &t) const
+        friend std::ostream &operator<<(std::ostream &s, MyTag)
         {
-            std::cout << t << std::endl;
+            return s << "MyTag";
         }
     };
 
-    struct fun_t {};
-    proto::terminal<fun_t>::type const fun = {{}};
+    // Some other Streamable type
+    struct MyTerminal
+    {
+        friend std::ostream &operator<<(std::ostream &s, MyTerminal)
+        {
+            return s << "MyTerminal";
+        }
+    };
 
-    // ...
-    fusion::for_each(
-        fusion::transform(
-            // pop_front() removes the "fun" child
-            fusion::pop_front(fun(1,2,3,4))
-            // Extract the ints from the terminal nodes
-          , proto::functional::value()
-        )
-      , display()
-    );
+    int main()
+    {
+        // Display an expression tree that contains a custom
+        // tag and a user-defined type in a terminal
+        proto::display_expr(
+            proto::make_expr<MyTag>(MyTerminal()) + 42
+        );
+    }
 
-Recall from the Introduction that types in the `proto::functional` namespace
-define function objects that correspond to Proto's free functions. So 
-`proto::functional::value()` creates a function object that is equivalent to
-the `proto::value()` function. The above invocation of `fusion::for_each()`
-displays the following:
+The above code prints the following:
 
-[pre
-1
-2
-3
-4
-]
-
-[/========================================]
-[heading Flattening Proto Expression Tress]
-[/========================================]
-
-Imagine a slight variation of the above example where, instead of iterating
-over the arguments of a lazy function invocation, we would like to iterate
-over the terminals in an addition expression:
-
-    proto::terminal<int>::type const _1 = {1};
-
-    // ERROR: this doesn't work! Why?
-    fusion::for_each(
-        fusion::transform(
-            _1 + 2 + 3 + 4
-          , proto::functional::value()
-        )
-      , display()
-    );
-
-The reason this doesn't work is because the expression `_1 + 2 + 3 + 4` does
-not describe a flat sequence of terminals --- it describes a binary tree. We
-can treat it as a flat sequence of terminals, however, using Proto's _flatten_
-function. _flatten_ returns a view which makes a tree appear as a flat Fusion
-sequence. If the top-most node has a tag type `T`, then the elements of the
-flattened sequence are the child nodes that do /not/ have tag type `T`. This
-process is evaluated recursively. So the above can correctly be written as:
-
-    proto::terminal<int>::type const _1 = {1};
-
-    // OK, iterate over a flattened view
-    fusion::for_each(
-        fusion::transform(
-            proto::flatten(_1 + 2 + 3 + 4)
-          , proto::functional::value()
-        )
-      , display()
-    );
-
-The above invocation of `fusion::for_each()` displays the following:
-
-[pre
-1
-2
-3
-4
-]
+[pre plus(
+    MyTag(
+        terminal(MyTerminal)
+    )
+  , terminal(42)
+)]
 
 [endsect]
 
@@ -360,10 +380,7 @@ The above invocation of `fusion::for_each()` displays the following:
 [section:tags_and_metafunctions Operator Tags and Metafunctions]
 [/=============================================================]
 
-The following table lists the overloadable C++ operators, the Proto tag types for 
-each, and the name of the metafunctions for generating the corresponding Proto 
-expression types. And as we'll see later, the metafunctions are also usable as 
-grammars for matching such nodes, as well as pass-through transforms.
+The following table lists the overloadable C++ operators, the Proto tag types for  each, and the name of the metafunctions for generating the corresponding Proto  expression types. And as we'll see later, the metafunctions are also usable as  grammars for matching such nodes, as well as pass-through transforms.
 
 [table Operators, Tags and Metafunctions
     [[Operator]
@@ -549,39 +566,111 @@ grammars for matching such nodes, as well as pass-through transforms.
 
 [endsect]
 
+[/======================================]
+[section Expressions as Fusion Sequences]
+[/======================================]
+
+Boost.Fusion is a library of iterators, algorithms, containers and adaptors for manipulating heterogeneous sequences. In essence, a Proto expression is just a heterogeneous sequence of its child expressions, and so Proto expressions are valid Fusion random-access sequences. That means you can apply Fusion algorithms to them, transform them, apply Fusion filters and views to them, and access their elements using `fusion::at()`. The things Fusion can do to heterogeneous sequences are beyond the scope of this users' guide, but below is a simple example. It takes a lazy function invocation like `fun(1,2,3,4)` and uses Fusion to print the function arguments in order.
+
+    struct display
+    {
+        template<typename T>
+        void operator()(T const &t) const
+        {
+            std::cout << t << std::endl;
+        }
+    };
+
+    struct fun_t {};
+    proto::terminal<fun_t>::type const fun = {{}};
+
+    // ...
+    fusion::for_each(
+        fusion::transform(
+            // pop_front() removes the "fun" child
+            fusion::pop_front(fun(1,2,3,4))
+            // Extract the ints from the terminal nodes
+          , proto::functional::value()
+        )
+      , display()
+    );
+
+Recall from the Introduction that types in the `proto::functional` namespace
+define function objects that correspond to Proto's free functions. So 
+`proto::functional::value()` creates a function object that is equivalent to
+the `proto::value()` function. The above invocation of `fusion::for_each()`
+displays the following:
+
+[pre
+1
+2
+3
+4
+]
+
+Terminals are also valid Fusion sequences. They contain exactly one element: their value.
+
+[/========================================]
+[heading Flattening Proto Expression Tress]
+[/========================================]
+
+Imagine a slight variation of the above example where, instead of iterating over the arguments of a lazy function invocation, we would like to iterate over the terminals in an addition expression:
+
+    proto::terminal<int>::type const _1 = {1};
+
+    // ERROR: this doesn't work! Why?
+    fusion::for_each(
+        fusion::transform(
+            _1 + 2 + 3 + 4
+          , proto::functional::value()
+        )
+      , display()
+    );
+
+The reason this doesn't work is because the expression `_1 + 2 + 3 + 4` does not describe a flat sequence of terminals --- it describes a binary tree. We can treat it as a flat sequence of terminals, however, using Proto's _flatten_ function. _flatten_ returns a view which makes a tree appear as a flat Fusion sequence. If the top-most node has a tag type `T`, then the elements of the flattened sequence are the child nodes that do /not/ have tag type `T`. This process is evaluated recursively. So the above can correctly be written as:
+
+    proto::terminal<int>::type const _1 = {1};
+
+    // OK, iterate over a flattened view
+    fusion::for_each(
+        fusion::transform(
+            proto::flatten(_1 + 2 + 3 + 4)
+          , proto::functional::value()
+        )
+      , display()
+    );
+
+The above invocation of `fusion::for_each()` displays the following:
+
+[pre
+1
+2
+3
+4
+]
+
+[endsect]
+
 [/============================================================================]
 [section:expression_introspection Expression Introspection: Defining a Grammar]
 [/============================================================================]
 
-Expression trees can have a very rich and complicated structure. Often, you
-need to know some things about an expression's structure before you can process
-it. This section describes the tools Proto provides for peering inside an
-expression tree and discovering its structure. And as you'll see in later
-sections, all the really interesting things you can do with Proto begin right
-here.
+Expression trees can have a very rich and complicated structure. Often, you need to know some things about an expression's structure before you can process it. This section describes the tools Proto provides for peering inside an expression tree and discovering its structure. And as you'll see in later sections, all the really interesting things you can do with Proto begin right here.
 
 [/===============================================]
 [section:patterns Finding Patterns in Expressions]
 [/===============================================]
 
-Imagine your DSEL is a miniature I/O facility, with iostream operations
-that execute lazily. You might want expressions representing input operations
-to be processed by one function, and output operations to be processed by a
-different function. How would you do that?
+Imagine your DSEL is a miniature I/O facility, with iostream operations that execute lazily. You might want expressions representing input operations to be processed by one function, and output operations to be processed by a different function. How would you do that?
 
-The answer is to write patterns (a.k.a, /grammars/) that match the structure
-of input and output expressions. Proto provides utilities for defining the
-grammars, and the _matches_ template for checking whether a given expression
-type matches the grammar.
+The answer is to write patterns (a.k.a, /grammars/) that match the structure of input and output expressions. Proto provides utilities for defining the grammars, and the _matches_ template for checking whether a given expression type matches the grammar.
 
 First, let's define some terminals we can use in our lazy I/O expressions:
 
     proto::terminal< std::istream & >::type cin_ = { std::cin };
     proto::terminal< std::ostream & >::type cout_ = { std::cout };
 
-Now, we can use `cout_` instead of `std::cout`, and get I/O expression trees
-that we can execute later. To define grammars that match input and output
-expressions of the form `cin_ >> i` and `cout_ << 1` we do this:
+Now, we can use `cout_` instead of `std::cout`, and get I/O expression trees that we can execute later. To define grammars that match input and output expressions of the form `cin_ >> i` and `cout_ << 1` we do this:
 
     struct Input
       : proto::shift_right< proto::terminal< std::istream & >, proto::_ >
@@ -632,9 +721,7 @@ Output!
 Input!
 ]
 
-If we wanted to break the `input_output()` function into two functions, one
-that handles input expressions and one for output expressions, we can use
-`boost::enable_if<>`, as follows:
+If we wanted to break the `input_output()` function into two functions, one that handles input expressions and one for output expressions, we can use `boost::enable_if<>`, as follows:
 
     template< typename Expr >
     typename boost::enable_if< proto::matches< Expr, Input > >::type
@@ -650,21 +737,13 @@ that handles input expressions and one for output expressions, we can use
         std::cout << "Output!\n";
     }
 
-This works as the previous version did. However, the following does not compile
-at all:
+This works as the previous version did. However, the following does not compile at all:
 
     input_output( cout_ << 1 << 2 ); // oops!
 
-What's wrong? The problem is that this expression does not match our grammar.
-The expression groups as if it were written like `(cout_ << 1) << 2`. It will
-not match the `Output` grammar, which expects the left operand to be a
-terminal, not another left-shift operation. We need to fix the grammar.
+What's wrong? The problem is that this expression does not match our grammar. The expression groups as if it were written like `(cout_ << 1) << 2`. It will not match the `Output` grammar, which expects the left operand to be a terminal, not another left-shift operation. We need to fix the grammar.
 
-We notice that in order to verify an expression as input or output, we'll need
-to recurse down to the bottom-left-most leaf and check that it is a
-`std::istream` or `std::ostream`. When we get to the terminal, we must stop
-recursing. We can express this in our grammar using _or_. Here are the correct
-`Input` and `Output` grammars:
+We notice that in order to verify an expression as input or output, we'll need to recurse down to the bottom-left-most leaf and check that it is a `std::istream` or `std::ostream`. When we get to the terminal, we must stop recursing. We can express this in our grammar using _or_. Here are the correct `Input` and `Output` grammars:
 
     struct Input
       : proto::or_<
@@ -680,23 +759,22 @@ recursing. We can express this in our grammar using _or_. Here are the correct
         >
     {};
 
-This may look a little odd at first. We seem to be defining the `Input` and
-`Output` types in terms of themselves. This is perfectly OK, actually. At
-the point in the grammar that the `Input` and `Output` types are being used,
-they are /incomplete/, but by the time we actually evaluate the grammar with
-_matches_, the types will be complete. These are recursive grammars, and
-rightly so because they must match a recursive data structure!
+This may look a little odd at first. We seem to be defining the `Input` and `Output` types in terms of themselves. This is perfectly OK, actually. At the point in the grammar that the `Input` and `Output` types are being used, they are /incomplete/, but by the time we actually evaluate the grammar with _matches_, the types will be complete. These are recursive grammars, and rightly so because they must match a recursive data structure!
 
-When the `Output` grammar is evaluated against an expression like
-`cout_ << 1 << 2`, the first alternate of the _or_ is tried first. It will fail,
-because the expression `cout_ << 1 << 2` does not match the grammar
-`proto::shift_left< proto::terminal< std::ostream & >, proto::_ >`. Then the second 
-alternate is tried. We match the expression against
-`proto::shift_left< Output, proto::_ >`. The expression is a left-shift, so we try
-the operands. The right operand `2` matches `proto::_` trivially. To see if the 
-left operand `cout_ << 1` matches `Output`, we must recursively evaluate the 
-`Output` grammar. This time we succeed, because `cout_ << 1` will match the first 
-alternate of the _or_. We're done -- the grammar matches successfully.
+Matching an expression such as `cout_ << 1 << 2` against the `Output` grammar procedes as follows:
+
+# The first alternate of the _or_ is tried first. It will fail, because the 
+  expression `cout_ << 1 << 2` does not match the grammar `proto::shift_left< 
+  proto::terminal< std::ostream & >, proto::_ >`.
+# Then the second alternate is tried next. We match the expression against 
+  `proto::shift_left< Output, proto::_ >`. The expression is a left-shift, so we 
+  next try to match the operands.
+# The right operand `2` matches `proto::_` trivially.
+# To see if the left operand `cout_ << 1` matches `Output`, we must recursively 
+  evaluate the `Output` grammar. This time we succeed, because `cout_ << 1` will 
+  match the first alternate of the _or_.
+
+We're done -- the grammar matches successfully.
 
 [endsect]
 
@@ -704,20 +782,11 @@ alternate of the _or_. We're done -- the grammar matches successfully.
 [section Fuzzy and Exact Matches of Terminals]
 [/===========================================]
 
-The terminals in an expression tree could be const or non-const references, or
-they might not be references at all. When writing grammars, you usually don't
-have to worry about it because _matches_ gives you a little wiggle room when
-matching terminals. A grammar such as `proto::terminal<int>` will match a
-terminal of type `int`, `int &`, or `int const &`.
+The terminals in an expression tree could be const or non-const references, or they might not be references at all. When writing grammars, you usually don't have to worry about it because _matches_ gives you a little wiggle room when matching terminals. A grammar such as `proto::terminal<int>` will match a terminal of type `int`, `int &`, or `int const &`.
 
-You can explicitly specify that you want to match a reference type. If you do,
-the type must match exactly. For instance, a grammar such as
-`proto::terminal<int &>` will only match an `int &`. It will not match an `int`
-or an `int const &`.
+You can explicitly specify that you want to match a reference type. If you do, the type must match exactly. For instance, a grammar such as `proto::terminal<int &>` will only match an `int &`. It will not match an `int` or an `int const &`.
 
-The table below shows how Proto matches terminals. The simple rule is: if you
-want to match only reference types, you must specify the reference in your
-grammar. Otherwise, leave it off and Proto will ignore const and references.
+The table below shows how Proto matches terminals. The simple rule is: if you want to match only reference types, you must specify the reference in your grammar. Otherwise, leave it off and Proto will ignore const and references.
 
 [table proto::matches<> and Reference / CV-Qualification of Terminals
     [[Terminal]     [Grammar]       [Matches?]]
@@ -732,19 +801,9 @@ grammar. Otherwise, leave it off and Proto will ignore const and references.
     [[T const &]    [T const &]     [yes]]
 ]
 
-This begs the question: What if you want to match an `int`, but not an `int &`
-or an `int const &`? For forcing exact matches, Proto provides the _exact_
-template. For instance, `proto::terminal< proto::exact<int> >` would only match an 
-`int` held by value.
+This begs the question: What if you want to match an `int`, but not an `int &` or an `int const &`? For forcing exact matches, Proto provides the _exact_ template. For instance, `proto::terminal< proto::exact<int> >` would only match an `int` held by value.
 
-Proto gives you extra wiggle room when matching array types. Array types match
-themselves or the pointer types they decay to. This is especially useful with
-character arrays. The type returned by `proto::as_expr("hello")` is
-`proto::terminal<char const[6]>::type`. That's a terminal containing a
-6-element character array. Naturally, you can match this terminal
-with the grammar `proto::terminal<char const[6]>`, but the grammar
-`proto::terminal<char const *>` will match it as well, as the following
-code fragment illustrates.
+Proto gives you extra wiggle room when matching array types. Array types match themselves or the pointer types they decay to. This is especially useful with character arrays. The type returned by `proto::as_expr("hello")` is `proto::terminal<char const[6]>::type`. That's a terminal containing a 6-element character array. Naturally, you can match this terminal with the grammar `proto::terminal<char const[6]>`, but the grammar `proto::terminal<char const *>` will match it as well, as the following code fragment illustrates.
 
     struct CharString
       : proto::terminal< char const * >
@@ -754,9 +813,7 @@ code fragment illustrates.
 
     BOOST_MPL_ASSERT(( proto::matches< char_array, CharString > ));
 
-What if we only wanted `CharString` to match terminals of exactly the type
-`char const *`? You can use _exact_ here to turn off the fuzzy matching of
-terminals, as follows:
+What if we only wanted `CharString` to match terminals of exactly the type `char const *`? You can use _exact_ here to turn off the fuzzy matching of terminals, as follows:
 
     struct CharString
       : proto::terminal< proto::exact< char const * > >
@@ -770,33 +827,17 @@ terminals, as follows:
 
 Now, `CharString` does not match array types, only character string pointers.
 
-The inverse problem is a little trickier: what if you wanted to match all
-character arrays, but not character pointers? As mentioned above, the
-expression `as_expr("hello")` has the type
-`proto::terminal< char const[ 6 ] >::type`. If you wanted to match character
-arrays of arbitrary size, you could use `proto::N`, which is an array-size
-wildcard. The following grammar would match any string literal:
-`proto::terminal< char const[ proto::N ] >`.
+The inverse problem is a little trickier: what if you wanted to match all character  arrays, but not character pointers? As mentioned above, the expression `as_expr("hello")` has the type `proto::terminal< char const[ 6 ] >::type`. If you wanted to match character arrays of arbitrary size, you could use `proto::N`, which is an array-size wildcard. The following grammar would match any string literal: `proto::terminal< char const[ proto::N ] >`.
 
-Sometimes you need even more wiggle room when matching terminals. For
-example, maybe you're building a calculator DSEL and you want to allow any
-terminals that are convertible to `double`. For that, Proto provides the
-_convertible_to_ template. You can use it as:
-`proto::terminal< proto::convertible_to< double > >`.
+Sometimes you need even more wiggle room when matching terminals. For example, maybe you're building a calculator DSEL and you want to allow any terminals that are convertible to `double`. For that, Proto provides the _convertible_to_ template. You can use it as: `proto::terminal< proto::convertible_to< double > >`.
 
-There is one more way you can perform a fuzzy match on terminals. Consider the
-problem of trying to match a `std::complex<>` terminal. You can easily match
-a `std::complex<float>` or a `std::complex<double>`, but how would you match
-any instantiation of `std::complex<>`? You can use `proto::_` here to solve
-this problem. Here is the grammar to match any `std::complex<>` instantiation:
+There is one more way you can perform a fuzzy match on terminals. Consider the problem of trying to match a `std::complex<>` terminal. You can easily match a `std::complex<float>` or a `std::complex<double>`, but how would you match any instantiation of `std::complex<>`? You can use `proto::_` here to solve this problem. Here is the grammar to match any `std::complex<>` instantiation:
 
     struct StdComplex
       : proto::terminal< std::complex< proto::_ > >
     {};
 
-When given a grammar like this, Proto will deconstruct the grammar and the
-terminal it is being matched against and see if it can match all the
-constituents.
+When given a grammar like this, Proto will deconstruct the grammar and the terminal it is being matched against and see if it can match all the constituents.
 
 [endsect]
 
@@ -804,23 +845,13 @@ constituents.
 [section:if_and_not [^if_<>], [^and_<>], and [^not_<>]]
 [/====================================================]
 
-We've already seen how to use expression generators like `proto::terminal<>` and
-`proto::shift_right<>` as grammars. We've also seen _or_, which we can use to
-express a set of alternate grammars. There are a few others of interest; in
-particular, _if_, _and_ and _not_.
+We've already seen how to use expression generators like `proto::terminal<>` and `proto::shift_right<>` as grammars. We've also seen _or_, which we can use to express a set of alternate grammars. There are a few others of interest; in particular, _if_, _and_ and _not_.
 
-The _not_ template is the simplest. It takes a grammar as a template parameter
-and logically negates it; `not_<Grammar>` will match any expression that
-`Grammar` does /not/ match.
+The _not_ template is the simplest. It takes a grammar as a template parameter and logically negates it; `not_<Grammar>` will match any expression that `Grammar` does /not/ match.
 
-The _if_ template is used together with a Proto transform that is evaluated
-against expression types to find matches. (Proto transforms will be described
-later.)
+The _if_ template is used together with a Proto transform that is evaluated against expression types to find matches. (Proto transforms will be described later.)
 
-The _and_ template is like _or_, except that each argument of the _and_ must
-match in order for the _and_ to match. As an example, consider the definition
-of `CharString` above that uses _exact_. It could have been written without
-_exact_ as follows:
+The _and_ template is like _or_, except that each argument of the _and_ must match in order for the _and_ to match. As an example, consider the definition of `CharString` above that uses _exact_. It could have been written without _exact_ as follows:
 
     struct CharString
       : proto::and_<
@@ -829,15 +860,9 @@ _exact_ as follows:
         >
     {};
 
-This says that a `CharString` must be a terminal, /and/ its value type must be
-the same as `char const *`. Notice the template argument of _if_:
-`boost::is_same< proto::_value, char const * >()`. This is Proto transform that 
-compares the value type of a terminal to `char const *`.
+This says that a `CharString` must be a terminal, /and/ its value type must be the same as `char const *`. Notice the template argument of _if_: `boost::is_same< proto::_value, char const * >()`. This is Proto transform that compares the value type of a terminal to `char const *`.
 
-The _if_ template has a couple of variants. In addition to `if_<Condition>` you
-can also say `if_<Condition, ThenGrammar>` and
-`if_<Condition, ThenGrammar, ElseGrammar>`. These let you select one sub-grammar
-or another based on the `Condition`.
+The _if_ template has a couple of variants. In addition to `if_<Condition>` you can also say `if_<Condition, ThenGrammar>` and `if_<Condition, ThenGrammar, ElseGrammar>`. These let you select one sub-grammar or another based on the `Condition`.
 
 [endsect]
 
@@ -995,18 +1020,9 @@ You might find this cleaner than defining explicit `case_<>` specializations out
 [section Matching Vararg Expressions]
 [/==================================]
 
-Not all of C++'s overloadable operators are unary or binary. There is the
-oddball `operator()` -- the function call operator -- which can have any number
-of arguments. Likewise, with Proto you may define your own "operators" that
-could also take more that two arguments. As a result, there may be nodes in
-your Proto expression tree that have an arbitrary number of children (up to
-`BOOST_PROTO_MAX_ARITY`, which is configurable). How do you write a grammar to 
-match such a node?
+Not all of C++'s overloadable operators are unary or binary. There is the oddball `operator()` -- the function call operator -- which can have any number of arguments. Likewise, with Proto you may define your own "operators" that could also take more that two arguments. As a result, there may be nodes in your Proto expression tree that have an arbitrary number of children (up to _MAX_ARITY_, which is configurable). How do you write a grammar to  match such a node?
 
-For such cases, Proto provides the _vararg_ class template. Its template
-argument is a grammar, and the _vararg_ will match the grammar zero or more
-times. Consider a Proto lazy function called `fun()` that can take zero or
-more characters as arguments, as follows:
+For such cases, Proto provides the _vararg_ class template. Its template argument is a grammar, and the _vararg_ will match the grammar zero or more times. Consider a Proto lazy function called `fun()` that can take zero or more characters as arguments, as follows:
 
     struct fun_tag {};
     struct FunTag : proto::terminal< fun_tag > {};
@@ -1024,8 +1040,7 @@ Below is the grammar that matches all the allowable invocations of `fun()`:
       : proto::function< FunTag, proto::vararg< proto::terminal< char > > >
     {};
 
-The `FunCall` grammar uses _vararg_ to match zero or more character literals
-as arguments of the `fun()` function.
+The `FunCall` grammar uses _vararg_ to match zero or more character literals as arguments of the `fun()` function.
 
 As another example, can you guess what the following grammar matches?
 
@@ -1036,10 +1051,7 @@ As another example, can you guess what the following grammar matches?
         >
     {};
 
-Here's a hint: the first template parameter to `proto::nary_expr<>` represents the
-node type, and any additional template parameters represent child nodes. The answer 
-is that this is a degenerate grammar that matches every possible expression tree, 
-from root to leaves.
+Here's a hint: the first template parameter to `proto::nary_expr<>` represents the node type, and any additional template parameters represent child nodes. The answer  is that this is a degenerate grammar that matches every possible expression tree,  from root to leaves.
 
 [endsect]
 
@@ -1047,9 +1059,7 @@ from root to leaves.
 [section Defining DSEL Grammars]
 [/=============================]
 
-In this section we'll see how to use Proto to define a grammar for your DSEL and 
-use it to validate expression templates, giving short, readable compile-time errors 
-for invalid expressions.
+In this section we'll see how to use Proto to define a grammar for your DSEL and  use it to validate expression templates, giving short, readable compile-time errors  for invalid expressions.
 
 [tip You might think that this is a backwards way of doing things. ["If Proto let 
 me select which operators to overload, my users wouldn't be able to create invalid 
@@ -1074,12 +1084,7 @@ If none of the above convinces you, you actually /can/ use Proto to control whic
 operators are overloaded within your domain. And to do it, you need to define a 
 grammar!]
 
-In a previous section, we used Proto to define a DSEL for a lazily evaluated
-calculator that allowed any combination of placeholders, floating-point
-literals, addition, subtraction, multiplication, division and grouping. If
-we were to write the grammar for this DSEL in
-[@http://en.wikipedia.org/wiki/Extended_Backus_Naur_Form EBNF], it might look
-like this:
+In a previous section, we used Proto to define a DSEL for a lazily evaluated calculator that allowed any combination of placeholders, floating-point literals, addition, subtraction, multiplication, division and grouping. If we were to write the grammar for this DSEL in [@http://en.wikipedia.org/wiki/Extended_Backus_Naur_Form EBNF], it might look like this:
 
 [pre
 group       ::= '(' expression ')'

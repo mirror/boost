@@ -61,6 +61,8 @@
   [funcref   boost::proto::make_expr `proto::make_expr()`]]
 [def _unpack_expr_          
   [funcref   boost::proto::unpack_expr `proto::unpack_expr()`]]
+[def _display_expr_          
+  [funcref   boost::proto::display_expr `proto::display_expr()`]]
 [def _matches_              
   [classref  boost::proto::matches `proto::matches<>`]]
 [def _or_                   
@@ -81,6 +83,8 @@
   [classref  boost::proto::is_expr `proto::is_expr<>`]]
 [def _tag_of_               
   [classref  boost::proto::tag_of `proto::tag_of<>`]]
+[def _arity_of_               
+  [classref  boost::proto::arity_of `proto::arity_of<>`]]
 [def _child_                
   [funcref   boost::proto::child `proto::child()`]]
 [def _child_c_              
@@ -161,6 +165,36 @@
   [classref boost::proto::lazy `proto::lazy<>`]]
 [def _SYB_ 
   [link boost_proto.users_guide.resources.SYB ["Scrap Your Boilerplate]]]
+[def _result_of_value_
+  [classref boost::proto::result_of::value `proto::result_of::value<>`]]
+[def _result_of_child_c_
+  [classref boost::proto::result_of::child_c `proto::result_of::child_c<>`]]
+[def _result_of_child_
+  [classref boost::proto::result_of::child `proto::result_of::child<>`]]
+[def _result_of_left_
+  [classref boost::proto::result_of::left `proto::result_of::left<>`]]
+[def _result_of_right_
+  [classref boost::proto::result_of::right `proto::result_of::right<>`]]
+[def _MAX_ARITY_
+  [^[macroref BOOST_PROTO_MAX_ARITY]]]
+[def _MAX_LOGICAL_ARITY_
+  [^[macroref BOOST_PROTO_MAX_LOGICAL_ARITY]]]
+[def _MAX_FUNCTION_CALL_ARITY_
+  [^[macroref BOOST_PROTO_MAX_FUNCTION_CALL_ARITY]]]
+[def _BASIC_EXTENDS_
+  [^[macroref BOOST_PROTO_BASIC_EXTENDS]()]]
+[def _EXTENDS_
+  [^[macroref BOOST_PROTO_EXTENDS]()]]
+[def _EXTENDS_ASSIGN_
+  [^[macroref BOOST_PROTO_EXTENDS_ASSIGN]()]]
+[def _EXTENDS_SUBSCRIPT_
+  [^[macroref BOOST_PROTO_EXTENDS_SUBSCRIPT]()]]
+[def _EXTENDS_FUNCTION_
+  [^[macroref BOOST_PROTO_EXTENDS_FUNCTION]()]]
+[def _DEFINE_OPERATORS_
+  [^[macroref BOOST_PROTO_DEFINE_OPERATORS]()]]
+[def _AUTO_
+  [^[macroref BOOST_PROTO_AUTO]()]]
 
 [include preface.qbk]
 

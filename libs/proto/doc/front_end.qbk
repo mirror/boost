@@ -70,12 +70,7 @@ Proto also overloads `operator=`, `operator[]`, and `operator()`, but these oper
     _1(8,9);    // OK, builds a ternary function tree node
     // ... etc.
 
-For the first two lines, assignment and subscript, it should be fairly unsurprising
-that the resulting expression node should be binary. After all, there are
-two operands in each expression. It may be surprising at first that what appears
-to be a function call with no arguments, `_1()`, actually creates an expression
-node with one child. The child is `_1` itself. Likewise, the expression `_1(7)`
-has two children: `_1` and `7`.
+For the first two lines, assignment and subscript, it should be fairly unsurprising that the resulting expression node should be binary. After all, there are two operands in each expression. It may be surprising at first that what appears to be a function call with no arguments, `_1()`, actually creates an expression node with one child. The child is `_1` itself. Likewise, the expression `_1(7)` has two children: `_1` and `7`.
 
 Because these operators can only be defined as member functions, the following expressions are invalid:
 
@@ -87,22 +82,17 @@ Because these operators can only be defined as member functions, the following e
 
     std::sin(_1);   // ERROR: cannot call std::sin() with _1
 
-Also, C++ has special rules for overloads of `operator->` that make it useless
-for building expression templates, so Proto does not overload it.
+Also, C++ has special rules for overloads of `operator->` that make it useless for building expression templates, so Proto does not overload it.
 
 [/==============================]
 [heading The Address-Of Operator]
 [/==============================]
 
-Proto overloads the address-of operator for expression types, so that the
-following code creates a new unary address-of tree node:
+Proto overloads the address-of operator for expression types, so that the following code creates a new unary address-of tree node:
 
     &_1;    // OK, creates a unary address-of tree node
 
-It does /not/ return the address of the `_1` object. However, there is
-special code in Proto such that a unary address-of node is implicitly
-convertible to a pointer to its child. In other words, the following
-code works and does what you might expect, but not in the obvious way:
+It does /not/ return the address of the `_1` object. However, there is special code in Proto such that a unary address-of node is implicitly convertible to a pointer to its child. In other words, the following code works and does what you might expect, but not in the obvious way:
 
     typedef
         proto::terminal< placeholder<0> >::type
@@ -373,7 +363,7 @@ Now that we have defined the `calculator<>` expression wrapper, we need to wrap 
 To use _extends_, your extension type must derive from _extends_. Unfortunately, that means that your extension type is no longer POD and its instances cannot be /statically initialized/. (See the [link boost_proto.appendices.rationale.static_initialization Static
 Initialization] section in the [link boost_proto.appendices.rationale Rationale] appendix for why this matters.) In particular, as defined above, the global placeholder objects `_1` and `_2` will need to be initialized at runtime, which could lead to subtle order of initialization bugs.
 
-There is another way to make an expression extension that doesn't sacrifice POD-ness : the `BOOST_PROTO_EXTENDS()` macro. You can use it much like you use _extends_. We can use `BOOST_PROTO_EXTENDS()` to keep `calculator<>` a POD and our placeholders statically initialized.
+There is another way to make an expression extension that doesn't sacrifice POD-ness : the _EXTENDS_ macro. You can use it much like you use _extends_. We can use _EXTENDS_ to keep `calculator<>` a POD and our placeholders statically initialized.
 
     // The calculator<> expression wrapper makes expressions
     // function objects.
@@ -399,7 +389,7 @@ With the new `calculator<>` type, we can redefine our placeholders to be statica
 
 We need to make one additional small change to accommodate the POD-ness of our expression extension, which we'll describe below in the section on expression generators.
 
-What does `BOOST_PROTO_EXTENDS()` do? It defines a data member of expression type being extended; some nested typedefs that Proto requires; `operator=`, `operator[]` and `operator()` overloads for building expression templates; and a nested `result<>` template for calculating the return type of `operator()`. In this case, however, the `operator()` overloads and the `result<>` template are not needed because we are defining our own `operator()` in the `calculator<>` type. Proto provides additional macros for finer control over which member functions are defined. We could improve our `calculator<>` type as follows:
+What does _EXTENDS_ do? It defines a data member of expression type being extended; some nested typedefs that Proto requires; `operator=`, `operator[]` and `operator()` overloads for building expression templates; and a nested `result<>` template for calculating the return type of `operator()`. In this case, however, the `operator()` overloads and the `result<>` template are not needed because we are defining our own `operator()` in the `calculator<>` type. Proto provides additional macros for finer control over which member functions are defined. We could improve our `calculator<>` type as follows:
 
     // The calculator<> expression wrapper makes expressions
     // function objects.
@@ -424,39 +414,41 @@ What does `BOOST_PROTO_EXTENDS()` do? It defines a data member of expression typ
         }
     };
 
-Notice that we are now using `BOOST_PROTO_BASIC_EXTENDS()` instead of `BOOST_PROTO_EXTENDS()`. This just adds the data member and the nested typedefs but not any of the overloaded operators. Those are added separately with `BOOST_PROTO_EXTENDS_ASSIGN()` and `BOOST_PROTO_EXTENDS_SUBSCRIPT()`. We are leaving out the function call operator and the nested `result<>` template that could have been defined with Proto's `BOOST_PROTO_EXTENDS_FUNCTION()` macro.
+Notice that we are now using _BASIC_EXTENDS_ instead of _EXTENDS_. This just adds the data member and the nested typedefs but not any of the overloaded operators. Those are added separately with _EXTENDS_ASSIGN_ and _EXTENDS_SUBSCRIPT_. We are leaving out the function call operator and the nested `result<>` template that could have been defined with Proto's _EXTENDS_FUNCTION_ macro.
 
 In summary, here are the macros you can use to define expression extensions, and a brief description of each.
 
 [def __expression__ [~expression]]
 [def __extension__ [~extension]]
 [def __domain__ [~domain]]
+[def __extends__ [macroref BOOST_PROTO_EXTENDS]]
+[def __basic_extends__ [macroref BOOST_PROTO_BASIC_EXTENDS]]
 
 [table Expression Extension Macros
  [[Macro]
   [Purpose]]
- [[``BOOST_PROTO_BASIC_EXTENDS(
+ [[``__basic_extends__(
     __expression__
   , __extension__
   , __domain__
 )``]
   [Defines a data member of type `__expression__` and some nested typedefs that Proto requires.]]
- [[`BOOST_PROTO_EXTENDS_ASSIGN()`]
-  [Defines `operator=`. Only valid when preceded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
- [[`BOOST_PROTO_EXTENDS_SUBSCRIPT()`]
-  [Defines `operator[]`. Only valid when preceded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
- [[`BOOST_PROTO_EXTENDS_FUNCTION()`]
-  [Defines `operator()` and a nested `result<>` template for return type calculation. Only valid when preceded by `BOOST_PROTO_BASIC_EXTENDS()`.]]
- [[``BOOST_PROTO_EXTENDS(
+ [[_EXTENDS_ASSIGN_]
+  [Defines `operator=`. Only valid when preceded by _BASIC_EXTENDS_.]]
+ [[_EXTENDS_SUBSCRIPT_]
+  [Defines `operator[]`. Only valid when preceded by _BASIC_EXTENDS_.]]
+ [[_EXTENDS_FUNCTION_]
+  [Defines `operator()` and a nested `result<>` template for return type calculation. Only valid when preceded by _BASIC_EXTENDS_.]]
+ [[``__extends__(
     __expression__
   , __extension__
   , __domain__
 )``]
   [Equivalent to:``
-    BOOST_PROTO_BASIC_EXTENDS(__expression__, __extension__, __domain__)
-    BOOST_PROTO_EXTENDS_ASSIGN()
-    BOOST_PROTO_EXTENDS_SUBSCRIPT()
-    BOOST_PROTO_EXTENDS_FUNCTION()``]]
+__basic_extends__(__expression__, __extension__, __domain__)
+_EXTENDS_ASSIGN_
+_EXTENDS_SUBSCRIPT_
+_EXTENDS_FUNCTION_``]]
 ]
 
 [endsect]
@@ -476,7 +468,7 @@ The last thing that remains to be done is to tell Proto that it needs to wrap al
 
 The first template parameter to `proto::domain<>` is the generator. "Generator" is just a fancy name for a function object that accepts an expression and does something to it. `proto::generator<>` is a very simple one --- it wraps an expression in the wrapper you specify. `proto::domain<>` inherits from its generator parameter, so all domains are themselves function objects.
 
-If we used `BOOST_PROTO_EXTENDS()` to keep our expression extension type POD, then we need to use `proto::pod_generator<>` instead of `proto::generator<>`, as follows:
+If we used _EXTENDS_ to keep our expression extension type POD, then we need to use `proto::pod_generator<>` instead of `proto::generator<>`, as follows:
 
     // If calculator<> uses BOOST_PROTO_EXTENDS() instead of 
     // use proto::extends<>, use proto::pod_generator<> instead
@@ -547,6 +539,67 @@ Another common use for this feature would be to disable Proto's unary `operator&
 The type `proto::not_< proto::address_of< _ > >` is a very simple grammar that matches all expressions except unary address-of expressions. In the section describing Proto's intermediate form, we'll have much more to say about grammars.
 
 [endsect]
+
+[endsect]
+
+[section:define_operators Adapting Existing Types to Proto]
+
+The preceding discussions of defining Proto front ends have all made a big assumption: that you have the luxury of defining everything from scratch. What happens if you have existing types, say a matrix type and a vector type, that you would like to treat as if they were Proto terminals? Proto usually trades only in its own expression types, but with _DEFINE_OPERATORS_, it can accomodate your custom terminal types, too. 
+
+Let's say, for instance, that you have the following types and that you can't modify then to make them ["native] Proto terminal types.
+
+    namespace math
+    {
+        // A matrix type ...
+        struct matrix { /*...*/ };
+
+        // A vector type ...
+        struct vector { /*...*/ };
+    }
+
+You can non-intrusively make objects of these types Proto terminals by defining the proper operator overloads using _DEFINE_OPERATORS_. The basic procedure is as follows:
+
+# Define a trait that returns true for your types and false for all others.
+# Reopen the namespace of your types and use _DEFINE_OPERATORS_ to define a set of 
+  operator overloads, passing the name of the trait as the first macro parameter,
+  and the name of a Proto domain (e.g., _default_domain_) as the second.
+
+The following code demonstrates how it works.
+
+    namespace math
+    {
+        template<typename T>
+        struct is_terminal
+          : mpl::false_
+        {};
+
+        // OK, "matrix" is a custom terminal type
+        template<>
+        struct is_terminal<matrix>
+          : mpl::true_
+        {};
+
+        // OK, "vector" is a custom terminal type
+        template<>
+        struct is_terminal<vector>
+          : mpl::true_
+        {};
+
+        // Define all the operator overloads to construct Proto
+        // expression templates, treating "matrix" and "vector"
+        // objects as if they were Proto terminals.
+        BOOST_PROTO_DEFINE_OPERATORS(is_terminal, proto::default_domain)
+    }
+
+The invocation of the _DEFINE_OPERATORS_ macro defines a complete set of operator overloads that treat `matrix` and `vector` objects as if they were Proto terminals. And since the operators are defined in the same namespace as the `matrix` and `vector` types, the operators will be found by argument-dependent lookup. With the code above, we can now construct expression templates with matrices and vectors, as shown below.
+
+    math::matrix m1;
+    math::vector v1;
+    proto::literal<int> i(0);
+    
+    m1 * 1;  // custom terminal and literals are OK
+    m1 * i;  // custom terminal and Proto expressions are OK
+    m1 * v1; // two custom terminals are OK, too.
 
 [endsect]
 

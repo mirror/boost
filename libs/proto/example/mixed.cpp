@@ -158,8 +158,8 @@ struct AssignOpsCases
     template<int D> struct case_< proto::tag::bitwise_xor_assign, D >  : _ {};
 };
 
-// A vector grammar is a terminal or some op that is not an
-// assignment op. (Assignment will be handled specially.)
+// An expression conforms to the MixedGrammar if it is a terminal or some
+// op that is not an assignment op. (Assignment will be handled specially.)
 struct MixedGrammar
   : proto::or_<
         proto::terminal<_>
@@ -170,8 +170,8 @@ struct MixedGrammar
     >
 {};
 
-// Expressions in the vector domain will be wrapped in VectorExpr<>
-// and must conform to the VectorGrammar
+// Expressions in the MixedDomain will be wrapped in MixedExpr<>
+// and must conform to the MixedGrammar
 struct MixedDomain
   : proto::domain<proto::generator<MixedExpr>, MixedGrammar>
 {};

@@ -88,7 +88,7 @@
           template<typename T, std::size_t N>
           struct term_traits<T (&)[N]>
           {
-              typedef T (&value_type)[N];
+              typedef T value_type[N];
               typedef T (&reference)[N];
               typedef T (&const_reference)[N];
           };
@@ -97,7 +97,7 @@
           template<typename T, std::size_t N>
           struct term_traits<T const (&)[N]>
           {
-              typedef T const (&value_type)[N];
+              typedef T value_type[N];
               typedef T const (&reference)[N];
               typedef T const (&const_reference)[N];
           };
@@ -106,7 +106,7 @@
           template<typename T, std::size_t N>
           struct term_traits<T[N]>
           {
-              typedef T (&value_type)[N];
+              typedef T value_type[N];
               typedef T (&reference)[N];
               typedef T const (&const_reference)[N];
           };
@@ -115,7 +115,7 @@
           template<typename T, std::size_t N>
           struct term_traits<T const[N]>
           {
-              typedef T const (&value_type)[N];
+              typedef T value_type[N];
               typedef T const (&reference)[N];
               typedef T const (&const_reference)[N];
           };

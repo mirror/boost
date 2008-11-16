@@ -447,11 +447,11 @@
                 /// \c Expr. This may be a value or a reference
                 typedef typename Expr::proto_child0 value_type;
 
-                /// The "value" type of the child, suitable for return by value,
+                /// The "value" type of the child, suitable for storage by value,
                 /// computed as follows:
-                /// \li <tt>T const(&)[N]</tt> becomes <tt>T const(&)[N]</tt>
-                /// \li <tt>T[N]</tt> becomes <tt>T(&)[N]</tt>
-                /// \li <tt>T(&)[N]</tt> becomes <tt>T(&)[N]</tt>
+                /// \li <tt>T const(&)[N]</tt> becomes <tt>T[N]</tt>
+                /// \li <tt>T[N]</tt> becomes <tt>T[N]</tt>
+                /// \li <tt>T(&)[N]</tt> becomes <tt>T[N]</tt>
                 /// \li <tt>R(&)(A0,...)</tt> becomes <tt>R(&)(A0,...)</tt>
                 /// \li <tt>T const &</tt> becomes <tt>T</tt>
                 /// \li <tt>T &</tt> becomes <tt>T</tt>
@@ -466,7 +466,7 @@
                 /// \c Expr. This may be a value or a reference
                 typedef typename Expr::proto_child0 value_type;
 
-                /// The "reference" type of the child, suitable for return by
+                /// The "reference" type of the child, suitable for storage by
                 /// reference, computed as follows:
                 /// \li <tt>T const(&)[N]</tt> becomes <tt>T const(&)[N]</tt>
                 /// \li <tt>T[N]</tt> becomes <tt>T(&)[N]</tt>
@@ -485,7 +485,7 @@
                 /// \c Expr. This may be a value or a reference
                 typedef typename Expr::proto_child0 value_type;
 
-                /// The "const reference" type of the child, suitable for return by
+                /// The "const reference" type of the child, suitable for storage by
                 /// const reference, computed as follows:
                 /// \li <tt>T const(&)[N]</tt> becomes <tt>T const(&)[N]</tt>
                 /// \li <tt>T[N]</tt> becomes <tt>T const(&)[N]</tt>
@@ -2309,7 +2309,7 @@
             /// of a Proto expression.
             ///
             /// A metafunction that returns the type of the Nth child
-            /// of a Proto expression. \c N must be 0 or less than
+            /// of a Proto expression. \c N must be less than
             /// \c Expr::proto_arity::value.
             template<typename Expr>
             struct child_c<Expr, N>

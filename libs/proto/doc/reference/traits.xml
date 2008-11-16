@@ -2104,7 +2104,7 @@
           <typedef name="value_type">
             <description>
               <para>
-                The raw type of the <replaceable>N</replaceable><superscript>th</superscript> child as it is
+                The raw type of the value as it is
                 stored within <computeroutput>Expr</computeroutput>. This may be a value or a reference.
               </para>
             </description>
@@ -2118,17 +2118,17 @@
                 <itemizedlist>
                   <listitem>
                     <para>
-                      <computeroutput>T const(&amp;)[N]</computeroutput> becomes <computeroutput>T const(&amp;)[N]</computeroutput>
+                      <computeroutput>T const(&amp;)[N]</computeroutput> becomes <computeroutput>T[N]</computeroutput>
                     </para>
                   </listitem>
                   <listitem>
                     <para>
-                      <computeroutput>T[N]</computeroutput> becomes <computeroutput>T(&amp;)[N]</computeroutput>
+                      <computeroutput>T[N]</computeroutput> becomes <computeroutput>T[N]</computeroutput>
                     </para>
                   </listitem>
                   <listitem>
                     <para>
-                      <computeroutput>T(&amp;)[N]</computeroutput> becomes <computeroutput>T(&amp;)[N]</computeroutput>
+                      <computeroutput>T(&amp;)[N]</computeroutput> becomes <computeroutput>T[N]</computeroutput>
                     </para>
                   </listitem>
                   <listitem>

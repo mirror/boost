@@ -2,8 +2,25 @@
 # subject to the Boost Software License, Version 1.0. (See accompanying
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+import os ;
 import path ;
 import quickbook ;
+import boostbook ;
+
+local admon-graphics-path = [ path.join [ boostbook.docbook-xsl-dir ] images ] ;
+local callout-graphics-path = [ path.join $(admon-graphics-path) callouts ] ;
+
+admon-graphics-path = [ path.native $(admon-graphics-path)/ ] ;
+callout-graphics-path = [ path.native $(callout-graphics-path)/ ] ;
+
+if [ os.name ] = CYGWIN
+{
+    admon-graphics-path = $(admon-graphics-path:W) ;
+    callout-graphics-path = $(callout-graphics-path:W) ;
+
+    admon-graphics-path = $(admon-graphics-path:T) ;
+    callout-graphics-path = $(callout-graphics-path:T) ;
+}
 
 xml proto
     :
@@ -50,8 +67,7 @@ boostbook standalone
         # Set this one for PDF generation *only*:
         # default png graphics are awful in PDF form,
         # better use SVG's instead:
-        #<format>pdf:<xsl:param>admon.graphics.extension=".svg"
-        #<format>pdf:<xsl:param>img.src.path="C:/Program Files/docbook-xsl-1.73.2/images/"
-        #<format>pdf:<xsl:param>admon.graphics.path="C:/Program Files/docbook-xsl-1.73.2/images/"
-        #<format>pdf:<xsl:param>callout.graphics.path="C:/Program Files/docbook-xsl-1.73.2/images/callouts/"
+        <format>pdf:<xsl:param>admon.graphics.extension=".svg"
+        <format>pdf:<xsl:param>admon.graphics.path="$(admon-graphics-path)"
+        <format>pdf:<xsl:param>callout.graphics.path="$(callout-graphics-path)"
     ;
