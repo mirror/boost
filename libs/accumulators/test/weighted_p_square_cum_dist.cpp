@@ -82,10 +82,10 @@ void test_stat()
 
         // check upper region of distribution
         if ( histogram_upper[i].second > 0.1 )
-            BOOST_CHECK_CLOSE( 0.5 * (1.0 + my_erf( histogram_upper[i].first / sqrt(2.0) )), histogram_upper[i].second, epsilon );
+            BOOST_CHECK_CLOSE( 0.5 * (1.0 + my_erf( histogram_upper[i].first / std::sqrt(2.0) )), histogram_upper[i].second, epsilon );
         // check lower region of distribution
         if ( histogram_lower[i].second < -0.1 )
-            BOOST_CHECK_CLOSE( 0.5 * (1.0 + my_erf( histogram_lower[i].first / sqrt(2.0) )), histogram_lower[i].second, epsilon );
+            BOOST_CHECK_CLOSE( 0.5 * (1.0 + my_erf( histogram_lower[i].first / std::sqrt(2.0) )), histogram_lower[i].second, epsilon );
     }
 }
 
