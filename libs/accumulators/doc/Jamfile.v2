@@ -62,7 +62,7 @@ if [ os.name ] = NT
 {
     CP = copy /y ;
     MKDIR = mkdir ;
-    FROM = \\..\\..\\html\\statsdoc\\*.png ;
+    FROM = \\..\\..\\..\\html\\statsdoc\\*.png ;
     TOHTML = .\\html\\images\\accumulators ;
     TOPDF = \\images\\accumulators ;
 }
