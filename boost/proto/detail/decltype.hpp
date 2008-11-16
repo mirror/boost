@@ -420,9 +420,9 @@ namespace boost { namespace proto
             typedef typename remove_const<typename remove_reference<PMF>::type>::type pmf_type;
             typedef typename boost::result_of<pmf_type(T)>::type result_type;
 
-            memfun(T t, PMF pmf)
+            memfun(T t, PMF p)
               : obj(t)
-              , pmf(pmf)
+              , pmf(p)
             {}
 
             result_type operator()() const

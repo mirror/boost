@@ -44,16 +44,14 @@
         ///
         #define BOOST_PROTO_CHILD(Z, N, DATA)                                                       \
             typedef typename Args::BOOST_PP_CAT(child, N) BOOST_PP_CAT(proto_child, N);             \
-            typedef typename Args::BOOST_PP_CAT(child_ref, N) BOOST_PP_CAT(proto_child_ref, N);     \
             BOOST_PP_CAT(proto_child, N) BOOST_PP_CAT(child, N);                                    \
-            /**/
+            /**< INTERNAL ONLY */
 
         /// INTERNAL ONLY
         ///
         #define BOOST_PROTO_VOID(Z, N, DATA)                                                        \
             typedef void BOOST_PP_CAT(proto_child, N);                                              \
-            typedef void BOOST_PP_CAT(proto_child_ref, N);                                          \
-            /**/
+            /**< INTERNAL ONLY */
 
             struct not_a_valid_type
             {
@@ -187,8 +185,8 @@
             typedef Args proto_args;
             typedef default_domain proto_domain;
             BOOST_PROTO_FUSION_DEFINE_TAG(proto::tag::proto_expr)
-            typedef void proto_is_expr_;
             typedef expr proto_derived_expr;
+            typedef void proto_is_expr_; /**< INTERNAL ONLY */
 
             BOOST_PP_REPEAT(ARG_COUNT, BOOST_PROTO_CHILD, ~)
             BOOST_PP_REPEAT_FROM_TO(ARG_COUNT, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_VOID, ~)

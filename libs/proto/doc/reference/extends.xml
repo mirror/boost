@@ -284,9 +284,7 @@
   </namespace>
 
   <macro name="BOOST_PROTO_BASIC_EXTENDS" kind="functionlike">
-    <macro-parameter name="Expr">
-      <purpose>Expr purpose</purpose>
-    </macro-parameter>
+    <macro-parameter name="Expr"/>
     <macro-parameter name="Derived"/>
     <macro-parameter name="Domain"/>
     <purpose>For creating expression wrappers that add members to a Proto expression template, like

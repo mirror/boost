@@ -17,6 +17,7 @@
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/utility/enable_if.hpp>
     #include <boost/proto/proto_fwd.hpp>
+    #include <boost/proto/args.hpp>
     #include <boost/proto/matches.hpp>
     #include <boost/proto/detail/suffix.hpp>
 
@@ -41,21 +42,21 @@
             };
 
             template<typename Expr>
-            struct expr_traits;
+            struct expr_params;
 
             template<typename Tag, typename Args, long N>
-            struct expr_traits<proto::expr<Tag, Args, N> >
+            struct expr_params<proto::expr<Tag, Args, N> >
             {
                 typedef Tag tag;
                 typedef Args args;
                 BOOST_STATIC_CONSTANT(long, arity = N);
             };
 
-            template<typename Expr, long Arity = expr_traits<Expr>::arity>
+            template<typename Expr, long Arity = expr_params<Expr>::arity>
             struct by_value_generator_;
 
         #define BOOST_PROTO_DEFINE_BY_VALUE_TYPE(Z, N, Expr)                                        \
-            typename uncvref<typename expr_traits<Expr>::args::BOOST_PP_CAT(child, N)>::type        \
+            typename uncvref<typename expr_params<Expr>::args::BOOST_PP_CAT(child, N)>::type        \
             /**/
 
         #define BOOST_PROTO_DEFINE_BY_VALUE(Z, N, expr)                                             \
@@ -67,8 +68,8 @@
             {
                 typedef
                     proto::expr<
-                        typename expr_traits<Expr>::tag
-                      , term<typename expr_traits<Expr>::args::child_ref0::value_type>
+                        typename expr_params<Expr>::tag
+                      , term<typename detail::term_traits<typename expr_params<Expr>::args::child0>::value_type>
                     >
                 type;
 
@@ -362,9 +363,9 @@
             {
                 typedef
                     proto::expr<
-                        typename expr_traits<Expr>::tag
+                        typename expr_params<Expr>::tag
                       , BOOST_PP_CAT(list, N)<
-                            // typename expr_traits<Expr>::args::child_ref0::proto_derived_expr, ...
+                            // typename uncvref<typename expr_params<Expr>::args::child0>::type, ...
                             BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_BY_VALUE_TYPE, Expr)
                         >
                     >
