@@ -63,7 +63,7 @@ void test_stat()
     {
         // problem with small results: epsilon is relative (in percent), not absolute!
         if ( histogram[i].second > 0.001 )
-            BOOST_CHECK_CLOSE( 0.5 * (1.0 + my_erf( histogram[i].first / sqrt(2.0) )), histogram[i].second, epsilon );
+            BOOST_CHECK_CLOSE( 0.5 * (1.0 + my_erf( histogram[i].first / std::sqrt(2.0) )), histogram[i].second, epsilon );
     }
 }
 
