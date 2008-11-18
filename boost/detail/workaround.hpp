@@ -45,6 +45,11 @@
 #else
 #define __BORLANDC___WORKAROUND_GUARD 0
 #endif
+#ifndef __CODEGEARC__
+#define __CODEGEARC___WORKAROUND_GUARD 1
+#else
+#define __CODEGEARC___WORKAROUND_GUARD 0
+#endif
 #ifndef _MSC_VER
 #define _MSC_VER_WORKAROUND_GUARD 1
 #else
