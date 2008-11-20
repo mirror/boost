@@ -99,7 +99,7 @@ directly to the container:</p>
 <H2><A NAME="framework"></A>Framework</H2>
 <p>
 This library proposes a framework to allow some containers to directly contruct contained objects in-place without requiring
-the entire set of constructor overloads ftom the contained type. It also allows the container to remove the CopyConstuctible
+the entire set of constructor overloads from the contained type. It also allows the container to remove the CopyConstuctible
 requirement from the contained type since objects can be directly constructed in-place without need of a copy.<br>
 The only requirement on the container is that it must provide proper storage (that is, correctly aligned and sized).
 Naturally, the container will typically support uninitialized storage to avoid the in-place construction to override

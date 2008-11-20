@@ -38,6 +38,7 @@
         </xsl:call-template>
       </xsl:with-param>
       <xsl:with-param name="synopsis">
+        <xsl:call-template name="header-link"/>
         <xsl:call-template name="macro-synopsis">
           <xsl:with-param name="link-type" select="'none'"/>
         </xsl:call-template>

@@ -21,6 +21,15 @@
 #include <boost/unordered/detail/move.hpp>
 #endif
 
+#if defined(BOOST_MSVC)
+#pragma warning(push)
+#if BOOST_MSVC >= 1400
+#pragma warning(disable:4396) //the inline specifier cannot be used when a
+                              // friend declaration refers to a specialization
+                              // of a function template
+#endif
+#endif
+
 namespace boost
 {
     template <class Value, class Hash, class Pred, class Alloc>
@@ -357,8 +366,8 @@ namespace boost
         friend bool operator==(unordered_set const&, unordered_set const&);
         friend bool operator!=(unordered_set const&, unordered_set const&);
 #else
-        friend bool operator==<>(unordered_set const&, unordered_set const&);
-        friend bool operator!=<>(unordered_set const&, unordered_set const&);
+        friend bool operator==<Value, Hash, Pred, Alloc>(unordered_set const&, unordered_set const&);
+        friend bool operator!=<Value, Hash, Pred, Alloc>(unordered_set const&, unordered_set const&);
 #endif
     }; // class template unordered_set
 
@@ -714,8 +723,8 @@ namespace boost
         friend bool operator==(unordered_multiset const&, unordered_multiset const&);
         friend bool operator!=(unordered_multiset const&, unordered_multiset const&);
 #else
-        friend bool operator==<>(unordered_multiset const&, unordered_multiset const&);
-        friend bool operator!=<>(unordered_multiset const&, unordered_multiset const&);
+        friend bool operator==<Value, Hash, Pred, Alloc>(unordered_multiset const&, unordered_multiset const&);
+        friend bool operator!=<Value, Hash, Pred, Alloc>(unordered_multiset const&, unordered_multiset const&);
 #endif
     }; // class template unordered_multiset
 
@@ -741,5 +750,9 @@ namespace boost
     }
 
 } // namespace boost
+
+#if defined(BOOST_MSVC)
+#pragma warning(pop)
+#endif
 
 #endif // BOOST_UNORDERED_UNORDERED_SET_HPP_INCLUDED

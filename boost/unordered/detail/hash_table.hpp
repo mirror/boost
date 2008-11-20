@@ -29,6 +29,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/utility/swap.hpp>
 
 #include <boost/mpl/aux_/config/eti.hpp>
 
@@ -57,17 +58,6 @@ namespace boost {
 
         static const std::size_t default_initial_bucket_count = 50;
         static const float minimum_max_load_factor = 1e-3f;
-
-        template <class T>
-        inline void hash_swap(T& x, T& y)
-        {
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-            std::swap(x,y);
-#else
-            using std::swap;
-            swap(x, y);
-#endif
-        }
 
         inline std::size_t double_to_size_t(double f)
         {

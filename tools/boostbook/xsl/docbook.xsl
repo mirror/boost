@@ -474,4 +474,25 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
   <xsl:template match="part/part/chapter/chapterinfo|part/part/appendix/appendixinfo">
     <sectioninfo><xsl:apply-templates/></sectioninfo>
   </xsl:template>
+
+  <!-- Header link comment to be inserted at the start of a reference page's
+       synopsis -->
+  <xsl:template name="header-link">
+    <xsl:if test="ancestor::header">
+      <xsl:call-template name="highlight-comment">
+        <xsl:with-param name="text">
+          <xsl:text>// In header: &lt;</xsl:text>
+          <xsl:call-template name="internal-link">
+            <xsl:with-param name="to">
+              <xsl:call-template name="generate.id">
+                <xsl:with-param name="node" select="ancestor::header[1]"/>
+              </xsl:call-template>
+            </xsl:with-param>
+            <xsl:with-param name="text" select="ancestor::header[1]/@name" />
+          </xsl:call-template>
+          <xsl:text>&gt;&#10;&#10;</xsl:text>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
 </xsl:stylesheet>

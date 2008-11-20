@@ -895,6 +895,7 @@
           <xsl:call-template name="generate.id"/>
         </xsl:with-param>
         <xsl:with-param name="synopsis">
+          <xsl:call-template name="header-link"/>
           <xsl:call-template name="function">
             <xsl:with-param name="indentation" select="0"/>
             <xsl:with-param name="is-reference" select="true()"/>
@@ -976,6 +977,7 @@
           <xsl:call-template name="generate.id"/>
         </xsl:with-param>
         <xsl:with-param name="synopsis">
+          <xsl:call-template name="header-link"/>
           <xsl:for-each select="signature">
             <xsl:call-template name="function">
               <xsl:with-param name="indentation" select="0"/>
