@@ -15,6 +15,7 @@
 # pragma once
 #endif
 
+#include <boost/config.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/xpressive/xpressive_fwd.hpp>
 #include <boost/xpressive/regex_constants.hpp>
@@ -61,8 +62,20 @@ private:
 public:
     typedef BidiIter iterator_type;
     typedef typename iterator_value<BidiIter>::type char_type;
+    // For compatibility with std::basic_regex
+    typedef typename iterator_value<BidiIter>::type value_type;
     typedef typename detail::string_type<char_type>::type string_type;
     typedef regex_constants::syntax_option_type flag_type;
+
+    BOOST_STATIC_CONSTANT(regex_constants::syntax_option_type, ECMAScript         = regex_constants::ECMAScript);
+    BOOST_STATIC_CONSTANT(regex_constants::syntax_option_type, icase              = regex_constants::icase_);
+    BOOST_STATIC_CONSTANT(regex_constants::syntax_option_type, nosubs             = regex_constants::nosubs);
+    BOOST_STATIC_CONSTANT(regex_constants::syntax_option_type, optimize           = regex_constants::optimize);
+    BOOST_STATIC_CONSTANT(regex_constants::syntax_option_type, collate            = regex_constants::collate);
+    BOOST_STATIC_CONSTANT(regex_constants::syntax_option_type, single_line        = regex_constants::single_line);
+    BOOST_STATIC_CONSTANT(regex_constants::syntax_option_type, not_dot_null       = regex_constants::not_dot_null);
+    BOOST_STATIC_CONSTANT(regex_constants::syntax_option_type, not_dot_newline    = regex_constants::not_dot_newline);
+    BOOST_STATIC_CONSTANT(regex_constants::syntax_option_type, ignore_white_space = regex_constants::ignore_white_space);
 
     /// \post regex_id()    == 0
     /// \post mark_count()  == 0
@@ -229,13 +242,6 @@ private:
         #endif
     }
 
-    // Returns true if this basic_regex object does not contain a valid regular expression.
-    /// INTERNAL ONLY
-    bool invalid_() const
-    {
-        return !proto::value(*this) || !proto::value(*this)->xpr_;
-    }
-
     // Compiles valid static regexes into a state machine.
     /// INTERNAL ONLY
     template<typename Expr>
@@ -254,6 +260,18 @@ private:
     /// INTERNAL ONLY
     void dump_(std::ostream &sout) const;
 };
+
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+template<typename BidiIter> regex_constants::syntax_option_type const basic_regex<BidiIter>::ECMAScript;
+template<typename BidiIter> regex_constants::syntax_option_type const basic_regex<BidiIter>::icase;
+template<typename BidiIter> regex_constants::syntax_option_type const basic_regex<BidiIter>::nosubs;
+template<typename BidiIter> regex_constants::syntax_option_type const basic_regex<BidiIter>::optimize;
+template<typename BidiIter> regex_constants::syntax_option_type const basic_regex<BidiIter>::collate;
+template<typename BidiIter> regex_constants::syntax_option_type const basic_regex<BidiIter>::single_line;
+template<typename BidiIter> regex_constants::syntax_option_type const basic_regex<BidiIter>::not_dot_null;
+template<typename BidiIter> regex_constants::syntax_option_type const basic_regex<BidiIter>::not_dot_newline;
+template<typename BidiIter> regex_constants::syntax_option_type const basic_regex<BidiIter>::ignore_white_space;
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // swap
