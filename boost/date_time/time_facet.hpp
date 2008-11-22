@@ -18,6 +18,7 @@
 #include <iomanip>
 #include <iterator> // i/ostreambuf_iterator
 #include <exception>
+#include <boost/assert.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/algorithm/string/erase.hpp>
@@ -445,8 +446,7 @@ namespace date_time {
       if (format.find(hours_format) != string_type::npos) {
         if (hours_str.empty())
           hours_str = hours_as_string(a_time_dur);
-        if (hours_str.length() > 2)
-          hours_str.erase(0, hours_str.length() - 2);
+        BOOST_ASSERT(hours_str.length() <= 2);
         boost::algorithm::replace_all(format, hours_format, hours_str);
       }
 
