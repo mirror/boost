@@ -399,6 +399,12 @@ int main(){
   check("Special values, default strings, not_a_date_time date",
       d == date(not_a_date_time));
 
+  // in addition check that special_value_from_string also works correctly for other special values
+  check("Special values, default strings, not_special test",
+      special_value_from_string("not_special") == not_special);
+  check("Special values, default strings, junk test",
+      special_value_from_string("junk") == not_special);
+
   // special values custom, strings
   special_values_parser svp("NADT", "MINF", "INF", "MINDT", "MAXDT");
   facet->special_values_parser(svp);

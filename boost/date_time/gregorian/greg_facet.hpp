@@ -284,7 +284,8 @@ namespace gregorian {
       const facet_def& f = std::use_facet<facet_def>(is.getloc());
       num = date_time::find_match(f.get_short_month_names(), 
                                   f.get_long_month_names(), 
-                                  (greg_month::max)(), s); 
+                                  (greg_month::max)(), s); // greg_month spans 1..12, so max returns the array size,
+                                                           // which is needed by find_match
     }
     /* bad_cast will be thrown if the desired facet is not accessible
      * so we can generate the facet. This has the drawback of using english
@@ -294,10 +295,11 @@ namespace gregorian {
       std::auto_ptr< const facet_def > f(create_facet_def(a));
       num = date_time::find_match(f->get_short_month_names(), 
                                   f->get_long_month_names(), 
-                                  (greg_month::max)(), s); 
+                                  (greg_month::max)(), s); // greg_month spans 1..12, so max returns the array size,
+                                                           // which is needed by find_match
     }
     
-    num += 1; // months numbered 1-12
+    ++num; // months numbered 1-12
     m = greg_month(num); 
 
     return is;
@@ -324,7 +326,8 @@ namespace gregorian {
       const facet_def& f = std::use_facet<facet_def>(is.getloc());
       num = date_time::find_match(f.get_short_weekday_names(), 
                                   f.get_long_weekday_names(), 
-                                  (greg_weekday::max)(), s); 
+                                  (greg_weekday::max)() + 1, s); // greg_weekday spans 0..6, so increment is needed
+                                                                 // to form the array size which is needed by find_match
     }
     /* bad_cast will be thrown if the desired facet is not accessible
      * so we can generate the facet. This has the drawback of using english
@@ -334,7 +337,8 @@ namespace gregorian {
       std::auto_ptr< const facet_def > f(create_facet_def(a));
       num = date_time::find_match(f->get_short_weekday_names(), 
                                   f->get_long_weekday_names(), 
-                                  (greg_weekday::max)(), s); 
+                                  (greg_weekday::max)() + 1, s); // greg_weekday spans 0..6, so increment is needed
+                                                                 // to form the array size which is needed by find_match
     }
    
     wd = greg_weekday(num); // weekdays numbered 0-6

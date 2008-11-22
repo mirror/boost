@@ -103,6 +103,14 @@
         </row>
 
         <row>
+          <entry>Bug fix</entry>
+          <entry>
+            Fixed a possible crash in <code>gregorian::special_value_from_string</code> if the string
+            did not represent a valid special value.
+          </entry>
+        </row>
+
+        <row>
           <entry>Bug Fix</entry>
           <entry>
           </entry>
