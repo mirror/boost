@@ -29,7 +29,9 @@
             A new formatter <code>%O</code> is used indicate such long durations in the
             format string. The old <code>%H</code> format specifier is thus restricted
             to represent durations that fit into two characters, in order to retain support
-            for reading durations in ISO format.
+            for reading durations in ISO format. In case if it is detected that the <code>%H</code>
+            format specifier is used with longer durations, the results are not specified
+            (an assertion in debug builds is raised).
           </entry>
         </row>
 
@@ -89,6 +91,22 @@
             On Windows platform made inclusion of <code>windows.h</code> optional. The header is only used
             when the <code>BOOST_USE_WINDOWS_H</code> macro is defined. Otherwise (and by default),
             the library uses internal definitions of symbols from this header.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug fix</entry>
+          <entry>
+            On Windows platform function <code>from_ftime</code> could return incorrect time if
+            the <code>FILETIME</code> that is being passed to the function contained dates before 1970-Jan-01.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug fix</entry>
+          <entry>
+            Fixed a possible crash in <code>gregorian::special_value_from_string</code> if the string
+            did not represent a valid special value.
           </entry>
         </row>
 

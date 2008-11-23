@@ -14,6 +14,17 @@
 #include <windows.h>
 #endif
 
+template< typename T, typename U >
+inline bool check_equal(const std::string& testname, T const& left, U const& right)
+{
+  bool res = check(testname, left == right);
+  if (!res)
+  {
+    std::cout << "    left = " << left << ", right = " << right << std::endl;
+  }
+  return res;
+}
+
 int main() 
 {
 #if defined(BOOST_HAS_FTIME) // skip tests if no FILETIME
@@ -33,21 +44,20 @@ int main()
 
     ptime pt = from_ftime<ptime>(ft);
 
-    check("ptime year matches systemtime year", 
-        st.wYear == pt.date().year());
-    check("ptime month matches systemtime month", 
-        st.wMonth == pt.date().month());
-    check("ptime day matches systemtime day", 
-        st.wDay == pt.date().day());
-    check("ptime hour matches systemtime hour", 
-        st.wHour == pt.time_of_day().hours());
-    check("ptime minute matches systemtime minute", 
-        st.wMinute == pt.time_of_day().minutes());
-    check("ptime second matches systemtime second", 
-        st.wSecond == pt.time_of_day().seconds());
-    check("truncated ptime fractional second matches systemtime millisecond", 
-        st.wMilliseconds == (pt.time_of_day().fractional_seconds() / adjustor)
-         );
+    check_equal("ptime year matches systemtime year", 
+        st.wYear, pt.date().year());
+    check_equal("ptime month matches systemtime month", 
+        st.wMonth, pt.date().month());
+    check_equal("ptime day matches systemtime day", 
+        st.wDay, pt.date().day());
+    check_equal("ptime hour matches systemtime hour", 
+        st.wHour, pt.time_of_day().hours());
+    check_equal("ptime minute matches systemtime minute", 
+        st.wMinute, pt.time_of_day().minutes());
+    check_equal("ptime second matches systemtime second", 
+        st.wSecond, pt.time_of_day().seconds());
+    check_equal("truncated ptime fractional second matches systemtime millisecond", 
+        st.wMilliseconds, (pt.time_of_day().fractional_seconds() / adjustor));
 
     // burn up a little time
     for (int j=0; j<100000; j++)
@@ -57,6 +67,28 @@ int main()
     }
 
   } // for loop
+
+  // check that time_from_ftime works for pre-1970-Jan-01 dates, too
+  // zero FILETIME should represent 1601-Jan-01 00:00:00.000
+  FILETIME big_bang_by_ms;
+  big_bang_by_ms.dwLowDateTime = big_bang_by_ms.dwHighDateTime = 0;
+  ptime pt = from_ftime<ptime>(big_bang_by_ms);
+
+  check_equal("big bang ptime year matches 1601", 
+      1601, pt.date().year());
+  check_equal("big bang ptime month matches Jan", 
+      1, pt.date().month());
+  check_equal("big bang ptime day matches 1", 
+      1, pt.date().day());
+  check_equal("big bang ptime hour matches 0", 
+      0, pt.time_of_day().hours());
+  check_equal("big bang ptime minute matches 0", 
+      0, pt.time_of_day().minutes());
+  check_equal("big bang ptime second matches 0", 
+      0, pt.time_of_day().seconds());
+  check_equal("big bang truncated ptime fractional second matches 0", 
+      0, (pt.time_of_day().fractional_seconds() / adjustor));
+
 
 #else // BOOST_HAS_FTIME
   // we don't want a forced failure here, not a shortcoming

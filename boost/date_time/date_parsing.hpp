@@ -74,22 +74,23 @@ namespace date_time {
     }
  
     //! Find index of a string in either of 2 arrays
-    /*! find_match searches both arrays for a match to 's'. Indexing of the 
-     * arrays is from 0 to 'limit'. The index of the match is returned.
+    /*! find_match searches both arrays for a match to 's'. Both arrays
+     * must contain 'size' elements. The index of the match is returned.
+     * If no match is found, 'size' is returned.
      * Ex. "Jan" returns 0, "Dec" returns 11, "Tue" returns 2.
-     * 'limit' can be sent in with: greg_month::max(), 
-     * greg_weekday::max() or date_time::NumSpecialValues */
+     * 'size' can be sent in with: greg_month::max() (which 12),
+     * greg_weekday::max() + 1 (which is 7) or date_time::NumSpecialValues */
     template<class charT>
     short find_match(const charT* const* short_names, 
                      const charT* const* long_names, 
-                     short limit,
+                     short size,
                      const std::basic_string<charT>& s) {
-      for(short i = 0; i <= limit; ++i){
+      for(short i = 0; i < size; ++i){
         if(short_names[i] == s || long_names[i] == s){
           return i;
         }
       }
-      return static_cast<short>(limit + 1); // not-found, return a value out of range
+      return size; // not-found, return a value out of range
     }
     
     //! Generic function to parse a delimited date (eg: 2002-02-10)

@@ -75,7 +75,7 @@ namespace gregorian {
                                     special_value_names,
                                     date_time::NumSpecialValues,
                                     s);
-    if(i > date_time::NumSpecialValues) { // match not found
+    if(i >= date_time::NumSpecialValues) { // match not found
       return not_special;
     }
     else {

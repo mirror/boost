@@ -87,10 +87,11 @@ namespace date_time {
 #elif defined(BOOST_HAS_FTIME)
       winapi::file_time ft;
       winapi::get_system_time_as_file_time(ft);
-      uint64_t nanos = winapi::file_time_to_nanoseconds(ft);
-      std::time_t t = static_cast<time_t>(nanos / 1000000000UL); // seconds since epoch
+      uint64_t micros = winapi::file_time_to_microseconds(ft); // it will not wrap, since ft is the current time
+                                                               // and cannot be before 1970-Jan-01
+      std::time_t t = static_cast<time_t>(micros / 1000000UL); // seconds since epoch
       // microseconds -- static casts supress warnings
-      boost::uint32_t sub_sec = static_cast<boost::uint32_t>((nanos % 1000000000UL) / 1000UL);
+      boost::uint32_t sub_sec = static_cast<boost::uint32_t>(micros % 1000000UL);
 #else
 #error Internal Boost.DateTime error: BOOST_DATE_TIME_HAS_HIGH_PRECISION_CLOCK is defined, however neither gettimeofday nor FILETIME support is detected.
 #endif
@@ -101,7 +102,7 @@ namespace date_time {
                   curr_ptr->tm_mon + 1,
                   curr_ptr->tm_mday);
 
-      //The following line will adjusts the fractional second tick in terms
+      //The following line will adjust the fractional second tick in terms
       //of the current time system.  For example, if the time system
       //doesn't support fractional seconds then res_adjust returns 0
       //and all the fractional seconds return 0.
