@@ -111,7 +111,7 @@ namespace boost { namespace property_tree { namespace xml_parser
             void operator()(It b, It e) const
             {
                 Ptree &attr = c.stack.back()->get_child(xmlattr<Ch>());
-                attr.back().second.put_value(Str(b + 1, e - 1));
+                attr.back().second.put_value(Str(b.base() + 1, e.base() - 1));
             }
         };
 
@@ -707,7 +707,7 @@ namespace boost { namespace property_tree { namespace xml_parser
         
         // Initialize iterators
         It begin(v.begin(), v.end());
-        It end;
+        It end(v.end(), v.end());;
         
         begin.set_position(detail::widen<Ch>(filename.c_str()));
         
