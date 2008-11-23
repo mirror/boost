@@ -35,11 +35,6 @@ struct core_access
         return proto::value(rex)->hidden_mark_count_;
     }
 
-    static bool invalid(basic_regex<BidiIter> const &rex)
-    {
-        return rex.invalid_();
-    }
-
     static bool match(basic_regex<BidiIter> const &rex, match_state<BidiIter> &state)
     {
         return rex.match_(state);
