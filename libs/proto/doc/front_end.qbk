@@ -161,7 +161,7 @@ Before we can write the `pow()` function, we need a function object that wraps a
         }
     };
 
-Now, let's try to define a function template that returns an expression template. We'll use the `proto::function<>` metafunction to calculate the type of a Proto expression that represents a function call. It is analogous to _terminal_. (We'll see a couple of different ways to solve this problem, and each will demonstrate another utility for defining Proto front-ends.)
+Now, let's try to define a function template that returns an expression template. We'll use the _function_ metafunction to calculate the type of a Proto expression that represents a function call. It is analogous to _terminal_. (We'll see a couple of different ways to solve this problem, and each will demonstrate another utility for defining Proto front-ends.)
 
     // Define a lazy pow() function for the calculator DSEL.
     // Can be used as: pow< 2 >(_1)
@@ -183,9 +183,9 @@ Now, let's try to define a function template that returns an expression template
         return result;
     }
 
-In the code above, notice how the `proto::function<>` and _terminal_ metafunctions are used to calculate the return type: `pow()` returns an expression template representing a function call where the first child is the function to call and the second is the argument to the function. (Unfortunately, the same type calculation is repeated in the body of the function so that we can initialize a local variable of the correct type. We'll see in a moment how to avoid that.)
+In the code above, notice how the _function_ and _terminal_ metafunctions are used to calculate the return type: `pow()` returns an expression template representing a function call where the first child is the function to call and the second is the argument to the function. (Unfortunately, the same type calculation is repeated in the body of the function so that we can initialize a local variable of the correct type. We'll see in a moment how to avoid that.)
 
-[note As with `proto::function<>`, there are metafunctions corresponding to all of the overloadable C++ operators for calculation expression types.]
+[note As with _function_, there are metafunctions corresponding to all of the overloadable C++ operators for calculation expression types.]
 
 With the above definition of the `pow()` function, we can create calculator expressions like the one below and evaluate them using the `calculator_context` we implemented in the Introduction.
 
@@ -449,6 +449,53 @@ __basic_extends__(__expression__, __extension__, __domain__)
 _EXTENDS_ASSIGN_
 _EXTENDS_SUBSCRIPT_
 _EXTENDS_FUNCTION_``]]
+]
+
+[warning [*Argument-Dependent Lookup and _EXTENDS_]
+
+Proto's operator overloads are defined in the `boost::proto` namespace and are found by argument-dependent lookup (ADL). This usually just works because expressions are made up of types that live in the `boost::proto` namespace. However, sometimes when you use _EXTENDS_ that is not the case. Consider:
+
+``    template<class T>
+    struct my_complex
+    {
+        BOOST_PROTO_EXTENDS(
+            typename proto::terminal<std::complex<T> >::type
+          , my_complex<T>
+          , proto::default_domain
+        )
+    };
+
+    int main()
+    {
+        my_complex<int> c0, c1;
+    
+        c0 + c1; // ERROR: operator+ not found
+    }
+``
+
+The problem has to do with how argument-dependent lookup works. The type `my_complex<int>` is not associated in any way with the `boost::proto` namespace, so the operators defined there are not considered. (Had we inherited from _extends_ instead of used _EXTENDS_, we would have avoided the problem because inheriting from a type in `boost::proto` namespace is enough to get ADL to kick in.)
+
+So what can we do? By adding an extra dummy template parameter that defaults to a type in the `boost::proto` namespace, we can trick ADL into finding the right operator overloads. The solution looks like this:
+
+``    template<class T, class Dummy = proto::is_proto_expr>
+    struct my_complex
+    {
+        BOOST_PROTO_EXTENDS(
+            typename proto::terminal<std::complex<T> >::type
+          , my_complex<T>
+          , proto::default_domain
+        )
+    };
+
+    int main()
+    {
+        my_complex<int> c0, c1;
+    
+        c0 + c1; // OK, operator+ found now!
+    }
+``
+
+The type [classref boost::proto::is_proto_expr `proto::is_proto_expr`] is nothing but an empty struct, but by making it a template parameter we make `boost::proto` an associated namespace of `my_complex<int>`. Now ADL can successfully find Proto's operator overloads.
 ]
 
 [endsect]

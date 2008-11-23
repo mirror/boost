@@ -1130,6 +1130,7 @@ The same is true for any primitive transform. The following are all equivalent:
 [table Implicit Parameters to Primitive Transforms
   [[Equivalent Transforms]]
   [[`proto::when<_, StringCopy>`]]
+  [[`proto::when<_, StringCopy()>`]]
   [[`proto::when<_, StringCopy(_)>`]]
   [[`proto::when<_, StringCopy(_, proto::_state)>`]]
   [[`proto::when<_, StringCopy(_, proto::_state, proto::_data)>`]]

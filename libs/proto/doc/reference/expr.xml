@@ -113,7 +113,7 @@
             </parameter>
             <requires>
               <para>
-                The number of supplied arguments must be <computeroutput>Arity</computeroutput>.
+                The number of supplied arguments must be <computeroutput>max(Arity,1)</computeroutput>.
               </para>
             </requires>
             <returns>
