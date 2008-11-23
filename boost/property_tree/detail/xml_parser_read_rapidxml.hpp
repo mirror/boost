@@ -93,9 +93,9 @@ namespace boost { namespace property_tree { namespace xml_parser
             using namespace rapidxml;
             xml_document<Ch> doc;
             if (flags & no_comments)
-                doc.parse<parse_normalize_whitespace>(&v.front());
+                doc.BOOST_NESTED_TEMPLATE parse<parse_normalize_whitespace>(&v.front());
             else
-                doc.parse<parse_normalize_whitespace | parse_comment_nodes>(&v.front());
+                doc.BOOST_NESTED_TEMPLATE parse<parse_normalize_whitespace | parse_comment_nodes>(&v.front());
 
             // Create ptree from nodes
             Ptree local;
