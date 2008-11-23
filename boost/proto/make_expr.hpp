@@ -524,7 +524,7 @@
                 {
                     proto::expr<tag::terminal, Args, 0> that = {this->a0};
                     return that;
-                };
+                }
 
                 template<typename Expr>
                 operator Expr() const
@@ -558,7 +558,7 @@
                 {
                     proto::expr<Tag, Args, 1> that = {this->a0};
                     return that;
-                };
+                }
 
                 template<typename Expr>
                 operator Expr() const
@@ -1087,7 +1087,7 @@
                 #undef M0
                 proto::expr<Tag, Args, N> that = {BOOST_PP_ENUM_PARAMS(N, c)};
                 return that;
-            };
+            }
 
             template<typename Expr>
             operator Expr() const

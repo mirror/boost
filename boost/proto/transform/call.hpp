@@ -411,7 +411,8 @@
                     #define M0(Z, M, DATA)                                                          \
                         detail::as_lvalue(                                                          \
                             typename when<_, BOOST_PP_CAT(A, M)>                                    \
-                                ::template impl<Expr, State, Data>()(e, s, d))            \
+                                ::template impl<Expr, State, Data>()(e, s, d))                      \
+                        /**/
                     return mono_fun()(BOOST_PP_ENUM(N, M0, ~));
                     #undef M0
                 }
