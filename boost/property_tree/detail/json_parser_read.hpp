@@ -16,6 +16,7 @@
 #include <boost/property_tree/detail/ptree_utils.hpp>
 #include <boost/property_tree/detail/json_parser_error.hpp>
 #include <boost/spirit.hpp>
+#include <boost/limits.hpp>
 #include <string>
 #include <locale>
 #include <istream>

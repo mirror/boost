@@ -10,6 +10,7 @@
 #ifndef BOOST_PROPERTY_TREE_DETAIL_PTREE_UTILS_HPP_INCLUDED
 #define BOOST_PROPERTY_TREE_DETAIL_PTREE_UTILS_HPP_INCLUDED
 
+#include <boost/limits.hpp>
 #include <string>
 #include <algorithm>
 #include <locale>

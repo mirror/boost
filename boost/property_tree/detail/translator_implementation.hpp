@@ -10,6 +10,8 @@
 #ifndef BOOST_PROPERTY_TREE_DETAIL_TRANSLATOR_IMPLEMENTATION_HPP_INCLUDED
 #define BOOST_PROPERTY_TREE_DETAIL_TRANSLATOR_IMPLEMENTATION_HPP_INCLUDED
 
+#include <boost/limits.hpp>
+
 namespace boost { namespace property_tree
 {
 
