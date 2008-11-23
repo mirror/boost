@@ -7,4 +7,20 @@ test-suite "property_tree"
      [ run test_json_parser.cpp ]
      [ run test_ini_parser.cpp ]
      [ run test_xml_parser_rapidxml.cpp ]
+
+     # danieljames: The following tests were previously missing.
+     # I don't know why.
+
+     [ run test_xml_parser_spirit.cpp ]
+     [ run test_multi_module1.cpp test_multi_module2.cpp ]
+     [ run test_registry_parser.cpp ]
+
+     # I think these require external dependencies:
+     #
+     # [ run test_xml_parser_pugxml.cpp ]
+     # [ run test_xml_parser_tinyxml.cpp ]
+ 
+     # The implementation for this seems to be missing:
+     #
+     # [ run test_cmdline_parser.cpp ]
 ;
