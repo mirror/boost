@@ -103,6 +103,8 @@
   [classref  boost::proto::unary_plus `proto::unary_plus<>`]]
 [def _plus_
   [classref  boost::proto::plus `proto::plus<>`]]
+[def _function_             
+  [classref  boost::proto::function `proto::function<>`]]
 [def _unary_expr_           
   [classref  boost::proto::unary_expr `proto::unary_expr<>`]]
 [def _binary_expr_          
