@@ -68,3 +68,7 @@ exe mini_lambda
         mini_lambda.cpp
     ;
 
+exe virtual_member
+    :
+        virtual_member.cpp
+    ;
