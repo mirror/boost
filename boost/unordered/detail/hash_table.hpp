@@ -76,8 +76,9 @@ namespace boost {
 
         template<typename T>
         std::size_t const prime_list_template<T>::value[] = {
-            53ul, 97ul, 193ul, 389ul, 769ul,
-            1543ul, 3079ul, 6151ul, 12289ul, 24593ul,
+            5ul, 11ul, 17ul, 29ul, 37ul, 53ul, 67ul, 79ul,
+            97ul, 131ul, 193ul, 257ul, 389ul, 521ul, 769ul,
+            1031ul, 1543ul, 2053ul, 3079ul, 6151ul, 12289ul, 24593ul,
             49157ul, 98317ul, 196613ul, 393241ul, 786433ul,
             1572869ul, 3145739ul, 6291469ul, 12582917ul, 25165843ul,
             50331653ul, 100663319ul, 201326611ul, 402653189ul, 805306457ul,

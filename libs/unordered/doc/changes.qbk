@@ -49,5 +49,8 @@ First official release.
   Document that the equality and inequality operators are undefined for two
   objects if their equality predicates aren't equivalent. Thanks to Daniel
   Krügler.
+* [@https://svn.boost.org/trac/boost/ticket/1710 Ticket 1710]: 
+  Use a larger prime number list. Thanks to Thorsten Ottosen and Hervé
+  Brönnimann.
 
 [endsect]

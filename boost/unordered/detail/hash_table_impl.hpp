@@ -1469,6 +1469,21 @@ namespace boost {
                 return need_to_reserve;
             }
 
+            // basic exception safety
+            bool reserve_for_insert(size_type n)
+            {
+                bool need_to_reserve = n >= max_load_;
+                // throws - basic:
+                if (need_to_reserve) {
+                    size_type s = size();
+                    s = s + (s >> 1);
+                    s = s > n ? s : n;
+                    rehash_impl(min_buckets_for_size(s));
+                }
+                BOOST_ASSERT(n < max_load_ || n > max_size());
+                return need_to_reserve;
+            }
+
         public:
 
             // no throw
@@ -1720,7 +1735,7 @@ namespace boost {
 
                 // reserve has basic exception safety if the hash function
                 // throws, strong otherwise.
-                if(reserve(size() + 1))
+                if(reserve_for_insert(size() + 1))
                     bucket = data_.bucket_ptr_from_hash(hash_value);
 
                 // I'm relying on link_ptr not being invalidated by
@@ -1750,7 +1765,7 @@ namespace boost {
 
                     // reserve has basic exception safety if the hash function
                     // throws, strong otherwise.
-                    bucket_ptr base = reserve(size() + 1) ?
+                    bucket_ptr base = reserve_for_insert(size() + 1) ?
                         get_bucket(extract_key(a.get()->value_)) : it.bucket_;
 
                     // Nothing after this point can throw
@@ -1775,7 +1790,7 @@ namespace boost {
                 }
                 else {
                     // Only require basic exception safety here
-                    reserve(size() + distance);
+                    reserve_for_insert(size() + distance);
                     node_constructor a(data_.allocators_);
 
                     for (; i != j; ++i) {
@@ -1841,7 +1856,7 @@ namespace boost {
 
                     // reserve has basic exception safety if the hash function
                     // throws, strong otherwise.
-                    if(reserve(size() + 1))
+                    if(reserve_for_insert(size() + 1))
                         bucket = data_.bucket_ptr_from_hash(hash_value);
 
                     // Nothing after this point can throw.
@@ -1880,7 +1895,7 @@ namespace boost {
 
                     // reserve has basic exception safety if the hash function
                     // throws, strong otherwise.
-                    if(reserve(size() + 1))
+                    if(reserve_for_insert(size() + 1))
                         bucket = data_.bucket_ptr_from_hash(hash_value);
 
                     // Nothing after this point can throw.
@@ -1947,7 +1962,7 @@ namespace boost {
 
                     // reserve has basic exception safety if the hash function
                     // throws, strong otherwise.
-                    if(reserve(size() + 1))
+                    if(reserve_for_insert(size() + 1))
                         bucket = data_.bucket_ptr_from_hash(hash_value);
 
                     // Nothing after this point can throw.
@@ -1978,7 +1993,7 @@ namespace boost {
                 } else {
                     // reserve has basic exception safety if the hash function
                     // throws, strong otherwise.
-                    if(reserve(size() + 1))
+                    if(reserve_for_insert(size() + 1))
                         bucket = data_.bucket_ptr_from_hash(hash_value);
 
                     // Nothing after this point can throw.
@@ -2047,7 +2062,7 @@ namespace boost {
                         // reserve has basic exception safety if the hash function
                         // throws, strong otherwise.
                         if(size() + 1 >= max_load_) {
-                            reserve(size() + insert_size(i, j));
+                            reserve_for_insert(size() + insert_size(i, j));
                             bucket = data_.bucket_ptr_from_hash(hash_value);
                         }
 
