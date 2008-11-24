@@ -26,6 +26,8 @@
 #include <boost/static_assert.hpp>
 #include <boost/unordered/detail/allocator_helpers.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/aligned_storage.hpp>
+#include <boost/type_traits/alignment_of.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/detail/workaround.hpp>

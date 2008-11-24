@@ -52,5 +52,12 @@ First official release.
 * [@https://svn.boost.org/trac/boost/ticket/1710 Ticket 1710]: 
   Use a larger prime number list. Thanks to Thorsten Ottosen and Hervé
   Brönnimann.
+* Use
+  [@../../libs/type_traits/doc/html/boost_typetraits/category/alignment.html
+  aligned storage] to store the types. This changes the way the allocator is
+  used to construct nodes. It used to construct the node with two calls to
+  the allocator's `construct` method - once for the pointers and once for the
+  value. It now constructs the node with a single call to construct and
+  then constructs the value using in place construction.
 
 [endsect]
