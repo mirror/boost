@@ -41,6 +41,16 @@ This is a simplified version of the example at
 [@../../libs/unordered/examples/case_insensitive.hpp /libs/unordered/examples/case_insensitive.hpp]
 which supports other locales and string types.
 
+[caution
+Be careful when using the equality (`==`) operator with custom equality
+predicates, especially if you're using a function pointer. If you compare two
+containers with different equality predicates then the result is undefined.
+For most stateless function objects this is impossible - since you can only
+compare objects with the same equality predicate you know the equality
+predicates must be equal. But if you're using function pointers or a stateful
+equality predicate (e.g. boost::function) then you can get into trouble.
+]
+
 [h2 Custom Types]
 
 Similarly, a custom hash function can be used for custom types:
