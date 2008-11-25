@@ -6,7 +6,7 @@
  */
 
 #include "boost/date_time/int_adapter.hpp"
-#include "boost/date_time/testfrmwk.hpp"
+#include "testfrmwk.hpp"
 #include "boost/cstdint.hpp"
 #include <iostream>
 #include <sstream>

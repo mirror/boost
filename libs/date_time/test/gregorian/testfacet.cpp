@@ -13,7 +13,7 @@
 #include "boost/date_time/gregorian/greg_facet.hpp"
 #include "boost/date_time/date_format_simple.hpp"
 #include "boost/date_time/gregorian/gregorian.hpp"
-#include "boost/date_time/testfrmwk.hpp"
+#include "../testfrmwk.hpp"
 
 #ifndef BOOST_DATE_TIME_NO_LOCALE
 

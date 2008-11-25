@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include "boost/date_time/period.hpp"
-#include "boost/date_time/testfrmwk.hpp"
+#include "testfrmwk.hpp"
 
 /*! duration_rep parameter for period requires a func unit() that
  * returns the smallest unit of measure for this type. This minimal

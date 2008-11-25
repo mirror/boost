@@ -6,7 +6,7 @@
  */
 
 #include "boost/date_time/time_resolution_traits.hpp"
-#include "boost/date_time/testfrmwk.hpp"
+#include "testfrmwk.hpp"
 
 
 int

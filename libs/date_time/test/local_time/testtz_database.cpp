@@ -6,7 +6,7 @@
  */
 
 
-#include "boost/date_time/testfrmwk.hpp"
+#include "../testfrmwk.hpp"
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/local_time/custom_time_zone.hpp"

@@ -7,7 +7,7 @@
 
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/local_timezone_defs.hpp"
-#include "boost/date_time/testfrmwk.hpp"
+#include "../testfrmwk.hpp"
 
 // Define dst rule for Paraguay which is transitions forward on Oct 1 and 
 // back Mar 1
