@@ -202,9 +202,8 @@ namespace mini_lambda
             ((keyword::catch_,  catch_))
         )
 
-        BOOST_STATIC_CONSTANT(
-            int, arity = boost::result_of<arity_of(E)>::type::value
-        );
+        // Calculate the arity of this lambda expression
+        static int const arity = boost::result_of<arity_of(E)>::type::value;
 
         // Define overloads of operator() that evaluate the lambda
         // expression for up to 3 arguments.
@@ -214,53 +213,38 @@ namespace mini_lambda
         typename mpl::eval_if_c<
             0 != arity
           , mpl::identity<void>
-          , boost::result_of<grammar(E const &, int const &, fusion::vector0 &)>
+          , boost::result_of<grammar(
+                E const &
+              , int const &
+              , fusion::vector<> &
+            )>
         >::type
         operator()() const
         {
             BOOST_MPL_ASSERT_RELATION(arity, ==, 0);
-            fusion::vector0 args;
+            fusion::vector<> args;
             return grammar()(proto_base(), 0, args);            
         }
 
-        template<typename A0>
-        typename boost::result_of<grammar(
-            E const &
-          , int const &
-          , fusion::vector1<A0 const &> &
-        )>::type
-        operator ()(A0 const &a0) const
-        {
-            BOOST_MPL_ASSERT_RELATION(arity, <=, 1);
-            fusion::vector1<A0 const &> args(a0);
-            return grammar()(proto_base(), 0, args);
-        }
+        #define LAMBDA_EVAL(N, typename_A, A_const_ref, A_const_ref_a, ref_a) \
+        template<typename_A(N)>                                               \
+        typename boost::result_of<grammar(                                    \
+            E const &                                                         \
+          , int const &                                                       \
+          , fusion::vector<A_const_ref(N)> &                                  \
+        )>::type                                                              \
+        operator ()(A_const_ref_a(N)) const                                   \
+        {                                                                     \
+            BOOST_MPL_ASSERT_RELATION(arity, <=, N);                          \
+            fusion::vector<A_const_ref(N)> args(ref_a(N));                    \
+            return grammar()(proto_base(), 0, args);                          \
+        }                                                                     \
+        /**/
 
-        template<typename A0, typename A1>
-        typename boost::result_of<grammar(
-            E const &
-          , int const &
-          , fusion::vector2<A0 const &, A1 const &> &
-        )>::type
-        operator ()(A0 const &a0, A1 const &a1) const
-        {
-            BOOST_MPL_ASSERT_RELATION(arity, <=, 2);
-            fusion::vector2<A0 const &, A1 const &> args(a0, a1);
-            return grammar()(proto_base(), 0, args);
-        }
-
-        template<typename A0, typename A1, typename A2>
-        typename boost::result_of<grammar(
-            E const &
-          , int const &
-          , fusion::vector3<A0 const &, A1 const &, A2 const &> &
-        )>::type
-        operator ()(A0 const &a0, A1 const &a1, A2 const &a2) const
-        {
-            BOOST_MPL_ASSERT_RELATION(arity, <=, 3);
-            fusion::vector3<A0 const &, A1 const &, A2 const &> args(a0, a1, a2);
-            return grammar()(proto_base(), 0, args);
-        }
+        // Repeats LAMBDA_EVAL macro for N=1 to 3 inclusive (because
+        // there are only 3 placeholders)
+        BOOST_PROTO_REPEAT_FROM_TO(1, 4, LAMBDA_EVAL)
+        #undef LAMBDA_EVAL
     };
 
     namespace placeholders

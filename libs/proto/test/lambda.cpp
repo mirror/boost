@@ -130,28 +130,24 @@ struct lambda
         return proto::eval(*this, ctx);
     }
 
-    template<typename A0>
-    typename proto::result_of::eval<T const, lambda_context<fusion::tuple<A0 const &> > >::type
-    operator ()(A0 const &a0) const
-    {
-        fusion::tuple<A0 const &> args(a0);
-        lambda_context<fusion::tuple<A0 const &> > ctx(args);
-        return proto::eval(*this, ctx);
-    }
-
-    template<typename A0, typename A1>
-    typename proto::result_of::eval<T const, lambda_context<fusion::tuple<A0 const &, A1 const &> > >::type
-    operator ()(A0 const &a0, A1 const &a1) const
-    {
-        fusion::tuple<A0 const &, A1 const &> args(a0, a1);
-        lambda_context<fusion::tuple<A0 const &, A1 const &> > ctx(args);
-        return proto::eval(*this, ctx);
-    }
+    #define M0(N, typename_A, A_const_ref, A_const_ref_a, ref_a)                                    \
+    template<typename_A(N)>                                                                         \
+    typename proto::result_of::eval<T const, lambda_context<fusion::tuple<A_const_ref(N)> > >::type \
+    operator ()(A_const_ref_a(N)) const                                                             \
+    {                                                                                               \
+        fusion::tuple<A_const_ref(N)> args(ref_a(N));                                               \
+        lambda_context<fusion::tuple<A_const_ref(N)> > ctx(args);                                   \
+        return proto::eval(*this, ctx);                                                             \
+    }                                                                                               \
+    /**/
+    BOOST_PROTO_REPEAT_FROM_TO(1, 4, M0)
+    #undef M0
 };
 
 // Define some lambda placeholders
 lambda<proto::terminal<placeholder<mpl::int_<0> > >::type> const _1 = {{}};
 lambda<proto::terminal<placeholder<mpl::int_<1> > >::type> const _2 = {{}};
+lambda<proto::terminal<placeholder<mpl::int_<3> > >::type> const _3 = {{}};
 
 template<typename T>
 lambda<typename proto::terminal<T>::type> const val(T const &t)
