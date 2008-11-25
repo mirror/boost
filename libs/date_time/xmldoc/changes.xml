@@ -9,7 +9,7 @@
 
 <section id="date_time.changes">
   <title>Change History</title>
-  
+
   <!-- if each new change tgroup has a "Bug Fix" as the first "Type", the columns will line up nicely -->
 
   <bridgehead renderas="sect3">Changes from Boost 1.34 to 1.38 (date_time 1.05 to 1.06)</bridgehead>
@@ -111,8 +111,10 @@
         </row>
 
         <row>
-          <entry>Bug Fix</entry>
+          <entry>Bug fix</entry>
           <entry>
+            Removed the <code>testfrmwk.hpp</code> file from the public include directory. This file
+            was internal for the library tests and was not documented.
           </entry>
         </row>
 
@@ -166,7 +168,6 @@
         <row>
           <entry>Bug Fix</entry>
           <entry>Fix DST traits for Austrialia (sf# 1672139) to set end of DST at 3:00 am instead of 2:00 am.
-                
           </entry>
         </row>
 
@@ -210,13 +211,6 @@
                  a bug in the VC8 standard library. See 
                  <ulink url="http://lists.boost.org/Archives/boost/2006/02/101122.php">mailing list archive</ulink> 
                  for more information.
-          </entry>
-        </row>
-
-
-        <row>
-          <entry>Bug Fix</entry>
-          <entry>
           </entry>
         </row>
 
