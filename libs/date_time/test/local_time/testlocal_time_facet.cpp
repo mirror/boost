@@ -11,7 +11,7 @@
 #include <sstream>
 #include <boost/shared_ptr.hpp>
 #include "boost/date_time/local_time/local_time.hpp"
-#include "boost/date_time/testfrmwk.hpp"
+#include "../testfrmwk.hpp"
 
 
 template<class temporal_type, typename charT>

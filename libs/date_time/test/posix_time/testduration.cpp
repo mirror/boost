@@ -13,7 +13,7 @@
 #else
 #include "boost/date_time/posix_time/time_formatters.hpp"
 #endif
-#include "boost/date_time/testfrmwk.hpp"
+#include "../testfrmwk.hpp"
 
 
 int

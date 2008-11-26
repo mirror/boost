@@ -12,7 +12,7 @@
 
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/gregorian/greg_serialize.hpp>
-#include <boost/date_time/testfrmwk.hpp>
+#include "../testfrmwk.hpp"
 #include <sstream>
 
 using namespace boost;

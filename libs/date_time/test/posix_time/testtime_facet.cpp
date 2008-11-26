@@ -8,7 +8,7 @@
  */
 
 #include "boost/date_time/posix_time/posix_time.hpp"
-#include "boost/date_time/testfrmwk.hpp"
+#include "../testfrmwk.hpp"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -24,7 +24,7 @@ teststreaming(std::string testname,
   std::basic_stringstream<charT> ss;
   ss.imbue(locale);
   ss << value;
-  check(testname, ss.str() == expected_result);
+  check_equal(testname, ss.str(), expected_result);
 }
 
 

@@ -8,7 +8,7 @@
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include "boost/date_time/local_time/dst_transition_day_rules.hpp"
 #include "boost/shared_ptr.hpp"
-#include "boost/date_time/testfrmwk.hpp"
+#include "../testfrmwk.hpp"
 
 
 

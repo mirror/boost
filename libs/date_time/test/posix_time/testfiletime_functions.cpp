@@ -6,24 +6,13 @@
  */
 
 #include "boost/date_time/posix_time/posix_time.hpp"
-#include "boost/date_time/testfrmwk.hpp"
+#include "../testfrmwk.hpp"
 #include "boost/date_time/filetime_functions.hpp"
 #include <cmath>
 
 #if defined(BOOST_HAS_FTIME)
 #include <windows.h>
 #endif
-
-template< typename T, typename U >
-inline bool check_equal(const std::string& testname, T const& left, U const& right)
-{
-  bool res = check(testname, left == right);
-  if (!res)
-  {
-    std::cout << "    left = " << left << ", right = " << right << std::endl;
-  }
-  return res;
-}
 
 int main() 
 {

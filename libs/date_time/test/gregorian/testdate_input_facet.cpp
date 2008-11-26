@@ -7,7 +7,7 @@
  */
 
 #include "boost/date_time/gregorian/gregorian.hpp"
-#include "boost/date_time/testfrmwk.hpp"
+#include "../testfrmwk.hpp"
 #include <iostream>
 #include <sstream>
 #include <string>

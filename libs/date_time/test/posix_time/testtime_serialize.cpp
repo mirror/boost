@@ -11,7 +11,7 @@
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/posix_time/time_serialize.hpp>
-#include <boost/date_time/testfrmwk.hpp>
+#include "../testfrmwk.hpp"
 #include <sstream>
 
 using namespace boost;

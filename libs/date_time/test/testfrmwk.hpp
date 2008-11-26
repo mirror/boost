@@ -55,6 +55,28 @@ bool check(const std::string& testname, bool testcond)
   }
 }
 
+template< typename T, typename U >
+inline bool check_equal(const std::string& testname, T const& left, U const& right)
+{
+  bool res = check(testname, left == right);
+  if (!res)
+  {
+    std::cout << "        left = " << left << ", right = " << right << std::endl;
+  }
+  return res;
+}
+
+#ifndef BOOST_NO_STD_WSTRING
+inline bool check_equal(const std::string& testname, std::wstring const& left, std::wstring const& right)
+{
+  bool res = check(testname, left == right);
+  if (!res)
+  {
+    std::wcout << L"        left = " << left << L", right = " << right << std::endl;
+  }
+  return res;
+}
+#endif
 
 int printTestStats() 
 {
