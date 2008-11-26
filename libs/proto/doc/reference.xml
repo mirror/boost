@@ -1012,6 +1012,7 @@
   <xi:include href="reference/proto.xml"/>
   <xi:include href="reference/proto_fwd.xml"/>
   <xi:include href="reference/proto_typeof.xml"/>
+  <xi:include href="reference/repeat.xml"/>
   <xi:include href="reference/tags.xml"/>
   <xi:include href="reference/traits.xml"/>
   <xi:include href="reference/transform/arg.xml"/>
