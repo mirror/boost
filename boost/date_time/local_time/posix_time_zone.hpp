@@ -89,7 +89,13 @@ namespace local_time{
       dst_offsets_(posix_time::hours(0),posix_time::hours(0),posix_time::hours(0)),
       dst_calc_rules_()
     {
+#ifdef __HP_aCC
+      // Work around bug in aC++ compiler: see QXCR1000880488 in the
+      // HP bug tracking system
+      const char_type sep_chars[2] = {',',0};
+#else
       const char_type sep_chars[2] = {','};
+#endif
       char_separator_type sep(sep_chars);
       tokenizer_type tokens(s, sep);
       tokenizer_iterator_type it = tokens.begin();
@@ -297,7 +303,13 @@ namespace local_time{
     }
 
     void calc_rules(const string_type& start, const string_type& end){
+#ifdef __HP_aCC
+      // Work around bug in aC++ compiler: see QXCR1000880488 in the
+      // HP bug tracking system
+      const char_type sep_chars[2] = {'/',0};
+#else
       const char_type sep_chars[2] = {'/'};
+#endif
       char_separator_type sep(sep_chars);
       tokenizer_type st_tok(start, sep);
       tokenizer_type et_tok(end, sep);
@@ -357,7 +369,13 @@ namespace local_time{
     void M_func(const string_type& s, const string_type& e){
       typedef gregorian::nth_kday_of_month nkday;
       unsigned short sm=0,sw=0,sd=0,em=0,ew=0,ed=0; // start/end month,week,day
+#ifdef __HP_aCC
+      // Work around bug in aC++ compiler: see QXCR1000880488 in the
+      // HP bug tracking system
+      const char_type sep_chars[3] = {'M','.',0};
+#else
       const char_type sep_chars[3] = {'M','.'};
+#endif
       char_separator_type sep(sep_chars);
       tokenizer_type stok(s, sep), etok(e, sep);
       
