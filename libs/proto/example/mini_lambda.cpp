@@ -46,7 +46,7 @@ struct placeholder_arity
 };
 
 // The lambda grammar, with the transforms for calculating the max arity
-struct Lambda
+struct lambda_arity
   : proto::or_<
         proto::when<
             proto::terminal< placeholder<_> >
@@ -57,15 +57,9 @@ struct Lambda
         >
       , proto::when<
             proto::nary_expr<_, proto::vararg<_> >
-          , proto::fold<_, mpl::int_<0>(), mpl::max<Lambda,proto::_state>()>
+          , proto::fold<_, mpl::int_<0>(), mpl::max<lambda_arity, proto::_state>()>
         >
     >
-{};
-
-// simple wrapper for calculating a lambda expression's arity.
-template<typename Expr>
-struct lambda_arity
-  : boost::result_of<Lambda(Expr, mpl::void_, mpl::void_)>
 {};
 
 // The lambda context is the same as the default context
@@ -105,16 +99,38 @@ struct lambda
     BOOST_PROTO_EXTENDS_ASSIGN()
     BOOST_PROTO_EXTENDS_SUBSCRIPT()
 
-    // Careful not to evaluate the return type of the nullary function
-    // unless we have a nullary lambda!
-    typedef typename mpl::eval_if<
-        typename lambda_arity<T>::type
-      , mpl::identity<void>
-      , proto::result_of::eval<T const, lambda_context<fusion::tuple<> > >
-    >::type nullary_type;
+    // Calculate the arity of this lambda expression
+    static int const arity = boost::result_of<lambda_arity(T)>::type::value;
+
+    template<typename Sig>
+    struct result;
+
+    // Define nested result<> specializations to calculate the return
+    // type of this lambda expression. But be careful not to evaluate
+    // the return type of the nullary function unless we have a nullary
+    // lambda!
+    template<typename This>
+    struct result<This()>
+      : mpl::eval_if_c<
+            0 == arity
+          , proto::result_of::eval<T const, lambda_context<fusion::tuple<> > >
+          , mpl::identity<void>
+        >
+    {};
+
+    template<typename This, typename A0>
+    struct result<This(A0)>
+      : proto::result_of::eval<T const, lambda_context<fusion::tuple<A0> > >
+    {};
+
+    template<typename This, typename A0, typename A1>
+    struct result<This(A0, A1)>
+      : proto::result_of::eval<T const, lambda_context<fusion::tuple<A0, A1> > >
+    {};
 
     // Define our operator () that evaluates the lambda expression.
-    nullary_type operator ()() const
+    typename result<lambda()>::type
+    operator ()() const
     {
         fusion::tuple<> args;
         lambda_context<fusion::tuple<> > ctx(args);
@@ -122,7 +138,7 @@ struct lambda
     }
 
     template<typename A0>
-    typename proto::result_of::eval<T const, lambda_context<fusion::tuple<A0 const &> > >::type
+    typename result<lambda(A0 const &)>::type
     operator ()(A0 const &a0) const
     {
         fusion::tuple<A0 const &> args(a0);
@@ -131,7 +147,7 @@ struct lambda
     }
 
     template<typename A0, typename A1>
-    typename proto::result_of::eval<T const, lambda_context<fusion::tuple<A0 const &, A1 const &> > >::type
+    typename result<lambda(A0 const &, A1 const &)>::type
     operator ()(A0 const &a0, A1 const &a1) const
     {
         fusion::tuple<A0 const &, A1 const &> args(a0, a1);
@@ -166,23 +182,38 @@ struct construct_helper
     T operator()() const
     { return T(); }
 
-    template<typename A0>
-    T operator()(A0 const &a0) const
-    { return T(a0); }
-
-    template<typename A0, typename A1>
-    T operator()(A0 const &a0, A1 const &a1) const
-    { return T(a0, a1); }
+    // Generate BOOST_PROTO_MAX_ARITY overloads of the
+    // followig function call operator.
+#define BOOST_PROTO_LOCAL_MACRO(N, typename_A, A_const_ref, A_const_ref_a, a)\
+    template<typename_A(N)>                                       \
+    T operator()(A_const_ref_a(N)) const                          \
+    { return T(a(N)); }
+#define BOOST_PROTO_LOCAL_a BOOST_PROTO_a
+#include BOOST_PROTO_LOCAL_ITERATE()
 };
 
 // Generate BOOST_PROTO_MAX_ARITY-1 overloads of the
-// construct function template like the one defined above.
-BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE(            \
-    construct                                           \
-  , lambda_domain                                       \
-  , (proto::tag::function)                              \
-  , ((construct_helper)(typename))                      \
-)
+// following construct() function template.
+#define M0(N, typename_A, A_const_ref, A_const_ref_a, ref_a)      \
+template<typename T, typename_A(N)>                               \
+typename proto::result_of::make_expr<                             \
+    proto::tag::function                                          \
+  , lambda_domain                                                 \
+  , construct_helper<T>                                           \
+  , A_const_ref(N)                                                \
+>::type const                                                     \
+construct(A_const_ref_a(N))                                       \
+{                                                                 \
+    return proto::make_expr<                                      \
+        proto::tag::function                                      \
+      , lambda_domain                                             \
+    >(                                                            \
+        construct_helper<T>()                                     \
+      , ref_a(N)                                                  \
+    );                                                            \
+}
+BOOST_PROTO_REPEAT_FROM_TO(1, BOOST_PROTO_MAX_ARITY, M0)
+#undef M0
 
 struct S
 {
