@@ -650,4 +650,82 @@ The invocation of the _DEFINE_OPERATORS_ macro defines a complete set of operato
 
 [endsect]
 
+[/=======================================================================]
+[section:code_repetition Generating Repetitive Code with the Preprocessor]
+[/=======================================================================]
+
+Sometimes as a DSEL designer, to make the lives of your users easy, you have to make your own life hard. Giving your users natural and flexible syntax often involves writing large numbers of repetitive function overloads. It can be enough to give you repetitive stress injury! Before you hurt yourself, check out the macros Proto provides for automating many repetitive code-generation chores.
+
+Imagine that we are writing a lambda DSEL, and we would like to enable syntax for constructing temporary objects of any type using the following syntax:
+
+    // A lambda expression that takes two arguments and
+    // uses them to construct a temporary std::complex<>
+    construct< std::complex<int> >( _1, _2 )
+
+For the sake of the discussion, imagine that we already have a function object template `construct_impl<>` that accepts arguments and constructs new objects from them. We would want the above lambda expression to be equivalent to the following:
+
+    // The above lambda expression should be roughly equivalent
+    // to the following:
+    proto::make_expr<proto::tag::function>(
+        construct_impl<std::complex<int> >() // The function to invoke lazily
+      , boost::ref(_1)                       // The first argument to the function
+      , boost::ref(_2)                       // The second argument to the function
+    );
+
+We can define our `construct()` function template as follows:
+
+    template<typename T, typename A0, typename A1>
+    typename proto::result_of::make_expr<
+        proto::tag::function
+      , construct_impl<T>
+      , A0 const &
+      , A1 const &
+    >::type const
+    construct(A0 const &a0, A1 const &a1)
+    {
+        return proto::make_expr<proto::tag::function>(
+            construct_impl<T>()
+          , boost::ref(a0)
+          , boost::ref(a1)
+        );
+    }
+
+This works for two arguments, but we would like it to work for any number of arguments, up to (_MAX_ARITY_ - 1). (Why "- 1"? Because one child is taken up by the `construct_impl<T>()` terminal leaving room for only (_MAX_ARITY_ - 1) other children.)
+
+For cases like this, Proto provides the _REPEAT_ and _REPEAT_FROM_TO_ macros. To use it, we turn the function definition above into a macro as follows:
+
+    #define M0(N, typename_A, A_const_ref, A_const_ref_a, ref_a)  \
+    template<typename T, typename_A(N)>                           \
+    typename proto::result_of::make_expr<                         \
+        proto::tag::function                                      \
+      , construct_impl<T>                                         \
+      , A_const_ref(N)                                            \
+    >::type const                                                 \
+    construct(A_const_ref_a(N))                                   \
+    {                                                             \
+        return proto::make_expr<proto::tag::function>(            \
+            construct_impl<T>()                                   \
+          , ref_a(N)                                              \
+        );                                                        \
+    }
+
+Notice that we turned the function into a macro that takes 5 arguments. The first is the current iteration number. The rest are the names of other macros that generate different sequences. For instance, Proto passes as the second parameter the name of a macro that will expand to `typename A0, typename A1, ...`.
+
+Now that we have turned our function into a macro, we can pass the macro to _REPEAT_FROM_TO_. Proto will invoke it iteratively, generating all the function overloads for us.
+
+    // Generate overloads of construct() that accept from
+    // 1 to BOOST_PROTO_MAX_ARITY-1 arguments:
+    BOOST_PROTO_REPEAT_FROM_TO(1, BOOST_PROTO_MAX_ARITY, M0)
+    #undef M0
+
+[/============================]
+[heading Non-Default Sequences]
+[/============================]
+
+As mentioned above, Proto passes as the last 4 arguments to your macro the names of other macros that generate various sequences. The macros _REPEAT_ and _REPEAT_FROM_TO_ select defaults for these parameters. If the defaults do not meet your needs, you can use _REPEAT_EX_ and _REPEAT_FROM_TO_EX_ and pass different macros that generate different sequences. Proto defines a number of such macros for use as parameters to _REPEAT_EX_ and _REPEAT_FROM_TO_EX_. Check the reference section for [headerref boost/proto/repeat.hpp] for all the details.
+
+Also, check out _LOCAL_ITERATE_. It works similarly to _REPEAT_ and friends, but it can be easier to use when you want to change one macro argument and accept defaults for the others.
+
+[endsect]
+
 [endsect]

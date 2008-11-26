@@ -197,6 +197,34 @@
   [^[macroref BOOST_PROTO_DEFINE_OPERATORS]()]]
 [def _AUTO_
   [^[macroref BOOST_PROTO_AUTO]()]]
+[def _REPEAT_
+  [^[macroref BOOST_PROTO_REPEAT]()]]
+[def _REPEAT_FROM_TO_
+  [^[macroref BOOST_PROTO_REPEAT_FROM_TO]()]]
+[def _REPEAT_EX_
+  [^[macroref BOOST_PROTO_REPEAT_EX]()]]
+[def _REPEAT_FROM_TO_EX_
+  [^[macroref BOOST_PROTO_REPEAT_FROM_TO_EX]()]]
+[def _LOCAL_ITERATE_
+  [^[macroref BOOST_PROTO_LOCAL_ITERATE]()]]
+[def _BOOST_PROTO_typename_A_
+  [^[macroref BOOST_PROTO_typename_A]()]]
+[def _BOOST_PROTO_A_
+  [^[macroref BOOST_PROTO_A]()]]
+[def _BOOST_PROTO_A_const_
+  [^[macroref BOOST_PROTO_A_const]()]]
+[def _BOOST_PROTO_A_ref_
+  [^[macroref BOOST_PROTO_A_ref]()]]
+[def _BOOST_PROTO_A_const_ref_
+  [^[macroref BOOST_PROTO_A_const_ref]()]]
+[def _BOOST_PROTO_A_ref_a_
+  [^[macroref BOOST_PROTO_A_ref_a]()]]
+[def _BOOST_PROTO_A_const_ref_a_
+  [^[macroref BOOST_PROTO_A_const_ref_a]()]]
+[def _BOOST_PROTO_a_
+  [^[macroref BOOST_PROTO_a]()]]
+[def _BOOST_PROTO_ref_a_
+  [^[macroref BOOST_PROTO_ref_a]()]]
 
 [include preface.qbk]
 
