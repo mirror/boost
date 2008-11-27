@@ -19,6 +19,12 @@ namespace units {
 
 struct one { one() {} };
 
+// workaround for pathscale.
+one make_one() {
+    one result;
+    return(result);
+}
+
 template<class T>
 struct multiply_typeof_helper<one, T>
 {
