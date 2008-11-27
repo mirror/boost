@@ -223,7 +223,11 @@ namespace boost {
             functions func2_;
             functions_ptr func_; // The currently active functions.
         };
-
+        
+        template <typename T>
+        void destroy(T* x) {
+        	x->~T();
+        }
     }
 }
 
