@@ -7,9 +7,6 @@
 import testing ;
 
 project factory-tests
-    : requirements
-      <include>/Users/tosh/Lab/boost
-      <include>/Users/tosh/Lab/deploy/x_files/factory
     ;
 
 test-suite functional/factory
