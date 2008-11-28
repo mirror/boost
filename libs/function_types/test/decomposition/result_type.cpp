@@ -16,12 +16,19 @@ namespace ft = boost::function_types;
 
 class C; 
 typedef C func();
+typedef C const c_func();
 typedef C (*func_ptr)();
+typedef C const (*c_func_ptr)();
 typedef C (&func_ref)();
+typedef C const (&c_func_ref)();
 typedef C (C::*mem_func_ptr)();
-typedef C (C::*c_mem_func_ptr)() const;
-typedef C (C::*v_mem_func_ptr)() volatile;
-typedef C (C::*cv_mem_func_ptr)() const volatile;
+typedef C const (C::*c_mem_func_ptr)();
+typedef C (C::*mem_func_ptr_c)() const;
+typedef C const (C::*c_mem_func_ptr_c)() const;
+typedef C (C::*mem_func_ptr_v)() volatile;
+typedef C const (C::*c_mem_func_ptr_v)() volatile;
+typedef C (C::*mem_func_ptr_cv)() const volatile;
+typedef C const (C::*c_mem_func_ptr_cv)() const volatile;
 typedef int C::* mem_ptr;
 typedef int const C::* c_mem_ptr;
 
@@ -30,7 +37,15 @@ BOOST_MPL_ASSERT((
 ));
 
 BOOST_MPL_ASSERT((
+  boost::is_same<ft::result_type<c_func>::type,C const>
+));
+
+BOOST_MPL_ASSERT((
   boost::is_same<ft::result_type<func_ptr>::type,C>
+));
+
+BOOST_MPL_ASSERT((
+  boost::is_same<ft::result_type<c_func_ptr>::type,C const>
 ));
 
 BOOST_MPL_ASSERT((
@@ -38,19 +53,39 @@ BOOST_MPL_ASSERT((
 ));
 
 BOOST_MPL_ASSERT((
+  boost::is_same<ft::result_type<c_func_ref>::type,C const>
+));
+
+BOOST_MPL_ASSERT((
   boost::is_same<ft::result_type<mem_func_ptr>::type,C>
 ));
 
 BOOST_MPL_ASSERT((
-  boost::is_same<ft::result_type<c_mem_func_ptr>::type,C>
+  boost::is_same<ft::result_type<c_mem_func_ptr>::type,C const>
 ));
 
 BOOST_MPL_ASSERT((
-  boost::is_same<ft::result_type<v_mem_func_ptr>::type,C>
+  boost::is_same<ft::result_type<mem_func_ptr_c>::type,C>
 ));
 
 BOOST_MPL_ASSERT((
-  boost::is_same<ft::result_type<cv_mem_func_ptr>::type,C>
+  boost::is_same<ft::result_type<c_mem_func_ptr_c>::type,C const>
+));
+
+BOOST_MPL_ASSERT((
+  boost::is_same<ft::result_type<mem_func_ptr_v>::type,C>
+));
+
+BOOST_MPL_ASSERT((
+  boost::is_same<ft::result_type<c_mem_func_ptr_v>::type,C const>
+));
+
+BOOST_MPL_ASSERT((
+  boost::is_same<ft::result_type<mem_func_ptr_cv>::type,C>
+));
+
+BOOST_MPL_ASSERT((
+  boost::is_same<ft::result_type<c_mem_func_ptr_cv>::type,C const>
 ));
 
 BOOST_MPL_ASSERT((
