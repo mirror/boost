@@ -17,31 +17,30 @@ import sequence ;
 
 path-constant here : . ;
 
-rule run_doxygen ( target : files * : name : expand ? )
+rule run_doxygen ( target : files * : name )
 {
-
-    expand ?= <doxygen:param>EXPAND_ONLY_PREDEF=YES ;
-
-doxygen $(target)
-  :
-    $(files)
-  :
+    doxygen $(target)
+      :
+        $(files)
+      :
         <doxygen:param>EXTRACT_ALL=YES
+        <doxygen:param>EXPAND_ONLY_PREDEF=YES
 
-# Horribly ugly, but then macros usually are :(
-        <doxygen:param>"PREDEFINED=\"BOOST_UNITS_STATIC_CONSTANT(a,b)=static const b a\" \\
-                                   \"BOOST_UNITS_AUTO_STATIC_CONSTANT(a,b)=static const auto a = b\" \\
-                                   \"BOOST_UNITS_TYPEOF(a)=typeof(a)\" \\
-                                   \"BOOST_PREVENT_MACRO_SUBSTITUTION=\" \\
-                                   \"BOOST_UNITS_HAS_TYPEOF=1\" \\
-                                   \"BOOST_UNITS_DEFINE_BASE_UNIT_WITH_CONVERSIONS(namespace_, name_, name_string, symbol_, factor, other_unit, id)= \\
-                                   namespace boost { namespace units { namespace namespace_ { \\
-                                     struct name_ ## _base_unit : boost::units::base_unit<name_ ## _base_unit, other_unit::dimension_type, id> { \\
-                                       static const char* name(); \\
-                                       static const char* symbol(); \\
-                                     }; \\
-                                   } } }\" \\
-                                   \"BOOST_UNITS_DOXYGEN=1\""
+        # Horribly ugly, but then macros usually are :(
+        <doxygen:param>"PREDEFINED= \\
+            \"BOOST_UNITS_STATIC_CONSTANT(a,b)=static const b a\" \\
+            \"BOOST_UNITS_AUTO_STATIC_CONSTANT(a,b)=static const auto a = b\" \\
+            \"BOOST_UNITS_TYPEOF(a)=typeof(a)\" \\
+            \"BOOST_PREVENT_MACRO_SUBSTITUTION=\" \\
+            \"BOOST_UNITS_HAS_TYPEOF=1\" \\
+            \"BOOST_UNITS_DEFINE_BASE_UNIT_WITH_CONVERSIONS(namespace_, name_, name_string, symbol_, factor, other_unit, id)= \\
+                namespace boost { namespace units { namespace namespace_ { \\
+                    struct name_ ## _base_unit : boost::units::base_unit<name_ ## _base_unit, other_unit::dimension_type, id> { \\
+                        static const char* name(); \\
+                        static const char* symbol(); \\
+                    }; \\
+                } } }\" \\
+            \"BOOST_UNITS_DOXYGEN=1\""
         <doxygen:param>HIDE_UNDOC_MEMBERS=NO
         <doxygen:param>EXTRACT_PRIVATE=NO
         <doxygen:param>ENABLE_PREPROCESSING=YES
@@ -49,7 +48,7 @@ doxygen $(target)
         $(expand)
         <doxygen:param>SEARCH_INCLUDES=NO
         <reftitle>$(name)
-  ;
+    ;
 
 }
 
@@ -76,7 +75,8 @@ run_doxygen cgs_reference
     "CGS System Reference"
   ;
 
-rule make_base_units_doc ( directory : name ) {
+rule make_base_units_doc ( directory : name )
+{
     run_doxygen $(directory)_base_units_reference
       :
         [ path.glob-tree $(here)/../../../boost/units/base_units/$(directory) : *.hpp : detail conversions.hpp ]
@@ -127,39 +127,48 @@ run_doxygen abstract_reference
     "Abstract System Reference"
   ;
 
-rule less ( a b ) {
-    if [ path.basename $(a) ]  < [ path.basename $(b) ]  {
+rule less ( a b )
+{
+    if [ path.basename $(a) ]  < [ path.basename $(b) ] 
+    {
         return true ;
     }
 }
 
-rule generate-qbk ( target : sources * : properties * ) {
+rule generate-qbk ( target : sources * : properties * )
+{
     print.output $(target) ;
     local as-path = [ sequence.transform path.make : $(sources:G=) ] ;
     local known = ;
     local duplicated = ;
-    for local file in $(as-path) {
+    for local file in $(as-path)
+    {
         local base = [ path.basename $(file) ] ;
-        if $(base) in $(known) {
-            if ! $(base) in $(duplicated) {
+        if $(base) in $(known)
+        {
+            if ! $(base) in $(duplicated)
+            {
                 duplicated += $(base) ;
             }
-        } else {
+        } else
+        {
             known += $(base) ;
         }
     }
-    for local file in [ sequence.insertion-sort $(as-path) : less ] {
+    for local file in [ sequence.insertion-sort $(as-path) : less ]
+    {
         local output_filename = [ path.relative-to [ path.make $(here)/../../.. ] $(file) ] ;
         local base_filename = [ path.basename $(file) ] ;
         local base_unit = [ regex.replace $(base_filename) "\\.hpp" "" ] ;
-        if $(base_filename) in $(duplicated) {
+        if $(base_filename) in $(duplicated)
+        {
             # tack the directory name onto the end
             local dir-name = [ path.basename [ path.parent $(file) ] ] ;
             base_unit = "$(base_unit) ($(dir-name))" ;
         }
-# this looks better, but it won't work until my boostbook patch for
-# annotation.xsl gets applied.
-#        print.text "[headerref $(output_filename) $(base_unit)]\\n" : overwrite ;
+        # this looks better, but it won't work until my boostbook patch for
+        # annotation.xsl gets applied.
+        # print.text "[headerref $(output_filename) $(base_unit)]\\n" : overwrite ;
         print.text "[headerref $(output_filename)]\\n" : overwrite ;
     }
 }

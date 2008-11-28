@@ -4,7 +4,7 @@
 # Steven Watanabe
 #
 # Distributed under the Boost Software License, Version 1.0. (See
-# accomanying file LICENSE_1_0.txt or copy at
+# accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt
 
 import testing ;
@@ -12,32 +12,28 @@ import path ;
 import regex ;
 import print ;
 
-project test_headers :
+project boost/units/test_headers :
     requirements <include>$(BOOST_ROOT) <include>../../..
 ;
 
 headers = [ path.glob-tree ../../../boost/units : *.hpp : detail ] ;
 
-rule setup ( ) {
-  for local file in $(headers) {
-
-    result += [ compile test.cpp :
-                 <define>BOOST_UNITS_HEADER_NAME=$(file)
-                 <dependency>$(file)
-               : 
-                 [ regex.replace [ path.relative-to ../../.. $(file) ] "/" "_" ] ] ;
-
-  }
-  return $(result) ;
+for local file in $(headers)
+{
+    compile test.cpp
+      : # requirements
+        <define>BOOST_UNITS_HEADER_NAME=$(file)
+        <dependency>$(file)
+      : # test name
+        [ regex.replace [ path.relative-to ../../.. $(file) ] "/" "_" ] ;
 }
 
-tests = [ setup ] ;
-
-rule generate-include-all ( target : sources * : properties * ) {
-
+rule generate-include-all ( target : sources * : properties * )
+{
     print.output $(target) ;
 
-    for local file in $(sources) {
+    for local file in $(sources)
+    {
         print.text "#include <$(file:G=)>
 " : overwrite ;
     }
@@ -47,10 +43,5 @@ rule generate-include-all ( target : sources * : properties * ) {
 make include_all1.cpp : $(headers) : @generate-include-all ;
 make include_all2.cpp : $(headers) : @generate-include-all ;
 
-import testing ;
-
-test-suite units_headers :
-  $(tests)
 # this ought to catch non-inlined functions and other duplicate definitions
-  [ link include_all1.cpp include_all2.cpp main.cpp : <include>. : include_all_headers ]
-  ;
+link include_all1.cpp include_all2.cpp main.cpp : <include>. : include_all_headers ;
