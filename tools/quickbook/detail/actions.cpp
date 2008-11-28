@@ -503,7 +503,7 @@ namespace quickbook
         {
             if (template_.size()-1 != template_info.size())
             {
-                while (template_.size()-1 != template_info.size())
+                while (template_.size()-1 > template_info.size())
                 {
                     // Try to break the last argument at the first space found
                     // and push it into the back of template_info. Do this
@@ -516,6 +516,8 @@ namespace quickbook
                         break;
                     std::string first(str.begin(), str.begin()+l_pos);
                     std::string::size_type r_pos = str.find_first_not_of(" \t\r\n", l_pos);
+                    if (r_pos == std::string::npos)
+                        break;
                     std::string second(str.begin()+r_pos, str.end());
                     str = first;
                     template_info.push_back(second);
