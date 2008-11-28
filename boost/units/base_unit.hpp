@@ -53,7 +53,7 @@ struct check_base_unit {
 template<class Derived,
          class Dim,
          long N
-#ifndef BOOST_UNITS_DOXYGEN
+#if !defined(BOOST_UNITS_DOXYGEN) && !defined(__BORLANDC__)
          ,
          class = typename detail::ordinal_has_already_been_defined<
              check_base_unit<Derived, N>::value
