@@ -27,9 +27,11 @@ Output:
 
 #include <iostream>
 
-#include <boost/test/minimal.hpp>
+#define BOOST_TEST_MAIN
 
-#define BOOST_UNITS_CHECK_CLOSE(a, b) (BOOST_CHECK((std::abs((a) - (b)) < .0000001)))
+#include <boost/test/unit_test.hpp>
+
+#define BOOST_UNITS_CHECK_CLOSE(a, b) BOOST_CHECK_CLOSE_FRACTION(a, b, .0000001)
 
 namespace bu = boost::units;
 
@@ -50,35 +52,39 @@ typedef bu::divide_typeof_helper<bu::multiply_typeof_helper<si_mass,cgs_area>::t
 typedef bu::divide_typeof_helper<bu::multiply_typeof_helper<cgs_mass,mixed_length>::type, 
                                  bu::multiply_typeof_helper<cgs_time,cgs_time>::type >::type            mixed_energy_2;
 
-int test_main(int,char *[])
-{
+BOOST_AUTO_TEST_CASE(test_conversion) {
+    BOOST_CHECK_EQUAL(1, 1);
     bu::quantity<mixed_length> a1(2.0 * mixed_length());
     bu::quantity<si_area> a2(a1);
 
-    BOOST_CHECK((std::abs(a2.value() - .02) < .0001));
+    BOOST_UNITS_CHECK_CLOSE(a2.value(), .02);
 
     bu::quantity<mixed_length> a3(a2);
 
-    BOOST_CHECK((std::abs(a3.value() - 2.0) < .0001));
+    BOOST_UNITS_CHECK_CLOSE(a3.value(), 2.0);
 
     bu::quantity<mixed_energy_1> e1(2.0 * mixed_energy_1());
     bu::quantity<mixed_energy_2> e2(e1);
 
-    BOOST_CHECK((std::abs(e2.value() - 20.0) < .0001));
+    BOOST_UNITS_CHECK_CLOSE(e2.value(), 20.0);
 
     bu::quantity<bu::si::energy> e3(e1);
-    BOOST_CHECK((std::abs(e3.value() - .0002) < .0001));
+    BOOST_UNITS_CHECK_CLOSE(e3.value(), .0002);
     bu::quantity<mixed_energy_2> e4(e3);
-    BOOST_CHECK((std::abs(e4.value() - 20.0) < .0001));
+    BOOST_UNITS_CHECK_CLOSE(e4.value(), 20.0);
 
     bu::quantity<bu::cgs::force> F0 = 20 * bu::cgs::dyne;
-    BOOST_CHECK((std::abs(F0.value() - 20.0) < .0001));
+    BOOST_UNITS_CHECK_CLOSE(F0.value(), 20.0);
 
     bu::quantity<bu::si::force> F3(F0);
-    BOOST_CHECK((std::abs(F3.value() - 2.0e-4) < .000000001));
+    BOOST_UNITS_CHECK_CLOSE(F3.value(), 2.0e-4);
 
     bu::quantity<bu::si::force> F5(20 * bu::cgs::dyne);
-    BOOST_CHECK((std::abs(F5.value() - 2.0e-4) < .000000001));
+    BOOST_UNITS_CHECK_CLOSE(F5.value(), 2.0e-4);
+
+}
+
+BOOST_AUTO_TEST_CASE(test_dimensionless_conversions) {
 
     bu::quantity<bu::si::dimensionless> dimensionless_test1(1.0*bu::cgs::dyne/bu::si::newton);
     BOOST_CHECK(dimensionless_test1 == 1e-5);
@@ -94,6 +100,4 @@ int test_main(int,char *[])
     bu::quantity<bu::divide_typeof_helper<bu::si::length, bu::cgs::length>::type> dimensionless_test4(2.0 * bu::si::meters / bu::cgs::centimeters);
     bu::quantity<bu::divide_typeof_helper<bu::cgs::mass, bu::si::mass>::type> dimensionless_test5(dimensionless_test4);
     BOOST_UNITS_CHECK_CLOSE(dimensionless_test5.value(), 2e5);
-
-    return(0);
 }

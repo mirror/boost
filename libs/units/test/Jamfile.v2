@@ -27,7 +27,7 @@ run test_dimensionless_quantity.cpp ;
 run test_implicit_conversion.cpp ;
 run test_quantity.cpp ;
 run test_unit.cpp ;
-run test_conversion.cpp ;
+run test_conversion.cpp test_framework ;
 run test_base_dimension.cpp ;
 run test_absolute.cpp ;
 run test_default_conversion.cpp ;
