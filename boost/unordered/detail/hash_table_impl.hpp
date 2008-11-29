@@ -172,7 +172,7 @@ namespace boost {
                 {
                     if (node_) {
                         if (value_constructed_) {
-                            node_->value().~value_type();
+                            boost::unordered_detail::destroy(&node_->value());
                         }
 
                         if (node_constructed_)
