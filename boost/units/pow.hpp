@@ -85,7 +85,10 @@ root(const Y& x)
 /// take @c static_rational root of an @c T
 template<class T, long N,long D> 
 struct root_typeof_helper<T,static_rational<N,D> >     
-    : power_typeof_helper<T, static_rational<D,N> > {};
+    : power_typeof_helper<T, static_rational<D,N> > {
+        // help pathscale?
+        typedef typename power_typeof_helper<T, static_rational<D,N> >::type type;
+};
 
 #endif
 
