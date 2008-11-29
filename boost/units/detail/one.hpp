@@ -20,7 +20,7 @@ namespace units {
 struct one { one() {} };
 
 // workaround for pathscale.
-one make_one() {
+inline one make_one() {
     one result;
     return(result);
 }
