@@ -31,21 +31,6 @@
 
 #include <cstddef>   // for std::size_t
 #include <ios>       // for std::hex
-#include <iostream>  // for std::cout
-#include <ostream>   // for std::endl
-
-
-// Control if events will be printed conventionally, or just logged.
-#ifndef CONTROL_SHOW_TYPES
-#define CONTROL_SHOW_TYPES  0
-#endif
-
-// Logging
-#if CONTROL_SHOW_TYPES
-#define PRIVATE_SHOW_MESSAGE( m )  std::cout << m << std::endl
-#else
-#define PRIVATE_SHOW_MESSAGE( m )  BOOST_TEST_MESSAGE( m )
-#endif
 
 
 // Custom types/templates, helper functions, and objects
@@ -71,7 +56,7 @@ print_out_template( Tmpl<Value> const &, ValueT setting, char const
     // Too bad the type-id expression couldn't use the compact form "*unused",
     // but type-ids of dereferenced null pointers throw by order of C++ 2003,
     // sect. 5.2.8, para. 2 (although the result is not conceptually needed).
-    PRIVATE_SHOW_MESSAGE( "There is an " << template_name << "<" << setting <<
+    BOOST_TEST_MESSAGE( "There is an " << template_name << "<" << setting <<
      "> specialization with type '" << typeid(typename
      Tmpl<Value>::value_type).name() << "' and value '" << std::hex <<
      Tmpl<Value>::value << "'." );
@@ -82,7 +67,7 @@ template < typename ValueT, typename T >
 bool
 print_out_template( T const &, ValueT setting, char const *template_name )
 {
-    PRIVATE_SHOW_MESSAGE( "There is no " << template_name << "<" << setting <<
+    BOOST_TEST_MESSAGE( "There is no " << template_name << "<" << setting <<
      "> specialization." );
     return false;
 }

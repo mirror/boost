@@ -58,20 +58,12 @@
 #include <algorithm>  // for std::binary_search
 #include <climits>    // for ULONG_MAX, LONG_MAX, LONG_MIN, etc.
 #include <cstddef>    // for std::size_t
-#include <iostream>   // for std::cout
-#include <ostream>    // for std::endl
 #include <typeinfo>   // for std::type_info
 
 
 // Control what the "fast" specialization of "short" is
 #ifndef CONTROL_FAST_SHORT
 #define CONTROL_FAST_SHORT  long
-#endif
-
-// Control if the names of the types for each version
-// of the integer templates will be printed.
-#ifndef CONTROL_SHOW_TYPES
-#define CONTROL_SHOW_TYPES  0
 #endif
 
 // Control if every potential bit-count is used, or only a selection
@@ -93,14 +85,6 @@ namespace boost
         typedef CONTROL_FAST_SHORT  type;
     };
 }
-
-
-// Logging
-#if CONTROL_SHOW_TYPES
-#define PRIVATE_SHOW_MESSAGE( m )  std::cout << m << std::endl
-#else
-#define PRIVATE_SHOW_MESSAGE( m )  BOOST_TEST_MESSAGE( m )
-#endif
 
 
 // Custom types/templates, helper functions, and objects
@@ -272,7 +256,7 @@ print_out_template( Tmpl<Value> const &, ValueT setting, char const
     // Too bad the type-id expression couldn't use the compact form "*unused",
     // but type-ids of dereferenced null pointers throw by order of C++ 2003,
     // sect. 5.2.8, para. 2 (although the result is not conceptually needed).
-    PRIVATE_SHOW_MESSAGE( "This is " << template_pre_name << setting
+    BOOST_TEST_MESSAGE( "This is " << template_pre_name << setting
      << template_post_name << " specialization, with type '" << typeid(typename
      Tmpl<Value>::type).name() << "'." );
     return true;
@@ -283,7 +267,7 @@ bool
 print_out_template( T const &, ValueT setting, char const *template_pre_name,
  char const *template_post_name )
 {
-    PRIVATE_SHOW_MESSAGE( "Looking for " << template_pre_name << setting
+    BOOST_TEST_MESSAGE( "Looking for " << template_pre_name << setting
      << template_post_name << " specialization?  It doesn't exist." );
     return false;
 }
