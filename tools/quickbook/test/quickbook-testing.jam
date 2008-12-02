@@ -60,6 +60,7 @@ rule quickbook-test ( target-name : input ? : reference-output ? : requirements 
                 <location-prefix>$(target-name).test
                 <testing.input-file>$(reference-output)
                 <testing.input-file>$(target-name).boostbook
+                <preserve-test-targets>on
         ]
         ;
 
