@@ -56,8 +56,10 @@ namespace quickbook
 
         std::string storage;
         int err = detail::load(filein_, storage);
-        if (err != 0)
+        if (err != 0) {
+            ++actor.error_count;
             return err;
+        }
 
         typedef position_iterator<std::string::const_iterator> iterator_type;
         iterator_type first(storage.begin(), storage.end(), filein_);
@@ -83,10 +85,10 @@ namespace quickbook
             file_position const pos = info.stop.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Syntax Error near column " << pos.column << ".\n";
-            return 1;
+            ++actor.error_count;
         }
 
-        return 0;
+        return actor.error_count ? 1 : 0;
     }
 
     static int
@@ -257,6 +259,7 @@ main(int argc, char* argv[])
         else
         {
             quickbook::detail::outerr("",0) << "Error: No filename given" << std::endl;
+            return 1;
         }
     }
 
@@ -269,6 +272,7 @@ main(int argc, char* argv[])
     catch(...)
     {
         quickbook::detail::outerr("",0) << "Error: Exception of unknown type caught\n";
+        return 1;
     }
 
     return 0;

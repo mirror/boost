@@ -23,6 +23,8 @@ test-suite quickbook.test :
     [ quickbook-test import ]
     [ quickbook-fail-test fail-include ]
     [ quickbook-fail-test fail-import ]
+    [ quickbook-fail-test fail-template-arguments1 ]
+    [ quickbook-fail-test fail-template-arguments2 ]
     ;
 
 

@@ -90,6 +90,7 @@ namespace quickbook
         int                     template_depth;
         bool                    template_escape;
         template_stack          templates;
+        int                     error_count;
 
     // push/pop the states and the streams
         void push();

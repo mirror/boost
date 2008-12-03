@@ -38,6 +38,7 @@ namespace quickbook
         boost::spirit::file_position const pos = first.get_position();
         detail::outerr(pos.file,pos.line)
             << "Syntax Error near column " << pos.column << ".\n";
+        ++error_count;
     }
 
     void phrase_action::operator()(iterator first, iterator last) const
@@ -229,6 +230,7 @@ namespace quickbook
                 << "Illegal change of list style near column " << pos.column << ".\n";
             detail::outwarn(pos.file,pos.line)
                 << "Ignoring change of list style" << std::endl;
+            ++error_count;
         }
     }
 
@@ -484,6 +486,7 @@ namespace quickbook
             boost::spirit::file_position const pos = first.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Template Redefinition: " << actions.template_info[0] << std::endl;
+            ++actions.error_count;
         }
 
         actions.template_info.push_back(std::string(first, last));
@@ -561,6 +564,7 @@ namespace quickbook
                 {
                     detail::outerr(pos.file,pos.line)
                         << "Duplicate Symbol Found" << std::endl;
+                    ++actions.error_count;
                     return std::make_pair(false, tpl);
                 }
                 else
@@ -637,6 +641,7 @@ namespace quickbook
             detail::outerr(pos.file,pos.line)
                 << "Infinite loop detected" << std::endl;
             --actions.template_depth;
+            ++actions.error_count;
             return;
         }
 
@@ -659,6 +664,7 @@ namespace quickbook
             {
                 actions.pop(); // restore the actions' states
                 --actions.template_depth;
+                ++actions.error_count;
                 return;
             }
 
@@ -693,6 +699,7 @@ namespace quickbook
                     << std::endl;
                 actions.pop(); // restore the actions' states
                 --actions.template_depth;
+                ++actions.error_count;
                 return;
             }
         }
@@ -890,6 +897,8 @@ namespace quickbook
             boost::spirit::file_position const pos = first.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Mismatched [endsect] near column " << pos.column << ".\n";
+            ++error_count;
+            
             // $$$ TODO: somehow fail parse else BOOST_ASSERT(std::string::npos != n)
             // $$$ below will assert.
         }
@@ -1042,7 +1051,7 @@ namespace quickbook
         id.clear();
     }
 
-    void load_snippets(
+    int load_snippets(
         std::string const& file
       , std::vector<template_symbol>& storage   // snippets are stored in a
                                                 // vector of template_symbols
@@ -1052,14 +1061,17 @@ namespace quickbook
         std::string code;
         int err = detail::load(file, code);
         if (err != 0)
-            return; // return early on error
+            return err; // return early on error
 
         typedef position_iterator<std::string::const_iterator> iterator_type;
         iterator_type first(code.begin(), code.end(), file);
         iterator_type last(code.end(), code.end());
 
         cpp_code_snippet_grammar g(storage, doc_id);
+        // TODO: Should I check that parse succeeded?
         boost::spirit::parse(first, last, g);
+
+        return 0;
     }
 
     namespace
@@ -1098,7 +1110,8 @@ namespace quickbook
         fs::path path = include_search(actions.filename.branch_path(), std::string(first,last));
         std::string ext = fs::extension(path);
         std::vector<template_symbol> storage;
-        load_snippets(path.string(), storage, ext, actions.doc_id);
+        actions.error_count +=
+            load_snippets(path.string(), storage, ext, actions.doc_id);
 
         BOOST_FOREACH(template_symbol const& ts, storage)
         {
@@ -1108,6 +1121,7 @@ namespace quickbook
                 boost::spirit::file_position const pos = boost::get<1>(ts);
                 detail::outerr(pos.file, pos.line)
                     << "Template Redefinition: " << tname << std::endl;
+                ++actions.error_count;
             }
             else
             {
