@@ -7,6 +7,11 @@
 #
 # See http://www.boost.org/libs/flyweight for library home page.
 
+project
+    : requirements
+      <os>LINUX:<threading>multi
+    ;
+
 exe basic
     : basic.cpp
     : <include>$(BOOST_ROOT)
