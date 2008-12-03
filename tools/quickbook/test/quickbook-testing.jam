@@ -69,6 +69,28 @@ rule quickbook-test ( target-name : input ? : reference-output ? : requirements 
     return $(t) ;
 }
 
+rule quickbook-fail-test ( target-name : input ? : requirements * )
+{
+    input ?= $(target-name).quickbook ;
+
+    local project = [ project.current ] ;
+    requirements += <testing.arg>$(input:J=" ") ;
+
+    local t =
+        [ targets.create-typed-target RUN_FAIL
+            : $(project)
+            : $(target-name)
+            : ..//quickbook
+            : $(requirements)
+              <preserve-test-targets>on
+        ]
+        ;
+
+    modules.poke testing : .all-tests : \$\(all-tests\) $(t) ;
+
+    return $(t) ;
+}
+
 ################################################################################
 toolset.flags quickbook-testing.process-quickbook quickbook-command <quickbook-testing.quickbook-command> ;
 rule process-quickbook ( target : source : properties * )

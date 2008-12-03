@@ -8,7 +8,7 @@
 
 project test ;
 
-import quickbook-testing : quickbook-test ;
+import quickbook-testing : quickbook-test quickbook-fail-test ;
 
 test-suite quickbook.test :
     [ quickbook-test quickbook-manual ]
@@ -21,4 +21,9 @@ test-suite quickbook.test :
     [ quickbook-test templates ]
     [ quickbook-test xinclude ]
     [ quickbook-test import ]
+    [ quickbook-fail-test fail-include ]
+    [ quickbook-fail-test fail-import ]
     ;
+
+
+
