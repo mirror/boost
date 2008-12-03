@@ -7,6 +7,44 @@ import common ;
 import doxygen ;
 import quickbook ;
 
+#
+# Accumulators docs are dependent upon
+# latex dvips and ps being in your PATH.
+# This is true for most Unix installs, but
+# not on Win32, where you will need to install
+# MkTex and Ghostscript and add these tools
+# to your path.
+#
+make latex.check : : @check-latex ;
+actions check-latex
+{
+    latex -version > latex.version
+}
+
+make dvips.check : : @check-dvips ;
+actions check-dvips
+{
+    dvips -version > dvips.version
+}
+
+make gs.check : : @check-gs ;
+
+import os ;
+
+if [ os.name ] = "NT"
+{
+   actions check-gs
+   {
+       gswin32c -version > gs.version
+   }
+}
+else
+{
+   actions check-gs
+   {
+       gs -version > gs.version
+   }
+}
 
 # Use Doxygen to emit a tagfile with the definition of depends_on<>. That
 # tagfile will be used by Doxygen below when generating the Statistics Library
@@ -23,6 +61,9 @@ doxygen tagfile
         <doxygen:param>"PREDEFINED=\"BOOST_ACCUMULATORS_DOXYGEN_INVOKED=1\" \\
                                    \"BOOST_PP_REPEAT_FROM_TO(a,b,c,d)=\" \\
                                    \"BOOST_PP_ENUM_PARAMS(a,b)=b ## 1, b ## 2, ...\""
+        <dependency>latex.check
+        <dependency>dvips.check
+        <dependency>gs.check
     ;
 
 doxygen accdoc
@@ -47,6 +88,9 @@ doxygen accdoc
         <doxygen:param>EXPAND_ONLY_PREDEF=YES
         <doxygen:param>SEARCH_INCLUDES=NO
         <reftitle>"Accumulators Framework Reference"
+        <dependency>latex.check
+        <dependency>dvips.check
+        <dependency>gs.check
     ;
 
 # Generate the HTML form of the stats documentation, as this causes Doxygen to
@@ -56,6 +100,10 @@ doxygen statsdoc.html
         [ glob ../../../boost/accumulators/statistics*.hpp ]
         [ glob ../../../boost/accumulators/statistics/*.hpp ]
         [ glob ../../../boost/accumulators/statistics/variates/*.hpp ]
+    :
+        <dependency>latex.check
+        <dependency>dvips.check
+        <dependency>gs.check
     ;
 
 if [ os.name ] = NT
@@ -116,6 +164,9 @@ doxygen statsdoc
         <reftitle>"Statistics Library Reference"
         <dependency>tagfile
         <dependency>statsdoclatex.tag
+        <dependency>latex.check
+        <dependency>dvips.check
+        <dependency>gs.check
     ;
 
 doxygen opdoc
@@ -162,6 +213,9 @@ doxygen opdoc
         <doxygen:param>EXPAND_ONLY_PREDEF=YES
         <doxygen:param>SEARCH_INCLUDES=NO
         <reftitle>"Numeric Operators Library Reference"
+        <dependency>latex.check
+        <dependency>dvips.check
+        <dependency>gs.check
     ;
 
 xml accumulators
