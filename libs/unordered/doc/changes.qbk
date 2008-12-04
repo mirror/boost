@@ -59,5 +59,7 @@ First official release.
   the allocator's `construct` method - once for the pointers and once for the
   value. It now constructs the node with a single call to construct and
   then constructs the value using in place construction.
+* Add support for C++0x initializer lists where they're available (currently
+  only g++ 4.4 in C++0x mode).
 
 [endsect]

@@ -1,4 +1,4 @@
-//  This file was automatically generated on Sat Sep 20 09:49:52 2008
+//  This file was automatically generated on Wed Sep 24 11:44:22 2008
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -116,6 +116,11 @@ namespace boost_no_function_template_ordering = empty_boost;
 #include "boost_no_i64_limits.ipp"
 #else
 namespace boost_no_ms_int64_numeric_limits = empty_boost;
+#endif
+#ifndef BOOST_NO_INITIALIZER_LISTS
+#include "boost_no_initializer_lists.ipp"
+#else
+namespace boost_no_initializer_lists = empty_boost;
 #endif
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #include "boost_no_inline_memb_init.ipp"
@@ -964,6 +969,11 @@ int main( int, char *[] )
    if(0 != boost_no_ms_int64_numeric_limits::test())
    {
       std::cerr << "Failed test for BOOST_NO_MS_INT64_NUMERIC_LIMITS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_initializer_lists::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_INITIALIZER_LISTS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_inclass_member_initialization::test())

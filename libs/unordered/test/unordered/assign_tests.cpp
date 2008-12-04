@@ -103,6 +103,22 @@ UNORDERED_TEST(assign_tests2,
     ((default_generator)(generate_collisions))
 )
 
+#if !defined(BOOST_NO_INITIALIZER_LISTS)
+
+UNORDERED_AUTO_TEST(assign_initializer_list)
+{
+    std::cerr<<"Initializer List Tests\n";
+
+    boost::unordered_set<int> x;
+    x.insert(10);
+    x.insert(20);
+    x = { 1, 2, -10 };
+    BOOST_CHECK(x.find(10) == x.end());
+    BOOST_CHECK(x.find(-10) != x.end());
+}
+
+#endif
+
 }
 
 RUN_TESTS()

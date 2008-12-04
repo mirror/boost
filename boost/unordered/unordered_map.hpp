@@ -135,6 +135,24 @@ namespace boost
 #endif
 #endif
 
+#if !defined(BOOST_NO_INITIALIZER_LISTS)
+        unordered_map(std::initializer_list<value_type> list,
+                size_type n = boost::unordered_detail::default_initial_bucket_count,
+                const hasher &hf = hasher(),
+                const key_equal &eql = key_equal(),
+                const allocator_type &a = allocator_type())
+            : base(list.begin(), list.end(), n, hf, eql, a)
+        {
+        }
+
+        unordered_map& operator=(std::initializer_list<value_type> list)
+        {
+            base.data_.clear();
+            base.insert_range(list.begin(), list.end());
+            return *this;
+        }
+#endif
+
     private:
 
         BOOST_DEDUCED_TYPENAME implementation::iterator_base const&
@@ -521,6 +539,24 @@ namespace boost
             return *this;
         }
 #endif
+#endif
+
+#if !defined(BOOST_NO_INITIALIZER_LISTS)
+        unordered_multimap(std::initializer_list<value_type> list,
+                size_type n = boost::unordered_detail::default_initial_bucket_count,
+                const hasher &hf = hasher(),
+                const key_equal &eql = key_equal(),
+                const allocator_type &a = allocator_type())
+            : base(list.begin(), list.end(), n, hf, eql, a)
+        {
+        }
+
+        unordered_multimap& operator=(std::initializer_list<value_type> list)
+        {
+            base.data_.clear();
+            base.insert_range(list.begin(), list.end());
+            return *this;
+        }
 #endif
 
 
