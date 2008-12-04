@@ -83,6 +83,7 @@ rule quickbook-fail-test ( target-name : input ? : requirements * )
             : ..//quickbook
             : $(requirements)
               <preserve-test-targets>on
+              <dependency>$(input)
         ]
         ;
 
@@ -102,3 +103,4 @@ actions process-quickbook bind quickbook-command
 {
     $(quickbook-command) $(>) --output-file=$(<) --debug
 }
+
