@@ -8,7 +8,7 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 #include "./utils.hpp"
-#include <boost/spirit/core.hpp>
+#include <boost/spirit/include/classic_core.hpp>
 
 #include <cctype>
 #include <cstring>

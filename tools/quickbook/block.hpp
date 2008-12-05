@@ -12,16 +12,16 @@
 
 #include "./detail/utils.hpp"
 #include "./phrase.hpp"
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/utility/confix.hpp>
-#include <boost/spirit/utility/chset.hpp>
-#include <boost/spirit/actor/assign_actor.hpp>
-#include <boost/spirit/dynamic/if.hpp>
-#include <boost/spirit/symbols/symbols.hpp>
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_confix.hpp>
+#include <boost/spirit/include/classic_chset.hpp>
+#include <boost/spirit/include/classic_assign_actor.hpp>
+#include <boost/spirit/include/classic_if.hpp>
+#include <boost/spirit/include/classic_symbols.hpp>
 
 namespace quickbook
 {
-    using namespace boost::spirit;
+    using namespace boost::spirit::classic;
 
     template <typename Actions, bool skip_initial_spaces = false>
     struct block_grammar : grammar<block_grammar<Actions> >

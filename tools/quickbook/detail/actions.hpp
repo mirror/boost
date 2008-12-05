@@ -16,7 +16,7 @@
 #include <vector>
 #include <stack>
 #include <algorithm>
-#include <boost/spirit/iterator/position_iterator.hpp>
+#include <boost/spirit/include/classic_iterator.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>

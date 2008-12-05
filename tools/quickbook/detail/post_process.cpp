@@ -8,7 +8,7 @@
 =============================================================================*/
 #include "./post_process.hpp"
 #include "./utils.hpp"
-#include <boost/spirit/core.hpp>
+#include <boost/spirit/include/classic_core.hpp>
 #include <boost/bind.hpp>
 #include <set>
 #include <stack>
@@ -16,7 +16,7 @@
 
 namespace quickbook
 {
-    using namespace boost::spirit;
+    using namespace boost::spirit::classic;
     using boost::bind;
     typedef std::string::const_iterator iter_type;
 

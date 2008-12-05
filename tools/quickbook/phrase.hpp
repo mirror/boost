@@ -11,15 +11,15 @@
 #define BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP
 
 #include "detail/utils.hpp"
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/utility/confix.hpp>
-#include <boost/spirit/utility/chset.hpp>
-#include <boost/spirit/actor/assign_actor.hpp>
-#include <boost/spirit/dynamic/if.hpp>
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_confix.hpp>
+#include <boost/spirit/include/classic_chset.hpp>
+#include <boost/spirit/include/classic_assign_actor.hpp>
+#include <boost/spirit/include/classic_if.hpp>
 
 namespace quickbook
 {
-    using namespace boost::spirit;
+    using namespace boost::spirit::classic;
 
     template <typename Rule, typename Action>
     inline void

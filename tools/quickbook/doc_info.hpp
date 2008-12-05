@@ -11,14 +11,14 @@
 #define BOOST_SPIRIT_QUICKBOOK_DOC_INFO_HPP
 
 #include "./phrase.hpp"
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/actor.hpp>
-#include <boost/spirit/utility/loops.hpp>
-#include <boost/spirit/symbols/symbols.hpp>
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_actor.hpp>
+#include <boost/spirit/include/classic_loops.hpp>
+#include <boost/spirit/include/classic_symbols.hpp>
 
 namespace quickbook
 {
-    using namespace boost::spirit;
+    using namespace boost::spirit::classic;
     extern unsigned qbk_major_version;
     extern unsigned qbk_minor_version;
 

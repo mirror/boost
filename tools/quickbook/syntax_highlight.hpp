@@ -10,16 +10,16 @@
 #if !defined(BOOST_SPIRIT_QUICKBOOK_SYNTAX_HIGHLIGHT_HPP)
 #define BOOST_SPIRIT_QUICKBOOK_SYNTAX_HIGHLIGHT_HPP
 
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/utility/confix.hpp>
-#include <boost/spirit/utility/chset.hpp>
-#include <boost/spirit/symbols/symbols.hpp>
-#include <boost/spirit/utility/escape_char.hpp>
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_confix.hpp>
+#include <boost/spirit/include/classic_chset.hpp>
+#include <boost/spirit/include/classic_symbols.hpp>
+#include <boost/spirit/include/classic_escape_char.hpp>
 #include "./phrase.hpp"
 
 namespace quickbook
 {
-    using namespace boost::spirit;
+    using namespace boost::spirit::classic;
 
     // Grammar for C++ highlighting
     template <

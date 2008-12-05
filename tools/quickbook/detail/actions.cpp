@@ -27,7 +27,7 @@ namespace quickbook
     // Handles line-breaks (DEPRECATED!!!)
     void break_action::operator()(iterator first, iterator) const
     {
-        boost::spirit::file_position const pos = first.get_position();
+        boost::spirit::classic::file_position const pos = first.get_position();
         detail::outwarn(pos.file,pos.line) << "in column:" << pos.column << ", "
             << "[br] and \\n are deprecated" << ".\n";
         phrase << break_mark;
@@ -35,7 +35,7 @@ namespace quickbook
 
     void error_action::operator()(iterator first, iterator /*last*/) const
     {
-        boost::spirit::file_position const pos = first.get_position();
+        boost::spirit::classic::file_position const pos = first.get_position();
         detail::outerr(pos.file,pos.line)
             << "Syntax Error near column " << pos.column << ".\n";
         ++error_count;
@@ -225,7 +225,7 @@ namespace quickbook
 
         if (mark != list_marks.top().first) // new_indent == list_indent
         {
-            boost::spirit::file_position const pos = first.get_position();
+            boost::spirit::classic::file_position const pos = first.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Illegal change of list style near column " << pos.column << ".\n";
             detail::outwarn(pos.file,pos.line)
@@ -483,7 +483,7 @@ namespace quickbook
         BOOST_ASSERT(actions.template_info.size());
         if (actions.templates.find_top_scope(actions.template_info[0]))
         {
-            boost::spirit::file_position const pos = first.get_position();
+            boost::spirit::classic::file_position const pos = first.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Template Redefinition: " << actions.template_info[0] << std::endl;
             ++actions.error_count;
@@ -501,7 +501,7 @@ namespace quickbook
         bool break_arguments(
             std::vector<std::string>& template_info
           , std::vector<std::string> const& template_
-          , boost::spirit::file_position const& pos
+          , boost::spirit::classic::file_position const& pos
         )
         {
             if (template_.size()-1 != template_info.size())
@@ -545,7 +545,7 @@ namespace quickbook
         get_arguments(
             std::vector<std::string>& template_info
           , std::vector<std::string> const& template_
-          , boost::spirit::file_position const& pos
+          , boost::spirit::classic::file_position const& pos
           , quickbook::actions& actions
         )
         {
@@ -579,7 +579,7 @@ namespace quickbook
         bool parse_template(
             std::string& body
           , std::string& result
-          , boost::spirit::file_position const& template_pos
+          , boost::spirit::classic::file_position const& template_pos
           , quickbook::actions& actions
         )
         {
@@ -610,7 +610,7 @@ namespace quickbook
                 iterator first(body.begin(), body.end(), actions.filename.native_file_string().c_str());
                 first.set_position(template_pos);
                 iterator last(body.end(), body.end());
-                r = boost::spirit::parse(first, last, phrase_p).full;
+                r = boost::spirit::classic::parse(first, last, phrase_p).full;
                 actions.phrase.swap(result);
             }
             else
@@ -625,7 +625,7 @@ namespace quickbook
                 iterator first(iter, body.end(), actions.filename.native_file_string().c_str());
                 first.set_position(template_pos);
                 iterator last(body.end(), body.end());
-                r = boost::spirit::parse(first, last, block_p).full;
+                r = boost::spirit::classic::parse(first, last, block_p).full;
                 actions.out.swap(result);
             }
             return r;
@@ -634,7 +634,7 @@ namespace quickbook
 
     void do_template_action::operator()(iterator first, iterator) const
     {
-        boost::spirit::file_position const pos = first.get_position();
+        boost::spirit::classic::file_position const pos = first.get_position();
         ++actions.template_depth;
         if (actions.template_depth > actions.max_template_depth)
         {
@@ -653,7 +653,7 @@ namespace quickbook
             BOOST_ASSERT(symbol);
 
             std::vector<std::string> template_ = boost::get<0>(*symbol);
-            boost::spirit::file_position template_pos = boost::get<1>(*symbol);
+            boost::spirit::classic::file_position template_pos = boost::get<1>(*symbol);
 
             std::vector<std::string> template_info;
             std::swap(template_info, actions.template_info);
@@ -690,7 +690,7 @@ namespace quickbook
 
             if (!parse_template(body, result, template_pos, actions))
             {
-                boost::spirit::file_position const pos = first.get_position();
+                boost::spirit::classic::file_position const pos = first.get_position();
                 detail::outerr(pos.file,pos.line)
                     << "Expanding template:" << template_info[0] << std::endl
                     << "------------------begin------------------" << std::endl
@@ -894,7 +894,7 @@ namespace quickbook
         --section_level;
         if (section_level < 0)
         {
-            boost::spirit::file_position const pos = first.get_position();
+            boost::spirit::classic::file_position const pos = first.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Mismatched [endsect] near column " << pos.column << ".\n";
             ++error_count;
@@ -1069,7 +1069,7 @@ namespace quickbook
 
         cpp_code_snippet_grammar g(storage, doc_id);
         // TODO: Should I check that parse succeeded?
-        boost::spirit::parse(first, last, g);
+        boost::spirit::classic::parse(first, last, g);
 
         return 0;
     }
@@ -1118,7 +1118,7 @@ namespace quickbook
             std::string tname = boost::get<0>(ts)[0];
             if (actions.templates.find_top_scope(tname))
             {
-                boost::spirit::file_position const pos = boost::get<1>(ts);
+                boost::spirit::classic::file_position const pos = boost::get<1>(ts);
                 detail::outerr(pos.file, pos.line)
                     << "Template Redefinition: " << tname << std::endl;
                 ++actions.error_count;
@@ -1158,7 +1158,7 @@ namespace quickbook
         }
 
         // update the __FILENAME__ macro
-        *boost::spirit::find(actions.macro, "__FILENAME__") = actions.filename.native_file_string();
+        *boost::spirit::classic::find(actions.macro, "__FILENAME__") = actions.filename.native_file_string();
 
         // parse the file
         quickbook::parse(actions.filename.native_file_string().c_str(), actions, true);

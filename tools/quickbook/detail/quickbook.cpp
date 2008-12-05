@@ -12,7 +12,7 @@
 #include "../doc_info.hpp"
 #include "./post_process.hpp"
 #include "./utils.hpp"
-#include <boost/spirit/iterator/position_iterator.hpp>
+#include <boost/spirit/include/classic_iterator.hpp>
 #include <boost/program_options.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -31,7 +31,7 @@
 
 namespace quickbook
 {
-    using namespace boost::spirit;
+    using namespace boost::spirit::classic;
     namespace fs = boost::filesystem;
     tm* current_time; // the current time
     tm* current_gm_time; // the current UTC time
