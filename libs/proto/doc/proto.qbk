@@ -51,6 +51,8 @@
   [funcref   boost::proto::deep_copy `proto::deep_copy()`]]
 [def _domain_              
   [classref  boost::proto::domain `proto::domain<>`]]
+[def _domain_              
+  [classref  boost::proto::default_domain `proto::default_domain`]]
 [def _extends_              
   [classref  boost::proto::extends `proto::extends<>`]]
 [def _as_expr_              

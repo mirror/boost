@@ -122,7 +122,7 @@
               <parameter name="sequence">
                 <paramtype>Sequence const &amp;</paramtype>
                 <description>
-                  <para>A Fusion Random Access Sequence </para>
+                  <para>A Fusion Forward Sequence </para>
                 </description>
               </parameter>
               <description>
@@ -243,7 +243,7 @@
               function.
             </para>
             <para>
-              <computeroutput>Sequence</computeroutput> is a Fusion Random Access Sequence.
+              <computeroutput>Sequence</computeroutput> is a Fusion Forward Sequence.
             </para>
             <para>
               In this specialization, the domain is deduced from the domains of the child types.
@@ -252,13 +252,13 @@
             </para>
           </description>
           <typedef name="type">
-            <purpose>Where N is the size of Sequence.</purpose>
+            <purpose>Where S is a RandomAccessSequence equivalent to Sequence, and N is the size of S.</purpose>
             <type>
     typename <classname>proto::result_of::make_expr</classname>&lt;
       Tag,
-      typename fusion::value_at&lt;Sequence, 0&gt;::type,
+      typename fusion::result_of::value_at_c&lt;<replaceable>S</replaceable>, 0&gt;::type,
       ...
-      typename fusion::value_at&lt;Sequence, <replaceable>N</replaceable>-1&gt;::type
+      typename fusion::result_of::value_at_c&lt;<replaceable>S</replaceable>, <replaceable>N</replaceable>-1&gt;::type
     &gt;::type
   </type>
           </typedef>
@@ -286,14 +286,14 @@
             </para>
           </description>
           <typedef name="type">
-            <purpose>Where N is the size of Sequence.</purpose>
+            <purpose>Where S is a RandomAccessSequence equivalent to Sequence, and N is the size of S.</purpose>
             <type>
     typename <classname>proto::result_of::make_expr</classname>&lt;
       Tag,
       Domain,
-      typename fusion::value_at&lt;Sequence, 0&gt;::type,
+      typename fusion::result_of::value_at_c&lt;<replaceable>S</replaceable>, 0&gt;::type,
       ...
-      typename fusion::value_at&lt;Sequence, <replaceable>N</replaceable>-1&gt;::type
+      typename fusion::result_of::value_at_c&lt;<replaceable>S</replaceable>, <replaceable>N</replaceable>-1&gt;::type
     &gt;::type
   </type>
           </typedef>
@@ -379,7 +379,7 @@
           <parameter name="sequence">
             <paramtype>Sequence const &amp;</paramtype>
             <description>
-              <para>A Fusion Random Access Sequence.</para>
+              <para>A Fusion Forward Sequence.</para>
             </description>
           </parameter>
         </signature>
@@ -395,7 +395,7 @@
           </parameter>
         </signature>
         <purpose>Construct an expression of the requested tag type with a domain and with children
-          from the specified Fusion Random Access Sequence.</purpose>
+          from the specified Fusion Forward Sequence.</purpose>
         <description>
           <para>
             This function template may be invoked either with or without specifying a
@@ -406,12 +406,14 @@
             exists, or <computeroutput><classname>proto::default_domain</classname></computeroutput> otherwise.
           </para>
           <para>
+            Let <computeroutput>s</computeroutput> be a Fusion Random Access Sequence equivalent to
+            <computeroutput>sequence</computeroutput>.
             Let <computeroutput><replaceable>WRAP</replaceable>&lt;N&gt;(s)</computeroutput>, where
             <computeroutput>s</computeroutput> has type <computeroutput>S</computeroutput>, be defined such that:
             <itemizedlist>
               <listitem>
                 <para>
-                  If <computeroutput>fusion::value_at&lt;S,N&gt;::type</computeroutput> is a reference,
+                  If <computeroutput>fusion::result_of::value_at_c&lt;S,N&gt;::type</computeroutput> is a reference,
                   <computeroutput><replaceable>WRAP</replaceable>&lt;N&gt;(s)</computeroutput> is equivalent to
                   <computeroutput><functionname>proto::as_child</functionname>&lt;Domain&gt;(fusion::at_c&lt;N&gt;(s))</computeroutput>.
                 </para>
