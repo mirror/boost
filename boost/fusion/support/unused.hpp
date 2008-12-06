@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(BOOST_FUSION_SUPPORT_UNUSED_20070305_1038)
@@ -13,7 +13,8 @@
 # pragma warning(disable: 4522) // multiple assignment operators specified warning
 #endif
 
-namespace boost { namespace fusion {
+namespace boost { namespace fusion
+{
     struct unused_type
     {
         unused_type()
@@ -53,6 +54,18 @@ namespace boost { namespace fusion {
     };
 
     unused_type const unused = unused_type();
+
+    template <typename Out>
+    inline Out& operator<<(Out& out, unused_type const&)
+    {
+        return out;
+    }
+
+    template <typename Out>
+    inline Out& operator>>(Out& out, unused_type&)
+    {
+        return out;
+    }
 }}
 
 #if defined(BOOST_MSVC)
