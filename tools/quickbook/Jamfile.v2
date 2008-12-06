@@ -30,7 +30,6 @@ exe quickbook
       <toolset>msvc:<cxxflags>/wd4800
       <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
       <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
-      <target-os>cygwin:<define>BOOST_CYGWIN_PATH
     ;
 
 install dist-bin
