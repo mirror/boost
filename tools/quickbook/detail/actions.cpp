@@ -242,8 +242,15 @@ namespace quickbook
         out << "</phrase>";
     }
 
-    void unexpected_char::operator()(char) const
+    void unexpected_char::operator()(iterator first, iterator last) const
     {
+        boost::spirit::classic::file_position const pos = first.get_position();
+
+        detail::outwarn(pos.file, pos.line)
+            << "in column:" << pos.column
+            << ", unexpected character: " << std::string(first, last)
+            << "\n";
+
         out << '#'; // print out an unexpected character
     }
 

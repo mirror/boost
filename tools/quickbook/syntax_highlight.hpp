@@ -15,6 +15,7 @@
 #include <boost/spirit/include/classic_chset.hpp>
 #include <boost/spirit/include/classic_symbols.hpp>
 #include <boost/spirit/include/classic_escape_char.hpp>
+#include <boost/spirit/include/classic_loops.hpp>
 #include "./phrase.hpp"
 
 namespace quickbook
@@ -58,7 +59,7 @@ namespace quickbook
                     |   string_         [Process("string", self.out)]
                     |   char_           [Process("char", self.out)]
                     |   number          [Process("number", self.out)]
-                    |   anychar_p       [Unexpected(self.out)]
+                    |   repeat_p(1)[anychar_p] [Unexpected(self.out)]
                     )
                     ;
 
@@ -75,7 +76,10 @@ namespace quickbook
                     ;
 
                 escape
-                    = str_p("``")           [PreEscape(self.escape_actions, save)]
+                    = (
+                        str_p("``")
+                        >> eps_p(+(anychar_p - "``") >> eps_p("``"))  
+                    )                       [PreEscape(self.escape_actions, save)]
                     >>  (
                             (+(anychar_p - "``") >> eps_p("``"))
                             & qbk_phrase
@@ -193,7 +197,7 @@ namespace quickbook
                     |   special         [Process("special", self.out)]
                     |   string_         [Process("string", self.out)]
                     |   number          [Process("number", self.out)]
-                    |   anychar_p       [Unexpected(self.out)]
+                    |   repeat_p(1)[anychar_p] [Unexpected(self.out)]
                     )
                     ;
 
@@ -210,7 +214,10 @@ namespace quickbook
                     ;
 
                 escape
-                    = str_p("``")           [PreEscape(self.escape_actions, save)]
+                    = (
+                        str_p("``")
+                        >> eps_p(+(anychar_p - "``") >> eps_p("``"))  
+                    )                       [PreEscape(self.escape_actions, save)]
                     >>  (
                             (+(anychar_p - "``") >> eps_p("``"))
                             & qbk_phrase

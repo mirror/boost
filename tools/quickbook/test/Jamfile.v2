@@ -14,6 +14,8 @@ test-suite quickbook.test :
     [ quickbook-test quickbook-manual ]
     [ quickbook-test code-block-1 ]
     [ quickbook-test code-block-2 ]
+    [ quickbook-test code-block-bad-escape-cpp ]
+    [ quickbook-test code-block-bad-escape-python ]
     [ quickbook-test code-snippet ]
     [ quickbook-test preformatted ]
     [ quickbook-test link-side-by-side ]

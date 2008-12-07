@@ -271,7 +271,7 @@ namespace quickbook
         unexpected_char(collector& out)
         : out(out) {}
 
-        void operator()(char) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
     };

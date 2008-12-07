@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<article id="odd_code_markup__" name="Odd code markup. " dirname="odd_code_markup__"
+last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <articleinfo>
+  </articleinfo>
+  <title>Odd code markup. </title>
+  <para>
+  </para>
+  
+<programlisting><phrase role="keyword">print</phrase> <phrase role="string">&quot;Hello World.&quot;</phrase> ##
+</programlisting>
+</article>
