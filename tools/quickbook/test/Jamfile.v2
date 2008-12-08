@@ -27,6 +27,9 @@ test-suite quickbook.test :
     [ quickbook-fail-test fail-template-arguments2 ]
     [ quickbook-fail-test fail-cpp-mismatched-escape ]
     [ quickbook-fail-test fail-python-mismatched-escape ]
+    [ quickbook-fail-test fail-post-process ]
+    [ quickbook-fail-test fail-parse-error1 ]
+    [ quickbook-fail-test fail-parse-error2 ]
     ;
 
 

@@ -122,7 +122,7 @@ namespace quickbook
             result = parse(filein_, outdir, buffer);
             if (result == 0)
             {
-                post_process(buffer.str(), fileout, indent, linewidth);
+                result = post_process(buffer.str(), fileout, indent, linewidth);
             }
         }
         else

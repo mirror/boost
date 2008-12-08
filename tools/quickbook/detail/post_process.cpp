@@ -417,7 +417,7 @@ namespace quickbook
         int indent;
     };
 
-    void post_process(
+    int post_process(
         std::string const& in
       , std::ostream& out
       , int indent
@@ -437,6 +437,7 @@ namespace quickbook
             if (r.full)
             {
                 out << tidy;
+                return 0;
             }
             else
             {
@@ -445,6 +446,7 @@ namespace quickbook
                     << "Warning: Post Processing Failed."
                     << std::endl;
                 out << in;
+                return 1;
             }
         }
 
@@ -455,6 +457,7 @@ namespace quickbook
                 << "Warning: Post Processing Failed."
                 << std::endl;
             out << in;
+            return 1;
         }
     }
 }
