@@ -567,7 +567,7 @@ namespace quickbook
                 tinfo.push_back(*arg);
                 template_symbol template_(tinfo, pos);
 
-                if (template_symbol* p = actions.templates.find_top_scope(*tpl))
+                if (actions.templates.find_top_scope(*tpl))
                 {
                     detail::outerr(pos.file,pos.line)
                         << "Duplicate Symbol Found" << std::endl;
