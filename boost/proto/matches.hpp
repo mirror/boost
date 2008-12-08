@@ -12,6 +12,7 @@
     #define BOOST_PROTO_MATCHES_HPP_EAN_11_03_2006
 
     #include <boost/proto/detail/prefix.hpp> // must be first include
+    #include <boost/config.hpp>
     #include <boost/detail/workaround.hpp>
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/arithmetic/dec.hpp>
@@ -538,7 +539,12 @@
 
                     /// \param expr An expression
                     /// \return \c e
-                    typename impl::expr_param operator()(
+                    #ifdef BOOST_HAS_DECLTYPE
+                    result_type
+                    #else
+                    typename impl::expr_param 
+                    #endif
+                    operator()(
                         typename impl::expr_param e
                       , typename impl::state_param
                       , typename impl::data_param
@@ -573,7 +579,12 @@
                     /// \param e An expression
                     /// \pre <tt>matches\<Expr,not_\>::::value</tt> is \c true.
                     /// \return \c e
-                    typename impl::expr_param operator()(
+                    #ifdef BOOST_HAS_DECLTYPE
+                    result_type
+                    #else
+                    typename impl::expr_param 
+                    #endif
+                    operator()(
                         typename impl::expr_param e
                       , typename impl::state_param
                       , typename impl::data_param

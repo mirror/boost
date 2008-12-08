@@ -69,7 +69,12 @@
                 /// \param e An expression
                 /// \return \c e
                 /// \throw nothrow
-                typename pass_through_impl::expr_param operator()(
+                #ifdef BOOST_HAS_DECLTYPE
+                result_type
+                #else
+                typename pass_through_impl::expr_param 
+                #endif
+                operator()(
                     typename pass_through_impl::expr_param e
                   , typename pass_through_impl::state_param
                   , typename pass_through_impl::data_param

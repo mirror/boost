@@ -39,7 +39,12 @@ namespace boost { namespace proto
             /// \param e The current expression.
             /// \return \c e
             /// \throw nothrow
-            typename impl::expr_param operator()(
+            #ifdef BOOST_HAS_DECLTYPE
+            result_type
+            #else
+            typename impl::expr_param 
+            #endif
+            operator()(
                 typename impl::expr_param e
               , typename impl::state_param
               , typename impl::data_param
@@ -71,7 +76,12 @@ namespace boost { namespace proto
             /// \param s The current state.
             /// \return \c s
             /// \throw nothrow
-            typename impl::state_param operator ()(
+            #ifdef BOOST_HAS_DECLTYPE
+            result_type
+            #else
+            typename impl::state_param 
+            #endif
+            operator ()(
                 typename impl::expr_param
               , typename impl::state_param s
               , typename impl::data_param
@@ -104,7 +114,12 @@ namespace boost { namespace proto
             /// \param d The current data.
             /// \return \c d
             /// \throw nothrow
-            typename impl::data_param operator ()(
+            #ifdef BOOST_HAS_DECLTYPE
+            result_type
+            #else
+            typename impl::data_param 
+            #endif
+            operator ()(
                 typename impl::expr_param
               , typename impl::state_param
               , typename impl::data_param d
@@ -140,7 +155,11 @@ namespace boost { namespace proto
             /// \param e The current expression.
             /// \return <tt>proto::child_c\<N\>(e)</tt>
             /// \throw nothrow
+            #ifdef BOOST_HAS_DECLTYPE
+            result_type
+            #else
             typename result_of::child_c<typename impl::expr_param, N>::type
+            #endif
             operator ()(
                 typename impl::expr_param e
               , typename impl::state_param
@@ -176,7 +195,11 @@ namespace boost { namespace proto
             /// \param e The current expression.
             /// \return <tt>proto::value(e)</tt>
             /// \throw nothrow
+            #ifdef BOOST_HAS_DECLTYPE
+            result_type
+            #else
             typename result_of::value<typename impl::expr_param>::type
+            #endif
             operator ()(
                 typename impl::expr_param e
               , typename impl::state_param

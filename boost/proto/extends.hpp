@@ -344,7 +344,7 @@ namespace boost { namespace proto
                           , proto_domain                                                            \
                         >::type                                                                     \
                     )                                                                               \
-                >::type                                                                             \
+                >::type const                                                                       \
             type;                                                                                   \
         };                                                                                          \
         /**/

@@ -12,6 +12,8 @@
     #define BOOST_PROTO_GENERATE_HPP_EAN_02_13_2007
 
     #include <boost/proto/detail/prefix.hpp>
+    #include <boost/config.hpp>
+    #include <boost/utility/result_of.hpp>
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/repetition/enum.hpp>
@@ -98,7 +100,12 @@
             /// \param expr A Proto expression
             /// \return expr
             template<typename Expr>
-            Expr const &operator ()(Expr const &expr) const
+            #ifdef BOOST_HAS_DECLTYPE
+            Expr
+            #else
+            Expr const &
+            #endif
+            operator ()(Expr const &expr) const
             {
                 return expr;
             }
