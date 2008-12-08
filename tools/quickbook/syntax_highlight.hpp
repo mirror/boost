@@ -75,16 +75,23 @@ namespace quickbook
                     )
                     ;
 
-                escape
-                    = (
-                        str_p("``")
-                        >> eps_p(+(anychar_p - "``") >> eps_p("``"))  
-                    )                       [PreEscape(self.escape_actions, save)]
-                    >>  (
-                            (+(anychar_p - "``") >> eps_p("``"))
-                            & qbk_phrase
+                escape =
+                    str_p("``")         [PreEscape(self.escape_actions, save)]
+                    >>
+                    (
+                        (
+                            (
+                                (+(anychar_p - "``") >> eps_p("``"))
+                                & qbk_phrase
+                            )
+                            >>  str_p("``")
                         )
-                    >> str_p("``")          [PostEscape(self.out, self.escape_actions, save)]
+                        |
+                        (
+                            eps_p       [self.escape_actions.error]
+                            >> *anychar_p
+                        )
+                    )                   [PostEscape(self.out, self.escape_actions, save)]
                     ;
 
                 preprocessor
@@ -213,16 +220,23 @@ namespace quickbook
                     )
                     ;
 
-                escape
-                    = (
-                        str_p("``")
-                        >> eps_p(+(anychar_p - "``") >> eps_p("``"))  
-                    )                       [PreEscape(self.escape_actions, save)]
-                    >>  (
-                            (+(anychar_p - "``") >> eps_p("``"))
-                            & qbk_phrase
+                escape =
+                    str_p("``")         [PreEscape(self.escape_actions, save)]
+                    >>
+                    (
+                        (
+                            (
+                                (+(anychar_p - "``") >> eps_p("``"))
+                                & qbk_phrase
+                            )
+                            >>  str_p("``")
                         )
-                    >> str_p("``")          [PostEscape(self.out, self.escape_actions, save)]
+                        |
+                        (
+                            eps_p       [self.escape_actions.error]
+                            >> *anychar_p
+                        )
+                    )                   [PostEscape(self.out, self.escape_actions, save)]
                     ;
 
                 comment
