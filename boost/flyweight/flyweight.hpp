@@ -58,6 +58,52 @@ struct unmatched_arg;
 
 } /* namespace flyweights::detail */
 
+#if BOOST_WORKAROUND(__SUNPRO_CC,<=0x590)
+/* Workaround for http://bugs.sun.com/view_bug.do?bug_id=6782987
+ * from Simon Atanasyan.
+ */
+
+template struct parameter::parameters<
+  parameter::optional<
+    parameter::deduced<tag<> >,
+    detail::is_tag<boost::mpl::_>
+  >,
+  parameter::optional<
+    parameter::deduced<tracking<> >,
+    is_tracking<boost::mpl::_>
+  >,
+  parameter::optional<
+    parameter::deduced<factory<> >,
+    is_factory<boost::mpl::_>
+  >,
+  parameter::optional<
+    parameter::deduced<locking<> >,
+    is_locking<boost::mpl::_>
+  >,
+  parameter::optional<
+    parameter::deduced<holder<> >,
+    is_holder<boost::mpl::_>
+  >
+>;
+
+template struct parameter::parameters<
+  parameter::optional<
+    parameter::deduced<
+      detail::unmatched_arg
+    >,
+    mpl::not_<
+      mpl::or_<
+        detail::is_tag<boost::mpl::_>,
+        is_tracking<boost::mpl::_>,
+        is_factory<boost::mpl::_>,
+        is_locking<boost::mpl::_>,
+        is_holder<boost::mpl::_>
+      >
+    >
+  >
+>;
+#endif
+
 template<
   typename T,
   typename Arg1,typename Arg2,typename Arg3,typename Arg4,typename Arg5
