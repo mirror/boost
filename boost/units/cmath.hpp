@@ -11,14 +11,6 @@
 #ifndef BOOST_UNITS_CMATH_HPP 
 #define BOOST_UNITS_CMATH_HPP
 
-#include <boost/version.hpp>
-
-// The trunk still has BOOST_VERSION == 103500
-//#if (BOOST_VERSION <= 103500)
-#if 0
-    #include <boost/units/detail/cmath_boost_1_35.hpp>
-#else
-
 #include <boost/config/no_tr1/cmath.hpp>
 #include <cstdlib>
 
@@ -545,8 +537,6 @@ sqrt(const quantity<Unit,Y>& q)
 } // namespace units
 
 } // namespace boost
-
-#endif // (BOOST_VERSION <= 103500)
 
 namespace boost {
 
