@@ -952,20 +952,6 @@ struct strip_zeroes_impl<0> {
 // dimension.
 //
 // list<rational> calculate_base_unit_exponents(list<base_unit> units, dimension_list dimensions);
-//
-// What is the purpose of all this magic with
-// base_dimensions? Can't we just solve the
-// equations for the dimension directly?  Yes,
-// we can, but remember that solving a
-// system of linear equations is O(N^3).
-// By normalizing the system we incur a
-// high one time cost O(N^4), but for all
-// solutions after the first it is O(N^2)
-// In addition, the constant factor is
-// good because everything is already set up.
-// Since we expect a few systems to be
-// used many times, the cost of creating
-// a system is probably not significant.
 
 template<class T>
 struct is_base_dimension_unit {

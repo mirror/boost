@@ -129,19 +129,14 @@ int test_main(int,char *[])
 
 #endif
 
-#if 0
-
     BOOST_CHECK((bu::nextafter)(E4,E5).value() == (boost::math::nextafter)(E4.value(),E5.value()));
     BOOST_CHECK((bu::nextafter)(E5,E4).value() == (boost::math::nextafter)(E5.value(),E4.value()));
 
     BOOST_CHECK((bu::nexttoward)(E4,E5).value() == (boost::math::nextafter)(E4.value(),E5.value()));
     BOOST_CHECK((bu::nexttoward)(E5,E4).value() == (boost::math::nextafter)(E5.value(),E4.value()));
 
-
     BOOST_CHECK((bu::round)(E4 - 0.00000000001 * bu::joules) == -3.0*bu::joules);
     BOOST_CHECK((bu::round)(E5 + 0.00000000001 * bu::joules) == 3.0*bu::joules);    
-#endif
-
     BOOST_CHECK((bu::signbit)(E4) == 1);
     BOOST_CHECK((bu::signbit)(E5) == 0);
     BOOST_CHECK((bu::trunc)(E4) == -2.0*bu::joules);
