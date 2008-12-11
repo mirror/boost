@@ -103,29 +103,31 @@
 ///
 /// Example:
 ///
-/// \code
-/// // Generate BOOST_PROTO_MAX_ARITY-1 overloads of the
-/// // following construct() function template.
-/// #define M0(N, typename_A, A_const_ref, A_const_ref_a, ref_a)      \
-/// template<typename T, typename_A(N)>                               \
-/// typename proto::result_of::make_expr<                             \
-///     proto::tag::function                                          \
-///   , construct_helper<T>                                           \
-///   , A_const_ref(N)                                                \
-/// >::type const                                                     \
-/// construct(A_const_ref_a(N))                                       \
-/// {                                                                 \
-///     return proto::make_expr<                                      \
-///         proto::tag::function                                      \
-///     >(                                                            \
-///         construct_helper<T>()                                     \
-///       , ref_a(N)                                                  \
-///     );                                                            \
-/// }
-/// BOOST_PROTO_REPEAT_FROM_TO(1, BOOST_PROTO_MAX_ARITY, M0)
-/// #undef M0
-/// \endcode
-///
+/** \code
+
+// Generate BOOST_PROTO_MAX_ARITY-1 overloads of the
+// following construct() function template.
+#define M0(N, typename_A, A_const_ref, A_const_ref_a, ref_a)      \ 
+template<typename T, typename_A(N)>                               \ 
+typename proto::result_of::make_expr<                             \ 
+    proto::tag::function                                          \ 
+  , construct_helper<T>                                           \ 
+  , A_const_ref(N)                                                \ 
+>::type const                                                     \ 
+construct(A_const_ref_a(N))                                       \ 
+{                                                                 \ 
+    return proto::make_expr<                                      \ 
+        proto::tag::function                                      \ 
+    >(                                                            \ 
+        construct_helper<T>()                                     \ 
+      , ref_a(N)                                                  \ 
+    );                                                            \ 
+}
+BOOST_PROTO_REPEAT_FROM_TO(1, BOOST_PROTO_MAX_ARITY, M0)
+#undef M0
+
+\endcode
+**/
 /// The above invocation of BOOST_PROTO_REPEAT_FROM_TO()  will generate
 /// the following code: 
 ///
@@ -211,30 +213,32 @@
 ///
 /// Example:
 ///
-/// \code
-/// // Generate BOOST_PROTO_MAX_ARITY-1 overloads of the
-/// // following construct() function template.
-/// #define BOOST_PROTO_LOCAL_MACRO(N, typename_A, A_const_ref,       \
-///   A_const_ref_a, ref_a)                                           \
-/// template<typename T, typename_A(N)>                               \
-/// typename proto::result_of::make_expr<                             \
-///     proto::tag::function                                          \
-///   , construct_helper<T>                                           \
-///   , A_const_ref(N)                                                \
-/// >::type const                                                     \
-/// construct(A_const_ref_a(N))                                       \
-/// {                                                                 \
-///     return proto::make_expr<                                      \
-///         proto::tag::function                                      \
-///     >(                                                            \
-///         construct_helper<T>()                                     \
-///       , ref_a(N)                                                  \
-///     );                                                            \
-/// }
-/// #define BOOST_PROTO_LOCAL_LIMITS (1, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY))
-/// #include BOOST_PROTO_LOCAL_ITERATE()
-/// \endcode
-///
+/** \code
+
+// Generate BOOST_PROTO_MAX_ARITY-1 overloads of the
+// following construct() function template.
+#define BOOST_PROTO_LOCAL_MACRO(N, typename_A, A_const_ref,       \ 
+  A_const_ref_a, ref_a)                                           \ 
+template<typename T, typename_A(N)>                               \ 
+typename proto::result_of::make_expr<                             \ 
+    proto::tag::function                                          \ 
+  , construct_helper<T>                                           \ 
+  , A_const_ref(N)                                                \ 
+>::type const                                                     \ 
+construct(A_const_ref_a(N))                                       \ 
+{                                                                 \ 
+    return proto::make_expr<                                      \ 
+        proto::tag::function                                      \ 
+    >(                                                            \ 
+        construct_helper<T>()                                     \ 
+      , ref_a(N)                                                  \ 
+    );                                                            \ 
+}
+#define BOOST_PROTO_LOCAL_LIMITS (1, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY))
+#include BOOST_PROTO_LOCAL_ITERATE()
+
+\endcode
+**/
 /// The above inclusion of BOOST_PROTO_LOCAL_ITERATE() will generate
 /// the following code: 
 ///

@@ -543,7 +543,12 @@
                     /// \pre <tt>matches\<Expr, terminal\<T\> \>::::value</tt> is \c true.
                     /// \return \c e
                     /// \throw nothrow
-                    typename impl::expr_param operator ()(
+                    #ifdef BOOST_HAS_DECLTYPE
+                    result_type
+                    #else
+                    typename impl::expr_param
+                    #endif
+                    operator ()(
                         typename impl::expr_param e
                       , typename impl::state_param
                       , typename impl::data_param

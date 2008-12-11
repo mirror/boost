@@ -409,7 +409,7 @@
             template<typename Sig>
             struct result
             {
-                typedef typename result_of::funop<Sig, expr, default_domain>::type type;
+                typedef typename result_of::funop<Sig, expr, default_domain>::type const type;
             };
 
             /// Function call
