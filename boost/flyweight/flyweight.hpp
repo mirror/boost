@@ -56,67 +56,14 @@ namespace detail{
 
 struct unmatched_arg;
 
-} /* namespace flyweights::detail */
-
-#if BOOST_WORKAROUND(__SUNPRO_CC,<=0x590)
-/* Workaround for http://bugs.sun.com/view_bug.do?bug_id=6782987
- * from Simon Atanasyan.
+/* Boost.Parameter structures for use in flyweight.
+ * NB: these types are derived from instead of typedef'd to force their
+ * instantiation, which solves http://bugs.sun.com/view_bug.do?bug_id=6782987
+ * as found out by Simon Atanasyan.
  */
 
-template struct parameter::parameters<
-  parameter::optional<
-    parameter::deduced<tag<> >,
-    detail::is_tag<boost::mpl::_>
-  >,
-  parameter::optional<
-    parameter::deduced<tracking<> >,
-    is_tracking<boost::mpl::_>
-  >,
-  parameter::optional<
-    parameter::deduced<factory<> >,
-    is_factory<boost::mpl::_>
-  >,
-  parameter::optional<
-    parameter::deduced<locking<> >,
-    is_locking<boost::mpl::_>
-  >,
-  parameter::optional<
-    parameter::deduced<holder<> >,
-    is_holder<boost::mpl::_>
-  >
->;
-
-template struct parameter::parameters<
-  parameter::optional<
-    parameter::deduced<
-      detail::unmatched_arg
-    >,
-    mpl::not_<
-      mpl::or_<
-        detail::is_tag<boost::mpl::_>,
-        is_tracking<boost::mpl::_>,
-        is_factory<boost::mpl::_>,
-        is_locking<boost::mpl::_>,
-        is_holder<boost::mpl::_>
-      >
-    >
-  >
->;
-#endif
-
-template<
-  typename T,
-  typename Arg1,typename Arg2,typename Arg3,typename Arg4,typename Arg5
->
-class flyweight
-{
-private:
-  typedef typename mpl::if_<
-    detail::is_value<T>,
-    T,
-    detail::default_value_policy<T>
-  >::type                                      value_policy;
-  typedef parameter::parameters<
+struct flyweight_signature:
+  parameter::parameters<
     parameter::optional<
       parameter::deduced<tag<> >,
       detail::is_tag<boost::mpl::_>
@@ -137,27 +84,11 @@ private:
       parameter::deduced<holder<> >,
       is_holder<boost::mpl::_>
     >
-  >                                            signature;
-  typedef typename signature::bind<
-    Arg1,Arg2,Arg3,Arg4,Arg5
-  >::type                                      args;
-  typedef typename parameter::binding<
-    args,tag<>,mpl::na
-  >::type                                      tag_type;
-  typedef typename parameter::binding<
-    args,tracking<>,refcounted
-  >::type                                      tracking_policy;
-  typedef typename parameter::binding<
-    args,factory<>,hashed_factory<>
-  >::type                                      factory_specifier;
-  typedef typename parameter::binding<
-    args,locking<>,simple_locking
-  >::type                                      locking_policy;
-  typedef typename parameter::binding<
-    args,holder<>,static_holder
-  >::type                                      holder_specifier;
-  
-  typedef parameter::parameters<
+  >
+{};
+
+struct flyweight_unmatched_signature:
+  parameter::parameters<
     parameter::optional<
       parameter::deduced<
         detail::unmatched_arg
@@ -172,14 +103,51 @@ private:
         >
       >
     >
-  >                                            unmatched_signature;
-  typedef typename unmatched_signature::bind<
+  >
+{};
+
+} /* namespace flyweights::detail */
+
+template<
+  typename T,
+  typename Arg1,typename Arg2,typename Arg3,typename Arg4,typename Arg5
+>
+class flyweight
+{
+private:
+  typedef typename mpl::if_<
+    detail::is_value<T>,
+    T,
+    detail::default_value_policy<T>
+  >::type                                 value_policy;
+  typedef typename detail::
+  flyweight_signature::bind<
     Arg1,Arg2,Arg3,Arg4,Arg5
-  >::type                                      unmatched_args;
+  >::type                                 args;
+  typedef typename parameter::binding<
+    args,tag<>,mpl::na
+  >::type                                 tag_type;
+  typedef typename parameter::binding<
+    args,tracking<>,refcounted
+  >::type                                 tracking_policy;
+  typedef typename parameter::binding<
+    args,factory<>,hashed_factory<>
+  >::type                                 factory_specifier;
+  typedef typename parameter::binding<
+    args,locking<>,simple_locking
+  >::type                                 locking_policy;
+  typedef typename parameter::binding<
+    args,holder<>,static_holder
+  >::type                                 holder_specifier;
+
+  typedef typename detail::
+  flyweight_unmatched_signature::bind<
+    Arg1,Arg2,Arg3,Arg4,Arg5
+  >::type                                 unmatched_args;
   typedef typename parameter::binding<
     unmatched_args,detail::unmatched_arg,
     detail::unmatched_arg
-  >::type                                      unmatched_arg_detected;
+  >::type                                 unmatched_arg_detected;
 
   /* You have passed a type in the specification of a flyweight type that
    * could not be interpreted as a valid argument.
