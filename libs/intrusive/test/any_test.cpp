@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2007.
+// (C) Copyright Ion Gaztanaga  2006-2008.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -18,6 +18,7 @@
 #include<boost/intrusive/avltree.hpp>
 #include<boost/intrusive/sgtree.hpp>
 #include<boost/intrusive/splaytree.hpp>
+#include<boost/intrusive/treap.hpp>
 #include<boost/intrusive/hashtable.hpp>
 #include<boost/functional/hash.hpp>
 #include <vector>    //std::vector
@@ -48,7 +49,11 @@ class MyClass : public any_base_hook<>
 
    friend std::size_t hash_value(const MyClass &o)
    {  return boost::hash<int>()(o.get());  }
+
+   friend bool priority_order(const MyClass &a, const MyClass &b)
+   {  return a.int_ < b.int_;  }
 };
+
 
 void instantiation_test()
 {
@@ -95,6 +100,14 @@ void instantiation_test()
    {
       sgtree < MyClass, any_to_bs_set_hook< MemberHook > > sgtree_member;
       sgtree_member.insert_unique(myclass);
+   }
+   {
+      treap < MyClass, any_to_bs_set_hook< BaseHook > > treap_base;
+      treap_base.insert_unique(myclass);
+   }
+   {
+      treap < MyClass, any_to_bs_set_hook< MemberHook > > treap_member;
+      treap_member.insert_unique(myclass);
    }
    {
       splaytree < MyClass, any_to_bs_set_hook< BaseHook > > splaytree_base;

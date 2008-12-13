@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2007.
+// (C) Copyright Ion Gaztanaga  2006-2008.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -35,6 +35,22 @@ struct has_rebalance<boost::intrusive::sg_multiset<T,
 };
 
 }}}
+
+using namespace boost::intrusive;
+
+struct my_tag;
+
+template<class VoidPointer>
+struct hooks
+{
+   typedef bs_set_base_hook<void_pointer<VoidPointer> >     base_hook_type;
+   typedef bs_set_member_hook<void_pointer<VoidPointer> >   member_hook_type;
+   typedef member_hook_type   auto_member_hook_type;
+   struct auto_base_hook_type
+      :  bs_set_base_hook<void_pointer<VoidPointer>, tag<my_tag> >
+   {};
+};
+
 
 template< class ValueType
         , class Option1 = boost::intrusive::none
@@ -74,34 +90,34 @@ class test_main_template
    int operator()()
    {
       using namespace boost::intrusive;
-      typedef testvalue<VoidPointer, true> value_type;
+      typedef testvalue<hooks<VoidPointer> , true> value_type;
 
       test::test_generic_multiset < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::bs_set_base_hook_t
+                  , typename hooks<VoidPointer>::base_hook_type
                   >::type
                , GetContainer
                >::test_all();
       test::test_generic_multiset < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                              , typename value_type::bs_set_member_hook_t
-                              , &value_type::sg_set_node_
+                              , typename hooks<VoidPointer>::member_hook_type
+                              , &value_type::node_
                               >
                   >::type
                , GetContainer
                >::test_all();
       test::test_generic_multiset < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::bs_set_base_hook_t
+                  , typename hooks<VoidPointer>::base_hook_type
                   >::type
                , GetContainerFixedAlpha
                >::test_all();
       test::test_generic_multiset < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                              , typename value_type::bs_set_member_hook_t
-                              , &value_type::sg_set_node_
+                              , typename hooks<VoidPointer>::member_hook_type
+                              , &value_type::node_
                               >
                   >::type
                , GetContainerFixedAlpha

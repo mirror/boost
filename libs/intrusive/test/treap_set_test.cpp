@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2007.
+// (C) Copyright Ion Gaztanaga  2006-2008.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -10,62 +10,10 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include <boost/intrusive/detail/config_begin.hpp>
-#include <boost/intrusive/splay_set.hpp>
+#include <boost/intrusive/treap_set.hpp>
 #include "itestvalue.hpp"
 #include "smart_ptr.hpp"
 #include "generic_set_test.hpp"
-
-namespace boost { namespace intrusive { namespace test {
-
-#if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
-template<class T, class O1, class O2, class O3, class O4>
-#else
-template<class T, class ...Options>
-#endif
-struct has_const_overloads<boost::intrusive::splay_set<T,
-   #if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
-   O1, O2, O3, O4
-   #else
-   Options...
-   #endif
-> >
-{
-   static const bool value = false;
-};
-
-#if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
-template<class T, class O1, class O2, class O3, class O4>
-#else
-template<class T, class ...Options>
-#endif
-struct has_splay<boost::intrusive::splay_set<T,
-   #if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
-   O1, O2, O3, O4
-   #else
-   Options...
-   #endif
-> >
-{
-   static const bool value = true;
-};
-
-#if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
-template<class T, class O1, class O2, class O3, class O4>
-#else
-template<class T, class ...Options>
-#endif
-struct has_rebalance<boost::intrusive::splay_set<T,
-   #if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
-   O1, O2, O3, O4
-   #else
-   Options...
-   #endif
-> >
-{
-   static const bool value = true;
-};
-
-}}}
 
 using namespace boost::intrusive;
 
@@ -74,15 +22,14 @@ struct my_tag;
 template<class VoidPointer>
 struct hooks
 {
-   typedef splay_set_base_hook<void_pointer<VoidPointer> >     base_hook_type;
-   typedef splay_set_base_hook
-      < link_mode<auto_unlink>
-      , void_pointer<VoidPointer>
-      , tag<my_tag> >                                          auto_base_hook_type;
-   typedef splay_set_member_hook<void_pointer<VoidPointer> >   member_hook_type;
-   typedef splay_set_member_hook
-      < link_mode<auto_unlink>
-      , void_pointer<VoidPointer> >                            auto_member_hook_type;
+   typedef bs_set_base_hook<void_pointer<VoidPointer> >     base_hook_type;
+   typedef bs_set_base_hook
+      < void_pointer<VoidPointer>
+      , tag<my_tag> >                                       auto_base_hook_type;
+   typedef bs_set_member_hook
+      < void_pointer<VoidPointer> >                         member_hook_type;
+   typedef bs_set_member_hook
+      < void_pointer<VoidPointer> >                         auto_member_hook_type;
 };
 
 template< class ValueType
@@ -92,7 +39,7 @@ template< class ValueType
         >
 struct GetContainer
 {
-   typedef boost::intrusive::splay_set
+   typedef boost::intrusive::treap_set
       < ValueType
       , Option1
       , Option2
@@ -183,4 +130,5 @@ int main( int, char* [] )
    test_main_template<boost::intrusive::smart_ptr<void>, true>()();
    return boost::report_errors();
 }
+
 #include <boost/intrusive/detail/config_end.hpp>

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2007.
+// (C) Copyright Ion Gaztanaga  2006-2008.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -23,6 +23,19 @@
 #include "test_container.hpp"
 
 using namespace boost::intrusive;
+
+struct my_tag;
+
+template<class VoidPointer>
+struct hooks
+{
+   typedef slist_base_hook<void_pointer<VoidPointer> >                base_hook_type;
+   typedef slist_base_hook< link_mode<auto_unlink>
+                         , void_pointer<VoidPointer>, tag<my_tag> >  auto_base_hook_type;
+   typedef slist_member_hook<void_pointer<VoidPointer>, tag<my_tag> > member_hook_type;
+   typedef slist_member_hook< link_mode<auto_unlink>
+                           , void_pointer<VoidPointer> >             auto_member_hook_type;
+};
 
 template<class ValueTraits, bool Linear, bool CacheLast>
 struct test_slist 
@@ -491,14 +504,14 @@ class test_main_template
    public:
    int operator()()
    {
-      typedef testvalue<VoidPointer, constant_time_size> value_type;
+      typedef testvalue<hooks<VoidPointer> , constant_time_size> value_type;
       std::vector<value_type> data (5);
       for (int i = 0; i < 5; ++i)
          data[i].value_ = i + 1; 
 
       test_slist < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::slist_base_hook_t
+                  , typename hooks<VoidPointer>::base_hook_type
                   >::type
                  , false
                  , false
@@ -506,8 +519,8 @@ class test_main_template
       test_slist < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                               , typename value_type::slist_member_hook_t
-                               , &value_type::slist_node_
+                               , typename hooks<VoidPointer>::member_hook_type
+                               , &value_type::node_
                                >
                   >::type
                  , false
@@ -517,7 +530,7 @@ class test_main_template
       //Now linear slists
       test_slist < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::slist_base_hook_t
+                  , typename hooks<VoidPointer>::base_hook_type
                   >::type
                  , true
                  , false
@@ -526,8 +539,8 @@ class test_main_template
       test_slist < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                               , typename value_type::slist_member_hook_t
-                               , &value_type::slist_node_
+                               , typename hooks<VoidPointer>::member_hook_type
+                               , &value_type::node_
                                >
                   >::type
                  , true
@@ -537,7 +550,7 @@ class test_main_template
       //Now the same but caching the last node
       test_slist < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::slist_base_hook_t
+                  , typename hooks<VoidPointer>::base_hook_type
                   >::type
                  , false
                  , true
@@ -545,8 +558,8 @@ class test_main_template
       test_slist < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                               , typename value_type::slist_member_hook_t
-                               , &value_type::slist_node_
+                               , typename hooks<VoidPointer>::member_hook_type
+                               , &value_type::node_
                                >
                   >::type
                  , false
@@ -556,7 +569,7 @@ class test_main_template
       //Now linear slists
       test_slist < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::slist_base_hook_t
+                  , typename hooks<VoidPointer>::base_hook_type
                   >::type
                  , true
                  , true
@@ -565,8 +578,8 @@ class test_main_template
       test_slist < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                               , typename value_type::slist_member_hook_t
-                               , &value_type::slist_node_
+                               , typename hooks<VoidPointer>::member_hook_type
+                               , &value_type::node_
                                >
                   >::type
                  , true
@@ -582,14 +595,14 @@ class test_main_template<VoidPointer, false>
    public:
    int operator()()
    {
-      typedef testvalue<VoidPointer, false> value_type;
+      typedef testvalue<hooks<VoidPointer> , false> value_type;
       std::vector<value_type> data (5);
       for (int i = 0; i < 5; ++i)
          data[i].value_ = i + 1; 
 
       test_slist < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::slist_base_hook_t
+                  , typename hooks<VoidPointer>::base_hook_type
                   >::type
                  , false
                  , false
@@ -598,8 +611,8 @@ class test_main_template<VoidPointer, false>
       test_slist < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                               , typename value_type::slist_member_hook_t
-                               , &value_type::slist_node_
+                               , typename hooks<VoidPointer>::member_hook_type
+                               , &value_type::node_
                                >
                   >::type
                  , false
@@ -608,7 +621,7 @@ class test_main_template<VoidPointer, false>
 
       test_slist < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::slist_auto_base_hook_t
+                  , typename hooks<VoidPointer>::auto_base_hook_type
                   >::type
                  , false
                  , false
@@ -617,8 +630,8 @@ class test_main_template<VoidPointer, false>
       test_slist < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                               , typename value_type::slist_auto_member_hook_t
-                               , &value_type::slist_auto_node_
+                               , typename hooks<VoidPointer>::auto_member_hook_type
+                               , &value_type::auto_node_
                                >
                   >::type
                  , false
@@ -627,7 +640,7 @@ class test_main_template<VoidPointer, false>
 
       test_slist < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::slist_base_hook_t
+                  , typename hooks<VoidPointer>::base_hook_type
                   >::type
                  , true
                  , false
@@ -636,8 +649,8 @@ class test_main_template<VoidPointer, false>
       test_slist < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                               , typename value_type::slist_member_hook_t
-                               , &value_type::slist_node_
+                               , typename hooks<VoidPointer>::member_hook_type
+                               , &value_type::node_
                                >
                   >::type
                  , true
@@ -647,7 +660,7 @@ class test_main_template<VoidPointer, false>
       //Now cache last
       test_slist < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::slist_base_hook_t
+                  , typename hooks<VoidPointer>::base_hook_type
                   >::type
                  , false
                  , true
@@ -656,8 +669,8 @@ class test_main_template<VoidPointer, false>
       test_slist < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                               , typename value_type::slist_member_hook_t
-                               , &value_type::slist_node_
+                               , typename hooks<VoidPointer>::member_hook_type
+                               , &value_type::node_
                                >
                   >::type
                  , false
@@ -666,7 +679,7 @@ class test_main_template<VoidPointer, false>
 
       test_slist < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::slist_base_hook_t
+                  , typename hooks<VoidPointer>::base_hook_type
                   >::type
                  , true
                  , true
@@ -675,8 +688,8 @@ class test_main_template<VoidPointer, false>
       test_slist < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                               , typename value_type::slist_member_hook_t
-                               , &value_type::slist_node_
+                               , typename hooks<VoidPointer>::member_hook_type
+                               , &value_type::node_
                                >
                   >::type
                  , true

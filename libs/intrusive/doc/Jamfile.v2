@@ -38,7 +38,10 @@ doxygen autodoc
                   "sgtree_impl=sgtree" \\
                   "avl_set_impl=avl_set" \\
                   "avl_multiset_impl=avl_multiset" \\
-                  "avltree_impl=avltree""
+                  "avltree_impl=avltree" \\
+                  "treap_set_impl=treap_set" \\
+                  "treap_multiset_impl=treap_multiset" \\
+                  "treap_impl=treap""
    ;
 
 xml intrusive : intrusive.qbk ;

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2007
+// (C) Copyright Ion Gaztanaga  2007-2008
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -11,6 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 //Includes for tests
+#include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/config.hpp>
 #include <list>
 #include <functional>
@@ -545,3 +546,5 @@ int main()
    do_all_tests<true>();
    return 0;
 }
+
+#include <boost/intrusive/detail/config_end.hpp>
