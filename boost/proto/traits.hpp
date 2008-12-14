@@ -603,7 +603,7 @@
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
-                struct impl
+                struct impl : transform_impl<Expr, State, Data>
                 {
                     typedef Expr result_type;
 
