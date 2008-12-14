@@ -26,7 +26,7 @@ assert( boost::addressof(i) == boost::addressof(j) );</programlisting>
           </typedef>
           <method-group name="public member functions">
             <method name="operator()" cv="const">
-              <type>typename impl::expr_param</type>
+              <type>Expr</type>
               <parameter name="expr">
                 <paramtype>typename impl::expr_param</paramtype>
                 <description>
@@ -80,7 +80,7 @@ assert( ch == 'a' );</programlisting>
           </typedef>
           <method-group name="public member functions">
             <method name="operator()" cv="const">
-              <type>typename impl::state_param</type>
+              <type>State</type>
               <parameter name="">
                 <paramtype>typename impl::expr_param</paramtype>
               </parameter>
@@ -135,7 +135,7 @@ assert( &amp;str == &amp;data );</programlisting>
           </typedef>
           <method-group name="public member functions">
             <method name="operator()" cv="const">
-              <type>typename impl::data_param</type>
+              <type>Data</type>
               <parameter name="">
                 <paramtype>typename impl::expr_param</paramtype>
               </parameter>
@@ -194,7 +194,7 @@ assert( boost::addressof(i) == boost::addressof(j) );</programlisting>
           </typedef>
           <method-group name="public member functions">
             <method name="operator()" cv="const">
-              <type>typename <classname>proto::result_of::child_c</classname>&lt; typename impl::expr_param, N &gt;::type</type>
+              <type>typename <classname>proto::result_of::child_c</classname>&lt; Expr, N &gt;::type</type>
               <parameter name="expr">
                 <paramtype>typename impl::expr_param</paramtype>
                 <description>
@@ -253,7 +253,7 @@ assert( 42 == j );</programlisting>
           </typedef>
           <method-group name="public member functions">
             <method name="operator()" cv="const">
-              <type>typename <classname>proto::result_of::value</classname>&lt; typename impl::expr_param &gt;::type</type>
+              <type>typename <classname>proto::result_of::value</classname>&lt; Expr &gt;::type</type>
               <parameter name="expr">
                 <paramtype>typename impl::expr_param</paramtype>
                 <description>

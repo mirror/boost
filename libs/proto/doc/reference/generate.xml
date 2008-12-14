@@ -33,7 +33,7 @@
         </struct-specialization>
         <method-group name="public member functions">
           <method name="operator()" cv="const">
-            <type>Expr const &amp;</type>
+            <type>Expr</type>
             <template>
               <template-type-parameter name="Expr"/>
             </template>

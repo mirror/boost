@@ -174,9 +174,12 @@ namespace mini_lambda
                 proto::terminal<_>
               , mpl::int_<0>()
             >
-          , proto::when<
-                proto::nary_expr<_, proto::vararg<_> >
-              , proto::fold<_, mpl::int_<0>(), mpl::max<arity_of, proto::_state>()>
+          , proto::otherwise<
+                proto::fold<
+                    _
+                  , mpl::int_<0>()
+                  , mpl::max<arity_of, proto::_state>()
+                >
             >
         >
     {};
@@ -226,25 +229,26 @@ namespace mini_lambda
             return grammar()(proto_base(), 0, args);            
         }
 
-        #define LAMBDA_EVAL(N, typename_A, A_const_ref, A_const_ref_a, ref_a) \
-        template<typename_A(N)>                                               \
-        typename boost::result_of<grammar(                                    \
-            E const &                                                         \
-          , int const &                                                       \
-          , fusion::vector<A_const_ref(N)> &                                  \
-        )>::type                                                              \
-        operator ()(A_const_ref_a(N)) const                                   \
-        {                                                                     \
-            BOOST_MPL_ASSERT_RELATION(arity, <=, N);                          \
-            fusion::vector<A_const_ref(N)> args(ref_a(N));                    \
-            return grammar()(proto_base(), 0, args);                          \
-        }                                                                     \
-        /**/
-
-        // Repeats LAMBDA_EVAL macro for N=1 to 3 inclusive (because
-        // there are only 3 placeholders)
-        BOOST_PROTO_REPEAT_FROM_TO(1, 4, LAMBDA_EVAL)
-        #undef LAMBDA_EVAL
+        #define BOOST_PROTO_LOCAL_MACRO(                    \
+            N, typename_A, A_const_ref, A_const_ref_a, a    \
+        )                                                   \
+        template<typename_A(N)>                             \
+        typename boost::result_of<grammar(                  \
+            E const &                                       \
+          , int const &                                     \
+          , fusion::vector<A_const_ref(N)> &                \
+        )>::type                                            \
+        operator ()(A_const_ref_a(N)) const                 \
+        {                                                   \
+            BOOST_MPL_ASSERT_RELATION(arity, <=, N);        \
+            fusion::vector<A_const_ref(N)> args(a(N));      \
+            return grammar()(proto_base(), 0, args);        \
+        }
+        // Repeats BOOST_PROTO_LOCAL_MACRO macro for N=1 to 3
+        // inclusive (because there are only 3 placeholders)
+        #define BOOST_PROTO_LOCAL_a       BOOST_PROTO_a
+        #define BOOST_PROTO_LOCAL_LIMITS  (1, 3)
+        #include BOOST_PROTO_LOCAL_ITERATE()
     };
 
     namespace placeholders

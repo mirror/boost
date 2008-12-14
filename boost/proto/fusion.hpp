@@ -511,7 +511,7 @@ namespace boost { namespace fusion
         {
             template<typename Sequence>
             struct apply
-              : mpl::long_<0 == Sequence::proto_arity::value ? 1 : Sequence::proto_arity::value>
+              : mpl::long_<0 == Sequence::proto_arity_c ? 1 : Sequence::proto_arity_c>
             {};
         };
 
@@ -545,7 +545,7 @@ namespace boost { namespace fusion
                 typedef
                     proto::detail::expr_iterator<
                         Sequence
-                      , 0 == Sequence::proto_arity::value ? 1 : Sequence::proto_arity::value
+                      , 0 == Sequence::proto_arity_c ? 1 : Sequence::proto_arity_c
                     >
                 type;
 

@@ -387,10 +387,6 @@
                 <para>
                   <computeroutput>0 == Expr::proto_arity::value</computeroutput>
                 </para>
-                <para>
-                  <computeroutput>Expr::proto_tag</computeroutput> is
-                  <computeroutput><classname>proto::tag::terminal</classname></computeroutput>
-                </para>
               </requires>
               <returns>
                 <para>
@@ -567,7 +563,7 @@
           </typedef>
           <method-group name="public member functions">
             <method name="operator()" cv="const">
-              <type>typename impl::expr_param</type>
+              <type>Expr</type>
               <parameter name="expr">
                 <paramtype>typename impl::expr_param</paramtype>
                 <description>
@@ -1867,6 +1863,70 @@
         </typedef>
       </struct>
       
+      <struct name="nullary_expr">
+        <template>
+          <template-type-parameter name="Tag"/>
+          <template-type-parameter name="T"/>
+        </template>
+        <inherit><classname>proto::transform</classname>&lt; nullary_expr&lt;Tag, T&gt; &gt;</inherit>
+        <purpose>A metafunction for generating nullary expression types, a grammar element for matching
+          nullary expressions, and
+          a <conceptname>PrimitiveTransform</conceptname> that returns the current expression unchanged. </purpose>
+        <description>
+          <para>
+            Use <computeroutput>proto::nullary_expr&lt;<classname>proto::_</classname>, <classname>proto::_</classname>&gt;</computeroutput>
+            as a grammar element to match any nullary expression.
+          </para>
+        </description>
+        <struct name="impl">
+          <template>
+            <template-type-parameter name="Expr"/>
+            <template-type-parameter name="State"/>
+            <template-type-parameter name="Data"/>
+          </template>
+          <inherit><classname>proto::transform_impl</classname>&lt; Expr, State, Data &gt;</inherit>
+          <typedef name="result_type">
+            <type>Expr</type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="operator()" cv="const">
+              <type>Expr</type>
+              <parameter name="expr">
+                <paramtype>typename impl::expr_param</paramtype>
+                <description>
+                  <para>The current expression </para>
+                </description>
+              </parameter>
+              <parameter name="">
+                <paramtype>typename impl::state_param</paramtype>
+              </parameter>
+              <parameter name="">
+                <paramtype>typename impl::data_param</paramtype>
+              </parameter>
+              <requires>
+                <para>
+                  <computeroutput><classname>proto::matches</classname>&lt;Expr, proto::nullary_expr&lt;Tag, T&gt; &gt;::value</computeroutput> is <computeroutput>true</computeroutput>.
+                </para>
+              </requires>
+              <returns>
+                <para>
+                  <computeroutput>expr</computeroutput>
+                </para>
+              </returns>
+              <throws>
+                <simpara>Will not throw.</simpara>
+              </throws>
+            </method>
+          </method-group>
+        </struct>
+        <typedef name="type">
+          <type><classname>proto::expr</classname>&lt; Tag, <classname>proto::term</classname>&lt; T &gt; &gt;</type>
+        </typedef>
+        <typedef name="proto_base_expr">
+          <type>type</type>
+        </typedef>
+      </struct>
+
       <struct name="unary_expr">
         <template>
           <template-type-parameter name="Tag"/>

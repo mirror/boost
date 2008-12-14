@@ -298,7 +298,7 @@ namespace boost { namespace proto
             typename Expr
           , typename Derived
           , typename Domain = default_domain
-          , typename Tag = typename Expr::proto_tag
+          , long Arity = Expr::proto_arity_c
         >
         struct extends;
 
@@ -374,18 +374,18 @@ namespace boost { namespace proto
     {
         struct null_context;
 
-        template<typename Expr, typename Context, long Arity = Expr::proto_arity::value>
+        template<typename Expr, typename Context, long Arity = Expr::proto_arity_c>
         struct null_eval;
 
         struct default_context;
 
-        template<typename Expr, typename Context, typename Tag = typename Expr::proto_tag, long Arity = Expr::proto_arity::value>
+        template<typename Expr, typename Context, typename Tag = typename Expr::proto_tag, long Arity = Expr::proto_arity_c>
         struct default_eval;
 
         template<typename Derived, typename DefaultCtx = default_context>
         struct callable_context;
 
-        template<typename Expr, typename Context, long Arity = Expr::proto_arity::value>
+        template<typename Expr, typename Context, long Arity = Expr::proto_arity_c>
         struct callable_eval;
     }
 
