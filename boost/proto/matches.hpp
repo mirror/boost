@@ -89,6 +89,18 @@
             template<typename And>
             struct last;
 
+            template<>
+            struct last<proto::and_<> >
+            {
+                typedef proto::_ type;
+            };
+
+            template<typename G0>
+            struct last<proto::and_<G0> >
+            {
+                typedef G0 type;
+            };
+
             template<typename T, typename U>
             struct array_matches
               : mpl::false_
@@ -391,6 +403,32 @@
             template<typename Expr, typename If>
             struct matches_<Expr, proto::if_<If> >
               : detail::uncvref<typename when<_, If>::template impl<Expr, int, int>::result_type>::type
+            {};
+
+            // handle degenerate cases of proto::or_
+            template<typename Expr>
+            struct matches_<Expr, or_<> >
+              : mpl::false_
+            {
+                typedef not_<_> which;
+            };
+
+            template<typename Expr, typename G0>
+            struct matches_<Expr, or_<G0> >
+              : matches_<Expr, typename G0::proto_base_expr>
+            {
+                typedef G0 which;
+            };
+
+            // handle degenerate cases of proto::and_
+            template<typename Expr>
+            struct matches_<Expr, and_<> >
+              : mpl::true_
+            {};
+
+            template<typename Expr, typename G0>
+            struct matches_<Expr, and_<G0> >
+              : matches_<Expr, typename G0::proto_base_expr>
             {};
 
             // handle proto::not_

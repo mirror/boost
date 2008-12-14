@@ -16,7 +16,6 @@
 #include <boost/version.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
@@ -317,26 +316,10 @@ namespace boost { namespace proto
 
     namespace control
     {
-        template<
-            typename Grammar0
-          , typename Grammar1
-          , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
-                BOOST_PP_SUB(BOOST_PROTO_MAX_LOGICAL_ARITY,2)
-              , typename G
-              , void
-            )
-        >
+        template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G, void)>
         struct or_;
 
-        template<
-            typename Grammar0
-          , typename Grammar1
-          , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
-                BOOST_PP_SUB(BOOST_PROTO_MAX_LOGICAL_ARITY,2)
-              , typename G
-              , void
-            )
-        >
+        template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G, void)>
         struct and_;
 
         template<typename Grammar>
