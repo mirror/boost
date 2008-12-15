@@ -88,6 +88,20 @@ public:
     5,hashed_factory_class,(Entry,Key,Hash,Pred,Allocator))
 };
 
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+/* This is preferred to deriving from factory_marker since checking for
+ * derivation forces the instantiation of the specifier, which is not
+ * needed when the specifier is a placeholder expression.
+ */
+
+template<
+  typename Entry,typename Key,
+  typename Hash,typename Pred,typename Allocator
+>
+struct is_factory<hashed_factory_class<Entry,Key,Hash,Pred,Allocator> >:
+  boost::mpl::true_{};
+#endif
+
 /* hashed_factory_class specifier */
 
 template<

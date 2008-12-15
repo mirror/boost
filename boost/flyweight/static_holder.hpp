@@ -38,6 +38,16 @@ struct static_holder_class:holder_marker
   BOOST_MPL_AUX_LAMBDA_SUPPORT(1,static_holder_class,(C))
 };
 
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+/* This is preferred to deriving from holder_marker since checking for
+ * derivation forces the instantiation of the specifier, which is not
+ * needed when the specifier is a placeholder expression.
+ */
+
+template<typename C>
+struct is_holder<static_holder_class<C> >:boost::mpl::true_{};
+#endif
+
 /* static_holder_class specifier */
 
 struct static_holder:holder_marker

@@ -53,6 +53,17 @@ public:
   BOOST_MPL_AUX_LAMBDA_SUPPORT(1,assoc_container_factory_class,(Container))
 };
 
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+/* This is preferred to deriving from factory_marker since checking for
+ * derivation forces the instantiation of the specifier, which is not
+ * needed when the specifier is a placeholder expression.
+ */
+
+template<typename Container>
+struct is_factory<assoc_container_factory_class<Container> >:
+  boost::mpl::true_{};
+#endif
+
 /* assoc_container_factory_class specifier */
 
 template<
