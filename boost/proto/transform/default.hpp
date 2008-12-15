@@ -38,8 +38,8 @@
             template<typename Expr, typename State, typename Data, typename Tag, long Arity>
             struct impl2;
 
-            template<typename Expr, typename State, typename Data>
-            struct impl2<Expr, State, Data, tag::terminal, 0>
+            template<typename Expr, typename State, typename Data, typename Tag>
+            struct impl2<Expr, State, Data, Tag, 0>
               : _value::impl<Expr, State, Data>
             {};
 
@@ -54,13 +54,13 @@
             public:                                                                                 \
                 BOOST_PROTO_DECLTYPE_(OP proto::detail::MAKE<r0>(), result_type)                    \
                 result_type operator ()(                                                            \
-                    typename impl2::expr_param e                                                 \
-                  , typename impl2::state_param s                                               \
-                  , typename impl2::data_param d                                                 \
+                    typename impl2::expr_param e                                                    \
+                  , typename impl2::state_param s                                                   \
+                  , typename impl2::data_param d                                                    \
                 ) const                                                                             \
                 {                                                                                   \
                     typename Grammar::template impl<e0, State, Data> t0;                            \
-                    return OP t0(proto::child_c<0>(e), s, d);                             \
+                    return OP t0(proto::child_c<0>(e), s, d);                                       \
                 }                                                                                   \
             };                                                                                      \
             /**/
@@ -81,15 +81,15 @@
                   , result_type                                                                     \
                 )                                                                                   \
                 result_type operator ()(                                                            \
-                    typename impl2::expr_param e                                                 \
-                  , typename impl2::state_param s                                               \
-                  , typename impl2::data_param d                                                 \
+                    typename impl2::expr_param e                                                    \
+                  , typename impl2::state_param s                                                   \
+                  , typename impl2::data_param d                                                    \
                 ) const                                                                             \
                 {                                                                                   \
                     typename Grammar::template impl<e0, State, Data> t0;                            \
                     typename Grammar::template impl<e1, State, Data> t1;                            \
-                    return t0(proto::child_c<0>(e), s, d)                                 \
-                        OP t1(proto::child_c<1>(e), s, d);                                \
+                    return t0(proto::child_c<0>(e), s, d)                                           \
+                        OP t1(proto::child_c<1>(e), s, d);                                          \
                 }                                                                                   \
             };                                                                                      \
             /**/
@@ -450,7 +450,7 @@
                   , State
                   , Data
                   , typename transform_impl<Expr, State, Data>::expr::proto_tag
-                  , transform_impl<Expr, State, Data>::expr::proto_arity::value
+                  , transform_impl<Expr, State, Data>::expr::proto_arity_c
                 >
             {};
         };

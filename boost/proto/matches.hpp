@@ -89,6 +89,18 @@
             template<typename And>
             struct last;
 
+            template<>
+            struct last<proto::and_<> >
+            {
+                typedef proto::_ type;
+            };
+
+            template<typename G0>
+            struct last<proto::and_<G0> >
+            {
+                typedef G0 type;
+            };
+
             template<typename T, typename U>
             struct array_matches
               : mpl::false_
@@ -319,9 +331,19 @@
               : vararg_matches< Args1, Args2, typename Args2::back_, (N1+2 > N2), (N2 > N1) >
             {};
 
-            template<typename Args1, typename Args2, long N2>
-            struct matches_< proto::expr<tag::terminal, Args1, 0>, proto::expr<proto::_, Args2, N2> >
+            template<typename Tag, typename Args1, typename Args2>
+            struct matches_< proto::expr<Tag, Args1, 0>, proto::expr<Tag, Args2, 0> >
+              : terminal_matches<typename Args1::child0, typename Args2::child0>
+            {};
+
+            template<typename Tag, typename Args1, typename Args2, long N2>
+            struct matches_< proto::expr<Tag, Args1, 0>, proto::expr<proto::_, Args2, N2> >
               : mpl::false_
+            {};
+
+            template<typename Tag, typename Args1, typename Args2>
+            struct matches_< proto::expr<Tag, Args1, 0>, proto::expr<proto::_, Args2, 0> >
+              : terminal_matches<typename Args1::child0, typename Args2::child0>
             {};
 
             template<typename Tag, typename Args1, typename Args2>
@@ -332,11 +354,6 @@
             template<typename Tag, typename Args1, typename Args2>
             struct matches_< proto::expr<Tag, Args1, 1>, proto::expr<proto::_, Args2, 1> >
               : matches_<typename detail::expr_traits<typename Args1::child0>::value_type::proto_base_expr, typename Args2::child0::proto_base_expr>
-            {};
-
-            template<typename Args1, typename Args2>
-            struct matches_< proto::expr<tag::terminal, Args1, 0>, proto::expr<tag::terminal, Args2, 0> >
-              : terminal_matches<typename Args1::child0, typename Args2::child0>
             {};
 
         #define BOOST_PROTO_MATCHES_N_FUN(Z, N, DATA)                                               \
@@ -386,6 +403,32 @@
             template<typename Expr, typename If>
             struct matches_<Expr, proto::if_<If> >
               : detail::uncvref<typename when<_, If>::template impl<Expr, int, int>::result_type>::type
+            {};
+
+            // handle degenerate cases of proto::or_
+            template<typename Expr>
+            struct matches_<Expr, or_<> >
+              : mpl::false_
+            {
+                typedef not_<_> which;
+            };
+
+            template<typename Expr, typename G0>
+            struct matches_<Expr, or_<G0> >
+              : matches_<Expr, typename G0::proto_base_expr>
+            {
+                typedef G0 which;
+            };
+
+            // handle degenerate cases of proto::and_
+            template<typename Expr>
+            struct matches_<Expr, and_<> >
+              : mpl::true_
+            {};
+
+            template<typename Expr, typename G0>
+            struct matches_<Expr, and_<G0> >
+              : matches_<Expr, typename G0::proto_base_expr>
             {};
 
             // handle proto::not_
@@ -442,9 +485,9 @@
             /// \li An expression \c E matches <tt>switch_\<C\></tt> if
             ///     \c E matches <tt>C::case_\<E::proto_tag\></tt>.
             ///
-            /// A terminal expression <tt>expr\<tag::terminal,term\<A\> \></tt> matches
-            /// a grammar <tt>expr\<BT,term\<B\> \></tt> if \c BT is \c _ or
-            /// \c tag::terminal and one of the following is true:
+            /// A terminal expression <tt>expr\<AT,term\<A\> \></tt> matches
+            /// a grammar <tt>expr\<BT,term\<B\> \></tt> if \c BT is \c AT or
+            /// \c proto::_ and if one of the following is true:
             ///
             /// \li \c B is the wildcard pattern, \c _
             /// \li \c A is \c B
@@ -476,6 +519,8 @@
                 >
             {};
 
+            /// INTERNAL ONLY
+            ///
             template<typename Expr, typename Grammar>
             struct matches<Expr &, Grammar>
               : detail::matches_<

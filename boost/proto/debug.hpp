@@ -65,6 +65,7 @@ namespace boost { namespace proto
         }                                                                       \
         /**/
 
+        BOOST_PROTO_DEFINE_TAG_NAME(terminal)
         BOOST_PROTO_DEFINE_TAG_NAME(unary_plus)
         BOOST_PROTO_DEFINE_TAG_NAME(negate)
         BOOST_PROTO_DEFINE_TAG_NAME(dereference)
@@ -138,11 +139,12 @@ namespace boost { namespace proto
 
             /// \brief Pretty-print the current node in a Proto expression
             /// tree.
-            template<typename Args>
-            void operator()(proto::expr<tag::terminal, Args, 0> const &expr) const
+            template<typename Tag, typename Args>
+            void operator()(proto::expr<Tag, Args, 0> const &expr) const
             {
+                using namespace tag;
                 this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ")
-                    << "terminal(" << proto::value(expr) << ")\n";
+                    << proto_tag_name(Tag()) << "(" << proto::value(expr) << ")\n";
                 this->first_ = false;
             }
 

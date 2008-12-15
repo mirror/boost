@@ -25,7 +25,7 @@
     {
         namespace detail
         {
-            template<typename Expr, long Arity = Expr::proto_arity::value>
+            template<typename Expr, long Arity = Expr::proto_arity_c>
             struct deep_copy_impl;
 
             template<typename Expr>

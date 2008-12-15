@@ -106,6 +106,8 @@ struct NumberGrammar
     >
 {};
 
+struct my_terminal
+{};
 
 void test_matches()
 {
@@ -247,6 +249,29 @@ void test_matches()
 
     number<int, two_complement_c> num;
     assert_matches<NumberGrammar>(proto::as_expr(num));
+
+    // check custom terminal types
+    {
+        proto::nullary_expr<my_terminal, int>::type i = {0};
+
+        assert_matches<proto::nullary_expr<my_terminal, _> >( i );
+        assert_not_matches<proto::terminal<_> >( i );
+
+        proto::terminal<int>::type j = {0};
+        assert_matches<proto::terminal<_> >( j );
+        assert_not_matches<proto::nullary_expr<my_terminal, _> >( j );
+
+        assert_matches<proto::nullary_expr<_, _> >( i );
+    }
+
+    // check 0 and 1 arg forms or or_ and and_
+    {
+        assert_matches< proto::and_<> >( lit(1) );
+        assert_not_matches< proto::or_<> >( lit(1) );
+
+        assert_matches< proto::and_<proto::terminal<int> > >( lit(1) );
+        assert_matches< proto::or_<proto::terminal<int> > >( lit(1) );
+    }
 }
 
 using namespace unit_test;

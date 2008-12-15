@@ -589,6 +589,49 @@
                 typedef V proto_child2;
             };
 
+            /// \brief A metafunction for generating nullary expression types with a
+            /// specified tag type,
+            /// a grammar element for matching nullary expressions, and a
+            /// PrimitiveTransform that returns the current expression unchanged.
+            ///
+            /// Use <tt>nullary_expr\<_, _\></tt> as a grammar element to match any
+            /// nullary expression.
+            template<typename Tag, typename T>
+            struct nullary_expr : transform<nullary_expr<Tag, T>, empty_base>
+            {
+                typedef proto::expr<Tag, term<T> > type;
+                typedef type proto_base_expr;
+
+                template<typename Expr, typename State, typename Data>
+                struct impl : transform_impl<Expr, State, Data>
+                {
+                    typedef Expr result_type;
+
+                    /// \param e The current expression
+                    /// \pre <tt>matches\<Expr, nullary_expr\<Tag, T\> \>::::value</tt> is \c true.
+                    /// \return \c e
+                    /// \throw nothrow
+                    #ifdef BOOST_HAS_DECLTYPE
+                    result_type
+                    #else
+                    typename impl::expr_param
+                    #endif
+                    operator ()(
+                        typename impl::expr_param e
+                      , typename impl::state_param
+                      , typename impl::data_param
+                    ) const
+                    {
+                        return e;
+                    }
+                };
+
+                /// INTERNAL ONLY
+                typedef Tag proto_tag;
+                /// INTERNAL ONLY
+                typedef T proto_child0;
+            };
+
             /// \brief A metafunction for generating unary expression types with a
             /// specified tag type,
             /// a grammar element for matching unary expressions, and a
@@ -1814,7 +1857,6 @@
                 /// \param expr The terminal expression node.
                 /// \pre <tt>is_expr\<Expr\>::::value</tt> is \c true
                 /// \pre <tt>0 == Expr::proto_arity::value</tt>
-                /// \pre <tt>Expr::proto_tag</tt> is <tt>tag::terminal</tt>
                 /// \return <tt>proto::value(expr)</tt>
                 /// \throw nothrow
                 template<typename Expr>
@@ -2099,7 +2141,6 @@
         /// reference.
         ///
         /// \param expr The Proto terminal expression.
-        /// \pre \c Expr::proto_tag is \c tag::terminal.
         /// \pre <tt>N::value == 0</tt>
         /// \throw nothrow
         /// \return A reference to the terminal's value
