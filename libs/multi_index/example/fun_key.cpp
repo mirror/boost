@@ -91,7 +91,7 @@ int main()
 
   std::cout<<"\nLength order\n"
            <<  "------------"<<std::endl;
-  for(nth_index_iterator<name_record_set,1>::type it1=get<1>(ns).begin();
+  for(nth_index<name_record_set,1>::type::iterator it1=get<1>(ns).begin();
       it1!=get<1>(ns).end();++it1){
     std::cout<<it1->name()<<std::endl;
   }

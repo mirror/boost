@@ -108,7 +108,7 @@ int main()
     std::cout<<word<<" is said "<<it->second<<" in English"<<std::endl;
   }
   else{
-    nth_index_iterator<dictionary,1>::type it2=get<1>(d).find(word);
+    nth_index<dictionary,1>::type::iterator it2=get<1>(d).find(word);
     if(it2!=get<1>(d).end()){
       std::cout<<word<<" is said "<<it2->first<<" in Spanish"<<std::endl;
     }
@@ -129,7 +129,7 @@ int main()
   else{
     /* word not found in Spanish, try our luck in English */
 
-    dictionary::index_iterator<to>::type it2=d.get<to>().find(word);
+    dictionary::index<to>::type::iterator it2=d.get<to>().find(word);
     if(it2!=d.get<to>().end()){
       std::cout<<word<<" is said "<<it2->first<<" in Spanish"<<std::endl;
     }

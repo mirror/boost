@@ -31,6 +31,7 @@ Acknowledgements
 <h2>Contents</h2>
 
 <ul>
+  <li><a href="#boost_1_38">Boost 1.38 release</a></li>
   <li><a href="#boost_1_37">Boost 1.37 release</a></li>
   <li><a href="#boost_1_36">Boost 1.36 release</a></li>
   <li><a href="#boost_1_35">Boost 1.35 release</a></li>
@@ -38,6 +39,37 @@ Acknowledgements
   <li><a href="#boost_1_33_1">Boost 1.33.1 release</a></li>
   <li><a href="#boost_1_33">Boost 1.33 release</a></li>
 </ul>
+
+<h2><a name="boost_1_38">Boost 1.38 release</a></h2>
+
+<p>
+<ul>
+  <li>These constructs are deprecated:
+    <ul>
+      <li><code>nth_index_iterator&lt;MultiIndexContainer,N&gt;::type</code>,</li>
+      <li><code>multi_index_container&lt;...&gt;::nth_index_iterator&lt;N&gt;::type</code>,</li>
+      <li><code>nth_index_const_iterator&lt;MultiIndexContainer,N&gt;::type</code>,</li>
+      <li><code>multi_index_container&lt;...&gt;::nth_index_const_iterator&lt;N&gt;::type</code>,</li>
+      <li><code>index_iterator&lt;MultiIndexContainer,Tag&gt;::type</code>,</li>
+      <li><code>multi_index_container&lt;...&gt;::index_iterator&lt;Tag&gt;::type</code>,</li>
+      <li><code>index_const_iterator&lt;MultiIndexContainer,Tag&gt;::type</code>,</li>
+      <li><code>multi_index_container&lt;...&gt;::index_const_iterator&lt;Tag&gt;::type</code>.</li>
+    </ul>
+    Use the following instead:
+    <ul>
+      <li><code>nth_index&lt;MultiIndexContainer,N&gt;::type::iterator</code>,</li>
+      <li><code>multi_index_container&lt;...&gt;::nth_index&lt;N&gt;::type::iterator</code>,</li>
+      <li><code>nth_index&lt;MultiIndexContainer,N&gt;::type::const_iterator</code>,</li>
+      <li><code>multi_index_container&lt;...&gt;::nth_index&lt;N&gt;::type::const_iterator</code>,</li>
+      <li><code>index&lt;MultiIndexContainer,Tag&gt;::type::iterator</code>,</li>
+      <li><code>multi_index_container&lt;...&gt;::index&lt;Tag&gt;::type::iterator</code>,</li>
+      <li><code>index&lt;MultiIndexContainer,Tag&gt;::type::const_iterator</code>,</li>
+      <li><code>multi_index_container&lt;...&gt;::index&lt;Tag&gt;::type::const_iterator</code>.</li>
+    </ul>
+  </li>
+  <li>Maintenance fixes.</li>
+</ul>
+</p>
 
 <h2><a name="boost_1_37">Boost 1.37 release</a></h2>
 
@@ -51,13 +83,12 @@ Acknowledgements
 
 <p>
 <ul>
-  <a name="stable_update">
-  <li>On prior versions of the library, the <a href="tutorial/indices.html#hash_updating">update
+  <li><a name="stable_update">On prior versions of the library, the <a href="tutorial/indices.html#hash_updating">update
   member functions</a> of hashed indices could alter the position of an element even if the
   associated key did not change with the update. This is legal but probably unexpected behavior.
   The functions have been rewritten to provide the additional guarantee that elements with
   unmodified key will not change position in hashed indices, just as always was the case with
-  ordered indices. These guarantees are now documented in the reference.</li>
+  ordered indices. These guarantees are now documented in the reference.</a></li>
   <li>Added the constructor <code>multi_index_container::multi_index_container(const allocator_type&amp;)</code>
   to mimic the equivalent interface in STL sequence containers.
   <li>Maintenance fixes.</li>
@@ -232,7 +263,7 @@ Acknowledgements
 
 <br>
 
-<p>Revised August 29th 2008</p>
+<p>Revised November 10th 2008</p>
 
 <p>&copy; Copyright 2003-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
