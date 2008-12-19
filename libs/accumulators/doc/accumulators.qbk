@@ -695,7 +695,7 @@ Below is an example of a feature definition.
     {
         // Define a nested typedef called 'impl' that specifies which
         // accumulator implements this feature. 
-        typedef impl::mean_accumulator< mpl::_1 > impl;
+        typedef accumulators::impl::mean_accumulator< mpl::_1 > impl;
     };
     
     }}}
