@@ -70,7 +70,6 @@ along with suitable workarounds when available.
   </li>
   <li><a href="#msvc_71">Microsoft Visual C++ 7.1</a></li>
   <li><a href="#msvc_80">Microsoft Visual C++ 8.0 and later</a></li>
-  <li><a href="#msvc_80_x86_amd64">Microsoft Visual C++ 8.0 x64 cross-compiler and later</a></li>
   <li><a href="#sun_10">Sun Studio 10 and later for Solaris</a></li>
   <li><a href="#portability">Portability techniques</a>
     <ul>
@@ -120,16 +119,14 @@ No problems have been detected with several versions of this compiler
 starting from 3.2. The following versions have been explicitly tested:
 <ul>
   <li>GCC 3.2 20020927 (prerelease) under Cygwin 1.5.7,</li>
-  <li>GCC 3.4.2 under HP-UX PA-RISC,</li>
   <li>GCC 3.4.3 under Linux x86-64,</li>
+  <li>GCC 3.4.4 (cygming special, gdc 0.12, using dmd 0.125) under Cygwin and MinGW,</li>
   <li>GCC 3.4.6 under Solaris,</li>
-  <li>GCC 4.0.1 under Linux x86-64, (Apple build 5363) under Mac OS,</li>
-  <li>GCC 4.1.2 20061021 prerelease (NetBSD nb3 20061125) under Linux and Linux x86-64, 20070115 (prerelease) (SUSE Linux) under Linux x86-64, 20071124 (Red Hat 4.1.2-42) under Linux x86-64,</li>
-  <li>GCC 4.2.1 under HP-UX IA64 and Linux x86-64, (SUSE Linux) under Linux,</li>
-  <li>GCC 4.2.3 (Ubuntu 4.2.3-2ubuntu7) under Linux and Linux x86-64,</li>
-  <li>GCC 4.2.4 under Linux x86-64, (Ubuntu 4.2.4-1ubuntu1) under Linux x86-64,</li>
-  <li>GCC 4.3.0 with Apache C++ Standard Library 4.2.2 under Linux x86-64,</li>
-  <li>GCC 4.3.2 under Linux x86-64,</li>
+  <li>GCC 4.0.1 under Linux x86-64, (Apple build 5363) and (Apple Inc. build 5488) under Mac OS,</li>
+  <li>GCC 4.1.2 20061021 prerelease (NetBSD nb3 20061125) under Linux and Linux x86-64, 20061115 (prerelease) (Debian 4.1.1-21) under Linux, 20070115 (prerelease) (SUSE Linux) under Linux x86-64, 20071124 (Red Hat 4.1.2-42) under Linux x86-64, 20080704 (Red Hat 4.1.2-44) under Linux x86-64,</li>
+  <li>GCC 4.2.1 under HP-UX IA64 and Linux x86-64, (SUSE Linux) Under Linux,</li>
+  <li>GCC 4.2.4 under Linux x86-64, (Ubuntu 4.2.4-1ubuntu3) undex Linux,</li>
+  <li>GCC 4.3.2 under Linux x86-64, 20080827 (alpha-testing) 1 under Cygwin,</li>
   <li>GCC 4.3.2 gnu++0x under Linux x86-64.</li>
 </ul>
 Boost.MultiIndex does not work with versions 3.1 and prior of GCC.
@@ -238,14 +235,14 @@ Last tested for version V10.1.
 
 <p>
 No problems have been detected with this compiler.
-Tested from version 8.1 to 10.1.
+Last tested for compiler versions 9.0 to 10.1.
 </p>
 
 <h2><a name="intel_91_mac">Intel C++ Compiler for Mac OS 9.1 and later</a></h2>
 
 <p>
 No problems have been detected with this compiler.
-Tested from version 9.1 to 10.1.
+Tested from version 9.1 to 11.0.
 </p>
 
 <h2><a name="intel_80_win">Intel C++ Compiler for Windows 32-bit 8.0 and later</a></h2>
@@ -257,14 +254,14 @@ and in particular with the serialization part of Boost.MultiIndex.
 Argument dependent lookup is enabled by adding
 <code>/Qoption,c,--arg_dep_lookup</code> to the project options.
 Other than this, Boost.MultiIndex works without problems.
-Last tested for compiler version 10.1.
+Last tested for compiler version 11.0.
 </p>
 
 <h2><a name="intel_100_win64">Intel C++ Compiler for Windows 64-bit 10.0 and later</a></h2>
 
 <p>
 No problems have been detected with this compiler.
-Last tested for compiler version 10.1.
+Last tested for compiler versions 10.1 to 11.0.
 </p>
 
 <h2><a name="cw_83">Metrowerks CodeWarrior 8.3</a></h2>
@@ -665,15 +662,8 @@ without further problems.
 <h2><a name="msvc_80">Microsoft Visual C++ 8.0 and later</a></h2>
 
 <p>
-No problems have been detected with this compiler.
+No problems have been detected with this compiler, both in 32-bit and 64-bit modes.
 Last tested for compiler versions 8.0 and 9.0.
-</p>
-
-<h2><a name="msvc_80_x86_amd64">Microsoft Visual C++ 8.0 x64 cross-compiler and later</a></h2>
-
-<p>
-No problems have been detected with this compiler.
-Last tested for compiler version 9.0.
 </p>
 
 <h2><a name="sun_10">Sun Studio 10 and later for Solaris</a></h2>
@@ -1111,7 +1101,7 @@ Performance
 
 <br>
 
-<p>Revised October 6th 2008</p>
+<p>Revised December 19th 2008</p>
 
 <p>&copy; Copyright 2003-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
