@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2007
+// (C) Copyright Ion Gaztanaga 2007-2008
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -47,7 +47,7 @@ struct my_avltree_node_traits
 
 struct node_ptr_compare
 {
-   bool operator()(my_node *a, my_node *b)
+   bool operator()(const my_node *a, const my_node *b)
    {  return a->int_ < b->int_;  }
 };
 

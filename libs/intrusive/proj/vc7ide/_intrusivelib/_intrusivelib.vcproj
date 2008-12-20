@@ -199,6 +199,15 @@
 				RelativePath="..\..\..\..\..\boost\intrusive\splaytree_algorithms.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\treap.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\treap_algorithms.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\treap_set.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\trivial_value_traits.hpp">
 			</File>
 			<File
@@ -218,6 +227,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\avltree_node.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\clear_on_destructor_base.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\common_slist_algorithms.hpp">
@@ -396,6 +408,12 @@
 			</File>
 			<File
 				RelativePath="..\..\..\example\doc_stateful_value_traits.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\example\doc_treap_algorithms.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\example\doc_treap_set.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\example\doc_unordered_set.cpp">

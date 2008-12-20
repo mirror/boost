@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2007.
+// (C) Copyright Ion Gaztanaga  2006-2008.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -117,16 +117,27 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_insert_erase_burst(
    //Now random insertions
    std::random_shuffle(values.begin(), values.end());
    testset.insert(&values[0], &values[0] + values.size());
-   std::sort(values.begin(), values.end());
+   std::vector<value_type> values_ordered(values);
+   std::sort(values_ordered.begin(), values_ordered.end());
    TEST_INTRUSIVE_SEQUENCE_EXPECTED(testset, testset.begin());
 
-   //Random erasure
-   std::random_shuffle(values.begin(), values.end());
-   for(int i = 0; i != MaxValues; ++i){
-      it = testset.erase(testset.iterator_to(values[i]));
-   }
+   {
+      typedef typename std::vector<value_type>::const_iterator cvec_iterator;
+      //Random erasure
+      std::vector<cvec_iterator> it_vector;
+      
+      for(cvec_iterator it(values.begin()), itend(values.end())
+         ; it != itend
+         ; ++it){
+         it_vector.push_back(it);
+      }
+      std::random_shuffle(it_vector.begin(), it_vector.end());
+      for(int i = 0; i != MaxValues; ++i){
+         testset.erase(testset.iterator_to(*it_vector[i]));
+      }
 
-   BOOST_TEST(testset.empty());
+      BOOST_TEST(testset.empty());
+   }
 }
 
 template<class ValueTraits, template <class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none> class ContainerDefiner>

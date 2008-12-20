@@ -83,6 +83,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "any_hook", "any_test\any_te
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "treap_set", "treap_set\treap_set.vcproj", "{1E09E697-4A2F-BC76-7C91-2BA479B29159}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "treap_multiset", "treap_multiset\treap_multiset.vcproj", "{16E09E95-F4A2-C971-BC76-9BA407191C59}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -175,6 +183,14 @@ Global
 		{97B61B24-4C97-9681-50BF-243175A813B6}.Debug.Build.0 = Debug|Win32
 		{97B61B24-4C97-9681-50BF-243175A813B6}.Release.ActiveCfg = Release|Win32
 		{97B61B24-4C97-9681-50BF-243175A813B6}.Release.Build.0 = Release|Win32
+		{1E09E697-4A2F-BC76-7C91-2BA479B29159}.Debug.ActiveCfg = Debug|Win32
+		{1E09E697-4A2F-BC76-7C91-2BA479B29159}.Debug.Build.0 = Debug|Win32
+		{1E09E697-4A2F-BC76-7C91-2BA479B29159}.Release.ActiveCfg = Release|Win32
+		{1E09E697-4A2F-BC76-7C91-2BA479B29159}.Release.Build.0 = Release|Win32
+		{16E09E95-F4A2-C971-BC76-9BA407191C59}.Debug.ActiveCfg = Debug|Win32
+		{16E09E95-F4A2-C971-BC76-9BA407191C59}.Debug.Build.0 = Debug|Win32
+		{16E09E95-F4A2-C971-BC76-9BA407191C59}.Release.ActiveCfg = Release|Win32
+		{16E09E95-F4A2-C971-BC76-9BA407191C59}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

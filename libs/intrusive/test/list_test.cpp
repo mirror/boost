@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2007.
+// (C) Copyright Ion Gaztanaga  2006-2008.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -24,6 +24,19 @@
 #include "test_container.hpp"
 
 using namespace boost::intrusive;
+
+class my_tag;
+
+template<class VoidPointer>
+struct hooks
+{
+   typedef list_base_hook<void_pointer<VoidPointer> >                base_hook_type;
+   typedef list_base_hook< link_mode<auto_unlink>
+                         , void_pointer<VoidPointer>, tag<my_tag> >  auto_base_hook_type;
+   typedef list_member_hook<void_pointer<VoidPointer>, tag<my_tag> > member_hook_type;
+   typedef list_member_hook< link_mode<auto_unlink>
+                           , void_pointer<VoidPointer> >             auto_member_hook_type;
+};
 
 template<class ValueTraits>
 struct test_list 
@@ -400,21 +413,21 @@ class test_main_template
    public:
    int operator()()
    {
-      typedef testvalue<VoidPointer, constant_time_size> value_type;
+      typedef testvalue<hooks<VoidPointer>, constant_time_size> value_type;
       std::vector<value_type> data (5);
       for (int i = 0; i < 5; ++i)
          data[i].value_ = i + 1; 
 
       test_list < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::list_base_hook_t
+                  , typename hooks<VoidPointer>::base_hook_type
                   >::type
                 >::test_all(data);
       test_list < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                               , typename value_type::list_member_hook_t
-                               , &value_type::list_node_
+                               , typename hooks<VoidPointer>::member_hook_type
+                               , &value_type::node_
                                >
                   >::type
                 >::test_all(data);
@@ -428,22 +441,22 @@ class test_main_template<VoidPointer, false>
    public:
    int operator()()
    {
-      typedef testvalue<VoidPointer, false> value_type;
+      typedef testvalue<hooks<VoidPointer>, false> value_type;
       std::vector<value_type> data (5);
       for (int i = 0; i < 5; ++i)
          data[i].value_ = i + 1; 
 
       test_list < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::list_base_hook_t
+                  , typename hooks<VoidPointer>::base_hook_type
                   >::type
                 >::test_all(data);
 
       test_list < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                               , typename value_type::list_member_hook_t
-                               , &value_type::list_node_
+                               , typename hooks<VoidPointer>::member_hook_type
+                               , &value_type::node_
                                >
                   >::type
                 >::test_all(data);
@@ -455,15 +468,15 @@ class test_main_template<VoidPointer, false>
 //               >::test_all(data);
       test_list < typename detail::get_base_value_traits
                   < value_type
-                  , typename value_type::list_auto_base_hook_t
+                  , typename hooks<VoidPointer>::auto_base_hook_type
                   >::type
                 >::test_all(data);
 
       test_list < typename detail::get_member_value_traits
                   < value_type
                   , member_hook< value_type
-                               , typename value_type::list_auto_member_hook_t
-                               , &value_type::list_auto_node_
+                               , typename hooks<VoidPointer>::auto_member_hook_type
+                               , &value_type::auto_node_
                                >
                   >::type
                 >::test_all(data);
@@ -488,285 +501,3 @@ int main( int, char* [] )
    return boost::report_errors();
 }
 #include <boost/intrusive/detail/config_end.hpp>
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-#include <cstddef>
-
-
-////////////////////////////////////////////////////
-// Builds an index_tuple<0, 1, 2, ..., Num-1>, that will
-// be used to "unpack" into comma-separated values
-// in a function call.
-////////////////////////////////////////////////////
-
-template<int... Indexes>
-struct index_tuple{};
-
-template<std::size_t Num, typename Tuple = index_tuple<> >
-struct build_number_seq;
-
-template<std::size_t Num, int... Indexes> 
-struct build_number_seq<Num, index_tuple<Indexes...> >
-   : build_number_seq<Num - 1, index_tuple<Indexes..., sizeof...(Indexes)> >
-{};
-
-template<int... Indexes>
-struct build_number_seq<0, index_tuple<Indexes...> >
-{  typedef index_tuple<Indexes...> type;  };
-
-template<class ...Types>
-struct typelist
-{};
-
-template<class T>
-struct invert_typelist;
-
-template<int I, typename Tuple>
-struct typelist_element;
-
-template<int I, typename Head, typename... Tail>
-struct typelist_element<I, typelist<Head, Tail...> >
-{
-   typedef typename typelist_element<I-1, typelist<Tail...> >::type type;
-};
-
-template<typename Head, typename... Tail>
-struct typelist_element<0, typelist<Head, Tail...> >
-{
-   typedef Head type;
-};
-
-template<int ...Ints, class ...Types>
-typelist<typename typelist_element<(sizeof...(Types) - 1) - Ints, typelist<Types...> >::type...>
-   inverted_typelist(index_tuple<Ints...>, typelist<Types...>)
-{
-   return typelist<typename typelist_element<(sizeof...(Types) - 1) - Ints, typelist<Types...> >::type...>();
-}
-
-
-template<class Typelist>
-struct sizeof_typelist;
-
-template<class ...Types>
-struct sizeof_typelist< typelist<Types...> >
-{
-   static const std::size_t value = sizeof...(Types);
-};
-
-//invert_typelist_impl
-template<class Typelist, class Indexes>
-struct invert_typelist_impl;
-
-
-template<class Typelist, int ...Ints>
-struct invert_typelist_impl< Typelist, index_tuple<Ints...> >
-{
-   static const std::size_t last_idx = sizeof_typelist<Typelist>::value - 1;
-   typedef typelist
-      <typename typelist_element<last_idx - Ints, Typelist>::type...> type;
-};
-
-template<class Typelist, int Int>
-struct invert_typelist_impl< Typelist, index_tuple<Int> >
-{
-   typedef Typelist type;
-};
-
-template<class Typelist>
-struct invert_typelist_impl< Typelist, index_tuple<> >
-{
-   typedef Typelist type;
-};
-
-//invert_typelist
-template<class Typelist>
-struct invert_typelist;
-
-template<class ...Types>
-struct invert_typelist< typelist<Types...> >
-{
-   typedef typelist<Types...> typelist_t;
-   typedef typename build_number_seq<sizeof...(Types)>::type indexes_t;
-   typedef typename invert_typelist_impl<typelist_t, indexes_t>::type type;
-};
-
-struct none
-{
-    template<class Base>
-    struct pack : Base
-    { };
-};
-
-//!This option setter specifies the type of
-//!a void pointer. This will instruct the hook
-//!to use this type of pointer instead of the
-//!default one
-template<class VoidPointer>
-struct void_pointer
-{
-/// @cond
-   template<class Base>
-   struct pack : Base
-   {
-      typedef VoidPointer void_pointer;
-   };
-/// @endcond
-};
-
-//!This option setter specifies the type of
-//!the tag of a base hook. A type cannot have two
-//!base hooks of the same type, so a tag can be used
-//!to differentiate two base hooks with otherwise same type
-template<class Tag>
-struct tag
-{
-/// @cond
-   template<class Base>
-   struct pack : Base
-   {
-      typedef Tag tag;
-   };
-/// @endcond
-};
-
-
-//!This option setter specifies if the hook
-//!should be optimized for size instead of for speed.
-template<bool Enabled>
-struct optimize_size
-{
-/// @cond
-   template<class Base>
-   struct pack : Base
-   {
-      static const bool optimize_size = Enabled;
-   };
-/// @endcond
-};
-
-//!This option setter specifies if the list container should
-//!use a linear implementation instead of a circular one.
-template<bool Enabled>
-struct linear
-{
-/// @cond
-   template<class Base>
-   struct pack : Base
-   {
-      static const bool linear = Enabled;
-   };
-/// @endcond
-};
-
-//!This option setter specifies if the list container should
-//!use a linear implementation instead of a circular one.
-template<bool Enabled>
-struct cache_last
-{
-/// @cond
-   template<class Base>
-   struct pack : Base
-   {
-      static const bool cache_last = Enabled;
-   };
-/// @endcond
-};
-
-
-
-template<class Typelist>
-struct do_pack;
-
-template<>
-struct do_pack<typelist<> >;
-
-template<class Prev>
-struct do_pack<typelist<Prev> >
-{
-   typedef Prev type;
-};
-
-template<class Prev, class Last>
-struct do_pack<typelist<Prev, Last> >
-{
-   typedef typename Prev::template pack<Last> type;
-};
-
-template<class Prev, class ...Others>
-struct do_pack<typelist<Prev, Others...> >
-{
-   typedef typename Prev::template pack
-      <typename do_pack<typelist<Others...>>::type> type;
-};
-
-
-template<class ...Options>
-struct pack_options
-{
-   typedef typelist<Options...> typelist_t;
-   typedef typename invert_typelist<typelist_t>::type inverted_typelist;
-   typedef typename do_pack<inverted_typelist>::type type;
-};
-
-struct hook_defaults
-   :  public pack_options
-   < none
-   , void_pointer<void*>
-   , tag<int>
-   , optimize_size<false>
-   , linear<false>
-   >::type
-{};
-
-
-#include <iostream>
-#include <typeinfo>
-
-struct S
-{};
-
-int main()
-{
-   {
-      typedef typelist<int, float, double> typelist_t;
-      typedef invert_typelist<typelist_t>::type inverted_typelist;
-      std::cout << "original: " << typeid(typelist_t).name() << std::endl;
-      std::cout << "inverted: " << typeid(inverted_typelist).name() << std::endl;
-   }
-   {
-      typedef typelist<int> typelist_t;
-      typedef invert_typelist<typelist_t>::type inverted_typelist;
-      std::cout << "original: " << typeid(typelist_t).name() << std::endl;
-      std::cout << "inverted: " << typeid(inverted_typelist).name() << std::endl;
-   }
-   {
-      typedef typelist<> typelist_t;
-      typedef invert_typelist<typelist_t>::type inverted_typelist;
-      std::cout << "original: " << typeid(typelist_t).name() << std::endl;
-      std::cout << "inverted: " << typeid(inverted_typelist).name() << std::endl;
-   }
-   {
-      typedef pack_options<S, none>::type options_t;
-      std::cout << "options_t " << typeid(options_t).name() << std::endl;
-   }
-   {
-      typedef pack_options<S, none, none>::type options_t;
-      std::cout << "options_t " << typeid(options_t).name() << std::endl;
-   }
-
-   hook_defaults h;
-   return 1;
-}
-*/
