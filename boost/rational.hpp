@@ -441,11 +441,18 @@ bool rational<IntType>::operator< (const rational<IntType>& r) const
     }
     else
     {
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4800)
+#endif
         // Exactly one of the remainders is zero, so all following c.f.
         // components of that variable are infinity, while the other variable
         // has a finite next c.f. component.  So that other variable has the
         // lesser value (modulo the reversal flag!).
         return ( ts.r != zero ) != static_cast<bool>( reverse );
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
     }
 }
 
