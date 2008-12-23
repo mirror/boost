@@ -33,38 +33,43 @@ int* get_array_data();
 
 int error_count = 0;
 
+#define RUN_TESTS(name) \
+   std::cout << "Running test case \"" #name "\".\n";\
+   name();
+
+
 void run_tests()
 {
-   basic_tests();
-   test_simple_repeats();
-   test_alt();
-   test_sets();
-   test_sets2();
-   test_anchors();
-   test_backrefs();
-   test_character_escapes();
-   test_assertion_escapes();
-   test_tricky_cases();
-   test_grep();
-   test_replace();
-   test_non_greedy_repeats();
-   test_non_marking_paren();
-   test_partial_match();
-   test_forward_lookahead_asserts();
-   test_fast_repeats();
-   test_fast_repeats2();
-   test_independent_subs();
-   test_nosubs();
-   test_conditionals();
-   test_options();
-   test_options2();
+   RUN_TESTS(basic_tests);
+   RUN_TESTS(test_simple_repeats);
+   RUN_TESTS(test_alt);
+   RUN_TESTS(test_sets);
+   RUN_TESTS(test_sets2);
+   RUN_TESTS(test_anchors);
+   RUN_TESTS(test_backrefs);
+   RUN_TESTS(test_character_escapes);
+   RUN_TESTS(test_assertion_escapes);
+   RUN_TESTS(test_tricky_cases);
+   RUN_TESTS(test_grep);
+   RUN_TESTS(test_replace);
+   RUN_TESTS(test_non_greedy_repeats);
+   RUN_TESTS(test_non_marking_paren);
+   RUN_TESTS(test_partial_match);
+   RUN_TESTS(test_forward_lookahead_asserts);
+   RUN_TESTS(test_fast_repeats);
+   RUN_TESTS(test_fast_repeats2);
+   RUN_TESTS(test_independent_subs);
+   RUN_TESTS(test_nosubs);
+   RUN_TESTS(test_conditionals);
+   RUN_TESTS(test_options);
+   RUN_TESTS(test_options2);
 #ifndef TEST_THREADS
-   test_en_locale();
+   RUN_TESTS(test_en_locale);
 #endif
-   test_emacs();
-   test_operators();
-   test_overloads();
-   test_unicode();
+   RUN_TESTS(test_emacs);
+   RUN_TESTS(test_operators);
+   RUN_TESTS(test_overloads);
+   RUN_TESTS(test_unicode);
 }
 
 int cpp_main(int /*argc*/, char * /*argv*/[])

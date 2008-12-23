@@ -42,7 +42,8 @@ void basic_tests()
    TEST_REGEX_SEARCH("()", perl, "zzz", match_default, make_array(0, 0, 0, 0, -2, 1, 1, 1, 1, -2, 2, 2, 2, 2, -2, 3, 3, 3, 3, -2, -2));
    TEST_REGEX_SEARCH("()", perl, "", match_default, make_array(0, 0, 0, 0, -2, -2));
    TEST_INVALID_REGEX("(", perl);
-   TEST_INVALID_REGEX("", perl);
+   TEST_INVALID_REGEX("", perl|no_empty_expressions);
+   TEST_REGEX_SEARCH("", perl, "abc", match_default, make_array(0, 0, -2, 1, 1, -2, 2, 2, -2, 3, 3, -2, -2));
    TEST_INVALID_REGEX(")", perl);
    TEST_INVALID_REGEX("(aa", perl);
    TEST_INVALID_REGEX("aa)", perl);

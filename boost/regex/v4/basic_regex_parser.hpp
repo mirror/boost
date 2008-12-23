@@ -109,7 +109,11 @@ void basic_regex_parser<charT, traits>::parse(const charT* p1, const charT* p2, 
    m_position = m_base = p1;
    m_end = p2;
    // empty strings are errors:
-   if(p1 == p2)
+   if((p1 == p2) && 
+      (
+         (l_flags & regbase::main_option_type) != regbase::perl_syntax_group)
+         || (l_flags & regbase::no_empty_expressions)
+      )
    {
       fail(regex_constants::error_empty, 0);
       return;
@@ -926,7 +930,15 @@ bool basic_regex_parser<charT, traits>::parse_alt()
    // error check: if there have been no previous states,
    // or if the last state was a '(' then error:
    //
-   if((this->m_last_state == 0) || (this->m_last_state->type == syntax_element_startmark))
+   if(
+      ((this->m_last_state == 0) || (this->m_last_state->type == syntax_element_startmark))
+      &&
+      !(
+         ((this->flags() & regbase::main_option_type) == regbase::perl_syntax_group)
+           &&
+         ((this->flags() & regbase::no_empty_expressions) == 0)
+        )
+      )
    {
       fail(regex_constants::error_empty, this->m_position - this->m_base);
       return false;
@@ -2075,7 +2087,14 @@ bool basic_regex_parser<charT, traits>::unwind_alts(std::ptrdiff_t last_paren_st
    // alternative then that's an error:
    //
    if((this->m_alt_insert_point == static_cast<std::ptrdiff_t>(this->m_pdata->m_data.size()))
-      && m_alt_jumps.size() && (m_alt_jumps.back() > last_paren_start))
+      && m_alt_jumps.size() && (m_alt_jumps.back() > last_paren_start)
+      &&
+      !(
+         ((this->flags() & regbase::main_option_type) == regbase::perl_syntax_group)
+           &&
+         ((this->flags() & regbase::no_empty_expressions) == 0)
+        )
+      )
    {
       fail(regex_constants::error_empty, this->m_position - this->m_base);
       return false;

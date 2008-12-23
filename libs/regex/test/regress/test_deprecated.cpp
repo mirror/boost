@@ -38,7 +38,7 @@ int get_posix_compile_options(boost::regex_constants::syntax_option_type opts)
    {
    case regbase::perl:
       result = (opts & regbase::no_perl_ex) ? REG_EXTENDED : REG_PERL;
-      if(opts & (regbase::no_bk_refs|regbase::no_mod_m|regbase::mod_x|regbase::mod_s|regbase::no_mod_s|regbase::no_escape_in_lists))
+      if(opts & (regbase::no_bk_refs|regbase::no_mod_m|regbase::mod_x|regbase::mod_s|regbase::no_mod_s|regbase::no_escape_in_lists|regbase::no_empty_expressions))
          return -1;
       break;
    case regbase::basic:

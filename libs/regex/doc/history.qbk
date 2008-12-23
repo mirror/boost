@@ -10,6 +10,12 @@
 
 [h4 Boost 1.38]
 
+* [*Breaking change]: empty expressions, and empty alternatives are now
+allowed when using the Perl regular expression syntax.  This change has
+been added for Perl compatibility, when the new [syntax_option_type]
+['no_empty_expressions] is set then the old behaviour is preserved and
+empty expressions are prohibited.  This is issue
+[@https://svn.boost.org/trac/boost/ticket/1081 #1081].
 * Added support for Perl style ${n} expressions in format strings
 (issue [@https://svn.boost.org/trac/boost/ticket/2556 #2556]).
 * Added support for accessing the location of sub-expressions within the
