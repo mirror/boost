@@ -35,7 +35,32 @@ duplicated within the scope of class template [basic_regex].
    static const syntax_option_type nosubs;
    static const syntax_option_type optimize;
    static const syntax_option_type collate;
-   // other Boost.Regex specific options are listed below
+   
+   // 
+   // The remaining options are specific to Boost.Regex:
+   //
+   
+   // Options common to both Perl and POSIX regular expressions:
+   static const syntax_option_type newline_alt;
+   static const syntax_option_type no_except;
+   static const syntax_option_type  save_subexpression_location;
+   
+   // Perl specific options:
+   static const syntax_option_type no_mod_m;
+   static const syntax_option_type no_mod_s;
+   static const syntax_option_type mod_s;
+   static const syntax_option_type mod_x;
+   
+   // POSIX extended specific options:
+   static const syntax_option_type no_escape_in_lists;
+   static const syntax_option_type no_bk_refs;
+   
+   // POSIX basic specific options:
+   static const syntax_option_type no_escape_in_lists;
+   static const syntax_option_type no_char_classes;
+   static const syntax_option_type no_intervals;
+   static const syntax_option_type bk_plus_qm;
+   static const syntax_option_type bk_vbar;
 
    } // namespace regex_constants
    } // namespace std
@@ -126,6 +151,9 @@ The following options may also be set when using perl-style regular expressions:
       whether `match_not_dot_newline` is set in the match flags.]]
 [[mod_x][No][Turns on the perl x-modifier: causes unescaped whitespace 
       in the expression to be ignored.]]
+[[save_subexpression_location][No][When set then the locations of individual
+sub-expressions within the ['original regular expression string] can be accessed
+via the [link boost_regex.basic_regex.subexpression `subexpression()`] member function of `basic_regex`.]]
 ]
 
 [endsect]
@@ -203,6 +231,9 @@ The following options may also be set when using POSIX extended regular expressi
       to support for backreferences on.]]
 [[no_except][No][Prevents [basic_regex] from throwing an exception when 
       an invalid expression is encountered.]]
+[[save_subexpression_location][No][When set then the locations of individual
+sub-expressions within the ['original regular expression string] can be accessed
+via the [link boost_regex.basic_regex.subexpression `subexpression()`] member function of `basic_regex`.]]
 ]
 
 [endsect]
@@ -268,6 +299,9 @@ The following options may also be set when using POSIX basic regular expressions
 [[bk_vbar][No][When set then `\|` acts as the alternation operator.]]
 [[no_except][No][Prevents [basic_regex] from throwing an exception when an 
       invalid expression is encountered.]]
+[[save_subexpression_location][No][When set then the locations of individual
+sub-expressions within the ['original regular expression string] can be accessed
+via the [link boost_regex.basic_regex.subexpression `subexpression()`] member function of `basic_regex`.]]
 ]
 
 [endsect]

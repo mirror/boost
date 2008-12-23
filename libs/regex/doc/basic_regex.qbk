@@ -138,6 +138,7 @@ The definition of `basic_regex` follows: it is based very closely on class
       template <class ST, class SA> 
       ``[link boost_regex.basic_regex.opeq3 basic_regex& operator=]`` (const basic_string<charT, ST, SA>& p);
       // iterators: 
+      ``[link boost_regex.basic_regex.subexpression std::pair<const_iterator, const_iterator> subexpression]``(size_type n) const; 
       ``[link boost_regex.basic_regex.begin const_iterator begin]``() const; 
       ``[link boost_regex.basic_regex.end const_iterator end]``() const;
       // capacity: 
@@ -435,6 +436,18 @@ according to the [link boost_regex.ref.syntax_option_type option flags] specifie
    basic_regex& operator=(const basic_string<charT, ST, SA>& p);
 
 [*Effects]: Returns the result of `assign(p)`.
+
+[#boost_regex.basic_regex.subexpression]
+
+   std::pair<const_iterator, const_iterator> subexpression(size_type n) const;
+
+[*Effects]: Returns a pair of iterators denoting the location of 
+marked subexpression /n/ within the original regular expression string.
+The returned iterators are relative to `begin()` and `end()`.
+
+[*Requires]: The expression must have been compiled with the
+[syntax_option_type] save_subexpression_location set.  Argument
+/n/ must be in within the range `1 <= n < mark_count()`.
 
 [#boost_regex.basic_regex.begin]
 

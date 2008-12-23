@@ -84,6 +84,7 @@ public:
       nocollate = 0,                                    // don't use locale specific collation (deprecated)
       collate = 1 << 21,                                // use locale specific collation
       nosubs = 1 << 22,                                 // don't mark sub-expressions
+      save_subexpression_location = 1 << 23,            // save subexpression locations
       optimize = 0,                                     // not really supported
       
 
@@ -141,6 +142,7 @@ namespace regex_constants{
       mod_x = ::boost::regbase::mod_x,
       mod_s = ::boost::regbase::mod_s,
       no_mod_s = ::boost::regbase::no_mod_s,
+      save_subexpression_location = ::boost::regbase::save_subexpression_location,
 
       basic = ::boost::regbase::basic,
       extended = ::boost::regbase::extended,

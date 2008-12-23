@@ -116,5 +116,15 @@ void test_replace()
    TEST_REGEX_REPLACE("x", literal|icase, "xx", match_default|format_all, "a", "aa");
    // literals:
    TEST_REGEX_REPLACE("(a(c)?)|(b)", perl, "acab", match_default|format_literal, "\\&$", "\\&$\\&$\\&$");
+   // Bracketed sub expressions:
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default, "$", "...$,,,");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default, "${", "...${,,,");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default, "${2", "...${2,,,");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default, "${23", "...${23,,,");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default, "${d}", "...${d},,,");
+   TEST_REGEX_REPLACE("(a+)", perl, "...aaa,,,", match_default, "/${1}/", ".../aaa/,,,");
+   TEST_REGEX_REPLACE("(a+)", perl, "...aaa,,,", match_default, "/${10}/", "...//,,,");
+   TEST_REGEX_REPLACE("((((((((((a+))))))))))", perl, "...aaa,,,", match_default, "/${10}/", ".../aaa/,,,");
+   TEST_REGEX_REPLACE("(a+)", perl, "...aaa,,,", match_default, "/${1}0/", ".../aaa0/,,,");
 }
 

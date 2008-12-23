@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>regex_split (deprecated)</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../index.html" title="Boost.Regex">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../index.html" title="Boost.Regex">
 <link rel="up" href="../deprecated_interfaces.html" title="Deprecated Interfaces">
 <link rel="prev" href="regex_grep.html" title="regex_grep (Deprecated)">
 <link rel="next" href="old_regex.html" title="High Level Class RegEx (Deprecated)">
@@ -24,23 +24,23 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_regex.ref.deprecated_interfaces.regex_split"></a><a href="regex_split.html" title="regex_split (deprecated)">
+<a name="boost_regex.ref.deprecated_interfaces.regex_split"></a><a class="link" href="regex_split.html" title="regex_split (deprecated)">
         regex_split (deprecated)</a>
 </h4></div></div></div>
 <p>
-          The algorithm <a href="regex_split.html" title="regex_split (deprecated)"><code class="computeroutput"><span class="identifier">regex_split</span></code></a> has been deprecated
-          in favor of the iterator <a href="../regex_token_iterator.html" title="regex_token_iterator"><code class="computeroutput"><span class="identifier">regex_token_iterator</span></code></a> which has
+          The algorithm <a class="link" href="regex_split.html" title="regex_split (deprecated)"><code class="computeroutput"><span class="identifier">regex_split</span></code></a> has been deprecated
+          in favor of the iterator <a class="link" href="../regex_token_iterator.html" title="regex_token_iterator"><code class="computeroutput"><span class="identifier">regex_token_iterator</span></code></a> which has
           a more flexible and powerful interface, as well as following the more usual
           standard library "pull" rather than "push" semantics.
         </p>
 <p>
-          Code which uses <a href="regex_split.html" title="regex_split (deprecated)"><code class="computeroutput"><span class="identifier">regex_split</span></code></a> will continue to compile,
+          Code which uses <a class="link" href="regex_split.html" title="regex_split (deprecated)"><code class="computeroutput"><span class="identifier">regex_split</span></code></a> will continue to compile,
           the following documentation is taken from a previous Boost.Regex version:
         </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> 
 </pre>
 <p>
-          Algorithm <a href="regex_split.html" title="regex_split (deprecated)"><code class="computeroutput"><span class="identifier">regex_split</span></code></a> performs a similar
+          Algorithm <a class="link" href="regex_split.html" title="regex_split (deprecated)"><code class="computeroutput"><span class="identifier">regex_split</span></code></a> performs a similar
           operation to the perl split operation, and comes in three overloaded forms:
         </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Alloc1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits2</span><span class="special">&gt;</span>

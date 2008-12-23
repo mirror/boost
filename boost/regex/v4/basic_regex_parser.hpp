@@ -368,7 +368,11 @@ bool basic_regex_parser<charT, traits>::parse_open_paren()
    //
    unsigned markid = 0;
    if(0 == (this->flags() & regbase::nosubs))
+   {
       markid = ++m_mark_count;
+      if(this->flags() & regbase::save_subexpression_location)
+         this->m_pdata->m_subs.push_back(std::pair<std::size_t, std::size_t>(std::distance(m_base, m_position) - 1, 0));
+   }
    re_brace* pb = static_cast<re_brace*>(this->append_state(syntax_element_startmark, sizeof(re_brace)));
    pb->index = markid;
    std::ptrdiff_t last_paren_start = this->getoffset(pb);
@@ -415,6 +419,8 @@ bool basic_regex_parser<charT, traits>::parse_open_paren()
       return false;
    }
    BOOST_ASSERT(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_close_mark);
+   if(markid && (this->flags() & regbase::save_subexpression_location))
+      this->m_pdata->m_subs.at(markid - 1).second = std::distance(m_base, m_position);
    ++m_position;
    //
    // append closing parenthesis state:

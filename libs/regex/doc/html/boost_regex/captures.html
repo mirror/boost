@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Understanding Marked Sub-Expressions and Captures</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../index.html" title="Boost.Regex">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../index.html" title="Boost.Regex">
 <link rel="up" href="../index.html" title="Boost.Regex">
 <link rel="prev" href="unicode.html" title="Unicode and Boost.Regex">
 <link rel="next" href="partial_matches.html" title="Partial Matches">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_regex.captures"></a><a href="captures.html" title="Understanding Marked Sub-Expressions and Captures"> Understanding Marked Sub-Expressions
+<a name="boost_regex.captures"></a><a class="link" href="captures.html" title="Understanding Marked Sub-Expressions and Captures"> Understanding Marked Sub-Expressions
     and Captures</a>
 </h2></div></div></div>
 <p>
@@ -35,8 +35,8 @@
       accessed.
     </p>
 <a name="boost_regex.captures.marked_sub_expressions"></a><h5>
-<a name="id502881"></a>
-      <a href="captures.html#boost_regex.captures.marked_sub_expressions">Marked sub-expressions</a>
+<a name="id530356"></a>
+      <a class="link" href="captures.html#boost_regex.captures.marked_sub_expressions">Marked sub-expressions</a>
     </h5>
 <p>
       Every time a Perl regular expression contains a parenthesis group <code class="computeroutput"><span class="special">()</span></code>, it spits out an extra field, known as a
@@ -131,8 +131,8 @@
 </tbody>
 </table></div>
 <p>
-      In Boost.Regex all these are accessible via the <a href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a> class that gets filled
-      in when calling one of the regular expression matching algorithms ( <a href="ref/regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>, <a href="ref/regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>, or <a href="ref/regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a>). So given:
+      In Boost.Regex all these are accessible via the <a class="link" href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a> class that gets filled
+      in when calling one of the regular expression matching algorithms ( <a class="link" href="ref/regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>, <a class="link" href="ref/regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>, or <a class="link" href="ref/regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a>). So given:
     </p>
 <pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">IteratorType</span><span class="special">&gt;</span> <span class="identifier">m</span><span class="special">;</span>
 </pre>
@@ -208,18 +208,18 @@
 </tbody>
 </table></div>
 <p>
-      In Boost.Regex each sub-expression match is represented by a <a href="ref/sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a> object, this is basically
+      In Boost.Regex each sub-expression match is represented by a <a class="link" href="ref/sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a> object, this is basically
       just a pair of iterators denoting the start and end position of the sub-expression
       match, but there are some additional operators provided so that objects of
-      type <a href="ref/sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
+      type <a class="link" href="ref/sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
       behave a lot like a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span></code>: for example they are implicitly
       convertible to a <code class="computeroutput"><span class="identifier">basic_string</span></code>,
       they can be compared to a string, added to a string, or streamed out to an
       output stream.
     </p>
 <a name="boost_regex.captures.unmatched_sub_expressions"></a><h5>
-<a name="id503504"></a>
-      <a href="captures.html#boost_regex.captures.unmatched_sub_expressions">Unmatched Sub-Expressions</a>
+<a name="id530979"></a>
+      <a class="link" href="captures.html#boost_regex.captures.unmatched_sub_expressions">Unmatched Sub-Expressions</a>
     </h5>
 <p>
       When a regular expression match is found there is no need for all of the marked
@@ -231,8 +231,8 @@
       you can determine which sub-expressions matched by accessing the <code class="computeroutput"><span class="identifier">sub_match</span><span class="special">::</span><span class="identifier">matched</span></code> data member.
     </p>
 <a name="boost_regex.captures.repeated_captures"></a><h5>
-<a name="id503566"></a>
-      <a href="captures.html#boost_regex.captures.repeated_captures">Repeated Captures</a>
+<a name="id531042"></a>
+      <a class="link" href="captures.html#boost_regex.captures.repeated_captures">Repeated Captures</a>
     </h5>
 <p>
       When a marked sub-expression is repeated, then the sub-expression gets "captured"
