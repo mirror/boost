@@ -131,7 +131,7 @@ Suppose we have a template-class that requires an unsigned integral type with
 at least 16-bits of precision as a template argument, we can achieve this 
 using something like this:
 
-   #include <climits>
+   #include <limits>
    #include <boost/static_assert.hpp>
 
    template <class UnsignedInt>

@@ -5,7 +5,7 @@
 
 //  See http://www.boost.org for most recent version including documentation.
 
-#include <climits>
+#include <limits>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 
