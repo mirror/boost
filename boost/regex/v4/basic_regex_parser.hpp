@@ -111,9 +111,10 @@ void basic_regex_parser<charT, traits>::parse(const charT* p1, const charT* p2, 
    // empty strings are errors:
    if((p1 == p2) && 
       (
-         (l_flags & regbase::main_option_type) != regbase::perl_syntax_group)
+         ((l_flags & regbase::main_option_type) != regbase::perl_syntax_group)
          || (l_flags & regbase::no_empty_expressions)
       )
+     )
    {
       fail(regex_constants::error_empty, 0);
       return;
