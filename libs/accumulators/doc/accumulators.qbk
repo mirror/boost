@@ -2023,6 +2023,146 @@ Both `tag::pot_tail_mean<_left_or_right_>` and `tag::pot_tail_mean_prob<_left_or
 
 [endsect]
 
+[section:rolling_count rolling_count]
+
+The rolling count is the current number of elements in the rolling window. 
+
+[variablelist
+    [[Result Type] [``std::size_t``]]
+    [[Depends On] [`rolling_window_plus1`]]
+    [[Variants] [['none]]]
+    [[Initialization Parameters] [`tag::rolling_window::window_size`]]
+    [[Accumulator Parameters] [['none]]]
+    [[Extractor Parameters] [['none]]]
+    [[Accumulator Complexity] [O(1)]] 
+    [[Extractor Complexity] [O(1)]] 
+]
+
+[*Header]
+[def _ROLLING_COUNT_HPP_ [headerref boost/accumulators/statistics/rolling_count.hpp]]
+
+    #include <_ROLLING_COUNT_HPP_>
+
+[*Example]
+
+    accumulator_set<int, stats<tag::rolling_count> > acc(tag::rolling_window::window_size = 3);
+
+    BOOST_CHECK_EQUAL(0u, rolling_count(acc));
+
+    acc(1);
+    BOOST_CHECK_EQUAL(1u, rolling_count(acc));
+
+    acc(1);
+    BOOST_CHECK_EQUAL(2u, rolling_count(acc));
+
+    acc(1);
+    BOOST_CHECK_EQUAL(3u, rolling_count(acc));
+
+    acc(1);
+    BOOST_CHECK_EQUAL(3u, rolling_count(acc));
+
+    acc(1);
+    BOOST_CHECK_EQUAL(3u, rolling_count(acc));
+
+[*See also]
+
+* [classref boost::accumulators::impl::rolling_count_impl [^rolling_count_impl]]
+
+[endsect]
+
+[section:rolling_sum rolling_sum]
+
+The rolling sum is the sum of the last /N/ samples. 
+
+[variablelist
+    [[Result Type] [``_sample_type_``]]
+    [[Depends On] [`rolling_window_plus1`]]
+    [[Variants] [['none]]]
+    [[Initialization Parameters] [`tag::rolling_window::window_size`]]
+    [[Accumulator Parameters] [['none]]]
+    [[Extractor Parameters] [['none]]]
+    [[Accumulator Complexity] [O(1)]] 
+    [[Extractor Complexity] [O(1)]] 
+]
+
+[*Header]
+[def _ROLLING_SUM_HPP_ [headerref boost/accumulators/statistics/rolling_sum.hpp]]
+
+    #include <_ROLLING_SUM_HPP_>
+
+[*Example]
+
+    accumulator_set<int, stats<tag::rolling_sum> > acc(tag::rolling_window::window_size = 3);
+
+    BOOST_CHECK_EQUAL(0, rolling_sum(acc));
+
+    acc(1);
+    BOOST_CHECK_EQUAL(1, rolling_sum(acc));
+
+    acc(2);
+    BOOST_CHECK_EQUAL(3, rolling_sum(acc));
+
+    acc(3);
+    BOOST_CHECK_EQUAL(6, rolling_sum(acc));
+
+    acc(4);
+    BOOST_CHECK_EQUAL(9, rolling_sum(acc));
+
+    acc(5);
+    BOOST_CHECK_EQUAL(12, rolling_sum(acc));
+
+[*See also]
+
+* [classref boost::accumulators::impl::rolling_sum_impl [^rolling_sum_impl]]
+
+[endsect]
+
+[section:rolling_mean rolling_mean]
+
+The rolling mean is the mean over the last /N/ samples. It is computed by dividing
+the rolling sum by the rolling count.
+
+[variablelist
+    [[Result Type] [``
+                    numeric::functional::average<_sample_type_, std::size_t>::result_type
+                    ``]]
+    [[Depends On] [`rolling_sum` \n `rolling_count`]]
+    [[Variants] [['none]]]
+    [[Initialization Parameters] [`tag::rolling_window::window_size`]]
+    [[Accumulator Parameters] [['none]]]
+    [[Extractor Parameters] [['none]]]
+    [[Accumulator Complexity] [O(1)]] 
+    [[Extractor Complexity] [O(1)]] 
+]
+
+[*Header]
+[def _ROLLING_MEAN_HPP_ [headerref boost/accumulators/statistics/rolling_mean.hpp]]
+
+    #include <_ROLLING_MEAN_HPP_>
+
+[*Example]
+
+    accumulator_set<int, stats<tag::rolling_mean> > acc(tag::rolling_window::window_size = 5);
+    
+    acc(1);
+    acc(2);
+    acc(3);
+
+    BOOST_CHECK_CLOSE( rolling_mean(acc), 2.0, 1e-6 );
+
+    acc(4);
+    acc(5);
+    acc(6);
+    acc(7);
+
+    BOOST_CHECK_CLOSE( rolling_mean(acc), 5.0, 1e-6 );
+
+[*See also]
+
+* [classref boost::accumulators::impl::rolling_mean_impl [^rolling_mean_impl]]
+
+[endsect]
+
 [section:skewness skewness]
 
 The skewness of a sample distribution is defined as the ratio of the 3rd central moment and the [^3/2]-th power 
