@@ -77,9 +77,15 @@
 #      endif
 #    elif ( (__GNUC__ == 3 ) && ((__GNUC_MINOR__ == 0) || ((__GNUC_MINOR__ < 3) && defined(__APPLE_CC__))))
 #      define BOOST_TR1_STD_HEADER(name) <../g++-v3/name>
+#      ifndef BOOST_TR1_DISABLE_INCLUDE_NEXT
+#        define BOOST_TR1_DISABLE_INCLUDE_NEXT
+#      endif
 #    else
 #      if ( ((__GNUC__ == 4 ) || (__GNUC_MINOR__ >= 3)) && defined(__APPLE_CC__))
 #        define BOOST_TR1_STD_HEADER(name) <../c++/name>
+#        ifndef BOOST_TR1_DISABLE_INCLUDE_NEXT
+#          define BOOST_TR1_DISABLE_INCLUDE_NEXT
+#        endif
          /*
           *  Before version 3.4.0 the 0 patch level was not part of the include path:
           */
@@ -87,8 +93,14 @@
                                               (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || \
                                               (__GNUC__ > 3))
 #        define BOOST_TR1_STD_HEADER(name) <../__GNUC__.__GNUC_MINOR__.__GNUC_PATCHLEVEL__/name>
+#        ifndef BOOST_TR1_DISABLE_INCLUDE_NEXT
+#          define BOOST_TR1_DISABLE_INCLUDE_NEXT
+#        endif
 #      else
 #        define BOOST_TR1_STD_HEADER(name) <../__GNUC__.__GNUC_MINOR__/name>
+#        ifndef BOOST_TR1_DISABLE_INCLUDE_NEXT
+#          define BOOST_TR1_DISABLE_INCLUDE_NEXT
+#        endif
 #      endif
 #    endif
 
