@@ -105,7 +105,8 @@
 #   define BOOST_IS_ENUM(T) __is_enum(T)
 //  This one doesn't quite always do the right thing:
 //  #   define BOOST_IS_POLYMORPHIC(T) __is_polymorphic(T)
-#   define BOOST_ALIGNMENT_OF(T) __alignof(T)
+//  This one fails if the default alignment has been changed with /Zp:
+//  #   define BOOST_ALIGNMENT_OF(T) __alignof(T)
 
 #   define BOOST_HAS_TYPE_TRAITS_INTRINSICS
 #endif
