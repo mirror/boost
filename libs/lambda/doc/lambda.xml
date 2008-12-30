@@ -1908,7 +1908,7 @@ For example:
 int foo(int); int bar(int);
 ...
 int i;
-bind(foo, bind(bar, _1)(i);
+bind(foo, bind(bar, _1))(i);
 </programlisting>
 
 The last line makes the call <literal>foo(bar(i));</literal>
