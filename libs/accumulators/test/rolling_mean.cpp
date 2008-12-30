@@ -40,7 +40,7 @@ void test_stat()
     BOOST_CHECK_CLOSE(1.5, rolling_mean(acc), 1e-5);
 
     acc(3);
-    BOOST_CHECK_CLOSE(2, rolling_mean(acc), 1e-5);
+    BOOST_CHECK_CLOSE(2., rolling_mean(acc), 1e-5);
 
     acc(4);
     BOOST_CHECK_CLOSE(2.5, rolling_mean(acc), 1e-5);
