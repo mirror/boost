@@ -29,7 +29,7 @@
 #include <cstring>
 #include <cstdio>
 
-#if defined(BOOST_NO_STDC_NAMESPACE)
+#if defined(BOOST_NO_STDC_NAMESPACE) || defined(__NetBSD__)
 namespace std{
 #  ifndef BOOST_NO_SWPRINTF
       using ::swprintf;
