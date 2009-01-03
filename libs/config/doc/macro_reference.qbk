@@ -547,6 +547,9 @@ explicit conversion operators (`explicit operator T()`).
 [[`BOOST_NO_EXTERN_TEMPLATE`][The compiler does not support 
 explicit instantiation declarations for templates (`explicit template`).
 ]]
+[[`BOOST_NO_INITIALIZER_LISTS`][
+The C++ compiler does not support C++0x initializer lists.
+]]
 [[`BOOST_NO_LONG_LONG`][The compiler does not support `long long`.
 ]]                
 [[`BOOST_NO_RAW_LITERALS`][The compiler does not support

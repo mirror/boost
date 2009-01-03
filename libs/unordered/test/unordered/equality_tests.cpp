@@ -13,6 +13,10 @@ namespace equality_tests
 {
     struct mod_compare
     {
+        bool alt_hash_;
+
+        explicit mod_compare(bool alt_hash = false) : alt_hash_(alt_hash) {}
+
         bool operator()(int x, int y) const
         {
             return x % 1000 == y % 1000;
@@ -20,7 +24,7 @@ namespace equality_tests
 
         int operator()(int x) const
         {
-            return x % 250;
+            return alt_hash_ ? x % 250 : (x + 5) % 250;
         }
     };
 
@@ -136,6 +140,25 @@ namespace equality_tests
             (1), ==, (1001));
         UNORDERED_EQUALITY_MAP_TEST(
             ((1)(2))((1001)(1)), ==, ((1001)(2))((1)(1)));
+    }
+
+    // Test that equality still works when the two containers have
+    // different hash functions but the same equality predicate.
+
+    UNORDERED_AUTO_TEST(equality_different_hash_test)
+    {
+        typedef boost::unordered_set<int, mod_compare, mod_compare> set;
+        set set1(0, mod_compare(false), mod_compare(false));
+        set set2(0, mod_compare(true), mod_compare(true));
+        BOOST_CHECK(set1 == set2);
+        set1.insert(1); set2.insert(2);
+        BOOST_CHECK(set1 != set2);
+        set1.insert(2); set2.insert(1);
+        BOOST_CHECK(set1 == set2);
+        set1.insert(10); set2.insert(20);
+        BOOST_CHECK(set1 != set2);
+        set1.insert(20); set2.insert(10);
+        BOOST_CHECK(set1 == set2);
     }
 
 }

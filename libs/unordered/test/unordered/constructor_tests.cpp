@@ -288,6 +288,17 @@ UNORDERED_TEST(map_constructor_test,
     ((test_map)(test_multimap))
 )
 
+#if !defined(BOOST_NO_INITIALIZER_LISTS)
+
+UNORDERED_AUTO_TEST(test_initializer_list) {
+    std::cerr<<"Initializer List Tests\n";
+    boost::unordered_set<int> x1 = { 2, 10, 45, -5 };
+    BOOST_CHECK(x1.find(10) != x1.end());
+    BOOST_CHECK(x1.find(46) == x1.end());
+}
+
+#endif
+
 }
 
 RUN_TESTS()

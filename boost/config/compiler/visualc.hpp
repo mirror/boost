@@ -88,6 +88,10 @@
 #  define BOOST_NO_ADL_BARRIER
 #endif
 
+#if _MSC_VER <= 1500  || !defined(BOOST_STRICT_CONFIG) // 1500 == VC++ 9.0
+#  define BOOST_NO_INITIALIZER_LISTS
+#endif
+
 #ifndef _NATIVE_WCHAR_T_DEFINED
 #  define BOOST_NO_INTRINSIC_WCHAR_T
 #endif
