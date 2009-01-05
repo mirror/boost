@@ -194,9 +194,9 @@ template<>
 struct determine_extra_equations_skip_zeros_impl<true, false> {
     template<class RowsBegin, int RemainingRows, int CurrentColumn, int TotalColumns, class Result>
     struct apply {
-        typedef typename RowsBegin::item current_row;
+        typedef typename RowsBegin::next::item next_row;
         typedef typename determine_extra_equations_skip_zeros_impl<
-            current_row::item::Numerator == 0,
+            next_row::item::Numerator == 0,
             RemainingRows == 2  // the next one will be the last.
         >::template apply<
             typename RowsBegin::next,
@@ -213,7 +213,7 @@ struct determine_extra_equations_skip_zeros_impl<true, false> {
 // all the elements in this column are zero.
 template<>
 struct determine_extra_equations_skip_zeros_impl<true, true> {
-    template<class RowsBegin, int RemainingRows, int CurrentColumn, int TotalColumns, class MatrixWithFirstColumnStripped, class Result>
+    template<class RowsBegin, int RemainingRows, int CurrentColumn, int TotalColumns, class Result>
     struct apply {
         typedef list<typename RowsBegin::item::next, dimensionless_type> next_equations;
         typedef list<typename create_row_of_identity<CurrentColumn, TotalColumns>::type, Result> type;
