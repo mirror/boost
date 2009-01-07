@@ -226,7 +226,7 @@ namespace boost {
         
         template <typename T>
         void destroy(T* x) {
-        	x->~T();
+            x->~T();
         }
     }
 }
