@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Options for Perl Regular Expressions</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../index.html" title="Boost.Regex">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../index.html" title="Boost.Regex">
 <link rel="up" href="../syntax_option_type.html" title="syntax_option_type">
 <link rel="prev" href="syntax_option_type_overview.html" title="Overview of syntax_option_type">
 <link rel="next" href="syntax_option_type_extended.html" title="Options for POSIX Extended Regular Expressions">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_regex.ref.syntax_option_type.syntax_option_type_perl"></a><a href="syntax_option_type_perl.html" title="Options for Perl Regular Expressions">
+<a name="boost_regex.ref.syntax_option_type.syntax_option_type_perl"></a><a class="link" href="syntax_option_type_perl.html" title="Options for Perl Regular Expressions">
         Options for Perl Regular Expressions</a>
 </h4></div></div></div>
 <p>
@@ -73,7 +73,7 @@
                   part 10, RegExp (Regular Expression) Objects (FWD.1).
                 </p>
                 <p>
-                  This is functionally identical to the <a href="../../syntax/perl_syntax.html" title="Perl Regular Expression Syntax">Perl
+                  This is functionally identical to the <a class="link" href="../../syntax/perl_syntax.html" title="Perl Regular Expression Syntax">Perl
                   regular expression syntax</a>.
                 </p>
                 <p>
@@ -211,7 +211,7 @@
                 <p>
                   Specifies that when a regular expression is matched against a character
                   container sequence, then no sub-expression matches are to be stored
-                  in the supplied <a href="../match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a> structure.
+                  in the supplied <a class="link" href="../match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a> structure.
                 </p>
                 </td>
 </tr>
@@ -286,7 +286,7 @@
                 </td>
 <td>
                 <p>
-                  Prevents <a href="../basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> from throwing
+                  Prevents <a class="link" href="../basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> from throwing
                   an exception when an invalid expression is encountered.
                 </p>
                 </td>
@@ -368,6 +368,43 @@
                 <p>
                   Turns on the perl x-modifier: causes unescaped whitespace in the
                   expression to be ignored.
+                </p>
+                </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  no_empty_expressions
+                </p>
+                </td>
+<td>
+                <p>
+                  No
+                </p>
+                </td>
+<td>
+                <p>
+                  When set then empty expressions/alternatives are prohibited.
+                </p>
+                </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  save_subexpression_location
+                </p>
+                </td>
+<td>
+                <p>
+                  No
+                </p>
+                </td>
+<td>
+                <p>
+                  When set then the locations of individual sub-expressions within
+                  the <span class="emphasis"><em>original regular expression string</em></span> can
+                  be accessed via the <a class="link" href="../basic_regex.html#boost_regex.basic_regex.subexpression"><code class="computeroutput"><span class="identifier">subexpression</span><span class="special">()</span></code></a>
+                  member function of <code class="computeroutput"><span class="identifier">basic_regex</span></code>.
                 </p>
                 </td>
 </tr>

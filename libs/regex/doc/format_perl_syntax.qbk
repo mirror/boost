@@ -23,6 +23,7 @@ should be sent to output as follows:
 [[$'][Outputs all the text following the end of the current match.]]
 [[$$][Outputs a literal '$']]
 [[$n][Outputs what matched the n'th sub-expression.]]
+[[${n}][Outputs what matched the n'th sub-expression.]]
 ]
 
 Any $-placeholder sequence not listed above, results in '$' being treated 

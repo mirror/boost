@@ -29,11 +29,16 @@ void test_alt()
    TEST_REGEX_SEARCH("a(b|c)", perl, "ad", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("(a|b|c)", perl, "c", match_default, make_array(0, 1, 0, 1, -2, -2));
    TEST_REGEX_SEARCH("(a|(b)|.)", perl, "b", match_default, make_array(0, 1, 0, 1, 0, 1, -2, -2));
-   TEST_INVALID_REGEX("|c", perl);
-   TEST_INVALID_REGEX("c|", perl);
-   TEST_INVALID_REGEX("(|)", perl);
-   TEST_INVALID_REGEX("(a|)", perl);
-   TEST_INVALID_REGEX("(|a)", perl);
+   TEST_INVALID_REGEX("|c", perl|no_empty_expressions);
+   TEST_REGEX_SEARCH("|c", perl, " c", match_default, make_array(0, 0, -2, 1, 1, -2, 1, 2, -2, 2, 2, -2, -2));
+   TEST_INVALID_REGEX("c|", perl|no_empty_expressions);
+   TEST_REGEX_SEARCH("c|", perl, " c", match_default, make_array(0, 0, -2, 1, 2, -2, 2, 2, -2, -2));
+   TEST_INVALID_REGEX("(|)", perl|no_empty_expressions);
+   TEST_REGEX_SEARCH("(|)", perl, " c", match_default, make_array(0, 0, 0, 0, -2, 1, 1, 1, 1, -2, 2, 2, 2, 2, -2, -2));
+   TEST_INVALID_REGEX("(a|)", perl|no_empty_expressions);
+   TEST_REGEX_SEARCH("(a|)", perl, " a", match_default, make_array(0, 0, 0, 0, -2, 1, 2, 1, 2, -2, 2, 2, 2, 2, -2, -2));
+   TEST_INVALID_REGEX("(|a)", perl|no_empty_expressions);
+   TEST_REGEX_SEARCH("(|a)", perl, " a", match_default, make_array(0, 0, 0, 0, -2, 1, 1, 1, 1, -2, 1, 2, 1, 2, -2, 2, 2, 2, 2, -2, -2));
    TEST_REGEX_SEARCH("a\\|", perl, "a|", match_default, make_array(0, 2, -2, -2));
 
    TEST_REGEX_SEARCH("a|", basic, "a|", match_default, make_array(0, 2, -2, -2));

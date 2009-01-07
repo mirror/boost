@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>FAQ</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../index.html" title="Boost.Regex">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../background_information.html" title="Background Information">
 <link rel="prev" href="futher.html" title="References and Further Information">
 <link rel="next" href="performance.html" title="Performance">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_regex.background_information.faq"></a><a href="faq.html" title="FAQ"> FAQ</a>
+<a name="boost_regex.background_information.faq"></a><a class="link" href="faq.html" title="FAQ"> FAQ</a>
 </h3></div></div></div>
 <p>
         <span class="bold"><strong>Q.</strong></span> I can't get regex++ to work with escape
@@ -115,10 +115,10 @@
         throw specifications, others support them but with reduced efficiency. Throw
         specifications may be added at a later date as compilers begin to handle
         this better. The library should throw only three types of exception: [boost::regex_error]
-        can be thrown by <a href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> when compiling a regular
+        can be thrown by <a class="link" href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> when compiling a regular
         expression, <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></code> can be thrown when a call
         to <code class="computeroutput"><span class="identifier">basic_regex</span><span class="special">::</span><span class="identifier">imbue</span></code> tries to open a message catalogue
-        that doesn't exist, or when a call to <a href="../ref/regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a> or <a href="../ref/regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a> results in an "everlasting"
+        that doesn't exist, or when a call to <a class="link" href="../ref/regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a> or <a class="link" href="../ref/regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a> results in an "everlasting"
         search, or when a call to <code class="computeroutput"><span class="identifier">RegEx</span><span class="special">::</span><span class="identifier">GrepFiles</span></code>
         or <code class="computeroutput"><span class="identifier">RegEx</span><span class="special">::</span><span class="identifier">FindFiles</span></code> tries to open a file that cannot
         be opened, finally <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">bad_alloc</span></code> can be thrown by just about any

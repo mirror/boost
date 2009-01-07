@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Perl Regular Expression Syntax</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../index.html" title="Boost.Regex">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../syntax.html" title="Regular Expression Syntax">
 <link rel="prev" href="../syntax.html" title="Regular Expression Syntax">
 <link rel="next" href="basic_extended.html" title="POSIX Extended Regular Expression Syntax">
@@ -24,18 +24,18 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_regex.syntax.perl_syntax"></a><a href="perl_syntax.html" title="Perl Regular Expression Syntax"> Perl Regular Expression
+<a name="boost_regex.syntax.perl_syntax"></a><a class="link" href="perl_syntax.html" title="Perl Regular Expression Syntax"> Perl Regular Expression
       Syntax</a>
 </h3></div></div></div>
 <a name="boost_regex.syntax.perl_syntax.synopsis"></a><h4>
-<a name="id507588"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.synopsis">Synopsis</a>
+<a name="id535061"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.synopsis">Synopsis</a>
       </h4>
 <p>
         The Perl regular expression syntax is based on that used by the programming
         language Perl . Perl regular expressions are the default behavior in Boost.Regex
         or you can pass the flag <code class="computeroutput"><span class="identifier">perl</span></code>
-        to the <a href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>
+        to the <a class="link" href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>
         constructor, for example:
       </p>
 <pre class="programlisting"><span class="comment">// e1 is a case sensitive Perl regular expression: 
@@ -45,8 +45,8 @@
 </span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span> <span class="identifier">e2</span><span class="special">(</span><span class="identifier">my_expression</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">::</span><span class="identifier">perl</span><span class="special">|</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">::</span><span class="identifier">icase</span><span class="special">);</span>
 </pre>
 <a name="boost_regex.syntax.perl_syntax.perl_regular_expression_syntax"></a><h4>
-<a name="id507810"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.perl_regular_expression_syntax">Perl
+<a name="id535282"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.perl_regular_expression_syntax">Perl
         Regular Expression Syntax</a>
       </h4>
 <p>
@@ -55,8 +55,8 @@
       </p>
 <pre class="programlisting">.[{()\*+?|^$</pre>
 <a name="boost_regex.syntax.perl_syntax.wildcard"></a><h5>
-<a name="id507848"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.wildcard">Wildcard</a>
+<a name="id535320"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.wildcard">Wildcard</a>
       </h5>
 <p>
         The single character '.' when used outside of a character set will match
@@ -64,19 +64,19 @@
       </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-          The NULL character when the <a href="../ref/match_flag_type.html" title="match_flag_type">flag
+          The NULL character when the <a class="link" href="../ref/match_flag_type.html" title="match_flag_type">flag
           <code class="computeroutput"><span class="identifier">match_not_dot_null</span></code></a>
           is passed to the matching algorithms.
         </li>
 <li>
-          The newline character when the <a href="../ref/match_flag_type.html" title="match_flag_type">flag
+          The newline character when the <a class="link" href="../ref/match_flag_type.html" title="match_flag_type">flag
           <code class="computeroutput"><span class="identifier">match_not_dot_newline</span></code></a>
           is passed to the matching algorithms.
         </li>
 </ul></div>
 <a name="boost_regex.syntax.perl_syntax.anchors"></a><h5>
-<a name="id507929"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.anchors">Anchors</a>
+<a name="id535401"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.anchors">Anchors</a>
       </h5>
 <p>
         A '^' character shall match the start of a line.
@@ -85,8 +85,8 @@
         A '$' character shall match the end of a line.
       </p>
 <a name="boost_regex.syntax.perl_syntax.marked_sub_expressions"></a><h5>
-<a name="id507962"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.marked_sub_expressions">Marked
+<a name="id535435"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.marked_sub_expressions">Marked
         sub-expressions</a>
       </h5>
 <p>
@@ -97,8 +97,8 @@
         to by a back-reference.
       </p>
 <a name="boost_regex.syntax.perl_syntax.non_marking_grouping"></a><h5>
-<a name="id508018"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.non_marking_grouping">Non-marking
+<a name="id535490"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.non_marking_grouping">Non-marking
         grouping</a>
       </h5>
 <p>
@@ -111,8 +111,8 @@
         out any separate sub-expressions.
       </p>
 <a name="boost_regex.syntax.perl_syntax.repeats"></a><h5>
-<a name="id508106"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.repeats">Repeats</a>
+<a name="id535579"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.repeats">Repeats</a>
       </h5>
 <p>
         Any atom (a single character, a marked sub-expression, or a character class)
@@ -197,8 +197,8 @@
         operator to be applied to.
       </p>
 <a name="boost_regex.syntax.perl_syntax.non_greedy_repeats"></a><h5>
-<a name="id508580"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.non_greedy_repeats">Non greedy
+<a name="id536052"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.non_greedy_repeats">Non greedy
         repeats</a>
       </h5>
 <p>
@@ -228,8 +228,8 @@
         input as possible.
       </p>
 <a name="boost_regex.syntax.perl_syntax.back_references"></a><h5>
-<a name="id508725"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.back_references">Back references</a>
+<a name="id536197"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.back_references">Back references</a>
       </h5>
 <p>
         An escape character followed by a digit <span class="emphasis"><em>n</em></span>, where <span class="emphasis"><em>n</em></span>
@@ -248,8 +248,8 @@
 <pre class="programlisting"><span class="identifier">aaabba</span>
 </pre>
 <a name="boost_regex.syntax.perl_syntax.alternation"></a><h5>
-<a name="id508808"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.alternation">Alternation</a>
+<a name="id536280"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.alternation">Alternation</a>
       </h5>
 <p>
         The <code class="computeroutput"><span class="special">|</span></code> operator will match either
@@ -277,8 +277,8 @@
         <code class="computeroutput"><span class="special">(?:</span><span class="identifier">abc</span><span class="special">)??</span></code> has exactly the same effect.
       </p>
 <a name="boost_regex.syntax.perl_syntax.character_sets"></a><h5>
-<a name="id508996"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.character_sets">Character sets</a>
+<a name="id536469"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.character_sets">Character sets</a>
       </h5>
 <p>
         A character set is a bracket-expression starting with <code class="computeroutput"><span class="special">[</span></code>
@@ -290,16 +290,16 @@
         A bracket expression may contain any combination of the following:
       </p>
 <a name="boost_regex.syntax.perl_syntax.single_characters"></a><h6>
-<a name="id509055"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.single_characters">Single characters</a>
+<a name="id536527"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.single_characters">Single characters</a>
       </h6>
 <p>
         For example <code class="computeroutput"><span class="special">[</span><span class="identifier">abc</span><span class="special">]</span></code>, will match any of the characters 'a', 'b',
         or 'c'.
       </p>
 <a name="boost_regex.syntax.perl_syntax.character_ranges"></a><h6>
-<a name="id509105"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.character_ranges">Character
+<a name="id536578"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.character_ranges">Character
         ranges</a>
       </h6>
 <p>
@@ -307,12 +307,12 @@
         will match any single character in the range 'a' to 'c'. By default, for
         Perl regular expressions, a character x is within the range y to z, if the
         code point of the character lies within the codepoints of the endpoints of
-        the range. Alternatively, if you set the <a href="../ref/syntax_option_type/syntax_option_type_perl.html" title="Options for Perl Regular Expressions"><code class="computeroutput"><span class="identifier">collate</span></code> flag</a> when constructing the
+        the range. Alternatively, if you set the <a class="link" href="../ref/syntax_option_type/syntax_option_type_perl.html" title="Options for Perl Regular Expressions"><code class="computeroutput"><span class="identifier">collate</span></code> flag</a> when constructing the
         regular expression, then ranges are locale sensitive.
       </p>
 <a name="boost_regex.syntax.perl_syntax.negation"></a><h6>
-<a name="id509186"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.negation">Negation</a>
+<a name="id536658"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.negation">Negation</a>
       </h6>
 <p>
         If the bracket-expression begins with the ^ character, then it matches the
@@ -320,18 +320,18 @@
         range <code class="computeroutput"><span class="identifier">a</span><span class="special">-</span><span class="identifier">c</span></code>.
       </p>
 <a name="boost_regex.syntax.perl_syntax.character_classes"></a><h6>
-<a name="id509268"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.character_classes">Character
+<a name="id536740"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.character_classes">Character
         classes</a>
       </h6>
 <p>
         An expression of the form <code class="computeroutput"><span class="special">[[:</span><span class="identifier">name</span><span class="special">:]]</span></code>
         matches the named character class "name", for example <code class="computeroutput"><span class="special">[[:</span><span class="identifier">lower</span><span class="special">:]]</span></code> matches any lower case character. See
-        <a href="character_classes.html" title="Character Class Names">character class names</a>.
+        <a class="link" href="character_classes.html" title="Character Class Names">character class names</a>.
       </p>
 <a name="boost_regex.syntax.perl_syntax.collating_elements"></a><h6>
-<a name="id509351"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.collating_elements">Collating
+<a name="id536823"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.collating_elements">Collating
         Elements</a>
       </h6>
 <p>
@@ -345,7 +345,7 @@
         a single collating element in the current locale.
       </p>
 <p>
-        As an extension, a collating element may also be specified via it's <a href="collating_names.html" title="Collating Names">symbolic name</a>, for example:
+        As an extension, a collating element may also be specified via it's <a class="link" href="collating_names.html" title="Collating Names">symbolic name</a>, for example:
       </p>
 <pre class="programlisting"><span class="special">[[.</span><span class="identifier">NUL</span><span class="special">.]]</span>
 </pre>
@@ -354,15 +354,15 @@
         character.
       </p>
 <a name="boost_regex.syntax.perl_syntax.equivalence_classes"></a><h6>
-<a name="id509500"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.equivalence_classes">Equivalence
+<a name="id536972"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.equivalence_classes">Equivalence
         classes</a>
       </h6>
 <p>
         An expression of the form <code class="computeroutput"><span class="special">[[=</span><span class="identifier">col</span><span class="special">=]]</span></code>,
         matches any character or collating element whose primary sort key is the
         same as that for collating element <span class="emphasis"><em>col</em></span>, as with collating
-        elements the name <span class="emphasis"><em>col</em></span> may be a <a href="collating_names.html" title="Collating Names">symbolic
+        elements the name <span class="emphasis"><em>col</em></span> may be a <a class="link" href="collating_names.html" title="Collating Names">symbolic
         name</a>. A primary sort key is one that ignores case, accentation, or
         locale-specific tailorings; so for example <code class="computeroutput"><span class="special">[[=</span><span class="identifier">a</span><span class="special">=]]</span></code> matches
         any of the characters: a, À, Á, Â, Ã, Ä, Å, A, à, á, â, ã, ä and å. Unfortunately implementation
@@ -371,8 +371,8 @@
         or even all locales on one platform.
       </p>
 <a name="boost_regex.syntax.perl_syntax.escaped_characters"></a><h6>
-<a name="id509603"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.escaped_characters">Escaped
+<a name="id537075"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.escaped_characters">Escaped
         Characters</a>
       </h6>
 <p>
@@ -383,16 +383,16 @@
         is <span class="emphasis"><em>not</em></span> a "word" character.
       </p>
 <a name="boost_regex.syntax.perl_syntax.combinations"></a><h6>
-<a name="id509709"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.combinations">Combinations</a>
+<a name="id537181"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.combinations">Combinations</a>
       </h6>
 <p>
         All of the above can be combined in one character set declaration, for example:
         <code class="computeroutput"><span class="special">[[:</span><span class="identifier">digit</span><span class="special">:]</span><span class="identifier">a</span><span class="special">-</span><span class="identifier">c</span><span class="special">[.</span><span class="identifier">NUL</span><span class="special">.]]</span></code>.
       </p>
 <a name="boost_regex.syntax.perl_syntax.escapes"></a><h5>
-<a name="id509787"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.escapes">Escapes</a>
+<a name="id537259"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.escapes">Escapes</a>
       </h5>
 <p>
         Any special character preceded by an escape shall match itself.
@@ -576,7 +576,7 @@
               </td>
 <td>
               <p>
-                Matches the single character which has the <a href="collating_names.html" title="Collating Names">symbolic
+                Matches the single character which has the <a class="link" href="collating_names.html" title="Collating Names">symbolic
                 name</a> <span class="emphasis"><em>name</em></span>. For example <code class="computeroutput"><span class="special">\</span><span class="identifier">N</span><span class="special">{</span><span class="identifier">newline</span><span class="special">}</span></code> matches the single character \n.
               </p>
               </td>
@@ -584,8 +584,8 @@
 </tbody>
 </table></div>
 <a name="boost_regex.syntax.perl_syntax._quot_single_character_quot__character_classes_"></a><h6>
-<a name="id510500"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax._quot_single_character_quot__character_classes_">"Single
+<a name="id537972"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax._quot_single_character_quot__character_classes_">"Single
         character" character classes:</a>
       </h6>
 <p>
@@ -738,13 +738,13 @@
 </tbody>
 </table></div>
 <a name="boost_regex.syntax.perl_syntax.character_properties"></a><h6>
-<a name="id511132"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.character_properties">Character
+<a name="id538604"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.character_properties">Character
         Properties</a>
       </h6>
 <p>
         The character property names in the following table are all equivalent to
-        the <a href="character_classes.html" title="Character Class Names">names used in character
+        the <a class="link" href="character_classes.html" title="Character Class Names">names used in character
         classes</a>.
       </p>
 <div class="informaltable"><table class="table">
@@ -846,8 +846,8 @@
         matches any "digit" character, as does <code class="computeroutput"><span class="special">\</span><span class="identifier">p</span><span class="special">{</span><span class="identifier">digit</span><span class="special">}</span></code>.
       </p>
 <a name="boost_regex.syntax.perl_syntax.word_boundaries"></a><h6>
-<a name="id511541"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.word_boundaries">Word Boundaries</a>
+<a name="id539013"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.word_boundaries">Word Boundaries</a>
       </h6>
 <p>
         The following escape sequences match the boundaries of words:
@@ -868,8 +868,8 @@
         Matches only when not at a word boundary.
       </p>
 <a name="boost_regex.syntax.perl_syntax.buffer_boundaries"></a><h6>
-<a name="id511643"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.buffer_boundaries">Buffer boundaries</a>
+<a name="id539115"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.buffer_boundaries">Buffer boundaries</a>
       </h6>
 <p>
         The following match only at buffer boundaries: a "buffer" in this
@@ -893,8 +893,8 @@
         to the regular expression <code class="computeroutput"><span class="special">\</span><span class="identifier">n</span><span class="special">*\</span><span class="identifier">z</span></code>
       </p>
 <a name="boost_regex.syntax.perl_syntax.continuation_escape"></a><h6>
-<a name="id511726"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.continuation_escape">Continuation
+<a name="id539198"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.continuation_escape">Continuation
         Escape</a>
       </h6>
 <p>
@@ -905,8 +905,8 @@
         match to start where the last one ended.
       </p>
 <a name="boost_regex.syntax.perl_syntax.quoting_escape"></a><h6>
-<a name="id511776"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.quoting_escape">Quoting escape</a>
+<a name="id539248"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.quoting_escape">Quoting escape</a>
       </h6>
 <p>
         The escape sequence <code class="computeroutput"><span class="special">\</span><span class="identifier">Q</span></code>
@@ -918,8 +918,8 @@
 <span class="special">\*+</span><span class="identifier">aaa</span>
 </pre>
 <a name="boost_regex.syntax.perl_syntax.unicode_escapes"></a><h6>
-<a name="id511879"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.unicode_escapes">Unicode escapes</a>
+<a name="id539354"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.unicode_escapes">Unicode escapes</a>
       </h6>
 <p>
         <code class="computeroutput"><span class="special">\</span><span class="identifier">C</span></code>
@@ -929,8 +929,8 @@
         combining characters.
       </p>
 <a name="boost_regex.syntax.perl_syntax.any_other_escape"></a><h6>
-<a name="id511943"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.any_other_escape">Any other
+<a name="id539418"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.any_other_escape">Any other
         escape</a>
       </h6>
 <p>
@@ -938,8 +938,8 @@
         \@ matches a literal '@'.
       </p>
 <a name="boost_regex.syntax.perl_syntax.perl_extended_patterns"></a><h5>
-<a name="id511972"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.perl_extended_patterns">Perl
+<a name="id539447"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.perl_extended_patterns">Perl
         Extended Patterns</a>
       </h5>
 <p>
@@ -947,8 +947,8 @@
         <code class="computeroutput"><span class="special">(?</span></code>.
       </p>
 <a name="boost_regex.syntax.perl_syntax.comments"></a><h6>
-<a name="id512014"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.comments">Comments</a>
+<a name="id539489"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.comments">Comments</a>
       </h6>
 <p>
         <code class="computeroutput"><span class="special">(?</span># <span class="special">...</span>
@@ -956,8 +956,8 @@
         are ignored.
       </p>
 <a name="boost_regex.syntax.perl_syntax.modifiers"></a><h6>
-<a name="id512066"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.modifiers">Modifiers</a>
+<a name="id539542"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.modifiers">Modifiers</a>
       </h6>
 <p>
         <code class="computeroutput"><span class="special">(?</span><span class="identifier">imsx</span><span class="special">-</span><span class="identifier">imsx</span> <span class="special">...</span> <span class="special">)</span></code> alters
@@ -971,8 +971,8 @@
         applies the specified modifiers to pattern only.
       </p>
 <a name="boost_regex.syntax.perl_syntax.non_marking_groups"></a><h6>
-<a name="id512193"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.non_marking_groups">Non-marking
+<a name="id539669"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.non_marking_groups">Non-marking
         groups</a>
       </h6>
 <p>
@@ -980,8 +980,8 @@
         an additional sub-expression.
       </p>
 <a name="boost_regex.syntax.perl_syntax.lookahead"></a><h6>
-<a name="id512244"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.lookahead">Lookahead</a>
+<a name="id539720"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.lookahead">Lookahead</a>
       </h6>
 <p>
         <code class="computeroutput"><span class="special">(?=</span><span class="identifier">pattern</span><span class="special">)</span></code> consumes zero characters, only if pattern
@@ -1003,8 +1003,8 @@
         could be used to validate the password.
       </p>
 <a name="boost_regex.syntax.perl_syntax.lookbehind"></a><h6>
-<a name="id512386"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.lookbehind">Lookbehind</a>
+<a name="id539861"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.lookbehind">Lookbehind</a>
       </h6>
 <p>
         <code class="computeroutput"><span class="special">(?&lt;=</span><span class="identifier">pattern</span><span class="special">)</span></code> consumes zero characters, only if pattern
@@ -1017,8 +1017,8 @@
         (pattern must be of fixed length).
       </p>
 <a name="boost_regex.syntax.perl_syntax.independent_sub_expressions"></a><h6>
-<a name="id512464"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.independent_sub_expressions">Independent
+<a name="id539939"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.independent_sub_expressions">Independent
         sub-expressions</a>
       </h6>
 <p>
@@ -1030,8 +1030,8 @@
         no match is found at all.
       </p>
 <a name="boost_regex.syntax.perl_syntax.conditional_expressions"></a><h6>
-<a name="id512528"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.conditional_expressions">Conditional
+<a name="id540003"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.conditional_expressions">Conditional
         Expressions</a>
       </h6>
 <p>
@@ -1050,8 +1050,8 @@
         sub-expression has been matched).
       </p>
 <a name="boost_regex.syntax.perl_syntax.operator_precedence"></a><h5>
-<a name="id512696"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.operator_precedence">Operator
+<a name="id540172"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.operator_precedence">Operator
         precedence</a>
       </h5>
 <p>
@@ -1086,8 +1086,8 @@
         </li>
 </ol></div>
 <a name="boost_regex.syntax.perl_syntax.what_gets_matched"></a><h4>
-<a name="id512875"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.what_gets_matched">What gets
+<a name="id540350"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.what_gets_matched">What gets
         matched</a>
       </h4>
 <p>
@@ -1099,7 +1099,7 @@
         Alternatively:
       </p>
 <p>
-        The best match found is the <a href="leftmost_longest_rule.html" title="The Leftmost Longest Rule">leftmost
+        The best match found is the <a class="link" href="leftmost_longest_rule.html" title="The Leftmost Longest Rule">leftmost
         match</a>, with individual elements matched as follows;
       </p>
 <div class="informaltable"><table class="table">
@@ -1271,20 +1271,20 @@
 </tbody>
 </table></div>
 <a name="boost_regex.syntax.perl_syntax.variations"></a><h4>
-<a name="id513789"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.variations">Variations</a>
+<a name="id541265"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.variations">Variations</a>
       </h4>
 <p>
-        The <a href="../ref/syntax_option_type/syntax_option_type_perl.html" title="Options for Perl Regular Expressions">options
+        The <a class="link" href="../ref/syntax_option_type/syntax_option_type_perl.html" title="Options for Perl Regular Expressions">options
         <code class="computeroutput"><span class="identifier">normal</span></code>, <code class="computeroutput"><span class="identifier">ECMAScript</span></code>,
         <code class="computeroutput"><span class="identifier">JavaScript</span></code> and <code class="computeroutput"><span class="identifier">JScript</span></code></a> are all synonyms for <code class="computeroutput"><span class="identifier">perl</span></code>.
       </p>
 <a name="boost_regex.syntax.perl_syntax.options"></a><h4>
-<a name="id513884"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.options">Options</a>
+<a name="id541360"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.options">Options</a>
       </h4>
 <p>
-        There are a <a href="../ref/syntax_option_type/syntax_option_type_perl.html" title="Options for Perl Regular Expressions">variety
+        There are a <a class="link" href="../ref/syntax_option_type/syntax_option_type_perl.html" title="Options for Perl Regular Expressions">variety
         of flags</a> that may be combined with the <code class="computeroutput"><span class="identifier">perl</span></code>
         option when constructing the regular expression, in particular note that
         the <code class="computeroutput"><span class="identifier">newline_alt</span></code> option alters
@@ -1293,20 +1293,20 @@
         sensitivity are to be applied.
       </p>
 <a name="boost_regex.syntax.perl_syntax.pattern_modifiers"></a><h4>
-<a name="id513985"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.pattern_modifiers">Pattern
+<a name="id541461"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.pattern_modifiers">Pattern
         Modifiers</a>
       </h4>
 <p>
         The perl <code class="computeroutput"><span class="identifier">smix</span></code> modifiers can
         either be applied using a <code class="computeroutput"><span class="special">(?</span><span class="identifier">smix</span><span class="special">-</span><span class="identifier">smix</span><span class="special">)</span></code> prefix to the regular expression, or with
-        one of the <a href="../ref/syntax_option_type/syntax_option_type_perl.html" title="Options for Perl Regular Expressions">regex-compile
+        one of the <a class="link" href="../ref/syntax_option_type/syntax_option_type_perl.html" title="Options for Perl Regular Expressions">regex-compile
         time flags <code class="computeroutput"><span class="identifier">no_mod_m</span></code>, <code class="computeroutput"><span class="identifier">mod_x</span></code>, <code class="computeroutput"><span class="identifier">mod_s</span></code>,
         and <code class="computeroutput"><span class="identifier">no_mod_s</span></code></a>.
       </p>
 <a name="boost_regex.syntax.perl_syntax.references"></a><h4>
-<a name="id514112"></a>
-        <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.references">References</a>
+<a name="id541588"></a>
+        <a class="link" href="perl_syntax.html#boost_regex.syntax.perl_syntax.references">References</a>
       </h4>
 <p>
         <a href="http://perldoc.perl.org/perlre.html" target="_top">Perl 5.8</a>.

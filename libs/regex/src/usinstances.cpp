@@ -22,7 +22,7 @@
 #include <memory>
 #include <string>
 
-#if defined(_DLL_CPPLIB) && !defined(_M_CEE_PURE) \
+#if defined(_DLL_CPPLIB) && !defined(_M_CEE_PURE) && defined(_NATIVE_WCHAR_T_DEFINED) \
    && !(defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION) || defined(__STD_RWCOMPILER_H__) || defined(_RWSTD_VER))
 //
 // This is a horrible workaround, but without declaring these symbols extern we get

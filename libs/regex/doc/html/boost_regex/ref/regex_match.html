@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>regex_match</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../index.html" title="Boost.Regex">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../ref.html" title="Reference">
 <link rel="prev" href="sub_match.html" title="sub_match">
 <link rel="next" href="regex_search.html" title="regex_search">
@@ -24,12 +24,12 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_regex.ref.regex_match"></a><a href="regex_match.html" title="regex_match"> regex_match</a>
+<a name="boost_regex.ref.regex_match"></a><a class="link" href="regex_match.html" title="regex_match"> regex_match</a>
 </h3></div></div></div>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> 
 </pre>
 <p>
-        The algorithm <a href="regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>
+        The algorithm <a class="link" href="regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>
         determines whether a given regular expression matches <span class="bold"><strong>all</strong></span>
         of a given character sequence denoted by a pair of bidirectional-iterators,
         the algorithm is defined as follows, the main use of this function is data
@@ -42,8 +42,8 @@
 </tr>
 <tr><td align="left" valign="top"><p>
           Note that the result is true only if the expression matches the <span class="bold"><strong>whole</strong></span> of the input sequence. If you want to search
-          for an expression somewhere within the sequence then use <a href="regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>. If you want to match
-          a prefix of the character string then use <a href="regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a> with the flag match_continuous
+          for an expression somewhere within the sequence then use <a class="link" href="regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>. If you want to match
+          a prefix of the character string then use <a class="link" href="regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a> with the flag match_continuous
           set.
         </p></td></tr>
 </table></div>
@@ -80,8 +80,8 @@
                  <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <a name="boost_regex.ref.regex_match.description"></a><h5>
-<a name="id573882"></a>
-        <a href="regex_match.html#boost_regex.ref.regex_match.description">Description</a>
+<a name="id601653"></a>
+        <a class="link" href="regex_match.html#boost_regex.ref.regex_match.description">Description</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">BidirectionalIterator</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">BidirectionalIterator</span> <span class="identifier">last</span><span class="special">,</span>
@@ -97,7 +97,7 @@
         <span class="bold"><strong>Effects</strong></span>: Determines whether there is an
         exact match between the regular expression <span class="emphasis"><em>e</em></span>, and all
         of the character sequence [first, last), parameter <span class="emphasis"><em>flags</em></span>
-        (see <a href="match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a>)
+        (see <a class="link" href="match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a>)
         is used to control how the expression is matched against the character sequence.
         Returns true if such a match exists, false otherwise.
       </p>
@@ -360,8 +360,8 @@
         <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">s</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">e</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></code>.
       </p>
 <a name="boost_regex.ref.regex_match.examples"></a><h5>
-<a name="id577061"></a>
-        <a href="regex_match.html#boost_regex.ref.regex_match.examples">Examples</a>
+<a name="id604831"></a>
+        <a class="link" href="regex_match.html#boost_regex.ref.regex_match.examples">Examples</a>
       </h5>
 <p>
         The following example processes an ftp response:

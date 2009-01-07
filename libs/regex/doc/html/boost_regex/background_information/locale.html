@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Localization</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../index.html" title="Boost.Regex">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../background_information.html" title="Background Information">
 <link rel="prev" href="headers.html" title="Headers">
 <link rel="next" href="thread_safety.html" title="Thread Safety">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_regex.background_information.locale"></a><a href="locale.html" title="Localization"> Localization</a>
+<a name="boost_regex.background_information.locale"></a><a class="link" href="locale.html" title="Localization"> Localization</a>
 </h3></div></div></div>
 <p>
         Boost.Regex provides extensive support for run-time localization, the localization
@@ -58,14 +58,14 @@
         There are three separate localization mechanisms supported by Boost.Regex:
       </p>
 <a name="boost_regex.background_information.locale.win32_localization_model_"></a><h5>
-<a name="id653600"></a>
-        <a href="locale.html#boost_regex.background_information.locale.win32_localization_model_">Win32
+<a name="id682058"></a>
+        <a class="link" href="locale.html#boost_regex.background_information.locale.win32_localization_model_">Win32
         localization model.</a>
       </h5>
 <p>
         This is the default model when the library is compiled under Win32, and is
         encapsulated by the traits class <code class="computeroutput"><span class="identifier">w32_regex_traits</span></code>.
-        When this model is in effect each <a href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> object gets it's own
+        When this model is in effect each <a class="link" href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> object gets it's own
         LCID, by default this is the users default setting as returned by GetUserDefaultLCID,
         but you can call imbue on the <code class="computeroutput"><span class="identifier">basic_regex</span></code>
         object to set it's locale to some other LCID if you wish. All the settings
@@ -90,8 +90,8 @@
         are treated as "unknown" graphic characters.
       </p>
 <a name="boost_regex.background_information.locale.c_localization_model_"></a><h5>
-<a name="id653844"></a>
-        <a href="locale.html#boost_regex.background_information.locale.c_localization_model_">C
+<a name="id682296"></a>
+        <a class="link" href="locale.html#boost_regex.background_information.locale.c_localization_model_">C
         localization model.</a>
       </h5>
 <p>
@@ -114,16 +114,16 @@
         libraries including version 1 of this library.
       </p>
 <a name="boost_regex.background_information.locale.c___localization_model_"></a><h5>
-<a name="id653957"></a>
-        <a href="locale.html#boost_regex.background_information.locale.c___localization_model_">C++
+<a name="id682409"></a>
+        <a class="link" href="locale.html#boost_regex.background_information.locale.c___localization_model_">C++
         localization model.</a>
       </h5>
 <p>
         This model is the default for non-Windows compilers.
       </p>
 <p>
-        When this model is in effect each instance of <a href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> has its own instance
-        of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span></code>, class <a href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> also has a member function
+        When this model is in effect each instance of <a class="link" href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> has its own instance
+        of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span></code>, class <a class="link" href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> also has a member function
         <code class="computeroutput"><span class="identifier">imbue</span></code> which allows the locale
         for the expression to be set on a per-instance basis. Front end localization
         requires a POSIX message catalogue, which will be loaded via the <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">messages</span></code>
@@ -140,7 +140,7 @@
 </pre>
 <p>
         Note that calling <code class="computeroutput"><span class="identifier">basic_regex</span><span class="special">&lt;&gt;::</span><span class="identifier">imbue</span></code>
-        will invalidate any expression currently compiled in that instance of <a href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>.
+        will invalidate any expression currently compiled in that instance of <a class="link" href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>.
       </p>
 <p>
         Finally note that if you build the library with a non-default localization
@@ -151,8 +151,8 @@
         in your code. The best way to ensure this is to add the #define to <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">/</span><span class="identifier">user</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>.
       </p>
 <a name="boost_regex.background_information.locale.providing_a_message_catalogue"></a><h5>
-<a name="id654417"></a>
-        <a href="locale.html#boost_regex.background_information.locale.providing_a_message_catalogue">Providing
+<a name="id682868"></a>
+        <a class="link" href="locale.html#boost_regex.background_information.locale.providing_a_message_catalogue">Providing
         a message catalogue</a>
       </h5>
 <p>

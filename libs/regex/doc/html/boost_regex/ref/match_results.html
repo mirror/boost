@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>match_results</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../index.html" title="Boost.Regex">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../ref.html" title="Reference">
 <link rel="prev" href="basic_regex.html" title="basic_regex">
 <link rel="next" href="sub_match.html" title="sub_match">
@@ -24,11 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_regex.ref.match_results"></a><a href="match_results.html" title="match_results"> match_results</a>
+<a name="boost_regex.ref.match_results"></a><a class="link" href="match_results.html" title="match_results"> match_results</a>
 </h3></div></div></div>
 <a name="boost_regex.ref.match_results.synopsis"></a><h5>
-<a name="id541812"></a>
-        <a href="match_results.html#boost_regex.ref.match_results.synopsis">Synopsis</a>
+<a name="id569578"></a>
+        <a class="link" href="match_results.html#boost_regex.ref.match_results.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -39,14 +39,14 @@
         parenthesis (...). There has to be some method for reporting sub-expression
         matches back to the user: this is achieved this by defining a class <code class="computeroutput"><span class="identifier">match_results</span></code> that acts as an indexed collection
         of sub-expression matches, each sub-expression match being contained in an
-        object of type <a href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>.
+        object of type <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>.
       </p>
 <p>
         Template class <code class="computeroutput"><span class="identifier">match_results</span></code>
         denotes a collection of character sequences representing the result of a
         regular expression match. Objects of type <code class="computeroutput"><span class="identifier">match_results</span></code>
-        are passed to the algorithms <a href="regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a> and <a href="regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>, and are returned by
-        the iterator <a href="regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a>. Storage for the
+        are passed to the algorithms <a class="link" href="regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a> and <a class="link" href="regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>, and are returned by
+        the iterator <a class="link" href="regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a>. Storage for the
         collection is allocated and freed as necessary by the member functions of
         class <code class="computeroutput"><span class="identifier">match_results</span></code>.
       </p>
@@ -87,63 +87,63 @@
    <span class="keyword">typedef</span>          <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">char_type</span><span class="special">&gt;</span>                                 <span class="identifier">string_type</span><span class="special">;</span>
 
    <span class="comment">// construct/copy/destroy:
-</span>   <a href="match_results.html#boost_regex.match_results.construct">explicit match_results</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Allocator</span><span class="special">&amp;</span> <span class="identifier">a</span> <span class="special">=</span> <span class="identifier">Allocator</span><span class="special">());</span>
-   <a href="match_results.html#boost_regex.match_results.copy_construct">match_results</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&amp;</span> <span class="identifier">m</span><span class="special">);</span>
-   <a href="match_results.html#boost_regex.match_results.assign">match_results&amp; operator=</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&amp;</span> <span class="identifier">m</span><span class="special">);</span> 
+</span>   <a class="link" href="match_results.html#boost_regex.match_results.construct">explicit match_results</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Allocator</span><span class="special">&amp;</span> <span class="identifier">a</span> <span class="special">=</span> <span class="identifier">Allocator</span><span class="special">());</span>
+   <a class="link" href="match_results.html#boost_regex.match_results.copy_construct">match_results</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&amp;</span> <span class="identifier">m</span><span class="special">);</span>
+   <a class="link" href="match_results.html#boost_regex.match_results.assign">match_results&amp; operator=</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&amp;</span> <span class="identifier">m</span><span class="special">);</span> 
    <span class="special">~</span><span class="identifier">match_results</span><span class="special">();</span>
 
    <span class="comment">// size:
-</span>   <span class="identifier">size_type</span> <a href="match_results.html#boost_regex.match_results.size">size</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="identifier">size_type</span> <a href="match_results.html#boost_regex.match_results.max_size">max_size</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="keyword">bool</span> <a href="match_results.html#boost_regex.match_results.empty">empty</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+</span>   <span class="identifier">size_type</span> <a class="link" href="match_results.html#boost_regex.match_results.size">size</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">size_type</span> <a class="link" href="match_results.html#boost_regex.match_results.max_size">max_size</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="keyword">bool</span> <a class="link" href="match_results.html#boost_regex.match_results.empty">empty</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
    <span class="comment">// element access:
-</span>   <span class="identifier">difference_type</span> <a href="match_results.html#boost_regex.match_results.length">length</a><span class="special">(</span><span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="identifier">difference_type</span> <a href="match_results.html#boost_regex.match_results.position">position</a><span class="special">(</span><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="identifier">string_type</span> <a href="match_results.html#boost_regex.match_results.str">str</a><span class="special">(</span><span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="identifier">const_reference</span> <a href="match_results.html#boost_regex.match_results.subscript">operator[]</a><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+</span>   <span class="identifier">difference_type</span> <a class="link" href="match_results.html#boost_regex.match_results.length">length</a><span class="special">(</span><span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">difference_type</span> <a class="link" href="match_results.html#boost_regex.match_results.position">position</a><span class="special">(</span><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">string_type</span> <a class="link" href="match_results.html#boost_regex.match_results.str">str</a><span class="special">(</span><span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">const_reference</span> <a class="link" href="match_results.html#boost_regex.match_results.subscript">operator[]</a><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
-   <span class="identifier">const_reference</span> <a href="match_results.html#boost_regex.match_results.prefix">prefix</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">const_reference</span> <a class="link" href="match_results.html#boost_regex.match_results.prefix">prefix</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 
-   <span class="identifier">const_reference</span> <a href="match_results.html#boost_regex.match_results.suffix">suffix</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="identifier">const_iterator</span> <a href="match_results.html#boost_regex.match_results.begin">begin</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="identifier">const_iterator</span> <a href="match_results.html#boost_regex.match_results.end">end</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">const_reference</span> <a class="link" href="match_results.html#boost_regex.match_results.suffix">suffix</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">const_iterator</span> <a class="link" href="match_results.html#boost_regex.match_results.begin">begin</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">const_iterator</span> <a class="link" href="match_results.html#boost_regex.match_results.end">end</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
    <span class="comment">// format:
 </span>   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">&gt;</span>
-   <span class="identifier">OutputIterator</span> <a href="match_results.html#boost_regex.match_results.format">format</a><span class="special">(</span><span class="identifier">OutputIterator</span> <span class="identifier">out</span><span class="special">,</span>
+   <span class="identifier">OutputIterator</span> <a class="link" href="match_results.html#boost_regex.match_results.format">format</a><span class="special">(</span><span class="identifier">OutputIterator</span> <span class="identifier">out</span><span class="special">,</span>
                         <span class="keyword">const</span> <span class="identifier">string_type</span><span class="special">&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
                         <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">format_default</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="identifier">string_type</span> <a href="match_results.html#boost_regex.match_results.format2">format</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">string_type</span><span class="special">&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
+   <span class="identifier">string_type</span> <a class="link" href="match_results.html#boost_regex.match_results.format2">format</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">string_type</span><span class="special">&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
                      <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">format_default</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
-   <span class="identifier">allocator_type</span> <a href="match_results.html#boost_regex.match_results.get_allocator">get_allocator</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="keyword">void</span> <a href="match_results.html#boost_regex.match_results.swap">swap</a><span class="special">(</span><span class="identifier">match_results</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">);</span>
+   <span class="identifier">allocator_type</span> <a class="link" href="match_results.html#boost_regex.match_results.get_allocator">get_allocator</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="keyword">void</span> <a class="link" href="match_results.html#boost_regex.match_results.swap">swap</a><span class="special">(</span><span class="identifier">match_results</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">);</span>
 
 <span class="preprocessor">#ifdef</span> <span class="identifier">BOOST_REGEX_MATCH_EXTRA</span>
    <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">value_type</span><span class="special">::</span><span class="identifier">capture_sequence_type</span> <span class="identifier">capture_sequence_type</span><span class="special">;</span>
-   <span class="keyword">const</span> <span class="identifier">capture_sequence_type</span><span class="special">&amp;</span> <a href="match_results.html#boost_regex.match_results.captures">captures</a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">i</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="keyword">const</span> <span class="identifier">capture_sequence_type</span><span class="special">&amp;</span> <a class="link" href="match_results.html#boost_regex.match_results.captures">captures</a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">i</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 <span class="preprocessor">#endif</span>
 
 <span class="special">};</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span>
-<span class="keyword">bool</span> <a href="match_results.html#boost_regex.match_results.op_eq">operator ==</a> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m1</span><span class="special">,</span>
+<span class="keyword">bool</span> <a class="link" href="match_results.html#boost_regex.match_results.op_eq">operator ==</a> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m1</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m2</span><span class="special">);</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span>
-<span class="keyword">bool</span> <a href="match_results.html#boost_regex.match_results.op_ne">operator !=</a> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m1</span><span class="special">,</span>
+<span class="keyword">bool</span> <a class="link" href="match_results.html#boost_regex.match_results.op_ne">operator !=</a> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m1</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m2</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span>
 <span class="identifier">basic_ostream</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span>
-   <a href="match_results.html#boost_regex.match_results.op_stream">operator &lt;&lt;</a> <span class="special">(</span><span class="identifier">basic_ostream</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">os</span><span class="special">,</span>
+   <a class="link" href="match_results.html#boost_regex.match_results.op_stream">operator &lt;&lt;</a> <span class="special">(</span><span class="identifier">basic_ostream</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">os</span><span class="special">,</span>
                <span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <a href="match_results.html#boost_regex.match_results.op_swap">swap</a><span class="special">(</span><span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m1</span><span class="special">,</span>
+<span class="keyword">void</span> <a class="link" href="match_results.html#boost_regex.match_results.op_swap">swap</a><span class="special">(</span><span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m1</span><span class="special">,</span>
          <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m2</span><span class="special">);</span>
 </pre>
 <a name="boost_regex.ref.match_results.description"></a><h5>
-<a name="id544716"></a>
-        <a href="match_results.html#boost_regex.ref.match_results.description">Description</a>
+<a name="id572482"></a>
+        <a class="link" href="match_results.html#boost_regex.ref.match_results.description">Description</a>
       </h5>
 <p>
         In all <code class="computeroutput"><span class="identifier">match_results</span></code> constructors,
@@ -352,7 +352,7 @@
 <pre class="programlisting"><span class="identifier">size_type</span> <span class="identifier">size</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns the number of <a href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a> elements stored in *this;
+        <span class="bold"><strong>Effects</strong></span>: Returns the number of <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a> elements stored in *this;
         that is the number of marked sub-expressions in the regular expression that
         was matched plus one.
       </p>
@@ -362,7 +362,7 @@
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the maximum number of
-        <a href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
+        <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
         elements that can be stored in *this.
       </p>
 <a name="boost_regex.match_results.empty"></a><p>
@@ -404,13 +404,13 @@
 <pre class="programlisting"><span class="identifier">const_reference</span> <span class="keyword">operator</span><span class="special">[](</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns a reference to the <a href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
+        <span class="bold"><strong>Effects</strong></span>: Returns a reference to the <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
         object representing the character sequence that matched marked sub-expression
         <span class="emphasis"><em>n</em></span>. If <code class="computeroutput"><span class="identifier">n</span> <span class="special">==</span> <span class="number">0</span></code> then returns
-        a reference to a <a href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a> object representing the
+        a reference to a <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a> object representing the
         character sequence that matched the whole regular expression. If <span class="emphasis"><em>n</em></span>
         is out of range, or if <span class="emphasis"><em>n</em></span> is an unmatched sub-expression,
-        then returns a <a href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
+        then returns a <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
         object whose matched member is false.
       </p>
 <a name="boost_regex.match_results.prefix"></a><p>
@@ -418,7 +418,7 @@
 <pre class="programlisting"><span class="identifier">const_reference</span> <span class="identifier">prefix</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns a reference to the <a href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
+        <span class="bold"><strong>Effects</strong></span>: Returns a reference to the <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
         object representing the character sequence from the start of the string being
         matched or searched, to the start of the match found.
       </p>
@@ -427,7 +427,7 @@
 <pre class="programlisting"><span class="identifier">const_reference</span> <span class="identifier">suffix</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns a reference to the <a href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
+        <span class="bold"><strong>Effects</strong></span>: Returns a reference to the <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
         object representing the character sequence from the end of the match found
         to the end of the string being matched or searched.
       </p>
@@ -470,7 +470,7 @@
         Chapter 15 part 5.4.11 String.prototype.replace.
       </p>
 <p>
-        See the <a href="../format.html" title="Search and Replace Format String Syntax">format syntax guide for more information</a>.
+        See the <a class="link" href="../format.html" title="Search and Replace Format String Syntax">format syntax guide for more information</a>.
       </p>
 <p>
         <span class="bold"><strong>Returns</strong></span>: out.
@@ -490,7 +490,7 @@
         Chapter 15 part 5.4.11 String.prototype.replace.
       </p>
 <p>
-        See the <a href="../format.html" title="Search and Replace Format String Syntax">format syntax guide for more information</a>.
+        See the <a class="link" href="../format.html" title="Search and Replace Format String Syntax">format syntax guide for more information</a>.
       </p>
 <a name="boost_regex.match_results.get_allocator"></a><p>
       </p>
@@ -539,7 +539,7 @@
 <p>
         <span class="bold"><strong>Preconditions</strong></span>: the library must be built
         and used with BOOST_REGEX_MATCH_EXTRA defined, and you must pass the flag
-        match_extra to the regex matching functions ( <a href="regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>, <a href="regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>, <a href="regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a> or <a href="regex_token_iterator.html" title="regex_token_iterator"><code class="computeroutput"><span class="identifier">regex_token_iterator</span></code></a>) in order for
+        match_extra to the regex matching functions ( <a class="link" href="regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>, <a class="link" href="regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>, <a class="link" href="regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a> or <a class="link" href="regex_token_iterator.html" title="regex_token_iterator"><code class="computeroutput"><span class="identifier">regex_token_iterator</span></code></a>) in order for
         this member function to be defined and return useful information.
       </p>
 <p>

@@ -471,6 +471,38 @@ void test(boost::basic_regex<charT, traits>& r, const test_regex_search_tag&)
       test_regex_token_iterator(r);
       test_regex_grep(r);
       test_regex_match(r);
+      //
+      // Verify sub-expression locations:
+      //
+      if((syntax_options & boost::regbase::save_subexpression_location) == 0)
+      {
+         bool have_except = false;
+         try
+         {
+            r.subexpression(1);
+         }
+         catch(const std::out_of_range&)
+         {
+            have_except = true;
+         }
+         if(!have_except)
+         {
+            BOOST_REGEX_TEST_ERROR("Expected std::out_of_range error was not found.", charT);
+         }
+      }
+      r.assign(expression, syntax_options | boost::regbase::save_subexpression_location);
+      for(std::size_t i = 1; i < r.mark_count(); ++i)
+      {
+         std::pair<const charT*, const charT*> p = r.subexpression(i);
+         if(*p.first != '(')
+         {
+            BOOST_REGEX_TEST_ERROR("Starting location of sub-expression " << i << " iterator was invalid.", charT);
+         }
+         if(*p.second != ')')
+         {
+            BOOST_REGEX_TEST_ERROR("Ending location of sub-expression " << i << " iterator was invalid.", charT);
+         }
+      }
    }
    catch(const boost::bad_expression& e)
    {

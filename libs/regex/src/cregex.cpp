@@ -28,6 +28,10 @@
 typedef boost::match_flag_type match_flag_type;
 #include <cstdio>
 
+#ifdef BOOST_MSVC
+#pragma warning(disable:4309)
+#endif
+
 namespace boost{
 
 #ifdef __BORLANDC__
@@ -626,6 +630,7 @@ basic_string<wchar_t>::replace<const wchar_t*>(wchar_t* f1, wchar_t* f2, const w
 #endif
 
 #endif
+
 
 
 
