@@ -62,41 +62,15 @@ g()
 <p>The <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> function template is instantiated with the typedef from (1), and is passed an exception object of a polymorphic type. If the exception object contains the requested value, the returned <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span> will point to it; otherwise an empty <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span> is returned.</p>
 </div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>Adding of Arbitrary Data to Active Exception Objects</h3>
 </div>
-<p>Sometimes the throw site does not have all the information that is needed at the catch site to make sense of what went wrong. Here is an example:</p>
-<pre>#include &lt;stdio.h&gt;
-#include &lt;string&gt;
-        
-class
-file_read_error
-    {
-    public:
-
-    explicit
-    file_read_error( std::string const &amp; fn ):
-        fn_(fn)
-        {
-        };
-
-    std::string const &amp;
-    file_name() const
-        {
-        return fn_;
-        }
-
-    private:
-
-    std::string fn_;
-    };
-
-void
+<p>Sometimes the throw site does not have all the information that is needed at the catch site to make sense of what went wrong. Let's say we have an exception type file_read_error, which takes a file name in its constructor. Consider the following function:</p>
+<pre>void
 file_read( FILE * f, void * buffer, size_t size )
     {
     if( size!=fread(buffer,1,size,f) )
-        throw file_read_error("????");
+        throw file_read_error(????);
     }</pre>
-<p>We have defined an exception class file_read_error which can store a file name, so that when we catch a file_read_error object, we know which file the failure is related to. However, the file_read function does not have the file name at the time of the throw; all it has is a FILE handle.</p>
-<p>One possible solution is to not use FILE handles directly. We could have our own class file which stores both a FILE handle and a file name, and pass that to file_read. However, this could be problematic if we communicate with 3rd party code that does not use our class file (probably because they have their own similar class.)</p>
-<p>A better solution is to make class file_read_error derive (possibly indirectly) from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, and free the file_read function from the burden of storing the file name in exceptions it throws:</p>
+<p>How can the file_read function pass a file name to the exception type constructor? All it has is a FILE handle.</p>
+<p>Using boost::<span class="RenoLink"><a href="exception.html">exception</a></span> allows us to free the file_read function from the burden of storing the file name in exceptions it throws:</p>
 <pre>#include &lt;<span class="RenoLink"><a href="exception_hpp.html">boost/exception.hpp</a></span>&gt;
 #include &lt;stdio.h&gt;
 #include &lt;errno.h&gt;
@@ -140,7 +114,6 @@ parse_file( char const * file_name )
         }
     }</pre>
 <p>The above function is (almost) exception-neutral -- if an exception is emitted by any function call within the try block, parse_file does not need to do any real work, but it intercepts any boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object, stores the file name, and re-throws using a throw-expression with no operand (15.1.6). The rationale for catching any boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object is that the file name is relevant to any failure that occurs in parse_file, <i>even if the failure is unrelated to file I/O</i>.</p>
-<p>As usual, the stored data can be retrieved using <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>.</p>
 </div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>Adding Grouped Data to Exceptions</h3>
 </div>
 <p>The code snippet below demonstrates how boost::<span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html">tuple</a></span> can be used to bundle the name of the function that failed, together with the reported errno so that they can be added to exception objects more conveniently together:</p>
