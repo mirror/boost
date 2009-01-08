@@ -19,6 +19,7 @@
 #include <errno.h>
 #include <string>
 #include <iostream>
+#include <sstream>
 
 typedef boost::error_info<struct tag_errno,int> errno_info;
 typedef boost::error_info<struct tag_file_stream,boost::weak_ptr<FILE> > file_stream_info;
@@ -27,6 +28,15 @@ typedef boost::error_info<struct tag_file_name,std::string> file_name_info; //Th
 typedef boost::error_info<struct tag_file_name_src,std::string> file_name_src_info; //The source file name of a failed copy operation.
 typedef boost::error_info<struct tag_file_name_dst,std::string> file_name_dst_info; //The destination file name of a failed copy operation.
 typedef boost::error_info<struct tag_function,std::string> function_info; //The name of the C function which reported the failure.
+
+std::string
+to_string( errno_info const & e )
+    {
+    int en=e.value();
+    std::ostringstream s;
+    s << en << ", OS says \"" << strerror(en) << "\"";
+    return s.str();
+    }
 
 char const data[] = "example";
 size_t const data_size = sizeof(data);
