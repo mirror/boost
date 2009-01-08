@@ -14,6 +14,7 @@ exe quickbook
     detail/actions.cpp
     detail/actions_class.cpp
     detail/utils.cpp
+    detail/input_path.cpp
     detail/post_process.cpp
     detail/collector.cpp
     detail/template_stack.cpp

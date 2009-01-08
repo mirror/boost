@@ -12,6 +12,7 @@
 #include "../doc_info.hpp"
 #include "./post_process.hpp"
 #include "./utils.hpp"
+#include "./input_path.hpp"
 #include <boost/spirit/include/classic_iterator.hpp>
 #include <boost/program_options.hpp>
 #include <boost/filesystem/path.hpp>
@@ -164,11 +165,11 @@ main(int argc, char* argv[])
             ("no-pretty-print", "disable XML pretty printing")
             ("indent", value<int>(), "indent spaces")
             ("linewidth", value<int>(), "line width")
-            ("input-file", value<std::string>(), "input file")
-            ("output-file", value<std::string>(), "output file")
+            ("input-file", value<quickbook::detail::input_path>(), "input file")
+            ("output-file", value<quickbook::detail::input_path>(), "output file")
             ("debug", "debug mode (for developers)")
             ("ms-errors", "use Microsoft Visual Studio style error & warn message format")
-            ("include-path,I", value< std::vector<std::string> >(), "include path")
+            ("include-path,I", value< std::vector<quickbook::detail::input_path> >(), "include path")
         ;
 
         positional_options_description p;
@@ -232,17 +233,22 @@ main(int argc, char* argv[])
         
         if (vm.count("include-path"))
         {
-            quickbook::include_path = vm["include-path"].as< std::vector<std::string> >();
+            std::vector<quickbook::detail::input_path> paths
+                = vm["include-path"].as<
+                    std::vector<quickbook::detail::input_path> >();
+            quickbook::include_path
+                = std::vector<std::string>(paths.begin(), paths.end());
         }
 
         if (vm.count("input-file"))
         {
-            std::string filein = vm["input-file"].as<std::string>();
+            std::string filein
+                = vm["input-file"].as<quickbook::detail::input_path>();
             std::string fileout;
 
             if (vm.count("output-file"))
             {
-                fileout = vm["output-file"].as<std::string>();
+                fileout = vm["output-file"].as<quickbook::detail::input_path>();
             }
             else
             {
