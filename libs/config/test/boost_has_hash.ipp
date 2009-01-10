@@ -11,9 +11,17 @@
 //                 or hash_map classes.
 
 #if defined(__GLIBCXX__) || (defined(__GLIBCPP__) && __GLIBCPP__>=20020514) // GCC >= 3.1.0
-#  define BOOST_STD_EXTENSION_NAMESPACE __gnu_cxx
-#include <ext/hash_set>
-#include <ext/hash_map>
+#  ifdef BOOST_NO_STD_UNORDERED
+#    define BOOST_STD_EXTENSION_NAMESPACE __gnu_cxx
+#    include <ext/hash_set>
+#    include <ext/hash_map>
+#  else
+     // If we have BOOST_NO_STD_UNORDERED *not* defined, then we must 
+     // not include the <ext/*> headers as they clash with the C++0x
+     // headers.  ie in any given translation unit we can include one
+     // or the other, but not both.
+#    define DISABLE_BOOST_HAS_HASH_TEST
+#  endif
 #else
 #include <hash_set>
 #include <hash_map>
@@ -25,6 +33,8 @@
 
 namespace boost_has_hash{
 
+#ifndef DISABLE_BOOST_HAS_HASH_TEST
+
 template <class Key, class Eq, class Hash, class Alloc>
 void foo(const BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key,Eq,Hash,Alloc>& )
 {
@@ -35,12 +45,16 @@ void foo(const BOOST_STD_EXTENSION_NAMESPACE::hash_map<Key,T,Eq,Hash,Alloc>& )
 {
 }
 
+#endif
+
 int test()
 {
+#ifndef DISABLE_BOOST_HAS_HASH_TEST
    BOOST_STD_EXTENSION_NAMESPACE::hash_set<int> hs;
    foo(hs);
    BOOST_STD_EXTENSION_NAMESPACE::hash_map<int, long> hm;
    foo(hm);
+#endif
    return 0;
 }
 

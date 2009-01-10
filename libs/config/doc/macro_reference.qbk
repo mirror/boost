@@ -537,7 +537,8 @@ type `char32_t`.
 `decltype`. 
 ]]                       
 [[`BOOST_NO_DEFAULTED_FUNCTIONS`][The compiler does not support 
-defaulted (`= default`) functions.              
+defaulted (`= default`) functions.  
+]]            
 [[`BOOST_NO_DELETED_FUNCTIONS`][The compiler does not support 
 deleted (`= delete`) functions.              
 ]]              
@@ -564,8 +565,11 @@ scoped enumerations (`enum class`).
 [[`BOOST_NO_STATIC_ASSERT`][The compiler does not support
 `static_assert`. 
 ]]                  
+[[`BOOST_NO_STD_UNORDERD`][The standard library does not support
+<unordered_map> and <unordered_set>. 
+]]                  
 [[`BOOST_NO_UNICODE_LITERALS`][The compiler does not support
-Unicode (`u8`, `u`, `U') literals. 
+Unicode (`u8`, `u`, `U`) literals. 
 ]]               
 [[`BOOST_NO_VARIADIC_TEMPLATES`][The compiler does not support
 variadic templates. 

@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Boost Macro Reference</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
-<link rel="start" href="../index.html" title="Boost.Config">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../index.html" title="Boost.Config">
 <link rel="up" href="../index.html" title="Boost.Config">
 <link rel="prev" href="../index.html" title="Boost.Config">
 <link rel="next" href="guidelines_for_boost_authors.html" title="Guidelines for Boost Authors">
@@ -2218,7 +2218,6 @@
 <colgroup>
 <col>
 <col>
-<col>
 </colgroup>
 <thead><tr>
 <th>
@@ -2231,7 +2230,6 @@
                 Description
               </p>
               </th>
-<td class="auto-generated"> </td>
 </tr></thead>
 <tbody>
 <tr>
@@ -2245,7 +2243,6 @@
                 The compiler does not support type <code class="computeroutput"><span class="identifier">char16_t</span></code>.
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -2258,7 +2255,6 @@
                 The compiler does not support type <code class="computeroutput"><span class="identifier">char32_t</span></code>.
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -2271,7 +2267,6 @@
                 The compiler does not support <code class="computeroutput"><span class="identifier">constexpr</span></code>.
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -2284,7 +2279,6 @@
                 The compiler does not support <code class="computeroutput"><span class="identifier">decltype</span></code>.
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -2295,7 +2289,14 @@
 <td>
               <p>
                 The compiler does not support defaulted (<code class="computeroutput"><span class="special">=</span>
-                <span class="keyword">default</span></code>) functions. [[<code class="computeroutput"><span class="identifier">BOOST_NO_DELETED_FUNCTIONS</span></code>
+                <span class="keyword">default</span></code>) functions.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_DELETED_FUNCTIONS</span></code>
               </p>
               </td>
 <td>
@@ -2317,7 +2318,6 @@
                 <span class="identifier">T</span><span class="special">()</span></code>).
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -2331,7 +2331,6 @@
                 for templates (<code class="computeroutput"><span class="keyword">explicit</span> <span class="keyword">template</span></code>).
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -2344,7 +2343,6 @@
                 The C++ compiler does not support C++0x initializer lists.
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -2358,7 +2356,6 @@
                 <span class="keyword">long</span></code>.
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -2371,7 +2368,6 @@
                 The compiler does not support raw string literals.
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -2384,7 +2380,6 @@
                 The compiler does not support r-value references.
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -2397,7 +2392,6 @@
                 The compiler does not support scoped enumerations (<code class="computeroutput"><span class="keyword">enum</span> <span class="keyword">class</span></code>).
               </p>
               </td>
-<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
@@ -2410,7 +2404,18 @@
                 The compiler does not support <code class="computeroutput"><span class="identifier">static_assert</span></code>.
               </p>
               </td>
-<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_UNORDERD</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not support &lt;unordered_map&gt; and &lt;unordered_set&gt;.
+              </p>
+              </td>
 </tr>
 <tr>
 <td>
@@ -2421,8 +2426,14 @@
 <td>
               <p>
                 The compiler does not support Unicode (<code class="computeroutput"><span class="identifier">u8</span></code>,
-                <code class="computeroutput"><span class="identifier">u</span></code>, <code class="computeroutput"><span class="identifier">U</span>#<span class="special">)</span> <span class="identifier">literals</span><span class="special">.</span>
-                <span class="special">]]</span> <span class="special">[[</span></code>BOOST_NO_VARIADIC_TEMPLATES`
+                <code class="computeroutput"><span class="identifier">u</span></code>, <code class="computeroutput"><span class="identifier">U</span></code>) literals.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_VARIADIC_TEMPLATES</span></code>
               </p>
               </td>
 <td>

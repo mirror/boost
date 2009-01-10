@@ -1,4 +1,4 @@
-//  This file was automatically generated on Wed Sep 24 11:44:22 2008
+//  This file was automatically generated on Tue Dec 16 16:41:41 2008
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -291,6 +291,11 @@ namespace boost_no_std_output_iterator_assign = empty_boost;
 #include "boost_no_std_typeinfo.ipp"
 #else
 namespace boost_no_std_typeinfo = empty_boost;
+#endif
+#ifndef BOOST_NO_STD_UNORDERED
+#include "boost_no_std_unordered.ipp"
+#else
+namespace boost_no_std_unordered = empty_boost;
 #endif
 #ifndef BOOST_NO_STD_USE_FACET
 #include "boost_no_std_use_facet.ipp"
@@ -1144,6 +1149,11 @@ int main( int, char *[] )
    if(0 != boost_no_std_typeinfo::test())
    {
       std::cerr << "Failed test for BOOST_NO_STD_TYPEINFO at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_std_unordered::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_STD_UNORDERED at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_std_use_facet::test())
