@@ -15,16 +15,15 @@
 #include <string>
 
 #include <cstddef> // size_t
+#include <cwchar>
 #include <boost/config.hpp>
+
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::size_t; 
+    using ::wcslen;
+    using ::w_int;
 } // namespace std
-#endif
-
-#include <cwchar>
-#ifdef BOOST_NO_STDC_NAMESPACE
-namespace std{ using ::wcslen; }
 #endif
 
 #include "test_tools.hpp"
