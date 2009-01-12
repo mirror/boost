@@ -41,7 +41,16 @@ boost
 <li>If dynamic_cast&lt;std::exception const *&gt;(&amp;x) is not null, the returned string includes the output from std::exception::what.</li>
 <li>The returned string may include additional platform-specific diagnostic information.</li>
 </ul></div>
-</div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
+<div class="RenoIncludeDIV"><h4>Example:</h4>
+<p>this is a possible output from the <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> function, as used in <i>libs/exception/example/example_io.cpp:</i></p>
+<pre>libs\exception\example\example_io.cpp(83): Throw in function class boost::shared_ptr&lt;struct _iobuf&gt; __cdecl my_fopen(const char *,const char *)
+Dynamic exception type: class boost::exception_detail::clone_impl&lt;class fopen_error&gt;
+std::exception::what: example_io error
+[struct tag_errno *] = 2, OS says "No such file or directory"
+[struct tag_file_name *] = tmp1.txt
+[struct tag_function *] = fopen
+[struct tag_open_mode *] = rb</pre>
+</div></div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION<br/>
 </a><a href="boost-exception.html">Boost Exception<br/>
