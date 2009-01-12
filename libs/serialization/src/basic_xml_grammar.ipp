@@ -17,16 +17,9 @@
 #include <boost/config.hpp> // BOOST_DEDUCED_TYPENAME
 
 // spirit stuff
-#if (defined __BORLANDC__) && (__BORLANDC__ < 0x593) \
-|| (defined _MSC_VER) && (_MSC_VER <= 1300) 
 #include <boost/spirit/core/composite/operators.hpp>
 #include <boost/spirit/core/composite/actions.hpp>
 #include <boost/spirit/core/primitives/numerics.hpp>
-#else
-#include <boost/spirit/include/classic_operators.hpp>
-#include <boost/spirit/include/classic_actions.hpp>
-#include <boost/spirit/include/classic_numerics.hpp>
-#endif
 
 // for head_iterator test
 //#include <boost/bind.hpp> 
