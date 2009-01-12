@@ -92,12 +92,12 @@ extended_type_info::key_unregister() {
         assert(start != end);
 
         // remove entry in map which corresponds to this type
-        do{
-            if(this == *start)
-                x.erase(start++);
-            else
-		    ++start;
-        }while(start != end);
+        for(;start != end; ++start){
+            if(this == *start){
+                x.erase(start);
+                break;
+            }
+        }
     }
     m_key = NULL;
 }
@@ -120,9 +120,6 @@ extended_type_info::extended_type_info(
     m_type_info_key(type_info_key),
     m_key(NULL)
 {
-    // make sure that the ktmap is instantiated before 
-    // the first key is added to it.
-    singleton<detail::ktmap>::get_const_instance();
 }
 
 BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) 
