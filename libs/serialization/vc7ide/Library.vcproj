@@ -616,9 +616,6 @@
 				RelativePath="..\..\..\boost\archive\detail\common_oarchive.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\boost\archive\array\iarchive.hpp">
-			</File>
-			<File
 				RelativePath="..\..\..\boost\archive\detail\interface_iarchive.hpp">
 			</File>
 			<File
@@ -626,9 +623,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\iserializer.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\array\oarchive.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\oserializer.hpp">
