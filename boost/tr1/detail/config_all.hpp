@@ -81,8 +81,15 @@
 #        define BOOST_TR1_DISABLE_INCLUDE_NEXT
 #      endif
 #    else
-#      if ( ((__GNUC__ == 4 ) || (__GNUC_MINOR__ >= 3)) && defined(__APPLE_CC__))
+#      if ( ((__GNUC__ == 3 ) && (__GNUC_MINOR__ >= 3)) && defined(__APPLE_CC__))
 #        define BOOST_TR1_STD_HEADER(name) <../c++/name>
+#        ifndef BOOST_TR1_DISABLE_INCLUDE_NEXT
+#          define BOOST_TR1_DISABLE_INCLUDE_NEXT
+#        endif
+#      elif (__GLIBCXX__ == 20050421)
+         // Some Darwin tools fix libstdc++ at 4.0.0 irrespective of the actual
+         // compiler version:
+#        define BOOST_TR1_STD_HEADER(name) <../4.0.0/name>
 #        ifndef BOOST_TR1_DISABLE_INCLUDE_NEXT
 #          define BOOST_TR1_DISABLE_INCLUDE_NEXT
 #        endif
