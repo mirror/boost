@@ -500,6 +500,72 @@ void test_overflow_range()
 { }
 #endif
 
+template <typename EngineT>
+struct rand_for_random_shuffle
+{
+  explicit rand_for_random_shuffle(EngineT &engine)
+    : m_engine(engine)
+  { }
+
+  template <typename IntT>
+  IntT operator()(IntT upperBound)
+  {
+    assert(upperBound > 0);
+
+    if (upperBound == 1)
+    {
+      return 0;
+    }
+
+    typedef boost::uniform_int<IntT> distribution_type;
+    typedef boost::variate_generator<EngineT &, distribution_type> generator_type;
+
+    return generator_type(m_engine, distribution_type(0, upperBound - 1))();
+  }
+
+  EngineT &m_engine;
+        
+};
+
+// Test that uniform_int<> can be used with std::random_shuffle
+// Author: Jos Hickson
+void test_random_shuffle()
+{
+    typedef boost::uniform_int<> distribution_type;
+    typedef boost::variate_generator<boost::mt19937 &, distribution_type> generator_type;
+
+    boost::mt19937 engine1(1234);
+    boost::mt19937 engine2(1234);
+
+    rand_for_random_shuffle<boost::mt19937> referenceRand(engine1);
+
+    distribution_type dist(0,10);
+    generator_type testRand(engine2, dist);
+
+    std::vector<int> referenceVec;
+
+    for (int i = 0; i < 200; ++i)
+    {
+      referenceVec.push_back(i);
+    }
+
+    std::vector<int> testVec(referenceVec);
+
+    std::random_shuffle(referenceVec.begin(), referenceVec.end(), referenceRand);
+    std::random_shuffle(testVec.begin(), testVec.end(), testRand);
+
+    typedef std::vector<int>::iterator iter_type;
+    iter_type theEnd(referenceVec.end());
+
+    for (iter_type referenceIter(referenceVec.begin()), testIter(testVec.begin());
+         referenceIter != theEnd;
+         ++referenceIter, ++testIter)
+    {
+      BOOST_CHECK_EQUAL(*referenceIter, *testIter);
+    }
+}
+
+
 int test_main(int, char*[])
 {
 
@@ -528,6 +594,7 @@ int test_main(int, char*[])
             << std::endl;
 
   test_overflow_range();
+  test_random_shuffle();
 
   return 0;
 #else
