@@ -147,21 +147,28 @@ struct guid_initializer
 };
 
 template<typename T>
-class init_guid {
-    static ::boost::archive::detail::guid_initializer<T> const
-        & guid_initializer;
-};
+struct init_guid;
 
 } // namespace detail
 } // namespace archive
 } // namespace boost
 
-#define BOOST_CLASS_EXPORT_GUID(T, K)                                               \
-    ::boost::archive::detail::guid_initializer< T > const &                         \
-        ::boost::archive::detail::init_guid<T>::guid_initializer =                  \
-           ::boost::serialization::singleton<                                       \
-               ::boost::archive::detail::guid_initializer< T >                      \
-           >::get_mutable_instance().export_guid(K);                                \
+#define BOOST_CLASS_EXPORT_GUID(T, K)                                  \
+    namespace boost {                                                  \
+    namespace archive {                                                \
+    namespace detail {                                                 \
+    template<>                                                         \
+    struct init_guid< T > {                                            \
+        static ::boost::archive::detail::guid_initializer< T > const   \
+            & guid_initializer;                                        \
+    };                                                                 \
+    }}}                                                                \
+    ::boost::archive::detail::guid_initializer< T > const &            \
+        ::boost::archive::detail::init_guid< T >::guid_initializer =   \
+           ::boost::serialization::singleton<                          \
+               ::boost::archive::detail::guid_initializer< T >         \
+           >::get_mutable_instance().export_guid(K);                   \
+/**/
 
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
 
