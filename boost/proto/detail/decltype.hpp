@@ -11,6 +11,7 @@
 
 #include <boost/proto/detail/prefix.hpp> // must be first include
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/get_pointer.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
@@ -157,7 +158,12 @@ namespace boost { namespace proto
           : T
         {
             using T::operator[];
-            any operator[](any) const volatile;
+
+            #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500))
+            any operator[](any const volatile &) const volatile;
+            #else
+            any operator[](any const &) const volatile;
+            #endif
         };
 
         ////////////////////////////////////////////////////////////////////////////////////////////
