@@ -42,6 +42,11 @@
 //
 #include <cstddef>
 
+// Including <cstdlib> allows us to use __GLIBCXX__ to
+// determine the version of the stdc++ library in use
+// under Darwin.
+#include <cstdlib>
+
 #  if defined(_RWSTD_VER) && _RWSTD_VER >= 0x04010200
 #     if !defined (__SUNPRO_CC) && !defined (__DECCXX)
 #        define BOOST_TR1_STD_CHEADER(name) <../include/ansi/name>
@@ -86,7 +91,7 @@
 #        ifndef BOOST_TR1_DISABLE_INCLUDE_NEXT
 #          define BOOST_TR1_DISABLE_INCLUDE_NEXT
 #        endif
-#      elif (__GLIBCXX__ == 20050421)
+#      elif ((__GLIBCXX__ == 20050421) && defined(__APPLE_CC__))
          // Some Darwin tools fix libstdc++ at 4.0.0 irrespective of the actual
          // compiler version:
 #        define BOOST_TR1_STD_HEADER(name) <../4.0.0/name>
