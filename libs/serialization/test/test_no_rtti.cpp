@@ -33,82 +33,12 @@ namespace std{
 #include <boost/preprocessor/stringize.hpp>
 #include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/base_object.hpp>
-#include <boost/serialization/export.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/extended_type_info_no_rtti.hpp>
 
-class polymorphic_base
-{
-    friend class boost::serialization::access;
-    template<class Archive>
-    void serialize(Archive & /* ar */, const unsigned int /* file_version */){
-    }
-public:
-    virtual const char * get_key() const = 0;
-    virtual ~polymorphic_base(){};
-};
-
-BOOST_SERIALIZATION_ASSUME_ABSTRACT(polymorphic_base)
-
-BOOST_CLASS_TYPE_INFO(
-    polymorphic_base,
-    extended_type_info_no_rtti<polymorphic_base>
-)
-// note: types which use ...no_rtti MUST be exported
-BOOST_CLASS_EXPORT(polymorphic_base)
-
-class polymorphic_derived1 : public polymorphic_base
-{
-    friend class boost::serialization::access;
-    template<class Archive>
-    void serialize(Archive &ar, const unsigned int  /* file_version */){
-        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
-    }
-public:
-    virtual const char * get_key() const ;
-};
-
-BOOST_CLASS_TYPE_INFO(
-    polymorphic_derived1,
-    extended_type_info_no_rtti<polymorphic_derived1>
-)
-BOOST_CLASS_EXPORT(polymorphic_derived1)
-
-const char * polymorphic_derived1::get_key() const {
-    return
-        boost::serialization::type_info_implementation<
-            polymorphic_derived1
-        >::type::get_const_instance().get_key();
-}
-
-class polymorphic_derived2 : public polymorphic_base
-{
-    friend class boost::serialization::access;
-    template<class Archive>
-    void serialize(Archive &ar, const unsigned int /* file_version */){
-        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
-    }
-public:
-    virtual const char * get_key() const ;
-};
-
-// note the mixing of type_info systems is supported.
-BOOST_CLASS_TYPE_INFO(
-    polymorphic_derived2,
-    boost::serialization::extended_type_info_typeid<polymorphic_derived2>
-)
-
-BOOST_CLASS_EXPORT(polymorphic_derived2)
-
-const char * polymorphic_derived2::get_key() const {
-    // use the exported key as the identifier
-    return
-        boost::serialization::type_info_implementation<
-            polymorphic_derived2
-        >::type::get_const_instance().get_key();
-}
+#include "polymorphic_base.hpp"
+#include "polymorphic_derived1.hpp"
+#include "polymorphic_derived2.hpp"
 
 // save derived polymorphic class
 void save_derived(const char *testfile)
