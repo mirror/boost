@@ -222,7 +222,7 @@ class basic_iarchive_impl {
 inline void 
 basic_iarchive_impl::reset_object_address(
     const void * new_address, 
-    const void *old_address
+    const void * old_address
 ){
     // this code handles a couple of situations.
     // a) where reset_object_address is applied to an untracked object.

@@ -2188,8 +2188,8 @@ Global
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static binary_archive.ActiveCfg = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static binary_archive.Build.0 = Debug runtime-static threading-multi|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static text_archive.ActiveCfg = Debug runtime-static threading-multi|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static text_archive.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static text_archive.ActiveCfg = Debug runtime-static text_archive|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static text_archive.Build.0 = Debug runtime-static text_archive|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static text_warchive.ActiveCfg = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static text_warchive.Build.0 = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
@@ -6556,8 +6556,8 @@ Global
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static binary_archive.ActiveCfg = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static binary_archive.Build.0 = Debug runtime-static threading-multi|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static text_archive.ActiveCfg = Debug runtime-static threading-multi|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static text_archive.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static text_archive.ActiveCfg = Debug runtime-static text_archive|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static text_archive.Build.0 = Debug runtime-static text_archive|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static text_warchive.ActiveCfg = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static text_warchive.Build.0 = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
