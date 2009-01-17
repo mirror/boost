@@ -85,12 +85,23 @@ struct member<T,val_tag>
 template<class T> inline T& deref(T* p, ref_tag) { return *p; }
 template<class T> inline T& deref(T& r, val_tag) { return  r; }
 
+template<class T>
+struct wrapper
+{
+    typedef T type;
+};
+
+template<class T> wrapper<T> wrap(T&);
+
 } } }
 
-#define BOOST_SCOPE_EXIT_AUX_GUARD(id)     BOOST_PP_CAT(boost_se_guard_,     id)
-#define BOOST_SCOPE_EXIT_AUX_GUARD_T(id)   BOOST_PP_CAT(boost_se_guard_t_,   id)
-#define BOOST_SCOPE_EXIT_AUX_PARAMS(id)    BOOST_PP_CAT(boost_se_params_,    id)
-#define BOOST_SCOPE_EXIT_AUX_PARAMS_T(id)  BOOST_PP_CAT(boost_se_params_t_,  id)
+#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::aux::wrapper, 1)
+
+#define BOOST_SCOPE_EXIT_AUX_GUARD(id)     BOOST_PP_CAT(boost_se_guard_,    id)
+#define BOOST_SCOPE_EXIT_AUX_GUARD_T(id)   BOOST_PP_CAT(boost_se_guard_t_,  id)
+#define BOOST_SCOPE_EXIT_AUX_PARAMS(id)    BOOST_PP_CAT(boost_se_params_,   id)
+#define BOOST_SCOPE_EXIT_AUX_PARAMS_T(id)  BOOST_PP_CAT(boost_se_params_t_, id)
 
 #define BOOST_SCOPE_EXIT_AUX_TAG(id, i) \
     BOOST_PP_SEQ_CAT( (boost_se_tag_)(i)(_)(id) )
@@ -103,6 +114,9 @@ template<class T> inline T& deref(T& r, val_tag) { return  r; }
 
 #define BOOST_SCOPE_EXIT_AUX_CAPTURE_T(id, i, var) \
     BOOST_PP_SEQ_CAT( (boost_se_capture_t_)(i)(_)(id) )
+
+#define BOOST_SCOPE_EXIT_AUX_WRAPPED(id, i) \
+    BOOST_PP_SEQ_CAT( (boost_se_wrapped_t_)(i)(_)(id) )
 
 #define BOOST_SCOPE_EXIT_AUX_DEREF(id, i, var) \
     boost::scope_exit::aux::deref(var, (BOOST_SCOPE_EXIT_AUX_TAG(id,i))0)
@@ -157,32 +171,7 @@ template<class T> inline T& deref(T& r, val_tag) { return  r; }
 
 #endif
 
-#if !defined(BOOST_TYPEOF_EMULATION)
-
-#define BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL(r, idty, i, var)              \
-    typedef BOOST_TYPEOF_KEYWORD(BOOST_SCOPE_EXIT_AUX_DEREF(            \
-        BOOST_PP_SEQ_ELEM(0,idty), i, var))                             \
-        BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_SEQ_ELEM(0,idty), i, var);
-
-#else
-
-namespace boost { namespace scope_exit { namespace aux {
-
-template<class T>
-struct wrapper
-{
-    typedef T type;
-};
-
-template<class T> wrapper<T> wrap(T&);
-
-} } }
-
-#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::aux::wrapper, 1)
-
-#define BOOST_SCOPE_EXIT_AUX_WRAPPED(id, i) \
-    BOOST_PP_SEQ_CAT( (boost_se_wrapped_t_)(i)(_)(id) )
+#if defined(BOOST_TYPEOF_EMULATION)
 
 #define BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL(r, idty, i, var)                   \
     struct BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_SEQ_ELEM(0,idty), i)        \
@@ -190,6 +179,23 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::aux::wrapper, 1)
         BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_SEQ_ELEM(0, idty), i, var))) {}; \
     typedef BOOST_PP_SEQ_ELEM(1,idty)                                        \
         BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_SEQ_ELEM(0,idty), i)::type     \
+        BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_SEQ_ELEM(0,idty), i, var);
+
+#elif defined(BOOST_INTEL)
+
+#define BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL(r, idty, i, var)               \
+    typedef BOOST_TYPEOF_KEYWORD(                                        \
+        BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_SEQ_ELEM(0,idty), i, var))   \
+        BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_SEQ_ELEM(0,idty), i, var);
+
+#else
+
+#define BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL(r, idty, i, var)               \
+    typedef BOOST_TYPEOF(boost::scope_exit::aux::wrap(                   \
+        BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_SEQ_ELEM(0,idty), i, var)))  \
+        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_SEQ_ELEM(0,idty), i);      \
+    typedef BOOST_PP_SEQ_ELEM(1,idty)                                    \
+        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_SEQ_ELEM(0,idty), i)::type \
         BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_SEQ_ELEM(0,idty), i, var);
 
 #endif
@@ -221,11 +227,23 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::aux::wrapper, 1)
         static void boost_se_body(BOOST_PP_SEQ_FOR_EACH_I(                     \
             BOOST_SCOPE_EXIT_AUX_ARG_DECL, (id)(ty), seq) )
 
+#if defined(BOOST_MSVC)
+
+#define BOOST_SCOPE_EXIT_END } BOOST_SCOPE_EXIT_AUX_GUARD(__COUNTER__) ( \
+    boost_scope_exit_args.value);
+
+#define BOOST_SCOPE_EXIT(seq) \
+    BOOST_SCOPE_EXIT_AUX_IMPL(__COUNTER__, seq, BOOST_PP_EMPTY())
+
+#else
+
 #define BOOST_SCOPE_EXIT_END } BOOST_SCOPE_EXIT_AUX_GUARD(__LINE__) ( \
     boost_scope_exit_args.value);
 
 #define BOOST_SCOPE_EXIT(seq) \
     BOOST_SCOPE_EXIT_AUX_IMPL(__LINE__, seq, BOOST_PP_EMPTY())
+
+#endif
 
 #ifdef BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND
 #define BOOST_SCOPE_EXIT_TPL(seq) \
