@@ -14,8 +14,8 @@
 #include <boost/preprocessor/facilities/empty.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/seq/cat.hpp>
-#include <boost/preprocessor/seq/elem.hpp>
 #include <boost/preprocessor/seq/for_each_i.hpp>
+#include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/typeof/typeof.hpp>
 
 #if defined(__GNUC__) && !defined(BOOST_INTEL)
@@ -127,11 +127,11 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::aux::wrapper, 1)
         BOOST_SCOPE_EXIT_AUX_TAG(id,i)             \
     > BOOST_SCOPE_EXIT_AUX_PARAM(id,i,var);
 
-// idty is (id)(typename) or (id)()
-#define BOOST_SCOPE_EXIT_AUX_ARG_DECL(r, idty, i, var)            \
-    BOOST_PP_COMMA_IF(i) BOOST_PP_SEQ_ELEM(1,idty)                \
-    BOOST_SCOPE_EXIT_AUX_PARAMS_T(BOOST_PP_SEQ_ELEM(0,idty))::    \
-    BOOST_SCOPE_EXIT_AUX_PARAM_T(BOOST_PP_SEQ_ELEM(0,idty), i, var) var
+// idty is (id,typename) or (id,BOOST_PP_EMPTY())
+#define BOOST_SCOPE_EXIT_AUX_ARG_DECL(r, idty, i, var)             \
+    BOOST_PP_COMMA_IF(i) BOOST_PP_TUPLE_ELEM(2,1,idty)             \
+    BOOST_SCOPE_EXIT_AUX_PARAMS_T(BOOST_PP_TUPLE_ELEM(2,0,idty)):: \
+    BOOST_SCOPE_EXIT_AUX_PARAM_T(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var) var
  
 #define BOOST_SCOPE_EXIT_AUX_ARG(r, id, i, var) BOOST_PP_COMMA_IF(i) \
     boost_se_params_->BOOST_SCOPE_EXIT_AUX_PARAM(id,i,var).value
@@ -174,42 +174,43 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::aux::wrapper, 1)
 #if defined(BOOST_TYPEOF_EMULATION)
 
 #define BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL(r, idty, i, var)                   \
-    struct BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_SEQ_ELEM(0,idty), i)        \
+    struct BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2,0,idty), i)    \
         : BOOST_TYPEOF(boost::scope_exit::aux::wrap(                         \
-        BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_SEQ_ELEM(0, idty), i, var))) {}; \
-    typedef BOOST_PP_SEQ_ELEM(1,idty)                                        \
-        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_SEQ_ELEM(0,idty), i)::type     \
-        BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_SEQ_ELEM(0,idty), i, var);
+        BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var)))  \
+    {}; typedef BOOST_PP_TUPLE_ELEM(2,1,idty)                                \
+        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2,0,idty), i)::type \
+        BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var);
 
 #elif defined(BOOST_INTEL)
 
-#define BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL(r, idty, i, var)               \
-    typedef BOOST_TYPEOF_KEYWORD(                                        \
-        BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_SEQ_ELEM(0,idty), i, var))   \
-        BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_SEQ_ELEM(0,idty), i, var);
+#define BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL(r, idty, i, var)                 \
+    typedef BOOST_TYPEOF_KEYWORD(                                          \
+        BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var)) \
+        BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var);
 
 #else
 
-#define BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL(r, idty, i, var)               \
-    typedef BOOST_TYPEOF(boost::scope_exit::aux::wrap(                   \
-        BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_SEQ_ELEM(0,idty), i, var)))  \
-        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_SEQ_ELEM(0,idty), i);      \
-    typedef BOOST_PP_SEQ_ELEM(1,idty)                                    \
-        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_SEQ_ELEM(0,idty), i)::type \
-        BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_SEQ_ELEM(0,idty), i, var);
+#define BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL(r, idty, i, var)                   \
+    typedef BOOST_TYPEOF(boost::scope_exit::aux::wrap(                       \
+        BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var)))  \
+        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2,0,idty), i);      \
+    typedef BOOST_PP_TUPLE_ELEM(2,1,idty)                                    \
+        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2,0,idty), i)::type \
+        BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var);
 
 #endif
 
-#define BOOST_SCOPE_EXIT_AUX_PARAM_DECL(r, idty, i, var)                      \
-    typedef BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_SEQ_ELEM(0,idty), i, var) \
-        BOOST_SCOPE_EXIT_AUX_PARAM_T(BOOST_PP_SEQ_ELEM(0,idty), i, var);
+#define BOOST_SCOPE_EXIT_AUX_PARAM_DECL(r, idty, i, var) \
+    typedef BOOST_SCOPE_EXIT_AUX_CAPTURE_T(              \
+        BOOST_PP_TUPLE_ELEM(2,0,idty), i, var)           \
+        BOOST_SCOPE_EXIT_AUX_PARAM_T(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var);
 
 
 #define BOOST_SCOPE_EXIT_AUX_IMPL(id, seq, ty)                                 \
     BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_TAG_DECL, id, seq)            \
-    BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL, (id)(ty), seq)  \
+    BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL, (id,ty), seq)  \
     struct BOOST_SCOPE_EXIT_AUX_PARAMS_T(id) {                                 \
-        BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_PARAM_DECL, (id)(ty), seq)\
+        BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_PARAM_DECL, (id,ty), seq)\
         BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_MEMBER, id, seq)          \
         BOOST_SCOPE_EXIT_AUX_PARAMS_T_CTOR(id, seq)                            \
     } BOOST_SCOPE_EXIT_AUX_PARAMS(id) BOOST_SCOPE_EXIT_AUX_PARAMS_INIT(id, seq)\
@@ -225,7 +226,7 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::aux::wrapper, 1)
         ~BOOST_SCOPE_EXIT_AUX_GUARD_T(id)() { boost_se_body(                   \
             BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_ARG, id, seq) ); }    \
         static void boost_se_body(BOOST_PP_SEQ_FOR_EACH_I(                     \
-            BOOST_SCOPE_EXIT_AUX_ARG_DECL, (id)(ty), seq) )
+            BOOST_SCOPE_EXIT_AUX_ARG_DECL, (id,ty), seq) )
 
 #if defined(BOOST_MSVC)
 
