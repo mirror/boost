@@ -384,7 +384,17 @@ namespace boost
     };
 
     //  predefined error_code object used as "throw on error" tag
+# ifndef BOOST_SYSTEM_THROWS_FUNCTION
     BOOST_SYSTEM_DECL extern error_code throws;
+# else
+    namespace detail { inline error_code * throws() { return 0; } }
+      //  prevent misuse by poisoning the reference in a way that doesn't
+      //  produce warnings or errors from popular compilers, and is also
+      //  very efficient (as determined by inspectiing generated code)
+
+    inline error_code & throws()
+      { return *detail::throws(); }
+# endif
 
     //  non-member functions  ------------------------------------------------//
 
