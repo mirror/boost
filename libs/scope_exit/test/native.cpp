@@ -42,13 +42,14 @@ void test_non_local()
         } BOOST_SCOPE_EXIT_END
 
         BOOST_SCOPE_EXIT( (&i) )
-        try
         {
-            i = 2;
-            Holder<>::g_long = 2;
-            throw 0;
-        } catch(...) {}
-        BOOST_SCOPE_EXIT_END
+          try
+          {
+              i = 2;
+              Holder<>::g_long = 2;
+              throw 0;
+          } catch(...) {}
+        } BOOST_SCOPE_EXIT_END
 
         BOOST_CHECK(i == 0);
         BOOST_CHECK(g_str == "");
