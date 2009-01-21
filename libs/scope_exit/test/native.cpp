@@ -31,6 +31,20 @@ void test_non_local()
     // ... and one local variable as well:
     int i = 0;
 
+    BOOST_SCOPE_EXIT( (i) )
+    {
+        BOOST_CHECK(i == 0);
+        BOOST_CHECK(Holder<>::g_long == 3);
+        BOOST_CHECK(g_str == "try: g_str");
+    } BOOST_SCOPE_EXIT_END
+
+    BOOST_SCOPE_EXIT( (&i) )
+    {
+        BOOST_CHECK(i == 3);
+        BOOST_CHECK(Holder<>::g_long == 3);
+        BOOST_CHECK(g_str == "try: g_str");
+    } BOOST_SCOPE_EXIT_END
+
     {
         g_str = "";
         Holder<>::g_long = 1;
@@ -59,6 +73,20 @@ void test_non_local()
     BOOST_CHECK(Holder<>::g_long == 2);
     BOOST_CHECK(g_str == "g_str");
     BOOST_CHECK(i == 1); // Check that first declared is executed last
+
+    BOOST_SCOPE_EXIT( (&i) )
+    {
+        BOOST_CHECK(i == 3);
+        BOOST_CHECK(Holder<>::g_long == 3);
+        BOOST_CHECK(g_str == "try: g_str");
+    } BOOST_SCOPE_EXIT_END
+
+    BOOST_SCOPE_EXIT( (i) )
+    {
+        BOOST_CHECK(i == 1);
+        BOOST_CHECK(Holder<>::g_long == 3);
+        BOOST_CHECK(g_str == "try: g_str");
+    } BOOST_SCOPE_EXIT_END
 
     try
     {
@@ -95,7 +123,7 @@ bool foo()
 
 void test_types()
 {
-    bool (*pf)() = &foo;
+    bool (*pf)() = 0;
     bool (&rf)() = foo;
     bool results[2] = {};
 
@@ -107,12 +135,31 @@ void test_types()
         }
         BOOST_SCOPE_EXIT_END
 
+        pf = &foo;
+
         BOOST_CHECK(results[0] == false);
         BOOST_CHECK(results[1] == false);
     }
 
     BOOST_CHECK(results[0] == true);
     BOOST_CHECK(results[1] == true);
+
+    {
+        BOOST_SCOPE_EXIT( (&results)(pf) )
+        {
+            results[0] = !pf();
+            results[1] = !pf();
+        }
+        BOOST_SCOPE_EXIT_END
+
+        pf = 0;
+
+        BOOST_CHECK(results[0] == true);
+        BOOST_CHECK(results[1] == true);
+    }
+
+    BOOST_CHECK(results[0] == false);
+    BOOST_CHECK(results[1] == false);
 }
 
 test_suite* init_unit_test_suite( int, char* [] )
