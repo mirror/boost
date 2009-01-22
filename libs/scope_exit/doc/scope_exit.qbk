@@ -26,17 +26,15 @@
 [def _lambda_ [@../../libs/lambda/index.html Boost.Lambda]]
 [def _typeof_ [@../../libs/typeof/index.html Boost.Typeof]]
 [def _typeof_emulation_ [@../../libs/typeof/index.html typeof emulation]]
-[def _typeof_REGISTER_TYPE_ [@../../libs/typeof/refe.html#typeof.regtype REGISTER_TYPE]]
-[def _typeof_REGISTER_TEMPLATE_ [@../../libs/typeof/refe.html#typeof.regtemp REGISTER_TEMPLATE]]
+[def _typeof_REGISTER_TYPE_ [@../../libs/typeof/refe.html#typeof.regtype BOOST_TYPEOF_REGISTER_TYPE]]
+[def _typeof_REGISTER_TEMPLATE_ [@../../libs/typeof/refe.html#typeof.regtemp BOOST_TYPEOF_REGISTER_TEMPLATE]]
 [def _pp_ [@../../libs/preprocessor/index.html Boost.Preprocessor]]
 [def _pp_seq_ [@../../libs/preprocessor/index.html Boost.Preprocessor sequence]]
 [def _ptr_container_ [@../../libs/ptr_container/doc/ptr_container.html Boost Pointer Container Library]]
 [def _multi_index_ [@../../libs/multi_index/doc/index.html Boost Multi-Index Containers Library]]
 [def _scope_guard_ [@http://www.ddj.com/dept/cpp/184403758 ScopeGuard]]
 [def _D_ [@http://www.digitalmars.com/d/index.html D]]
-[def _D_scope_exit_ [@http://www.digitalmars.com/d/statement.html#ScopeGuardStatement scope(exit)]]
-[def _D_scope_failure_ [@http://www.digitalmars.com/d/statement.html#ScopeGuardStatement scope(failure)]]
-[def _D_scope_success_ [@http://www.digitalmars.com/d/statement.html#ScopeGuardStatement scope(success)]]
+[def _D_scope_exit_ [@http://www.digitalmars.com/d/2.0/statement.html#ScopeGuardStatement scope(exit)]]
 [def _RAII_ [@http://www.research.att.com/~bs/glossary.html#Gresource-acquisition-is-initialization RAII]]
 [def _strong_guarantee_ [@http://www.research.att.com/~bs/glossary.html#Gstrong-guarantee strong guarantee]]
 
@@ -101,8 +99,11 @@ will be available inside the _scope_exit_ body; otherwise, a copy of the
 variable will be made after the point `(1)` and only the copy will be
 available inside the body.
 
-In the example above, variables `commit` and `m_persons` are passed by
-reference. This is a most common case but passing a variable by value is
+In the example above, variables `commit` and `m_persons` are passed
+by reference because the final value of the `commit` variable should
+be used to determine whether to execute rollback action or not and
+the action should modify the `m_persons` object, not its copy.
+This is a most common case but passing a variable by value is
 sometimes useful as well.
 
 Consider a more complex case where `World::addPerson` can save intermediate
@@ -111,7 +112,7 @@ use `Person::m_evolution` to store a version of changes and increment it
 to cancel all rollback actions associated with those changes.
 
 If you pass a current value of `m_evolution` stored in the `checkpoint`
-variable by value, it will be remain unchanged until the end of scope
+variable by value, it will remain unchanged until the end of aa  scope
 and you can compare it with the final value of the `m_evolution`.
 If the latter wasn't incremented since you saved it, the rollback action
 inside the block should be executed:
@@ -200,7 +201,7 @@ _scope_exit_ doesn't have any of these problems:
 [h3 RAII]
 
 _RAII_ is absolutely perfect for the `File` class introduced above.
-Use of properly designed `File` class would look like:
+Use of a properly designed `File` class would look like:
 
 	try {
 	    File passwd("/etc/passwd");
@@ -211,7 +212,7 @@ Use of properly designed `File` class would look like:
 	    throw;
 	}
 
-However, using RAII to build up a _strong_guarantee_ could introduce
+However, using _RAII_ to build up a _strong_guarantee_ could introduce
 a lot of non-reusable _RAII_ types. For example:
 
 	m_persons.push_back(person);
@@ -279,7 +280,7 @@ Note that
 overloaded function must be explicitly casted, as demonstrated in
 this example,
 * condition in `if_` expression refers to `commit` variable indirectly
-through `_1` placeholder,
+through the `_1` placeholder,
 * setting a breakpoint inside `if_[ ... ]` requires in-depth knowledge
 of _lambda_ and debugging techniques.
 
@@ -312,23 +313,26 @@ In future releases _scope_exit_ will take advantages of C++0x features.
 
 * Passing capture list as _pp_seq_ will be replaced with a traditional
 macro invocation style:
+
 	BOOST_SCOPE_EXIT(currency_rate_inserted, &commit, &rates, &currency)
-       {
+	{
 	    if(currency_rate_inserted && !commit)
 	        rates.erase(currency);
 	} BOOST_SCOPE_EXIT_END
 	
 * `BOOST_SCOPE_EXIT_END` will be replaced with a semicolon:
+
 	BOOST_SCOPE_EXIT(currency_rate_inserted, &commit, &rates, &currency)
-       {
+	{
 	    if(currency_rate_inserted && !commit)
 	        rates.erase(currency);
 	};
 
 * Users will be able to capture local variables implicitly with lambda
 capture defaults `&` and `=`:
+
 	BOOST_SCOPE_EXIT(&, currency_rate_inserted)
-       {
+	{
 	    if(currency_rate_inserted && !commit)
 	        rates.erase(currency);
 	};
@@ -341,7 +345,7 @@ _ScopeExit_ is similar to _D_scope_exit_ feature built
 into the _D_ programming language.
 
 A curious reader may notice that the library doesn't implement
-_D_scope_success_ and _D_scope_failure_ of the _D_ language.
+`scope(success)` and `scope(failure)` of the _D_ language.
 Unfortunately, it's not possible in C++ because failure or success
 condition cannot be determined by calling `std::uncaught_exception`.
 It's not a big problem, though. These two constructs can be
@@ -409,6 +413,7 @@ If a `scope-exit-capture` starts with the ampersand sign `&`, the
 corresponding `identifier` will be available inside `scope-exit-body`;
 otherwise, a copy of it will be made at the point of _scope_exit_
 declaration and that copy will be available inside `scope-exit-body`.
+In the latter case, the `idenitifer` must be `CopyConstructible`.
 
 Only identifiers listed in `scope-exit-capture-list`, static variables,
 `extern` variables and functions, and enumerations from the enclosing
@@ -461,7 +466,7 @@ Maxim Yegorushkin for sending me a code where he used a local struct
 to clean up resources.
 
 Andrei Alexandrescu for pointing me to _D_scope_exit_ construct of
-the D programming language.
+the _D_ programming language.
 
 Pavel Vozenilek and Maxim Yanchenko for reviews of early drafts of
 the library.
