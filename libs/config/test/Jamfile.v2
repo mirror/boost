@@ -21,6 +21,8 @@ test-suite config
           : #input-files
           : #requirements
           <threading>single <toolset>msvc:<runtime-link>static <toolset>msvc:<link>static 
+          <target-os>linux:<linkflags>-lpthread
+          <target-os>linux:<linkflags>-lrt
     ]
      [ run config_info.cpp : : : <test-info>always_show_run_output <threading>single <toolset>msvc:<runtime-link>static <toolset>msvc:<link>static ]
      [ run config_info.cpp : : : <test-info>always_show_run_output <threading>multi : config_info_threaded ]
