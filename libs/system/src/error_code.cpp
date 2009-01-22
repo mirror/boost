@@ -411,7 +411,7 @@ namespace boost
   namespace system
   {
 
-# ifndef BOOST_SYSTEM_THROWS_FUNCTION
+# ifndef BOOST_SYSTEM_NO_DEPRECATED
     BOOST_SYSTEM_DECL error_code throws; // "throw on error" special error_code;
                                          //  note that it doesn't matter if this
                                          //  isn't initialized before use since
