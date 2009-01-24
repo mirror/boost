@@ -1,4 +1,4 @@
-/* Copyright 2006-2008 Joaquin M Lopez Munoz.
+/* Copyright 2006-2009 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -15,9 +15,15 @@
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/flyweight/assoc_container_factory_fwd.hpp>
+#include <boost/flyweight/detail/nested_xxx_if_not_ph.hpp>
 #include <boost/flyweight/factory_tag.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
+
+namespace boost{namespace flyweights{namespace detail{
+BOOST_FLYWEIGHT_NESTED_XXX_IF_NOT_PLACEHOLDER_EXPRESSION_DEF(iterator);
+BOOST_FLYWEIGHT_NESTED_XXX_IF_NOT_PLACEHOLDER_EXPRESSION_DEF(value_type);
+}}} /* namespace boost::flyweights::detail */
 
 /* Factory class using a given associative container.
  */
@@ -30,8 +36,20 @@ template<typename Container>
 class assoc_container_factory_class:public factory_marker
 {
 public:
-  typedef typename Container::iterator   handle_type;
-  typedef typename Container::value_type entry_type;
+
+  /* When assoc_container_factory_class<Container> is an MPL placeholder
+   * expression, referring to Container::iterator and Container::value_type
+   * force the MPL placeholder expression Container to be instantiated, which
+   * is wasteful and can fail in concept-checked STL implementations.
+   * We protect ourselves against this circumstance.
+   */
+
+  typedef typename detail::nested_iterator_if_not_placeholder_expression<
+    Container
+  >::type                                handle_type;
+  typedef typename detail::nested_value_type_if_not_placeholder_expression<
+    Container
+  >::type                                entry_type;
   
   handle_type insert(const entry_type& x)
   {
@@ -52,17 +70,6 @@ public:
   typedef assoc_container_factory_class type;
   BOOST_MPL_AUX_LAMBDA_SUPPORT(1,assoc_container_factory_class,(Container))
 };
-
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-/* This is preferred to deriving from factory_marker since checking for
- * derivation forces the instantiation of the specifier, which is not
- * needed when the specifier is a placeholder expression.
- */
-
-template<typename Container>
-struct is_factory<assoc_container_factory_class<Container> >:
-  boost::mpl::true_{};
-#endif
 
 /* assoc_container_factory_class specifier */
 

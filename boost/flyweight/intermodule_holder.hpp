@@ -1,4 +1,4 @@
-/* Copyright 2006-2008 Joaquin M Lopez Munoz.
+/* Copyright 2006-2009 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -173,16 +173,6 @@ public:
   typedef intermodule_holder_class type;
   BOOST_MPL_AUX_LAMBDA_SUPPORT(1,intermodule_holder_class,(C))
 };
-
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-/* This is preferred to deriving from holder_marker since checking for
- * derivation forces the instantiation of the specifier, which is not
- * needed when the specifier is a placeholder expression.
- */
-
-template<typename C>
-struct is_holder<intermodule_holder_class<C> >:boost::mpl::true_{};
-#endif
 
 /* intermodule_holder_class specifier */
 
