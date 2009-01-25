@@ -203,7 +203,7 @@ Intrusive containers have also downsides:
 *  Analyzing the thread safety of a program that uses containers is harder with intrusive containers, because
    the container might be modified indirectly without an explicit call to a container member.
 
-[table Summay of intrusive containers advantages and disadvantages
+[table Summary of intrusive containers advantages and disadvantages
     [[Issue]                                                                     [Intrusive]                         [Non-intrusive]]
     [[Memory management]                                                         [External]                          [Internal through allocator]]
     [[Insertion/Erasure time]                                                    [Faster]                            [Slower]]
@@ -318,7 +318,7 @@ and optionally, the user can specify options. We have 3 option types:
 *  [*`constant_time_size<bool Enabled>`]: Specifies if a constant time `size()`
    function is demanded for the container. This will instruct the intrusive
    container to store an additional member to keep track of the current size of the
-   container. By default, contant-time size is activated.
+   container. By default, constant-time size is activated.
 
 *  [*`size_type<bool Enabled>`]: Specifies a type that can hold
    the size of the container. This type will be the type returned by `list.size()`
@@ -464,7 +464,7 @@ issue and:
 *  the computation of an iterator to an element from a pointer or reference
    to that element should be a constant time operation.
 *  it's important to achieve a well-known worst-time system response.
-*  localization of data (e.g. for cache hit optimization) leads to measureable effects.
+*  localization of data (e.g. for cache hit optimization) leads to measurable effects.
 
 The last point is important if you have a lot of containers over a set of elements. E.g. if 
 you have a vector of objects (say, `std::vector<Object>`), and you also have a list
@@ -692,7 +692,7 @@ There is a reason for this:
   without referring to the container. 
 
 This auto-unlink feature is useful in certain applications
-but it must be used [*very carefuly]:
+but it must be used [*very carefully]:
 
 *  If several threads are using the same container the destructor of the auto-unlink
    hook will be called without any thread synchronization so removing the object is
@@ -779,7 +779,7 @@ linear time complexity, even some that usually are constant time, like
 [classref boost::intrusive::slist::swap swap]. [classref boost::intrusive::slist slist]
 only provides forward iterators.
 
-For most cases, a doubly linked list is preferrable because it offers more
+For most cases, a doubly linked list is preferable because it offers more
 constant-time functions with a slightly bigger size overhead.
 However, for some applications like
 constructing more elaborate containers, singly linked lists are essential
@@ -969,7 +969,7 @@ Now let's see a small example using both hooks:
 [*Boost.Intrusive] also offers associative containers that can be very useful
 when creating more complex associative containers, like containers maintaining
 one or more indices with different sorting semantics. Boost.Intrusive associative 
-containers, like most STL associative container implemenatations are based on
+containers, like most STL associative container implementations are based on
 red-black trees.
 
 The memory overhead of these containers is usually 3 pointers and a bit (with
@@ -1192,7 +1192,7 @@ Apart from them, these hooks offer additional options:
    container. When this option is used, the unordered container will store
    the calculated hash value in the hook and rehashing operations won't need
    to recalculate the hash of the value.
-   This option will improve the perfomance of unordered containers when
+   This option will improve the performance of unordered containers when
    rehashing is frequent or hashing the value is a slow operation.
    Default: `store_hash<false>`.
 
@@ -1801,7 +1801,7 @@ behavior may be outweighed by better expected-case behavior, as the most importa
 This means most important objects will be retrieved faster than less important items and for items keys with equal keys
 most important objects will be found first. These properties are important for some applications.
 
-The priority comparison will be provided just like the key comparison, via a funcion object that will be
+The priority comparison will be provided just like the key comparison, via a function object that will be
 stored in the intrusive container. This means that the priority can be stored in the value to be introduced
 in the treap or computed on flight (via hashing or similar).
 
@@ -2065,7 +2065,7 @@ and [classref boost::intrusive::unordered_set unordered_set] reference for more 
 With multiple ordered and unordered associative containers
 ([classref boost::intrusive::multiset multiset] and 
 [classref boost::intrusive::unordered_multiset unordered_multiset]) there  is
-no need for these advanced insertion functions, since insertions are always succesful.
+no need for these advanced insertion functions, since insertions are always successful.
 
 [endsect]
 
@@ -2240,7 +2240,7 @@ For unordered associative containers
 On the other hand, `local_iterator_to` functions
 have their `s_local_iterator_to` static alternatives.
 
-Alternative static functions are available under certain circunstances
+Alternative static functions are available under certain circumstances
 explained in the [link intrusive.value_traits.stateful_value_traits Stateful value traits] section;
 if the programmer uses hooks provided by [*Boost.Intrusive], those functions
 will be available.
@@ -3163,17 +3163,17 @@ class is empty:
 *  If the class is not empty, a [*stateful] value traits is assumed.
    Node <-> Value transformations must be non-static functions.
 
-Using stateful value traits it's possible to create containers of non-copyable/moveble objects [*without modifying]
+Using stateful value traits it's possible to create containers of non-copyable/movable objects [*without modifying]
 the definition of the class to be inserted. This interesting property is achieved without using global variables
 (stateless value traits could use global variables to achieve the same goal), so:
 
 *  [*Thread-safety guarantees]: Better thread-safety guarantees can be achieved with stateful
-   value traits, since accessing global resources might require syncronization primitives that
+   value traits, since accessing global resources might require synchronization primitives that
    can be avoided when using internal state.
 *  [*Flexibility]: A stateful value traits type can be configured at run-time.
 *  [*Run-time polymorphism]: A value traits might implement node <-> value
    transformations as virtual functions. A single container type could be
-   configured at run-time to use different node <-> value relatioships.
+   configured at run-time to use different node <-> value relationships.
 
 Stateful value traits have many advantages but also some downsides:
 
@@ -3185,7 +3185,7 @@ Stateful value traits have many advantages but also some downsides:
    available because node <-> value transformations are not static.
 *  [*Bigger iterators]: The size of some iterators is increased because the iterator
    needs to store a pointer to the stateful value traits to implement node to value
-   tranformations (e.g. `operator*()` and `operator->()`).
+   transformations (e.g. `operator*()` and `operator->()`).
 
 An easy and useful example of stateful value traits is when an array of values can be indirectly introduced
 in a list guaranteeing no additional allocation apart from the initial resource reservation:
@@ -3335,7 +3335,7 @@ functions come in handy when implementing non-intrusive containers
 
 [*Boost.Intrusive] offers a wide range of containers but also allows the
 construction of custom containers reusing [*Boost.Intrusive] elements.
-The programer might want to use node algorithms directly or
+The programmer might want to use node algorithms directly or
 build special hooks that take advantage of an application environment.
 
 For example, the programmer can customize parts of [*Boost.Intrusive]
@@ -3557,7 +3557,7 @@ containers. The dispersed pointer list, as with small values, has poor locality.
 
 The next test measures the time needed to complete calls to the member function
 `sort(Pred pred)`. Values (`test_class` and `itest_class`) and lists are created as explained in the
-first section. The values will be sorted in ascending and descenting order each
+first section. The values will be sorted in ascending and descending order each
 iteration. For example, if ['l] is a list:
 
 [c++]
@@ -3706,7 +3706,7 @@ all the objects to be inserted in intrusive containers in containers like `std::
 *  New treap-based containers: treap, treap_set, treap_multiset.
 *  Corrected compilation bug for Windows-based 64 bit compilers.
 *  Corrected exception-safety bugs in container constructors.
-*  Updated documentation to show rvalue-references funcions instead of emulation functions.
+*  Updated documentation to show rvalue-references functions instead of emulation functions.
 
 [endsect]
 
@@ -3762,7 +3762,7 @@ all the objects to be inserted in intrusive containers in containers like `std::
 
 [endsect]
 
-[section:acknowledgements Acknowledegements]
+[section:acknowledgements Acknowledgements]
 
 [*Olaf Krzikalla] would like to thank:
 
@@ -3799,7 +3799,7 @@ helpful discussions.
 
 [endsect]
 
-[/xinclude autodoc.xml]
+[xinclude autodoc.xml]
 
 [section:license_notices License notices]
 
