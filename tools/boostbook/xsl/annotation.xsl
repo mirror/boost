@@ -8,6 +8,9 @@
   -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
+  <xsl:variable name="uppercase-letters" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>
+  <xsl:variable name="lowercase-letters" select="'abcdefghijklmnopqrstuvwxyz'"/>
+
   <xsl:key name="classes" match="class|struct|union|typedef" use="@name"/>
   <xsl:key name="methods" match="method|overloaded-method" use="@name"/>
   <xsl:key name="functions" match="function|overloaded-function" use="@name"/>
@@ -17,7 +20,7 @@
   <xsl:key name="macros" match="macro" use="@name"/>
   <xsl:key name="headers" match="header" use="@name"/>
   <xsl:key name="globals" match="namespace/data-member|header/data-member" use="@name"/>
-  <xsl:key name="named-entities" match="class|struct|union|concept|function|overloaded-function|macro|library|namespace/data-member|header/data-member|*[attribute::id]" use="@name|@id"/>
+  <xsl:key name="named-entities" match="class|struct|union|concept|function|overloaded-function|macro|library|namespace/data-member|header/data-member|*[attribute::id]" use="translate(@name|@id, $uppercase-letters, $lowercase-letters)"/>
 
   <xsl:template match="function|overloaded-function" mode="generate.id">
     <xsl:call-template name="fully-qualified-id">
