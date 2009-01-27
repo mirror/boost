@@ -15,10 +15,12 @@
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/flyweight/assoc_container_factory_fwd.hpp>
+#include <boost/flyweight/detail/is_placeholder_expr.hpp>
 #include <boost/flyweight/detail/nested_xxx_if_not_ph.hpp>
 #include <boost/flyweight/factory_tag.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
+#include <boost/mpl/if.hpp>
 
 namespace boost{namespace flyweights{namespace detail{
 BOOST_FLYWEIGHT_NESTED_XXX_IF_NOT_PLACEHOLDER_EXPRESSION_DEF(iterator);
@@ -36,7 +38,6 @@ template<typename Container>
 class assoc_container_factory_class:public factory_marker
 {
 public:
-
   /* When assoc_container_factory_class<Container> is an MPL placeholder
    * expression, referring to Container::iterator and Container::value_type
    * force the MPL placeholder expression Container to be instantiated, which
@@ -63,8 +64,17 @@ public:
 
   static const entry_type& entry(handle_type h){return *h;}
 
-private:  
-  Container cont;
+private:
+  /* As above, avoid instantiating Container if it is an
+   * MPL placeholder expression.
+   */
+
+  typedef typename mpl::if_<
+    detail::is_placeholder_expression<Container>,
+    int,
+    Container
+  >::type container_type;
+  container_type cont;
 
 public:
   typedef assoc_container_factory_class type;
