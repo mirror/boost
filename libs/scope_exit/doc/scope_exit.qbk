@@ -20,18 +20,18 @@
 
 [/  Links   ]
 
-[def _scope_exit_ [@index.html ScopeExit]]
-[def _Tutorial_ [@scope_exit/tutorial.html Tutorial]]
-[def _Reference_ [@scope_exit/ref.html Reference]]
-[def _lambda_ [@../../libs/lambda/index.html Boost.Lambda]]
-[def _typeof_ [@../../libs/typeof/index.html Boost.Typeof]]
-[def _typeof_emulation_ [@../../libs/typeof/index.html typeof emulation]]
-[def _typeof_REGISTER_TYPE_ [@../../libs/typeof/refe.html#typeof.regtype BOOST_TYPEOF_REGISTER_TYPE]]
-[def _typeof_REGISTER_TEMPLATE_ [@../../libs/typeof/refe.html#typeof.regtemp BOOST_TYPEOF_REGISTER_TEMPLATE]]
-[def _pp_ [@../../libs/preprocessor/index.html Boost.Preprocessor]]
-[def _pp_seq_ [@../../libs/preprocessor/index.html Boost.Preprocessor sequence]]
-[def _ptr_container_ [@../../libs/ptr_container/doc/ptr_container.html Boost Pointer Container Library]]
-[def _multi_index_ [@../../libs/multi_index/doc/index.html Boost Multi-Index Containers Library]]
+[def _scope_exit_ [link scope_exit ScopeExit]]
+[def _Tutorial_ [link scope_exit.tutorial Tutorial]]
+[def _Reference_ [link scope_exit.ref Reference]]
+[def _lambda_ [@../../../../libs/lambda/index.html Boost.Lambda]]
+[def _typeof_ [@../../../../libs/typeof/index.html Boost.Typeof]]
+[def _typeof_emulation_ [@../../../../libs/typeof/index.html typeof emulation]]
+[def _typeof_REGISTER_TYPE_ [@../../../../doc/html/typeof/refe.html#typeof.regtype BOOST_TYPEOF_REGISTER_TYPE]]
+[def _typeof_REGISTER_TEMPLATE_ [@../../../../doc/html/typeof/refe.html#typeof.regtemp BOOST_TYPEOF_REGISTER_TEMPLATE]]
+[def _pp_ [@../../../../libs/preprocessor/index.html Boost.Preprocessor]]
+[def _pp_seq_ [@../../../../libs/preprocessor/index.html Boost.Preprocessor sequence]]
+[def _ptr_container_ [@../../../../libs/ptr_container/doc/ptr_container.html Boost Pointer Container Library]]
+[def _multi_index_ [@../../../../libs/multi_index/doc/index.html Boost Multi-Index Containers Library]]
 [def _scope_guard_ [@http://www.ddj.com/dept/cpp/184403758 ScopeGuard]]
 [def _D_ [@http://www.digitalmars.com/d/index.html D]]
 [def _D_scope_exit_ [@http://www.digitalmars.com/d/2.0/statement.html#ScopeGuardStatement scope(exit)]]
@@ -150,7 +150,7 @@ inside the block should be executed:
 	    checkpoint = ++person.m_evolution;
 	}
 
-Full code listing can be found in [@../example/world.cpp world.cpp].
+Full code listing can be found in [@../../example/world.cpp world.cpp].
 
 [endsect]
 
