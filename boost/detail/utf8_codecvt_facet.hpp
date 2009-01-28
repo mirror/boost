@@ -86,9 +86,11 @@
 #include <boost/detail/workaround.hpp>
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std {
     using ::codecvt;
     using ::mbstate_t;
     using ::size_t
+}
 #endif
 
 #if !defined(__MSL_CPP__) && !defined(__LIBCOMO__)
