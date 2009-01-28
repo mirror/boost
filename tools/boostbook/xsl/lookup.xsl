@@ -225,7 +225,8 @@
   </xsl:template>
 
   <xsl:template match="function|overloaded-function" mode="unique.name">
-    <xsl:value-of select="number(count(key('named-entities', @name)) = 1)"/>
+    <xsl:value-of select="number(count(key('named-entities',
+        translate(@name, $uppercase-letters, $lowercase-letters))) = 1)"/>
   </xsl:template>
 
   <!-- Print the name of the current node -->

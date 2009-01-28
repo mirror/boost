@@ -205,7 +205,7 @@ A wrapper class aware of this can use it as:
     {
         // Wrapped object constructed in-place via a TypedInPlaceFactory.
         // No temporary created.
-        W ( TypedInPlaceFactory2<X,int,std::string&rt(123,"hello")) ;
+        W ( TypedInPlaceFactory2<X,int,std::string>(123,"hello")) ;
     }
 
 The factories are divided in two groups:
