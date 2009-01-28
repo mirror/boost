@@ -1,0 +1,35 @@
+
+#line 1912 "../../../../libs/parameter/doc/index.rst"
+#include <boost/bind.hpp>
+#include <boost/ref.hpp>
+#include <boost/parameter.hpp>
+#include <string>
+#include <functional>
+
+namespace parameter = boost::parameter;
+
+BOOST_PARAMETER_NAME(s1)
+BOOST_PARAMETER_NAME(s2)
+BOOST_PARAMETER_NAME(s3)
+
+template <class ArgumentPack>
+std::string f(ArgumentPack const& args)
+{
+    std::string const& s1 = args[_s1];
+    std::string const& s2 = args[_s2];
+#line 1905 "../../../../libs/parameter/doc/index.rst"
+using boost::bind;
+using boost::ref;
+
+typename parameter::binding<
+    ArgumentPack, tag::s3, std::string
+>::type s3 = args[_s3 || bind(std::plus<std::string>(), ref(s1), ref(s2)) ];
+#line 1931 "../../../../libs/parameter/doc/index.rst"
+    return s3;
+}
+
+std::string x = f((_s1="hello,", _s2=" world", _s3="hi world"));
+
+int main()
+{}
+
