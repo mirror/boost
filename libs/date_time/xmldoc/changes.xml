@@ -33,15 +33,15 @@
           <entry>Bug fix</entry>
           <entry>
             Fixed missing include in <code>filetime_functions.hpp</code>
-			(<ulink url="https://svn.boost.org/trac/boost/ticket/2688">#2688</ulink>).
+            (<ulink url="https://svn.boost.org/trac/boost/ticket/2688">#2688</ulink>).
           </entry>
         </row>
         <row>
           <entry>Bug fix</entry>
           <entry>
             Fixed dereferencing end string iterators in different places of code,
-			which could cause crashes on MSVC
-			(<ulink url="https://svn.boost.org/trac/boost/ticket/2698">#2698</ulink>).
+            which could cause crashes on MSVC
+            (<ulink url="https://svn.boost.org/trac/boost/ticket/2698">#2698</ulink>).
           </entry>
         </row>
 
