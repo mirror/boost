@@ -6,6 +6,7 @@
 #ifndef UUID_0552D49838DD11DD90146B8956D89593
 #define UUID_0552D49838DD11DD90146B8956D89593
 
+#include <boost/config.hpp>
 #include <boost/exception/get_error_info.hpp>
 #include <exception>
 #include <sstream>
@@ -22,13 +23,17 @@ boost
         get_diagnostic_information( exception const & x )
             {
             if( error_info_container * c=x.data_.get() )
+#ifndef BOOST_NO_EXCEPTIONS
                 try
                     {
+#endif
                     return c->diagnostic_information();
+#ifndef BOOST_NO_EXCEPTIONS
                     }
                 catch(...)
                     {
                     }
+#endif
             return 0;
             }
         }

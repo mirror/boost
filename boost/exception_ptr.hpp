@@ -6,6 +6,10 @@
 #ifndef UUID_FA5836A2CADA11DC8CD47C8555D89593
 #define UUID_FA5836A2CADA11DC8CD47C8555D89593
 
+#include <boost/config.hpp>
+#ifdef BOOST_NO_EXCEPTIONS
+#error This header requires exception handling to be enabled.
+#endif
 #include <boost/exception/exception.hpp>
 #include <boost/exception/detail/type_info.hpp>
 #include <boost/shared_ptr.hpp>
