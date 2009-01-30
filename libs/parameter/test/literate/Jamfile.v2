@@ -21,7 +21,7 @@ run namespaces1.cpp ;
 run namespaces2.cpp ;
 run namespaces3.cpp ;
 compile optional-parameters0.cpp ;
-compile static-member-functions0.cpp ;
+# compile static-member-functions0.cpp ;
 run parameter-enabled-constructors0.cpp ;
 compile required-parameters0.cpp ;
 compile class-template-skeleton0.cpp ;
