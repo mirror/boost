@@ -8,6 +8,22 @@ if (BUILD_QUICKBOOK)
     add_definitions(/wd4511 /wd4512 /wd4701 /wd4702 /wd4244 /wd4267 /wd4800)
   endif (MSVC)
   
+  #
+  # TDS: this needs fixing...  these are the modules that quickbook is
+  # dependent on, these paths should be set via some more generic
+  # mechanism
+  #
+  include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/spirit/include
+    ${CMAKE_SOURCE_DIR}/libs/detail/include
+    ${CMAKE_SOURCE_DIR}/libs/config/include
+    ${CMAKE_SOURCE_DIR}/libs/type_traits/include
+    ${CMAKE_SOURCE_DIR}/libs/program_options/include
+    ${CMAKE_SOURCE_DIR}/libs/filesystem/include
+    ${CMAKE_SOURCE_DIR}/libs/system/include
+    )
+  
+
   boost_add_executable(quickbook
     detail/quickbook.cpp
     detail/actions.cpp
