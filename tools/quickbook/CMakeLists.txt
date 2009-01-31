@@ -15,7 +15,9 @@ if (BUILD_QUICKBOOK)
     detail/utils.cpp
     detail/post_process.cpp
     detail/collector.cpp
+    detail/input_path.cpp
     detail/template_stack.cpp
+    detail/markups.cpp
     DEPENDS boost_program_options boost_filesystem
     )  
 endif (BUILD_QUICKBOOK)
