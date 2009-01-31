@@ -6,6 +6,8 @@
 
 
 
+#include <boost/test/test_tools.hpp>
+
 #include <boost/statechart/asynchronous_state_machine.hpp>
 #include <boost/statechart/fifo_scheduler.hpp>
 #include <boost/statechart/event.hpp>
@@ -17,8 +19,6 @@
 
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
-
-#include <boost/test/test_tools.hpp>
 
 #include <stdexcept>
 
