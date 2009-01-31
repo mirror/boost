@@ -10,8 +10,7 @@
 //  Revision History
 //  23 Sep 2001  Initial version (Daryle Walker)
 
-#define  BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>  // for main
+#include <boost/test/minimal.hpp>  // for main
 
 #include <boost/cstdlib.hpp>               // for boost::exit_success
 #include <boost/integer/integer_mask.hpp>  // for boost::high_bit_mask_t, etc.
