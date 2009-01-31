@@ -89,7 +89,7 @@
 namespace std {
     using ::codecvt;
     using ::mbstate_t;
-    using ::size_t
+    using ::size_t;
 }
 #endif
 
