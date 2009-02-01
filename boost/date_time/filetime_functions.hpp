@@ -25,6 +25,7 @@
 
 #include <boost/cstdint.hpp>
 #include <boost/date_time/time.hpp>
+#include <boost/date_time/date_defs.hpp>
 
 namespace boost {
 

@@ -196,7 +196,21 @@ int main() {
       check("Long negative time durations", ss.str() == std::string("-300:02:01"));
       ss.str("");
     }
-      
+
+    // The test verifies that #2698 is fixed. That is, the time and date facet should
+    // not dereference end() iterator for the format string in do_put_tm.
+    {
+      boost::gregorian::date date(2009, 1, 1);
+      boost::posix_time::time_duration td(0, 0, 0, 0);
+      boost::posix_time::ptime boost_time(date, td);
+      std::stringstream sstr;
+    
+      boost::posix_time::time_facet* pFacet = new boost::posix_time::time_facet("");
+      sstr.imbue(std::locale(std::locale::classic(), pFacet));
+    
+      sstr << boost_time;
+    }
+
 #if !defined(BOOST_NO_STD_WSTRING) 
     std::copy(&short_month_names[0], 
               &short_month_names[12],

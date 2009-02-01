@@ -352,11 +352,12 @@ namespace boost { namespace date_time {
                                       m_month_short_names[tm_value.tm_mon]);
       }
       // use time_put facet to create final string
+      const char_type* p_format = a_format.c_str();
       return std::use_facet<std::time_put<CharT> >(a_ios.getloc()).put(next, a_ios, 
                                                                        fill_char, 
                                                                        &tm_value,
-                                                                       &*a_format.begin(), 
-                                                                       &*a_format.begin()+a_format.size());
+                                                                       p_format, 
+                                                                       p_format + a_format.size());
     }
   protected:
     string_type                   m_format;
