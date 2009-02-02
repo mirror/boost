@@ -157,7 +157,7 @@ private:
     {
       referenced_instance(const char* segment_name_):ref(0)
       {
-        strcpy(segment_name,segment_name_);
+        std::strcpy(segment_name,segment_name_);
       }
 
       ~referenced_instance(){segment_name[0]='\0';}
