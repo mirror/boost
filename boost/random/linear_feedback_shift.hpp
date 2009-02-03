@@ -92,7 +92,7 @@ public:
     value = ((value & mask) << s) ^ b;
     return value;
   }
-  bool validation(result_type x) const { return val == x; }
+  static bool validation(result_type x) { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
 
