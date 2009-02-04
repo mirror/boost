@@ -57,14 +57,17 @@ add `boost-install-path/boost/tr1/tr1` to your compiler's include search path.
 Note that you must not copy the headers in boost/tr1/tr1 into a directory
 called "include", doing so will cause them to cease working.
 
-[blurb [*Important Note #1]\n\n
+[blurb [*Important Note #1]
+
 The include path order is very important if you want this library to work 
 correctly.  If you get compiler errors then suspect the include paths.  The
-correct order is:\n\n
+correct order is:
+
 1) boost-root/boost/tr1/tr1\n
 2) boost-root\n
 3) Any other standard library replacements (STLport for example).\n
-4) Your regular standard library.]
+4) Your regular standard library.\n
+]
 
 [blurb [*Important Note #2: GNU C++ Users]
 
@@ -102,7 +105,11 @@ set up the include paths as follows:
 
 Sun's compiler has a particularly interesting form of `#include`, that
 will actually look for a file named `array.SUNWCCh` if you `#include <array>`.
-In order to make this library work with Sun's compiler you will need to
+What's more it won't include a standard header file that it thinks it's
+already seen.
+In order to make this library work with Sun's compiler you can either
+pass the undocumented compiler switch ['"-Qoption ccfe -nosunwcch"] to
+the compiler, or else you will need to
 set up the include paths as follows:
 
 1) boost-root/boost/tr1/tr1/sun\n
@@ -1869,7 +1876,9 @@ See: [link boost_tr1.subject_list.array Fixed Size Array]
 
 [section:cmath_header <cmath>]
 
-See: [link boost_tr1.unsupported.special Special Functions]
+See: [link boost_tr1.subject_list.special Special Functions]
+
+See: [link boost_tr1.subject_list.c99_special C99 Special Functions]
 
 [endsect]
 
@@ -1929,13 +1938,13 @@ See: [link boost_tr1.subject_list.type_traits Type Traits].
 
 [section:unordered_map_header <unordered_map>]
 
-See: [link boost_tr1.unsupported.unordered_map Unordered Associative Map]
+See: [link boost_tr1.subject_list.unordered_map Unordered Associative Map]
 
 [endsect]
 
 [section:unordered_set_header <unordered_set>]
 
-See: [link boost_tr1.unsupported.unordered_set Unordered Associative Set].
+See: [link boost_tr1.subject_list.unordered_set Unordered Associative Set].
 
 [endsect]
 
@@ -2014,6 +2023,7 @@ as the Boost-specific ones. This will allow these tests to be used against the s
 library's own TR1 implementation as well as the Boost one.
 
 [endsect]
+
 
 
 
