@@ -28,6 +28,8 @@ Output:
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
+BOOST_MPL_ASSERT((boost::is_same<boost::units::unscale<boost::units::temperature::fahrenheit_base_unit::unit_type::system_type>::type,
+                  boost::units::temperature::fahrenheit_base_unit::unit_type::system_type>));
 
 BOOST_MPL_ASSERT((boost::is_same<boost::units::unscale<boost::units::temperature::fahrenheit_base_unit::unit_type>::type,
                  boost::units::temperature::fahrenheit_base_unit::unit_type>));
