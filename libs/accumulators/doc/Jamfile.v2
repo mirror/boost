@@ -228,6 +228,8 @@ xml accumulators
         <xsl:param>chunk.section.depth=2
     ;
 
+path-constant images_location : html ;
+
 boostbook standalone
     :
         accumulators
@@ -239,4 +241,6 @@ boostbook standalone
         <dependency>accdoc
         <dependency>statsdoc
         <dependency>opdoc
+        <format>pdf:<xsl:param>img.src.path=$(images_location)/
     ;
+

@@ -8,7 +8,7 @@ path-constant admonishment_location : ../../../../doc/src/images ;
 
 xml unordered : unordered.qbk ;
 boostbook standalone : unordered :
-    <xsl:param>admon.graphics.path=images/
+    <format>html:<xsl:param>admon.graphics.path=images/
     <xsl:param>navig.graphics.path=images/
     <xsl:param>html.stylesheet=boostbook.css
     <xsl:param>boost.root=../../../..

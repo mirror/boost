@@ -5,7 +5,7 @@
 
 xml hash : hash.qbk ;
 boostbook standalone : hash :
-    <xsl:param>admon.graphics.path=images/
+    <format>html:<xsl:param>admon.graphics.path=images/
     <xsl:param>navig.graphics.path=images/
     <xsl:param>html.stylesheet=boostbook.css
     <xsl:param>boost.root=../../../../..

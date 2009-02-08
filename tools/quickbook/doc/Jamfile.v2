@@ -5,6 +5,8 @@ using quickbook ;
 
 xml quickbook : quickbook.qbk ;
 
+path-constant images : ../../../doc/html ;
+
 boostbook standalone
     :
         quickbook
@@ -17,4 +19,5 @@ boostbook standalone
         <xsl:param>chunk.first.sections=1
 
         #<xsl:param>callout.graphics.path=../../images/callouts//
+        <format>pdf:<xsl:param>img.src.path=$(images)/
     ;
