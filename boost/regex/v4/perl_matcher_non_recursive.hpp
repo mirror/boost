@@ -154,7 +154,11 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_all_states()
       &perl_matcher<BidiIterator, Allocator, traits>::match_combining,
       &perl_matcher<BidiIterator, Allocator, traits>::match_soft_buffer_end,
       &perl_matcher<BidiIterator, Allocator, traits>::match_restart_continue,
-      (::boost::is_random_access_iterator<BidiIterator>::value ? &perl_matcher<BidiIterator, Allocator, traits>::match_dot_repeat_fast : &perl_matcher<BidiIterator, Allocator, traits>::match_dot_repeat_slow),
+      // Although this next line *should* be evaluated at compile time, in practice
+      // some compilers (VC++) emit run-time initialisation which breaks thread
+      // safety, so use a dispatch function instead:
+      //(::boost::is_random_access_iterator<BidiIterator>::value ? &perl_matcher<BidiIterator, Allocator, traits>::match_dot_repeat_fast : &perl_matcher<BidiIterator, Allocator, traits>::match_dot_repeat_slow),
+      &perl_matcher<BidiIterator, Allocator, traits>::match_dot_repeat_dispatch,
       &perl_matcher<BidiIterator, Allocator, traits>::match_char_repeat,
       &perl_matcher<BidiIterator, Allocator, traits>::match_set_repeat,
       &perl_matcher<BidiIterator, Allocator, traits>::match_long_set_repeat,

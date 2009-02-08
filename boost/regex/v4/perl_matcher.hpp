@@ -403,6 +403,10 @@ private:
    bool match_char_repeat();
    bool match_dot_repeat_fast();
    bool match_dot_repeat_slow();
+   bool match_dot_repeat_dispatch()
+   {
+      return ::boost::is_random_access_iterator<BidiIterator>::value ? match_dot_repeat_fast() : match_dot_repeat_slow();
+   }
    bool match_backstep();
    bool match_assert_backref();
    bool match_toggle_case();
