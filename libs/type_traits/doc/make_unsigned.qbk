@@ -32,14 +32,14 @@ __header ` #include <boost/type_traits/make_unsigned.hpp>` or ` #include <boost/
 
 [ [Expression] [Result Type]]
 
-[[`make_signed<int>::type`][`unsigned int`]]
+[[`make_unsigned<int>::type`][`unsigned int`]]
 
-[[`make_signed<unsigned int const>::type`] [`unsigned int const`]]
+[[`make_unsigned<unsigned int const>::type`] [`unsigned int const`]]
 
-[[`make_signed<const unsigned long long>::type`] [`const unsigned long long`]]
+[[`make_unsigned<const unsigned long long>::type`] [`const unsigned long long`]]
 
-[[`make_signed<my_enum>::type`] [An unsigned integer type with the same width as the enum.]]
-[[`make_signed<wchar_t>::type`] [An unsigned integer type with the same width as wchar_t.]]
+[[`make_unsigned<my_enum>::type`] [An unsigned integer type with the same width as the enum.]]
+[[`make_unsigned<wchar_t>::type`] [An unsigned integer type with the same width as wchar_t.]]
 
 ]
 

@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>is_member_pointer</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="home" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="up" href="../reference.html" title="Alphabetical Reference">
 <link rel="prev" href="is_member_object_pointer.html" title="is_member_object_pointer">
 <link rel="next" href="is_object.html" title="is_object">
@@ -24,16 +24,16 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.reference.is_member_pointer"></a><a href="is_member_pointer.html" title="is_member_pointer"> is_member_pointer</a>
+<a name="boost_typetraits.reference.is_member_pointer"></a><a class="link" href="is_member_pointer.html" title="is_member_pointer"> is_member_pointer</a>
 </h3></div></div></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">is_member_pointer</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a href="integral_constant.html" title="integral_constant">true_type</a>-or-<a href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
+<span class="keyword">struct</span> <span class="identifier">is_member_pointer</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a class="link" href="integral_constant.html" title="integral_constant">true_type</a>-or-<a class="link" href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
 </pre>
 <p>
         <span class="bold"><strong>Inherits:</strong></span> If T is a (possibly cv-qualified)
         pointer to a member (either a function or a data member) then inherits from
-        <a href="integral_constant.html" title="integral_constant">true_type</a>,
-        otherwise inherits from <a href="integral_constant.html" title="integral_constant">false_type</a>.
+        <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>,
+        otherwise inherits from <a class="link" href="integral_constant.html" title="integral_constant">false_type</a>.
       </p>
 <p>
         <span class="bold"><strong>C++ Standard Reference:</strong></span> 3.9.2 and 8.3.3.
@@ -51,7 +51,7 @@
           </p>
 <p>
             <code class="computeroutput"><span class="identifier">is_member_pointer</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="special">(</span><span class="identifier">MyClass</span><span class="special">::*)&gt;</span></code>
-            inherits from <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">true_type</a></code>.
+            inherits from <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">true_type</a></code>.
           </p>
 <p>
         </p>
@@ -60,7 +60,7 @@
 <p>
           </p>
 <p>
-            <code class="computeroutput"><span class="identifier">is_member_pointer</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="special">(</span><span class="identifier">MyClass</span><span class="special">::*)(</span><span class="keyword">char</span><span class="special">)&gt;::</span><span class="identifier">type</span></code> is the type <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">true_type</a></code>.
+            <code class="computeroutput"><span class="identifier">is_member_pointer</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="special">(</span><span class="identifier">MyClass</span><span class="special">::*)(</span><span class="keyword">char</span><span class="special">)&gt;::</span><span class="identifier">type</span></code> is the type <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">true_type</a></code>.
           </p>
 <p>
         </p>
