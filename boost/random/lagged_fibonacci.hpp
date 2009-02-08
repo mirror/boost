@@ -317,12 +317,14 @@ public:
     unsigned long mask = ~((~0u) << (w%32));   // now lowest w bits set
     RealType two32 = pow(RealType(2), 32);
     unsigned int j;
-    for(j = 0; j < long_lag && first != last; ++j, ++first) {
+    for(j = 0; j < long_lag && first != last; ++j) {
       x[j] = RealType(0);
       for(int k = 0; k < w/32 && first != last; ++k, ++first)
         x[j] += *first / pow(two32,k+1);
-      if(first != last && mask != 0)
+      if(first != last && mask != 0) {
         x[j] += fmod((*first & mask) / _modulus, RealType(1));
+        ++first;
+      }
     }
     i = long_lag;
     if(first == last && j < long_lag)

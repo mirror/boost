@@ -238,17 +238,17 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   std::vector<int>::const_iterator it_end = v.end();
   URNG urng3(it, it_end);
   BOOST_CHECK(it != v.begin());
-  std::cout << "; seeding uses " << (it - v.begin()) << " words" << std::endl;
+  std::vector<int>::const_iterator::difference_type n_words = (it - v.begin());
+  std::cout << "; seeding uses " << n_words << " words" << std::endl;
 
-  bool have_exception = false;
-  try {
-    // now check that exceptions are thrown
+  it = v.end();
+  BOOST_CHECK_THROW(urng3.seed(it, it_end), std::invalid_argument);
+
+  if(n_words > 1) {
     it = v.end();
-    urng3.seed(it, it_end);
-  } catch(std::invalid_argument& x) {
-    have_exception = true;
+    --it;
+    BOOST_CHECK_THROW(urng3.seed(it, it_end), std::invalid_argument);
   }
-  BOOST_CHECK(have_exception);
 
   // check for min/max members
   ResultType min = (urng3.min)();
