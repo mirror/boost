@@ -85,6 +85,7 @@ BOOST_AUTO_TEST_CASE(test_conversion) {
 }
 
 BOOST_AUTO_TEST_CASE(test_dimensionless_conversions) {
+    typedef bu::divide_typeof_helper<bu::cgs::force, bu::si::force>::type mixed_dimensionless;
 
     bu::quantity<bu::si::dimensionless> dimensionless_test1(1.0*bu::cgs::dyne/bu::si::newton);
     BOOST_CHECK(dimensionless_test1 == 1e-5);
@@ -95,6 +96,10 @@ BOOST_AUTO_TEST_CASE(test_dimensionless_conversions) {
     BOOST_CHECK(dimensionless_test2.value() == 1e-5);
     bu::quantity<bu::divide_typeof_helper<bu::cgs::force, bu::si::force>::type> dimensionless_test3(dimensionless_test2);
     BOOST_UNITS_CHECK_CLOSE(dimensionless_test3.value(), 1.0);
+
+    BOOST_UNITS_CHECK_CLOSE(boost::units::conversion_factor(mixed_dimensionless(), heterogeneous_dimensionless()), 1e-5);
+    BOOST_UNITS_CHECK_CLOSE(boost::units::conversion_factor(heterogeneous_dimensionless(), mixed_dimensionless()), 1e5);
+
 
     //m/cm -> g/kg
     bu::quantity<bu::divide_typeof_helper<bu::si::length, bu::cgs::length>::type> dimensionless_test4(2.0 * bu::si::meters / bu::cgs::centimeters);
