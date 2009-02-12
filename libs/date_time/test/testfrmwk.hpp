@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <string>
+#include <boost/config.hpp>
 
 //! Really simple test framework for counting and printing
 class TestStats
