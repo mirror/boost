@@ -20,6 +20,7 @@
 #include <vector>
 #include <boost/random.hpp>
 #include <boost/config.hpp>
+#include <boost/preprocessor/stringize.hpp>
 
 #include <boost/test/test_tools.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
@@ -288,14 +289,10 @@ void instantiate_all()
   
   typedef boost::random::lagged_fibonacci<boost::uint32_t, 24, 607, 273> lagged_fibonacci;
 
-#define BOOST_RANDOM_STRINGIZE(x) #x
-
   typedef BOOST_RANDOM_URNG_TEST::result_type result_type;
-  instantiate_urng(BOOST_RANDOM_STRINGIZE(BOOST_RANDOM_URNG_TEST), BOOST_RANDOM_URNG_TEST(), static_cast<result_type>(0));
+  instantiate_urng(BOOST_PP_STRINGIZE(BOOST_RANDOM_URNG_TEST), BOOST_RANDOM_URNG_TEST(), static_cast<result_type>(0));
   BOOST_RANDOM_URNG_TEST* type_ptr = 0;
   extra_tests(type_ptr);
-
-#undef BOOST_RANDOM_STRINGIZE
 
 }
 
