@@ -375,8 +375,13 @@ bool basic_regex_parser<charT, traits>::parse_open_paren()
    if(0 == (this->flags() & regbase::nosubs))
    {
       markid = ++m_mark_count;
+#ifndef BOOST_NO_STD_DISTANCE
       if(this->flags() & regbase::save_subexpression_location)
          this->m_pdata->m_subs.push_back(std::pair<std::size_t, std::size_t>(std::distance(m_base, m_position) - 1, 0));
+#else
+      if(this->flags() & regbase::save_subexpression_location)
+         this->m_pdata->m_subs.push_back(std::pair<std::size_t, std::size_t>((m_position - m_base) - 1, 0));
+#endif
    }
    re_brace* pb = static_cast<re_brace*>(this->append_state(syntax_element_startmark, sizeof(re_brace)));
    pb->index = markid;
@@ -424,8 +429,13 @@ bool basic_regex_parser<charT, traits>::parse_open_paren()
       return false;
    }
    BOOST_ASSERT(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_close_mark);
+#ifndef BOOST_NO_STD_DISTANCE
    if(markid && (this->flags() & regbase::save_subexpression_location))
       this->m_pdata->m_subs.at(markid - 1).second = std::distance(m_base, m_position);
+#else
+   if(markid && (this->flags() & regbase::save_subexpression_location))
+      this->m_pdata->m_subs.at(markid - 1).second = (m_position - m_base);
+#endif
    ++m_position;
    //
    // append closing parenthesis state:
