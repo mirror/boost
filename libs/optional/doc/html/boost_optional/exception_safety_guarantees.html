@@ -1,23 +1,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Exception Safety
-    Guarantees</title>
+<title>Exception Safety Guarantees</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
-<link rel="start" href="../index.html" title="Chapter 1. Boost.Optional">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="home" href="../index.html" title="Chapter 1. Boost.Optional">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.Optional">
-<link rel="prev" href="a_note_about_optional_bool_.html" title="A note about
-    optional&lt;bool&gt;">
+<link rel="prev" href="a_note_about_optional_bool_.html" title="A note about optional&lt;bool&gt;">
 <link rel="next" href="type_requirements.html" title="Type requirements">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -26,12 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_optional.exception_safety_guarantees"></a><a href="exception_safety_guarantees.html" title="Exception Safety
-    Guarantees">Exception Safety
+<a name="boost_optional.exception_safety_guarantees"></a><a class="link" href="exception_safety_guarantees.html" title="Exception Safety Guarantees">Exception Safety
     Guarantees</a>
 </h2></div></div></div>
 <p>
-      Because of the current implementation (see <a href="../index.html#optional_implementation_notes">Implementation
+      Because of the current implementation (see <a class="link" href="implementation_notes.html" title="Implementation Notes">Implementation
       Notes</a>), all of the assignment methods:
     </p>
 <div class="itemizedlist"><ul type="disc">
@@ -75,8 +72,7 @@
       know that <code class="computeroutput"><span class="identifier">optional</span></code>'s assignment
       and reset has the same guarantees.
     </p>
-<pre class="programlisting">
-<span class="comment">//
+<pre class="programlisting"><span class="comment">//
 </span><span class="comment">// Case 1: Exception thrown during assignment.
 </span><span class="comment">//
 </span><span class="identifier">T</span> <span class="identifier">v0</span><span class="special">(</span><span class="number">123</span><span class="special">);</span>
@@ -116,8 +112,8 @@
 <span class="special">}</span>
 </pre>
 <a name="boost_optional.exception_safety_guarantees.swap"></a><h4>
-<a name="id2644478"></a>
-      <a href="exception_safety_guarantees.html#boost_optional.exception_safety_guarantees.swap">Swap</a>
+<a name="id704586"></a>
+      <a class="link" href="exception_safety_guarantees.html#boost_optional.exception_safety_guarantees.swap">Swap</a>
     </h4>
 <p>
       <code class="computeroutput"><span class="keyword">void</span> <span class="identifier">swap</span><span class="special">(</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;,</span>

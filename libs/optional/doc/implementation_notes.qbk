@@ -10,8 +10,6 @@
 
 
 
-[#optional_implementation_notes]
-
 [section Implementation Notes]
 
 `optional<T>` is currently implemented using a custom aligned storage facility

@@ -1,23 +1,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>A note about
-    optional&lt;bool&gt;</title>
+<title>A note about optional&lt;bool&gt;</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
-<link rel="start" href="../index.html" title="Chapter 1. Boost.Optional">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="home" href="../index.html" title="Chapter 1. Boost.Optional">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.Optional">
 <link rel="prev" href="in_place_factories.html" title="In-Place Factories">
-<link rel="next" href="exception_safety_guarantees.html" title="Exception Safety
-    Guarantees">
+<link rel="next" href="exception_safety_guarantees.html" title="Exception Safety Guarantees">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -26,8 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_optional.a_note_about_optional_bool_"></a><a href="a_note_about_optional_bool_.html" title="A note about
-    optional&lt;bool&gt;">A note about
+<a name="boost_optional.a_note_about_optional_bool_"></a><a class="link" href="a_note_about_optional_bool_.html" title="A note about optional&lt;bool&gt;">A note about
     optional&lt;bool&gt;</a>
 </h2></div></div></div>
 <p>
@@ -36,7 +33,7 @@
     </p>
 <p>
       First, it is functionally similar to a tristate boolean (false,maybe,true)
-      &#8212;such as <a href="../../../../tribool/index.html" target="_top">boost::tribool</a>&#8212;
+      &#8212;such as <a href="../../../../../doc/html/tribool.html" target="_top">boost::tribool</a>&#8212;
       except that in a tristate boolean, the maybe state <span class="underline">represents
       a valid value</span>, unlike the corresponding state of an uninitialized
       <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">&gt;</span></code>. It
@@ -52,8 +49,7 @@
       lead to subtle errors due to the implicit <code class="computeroutput"><span class="keyword">bool</span></code>
       conversion:
     </p>
-<pre class="programlisting">
-<span class="keyword">void</span> <span class="identifier">foo</span> <span class="special">(</span> <span class="keyword">bool</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">foo</span> <span class="special">(</span> <span class="keyword">bool</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
 <span class="keyword">void</span> <span class="identifier">bar</span><span class="special">()</span>
 <span class="special">{</span>
     <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">v</span> <span class="special">=</span> <span class="keyword">try</span><span class="special">();</span>

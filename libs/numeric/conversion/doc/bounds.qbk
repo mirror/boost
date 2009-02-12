@@ -8,8 +8,6 @@
     http://www.boost.org/LICENSE_1_0.txt)
 ]
 
-[#numeric_conversion_bounds]
-
 [section bounds<> traits class]
 
 [section Introduction]

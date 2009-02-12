@@ -8,8 +8,6 @@
     http://www.boost.org/LICENSE_1_0.txt)
 ]
 
-[#numeric_conversion_converter]
-
 [section converter<> function object]
 
 [section Synopsis]
@@ -52,7 +50,7 @@
 `boost::numeric::converter<>` is a __SGI_UNARY_FUNCTION__ encapsulating
 the code to perform a numeric conversion with the direction and
 properties specified by the Traits template parameter. It can optionally
-take some [link numeric_coversion_converter_policies policies] which can be used to customize its behavior. The
+take some [link boost_numericconversion.numeric_converter_policy_classes policies] which can be used to customize its behavior. The
 `Traits` parameter is not a policy but the parameter that defines
 the conversion.
 
@@ -63,16 +61,16 @@ the conversion.
 [table
 [[            ][           ]]
 [[`T`][
-The [link numeric_conversion_definitions_numeric_types Numeric Type] 
+The [link boost_numericconversion.definitions.numeric_types Numeric Type] 
 which is the ['Target] of the conversion.
 ]]
 [[`S`][
-The [link numeric_conversion_definitions_numeric_types Numeric Type] 
+The [link boost_numericconversion.definitions.numeric_types Numeric Type] 
 which is the ['Source] of the conversion.
 ]]
 [[`Traits`][
 This must be a conversion traits class with the interface of
-[link numeric_conversion_traits `boost::numeric::conversion_traits`]
+[link boost_numericconversion.conversion_traits___traits_class `boost::numeric::conversion_traits`]
 ]]
 [[`OverflowHandler`][
 [*Stateless Policy] called to administrate the result of the range checking.
@@ -143,19 +141,19 @@ represented by the target type without overflow.
 
 It does not determine if the conversion is ['exact]; that is, it does not detect
 ['inexact] conversions, only ['out-of-range] conversions (see the
-[link numeric_conversion_definitions_roundoff Definitions] for further details).
+[link boost_numericconversion.definitions.exact__correctly_rounded_and_out_of_range_representations Definitions] for further details).
 
 The return value is of enum type 
-[link numeric_conversion_converter_policies_range_check_result `boost::numeric::range_check_result`]
+[link boost_numericconversion.numeric_converter_policy_classes.enum_range_check_result `boost::numeric::range_check_result`]
 
 The actual code for the range checking logic is optimized for the combined
 properties of the source and target types. For example, a non-subranged
 conversion (i.e: `int`->`float`), requires no range checking, so `out_of_range()`
 returns `cInRange` directly. See the following 
-[link numeric_conversion_converter_range_checking_logic table] for more details.
+[link boost_numericconversion.converter___function_object.range_checking_logic table] for more details.
 
 If the user supplied a
-[link numeric_conversion_policy_user_range_checker UserRangeChecker] policy, 
+[link boost_numericconversion.numeric_converter_policy_classes.policy_userrangechecker UserRangeChecker] policy, 
 is this policy which implements this function, so the implementation is user 
 defined, although it is expected to perform the same conceptual check and 
 return the appropriate result.
@@ -167,14 +165,14 @@ __SPACE__
 
 This [link numeric_conversion_converter_internal internal] static member function 
 calls out_of_range(s), and passes the
-result to the [link numeric_conversion_policy_overflow_handler OverflowHandler] 
+result to the [link boost_numericconversion.numeric_converter_policy_classes.policy_overflowhandler OverflowHandler] 
 policy class.
 
 For those Target/Source combinations which don't require range checking, this
 is an empty inline function.
 
 If the user supplied a 
-[link numeric_conversion_policy_user_range_checker UserRangeChecker] policy, 
+[link boost_numericconversion.numeric_converter_policy_classes.policy_userrangechecker UserRangeChecker] policy, 
 is this policy which implements this function, so the implementation is user 
 defined, although it is expected to perform the same action as the default. 
 In particular, it is expected to pass the result of the check to the overflow handler.
@@ -187,7 +185,7 @@ This [link numeric_conversion_converter_internal internal] static member functio
 performs the actual conversion.
 
 This function is externally supplied by the 
-[link numeric_conversion_policy_raw_converter RawConverter] policy class.
+[link boost_numericconversion.numeric_converter_policy_classes.policy_rawconverter RawConverter] policy class.
 
 __SPACE__
 
@@ -199,7 +197,7 @@ which is [_only used] for
 type]] according to some rounding direction.
 
 This function is externally supplied by the 
-[link numeric_conversion_policy_float_to_int_rounder Float2IntRounder] policy class
+[link boost_numericconversion.numeric_converter_policy_classes.policy_float2introunder Float2IntRounder] policy class
 which encapsulates the specific rounding mode.
 
 __SPACE__
@@ -213,8 +211,6 @@ The user does not have to call these if calling `convert()`, since `convert()` c
 them infernally, but they can be called separately for specific needs.
 
 [endsect]
-
-[#numeric_conversion_converter_range_checking_logic]
 
 [section Range Checking Logic]
 

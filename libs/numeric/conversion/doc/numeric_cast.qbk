@@ -15,7 +15,7 @@
 The lack of preservation of range makes conversions between numeric types
 error prone. This is true for both implicit conversions and explicit
 conversions (through `static_cast`).
-[link numeric_conversion_numeric_cast `numeric_cast`]
+[link boost_numericconversion.improved_numeric_cast__.numeric_cast `numeric_cast`]
 detects loss of range when a numeric type is converted, and throws an
 exception if the range cannot be preserved.
 
@@ -41,8 +41,6 @@ to a type that can hold all possible values of the source type, there will
 be no runtime overhead.
 
 [endsect]
-
-[#numeric_conversion_numeric_cast]
 
 [section numeric_cast]
 

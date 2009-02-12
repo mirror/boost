@@ -46,32 +46,32 @@ Distributed under the Boost Software License, Version 1.0.
 
 The Boost Numeric Conversion library is a collection of tools to describe and
 perform conversions between values of different 
-[link numeric_conversion_definitions_numeric_types numeric types].
+[link boost_numericconversion.definitions.numeric_types numeric types].
 
 The library includes a special alternative for a subset of `std::numeric_limits<>`,
-the [link numeric_conversion_bounds bounds<>] traits class, which provides 
-a consistent way to obtain the [link numeric_conversion_definitions_range boundary] 
-values for the [link numeric_conversion_definitions_range range] of a numeric type.
+the [link boost_numericconversion.bounds___traits_class bounds<>] traits class, which provides 
+a consistent way to obtain the [link boost_numericconversion.definitions.range_and_precision boundary] 
+values for the [link boost_numericconversion.definitions.range_and_precision range] of a numeric type.
 
-It also includes a set of [link numeric_conversion_traits trait classes] 
+It also includes a set of [link boost_numericconversion.conversion_traits___traits_class trait classes] 
 which describes the compile-time
 properties of a conversion from a source to a target numeric type.
-Both [link numeric_conversion_cpp_arithmetic_types arithmetic] and 
-[link numeric_conversion_definitions_numeric_types user-defined numeric types] can be used.
+Both [link boost_numericconversion.definitions.c___arithmetic_types arithmetic] and 
+[link boost_numericconversion.definitions.numeric_types user-defined numeric types] can be used.
 
-A policy-based [link numeric_conversion_converter converter] object which 
+A policy-based [link boost_numericconversion.converter___function_object converter] object which 
 uses `conversion_traits` to select
 an optimized implementation is supplied. Such implementation uses an optimal
 range checking code suitable for the source/target combination.
 
 * The converter's out-of-range behavior can be customized via an
-[link numeric_conversion_policy_overflow_handler OverflowHandler] policy.
+[link boost_numericconversion.numeric_converter_policy_classes.policy_overflowhandler OverflowHandler] policy.
 * For floating-point to integral conversions, the rounding mode can be selected via the
-[link numeric_conversion_policy_float_to_int_rounder Float2IntRounder] policy.
+[link boost_numericconversion.numeric_converter_policy_classes.policy_float2introunder Float2IntRounder] policy.
 * A custom low-level conversion routine (for UDTs for instance) can be passed via a
-[link numeric_conversion_policy_raw_converter RawConverter] policy.
+[link boost_numericconversion.numeric_converter_policy_classes.policy_rawconverter RawConverter] policy.
 * The optimized automatic range-checking logic can be overridden via a
-[link numeric_conversion_policy_user_range_checker UserRangeChecker] policy.
+[link boost_numericconversion.numeric_converter_policy_classes.policy_userrangechecker UserRangeChecker] policy.
 
 [endsect]
 

@@ -85,8 +85,6 @@ rest of this document.
 
 [endsect]
 
-[#numeric_conversion_cpp_arithmetic_types]
-
 [section C++ Arithmetic Types]
 
 The C++ language defines [_fundamental types] (§3.9.1). The following subsets of
@@ -144,8 +142,6 @@ positive values only (you can do this with signed types as well).
 
 [endsect]
 
-[#numeric_conversion_definitions_numeric_types]
-
 [section Numeric Types]
 
 This section introduces the following definitions intended to integrate
@@ -161,8 +157,8 @@ A type is [*numeric] if:
 * It is a user-defined type which
     * Represents numeric abstract values (i.e. numbers).
     * Can be converted (either implicitly or explicitly) to/from at least one arithmetic type.
-    * Has [link numeric_conversion_definitions_range range] (possibly unbounded) 
-      and [link numeric_conversion_definitions_range precision] (possibly dynamic or
+    * Has [link boost_numericconversion.definitions.range_and_precision range] (possibly unbounded) 
+      and [link boost_numericconversion.definitions.range_and_precision precision] (possibly dynamic or
       unlimited).
     * Provides an specialization of `std::numeric_limits`.
 
@@ -215,8 +211,6 @@ types (and values):
 
 
 [endsect]
-
-[#numeric_conversion_definitions_range]
 
 [section Range and Precision]
 
@@ -317,8 +311,6 @@ exactly represented). The higher the number of exponent bits the wider the range
 while the higher the number of mantissa bits, the higher the precision.
 
 [endsect]
-
-[#numeric_conversion_definitions_roundoff]
 
 [section Exact, Correctly Rounded and Out-Of-Range Representations]
 
@@ -453,8 +445,6 @@ two adjacents, with an implementation-defined choice of rounding direction;
 that is, the conversion is required to be correctly rounded.
 
 [endsect]
-
-[#numeric_conversion_definitions_subranged]
 
 [section Subranged Conversion Direction, Subtype and Supertype]
 

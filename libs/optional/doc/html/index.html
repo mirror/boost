@@ -3,17 +3,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Chapter 1. Boost.Optional</title>
 <link rel="stylesheet" href="boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
-<link rel="start" href="index.html" title="Chapter 1. Boost.Optional">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="home" href="index.html" title="Chapter 1. Boost.Optional">
 <link rel="next" href="boost_optional/development.html" title="Development">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"></td>
-<td align="center"><a href="../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,7 +27,7 @@
 </h3></div></div>
 <div><p class="copyright">Copyright © 2003 -2007 Fernando Luis Cacciola Carballal</p></div>
 <div><div class="legalnotice">
-<a name="id2604939"></a><p>
+<a name="id663349"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -73,7 +73,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="optional.motivation"></a><a href="index.html#optional.motivation" title="Motivation">Motivation</a>
+<a name="optional.motivation"></a><a class="link" href="index.html#optional.motivation" title="Motivation">Motivation</a>
 </h2></div></div></div>
 <p>
       Consider these functions which should return a value but which might not have
@@ -142,16 +142,14 @@
       the function would conceptually return. For example, the last two functions
       could have the following interface:
     </p>
-<pre class="programlisting">
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span><span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">get_async_input</span><span class="special">();</span>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span><span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">get_async_input</span><span class="special">();</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">point</span><span class="special">,</span><span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">polygon</span><span class="special">::</span><span class="identifier">get_any_point_effectively_inside</span><span class="special">();</span>
 </pre>
 <p>
       These functions use a consistent interface for dealing with possibly inexistent
       results:
     </p>
-<pre class="programlisting">
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">point</span><span class="special">,</span><span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">poly</span><span class="special">.</span><span class="identifier">get_any_point_effectively_inside</span><span class="special">();</span>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">point</span><span class="special">,</span><span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">poly</span><span class="special">.</span><span class="identifier">get_any_point_effectively_inside</span><span class="special">();</span>
 <span class="keyword">if</span> <span class="special">(</span> <span class="identifier">p</span><span class="special">.</span><span class="identifier">second</span> <span class="special">)</span>
     <span class="identifier">flood_fill</span><span class="special">(</span><span class="identifier">p</span><span class="special">.</span><span class="identifier">first</span><span class="special">);</span>
 </pre>
@@ -166,15 +164,9 @@
 </div>
 <p>
   </p>
-<a name="optional_refassign"></a><p>
-  </p>
-<a name="optional_in_place_factories"></a><p>
-  </p>
-<a name="optional_implementation_notes"></a><p>
-  </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: February 12, 2008 at 22:47:14 GMT</small></p></td>
+<td align="left"><p><small>Last revised: February 09, 2009 at 11:55:08 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>

@@ -12,6 +12,9 @@
 
 import quickbook ;
 
+path-constant images : html ;
+
+
 xml conversion
     :
         conversion.qbk
@@ -26,5 +29,7 @@ boostbook standalone
         <xsl:param>toc.max.depth=2
         <xsl:param>toc.section.depth=2
         <xsl:param>chunk.section.depth=1
+        <format>pdf:<xsl:param>img.src.path=$(images)/
     ;
+
 
