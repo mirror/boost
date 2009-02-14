@@ -153,7 +153,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   std::vector<int>::const_iterator it_end = v.end();
   URNG urng3(it, it_end);
   BOOST_CHECK(it != v.begin());
-  std::vector<int>::const_iterator::difference_type n_words = (it - v.begin());
+  std::iterator_traits<std::vector<int>::const_iterator>::difference_type n_words = (it - v.begin());
   std::cout << "; seeding uses " << n_words << " words" << std::endl;
 
   it = v.end();
