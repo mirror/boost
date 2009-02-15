@@ -20,15 +20,36 @@
 
   <!-- The root of the Boost directory -->
   <xsl:param name="boost.root" select="'../..'"/>
-  <xsl:param name="boost.header.root" select="$boost.root"/>
 
   <!-- A space-separated list of libraries to include in the
        output. If this list is empty, all libraries will be included. -->
   <xsl:param name="boost.include.libraries" select="''"/>
 
+  <!-- Whether to rewrite relative URL's to point to the website -->
+  <xsl:param name="boost.url.prefix"/>
+
   <!-- A space-separated list of xml elements in the input file for which
        whitespace should be preserved -->
   <xsl:preserve-space elements="*"/>
+
+  <!-- The root for boost headers -->
+  <xsl:param name="boost.header.root">
+    <xsl:if test="$boost.url.prefix">
+      <xsl:value-of select="$boost.url.prefix"/>
+      <xsl:text>/</xsl:text>
+    </xsl:if>
+    <xsl:value-of select="$boost.root"/>
+  </xsl:param>
+
+  <!-- The prefix for 'boost:' links. -->
+  <xsl:variable name="boost.protocol.text">
+    <xsl:if test="($boost.url.prefix != '') and (contains($boost.root, '://') = 0)">
+      <xsl:value-of select="concat($boost.url.prefix, '/', $boost.root)"/>
+    </xsl:if>
+    <xsl:if test="($boost.url.prefix = '') or contains($boost.root, '://')">
+      <xsl:value-of select="$boost.root"/>
+    </xsl:if>
+  </xsl:variable>
 
   <xsl:template match="library-reference">
     <xsl:choose>
@@ -183,6 +204,28 @@
   </xsl:template>
 
   <!-- Linking -->
+  <xsl:template match="ulink">
+    <xsl:copy>
+      <xsl:copy-of select="@*"/>
+      <xsl:attribute name="url">
+        <xsl:choose>
+          <xsl:when test="starts-with(@url, 'boost:/')">
+            <xsl:value-of select="concat($boost.protocol.text, substring-after(@url, 'boost:'))"/>
+          </xsl:when>
+          <xsl:when test="starts-with(@url, 'boost:')">
+            <xsl:value-of select="concat($boost.protocol.text, '/', substring-after(@url, 'boost:'))"/>
+          </xsl:when>
+          <xsl:when test="$boost.url.prefix != '' and not(contains(@url, ':') or starts-with(@url, '//'))">
+            <xsl:value-of select="concat($boost.url.prefix, '/', @url)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="@url"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:apply-templates/>
+    </xsl:copy>
+  </xsl:template>
   <xsl:template name="internal-link">
     <xsl:param name="to"/>
     <xsl:param name="text"/>
@@ -496,3 +539,4 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
     </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
+
