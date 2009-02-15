@@ -3,7 +3,7 @@
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) ]
 
-[def __multi-index-short__ [@../../libs/multi_index/doc/index.html
+[def __multi-index-short__ [@boost:/libs/multi_index/doc/index.html
     Boost.MultiIndex]]
 
 [section:tutorial Tutorial]
@@ -110,9 +110,9 @@ And you can now use [classref boost::hash] with book:
     assert(books.find(dandelion) == books.end());
 
 The full example can be found in:
-[@../../libs/functional/hash/examples/books.cpp /libs/functional/hash/examples/books.hpp]
+[@boost:/libs/functional/hash/examples/books.cpp /libs/functional/hash/examples/books.hpp]
 and
-[@../../libs/functional/hash/examples/books.cpp /libs/functional/hash/examples/books.cpp].
+[@boost:/libs/functional/hash/examples/books.cpp /libs/functional/hash/examples/books.cpp].
 
 [tip
 When writing a hash function, first look at how the equality function works.
@@ -170,7 +170,7 @@ of point, it can be repeatedly called for any number of elements. It calls
 [funcref boost::hash_value hash_value] on the supplied element, and combines it with the seed.
 
 Full code for this example is at
-[@../../libs/functional/hash/examples/point.cpp /libs/functional/hash/examples/point.cpp].
+[@boost:/libs/functional/hash/examples/point.cpp /libs/functional/hash/examples/point.cpp].
 
 [note
 When using [funcref boost::hash_combine] the order of the

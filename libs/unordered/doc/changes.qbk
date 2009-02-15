@@ -44,7 +44,7 @@ First official release.
 
 [h2 Boost 1.38.0]
 
-* Use [@../../libs/utility/swap.html `boost::swap`].
+* Use [@boost:/libs/utility/swap.html `boost::swap`].
 * [@https://svn.boost.org/trac/boost/ticket/2237 Ticket 2237]:
   Document that the equality and inequality operators are undefined for two
   objects if their equality predicates aren't equivalent. Thanks to Daniel
@@ -53,7 +53,7 @@ First official release.
   Use a larger prime number list. Thanks to Thorsten Ottosen and Hervé
   Brönnimann.
 * Use
-  [@../../libs/type_traits/doc/html/boost_typetraits/category/alignment.html
+  [@boost:/libs/type_traits/doc/html/boost_typetraits/category/alignment.html
   aligned storage] to store the types. This changes the way the allocator is
   used to construct nodes. It used to construct the node with two calls to
   the allocator's `construct` method - once for the pointers and once for the
