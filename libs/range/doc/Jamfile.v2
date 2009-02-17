@@ -28,5 +28,6 @@ boostbook standalone
 #    <xsl:param>generate.section.toc.level=4
 #    <xsl:param>chunk.first.sections=7
 #    <xsl:param>toc.section.depth=10
+     <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/doc/html
   ;
 

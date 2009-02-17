@@ -15,4 +15,5 @@ boostbook standalone : hash :
     <xsl:param>generate.section.toc.level=2
     <xsl:param>toc.section.depth=1
     <xsl:param>toc.max.depth=1
+    <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/functional/hash/doc/html
     ;

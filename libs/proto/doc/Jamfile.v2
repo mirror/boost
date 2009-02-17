@@ -70,4 +70,5 @@ boostbook standalone
         #<format>pdf:<xsl:param>admon.graphics.extension=".svg"
         #<format>pdf:<xsl:param>admon.graphics.path="$(admon-graphics-path)"
         #<format>pdf:<xsl:param>callout.graphics.path="$(callout-graphics-path)"
+        <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/doc/html
     ;
