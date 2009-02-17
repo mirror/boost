@@ -14,7 +14,7 @@
 
 namespace quickbook
 {
-    void post_process(
+    int post_process(
         std::string const& in
       , std::ostream& out
       , int indent

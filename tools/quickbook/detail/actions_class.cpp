@@ -62,9 +62,10 @@ namespace quickbook
         , template_depth(0)
         , template_escape(false)
         , templates()
+        , error_count(0)
 
     // actions
-        , error()
+        , error(error_count)
         , extract_doc_license(doc_license, phrase)
         , extract_doc_purpose(doc_purpose, phrase)
 
@@ -96,7 +97,7 @@ namespace quickbook
         , cond_phrase_post(phrase, conditions, macro)
 
         , list(out, list_buffer, list_indent, list_marks)
-        , list_format(list_buffer, list_indent, list_marks)
+        , list_format(list_buffer, list_indent, list_marks, error_count)
         , list_item(list_buffer, phrase, list_item_pre, list_item_post)
 
         , funcref_pre(phrase, funcref_pre_)
@@ -165,7 +166,7 @@ namespace quickbook
         , anchor(out)
 
         , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id)
-        , end_section(out, section_level, qualified_section_id)
+        , end_section(out, section_level, qualified_section_id, error_count)
         , xinclude(out, *this)
         , include(*this)
         , import(out, *this)

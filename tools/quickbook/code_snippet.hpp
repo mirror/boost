@@ -9,8 +9,8 @@
 #if !defined(BOOST_SPIRIT_QUICKBOOK_CODE_SNIPPET_HPP)
 #define BOOST_SPIRIT_QUICKBOOK_CODE_SNIPPET_HPP
 
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/actor.hpp>
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_actor.hpp>
 #include "./detail/template_stack.hpp"
 
 namespace quickbook

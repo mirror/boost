@@ -10,10 +10,10 @@
 #include <iostream>
 #include <iterator>
 
-#include <boost/spirit/core/scanner/scanner.hpp>
-#include <boost/spirit/core/primitives/primitives.hpp>
+#include <boost/spirit/include/classic_scanner.hpp>
+#include <boost/spirit/include/classic_primitives.hpp>
 
-namespace spirit = boost::spirit;
+namespace spirit = boost::spirit::classic;
 
 typedef std::istream_iterator<char, char> iterator;
 typedef spirit::scanner<iterator> scanner;

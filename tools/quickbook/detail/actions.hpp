@@ -16,7 +16,7 @@
 #include <vector>
 #include <stack>
 #include <algorithm>
-#include <boost/spirit/iterator/position_iterator.hpp>
+#include <boost/spirit/include/classic_iterator.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
@@ -54,7 +54,13 @@ namespace quickbook
     {
         // Prints an error message to std::cerr
 
+        error_action(
+            int& error_count)
+        : error_count(error_count) {}
+
         void operator()(iterator first, iterator /*last*/) const;
+
+        int& error_count;
     };
 
     struct phrase_action
@@ -230,16 +236,19 @@ namespace quickbook
         list_format_action(
             collector& out
           , int& list_indent
-          , std::stack<mark_type>& list_marks)
+          , std::stack<mark_type>& list_marks
+          , int& error_count)
         : out(out)
         , list_indent(list_indent)
-        , list_marks(list_marks) {}
+        , list_marks(list_marks)
+        , error_count(error_count) {}
 
         void operator()(iterator first, iterator last) const;
 
         collector& out;
         int& list_indent;
         std::stack<mark_type>& list_marks;
+        int& error_count;
     };
 
     struct span
@@ -262,7 +271,7 @@ namespace quickbook
         unexpected_char(collector& out)
         : out(out) {}
 
-        void operator()(char) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
     };
@@ -671,16 +680,19 @@ namespace quickbook
         end_section_action(
             collector& out
           , int& section_level
-          , std::string& qualified_section_id)
+          , std::string& qualified_section_id
+          , int& error_count)
         : out(out)
         , section_level(section_level)
-        , qualified_section_id(qualified_section_id) {}
+        , qualified_section_id(qualified_section_id)
+        , error_count(error_count) {}
 
         void operator()(iterator first, iterator last) const;
 
         collector& out;
         int& section_level;
         std::string& qualified_section_id;
+        int& error_count;
    };
 
     struct xinclude_action

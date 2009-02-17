@@ -1208,12 +1208,12 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     <xsl:if test="@kind='exception'">
       <simpara>
         <xsl:choose>
-          <xsl:when test="normalize-space(.//parametername/text())='nothrow'">
+          <xsl:when test="normalize-space(.//parametername//text())='nothrow'">
             <xsl:text>Will not throw.</xsl:text>
           </xsl:when>
           <xsl:otherwise>
             <classname>
-              <xsl:value-of select=".//parametername/text()"/>
+              <xsl:value-of select=".//parametername//text()"/>
             </classname>
             <xsl:text> </xsl:text>
             <xsl:apply-templates 

@@ -12,7 +12,8 @@
 #include "../doc_info.hpp"
 #include "./post_process.hpp"
 #include "./utils.hpp"
-#include <boost/spirit/iterator/position_iterator.hpp>
+#include "./input_path.hpp"
+#include <boost/spirit/include/classic_iterator.hpp>
 #include <boost/program_options.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -31,7 +32,7 @@
 
 namespace quickbook
 {
-    using namespace boost::spirit;
+    using namespace boost::spirit::classic;
     namespace fs = boost::filesystem;
     tm* current_time; // the current time
     tm* current_gm_time; // the current UTC time
@@ -56,8 +57,10 @@ namespace quickbook
 
         std::string storage;
         int err = detail::load(filein_, storage);
-        if (err != 0)
+        if (err != 0) {
+            ++actor.error_count;
             return err;
+        }
 
         typedef position_iterator<std::string::const_iterator> iterator_type;
         iterator_type first(storage.begin(), storage.end(), filein_);
@@ -83,10 +86,10 @@ namespace quickbook
             file_position const pos = info.stop.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Syntax Error near column " << pos.column << ".\n";
-            return 1;
+            ++actor.error_count;
         }
 
-        return 0;
+        return actor.error_count ? 1 : 0;
     }
 
     static int
@@ -120,7 +123,7 @@ namespace quickbook
             result = parse(filein_, outdir, buffer);
             if (result == 0)
             {
-                post_process(buffer.str(), fileout, indent, linewidth);
+                result = post_process(buffer.str(), fileout, indent, linewidth);
             }
         }
         else
@@ -162,11 +165,11 @@ main(int argc, char* argv[])
             ("no-pretty-print", "disable XML pretty printing")
             ("indent", value<int>(), "indent spaces")
             ("linewidth", value<int>(), "line width")
-            ("input-file", value<std::string>(), "input file")
-            ("output-file", value<std::string>(), "output file")
+            ("input-file", value<quickbook::detail::input_path>(), "input file")
+            ("output-file", value<quickbook::detail::input_path>(), "output file")
             ("debug", "debug mode (for developers)")
             ("ms-errors", "use Microsoft Visual Studio style error & warn message format")
-            ("include-path,I", value< std::vector<std::string> >(), "include path")
+            ("include-path,I", value< std::vector<quickbook::detail::input_path> >(), "include path")
         ;
 
         positional_options_description p;
@@ -230,17 +233,22 @@ main(int argc, char* argv[])
         
         if (vm.count("include-path"))
         {
-            quickbook::include_path = vm["include-path"].as< std::vector<std::string> >();
+            std::vector<quickbook::detail::input_path> paths
+                = vm["include-path"].as<
+                    std::vector<quickbook::detail::input_path> >();
+            quickbook::include_path
+                = std::vector<std::string>(paths.begin(), paths.end());
         }
 
         if (vm.count("input-file"))
         {
-            std::string filein = vm["input-file"].as<std::string>();
+            std::string filein
+                = vm["input-file"].as<quickbook::detail::input_path>();
             std::string fileout;
 
             if (vm.count("output-file"))
             {
-                fileout = vm["output-file"].as<std::string>();
+                fileout = vm["output-file"].as<quickbook::detail::input_path>();
             }
             else
             {
@@ -257,6 +265,7 @@ main(int argc, char* argv[])
         else
         {
             quickbook::detail::outerr("",0) << "Error: No filename given" << std::endl;
+            return 1;
         }
     }
 
@@ -269,6 +278,7 @@ main(int argc, char* argv[])
     catch(...)
     {
         quickbook::detail::outerr("",0) << "Error: Exception of unknown type caught\n";
+        return 1;
     }
 
     return 0;

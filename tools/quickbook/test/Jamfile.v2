@@ -8,7 +8,7 @@
 
 project test ;
 
-import quickbook-testing : quickbook-test ;
+import quickbook-testing : quickbook-test quickbook-fail-test ;
 
 test-suite quickbook.test :
     [ quickbook-test quickbook-manual ]
@@ -21,4 +21,16 @@ test-suite quickbook.test :
     [ quickbook-test templates ]
     [ quickbook-test xinclude ]
     [ quickbook-test import ]
+    [ quickbook-fail-test fail-include ]
+    [ quickbook-fail-test fail-import ]
+    [ quickbook-fail-test fail-template-arguments1 ]
+    [ quickbook-fail-test fail-template-arguments2 ]
+    [ quickbook-fail-test fail-cpp-mismatched-escape ]
+    [ quickbook-fail-test fail-python-mismatched-escape ]
+    [ quickbook-fail-test fail-post-process ]
+    [ quickbook-fail-test fail-parse-error1 ]
+    [ quickbook-fail-test fail-parse-error2 ]
     ;
+
+
+

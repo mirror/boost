@@ -60,6 +60,30 @@ rule quickbook-test ( target-name : input ? : reference-output ? : requirements 
                 <location-prefix>$(target-name).test
                 <testing.input-file>$(reference-output)
                 <testing.input-file>$(target-name).boostbook
+                <preserve-test-targets>on
+        ]
+        ;
+
+    modules.poke testing : .all-tests : \$\(all-tests\) $(t) ;
+
+    return $(t) ;
+}
+
+rule quickbook-fail-test ( target-name : input ? : requirements * )
+{
+    input ?= $(target-name).quickbook ;
+
+    local project = [ project.current ] ;
+    requirements += <testing.arg>$(input:J=" ") ;
+
+    local t =
+        [ targets.create-typed-target RUN_FAIL
+            : $(project)
+            : $(target-name)
+            : ..//quickbook
+            : $(requirements)
+              <preserve-test-targets>on
+              <dependency>$(input)
         ]
         ;
 
@@ -79,3 +103,4 @@ actions process-quickbook bind quickbook-command
 {
     $(quickbook-command) $(>) --output-file=$(<) --debug
 }
+

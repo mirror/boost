@@ -10,16 +10,17 @@
 #if !defined(BOOST_SPIRIT_QUICKBOOK_SYNTAX_HIGHLIGHT_HPP)
 #define BOOST_SPIRIT_QUICKBOOK_SYNTAX_HIGHLIGHT_HPP
 
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/utility/confix.hpp>
-#include <boost/spirit/utility/chset.hpp>
-#include <boost/spirit/symbols/symbols.hpp>
-#include <boost/spirit/utility/escape_char.hpp>
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_confix.hpp>
+#include <boost/spirit/include/classic_chset.hpp>
+#include <boost/spirit/include/classic_symbols.hpp>
+#include <boost/spirit/include/classic_escape_char.hpp>
+#include <boost/spirit/include/classic_loops.hpp>
 #include "./phrase.hpp"
 
 namespace quickbook
 {
-    using namespace boost::spirit;
+    using namespace boost::spirit::classic;
 
     // Grammar for C++ highlighting
     template <
@@ -58,7 +59,7 @@ namespace quickbook
                     |   string_         [Process("string", self.out)]
                     |   char_           [Process("char", self.out)]
                     |   number          [Process("number", self.out)]
-                    |   anychar_p       [Unexpected(self.out)]
+                    |   repeat_p(1)[anychar_p] [Unexpected(self.out)]
                     )
                     ;
 
@@ -74,13 +75,23 @@ namespace quickbook
                     )
                     ;
 
-                escape
-                    = str_p("``")           [PreEscape(self.escape_actions, save)]
-                    >>  (
-                            (+(anychar_p - "``") >> eps_p("``"))
-                            & qbk_phrase
+                escape =
+                    str_p("``")         [PreEscape(self.escape_actions, save)]
+                    >>
+                    (
+                        (
+                            (
+                                (+(anychar_p - "``") >> eps_p("``"))
+                                & qbk_phrase
+                            )
+                            >>  str_p("``")
                         )
-                    >> str_p("``")          [PostEscape(self.out, self.escape_actions, save)]
+                        |
+                        (
+                            eps_p       [self.escape_actions.error]
+                            >> *anychar_p
+                        )
+                    )                   [PostEscape(self.out, self.escape_actions, save)]
                     ;
 
                 preprocessor
@@ -193,7 +204,7 @@ namespace quickbook
                     |   special         [Process("special", self.out)]
                     |   string_         [Process("string", self.out)]
                     |   number          [Process("number", self.out)]
-                    |   anychar_p       [Unexpected(self.out)]
+                    |   repeat_p(1)[anychar_p] [Unexpected(self.out)]
                     )
                     ;
 
@@ -209,13 +220,23 @@ namespace quickbook
                     )
                     ;
 
-                escape
-                    = str_p("``")           [PreEscape(self.escape_actions, save)]
-                    >>  (
-                            (+(anychar_p - "``") >> eps_p("``"))
-                            & qbk_phrase
+                escape =
+                    str_p("``")         [PreEscape(self.escape_actions, save)]
+                    >>
+                    (
+                        (
+                            (
+                                (+(anychar_p - "``") >> eps_p("``"))
+                                & qbk_phrase
+                            )
+                            >>  str_p("``")
                         )
-                    >> str_p("``")          [PostEscape(self.out, self.escape_actions, save)]
+                        |
+                        (
+                            eps_p       [self.escape_actions.error]
+                            >> *anychar_p
+                        )
+                    )                   [PostEscape(self.out, self.escape_actions, save)]
                     ;
 
                 comment

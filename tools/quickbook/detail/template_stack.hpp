@@ -14,9 +14,9 @@
 #include <vector>
 #include <boost/tuple/tuple.hpp>
 #include <boost/assert.hpp>
-#include <boost/spirit/iterator/position_iterator.hpp>
-#include <boost/spirit/utility/functor_parser.hpp>
-#include <boost/spirit/symbols/symbols.hpp>
+#include <boost/spirit/include/classic_position_iterator.hpp>
+#include <boost/spirit/include/classic_functor_parser.hpp>
+#include <boost/spirit/include/classic_symbols.hpp>
 #include <boost/next_prior.hpp>
 
 namespace quickbook
@@ -26,16 +26,16 @@ namespace quickbook
     //      template name
     //      template param name[0]
     //      template param name[1]
-    //      ... 
+    //      ...
     //      template param name[N]
     //      template body
 
     typedef boost::tuple<
             std::vector<std::string>
-          , boost::spirit::file_position> 
+          , boost::spirit::classic::file_position>
     template_symbol;
 
-    typedef boost::spirit::symbols<template_symbol> template_symbols;
+    typedef boost::spirit::classic::symbols<template_symbol> template_symbols;
 
     struct template_stack
     {
@@ -43,8 +43,8 @@ namespace quickbook
 
         struct parser
         {
-            typedef boost::spirit::nil_t result_t;
-    
+            typedef boost::spirit::classic::nil_t result_t;
+
             parser(template_stack& ts)
                 : ts(ts) {}
 
@@ -58,7 +58,7 @@ namespace quickbook
                 for (template_stack::deque::const_iterator i = ts.scopes.begin();
                     i != ts.scopes.end(); ++i)
                 {
-                    boost::spirit::match<> m = i->parse(scan);
+                    boost::spirit::classic::match<> m = i->parse(scan);
                     if (m.length() > len)
                         len = m.length();
                     scan.first = f;
@@ -67,7 +67,7 @@ namespace quickbook
                     scan.first = boost::next(f, len);
                 return len;
             }
-            
+
             template_stack& ts;
         };
 
@@ -78,11 +78,11 @@ namespace quickbook
         void add(std::string const& symbol, template_symbol const& ts);
         void push();
         void pop();
-        
-        boost::spirit::functor_parser<parser> scope;
+
+        boost::spirit::classic::functor_parser<parser> scope;
 
     private:
-        
+
         friend struct parser;
         deque scopes;
     };
