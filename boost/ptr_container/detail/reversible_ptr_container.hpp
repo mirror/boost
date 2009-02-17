@@ -238,6 +238,12 @@ namespace ptr_container_detail
             sd.release();
         }
 
+        template< class U >
+        void remove( U* ptr )
+        {
+            null_policy_deallocate_clone( ptr );
+        }
+        
         template< class I >
         void remove( I i )
         { 
