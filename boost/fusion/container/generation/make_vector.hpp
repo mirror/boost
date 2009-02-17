@@ -36,7 +36,7 @@ namespace boost { namespace fusion
         };
     }
 
-    inline vector<>
+    inline vector0
     make_vector()
     {
         return vector0();
