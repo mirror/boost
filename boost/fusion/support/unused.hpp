@@ -13,6 +13,8 @@
 # pragma warning(disable: 4522) // multiple assignment operators specified warning
 #endif
 
+#define BOOST_FUSION_UNUSED_HAS_IO
+
 namespace boost { namespace fusion
 {
     struct unused_type
