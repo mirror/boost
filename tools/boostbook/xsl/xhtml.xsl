@@ -46,9 +46,11 @@
             select = "concat($boost.root, '/doc/xhtml/images/')"/>
   <xsl:param name = "navig.graphics.path"
             select = "concat($boost.root, '/doc/xhtml/images/')"/>
+  <xsl:param name = "callout.graphics.path"
+            select = "concat($boost.root, '/doc/src/images/callouts/')"/>
 
 
-   <xsl:param name="admon.style">
+  <xsl:param name="admon.style">
     <!-- Remove the style. Let the CSS do the styling -->
 </xsl:param>
 
@@ -74,6 +76,7 @@ sect5     toc
 section   toc
 set       toc,title
   </xsl:param>
+
 
   <xsl:template name="format.cvs.revision">
     <xsl:param name="text"/>
@@ -307,4 +310,3 @@ set       toc,title
 </xsl:template>
 
 </xsl:stylesheet>
-
