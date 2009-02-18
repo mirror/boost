@@ -487,6 +487,10 @@
         <xsl:call-template name="typedef" />
       </xsl:when>
 
+      <xsl:when test="@kind='enum'">
+        <xsl:call-template name="enum" />
+      </xsl:when>
+
       <xsl:otherwise>
         <xsl:call-template name="kind-error-message">
           <xsl:with-param name="message" select="'Cannot handle toplevel memberdef element'"/>
