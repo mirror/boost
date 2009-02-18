@@ -26,13 +26,13 @@
 namespace boost {
 namespace random {
 
-template<class URNG1, int s1, class URNG2, int s2,
 #ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
-  typename URNG1::result_type 
+  #define BOOST_RANDOM_VAL_TYPE typename URNG1::result_type 
 #else
-  uint32_t
+  #define BOOST_RANDOM_VAL_TYPE uint32_t
 #endif
-  val = 0>
+
+template<class URNG1, int s1, class URNG2, int s2, BOOST_RANDOM_VAL_TYPE val = 0>
 class xor_combine
 {
 public:
@@ -42,7 +42,7 @@ public:
 
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
   BOOST_STATIC_CONSTANT(int, shift1 = s1);
-  BOOST_STATIC_CONSTANT(int, shfit2 = s2);
+  BOOST_STATIC_CONSTANT(int, shift2 = s2);
 
   xor_combine() : _rng1(), _rng2()
   { }
@@ -114,15 +114,15 @@ private:
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 //  A definition is required even for integral static constants
-template<class URNG1, int s1, class URNG2, int s2,
-#ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
-  typename URNG1::result_type 
-#else
-  uint32_t
-#endif
-  val>
+template<class URNG1, int s1, class URNG2, int s2, BOOST_RANDOM_VAL_TYPE val>
 const bool xor_combine<URNG1, s1, URNG2, s2, val>::has_fixed_range;
+template<class URNG1, int s1, class URNG2, int s2, BOOST_RANDOM_VAL_TYPE val>
+const int xor_combine<URNG1, s1, URNG2, s2, val>::shift1;
+template<class URNG1, int s1, class URNG2, int s2, BOOST_RANDOM_VAL_TYPE val>
+const int xor_combine<URNG1, s1, URNG2, s2, val>::shift2;
 #endif
+
+#undef BOOST_RANDOM_VAL_TYPE
 
 } // namespace random
 } // namespace boost
