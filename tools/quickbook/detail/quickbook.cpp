@@ -264,7 +264,8 @@ main(int argc, char* argv[])
         }
         else
         {
-            quickbook::detail::outerr("",0) << "Error: No filename given" << std::endl;
+            quickbook::detail::outerr("",0) << "Error: No filename given\n\n"
+                << desc << std::endl;;
             return 1;
         }
     }
