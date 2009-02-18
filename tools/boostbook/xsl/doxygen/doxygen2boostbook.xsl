@@ -53,6 +53,23 @@
 
   <xsl:strip-space elements="briefdescription detaileddescription"/>
 
+  <xsl:template name="kind-error-message">
+    <xsl:param name="message"/>
+
+    <xsl:variable name="location" select=".//location[1]" />
+    <xsl:variable name="name" select="./name" />
+
+    <xsl:message>
+      <xsl:if test="$location">
+        <xsl:value-of select="concat($location/@file, ':', $location/@line, ': ')" />
+      </xsl:if>
+      <xsl:value-of select="concat($message, ' with kind=', @kind)" />
+      <xsl:if test="$name">
+        <xsl:value-of select="concat(' (name=', $name, ') ')" />
+      </xsl:if>
+    </xsl:message>
+  </xsl:template>
+
   <!-- translate-name: given a string, return a string suitable for use as a refid -->
   <xsl:template name="translate-name">
     <xsl:param name="name"/>
@@ -131,9 +148,9 @@
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:message>
-Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
-        </xsl:message>
+        <xsl:call-template name="kind-error-message">
+          <xsl:with-param name="message" select="'Cannot handle compounddef'"/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -471,8 +488,9 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
       </xsl:when>
 
       <xsl:otherwise>
-        <xsl:message>Cannot handle toplevel memberdef element with
-        kind=<xsl:value-of select="@kind"/></xsl:message>
+        <xsl:call-template name="kind-error-message">
+          <xsl:with-param name="message" select="'Cannot handle toplevel memberdef element'"/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -666,6 +684,15 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
       <xsl:when test="@kind='public-static-attrib' or @kind='public-attrib'">
         <xsl:apply-templates/>
       </xsl:when>
+      <xsl:when test="@kind='protected-static-attrib' or @kind='protected-attrib'">
+        <xsl:apply-templates/>
+      </xsl:when>
+      <xsl:when test="@kind='private-static-attrib' or @kind='private-attrib'">
+        <xsl:apply-templates/>
+      </xsl:when>
+      <xsl:when test="@kind='friend'">
+        <xsl:apply-templates/>
+      </xsl:when>
       <xsl:when test="@kind='public-type'">
         <xsl:apply-templates/>
       </xsl:when>
@@ -699,9 +726,9 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
         </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:message>
-Cannot handle sectiondef with kind=<xsl:value-of select="@kind"/>      
-        </xsl:message>
+        <xsl:call-template name="kind-error-message">
+          <xsl:with-param name="message" select="'Cannot handle sectiondef'"/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -783,9 +810,9 @@ Cannot handle sectiondef with kind=<xsl:value-of select="@kind"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:message>
-Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
-        </xsl:message>
+        <xsl:call-template name="kind-error-message">
+          <xsl:with-param name="message" select="'Cannot handle memberdef element'"/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
