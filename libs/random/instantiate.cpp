@@ -111,6 +111,8 @@ void instantiate_dist(URNG& urng, const char * name, const Dist& dist)
 template<class URNG, class RealType>
 void instantiate_real_dist(URNG& urng, RealType /* ignored */)
 {
+  instantiate_dist(urng, "uniform_01",
+                   boost::uniform_01<RealType>());
   instantiate_dist(urng, "uniform_real",
                    boost::uniform_real<RealType>(0, 2.1));
   instantiate_dist(urng, "triangle_distribution",
