@@ -175,13 +175,16 @@ Put a box around admonishments and keep them together:
   <xsl:attribute name="padding-right">0.2cm</xsl:attribute>
   <xsl:attribute name="padding-top">0.2cm</xsl:attribute>
   <xsl:attribute name="padding-bottom">0.2cm</xsl:attribute>
-  <xsl:attribute name="keep-together">1</xsl:attribute>
+  <xsl:attribute name="keep-together.within-page">1</xsl:attribute>
 </xsl:attribute-set>
 
 <!--
 Put a box around code blocks, also set the font size
 and keep the block together if we can using the widows 
-and orphans controls:
+and orphans controls.  Hyphenation and line wrapping
+is also turned on, so that long lines of code don't
+bleed off the edge of the page, a carriage return
+symbol is used as the hyphenation character:
 -->
 <xsl:attribute-set name="monospace.verbatim.properties">
   <xsl:attribute name="border-color">#DCDCDC</xsl:attribute>
@@ -194,8 +197,18 @@ and orphans controls:
   <xsl:attribute name="widows">6</xsl:attribute>
   <xsl:attribute name="orphans">40</xsl:attribute>
   <xsl:attribute name="font-size">9pt</xsl:attribute>
+  <xsl:attribute name="hyphenate">true</xsl:attribute>
+  <xsl:attribute name="wrap-option">wrap</xsl:attribute>
+  <xsl:attribute name="hyphenation-character">&#8629;</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:param name="hyphenate.verbatim" select="1"></xsl:param>
+
+<!--Regular monospace text should have the same font size as code blocks etc-->
+<xsl:attribute-set name="monospace.properties">
+  <xsl:attribute name="font-size">9pt</xsl:attribute>
+</xsl:attribute-set>
+  
 <!-- 
 Put some small amount of padding around table cells, and keep tables
 together on one page if possible:
@@ -207,8 +220,17 @@ together on one page if possible:
   <xsl:attribute name="padding-bottom">0.2cm</xsl:attribute>
 </xsl:attribute-set>
 
+  <!--Formal and informal tables have the same properties
+      Using widow-and-orphan control here gives much better
+      results for very large tables than a simple "keep-together"
+      instruction-->
 <xsl:attribute-set name="table.properties">
-  <xsl:attribute name="keep-together">1</xsl:attribute>
+  <xsl:attribute name="widows">6</xsl:attribute>
+  <xsl:attribute name="orphans">40</xsl:attribute>
+</xsl:attribute-set>
+<xsl:attribute-set name="informaltable.properties">
+  <xsl:attribute name="widows">6</xsl:attribute>
+  <xsl:attribute name="orphans">40</xsl:attribute>
 </xsl:attribute-set>
 
 <!--
