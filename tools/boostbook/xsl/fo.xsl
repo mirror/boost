@@ -199,12 +199,13 @@ symbol is used as the hyphenation character:
   <xsl:attribute name="font-size">9pt</xsl:attribute>
   <xsl:attribute name="hyphenate">true</xsl:attribute>
   <xsl:attribute name="wrap-option">wrap</xsl:attribute>
-  <xsl:attribute name="hyphenation-character">&#8629;</xsl:attribute>
+  <xsl:attribute name="hyphenation-character">&#x21B5;</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:param name="hyphenate.verbatim" select="1"></xsl:param>
+<xsl:param name="monospace.font.family">monospace,Symbol</xsl:param>
 
-<!--Regular monospace text should have the same font size as code blocks etc-->
+  <!--Regular monospace text should have the same font size as code blocks etc-->
 <xsl:attribute-set name="monospace.properties">
   <xsl:attribute name="font-size">9pt</xsl:attribute>
 </xsl:attribute-set>
@@ -225,12 +226,10 @@ together on one page if possible:
       results for very large tables than a simple "keep-together"
       instruction-->
 <xsl:attribute-set name="table.properties">
-  <xsl:attribute name="widows">6</xsl:attribute>
-  <xsl:attribute name="orphans">40</xsl:attribute>
+  <xsl:attribute name="keep-together.within-page">1</xsl:attribute>
 </xsl:attribute-set>
 <xsl:attribute-set name="informaltable.properties">
-  <xsl:attribute name="widows">6</xsl:attribute>
-  <xsl:attribute name="orphans">40</xsl:attribute>
+  <xsl:attribute name="keep-together.within-page">1</xsl:attribute>
 </xsl:attribute-set>
 
 <!--
