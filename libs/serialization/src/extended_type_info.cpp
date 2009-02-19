@@ -64,7 +64,7 @@ class extended_type_info_arg : public extended_type_info
 {
 public:
     extended_type_info_arg(const char * key) :
-        extended_type_info(NULL)
+        extended_type_info()
     {
         m_key = key;
     }
