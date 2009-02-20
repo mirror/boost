@@ -45,7 +45,6 @@ namespace boost
         {
             template< typename Sig > struct apply;
 
-          private:
             // Utility metafunction for qualification adjustment on arguments
             template< typename T > struct q          { typedef T const t; };
             template< typename T > struct q<T const> { typedef T const t; };
@@ -73,7 +72,7 @@ namespace boost
     template< typename Function, int Arity_Or_MinArity, int MaxArity >
     class forward_adapter
         : public BOOST_TMP_MACRO(Function,Function,Function const)
-        , Function
+        , private Function
     {
       public:
         forward_adapter(Function const& f = Function()) 
@@ -95,7 +94,7 @@ namespace boost
     template< typename Function, int Arity_Or_MinArity, int MaxArity >
     class forward_adapter< Function const, Arity_Or_MinArity, MaxArity >
         : public BOOST_TMP_MACRO(Function const, Function const, Function const)
-        , Function
+        , private Function
     {
       public:
         forward_adapter(Function const& f = Function())

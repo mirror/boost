@@ -58,7 +58,7 @@ namespace boost
 
     template< class Pointer, class Allocator, factory_alloc_propagation AP >
     class factory
-        : Allocator::template rebind< typename boost::pointee<
+        : private Allocator::template rebind< typename boost::pointee<
             typename boost::remove_cv<Pointer>::type >::type >::other
     {
       public:
