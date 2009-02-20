@@ -260,7 +260,7 @@ bool test ( T const& y, T const& z )
   boost::value_initialized<T> const x_c ;
   BOOST_CHECK ( y == x_c ) ;
   BOOST_CHECK ( y == boost::get(x_c) ) ;
-  T& x_c_ref = x_c ;
+  T& x_c_ref = const_cast<T&>( boost::get(x_c) ) ;
   x_c_ref = z ;
   BOOST_CHECK ( x_c == z ) ;
 
