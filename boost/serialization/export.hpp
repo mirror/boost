@@ -160,6 +160,7 @@ struct init_guid;
     namespace boost {                                                  \
     namespace archive {                                                \
     namespace detail {                                                 \
+    namespace {                                                        \
     template<>                                                         \
     struct init_guid< T > {                                            \
         static ::boost::archive::detail::guid_initializer< T > const   \
@@ -170,7 +171,7 @@ struct init_guid;
            ::boost::serialization::singleton<                          \
                ::boost::archive::detail::guid_initializer< T >         \
            >::get_mutable_instance().export_guid(K);                   \
-    }}}                                                                \
+    }}}}                                                                \
 /**/
 
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
