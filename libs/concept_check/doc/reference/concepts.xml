@@ -51,7 +51,7 @@
       and Boost Graph and Property Map documentation, the SGI Standard
       Template Library documentation and the Hewlett-Packard STL,
       under the following license: 
-        <blockquote>Permission to use, copy, modify, distribute and
+        <blockquote><simpara>Permission to use, copy, modify, distribute and
         sell this software and its documentation for any purpose is
         hereby granted without fee, provided that the above copyright
         notice appears in all copies and that both that copyright
@@ -59,7 +59,7 @@
         documentation.  Silicon Graphics makes no representations
         about the suitability of this software for any purpose.  It is
         provided "as is" without express or implied
-        warranty.</blockquote></para>
+        warranty.</simpara></blockquote></para>
     </legalnotice>
   </sectioninfo>
   <title>Concept reference</title>
