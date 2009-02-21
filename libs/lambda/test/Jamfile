@@ -11,7 +11,7 @@
 import testing ;
 
 project 
-  : requirements <library>/boost/test//boost_test_exec_monitor
+  : requirements <toolset>msvc:<asynch-exceptions>on
   ;
           
 test-suite lambda

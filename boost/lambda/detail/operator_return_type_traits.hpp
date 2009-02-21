@@ -933,6 +933,41 @@ struct plain_return_type_2<other_action<subscript_action>, const std::basic_stri
   typedef typename std::basic_string<Char, Traits, Allocator>::const_reference type;
 };
 
+template<class Char, class Traits, class Allocator> 
+struct plain_return_type_2<arithmetic_action<plus_action>,
+                           std::basic_string<Char, Traits, Allocator>,
+                           std::basic_string<Char, Traits, Allocator> > { 
+  typedef std::basic_string<Char, Traits, Allocator> type;
+};
+
+template<class Char, class Traits, class Allocator> 
+struct plain_return_type_2<arithmetic_action<plus_action>,
+                           const Char*,
+                           std::basic_string<Char, Traits, Allocator> > { 
+  typedef std::basic_string<Char, Traits, Allocator> type;
+};
+
+template<class Char, class Traits, class Allocator> 
+struct plain_return_type_2<arithmetic_action<plus_action>,
+                           std::basic_string<Char, Traits, Allocator>,
+                           const Char*> { 
+  typedef std::basic_string<Char, Traits, Allocator> type;
+};
+
+template<class Char, class Traits, class Allocator, std::size_t N> 
+struct plain_return_type_2<arithmetic_action<plus_action>,
+                           Char[N],
+                           std::basic_string<Char, Traits, Allocator> > { 
+  typedef std::basic_string<Char, Traits, Allocator> type;
+};
+
+template<class Char, class Traits, class Allocator, std::size_t N> 
+struct plain_return_type_2<arithmetic_action<plus_action>,
+                           std::basic_string<Char, Traits, Allocator>,
+                           Char[N]> { 
+  typedef std::basic_string<Char, Traits, Allocator> type;
+};
+
 
 } // namespace lambda
 } // namespace boost
