@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
-<chapter id="reference">
+<section id="reference">
   <title>Reference</title>
-  <para>Elements:<itemizedlist spacing="compact"><listitem><simpara><link linkend="boostbook.dtd.access">Element <sgmltag>access</sgmltag> - Declares an access specification for class members</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.boostbook">Element <sgmltag>boostbook</sgmltag> - Defines a BoostBook book</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.class">Element <sgmltag>class</sgmltag> - Declares a class or class template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.class-specialization">Element <sgmltag>class-specialization</sgmltag> - A specialization (partial or full) of a class template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.code">Element <sgmltag>code</sgmltag> - Mimics the <sgmltag>code</sgmltag> tag in HTML</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.compile-fail-test">Element <sgmltag>compile-fail-test</sgmltag> - A testcase that should fail to compile</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.compile-test">Element <sgmltag>compile-test</sgmltag> - A testcase that should compile correctly</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.complexity">Element <sgmltag>complexity</sgmltag> - The time/space/etc. complexity of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.constructor">Element <sgmltag>constructor</sgmltag> - Declares a constructor of the enclosing class</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.copy-assignment">Element <sgmltag>copy-assignment</sgmltag> - Declares a copy-assignment operator</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.data-member">Element <sgmltag>data-member</sgmltag> - Declares a data member of a class</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.default">Element <sgmltag>default</sgmltag> - The default value of a function or template parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.description">Element <sgmltag>description</sgmltag> - Detailed description of a construct</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.destructor">Element <sgmltag>destructor</sgmltag> - Declares a destructor for the enclosing class</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.effects">Element <sgmltag>effects</sgmltag> - Declares the side effects of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.enum">Element <sgmltag>enum</sgmltag> - Declares an enumeration type</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.enumvalue">Element <sgmltag>enumvalue</sgmltag> - A single value of an enumeration</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.free-function-group">Element <sgmltag>free-function-group</sgmltag> - A set of functions that are grouped together under one name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.function">Element <sgmltag>function</sgmltag> - Declares a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.functionname">Element <sgmltag>functionname</sgmltag> - References a function with the given name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.header">Element <sgmltag>header</sgmltag> - Declares a C++ header with the given name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.if-fails">Element <sgmltag>if-fails</sgmltag> - What it means when a testcase fails</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.inherit">Element <sgmltag>inherit</sgmltag> - Declares a base class of the enclosing class or struct</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.lib">Element <sgmltag>lib</sgmltag> - A library dependency</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.library">Element <sgmltag>library</sgmltag> - Top-level element for a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.library-reference">Element <sgmltag>library-reference</sgmltag> - Declares the reference material for a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarycategory">Element <sgmltag>librarycategory</sgmltag> - Declares that the enclosing library is in this category</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarycategorydef">Element <sgmltag>librarycategorydef</sgmltag> - Defines a new library category</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarycategorylist">Element <sgmltag>librarycategorylist</sgmltag> - Categorized listing of libraries</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.libraryinfo">Element <sgmltag>libraryinfo</sgmltag> - Provides information about a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarylist">Element <sgmltag>librarylist</sgmltag> - Placeholder for an alphabetical list of libraries</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.libraryname">Element <sgmltag>libraryname</sgmltag> - References a library of the given name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarypurpose">Element <sgmltag>librarypurpose</sgmltag> - Describes in one short sentence or phrase the purpose of a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.link-fail-test">Element <sgmltag>link-fail-test</sgmltag> - Declares a test that should compile but fail to link</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.link-test">Element <sgmltag>link-test</sgmltag> - Declares a test that should compile and link</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.method">Element <sgmltag>method</sgmltag> - Declares a method, i.e., a member function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.method-group">Element <sgmltag>method-group</sgmltag> - A set of methods that are grouped together under one name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.namespace">Element <sgmltag>namespace</sgmltag> - Declares a namespace</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.notes">Element <sgmltag>notes</sgmltag> - Non-normative notes about a function's semantics</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.overloaded-function">Element <sgmltag>overloaded-function</sgmltag> - An overloaded function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.overloaded-method">Element <sgmltag>overloaded-method</sgmltag> - An overloaded method</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.parameter">Element <sgmltag>parameter</sgmltag> - A function parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.paramtype">Element <sgmltag>paramtype</sgmltag> - The type of a function parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.postconditions">Element <sgmltag>postconditions</sgmltag> - Conditions that must hold after the function returns</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.precondition">Element <sgmltag>precondition</sgmltag> - Conditions that must be met prior to executing a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.programlisting">Element <sgmltag>programlisting</sgmltag> - A sample of program code</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.purpose">Element <sgmltag>purpose</sgmltag> - A short description of an entity's use</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.rationale">Element <sgmltag>rationale</sgmltag> - Describes the rationale for a particular function's design</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.requirement">Element <sgmltag>requirement</sgmltag> - A requirement/property in the Jamfile for a testcase</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.requires">Element <sgmltag>requires</sgmltag> - Declares the requirements of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.returns">Element <sgmltag>returns</sgmltag> - Description of the return value of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.run-fail-test">Element <sgmltag>run-fail-test</sgmltag> - A testcase that should compile and link, but fail on execution</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.run-test">Element <sgmltag>run-test</sgmltag> - A testcase that should compile, link, and execute</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.signature">Element <sgmltag>signature</sgmltag> - One signature of an overloaded function or method</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.snippet">Element <sgmltag>snippet</sgmltag> - Pulls in a code snippet from a <sgmltag>programlisting</sgmltag> element</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.source">Element <sgmltag>source</sgmltag> - Defines source code for a test</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.specialization">Element <sgmltag>specialization</sgmltag> - Defines the specialization arguments for a class specialization</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.static-constant">Element <sgmltag>static-constant</sgmltag> - Declares a static constant, e.g., <code>const int foo = 5;</code>.</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.struct">Element <sgmltag>struct</sgmltag> - Declares a C++ struct</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.struct-specialization">Element <sgmltag>struct-specialization</sgmltag> - A specialization (full or partial) of a struct template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template">Element <sgmltag>template</sgmltag> - Declares the template parameters of a class or function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-arg">Element <sgmltag>template-arg</sgmltag> - A template argument in a specialization</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-nontype-parameter">Element <sgmltag>template-nontype-parameter</sgmltag> - A nontype template parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-type-parameter">Element <sgmltag>template-type-parameter</sgmltag> - Declares a template type parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-varargs">Element <sgmltag>template-varargs</sgmltag> - Declares a variable-length list of template parameters</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.testsuite">Element <sgmltag>testsuite</sgmltag> - Describes a library testsuite</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.throws">Element <sgmltag>throws</sgmltag> - Description of the exceptions thrown by a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.type">Element <sgmltag>type</sgmltag> - The type of an element or return type of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.typedef">Element <sgmltag>typedef</sgmltag> - Declares a typedef</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.union">Element <sgmltag>union</sgmltag> - Declares a C++ union or union template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.union-specialization">Element <sgmltag>union-specialization</sgmltag> - A specialization (full or partial) of a union template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.using-class">Element <sgmltag>using-class</sgmltag> - Injects the method and function names of a class into the local scope</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.using-namespace">Element <sgmltag>using-namespace</sgmltag> - Injects the declared names from a namespace into the local scope</link></simpara></listitem></itemizedlist></para>
+  <para>Elements:<itemizedlist spacing="compact"><listitem><simpara><link linkend="boostbook.dtd.access">Element <sgmltag>access</sgmltag> - Declares an access specification for class members</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.boostbook">Element <sgmltag>boostbook</sgmltag> - Defines a BoostBook book</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.class">Element <sgmltag>class</sgmltag> - Declares a class or class template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.class-specialization">Element <sgmltag>class-specialization</sgmltag> - A specialization (partial or full) of a class template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.code">Element <sgmltag>code</sgmltag> - Mimics the <sgmltag>code</sgmltag> tag in HTML</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.compile-fail-test">Element <sgmltag>compile-fail-test</sgmltag> - A testcase that should fail to compile</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.compile-test">Element <sgmltag>compile-test</sgmltag> - A testcase that should compile correctly</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.complexity">Element <sgmltag>complexity</sgmltag> - The time/space/etc. complexity of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.constructor">Element <sgmltag>constructor</sgmltag> - Declares a constructor of the enclosing class</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.copy-assignment">Element <sgmltag>copy-assignment</sgmltag> - Declares a copy-assignment operator</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.data-member">Element <sgmltag>data-member</sgmltag> - Declares a data member of a class</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.default">Element <sgmltag>default</sgmltag> - The default value of a function or template parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.description">Element <sgmltag>description</sgmltag> - Detailed description of a construct</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.destructor">Element <sgmltag>destructor</sgmltag> - Declares a destructor for the enclosing class</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.effects">Element <sgmltag>effects</sgmltag> - Declares the side effects of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.enum">Element <sgmltag>enum</sgmltag> - Declares an enumeration type</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.enumname">Element <sgmltag>enumname</sgmltag> - </link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.enumvalue">Element <sgmltag>enumvalue</sgmltag> - A single value of an enumeration</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.free-function-group">Element <sgmltag>free-function-group</sgmltag> - A set of functions that are grouped together under one name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.function">Element <sgmltag>function</sgmltag> - Declares a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.functionname">Element <sgmltag>functionname</sgmltag> - References a function with the given name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.globalname">Element <sgmltag>globalname</sgmltag> - </link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.header">Element <sgmltag>header</sgmltag> - Declares a C++ header with the given name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.headername">Element <sgmltag>headername</sgmltag> - </link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.if-fails">Element <sgmltag>if-fails</sgmltag> - What it means when a testcase fails</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.inherit">Element <sgmltag>inherit</sgmltag> - Declares a base class of the enclosing class or struct</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.lib">Element <sgmltag>lib</sgmltag> - A library dependency</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.library">Element <sgmltag>library</sgmltag> - Top-level element for a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.library-reference">Element <sgmltag>library-reference</sgmltag> - Declares the reference material for a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarycategory">Element <sgmltag>librarycategory</sgmltag> - Declares that the enclosing library is in this category</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarycategorydef">Element <sgmltag>librarycategorydef</sgmltag> - Defines a new library category</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarycategorylist">Element <sgmltag>librarycategorylist</sgmltag> - Categorized listing of libraries</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.libraryinfo">Element <sgmltag>libraryinfo</sgmltag> - Provides information about a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarylist">Element <sgmltag>librarylist</sgmltag> - Placeholder for an alphabetical list of libraries</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.libraryname">Element <sgmltag>libraryname</sgmltag> - References a library of the given name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarypurpose">Element <sgmltag>librarypurpose</sgmltag> - Describes in one short sentence or phrase the purpose of a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.link-fail-test">Element <sgmltag>link-fail-test</sgmltag> - Declares a test that should compile but fail to link</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.link-test">Element <sgmltag>link-test</sgmltag> - Declares a test that should compile and link</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.macroname">Element <sgmltag>macroname</sgmltag> - </link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.method">Element <sgmltag>method</sgmltag> - Declares a method, i.e., a member function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.method-group">Element <sgmltag>method-group</sgmltag> - A set of methods that are grouped together under one name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.namespace">Element <sgmltag>namespace</sgmltag> - Declares a namespace</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.notes">Element <sgmltag>notes</sgmltag> - Non-normative notes about a function's semantics</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.overloaded-function">Element <sgmltag>overloaded-function</sgmltag> - An overloaded function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.overloaded-method">Element <sgmltag>overloaded-method</sgmltag> - An overloaded method</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.parameter">Element <sgmltag>parameter</sgmltag> - A function parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.paramtype">Element <sgmltag>paramtype</sgmltag> - The type of a function parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.postconditions">Element <sgmltag>postconditions</sgmltag> - Conditions that must hold after the function returns</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.precondition">Element <sgmltag>precondition</sgmltag> - Conditions that must be met prior to executing a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.programlisting">Element <sgmltag>programlisting</sgmltag> - A sample of program code</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.purpose">Element <sgmltag>purpose</sgmltag> - A short description of an entity's use</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.rationale">Element <sgmltag>rationale</sgmltag> - Describes the rationale for a particular function's design</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.requirement">Element <sgmltag>requirement</sgmltag> - A requirement/property in the Jamfile for a testcase</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.requires">Element <sgmltag>requires</sgmltag> - Declares the requirements of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.returns">Element <sgmltag>returns</sgmltag> - Description of the return value of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.run-fail-test">Element <sgmltag>run-fail-test</sgmltag> - A testcase that should compile and link, but fail on execution</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.run-test">Element <sgmltag>run-test</sgmltag> - A testcase that should compile, link, and execute</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.signature">Element <sgmltag>signature</sgmltag> - One signature of an overloaded function or method</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.snippet">Element <sgmltag>snippet</sgmltag> - Pulls in a code snippet from a <sgmltag>programlisting</sgmltag> element</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.source">Element <sgmltag>source</sgmltag> - Defines source code for a test</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.specialization">Element <sgmltag>specialization</sgmltag> - Defines the specialization arguments for a class specialization</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.static-constant">Element <sgmltag>static-constant</sgmltag> - Declares a static constant, e.g., <code>const int foo = 5;</code>.</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.struct">Element <sgmltag>struct</sgmltag> - Declares a C++ struct</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.struct-specialization">Element <sgmltag>struct-specialization</sgmltag> - A specialization (full or partial) of a struct template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template">Element <sgmltag>template</sgmltag> - Declares the template parameters of a class or function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-arg">Element <sgmltag>template-arg</sgmltag> - A template argument in a specialization</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-nontype-parameter">Element <sgmltag>template-nontype-parameter</sgmltag> - A nontype template parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-type-parameter">Element <sgmltag>template-type-parameter</sgmltag> - Declares a template type parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-varargs">Element <sgmltag>template-varargs</sgmltag> - Declares a variable-length list of template parameters</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.testsuite">Element <sgmltag>testsuite</sgmltag> - Describes a library testsuite</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.throws">Element <sgmltag>throws</sgmltag> - Description of the exceptions thrown by a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.type">Element <sgmltag>type</sgmltag> - The type of an element or return type of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.typedef">Element <sgmltag>typedef</sgmltag> - Declares a typedef</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.union">Element <sgmltag>union</sgmltag> - Declares a C++ union or union template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.union-specialization">Element <sgmltag>union-specialization</sgmltag> - A specialization (full or partial) of a union template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.using-class">Element <sgmltag>using-class</sgmltag> - Injects the method and function names of a class into the local scope</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.using-namespace">Element <sgmltag>using-namespace</sgmltag> - Injects the declared names from a namespace into the local scope</link></simpara></listitem></itemizedlist></para>
   <refentry id="boostbook.dtd.class-specialization">
     <refmeta>
       <refentrytitle>
@@ -549,7 +549,7 @@
           <tbody>
 
 <row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
-<row><entry>access</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The access specifier ("public", "private", or "protected") of the inheritance.</entry></row>
+<row><entry>access</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>The access specifier ("public", "private", or "protected") of the inheritance.</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>pack</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to '1' if this is a pack exapansion.</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -715,6 +715,40 @@
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
+</tbody>
+        </tgroup>
+      </informaltable>
+    </refsection>
+  </refentry>
+  <refentry id="boostbook.dtd.macroname">
+    <refmeta>
+      <refentrytitle>
+          BoostBook element <sgmltag>macroname</sgmltag></refentrytitle>
+      <manvolnum>9</manvolnum>
+    </refmeta>
+    <refnamediv>
+      <refname>macroname</refname>
+      <refpurpose/>
+    </refnamediv>
+    <refsynopsisdiv>macroname ::= 
+  (#PCDATA)
+</refsynopsisdiv>
+    <refsection>
+      <title>Attributes</title>
+      <informaltable>
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry>Name</entry>
+              <entry>Type</entry>
+              <entry>Value</entry>
+              <entry>Purpose</entry>
+            </row>
+          </thead>
+          <tbody>
+
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
+<row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 </tbody>
         </tgroup>
       </informaltable>
@@ -981,6 +1015,40 @@
   </para>
 </refsection>
   </refentry>
+  <refentry id="boostbook.dtd.headername">
+    <refmeta>
+      <refentrytitle>
+          BoostBook element <sgmltag>headername</sgmltag></refentrytitle>
+      <manvolnum>9</manvolnum>
+    </refmeta>
+    <refnamediv>
+      <refname>headername</refname>
+      <refpurpose/>
+    </refnamediv>
+    <refsynopsisdiv>headername ::= 
+  (#PCDATA)
+</refsynopsisdiv>
+    <refsection>
+      <title>Attributes</title>
+      <informaltable>
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry>Name</entry>
+              <entry>Type</entry>
+              <entry>Value</entry>
+              <entry>Purpose</entry>
+            </row>
+          </thead>
+          <tbody>
+
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
+<row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
+</tbody>
+        </tgroup>
+      </informaltable>
+    </refsection>
+  </refentry>
   <refentry id="boostbook.dtd.free-function-group">
     <refmeta>
       <refentrytitle>
@@ -1053,6 +1121,7 @@
           <tbody>
 
 <row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
+<row><entry>alt</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry/></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -1159,6 +1228,7 @@
           <tbody>
 
 <row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
+<row><entry>specifiers</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>The specifiers for this function, e.g., inline, static, etc.</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -1304,6 +1374,41 @@
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>pack</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to '1' if this is a pack exapansion.</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
+</tbody>
+        </tgroup>
+      </informaltable>
+    </refsection>
+  </refentry>
+  <refentry id="boostbook.dtd.globalname">
+    <refmeta>
+      <refentrytitle>
+          BoostBook element <sgmltag>globalname</sgmltag></refentrytitle>
+      <manvolnum>9</manvolnum>
+    </refmeta>
+    <refnamediv>
+      <refname>globalname</refname>
+      <refpurpose/>
+    </refnamediv>
+    <refsynopsisdiv>globalname ::= 
+  (#PCDATA)
+</refsynopsisdiv>
+    <refsection>
+      <title>Attributes</title>
+      <informaltable>
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry>Name</entry>
+              <entry>Type</entry>
+              <entry>Value</entry>
+              <entry>Purpose</entry>
+            </row>
+          </thead>
+          <tbody>
+
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
+<row><entry>alt</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry/></row>
+<row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 </tbody>
         </tgroup>
       </informaltable>
@@ -1538,7 +1643,7 @@
       <refpurpose>Describes in one short sentence or phrase the purpose of a library</refpurpose>
     </refnamediv>
     <refsynopsisdiv>librarypurpose ::= 
-  (#PCDATA| <link linkend="boostbook.dtd.code">code</link>| ulink| <link linkend="boostbook.dtd.functionname">functionname</link>| methodname| classname)*
+  (#PCDATA| <link linkend="boostbook.dtd.code">code</link>| ulink| <link linkend="boostbook.dtd.functionname">functionname</link>| methodname| classname| <link linkend="boostbook.dtd.macroname">macroname</link>| <link linkend="boostbook.dtd.headername">headername</link>| <link linkend="boostbook.dtd.enumname">enumname</link>| <link linkend="boostbook.dtd.globalname">globalname</link>)*
 </refsynopsisdiv>
     <refsection>
       <title>Attributes</title>
@@ -1792,7 +1897,7 @@
       <refpurpose>A function parameter</refpurpose>
     </refnamediv>
     <refsynopsisdiv>parameter ::= 
-  (<link linkend="boostbook.dtd.paramtype">paramtype</link>, <link linkend="boostbook.dtd.default">default</link>?)
+  (<link linkend="boostbook.dtd.paramtype">paramtype</link>, <link linkend="boostbook.dtd.default">default</link>?, <link linkend="boostbook.dtd.description">description</link>?)
 </refsynopsisdiv>
     <refsection>
       <title>Attributes</title>
@@ -1913,8 +2018,8 @@
       <refpurpose>Declares an access specification for class members</refpurpose>
     </refnamediv>
     <refsynopsisdiv>access ::= 
-    (<link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)+
-  </refsynopsisdiv>
+  (<link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)+
+</refsynopsisdiv>
     <refsection><title>Description</title>
     <para>The access specifications of class members (public, private, or protected) may be determined by enclosing them in an &lt;access&gt; element.</para>
   </refsection>
@@ -1931,11 +2036,11 @@
             </row>
           </thead>
           <tbody>
-  
-  <row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
-  <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the access specification, e.g. "public", "private", or "protected".</entry></row>
-  <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
-  </tbody>
+
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
+<row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the access specification, e.g. "public", "private", or "protected".</entry></row>
+<row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
+</tbody>
         </tgroup>
       </informaltable>
     </refsection>
@@ -2427,6 +2532,41 @@
       </informaltable>
     </refsection>
   </refentry>
+  <refentry id="boostbook.dtd.enumname">
+    <refmeta>
+      <refentrytitle>
+          BoostBook element <sgmltag>enumname</sgmltag></refentrytitle>
+      <manvolnum>9</manvolnum>
+    </refmeta>
+    <refnamediv>
+      <refname>enumname</refname>
+      <refpurpose/>
+    </refnamediv>
+    <refsynopsisdiv>enumname ::= 
+  (#PCDATA)
+</refsynopsisdiv>
+    <refsection>
+      <title>Attributes</title>
+      <informaltable>
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry>Name</entry>
+              <entry>Type</entry>
+              <entry>Value</entry>
+              <entry>Purpose</entry>
+            </row>
+          </thead>
+          <tbody>
+
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
+<row><entry>alt</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry/></row>
+<row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
+</tbody>
+        </tgroup>
+      </informaltable>
+    </refsection>
+  </refentry>
   <refentry id="boostbook.dtd.struct-specialization">
     <refmeta>
       <refentrytitle>
@@ -2798,4 +2938,4 @@
       </informaltable>
     </refsection>
   </refentry>
-</chapter>
+</section>

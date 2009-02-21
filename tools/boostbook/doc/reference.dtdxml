@@ -7,8 +7,8 @@
      system-id="boostbook.dtd"
      public-id=""
      declaration=""
-     created-by="DTDParse V2.0beta6"
-     created-on="Sat Mar 29 16:11:38 2003"
+     created-by="DTDParse V2.00"
+     created-on="Wed Feb 18 23:39:45 2009"
 >
 <attpurpose name="id">A global identifier for this element</attpurpose>
 <attpurpose name="last-revision">Set to $Date: 2003/04/13 14:46:07 $ to keep "last revised" information in sync with CVS changes</attpurpose>
@@ -23,7 +23,10 @@
         type="param"
 >
 <text-expanded>template?, inherit*, purpose?, description?,
-              (access|%boost.class.mix;)*</text-expanded>
+              (static-constant|typedef|enum|
+         copy-assignment|constructor|destructor|method-group|
+         method|overloaded-method|data-member|class|class-specialization|struct|
+         struct-specialization|union|union-specialization|free-function-group|function|overloaded-function|access)*</text-expanded>
 <text>template?, inherit*, purpose?, description?,
               (access|%boost.class.mix;)*</text>
 </entity>
@@ -104,15 +107,18 @@
          struct-specialization|union|union-specialization</text-expanded>
 <text>static-constant|typedef|enum|
          copy-assignment|constructor|destructor|method-group|
-         |method|overloaded-method|data-member|class|class-specialization|struct|
+         method|overloaded-method|data-member|class|class-specialization|struct|
          struct-specialization|union|union-specialization</text>
 </entity>
 
 <entity name="boost.class.mix"
         type="param"
 >
-<text-expanded>free-function-group|function|overloaded-function|%boost.class.members;</text-expanded>
-<text>free-function-group|function|overloaded-function|%boost.class.members;</text>
+<text-expanded>static-constant|typedef|enum|
+         copy-assignment|constructor|destructor|method-group|
+         method|overloaded-method|data-member|class|class-specialization|struct|
+         struct-specialization|union|union-specialization|free-function-group|function|overloaded-function</text-expanded>
+<text>%boost.class.members;|free-function-group|function|overloaded-function</text>
 </entity>
 
 <entity name="boost.testsuite.tests"
@@ -154,8 +160,8 @@
 <entity name="local.tech.char.class"
         type="param"
 >
-<text-expanded>|functionname|libraryname|code</text-expanded>
-<text>|functionname|libraryname|code</text>
+<text-expanded>|functionname|libraryname|enumname|code</text-expanded>
+<text>|functionname|libraryname|enumname|code</text>
 </entity>
 
 <entity name="function.module"
@@ -199,7 +205,10 @@
         type="param"
 >
 <text-expanded>template?, specialization?, inherit?, purpose?, description?,
-              (access|%boost.class.mix;)*</text-expanded>
+              (static-constant|typedef|enum|
+         copy-assignment|constructor|destructor|method-group|
+         method|overloaded-method|data-member|class|class-specialization|struct|
+         struct-specialization|union|union-specialization|free-function-group|function|overloaded-function|access)*</text-expanded>
 <text>template?, specialization?, inherit?, purpose?, description?,
               (access|%boost.class.mix;)*</text>
 </entity>
@@ -830,7 +839,7 @@
 
 <attlist name="inherit">
 <attdecl>
-    access  CDATA  #REQUIRED
+    access  CDATA  #IMPLIED
     pack    CDATA  #IMPLIED 
     %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
@@ -838,7 +847,7 @@
            value="CDATA"
            default=""/>
 <attribute name="access"
-           type="#REQUIRED"
+           type="#IMPLIED"
            value="CDATA"
            default="">
   <purpose>The access specifier ("public", "private", or "protected") of the inheritance.</purpose>
@@ -1035,6 +1044,32 @@
            value="CDATA"
            default=""/>
 <attribute name="xml:base"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+</attlist>
+
+<element name="macroname"
+         content-type="mixed">
+<content-model-expanded>
+  <sequence-group>
+    <pcdata/>
+  </sequence-group>
+</content-model-expanded>
+<content-model>
+  <sequence-group>
+    <pcdata/>
+  </sequence-group>
+</content-model>
+</element>
+
+<attlist name="macroname">
+<attdecl> %boost.common.attrib;</attdecl>
+<attribute name="last-revision"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="id"
            type="#IMPLIED"
            value="CDATA"
            default=""/>
@@ -1339,6 +1374,32 @@
 </description>
 </element>
 
+<element name="headername"
+         content-type="mixed">
+<content-model-expanded>
+  <sequence-group>
+    <pcdata/>
+  </sequence-group>
+</content-model-expanded>
+<content-model>
+  <sequence-group>
+    <pcdata/>
+  </sequence-group>
+</content-model>
+</element>
+
+<attlist name="headername">
+<attdecl> %boost.common.attrib;</attdecl>
+<attribute name="last-revision"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="id"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+</attlist>
+
 <element name="free-function-group"
          content-type="element">
 <content-model-expanded>
@@ -1404,8 +1465,14 @@
 </element>
 
 <attlist name="functionname">
-<attdecl> %boost.common.attrib;</attdecl>
+<attdecl>
+    alt          CDATA  #IMPLIED
+    %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="alt"
            type="#IMPLIED"
            value="CDATA"
            default=""/>
@@ -1508,9 +1575,14 @@
 
 <attlist name="data-member">
 <attdecl>
-    name   CDATA  #REQUIRED
+    name         CDATA  #REQUIRED
+    specifiers   CDATA  #IMPLIED
     %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="specifiers"
            type="#IMPLIED"
            value="CDATA"
            default=""/>
@@ -1687,6 +1759,38 @@
   <purpose>Set to '1' if this is a pack exapansion.</purpose>
 </attribute>
 <attribute name="xml:base"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+</attlist>
+
+<element name="globalname"
+         content-type="mixed">
+<content-model-expanded>
+  <sequence-group>
+    <pcdata/>
+  </sequence-group>
+</content-model-expanded>
+<content-model>
+  <sequence-group>
+    <pcdata/>
+  </sequence-group>
+</content-model>
+</element>
+
+<attlist name="globalname">
+<attdecl>
+    alt          CDATA  #IMPLIED
+    %boost.common.attrib;</attdecl>
+<attribute name="last-revision"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="alt"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="id"
            type="#IMPLIED"
            value="CDATA"
            default=""/>
@@ -1902,6 +2006,10 @@
     <element-name name="functionname"/>
     <element-name name="methodname"/>
     <element-name name="classname"/>
+    <element-name name="macroname"/>
+    <element-name name="headername"/>
+    <element-name name="enumname"/>
+    <element-name name="globalname"/>
   </or-group>
 </content-model-expanded>
 <content-model>
@@ -1912,6 +2020,10 @@
     <element-name name="functionname"/>
     <element-name name="methodname"/>
     <element-name name="classname"/>
+    <element-name name="macroname"/>
+    <element-name name="headername"/>
+    <element-name name="enumname"/>
+    <element-name name="globalname"/>
   </or-group>
 </content-model>
 <purpose>Describes in one short sentence or phrase the purpose of a library</purpose>
@@ -2167,12 +2279,14 @@
   <sequence-group>
     <element-name name="paramtype"/>
     <element-name name="default" occurrence="?"/>
+    <element-name name="description" occurrence="?"/>
   </sequence-group>
 </content-model-expanded>
 <content-model>
   <sequence-group>
     <element-name name="paramtype"/>
     <element-name name="default" occurrence="?"/>
+    <element-name name="description" occurrence="?"/>
   </sequence-group>
 </content-model>
 <purpose>A function parameter</purpose>
@@ -2301,59 +2415,59 @@
            default=""/>
 </attlist>
 
-  <element name="access"
-          content-type="element">
-  <content-model-expanded>
-    <or-group occurrence="+">
-      <element-name name="static-constant"/>
-      <element-name name="typedef"/>
-      <element-name name="enum"/>
-      <element-name name="copy-assignment"/>
-      <element-name name="constructor"/>
-      <element-name name="destructor"/>
-      <element-name name="method-group"/>
-      <element-name name="method"/>
-      <element-name name="overloaded-method"/>
-      <element-name name="data-member"/>
-      <element-name name="class"/>
-      <element-name name="class-specialization"/>
-      <element-name name="struct"/>
-      <element-name name="struct-specialization"/>
-      <element-name name="union"/>
-      <element-name name="union-specialization"/>
-    </or-group>
-  </content-model-expanded>
-  <content-model>
-    <sequence-group occurrence="+">
-      <parament-name name="boost.class.members"/>
-    </sequence-group>
-  </content-model>
+<element name="access"
+         content-type="element">
+<content-model-expanded>
+  <or-group occurrence="+">
+    <element-name name="static-constant"/>
+    <element-name name="typedef"/>
+    <element-name name="enum"/>
+    <element-name name="copy-assignment"/>
+    <element-name name="constructor"/>
+    <element-name name="destructor"/>
+    <element-name name="method-group"/>
+    <element-name name="method"/>
+    <element-name name="overloaded-method"/>
+    <element-name name="data-member"/>
+    <element-name name="class"/>
+    <element-name name="class-specialization"/>
+    <element-name name="struct"/>
+    <element-name name="struct-specialization"/>
+    <element-name name="union"/>
+    <element-name name="union-specialization"/>
+  </or-group>
+</content-model-expanded>
+<content-model>
+  <sequence-group occurrence="+">
+    <parament-name name="boost.class.members"/>
+  </sequence-group>
+</content-model>
   <purpose>Declares an access specification for class members</purpose>
 
   <description>
     <para>The access specifications of class members (public, private, or protected) may be determined by enclosing them in an &lt;access&gt; element.</para>
   </description>
-  </element>
+</element>
 
-  <attlist name="access">
-  <attdecl>
-      name CDATA #REQUIRED
-      %boost.common.attrib;</attdecl>
-  <attribute name="last-revision"
-            type="#IMPLIED"
-            value="CDATA"
-            default=""/>
-  <attribute name="name"
-            type="#REQUIRED"
-            value="CDATA"
-            default="">
-    <purpose>The name of the access specification, e.g. "public", "private", or "protected".</purpose>
-  </attribute>
-  <attribute name="id"
-            type="#IMPLIED"
-            value="CDATA"
-            default=""/>
-  </attlist>
+<attlist name="access">
+<attdecl>
+    name CDATA #REQUIRED
+    %boost.common.attrib;</attdecl>
+<attribute name="last-revision"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="name"
+           type="#REQUIRED"
+           value="CDATA"
+           default="">
+  <purpose>The name of the access specification, e.g. "public", "private", or "protected".</purpose>
+</attribute>
+<attribute name="id"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+</attlist>
 
 <element name="class"
          content-type="element">
@@ -2546,6 +2660,8 @@
 <content-model>
   <sequence-group>
     <element-name name="default" occurrence="?"/>
+    <element-name name="purpose" occurrence="?"/>
+    <element-name name="description" occurrence="?"/>
   </sequence-group>
 </content-model>
 <purpose>A single value of an enumeration</purpose>
@@ -2885,6 +3001,38 @@
            value="CDATA"
            default=""/>
 <attribute name="xml:base"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+</attlist>
+
+<element name="enumname"
+         content-type="mixed">
+<content-model-expanded>
+  <sequence-group>
+    <pcdata/>
+  </sequence-group>
+</content-model-expanded>
+<content-model>
+  <sequence-group>
+    <pcdata/>
+  </sequence-group>
+</content-model>
+</element>
+
+<attlist name="enumname">
+<attdecl>
+    alt          CDATA  #IMPLIED
+    %boost.common.attrib;</attdecl>
+<attribute name="last-revision"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="alt"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="id"
            type="#IMPLIED"
            value="CDATA"
            default=""/>
