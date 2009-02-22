@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Change log</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="prev" href="notes.html" title="Notes">
@@ -30,11 +30,11 @@
     </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-        Sep 27, 2006: Added <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tuple</span></tt>
+        Sep 27, 2006: Added <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tuple</span></code>
         support. (Joel de Guzman)
       </li>
 <li>
-        Nov 17, 2006: Added <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">variant</span></tt>
+        Nov 17, 2006: Added <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">variant</span></code>
         support. (Joel de Guzman)
       </li>
 <li>
@@ -47,12 +47,12 @@
         May 8, 2007: Added associative struct adapter. (Dan Marsden)
       </li>
 <li>
-        Dec 20, 2007: Removed <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">variant</span></tt>
+        Dec 20, 2007: Removed <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">variant</span></code>
         support. After thorough investigation, I think now that the move to make
         variant a fusion sequence is rather quirky. A variant will always have a
         size==1 regardless of the number of types it can contain and there's no way
         to know at compile time what it contains. Iterating over its types is simply
-        wrong. All these imply that the variant is <span class="bold"><b>not</b></span>
+        wrong. All these imply that the variant is <span class="bold"><strong>not</strong></span>
         a fusion sequence. (Joel de Guzman)
       </li>
 </ul></div>

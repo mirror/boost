@@ -4,7 +4,7 @@
 <title> Polymorphic Function
         Object</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
 <link rel="prev" href="def_callable.html" title=" Deferred
@@ -30,7 +30,7 @@
         Object"> Polymorphic Function
         Object</a></h4></div></div></div>
 <a name="fusion.functional.concepts.poly.description"></a><h5>
-<a name="id656328"></a>
+<a name="id1284943"></a>
           <a href="poly.html#fusion.functional.concepts.poly.description">Description</a>
         </h5>
 <p>
@@ -39,7 +39,7 @@
           Callable Object</a> type.
         </p>
 <a name="fusion.functional.concepts.poly.refinement_of"></a><h5>
-<a name="id656368"></a>
+<a name="id1284978"></a>
           <a href="poly.html#fusion.functional.concepts.poly.refinement_of">Refinement
           of</a>
         </h5>
@@ -54,36 +54,36 @@
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">F</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">F</span></code></span></dt>
 <dd><p>
               A possibly const-qualified Polymorphic Function Object type
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">f</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">f</span></code></span></dt>
 <dd><p>
               An object or reference to an object of type F
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">A1</span>
-          <span class="special">...</span><span class="identifier">AN</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">A1</span>
+          <span class="special">...</span><span class="identifier">AN</span></code></span></dt>
 <dd><p>
               Argument types
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">a1</span>
-          <span class="special">...</span><span class="identifier">aN</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">a1</span>
+          <span class="special">...</span><span class="identifier">aN</span></code></span></dt>
 <dd><p>
-              Objects or references to objects with types <tt class="computeroutput"><span class="identifier">A1</span>
-              <span class="special">...</span><span class="identifier">AN</span></tt>
+              Objects or references to objects with types <code class="computeroutput"><span class="identifier">A1</span>
+              <span class="special">...</span><span class="identifier">AN</span></code>
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">T1</span>
-          <span class="special">...</span><span class="identifier">TN</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">T1</span>
+          <span class="special">...</span><span class="identifier">TN</span></code></span></dt>
 <dd><p>
-              <tt class="computeroutput"><span class="identifier">T</span></tt>i is <tt class="computeroutput"><span class="identifier">A</span></tt>i <tt class="computeroutput"><span class="special">&amp;</span></tt>
-              if <tt class="computeroutput"><span class="identifier">a</span></tt>i is an LValue,
-              same as <tt class="computeroutput"><span class="identifier">A</span></tt>i, otherwise
+              <code class="computeroutput"><span class="identifier">T</span></code>i is <code class="computeroutput"><span class="identifier">A</span></code>i <code class="computeroutput"><span class="special">&amp;</span></code>
+              if <code class="computeroutput"><span class="identifier">a</span></code>i is an LValue,
+              same as <code class="computeroutput"><span class="identifier">A</span></code>i, otherwise
             </p></dd>
 </dl>
 </div>
 <a name="fusion.functional.concepts.poly.expression_requirements"></a><h5>
-<a name="id656658"></a>
+<a name="id1285235"></a>
           <a href="poly.html#fusion.functional.concepts.poly.expression_requirements">Expression
           requirements</a>
         </h5>
@@ -113,15 +113,15 @@
 <tbody><tr>
 <td>
                 <p>
-                  <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">a1</span><span class="special">,</span>
-                  <span class="special">...</span><span class="identifier">aN</span><span class="special">)</span></tt>
+                  <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">a1</span><span class="special">,</span>
+                  <span class="special">...</span><span class="identifier">aN</span><span class="special">)</span></code>
                 </p>
                 </td>
 <td>
                 <p>
-                  <tt class="computeroutput"><span class="identifier">result_of</span><span class="special">&lt;</span>
+                  <code class="computeroutput"><span class="identifier">result_of</span><span class="special">&lt;</span>
                   <span class="identifier">F</span><span class="special">(</span><span class="identifier">T1</span><span class="special">,</span>
-                  <span class="special">...</span><span class="identifier">TN</span><span class="special">)</span> <span class="special">&gt;::</span><span class="identifier">type</span></tt>
+                  <span class="special">...</span><span class="identifier">TN</span><span class="special">)</span> <span class="special">&gt;::</span><span class="identifier">type</span></code>
                 </p>
                 </td>
 <td>
@@ -132,7 +132,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.concepts.poly.models"></a><h5>
-<a name="id656856"></a>
+<a name="id1285413"></a>
           <a href="poly.html#fusion.functional.concepts.poly.models">Models</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">
@@ -147,18 +147,17 @@
 </li>
 </ul></div>
 <a name="fusion.functional.concepts.poly.examples"></a><h5>
-<a name="id656910"></a>
+<a name="id1285459"></a>
           <a href="poly.html#fusion.functional.concepts.poly.examples">Examples</a>
         </h5>
-<pre class="programlisting">
-<span class="special">&amp;</span> <span class="identifier">a_free_function</span>
+<pre class="programlisting"><span class="special">&amp;</span> <span class="identifier">a_free_function</span>
 <span class="special">&amp;</span> <span class="identifier">a_class</span><span class="special">::</span><span class="identifier">a_static_member_function</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;()</span>
 <span class="comment">// using namespace boost;
 </span><span class="identifier">bind</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(),</span> <span class="identifier">_1</span><span class="special">,</span> <span class="number">5</span><span class="special">)</span>
 <span class="comment">// Note: Boost.Lambda expressions don't work with __boost_result_of__
 </span><span class="identifier">fusion</span><span class="special">::</span><a href="../generation/functions/mk_fused_fobj.html" title="
-          make_fused_function_object"><tt class="computeroutput"><span class="identifier">make_fused_function_object</span></tt></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;())</span>
+          make_fused_function_object"><code class="computeroutput"><span class="identifier">make_fused_function_object</span></code></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;())</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

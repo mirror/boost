@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>list</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../container.html" title="Container">
 <link rel="prev" href="cons.html" title="cons">
@@ -26,33 +26,31 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="fusion.container.list"></a><a href="list.html" title="list">list</a></h3></div></div></div>
 <a name="fusion.container.list.description"></a><h4>
-<a name="id532236"></a>
+<a name="id1072172"></a>
         <a href="list.html#fusion.container.list.description">Description</a>
       </h4>
 <p>
-        <tt class="computeroutput"><span class="identifier">list</span></tt> is a <a href="../sequence/concepts/forward_sequence.html" title="Forward
+        <code class="computeroutput"><span class="identifier">list</span></code> is a <a href="../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-        Sequence</a> of heterogenous typed data built on top of <a href="cons.html" title="cons"><tt class="computeroutput"><span class="identifier">cons</span></tt></a>. It is more efficient than
-        <a href="vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a>
+        Sequence</a> of heterogenous typed data built on top of <a href="cons.html" title="cons"><code class="computeroutput"><span class="identifier">cons</span></code></a>. It is more efficient than
+        <a href="vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a>
         when the target sequence is constructed piecemeal (a data at a time). The
         runtime cost of access to each element is peculiarly constant (see <a href="../notes.html#fusion.notes.recursive_inlined_functions">Recursive Inlined Functions</a>).
       </p>
 <a name="fusion.container.list.header"></a><h4>
-<a name="id532333"></a>
+<a name="id1072257"></a>
         <a href="list.html#fusion.container.list.header">Header</a>
       </h4>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">list</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">list</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">list</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">list</span><span class="special">/</span><span class="identifier">list_fwd</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">list_fwd</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.container.list.synopsis"></a><h4>
-<a name="id532626"></a>
+<a name="id1072512"></a>
         <a href="list.html#fusion.container.list.synopsis">Synopsis</a>
       </h4>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">T0</span> <span class="special">=</span> <span class="emphasis"><em>unspecified</em></span>
   <span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T1</span> <span class="special">=</span> <span class="emphasis"><em>unspecified</em></span>
   <span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span> <span class="special">=</span> <span class="emphasis"><em>unspecified</em></span>
@@ -62,24 +60,22 @@
 <span class="keyword">struct</span> <span class="identifier">list</span><span class="special">;</span>
 </pre>
 <p>
-        The variadic class interface accepts <tt class="computeroutput"><span class="number">0</span></tt>
-        to <tt class="computeroutput"><span class="identifier">FUSION_MAX_LIST_SIZE</span></tt> elements,
-        where <tt class="computeroutput"><span class="identifier">FUSION_MAX_LIST_SIZE</span></tt>
-        is a user definable predefined maximum that defaults to <tt class="computeroutput"><span class="number">10</span></tt>.
+        The variadic class interface accepts <code class="computeroutput"><span class="number">0</span></code>
+        to <code class="computeroutput"><span class="identifier">FUSION_MAX_LIST_SIZE</span></code> elements,
+        where <code class="computeroutput"><span class="identifier">FUSION_MAX_LIST_SIZE</span></code>
+        is a user definable predefined maximum that defaults to <code class="computeroutput"><span class="number">10</span></code>.
         Example:
       </p>
-<pre class="programlisting">
-<span class="identifier">list</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="identifier">list</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span>
 </pre>
 <p>
-        You may define the preprocessor constant <tt class="computeroutput"><span class="identifier">FUSION_MAX_LIST_SIZE</span></tt>
+        You may define the preprocessor constant <code class="computeroutput"><span class="identifier">FUSION_MAX_LIST_SIZE</span></code>
         before including any Fusion header to change the default. Example:
       </p>
-<pre class="programlisting">
-<span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_LIST_SIZE</span> <span class="number">20</span>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_LIST_SIZE</span> <span class="number">20</span>
 </pre>
 <a name="fusion.container.list.template_parameters"></a><h4>
-<a name="id532957"></a>
+<a name="id1072801"></a>
         <a href="list.html#fusion.container.list.template_parameters">Template parameters</a>
       </h4>
 <div class="informaltable"><table class="table">
@@ -108,7 +104,7 @@
 <tbody><tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">T0</span></tt>...<tt class="computeroutput"><span class="identifier">TN</span></tt>
+                <code class="computeroutput"><span class="identifier">T0</span></code>...<code class="computeroutput"><span class="identifier">TN</span></code>
               </p>
               </td>
 <td>
@@ -124,7 +120,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.container.list.model_of"></a><h4>
-<a name="id533076"></a>
+<a name="id1072906"></a>
         <a href="list.html#fusion.container.list.model_of">Model of</a>
       </h4>
 <div class="itemizedlist"><ul type="disc"><li><a href="../sequence/concepts/forward_sequence.html" title="Forward
@@ -132,24 +128,24 @@
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">L</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">L</span></code></span></dt>
 <dd><p>
-            A <tt class="computeroutput"><span class="identifier">list</span></tt> type
+            A <code class="computeroutput"><span class="identifier">list</span></code> type
           </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">l</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">l</span></code></span></dt>
 <dd><p>
-            An instance of <tt class="computeroutput"><span class="identifier">list</span></tt>
+            An instance of <code class="computeroutput"><span class="identifier">list</span></code>
           </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">e0</span></tt>...<tt class="computeroutput"><span class="identifier">en</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">e0</span></code>...<code class="computeroutput"><span class="identifier">en</span></code></span></dt>
 <dd><p>
             Heterogeneous values
           </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">s</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
 <dd><p>
             A <a href="../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward Sequence</a>
           </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">N</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">N</span></code></span></dt>
 <dd><p>
             An <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
             Integral Constant</a>
@@ -157,7 +153,7 @@
 </dl>
 </div>
 <a name="fusion.container.list.expression_semantics"></a><h4>
-<a name="id533289"></a>
+<a name="id1073095"></a>
         <a href="list.html#fusion.container.list.expression_semantics">Expression Semantics</a>
       </h4>
 <p>
@@ -187,7 +183,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">L</span><span class="special">()</span></tt>
+                <code class="computeroutput"><span class="identifier">L</span><span class="special">()</span></code>
               </p>
               </td>
 <td>
@@ -199,79 +195,78 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">L</span><span class="special">(</span><span class="identifier">e0</span><span class="special">,</span> <span class="identifier">e1</span><span class="special">,...</span>
-                <span class="identifier">en</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">L</span><span class="special">(</span><span class="identifier">e0</span><span class="special">,</span> <span class="identifier">e1</span><span class="special">,...</span>
+                <span class="identifier">en</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
               <p>
-                Creates a list with elements <tt class="computeroutput"><span class="identifier">e0</span></tt>...<tt class="computeroutput"><span class="identifier">en</span></tt>.
+                Creates a list with elements <code class="computeroutput"><span class="identifier">e0</span></code>...<code class="computeroutput"><span class="identifier">en</span></code>.
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">L</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">L</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
               <p>
                 Copy constructs a list from a <a href="../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>, <tt class="computeroutput"><span class="identifier">s</span></tt>.
+                Sequence</a>, <code class="computeroutput"><span class="identifier">s</span></code>.
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">l</span> <span class="special">=</span>
-                <span class="identifier">s</span></tt>
+                <code class="computeroutput"><span class="identifier">l</span> <span class="special">=</span>
+                <span class="identifier">s</span></code>
               </p>
               </td>
 <td>
               <p>
-                Assigns to a list, <tt class="computeroutput"><span class="identifier">l</span></tt>,
+                Assigns to a list, <code class="computeroutput"><span class="identifier">l</span></code>,
                 from a <a href="../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>, <tt class="computeroutput"><span class="identifier">s</span></tt>.
+                Sequence</a>, <code class="computeroutput"><span class="identifier">s</span></code>.
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><a href="../sequence/intrinsic/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span></tt>
+                <code class="computeroutput"><a href="../sequence/intrinsic/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
               <p>
-                The Nth element from the beginning of the sequence; see <a href="../sequence/intrinsic/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a>.
+                The Nth element from the beginning of the sequence; see <a href="../sequence/intrinsic/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a>.
               </p>
               </td>
 </tr>
 </tbody>
 </table></div>
 <div class="sidebar"><p>
-        <span class="inlinemediaobject"><img src="../../images/note.png" alt="note"></span> <tt class="computeroutput"><a href="../sequence/intrinsic/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">n</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span></tt> is provided
+        <span class="inlinemediaobject"><img src="../../images/note.png" alt="note"></span> <code class="computeroutput"><a href="../sequence/intrinsic/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">n</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span></code> is provided
         for convenience and compatibility with the original <a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html" target="_top">Boost.Tuple</a>
-        library, despite <tt class="computeroutput"><span class="identifier">list</span></tt> being
+        library, despite <code class="computeroutput"><span class="identifier">list</span></code> being
         a <a href="../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward Sequence</a>
-        only (<a href="../sequence/intrinsic/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a> is supposed to be a <a href="../sequence/concepts/random_access_sequence.html" title="Random
+        only (<a href="../sequence/intrinsic/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a> is supposed to be a <a href="../sequence/concepts/random_access_sequence.html" title="Random
         Access Sequence">Random
-        Access Sequence</a> requirement). The runtime complexity of <a href="../sequence/intrinsic/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a> is constant (see <a href="../notes.html#fusion.notes.recursive_inlined_functions">Recursive
+        Access Sequence</a> requirement). The runtime complexity of <a href="../sequence/intrinsic/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a> is constant (see <a href="../notes.html#fusion.notes.recursive_inlined_functions">Recursive
         Inlined Functions</a>).
       </p></div>
 <a name="fusion.container.list.example"></a><h4>
-<a name="id533865"></a>
+<a name="id1073605"></a>
         <a href="list.html#fusion.container.list.example">Example</a>
       </h4>
-<pre class="programlisting">
-<span class="identifier">list</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">l</span><span class="special">(</span><span class="number">12</span><span class="special">,</span> <span class="number">5.5f</span><span class="special">);</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">list</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">l</span><span class="special">(</span><span class="number">12</span><span class="special">,</span> <span class="number">5.5f</span><span class="special">);</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

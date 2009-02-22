@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>in</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../i_o.html" title="I/O">
 <link rel="prev" href="../i_o.html" title="I/O">
@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.sequence.operator.i_o.in"></a><a href="in.html" title="in">in</a></h5></div></div></div>
 <a name="fusion.sequence.operator.i_o.in.description"></a><h6>
-<a name="id519795"></a>
+<a name="id1043755"></a>
             <a href="in.html#fusion.sequence.operator.i_o.in.description">Description</a>
           </h6>
 <p>
@@ -34,16 +34,15 @@
             stream.
           </p>
 <a name="fusion.sequence.operator.i_o.in.synopsis"></a><h6>
-<a name="id519834"></a>
+<a name="id1043789"></a>
             <a href="in.html#fusion.sequence.operator.i_o.in.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">IStream</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">IStream</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
 <span class="identifier">IStream</span><span class="special">&amp;</span>
 <span class="keyword">operator</span><span class="special">&gt;&gt;(</span><span class="identifier">IStream</span><span class="special">&amp;</span> <span class="identifier">is</span><span class="special">,</span> <span class="identifier">Sequence</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <a name="fusion.sequence.operator.i_o.in.parameters"></a><h6>
-<a name="id519980"></a>
+<a name="id1043917"></a>
             <a href="in.html#fusion.sequence.operator.i_o.in.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -107,35 +106,32 @@
 </tbody>
 </table></div>
 <a name="fusion.sequence.operator.i_o.in.expression_semantics"></a><h6>
-<a name="id520110"></a>
+<a name="id1044032"></a>
             <a href="in.html#fusion.sequence.operator.i_o.in.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<span class="identifier">is</span> <span class="special">&gt;&gt;</span> <span class="identifier">seq</span>
+<pre class="programlisting"><span class="identifier">is</span> <span class="special">&gt;&gt;</span> <span class="identifier">seq</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: IStream&amp;
+            <span class="bold"><strong>Return type</strong></span>: IStream&amp;
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: For each element, <tt class="computeroutput"><span class="identifier">e</span></tt>, in sequence, <tt class="computeroutput"><span class="identifier">seq</span></tt>,
-            call <tt class="computeroutput"><span class="identifier">is</span> <span class="special">&gt;&gt;</span>
-            <span class="identifier">e</span></tt>.
+            <span class="bold"><strong>Semantics</strong></span>: For each element, <code class="computeroutput"><span class="identifier">e</span></code>, in sequence, <code class="computeroutput"><span class="identifier">seq</span></code>,
+            call <code class="computeroutput"><span class="identifier">is</span> <span class="special">&gt;&gt;</span>
+            <span class="identifier">e</span></code>.
           </p>
 <a name="fusion.sequence.operator.i_o.in.header"></a><h6>
-<a name="id520231"></a>
+<a name="id1044138"></a>
             <a href="in.html#fusion.sequence.operator.i_o.in.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">io</span><span class="special">/</span><span class="identifier">in</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">io</span><span class="special">/</span><span class="identifier">in</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">in</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequence.operator.i_o.in.example"></a><h6>
-<a name="id520398"></a>
+<a name="id1044285"></a>
             <a href="in.html#fusion.sequence.operator.i_o.in.example">Example</a>
           </h6>
-<pre class="programlisting">
-<a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">;</span>
+<pre class="programlisting"><a href="../../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cin</span> <span class="special">&gt;&gt;</span> <span class="identifier">v</span><span class="special">;</span>
 </pre>
 </div>

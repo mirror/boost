@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>push_front</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="push_back.html" title="push_back">
@@ -26,19 +26,18 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithm.transformation.metafunctions.push_front"></a><a href="push_front.html" title="push_front">push_front</a></h5></div></div></div>
 <a name="fusion.algorithm.transformation.metafunctions.push_front.description"></a><h6>
-<a name="id636001"></a>
+<a name="id1249471"></a>
             <a href="push_front.html#fusion.algorithm.transformation.metafunctions.push_front.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a href="../functions/push_front.html" title="push_front"><tt class="computeroutput"><span class="identifier">push_front</span></tt></a>, given the types
+            Returns the result type of <a href="../functions/push_front.html" title="push_front"><code class="computeroutput"><span class="identifier">push_front</span></code></a>, given the types
             of the input sequence and element to push.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.push_front.synopsis"></a><h6>
-<a name="id636054"></a>
+<a name="id1249517"></a>
             <a href="push_front.html#fusion.algorithm.transformation.metafunctions.push_front.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">T</span>
     <span class="special">&gt;</span>
@@ -48,7 +47,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id636174"></a><p class="title"><b>Table 1.90. Parameters</b></p>
+<a name="id1249620"></a><p class="title"><b>Table 1.90. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -76,7 +75,7 @@
 <tr>
 <td>
                 <p>
-                  <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
+                  <code class="computeroutput"><span class="identifier">Sequence</span></code>
                 </p>
                 </td>
 <td>
@@ -95,7 +94,7 @@
 <tr>
 <td>
                 <p>
-                  <tt class="computeroutput"><span class="identifier">T</span></tt>
+                  <code class="computeroutput"><span class="identifier">T</span></code>
                 </p>
                 </td>
 <td>
@@ -113,26 +112,25 @@
 </table>
 </div>
 <a name="fusion.algorithm.transformation.metafunctions.push_front.expression_semantics"></a><h6>
-<a name="id636314"></a>
+<a name="id1249746"></a>
             <a href="push_front.html#fusion.algorithm.transformation.metafunctions.push_front.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<a href="push_front.html" title="push_front"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">push_front</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<pre class="programlisting"><a href="push_front.html" title="push_front"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">push_front</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
+            <span class="bold"><strong>Return type</strong></span>: A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
             Sequence</a>.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Returns a sequence with the
-            elements of <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
-            and an element of type <tt class="computeroutput"><span class="identifier">T</span></tt>
+            <span class="bold"><strong>Semantics</strong></span>: Returns a sequence with the
+            elements of <code class="computeroutput"><span class="identifier">Sequence</span></code>
+            and an element of type <code class="computeroutput"><span class="identifier">T</span></code>
             added to the beginning.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.push_front.complexity"></a><h6>
-<a name="id636464"></a>
+<a name="id1249877"></a>
             <a href="push_front.html#fusion.algorithm.transformation.metafunctions.push_front.complexity">Complexity</a>
           </h6>
 <p>

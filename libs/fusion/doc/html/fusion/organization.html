@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Organization</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="prev" href="quick_start.html" title="Quick Start">
@@ -34,7 +34,7 @@
       The library is organized in three layers:
     </p>
 <a name="fusion.organization.layers"></a><h3>
-<a name="id459129"></a>
+<a name="id937890"></a>
       <a href="organization.html#fusion.organization.layers">Layers</a>
     </h3>
 <div class="blockquote"><blockquote class="blockquote">
@@ -47,15 +47,15 @@
       </p>
 </blockquote></div>
 <p>
-      The entire library is found in the <tt class="computeroutput"><span class="string">"boost/fusion"</span></tt>
+      The entire library is found in the <code class="computeroutput"><span class="string">"boost/fusion"</span></code>
       directory. Modules are organized in directories. Each module has its own header
       file placed in the same directory with the actual module-directory. For example,
-      there exists <tt class="computeroutput"><span class="string">"boost/fusion/support.hpp"</span></tt>
+      there exists <code class="computeroutput"><span class="string">"boost/fusion/support.hpp"</span></code>
       in the same directory as "boost/fusion/support". Everything, except
       those found inside "detail" directories, is public.
     </p>
 <p>
-      There is also a <tt class="computeroutput"><span class="string">"boost/fusion/include/"</span></tt>
+      There is also a <code class="computeroutput"><span class="string">"boost/fusion/include/"</span></code>
       directory that contains all the headers to all the components and modules.
       If you are unsure where to find a specific component or module, or don't want
       to fuss with hierarchy and nesting, use this.
@@ -65,7 +65,7 @@
       against.
     </p>
 <a name="fusion.organization.directory"></a><h3>
-<a name="id459228"></a>
+<a name="id937987"></a>
       <a href="organization.html#fusion.organization.directory">Directory</a>
     </h3>
 <div class="itemizedlist"><ul type="disc">
@@ -186,28 +186,27 @@
       </li>
 </ul></div>
 <a name="fusion.organization.example"></a><h3>
-<a name="id459407"></a>
+<a name="id938160"></a>
       <a href="organization.html#fusion.organization.example">Example</a>
     </h3>
 <p>
-      If, for example, you want to use <tt class="computeroutput"><span class="identifier">list</span></tt>,
+      If, for example, you want to use <code class="computeroutput"><span class="identifier">list</span></code>,
       depending on the granularity that you desire, you may do so by including one
       of
     </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">container</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">list</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">list</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
-      The first includes all containers The second includes only <tt class="computeroutput"><span class="identifier">list</span></tt>
-      <sup>[<a name="id459705" href="#ftn.id459705">4</a>]</sup>
+      The first includes all containers The second includes only <code class="computeroutput"><span class="identifier">list</span></code>
+      <sup>[<a name="id938420" href="#ftn.id938420">4</a>]</sup>
       .
     </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id459705" href="#id459705">4</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id938420" href="#id938420">4</a>] </sup>
           Modules may contain smaller components. Header file information for each
           component will be provided as part of the component's documentation.
         </p></div>

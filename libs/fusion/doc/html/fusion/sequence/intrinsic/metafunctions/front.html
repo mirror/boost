@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>front</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="empty.html" title="empty">
@@ -26,25 +26,24 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.sequence.intrinsic.metafunctions.front"></a><a href="front.html" title="front">front</a></h5></div></div></div>
 <a name="fusion.sequence.intrinsic.metafunctions.front.description"></a><h6>
-<a name="id510593"></a>
+<a name="id1035648"></a>
             <a href="front.html#fusion.sequence.intrinsic.metafunctions.front.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a href="../functions/front.html" title="front"><tt class="computeroutput"><span class="identifier">front</span></tt></a>.
+            Returns the result type of <a href="../functions/front.html" title="front"><code class="computeroutput"><span class="identifier">front</span></code></a>.
           </p>
 <a name="fusion.sequence.intrinsic.metafunctions.front.synopsis"></a><h6>
-<a name="id510642"></a>
+<a name="id1035692"></a>
             <a href="front.html#fusion.sequence.intrinsic.metafunctions.front.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Seq</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Seq</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">front</span>
 <span class="special">{</span>
     <span class="keyword">typedef</span> <span class="emphasis"><em>unspecified</em></span> <span class="identifier">type</span><span class="special">;</span>
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id510742"></a><p class="title"><b>Table 1.22. Parameters</b></p>
+<a name="id1035779"></a><p class="title"><b>Table 1.22. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -71,7 +70,7 @@
 <tbody><tr>
 <td>
                 <p>
-                  <tt class="computeroutput"><span class="identifier">Seq</span></tt>
+                  <code class="computeroutput"><span class="identifier">Seq</span></code>
                 </p>
                 </td>
 <td>
@@ -90,31 +89,29 @@
 </table>
 </div>
 <a name="fusion.sequence.intrinsic.metafunctions.front.expression_semantics"></a><h6>
-<a name="id510844"></a>
+<a name="id1035871"></a>
             <a href="front.html#fusion.sequence.intrinsic.metafunctions.front.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<span class="identifier">result_of</span><span class="special">::</span><span class="identifier">front</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<pre class="programlisting"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">front</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: Any type
+            <span class="bold"><strong>Return type</strong></span>: Any type
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: The type returned by dereferencing
-            an iterator to the first element in <tt class="computeroutput"><span class="identifier">Seq</span></tt>.
-            Equivalent to <tt class="computeroutput"><a href="../../../iterator/metafunctions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a><span class="special">&lt;</span><a href="begin.html" title="begin"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></tt></a><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>.
+            <span class="bold"><strong>Semantics</strong></span>: The type returned by dereferencing
+            an iterator to the first element in <code class="computeroutput"><span class="identifier">Seq</span></code>.
+            Equivalent to <code class="computeroutput"><a href="../../../iterator/metafunctions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></code></a><span class="special">&lt;</span><a href="begin.html" title="begin"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></code></a><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">type</span></code>.
           </p>
 <p>
             /sequence/intrinsic/front.hpp&gt;
           </p>
 <a name="fusion.sequence.intrinsic.metafunctions.front.example"></a><h6>
-<a name="id511050"></a>
+<a name="id1036049"></a>
             <a href="front.html#fusion.sequence.intrinsic.metafunctions.front.example">Example</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">typedef</span> <a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
-<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_same</span><span class="special">&lt;</span><a href="front.html" title="front"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">front</span></tt></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&amp;&gt;));</span>
+<pre class="programlisting"><span class="keyword">typedef</span> <a href="../../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
+<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_same</span><span class="special">&lt;</span><a href="front.html" title="front"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">front</span></code></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&amp;&gt;));</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

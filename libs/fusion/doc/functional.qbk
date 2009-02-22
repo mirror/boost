@@ -10,7 +10,9 @@
 Components to call functions and function objects and to make Fusion code
 callable through a function object interface.
 
-/functional.hpp>
+[heading Header]
+
+  #include <boost/fusion/functional.hpp>
 
 [heading Fused and unfused forms]
 
@@ -55,6 +57,8 @@ functions and adapters to transform them into fused form, respectively.
 Every variant has a corresponding generator function template that returns
 an adapter instance for the given argument.
 
+Constructors can be called applying __boost_func_factory__.
+
 [heading Making Fusion code callable through a function object interface]
 
 Transforming a fused function into its unfused counterpart allows to create
@@ -62,11 +66,12 @@ function objects to accept arbitrary calls. In other words, an unary function
 object can be implemented instead of (maybe heavily overloaded) function
 templates or function call operators.
 
-The library provides several adapter variants that implement this
-transformation, ranging from strictly typed to fully generic. The latter
-provides a reusable, approximate solution to __the_forwarding_problem__.
-Every generic variant has a corresponding generator function template that
-returns an adapter instance for the given argument.
+The library provides both a strictly typed and a generic variant for this 
+transformation. The latter should be used in combination with
+__boost_func_forward__ to attack __the_forwarding_problem__. 
+
+Both variants have a corresponding generator function template that returns an
+adapter instance for the given argument.
 
 [/ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ]
 
@@ -257,6 +262,8 @@ In case of the latter, a freestanding [^get_pointer] function must be
 defined (Boost provides this function for [^std::auto_ptr] and
 __boost_shared_ptr_call__).
 
+Constructors can be called applying __boost_func_factory__.
+
 [heading Synopsis]
     template<
         typename Function,
@@ -289,7 +296,9 @@ arguments.
 [*Semantics]: Invokes `f` with the elements in `s` as arguments and returns
 the result of the call expression.
 
-/functional/invocation/invoke.hpp>
+[heading Header]
+
+  #include <boost/fusion/functional/invocation/invoke.hpp>
 
 [heading Example]
     __std_plus_doc__<int> add;
@@ -300,6 +309,7 @@ the result of the call expression.
 * __invoke_function_object__
 * __result_of_invoke__
 * __fused__
+* __make_fused__
 
 [endsect]
 
@@ -352,7 +362,9 @@ implemented).
 
 [*Semantics]: Invokes `f` with the elements in `s` as arguments.
 
-/functional/invocation/invoke_procedure.hpp>
+[heading Header]
+
+  #include <booost/fusion/functional/invocation/invoke_procedure.hpp>
 
 [heading Example]
     __vector__<int,int> v(1,2);
@@ -365,6 +377,7 @@ implemented).
 * __invoke_function_object__
 * __result_of_invoke_procedure__
 * __fused_procedure__
+* __make_fused_procedure__
 
 [endsect]
 
@@ -376,6 +389,8 @@ Calls a __poly_func_obj__ with the arguments from a __sequence__.
 
 The first template parameter can be specialized explicitly to avoid copying
 and/or to control the const qualification of a function object.
+
+Constructors can be called applying __boost_func_factory__.
 
 [heading Synopsis]
     template<
@@ -409,7 +424,9 @@ arguments.
 [*Semantics]: Invokes `f` with the elements in `s` as arguments and returns the
 result of the call expression.
 
-/functional/invocation/invoke_function_object.hpp>
+[heading Header]
+
+  #include <boost/fusion/functional/invocation/invoke_function_object.hpp>
 
 [heading Example]
     struct sub
@@ -439,6 +456,7 @@ result of the call expression.
 * __invoke_procedure__
 * __result_of_invoke_function_object__
 * __fused_function_object__
+* __make_fused_function_object__
 
 [endsect]
 
@@ -520,6 +538,23 @@ Returns the result type of __invoke_function_object__.
 
 [endsect] [/ Metafunctions ]
 
+[section Limits]
+
+[heading Header]
+
+  #include <boost/fusion/functional/invocation/limits.hpp>
+
+[heading Macros]
+
+The following macros can be defined to change the maximum arity. 
+The default is 6.
+
+* BOOST_FUSION_INVOKE_MAX_ARITY
+* BOOST_FUSION_INVOKE_PROCEDURE_MAX_ARITY
+* BOOST_FUSION_INVOKE_FUNCTION_OBJECT_MAX_ARITY
+
+[endsect]
+
 [endsect] [/ Invocation ]
 
 [/ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ]
@@ -551,7 +586,9 @@ In case of the latter, a freestanding [^get_pointer] function must be
 defined (Boost provides this function for [^std::auto_ptr] and
 __boost_shared_ptr_call__).
 
-/functional/adapter/fused.hpp>
+[heading Header]
+
+  #include <boost/fusion/functional/adapter/fused.hpp>
 
 [heading Synopsis]
     template <typename Function>
@@ -594,6 +631,7 @@ __boost_shared_ptr_call__).
 * __fused_procedure__
 * __fused_function_object__
 * __invoke__
+* __make_fused__
 * __deduce__
 
 [endsect]
@@ -627,7 +665,9 @@ The target function must not be a pointer to a member object (dereferencing
 such a pointer without returning anything does not make sense, so this case
 is not implemented).
 
-/functional/adapter/fused_procedure.hpp>
+[heading Header]
+
+  #include <boost/fusion/functional/adapter/fused_procedure.hpp>
 
 [heading Synopsis]
     template <typename Function>
@@ -683,6 +723,7 @@ is not implemented).
 * __fused__
 * __fused_function_object__
 * __invoke_procedure__
+* __make_fused_procedure__
 
 [endsect]
 
@@ -700,7 +741,9 @@ reference. Const qualification is preserved and propagated appropriately
 target function object that is const or, if the target function object
 is held by value, the adapter is const).
 
-/functional/adapter/fused_function_object.hpp>
+[heading Header]
+
+  #include <boost/fusion/functional/adapter/fused_function_object.hpp>
 
 [heading Synopsis]
     template <class Function>
@@ -773,150 +816,50 @@ is held by value, the adapter is const).
 * __fused__
 * __fused_procedure__
 * __invoke_function_object__
+* __make_fused_function_object__
 * __deduce__
 
 [endsect]
 
 
-[section unfused_generic]
-
-[heading Description]
-
-An n-ary __poly_func_obj__ adapter template for an unary __poly_func_obj__
-target function. When called, its arguments are bundled to a
-__random_access_sequence__ of references that is passed to the target function.
-Non-const __lvalue__ arguments are transported as references to non-const, otherwise
-references to const are used.
-
-[blurb __tip__ Detecting mutable LValues on a per-argument basis is currently a
-compile time expensive operation (see __the_forwarding_problem__ for
-details). Therefore, there are two, lightweight and more restricted variants
-of this class template, __unfused_lvalue_args__ and __unfused_rvalue_args__.]
-
-The type of the target function is allowed to be const qualified or a
-reference. Const qualification is preserved and propagated appropriately
-(in other words, only const versions of [^operator()] can be used if
-the target function object is const - or, in case the target function
-object is held by value, the adapter is const).
-
-/functional/adapter/unfused_generic.hpp>
-
-[heading Synopsis]
-    template <class Function>
-    class unfused_generic;
-
-[heading Template parameters]
-
-[table
-    [[Parameter]  [Description]                   [Default]]
-    [[`Function`] [An unary __poly_func_obj__]    []]
-]
-
-[heading Model of]
-
-* __poly_func_obj__
-* __def_callable_obj__
-
-[variablelist Notation
-    [[`F`]         [A possibly const qualified, unary __poly_func_obj__ type or reference type thereof]]
-    [[`f`]         [An object convertible to `F`]]
-    [[`UG`]        [The type `unfused_generic<F>`]]
-    [[`ug`]        [An instance of `UG`, initialized with `f`]]
-    [[`a0`...`aN`] [Arguments to `ug`]]
-]
-
-[heading Expression Semantics]
-
-[table
-    [[Expression]      [Semantics]]
-    [[`UG(f)`]         [Creates a fused function as described above, initializes the target function with `f`.]]
-    [[`UG()`]          [Creates a fused function as described above, attempts to use `F`'s default constructor.]]
-    [[`ug(a0`...`aN)`] [Calls `f` with a __sequence__ that contains references to the arguments `a0`...`aN`.]]
-]
-
-[heading Example]
-    template <typename Function, typename T>
-    class fused_bound_1st
-    {
-        typename traits::deduce<Function>::type fnc_deferred;
-        typename traits::deduce<T>::type        xxx_bound;
-    public:
-
-        fused_bound_1st(Function deferred, T bound)
-            : fnc_deferred(deferred), xxx_bound(bound)
-        { }
-
-        template <typename Sig>
-        struct result;
-
-        template <class Self, class Seq>
-        struct result< Self(Seq) >
-            : result_of::invoke< Function, typename result_of::push_front<
-                typename remove_reference<Seq>::type, T>::type >
-        { };
-
-        template <class Seq>
-        typename result< void(Seq) >::type operator()(Seq const & s) const
-        {
-            return invoke(fnc_deferred, push_front(s,xxx_bound));
-        }
-    };
-
-    template <typename Function, typename T>
-    unfused_generic< fused_bound_1st<Function,T> >
-    bind_1st(Function f, T const & x)
-    {
-        return unfused_generic< fused_bound_1st<Function,T> >(
-            fused_bound_1st<Function,T>(f,x) );
-    }
-
-    int test_func(int a, int b, int c)
-    {
-        return a+b+c;
-    }
-
-    void try_it()
-    {
-        assert(bind_1st(& test_func,3)(-2,-1) == 0);
-        assert(bind_1st(std::plus<float>(), 1)(0.5f) == 1.5f);
-    }
-
-[heading See also]
-* __unfused_lvalue_args__
-* __unfused_rvalue_args__
-* __unfused_typed__
-* __deduce__
-* __deduce_sequence__
-
-[endsect]
-
-
-[section unfused_lvalue_args]
+[section unfused]
 
 [heading Description]
 
 An n-ary __poly_func_obj__ adapter template for an unary __poly_func_obj__
 target function. When called, its arguments are bundled to a
 __random_access_sequence__ of references that is passed to the target function
-object. Only __lvalue__ arguments are accepted.
+object.
+
+The nullary overload of the call operator can be removed by setting the
+second template parameter to `false`, which is very useful if the result type
+computation would result in a compile error, otherwise (nullary call
+operator's prototypes can't be templates and thus are instantiated as early
+as the class template).
+
+Only __lvalue__ arguments are accepted. To overcome this limitation, apply
+__boost_func_forward__.
 
 The type of the target function is allowed to be const qualified or a
-reference. Const qualification is preserved and propagated appropriately
-(in other words, only const versions of [^operator()] can be used if
+reference. Const qualification is preserved and propagated appropriately.
+In other words, only const versions of [^operator()] can be used if
 the target function object is const - or, in case the target function
-object is held by value, the adapter is const).
+object is held by value, the adapter is const.
 
-/functional/adapter/unfused_lvalue_args.hpp>
+[heading Header]
+
+  #include <boost/fusion/functional/adapter/unfused.hpp>
 
 [heading Synopsis]
-    template <class Function>
-    class unfused_lvalue_args;
+    template <class Function, bool AllowNullary = true>
+    class unfused;
 
 [heading Template parameters]
 
 [table
     [[Parameter]  [Description]               [Default]]
     [[`Function`] [A unary __poly_func_obj__] []]
+    [[`AllowNullary`] [Boolean constant] [true]]
 ]
 
 [heading Model of]
@@ -927,7 +870,7 @@ object is held by value, the adapter is const).
 [variablelist Notation
     [[`F`]         [A possibly const qualified, unary __poly_func_obj__ type or reference type thereof]]
     [[`f`]         [An object convertible to `F`]]
-    [[`UL`]        [The type `unfused_lvalue_args<F>`]]
+    [[`UL`]        [The type `unfused<F>`]]
     [[`ul`]        [An instance of `UL`, initialized with `f`]]
     [[`a0`...`aN`] [Arguments to `ul`]]
 ]
@@ -959,97 +902,15 @@ object is held by value, the adapter is const).
 
     void try_it()
     {
-        unfused_lvalue_args<fused_incrementer> increment;
+        unfused<fused_incrementer> increment;
         int a = 2; char b = 'X';
         increment(a,b);
         assert(a == 3 && b == 'Y');
     }
 
 [heading See also]
-* __unfused_rvalue_args__
-* __unfused_generic__
 * __unfused_typed__
-
-[endsect]
-
-[section unfused_rvalue_args]
-
-[heading Description]
-
-An n-ary __poly_func_obj__ adapter template for an unary __poly_func_obj__
-target function. When called, its arguments are bundled to a
-__random_access_sequence__ of references that is passed to the target
-function object. All referenced objects in the sequence are const qualified.
-
-The type of the target function is allowed to be const qualified or a
-reference. Const qualification is preserved and propagated appropriately
-(in other words, only const versions of [^operator()] can be used if
-the target function object is const - or, in case the target function object
-is held by value, the adapter is const).
-
-/functional/adapter/unfused_rvalue_args.hpp>
-
-[heading Synopsis]
-    template <class Function>
-    class unfused_rvalue_args;
-
-[heading Template parameters]
-
-[table
-    [[Parameter]  [Description]               [Default]]
-    [[`Function`] [A unary __poly_func_obj__] []]
-]
-
-[heading Model of]
-
-* __poly_func_obj__
-* __def_callable_obj__
-
-[variablelist Notation
-    [[`F`]         [A possibly const qualified, unary __poly_func_obj__ type or reference type thereof]]
-    [[`f`]         [An object convertible to `F`]]
-    [[`UR`]        [The type `unfused_rvalue_args<F>`]]
-    [[`ur`]        [An instance of `UR`, initialized with `f`]]
-    [[`a0`...`aN`] [Arguments to `ur`]]
-]
-
-[heading Expression Semantics]
-
-[table
-    [[Expression]      [Semantics]]
-    [[`UR(f)`]         [Creates a fused function as described above, initializes the target function with `f`.]]
-    [[`UR()`]          [Creates a fused function as described above, attempts to use `F`'s default constructor.]]
-    [[`ur(a0`...`aN)`] [Calls `f` with a __sequence__ that contains references to the arguments `a0`...`aN`.]]
-]
-
-[heading Example]
-    struct sequence_printer
-    {
-        template <class Seq>
-        struct result
-        {
-            typedef void type;
-        };
-
-        template <class Seq>
-        void operator()(Seq const & s) const
-        {
-            std::cout << s << std::endl;
-        }
-    };
-
-    void try_it()
-    {
-        unfused_rvalue_args<sequence_printer> print;
-        print(24,"bottles of beer in",'a',"box.");
-    }
-
-[heading See also]
-* __unfused_lvalue_args__
-* __unfused_generic__
-* __unfused_typed__
-* __deduce__
-* __deduce_sequence__
+* __make_unfused__
 
 [endsect]
 
@@ -1078,7 +939,9 @@ Therefore the adapter is always treated as if it was const. ]
 non-reference elements, the element is copied only once - the call operator's
 signature is optimized automatically to avoid by-value parameters.]
 
-/functional/adapter/unfused_typed.hpp>
+[heading Header]
+
+  #include <boost/fusion/functional/adapter/unfused_typed.hpp>
 
 [heading Synopsis]
     template <class Function, class Sequence>
@@ -1169,7 +1032,7 @@ signature is optimized automatically to avoid by-value parameters.]
                 fused_parallel_adder<Seq>(tie) );
         }
     };
-    unfused_lvalue_args<fused_parallel_adder_maker> parallel_add;
+    unfused<fused_parallel_adder_maker> parallel_add;
 
     void try_it()
     {
@@ -1183,11 +1046,26 @@ signature is optimized automatically to avoid by-value parameters.]
     }
 
 [heading See also]
-* __unfused_generic__
-* __unfused_lvalue_args__
-* __unfused_rvalue_args__
+* __unfused__
 * __deduce__
 * __deduce_sequence__
+
+[endsect]
+
+[section Limits]
+
+[heading Header]
+
+  #include <boost/fusion/functional/adapter/limits.hpp>
+
+[heading Macros]
+
+The following macros can be defined to change the maximum arity. 
+The value used for these macros must not exceed `FUSION_MAX_VECTOR_SIZE`.
+The default is 6.
+
+* BOOST_FUSION_UNFUSED_MAX_ARITY
+* BOOST_FUSION_UNFUSED_TYPE_MAX_ARITY
 
 [endsect]
 
@@ -1353,16 +1231,16 @@ The usual __element_conversion__ is applied to the target function.
 
 [endsect]
 
-[section:mk_unfused_genrc make_unfused_generic]
+[section:mk_unfused make_unfused]
 
 [heading Description]
-Creates a __unfused_generic__ adapter for a given, unary __poly_func_obj__.
+Creates a __unfused__ adapter for a given, unary __poly_func_obj__.
 The usual __element_conversion__ is applied to the target function.
 
 [heading Synopsis]
     template <typename F>
-    inline typename __result_of_make_unfused_generic__<F>::type
-    make_unfused_generic(F const & f);
+    inline typename __result_of_make_unfused__<F>::type
+    make_unfused(F const & f);
 
 [heading Parameters]
 [table
@@ -1372,85 +1250,16 @@ The usual __element_conversion__ is applied to the target function.
 
 [heading Expression Semantics]
 
-    make_unfused_generic(f);
+    make_unfused(f);
 
-[*Return type]: A specialization of __unfused_generic__.
+[*Return type]: A specialization of __unfused__.
 
-[*Semantics]: Returns a __unfused_generic__ adapter for `f`.
-
-[heading Header]
-
-    #include <boost/fusion/functional/generation/make_unfused_generic.hpp>
-    #include <boost/fusion/include/make_unfused_generic.hpp>
-
-[heading Example]
-    struct bottles_song
-    {
-        typedef void result_type;
-
-        template<class Seq>
-        void operator()(Seq & s) const
-        {
-            typename result_of::at_c<Seq,0>::type n = at_c<0>(s);
-            typename result_of::at_c<Seq,1>::type what = at_c<1>(s);
-
-            std::cout
-                << n << " bottles of " << what << " on the wall.\n"
-                << n << " bottles of " << what << "!\n"
-                << "Take one down - pass it around.\n";
-
-            n -= 1; // glug glug...
-
-            std::cout
-                << n << " bottles of " << what << " on the wall.\n"
-                << std::endl;
-        }
-    };
-
-    void try_it()
-    {
-        unsigned n_milk = 99;
-        for(int i = 0; i < 3; ++i)
-            make_unfused_generic(bottles_song())(n_milk,"milk");
-        // 96 bottles left for me
-    }
-
-[heading See also]
-* __unfused_generic__
-* __deduce__
-* __result_of_make_unfused_generic__
-
-[endsect]
-
-[section:mk_unfused_lvargs make_unfused_lvalue_args]
-
-[heading Description]
-Creates a __unfused_lvalue_args__ adapter for a given, unary __poly_func_obj__.
-The usual __element_conversion__ is applied to the target function.
-
-[heading Synopsis]
-    template <typename F>
-    inline typename __result_of_make_unfused_lvalue_args__<F>::type
-    make_unfused_lvalue_args(F const & f);
-
-[heading Parameters]
-[table
-    [[Parameter]  [Requirement]                    [Description]]
-    [[`f`]        [Model of __poly_func_obj__]     [The function to transform.]]
-]
-
-[heading Expression Semantics]
-
-    make_unfused_lvalue_args(f);
-
-[*Return type]: A specialization of __unfused_lvalue_args__.
-
-[*Semantics]: Returns a __unfused_lvalue_args__ adapter for `f`.
+[*Semantics]: Returns a __unfused__ adapter for `f`.
 
 [heading Header]
 
-    #include <boost/fusion/functional/generation/make_unfused_lvalue_args.hpp>
-    #include <boost/fusion/include/make_unfused_lvalue_args.hpp>
+    #include <boost/fusion/functional/generation/make_unfused.hpp>
+    #include <boost/fusion/include/make_unfused.hpp>
 
 [heading Example]
     struct fused_incrementer
@@ -1471,73 +1280,14 @@ The usual __element_conversion__ is applied to the target function.
     void try_it()
     {
         int a = 2; char b = 'X';
-        make_unfused_lvalue_args(fused_incrementer())(a,b);
+        make_unfused(fused_incrementer())(a,b);
         assert(a == 3 && b == 'Y');
     }
 
 [heading See also]
-* __unfused_lvalue_args__
+* __unfused__
 * __deduce__
-* __result_of_make_unfused_lvalue_args__
-
-[endsect]
-
-[section:mk_unfused_rvargs make_unfused_rvalue_args]
-
-[heading Description]
-Creates a __unfused_rvalue_args__ adapter for a given, unary __poly_func_obj__.
-The usual __element_conversion__ is applied to the target function.
-
-[heading Synopsis]
-    template <typename F>
-    inline typename __result_of_make_unfused_rvalue_args__<F>::type
-    make_unfused_rvalue_args(F const & f);
-
-[heading Parameters]
-[table
-    [[Parameter]  [Requirement]                    [Description]]
-    [[`f`]        [Model of __poly_func_obj__]     [The function to transform.]]
-]
-
-[heading Expression Semantics]
-
-    make_unfused_rvalue_args(f);
-
-[*Return type]: A specialization of __unfused_rvalue_args__.
-
-[*Semantics]: Returns a __unfused_rvalue_args__ adapter for `f`.
-
-[heading Header]
-
-    #include <boost/fusion/functional/generation/make_unfused_rvalue_args.hpp>
-    #include <boost/fusion/include/make_unfused_rvalue_args.hpp>
-
-[heading Example]
-    struct sequence_printer
-    {
-        template <class Seq>
-        struct result
-        {
-            typedef void type;
-        };
-
-        template <class Seq>
-        void operator()(Seq const & s) const
-        {
-            std::cout << s << std::endl;
-        }
-    };
-
-    void try_it()
-    {
-        make_unfused_rvalue_args(sequence_printer())
-            (24,"bottles of beer in",'a',"box.");
-    }
-
-[heading See also]
-* __unfused_rvalue_args__
-* __deduce__
-* __result_of_make_unfused_rvalue_args__
+* __result_of_make_unfused__
 
 [endsect]
 
@@ -1620,78 +1370,28 @@ Returns the result type of __make_fused_function_object__.
 
 [endsect]
 
-[section:mk_unfused_genrc make_unfused_generic]
+[section:mk_unfused make_unfused]
 
 [heading Description]
-Returns the result type of __make_unfused_generic__.
+Returns the result type of __make_unfused__.
 
 [heading Header]
 
-    #include <boost/fusion/functional/generation/make_unfused_generic.hpp>
-    #include <boost/fusion/include/make_unfused_generic.hpp>
+    #include <boost/fusion/functional/generation/make_unfused.hpp>
+    #include <boost/fusion/include/make_unfused.hpp>
 
 [heading Synopsis]
     namespace result_of
     {
         template<typename Function>
-        struct make_unfused_generic
+        struct make_unfused
         {
             typedef __unspecified__ type;
         };
     }
 
 [heading See also]
-* __make_unfused_generic__
-
-[endsect]
-
-[section:mk_unfused_lvargs make_unfused_lvalue_args]
-
-[heading Description]
-Returns the result type of __make_unfused_lvalue_args__.
-
-[heading Header]
-
-    #include <boost/fusion/functional/generation/make_unfused_lvalue_args.hpp>
-    #include <boost/fusion/include/make_unfused_lvalue_args.hpp>
-
-[heading Synopsis]
-    namespace result_of
-    {
-        template<typename Function>
-        struct make_unfused_lvalue_args
-        {
-            typedef __unspecified__ type;
-        };
-    }
-
-[heading See also]
-* __make_unfused_lvalue_args__
-
-[endsect]
-
-[section:mk_unfused_rvargs make_unfused_rvalue_args]
-
-[heading Description]
-Returns the result type of __make_unfused_rvalue_args__.
-
-[heading Header]
-
-    #include <boost/fusion/functional/generation/make_unfused_rvalue_args.hpp>
-    #include <boost/fusion/include/make_unfused_rvalue_args.hpp>
-
-[heading Synopsis]
-    namespace result_of
-    {
-        template<typename Function>
-        struct make_unfused_rvalue_args
-        {
-            typedef __unspecified__ type;
-        };
-    }
-
-[heading See also]
-* __make_unfused_rvalue_args__
+* __make_unfused__
 
 [endsect]
 

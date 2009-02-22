@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>reverse</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="remove_if.html" title="remove_if">
@@ -26,19 +26,18 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithm.transformation.metafunctions.reverse"></a><a href="reverse.html" title="reverse">reverse</a></h5></div></div></div>
 <a name="fusion.algorithm.transformation.metafunctions.reverse.description"></a><h6>
-<a name="id628881"></a>
+<a name="id1243206"></a>
             <a href="reverse.html#fusion.algorithm.transformation.metafunctions.reverse.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a href="../functions/reverse.html" title="reverse"><tt class="computeroutput"><span class="identifier">reverse</span></tt></a>, given the input sequence
+            Returns the result type of <a href="../functions/reverse.html" title="reverse"><code class="computeroutput"><span class="identifier">reverse</span></code></a>, given the input sequence
             type.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.reverse.synopsis"></a><h6>
-<a name="id628930"></a>
+<a name="id1243250"></a>
             <a href="reverse.html#fusion.algorithm.transformation.metafunctions.reverse.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span>
     <span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">reverse</span>
@@ -47,7 +46,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id629032"></a><p class="title"><b>Table 1.81. Parameters</b></p>
+<a name="id1243338"></a><p class="title"><b>Table 1.81. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -74,7 +73,7 @@
 <tbody><tr>
 <td>
                 <p>
-                  <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
+                  <code class="computeroutput"><span class="identifier">Sequence</span></code>
                 </p>
                 </td>
 <td>
@@ -93,35 +92,33 @@
 </table>
 </div>
 <a name="fusion.algorithm.transformation.metafunctions.reverse.expression_semantics"></a><h6>
-<a name="id629135"></a>
+<a name="id1243431"></a>
             <a href="reverse.html#fusion.algorithm.transformation.metafunctions.reverse.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<a href="reverse.html" title="reverse"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">reverse</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<pre class="programlisting"><a href="reverse.html" title="reverse"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">reverse</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequence/concepts/bidirectional_sequence.html" title="Bidirectional
+            <span class="bold"><strong>Return type</strong></span>: A model of <a href="../../../sequence/concepts/bidirectional_sequence.html" title="Bidirectional
         Sequence">Bidirectional
             Sequence</a>.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Returns a sequence with the
-            elements in the reverse order to <tt class="computeroutput"><span class="identifier">Sequence</span></tt>.
+            <span class="bold"><strong>Semantics</strong></span>: Returns a sequence with the
+            elements in the reverse order to <code class="computeroutput"><span class="identifier">Sequence</span></code>.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.reverse.complexity"></a><h6>
-<a name="id629261"></a>
+<a name="id1243542"></a>
             <a href="reverse.html#fusion.algorithm.transformation.metafunctions.reverse.complexity">Complexity</a>
           </h6>
 <p>
             Constant.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.reverse.header"></a><h6>
-<a name="id629293"></a>
+<a name="id1243549"></a>
             <a href="reverse.html#fusion.algorithm.transformation.metafunctions.reverse.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">reverse</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">reverse</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">reverse</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 </div>

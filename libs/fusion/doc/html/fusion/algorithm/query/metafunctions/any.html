@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>any</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="../metafunctions.html" title="Metafunctions">
@@ -26,18 +26,17 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithm.query.metafunctions.any"></a><a href="any.html" title="any">any</a></h5></div></div></div>
 <a name="fusion.algorithm.query.metafunctions.any.description"></a><h6>
-<a name="id596342"></a>
+<a name="id1179594"></a>
             <a href="any.html#fusion.algorithm.query.metafunctions.any.description">Description</a>
           </h6>
 <p>
-            A metafunction returning the result type of <a href="../functions/any.html" title="any"><tt class="computeroutput"><span class="identifier">any</span></tt></a>.
+            A metafunction returning the result type of <a href="../functions/any.html" title="any"><code class="computeroutput"><span class="identifier">any</span></code></a>.
           </p>
 <a name="fusion.algorithm.query.metafunctions.any.synopsis"></a><h6>
-<a name="id596387"></a>
+<a name="id1179637"></a>
             <a href="any.html#fusion.algorithm.query.metafunctions.any.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">F</span>
     <span class="special">&gt;</span>
@@ -47,7 +46,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id596507"></a><p class="title"><b>Table 1.46. Parameters</b></p>
+<a name="id1179743"></a><p class="title"><b>Table 1.46. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -75,7 +74,7 @@
 <tr>
 <td>
                 <p>
-                  <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
+                  <code class="computeroutput"><span class="identifier">Sequence</span></code>
                 </p>
                 </td>
 <td>
@@ -94,7 +93,7 @@
 <tr>
 <td>
                 <p>
-                  <tt class="computeroutput"><span class="identifier">F</span></tt>
+                  <code class="computeroutput"><span class="identifier">F</span></code>
                 </p>
                 </td>
 <td>
@@ -114,38 +113,36 @@
 </table>
 </div>
 <a name="fusion.algorithm.query.metafunctions.any.expression_semantics"></a><h6>
-<a name="id596653"></a>
+<a name="id1179876"></a>
             <a href="any.html#fusion.algorithm.query.metafunctions.any.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<a href="any.html" title="any"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">any</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">F</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<pre class="programlisting"><a href="any.html" title="any"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">any</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">F</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: <tt class="computeroutput"><span class="keyword">bool</span></tt>.
+            <span class="bold"><strong>Return type</strong></span>: <code class="computeroutput"><span class="keyword">bool</span></code>.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Returns the return type of
-            <a href="../functions/any.html" title="any"><tt class="computeroutput"><span class="identifier">any</span></tt></a>
-            given a sequence of type <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
+            <span class="bold"><strong>Semantics</strong></span>: Returns the return type of
+            <a href="../functions/any.html" title="any"><code class="computeroutput"><span class="identifier">any</span></code></a>
+            given a sequence of type <code class="computeroutput"><span class="identifier">Sequence</span></code>
             and a unary <a href="../../../functional/concepts/poly.html" title=" Polymorphic Function
         Object">Polymorphic
-            Function Object</a> of type <tt class="computeroutput"><span class="identifier">F</span></tt>.
-            The return type is always <tt class="computeroutput"><span class="keyword">bool</span></tt>.
+            Function Object</a> of type <code class="computeroutput"><span class="identifier">F</span></code>.
+            The return type is always <code class="computeroutput"><span class="keyword">bool</span></code>.
           </p>
 <a name="fusion.algorithm.query.metafunctions.any.complexity"></a><h6>
-<a name="id596835"></a>
+<a name="id1180040"></a>
             <a href="any.html#fusion.algorithm.query.metafunctions.any.complexity">Complexity</a>
           </h6>
 <p>
             Constant.
           </p>
 <a name="fusion.algorithm.query.metafunctions.any.header"></a><h6>
-<a name="id596863"></a>
+<a name="id1180067"></a>
             <a href="any.html#fusion.algorithm.query.metafunctions.any.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">query</span><span class="special">/</span><span class="identifier">any</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">query</span><span class="special">/</span><span class="identifier">any</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">any</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 </div>

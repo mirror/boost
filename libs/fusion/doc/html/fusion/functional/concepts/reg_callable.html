@@ -4,7 +4,7 @@
 <title> Regular Callable
         Object</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
 <link rel="prev" href="callable.html" title=" Callable Object">
@@ -30,7 +30,7 @@
         Object"> Regular Callable
         Object</a></h4></div></div></div>
 <a name="fusion.functional.concepts.reg_callable.description"></a><h5>
-<a name="id654747"></a>
+<a name="id1283542"></a>
           <a href="reg_callable.html#fusion.functional.concepts.reg_callable.description">Description</a>
         </h5>
 <p>
@@ -39,7 +39,7 @@
           can appear immediately to the left of a function call operator.
         </p>
 <a name="fusion.functional.concepts.reg_callable.refinement_of"></a><h5>
-<a name="id654790"></a>
+<a name="id1283580"></a>
           <a href="reg_callable.html#fusion.functional.concepts.reg_callable.refinement_of">Refinement
           of</a>
         </h5>
@@ -47,29 +47,29 @@
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">F</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">F</span></code></span></dt>
 <dd><p>
               A possibly const qualified Deferred Callable Object type
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">f</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">f</span></code></span></dt>
 <dd><p>
               An object or reference to an object of type F
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">A1</span>
-          <span class="special">...</span><span class="identifier">AN</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">A1</span>
+          <span class="special">...</span><span class="identifier">AN</span></code></span></dt>
 <dd><p>
               Argument types
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">a1</span>
-          <span class="special">...</span><span class="identifier">aN</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">a1</span>
+          <span class="special">...</span><span class="identifier">aN</span></code></span></dt>
 <dd><p>
-              Objects or references to objects with types <tt class="computeroutput"><span class="identifier">A1</span>
-              <span class="special">...</span><span class="identifier">AN</span></tt>
+              Objects or references to objects with types <code class="computeroutput"><span class="identifier">A1</span>
+              <span class="special">...</span><span class="identifier">AN</span></code>
             </p></dd>
 </dl>
 </div>
 <a name="fusion.functional.concepts.reg_callable.expression_requirements"></a><h5>
-<a name="id654976"></a>
+<a name="id1283746"></a>
           <a href="reg_callable.html#fusion.functional.concepts.reg_callable.expression_requirements">Expression
           requirements</a>
         </h5>
@@ -99,8 +99,8 @@
 <tbody><tr>
 <td>
                 <p>
-                  <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">a1</span><span class="special">,</span>
-                  <span class="special">...</span><span class="identifier">aN</span><span class="special">)</span></tt>
+                  <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">a1</span><span class="special">,</span>
+                  <span class="special">...</span><span class="identifier">aN</span><span class="special">)</span></code>
                 </p>
                 </td>
 <td>
@@ -116,7 +116,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.concepts.reg_callable.models"></a><h5>
-<a name="id655112"></a>
+<a name="id1283868"></a>
           <a href="reg_callable.html#fusion.functional.concepts.reg_callable.models">Models</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">
@@ -128,18 +128,17 @@
           </li>
 </ul></div>
 <a name="fusion.functional.concepts.reg_callable.examples"></a><h5>
-<a name="id655150"></a>
+<a name="id1283901"></a>
           <a href="reg_callable.html#fusion.functional.concepts.reg_callable.examples">Examples</a>
         </h5>
-<pre class="programlisting">
-<span class="special">&amp;</span> <span class="identifier">a_free_function</span>
+<pre class="programlisting"><span class="special">&amp;</span> <span class="identifier">a_free_function</span>
 <span class="special">&amp;</span> <span class="identifier">a_class</span><span class="special">::</span><span class="identifier">a_static_member_function</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;()</span>
 <span class="comment">// using namespace boost;
 </span><span class="identifier">bind</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(),</span> <span class="identifier">_1</span><span class="special">,</span> <span class="number">5</span><span class="special">)</span>
 <span class="identifier">lambda</span><span class="special">::</span><span class="identifier">_1</span> <span class="special">+=</span> <span class="identifier">lambda</span><span class="special">::</span><span class="identifier">_2</span><span class="special">;</span>
 <span class="identifier">fusion</span><span class="special">::</span><a href="../generation/functions/mk_fused_fobj.html" title="
-          make_fused_function_object"><tt class="computeroutput"><span class="identifier">make_fused_function_object</span></tt></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;())</span>
+          make_fused_function_object"><code class="computeroutput"><span class="identifier">make_fused_function_object</span></code></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;())</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

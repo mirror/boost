@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>join</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="insert_range.html" title="insert_range">
@@ -26,18 +26,17 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithm.transformation.metafunctions.join"></a><a href="join.html" title="join">join</a></h5></div></div></div>
 <a name="fusion.algorithm.transformation.metafunctions.join.description"></a><h6>
-<a name="id633181"></a>
+<a name="id1246985"></a>
             <a href="join.html#fusion.algorithm.transformation.metafunctions.join.description">Description</a>
           </h6>
 <p>
             Returns the result of joining 2 sequences, given the sequence types.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.join.synopsis"></a><h6>
-<a name="id633214"></a>
+<a name="id1247013"></a>
             <a href="join.html#fusion.algorithm.transformation.metafunctions.join.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">LhSequence</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">RhSequence</span>
     <span class="special">&gt;</span>
@@ -47,37 +46,35 @@
 <span class="special">};</span>
 </pre>
 <a name="fusion.algorithm.transformation.metafunctions.join.expression_semantics"></a><h6>
-<a name="id633343"></a>
+<a name="id1247128"></a>
             <a href="join.html#fusion.algorithm.transformation.metafunctions.join.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<a href="join.html" title="join"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">join</span></tt></a><span class="special">&lt;</span><span class="identifier">LhSequence</span><span class="special">,</span> <span class="identifier">RhSequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<pre class="programlisting"><a href="join.html" title="join"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">join</span></code></a><span class="special">&lt;</span><span class="identifier">LhSequence</span><span class="special">,</span> <span class="identifier">RhSequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
+            <span class="bold"><strong>Return type</strong></span>: A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
             Sequence</a>.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Returns a sequence containing
-            the elements of <tt class="computeroutput"><span class="identifier">LhSequence</span></tt>
-            followed by the elements of <tt class="computeroutput"><span class="identifier">RhSequence</span></tt>.
+            <span class="bold"><strong>Semantics</strong></span>: Returns a sequence containing
+            the elements of <code class="computeroutput"><span class="identifier">LhSequence</span></code>
+            followed by the elements of <code class="computeroutput"><span class="identifier">RhSequence</span></code>.
             The order of the elements in the 2 sequences is preserved.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.join.complexity"></a><h6>
-<a name="id633493"></a>
+<a name="id1247258"></a>
             <a href="join.html#fusion.algorithm.transformation.metafunctions.join.complexity">Complexity</a>
           </h6>
 <p>
             Constant.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.join.header"></a><h6>
-<a name="id633523"></a>
+<a name="id1247285"></a>
             <a href="join.html#fusion.algorithm.transformation.metafunctions.join.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">join</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">join</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">join</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 </div>

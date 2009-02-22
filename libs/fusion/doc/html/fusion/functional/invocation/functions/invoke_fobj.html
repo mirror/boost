@@ -4,7 +4,7 @@
 <title>
           invoke_function_object</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="invoke_proc.html" title="
@@ -30,7 +30,7 @@
           invoke_function_object">
           invoke_function_object</a></h5></div></div></div>
 <a name="fusion.functional.invocation.functions.invoke_fobj.description"></a><h6>
-<a name="id659482"></a>
+<a name="id1287955"></a>
             <a href="invoke_fobj.html#fusion.functional.invocation.functions.invoke_fobj.description">Description</a>
           </h6>
 <p>
@@ -42,17 +42,19 @@
             The first template parameter can be specialized explicitly to avoid copying
             and/or to control the const qualification of a function object.
           </p>
+<p>
+            Constructors can be called applying <a href="http://www.boost.org/libs/functional/factory/doc/html/index.html" target="_top">Boost.Functional/Factory</a>.
+          </p>
 <a name="fusion.functional.invocation.functions.invoke_fobj.synopsis"></a><h6>
-<a name="id659537"></a>
+<a name="id1288015"></a>
             <a href="invoke_fobj.html#fusion.functional.invocation.functions.invoke_fobj.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">,</span>
     <span class="keyword">class</span> <span class="identifier">Sequence</span>
     <span class="special">&gt;</span>
 <span class="keyword">typename</span> <a href="../metafunctions/invoke_fobj.html" title="
-          invoke_function_object"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">invoke_function_object</span></tt></a><span class="special">&lt;</span><span class="identifier">Function</span><span class="special">,</span> <span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
+          invoke_function_object"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">invoke_function_object</span></code></a><span class="special">&lt;</span><span class="identifier">Function</span><span class="special">,</span> <span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">invoke_function_object</span><span class="special">(</span><span class="identifier">Function</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Sequence</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span>
@@ -60,11 +62,11 @@
     <span class="keyword">class</span> <span class="identifier">Sequence</span>
     <span class="special">&gt;</span>
 <span class="keyword">typename</span> <a href="../metafunctions/invoke_fobj.html" title="
-          invoke_function_object"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">invoke_function_object</span></tt></a><span class="special">&lt;</span><span class="identifier">Function</span><span class="special">,</span> <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&gt;::</span><span class="identifier">type</span>
+          invoke_function_object"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">invoke_function_object</span></code></a><span class="special">&lt;</span><span class="identifier">Function</span><span class="special">,</span> <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">invoke_function_object</span><span class="special">(</span><span class="identifier">Function</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Sequence</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span>
 </pre>
 <a name="fusion.functional.invocation.functions.invoke_fobj.parameters"></a><h6>
-<a name="id659917"></a>
+<a name="id1288347"></a>
             <a href="invoke_fobj.html#fusion.functional.invocation.functions.invoke_fobj.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -94,7 +96,7 @@
 <tr>
 <td>
                   <p>
-                    <tt class="computeroutput"><span class="identifier">f</span></tt>
+                    <code class="computeroutput"><span class="identifier">f</span></code>
                   </p>
                   </td>
 <td>
@@ -113,7 +115,7 @@
 <tr>
 <td>
                   <p>
-                    <tt class="computeroutput"><span class="identifier">s</span></tt>
+                    <code class="computeroutput"><span class="identifier">s</span></code>
                   </p>
                   </td>
 <td>
@@ -132,31 +134,32 @@
 </tbody>
 </table></div>
 <a name="fusion.functional.invocation.functions.invoke_fobj.expression_semantics"></a><h6>
-<a name="id660078"></a>
+<a name="id1288493"></a>
             <a href="invoke_fobj.html#fusion.functional.invocation.functions.invoke_fobj.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<span class="identifier">invoke_function_object</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span><span class="identifier">s</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">invoke_function_object</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span><span class="identifier">s</span><span class="special">);</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: Return type of <tt class="computeroutput"><span class="identifier">f</span></tt> when invoked with the elements in
-            <tt class="computeroutput"><span class="identifier">s</span></tt> as its arguments.
+            <span class="bold"><strong>Return type</strong></span>: Return type of <code class="computeroutput"><span class="identifier">f</span></code> when invoked with the elements in
+            <code class="computeroutput"><span class="identifier">s</span></code> as its arguments.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Invokes <tt class="computeroutput"><span class="identifier">f</span></tt>
-            with the elements in <tt class="computeroutput"><span class="identifier">s</span></tt>
+            <span class="bold"><strong>Semantics</strong></span>: Invokes <code class="computeroutput"><span class="identifier">f</span></code>
+            with the elements in <code class="computeroutput"><span class="identifier">s</span></code>
             as arguments and returns the result of the call expression.
           </p>
-<p>
-            /functional/invocation/invoke_function_object.hpp&gt;
-          </p>
+<a name="fusion.functional.invocation.functions.invoke_fobj.header"></a><h6>
+<a name="id1288612"></a>
+            <a href="invoke_fobj.html#fusion.functional.invocation.functions.invoke_fobj.header">Header</a>
+          </h6>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">invocation</span><span class="special">/</span><span class="identifier">invoke_function_object</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
 <a name="fusion.functional.invocation.functions.invoke_fobj.example"></a><h6>
-<a name="id660221"></a>
+<a name="id1288705"></a>
             <a href="invoke_fobj.html#fusion.functional.invocation.functions.invoke_fobj.example">Example</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">sub</span>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">sub</span>
 <span class="special">{</span>
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sig</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">;</span>
@@ -175,21 +178,23 @@
 <span class="keyword">void</span> <span class="identifier">try_it</span><span class="special">()</span>
 <span class="special">{</span>
     <span class="identifier">sub</span> <span class="identifier">f</span><span class="special">;</span>
-    <span class="identifier">assert</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="number">2</span><span class="special">,</span><span class="number">1</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">invoke_function_object</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span><a href="../../../container/generation/functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">2</span><span class="special">,</span><span class="number">1</span><span class="special">)));</span>
+    <span class="identifier">assert</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="number">2</span><span class="special">,</span><span class="number">1</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">invoke_function_object</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span><a href="../../../container/generation/functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">2</span><span class="special">,</span><span class="number">1</span><span class="special">)));</span>
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.invocation.functions.invoke_fobj.see_also"></a><h6>
-<a name="id660771"></a>
+<a name="id1289189"></a>
             <a href="invoke_fobj.html#fusion.functional.invocation.functions.invoke_fobj.see_also">See
             also</a>
           </h6>
 <div class="itemizedlist"><ul type="disc">
-<li><a href="invoke.html" title="invoke"><tt class="computeroutput"><span class="identifier">invoke</span></tt></a></li>
+<li><a href="invoke.html" title="invoke"><code class="computeroutput"><span class="identifier">invoke</span></code></a></li>
 <li><a href="invoke_proc.html" title="
-          invoke_procedure"><tt class="computeroutput"><span class="identifier">invoke_procedure</span></tt></a></li>
+          invoke_procedure"><code class="computeroutput"><span class="identifier">invoke_procedure</span></code></a></li>
 <li><a href="../metafunctions/invoke_fobj.html" title="
-          invoke_function_object"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">invoke_function_object</span></tt></a></li>
-<li><a href="../../adapters/fused_function_object.html" title="fused_function_object"><tt class="computeroutput"><span class="identifier">fused_function_object</span></tt></a></li>
+          invoke_function_object"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">invoke_function_object</span></code></a></li>
+<li><a href="../../adapters/fused_function_object.html" title="fused_function_object"><code class="computeroutput"><span class="identifier">fused_function_object</span></code></a></li>
+<li><a href="../../generation/functions/mk_fused_fobj.html" title="
+          make_fused_function_object"><code class="computeroutput"><span class="identifier">make_fused_function_object</span></code></a></li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

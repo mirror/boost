@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>single_view</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../view.html" title="View">
 <link rel="prev" href="../view.html" title="View">
@@ -26,27 +26,25 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="fusion.view.single_view"></a><a href="single_view.html" title="single_view">single_view</a></h3></div></div></div>
 <p>
-        <tt class="computeroutput"><span class="identifier">single_view</span></tt> is a view into
+        <code class="computeroutput"><span class="identifier">single_view</span></code> is a view into
         a value as a single element sequence.
       </p>
 <a name="fusion.view.single_view.header"></a><h4>
-<a name="id563267"></a>
+<a name="id1116936"></a>
         <a href="single_view.html#fusion.view.single_view.header">Header</a>
       </h4>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">single_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">single_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">single_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.view.single_view.synopsis"></a><h4>
-<a name="id563424"></a>
+<a name="id1117073"></a>
         <a href="single_view.html#fusion.view.single_view.synopsis">Synopsis</a>
       </h4>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">single_view</span><span class="special">;</span>
 </pre>
 <a name="fusion.view.single_view.template_parameters"></a><h4>
-<a name="id563504"></a>
+<a name="id1117142"></a>
         <a href="single_view.html#fusion.view.single_view.template_parameters">Template parameters</a>
       </h4>
 <div class="informaltable"><table class="table">
@@ -75,7 +73,7 @@
 <tbody><tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">T</span></tt>
+                <code class="computeroutput"><span class="identifier">T</span></code>
               </p>
               </td>
 <td>
@@ -90,7 +88,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.view.single_view.model_of"></a><h4>
-<a name="id563608"></a>
+<a name="id1117235"></a>
         <a href="single_view.html#fusion.view.single_view.model_of">Model of</a>
       </h4>
 <div class="itemizedlist"><ul type="disc"><li><a href="../sequence/concepts/forward_sequence.html" title="Forward
@@ -98,23 +96,23 @@
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">S</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">S</span></code></span></dt>
 <dd><p>
-            A <tt class="computeroutput"><span class="identifier">single_view</span></tt> type
+            A <code class="computeroutput"><span class="identifier">single_view</span></code> type
           </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">s</span></tt>,
-        <tt class="computeroutput"><span class="identifier">s2</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code>,
+        <code class="computeroutput"><span class="identifier">s2</span></code></span></dt>
 <dd><p>
-            Instances of <tt class="computeroutput"><span class="identifier">single_view</span></tt>
+            Instances of <code class="computeroutput"><span class="identifier">single_view</span></code>
           </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">x</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">x</span></code></span></dt>
 <dd><p>
-            An instance of <tt class="computeroutput"><span class="identifier">T</span></tt>
+            An instance of <code class="computeroutput"><span class="identifier">T</span></code>
           </p></dd>
 </dl>
 </div>
 <a name="fusion.view.single_view.expression_semantics"></a><h4>
-<a name="id563773"></a>
+<a name="id1117380"></a>
         <a href="single_view.html#fusion.view.single_view.expression_semantics">Expression Semantics</a>
       </h4>
 <p>
@@ -144,53 +142,52 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
               <p>
-                Creates a <tt class="computeroutput"><span class="identifier">single_view</span></tt>
-                from <tt class="computeroutput"><span class="identifier">x</span></tt>.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <tt class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
-                Copy constructs a <tt class="computeroutput"><span class="identifier">single_view</span></tt>
-                from another <tt class="computeroutput"><span class="identifier">single_view</span></tt>,
-                <tt class="computeroutput"><span class="identifier">s</span></tt>.
+                Creates a <code class="computeroutput"><span class="identifier">single_view</span></code>
+                from <code class="computeroutput"><span class="identifier">x</span></code>.
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">s</span> <span class="special">=</span>
-                <span class="identifier">s2</span></tt>
+                <code class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
               <p>
-                Assigns to a <tt class="computeroutput"><span class="identifier">single_view</span></tt>,
-                <tt class="computeroutput"><span class="identifier">s</span></tt>, from another
-                <tt class="computeroutput"><span class="identifier">single_view</span></tt>, <tt class="computeroutput"><span class="identifier">s2</span></tt>.
+                Copy constructs a <code class="computeroutput"><span class="identifier">single_view</span></code>
+                from another <code class="computeroutput"><span class="identifier">single_view</span></code>,
+                <code class="computeroutput"><span class="identifier">s</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">s</span> <span class="special">=</span>
+                <span class="identifier">s2</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Assigns to a <code class="computeroutput"><span class="identifier">single_view</span></code>,
+                <code class="computeroutput"><span class="identifier">s</span></code>, from another
+                <code class="computeroutput"><span class="identifier">single_view</span></code>, <code class="computeroutput"><span class="identifier">s2</span></code>.
               </p>
               </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.view.single_view.example"></a><h4>
-<a name="id564085"></a>
+<a name="id1117654"></a>
         <a href="single_view.html#fusion.view.single_view.example">Example</a>
       </h4>
-<pre class="programlisting">
-<span class="identifier">single_view</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">view</span><span class="special">(</span><span class="number">3</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">single_view</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">view</span><span class="special">(</span><span class="number">3</span><span class="special">);</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">view</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
 </div>

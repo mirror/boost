@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>deduce</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../support.html" title="Support">
 <link rel="prev" href="category_of.html" title="category_of">
@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="fusion.support.deduce"></a><a href="deduce.html" title="deduce">deduce</a></h3></div></div></div>
 <a name="fusion.support.deduce.description"></a><h4>
-<a name="id464405"></a>
+<a name="id942546"></a>
         <a href="deduce.html#fusion.support.deduce.description">Description</a>
       </h4>
 <p>
@@ -34,24 +34,22 @@
         conversion</em></span></a> to the full argument type.
       </p>
 <p>
-        It removes references to <tt class="computeroutput"><span class="keyword">const</span></tt>,
-        references to array types are kept, even if the array is <tt class="computeroutput"><span class="keyword">const</span></tt>.
-        Reference wrappers are removed (see <a href="../notes.html#fusion.notes.boost__ref"><tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">ref</span></tt></a>).
+        It removes references to <code class="computeroutput"><span class="keyword">const</span></code>,
+        references to array types are kept, even if the array is <code class="computeroutput"><span class="keyword">const</span></code>.
+        Reference wrappers are removed (see <a href="../notes.html#fusion.notes.boost__ref"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">ref</span></code></a>).
       </p>
 <a name="fusion.support.deduce.header"></a><h4>
-<a name="id464504"></a>
+<a name="id942632"></a>
         <a href="deduce.html#fusion.support.deduce.header">Header</a>
       </h4>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">deduce</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">deduce</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">deduce</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.support.deduce.synopsis"></a><h4>
-<a name="id464661"></a>
+<a name="id942769"></a>
         <a href="deduce.html#fusion.support.deduce.synopsis">Synopsis</a>
       </h4>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">traits</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">traits</span>
 <span class="special">{</span>
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">deduce</span>
@@ -61,11 +59,10 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.support.deduce.example"></a><h4>
-<a name="id464792"></a>
+<a name="id942883"></a>
         <a href="deduce.html#fusion.support.deduce.example">Example</a>
       </h4>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">holder</span>
 <span class="special">{</span>
     <span class="keyword">typename</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">deduce</span><span class="special">&lt;</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;&gt;::</span><span class="identifier">type</span> <span class="identifier">element</span><span class="special">;</span>
@@ -82,10 +79,10 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.support.deduce.see_also"></a><h4>
-<a name="id465157"></a>
+<a name="id943203"></a>
         <a href="deduce.html#fusion.support.deduce.see_also">See also</a>
       </h4>
-<div class="itemizedlist"><ul type="disc"><li><a href="deduce_sequence.html" title="deduce_sequence"><tt class="computeroutput"><span class="identifier">deduce_sequence</span></tt></a></li></ul></div>
+<div class="itemizedlist"><ul type="disc"><li><a href="deduce_sequence.html" title="deduce_sequence"><code class="computeroutput"><span class="identifier">deduce_sequence</span></code></a></li></ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

@@ -4,7 +4,7 @@
 <title>Relational
         operators</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../class_template_tuple.html" title="Class template tuple">
 <link rel="prev" href="element_access.html" title="Element
@@ -30,7 +30,7 @@
         operators">Relational
         operators</a></h4></div></div></div>
 <a name="fusion.tuple.class_template_tuple.relational_operators.description"></a><h5>
-<a name="id639554"></a>
+<a name="id1252593"></a>
           <a href="relational_operators.html#fusion.tuple.class_template_tuple.relational_operators.description">Description</a>
         </h5>
 <p>
@@ -38,160 +38,154 @@
           Tuple</a> provides the standard boolean relational operators.
         </p>
 <a name="fusion.tuple.class_template_tuple.relational_operators.specification"></a><h5>
-<a name="id639594"></a>
+<a name="id1252629"></a>
           <a href="relational_operators.html#fusion.tuple.class_template_tuple.relational_operators.specification">Specification</a>
         </h5>
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">T1</span>
-          <span class="special">...</span> <span class="identifier">TN</span></tt>,
-          <tt class="computeroutput"><span class="identifier">U1</span> <span class="special">...</span>
-          <span class="identifier">UN</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">T1</span>
+          <span class="special">...</span> <span class="identifier">TN</span></code>,
+          <code class="computeroutput"><span class="identifier">U1</span> <span class="special">...</span>
+          <span class="identifier">UN</span></code></span></dt>
 <dd><p>
               Tuple element types
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">P1</span>
-          <span class="special">...</span> <span class="identifier">PN</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">P1</span>
+          <span class="special">...</span> <span class="identifier">PN</span></code></span></dt>
 <dd><p>
               Parameter types
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">Ti</span></tt>,
-          <tt class="computeroutput"><span class="identifier">Ui</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">Ti</span></code>,
+          <code class="computeroutput"><span class="identifier">Ui</span></code></span></dt>
 <dd><p>
-              The type of the <tt class="computeroutput"><span class="identifier">i</span></tt>th
+              The type of the <code class="computeroutput"><span class="identifier">i</span></code>th
               element of a tuple
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">Pi</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">Pi</span></code></span></dt>
 <dd><p>
-              The type of the <tt class="computeroutput"><span class="identifier">i</span></tt>th
+              The type of the <code class="computeroutput"><span class="identifier">i</span></code>th
               parameter
             </p></dd>
 </dl>
 </div>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
          <span class="keyword">typename</span> <span class="identifier">U1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">UN</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">==(</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">U1</span><span class="special">,</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">UN</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-          <span class="bold"><b>Requirements</b></span>: For all <tt class="computeroutput"><span class="identifier">i</span></tt>,
-          <tt class="computeroutput"><span class="number">1</span> <span class="special">&lt;=</span>
+          <span class="bold"><strong>Requirements</strong></span>: For all <code class="computeroutput"><span class="identifier">i</span></code>,
+          <code class="computeroutput"><span class="number">1</span> <span class="special">&lt;=</span>
           <span class="identifier">i</span> <span class="special">&lt;</span>
-          <span class="identifier">N</span></tt>, <tt class="computeroutput"><a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span> <span class="special">==</span> <a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span></tt>
-          is a valid expression returning a type that is convertible to <tt class="computeroutput"><span class="keyword">bool</span></tt>.
+          <span class="identifier">N</span></code>, <code class="computeroutput"><a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span> <span class="special">==</span> <a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span></code>
+          is a valid expression returning a type that is convertible to <code class="computeroutput"><span class="keyword">bool</span></code>.
         </p>
 <p>
-          <span class="bold"><b>Semantics</b></span>: Returns <tt class="computeroutput"><span class="keyword">true</span></tt>
-          if and only if <tt class="computeroutput"><a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span> <span class="special">==</span> <a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span></tt>
-          for all <tt class="computeroutput"><span class="identifier">i</span></tt>. For any 2 zero
-          length tuples <tt class="computeroutput"><span class="identifier">e</span></tt> and <tt class="computeroutput"><span class="identifier">f</span></tt>, <tt class="computeroutput"><span class="identifier">e</span>
-          <span class="special">==</span> <span class="identifier">f</span></tt>
-          returns <tt class="computeroutput"><span class="keyword">true</span></tt>.
+          <span class="bold"><strong>Semantics</strong></span>: Returns <code class="computeroutput"><span class="keyword">true</span></code>
+          if and only if <code class="computeroutput"><a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span> <span class="special">==</span> <a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span></code>
+          for all <code class="computeroutput"><span class="identifier">i</span></code>. For any 2 zero
+          length tuples <code class="computeroutput"><span class="identifier">e</span></code> and <code class="computeroutput"><span class="identifier">f</span></code>, <code class="computeroutput"><span class="identifier">e</span>
+          <span class="special">==</span> <span class="identifier">f</span></code>
+          returns <code class="computeroutput"><span class="keyword">true</span></code>.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
          <span class="keyword">typename</span> <span class="identifier">U1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">UN</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">&lt;(</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">U1</span><span class="special">,</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">UN</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-          <span class="bold"><b>Requirements</b></span>: For all <tt class="computeroutput"><span class="identifier">i</span></tt>,
-          <tt class="computeroutput"><span class="number">1</span> <span class="special">&lt;=</span>
+          <span class="bold"><strong>Requirements</strong></span>: For all <code class="computeroutput"><span class="identifier">i</span></code>,
+          <code class="computeroutput"><span class="number">1</span> <span class="special">&lt;=</span>
           <span class="identifier">i</span> <span class="special">&lt;</span>
-          <span class="identifier">N</span></tt>, <tt class="computeroutput"><a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span> <span class="special">&lt;</span> <a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span></tt>
-          is a valid expression returning a type that is convertible to <tt class="computeroutput"><span class="keyword">bool</span></tt>.
+          <span class="identifier">N</span></code>, <code class="computeroutput"><a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span> <span class="special">&lt;</span> <a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span></code>
+          is a valid expression returning a type that is convertible to <code class="computeroutput"><span class="keyword">bool</span></code>.
         </p>
 <p>
-          <span class="bold"><b>Semantics</b></span>: Returns the lexicographical
-          comparison of between <tt class="computeroutput"><span class="identifier">lhs</span></tt>
-          and <tt class="computeroutput"><span class="identifier">rhs</span></tt>.
+          <span class="bold"><strong>Semantics</strong></span>: Returns the lexicographical
+          comparison of between <code class="computeroutput"><span class="identifier">lhs</span></code>
+          and <code class="computeroutput"><span class="identifier">rhs</span></code>.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
          <span class="keyword">typename</span> <span class="identifier">U1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">UN</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">!=(</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">U1</span><span class="special">,</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">UN</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-          <span class="bold"><b>Requirements</b></span>: For all <tt class="computeroutput"><span class="identifier">i</span></tt>,
-          <tt class="computeroutput"><span class="number">1</span> <span class="special">&lt;=</span>
+          <span class="bold"><strong>Requirements</strong></span>: For all <code class="computeroutput"><span class="identifier">i</span></code>,
+          <code class="computeroutput"><span class="number">1</span> <span class="special">&lt;=</span>
           <span class="identifier">i</span> <span class="special">&lt;</span>
-          <span class="identifier">N</span></tt>, <tt class="computeroutput"><a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span> <span class="special">==</span> <a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span></tt>
-          is a valid expression returning a type that is convertible to <tt class="computeroutput"><span class="keyword">bool</span></tt>.
+          <span class="identifier">N</span></code>, <code class="computeroutput"><a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span> <span class="special">==</span> <a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span></code>
+          is a valid expression returning a type that is convertible to <code class="computeroutput"><span class="keyword">bool</span></code>.
         </p>
 <p>
-          <span class="bold"><b>Semantics</b></span>: Returns <tt class="computeroutput"><span class="special">!(</span><span class="identifier">lhs</span> <span class="special">==</span> <span class="identifier">rhs</span><span class="special">)</span></tt>.
+          <span class="bold"><strong>Semantics</strong></span>: Returns <code class="computeroutput"><span class="special">!(</span><span class="identifier">lhs</span> <span class="special">==</span> <span class="identifier">rhs</span><span class="special">)</span></code>.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
          <span class="keyword">typename</span> <span class="identifier">U1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">UN</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">&lt;=(</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">U1</span><span class="special">,</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">UN</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-          <span class="bold"><b>Requirements</b></span>: For all <tt class="computeroutput"><span class="identifier">i</span></tt>,
-          <tt class="computeroutput"><span class="number">1</span> <span class="special">&lt;=</span>
+          <span class="bold"><strong>Requirements</strong></span>: For all <code class="computeroutput"><span class="identifier">i</span></code>,
+          <code class="computeroutput"><span class="number">1</span> <span class="special">&lt;=</span>
           <span class="identifier">i</span> <span class="special">&lt;</span>
-          <span class="identifier">N</span></tt>, <tt class="computeroutput"><a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span> <span class="special">&lt;</span> <a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span></tt>
-          is a valid expression returning a type that is convertible to <tt class="computeroutput"><span class="keyword">bool</span></tt>.
+          <span class="identifier">N</span></code>, <code class="computeroutput"><a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span> <span class="special">&lt;</span> <a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span></code>
+          is a valid expression returning a type that is convertible to <code class="computeroutput"><span class="keyword">bool</span></code>.
         </p>
 <p>
-          <span class="bold"><b>Semantics</b></span>: Returns <tt class="computeroutput"><span class="special">!(</span><span class="identifier">rhs</span> <span class="special">&lt;</span> <span class="identifier">lhs</span><span class="special">)</span></tt>
+          <span class="bold"><strong>Semantics</strong></span>: Returns <code class="computeroutput"><span class="special">!(</span><span class="identifier">rhs</span> <span class="special">&lt;</span> <span class="identifier">lhs</span><span class="special">)</span></code>
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
          <span class="keyword">typename</span> <span class="identifier">U1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">UN</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">&gt;(</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">U1</span><span class="special">,</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">UN</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-          <span class="bold"><b>Requirements</b></span>: For all <tt class="computeroutput"><span class="identifier">i</span></tt>,
-          <tt class="computeroutput"><span class="number">1</span> <span class="special">&lt;=</span>
+          <span class="bold"><strong>Requirements</strong></span>: For all <code class="computeroutput"><span class="identifier">i</span></code>,
+          <code class="computeroutput"><span class="number">1</span> <span class="special">&lt;=</span>
           <span class="identifier">i</span> <span class="special">&lt;</span>
-          <span class="identifier">N</span></tt>, <tt class="computeroutput"><a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span> <span class="special">&lt;</span> <a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span></tt>
-          is a valid expression returning a type that is convertible to <tt class="computeroutput"><span class="keyword">bool</span></tt>.
+          <span class="identifier">N</span></code>, <code class="computeroutput"><a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span> <span class="special">&lt;</span> <a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span></code>
+          is a valid expression returning a type that is convertible to <code class="computeroutput"><span class="keyword">bool</span></code>.
         </p>
 <p>
-          <span class="bold"><b>Semantics</b></span>: Returns <tt class="computeroutput"><span class="identifier">rhs</span>
-          <span class="special">&lt;</span> <span class="identifier">lhs</span></tt>.
+          <span class="bold"><strong>Semantics</strong></span>: Returns <code class="computeroutput"><span class="identifier">rhs</span>
+          <span class="special">&lt;</span> <span class="identifier">lhs</span></code>.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
          <span class="keyword">typename</span> <span class="identifier">U1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">UN</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">&gt;=(</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">U1</span><span class="special">,</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">UN</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-          <span class="bold"><b>Requirements</b></span>: For all <tt class="computeroutput"><span class="identifier">i</span></tt>,
-          <tt class="computeroutput"><span class="number">1</span> <span class="special">&lt;=</span>
+          <span class="bold"><strong>Requirements</strong></span>: For all <code class="computeroutput"><span class="identifier">i</span></code>,
+          <code class="computeroutput"><span class="number">1</span> <span class="special">&lt;=</span>
           <span class="identifier">i</span> <span class="special">&lt;</span>
-          <span class="identifier">N</span></tt>, <tt class="computeroutput"><a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span> <span class="special">&lt;</span> <a href="element_access.html" title="Element
-        access"><tt class="computeroutput"><span class="identifier">get</span></tt></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span></tt>
-          is a valid expression returning a type that is convertible to <tt class="computeroutput"><span class="keyword">bool</span></tt>.
+          <span class="identifier">N</span></code>, <code class="computeroutput"><a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">lhs</span><span class="special">)</span> <span class="special">&lt;</span> <a href="element_access.html" title="Element
+        access"><code class="computeroutput"><span class="identifier">get</span></code></a><span class="special">&lt;</span><span class="identifier">i</span><span class="special">&gt;(</span><span class="identifier">rhs</span><span class="special">)</span></code>
+          is a valid expression returning a type that is convertible to <code class="computeroutput"><span class="keyword">bool</span></code>.
         </p>
 <p>
-          <span class="bold"><b>Semantics</b></span>: Returns <tt class="computeroutput"><span class="special">!(</span><span class="identifier">lhs</span> <span class="special">&lt;</span> <span class="identifier">rhs</span><span class="special">)</span></tt>.
+          <span class="bold"><strong>Semantics</strong></span>: Returns <code class="computeroutput"><span class="special">!(</span><span class="identifier">lhs</span> <span class="special">&lt;</span> <span class="identifier">rhs</span><span class="special">)</span></code>.
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

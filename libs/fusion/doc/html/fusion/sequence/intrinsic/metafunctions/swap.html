@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>swap</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="value_at_key.html" title="value_at_key">
@@ -26,25 +26,24 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.sequence.intrinsic.metafunctions.swap"></a><a href="swap.html" title="swap">swap</a></h5></div></div></div>
 <a name="fusion.sequence.intrinsic.metafunctions.swap.description"></a><h6>
-<a name="id518006"></a>
+<a name="id1042182"></a>
             <a href="swap.html#fusion.sequence.intrinsic.metafunctions.swap.description">Description</a>
           </h6>
 <p>
             Returns the return type of swap.
           </p>
 <a name="fusion.sequence.intrinsic.metafunctions.swap.synopsis"></a><h6>
-<a name="id518038"></a>
+<a name="id1042210"></a>
             <a href="swap.html#fusion.sequence.intrinsic.metafunctions.swap.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Seq1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Seq2</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Seq1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Seq2</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">swap</span>
 <span class="special">{</span>
     <span class="keyword">typedef</span> <span class="keyword">void</span> <span class="identifier">type</span><span class="special">;</span>
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id518158"></a><p class="title"><b>Table 1.32. Parameters</b></p>
+<a name="id1042314"></a><p class="title"><b>Table 1.32. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -71,7 +70,7 @@
 <tbody><tr>
 <td>
                 <p>
-                  <tt class="computeroutput"><span class="identifier">Seq1</span></tt>, <tt class="computeroutput"><span class="identifier">Seq2</span></tt>
+                  <code class="computeroutput"><span class="identifier">Seq1</span></code>, <code class="computeroutput"><span class="identifier">Seq2</span></code>
                 </p>
                 </td>
 <td>
@@ -90,18 +89,17 @@
 </table>
 </div>
 <a name="fusion.sequence.intrinsic.metafunctions.swap.expression_semantics"></a><h6>
-<a name="id518273"></a>
+<a name="id1042418"></a>
             <a href="swap.html#fusion.sequence.intrinsic.metafunctions.swap.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<span class="identifier">result_of</span><span class="special">::</span><span class="identifier">swap</span><span class="special">&lt;</span><span class="identifier">Seq1</span><span class="special">,</span> <span class="identifier">Seq2</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<pre class="programlisting"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">swap</span><span class="special">&lt;</span><span class="identifier">Seq1</span><span class="special">,</span> <span class="identifier">Seq2</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: <tt class="computeroutput"><span class="keyword">void</span></tt>.
+            <span class="bold"><strong>Return type</strong></span>: <code class="computeroutput"><span class="keyword">void</span></code>.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Always returns <tt class="computeroutput"><span class="keyword">void</span></tt>.
+            <span class="bold"><strong>Semantics</strong></span>: Always returns <code class="computeroutput"><span class="keyword">void</span></code>.
           </p>
 <p>
             /sequence/intrinsic/swap.hpp&gt;

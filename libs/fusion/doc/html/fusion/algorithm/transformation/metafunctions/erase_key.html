@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>erase_key</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="erase.html" title="erase">
@@ -26,19 +26,18 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithm.transformation.metafunctions.erase_key"></a><a href="erase_key.html" title="erase_key">erase_key</a></h5></div></div></div>
 <a name="fusion.algorithm.transformation.metafunctions.erase_key.description"></a><h6>
-<a name="id630947"></a>
+<a name="id1245020"></a>
             <a href="erase_key.html#fusion.algorithm.transformation.metafunctions.erase_key.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a href="../functions/erase_key.html" title="erase_key"><tt class="computeroutput"><span class="identifier">erase_key</span></tt></a>, given the sequence
+            Returns the result type of <a href="../functions/erase_key.html" title="erase_key"><code class="computeroutput"><span class="identifier">erase_key</span></code></a>, given the sequence
             and key types.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.erase_key.synopsis"></a><h6>
-<a name="id630998"></a>
+<a name="id1245066"></a>
             <a href="erase_key.html#fusion.algorithm.transformation.metafunctions.erase_key.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">Key</span>
     <span class="special">&gt;</span>
@@ -48,7 +47,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id631118"></a><p class="title"><b>Table 1.84. Parameters</b></p>
+<a name="id1245169"></a><p class="title"><b>Table 1.84. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -76,7 +75,7 @@
 <tr>
 <td>
                 <p>
-                  <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
+                  <code class="computeroutput"><span class="identifier">Sequence</span></code>
                 </p>
                 </td>
 <td>
@@ -95,7 +94,7 @@
 <tr>
 <td>
                 <p>
-                  <tt class="computeroutput"><span class="identifier">Key</span></tt>
+                  <code class="computeroutput"><span class="identifier">Key</span></code>
                 </p>
                 </td>
 <td>
@@ -113,36 +112,34 @@
 </table>
 </div>
 <a name="fusion.algorithm.transformation.metafunctions.erase_key.expression_semantics"></a><h6>
-<a name="id631258"></a>
+<a name="id1245293"></a>
             <a href="erase_key.html#fusion.algorithm.transformation.metafunctions.erase_key.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<a href="erase_key.html" title="erase_key"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">erase_key</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">Key</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<pre class="programlisting"><a href="erase_key.html" title="erase_key"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">erase_key</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">Key</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequence/concepts/associative_sequence.html" title="Associative
+            <span class="bold"><strong>Return type</strong></span>: A model of <a href="../../../sequence/concepts/associative_sequence.html" title="Associative
         Sequence">Associative
             Sequence</a>.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Returns a sequence with the
-            elements of <tt class="computeroutput"><span class="identifier">Sequence</span></tt>,
-            except those with key <tt class="computeroutput"><span class="identifier">Key</span></tt>.
+            <span class="bold"><strong>Semantics</strong></span>: Returns a sequence with the
+            elements of <code class="computeroutput"><span class="identifier">Sequence</span></code>,
+            except those with key <code class="computeroutput"><span class="identifier">Key</span></code>.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.erase_key.complexity"></a><h6>
-<a name="id631405"></a>
+<a name="id1245424"></a>
             <a href="erase_key.html#fusion.algorithm.transformation.metafunctions.erase_key.complexity">Complexity</a>
           </h6>
 <p>
             Constant.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.erase_key.header"></a><h6>
-<a name="id631436"></a>
+<a name="id1245432"></a>
             <a href="erase_key.html#fusion.algorithm.transformation.metafunctions.erase_key.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">erase_key</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">erase_key</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">erase_key</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 </div>

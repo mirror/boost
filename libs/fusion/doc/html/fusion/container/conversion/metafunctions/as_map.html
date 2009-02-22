@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>as_map</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="as_set.html" title="as_set">
@@ -26,22 +26,21 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.container.conversion.metafunctions.as_map"></a><a href="as_map.html" title="as_map">as_map</a></h5></div></div></div>
 <a name="fusion.container.conversion.metafunctions.as_map.description"></a><h6>
-<a name="id562233"></a>
+<a name="id1116026"></a>
             <a href="as_map.html#fusion.container.conversion.metafunctions.as_map.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a href="../functions/as_map.html" title="as_map"><tt class="computeroutput"><span class="identifier">as_map</span></tt></a>.
+            Returns the result type of <a href="../functions/as_map.html" title="as_map"><code class="computeroutput"><span class="identifier">as_map</span></code></a>.
           </p>
 <a name="fusion.container.conversion.metafunctions.as_map.synopsis"></a><h6>
-<a name="id562283"></a>
+<a name="id1116069"></a>
             <a href="as_map.html#fusion.container.conversion.metafunctions.as_map.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">as_map</span><span class="special">;</span>
 </pre>
 <a name="fusion.container.conversion.metafunctions.as_map.parameters"></a><h6>
-<a name="id562365"></a>
+<a name="id1116140"></a>
             <a href="as_map.html#fusion.container.conversion.metafunctions.as_map.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -70,7 +69,7 @@
 <tbody><tr>
 <td>
                   <p>
-                    <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
+                    <code class="computeroutput"><span class="identifier">Sequence</span></code>
                   </p>
                   </td>
 <td>
@@ -86,42 +85,39 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.container.conversion.metafunctions.as_map.expression_semantics"></a><h6>
-<a name="id562480"></a>
+<a name="id1116245"></a>
             <a href="as_map.html#fusion.container.conversion.metafunctions.as_map.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<span class="identifier">result_of</span><span class="special">::</span><span class="identifier">as_map</span><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">as_map</span><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">;</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: A <a href="../../map.html" title="map"><tt class="computeroutput"><span class="identifier">map</span></tt></a> with same elements as the
-            input sequence, <tt class="computeroutput"><span class="identifier">Sequence</span></tt>.
+            <span class="bold"><strong>Return type</strong></span>: A <a href="../../map.html" title="map"><code class="computeroutput"><span class="identifier">map</span></code></a> with same elements as the
+            input sequence, <code class="computeroutput"><span class="identifier">Sequence</span></code>.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Convert a fusion sequence,
-            <tt class="computeroutput"><span class="identifier">Sequence</span></tt>, to a <a href="../../map.html" title="map"><tt class="computeroutput"><span class="identifier">map</span></tt></a>.
+            <span class="bold"><strong>Semantics</strong></span>: Convert a fusion sequence,
+            <code class="computeroutput"><span class="identifier">Sequence</span></code>, to a <a href="../../map.html" title="map"><code class="computeroutput"><span class="identifier">map</span></code></a>.
           </p>
 <p>
-            <span class="bold"><b>Precondition</b></span>: The elements of the sequence
+            <span class="bold"><strong>Precondition</strong></span>: The elements of the sequence
             are assumed to be __fusion<span class="underline">pair</span>_s.
-            There may be no duplicate <a href="../../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></tt></a> key types.
+            There may be no duplicate <a href="../../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></code></a> key types.
           </p>
 <a name="fusion.container.conversion.metafunctions.as_map.header"></a><h6>
-<a name="id562683"></a>
+<a name="id1116423"></a>
             <a href="as_map.html#fusion.container.conversion.metafunctions.as_map.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">map</span><span class="special">/</span><span class="identifier">convert</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">map</span><span class="special">/</span><span class="identifier">convert</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">as_map</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.container.conversion.metafunctions.as_map.example"></a><h6>
-<a name="id562852"></a>
+<a name="id1116571"></a>
             <a href="as_map.html#fusion.container.conversion.metafunctions.as_map.example">Example</a>
           </h6>
-<pre class="programlisting">
-<span class="identifier">result_of</span><span class="special">::</span><span class="identifier">as_map</span><span class="special">&lt;</span><a href="../../vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span>
-    <a href="../../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span>
-  <span class="special">,</span> <a href="../../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></tt></a><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span>
+<pre class="programlisting"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">as_map</span><span class="special">&lt;</span><a href="../../vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span>
+    <a href="../../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span>
+  <span class="special">,</span> <a href="../../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></code></a><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
