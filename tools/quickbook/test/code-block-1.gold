@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<article id="code_block_1" name="Code Block 1" dirname="code_block_1" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
+<article id="code_block_1" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Code Block 1</title>
   <articleinfo>
   </articleinfo>
-  <title>Code Block 1</title>
   <section id="code_block_1.a_code_block">
     <title>A code block</title>
     <para>

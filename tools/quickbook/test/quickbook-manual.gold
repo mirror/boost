@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<article id="quickbook" name="Quickbook" dirname="quickbook" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
- xmlns:xi="http://www.w3.org/2001/XInclude">
+<article id="quickbook" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Quickbook 1.4</title>
   <articleinfo>
     <authorgroup>
     <author>
@@ -25,7 +25,6 @@
       <emphasis>WikiWiki</emphasis> style documentation tool
     </articlepurpose>
   </articleinfo>
-  <title>Quickbook 1.4</title>
   <section id="quickbook.intro">
     <title><link linkend="quickbook.intro"> Introduction</link></title>
     <blockquote>
