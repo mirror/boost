@@ -6,7 +6,7 @@
     http://www.boost.org/LICENSE_1_0.txt).
 ==============================================================================*/
 
-#include <boost/fusion/functional/generation/make_unfused_rvalue_args.hpp>
+#include <boost/fusion/functional/generation/make_unfused.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
 #include <boost/noncopyable.hpp>
@@ -16,6 +16,8 @@
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/identity.hpp>
+
+#include <boost/utility/result_of.hpp>
 
 #include <boost/fusion/sequence/intrinsic/empty.hpp>
 #include <boost/fusion/algorithm/iteration/fold.hpp>
@@ -65,9 +67,10 @@ struct test_func
         typedef long result_type;
 
         template <typename T>
-        long operator()(T const & elem, long value) const
+        long operator()(T & elem, long value) const
         {
-          return value + sizeof(T) * elem;
+          elem += sizeof(T);
+          return value + elem;
         }
     };
 };
@@ -83,27 +86,40 @@ int main()
     test_func<> f;
     test_func<noncopyable> f_nc;
 
-    fusion::result_of::make_unfused_rvalue_args< test_func<> >::type unfused_func =
-        fusion::make_unfused_rvalue_args(f);
+    fusion::result_of::make_unfused< test_func<> >::type unfused_func =
+        fusion::make_unfused(f);
 
-    fusion::result_of::make_unfused_rvalue_args< boost::reference_wrapper< 
+    fusion::result_of::make_unfused< boost::reference_wrapper< 
         test_func<noncopyable> > >::type unfused_func_ref = 
-            fusion::make_unfused_rvalue_args(ref(f_nc));
+            fusion::make_unfused(ref(f_nc));
 
-    fusion::result_of::make_unfused_rvalue_args< boost::reference_wrapper< 
+    fusion::result_of::make_unfused< boost::reference_wrapper< 
         test_func<noncopyable> const> >::type unfused_func_c_ref = 
-            fusion::make_unfused_rvalue_args(cref(f_nc));
+            fusion::make_unfused(cref(f_nc));
 
     BOOST_TEST(unfused_func() == 100);
     BOOST_TEST(const_(unfused_func)() == 0);
     BOOST_TEST(unfused_func_ref() == 100);
     BOOST_TEST(unfused_func_c_ref() == 0);
 
-    static const long expected = 1*sizeof(int) + 2*sizeof(long) + 7*sizeof(char);
-    BOOST_TEST(unfused_func(1,2l,'\007') == 100 + expected); 
-    BOOST_TEST(const_(unfused_func)(1,2l,'\007') == 0 + expected); 
-    BOOST_TEST(unfused_func_ref(1,2l,'\007') == 100 + expected); 
-    BOOST_TEST(unfused_func_c_ref(1,2l,'\007') == 0 + expected); 
+    long lv1 = 2; int lv2 = 3l; char lv3 = '\007'; 
+    long expected;
+
+    expected = lv1+sizeof(lv1) + lv2+sizeof(lv2) + lv3+sizeof(lv3);
+    BOOST_TEST(unfused_func(lv1,lv2,lv3) == 100 + expected); 
+    BOOST_TEST(lv1 == 2+1*sizeof(lv1) && lv2 == 3+1*sizeof(lv2) && lv3 == 7+1*sizeof(lv3));
+
+    expected = lv1+sizeof(lv1) + lv2+sizeof(lv2) + lv3+sizeof(lv3);
+    BOOST_TEST(const_(unfused_func)(lv1,lv2,lv3) == 0 + expected); 
+    BOOST_TEST(lv1 == 2+2*sizeof(lv1) && lv2 == 3+2*sizeof(lv2) && lv3 == 7+2*sizeof(lv3));
+
+    expected = lv1+sizeof(lv1) + lv2+sizeof(lv2) + lv3+sizeof(lv3);
+    BOOST_TEST(unfused_func_ref(lv1,lv2,lv3) == 100 + expected); 
+    BOOST_TEST(lv1 == 2+3*sizeof(lv1) && lv2 == 3+3*sizeof(lv2) && lv3 == 7+3*sizeof(lv3));
+
+    expected = lv1+sizeof(lv1) + lv2+sizeof(lv2) + lv3+sizeof(lv3);
+    BOOST_TEST(unfused_func_c_ref(lv1,lv2,lv3) == 0 + expected); 
+    BOOST_TEST(lv1 == 2+4*sizeof(lv1) && lv2 == 3+4*sizeof(lv2) && lv3 == 7+4*sizeof(lv3));
 
     return boost::report_errors();
 }
