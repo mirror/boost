@@ -41,8 +41,8 @@ namespace boost
 
     //----- ---- --- -- - -  -   -
 
-    template< typename Pointer >
-    class factory<Pointer, boost::none_t> 
+    template< typename Pointer, factory_alloc_propagation AP >
+    class factory<Pointer, boost::none_t, AP> 
     {
       public:
         typedef typename boost::remove_cv<Pointer>::type result_type;
@@ -124,8 +124,8 @@ namespace boost
 #     undef BOOST_TMP_MACRO
     };
 
-    template< typename Pointer, class Allocator > 
-    class factory<Pointer&, Allocator>;
+    template< typename Pointer, class Allocator, factory_alloc_propagation AP > 
+    class factory<Pointer&, Allocator, AP>;
     // forbidden, would create a dangling reference
 }
 
