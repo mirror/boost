@@ -1061,6 +1061,7 @@
     <pcdata/>
   </sequence-group>
 </content-model>
+<purpose>References a macro with the given name</purpose>
 </element>
 
 <attlist name="macroname">
@@ -1392,6 +1393,7 @@
     <pcdata/>
   </sequence-group>
 </content-model>
+<purpose>References a C++ header with the given name</purpose>
 </element>
 
 <attlist name="headername">
@@ -1788,6 +1790,7 @@
     <pcdata/>
   </sequence-group>
 </content-model>
+<purpose>References a global with the given name</purpose>
 </element>
 
 <attlist name="globalname">
@@ -3030,6 +3033,7 @@
     <pcdata/>
   </sequence-group>
 </content-model>
+<purpose>References an enumeration type with the given name</purpose>
 </element>
 
 <attlist name="enumname">
