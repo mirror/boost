@@ -212,7 +212,7 @@ namespace quickbook { namespace detail
 
         if (!in)
         {
-            outerr(filename,-1) << "Could not open input file." << endl;
+            outerr(filename) << "Could not open input file." << endl;
             return 1;
         }
 
