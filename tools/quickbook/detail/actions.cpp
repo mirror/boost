@@ -251,7 +251,11 @@ namespace quickbook
             << ", unexpected character: " << std::string(first, last)
             << "\n";
 
-        out << '#'; // print out an unexpected character
+        // print out an unexpected character
+        out << "<phrase role=\"error\">";
+        while (first != last)
+            detail::print_char(*first++, out.get());
+        out << "</phrase>";
     }
 
     void anchor_action::operator()(iterator first, iterator last) const
