@@ -22,23 +22,29 @@
     form. 
 ==============================================================================*/
 
+
 #include <boost/fusion/functional/invocation/invoke.hpp>
-#include <boost/fusion/functional/adapter/unfused_generic.hpp>
-#include <boost/fusion/functional/adapter/unfused_rvalue_args.hpp>
+#include <boost/fusion/functional/adapter/unfused.hpp>
 #include <boost/fusion/support/deduce_sequence.hpp>
 
 #include <boost/fusion/sequence/intrinsic/at.hpp>
-#include <boost/fusion/mpl.hpp>
 #include <boost/fusion/sequence/intrinsic/front.hpp>
-#include <boost/fusion/sequence/intrinsic/empty.hpp>
+#include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/algorithm/transformation/transform.hpp>
 #include <boost/fusion/algorithm/transformation/pop_front.hpp>
+#include <boost/fusion/algorithm/iteration/fold.hpp>
+#include <boost/fusion/view/filter_view.hpp>
+
+#include <boost/functional/forward_adapter.hpp>
+#include <boost/functional/lightweight_forward_adapter.hpp>
 
 #include <boost/type_traits/remove_reference.hpp>
 
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/int.hpp>
+#include <boost/mpl/max.hpp>
+#include <boost/mpl/next.hpp>
 
 #include <boost/ref.hpp>
 #include <iostream>
@@ -105,6 +111,7 @@ namespace impl
     // returned by bind
     template <class BindArgs> class fused_bound_function 
     {
+        // Transform arguments to be held by value
         typedef typename traits::deduce_sequence<BindArgs>::type bound_args;
 
         bound_args fsq_bind_args;
@@ -144,19 +151,40 @@ namespace impl
 
     };
 
+    // Find the number of placeholders in use
+    struct n_placeholders
+    {
+        struct fold_op
+        {
+            template <typename Sig> struct result;
+            template <class S, class A, class B> struct result< S(A &,B &) > 
+                : mpl::max<A,B> { };
+        };
+        struct filter_pred
+        {
+            template <class X> struct apply : is_placeholder<X> { };
+        };
+
+        template <typename Seq>
+        struct apply
+            : mpl::next< typename result_of::fold<
+                fusion::filter_view<Seq,filter_pred>, mpl::int_<-1>, fold_op
+            >::type>::type
+        { };
+    };
+
     // Fused implementation of the 'bind' function
     struct fused_binder
     {
         template <class Signature>
         struct result;
 
-        template <class BindArgs>
+        template <class BindArgs,
+            int Placeholders = n_placeholders::apply<BindArgs>::value>
         struct result_impl
         {
-            // We have to transform the arguments so they are held by-value
-            // in the returned function. 
-            typedef fusion::unfused_generic< 
-                fused_bound_function<BindArgs> > type;
+            typedef boost::forward_adapter<fusion::unfused< 
+                fused_bound_function<BindArgs>,!Placeholders>,Placeholders> type;
         };
 
         template <class Self, class BindArgs>
@@ -168,14 +196,16 @@ namespace impl
         inline typename result_impl< BindArgs >::type 
         operator()(BindArgs & bind_args) const
         {
-            return typename result< void(BindArgs) >::type(bind_args);
+            return typename result< void(BindArgs) >::type(
+                fusion::unfused< fused_bound_function<BindArgs>,
+                    ! n_placeholders::apply<BindArgs>::value >(bind_args) );
         }
     };
 
-    // The binder's unfused type. We use unfused_rvalue_args to make that
-    // thing more similar to Boost.Bind. Because of that we have to use 
+    // The binder's unfused type. We use lightweght_forward_adapter to make 
+    // that thing more similar to Boost.Bind. Because of that we have to use 
     // Boost.Ref (below in the sample code)
-    typedef fusion::unfused_rvalue_args<fused_binder> binder;
+    typedef boost::lightweight_forward_adapter< fusion::unfused<fused_binder> > binder;
 }
 
 // Placeholder globals
@@ -225,10 +255,11 @@ int main()
     using boost::ref;
 
     int errors = 0;
+
     errors += !( bind(f)() == 0);
     errors += !( bind(f,"Hi")() == 1);
     errors += !( bind(f,_1_)("there.") == 1);
-    errors += !( bind(f,"The answer is",_1_)(value) == 2);
+    errors += !( bind(f,"The answer is",_1_)(12) == 2);
     errors += !( bind(f,_1_,ref(value))("Really?") == 2);
     errors += !( bind(f,_1_,_2_)("Dunno. If there is an answer, it's",value) == 2);
 
