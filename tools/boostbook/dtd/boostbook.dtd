@@ -1,5 +1,5 @@
 <!--
-   BoostBook DTD version 1.1
+   BoostBook DTD - development version
 
    For further information, see: http://www.crystalclearsoftware.com/cgi-bin/boost_wiki/wiki.pl?Boost_Documentation_Format
 
@@ -11,7 +11,7 @@
    (See accompanying file LICENSE_1_0.txt or copy at
    http://www.boost.org/LICENSE_1_0.txt)
 
-   This DTD module is identified by the PUBLIC and SYSTEM identifiers:
+   The latest stable DTD module is identified by the PUBLIC and SYSTEM identifiers:
 
    PUBLIC "-//Boost//DTD BoostBook XML V1.1//EN"
    SYSTEM "http://www.boost.org/tools/boostbook/dtd/1.1/boostbook.dtd"
