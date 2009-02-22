@@ -6,6 +6,7 @@
 
 #if BOOST_UNORDERED_EQUIVALENT_KEYS
 #define BOOST_UNORDERED_TABLE hash_table_equivalent_keys
+#define BOOST_UNORDERED_TABLE_NODE node_equivalent_keys
 #define BOOST_UNORDERED_TABLE_DATA hash_table_data_equivalent_keys
 #define BOOST_UNORDERED_ITERATOR hash_iterator_equivalent_keys
 #define BOOST_UNORDERED_CONST_ITERATOR hash_const_iterator_equivalent_keys
@@ -13,6 +14,7 @@
 #define BOOST_UNORDERED_CONST_LOCAL_ITERATOR hash_const_local_iterator_equivalent_keys
 #else
 #define BOOST_UNORDERED_TABLE hash_table_unique_keys
+#define BOOST_UNORDERED_TABLE_NODE node_unique_keys
 #define BOOST_UNORDERED_TABLE_DATA hash_table_data_unique_keys
 #define BOOST_UNORDERED_ITERATOR hash_iterator_unique_keys
 #define BOOST_UNORDERED_CONST_ITERATOR hash_const_iterator_unique_keys
@@ -22,6 +24,32 @@
 
 namespace boost {
     namespace unordered_detail {
+
+        template <typename Alloc>
+        struct BOOST_UNORDERED_TABLE_NODE :
+            value_base<BOOST_DEDUCED_TYPENAME allocator_value_type<Alloc>::type>,
+            bucket_impl<Alloc>
+        {
+            typedef BOOST_DEDUCED_TYPENAME bucket_impl<Alloc>::link_ptr link_ptr;
+            typedef BOOST_DEDUCED_TYPENAME allocator_value_type<Alloc>::type value_type;
+
+            typedef BOOST_DEDUCED_TYPENAME
+                boost::unordered_detail::rebind_wrap<Alloc, BOOST_UNORDERED_TABLE_NODE>::type
+                node_allocator;
+
+#if BOOST_UNORDERED_EQUIVALENT_KEYS
+                BOOST_UNORDERED_TABLE_NODE() : group_prev_()
+                {
+                    BOOST_UNORDERED_MSVC_RESET_PTR(group_prev_);
+                }
+
+                link_ptr group_prev_;
+#endif
+
+                value_type& value() {
+                    return *static_cast<value_type*>(this->address());
+                }
+        };
 
         //
         // Hash Table Data
@@ -34,85 +62,23 @@ namespace boost {
         public:
             typedef BOOST_UNORDERED_TABLE_DATA data;
 
-            struct node;
-            struct bucket;
             typedef std::size_t size_type;
             typedef std::ptrdiff_t difference_type;
 
             typedef Alloc value_allocator;
 
-            typedef BOOST_DEDUCED_TYPENAME
-                boost::unordered_detail::rebind_wrap<Alloc, node>::type
-                node_allocator;
-            typedef BOOST_DEDUCED_TYPENAME
-                boost::unordered_detail::rebind_wrap<Alloc, bucket>::type
-                bucket_allocator;
+            typedef bucket_impl<Alloc> bucket;
+            typedef BOOST_DEDUCED_TYPENAME bucket::bucket_allocator bucket_allocator;
+            typedef BOOST_DEDUCED_TYPENAME bucket::bucket_ptr bucket_ptr;
+            typedef BOOST_DEDUCED_TYPENAME bucket::link_ptr link_ptr;
+
+            typedef BOOST_UNORDERED_TABLE_NODE<Alloc> node;
+            typedef BOOST_DEDUCED_TYPENAME node::node_allocator node_allocator;
 
             typedef BOOST_DEDUCED_TYPENAME allocator_value_type<Alloc>::type value_type;
             typedef BOOST_DEDUCED_TYPENAME allocator_pointer<node_allocator>::type node_ptr;
-            typedef BOOST_DEDUCED_TYPENAME allocator_pointer<bucket_allocator>::type bucket_ptr;
             typedef BOOST_DEDUCED_TYPENAME allocator_reference<value_allocator>::type reference;
             typedef BOOST_DEDUCED_TYPENAME allocator_reference<bucket_allocator>::type bucket_reference;
-
-            typedef bucket_ptr link_ptr;
-
-            // Hash Bucket
-            //
-            // all no throw
-
-            struct bucket
-            {
-            private:
-                bucket& operator=(bucket const&);
-            public:
-                link_ptr next_;
-
-                bucket() : next_()
-                {
-                    BOOST_UNORDERED_MSVC_RESET_PTR(next_);
-                }
-
-                bucket(bucket const& x) : next_(x.next_)
-                {
-                    // Only copy construct when allocating.
-                    BOOST_ASSERT(!x.next_);
-                }
-
-                bool empty() const
-                {
-                    return !this->next_;
-                }
-            };
-
-            // Value Base
-
-            struct value_base {
-                typename boost::aligned_storage<
-                    sizeof(value_type),
-                    boost::alignment_of<value_type>::value>::type data_;
-
-                void* address() { return this; }
-            };
-
-            // Hash Node
-            //
-            // all no throw
-
-            struct node : value_base, bucket {
-#if BOOST_UNORDERED_EQUIVALENT_KEYS
-            public:
-                node() : group_prev_()
-                {
-                    BOOST_UNORDERED_MSVC_RESET_PTR(group_prev_);
-                }
-
-                link_ptr group_prev_;
-#endif
-
-                value_type& value() {
-                    return *static_cast<value_type*>(this->address());
-                }
-            };
 
             // allocators
             //
@@ -2325,6 +2291,7 @@ namespace boost {
 }
 
 #undef BOOST_UNORDERED_TABLE
+#undef BOOST_UNORDERED_TABLE_NODE
 #undef BOOST_UNORDERED_TABLE_DATA
 #undef BOOST_UNORDERED_ITERATOR
 #undef BOOST_UNORDERED_CONST_ITERATOR
