@@ -112,7 +112,6 @@ import testing ;
     [ run functional/fused.cpp : : : : ]
     [ run functional/fused_function_object.cpp : : : : ]
     [ run functional/fused_procedure.cpp : : : : ]
-    [ run functional/unfused.cpp : : : : ]
     [ run functional/unfused_typed.cpp : : : : ]
     [ run functional/make_fused.cpp : : : : ]
     [ run functional/make_fused_function_object.cpp : : : : ]
