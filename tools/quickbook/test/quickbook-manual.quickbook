@@ -70,7 +70,7 @@
 [def __include__            [link quickbook.syntax.block.include Include]]
 [def __import__             [link quickbook.syntax.block.import Import]]
 
-[section:intro Introduction]
+[section : intro Introduction]
 
 [:[*['["Why program by hand in five days what you can spend five years of your
 life automating?]]]
