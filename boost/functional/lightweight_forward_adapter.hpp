@@ -231,7 +231,8 @@ namespace boost
 
             template< BOOST_PP_ENUM_PARAMS(N,typename T) >
             inline typename lightweight_forward_adapter_result::template apply<
-                MD const (BOOST_PP_ENUM_PARAMS(N,T)) >::type
+                MD const (BOOST_PP_ENUM_BINARY_PARAMS(N,
+                    T,const& BOOST_PP_INTERCEPT)) >::type
             operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,T,const& a)) const
             {
                 typedef lightweight_forward_adapter_result _;
@@ -240,7 +241,8 @@ namespace boost
             }
             template< BOOST_PP_ENUM_PARAMS(N,typename T) >
             inline typename lightweight_forward_adapter_result::template apply<
-                MD (BOOST_PP_ENUM_PARAMS(N,T)) >::type
+                MD (BOOST_PP_ENUM_BINARY_PARAMS(N,
+                    T,const& BOOST_PP_INTERCEPT)) >::type
             operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,T,const& a))
             {
                 typedef lightweight_forward_adapter_result _;
