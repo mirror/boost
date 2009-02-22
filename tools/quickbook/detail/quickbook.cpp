@@ -88,6 +88,12 @@ namespace quickbook
                 << "Syntax Error near column " << pos.column << ".\n";
             ++actor.error_count;
         }
+        
+        if(actor.error_count)
+        {
+        	detail::outerr(filein_, -1)
+        	    << "Error count: " << actor.error_count << ".\n";
+        }
 
         return actor.error_count ? 1 : 0;
     }
