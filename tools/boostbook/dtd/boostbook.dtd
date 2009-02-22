@@ -313,10 +313,14 @@
     %boost.common.attrib;>
 
 <!ELEMENT macroname (#PCDATA)>
-<!ATTLIST macroname %boost.common.attrib;>
+<!ATTLIST macroname
+    alt          CDATA  #IMPLIED
+    %boost.common.attrib;>
 
 <!ELEMENT headername (#PCDATA)>
-<!ATTLIST headername %boost.common.attrib;>
+<!ATTLIST headername
+    alt          CDATA  #IMPLIED
+    %boost.common.attrib;>
 
 <!ELEMENT globalname (#PCDATA)>
 <!ATTLIST globalname
@@ -415,7 +419,7 @@
      name        CDATA #IMPLIED>
 
 <!--========== Customize the DocBook DTD ==========-->
-<!ENTITY % local.tech.char.class "|functionname|libraryname|enumname|code">
+<!ENTITY % local.tech.char.class "|functionname|libraryname|enumname|headername|macroname|code">
 <!ENTITY % local.para.class
         "|using-namespace|using-class|librarylist|librarycategorylist">
 <!ENTITY % local.descobj.class "|libraryinfo">

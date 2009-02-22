@@ -748,6 +748,7 @@
           <tbody>
 
 <row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
+<row><entry>alt</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry/></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 </tbody>
         </tgroup>
@@ -1043,6 +1044,7 @@
           <tbody>
 
 <row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
+<row><entry>alt</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry/></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 </tbody>
         </tgroup>

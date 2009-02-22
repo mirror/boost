@@ -160,8 +160,8 @@
 <entity name="local.tech.char.class"
         type="param"
 >
-<text-expanded>|functionname|libraryname|enumname|code</text-expanded>
-<text>|functionname|libraryname|enumname|code</text>
+<text-expanded>|functionname|libraryname|enumname|headername|macroname|code</text-expanded>
+<text>|functionname|libraryname|enumname|headername|macroname|code</text>
 </entity>
 
 <entity name="function.module"
@@ -1064,8 +1064,14 @@
 </element>
 
 <attlist name="macroname">
-<attdecl> %boost.common.attrib;</attdecl>
+<attdecl>
+    alt          CDATA  #IMPLIED
+    %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="alt"
            type="#IMPLIED"
            value="CDATA"
            default=""/>
@@ -1389,8 +1395,14 @@
 </element>
 
 <attlist name="headername">
-<attdecl> %boost.common.attrib;</attdecl>
+<attdecl>
+    alt          CDATA  #IMPLIED
+    %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="alt"
            type="#IMPLIED"
            value="CDATA"
            default=""/>
