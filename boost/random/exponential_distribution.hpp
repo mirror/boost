@@ -21,6 +21,7 @@
 #include <iostream>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/random/detail/config.hpp>
 
 namespace boost {
 
@@ -54,7 +55,7 @@ public:
     return -result_type(1) / _lambda * log(result_type(1)-eng());
   }
 
-#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+#ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const exponential_distribution& ed)

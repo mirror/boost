@@ -81,7 +81,7 @@ void instantiate_dist(URNG& urng, const char * name, const Dist& dist)
   Dist d = dist;            // copy ctor
   d = dist;                 // copy assignment
 
-#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+#ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
   {
     std::ostringstream file;
     file << urng << std::endl;
@@ -105,7 +105,7 @@ void instantiate_dist(URNG& urng, const char * name, const Dist& dist)
                         (std::string(name) + " old == restored_dist"));
 #endif // BOOST_MSVC
   }
-#endif // BOOST_NO_OPERATORS_IN_NAMESPACE
+#endif // BOOST_RANDOM_NO_STREAM_OPERATORS
 }
 
 template<class URNG, class RealType>
@@ -173,7 +173,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   ResultType max = (urng3.max)();
   (void) &max;
 
-#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+#ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
   // Streamable concept not supported for broken compilers
 
   // advance a little so that state is relatively arbitrary
@@ -221,10 +221,10 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
 #endif // BOOST_MSVC
   }
 #endif // BOOST_NO_STD_WSTREAMBUF, BOOST_NO_STD_WSTRING
-#endif // BOOST_NO_OPERATORS_IN_NAMESPACE etc.
+#endif // BOOST_RANDOM_NO_STREAM_OPERATORS
 
   // instantiate various distributions with this URNG
-  // instantiate_dist(urng, "uniform_smallint", boost::uniform_smallint(0, 11));
+  instantiate_dist(urng, "uniform_smallint", boost::uniform_smallint<>(0, 11));
   instantiate_dist(urng, "uniform_int", boost::uniform_int<>(-200, 20000));
   instantiate_dist(urng, "bernoulli_distribution",
                    boost::bernoulli_distribution<>(0.2));

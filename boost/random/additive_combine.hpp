@@ -20,6 +20,7 @@
 #include <algorithm> // for std::min and std::max
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp>
+#include <boost/random/detail/config.hpp>
 #include <boost/random/linear_congruential.hpp>
 
 namespace boost {
@@ -85,7 +86,7 @@ public:
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const additive_combine& r)
