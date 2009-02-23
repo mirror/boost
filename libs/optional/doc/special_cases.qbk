@@ -23,8 +23,6 @@ rather than the reference itself.
 
 [endsect]
 
-[#optional_refassign]
-
 [section Rebinding semantics for assignment of optional references]
 
 If you assign to an ['uninitialized ] `optional<T&>` the effect is to bind (for
@@ -111,8 +109,6 @@ In such scenario, you can assign the value itself directly, as in:
     *opt=value;
 
 [endsect]
-
-[#optional_in_place_factories]
 
 [section In-Place Factories]
 
@@ -288,7 +284,7 @@ instead, it won't compile).
 
 [section Exception Safety Guarantees]
 
-Because of the current implementation (see [link optional_implementation_notes Implementation Notes]), all of the assignment methods:
+Because of the current implementation (see [link boost_optional.implementation_notes Implementation Notes]), all of the assignment methods:
 
 * `optional<T>::operator= ( optional<T> const& )`
 * `optional<T>::operator= ( T const& )`

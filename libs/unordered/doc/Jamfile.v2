@@ -8,7 +8,7 @@ path-constant admonishment_location : ../../../../doc/src/images ;
 
 xml unordered : unordered.qbk ;
 boostbook standalone : unordered :
-    <xsl:param>admon.graphics.path=images/
+    <format>html:<xsl:param>admon.graphics.path=images/
     <xsl:param>navig.graphics.path=images/
     <xsl:param>html.stylesheet=boostbook.css
     <xsl:param>boost.root=../../../..
@@ -51,6 +51,7 @@ boostbook standalone : unordered :
     <format>pdf:<xsl:param>img.src.path=$(images_location)/
     #<format>pdf:<xsl:param>admon.graphics.path=$(admonishment_location)
     <format>pdf:<xsl:param>draft.mode="no"
+    <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/unordered/doc/html
     ;
 
 install css : [ glob $(BOOST_ROOT)/doc/src/*.css ]
@@ -59,3 +60,4 @@ install images : [ glob $(BOOST_ROOT)/doc/src/images/*.png ]
     : <location>html/images ;
 explicit css ;
 explicit images ;
+

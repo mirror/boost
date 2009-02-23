@@ -8,12 +8,8 @@
     http://www.boost.org/LICENSE_1_0.txt)
 ]
 
-[#numeric_coversion_converter_policies]
-
 [section Numeric Converter Policy Classes]
 
-
-[#numeric_conversion_converter_policies_range_check_result]
 
 [section enum range_check_result]
 
@@ -31,8 +27,6 @@
 Defines the values returned by `boost::numeric::converter<>::out_of_range()`
 
 [endsect]
-
-[#numeric_conversion_policy_overflow_handler]
 
 [section Policy OverflowHandler]
 
@@ -127,8 +121,6 @@ the old code is wider than for the new code).
 ]
 
 [endsect]
-
-[#numeric_conversion_policy_float_to_int_rounder]
 
 [section Policy Float2IntRounder]
 
@@ -227,12 +219,10 @@ use a fully qualified call.
 
 This technique allows the default rounder policies to be used directly with
 user defined types. The user only requires that suitable overloads of `floor()` and `ceil()`
-be visible. See also [link numeric_conversion_requirements User Defined Numeric Types]
+be visible. See also [link boost_numericconversion.type_requirements_and_user_defined_types_support User Defined Numeric Types]
 support.
 
 [endsect]
-
-[#numeric_conversion_policy_raw_converter]
 
 [section Policy RawConverter]
 
@@ -274,8 +264,6 @@ This is the only raw converter policy class provided by the library:
     } }
 
 [endsect]
-
-[#numeric_conversion_policy_user_range_checker]
 
 [section Policy UserRangeChecker]
 

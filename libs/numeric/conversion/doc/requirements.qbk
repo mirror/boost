@@ -8,8 +8,6 @@
     http://www.boost.org/LICENSE_1_0.txt)
 ]
 
-[#numeric_conversion_requirements]
-
 [section Type Requirements and User-defined-types support]
 
 [section Type Requirements]
@@ -49,7 +47,7 @@ is positive or not, and for this it evaluates the expression
 [heading Conversion Traits]
 
 If a User Defined Type is involved in a conversion, it is ['assumed] that
-the UDT has [link numeric_conversion_definitions_range wider range] 
+the UDT has [link boost_numericconversion.definitions.range_and_precision wider range] 
 than any built-in type, and consequently the values
 of some `converter_traits<>` members are hardwired regardless of the reality.
 The following table summarizes this:
@@ -80,11 +78,9 @@ checking logic when UDTs are involved in a conversion. Therefore, if either
 Target or Source are not built-in types, the bundled range checking of the
 `converter<>` function object is automatically disabled. However, it is possible
 to supply a user-defined range-checker. See 
-[link numeric_conversion_requirements_hooks Special Policies]
+[link boost_numericconversion.type_requirements_and_user_defined_types_support.special_policies Special Policies]
 
 [endsect]
-
-[#numeric_conversion_requirements_hooks]
 
 [section Special Policies]
 
@@ -99,14 +95,14 @@ of the types.
 However, this internal logic is disabled when either type is User Defined.
 In this case, the user can specify an ['external] range checking policy which will be
 used in place of the internal code. See 
-[link numeric_conversion_policy_user_range_checker UserRangeChecker] policy for details.
+[link boost_numericconversion.numeric_converter_policy_classes.policy_userrangechecker UserRangeChecker] policy for details.
 
 The converter class performs the actual conversion using a Raw Converter policy.
 The default raw converter simply performs a `static_cast<Target>(source)`.
 
 However, if the a UDT is involved, the `static_cast` might not work. In this case,
 the user can implement and pass a different raw converter policy.
-See [link numeric_conversion_policy_raw_converter RawConverter] policy for details
+See [link boost_numericconversion.numeric_converter_policy_classes.policy_rawconverter RawConverter] policy for details
 
 [endsect]
 

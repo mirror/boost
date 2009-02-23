@@ -55,4 +55,5 @@ boostbook standalone
         <xsl:param>generate.section.toc.level=3
         <xsl:param>chunk.first.sections=1
         <dependency>autodoc
+        <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/doc/html
    ;

@@ -17,6 +17,8 @@ xml bimap
         bimap.qbk
     ;
 
+path-constant images_location : html ;
+
 boostbook standalone
     :
         bimap
@@ -26,6 +28,8 @@ boostbook standalone
         <xsl:param>toc.max.depth=2
         <xsl:param>toc.section.depth=4
         <xsl:param>chunk.section.depth=2
+        <format>pdf:<xsl:param>img.src.path=$(images_location)/
+        <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/bimap/doc/html
     ;
 
 

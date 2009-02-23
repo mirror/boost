@@ -5,7 +5,7 @@
 
 xml hash : hash.qbk ;
 boostbook standalone : hash :
-    <xsl:param>admon.graphics.path=images/
+    <format>html:<xsl:param>admon.graphics.path=images/
     <xsl:param>navig.graphics.path=images/
     <xsl:param>html.stylesheet=boostbook.css
     <xsl:param>boost.root=../../../../..
@@ -15,6 +15,7 @@ boostbook standalone : hash :
     <xsl:param>generate.section.toc.level=2
     <xsl:param>toc.section.depth=1
     <xsl:param>toc.max.depth=1
+    <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/functional/hash/doc/html
 
     <dependency>css
     <dependency>images
@@ -26,3 +27,4 @@ install images : [ glob $(BOOST_ROOT)/doc/src/images/*.png ]
     : <location>html/images ;
 explicit css ;
 explicit images ;
+

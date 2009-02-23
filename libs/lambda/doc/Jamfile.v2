@@ -1,5 +1,11 @@
 project boost/doc ;
 import boostbook : boostbook ;
 
-boostbook lambda-doc : lambda.xml ;
+# Are these really the correct images??
+path-constant images : ../../spirit/phoenix/doc/html ;
+
+boostbook lambda-doc : lambda.xml 
+:
+   <format>pdf:<xsl:param>img.src.path=$(images)/
+;
 

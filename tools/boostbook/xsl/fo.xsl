@@ -175,12 +175,16 @@ Put a box around admonishments and keep them together:
   <xsl:attribute name="padding-right">0.2cm</xsl:attribute>
   <xsl:attribute name="padding-top">0.2cm</xsl:attribute>
   <xsl:attribute name="padding-bottom">0.2cm</xsl:attribute>
-  <xsl:attribute name="keep-together">1</xsl:attribute>
+  <xsl:attribute name="keep-together.within-page">1</xsl:attribute>
 </xsl:attribute-set>
 
 <!--
 Put a box around code blocks, also set the font size
-and keep the block together if we can:
+and keep the block together if we can using the widows 
+and orphans controls.  Hyphenation and line wrapping
+is also turned on, so that long lines of code don't
+bleed off the edge of the page, a carriage return
+symbol is used as the hyphenation character:
 -->
 <xsl:attribute-set name="monospace.verbatim.properties">
   <xsl:attribute name="border-color">#DCDCDC</xsl:attribute>
@@ -190,10 +194,26 @@ and keep the block together if we can:
   <xsl:attribute name="padding-right">0.2cm</xsl:attribute>
   <xsl:attribute name="padding-top">0.2cm</xsl:attribute>
   <xsl:attribute name="padding-bottom">0.2cm</xsl:attribute>
-  <xsl:attribute name="keep-together">1</xsl:attribute>
+  <xsl:attribute name="widows">6</xsl:attribute>
+  <xsl:attribute name="orphans">40</xsl:attribute>
   <xsl:attribute name="font-size">9pt</xsl:attribute>
+  <xsl:attribute name="hyphenate">true</xsl:attribute>
+  <xsl:attribute name="wrap-option">wrap</xsl:attribute>
+  <xsl:attribute name="hyphenation-character">&#x21B5;</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:param name="hyphenate.verbatim" select="1"></xsl:param>
+<xsl:param name="monospace.font.family">monospace,Symbol</xsl:param>
+
+  <!--Regular monospace text should have the same font size as code blocks etc-->
+<xsl:attribute-set name="monospace.properties">
+  <xsl:attribute name="font-size">9pt</xsl:attribute>
+</xsl:attribute-set>
+  
+<!-- 
+Put some small amount of padding around table cells, and keep tables
+together on one page if possible:
+-->
 <xsl:attribute-set name="table.cell.padding">
   <xsl:attribute name="padding-left">0.2cm</xsl:attribute>
   <xsl:attribute name="padding-right">0.2cm</xsl:attribute>
@@ -201,12 +221,54 @@ and keep the block together if we can:
   <xsl:attribute name="padding-bottom">0.2cm</xsl:attribute>
 </xsl:attribute-set>
 
+  <!--Formal and informal tables have the same properties
+      Using widow-and-orphan control here gives much better
+      results for very large tables than a simple "keep-together"
+      instruction-->
 <xsl:attribute-set name="table.properties">
-  <xsl:attribute name="keep-together">1</xsl:attribute>
+  <xsl:attribute name="keep-together.within-page">1</xsl:attribute>
+</xsl:attribute-set>
+<xsl:attribute-set name="informaltable.properties">
+  <xsl:attribute name="keep-together.within-page">1</xsl:attribute>
 </xsl:attribute-set>
 
-   <xsl:param name="table.frame.border.color">#DCDCDC</xsl:param>
+<!--
+General default options go here:
+* Borders are mid-grey.
+* Body text is not indented compared to the titles.
+* Page margins are a rather small 0.5in, but we need
+  all the space we can get for code blocks.
+* Paper size is A4: an ISO standard, and just slightly smaller than US Letter.
+* Use SVG graphics for admonishments: the bitmaps look awful in PDF's.
+* Disable draft mode so we're not constantly trying to download the necessary graphic.
+* Set default image paths to pull down direct from SVN: individual Jamfiles can override this
+  and pass an absolute path to local versions of the images, but we can't get that here, so
+  we'll use SVN instead so that most things "just work".
+-->
+<xsl:param name="table.frame.border.color">#DCDCDC</xsl:param>
 <xsl:param name="table.cell.border.color">#DCDCDC</xsl:param>
+<xsl:param name="body.start.indent">0pt</xsl:param>
+<xsl:param name="page.margin.inner">0.5in</xsl:param>
+<xsl:param name="page.margin.outer">0.5in</xsl:param>
+<xsl:param name="paper.type">A4</xsl:param>
+<xsl:param name="admon.graphics">1</xsl:param>
+<xsl:param name="admon.graphics.extension">.svg</xsl:param>
+<xsl:param name="draft.mode">no</xsl:param>
+<xsl:param name="admon.graphics.path">http://svn.boost.org/svn/boost/trunk/doc/src/images/</xsl:param>
+<xsl:param name="callout.graphics.path">http://svn.boost.org/svn/boost/trunk/doc/src/images/callouts/</xsl:param>
+<xsl:param name="img.src.path">http://svn.boost.org/svn/boost/trunk/doc/html/</xsl:param>
 
+<!-- Ideally we would use this to force top level sections
+     to start on a new page, unfortunately this causes rather
+     unfortunate page breaks in some Doxygen-generated
+     documentation which uses <refentry> and <synopsis>
+     sections :-(
+
+<xsl:attribute-set name="section.level1.properties">
+  <xsl:attribute name="break-before">page</xsl:attribute>
+</xsl:attribute-set>
+
+-->
+  
 </xsl:stylesheet>
 

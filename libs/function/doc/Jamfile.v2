@@ -6,5 +6,10 @@
 project boost/doc ;
 import boostbook : boostbook ;
 
-boostbook function-doc : function.xml ;
+boostbook function-doc 
+	: 
+	function.xml 
+	:
+        <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/doc/html
+	;
 

@@ -331,7 +331,7 @@ factory.
 * [*Postconditions: ] `*this` is [_initialized] and its value is ['directly given]
 from the factory `f` (i.e., the value [_is not copied]).
 * [*Throws:] Whatever the `T` constructor called by the factory throws.
-* [*Notes:] See [link optional_in_place_factories In-Place Factories]
+* [*Notes:] See [link boost_optional.in_place_factories In-Place Factories]
 * [*Exception Safety:] Exceptions can only be thrown during the call to
 the `T` constructor used by the factory; in that case, this constructor has
 no effect.
@@ -385,7 +385,7 @@ __SPACE__
 * [*Postconditions: ] `*this` is initialized and it references the same
 object referenced by `rhs`.
 * [*Notes:] If `*this` was initialized, is is ['rebound] to the new object.
-See [link optional_refassign here] for details on this behavior.
+See [link boost_optional.rebinding_semantics_for_assignment_of_optional_references here] for details on this behavior.
 * [*Example:]
 ``
 int a = 1 ;
@@ -444,7 +444,7 @@ __SPACE__
 references the same object referenced by `*rhs`; otherwise, `*this` is
 uninitialized (and references no object).
 * [*Notes:] If `*this` was initialized and so is *rhs, this is is ['rebound] to
-the new object. See [link optional_refassign here] for details on this behavior.
+the new object. See [link boost_optional.rebinding_semantics_for_assignment_of_optional_references here] for details on this behavior.
 * [*Example:]
 ``
 int a = 1 ;
