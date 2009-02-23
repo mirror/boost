@@ -65,7 +65,11 @@ public:
   }
 
   template<class It>
-  linear_congruential(It& first, It last) { seed(first, last); }
+  linear_congruential(It& first, It last)
+    : _modulus(modulus)
+  {
+      seed(first, last);
+  }
 
   // compiler-generated copy constructor and assignment operator are fine
   void seed(IntType x0 = 1)
