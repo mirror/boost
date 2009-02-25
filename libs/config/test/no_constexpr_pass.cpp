@@ -1,4 +1,4 @@
-//  This file was automatically generated on Tue Dec 16 16:41:40 2008
+//  This file was automatically generated on Thu Jun 19 16:26:16 2008
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -6,14 +6,14 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/config for the most recent version.//
-//  Revision $Id: generate.cpp 49281 2008-10-11 15:40:44Z johnmaddock $
+//  Revision $Id$
 //
 
 
-// Test file for macro BOOST_NO_STD_UNORDERED
-// This file should not compile, if it does then
-// BOOST_NO_STD_UNORDERED should not be defined.
-// See file boost_no_std_unordered.ipp for details
+// Test file for macro BOOST_NO_CONSTEXPR
+// This file should compile, if it does not then
+// BOOST_NO_CONSTEXPR should be defined.
+// See file boost_no_constexpr.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
 // the objective of this file:
@@ -24,14 +24,14 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifdef BOOST_NO_STD_UNORDERED
-#include "boost_no_std_unordered.ipp"
+#ifndef BOOST_NO_CONSTEXPR
+#include "boost_no_constexpr.ipp"
 #else
-#error "this file should not compile"
+namespace boost_no_constexpr = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_std_unordered::test();
+   return boost_no_constexpr::test();
 }
 
