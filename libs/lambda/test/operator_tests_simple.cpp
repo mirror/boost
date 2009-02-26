@@ -17,6 +17,8 @@
 
 #include "boost/lambda/lambda.hpp"
 
+#include "boost/lambda/detail/suppress_unused.hpp"
+
 #include <vector>
 #include <map>
 #include <set>
@@ -96,6 +98,8 @@ void arithmetic_operators() {
   // test that unary plus really does something
   unary_plus_tester u;
   unary_plus_tester up = (+_1)(u);
+
+  boost::lambda::detail::suppress_unused_variable_warnings(up);
 }
 
 void bitwise_operators() {

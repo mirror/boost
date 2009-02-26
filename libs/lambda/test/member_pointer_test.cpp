@@ -118,11 +118,11 @@ class C {};
 class D {};
 
 // ->* can be overloaded to do anything
-bool operator->*(A a, B b) {
+bool operator->*(A /*a*/, B /*b*/) {
   return false; 
 }
 
-bool operator->*(B b, A a) {
+bool operator->*(B /*b*/, A /*a*/) {
   return true; 
 }
 

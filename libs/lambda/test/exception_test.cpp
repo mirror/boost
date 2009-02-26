@@ -29,7 +29,7 @@ using namespace boost::lambda;
 using namespace std;
 
 // to prevent unused variables warnings
-template <class T> void dummy(const T& t) {}
+template <class T> void dummy(const T&) {}
 
 void erroneous_exception_related_lambda_expressions() {
 
@@ -603,7 +603,7 @@ int test_main(int, char *[]) {
     return_type_matching();
     test_empty_catch_blocks();
   }
-  catch (int x)
+  catch (int)
   {
     BOOST_CHECK(false);
   }
