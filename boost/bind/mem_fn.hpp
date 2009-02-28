@@ -1,5 +1,5 @@
-#ifndef BOOST_MEM_FN_HPP_INCLUDED
-#define BOOST_MEM_FN_HPP_INCLUDED
+#ifndef BOOST_BIND_MEM_FN_HPP_INCLUDED
+#define BOOST_BIND_MEM_FN_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -386,4 +386,4 @@ template<class R, class T> _mfi::dm<R, T> mem_fn(R T::*f)
 
 } // namespace boost
 
-#endif // #ifndef BOOST_MEM_FN_HPP_INCLUDED
+#endif // #ifndef BOOST_BIND_MEM_FN_HPP_INCLUDED
