@@ -59,11 +59,12 @@
 
 #endif
 
-
+//
+// C++0x macros:
+//
 #  define BOOST_HAS_CHAR16_T
 #  define BOOST_HAS_CHAR32_T
 #  define BOOST_HAS_LONG_LONG
-
 //#  define BOOST_HAS_ALIGNOF
 #  define BOOST_HAS_DECLTYPE
 #  define BOOST_HAS_EXPLICIT_CONVERSION_OPS
@@ -72,6 +73,20 @@
 //#  define BOOST_HAS_STATIC_ASSERT
 #  define BOOST_HAS_STD_TYPE_TRAITS
 
+#  define BOOST_NO_EXTERN_TEMPLATE                
+#  define BOOST_NO_SCOPED_ENUMS                   
+#  define BOOST_NO_STATIC_ASSERT                  
+#  define BOOST_NO_RVALUE_REFERENCES              
+#  define BOOST_NO_VARIADIC_TEMPLATES
+#  define BOOST_NO_CONSTEXPR                      
+#  define BOOST_NO_DEFAULTED_FUNCTIONS              
+#  define BOOST_NO_DELETED_FUNCTIONS              
+#  define BOOST_NO_RAW_LITERALS                   
+#  define BOOST_NO_UNICODE_LITERALS     
+
+//
+// TR1 macros:
+//
 #  define BOOST_HAS_TR1_HASH
 #  define BOOST_HAS_TR1_TYPE_TRAITS
 #  define BOOST_HAS_TR1_UNORDERED_MAP

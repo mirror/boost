@@ -138,24 +138,42 @@
 #if (__BORLANDC__ >= 0x599)
 #  pragma defineonoption BOOST_CODEGEAR_0X_SUPPORT -Ax
 #endif
-
-#if defined( BOOST_CODEGEAR_0X_SUPPORT )
-#  #if __BORLANDC__ >= 0x610
+//
+// C++0x Macros:
+//
+#if defined( BOOST_CODEGEAR_0X_SUPPORT ) && (__BORLANDC__ >= 0x610)
 #  define BOOST_HAS_ALIGNOF
 #  define BOOST_HAS_CHAR16_T
 #  define BOOST_HAS_CHAR32_T
 #  define BOOST_HAS_DECLTYPE
-//#  define BOOST_HAS_DEFAULTED_FN
-//#  define BOOST_HAS_DELETED_FN
 #  define BOOST_HAS_EXPLICIT_CONVERSION_OPS
-//#  define BOOST_HAS_NULLPTR
-//#  define BOOST_HAS_RAW_STRING
 #  define BOOST_HAS_REF_QUALIFIER
 #  define BOOST_HAS_RVALUE_REFS
-//#  define BOOST_HAS_SCOPED_ENUM
 #  define BOOST_HAS_STATIC_ASSERT
-//#  define BOOST_HAS_VARIADIC_TMPL
-#  #endif //__BORLANDC__ >= 0x610
+
+#  define BOOST_NO_EXTERN_TEMPLATE                
+#  define BOOST_NO_SCOPED_ENUMS                   
+#  define BOOST_NO_VARIADIC_TEMPLATES
+#  define BOOST_NO_CONSTEXPR                      
+#  define BOOST_NO_DEFAULTED_FUNCTIONS              
+#  define BOOST_NO_DELETED_FUNCTIONS              
+#  define BOOST_NO_RAW_LITERALS                   
+#  define BOOST_NO_UNICODE_LITERALS       // UTF-8 still not supported        
+#else
+#  define BOOST_NO_CHAR16_T                       
+#  define BOOST_NO_CHAR32_T                       
+#  define BOOST_NO_DECLTYPE                       
+#  define BOOST_NO_EXPLICIT_CONVERSION_OPERATORS 
+#  define BOOST_NO_EXTERN_TEMPLATE                
+#  define BOOST_NO_SCOPED_ENUMS                   
+#  define BOOST_NO_STATIC_ASSERT                  
+#  define BOOST_NO_RVALUE_REFERENCES              
+#  define BOOST_NO_VARIADIC_TEMPLATES
+#  define BOOST_NO_CONSTEXPR                      
+#  define BOOST_NO_DEFAULTED_FUNCTIONS              
+#  define BOOST_NO_DELETED_FUNCTIONS              
+#  define BOOST_NO_RAW_LITERALS                   
+#  define BOOST_NO_UNICODE_LITERALS     
 #endif
 
 #define BOOST_NO_INITIALIZER_LISTS
@@ -213,29 +231,6 @@
 #ifndef __STRICT_ANSI__
 #  define BOOST_HAS_DECLSPEC
 #endif
-
-//
-// C++0x features
-//
-//   See above for BOOST_NO_LONG_LONG
-
-#if __BORLANDC__ < 0x0610
-#  define BOOST_NO_CHAR16_T                       
-#  define BOOST_NO_CHAR32_T                       
-#  define BOOST_NO_DECLTYPE                       
-#  define BOOST_NO_EXPLICIT_CONVERSION_OPERATORS 
-#  define BOOST_NO_EXTERN_TEMPLATE                
-#  define BOOST_NO_SCOPED_ENUMS                   
-#  define BOOST_NO_STATIC_ASSERT                  
-#  define BOOST_NO_RVALUE_REFERENCES              
-#  define BOOST_NO_VARIADIC_TEMPLATES
-#endif
-
-#define BOOST_NO_CONSTEXPR                      
-#define BOOST_NO_DEFAULTED_FUNCTIONS              
-#define BOOST_NO_DELETED_FUNCTIONS              
-#define BOOST_NO_RAW_LITERALS                   
-#  define BOOST_NO_UNICODE_LITERALS       // UTF-8 still not supported        
 //
 // ABI fixing headers:
 //
