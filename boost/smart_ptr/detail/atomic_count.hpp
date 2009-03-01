@@ -74,6 +74,7 @@
 //
 
 #include <boost/config.hpp>
+#include <boost/smart_ptr/detail/sp_has_sync.hpp>
 
 #ifndef BOOST_HAS_THREADS
 
@@ -95,10 +96,10 @@ typedef long atomic_count;
 #elif defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
 #  include <boost/smart_ptr/detail/atomic_count_gcc_x86.hpp>
 
-#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__CYGWIN__)
 #  include <boost/smart_ptr/detail/atomic_count_win32.hpp>
 
-#elif defined( __GNUC__ ) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 401 ) && !defined( __arm__ ) && !defined( __hppa ) && ( !defined( __INTEL_COMPILER ) || defined( __ia64__ ) )
+#elif defined( BOOST_SP_HAS_SYNC )
 #  include <boost/smart_ptr/detail/atomic_count_sync.hpp>
 
 #elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
