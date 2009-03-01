@@ -63,13 +63,13 @@ public:
 
     typedef T element_type;
 
-    intrusive_ptr(): p_(0)
+    intrusive_ptr(): px( 0 )
     {
     }
 
-    intrusive_ptr(T * p, bool add_ref = true): p_(p)
+    intrusive_ptr( T * p, bool add_ref = true ): px( p )
     {
-        if(p_ != 0 && add_ref) intrusive_ptr_add_ref(p_);
+        if( px != 0 && add_ref ) intrusive_ptr_add_ref( px );
     }
 
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) || defined(BOOST_MSVC6_MEMBER_TEMPLATES)
@@ -84,21 +84,21 @@ public:
     intrusive_ptr( intrusive_ptr<U> const & rhs )
 
 #endif
-    : p_( rhs.get() )
+    : px( rhs.get() )
     {
-        if( p_ != 0 ) intrusive_ptr_add_ref( p_ );
+        if( px != 0 ) intrusive_ptr_add_ref( px );
     }
 
 #endif
 
-    intrusive_ptr(intrusive_ptr const & rhs): p_(rhs.p_)
+    intrusive_ptr(intrusive_ptr const & rhs): px( rhs.px )
     {
-        if(p_ != 0) intrusive_ptr_add_ref(p_);
+        if( px != 0 ) intrusive_ptr_add_ref( px );
     }
 
     ~intrusive_ptr()
     {
-        if(p_ != 0) intrusive_ptr_release(p_);
+        if( px != 0 ) intrusive_ptr_release( px );
     }
 
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) || defined(BOOST_MSVC6_MEMBER_TEMPLATES)
@@ -135,63 +135,34 @@ public:
 
     T * get() const
     {
-        return p_;
+        return px;
     }
 
     T & operator*() const
     {
-        BOOST_ASSERT( p_ != 0 );
-        return *p_;
+        BOOST_ASSERT( px != 0 );
+        return *px;
     }
 
     T * operator->() const
     {
-        BOOST_ASSERT( p_ != 0 );
-        return p_;
+        BOOST_ASSERT( px != 0 );
+        return px;
     }
 
-#if defined(__SUNPRO_CC) && BOOST_WORKAROUND(__SUNPRO_CC, <= 0x530)
-
-    operator bool () const
-    {
-        return p_ != 0;
-    }
-
-#elif defined(__MWERKS__) && BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
-    typedef T * (this_type::*unspecified_bool_type)() const;
-    
-    operator unspecified_bool_type() const // never throws
-    {
-        return p_ == 0? 0: &this_type::get;
-    }
-
-#else 
-
-    typedef T * this_type::*unspecified_bool_type;
-
-    operator unspecified_bool_type () const
-    {
-        return p_ == 0? 0: &this_type::p_;
-    }
-
-#endif
-
-    // operator! is a Borland-specific workaround
-    bool operator! () const
-    {
-        return p_ == 0;
-    }
+// implicit conversion to "bool"
+#include <boost/smart_ptr/detail/operator_bool.hpp>
 
     void swap(intrusive_ptr & rhs)
     {
-        T * tmp = p_;
-        p_ = rhs.p_;
-        rhs.p_ = tmp;
+        T * tmp = px;
+        px = rhs.px;
+        rhs.px = tmp;
     }
 
 private:
 
-    T * p_;
+    T * px;
 };
 
 template<class T, class U> inline bool operator==(intrusive_ptr<T> const & a, intrusive_ptr<U> const & b)

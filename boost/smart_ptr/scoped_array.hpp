@@ -39,7 +39,7 @@ template<class T> class scoped_array // noncopyable
 {
 private:
 
-    T * ptr;
+    T * px;
 
     scoped_array(scoped_array const &);
     scoped_array & operator=(scoped_array const &);
@@ -53,79 +53,48 @@ public:
 
     typedef T element_type;
 
-    explicit scoped_array(T * p = 0) : ptr(p) // never throws
+    explicit scoped_array( T * p = 0 ) : px( p ) // never throws
     {
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
-        boost::sp_array_constructor_hook(ptr);
+        boost::sp_array_constructor_hook( px );
 #endif
     }
 
     ~scoped_array() // never throws
     {
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
-        boost::sp_array_destructor_hook(ptr);
+        boost::sp_array_destructor_hook( px );
 #endif
-        boost::checked_array_delete(ptr);
+        boost::checked_array_delete( px );
     }
 
     void reset(T * p = 0) // never throws
     {
-        BOOST_ASSERT(p == 0 || p != ptr); // catch self-reset errors
+        BOOST_ASSERT( p == 0 || p != px ); // catch self-reset errors
         this_type(p).swap(*this);
     }
 
     T & operator[](std::ptrdiff_t i) const // never throws
     {
-        BOOST_ASSERT(ptr != 0);
-        BOOST_ASSERT(i >= 0);
-        return ptr[i];
+        BOOST_ASSERT( px != 0 );
+        BOOST_ASSERT( i >= 0 );
+        return px[i];
     }
 
     T * get() const // never throws
     {
-        return ptr;
+        return px;
     }
 
-    // implicit conversion to "bool"
-
-#if defined(__SUNPRO_CC) && BOOST_WORKAROUND(__SUNPRO_CC, <= 0x530)
-
-    operator bool () const
-    {
-        return ptr != 0;
-    }
-
-#elif defined(__MWERKS__) && BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
-    typedef T * (this_type::*unspecified_bool_type)() const;
-    
-    operator unspecified_bool_type() const // never throws
-    {
-        return ptr == 0? 0: &this_type::get;
-    }
-
-#else 
-
-    typedef T * this_type::*unspecified_bool_type;
-
-    operator unspecified_bool_type() const // never throws
-    {
-        return ptr == 0? 0: &this_type::ptr;
-    }
-
-#endif
-
-    bool operator! () const // never throws
-    {
-        return ptr == 0;
-    }
+// implicit conversion to "bool"
+#include <boost/smart_ptr/detail/operator_bool.hpp>
 
     void swap(scoped_array & b) // never throws
     {
-        T * tmp = b.ptr;
-        b.ptr = ptr;
-        ptr = tmp;
+        T * tmp = b.px;
+        b.px = px;
+        px = tmp;
     }
-
 };
 
 template<class T> inline void swap(scoped_array<T> & a, scoped_array<T> & b) // never throws
