@@ -38,4 +38,5 @@ test-suite "bind"
       [ run bind_fnobj2_test.cpp ]
       [ run bind_fn2_test.cpp ]
       [ run bind_mf2_test.cpp ]
+      [ run bind_eq2_test.cpp ]
     ;

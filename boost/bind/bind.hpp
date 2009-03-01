@@ -100,6 +100,11 @@ template<class T> bool ref_compare( reference_wrapper<T> const & a, reference_wr
 
 template<class R, class F, class L> class bind_t;
 
+template<class R, class F, class L> bool ref_compare( bind_t<R, F, L> const & a, bind_t<R, F, L> const & b, int )
+{
+    return a.compare( b );
+}
+
 // value
 
 template<class T> class value
