@@ -1,0 +1,4 @@
+  boost::signals2::signal<void ()> sig;
+
+  sig.connect(1, World());  // connect with group 1
+  sig.connect(0, Hello());  // connect with group 0

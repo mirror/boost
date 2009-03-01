@@ -1,0 +1,3 @@
+  Button button;
+  button.doOnClick(&printCoordinates);
+  button.simulateClick();

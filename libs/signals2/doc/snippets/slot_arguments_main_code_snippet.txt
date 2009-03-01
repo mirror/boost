@@ -1,0 +1,9 @@
+  boost::signals2::signal<void (float, float)> sig;
+
+  sig.connect(&print_args);
+  sig.connect(&print_sum);
+  sig.connect(&print_product);
+  sig.connect(&print_difference);
+  sig.connect(&print_quotient);
+
+  sig(5., 3.);

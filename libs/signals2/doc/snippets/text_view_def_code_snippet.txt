@@ -1,0 +1,21 @@
+class TextView
+{
+public:
+    TextView(Document& doc): m_document(doc)
+    {
+        m_connection = m_document.connect(boost::bind(&TextView::refresh, this));
+    }
+
+    ~TextView()
+    {
+        m_connection.disconnect();
+    }
+
+    void refresh() const
+    {
+        std::cout << "TextView: " << m_document.getText() << std::endl;
+    }
+private:
+    Document&               m_document;
+    boost::signals2::connection  m_connection;
+};

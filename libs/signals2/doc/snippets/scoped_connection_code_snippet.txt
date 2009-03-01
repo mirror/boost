@@ -1,0 +1,6 @@
+  {
+    boost::signals2::scoped_connection c(sig.connect(ShortLived()));
+    sig(); // will call ShortLived function object
+  } // scoped_connection goes out of scope and disconnects
+
+  sig(); // ShortLived function object no longer connected to sig

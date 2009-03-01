@@ -1,0 +1,7 @@
+struct GoodMorning
+{
+  void operator()() const
+  {
+    std::cout << "... and good morning!" << std::endl;
+  }
+};

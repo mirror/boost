@@ -1,0 +1,8 @@
+  sig.connect(&product);
+  sig.connect(&quotient);
+  sig.connect(&sum);
+  sig.connect(&difference);
+
+  // Outputs the maximum value returned by the connected slots, in this case
+  // 15 from the product function.
+  std::cout << "maximum: " << sig(5, 3) << std::endl;

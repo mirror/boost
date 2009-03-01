@@ -1,0 +1,11 @@
+  boost::signals2::connection c = sig.connect(HelloWorld());
+  std::cout << "c is not blocked.\n";
+  sig(); // Prints "Hello, World!"
+
+  {
+    boost::signals2::shared_connection_block block(c); // block the slot
+    std::cout << "c is blocked.\n";
+    sig(); // No output: the slot is blocked
+  } // shared_connection_block going out of scope unblocks the slot
+  std::cout << "c is not blocked.\n";
+  sig(); // Prints "Hello, World!"}

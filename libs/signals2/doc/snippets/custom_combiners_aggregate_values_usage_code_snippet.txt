@@ -1,0 +1,10 @@
+  sig.connect(&quotient);
+  sig.connect(&product);
+  sig.connect(&sum);
+  sig.connect(&difference);
+
+  std::vector<float> results = sig(5, 3);
+  std::cout << "aggregate values: ";
+  std::copy(results.begin(), results.end(),
+    std::ostream_iterator<float>(std::cout, " "));
+  std::cout << "\n";

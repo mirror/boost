@@ -1,0 +1,31 @@
+class Document
+{
+public:
+    typedef boost::signals2::signal<void ()>  signal_t;
+
+public:
+    Document()
+    {}
+
+    /* Connect a slot to the signal which will be emitted whenever
+      text is appended to the document. */
+    boost::signals2::connection connect(const signal_t::slot_type &subscriber)
+    {
+        return m_sig.connect(subscriber);
+    }
+
+    void append(const char* s)
+    {
+        m_text += s;
+        m_sig();
+    }
+
+    const std::string& getText() const
+    {
+        return m_text;
+    }
+
+private:
+    signal_t    m_sig;
+    std::string m_text;
+};

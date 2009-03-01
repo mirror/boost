@@ -1,0 +1,8 @@
+  // by default slots are connected at the end of the slot list
+  sig.connect(GoodMorning());
+
+  // slots are invoked this order:
+  // 1) ungrouped slots connected with boost::signals2::at_front
+  // 2) grouped slots according to ordering of their groups
+  // 3) ungrouped slots connected with boost::signals2::at_back
+  sig();

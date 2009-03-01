@@ -1,0 +1,2 @@
+void foo() { std::cout << "foo"; }
+void bar() { std::cout << "bar\n"; }
