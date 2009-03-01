@@ -8,7 +8,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#include <boost/detail/yield_k.hpp>
+#include <boost/smart_ptr/detail/yield_k.hpp>
 
 // Sanity check only
 
