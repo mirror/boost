@@ -60,6 +60,11 @@ public:
     {
     }
 
+    // optimization: do not copy storage_
+    sp_ms_deleter( sp_ms_deleter const & ): initialized_( false )
+    {
+    }
+
     ~sp_ms_deleter()
     {
         destroy();
