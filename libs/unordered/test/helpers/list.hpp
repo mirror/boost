@@ -144,6 +144,7 @@ namespace test
         list& operator=(list const& other) {
             clear();
             insert(other.begin(), other.end());
+            return *this;
         }
 
         iterator begin() { return iterator(data_.first_); }
