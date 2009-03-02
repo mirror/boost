@@ -17,7 +17,11 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#include <bits/atomicity.h>
+#if __GNUC__ * 100 + __GNUC_MINOR__ >= 402
+# include <ext/atomicity.h> 
+#else 
+# include <bits/atomicity.h>
+#endif
 
 namespace boost
 {

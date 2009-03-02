@@ -18,6 +18,7 @@
 //
 
 #include <boost/config.hpp>
+#include <boost/smart_ptr/detail/sp_has_sync.hpp>
 
 #if defined( BOOST_SP_DISABLE_THREADS )
 # include <boost/smart_ptr/detail/sp_counted_base_nt.hpp>
@@ -46,13 +47,13 @@
 #elif defined( __GNUC__ ) && ( defined( __powerpc__ ) || defined( __ppc__ ) || defined( __ppc ) )
 # include <boost/smart_ptr/detail/sp_counted_base_gcc_ppc.hpp>
 
-#elif defined(__GNUC__) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 401 ) && !defined( __arm__ ) && !defined( __hppa ) && ( !defined( __INTEL_COMPILER ) || defined( __ia64__ ) )
+#elif defined( BOOST_SP_HAS_SYNC )
 # include <boost/smart_ptr/detail/sp_counted_base_sync.hpp>
 
 #elif defined(__GNUC__) && ( defined( __sparcv9 ) || ( defined( __sparcv8 ) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 402 ) ) )
 # include <boost/smart_ptr/detail/sp_counted_base_gcc_sparc.hpp>
 
-#elif defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ )
+#elif defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ ) || defined(__CYGWIN__)
 # include <boost/smart_ptr/detail/sp_counted_base_w32.hpp>
 
 #elif !defined( BOOST_HAS_THREADS )
