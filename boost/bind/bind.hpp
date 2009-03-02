@@ -1615,7 +1615,7 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 // data member pointers
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) \
-    || ( defined(__BORLANDC__) && BOOST_WORKAROUND( __BORLANDC__, < 0x600 ) )
+    || ( defined(__BORLANDC__) && BOOST_WORKAROUND( __BORLANDC__, <= 0x610 ) )
 
 template<class R, class T, class A1>
 _bi::bind_t< R, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
