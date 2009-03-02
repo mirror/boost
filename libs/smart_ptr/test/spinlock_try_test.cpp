@@ -8,7 +8,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#include <boost/detail/spinlock.hpp>
+#include <boost/smart_ptr/detail/spinlock.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
 // Sanity check only
