@@ -319,7 +319,7 @@ public:
 
     weak_count(shared_count const & r): pi_(r.pi_) // nothrow
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
-        , id_(shared_count_id)
+        , id_(weak_count_id)
 #endif
     {
         if(pi_ != 0) pi_->weak_add_ref();
@@ -327,7 +327,7 @@ public:
 
     weak_count(weak_count const & r): pi_(r.pi_) // nothrow
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
-        , id_(shared_count_id)
+        , id_(weak_count_id)
 #endif
     {
         if(pi_ != 0) pi_->weak_add_ref();
