@@ -94,54 +94,8 @@ public:
         return px;
     }
 
-    // implicit conversion to "bool"
-
-#if defined(__SUNPRO_CC) && BOOST_WORKAROUND(__SUNPRO_CC, <= 0x530)
-
-    operator bool () const
-    {
-        return px != 0;
-    }
-
-#elif defined( _MANAGED )
-
-    static void unspecified_bool( this_type*** )
-    {
-    }
-
-    typedef void (*unspecified_bool_type)( this_type*** );
-
-    operator unspecified_bool_type() const // never throws
-    {
-        return px == 0? 0: unspecified_bool;
-    }
-
-#elif \
-    ( defined(__MWERKS__) && BOOST_WORKAROUND(__MWERKS__, < 0x3200) ) || \
-    ( defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__ < 304) )
-
-    typedef T * (this_type::*unspecified_bool_type)() const;
-    
-    operator unspecified_bool_type() const // never throws
-    {
-        return px == 0? 0: &this_type::get;
-    }
-
-#else 
-
-    typedef T * this_type::*unspecified_bool_type;
-
-    operator unspecified_bool_type() const // never throws
-    {
-        return px == 0? 0: &this_type::px;
-    }
-
-#endif
-
-    bool operator! () const // never throws
-    {
-        return px == 0;
-    }
+// implicit conversion to "bool"
+#include <boost/smart_ptr/detail/operator_bool.hpp>
 
     bool unique() const // never throws
     {
