@@ -105,10 +105,13 @@ template< class T > boost::shared_ptr< T > make_shared()
 
     void * pv = pd->address();
 
-    new( pv ) T();
+    ::new( pv ) T();
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A > boost::shared_ptr< T > allocate_shared( A const & a )
@@ -119,10 +122,13 @@ template< class T, class A > boost::shared_ptr< T > allocate_shared( A const & a
 
     void * pv = pd->address();
 
-    new( pv ) T();
+    ::new( pv ) T();
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 #if defined( BOOST_HAS_VARIADIC_TMPL ) && defined( BOOST_HAS_RVALUE_REFS )
@@ -137,10 +143,13 @@ template< class T, class... Args > boost::shared_ptr< T > make_shared( Args && .
 
     void * pv = pd->address();
 
-    new( pv ) T( detail::forward<Args>( args )... );
+    ::new( pv ) T( detail::forward<Args>( args )... );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A, class... Args > boost::shared_ptr< T > allocate_shared( A const & a, Args && ... args )
@@ -151,10 +160,13 @@ template< class T, class A, class... Args > boost::shared_ptr< T > allocate_shar
 
     void * pv = pd->address();
 
-    new( pv ) T( detail::forward<Args>( args )... );
+    ::new( pv ) T( detail::forward<Args>( args )... );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 #else
@@ -170,10 +182,13 @@ boost::shared_ptr< T > make_shared( A1 const & a1 )
 
     void * pv = pd->address();
 
-    new( pv ) T( a1 );
+    ::new( pv ) T( a1 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A, class A1 >
@@ -185,10 +200,13 @@ boost::shared_ptr< T > allocate_shared( A const & a, A1 const & a1 )
 
     void * pv = pd->address();
 
-    new( pv ) T( a1 );
+    ::new( pv ) T( a1 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A1, class A2 >
@@ -200,10 +218,13 @@ boost::shared_ptr< T > make_shared( A1 const & a1, A2 const & a2 )
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2 );
+    ::new( pv ) T( a1, a2 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A, class A1, class A2 >
@@ -215,10 +236,13 @@ boost::shared_ptr< T > allocate_shared( A const & a, A1 const & a1, A2 const & a
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2 );
+    ::new( pv ) T( a1, a2 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A1, class A2, class A3 >
@@ -230,10 +254,13 @@ boost::shared_ptr< T > make_shared( A1 const & a1, A2 const & a2, A3 const & a3 
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3 );
+    ::new( pv ) T( a1, a2, a3 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A, class A1, class A2, class A3 >
@@ -245,10 +272,13 @@ boost::shared_ptr< T > allocate_shared( A const & a, A1 const & a1, A2 const & a
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3 );
+    ::new( pv ) T( a1, a2, a3 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A1, class A2, class A3, class A4 >
@@ -260,10 +290,13 @@ boost::shared_ptr< T > make_shared( A1 const & a1, A2 const & a2, A3 const & a3,
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3, a4 );
+    ::new( pv ) T( a1, a2, a3, a4 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A, class A1, class A2, class A3, class A4 >
@@ -275,10 +308,13 @@ boost::shared_ptr< T > allocate_shared( A const & a, A1 const & a1, A2 const & a
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3, a4 );
+    ::new( pv ) T( a1, a2, a3, a4 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A1, class A2, class A3, class A4, class A5 >
@@ -290,10 +326,13 @@ boost::shared_ptr< T > make_shared( A1 const & a1, A2 const & a2, A3 const & a3,
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3, a4, a5 );
+    ::new( pv ) T( a1, a2, a3, a4, a5 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A, class A1, class A2, class A3, class A4, class A5 >
@@ -305,10 +344,13 @@ boost::shared_ptr< T > allocate_shared( A const & a, A1 const & a1, A2 const & a
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3, a4, a5 );
+    ::new( pv ) T( a1, a2, a3, a4, a5 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A1, class A2, class A3, class A4, class A5, class A6 >
@@ -320,10 +362,13 @@ boost::shared_ptr< T > make_shared( A1 const & a1, A2 const & a2, A3 const & a3,
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3, a4, a5, a6 );
+    ::new( pv ) T( a1, a2, a3, a4, a5, a6 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A, class A1, class A2, class A3, class A4, class A5, class A6 >
@@ -335,10 +380,13 @@ boost::shared_ptr< T > allocate_shared( A const & a, A1 const & a1, A2 const & a
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3, a4, a5, a6 );
+    ::new( pv ) T( a1, a2, a3, a4, a5, a6 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7 >
@@ -350,10 +398,13 @@ boost::shared_ptr< T > make_shared( A1 const & a1, A2 const & a2, A3 const & a3,
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3, a4, a5, a6, a7 );
+    ::new( pv ) T( a1, a2, a3, a4, a5, a6, a7 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A, class A1, class A2, class A3, class A4, class A5, class A6, class A7 >
@@ -365,10 +416,13 @@ boost::shared_ptr< T > allocate_shared( A const & a, A1 const & a1, A2 const & a
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3, a4, a5, a6, a7 );
+    ::new( pv ) T( a1, a2, a3, a4, a5, a6, a7 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8 >
@@ -380,10 +434,13 @@ boost::shared_ptr< T > make_shared( A1 const & a1, A2 const & a2, A3 const & a3,
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3, a4, a5, a6, a7, a8 );
+    ::new( pv ) T( a1, a2, a3, a4, a5, a6, a7, a8 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8 >
@@ -395,10 +452,13 @@ boost::shared_ptr< T > allocate_shared( A const & a, A1 const & a1, A2 const & a
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3, a4, a5, a6, a7, a8 );
+    ::new( pv ) T( a1, a2, a3, a4, a5, a6, a7, a8 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9 >
@@ -410,10 +470,13 @@ boost::shared_ptr< T > make_shared( A1 const & a1, A2 const & a2, A3 const & a3,
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3, a4, a5, a6, a7, a8, a9 );
+    ::new( pv ) T( a1, a2, a3, a4, a5, a6, a7, a8, a9 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 template< class T, class A, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9 >
@@ -425,10 +488,13 @@ boost::shared_ptr< T > allocate_shared( A const & a, A1 const & a1, A2 const & a
 
     void * pv = pd->address();
 
-    new( pv ) T( a1, a2, a3, a4, a5, a6, a7, a8, a9 );
+    ::new( pv ) T( a1, a2, a3, a4, a5, a6, a7, a8, a9 );
     pd->set_initialized();
 
-    return boost::shared_ptr< T >( pt, static_cast< T* >( pv ) );
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
 }
 
 #endif

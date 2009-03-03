@@ -4,11 +4,11 @@
 //
 //  enable_shared_from_this.hpp
 //
-//  Copyright (c) 2002 Peter Dimov
+//  Copyright 2002, 2009 Peter Dimov
 //
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
+//  Distributed under the Boost Software License, Version 1.0.
+//  See accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt
 //
 //  http://www.boost.org/libs/smart_ptr/enable_shared_from_this.html
 //
@@ -46,26 +46,32 @@ public:
 
     shared_ptr<T> shared_from_this()
     {
-        shared_ptr<T> p(_internal_weak_this);
-        BOOST_ASSERT(p.get() == this);
+        shared_ptr<T> p( weak_this_ );
+        BOOST_ASSERT( p.get() == this );
         return p;
     }
 
     shared_ptr<T const> shared_from_this() const
     {
-        shared_ptr<T const> p(_internal_weak_this);
-        BOOST_ASSERT(p.get() == this);
+        shared_ptr<T const> p( weak_this_ );
+        BOOST_ASSERT( p.get() == this );
         return p;
     }
 
-//  Note: No, you don't need to initialize _internal_weak_this
-//
-//  Please read the documentation, not the code
-//
-//  http://www.boost.org/libs/smart_ptr/enable_shared_from_this.html
+public: // actually private, but avoids compiler template friendship issues
 
-    typedef T _internal_element_type; // for bcc 5.5.1
-    mutable weak_ptr<_internal_element_type> _internal_weak_this;
+    // Note: invoked automatically by shared_ptr; do not call
+    template<class X, class Y> void _internal_accept_owner( shared_ptr<X> const * ppx, Y * py ) const
+    {
+        if( weak_this_.expired() )
+        {
+            weak_this_ = shared_ptr<T>( *ppx, py );
+        }
+    }
+
+private:
+
+    mutable weak_ptr<T> weak_this_;
 };
 
 } // namespace boost

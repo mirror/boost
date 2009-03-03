@@ -48,5 +48,9 @@ import testing ;
           [ run ip_convertible_test.cpp ]
           [ run allocate_shared_test.cpp ]
           [ run sp_atomic_test.cpp ]
+          [ run esft_void_test.cpp ]
+          [ run esft_second_ptr_test.cpp ]
+          [ run make_shared_esft_test.cpp ]
+          [ run allocate_shared_esft_test.cpp ]
         ;
 }

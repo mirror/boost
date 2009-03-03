@@ -8,6 +8,8 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
+#if defined( BOOST_HAS_RVALUE_REFS )
+
 #include <boost/shared_ptr.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
@@ -93,3 +95,12 @@ int main()
 
     return boost::report_errors();
 }
+
+#else // !defined( BOOST_HAS_RVALUE_REFS )
+
+int main()
+{
+    return 0;
+}
+
+#endif
