@@ -29,7 +29,8 @@ namespace boost {
     };
 
     template<typename T>
-    struct last_value {
+    class last_value {
+    public:
       typedef T result_type;
 
       template<typename InputIterator>
