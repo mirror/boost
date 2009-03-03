@@ -28,7 +28,7 @@
 # include <boost/signals2/detail/lwm_nop.hpp>
 #elif defined(BOOST_HAS_PTHREADS)
 #  include <boost/signals2/detail/lwm_pthreads.hpp>
-#elif defined(BOOST_HAS_WINTHREADS) || defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+#elif defined(BOOST_HAS_WINTHREADS)
 #  include <boost/signals2/detail/lwm_win32_cs.hpp>
 #else
 // Use #define BOOST_DISABLE_THREADS to avoid the error

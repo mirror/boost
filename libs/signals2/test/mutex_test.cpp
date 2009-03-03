@@ -267,7 +267,7 @@ void do_test_mutex()
 {
     test_lock<boost::signals2::mutex>()();
 // try_lock not supported on old versions of windows
-#if !defined(BOOST_HAS_WINTHREADS) || (defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400))
+#if !defined(BOOST_HAS_WINTHREADS) || (defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400)) || (defined(NTDDI_VERSION) && NTDDI_VERSION >= NTDDI_WIN2K)
     test_trylock<boost::signals2::mutex>()();
 #endif
     test_lock_exclusion<boost::signals2::mutex>()();
