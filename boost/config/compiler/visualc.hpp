@@ -184,6 +184,10 @@
 #     define BOOST_COMPILER_VERSION evc4.0
 #   elif _MSC_VER == 1400
 #     define BOOST_COMPILER_VERSION evc8
+#   elif _MSC_VER == 1500
+#     define BOOST_COMPILER_VERSION evc9
+#   elif _MSC_VER == 1600
+#     define BOOST_COMPILER_VERSION evc10
 #   else
 #      if defined(BOOST_ASSERT_CONFIG)
 #         error "Unknown EVC++ compiler version - please run the configure tests and report the results"
