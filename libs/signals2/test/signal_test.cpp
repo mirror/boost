@@ -164,6 +164,15 @@ template<typename ResultType>
   return ResultType();
 }
 
+#ifdef BOOST_NO_VOID_RETURNS
+template<>
+  void disconnecting_slot<void>(const boost::signals2::connection &conn, int)
+{
+  conn.disconnect();
+  return;
+}
+#endif
+
 template<typename ResultType>
   void test_extended_slot()
 {
