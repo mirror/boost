@@ -85,7 +85,7 @@ struct Foo :
         
         <inherit><classname>proto::transform</classname>&lt; make&lt;T&gt; &gt;</inherit>
         
-        <purpose>A <conceptname>PrimitiveTransform</conceptname> which computes a type by evaluating
+        <purpose>A <conceptname>PrimitiveTransform</conceptname> that computes a type by evaluating
           any nested transforms and then constructs an object of that type. </purpose>
         
         <description>
@@ -124,20 +124,28 @@ struct Foo :
 
               <para>
                 If <computeroutput>T</computeroutput> is an <conceptname>ObjectTransform</conceptname> of the form
-                <computeroutput>
-                  Object(A<subscript>0</subscript>,...A<subscript>n</subscript>)
-                </computeroutput>, then let <computeroutput>O</computeroutput> be
-                the return type <computeroutput>Object</computeroutput>. Otherwise, let <computeroutput>O</computeroutput>
+                <computeroutput>Object(A<subscript>0</subscript>,...A<subscript>n</subscript>)</computeroutput>,
+                then let <computeroutput>O</computeroutput> be the return type
+                <computeroutput>Object</computeroutput>. Otherwise, let <computeroutput>O</computeroutput>
                 be <computeroutput>T</computeroutput>. The <computeroutput>result_type</computeroutput> typedef is
                 then computed as follows:
               </para>
               <para>
                 <itemizedlist>
                   <listitem>
-                    If <computeroutput>O</computeroutput> is a template like
-                    <computeroutput>
-                      S&lt;X<subscript>0</subscript>,...X<subscript>n</subscript>&gt;
-                    </computeroutput>, then the result type is calculated as follows:
+                    <para>
+                      If <computeroutput>O</computeroutput> is a <conceptname>Transform</conceptname>, then let
+                      the result type be
+                      <computeroutput>
+                        boost::result_of&lt;<classname>proto::when</classname>&lt;<classname>_</classname>, O&gt;(Expr, State, Data)&gt;::type
+                      </computeroutput>.
+                      Note that a substitution took place.
+                    </para>
+                  </listitem>
+                  <listitem>
+                    Otherwise, if <computeroutput>O</computeroutput> is a template like
+                    <computeroutput>S&lt;X<subscript>0</subscript>,...X<subscript>n</subscript>&gt;</computeroutput>,
+                    then the result type is calculated as follows:
                     <itemizedlist>
                       <listitem>
                         <para>
@@ -173,16 +181,6 @@ struct Foo :
                         </para>
                       </listitem>
                     </itemizedlist>
-                  </listitem>
-                  <listitem>
-                    <para>
-                      Otherwise, if <computeroutput>O</computeroutput> is a <conceptname>Transform</conceptname>, then let
-                      the result type be
-                      <computeroutput>
-                        boost::result_of&lt;<classname>proto::when</classname>&lt;<classname>_</classname>, O&gt;(Expr, State, Data)&gt;::type
-                      </computeroutput>.
-                      Note that a substitution took place.
-                    </para>
                   </listitem>
                   <listitem>
                     Otherwise, the result type is <computeroutput>O</computeroutput>, and note that no

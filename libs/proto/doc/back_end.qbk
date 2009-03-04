@@ -19,7 +19,7 @@ Now that you've written the front end for your DSEL compiler, and you've learned
   expression, but with rules in a Proto grammar. In this way, they are like 
   semantic actions in other compiler-construction toolkits.
 
-Two ways to evaluate expressions! How to choose? Contexts are a bit simpler to understand and to debug, since they are largely procedural, so contexts are a good place to start. But although transforms are more advanced, they are also more powerful; since they are associated with rules in your grammar, you can select the proper transform based on the entire /structure/ of a sub-expression rather than simply on the type of its top-most node.
+Two ways to evaluate expressions! How to choose? Since contexts are largely procedural, they are a bit simpler to understand and debug so they are a good place to start. But although transforms are more advanced, they are also more powerful; since they are associated with rules in your grammar, you can select the proper transform based on the entire /structure/ of a sub-expression rather than simply on the type of its top-most node.
 
 Also, transforms have a concise and declarative syntax that can be confusing at first, but highly expressive and fungible once you become accustomed to it. And -- this is admittedly very subjective -- the author finds programming with Proto transforms to be an inordinate amount of /fun!/ Your mileage may vary.
 
