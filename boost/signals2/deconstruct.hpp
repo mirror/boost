@@ -37,17 +37,6 @@ namespace boost
 {
   template<typename T> class enable_shared_from_this;
 
-  // fallback implementations of sp_accept_owner for older boost releases that don't support sp_accept_owner
-  template< class Y >
-    void sp_accept_owner( shared_ptr<Y> * ptr, ... )
-  {
-  }
-  template< class T, class Y >
-    void sp_accept_owner( shared_ptr<Y> * ptr, enable_shared_from_this<T> const * pe, ... /*pd*/ )
-  {
-    pe->_internal_weak_this = *ptr;
-  }
-
 namespace signals2
 {
   class deconstruct_access;
@@ -71,50 +60,78 @@ public:
     }
     const shared_ptr<T>& postconstruct() const
     {
-        adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()));
+        if(!_postconstructed)
+        {
+            adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()));
+            _postconstructed = true;
+        }
         return _sp;
     }
 #if defined( BOOST_HAS_VARIADIC_TMPL ) && defined( BOOST_HAS_RVALUE_REFS )
     template<class T, class... Args>
       const shared_ptr<T>& postconstruct(Args && ... args)
     {
-      adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
-        detail::forward<Args>(args)...);
+        if(!_postconstructed)
+        {
+            adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
+                detail::forward<Args>(args)...);
+            _postconstructed = true;
+        }
     }
 #else
     template<typename A1>
       const shared_ptr<T>& postconstruct(const A1 &a1) const
     {
-        adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
-          a1);
+        if(!_postconstructed)
+        {
+            adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
+                a1);
+            _postconstructed = true;
+        }
         return _sp;
     }
     template<typename A1, typename A2>
       const shared_ptr<T>& postconstruct(const A1 &a1, const A2 &a2) const
     {
-        adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
-          a1, a2);
+        if(!_postconstructed)
+        {
+            adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
+                a1, a2);
+            _postconstructed = true;
+        }
         return _sp;
     }
     template<typename A1, typename A2, typename A3>
       const shared_ptr<T>& postconstruct(const A1 &a1, const A2 &a2, const A3 &a3) const
     {
-        adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
-          a1, a2, a3);
+        if(!_postconstructed)
+        {
+            adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
+                a1, a2, a3);
+            _postconstructed = true;
+        }
         return _sp;
     }
     template<typename A1, typename A2, typename A3, typename A4>
       const shared_ptr<T>& postconstruct(const A1 &a1, const A2 &a2, const A3 &a3, const A4 &a4) const
     {
-        adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
-          a1, a2, a3, a4);
+        if(!_postconstructed)
+        {
+            adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
+                a1, a2, a3, a4);
+            _postconstructed = true;
+        }
         return _sp;
     }
     template<typename A1, typename A2, typename A3, typename A4, typename A5>
       const shared_ptr<T>& postconstruct(const A1 &a1, const A2 &a2, const A3 &a3, const A4 &a4, const A5 &a5) const
     {
-        adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
-          a1, a2, a3, a4, a5);
+        if(!_postconstructed)
+        {
+            adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
+                a1, a2, a3, a4, a5);
+            _postconstructed = true;
+        }
         return _sp;
     }
     template<typename A1, typename A2, typename A3, typename A4, typename A5,
@@ -122,8 +139,12 @@ public:
       const shared_ptr<T>& postconstruct(const A1 &a1, const A2 &a2, const A3 &a3, const A4 &a4, const A5 &a5,
       const A6 &a6) const
     {
-        adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
-          a1, a2, a3, a4, a5, a6);
+        if(!_postconstructed)
+        {
+            adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
+                a1, a2, a3, a4, a5, a6);
+            _postconstructed = true;
+        }
         return _sp;
     }
     template<typename A1, typename A2, typename A3, typename A4, typename A5,
@@ -131,8 +152,12 @@ public:
       const shared_ptr<T>& postconstruct(const A1 &a1, const A2 &a2, const A3 &a3, const A4 &a4, const A5 &a5,
       const A6 &a6, const A7 &a7) const
     {
-        adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
-          a1, a2, a3, a4, a5, a6, a7);
+        if(!_postconstructed)
+        {
+            adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
+                a1, a2, a3, a4, a5, a6, a7);
+            _postconstructed = true;
+        }
         return _sp;
     }
     template<typename A1, typename A2, typename A3, typename A4, typename A5,
@@ -140,8 +165,12 @@ public:
       const shared_ptr<T>& postconstruct(const A1 &a1, const A2 &a2, const A3 &a3, const A4 &a4, const A5 &a5,
       const A6 &a6, const A7 &a7, const A8 &a8) const
     {
-        adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
-          a1, a2, a3, a4, a5, a6, a7, a8);
+        if(!_postconstructed)
+        {
+            adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
+                a1, a2, a3, a4, a5, a6, a7, a8);
+            _postconstructed = true;
+        }
         return _sp;
     }
     template<typename A1, typename A2, typename A3, typename A4, typename A5,
@@ -149,17 +178,22 @@ public:
       const shared_ptr<T>& postconstruct(const A1 &a1, const A2 &a2, const A3 &a3, const A4 &a4, const A5 &a5,
       const A6 &a6, const A7 &a7, const A8 &a8, const A9 &a9) const
     {
-        adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
-          a1, a2, a3, a4, a5, a6, a7, a8, a9);
+        if(!_postconstructed)
+        {
+            adl_postconstruct(_sp, const_cast<typename boost::remove_const<T>::type *>(_sp.get()),
+                a1, a2, a3, a4, a5, a6, a7, a8, a9);
+            _postconstructed = true;
+        }
         return _sp;
     }
 #endif // else defined( BOOST_HAS_VARIADIC_TMPL ) && defined( BOOST_HAS_RVALUE_REFS )
 private:
     friend class boost::signals2::deconstruct_access;
     postconstructor_invoker(const shared_ptr<T> & sp):
-        _sp(sp)
+        _sp(sp), _postconstructed(false)
     {}
     shared_ptr<T> _sp;
+    mutable bool _postconstructed;
 };
 
 namespace detail
@@ -248,7 +282,7 @@ public:
         pd->set_initialized();
 
         boost::shared_ptr< T > retval( pt, static_cast< T* >( pv ) );
-        sp_accept_owner(&retval, retval.get(), pd);
+        boost::detail::sp_enable_shared_from_this(&retval, retval.get(), retval.get());
         return retval;
 
     }
@@ -270,7 +304,7 @@ public:
         pd->set_initialized();
 
         boost::shared_ptr< T > retval( pt, static_cast< T* >( pv ) );
-        sp_accept_owner(&retval, retval.get(), pd);
+        boost::detail::sp_enable_shared_from_this(&retval, retval.get(), retval.get());
         return retval;
     }
 
@@ -289,7 +323,7 @@ public:
         pd->set_initialized();
 
         boost::shared_ptr< T > retval( pt, static_cast< T* >( pv ) );
-        sp_accept_owner(&retval, retval.get(), pd);
+        boost::detail::sp_enable_shared_from_this(&retval, retval.get(), retval.get());
         return retval;
     }
 
@@ -306,7 +340,7 @@ public:
         pd->set_initialized();
 
         boost::shared_ptr< T > retval( pt, static_cast< T* >( pv ) );
-        sp_accept_owner(&retval, retval.get(), pd);
+        boost::detail::sp_enable_shared_from_this(&retval, retval.get(), retval.get());
         return retval;
     }
 
@@ -323,7 +357,7 @@ public:
         pd->set_initialized();
 
         boost::shared_ptr< T > retval( pt, static_cast< T* >( pv ) );
-        sp_accept_owner(&retval, retval.get(), pd);
+        boost::detail::sp_enable_shared_from_this(&retval, retval.get(), retval.get());
         return retval;
     }
 
@@ -340,7 +374,7 @@ public:
         pd->set_initialized();
 
         boost::shared_ptr< T > retval( pt, static_cast< T* >( pv ) );
-        sp_accept_owner(&retval, retval.get(), pd);
+        boost::detail::sp_enable_shared_from_this(&retval, retval.get(), retval.get());
         return retval;
     }
 
@@ -357,7 +391,7 @@ public:
         pd->set_initialized();
 
         boost::shared_ptr< T > retval( pt, static_cast< T* >( pv ) );
-        sp_accept_owner(&retval, retval.get(), pd);
+        boost::detail::sp_enable_shared_from_this(&retval, retval.get(), retval.get());
         return retval;
     }
 
@@ -374,7 +408,7 @@ public:
         pd->set_initialized();
 
         boost::shared_ptr< T > retval( pt, static_cast< T* >( pv ) );
-        sp_accept_owner(&retval, retval.get(), pd);
+        boost::detail::sp_enable_shared_from_this(&retval, retval.get(), retval.get());
         return retval;
     }
 
@@ -391,7 +425,7 @@ public:
         pd->set_initialized();
 
         boost::shared_ptr< T > retval( pt, static_cast< T* >( pv ) );
-        sp_accept_owner(&retval, retval.get(), pd);
+        boost::detail::sp_enable_shared_from_this(&retval, retval.get(), retval.get());
         return retval;
     }
 
@@ -408,7 +442,7 @@ public:
         pd->set_initialized();
 
         boost::shared_ptr< T > retval( pt, static_cast< T* >( pv ) );
-        sp_accept_owner(&retval, retval.get(), pd);
+        boost::detail::sp_enable_shared_from_this(&retval, retval.get(), retval.get());
         return retval;
     }
 
@@ -425,7 +459,7 @@ public:
         pd->set_initialized();
 
         boost::shared_ptr< T > retval( pt, static_cast< T* >( pv ) );
-        sp_accept_owner(&retval, retval.get(), pd);
+        boost::detail::sp_enable_shared_from_this(&retval, retval.get(), retval.get());
         return retval;
     }
 
