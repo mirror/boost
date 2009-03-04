@@ -389,7 +389,7 @@ With the new `calculator<>` type, we can redefine our placeholders to be statica
 
 We need to make one additional small change to accommodate the POD-ness of our expression extension, which we'll describe below in the section on expression generators.
 
-What does _EXTENDS_ do? It defines a data member of expression type being extended; some nested typedefs that Proto requires; `operator=`, `operator[]` and `operator()` overloads for building expression templates; and a nested `result<>` template for calculating the return type of `operator()`. In this case, however, the `operator()` overloads and the `result<>` template are not needed because we are defining our own `operator()` in the `calculator<>` type. Proto provides additional macros for finer control over which member functions are defined. We could improve our `calculator<>` type as follows:
+What does _EXTENDS_ do? It defines a data member of the expression type being extended; some nested typedefs that Proto requires; `operator=`, `operator[]` and `operator()` overloads for building expression templates; and a nested `result<>` template for calculating the return type of `operator()`. In this case, however, the `operator()` overloads and the `result<>` template are not needed because we are defining our own `operator()` in the `calculator<>` type. Proto provides additional macros for finer control over which member functions are defined. We could improve our `calculator<>` type as follows:
 
     // The calculator<> expression wrapper makes expressions
     // function objects.
