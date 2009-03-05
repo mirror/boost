@@ -233,28 +233,31 @@ template <class A> struct contentsof_type<const A> {
   // the IF is because the A::reference in the primary template could
   // be some class type rather than a real reference, hence
   // we do not want to make it a reference here either
-    typedef typename detail::IF<
+  typedef typename boost::remove_reference<type1>::type no_reference;
+  typedef typename detail::IF<
       is_reference<type1>::value, 
-      const typename boost::remove_reference<type1>::type &,
-      const type1
+      const no_reference &,
+      const no_reference
   >::RET type;
 };
 
 template <class A> struct contentsof_type<volatile A> {
   typedef typename contentsof_type<A>::type type1;
+  typedef typename boost::remove_reference<type1>::type no_reference;
   typedef typename detail::IF<
     is_reference<type1>::value, 
-    volatile typename boost::remove_reference<type1>::type &,
-    volatile type1
+    volatile no_reference &,
+    volatile no_reference
   >::RET type;
 };
 
 template <class A> struct contentsof_type<const volatile A> {
   typedef typename contentsof_type<A>::type type1;
+  typedef typename boost::remove_reference<type1>::type no_reference;
   typedef typename detail::IF<
     is_reference<type1>::value, 
-    const volatile typename boost::remove_reference<type1>::type &,
-    const volatile type1
+    const volatile no_reference &,
+    const volatile no_reference
   >::RET type;
 };
 

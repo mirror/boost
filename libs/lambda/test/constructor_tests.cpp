@@ -24,6 +24,10 @@
 #include <algorithm>
 #include <vector>
 
+#ifdef BOOST_MSVC
+#pragma warning(disable:4512)
+#endif
+
 using namespace boost::lambda;
 using namespace std;
 
@@ -34,7 +38,7 @@ bool check_tuple(int n, const T& t)
 }
 
 template <>
-bool check_tuple(int n, const null_type& ) { return true; }
+bool check_tuple(int /*n*/, const null_type& ) { return true; }
 
 
 void constructor_all_lengths() 
@@ -183,7 +187,7 @@ public:
 void test_destructor ()
 { 
   char space[sizeof(is_destructor_called)];
-  bool flag;
+  bool flag = false;
 
   is_destructor_called* idc = new(space) is_destructor_called(flag);
   BOOST_CHECK(flag == false);

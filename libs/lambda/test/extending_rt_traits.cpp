@@ -16,12 +16,15 @@
 
 #include "boost/lambda/bind.hpp"
 #include "boost/lambda/lambda.hpp"
+#include "boost/lambda/detail/suppress_unused.hpp"
 
 #include <iostream>
 
 #include <functional>
 
 #include <algorithm>
+
+using boost::lambda::detail::suppress_unused_variable_warnings;
 
 class A {};
 class B {};
@@ -81,7 +84,7 @@ struct plain_return_type_1<other_action<contentsof_action>, A> {
 } // lambda
 } // boost
 
-void ok(B b) {}
+void ok(B /*b*/) {}
 
 void test_unary_operators() 
 {
@@ -127,7 +130,7 @@ class my_vector {};
 
 template<class A, class B> 
 my_vector<typename return_type_2<arithmetic_action<plus_action>, A&, B&>::type>
-operator+(const my_vector<A>& a, const my_vector<B>& b)
+operator+(const my_vector<A>& /*a*/, const my_vector<B>& /*b*/)
 {
   typedef typename 
     return_type_2<arithmetic_action<plus_action>, A&, B&>::type res_type;
@@ -175,8 +178,8 @@ Z operator^=( X&, const Y&) { return Z(); }
 // assignment
 class Assign {
 public:
-  void operator=(const Assign& a) {}
-  X operator[](const int& i) { return X(); }
+  void operator=(const Assign& /*a*/) {}
+  X operator[](const int& /*i*/) { return X(); }
 };
 
 
@@ -329,8 +332,15 @@ void test_binary_operators() {
   XX dummy3 = (_1 * _2)(vxx, vyy);
   VV dummy4 = (_1 * _2)(cvxx, cvyy);
 
+  suppress_unused_variable_warnings(dummy1);
+  suppress_unused_variable_warnings(dummy2);
+  suppress_unused_variable_warnings(dummy3);
+  suppress_unused_variable_warnings(dummy4);
+
   my_vector<int> v1; my_vector<double> v2;
   my_vector<double> d = (_1 + _2)(v1, v2);
+
+  suppress_unused_variable_warnings(d);
 
   // bitwise
 
