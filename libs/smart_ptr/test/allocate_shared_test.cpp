@@ -10,6 +10,7 @@
 #include <boost/make_shared.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <cstddef>
 
 class X
 {
@@ -17,6 +18,14 @@ private:
 
     X( X const & );
     X & operator=( X const & );
+
+    void * operator new( std::size_t );
+
+    void operator delete( void * p )
+    {
+        // lack of this definition causes link errors on MSVC
+        ::operator delete( p );
+    }
 
 public:
 

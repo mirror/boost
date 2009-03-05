@@ -55,16 +55,23 @@ void test()
     BOOST_TEST(py.get() != 0);
     BOOST_TEST(py.use_count() == 1);
 
-    boost::shared_ptr<X> px = py->getX();
-    BOOST_TEST(px.get() != 0);
-    BOOST_TEST(py.use_count() == 2);
+    try
+    {
+        boost::shared_ptr<X> px = py->getX();
+        BOOST_TEST(px.get() != 0);
+        BOOST_TEST(py.use_count() == 2);
 
-    px->f();
+        px->f();
 
-    boost::shared_ptr<Y> py2 = boost::dynamic_pointer_cast<Y>(px);
-    BOOST_TEST(py.get() == py2.get());
-    BOOST_TEST(!(py < py2 || py2 < py));
-    BOOST_TEST(py.use_count() == 3);
+        boost::shared_ptr<Y> py2 = boost::dynamic_pointer_cast<Y>(px);
+        BOOST_TEST(py.get() == py2.get());
+        BOOST_TEST(!(py < py2 || py2 < py));
+        BOOST_TEST(py.use_count() == 3);
+    }
+    catch( boost::bad_weak_ptr const& )
+    {
+        BOOST_ERROR( "py->getX() failed" );
+    }
 }
 
 void test2();
@@ -124,19 +131,25 @@ void test3()
 {
     boost::shared_ptr<V> p(new V);
 
-    boost::shared_ptr<V> q = p->shared_from_this();
-    BOOST_TEST(p == q);
-    BOOST_TEST(!(p < q) && !(q < p));
+    try
+    {
+        boost::shared_ptr<V> q = p->shared_from_this();
+        BOOST_TEST(p == q);
+        BOOST_TEST(!(p < q) && !(q < p));
+    }
+    catch( boost::bad_weak_ptr const & )
+    {
+        BOOST_ERROR( "p->shared_from_this() failed" );
+    }
 
     V v2(*p);
 
     try
     {
         boost::shared_ptr<V> r = v2.shared_from_this();
-        BOOST_TEST( p < r || r < p );
-        BOOST_TEST( r.get() == &v2 );
+        BOOST_ERROR("v2.shared_from_this() failed to throw");
     }
-    catch(boost::bad_weak_ptr const &)
+    catch( boost::bad_weak_ptr const & )
     {
     }
 
@@ -147,7 +160,7 @@ void test3()
         BOOST_TEST(p == r);
         BOOST_TEST(!(p < r) && !(r < p));
     }
-    catch(boost::bad_weak_ptr const &)
+    catch( boost::bad_weak_ptr const & )
     {
         BOOST_ERROR("p->shared_from_this() threw bad_weak_ptr after *p = V()");
     }
