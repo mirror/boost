@@ -18,6 +18,7 @@
 # pragma once
 #endif
 
+#include <boost/assert.hpp>
 
 #ifdef BOOST_USE_WINDOWS_H
 #  include <windows.h>
@@ -87,6 +88,12 @@ public:
     bool try_lock()
     {
         return TryEnterCriticalSection(&cs_) != 0;
+    }
+#else
+    bool try_lock()
+    {
+        BOOST_ASSERT(false);
+        return false;
     }
 #endif
     void unlock()
