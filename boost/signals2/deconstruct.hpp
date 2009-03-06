@@ -472,7 +472,7 @@ public:
 
 template< class T > postconstructor_invoker<T> deconstruct()
 {
-	return deconstruct_access::deconstruct<T>();
+    return deconstruct_access::deconstruct<T>();
 }
 
 #if defined( BOOST_HAS_VARIADIC_TMPL ) && defined( BOOST_HAS_RVALUE_REFS )
@@ -491,19 +491,19 @@ template< class T, class... Args > postconstructor_invoker< T > deconstruct( Arg
 template< class T, class A1 >
 postconstructor_invoker<T> deconstruct( A1 const & a1 )
 {
-	return deconstruct_access::deconstruct<T>(a1);
+    return deconstruct_access::deconstruct<T>(a1);
 }
 
 template< class T, class A1, class A2 >
 postconstructor_invoker<T> deconstruct( A1 const & a1, A2 const & a2 )
 {
-   return deconstruct_access::deconstruct<T>(a1,a2);
+    return deconstruct_access::deconstruct<T>(a1,a2);
 }
 
 template< class T, class A1, class A2, class A3 >
 postconstructor_invoker<T> deconstruct( A1 const & a1, A2 const & a2, A3 const & a3 )
 {
-	return deconstruct_access::deconstruct<T>(a1,a2,a3);
+    return deconstruct_access::deconstruct<T>(a1,a2,a3);
 }
 
 template< class T, class A1, class A2, class A3, class A4 >

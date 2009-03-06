@@ -1,15 +1,15 @@
 /*
-	An allocator which first allocates from the stack, before falling
-	back on usual std::allocator behavior.  Used by signals2 to
-	optimize the vector of tracked shared_ptr created during signal
-	invocation.
+  An allocator which first allocates from the stack, before falling
+  back on usual std::allocator behavior.  Used by signals2 to
+  optimize the vector of tracked shared_ptr created during signal
+  invocation.
 
-	Example usage:
+  Example usage:
 
-	static const std::size_t n = 10;
-	stack_storage<T, n> storage;
-	stack_allocator<T, n> a(&storage);
-	std::vector<T, stack_allocator<T, n> > v(a);
+  static const std::size_t n = 10;
+  stack_storage<T, n> storage;
+  stack_allocator<T, n> a(&storage);
+  std::vector<T, stack_allocator<T, n> > v(a);
 
 */
 // Copyright Frank Mori Hess 2008.

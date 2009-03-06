@@ -61,4 +61,4 @@
   typename function_traits<Signature>::result_type \
   BOOST_PP_COMMA_IF(arity) BOOST_PP_ENUM(arity, BOOST_SIGNALS2_SIGNATURE_TO_ARGN_TYPE, Signature)
 
-#endif	// BOOST_SIGNALS2_SIGNALS_COMMON_MACROS_HPP
+#endif // BOOST_SIGNALS2_SIGNALS_COMMON_MACROS_HPP

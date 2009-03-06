@@ -141,4 +141,4 @@ namespace boost
   } // namespace signals2
 } // namespace boost
 
-#endif	// BOOST_SIGNALS2_SIGNAL_TYPE_HPP
+#endif // BOOST_SIGNALS2_SIGNAL_TYPE_HPP

@@ -1,6 +1,6 @@
 /*
-	A non-copyable vector which first allocates from the stack, before falling
-	back on usual std::allocator behavior.
+  A non-copyable vector which first allocates from the stack, before falling
+  back on usual std::allocator behavior.
 
 */
 // Copyright Frank Mori Hess 2008.

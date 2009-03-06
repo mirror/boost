@@ -2,9 +2,10 @@
   Template for Signa1, Signal2, ... classes that support signals
   with 1, 2, ... parameters
 
-  Author: Frank Mori Hess <fmhess@users.sourceforge.net>
   Begin: 2007-01-23
 */
+// Copyright Frank Mori Hess 2007-2008
+//
 // Use, modification and
 // distribution is subject to the Boost Software License, Version
 // 1.0. (See accompanying file LICENSE_1_0.txt or copy at
