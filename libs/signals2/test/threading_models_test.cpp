@@ -9,7 +9,11 @@
 
 // For more information, see http://www.boost.org
 
+// note boost/test/minimal.hpp can cause windows.h to get included, which
+// can screw up our checks of _WIN32_WINNT if it is included
+// after boost/signals2/mutex.hpp.  Frank Hess 2009-03-07.
 #include <boost/test/minimal.hpp>
+
 #include <boost/signals2.hpp>
 #include <boost/thread/mutex.hpp>
 

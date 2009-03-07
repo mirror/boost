@@ -12,10 +12,14 @@
 // added to test boost::signals2::mutex.
 // For more information, see http://www.boost.org
 
+// note boost/test/minimal.hpp can cause windows.h to get included, which
+// can screw up our checks of _WIN32_WINNT if it is included
+// after boost/signals2/mutex.hpp.  Frank Hess 2009-03-07.
+#include <boost/test/minimal.hpp>
+
 #include <boost/bind.hpp>
 #include <boost/signals2/dummy_mutex.hpp>
 #include <boost/signals2/mutex.hpp>
-#include <boost/test/minimal.hpp>
 #include <boost/thread/locks.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/thread.hpp>
@@ -267,7 +271,7 @@ void do_test_mutex()
 {
     test_lock<boost::signals2::mutex>()();
 // try_lock not supported on old versions of windows
-#if !defined(BOOST_HAS_WINTHREADS) || (defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400)) || (defined(NTDDI_VERSION) && NTDDI_VERSION >= NTDDI_WIN2K)
+#if !defined(BOOST_HAS_WINTHREADS) || (defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400))
     test_trylock<boost::signals2::mutex>()();
 #endif
     test_lock_exclusion<boost::signals2::mutex>()();

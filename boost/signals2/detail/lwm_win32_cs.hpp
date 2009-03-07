@@ -84,7 +84,7 @@ public:
         EnterCriticalSection(&cs_);
     }
 // TryEnterCriticalSection only exists on Windows NT 4.0 and later
-#if (defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400)) || (defined(NTDDI_VERSION) && NTDDI_VERSION >= NTDDI_WIN2K)
+#if (defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400))
     bool try_lock()
     {
         return TryEnterCriticalSection(&cs_) != 0;
