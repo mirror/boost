@@ -180,7 +180,9 @@ template<typename ResultType>
     typedef boost::signals2::signal<ResultType (int)> signal_type;
     typedef typename signal_type::extended_slot_type slot_type;
     signal_type sig;
-    slot_type myslot(&disconnecting_slot<ResultType>);
+    // attempting to work around msvc 7.1 bug by explicitly assigning to a function pointer
+    ResultType (*fp)(const boost::signals2::connection &conn, int) = &disconnecting_slot<ResultType>;
+    slot_type myslot(fp);
     sig.connect_extended(myslot);
     BOOST_CHECK(sig.num_slots() == 1);
     sig(0);
@@ -190,7 +192,9 @@ template<typename ResultType>
     typedef boost::signals2::signal<ResultType ()> signal_type;
     typedef typename signal_type::extended_slot_type slot_type;
     signal_type sig;
-    slot_type myslot(&disconnecting_slot<ResultType>, _1, 0);
+    // attempting to work around msvc 7.1 bug by explicitly assigning to a function pointer
+    ResultType (*fp)(const boost::signals2::connection &conn, int) = &disconnecting_slot<ResultType>;
+    slot_type myslot(fp, _1, 0);
     sig.connect_extended(myslot);
     BOOST_CHECK(sig.num_slots() == 1);
     sig();
@@ -201,10 +205,12 @@ template<typename ResultType>
     typedef boost::signals2::signal<ResultType (int)> signal_type;
     typedef typename signal_type::extended_slot_type slot_type;
     signal_type sig;
-    slot_type myslot(&disconnecting_slot<ResultType>);
+    // attempting to work around msvc 7.1 bug by explicitly assigning to a function pointer
+    ResultType (*fp)(const boost::signals2::connection &conn, int) = &disconnecting_slot<ResultType>;
+    slot_type myslot(fp);
     sig.connect_extended(myslot);
     BOOST_CHECK(sig.num_slots() == 1);
-    sig.disconnect(&disconnecting_slot<ResultType>);
+    sig.disconnect(fp);
     BOOST_CHECK(sig.num_slots() == 0);
   }
 }
