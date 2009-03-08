@@ -243,27 +243,27 @@ namespace test
         node** merge_adjacent_ranges(node** first, node** second,
                 node** third, Less less)
         {
-        	while(true) {
-        		while(true) {
-        			if(first == second) return third;
-        			if(less((*second)->value_, (*first)->value_)) break;
-        			first = &(*first)->next_;
-        		}
+            while(true) {
+                while(true) {
+                    if(first == second) return third;
+                    if(less((*second)->value_, (*first)->value_)) break;
+                    first = &(*first)->next_;
+                }
 
-        		swap_adjacent_ranges(first, second, third);
-        		first = &(*first)->next_;
-        		
-        		// Since the two ranges we just swapped, the order is now:
-        		// first...third...second
-        		
-        		while(true) {
-        			if(first == third) return second;
-        			if(!less((*first)->value_, (*third)->value_)) break;
-        			first = &(*first)->next_;
-        		}
+                swap_adjacent_ranges(first, second, third);
+                first = &(*first)->next_;
+                
+                // Since the two ranges we just swapped, the order is now:
+                // first...third...second
+                
+                while(true) {
+                    if(first == third) return second;
+                    if(!less((*first)->value_, (*third)->value_)) break;
+                    first = &(*first)->next_;
+                }
 
-	        	swap_adjacent_ranges(first, third, second);
-        		first = &(*first)->next_;
+                swap_adjacent_ranges(first, third, second);
+                first = &(*first)->next_;
             }
         }
         
