@@ -10,7 +10,7 @@
 #if !defined(BOOST_FUNCTIONAL_HASH_HASH_HPP)
 #define BOOST_FUNCTIONAL_HASH_HASH_HPP
 
-#include <boost/functional/hash_fwd.hpp>
+#include <boost/functional/hash/hash_fwd.hpp>
 #include <functional>
 #include <boost/functional/hash/detail/hash_float.hpp>
 #include <boost/detail/container_fwd.hpp>
