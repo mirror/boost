@@ -1,7 +1,0 @@
-struct World
-{
-  void operator()() const
-  {
-    std::cout << ", World!" << std::endl;
-  }
-};

@@ -1,9 +1,0 @@
-int main(int argc, char* argv[])
-{
-    Document    doc;
-    TextView    v1(doc);
-    HexView     v2(doc);
-
-    doc.append(argc == 2 ? argv[1] : "Hello world!");
-    return 0;
-}

@@ -1,9 +1,0 @@
-  // Signal with no arguments and a void return value
-  boost::signals2::signal<void ()> sig;
-
-  // Connect a HelloWorld slot
-  HelloWorld hello;
-  sig.connect(hello);
-
-  // Call all of the slots
-  sig();

@@ -15,11 +15,17 @@
 
 int main(int argc, const char *argv[])
 {
-	static const unsigned num_files = argc - 1;
-	unsigned i;
+	if(argc < 3)
+	{
+		std::cerr << "Too few arguments: need output directory and input file name(s).\n";
+		return -1;
+	}
+	static const std::string output_directory = argv[1];
+	static const int num_files = argc - 2;
+	int i;
 	for(i = 0; i < num_files; ++i)
 	{
-		const std::string file_name = argv[1 + i];
+		const std::string file_name = argv[2 + i];
 		std::cout << "opening file: " << file_name << std::endl;
 		std::ifstream infile(file_name.c_str());
 		bool inside_snippet = false;
@@ -58,7 +64,7 @@ int main(int argc, const char *argv[])
 						throw std::runtime_error("failed to obtain snippet name");
 					}
 					snippet_out_file.close();
-					snippet_out_file.open(std::string(snippet_name + ".txt").c_str());
+					snippet_out_file.open(std::string(output_directory + "/" + snippet_name + ".txt").c_str());
 					std::cout << "processing snippet \"" << snippet_name << "\"... ";
 					continue;
 				}

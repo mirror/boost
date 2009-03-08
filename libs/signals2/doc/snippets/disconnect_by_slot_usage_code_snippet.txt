@@ -1,7 +1,0 @@
-  sig.connect(&foo);
-  sig.connect(&bar);
-  sig();
-
-  // disconnects foo, but not bar
-  sig.disconnect(&foo);
-  sig();

@@ -1,7 +1,0 @@
-  boost::signals2::connection c = sig.connect(HelloWorld());
-  std::cout << "c is connected\n";
-  sig(); // Prints "Hello, World!"
-
-  c.disconnect(); // Disconnect the HelloWorld object
-  std::cout << "c is disconnected\n";
-  sig(); // Does nothing: there are no connected slots

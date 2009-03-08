@@ -1,7 +1,0 @@
-struct HelloWorld
-{
-  void operator()() const
-  {
-    std::cout << "Hello, World!" << std::endl;
-  }
-};

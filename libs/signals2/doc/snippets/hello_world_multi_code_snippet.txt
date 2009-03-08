@@ -1,6 +1,0 @@
-  boost::signals2::signal<void ()> sig;
-
-  sig.connect(Hello());
-  sig.connect(World());
-
-  sig();

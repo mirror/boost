@@ -5,6 +5,7 @@
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 boostbook standalone : signals.xml :
+    <dependency>./snippets//
     <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
     <xsl:param>boost.root=../../../..
     <xsl:param>boost.libraries=../../../libraries.htm
