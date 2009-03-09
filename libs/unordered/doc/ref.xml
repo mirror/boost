@@ -1,5 +1,5 @@
 <!--
-Copyright Daniel James 2006-2008
+Copyright Daniel James 2006-2009
 Distributed under the Boost Software License, Version 1.0. (See accompanying
 file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 --><library-reference>
@@ -24,7 +24,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           </purpose>
           <description>
             <para>For the normative reference see chapter 23 of
-              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
+              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008-2009/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
             <para><emphasis role="bold">Template Parameters</emphasis>
               <informaltable>
                 <tgroup cols="2">
@@ -758,7 +758,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           </purpose>
           <description>
             <para>For the normative reference see chapter 23 of
-              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
+              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008-2009/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
             <para><emphasis role="bold">Template Parameters</emphasis>
               <informaltable>
                 <tgroup cols="2">
@@ -1496,7 +1496,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           </purpose>
           <description>
             <para>For the normative reference see chapter 23 of
-              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
+              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008-2009/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
             <para><emphasis role="bold">Template Parameters</emphasis>
               <informaltable>
                 <tgroup cols="2">
@@ -2279,7 +2279,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           </purpose>
           <description>
             <para>For the normative reference see chapter 23 of
-              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
+              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008-2009/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
             <para><emphasis role="bold">Template Parameters</emphasis>
               <informaltable>
                 <tgroup cols="2">
