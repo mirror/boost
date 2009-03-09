@@ -1710,6 +1710,24 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\test\polymorphic_base.cpp">
+		</File>
+		<File
+			RelativePath="..\test\polymorphic_base.hpp">
+		</File>
+		<File
+			RelativePath="..\test\polymorphic_derived1.cpp">
+		</File>
+		<File
+			RelativePath="..\test\polymorphic_derived1.hpp">
+		</File>
+		<File
+			RelativePath="..\test\polymorphic_derived2.cpp">
+		</File>
+		<File
+			RelativePath="..\test\polymorphic_derived2.hpp">
+		</File>
+		<File
 			RelativePath="..\test\test_no_rtti.cpp">
 		</File>
 	</Files>

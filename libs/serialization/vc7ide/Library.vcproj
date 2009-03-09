@@ -43,7 +43,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/boost_serialization-vc71-mt-gd-1_34_1.lib"/>
+				OutputFile="$(OutDir)/boost_serialization-vc71-mt-gd-1_39.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -96,7 +96,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/boost_serialization-vc71-mt-1_34_1.lib"/>
+				OutputFile="$(OutDir)/boost_serialization-vc71-mt-1_39.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -147,7 +147,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization-vc71-sgd-1_37.lib"/>
+				OutputFile="$(OutDir)/libboost_serialization-vc71-sgd-1_39.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -198,7 +198,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization-vc71-sgd-1_3y.lib"/>
+				OutputFile="$(OutDir)/libboost_serialization-vc71-sgd-1_39.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -251,7 +251,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization-vc71-s-1_34_1.lib"/>
+				OutputFile="$(OutDir)/libboost_serialization-vc71-s-1_39.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -304,7 +304,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization-msvc71-mt-s-1_34_1.lib"/>
+				OutputFile="$(OutDir)/libboost_serialization-msvc71-mt-s-1_39.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -355,7 +355,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/boost_serialization-vc71-mt-gd-1_34_1.dll"
+				OutputFile="$(OutDir)/boost_serialization-vc71-mt-gd-1_39.dll"
 				GenerateDebugInformation="TRUE"
 				ImportLibrary="$(OutDir)/$(TargetName).lib"/>
 			<Tool
@@ -674,6 +674,9 @@
 				RelativePath="..\..\..\boost\serialization\force_include.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\is_virtual_base_of.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\pfto.hpp">
 			</File>
 			<File
@@ -760,103 +763,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\impl\xml_oarchive_impl.ipp">
-			</File>
-		</Filter>
-		<Filter
-			Name="Source"
-			Filter="">
-			<File
-				RelativePath="..\src\basic_archive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\basic_iarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\basic_iserializer.cpp">
-			</File>
-			<File
-				RelativePath="..\src\basic_oarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\basic_oserializer.cpp">
-			</File>
-			<File
-				RelativePath="..\src\basic_pointer_iserializer.cpp">
-			</File>
-			<File
-				RelativePath="..\src\basic_pointer_oserializer.cpp">
-			</File>
-			<File
-				RelativePath="..\src\basic_text_iprimitive.cpp">
-				<FileConfiguration
-					Name="Release runtime-dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="0"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release runtime-static|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="0"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release runtime-static threading-multi|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="0"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\src\basic_text_oprimitive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\basic_xml_archive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\basic_xml_grammar.ipp">
-			</File>
-			<File
-				RelativePath="..\src\binary_iarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\binary_oarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\extended_type_info.cpp">
-			</File>
-			<File
-				RelativePath="..\src\extended_type_info_no_rtti.cpp">
-			</File>
-			<File
-				RelativePath="..\src\extended_type_info_typeid.cpp">
-			</File>
-			<File
-				RelativePath="..\src\polymorphic_iarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\polymorphic_oarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\stl_port.cpp">
-			</File>
-			<File
-				RelativePath="..\src\text_iarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\text_oarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\void_cast.cpp">
-			</File>
-			<File
-				RelativePath="..\src\xml_grammar.cpp">
-			</File>
-			<File
-				RelativePath="..\src\xml_iarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\xml_oarchive.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -961,6 +867,106 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\iterators\xml_unescape.hpp">
+			</File>
+		</Filter>
+		<Filter
+			Name="Source"
+			Filter="">
+			<File
+				RelativePath="..\src\basic_archive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_iarchive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_iserializer.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_oarchive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_oserializer.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_pointer_iserializer.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_pointer_oserializer.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_serializer_map.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_text_iprimitive.cpp">
+				<FileConfiguration
+					Name="Release runtime-dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="0"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release runtime-static|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="0"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release runtime-static threading-multi|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="0"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\basic_text_oprimitive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_xml_archive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_xml_grammar.ipp">
+			</File>
+			<File
+				RelativePath="..\src\binary_iarchive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\binary_oarchive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\extended_type_info.cpp">
+			</File>
+			<File
+				RelativePath="..\src\extended_type_info_no_rtti.cpp">
+			</File>
+			<File
+				RelativePath="..\src\extended_type_info_typeid.cpp">
+			</File>
+			<File
+				RelativePath="..\src\polymorphic_iarchive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\polymorphic_oarchive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\stl_port.cpp">
+			</File>
+			<File
+				RelativePath="..\src\text_iarchive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\text_oarchive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\void_cast.cpp">
+			</File>
+			<File
+				RelativePath="..\src\xml_grammar.cpp">
+			</File>
+			<File
+				RelativePath="..\src\xml_iarchive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\xml_oarchive.cpp">
 			</File>
 		</Filter>
 	</Files>
