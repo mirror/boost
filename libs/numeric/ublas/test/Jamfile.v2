@@ -33,6 +33,7 @@ UBLAS_TESTSET_SPARSE ?=
 			USE_MAP_ARRAY USE_STD_MAP
             USE_MAPPED_VECTOR USE_COMPRESSED_VECTOR USE_COORDINATE_VECTOR
             USE_MAPPED_MATRIX USE_COMPRESSED_MATRIX USE_COORDINATE_MATRIX 
+	    USE_GENERALIZED_VECTOR_OF_VECTOR
 			;
 # Generalize VofV still failing
 #            USE_GENERALIZED_VECTOR_OF_VECTOR
@@ -89,14 +90,14 @@ test-suite numeric/uBLAS
             <define>$(UBLAS_TESTSET)
       ]
 # Test commented out, just like in V1 Jamfile
-#      [ run test7.cpp
-#            test71.cpp
-#            test72.cpp
-#            test73.cpp
-#        : : :
-#            <define>BOOST_UBLAS_USE_INTERVAL
-#            <define>$(UBLAS_TESTSET)
-#      ]
+      [ run test7.cpp
+            test71.cpp
+            test72.cpp
+            test73.cpp
+        : : :
+            <define>BOOST_UBLAS_USE_INTERVAL
+            <define>$(UBLAS_TESTSET)
+      ]
 
       [ run placement_new.cpp
       ]
@@ -105,5 +106,7 @@ test-suite numeric/uBLAS
             <define>EXTERNAL
             <toolset>intel-linux:<cxxflags>"-Xc"
 			<toolset>darwin:<cxxflags>"-fabi-version=0"
+      ]
+      [ run test_lu.cpp
       ]
     ;

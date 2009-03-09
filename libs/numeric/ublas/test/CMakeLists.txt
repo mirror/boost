@@ -57,6 +57,8 @@ boost_test_run(ublas_test6
 
 boost_test_run(placement_new)
 
+boost_test_run(test_lu)
+
 
 SET(test_compile_flags "-DEXTERNAL")
 #-- Intel Compiler flags
@@ -69,3 +71,4 @@ IF (APPLE)
 ENDIF (APPLE)
 
 boost_test_compile(concepts COMPILE_FLAGS "-DEXTERNAL")
+
