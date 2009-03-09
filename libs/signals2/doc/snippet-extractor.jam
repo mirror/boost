@@ -1,4 +1,4 @@
-# Boost.Signals2 Library 
+# Boost.Signals2 Library
 
 # Copyright Frank Mori Hess 2009.
 
@@ -17,7 +17,7 @@ toolset.flags snippet-extractor.extract-snippets EXTRACTOR-COMMAND <extractor-co
 
 rule extract-snippets ( target : sources * : properties * )
 {
-    DEPENDS $(target) : [ on $(target) return $(EXTRACTOR_COMMAND) ] ;
+    DEPENDS $(target) : [ on $(target) return $(EXTRACTOR-COMMAND) ] ;
 }
 actions extract-snippets bind EXTRACTOR-COMMAND
 {

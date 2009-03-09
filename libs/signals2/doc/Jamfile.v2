@@ -5,7 +5,9 @@
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 boostbook standalone : signals.xml :
-    <dependency>./snippets//
+    <dependency>hello_world_def_code_snippet.xml
+    <implicit-dependency>hello_world_def_code_snippet.xml
+
     <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
     <xsl:param>boost.root=../../../..
     <xsl:param>boost.libraries=../../../libraries.htm
@@ -21,3 +23,13 @@ boostbook standalone : signals.xml :
 #    <xsl:param>boost.compact.function=0
 #    <xsl:param>boost.compact.enum=0
     ;
+
+import snippet-extractor ;
+
+exe snippet_extractor : snippet_extractor.cpp ;
+
+make hello_world_def_code_snippet.xml
+  : [ glob ../example/*.cpp ]
+  : snippet-extractor.extract-snippets
+  : <extractor-command>.//snippet_extractor
+  ;

@@ -58,8 +58,8 @@ the <code>hello</code> function object to the signal using the
 <code>sig</code> like a function to call the slots, which in turns
 invokes <code>HelloWorld::operator()</code> to print "Hello,
 World!".</para>
-<programlisting><xi:include href="./snippets/hello_world_def_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="hello_world_def_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
   <informaltable>
     <tgroup cols="2" align="left">
       <thead>
@@ -71,8 +71,8 @@ World!".</para>
       <tbody>
         <row>
           <entry>
-<programlisting><xi:include href="./snippets/hello_world_single_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="hello_world_single_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 </entry>
 <entry>
 <programlisting>  // Signal with no arguments and a void return value
@@ -99,12 +99,12 @@ we can make the Hello, World program more interesting by splitting
 the work of printing "Hello, World!" into two completely separate
 slots. The first slot will print "Hello" and may look like
 this:</para>
-<programlisting><xi:include href="./snippets/hello_def_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="hello_def_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 <para>The second slot will print ", World!" and a newline, to complete
 the program. The second slot may look like this:</para>
-<programlisting><xi:include href="./snippets/world_def_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="world_def_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 <para>Like in our previous example, we can create a signal
 <code>sig</code> that takes no arguments and has a
 <code>void</code> return value. This time, we connect both a
@@ -121,8 +121,8 @@ signal, and when we call the signal both slots will be called.</para>
       <tbody>
         <row>
           <entry>
-<programlisting><xi:include href="./snippets/hello_world_multi_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="hello_world_multi_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
           </entry>
           <entry>
 <programlisting>  boost::signals2::signal0&lt;void&gt; sig;
@@ -166,8 +166,8 @@ are, by default, <code>int</code>s, and are ordered by the integer
       <tbody>
         <row>
           <entry>
-<programlisting><xi:include href="./snippets/hello_world_ordered_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="hello_world_ordered_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 </entry>
             <entry>
 <programlisting>  boost::signals2::signal0&lt;void&gt; sig;
@@ -203,10 +203,10 @@ grouped slots.
 <para>
   If we add a new slot to our example like this:
 </para>
-<programlisting><xi:include href="./snippets/good_morning_def_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
-<programlisting><xi:include href="./snippets/hello_world_ordered_invoke_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="good_morning_def_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
+<programlisting><xi:include href="hello_world_ordered_invoke_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 <para>... we will get the result we wanted:</para>
 <programlisting>
 Hello, World!
@@ -225,8 +225,8 @@ buttons are pressed.</para>
 <code>float</code> arguments to its slots. Then we'll create a few
 slots that print the results of various arithmetic operations on
 these values.</para>
-<programlisting><xi:include href="./snippets/slot_arguments_slot_defs_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="slot_arguments_slot_defs_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
   <informaltable>
     <tgroup cols="2" align="left">
       <thead>
@@ -238,8 +238,8 @@ these values.</para>
       <tbody>
         <row>
           <entry>
-<programlisting><xi:include href="./snippets/slot_arguments_main_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="slot_arguments_main_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 </entry>
 <entry>
 <programlisting>  boost::signals2::signal2&lt;void, float, float&gt; sig;
@@ -288,8 +288,8 @@ possibilities.</para>
 slightly so that the slots all return the results of computing the
 product, quotient, sum, or difference. Then the signal itself can
 return a value based on these results to be printed:</para>
-<programlisting><xi:include href="./snippets/signal_return_value_slot_defs_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="signal_return_value_slot_defs_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
   <informaltable>
     <tgroup cols="2" align="left">
       <thead>
@@ -310,8 +310,8 @@ return a value based on these results to be printed:</para>
           </tbody>
         </tgroup>
       </informaltable>
-<programlisting><xi:include href="./snippets/signal_return_value_main_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="signal_return_value_main_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 
 <para>This example program will output <code>2</code>. This is because the
 default behavior of a signal that has a return type
@@ -324,8 +324,8 @@ no side effects and the result is the last slot connected.</para>
 <para>A more interesting signal result would be the maximum of the
 values returned by any slot. To do this, we create a custom
 combiner that looks like this:</para>
-<programlisting><xi:include href="./snippets/custom_combiners_maximum_def_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="custom_combiners_maximum_def_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 <para>The <code>maximum</code> class template acts as a function
 object. Its result type is given by its template parameter, and
 this is the type it expects to be computing the maximum based on
@@ -368,8 +368,8 @@ follows the signal's calling signature:</para>
 
 <para>Now we can connect slots that perform arithmetic functions and
 use the signal:</para>
-<programlisting><xi:include href="./snippets/custom_combiners_maximum_usage_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="custom_combiners_maximum_usage_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 <para>The output of this program will be <code>15</code>, because
 regardless of the order in which the slots are connected, the product
 of 5 and 3 will be larger than the quotient, sum, or
@@ -377,8 +377,8 @@ difference.</para>
 <para>In other cases we might want to return all of the values
 computed by the slots together, in one large data structure. This
 is easily done with a different combiner:</para>
-<programlisting><xi:include href="./snippets/custom_combiners_aggregate_values_def_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="custom_combiners_aggregate_values_def_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 <para>
 Again, we can create a signal with this new combiner:
 </para>
@@ -406,8 +406,8 @@ Again, we can create a signal with this new combiner:
           </tbody>
         </tgroup>
       </informaltable>
-<programlisting><xi:include href="./snippets/custom_combiners_aggregate_values_usage_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="custom_combiners_aggregate_values_usage_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 <para>The output of this program will contain 15, 8, 1.6667, and 2. It
 is interesting here that
 the first template argument for the <code>signal</code> class,
@@ -465,8 +465,8 @@ disconnects the signal and slot if they are connected before it is
 called. Each call to the signal's <code>connect()</code> method
 returns a connection object, which can be used to determine if the
 connection still exists or to disconnect the signal and slot.</para>
-<programlisting><xi:include href="./snippets/disconnect_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="disconnect_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 </section>
 
 <section><title>Blocking Slots (Beginner)</title>
@@ -485,8 +485,8 @@ on all the
 Here is an example of
 blocking/unblocking slots:</para>
 
-<programlisting><xi:include href="./snippets/block_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="block_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 
 </section>
 
@@ -496,8 +496,8 @@ references a signal/slot connection that will be disconnected when
 the <code>scoped_connection</code> class goes out of scope. This
 ability is useful when a connection need only be temporary,
 e.g.,</para>
-<programlisting><xi:include href="./snippets/scoped_connection_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="scoped_connection_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 
 <para>
   Note, attempts to initialize a scoped_connection with the assignment syntax
@@ -526,8 +526,8 @@ the type of the function object has an accessible <code>==</code>
 operator. For instance:
 
 </para>
-<programlisting><xi:include href="./snippets/disconnect_by_slot_def_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="disconnect_by_slot_def_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
   <informaltable>
     <tgroup cols="2" align="left">
       <thead>
@@ -550,8 +550,8 @@ operator. For instance:
       </informaltable>
 
 </section>
-<programlisting><xi:include href="./snippets/disconnect_by_slot_usage_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="disconnect_by_slot_usage_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 
 <section id="signals2.tutorial.connection-management"><title>Automatic Connection Management (Intermediate)</title>
 <para>Boost.Signals2 can automatically track the lifetime of objects
@@ -734,11 +734,11 @@ cannot be templates. Slots can be passed via the
 <code>slot_type</code> for each particular signal type and any
 function object compatible with the signature of the signal can be
 passed to a <code>slot_type</code> parameter. For instance:</para>
-<programlisting><xi:include href="./snippets/passing_slots_defs_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<programlisting><xi:include href="passing_slots_defs_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 <programlisting>
-<xi:include href="./snippets/passing_slots_usage_code_snippet.txt"
-	xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+<xi:include href="passing_slots_usage_code_snippet.xml"
+  xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 
 <para>The <code>doOnClick</code> method is now functionally equivalent
 to the <code>connect</code> method of the <code>onClick</code>
@@ -757,8 +757,8 @@ hidden in an implementation detail file.</para>
   that it stores a single signal to which all of the views will be
   connected.</para>
 
-  <programlisting><xi:include href="./snippets/document_def_code_snippet.txt"
-    xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+  <programlisting><xi:include href="document_def_code_snippet.xml"
+    xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 
   <para>
     Next, we can begin to define views. The
@@ -766,15 +766,15 @@ hidden in an implementation detail file.</para>
     document text.
   </para>
 
-  <programlisting><xi:include href="./snippets/text_view_def_code_snippet.txt"
-    xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+  <programlisting><xi:include href="text_view_def_code_snippet.xml"
+    xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 
   <para>Alternatively, we can provide a view of the document
     translated into hex values using the <code>HexView</code>
     view:</para>
 
-  <programlisting><xi:include href="./snippets/hex_view_def_code_snippet.txt"
-    xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+  <programlisting><xi:include href="hex_view_def_code_snippet.xml"
+    xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 
   <para>
     To tie the example together, here is a
@@ -782,8 +782,8 @@ hidden in an implementation detail file.</para>
     modifies the document:
   </para>
 
-  <programlisting><xi:include href="./snippets/document_view_main_code_snippet.txt"
-    xmlns:xi="http://www.w3.org/2001/XInclude" parse="text"/></programlisting>
+  <programlisting><xi:include href="document_view_main_code_snippet.xml"
+    xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 
   <para>The complete example source, contributed by Keith MacDonald,
     is available in the <link linkend="signals2.examples.document-view">examples</link> section.
