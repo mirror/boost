@@ -5,7 +5,7 @@
 // 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-// For more information, see http://www.boost.org
+// For documentation, see http://www.boost.org/libs/signals2/
 
 #include <boost/signals2/deconstruct.hpp>
 #include <boost/signals2/deconstruct_ptr.hpp>
