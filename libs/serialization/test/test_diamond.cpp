@@ -63,7 +63,7 @@ public:
     {
         return i == another.i && m == another.m;
     }
-    // make virtual to evade gcc quirk
+    // make polymorphic by marking at least one function virtual
     virtual ~base() {};
 private:
     int i;
