@@ -15,7 +15,7 @@
 
 #define BOOST_FUSION_UNUSED_HAS_IO
 
-namespace boost { namespace fusion
+namespace fusion_adl_barrier
 {
     struct unused_type
     {
@@ -56,6 +56,12 @@ namespace boost { namespace fusion
     };
 
     unused_type const unused = unused_type();
+}
+
+namespace boost { namespace fusion
+{
+    using ::fusion_adl_barrier::unused_type;
+    using ::fusion_adl_barrier::unused;
 
     template <typename Out>
     inline Out& operator<<(Out& out, unused_type const&)
