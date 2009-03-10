@@ -51,7 +51,7 @@
   <xsl:key name="compounds-by-id" match="compounddef" use="@id"/>
   <xsl:key name="members-by-id" match="memberdef" use="@id" />
 
-  <xsl:strip-space elements="briefdescription detaileddescription"/>
+  <xsl:strip-space elements="briefdescription detaileddescription inbodydescription"/>
 
   <xsl:template name="kind-error-message">
     <xsl:param name="message"/>
@@ -118,6 +118,7 @@
            tell us what is \internal and what isn't. -->
       <xsl:when test="contains(detaileddescription/para, 'INTERNAL ONLY')"/>
       <xsl:when test="contains(briefdescription/para, 'INTERNAL ONLY')"/>
+      <xsl:when test="contains(inbodydescription/para, 'INTERNAL ONLY')"/>
 
       <xsl:when test="@kind='file'">
         <xsl:call-template name="file"/>
@@ -259,6 +260,7 @@
 
         <xsl:apply-templates select="briefdescription" mode="passthrough"/>
         <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+        <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
         <xsl:apply-templates/>
       </xsl:element>
     </xsl:if>
@@ -284,6 +286,7 @@
         
         <xsl:apply-templates select="briefdescription" mode="passthrough"/>
         <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+        <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
       </enum>
     </xsl:if>
   </xsl:template>
@@ -302,6 +305,7 @@
 
       <xsl:apply-templates select="briefdescription" mode="passthrough"/>
       <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+      <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
     </enumvalue>
   </xsl:template>
 
@@ -360,9 +364,10 @@
           </xsl:call-template>
         </xsl:attribute>
         
-        <xsl:if test="briefdescription/*|detaileddescription/*">
+        <xsl:if test="briefdescription/*|detaileddescription/*|inbodydescription/*">
           <xsl:apply-templates select="briefdescription/*" mode="passthrough"/>
           <xsl:apply-templates select="detaileddescription/*" mode="passthrough"/>
+          <xsl:apply-templates select="inbdoydescription/*" mode="passthrough"/>
         </xsl:if>
         
         <xsl:apply-templates mode="toplevel">
@@ -453,6 +458,7 @@
            tell us what is \internal and what isn't. -->
       <xsl:when test="contains(detaileddescription/para, 'INTERNAL ONLY')"/>
       <xsl:when test="contains(briefdescription/para, 'INTERNAL ONLY')"/>
+      <xsl:when test="contains(inbodydescription/para, 'INTERNAL ONLY')"/>
 
       <xsl:when test="@kind='define'">
         <macro>
@@ -476,6 +482,7 @@
 
           <xsl:apply-templates select="briefdescription" mode="passthrough"/>
           <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+          <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
         </macro>
       </xsl:when>
 
@@ -749,6 +756,7 @@
            tell us what is \internal and what isn't. -->
       <xsl:when test="contains(detaileddescription/para, 'INTERNAL ONLY')"/>
       <xsl:when test="contains(briefdescription/para, 'INTERNAL ONLY')"/>
+      <xsl:when test="contains(inbodydescription/para, 'INTERNAL ONLY')"/>
 
       <xsl:when test="@kind='typedef'">
         <xsl:call-template name="typedef">
@@ -836,6 +844,7 @@
         
         <xsl:apply-templates select="briefdescription" mode="passthrough"/>
         <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+        <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
         
         <type><xsl:apply-templates select="type"/></type>
       </typedef>
@@ -874,7 +883,7 @@
         <xsl:value-of select="normalize-space(declname/text())"/>
       </xsl:variable>
 
-      <xsl:apply-templates select="../detaileddescription//parameterlist[attribute::kind='param']/*"
+      <xsl:apply-templates select="../*[self::detaileddescription or self::inbodydescription]//parameterlist[attribute::kind='param']/*"
         mode="parameter.description">
         <xsl:with-param name="name">
           <xsl:value-of select="$name"/>
@@ -924,24 +933,25 @@
     <!-- The description -->
     <xsl:apply-templates select="briefdescription" mode="passthrough"/>
     <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+    <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
       
     <xsl:apply-templates 
-      select="detaileddescription/para/simplesect[@kind='pre']"
+      select="*[self::detaileddescription or self::inbodydescription]/para/simplesect[@kind='pre']"
       mode="function-clauses"/>
     <xsl:apply-templates 
-      select="detaileddescription/para/simplesect[@kind='post']"
+      select="*[self::detaileddescription or self::inbodydescription]/para/simplesect[@kind='post']"
       mode="function-clauses"/>
     <xsl:apply-templates 
-      select="detaileddescription/para/simplesect[@kind='return']"
+      select="*[self::detaileddescription or self::inbodydescription]/para/simplesect[@kind='return']"
       mode="function-clauses"/>
-    <xsl:if test="detaileddescription/para/parameterlist[@kind='exception']">
+    <xsl:if test="*[self::detaileddescription or self::inbodydescription]/para/parameterlist[@kind='exception']">
       <throws>
         <xsl:apply-templates 
-          select="detaileddescription/para/parameterlist[@kind='exception']"
+          select="*[self::detaileddescription or self::inbodydescription]/para/parameterlist[@kind='exception']"
           mode="function-clauses"/>
       </throws>
     </xsl:if>
-    <xsl:variable name="notes" select="detaileddescription/para/simplesect[@kind='note' or @kind='attention']"/>
+    <xsl:variable name="notes" select="*[self::detaileddescription or self::inbodydescription]/para/simplesect[@kind='note' or @kind='attention']"/>
     <xsl:if test="count($notes) &gt; 0"> 
       <notes>
         <xsl:apply-templates select="$notes" mode="function-clauses"/>
@@ -1151,6 +1161,7 @@
 
       <xsl:apply-templates select="briefdescription" mode="passthrough"/>
       <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+      <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
     </data-member>
     </xsl:if>
   </xsl:template>
@@ -1206,6 +1217,14 @@
   </xsl:template>
 
   <xsl:template match="detaileddescription" mode="passthrough">
+    <xsl:if test="text()|*">
+      <description>
+        <xsl:apply-templates mode="passthrough"/>
+      </description>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="inbodydescription" mode="passthrough">
     <xsl:if test="text()|*">
       <description>
         <xsl:apply-templates mode="passthrough"/>
