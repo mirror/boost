@@ -167,7 +167,7 @@ void_caster_primitive<Derived, Base>::void_caster_primitive() :
     void_caster( 
         & type_info_implementation<Derived>::type::get_const_instance(), 
         & type_info_implementation<Base>::type::get_const_instance(),
-        reinterpret_cast<int>(
+        reinterpret_cast<unsigned long int>(
             static_cast<Derived *>(
                 reinterpret_cast<Base *>(1)
             )
