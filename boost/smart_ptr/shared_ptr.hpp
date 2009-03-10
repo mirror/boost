@@ -198,19 +198,7 @@ public:
         boost::detail::sp_enable_shared_from_this( this, p, p );
     }
 
-//  generated copy constructor, assignment, destructor are fine...
-
-//  except that Borland C++ has a bug, and g++ with -Wsynth warns
-#if defined(__BORLANDC__) || defined(__GNUC__)
-
-    shared_ptr & operator=(shared_ptr const & r) // never throws
-    {
-        px = r.px;
-        pn = r.pn; // shared_count::op= doesn't throw
-        return *this;
-    }
-
-#endif
+//  generated copy constructor, destructor are fine
 
     template<class Y>
     explicit shared_ptr(weak_ptr<Y> const & r): pn(r.pn) // may throw
@@ -301,13 +289,20 @@ public:
 
 #endif // BOOST_NO_AUTO_PTR
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+    // assignment
+
+    shared_ptr & operator=( shared_ptr const & r ) // never throws
+    {
+        this_type(r).swap(*this);
+        return *this;
+    }
+
+#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1400)
 
     template<class Y>
     shared_ptr & operator=(shared_ptr<Y> const & r) // never throws
     {
-        px = r.px;
-        pn = r.pn; // shared_count::op= doesn't throw
+        this_type(r).swap(*this);
         return *this;
     }
 
