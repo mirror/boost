@@ -1,6 +1,6 @@
-//  make_shared_test.cpp
+// make_shared_test.cpp
 //
-//  Copyright (c) 2007, 2008 Peter Dimov
+// Copyright 2007-2009 Peter Dimov
 //
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE_1_0.txt or copy at
@@ -19,11 +19,17 @@ private:
     X( X const & );
     X & operator=( X const & );
 
-    void * operator new( std::size_t );
+    void * operator new( std::size_t n )
+    {
+        // lack of this definition causes link errors on Comeau C++
+        BOOST_ERROR( "private X::new called" );
+        return ::operator new( n );
+    }
 
     void operator delete( void * p )
     {
         // lack of this definition causes link errors on MSVC
+        BOOST_ERROR( "private X::delete called" );
         ::operator delete( p );
     }
 
