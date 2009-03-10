@@ -211,14 +211,14 @@ namespace boost
 
 # define BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr) \
     struct name {\
-        BOOST_STATIC_CONSTANT(int,_typeof_register_value=sizeof(boost::type_of::typeof_register_type<name>(expr)));\
+        enum {_typeof_register_value=sizeof(boost::type_of::typeof_register_type<name>(expr))};\
         typedef typename boost::type_of::msvc_extract_type<name>::id2type id2type;\
         typedef typename id2type::type type;\
     };
 
 # define BOOST_TYPEOF_NESTED_TYPEDEF(name,expr) \
     struct name {\
-        BOOST_STATIC_CONSTANT(int,_typeof_register_value=sizeof(boost::type_of::typeof_register_type<name>(expr)));\
+        enum {_typeof_register_value=sizeof(boost::type_of::typeof_register_type<name>(expr))};\
         typedef boost::type_of::msvc_extract_type<name>::id2type id2type;\
         typedef id2type::type type;\
     };
