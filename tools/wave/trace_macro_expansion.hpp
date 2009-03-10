@@ -26,6 +26,7 @@
 
 #include <boost/wave/token_ids.hpp>
 #include <boost/wave/util/macro_helpers.hpp>
+#include <boost/wave/util/filesystem_compatibility.hpp>
 #include <boost/wave/preprocessing_hooks.hpp>
 #include <boost/wave/whitespace_handling.hpp>
 #include <boost/wave/language_support.hpp>
@@ -820,7 +821,7 @@ protected:
         namespace fs = boost::filesystem;
         
         // ensure all directories for this file do exist
-        fs::create_directories(fpath.branch_path());
+        fs::create_directories(boost::wave::util::branch_path(fpath));
 
         // figure out, whether the file to open was last accessed by us
         std::ios::openmode mode = std::ios::out;
@@ -873,9 +874,8 @@ protected:
             namespace fs = boost::filesystem;
             
             string_type fname ((*it).get_value());
-            fs::path fpath (
-                util::impl::unescape_lit(fname.substr(1, fname.size()-2)).c_str(),
-                fs::native);
+            fs::path fpath (boost::wave::util::create_path(
+                util::impl::unescape_lit(fname.substr(1, fname.size()-2)).c_str()));
             fpath = fs::complete(fpath, ctx.get_current_directory());
             result = interpret_pragma_option_output_open(fpath, ctx, act_token);
         }
@@ -932,7 +932,7 @@ protected:
                 }
                 else {
                 // there was a file name on the command line
-                    fs::path fpath(default_outfile, fs::native);
+                    fs::path fpath(boost::wave::util::create_path(default_outfile));
                     result = interpret_pragma_option_output_open(fpath, ctx, 
                         act_token);
                 }

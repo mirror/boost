@@ -78,7 +78,6 @@ typedef boost::archive::text_oarchive oarchive;
 //  Import required names
 using namespace boost::spirit::classic;
 
-using std::string;
 using std::pair;
 using std::vector;
 using std::getline;
@@ -113,11 +112,11 @@ using std::istreambuf_iterator;
 
 ///////////////////////////////////////////////////////////////////////////////
 // print the current version
-string get_version()
+std::string get_version()
 {
-    string version (context_type::get_version_string());
+    std::string version (context_type::get_version_string());
     version = version.substr(1, version.size()-2);      // strip quotes
-    version += string(" (" CPP_VERSION_DATE_STR ")");   // add date
+    version += std::string(" (" CPP_VERSION_DATE_STR ")");   // add date
     return version;
 }
 
@@ -139,7 +138,7 @@ int print_copyright()
         "Wave: A Standard conformant C++ preprocessor based on the Boost.Wave library",
         "http://www.boost.org/",
         "",
-        "Copyright (c) 2001-2008 Hartmut Kaiser, Distributed under the Boost",
+        "Copyright (c) 2001-2009 Hartmut Kaiser, Distributed under the Boost",
         "Software License, Version 1.0. (See accompanying file",
         "LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)",
         0
@@ -176,13 +175,13 @@ namespace cmd_line_utils {
 
     // Additional command line parser which interprets '@something' as an 
     // option "config-file" with the value "something".
-    inline pair<string, string> 
-    at_option_parser(string const&s)
+    inline pair<std::string, std::string> 
+    at_option_parser(std::string const&s)
     {
         if ('@' == s[0]) 
-            return std::make_pair(string("config-file"), s.substr(1));
+            return std::make_pair(std::string("config-file"), s.substr(1));
         else
-            return pair<string, string>();
+            return pair<std::string, std::string>();
     }
 
     // class, which keeps include file information read from the command line
@@ -190,13 +189,13 @@ namespace cmd_line_utils {
     public:
         include_paths() : seen_separator(false) {}
 
-        vector<string> paths;       // stores user paths
-        vector<string> syspaths;    // stores system paths
+        vector<std::string> paths;       // stores user paths
+        vector<std::string> syspaths;    // stores system paths
         bool seen_separator;        // command line contains a '-I-' option
 
         // Function which validates additional tokens from command line.
         static void 
-        validate(boost::any &v, vector<string> const &tokens)
+        validate(boost::any &v, vector<std::string> const &tokens)
         {
             if (v.empty())
                 v = boost::any(include_paths());
@@ -205,7 +204,7 @@ namespace cmd_line_utils {
 
             BOOST_ASSERT(p);
             // Assume only one path per '-I' occurrence.
-            string const& t = po::validators::get_single_string(tokens);
+            std::string const& t = po::validators::get_single_string(tokens);
             if (t == "-") {
             // found -I- option, so switch behaviour
                 p->seen_separator = true;
@@ -223,7 +222,7 @@ namespace cmd_line_utils {
 
     // Read all options from a given config file, parse and add them to the
     // given variables_map
-    bool read_config_file_options(string const &filename, 
+    bool read_config_file_options(std::string const &filename, 
         po::options_description const &desc, po::variables_map &vm,
         bool may_fail = false)
     {
@@ -238,20 +237,20 @@ namespace cmd_line_utils {
             return false;
         }
         
-    vector<string> options;
-    string line;
+    vector<std::string> options;
+    std::string line;
 
         while (std::getline(ifs, line)) {
         // skip empty lines
-            string::size_type pos = line.find_first_not_of(" \t");
-            if (pos == string::npos) 
+            std::string::size_type pos = line.find_first_not_of(" \t");
+            if (pos == std::string::npos) 
                 continue;
             
         // skip comment lines
             if ('#' != line[pos]) {
             // strip leading and trailing whitespace
-                string::size_type endpos = line.find_last_not_of(" \t");
-                BOOST_ASSERT(endpos != string::npos);
+                std::string::size_type endpos = line.find_last_not_of(" \t");
+                BOOST_ASSERT(endpos != std::string::npos);
                 options.push_back(line.substr(pos, endpos-pos+1));
             }
         }
@@ -454,9 +453,10 @@ namespace {
 #if BOOST_WAVE_SERIALIZATION != 0
         try {
             if (vm.count("state") > 0) {
-                fs::path state_file (vm["state"].as<string>(), fs::native);
+                fs::path state_file (
+                    boost::wave::util::create_path(vm["state"].as<string>()));
                 if (state_file == "-") 
-                    state_file = fs::path("wave.state", fs::native);
+                    state_file = boost::wave::util::create_path("wave.state");
 
                 std::ios::openmode mode = std::ios::in;
 
@@ -498,9 +498,10 @@ namespace {
 #if BOOST_WAVE_SERIALIZATION != 0
         try {
             if (vm.count("state") > 0) {
-                fs::path state_file (vm["state"].as<string>(), fs::native);
+                fs::path state_file (boost::wave::util::create_path(
+                    vm["state"].as<string>()));
                 if (state_file == "-") 
-                    state_file = fs::path("wave.state", fs::native);
+                    state_file = boost::wave::util::create_path("wave.state");
 
                 std::ios::openmode mode = std::ios::out;
 
@@ -535,11 +536,11 @@ namespace {
     {
     // open file for macro names listing
         std::ofstream macronames_out;
-        fs::path macronames_file (filename, fs::native);
+        fs::path macronames_file (boost::wave::util::create_path(filename));
 
         if (macronames_file != "-") {
             macronames_file = fs::complete(macronames_file);
-            fs::create_directories(macronames_file.branch_path());
+            fs::create_directories(boost::wave::util::branch_path(macronames_file));
             macronames_out.open(macronames_file.string().c_str());
             if (!macronames_out.is_open()) {
                 cerr << "wave: could not open file for macro name listing: " 
@@ -640,10 +641,11 @@ int error_count = 0;
     
         if (vm.count("traceto")) {
         // try to open the file, where to put the trace output
-        fs::path trace_file (vm["traceto"].as<string>(), fs::native);
+        fs::path trace_file (boost::wave::util::create_path(
+            vm["traceto"].as<string>()));
         
             if (trace_file != "-") {
-                fs::create_directories(trace_file.branch_path());
+                fs::create_directories(boost::wave::util::branch_path(trace_file));
                 traceout.open(trace_file.string().c_str());
                 if (!traceout.is_open()) {
                     cerr << "wave: could not open trace file: " << trace_file 
@@ -663,10 +665,11 @@ int error_count = 0;
     // Open the stream where to output the list of included file names
         if (vm.count("listincludes")) {
         // try to open the file, where to put the include list 
-        fs::path includes_file(vm["listincludes"].as<string>(), fs::native);
+        fs::path includes_file(boost::wave::util::create_path(
+            vm["listincludes"].as<string>()));
         
             if (includes_file != "-") {
-                fs::create_directories(includes_file.branch_path());
+                fs::create_directories(boost::wave::util::branch_path(includes_file));
                 includelistout.open(includes_file.string().c_str());
                 if (!includelistout.is_open()) {
                     cerr << "wave: could not open include list file: " 
@@ -880,7 +883,8 @@ int error_count = 0;
     // open the output file
         if (vm.count("output")) {
         // try to open the file, where to put the preprocessed output
-        fs::path out_file (vm["output"].as<string>(), fs::native);
+        fs::path out_file (boost::wave::util::create_path(
+            vm["output"].as<string>()));
 
             if (out_file == "-") {
                 allow_output = false;     // inhibit output initially
@@ -888,7 +892,7 @@ int error_count = 0;
             }
             else {
                 out_file = fs::complete(out_file);
-                fs::create_directories(out_file.branch_path());
+                fs::create_directories(boost::wave::util::branch_path(out_file));
                 output.open(out_file.string().c_str());
                 if (!output.is_open()) {
                     cerr << "wave: could not open output file: " 
@@ -900,15 +904,15 @@ int error_count = 0;
         }
         else if (!input_is_stdin && vm.count("autooutput")) {
         // generate output in the file <input_base_name>.i
-        fs::path out_file (file_name, fs::native);
-        std::string basename (out_file.leaf());
+        fs::path out_file (boost::wave::util::create_path(file_name));
+        std::string basename (boost::wave::util::leaf(out_file));
         std::string::size_type pos = basename.find_last_of(".");
         
             if (std::string::npos != pos)
                 basename = basename.substr(0, pos);
-            out_file = out_file.branch_path() / (basename + ".i");
+            out_file = boost::wave::util::branch_path(out_file) / (basename + ".i");
 
-            fs::create_directories(out_file.branch_path());
+            fs::create_directories(boost::wave::util::branch_path(out_file));
             output.open(out_file.string().c_str());
             if (!output.is_open()) {
                 cerr << "wave: could not open output file: " 
@@ -1182,7 +1186,7 @@ main (int argc, char *argv[])
 
 //     // Try to find a wave.cfg in the same directory as the executable was 
 //     // started from. If this exists, treat it as a wave config file
-//     fs::path filename(argv[0], fs::native);
+//     fs::path filename(argv[0]);
 // 
 //         filename = filename.branch_path() / "wave.cfg";
 //         cmd_line_utils::read_config_file_options(filename.string(), 
@@ -1199,8 +1203,12 @@ main (int argc, char *argv[])
     // file for all files in a certain project.
         if (arguments.size() > 0 && arguments[0].value[0] != "-") {
         // construct full path of input file
-            fs::path input_dir (fs::complete(fs::path(arguments[0].value[0], fs::native)));
-            input_dir = input_dir.normalize().branch_path();    // chop of file name
+            fs::path input_dir (fs::complete(
+                boost::wave::util::create_path(arguments[0].value[0])));
+
+        // chop of file name
+            input_dir = boost::wave::util::branch_path(
+                boost::wave::util::normalize(input_dir)); 
 
         // walk up the hierarchy, trying to find a file wave.cfg 
             while (!input_dir.empty()) {
@@ -1210,7 +1218,7 @@ main (int argc, char *argv[])
                 {
                     break;    // break on the first cfg file found
                 }
-                input_dir = input_dir.branch_path();
+                input_dir = boost::wave::util::branch_path(input_dir);
             }
         }
         
