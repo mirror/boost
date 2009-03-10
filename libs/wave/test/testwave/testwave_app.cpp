@@ -66,9 +66,9 @@ namespace {
         using boost::wave::util::impl::unescape_lit;
         
         String unesc_name = unescape_lit(name.substr(1, name.size()-2));
-        fs::path p (unesc_name.c_str(), fs::native);
+        fs::path p (boost::wave::util::create_path(unesc_name.c_str()));
 
-        name = String("\"") + p.leaf().c_str() + String("\"");
+        name = String("\"") + boost::wave::util::leaf(p).c_str() + String("\"");
         return name;
     }
 
@@ -180,7 +180,8 @@ testwave_app::got_expected_result(std::string const& filename,
                 {
                     fs::path fullpath (
                         fs::complete(
-                            fs::path(filename, fs::native), fs::current_path())
+                            boost::wave::util::create_path(filename), 
+                            boost::wave::util::current_path())
                         );
                         
                     if ('(' == expected[pos1+2]) {
@@ -193,16 +194,17 @@ testwave_app::got_expected_result(std::string const& filename,
                             return false;
                         }
                         std::string base = expected.substr(pos1+3, p-pos1-3);
-                        fullpath = fullpath.branch_path() / 
-                            fs::path(base, fs::native);
+                        fullpath = boost::wave::util::branch_path(fullpath) / 
+                            boost::wave::util::create_path(base);
                         full_result += expected.substr(pos, pos1-pos);
                         if ('P' == expected[pos1+1]) {
-                            full_result += 
-                                escape_lit(fullpath.normalize().native_file_string());
+                            full_result += escape_lit(
+                                boost::wave::util::native_file_string(
+                                    boost::wave::util::normalize(fullpath)));
                         }
                         else {
-                            full_result += 
-                                escape_lit(fullpath.normalize().string());
+                            full_result += escape_lit(
+                                boost::wave::util::normalize(fullpath).string());
                         }
                         pos1 = expected.find_first_of ("$", 
                             pos = pos1 + 4 + base.size());
@@ -211,8 +213,8 @@ testwave_app::got_expected_result(std::string const& filename,
                     // the $P is used on its own
                         full_result += expected.substr(pos, pos1-pos);
                         if ('P' == expected[pos1+1]) {
-                            full_result += 
-                                escape_lit(fullpath.native_file_string());
+                            full_result += escape_lit(
+                                boost::wave::util::native_file_string(fullpath));
                         }
                         else {
                             full_result += 

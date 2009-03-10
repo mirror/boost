@@ -14,6 +14,7 @@
 
 // include boost
 #include <boost/config.hpp>
+#include <boost/wave.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 
@@ -178,29 +179,33 @@ main(int argc, char *argv[])
                     {
                     // correct the file name (pre-pend the config file path)
                         fs::path cfgpath = fs::complete(
-                            fs::path(*cit, fs::native), fs::current_path());
+                            boost::wave::util::create_path(*cit), 
+                            boost::wave::util::current_path());
                         fs::path filepath = 
-                            cfgpath.branch_path() / fs::path(*iit, fs::native);
+                            boost::wave::util::branch_path(cfgpath) / 
+                                boost::wave::util::create_path(*iit);
                         
                         if (9 == app.get_debuglevel()) {
                             std::cerr << std::string(79, '-') << std::endl;
                             std::cerr << "executing test: " 
-                                      << filepath.native_file_string()
+                                      << boost::wave::util::native_file_string(filepath)
                                       << std::endl;
                         }
                     
                     // execute this unit test case
-                        if (!app.test_a_file(filepath.native_file_string())) {
+                        if (!app.test_a_file(
+                              boost::wave::util::native_file_string(filepath))) 
+                        {
                             if (9 == app.get_debuglevel()) {
                                 std::cerr << "failed to execute test: " 
-                                          << filepath.native_file_string()
+                                          << boost::wave::util::native_file_string(filepath)
                                           << std::endl;
                             }
                             ++error_count;
                         }
                         else if (9 == app.get_debuglevel()) {
                             std::cerr << "succeeded to execute test: " 
-                                      << filepath.native_file_string()
+                                      << boost::wave::util::native_file_string(filepath)
                                       << std::endl;
                         }
                         ++input_count;
@@ -231,26 +236,27 @@ main(int argc, char *argv[])
         for (std::vector<po::option>::const_iterator arg = arguments.begin();
              arg != arg_end; ++arg)
         {
-            fs::path filepath((*arg).value[0], fs::native);
+            fs::path filepath(boost::wave::util::create_path((*arg).value[0]));
 
             if (9 == app.get_debuglevel()) {
                 std::cerr << std::string(79, '-') << std::endl;
                 std::cerr << "executing test: " 
-                          << filepath.native_file_string()
+                          << boost::wave::util::native_file_string(filepath)
                           << std::endl;
             }
                     
-            if (!app.test_a_file(filepath.native_file_string())) {
+            if (!app.test_a_file(boost::wave::util::native_file_string(filepath))) 
+            {
                 if (9 == app.get_debuglevel()) {
                     std::cerr << "failed to execute test: " 
-                              << filepath.native_file_string()
+                              << boost::wave::util::native_file_string(filepath)
                               << std::endl;
                 }
                 ++error_count;
             }
             else if (9 == app.get_debuglevel()) {
                 std::cerr << "succeeded to execute test: " 
-                          << filepath.native_file_string()
+                          << boost::wave::util::native_file_string(filepath)
                           << std::endl;
             }
 
