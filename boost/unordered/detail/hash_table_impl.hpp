@@ -1,11 +1,12 @@
 
 // Copyright (C) 2003-2004 Jeremy B. Maitin-Shepard.
-// Copyright (C) 2005-2008 Daniel James
+// Copyright (C) 2005-2009 Daniel James
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #if BOOST_UNORDERED_EQUIVALENT_KEYS
 #define BOOST_UNORDERED_TABLE hash_table_equivalent_keys
+#define BOOST_UNORDERED_TABLE_NODE node_equivalent_keys
 #define BOOST_UNORDERED_TABLE_DATA hash_table_data_equivalent_keys
 #define BOOST_UNORDERED_ITERATOR hash_iterator_equivalent_keys
 #define BOOST_UNORDERED_CONST_ITERATOR hash_const_iterator_equivalent_keys
@@ -13,6 +14,7 @@
 #define BOOST_UNORDERED_CONST_LOCAL_ITERATOR hash_const_local_iterator_equivalent_keys
 #else
 #define BOOST_UNORDERED_TABLE hash_table_unique_keys
+#define BOOST_UNORDERED_TABLE_NODE node_unique_keys
 #define BOOST_UNORDERED_TABLE_DATA hash_table_data_unique_keys
 #define BOOST_UNORDERED_ITERATOR hash_iterator_unique_keys
 #define BOOST_UNORDERED_CONST_ITERATOR hash_const_iterator_unique_keys
@@ -22,6 +24,32 @@
 
 namespace boost {
     namespace unordered_detail {
+
+        template <typename Alloc>
+        struct BOOST_UNORDERED_TABLE_NODE :
+            value_base<BOOST_DEDUCED_TYPENAME allocator_value_type<Alloc>::type>,
+            bucket_impl<Alloc>
+        {
+            typedef BOOST_DEDUCED_TYPENAME bucket_impl<Alloc>::link_ptr link_ptr;
+            typedef BOOST_DEDUCED_TYPENAME allocator_value_type<Alloc>::type value_type;
+
+            typedef BOOST_DEDUCED_TYPENAME
+                boost::unordered_detail::rebind_wrap<Alloc, BOOST_UNORDERED_TABLE_NODE>::type
+                node_allocator;
+
+#if BOOST_UNORDERED_EQUIVALENT_KEYS
+                BOOST_UNORDERED_TABLE_NODE() : group_prev_()
+                {
+                    BOOST_UNORDERED_MSVC_RESET_PTR(group_prev_);
+                }
+
+                link_ptr group_prev_;
+#endif
+
+                value_type& value() {
+                    return *static_cast<value_type*>(this->address());
+                }
+        };
 
         //
         // Hash Table Data
@@ -34,85 +62,23 @@ namespace boost {
         public:
             typedef BOOST_UNORDERED_TABLE_DATA data;
 
-            struct node;
-            struct bucket;
             typedef std::size_t size_type;
             typedef std::ptrdiff_t difference_type;
 
             typedef Alloc value_allocator;
 
-            typedef BOOST_DEDUCED_TYPENAME
-                boost::unordered_detail::rebind_wrap<Alloc, node>::type
-                node_allocator;
-            typedef BOOST_DEDUCED_TYPENAME
-                boost::unordered_detail::rebind_wrap<Alloc, bucket>::type
-                bucket_allocator;
+            typedef bucket_impl<Alloc> bucket;
+            typedef BOOST_DEDUCED_TYPENAME bucket::bucket_allocator bucket_allocator;
+            typedef BOOST_DEDUCED_TYPENAME bucket::bucket_ptr bucket_ptr;
+            typedef BOOST_DEDUCED_TYPENAME bucket::link_ptr link_ptr;
+
+            typedef BOOST_UNORDERED_TABLE_NODE<Alloc> node;
+            typedef BOOST_DEDUCED_TYPENAME node::node_allocator node_allocator;
 
             typedef BOOST_DEDUCED_TYPENAME allocator_value_type<Alloc>::type value_type;
             typedef BOOST_DEDUCED_TYPENAME allocator_pointer<node_allocator>::type node_ptr;
-            typedef BOOST_DEDUCED_TYPENAME allocator_pointer<bucket_allocator>::type bucket_ptr;
             typedef BOOST_DEDUCED_TYPENAME allocator_reference<value_allocator>::type reference;
             typedef BOOST_DEDUCED_TYPENAME allocator_reference<bucket_allocator>::type bucket_reference;
-
-            typedef bucket_ptr link_ptr;
-
-            // Hash Bucket
-            //
-            // all no throw
-
-            struct bucket
-            {
-            private:
-                bucket& operator=(bucket const&);
-            public:
-                link_ptr next_;
-
-                bucket() : next_()
-                {
-                    BOOST_UNORDERED_MSVC_RESET_PTR(next_);
-                }
-
-                bucket(bucket const& x) : next_(x.next_)
-                {
-                    // Only copy construct when allocating.
-                    BOOST_ASSERT(!x.next_);
-                }
-
-                bool empty() const
-                {
-                    return !this->next_;
-                }
-            };
-
-            // Value Base
-
-            struct value_base {
-                typename boost::aligned_storage<
-                    sizeof(value_type),
-                    boost::alignment_of<value_type>::value>::type data_;
-
-                void* address() { return this; }
-            };
-
-            // Hash Node
-            //
-            // all no throw
-
-            struct node : value_base, bucket {
-#if BOOST_UNORDERED_EQUIVALENT_KEYS
-            public:
-                node() : group_prev_()
-                {
-                    BOOST_UNORDERED_MSVC_RESET_PTR(group_prev_);
-                }
-
-                link_ptr group_prev_;
-#endif
-
-                value_type& value() {
-                    return *static_cast<value_type*>(this->address());
-                }
-            };
 
             // allocators
             //
@@ -1103,7 +1069,7 @@ namespace boost {
 
                 // This can throw, but BOOST_UNORDERED_TABLE_DATA's destructor will clean
                 // up.
-                copy_buckets(x.data_, data_, functions_.current());
+                x.copy_buckets_to(data_);
             }
 
             // Copy Construct with allocator
@@ -1118,7 +1084,7 @@ namespace boost {
 
                 // This can throw, but BOOST_UNORDERED_TABLE_DATA's destructor will clean
                 // up.
-                copy_buckets(x.data_, data_, functions_.current());
+                x.copy_buckets_to(data_);
             }
 
             // Move Construct
@@ -1143,14 +1109,14 @@ namespace boost {
                 if(x.data_.buckets_) {
                     // This can throw, but BOOST_UNORDERED_TABLE_DATA's destructor will clean
                     // up.
-                    copy_buckets(x.data_, data_, functions_.current());
+                    x.copy_buckets_to(data_);
                 }
             }
 
             // Assign
             //
             // basic exception safety, if buffered_functions::buffer or reserver throws
-            // the container is left in a sane, empty state. If copy_buckets
+            // the container is left in a sane, empty state. If copy_buckets_to
             // throws the container is left with whatever was successfully
             // copied.
 
@@ -1164,7 +1130,7 @@ namespace boost {
                     mlf_ = x.mlf_;                        // no throw
                     calculate_max_load();                 // no throw
                     reserve(x.size());                    // throws
-                    copy_buckets(x.data_, data_, functions_.current()); // throws
+                    x.copy_buckets_to(data_); // throws
                 }
 
                 return *this;
@@ -1207,10 +1173,10 @@ namespace boost {
                     // which will clean up if anything throws an exception.
                     // (all can throw, but with no effect as these are new objects).
                     data new_this(data_, x.min_buckets_for_size(x.data_.size_));
-                    copy_buckets(x.data_, new_this, functions_.*new_func_this);
+                    x.copy_buckets_to(new_this);
 
                     data new_that(x.data_, min_buckets_for_size(data_.size_));
-                    x.copy_buckets(data_, new_that, x.functions_.*new_func_that);
+                    copy_buckets_to(new_that);
 
                     // Start updating the data here, no throw from now on.
                     data_.swap(new_this);
@@ -1251,7 +1217,7 @@ namespace boost {
                     // which will clean up if anything throws an exception.
                     // (all can throw, but with no effect as these are new objects).
                     data new_this(data_, x.min_buckets_for_size(x.data_.size_));
-                    copy_buckets(x.data_, new_this, functions_.*new_func_this);
+                    x.copy_buckets_to(new_this);
 
                     // Start updating the data here, no throw from now on.
                     data_.move(new_this);
@@ -1494,22 +1460,23 @@ namespace boost {
                     return;
 
                 data new_buckets(data_, n); // throws, seperate
-                move_buckets(data_, new_buckets, hash_function());
-                                                        // basic/no throw
+                move_buckets_to(new_buckets);           // basic/no throw
                 new_buckets.swap(data_);                // no throw
                 calculate_max_load();                   // no throw
             }
 
-            // move_buckets & copy_buckets
+            // move_buckets_to & copy_buckets_to
             //
             // if the hash function throws, basic excpetion safety
             // no throw otherwise
 
-            static void move_buckets(data& src, data& dst, hasher const& hf)
+            void move_buckets_to(data& dst)
             {
                 BOOST_ASSERT(dst.size_ == 0);
                 //BOOST_ASSERT(src.allocators_.node_alloc_ == dst.allocators_.node_alloc_);
 
+                data& src = this->data_;
+                hasher const& hf = this->hash_function();
                 bucket_ptr end = src.buckets_end();
 
                 for(; src.cached_begin_bucket_ != end;
@@ -1533,12 +1500,14 @@ namespace boost {
             // basic excpetion safety. If an exception is thrown this will
             // leave dst partially filled.
 
-            static void copy_buckets(data const& src, data& dst, functions const& f)
+            void copy_buckets_to(data& dst) const
             {
                 BOOST_ASSERT(dst.size_ == 0);
+
                 // no throw:
+                data const& src = this->data_;
+                hasher const& hf = this->hash_function();
                 bucket_ptr end = src.buckets_end();
-                hasher const& hf = f.hash_function();
 
                 // no throw:
                 for(bucket_ptr i = src.cached_begin_bucket_; i != end; ++i) {
@@ -2322,6 +2291,7 @@ namespace boost {
 }
 
 #undef BOOST_UNORDERED_TABLE
+#undef BOOST_UNORDERED_TABLE_NODE
 #undef BOOST_UNORDERED_TABLE_DATA
 #undef BOOST_UNORDERED_ITERATOR
 #undef BOOST_UNORDERED_CONST_ITERATOR

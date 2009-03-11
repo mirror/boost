@@ -40,7 +40,6 @@ test-suite functional/hash
         [ compile-fail hash_no_ext_fail_test.cpp ]
         [ run hash_no_ext_macro_1.cpp ]
         [ run hash_no_ext_macro_2.cpp ]
-        [ compile-fail hash_deprecated_headers.cpp ]
     ;
 
 build-project ../examples ;
