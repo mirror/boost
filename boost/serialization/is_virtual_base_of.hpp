@@ -22,6 +22,8 @@ namespace detail {
 #ifdef BOOST_MSVC
 #pragma warning( push )
 #pragma warning( disable : 4584 )
+#elif defined __GNUC__
+#pragma GCC system_header
 #endif
 
 template<typename Base, typename Derived>

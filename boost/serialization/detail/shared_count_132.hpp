@@ -246,6 +246,7 @@ public:
     D del; // copy constructor must not throw
 
     sp_counted_base_impl(sp_counted_base_impl const &);
+    sp_counted_base_impl();
     sp_counted_base_impl & operator= (sp_counted_base_impl const &);
 
     typedef sp_counted_base_impl<P, D> this_type;
