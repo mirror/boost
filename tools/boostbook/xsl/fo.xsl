@@ -176,6 +176,8 @@ Put a box around admonishments and keep them together:
   <xsl:attribute name="padding-top">0.2cm</xsl:attribute>
   <xsl:attribute name="padding-bottom">0.2cm</xsl:attribute>
   <xsl:attribute name="keep-together.within-page">1</xsl:attribute>
+  <xsl:attribute name="margin-left">0pt</xsl:attribute>
+  <xsl:attribute name="margin-right">0pt</xsl:attribute>
 </xsl:attribute-set>
 
 <!--
@@ -200,6 +202,8 @@ symbol is used as the hyphenation character:
   <xsl:attribute name="hyphenate">true</xsl:attribute>
   <xsl:attribute name="wrap-option">wrap</xsl:attribute>
   <xsl:attribute name="hyphenation-character">&#x21B5;</xsl:attribute>
+  <xsl:attribute name="margin-left">0pt</xsl:attribute>
+  <xsl:attribute name="margin-right">0pt</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:param name="hyphenate.verbatim" select="1"></xsl:param>
