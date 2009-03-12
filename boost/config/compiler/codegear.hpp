@@ -73,16 +73,16 @@
 //#  define BOOST_HAS_STATIC_ASSERT
 #  define BOOST_HAS_STD_TYPE_TRAITS
 
-#  define BOOST_NO_EXTERN_TEMPLATE                
-#  define BOOST_NO_SCOPED_ENUMS                   
-#  define BOOST_NO_STATIC_ASSERT                  
-#  define BOOST_NO_RVALUE_REFERENCES              
+#  define BOOST_NO_EXTERN_TEMPLATE
+#  define BOOST_NO_SCOPED_ENUMS
+#  define BOOST_NO_STATIC_ASSERT
+#  define BOOST_NO_RVALUE_REFERENCES
 #  define BOOST_NO_VARIADIC_TEMPLATES
-#  define BOOST_NO_CONSTEXPR                      
-#  define BOOST_NO_DEFAULTED_FUNCTIONS              
-#  define BOOST_NO_DELETED_FUNCTIONS              
-#  define BOOST_NO_RAW_LITERALS                   
-#  define BOOST_NO_UNICODE_LITERALS     
+#  define BOOST_NO_CONSTEXPR
+#  define BOOST_NO_DEFAULTED_FUNCTIONS
+#  define BOOST_NO_DELETED_FUNCTIONS
+#  define BOOST_NO_RAW_LITERALS
+#  define BOOST_NO_UNICODE_LITERALS
 
 //
 // TR1 macros:
