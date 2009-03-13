@@ -108,4 +108,10 @@ test-suite numeric/uBLAS
       ]
       [ run test_lu.cpp
       ]
+      [ run triangular_access.cpp
+        : : :
+            <define>NOMESSAGES
+      ]
+      [ run triangular_layout.cpp
+      ]
     ;

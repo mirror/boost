@@ -26,6 +26,23 @@ void assertTrue(const char* message, bool condition) {
   }
 }
 
+template < class T >
+void assertEquals(const char* message, T expected, T actual) {
+#ifndef NOMESSAGES
+  std::cout << message;
+#endif
+  if ( expected == actual ) {
+    ++ _success_counter;
+    std::cout << "1\n"; // success
+  } else {
+    #ifndef NOMESSAGES
+      std::cout << " expected " << expected << " actual " << actual << " ";
+    #endif
+    ++ _fail_counter;
+    std::cout << "0\n"; // failed
+  }
+}
+
 static
 std::pair<unsigned, unsigned> getResults() {
   return std::make_pair(_success_counter, _fail_counter);
