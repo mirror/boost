@@ -18,6 +18,9 @@
 #include <typeinfo>
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
+#include <boost/integer.hpp>
+#include <boost/type_traits/has_trivial_copy.hpp>
+#include <boost/type_traits/has_trivial_destructor.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_volatile.hpp>
@@ -625,7 +628,7 @@ public:
     if (!vtable) return typeid(void);
 
     detail::function::function_buffer type;
-    vtable->manager(functor, type, detail::function::get_functor_type_tag);
+    get_vtable()->manager(functor, type, detail::function::get_functor_type_tag);
     return *type.type.type;
   }
 
@@ -638,7 +641,7 @@ public:
       type_result.type.type = &typeid(Functor);
       type_result.type.const_qualified = is_const<Functor>::value;
       type_result.type.volatile_qualified = is_volatile<Functor>::value;
-      vtable->manager(functor, type_result, 
+      get_vtable()->manager(functor, type_result, 
                       detail::function::check_functor_type_tag);
       return static_cast<Functor*>(type_result.obj_ptr);
     }
@@ -656,7 +659,7 @@ public:
       type_result.type.type = &typeid(Functor);
       type_result.type.const_qualified = true;
       type_result.type.volatile_qualified = is_volatile<Functor>::value;
-      vtable->manager(functor, type_result, 
+      get_vtable()->manager(functor, type_result, 
                       detail::function::check_functor_type_tag);
       // GCC 2.95.3 gets the CV qualifiers wrong here, so we
       // can't do the static_cast that we should do.
@@ -702,6 +705,15 @@ public:
 #endif
 
 public: // should be protected, but GCC 2.95.3 will fail to allow access
+  detail::function::vtable_base* get_vtable() const {
+    return reinterpret_cast<detail::function::vtable_base*>(
+             reinterpret_cast<std::size_t>(vtable) & ~(std::size_t)0x01);
+  }
+
+  bool has_trivial_copy_and_destroy() const {
+    return reinterpret_cast<std::size_t>(vtable) & 0x01;
+  }
+
   detail::function::vtable_base* vtable;
   mutable detail::function::function_buffer functor;
 };
