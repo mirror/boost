@@ -1,4 +1,4 @@
-//  (C) Copyright Daniel Frey and Robert Ramey 2009.
+//  (C) Copyright Robert Ramey 2009.
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -29,8 +29,10 @@ namespace detail {
 template<typename Base, typename Derived>
 struct is_virtual_base_of_impl
 {
-    struct X : Derived, virtual Base {};
-    BOOST_STATIC_CONSTANT(bool, value = sizeof(X)==sizeof(Derived));
+    struct x : private Derived {};
+    struct y : private Derived {};
+    struct z : private x, private y {};
+    BOOST_STATIC_CONSTANT(bool, value = (sizeof(z) != 2 * sizeof(x)));
 };
 
 #ifdef BOOST_MSVC
