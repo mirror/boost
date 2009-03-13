@@ -20,7 +20,13 @@
 namespace boost { namespace property_tree { namespace info_parser
 {
 
-    // Read info from stream
+    /**
+     * Read INFO from a the given stream and translate it to a property tree.
+     * @note Clears existing contents of property tree.  In case of error the property tree unmodified.
+     * @throw info_parser_error On error translating the INFO stream to a property tree.
+     * @param stream Stream from which to read in the property tree.
+     * @param[out] pt The property tree to populate.
+     */
     template<class Ptree, class Ch>
     void read_info(std::basic_istream<Ch> &stream, 
                    Ptree &pt)
@@ -30,7 +36,13 @@ namespace boost { namespace property_tree { namespace info_parser
         pt.swap(local);
     }
 
-    // Read info from stream with default
+    /**
+     * Read INFO from a the given stream and translate it to a property tree.
+     * @note Clears existing contents of property tree.  In case of error the property tree unmodified.
+     * @param stream Stream from which to read in the property tree.
+     * @param[out] pt The property tree to populate.
+     * @param default_ptree The property tree to which to set @c pt on error reading the INFO stream.
+     */
     template<class Ptree, class Ch>
     void read_info(std::basic_istream<Ch> &stream, 
                    Ptree &pt,
@@ -46,7 +58,14 @@ namespace boost { namespace property_tree { namespace info_parser
         }
     }
 
-    // Read info from file
+    /**
+     * Read INFO from a the given file and translate it to a property tree.
+     * @note Clears existing contents of property tree.  In case of error the property tree unmodified.
+     * @throw info_parser_error On error translating the INFO stream to a property tree.
+     * @param filename Name of file from which to read in the property tree.
+     * @param[out] pt The property tree to populate.
+     * @param loc The locale to use when reading in the file contents.
+     */
     template<class Ptree>
     void read_info(const std::string &filename,
                    Ptree &pt,
@@ -61,7 +80,14 @@ namespace boost { namespace property_tree { namespace info_parser
         pt.swap(local);
     }
 
-    // Read info from file with default
+    /**
+     * Read INFO from a the given file and translate it to a property tree.
+     * @note Clears existing contents of property tree.  In case of error the property tree unmodified.
+     * @param filename Name of file from which to read in the property tree.
+     * @param[out] pt The property tree to populate.
+     * @param loc The locale to use when reading in the file contents.
+     * @param default_ptree The property tree to which to set @c pt on error reading the INFO stream.
+     */
     template<class Ptree>
     void read_info(const std::string &filename, 
                    Ptree &pt,
@@ -78,7 +104,15 @@ namespace boost { namespace property_tree { namespace info_parser
         }
     }
 
-    // Write info to stream
+    /**
+     * Translates the property tree to INFO and writes it the given output stream.
+     * @throw info_parser_error In case of error translating the property tree to INFO
+     *                          or writing to the output stream.
+     * @param stream The stream to which to write the INFO representation of the
+     *               property tree.
+     * @param pt The property tree to tranlsate to INFO and output.
+     * @param settings The settings to use when writing the INFO data.
+     */
     template<class Ptree, class Ch>
     void write_info(std::basic_ostream<Ch> &stream, 
                     const Ptree &pt,
@@ -87,7 +121,16 @@ namespace boost { namespace property_tree { namespace info_parser
         write_info_internal(stream, pt, std::string(), settings);
     }
 
-    // Write info to file
+    /**
+     * Translates the property tree to INFO and writes it the given file.
+     * @throw info_parser_error In case of error translating the property tree to INFO
+     *                          or writing to the file.
+     * @param filename The name of the file to which to write the INFO representation
+     *                 of the property tree.
+     * @param pt The property tree to tranlsate to INFO and output.
+     * @param settings The settings to use when writing the INFO data.
+     * @param loc The locale to use when writing the file.
+     */
     template<class Ptree>
     void write_info(const std::string &filename,
                     const Ptree &pt,

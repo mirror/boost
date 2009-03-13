@@ -36,7 +36,20 @@
 namespace boost { namespace property_tree { namespace xml_parser
 {
 
-    // Read XML from stream
+    /**
+     * Reads XML from an input stream and translates it to property tree.
+     * @note Clears existing contents of property tree.  In case of error the property tree unmodified.
+     * @note XML attributes are placed under keys named @c \<xmlattr\>.
+     * @throw xml_parser_error In case of error deserializing the property tree.
+     * @param stream Stream from which to read in the property tree.
+     * @param[out] pt The property tree to populate.
+     * @param flags Flags controlling the bahviour of the parser.
+     *              The following flags are supported:
+     * @li @c no_concat_text -- Prevents concatenation of text nodes into datastring
+     *                          of property tree.  Puts them in separate @c \<xmltext\>
+     *                          strings instead.
+     * @li @c no_comments -- Skip XML comments.
+     */
     template<class Ptree>
     void read_xml(std::basic_istream<typename Ptree::key_type::value_type> &stream,
                   Ptree &pt,
@@ -45,7 +58,21 @@ namespace boost { namespace property_tree { namespace xml_parser
         read_xml_internal(stream, pt, flags, std::string());
     }
 
-    // Read XML from file
+    /**
+     * Reads XML from a file using the given locale and translates it to property tree.
+     * @note Clears existing contents of property tree.  In case of error the property tree unmodified.
+     * @note XML attributes are placed under keys named @c \<xmlattr\>.
+     * @throw xml_parser_error In case of error deserializing the property tree.
+     * @param filename The file from which to read in the property tree.
+     * @param[out] pt The property tree to populate.
+     * @param flags Flags controlling the bahviour of the parser.
+     *              The following flags are supported:
+     * @li @c no_concat_text -- Prevents concatenation of text nodes into datastring
+     *                          of property tree.  Puts them in separate @c \<xmltext\>
+     *                          strings instead.
+     * @li @c no_comments -- Skip XML comments.
+     * @param loc The locale to use when reading in the file contents.
+     */
     template<class Ptree>
     void read_xml(const std::string &filename,
                   Ptree &pt,
@@ -60,7 +87,15 @@ namespace boost { namespace property_tree { namespace xml_parser
         read_xml_internal(stream, pt, flags, filename);
     }
 
-    // Write XML to stream
+    /**
+     * Translates the property tree to XML and writes it the given output stream.
+     * @throw xml_parser_error In case of error translating the property tree to XML 
+     *                         or writing to the output stream.
+     * @param stream The stream to which to write the XML representation of the 
+     *               property tree.
+     * @param pt The property tree to tranlsate to XML and output.
+     * @param settings The settings to use when writing out the property tree as XML.
+     */
     template<class Ptree>
     void write_xml(std::basic_ostream<typename Ptree::key_type::value_type> &stream, 
                    const Ptree &pt,
@@ -69,7 +104,16 @@ namespace boost { namespace property_tree { namespace xml_parser
         write_xml_internal(stream, pt, std::string(), settings);
     }
 
-    // Write XML to file
+    /**
+     * Translates the property tree to XML and writes it the given file.
+     * @throw xml_parser_error In case of error translating the property tree to XML 
+     *                         or writing to the output stream.
+     * @param filename The file to which to write the XML representation of the 
+     *               property tree.
+     * @param pt The property tree to tranlsate to XML and output.
+     * @param loc The locale to use when writing the output to file.
+     * @param settings The settings to use when writing out the property tree as XML.
+     */
     template<class Ptree>
     void write_xml(const std::string &filename,
                    const Ptree &pt,

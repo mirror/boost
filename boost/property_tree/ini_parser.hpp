@@ -22,17 +22,29 @@
 namespace boost { namespace property_tree { namespace ini_parser
 {
 
-    static const int skip_ini_validity_check = 1;     // Skip check if ptree is a valid ini
+    /** Skip check if ptree is a valid ini */
+    static const int skip_ini_validity_check = 1;
 
+    /**
+     * Determines whether the @c flags are valid for use with the ini_parser.
+     * @param flags value to check for validity as flags to ini_parser.
+     * @return true if the flags are valid, false otherwise.
+     */
     inline bool validate_flags(int flags)
     {
         return (flags & ~skip_ini_validity_check) == 0;
     }
 
-    //! Ini parser error
+    /** Indicates an error parsing INI formatted data. */
     class ini_parser_error: public file_parser_error
     {
     public:
+        /**
+         * Construct an @c ini_parser_error
+         * @param message Message describing the parser error.
+         * @param filename The name of the file being parsed containing the error.
+         * @param line The line in the given file where an error was encountered.
+         */
         ini_parser_error(const std::string &message, 
                          const std::string &filename, 
                          unsigned long line): 
@@ -41,7 +53,13 @@ namespace boost { namespace property_tree { namespace ini_parser
         }
     };
 
-    //! Read ini from stream
+    /**
+     * Read INI from a the given stream and translate it to a property tree.
+     * @note Clears existing contents of property tree.  In case of error the property tree unmodified.
+     * @throw ini_parser_error In case of error deserializing the property tree.
+     * @param stream Stream from which to read in the property tree.
+     * @param[out] pt The property tree to populate.
+     */
     template<class Ptree>
     void read_ini(std::basic_istream<typename Ptree::key_type::value_type> &stream, 
                   Ptree &pt)
@@ -108,7 +126,14 @@ namespace boost { namespace property_tree { namespace ini_parser
 
     }
 
-    //! Read ini from file
+    /**
+     * Read INI from a the given file and translate it to a property tree.
+     * @note Clears existing contents of property tree.  In case of error the property tree unmodified.
+     * @throw ini_parser_error In case of error deserializing the property tree.
+     * @param filename Name of file from which to read in the property tree.
+     * @param[out] pt The property tree to populate.
+     * @param loc The locale to use when reading in the file contents.
+     */
     template<class Ptree>
     void read_ini(const std::string &filename, 
                   Ptree &pt,
@@ -126,7 +151,21 @@ namespace boost { namespace property_tree { namespace ini_parser
         }
     }
 
-    //! Write ini to stream
+    /**
+     * Translates the property tree to INI and writes it the given output stream.
+     * @pre @e pt cannot have keys with data at its root level.
+     * @pre @e pt cannot be deaper than two levels.
+     * @pre There cannot be duplicate keys on any given level of @e pt.
+     * @throw ini_parser_error In case of error translating the property tree to INI
+     *                         or writing to the output stream.
+     * @param stream The stream to which to write the INI representation of the 
+     *               property tree.
+     * @param pt The property tree to tranlsate to INI and output.
+     * @param flags The flags to use when writing the INI file.
+     *              The following flags are supported:
+     * @li @c skip_ini_validity_check -- Skip check if ptree is a valid ini.  The
+     *     validity check covers the preconditions but takes <tt>O(n log n)</tt> time.
+     */
     template<class Ptree>
     void write_ini(std::basic_ostream<typename Ptree::key_type::value_type> &stream, 
                    const Ptree &pt,
@@ -165,7 +204,22 @@ namespace boost { namespace property_tree { namespace ini_parser
 
     }
 
-    // Write ini to file
+    /**
+     * Translates the property tree to INI and writes it the given file.
+     * @pre @e pt cannot have keys with data at its root level.
+     * @pre @e pt cannot be deaper than two levels.
+     * @pre There cannot be duplicate keys on any given level of @e pt.
+     * @throw info_parser_error In case of error translating the property tree to INI
+     *                          or writing to the file.
+     * @param filename The name of the file to which to write the INI representation
+     *                 of the property tree.
+     * @param pt The property tree to tranlsate to INI and output.
+     * @param flags The flags to use when writing the INI file.
+     *              The following flags are supported:
+     * @li @c skip_ini_validity_check -- Skip check if ptree is a valid ini.  The
+     *     validity check covers the preconditions but takes <tt>O(n log n)</tt> time.
+     * @param loc The locale to use when writing the file.
+     */
     template<class Ptree>
     void write_ini(const std::string &filename,
                    const Ptree &pt,
