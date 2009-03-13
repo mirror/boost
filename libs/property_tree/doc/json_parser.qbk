@@ -1,0 +1,49 @@
+[section JSON Parser]
+[def __json_wiki__ [@http://en.wikipedia.org/wiki/JSON JSON format]]
+The __json_wiki__ is a data interchange format which is a subset of Javascript language.  (JSON stands for JavaScript Object Notation.)  It is considerably simpler than XML, is usually more concise, easier to read by humans, and easier to parse by machines. It's not currently as widely used as XML, but if you think XML is bloated then this may be the format worth consideration.
+
+JSON structure is slightly different from that of property tree. The differences and the way they are dealt with are summarized below:
+
+* JSON contains 'objects' and 'arrays' - objects are collections of name-value pairs, while arrays contain only values. During parse, items of JSON arrays are translated into ptree keys with empty names. Members of objects are translated into named keys. During write, any ptree key containing only unnamed subkeys will be rendered as JSON array.
+* A JSON element cannot simultaneously have child items and data. Only one of these may be present. As a result, if property tree contains keys that have both subkeys and non-empty data, writing will fail.
+* JSON data can be a string, a numeric value, or one of literals "null", "true" and "false". During parse, any of the above is copied verbatim into ptree data string. This causes some type information to be lost, because if resulting ptree is written back into JSON format, it will only contain strings.
+
+For example this JSON:
+
+ {
+    "menu": 
+    {
+       "foo": true,
+       "bar": "true",
+       "value": 102.3E+06,
+       "popup": 
+       [
+          {"value": "New", "onclick": "CreateNewDoc()"},
+          {"value": "Open", "onclick": "OpenDoc()"},
+       ]
+    }
+ }
+
+will be translated into the following property tree:
+
+ menu
+ {
+    foo true
+    bar true
+    value 102.3E+06
+    popup
+    {
+       ""
+       {
+          value New
+          onclick CreateNewDoc()
+       }
+       ""
+       {
+          value Open
+          onclick OpenDoc()
+       }
+    }
+ }
+
+[endsect] [/json_parser]

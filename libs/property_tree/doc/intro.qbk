@@ -1,0 +1,31 @@
+[template ptree2codeImage[] [$images/ptree2code.png]]
+[section:intro What is Property Tree?]
+Property tree is a recursive data structure that stores a single data string,
+and an ordered list of [^(key, value)] pairs, where value is a property tree
+itself. It therefore forms a tree, hence the name. It is a versatile structure
+that can store in uniform way data coming from various sources, such as XML,
+INI or JSON files, as well as windows registry, program command line etc.
+The correspondence between a data source (here XML file) and property tree is
+illustrated in the following diagram:
+[ptree2codeImage]
+
+Each node of property tree may be conceptually treated as the following
+structure (note that due to recursive nature of the tree, nodes are property
+trees):
+
+   struct ptree
+   {
+      string data;                            // data associated with the node
+      list< pair<string, ptree> > children;   // ordered list of named children
+   };
+
+Both key type and data type are configurable.
+
+The property tree interface is similar to the interface of a standard C++
+container. It supports iterators, insertion, erasing, searching etc. One can
+think of it as a sort of Document Object Model, which is minimalistic, not
+bound to any specific file format, designed to be easy to use, and comes as
+Boost-compatible, headers only C++ library.  Many software projects develop a
+similar tool at some point of their lifetime, and property tree originated the
+same way.  I hope the library can save many from reinventing the wheel. 
+[endsect] [/intro]

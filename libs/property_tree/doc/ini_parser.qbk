@@ -1,0 +1,6 @@
+[section INI Parser]
+[def __ini_wiki__ [@http://en.wikipedia.org/wiki/INI INI format]]
+The __ini_wiki__ was once widely used in the world of Windows. It is now deprecated, but is still used by a surprisingly large number of applications. The reason is probably its simplicity. Contrary to XML, this format is actually less rich than property tree. Because of that, there is no translation needed when reading from it. On the other hand, not every property tree can be represented as INI file - it cannot have keys with data on root level, it cannot be deeper than two levels, and there cannot be duplicate keys on any level.  The write functions by default do check these conditions, and will throw when these conditions are not met. Because the check can take a fairly significant amount of time [^(O(n log n))], there is an option to disable it by using `flags` parameter.
+
+INI parser does not use Windows functions to read and write the file. Instead it uses a fast and small handcrafted parser. Not that I think anybody would like to parse gigabytes of INI files. But thanks to this it is portable and can be used even on non-Windows systems.
+[endsect] [/ini_parser]

@@ -1,0 +1,15 @@
+[section XML Parser]
+[def __xml_wiki__ [@http://en.wikipedia.org/wiki/XML XML format]]
+[def __xml_parser.hpp__ [headerref boost/property_tree/xml_parser.hpp xml_parser.hpp]]
+[def __TinyXML__ [@http://sourceforge.net/projects/tinyxml TinyXML]]
+[def __boost_homepage__ [@http://www.boost.org Boost]]
+The __xml_wiki__ is an industry standard for storing information in textual form. Unfortunately, there is no XML parser in __boost_homepage__ as of the time of this writing. Therefore, a custom parser was created. It only supports a core subset of XML standard. For example, declarations and entity references are not supported. The parser is built with Spirit, and bases on XML grammar sample by Daniel Nuffer. As a reinforcement to it, a parser based on __TinyXML__ is also provided. To enable it define [^BOOST_PROPERTY_TREE_XML_PARSER_TINYXML] before including the __xml_parser.hpp__ file. __TinyXML__ library has to be obtained separately.
+
+How XML is translated to property tree (__read_xml__):
+
+* Attributes of each XML key are stored in a subkey with name [^<xmlattr>]. Each subkey of [^<xmlattr>] is one attribute. If [^<xmlattr>] subkey does not exist or is empty, there are no attributes.
+* XML comments are stored in keys named [^<xmlcomment>], unless a flag is specified that disables parsing of comments.
+* Data of XML node may be stored in two ways, depending on the flags parameter setting. The default way is to have all data nodes concatenated and put in data string of appropriate property tree key. The other way is to have them put in separate subkeys named [^<xmltext>] each.
+
+Translation of property tree back into XML (__write_xml__) assumes the same structure as outlined above. That means, for example, that if you want to have attributes, you need to create [^<xmlattr>] subkey and put them there. With appropriate flags setting, reading an XML file and writing it back will not change the contents (but may change formatting), unless XML file uses some unsupported constructs.
+[endsect] [/xml_parser]
