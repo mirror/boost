@@ -21,6 +21,8 @@
 
 #include "test7.hpp"
 
+// this testcase requires fix of task #2473 
+
 int main () {
     test_vector ();
     test_matrix_vector ();
