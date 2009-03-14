@@ -282,7 +282,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef VE vector_expression_type;
         typedef typename VE::type_category type_category;
         typedef typename VE::size_type size_type;
-        typedef typename VE::difference_type size_type;
+        typedef typename VE::difference_type difference_type;
         typedef typename VE::value_type value_type;
         typedef typename VE::const_reference const_reference;
         typedef typename VE::const_iterator const_iterator_type;
