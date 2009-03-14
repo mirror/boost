@@ -23,7 +23,7 @@
 #include <boost/serialization/singleton.hpp>
 #include <boost/serialization/force_include.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
-#include <boost/serialization/is_virtual_base_of.hpp>
+#include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <boost/config/abi_prefix.hpp> // must be the last header
 
