@@ -746,7 +746,7 @@
     <xsl:param name="namespace-reference" select="false()"/>
 
     <xsl:if test="$namespace-reference=false()">
-      <xsl:apply-templates select="purpose/*"/>
+      <xsl:apply-templates select="purpose/*|purpose/text()"/>
     </xsl:if>
 
     <xsl:apply-templates select="description/*"/>

@@ -288,12 +288,6 @@ def setup_boostbook( tools_directory ):
     print "Done! Execute \"bjam --v2\" in a documentation directory to generate"
     print "documentation with BoostBook. If you have not already, you will need"
     print "to compile Boost.Jam."
-    print ""
-    print "WARNING FOR WIN32: please obtain a patched version of xsltproc "
-    print "from http://engineering.meta-comm.com/xsltproc-win32.zip if you"
-    print "are running BoostBook build on Win32 system (this patched version"
-    print "solves the long-standing xsltproc problem with "
-    print "creating directories for output files)."
 
 def main():
     ( tools_directory ) = accept_args( sys.argv[ 1: ] )

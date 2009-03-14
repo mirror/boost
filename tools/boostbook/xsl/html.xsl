@@ -46,9 +46,11 @@
             select = "concat($boost.root, '/doc/html/images/')"/>
   <xsl:param name = "navig.graphics.path"
             select = "concat($boost.root, '/doc/html/images/')"/>
+  <xsl:param name = "callout.graphics.path"
+            select = "concat($boost.root, '/doc/src/images/callouts/')"/>
 
 
-   <xsl:param name="admon.style">
+  <xsl:param name="admon.style">
     <!-- Remove the style. Let the CSS do the styling -->
 </xsl:param>
 

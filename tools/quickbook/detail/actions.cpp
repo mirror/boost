@@ -251,7 +251,11 @@ namespace quickbook
             << ", unexpected character: " << std::string(first, last)
             << "\n";
 
-        out << '#'; // print out an unexpected character
+        // print out an unexpected character
+        out << "<phrase role=\"error\">";
+        while (first != last)
+            detail::print_char(*first++, out.get());
+        out << "</phrase>";
     }
 
     void anchor_action::operator()(iterator first, iterator last) const
@@ -1212,6 +1216,9 @@ namespace quickbook
         out << "      <year>" << year << "</year>\n";
     }
 
+    static void write_document_title(collector& out, quickbook::actions& actions);
+    static void write_document_info(collector& out, quickbook::actions& actions);
+
     void pre(collector& out, quickbook::actions& actions, bool ignore_docinfo)
     {
         // The doc_info in the file has been parsed. Here's what we'll do
@@ -1221,7 +1228,7 @@ namespace quickbook
             actions.doc_id = detail::make_identifier(
                 actions.doc_title.begin(),actions.doc_title.end());
 
-        if (actions.doc_dirname.empty())
+        if (actions.doc_dirname.empty() && actions.doc_type == "library")
             actions.doc_dirname = actions.doc_id;
 
         if (actions.doc_last_revision.empty())
@@ -1264,12 +1271,58 @@ namespace quickbook
             << "<!DOCTYPE library PUBLIC \"-//Boost//DTD BoostBook XML V1.0//EN\"\n"
             << "     \"http://www.boost.org/tools/boostbook/dtd/boostbook.dtd\">\n"
             << '<' << actions.doc_type << "\n"
-            << "    id=\"" << actions.doc_id << "\"\n"
-            << "    name=\"" << actions.doc_title << "\"\n"
-            << "    dirname=\"" << actions.doc_dirname << "\"\n"
-            << "    last-revision=\"" << actions.doc_last_revision << "\" \n"
-            << "    xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n"
-            << "  <" << actions.doc_type << "info>\n";
+            << "    id=\"" << actions.doc_id << "\"\n";
+        
+        if(actions.doc_type == "library")
+        {
+            out << "    name=\"" << actions.doc_title << "\"\n";
+        }
+
+        if(!actions.doc_dirname.empty())
+        {
+            out << "    dirname=\"" << actions.doc_dirname << "\"\n";
+        }
+
+        out << "    last-revision=\"" << actions.doc_last_revision << "\" \n"
+            << "    xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n";
+            
+        if(actions.doc_type == "library") {
+            write_document_info(out, actions);
+            write_document_title(out, actions);
+        }
+        else {
+            write_document_title(out, actions);
+            write_document_info(out, actions);
+        }
+    }
+    
+    void post(collector& out, quickbook::actions& actions, bool ignore_docinfo)
+    {
+        // if we're ignoring the document info, do nothing.
+        if (ignore_docinfo)
+        {
+            return;
+        }
+
+        // We've finished generating our output. Here's what we'll do
+        // *after* everything else.
+        out << "\n</" << actions.doc_type << ">\n\n";
+    }
+
+    void write_document_title(collector& out, quickbook::actions& actions)
+    {
+        if (!actions.doc_title.empty())
+        {
+            out<< "  <title>" << actions.doc_title;
+            if (!actions.doc_version.empty())
+                out << ' ' << actions.doc_version;
+            out<< "</title>\n\n\n";
+        }
+    }
+
+    void write_document_info(collector& out, quickbook::actions& actions)
+    {
+        out << "  <" << actions.doc_type << "info>\n";
 
         if(!actions.doc_authors.empty())
         {
@@ -1328,27 +1381,6 @@ namespace quickbook
         out << "  </" << actions.doc_type << "info>\n"
             << "\n"
         ;
-
-        if (!actions.doc_title.empty())
-        {
-            out << "  <title>" << actions.doc_title;
-            if (!actions.doc_version.empty())
-                out << ' ' << actions.doc_version;
-            out << "</title>\n\n\n";
-        }
-    }
-
-    void post(collector& out, quickbook::actions& actions, bool ignore_docinfo)
-    {
-        // if we're ignoring the document info, do nothing.
-        if (ignore_docinfo)
-        {
-            return;
-        }
-
-        // We've finished generating our output. Here's what we'll do
-        // *after* everything else.
-        out << "\n</" << actions.doc_type << ">\n\n";
     }
 
     void phrase_to_string_action::operator()(iterator first, iterator last) const

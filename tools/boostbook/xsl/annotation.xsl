@@ -271,7 +271,16 @@
   </xsl:template>
 
   <xsl:template match="macroname" mode="annotation">
-    <xsl:param name="name" select="text()"/>
+    <xsl:param name="name">
+      <xsl:choose>
+        <xsl:when test="@alt">
+          <xsl:value-of select="@alt"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="string(.)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:param>
 
     <xsl:variable name="node" select="key('macros', $name)"/>
     <xsl:choose>
@@ -291,7 +300,7 @@
               <xsl:with-param name="node" select="$node"/>
             </xsl:call-template>
           </xsl:with-param>
-          <xsl:with-param name="text" select="$name"/>
+          <xsl:with-param name="text" select="string(.)"/>
         </xsl:call-template>
       </xsl:when>
 
@@ -307,7 +316,16 @@
   </xsl:template>
 
   <xsl:template match="headername" mode="annotation">
-    <xsl:param name="name" select="text()"/>
+    <xsl:variable name="name">
+      <xsl:choose>
+        <xsl:when test="@alt">
+          <xsl:value-of select="@alt"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="string(.)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
 
     <xsl:variable name="node" select="key('headers', $name)"/>
     <xsl:choose>
@@ -327,7 +345,7 @@
               <xsl:with-param name="node" select="$node"/>
             </xsl:call-template>
           </xsl:with-param>
-          <xsl:with-param name="text" select="$name"/>
+          <xsl:with-param name="text" select="string(.)"/>
         </xsl:call-template>
       </xsl:when>
 

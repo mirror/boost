@@ -88,6 +88,12 @@ namespace quickbook
                 << "Syntax Error near column " << pos.column << ".\n";
             ++actor.error_count;
         }
+        
+        if(actor.error_count)
+        {
+            detail::outerr(filein_)
+                << "Error count: " << actor.error_count << ".\n";
+        }
 
         return actor.error_count ? 1 : 0;
     }
@@ -98,7 +104,7 @@ namespace quickbook
         actions actor(filein_, outdir, out);
         bool r = parse(filein_, actor);
         if (actor.section_level != 0)
-            detail::outwarn(filein_,1)
+            detail::outwarn(filein_)
                 << "Warning missing [endsect] detected at end of file."
                 << std::endl;
         return r;
@@ -264,20 +270,21 @@ main(int argc, char* argv[])
         }
         else
         {
-            quickbook::detail::outerr("",0) << "Error: No filename given" << std::endl;
+            quickbook::detail::outerr("") << "Error: No filename given\n\n"
+                << desc << std::endl;
             return 1;
         }
     }
 
     catch(std::exception& e)
     {
-        quickbook::detail::outerr("",0) << "Error: " << e.what() << "\n";
+        quickbook::detail::outerr("") << "Error: " << e.what() << "\n";
         return 1;
     }
 
     catch(...)
     {
-        quickbook::detail::outerr("",0) << "Error: Exception of unknown type caught\n";
+        quickbook::detail::outerr("") << "Error: Exception of unknown type caught\n";
         return 1;
     }
 
