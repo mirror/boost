@@ -75,8 +75,11 @@ For any |Forward Sequence| ``s``, binary |Lambda Expression| ``op``, and arbitra
         
     .. parsed-literal::
     
-        typedef iter_fold< s,state,apply<op,_1,deref<_2> > >::type t; 
-
+        typedef iter_fold<
+              s
+            , state
+            , apply2< lambda<op>::type, _1, deref<_2> >
+            >::type t; 
 
 
 Complexity

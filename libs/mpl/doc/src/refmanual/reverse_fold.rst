@@ -88,7 +88,7 @@ and arbitrary type ``state``:
         typedef reverse_iter_fold< 
               s
             , state
-            , apply<backward_op,_1,deref<_2> >
+            , apply2< lambda<backward_op>::type, _1, deref<_2> >
             >::type t; 
 
 
