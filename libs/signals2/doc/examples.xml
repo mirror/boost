@@ -23,8 +23,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         and then invoking the signal.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/hello_world_slot.cpp">hello_world_slot.cpp</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/hello_world_slot.cpp">hello_world_slot.cpp</ulink>.
       </para>
     </section>
     <section id="signals2.examples.tutorial.hello_world_multi_slot">
@@ -34,8 +33,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         slot to the signal before invoking it.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/hello_world_multi_slot.cpp">hello_world_multi_slot.cpp</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/hello_world_multi_slot.cpp">hello_world_multi_slot.cpp</ulink>.
       </para>
     </section>
     <section id="signals2.examples.tutorial.ordering_slots">
@@ -46,8 +44,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         the order slots should be invoked.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/ordering_slots.cpp">ordering_slots.cpp</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/ordering_slots.cpp">ordering_slots.cpp</ulink>.
       </para>
     </section>
     <section id="signals2.examples.tutorial.slot_arguments">
@@ -56,8 +53,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         The slot_arguments program shows how to pass arguments from a signal invocation to slots.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/slot_arguments.cpp">slot_arguments.cpp</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/slot_arguments.cpp">slot_arguments.cpp</ulink>.
       </para>
     </section>
     <section id="signals2.examples.tutorial.signal_return_value">
@@ -67,8 +63,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         It uses the default <classname>optional_last_value</classname> combiner.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/signal_return_value.cpp">signal_return_value.cpp</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/signal_return_value.cpp">signal_return_value.cpp</ulink>.
       </para>
     </section>
     <section id="signals2.examples.tutorial.custom_combiners">
@@ -78,8 +73,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         This time, custom combiners are defined and used.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/custom_combiners.cpp">custom_combiners.cpp</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/custom_combiners.cpp">custom_combiners.cpp</ulink>.
       </para>
     </section>
     <section id="signals2.examples.tutorial.disconnect_and_block">
@@ -89,8 +83,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         blocking them via <classname>shared_connection_block</classname>.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/disconnect_and_block.cpp">disconnect_and_block.cpp</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/disconnect_and_block.cpp">disconnect_and_block.cpp</ulink>.
       </para>
     </section>
     <section id="signals2.examples.tutorial.passing_slots">
@@ -100,8 +93,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         through a non-template interface.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/passing_slots.cpp">passing_slots.cpp</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/passing_slots.cpp">passing_slots.cpp</ulink>.
       </para>
     </section>
     <section id="signals2.examples.tutorial.extended_slot">
@@ -112,8 +104,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         permitting the slot to temporarily block or permanently disconnect itself.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/extended_slot.cpp">extended_slot.cpp</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/extended_slot.cpp">extended_slot.cpp</ulink>.
       </para>
     </section>
   </section>
@@ -128,8 +119,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         a text document.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/doc_view.cpp">doc_view.cpp</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/doc_view.cpp">doc_view.cpp</ulink>.
       </para>
     </section>
     <section id="signals2.examples.document-view.doc_view_acm">
@@ -139,8 +129,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         automatic connection management.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/doc_view_acm.cpp">doc_view_acm.cpp</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/doc_view_acm.cpp">doc_view_acm.cpp</ulink>.
       </para>
     </section>
     <section id="signals2.examples.document-view.doc_view_acm_deconstruct">
@@ -150,8 +139,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         and the <functionname>deconstruct()</functionname> factory function.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/doc_view_acm_deconstruct.cpp">doc_view_acm_deconstruct.cpp</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/doc_view_acm_deconstruct.cpp">doc_view_acm_deconstruct.cpp</ulink>.
       </para>
     </section>
   </section>
@@ -164,8 +152,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         uses <functionname>deconstruct()</functionname> as its factory function.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/postconstructor_ex1.cpp">postconstructor_ex1</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/postconstructor_ex1.cpp">postconstructor_ex1</ulink>.
       </para>
     </section>
     <section id="signals2.examples.deconstruct.postconstructor_ex2">
@@ -176,8 +163,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         and postconstructor.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/postconstructor_ex2.cpp">postconstructor_ex2</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/postconstructor_ex2.cpp">postconstructor_ex2</ulink>.
       </para>
     </section>
     <section id="signals2.examples.deconstruct.predestructor_example">
@@ -187,8 +173,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         uses <functionname>deconstruct()</functionname> as its factory function.
       </para>
       <para>
-  <!-- FIXME: url needs to have two "../" stripped from it to work once we are merged into main boost doc build -->
-        Download <ulink url="../../../../libs/signals2/example/predestructor_example.cpp">predestructor_example</ulink>.
+        Download <ulink url="boost:/libs/signals2/example/predestructor_example.cpp">predestructor_example</ulink>.
       </para>
     </section>
   </section>
