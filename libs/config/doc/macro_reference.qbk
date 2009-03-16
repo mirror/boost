@@ -524,12 +524,6 @@ that are not yet supported by a particular compiler.
 [table
 [[Macro     ][Description     ]]
 
-[[`BOOST_NO_AUTO_DECLARATIONS`][The compiler does not support
-type deduction for variables declared with the `auto` keyword (`auto var = ...;`).
-]]                       
-[[`BOOST_NO_AUTO_MULTIDECLARATIONS`][The compiler does not support
-type deduction for multiple variables declared with the `auto` keyword (`auto var = ..., *ptr = ...;`).
-]]                       
 [[`BOOST_NO_CHAR16_T`][The compiler does not support
 type `char16_t`. 
 ]]                       

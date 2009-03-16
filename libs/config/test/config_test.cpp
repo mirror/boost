@@ -1,4 +1,4 @@
-//  This file was automatically generated on Thu Mar 12 17:32:05 2009
+//  This file was automatically generated on Fri Feb 20 21:15:18 2009
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -36,16 +36,6 @@ namespace boost_no_argument_dependent_lookup = empty_boost;
 #include "boost_no_array_type_spec.ipp"
 #else
 namespace boost_no_array_type_specializations = empty_boost;
-#endif
-#ifndef BOOST_NO_AUTO_DECLARATIONS
-#include "boost_no_auto_declarations.ipp"
-#else
-namespace boost_no_auto_declarations = empty_boost;
-#endif
-#ifndef BOOST_NO_AUTO_MULTIDECLARATIONS
-#include "boost_no_auto_multidecl.ipp"
-#else
-namespace boost_no_auto_multideclarations = empty_boost;
 #endif
 #ifndef BOOST_NO_AUTO_PTR
 #include "boost_no_auto_ptr.ipp"
@@ -979,16 +969,6 @@ int main( int, char *[] )
    if(0 != boost_no_array_type_specializations::test())
    {
       std::cerr << "Failed test for BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_auto_declarations::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_AUTO_DECLARATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_auto_multideclarations::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_AUTO_MULTIDECLARATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_auto_ptr::test())
