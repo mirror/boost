@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<article id="templates" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
- xmlns:xi="http://www.w3.org/2001/XInclude">
+<article id="templates" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Templates</title>
   <articleinfo>
   </articleinfo>
@@ -66,7 +65,7 @@
       got a banana?
     </para>
     <para>
-      [join2
+      .0 00
     </para>
   </section>
 </article>
