@@ -92,7 +92,7 @@ namespace quickbook
         if(actor.error_count)
         {
             detail::outerr(filein_)
-        	    << "Error count: " << actor.error_count << ".\n";
+                << "Error count: " << actor.error_count << ".\n";
         }
 
         return actor.error_count ? 1 : 0;
