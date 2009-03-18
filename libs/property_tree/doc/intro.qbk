@@ -1,31 +1,29 @@
 [template ptree2codeImage[] [$images/ptree2code.png]]
 [section:intro What is Property Tree?]
-Property tree is a recursive data structure that stores a single data string,
-and an ordered list of [^(key, value)] pairs, where value is a property tree
-itself. It therefore forms a tree, hence the name. It is a versatile structure
-that can store in uniform way data coming from various sources, such as XML,
-INI or JSON files, as well as windows registry, program command line etc.
-The correspondence between a data source (here XML file) and property tree is
-illustrated in the following diagram:
-[ptree2codeImage]
+The Property Tree library provides a data structure that stores an arbitrarily
+deeply nested tree of values, indexed at each level by some key. Each node of
+the tree stores its own value, plus an ordered list of its subnodes and their
+keys. The tree allows easy access to any of its nodes by means of a path, which
+is a concatenation of multiple keys.
 
-Each node of property tree may be conceptually treated as the following
-structure (note that due to recursive nature of the tree, nodes are property
-trees):
+In addition, the library provides parsers and generators for a number of data
+formats that can be represented by such a tree, including XML, INI, and JSON.
+
+Property trees are versatile data structures, but are particularly suited for
+holding configuration data. The tree provides its own, tree-specific interface,
+and each node is also an STL-compatible Sequence for its child nodes.
+
+Conceptually, then, a node can be thought of as the following structure:
 
    struct ptree
    {
-      string data;                            // data associated with the node
-      list< pair<string, ptree> > children;   // ordered list of named children
+      data_type data;                         // data associated with the node
+      list< pair<key_type, ptree> > children; // ordered list of named children
    };
 
-Both key type and data type are configurable.
+Both key_type and data_type are configurable, but will usually be std::string.
 
-The property tree interface is similar to the interface of a standard C++
-container. It supports iterators, insertion, erasing, searching etc. One can
-think of it as a sort of Document Object Model, which is minimalistic, not
-bound to any specific file format, designed to be easy to use, and comes as
-Boost-compatible, headers only C++ library.  Many software projects develop a
-similar tool at some point of their lifetime, and property tree originated the
-same way.  I hope the library can save many from reinventing the wheel. 
+Many software projects develop a similar tool at some point of their lifetime,
+and property tree originated the same way.  We hope the library can save many
+from reinventing the wheel.
 [endsect] [/intro]

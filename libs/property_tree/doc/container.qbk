@@ -1,8 +1,19 @@
 [section:container Property Tree as a Container]
 [/ __ptree_*__ macros expected from property_tree.qbk]
-Standard containers implement a concept of sequence. What is the sequence in case of property tree? It is a list of immediate children of given __ptree__. So, iterating over a __ptree__ will only reveal one level in hierarchy, not the whole tree. There is no iterator to iterate over all the nodes in tree, but it is not needed, so don't worry. The actual type of values stored by property tree is __ptree_value_type__. Property tree provides bidirectional __ptree_iterator__, both normal and reverse, to allow iteration over its elements.
+Every property tree node models the ReversibleSequence concept, providing
+access to its immediate children. This means that iterating over a __ptree__
+(which is the same as its root node - every __ptree__ node is also the
+subtree it starts) iterates only a single level of the hierarchy. There is no
+way to iterate over the entire tree.
 
-The sequence is not ordered by key. It is an important fact, and many mistakes can be avoided by keeping it in mind. The order of sequence is determined by the place where elements were inserted, like in `std::list`. That's why there are __ptree_push_back__, __ptree_push_front__ and __ptree_insert__ functions. But __ptree_find__ function, which searches for elements by name, has time complexity [^O(log n)] like in `std::map` - there is an additional indexing data structure inside property tree that allows fast searches. The implication of property tree not being sorted is that you cannot use algorithms that require sorted range, like for example `std::binary_search`.
+It is very important to remember that the property sequence is *not* ordered by
+the key. It preserves the order of insertion. It closely resembles a std::list.
+Fast access to children is provided via a separate lookup structure. Do not
+attempt to use algorithms that expect an ordered sequence (like binary_search)
+on a node's children.
 
-Property tree allows multiple elements to have equivalent keys, and the __ptree_find__ member function will always return the first of them. It is tempting to use `std::lower_bound` and `std::upper_bound` algorithms to find a range that encompasses all elements with equivalent keys, but it is a mistake - the sequence is not sorted by key and such a range probably does not even exist! You need to sort the sequence first, using a __ptree_sort__ member function (though by doing so you lose original ordering of the elements). Note that `std::sort` cannot be used, because it requires random access iterators, and property tree only provides bidirectional iterators.
+There may be multiple children with the same key value in a node. However, these
+children are not necessarily sequential. The iterator returned by __ptree_find__
+may refer to any of these, and there are no guarantees about the relative
+position of the other equally named children.
 [endsect] [/container]
