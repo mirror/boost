@@ -15,8 +15,8 @@
 namespace quickbook
 {
     template_stack::template_stack()
-        : scopes()
-        , scope(template_stack::parser(*this))
+        : scope(template_stack::parser(*this))
+        , scopes()
     {
         scopes.push_front(template_symbols());
     }
