@@ -125,8 +125,7 @@ namespace quickbook
                 begin_section =
                        "section"
                     >> hard_space
-                    >>  (':' >> space >>
-                            (*(alnum_p | '_'))          [assign_a(actions.section_id)]
+                    >>  (':' >> (*(alnum_p | '_'))      [assign_a(actions.section_id)]
                         | eps_p                         [assign_a(actions.section_id)]
                         )
                     >> phrase                           [actions.begin_section]
