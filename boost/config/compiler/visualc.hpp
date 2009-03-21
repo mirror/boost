@@ -159,13 +159,13 @@
 #define BOOST_NO_UNICODE_LITERALS
 #define BOOST_NO_VARIADIC_TEMPLATES
 
-// MSVC 2010 has some support for C++0x
-#if _MSC_VER < 1600
-#  define BOOST_NO_RVALUE_REFERENCES
-#  define BOOST_NO_STATIC_ASSERT
-#  define BOOST_NO_AUTO_DECLARATIONS
-#  define BOOST_NO_AUTO_MULTIDECLARATIONS
-#endif // _MSC_VER < 1600
+// MSVC 2010 CTP has some support for C++0x, but we still disable it until the compiler release
+// #if _MSC_VER < 1600
+#define BOOST_NO_RVALUE_REFERENCES
+#define BOOST_NO_STATIC_ASSERT
+#define BOOST_NO_AUTO_DECLARATIONS
+#define BOOST_NO_AUTO_MULTIDECLARATIONS
+// #endif // _MSC_VER < 1600
 
 //
 // prefix and suffix headers:
