@@ -11,7 +11,9 @@ import testing ;
 # Please keep the tests ordered by filename
 test-suite utility
     :
+        [ run ../addressof_fn_test.cpp ]
         [ run ../addressof_test.cpp ]
+        [ run ../addressof_test2.cpp ]
         [ run ../assert_test.cpp ]
         [ run ../base_from_member_test.cpp ]
         [ run ../binary_search_test.cpp ]
