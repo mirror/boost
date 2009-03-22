@@ -76,11 +76,12 @@ public:
         extended_type_info const * derived,
         extended_type_info const * base,
         std::ptrdiff_t difference,
-        bool m_includes_virtual_base
+        bool includes_virtual_base
     ) :
-        void_caster(derived, base, difference)
+        void_caster(derived, base, difference),
+        m_includes_virtual_base(includes_virtual_base)
     {
-        recursive_register(m_includes_virtual_base);
+        recursive_register(includes_virtual_base);
     }
     ~void_caster_shortcut(){
         recursive_unregister();
@@ -96,13 +97,16 @@ void_caster_shortcut::vbc_downcast(
         = void_cast_detail::void_caster_registry::get_const_instance();
     void_cast_detail::set_type::const_iterator it;
     for(it = s.begin(); it != s.end(); ++it){
-        // if the current candidate doesn't cast to the desired target type
+        // if the current candidate casts to the desired target type
         if ((*it)->m_derived == m_derived){
-            // if the current candidate casts from the desired source type
+            // and if it's not us
             if ((*it)->m_base != m_base){
+                // try to cast from the candidate base to our base
                 const void * t_new;
                 t_new = void_downcast(*(*it)->m_base, *m_base, t);
+                // if we were successful
                 if(NULL != t_new)
+                    // recast to our derived
                     return (*it)->downcast(t_new);
             }
         }
@@ -119,10 +123,11 @@ void_caster_shortcut::vbc_upcast(
         = void_cast_detail::void_caster_registry::get_const_instance();
     void_cast_detail::set_type::const_iterator it;
     for(it = s.begin(); it != s.end(); ++it){
-        // if the current candidate doesn't cast to the desired target type
+        // if the current candidate casts from the desired base type
         if((*it)->m_base == m_base){
-            // if the current candidate casts from the desired source type
+            // and if it's not us
             if ((*it)->m_derived != m_derived){
+                // try to cast from the candidate derived to our our derived
                 const void * t_new;
                 t_new = void_upcast(*m_derived, *(*it)->m_derived, t);
                 if(NULL != t_new)
@@ -132,7 +137,6 @@ void_caster_shortcut::vbc_upcast(
     }
     return NULL;
 }
-
 
 // just used as a search key
 class void_caster_argument : public void_caster

@@ -674,9 +674,6 @@
 				RelativePath="..\..\..\boost\serialization\force_include.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\boost\serialization\is_virtual_base_of.hpp">
-			</File>
-			<File
 				RelativePath="..\..\..\boost\serialization\pfto.hpp">
 			</File>
 			<File

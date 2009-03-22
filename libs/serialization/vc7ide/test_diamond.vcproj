@@ -91,7 +91,7 @@
 				IgnoreImportLibrary="TRUE"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/link-static&quot;;&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/link-static&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/link-static&quot;"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"/>
 			<Tool

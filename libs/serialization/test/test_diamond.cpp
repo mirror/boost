@@ -45,7 +45,8 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving base\n";
-        ar << BOOST_SERIALIZATION_NVP(i) << BOOST_SERIALIZATION_NVP(m);
+        ar << BOOST_SERIALIZATION_NVP(i);
+        ar << BOOST_SERIALIZATION_NVP(m);
         ++save_count;
     }
 
@@ -53,7 +54,8 @@ public:
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring base\n";
-        ar >> BOOST_SERIALIZATION_NVP(i) >> BOOST_SERIALIZATION_NVP(m);
+        ar >> BOOST_SERIALIZATION_NVP(i);
+        ar >> BOOST_SERIALIZATION_NVP(m);
         ++load_count;
     }
 
