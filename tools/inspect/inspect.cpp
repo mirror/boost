@@ -156,6 +156,9 @@ namespace
       && leaf != ".htaccess"
       // ignore svn files:
       && leaf != ".svn"
+      // ignore other version control files
+      && leaf != ".git"
+      && leaf != ".bzr"
       // ignore OS X directory info files:
       && leaf != ".DS_Store"
       ;

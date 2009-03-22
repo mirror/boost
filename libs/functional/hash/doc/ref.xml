@@ -34,7 +34,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <classname>std::unary_function&lt;T, std::size_t&gt;</classname>
         </inherit>
 
-        <purpose>A <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf">TR1</ulink> compliant hash function object.</purpose>
+        <purpose><simpara>A <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf">TR1</ulink> compliant hash function object.</simpara></purpose>
 
         <method name="operator()" cv="const">
           <type>std::size_t</type>
@@ -419,10 +419,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         <type>void</type>
         <parameter name="seed"><paramtype>size_t &amp;</paramtype></parameter>
         <parameter name="v"><paramtype>T const&amp;</paramtype></parameter>
-        <purpose>
+        <purpose><simpara>
             Called repeatedly to incrementally create a hash value from
             several variables.
-        </purpose>
+        </simpara></purpose>
         <effects><programlisting>seed ^= <functionname>hash_value</functionname>(v) + 0x9e3779b9 + (seed &lt;&lt; 6) + (seed &gt;&gt; 2);</programlisting></effects>
         <notes>
           <para><functionname>hash_value</functionname> is called without
@@ -460,10 +460,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <parameter name="last"><paramtype>It</paramtype></parameter>
         </signature>
 
-        <purpose>
+        <purpose><simpara>
             Calculate the combined hash value of the elements of an iterator
             range.
-        </purpose>
+        </simpara></purpose>
         <effects>
           <para>For the two argument overload:
 <programlisting>
@@ -511,9 +511,9 @@ for(; first != last; ++first)
         -->
 
       <overloaded-function name="hash_value">
-        <purpose>
+        <purpose><simpara>
             Implementation of the hash function.
-        </purpose>
+        </simpara></purpose>
 
         <signature>
           <type>std::size_t</type>

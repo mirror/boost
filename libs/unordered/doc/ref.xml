@@ -19,9 +19,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <default><type>std::allocator&lt;Value&gt;</type></default>
             </template-type-parameter>
           </template>
-          <purpose>
+          <purpose><simpara>
             An unordered associative container that stores unique values.
-          </purpose>
+          </simpara></purpose>
           <description>
             <para>For the normative reference see chapter 23 of
               <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008-2009/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
@@ -69,11 +69,11 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           </typedef>
           <typedef name="reference">
             <type>typename allocator_type::reference</type>
-            <purpose>lvalue of <type>value_type</type>.</purpose>
+            <purpose><simpara>lvalue of <type>value_type</type>.</simpara></purpose>
           </typedef>
           <typedef name="const_reference">
             <type>typename allocator_type::const_reference</type>
-            <purpose>const lvalue of <type>value_type</type>.</purpose>
+            <purpose><simpara>const lvalue of <type>value_type</type>.</simpara></purpose>
           </typedef>
           <typedef name="size_type">
             <type><emphasis>implementation-defined</emphasis></type>
@@ -753,9 +753,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <default><type>std::allocator&lt;Value&gt;</type></default>
             </template-type-parameter>
           </template>
-          <purpose>
+          <purpose><simpara>
             An unordered associative container that stores  values. The same key can be stored multiple times.
-          </purpose>
+          </simpara></purpose>
           <description>
             <para>For the normative reference see chapter 23 of
               <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008-2009/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
@@ -803,11 +803,11 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           </typedef>
           <typedef name="reference">
             <type>typename allocator_type::reference</type>
-            <purpose>lvalue of <type>value_type</type>.</purpose>
+            <purpose><simpara>lvalue of <type>value_type</type>.</simpara></purpose>
           </typedef>
           <typedef name="const_reference">
             <type>typename allocator_type::const_reference</type>
-            <purpose>const lvalue of <type>value_type</type>.</purpose>
+            <purpose><simpara>const lvalue of <type>value_type</type>.</simpara></purpose>
           </typedef>
           <typedef name="size_type">
             <type><emphasis>implementation-defined</emphasis></type>
@@ -1491,9 +1491,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <default><type>std::allocator&lt;std::pair&lt;Key const, Mapped&gt; &gt;</type></default>
             </template-type-parameter>
           </template>
-          <purpose>
+          <purpose><simpara>
             An unordered associative container that associates unique keys with another value.
-          </purpose>
+          </simpara></purpose>
           <description>
             <para>For the normative reference see chapter 23 of
               <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008-2009/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
@@ -1547,11 +1547,11 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           </typedef>
           <typedef name="reference">
             <type>typename allocator_type::reference</type>
-            <purpose>lvalue of <type>value_type</type>.</purpose>
+            <purpose><simpara>lvalue of <type>value_type</type>.</simpara></purpose>
           </typedef>
           <typedef name="const_reference">
             <type>typename allocator_type::const_reference</type>
-            <purpose>const lvalue of <type>value_type</type>.</purpose>
+            <purpose><simpara>const lvalue of <type>value_type</type>.</simpara></purpose>
           </typedef>
           <typedef name="size_type">
             <type><emphasis>implementation-defined</emphasis></type>
@@ -2274,9 +2274,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <default><type>std::allocator&lt;std::pair&lt;Key const, Mapped&gt; &gt;</type></default>
             </template-type-parameter>
           </template>
-          <purpose>
+          <purpose><simpara>
             An unordered associative container that associates  keys with another value. The same key can be stored multiple times.
-          </purpose>
+          </simpara></purpose>
           <description>
             <para>For the normative reference see chapter 23 of
               <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008-2009/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
@@ -2330,11 +2330,11 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           </typedef>
           <typedef name="reference">
             <type>typename allocator_type::reference</type>
-            <purpose>lvalue of <type>value_type</type>.</purpose>
+            <purpose><simpara>lvalue of <type>value_type</type>.</simpara></purpose>
           </typedef>
           <typedef name="const_reference">
             <type>typename allocator_type::const_reference</type>
-            <purpose>const lvalue of <type>value_type</type>.</purpose>
+            <purpose><simpara>const lvalue of <type>value_type</type>.</simpara></purpose>
           </typedef>
           <typedef name="size_type">
             <type><emphasis>implementation-defined</emphasis></type>
