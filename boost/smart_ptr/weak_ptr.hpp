@@ -124,6 +124,11 @@ public:
         return pn.use_count() == 0;
     }
 
+    bool _empty() const // extension, not in std::weak_ptr
+    {
+        return pn.empty();
+    }
+
     void reset() // never throws in 1.30+
     {
         this_type().swap(*this);
