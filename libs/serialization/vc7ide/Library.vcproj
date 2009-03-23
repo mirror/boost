@@ -830,10 +830,16 @@
 				RelativePath="..\..\..\boost\archive\iterators\binary_from_base64.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\archive\iterators\dataflow.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\iterators\dataflow_exception.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\iterators\escape.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\head_iterator.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\iterators\insert_linebreaks.hpp">
