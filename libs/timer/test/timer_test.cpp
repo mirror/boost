@@ -26,8 +26,8 @@ int main() {
 
   timer t0;  // used only for elapsed_max() and elapsed_min()
 
-  cout << "timer::elapased_min() reports " << t0.elapsed_min() << " seconds\n";
-  cout << "timer::elapased_max() reports " << t0.elapsed_max()
+  cout << "timer::elapsed_min() reports " << t0.elapsed_min() << " seconds\n";
+  cout << "timer::elapsed_max() reports " << t0.elapsed_max()
        << " seconds, which is " << t0.elapsed_max()/3600.0 << " hours\n";
 
   cout << "\nverify progress_display(0) doesn't divide by zero" << endl;
