@@ -105,7 +105,7 @@ void save_construct_data(
 }
 
 template <class ArchiveT>
-void load_construct_data(ArchiveT& archive, A* p, unsigned int version)
+void load_construct_data(ArchiveT& archive, A* p, const unsigned int version)
 {
     IntValueHolder initialValue;
     archive & boost::serialization::make_nvp("initialValue", initialValue);
