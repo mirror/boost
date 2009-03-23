@@ -147,6 +147,12 @@ BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
     void *x, 
     const unsigned int file_version
 ) const {
+    // trap case where the program cannot handle the current version
+    if(file_version > version())
+        boost::serialization::throw_exception(archive::archive_exception(
+            boost::archive::archive_exception::unsupported_class_version
+        ));
+
     // make sure call is routed through the higest interface that might
     // be specialized by the user.
     boost::serialization::serialize_adl(
@@ -474,6 +480,9 @@ struct load_array_type {
         typedef BOOST_DEDUCED_TYPENAME remove_extent<T>::type value_type;
         
         // convert integers to correct enum to load
+        // determine number of elements in the array. Consider the
+        // fact that some machines will align elements on boundries
+        // other than characters.
         int current_count = sizeof(t) / (
             static_cast<char *>(static_cast<void *>(&t[1])) 
             - static_cast<char *>(static_cast<void *>(&t[0]))

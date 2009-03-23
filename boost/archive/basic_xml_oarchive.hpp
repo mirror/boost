@@ -28,7 +28,6 @@
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
-
 namespace boost {
 namespace archive {
 

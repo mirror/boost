@@ -21,6 +21,7 @@
 #include <cwchar>   // for mbstate_t
 #include <boost/config.hpp>
 #include <boost/archive/detail/auto_link_archive.hpp>
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
     using ::codecvt;
@@ -79,5 +80,7 @@ class codecvt_null<wchar_t> : public std::codecvt<wchar_t, char, std::mbstate_t>
 
 } // namespace archive
 } // namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // pop pragmas
 
 #endif //BOOST_ARCHIVE_CODECVT_NULL_HPP
