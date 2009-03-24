@@ -11,7 +11,7 @@
 
 #include <boost/config/warning_disable.hpp>
 
-#include <boost/test/minimal.hpp>
+#include <boost/detail/test_framework.hpp>
 #include <boost/system/error_code.hpp>
 #include <boost/system/cygwin_error.hpp>
 #include <boost/system/linux_error.hpp>
@@ -49,11 +49,11 @@ namespace
   }
 }
 
-//  test_main  ---------------------------------------------------------------//
+//  main  ------------------------------------------------------------------------------//
 
 // TODO: add hash_value tests
 
-int test_main( int, char ** )
+int main( int, char ** )
 {
 
   std::cout << "General tests...\n";
@@ -259,7 +259,7 @@ int test_main( int, char ** )
 
 #endif
   
-  return 0;
+  return boost::test_framework::errors();
 }
 
 
