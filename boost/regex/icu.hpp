@@ -311,12 +311,12 @@ inline u32regex do_make_u32regex(InputIterator i,
                               boost::regex_constants::syntax_option_type opt, 
                               const boost::mpl::int_<4>*)
 {
-   typedef std::vector<UCHAR32> vector_type;
+   typedef std::vector<UChar32> vector_type;
    vector_type v;
    while(i != j)
    {
-      v.push_back((UCHAR32)(*i));
-      ++a;
+      v.push_back((UChar32)(*i));
+      ++i;
    }
    if(v.size())
       return u32regex(&*v.begin(), v.size(), opt);
