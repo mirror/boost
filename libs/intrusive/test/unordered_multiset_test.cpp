@@ -719,7 +719,6 @@ class test_main_template
                 , false
                 , Incremental
                 >::test_all(data);
-
       return 0;
    }
 };
@@ -740,7 +739,7 @@ class test_main_template<VoidPointer, false, Incremental>
                   < value_type
                   , typename hooks<VoidPointer>::base_hook_type
                   >::type
-                , true
+                , false
                 , false
                 , Incremental
                 >::test_all(data);
@@ -752,7 +751,7 @@ class test_main_template<VoidPointer, false, Incremental>
                                , &value_type::node_
                                >
                   >::type
-                , false
+                , true
                 , false
                 , Incremental
                 >::test_all(data);
@@ -761,8 +760,8 @@ class test_main_template<VoidPointer, false, Incremental>
                   < value_type
                   , typename hooks<VoidPointer>::auto_base_hook_type
                   >::type
-                , true
-                , true
+                , false
+                , false
                 , Incremental
                 >::test_all(data);
 

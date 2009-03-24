@@ -417,6 +417,28 @@ void test_slist<ValueTraits, Linear, CacheLast>
       {  int init_values [] = { 2 };
          TEST_INTRUSIVE_SEQUENCE( init_values, testlist2.begin() );  }
    }
+   {  //Now test swap when testlist2 is empty
+      list_type testlist1 (&values[0], &values[0] + 2);
+      list_type testlist2;
+      testlist1.swap(testlist2);
+      BOOST_TEST (testlist1.empty());
+      {  int init_values [] = { 1, 2 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist2.begin() );  }
+   }
+   {  //Now test swap when testlist1 is empty
+      list_type testlist2 (&values[0], &values[0] + 2);
+      list_type testlist1;
+      testlist1.swap(testlist2);
+      BOOST_TEST (testlist2.empty());
+      {  int init_values [] = { 1, 2 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
+   }
+   {  //Now test when both are empty
+      list_type testlist1, testlist2;
+      testlist2.swap(testlist1);
+      BOOST_TEST (testlist1.empty() && testlist2.empty());
+   }
+
    if(!list_type::linear)
    {
       list_type testlist1 (&values[0], &values[0] + 2);
