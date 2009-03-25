@@ -3707,6 +3707,13 @@ all the objects to be inserted in intrusive containers in containers like `std::
 
 *  Optimized `list::merge` and `slist::merge`
 *  `list::sort` and `slist::sort` are now stable.
+*  Fixed bugs
+  [@https://svn.boost.org/trac/boost/ticket/2689 #2689],
+  [@https://svn.boost.org/trac/boost/ticket/2755 #2755],
+  [@https://svn.boost.org/trac/boost/ticket/2786 #2786],
+  [@https://svn.boost.org/trac/boost/ticket/2807 #2807],
+  [@https://svn.boost.org/trac/boost/ticket/2810 #2810],
+  [@https://svn.boost.org/trac/boost/ticket/2862 #2862].
 
 [endsect]
 
