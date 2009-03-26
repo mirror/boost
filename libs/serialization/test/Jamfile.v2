@@ -66,6 +66,7 @@ test-suite "serialization" :
      [ test-bsl-run_files test_valarray ]
      [ test-bsl-run_files test_variant : A ]
      [ test-bsl-run_files test_vector : A ]
+     [ test-bsl-run_files test_new_operator : A ]
      [ test-bsl-run_files test_optional ]
      [ test-bsl-run_files test_shared_ptr ]
      [ test-bsl-run_files test_shared_ptr_132 ]
