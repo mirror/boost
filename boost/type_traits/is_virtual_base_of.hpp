@@ -36,21 +36,21 @@ struct is_virtual_base_of_impl
 template<typename Base, typename Derived>
 struct is_virtual_base_of_impl<Base, Derived, mpl::true_>
 {
-    struct X : Derived, virtual Base 
+    struct X : public virtual Derived, public virtual Base 
     {
        X();
        X(const X&);
        X& operator=(const X&);
        ~X();
     };
-    struct Y : Derived 
+    struct Y : public virtual Derived 
     {
        Y();
        Y(const Y&);
        Y& operator=(const Y&);
        ~Y();
     };
-    BOOST_STATIC_CONSTANT(bool, value = sizeof(X)==sizeof(Y));
+    BOOST_STATIC_CONSTANT(bool, value = (sizeof(X)==sizeof(Y)));
 };
 
 template<typename Base, typename Derived>

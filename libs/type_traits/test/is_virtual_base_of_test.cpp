@@ -9,7 +9,6 @@
 #include "check_integral_constant.hpp"
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
-
 TT_TEST_BEGIN(is_virtual_base_of)
 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<Derived,Base>::value), false);
@@ -35,7 +34,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<Base,virtual_inherit1>::
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<virtual_inherit1,Base>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<Base,virtual_inherit2>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<virtual_inherit2,Base>::value), false);
+#ifndef BOOST_BROKEN_IS_BASE_AND_DERIVED
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<Base,virtual_inherit3>::value), true);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<virtual_inherit3,Base>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<boost::noncopyable,virtual_inherit4>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<virtual_inherit4,boost::noncopyable>::value), false);

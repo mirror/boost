@@ -368,8 +368,8 @@ struct polymorphic_derived2 : polymorphic_base
 struct virtual_inherit1 : virtual Base { };
 struct virtual_inherit2 : virtual_inherit1 { };
 struct virtual_inherit3 : private virtual Base {};
-struct virtual_inherit4 : private virtual boost::noncopyable {};
-struct virtual_inherit5 : private virtual int_convertible {};
+struct virtual_inherit4 : virtual boost::noncopyable {};
+struct virtual_inherit5 : virtual int_convertible {};
 
 typedef void foo0_t();
 typedef void foo1_t(int);
