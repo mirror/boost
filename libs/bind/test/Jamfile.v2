@@ -41,4 +41,5 @@ test-suite "bind"
       [ run bind_eq2_test.cpp ]
       [ run mem_fn_ref_test.cpp ]
       [ run bind_ref_test.cpp ]
+      [ run bind_eq3_test.cpp ]
     ;
