@@ -193,47 +193,19 @@ public:
 //    }
 //}
 
-#if 0
-// note: this should really be a member of the load_ptr function
-// below but some compilers still complain about this.
 template<class T>
 struct heap_allocator
 {
-    #if 0
-        // note: this fails on msvc 7.0 and gcc 3.2
-        template <class U, U x> struct test;
-        typedef char* yes;
-        typedef int* no;
-        template <class U>
-        yes has_op_new(U*, test<void* (*)(std::size_t), &U::operator new>* = 0);
-        no has_op_new(...);
-
-        template<class U>
-        T * new_operator(U);
-
-        T * new_operator(yes){
-            return (T::operator new)(sizeof(T));
-        }
-        T * new_operator(no){
-            return static_cast<T *>(operator new(sizeof(T)));
-        }
+    // boost::has_new_operator<T> doesn't work on these compilers
+    #if defined(__BORLANDC__)                          \
+    || defined(__IBMCPP__)                             \
+    || defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)     \
+    || defined(__SUNPRO_CC) && (__SUBPRO_CC < 0x590)
+        // This doesn't handle operator new overload for class T
         static T * invoke(){
-            return new_operator(has_op_new(static_cast<T *>(NULL)));
+            return static_cast<T *>(operator new(sizeof(T)));
         }
     #else
-        // while this doesn't handle operator new overload for class T
-        static T * invoke(){
-            return static_cast<T *>(operator new(sizeof(T)));
-        }
-    #endif
-};
-#endif
-
-template<class T>
-struct heap_allocator
-{
-    // usage of member operator new only seems to work on these compilers
-    #if defined(__GNUC__) || defined(BOOST_MSVC) && (BOOST_MSVC > 1300)
         struct has_new_operator {
             static T* invoke() {
                 return static_cast<T *>((T::operator new)(sizeof(T)));
@@ -252,11 +224,6 @@ struct heap_allocator
                     mpl::identity<doesnt_have_new_operator >    
                 >::type typex;
             return typex::invoke();
-        }
-    #else
-        // This doesn't handle operator new overload for class T
-        static T * invoke(){
-            return static_cast<T *>(operator new(sizeof(T)));
         }
     #endif
 };
