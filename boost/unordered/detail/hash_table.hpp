@@ -228,49 +228,6 @@ namespace boost {
         void destroy(T* x) {
             x->~T();
         }
-
-        // Some classes for the data structure
-
-        template <typename Alloc>
-        struct bucket_impl
-        {
-        private:
-            bucket_impl& operator=(bucket_impl const&);
-        public:
-            typedef BOOST_DEDUCED_TYPENAME
-                boost::unordered_detail::rebind_wrap<Alloc, bucket_impl>::type
-                bucket_allocator;
-            typedef BOOST_DEDUCED_TYPENAME
-                allocator_pointer<bucket_allocator>::type bucket_ptr;
-            typedef bucket_ptr link_ptr;
-
-            link_ptr next_;
-
-            bucket_impl() : next_()
-            {
-                BOOST_UNORDERED_MSVC_RESET_PTR(next_);
-            }
-
-            bucket_impl(bucket_impl const& x) : next_(x.next_)
-            {
-                // Only copy construct when allocating.
-                BOOST_ASSERT(!x.next_);
-            }
-
-            bool empty() const
-            {
-                return !this->next_;
-            }
-        };
-
-        template <typename T>
-        struct value_base {
-            typename boost::aligned_storage<
-                sizeof(T),
-                boost::alignment_of<T>::value>::type data_;
-
-            void* address() { return this; }
-        };
     }
 }
 
