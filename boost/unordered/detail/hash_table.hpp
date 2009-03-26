@@ -223,6 +223,16 @@ namespace boost {
             functions func2_;
             functions_ptr func_; // The currently active functions.
         };
+        
+#if defined(BOOST_MSVC)
+#  define BOOST_UNORDERED_DESTRUCT(x, type) (x)->~type();
+#else
+#  define BOOST_UNORDERED_DESTRUCT(x, type) boost::unordered_detail::destroy(x)
+        template <typename T>
+        void destroy(T* x) {
+            x->~T();
+        }
+#endif
     }
 }
 

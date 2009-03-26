@@ -130,7 +130,7 @@ namespace boost {
                 void destroy(link_ptr ptr)
                 {
                     node* raw_ptr = static_cast<node*>(&*ptr);
-                    (&raw_ptr->value())->~value_type();
+                    BOOST_UNORDERED_DESTRUCT(&raw_ptr->value(), value_type);
                     node_ptr n(node_alloc_.address(*raw_ptr));
                     node_alloc_.destroy(n);
                     node_alloc_.deallocate(n, 1);
@@ -172,7 +172,7 @@ namespace boost {
                 {
                     if (node_) {
                         if (value_constructed_) {
-                            (&node_->value())->~value_type();
+                            BOOST_UNORDERED_DESTRUCT(&node_->value(), value_type);
                         }
 
                         if (node_constructed_)
