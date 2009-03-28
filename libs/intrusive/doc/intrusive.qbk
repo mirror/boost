@@ -1280,7 +1280,9 @@ And they also can receive additional options:
    provides a bucket length that is not power of two.
    Default: `power_2_buckets<false>`.
 
-*  [*`cache_begin<bool Enabled>`]: Due to its internal structure, finding the first
+*  [*`cache_begin<bool Enabled>`]:
+   [*Note: this option is not compatible with `auto_unlink` hooks].
+   Due to its internal structure, finding the first
    element of an unordered container (`begin()` operation) is
    amortized constant-time. It's possible to speed up `begin()` and other operations
    related to it (like `clear()`) if the container caches internally the position
@@ -3700,6 +3702,20 @@ all the objects to be inserted in intrusive containers in containers like `std::
 [endsect]
 
 [section:release_notes Release Notes]
+
+[section:release_notes_boost_1_39_00 Boost 1.39 Release]
+
+*  Optimized `list::merge` and `slist::merge`
+*  `list::sort` and `slist::sort` are now stable.
+*  Fixed bugs
+  [@https://svn.boost.org/trac/boost/ticket/2689 #2689],
+  [@https://svn.boost.org/trac/boost/ticket/2755 #2755],
+  [@https://svn.boost.org/trac/boost/ticket/2786 #2786],
+  [@https://svn.boost.org/trac/boost/ticket/2807 #2807],
+  [@https://svn.boost.org/trac/boost/ticket/2810 #2810],
+  [@https://svn.boost.org/trac/boost/ticket/2862 #2862].
+
+[endsect]
 
 [section:release_notes_boost_1_38_00 Boost 1.38 Release]
 

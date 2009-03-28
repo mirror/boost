@@ -623,7 +623,7 @@ class test_main_template<VoidPointer, false, incremental>
                   < value_type
                   , typename hooks<VoidPointer>::auto_base_hook_type
                   >::type
-                , true
+                , false
                 , true
                 , incremental
                 >::test_all(data);

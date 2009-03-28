@@ -34,7 +34,7 @@ int main()
    typedef any_to_slist_hook < base_hook< any_base_hook<> > >     BaseSlistOption;
    typedef slist<MyClass, BaseSlistOption>                        BaseSList;
 
-   //Define a member hook option that converts any_base_hook to a list hook
+   //Define a member hook option that converts any_member_hook to a list hook
    typedef any_to_list_hook< member_hook
          < MyClass, any_member_hook<>, &MyClass::member_hook_> >  MemberListOption;
    typedef list<MyClass, MemberListOption>                        MemberList;

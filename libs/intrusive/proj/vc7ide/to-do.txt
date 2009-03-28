@@ -24,3 +24,5 @@
 -> revise strong exception safety concepts for treap::erase functions.
    What happens with range deletions?
 -> Assure stable order for optimize_multikey and inverse order otherwise
+-> linear slist's splice_after(..., slist &x) can be optimized if *this is empty
+-> optimize slist::merge like list::merge
