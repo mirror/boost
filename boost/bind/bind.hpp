@@ -48,6 +48,8 @@
 namespace boost
 {
 
+template<class T> class weak_ptr;
+
 namespace _bi // implementation details
 {
 
@@ -125,6 +127,13 @@ private:
 
     T t_;
 };
+
+// ref_compare for weak_ptr
+
+template<class T> bool ref_compare( value< weak_ptr<T> > const & a, value< weak_ptr<T> > const & b, int )
+{
+    return !(a.get() < b.get()) && !(b.get() < a.get());
+}
 
 // type
 
