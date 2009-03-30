@@ -103,6 +103,9 @@ The following templates describe the general properties of a type.
    struct __alignment_of;
 
    template <class T>
+   struct __has_new_operator;
+
+   template <class T>
    struct __has_nothrow_assign;
 
    template <class T>
@@ -182,6 +185,9 @@ between two types:
 
    template <class Base, class Derived>
    struct __is_base_of;
+
+   template <class Base, class Derived>
+   struct __is_virtual_base_of;
 
    template <class From, class To>
    struct __is_convertible;
