@@ -46,7 +46,17 @@ namespace std{
 #include <boost/type_traits/remove_extent.hpp>
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
+
+#define NO_HAS_NEW_OPERATOR (                          \
+    defined(__BORLANDC__)                              \
+    || defined(__IBMCPP__)                             \
+    || defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)     \
+    || defined(__SUNPRO_CC) && (__SUBPRO_CC < 0x590)   \
+)
+
+#if ! NO_USE_HAS_NEW_OPERATOR
 #include <boost/type_traits/has_new_operator.hpp>
+#endif
 
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/if.hpp>
@@ -197,10 +207,7 @@ template<class T>
 struct heap_allocator
 {
     // boost::has_new_operator<T> doesn't work on these compilers
-    #if defined(__BORLANDC__)                          \
-    || defined(__IBMCPP__)                             \
-    || defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)     \
-    || defined(__SUNPRO_CC) && (__SUBPRO_CC < 0x590)
+    #if NO_USE_HAS_NEW_OPERATOR
         // This doesn't handle operator new overload for class T
         static T * invoke(){
             return static_cast<T *>(operator new(sizeof(T)));
