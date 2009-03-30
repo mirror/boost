@@ -36,6 +36,7 @@ struct is_virtual_base_of_impl
 template<typename Base, typename Derived>
 struct is_virtual_base_of_impl<Base, Derived, mpl::true_>
 {
+#ifdef __BORLANDC__
     struct X : public virtual Derived, public virtual Base 
     {
        X();
@@ -50,6 +51,22 @@ struct is_virtual_base_of_impl<Base, Derived, mpl::true_>
        Y& operator=(const Y&);
        ~Y();
     };
+#else
+    struct X : Derived, virtual Base 
+    {
+       X();
+       X(const X&);
+       X& operator=(const X&);
+       ~X();
+    };
+    struct Y : Derived 
+    {
+       Y();
+       Y(const Y&);
+       Y& operator=(const Y&);
+       ~Y();
+    };
+#endif
     BOOST_STATIC_CONSTANT(bool, value = (sizeof(X)==sizeof(Y)));
 };
 
