@@ -14,7 +14,6 @@
 #include <boost/spirit/include/classic_confix.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
 #include <boost/spirit/include/classic_symbols.hpp>
-#include <boost/spirit/include/classic_escape_char.hpp>
 #include <boost/spirit/include/classic_loops.hpp>
 #include "./phrase.hpp"
 
@@ -127,12 +126,14 @@ namespace quickbook
                     =   +chset_p("~!%^&*()+={[}]:;,<.>?/|\\-")
                     ;
 
+                string_char = ('\\' >> anychar_p) | (anychar_p - '\\');
+
                 string_
-                    =   !as_lower_d['l'] >> confix_p('"', *c_escape_ch_p, '"')
+                    =   !as_lower_d['l'] >> confix_p('"', *string_char, '"')
                     ;
 
                 char_
-                    =   !as_lower_d['l'] >> confix_p('\'', *c_escape_ch_p, '\'')
+                    =   !as_lower_d['l'] >> confix_p('\'', *string_char, '\'')
                     ;
 
                 number
@@ -150,7 +151,8 @@ namespace quickbook
             }
 
             rule<Scanner>   program, macro, preprocessor, comment, special, string_, 
-                            char_, number, identifier, keyword, qbk_phrase, escape;
+                            char_, number, identifier, keyword, qbk_phrase, escape,
+                            string_char;
 
             symbols<> keyword_;
             phrase_grammar<EscapeActions> common;
@@ -275,16 +277,18 @@ namespace quickbook
                     =   ! string_prefix >> (long_string | short_string)
                     ;
 
+                string_char = ('\\' >> anychar_p) | (anychar_p - '\\');
+            
                 short_string
-                    =   confix_p('\'', * c_escape_ch_p, '\'') |
-                        confix_p('"', * c_escape_ch_p, '"')    
+                    =   confix_p('\'', * string_char, '\'') |
+                        confix_p('"', * string_char, '"')
                     ;
             
                 long_string
                     // Note: the "str_p" on the next two lines work around
                     // an INTERNAL COMPILER ERROR when using VC7.1
-                    =   confix_p(str_p("'''"), * lex_escape_ch_p, "'''") |
-                        confix_p(str_p("\"\"\""), * lex_escape_ch_p, "\"\"\"")
+                    =   confix_p(str_p("'''"), * string_char, "'''") |
+                        confix_p(str_p("\"\"\""), * string_char, "\"\"\"")
                     ;
                 
                 number
@@ -303,7 +307,7 @@ namespace quickbook
 
             rule<Scanner>   program, macro, comment, special, string_, string_prefix, 
                             short_string, long_string, number, identifier, keyword, 
-                            qbk_phrase, escape;
+                            qbk_phrase, escape, string_char;
 
             symbols<> keyword_;
             phrase_grammar<EscapeActions> common;
