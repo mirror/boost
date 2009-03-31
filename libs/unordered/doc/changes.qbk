@@ -62,4 +62,11 @@ First official release.
 * Add support for C++0x initializer lists where they're available (currently
   only g++ 4.4 in C++0x mode).
 
+[h2 Boost 1.39.0]
+
+* [@https://svn.boost.org/trac/boost/ticket/2756 Ticket 2756]: Avoid a warning
+  on Visual C++ 2009.
+* Some other minor internal changes to the implementation, tests and
+  documentation.
+
 [endsect]

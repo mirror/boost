@@ -73,5 +73,14 @@
   functional/hash, not functional. `boost/functional/detail/container_fwd.hpp`
   has been moved to `boost/detail/container_fwd.hpp` as it's used outside of
   this library, the others have been moved to `boost/functional/hash/detail`.
+  
+[h2 Boost 1.39.0]
+
+* Move the hash_fwd.hpp implementation into the hash subdirectory, leaving a
+  forwarding header in the old location. You should still use the old location,
+  the new location is mainly for implementation and possible modularization.
+* [@https://svn.boost.org/trac/boost/ticket/2412 Ticket 2412]: Removed deprecated
+  headers.
+
 
 [endsect]
