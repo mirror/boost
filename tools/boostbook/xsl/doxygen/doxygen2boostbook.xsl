@@ -494,6 +494,10 @@
         <xsl:call-template name="typedef" />
       </xsl:when>
 
+      <xsl:when test="@kind='variable'">
+        <xsl:call-template name="variable" />
+      </xsl:when>
+
       <xsl:when test="@kind='enum'">
         <xsl:call-template name="enum" />
       </xsl:when>
