@@ -1152,11 +1152,14 @@
       </xsl:attribute>
 
       <!-- Specifiers -->
-      <xsl:if test="@static = 'yes'">
-        <xsl:attribute name="specifiers">static</xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@mutable = 'yes'">
-        <xsl:attribute name="specifiers">mutable</xsl:attribute>
+      <xsl:variable name="specifiers">
+        <xsl:if test="@static = 'yes'"><xsl:text> static</xsl:text></xsl:if>
+        <xsl:if test="@mutable = 'yes'"><xsl:text> mutable</xsl:text></xsl:if>
+      </xsl:variable>
+      <xsl:if test="normalize-space($specifiers)">
+        <xsl:attribute name="specifiers">
+          <xsl:value-of select="normalize-space($specifiers)"/>
+        </xsl:attribute>
       </xsl:if>
 
       <type>
