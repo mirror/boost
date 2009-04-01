@@ -36,6 +36,8 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<VB,VD>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<VD,VB>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<test_abc1,test_abc3>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<test_abc3,test_abc1>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Base,virtual_inherit1>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<virtual_inherit1,Base>::value), false);
 
 TT_TEST_END
 

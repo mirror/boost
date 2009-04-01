@@ -73,6 +73,7 @@
 [def __has_virtual_destructor [link boost_typetraits.reference.has_virtual_destructor has_virtual_destructor]]
 [def __is_pod [link boost_typetraits.reference.is_pod is_pod]]
 [def __has_trivial_constructor [link boost_typetraits.reference.has_trivial_constructor has_trivial_constructor]]
+[def __has_new_operator [link boost_typetraits.reference.has_new_operator has_new_operator]]
 [def __has_trivial_copy [link boost_typetraits.reference.has_trivial_copy has_trivial_copy]]
 [def __has_trivial_default_constructor [link boost_typetraits.reference.has_trivial_constructor has_trivial_default_constructor]]
 [def __has_trivial_copy_constructor [link boost_typetraits.reference.has_trivial_copy has_trivial_copy_constructor]]
@@ -86,6 +87,7 @@
 [def __has_nothrow_assign [link boost_typetraits.reference.has_nothrow_assign has_nothrow_assign]]
 
 [def __is_base_of [link boost_typetraits.reference.is_base_of is_base_of]]
+[def __is_virtual_base_of [link boost_typetraits.reference.is_virtual_base_of is_virtual_base_of]]
 [def __is_convertible [link boost_typetraits.reference.is_convertible is_convertible]]
 [def __is_same [link boost_typetraits.reference.is_same is_same]]
 
@@ -168,6 +170,7 @@ that is the result of the transformation.
 [include floating_point_promotion.qbk]
 [include function_traits.qbk]
 
+[include has_new_operator.qbk]
 [include has_nothrow_assign.qbk]
 [include has_nothrow_constructor.qbk]
 [include has_nothrow_copy.qbk]
@@ -221,6 +224,7 @@ See __has_trivial_constructor.
 [include is_reference.qbk]
 [include is_union.qbk]
 [include is_unsigned.qbk]
+[include is_virtual_base_of.qbk]
 [include is_void.qbk]
 [include is_volatile.qbk]
 

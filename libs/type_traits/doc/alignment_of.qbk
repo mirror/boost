@@ -9,7 +9,7 @@
    template <class T>
    struct alignment_of : public __integral_constant<std::size_t, ALIGNOF(T)> {};
   
-__inherit Class template alignment_of inherits from 
+__inherit Class template `alignment_of` inherits from 
 `__integral_constant<std::size_t, ALIGNOF(T)>`, where `ALIGNOF(T)` is the
 alignment of type T.  
 
