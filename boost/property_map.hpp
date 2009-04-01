@@ -500,22 +500,20 @@ namespace boost {
   //=========================================================================
   // A property map that always returns a reference to the same object.
   //
-template <typename KeyType, typename ValueType>
-class ref_property_map :
-  public
-    boost::put_get_helper<ValueType&,ref_property_map<KeyType,ValueType> >
-{ 
-  ValueType* value;
-public:
-  typedef KeyType key_type;
-  typedef ValueType value_type;
-  typedef ValueType& reference;
-  typedef lvalue_property_map_tag category;
-  ref_property_map(ValueType& v) : value(&v) {}
-  ValueType& operator[](key_type const&) const { return *value; }
-
-};
-
+  template <typename KeyType, typename ValueType>
+  class ref_property_map :
+    public
+      boost::put_get_helper<ValueType&,ref_property_map<KeyType,ValueType> >
+  { 
+    ValueType* value;
+  public:
+    typedef KeyType key_type;
+    typedef ValueType value_type;
+    typedef ValueType& reference;
+    typedef lvalue_property_map_tag category;
+    ref_property_map(ValueType& v) : value(&v) {}
+    ValueType& operator[](key_type const&) const { return *value; }
+  };
 
   //=========================================================================
   // A property map that applies the identity function to integers
