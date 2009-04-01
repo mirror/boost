@@ -68,6 +68,7 @@
 </li>
 </ol></div>
 </li>
+<li><span class="RenoLink"><a href="frequently_asked_questions.html">Frequently Asked Questions</a></span></li>
 <li><span class="RenoLink"><a href="name_idx.html">Index</a></span></li>
 </ol></div>
 <h2>Synopsis</h2>
@@ -205,12 +206,24 @@ boost
 <p>T must have accessible copy constructor and must not be a reference (there is no requirement that T's copy constructor does not throw.)</p>
 <h4>Description:</h4>
 <p>This class template is used to associate a Tag type with a value type T. Objects of type <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; can be passed to <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span> to be stored in objects of type boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p>
-<h4>Note:</h4>
-<p>The header &lt;<span class="RenoLink"><a href="exception_error_info_value_hpp.html">boost/exception/error_info.hpp</a></span>&gt; provides a declaration of the <span class="RenoLink"><a href="error_info.html">error_info</a></span> template, which is sufficient for the purpose of typedefing an instance for specific Tag and T, like this:</p>
+<h4>Usage:</h4>
+<p>The header &lt;<span class="RenoLink"><a href="exception_error_info_value_hpp.html">boost/exception/error_info.hpp</a></span>&gt; provides a declaration of the <span class="RenoLink"><a href="error_info.html">error_info</a></span> template, which is sufficient for the purpose of typedefing an instance for specific Tag and T, for example:</p>
+<pre>#include &lt;<span class="RenoLink"><a href="exception_error_info_value_hpp.html">boost/exception/error_info.hpp</a></span>&gt;
+
+struct tag_errno;
+typedef boost::<span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;tag_errno,int&gt; errno_info;</pre>
+<p>Or, the shorter equivalent:</p>
 <pre>#include &lt;<span class="RenoLink"><a href="exception_error_info_value_hpp.html">boost/exception/error_info.hpp</a></span>&gt;
 
 typedef boost::<span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_errno,int&gt; errno_info;</pre>
-<p>Of course, to actually add an <span class="RenoLink"><a href="error_info.html">error_info</a></span> object to <span class="RenoLink"><a href="exception.html">exceptions</a></span> using <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span>, or to retrieve it using <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>, you must first #include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;.</p>
+<p>This errno_info typedef can be passed to <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span> (#include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt; first) to store an int named tag_errno in exceptions of types that derive from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>:</p>
+<pre>throw file_read_error() <span class="RenoLink"><a href="exception_operator_shl.html">&lt;&lt;</a></span> errno_info(errno);</pre>
+<p>It can also be passed to <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> (#include &lt;<span class="RenoLink"><a href="exception_get_error_info_hpp.html">boost/exception/get_error_info.hpp</a></span>&gt; first) to retrieve the tag_errno int from a boost::<span class="RenoLink"><a href="exception.html">exception</a></span>:</p>
+<pre>catch( boost::<span class="RenoLink"><a href="exception.html">exception</a></span> &amp; x )
+    {
+    if( boost::shared_ptr&lt;int const&gt; e=boost::<span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>&lt;errno_info&gt;(x) )
+        ....
+    }</pre>
 </div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>exception/operator&lt;&lt;</h3>
 </div>
 <div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;<span class="RenoBR">&nbsp;</span><br/></p>
