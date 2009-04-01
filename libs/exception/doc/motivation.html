@@ -119,10 +119,12 @@ catch( boost::<span class="RenoLink"><a href="exception.html">exception</a></spa
     if( shared_ptr&lt;int const&gt; c=<span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>&lt;errno_code&gt;(e) )
         std::cerr &lt;&lt; “OS says: “ &lt;&lt; strerror(*c) &lt;&lt; “\n”;
     }</pre>
+<p>In addition, boost::<span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> can be used to compose an automatic (if not user-friendly) message that contains all of the <span class="RenoLink"><a href="error_info.html">error_info</a></span> objects added to a boost::<span class="RenoLink"><a href="exception.html">exception</a></span>. This is useful for inclusion in logs and other diagnostic objects.</p>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
 </a><a href="exception_types_as_simple_semantic_tags.html">Exception Types As Simple Semantic Tags<br/>
+</a><a href="frequently_asked_questions.html">Frequently Asked Questions<br/>
 </a><a href="tutorial_enable_error_info.html">Integrating Boost Exception in Existing Exception Class Hierarchies<br/>
 </a></div>
 </div>
