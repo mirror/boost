@@ -29,7 +29,7 @@
 // Substitute a primitive implementation here.
 namespace boost {
 namespace archive {
-    char * tmpnam(char * buffer){
+    const char * tmpnam(char * buffer){
         static char ibuffer [512];
         if(NULL == buffer)
             buffer = ibuffer;
@@ -72,7 +72,7 @@ namespace std{
 
 namespace boost {
 namespace archive {
-    char * test_filename(char * dir = NULL, char *fname = NULL){
+    const char * test_filename(const char * dir = NULL, char *fname = NULL){
         static char ibuffer [512];
         int i;
         ibuffer[0] = '\0';
@@ -94,8 +94,8 @@ namespace archive {
         }
         return ibuffer;
     }
-    char * tmpnam(char * buffer){
-        char * name = test_filename(NULL, NULL);
+    const char * tmpnam(char * buffer){
+        const char * name = test_filename(NULL, NULL);
         if(NULL != buffer){
             STRCPY(buffer, name);
         }

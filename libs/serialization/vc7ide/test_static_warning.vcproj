@@ -301,6 +301,7 @@
 				RuntimeLibrary="1"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
+				DisableLanguageExtensions="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"

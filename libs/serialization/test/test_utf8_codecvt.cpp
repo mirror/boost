@@ -15,16 +15,26 @@
 #include <string>
 
 #include <cstddef> // size_t
+#include <cwchar>
 #include <boost/config.hpp>
+
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::size_t; 
+    using ::wcslen;
+    using ::w_int;
 } // namespace std
 #endif
 
-#include <cwchar>
-#ifdef BOOST_NO_STDC_NAMESPACE
-namespace std{ using ::wcslen; }
+// Note: copied from boost/iostreams/char_traits.hpp
+//
+// Dinkumware that comes with QNX Momentics 6.3.0, 4.0.2, incorrectly defines
+// the EOF and WEOF macros to not std:: qualify the wint_t type (and so does
+// Sun C++ 5.8 + STLport 4). Fix by placing the def in this scope.
+// NOTE: Use BOOST_WORKAROUND?
+#if (defined(__QNX__) && defined(BOOST_DINKUMWARE_STDLIB))  \
+    || defined(__SUNPRO_CC)
+using ::std::wint_t;
 #endif
 
 #include "test_tools.hpp"

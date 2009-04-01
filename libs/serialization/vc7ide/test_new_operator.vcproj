@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="test_diamond"
+	Name="test_new_operator"
 	ProjectGUID="{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
-	RootNamespace="test_diamond"
+	RootNamespace="test_new_operator"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -91,7 +91,7 @@
 				IgnoreImportLibrary="TRUE"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/link-static&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/link-static&quot;;&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/link-static&quot;"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"/>
 			<Tool
@@ -1663,8 +1663,6 @@
 		</Configuration>
 		<Configuration
 			Name="Debug runtime-dynamic threading-multi|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1">
 			<Tool
 				Name="VCCLCompilerTool"/>
@@ -1698,7 +1696,16 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\test\test_diamond.cpp">
+			RelativePath="..\test\A.cpp">
+		</File>
+		<File
+			RelativePath="..\test\A.hpp">
+		</File>
+		<File
+			RelativePath="..\test\A.ipp">
+		</File>
+		<File
+			RelativePath="..\test\test_new_operator.cpp">
 		</File>
 	</Files>
 	<Globals>

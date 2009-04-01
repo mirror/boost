@@ -29,6 +29,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   <dt><a href="#unregistered_class"><code style="white-space: normal">unregistered_class</code></a>
   <dt><a href="#invalid_signature"><code style="white-space: normal">invalid_signature</code></a>
   <dt><a href="#unsupported_version"><code style="white-space: normal">unsupported_version</code></a>
+  <dt><a href="#unsupported_class_version"><code style="white-space: normal">unsupported_class_version</code></a>
   <dt><a href="#pointer_conflict"><code style="white-space: normal">pointer_conflict</code></a>
   <dt><a href="#incompatible_native_format"><code style="white-space: normal">incompatible_native_format</code></a>
   <dt><a href="#array_size_too_short"><code style="white-space: normal">array_size_too_short</code></a>
@@ -72,8 +73,11 @@ public:
         invalid_class_name,     // class name greater than the maximum permitted.
                                 // most likely a corrupted archive or an attempt
                                 // to insert virus via buffer overrun method.
-        unregistered_cast       // base - derived relationship not registered with 
+        unregistered_cast,      // base - derived relationship not registered with 
                                 // void_cast_register
+        unsupported_class_version // type saved with a version # greater than the 
+                            // one used by the program.  This indicates that the proggram
+                            // needs to be rebuilt.
     } exception_code;
     exception_code code;
     archive_exception(exception_code c) : code(c) {}
@@ -109,7 +113,7 @@ the archive is opened, It is presumed that this file is not a valid archive and 
 exception is thrown.
 
 <h3><a name="unsupported_version"><code style="white-space: normal">unsupported_version</code></a></h3>
-This system assigns a version number of 2 to all archives created.  Note that this is in
+This system assigns a version number of 3 to all archives created.  Note that this is in
 no way related to version number of classes used by application programs. This refers
 to the version of the serialization system used to create the archive. Future versions
 of this serialization system will be able to identify archives created under previous
@@ -119,6 +123,14 @@ necessary to increment this version number when the newer system creates archive
 incompatible in format with the current one. 
 <p>Should it ever occur that an older program attempts to read newer archives whose
 format has changed, this exception is thrown.
+
+<h3><a name="unsupported_class_version"><code style="white-space: normal">unsupported_class_version</code></a></h3>
+An attempt has been made to load a class whose version has been incremented since the
+program was written.  Suppose that a class has been assigned version number 3 and the program
+has been built and sent to third parties.  Now suppose that the definition of that class
+has been altered, the version number has been incremented to 4 and new archives have been
+built.  If one attempts to load these new archives with the original program, this 
+exception will be thrown.
 
 <h3><a name="pointer_conflict"><code style="white-space: normal">pointer_conflict</code></a></h3>
 To understand what this exception means consider the following scenario

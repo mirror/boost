@@ -64,7 +64,7 @@ class extended_type_info_arg : public extended_type_info
 {
 public:
     extended_type_info_arg(const char * key) :
-        extended_type_info(NULL)
+        extended_type_info()
     {
         m_key = key;
     }
@@ -92,12 +92,12 @@ extended_type_info::key_unregister() {
         assert(start != end);
 
         // remove entry in map which corresponds to this type
-        do{
-            if(this == *start)
-                x.erase(start++);
-            else
-		    ++start;
-        }while(start != end);
+        for(;start != end; ++start){
+            if(this == *start){
+                x.erase(start);
+                break;
+            }
+        }
     }
     m_key = NULL;
 }
@@ -120,9 +120,6 @@ extended_type_info::extended_type_info(
     m_type_info_key(type_info_key),
     m_key(NULL)
 {
-    // make sure that the ktmap is instantiated before 
-    // the first key is added to it.
-    singleton<detail::ktmap>::get_const_instance();
 }
 
 BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) 
@@ -151,7 +148,7 @@ extended_type_info::operator==(const extended_type_info &rhs) const {
         return false;
     }
     return is_equal(rhs);
-};
+}
 
 } // namespace serialization
 } // namespace boost

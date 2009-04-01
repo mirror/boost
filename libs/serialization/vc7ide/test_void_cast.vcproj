@@ -302,7 +302,7 @@
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="5"
 				BufferSecurityCheck="TRUE"
 				EnableFunctionLevelLinking="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
@@ -319,7 +319,7 @@
 				IgnoreImportLibrary="TRUE"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/threading-multi/link-static&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/link-static&quot;"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"/>
 			<Tool

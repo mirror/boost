@@ -47,7 +47,9 @@ test-suite "serialization" :
      [ test-bsl-run_files test_map : A ]
      [ test-bsl-run_files test_mi ]
      [ test-bsl-run_files test_multiple_ptrs : A ]
-     [ test-bsl-run_files test_no_rtti ]
+     [ test-bsl-run_files test_no_rtti 
+         : polymorphic_base polymorphic_derived1 polymorphic_derived2 
+     ]
      [ test-bsl-run_files test_non_intrusive ]
      [ test-bsl-run_files test_non_default_ctor ]
      [ test-bsl-run_files test_non_default_ctor2 ]
@@ -64,6 +66,7 @@ test-suite "serialization" :
      [ test-bsl-run_files test_valarray ]
      [ test-bsl-run_files test_variant : A ]
      [ test-bsl-run_files test_vector : A ]
+     [ test-bsl-run_files test_new_operator : A ]
      [ test-bsl-run_files test_optional ]
      [ test-bsl-run_files test_shared_ptr ]
      [ test-bsl-run_files test_shared_ptr_132 ]
