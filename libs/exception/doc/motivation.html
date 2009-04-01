@@ -72,7 +72,8 @@ read_file( FILE * f, char const * name )
 </ul></div>
 <p>For example, in the throw statement below we only add the errno code, since this is the only failure-relevant information available in this context:</p>
 <pre>struct exception_base: virtual std::exception, virtual boost::<span class="RenoLink"><a href="exception.html">exception</a></span> { };
-struct file_read_error: virtual exception_base { };
+struct io_error: virtual exception_base { };
+struct file_read_error: virtual io_error { };
 
 typedef boost::<span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_errno_code,int&gt; errno_code;
 
