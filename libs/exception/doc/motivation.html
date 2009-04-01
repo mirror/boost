@@ -61,9 +61,9 @@ read_file( FILE * f, char const * name )
 <h3>Exception wrapping</h3>
 <p>The idea of exception wrapping is to catch an exception from a lower level function (such as the read_file function above), and throw a new exception object that contains the original exception (and also carries a file name.) This method seems to be particularly popular with C++ programmers with Java background.</p>
 <p>Exception wrapping leads to the following problems:</p>
-<div><ol><li>To wrap an exception object it must be copied, which may result in slicing.</li>
+<div><ul><li>To wrap an exception object it must be copied, which may result in slicing.</li>
 <li>Wrapping is practically impossible to use in generic contexts.</li>
-</ol></div>
+</ul></div>
 <p>The second point is actually special case of violating the exception neutrality principle. Most contexts in a program can not handle exceptions; such contexts should not interfere with the process of exception handling.</p>
 <h3>The boost::exception solution</h3>
 <div><ul><li>Simply derive your exception types from boos::<span class="RenoLink"><a href="exception.html">exception</a></span>.</li>
