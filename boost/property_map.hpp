@@ -1,4 +1,7 @@
 //  (C) Copyright Jeremy Siek 1999-2001.
+//  Copyright (C) 2006 Trustees of Indiana University
+//  Authors: Douglas Gregor and Jeremy Siek
+
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -498,6 +501,26 @@ namespace boost {
   }
 
   //=========================================================================
+  // A property map that always returns the same object by value.
+  //
+  template <typename ValueType>
+  class static_property_map :
+      public
+  boost::put_get_helper<ValueType,static_property_map<ValueType> >
+  { 
+    ValueType value;
+  public:
+    typedef void key_type;
+    typedef ValueType value_type;
+    typedef ValueType reference;
+    typedef readable_property_map_tag category;
+    static_property_map(ValueType v) : value(v) {}
+    
+    template<typename T>
+    inline reference operator[](T) const { return value; }
+  };
+
+  //=========================================================================
   // A property map that always returns a reference to the same object.
   //
   template <typename KeyType, typename ValueType>
@@ -561,6 +584,8 @@ namespace boost {
 
 } // namespace boost
 
+
+#include <boost/vector_property_map.hpp>
 
 #endif /* BOOST_PROPERTY_MAP_HPP */
 

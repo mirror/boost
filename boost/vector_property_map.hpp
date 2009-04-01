@@ -57,7 +57,10 @@ namespace boost {
         {
             return store->end();
         }
-                           
+                 
+        IndexMap&       get_index_map()       { return index; }
+        const IndexMap& get_index_map() const { return index; }
+          
     public:
         // Copy ctor absent, default semantics is OK.
         // Assignment operator absent, default semantics is OK.
