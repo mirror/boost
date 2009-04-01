@@ -9,6 +9,8 @@
 #ifndef BOOST_TT_HAS_NEW_OPERATOR_HPP_INCLUDED
 #define BOOST_TT_HAS_NEW_OPERATOR_HPP_INCLUDED
 
+#include <new> // std::nothrow_t
+#include <cstddef> // std::size_t
 #include <boost/type_traits/config.hpp>
 #include <boost/type_traits/detail/yes_no_type.hpp>
 #include <boost/type_traits/detail/ice_or.hpp>
