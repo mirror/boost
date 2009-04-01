@@ -80,16 +80,17 @@ p
 
 pre
 {
-	border-top: 1px solid #000000;
-	border-bottom: 1px solid #000000;
-	border-left: 0;
-	border-right: 0;
+	border-top: 1px solid #C5C5C5;
+	border-bottom: 1px solid #C5C5C5;
+	border-left: 1px solid #C5C5C5;
+	border-right: 1px solid #C5C5C5;
 	font-size: 10pt;
-	background-color: #E5E5E5;
 	padding-top: 5pt;
 	padding-bottom: 5pt;
 	padding-left: 5pt;
 	padding-right: 5pt;
+	margin-left: 18pt;
+	margin-right: 18pt;
 	margin-top: 10pt;
 	margin-bottom: 10pt;
 	clear: both;
