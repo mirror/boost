@@ -25,6 +25,8 @@
 <p><b>BOOST_NO_RTTI</b><span class="RenoBR">&nbsp;</span><br/><b>BOOST_NO_TYPEID</b></p>
 <p>The first macro prevents Boost Exception from using dynamic_cast and dynamic typeid. If the second macro is also defined, Boost Exception does not use static typeid either. There are no observable degrading effects on the library functionality, except for the following:</p>
 <blockquote><p>By default, the <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> function template can be called with any exception type. If BOOST_NO_RTTI is defined, <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> can be used only with objects of type boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p></blockquote>
+<h4>Note:</h4>
+<p>The library needs RTTI functionality. Disabling the language RTTI support enables an internal RTTI system, which may have more or less overhead depending on the platform.</p>
 <p><b>BOOST_EXCEPTION_DISABLE</b></p>
 <p>By default, <span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span> and <span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span> are integrated directly in the <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span> function. Defining BOOST_EXCEPTION_DISABLE disables this integration.</p>
 <p>Note that on some non-conformant compilers, for example MSVC 7.0 and older, as well as BCC, BOOST_EXCEPTION_DISABLE is implicitly defined in <span class="RenoLink"><a href="throw_exception_hpp.html">boost/throw_exception.hpp</a></span>.</p>
