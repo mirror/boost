@@ -32,7 +32,7 @@ throw e;</pre>
 <p>and looks better than something like:</p>
 <pre>throw error().add(foo_info(foo)).add(bar_info(bar));</pre>
 <h3>Why is boost::exception abstract?</h3>
-<p>To prevent exception-neutral contexts from erroneusly erasing the type of the original exception when adding <span class="RenoLink"><a href="error_info.html">error_info</a></span> to an active exception object:</p>
+<p>To prevent exception-neutral contexts from erroneously erasing the type of the original exception when adding <span class="RenoLink"><a href="error_info.html">error_info</a></span> to an active exception object:</p>
 <pre>catch( boost::<span class="RenoLink"><a href="exception.html">exception</a></span> &amp; e )
     {
     e <span class="RenoLink"><a href="exception_operator_shl.html">&lt;&lt;</a></span> foo_info(foo);
