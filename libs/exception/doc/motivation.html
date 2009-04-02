@@ -66,7 +66,7 @@ read_file( FILE * f, char const * name )
 </ul></div>
 <p>The second point is actually special case of violating the exception neutrality principle. Most contexts in a program can not handle exceptions; such contexts should not interfere with the process of exception handling.</p>
 <h3>The boost::exception solution</h3>
-<div><ul><li>Simply derive your exception types from boos::<span class="RenoLink"><a href="exception.html">exception</a></span>.</li>
+<div><ul><li>Simply derive your exception types from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</li>
 <li>Confidently limit the throw site to provide only data that is available naturally.</li>
 <li>Use exception-neutral contexts between the throw and the catch to augment exceptions with more relevant data as they bubble up.</li>
 </ul></div>
@@ -92,7 +92,7 @@ read_file( FILE * f )
 ....
 try
     {
-    if( FILE * fp=fopen(“foo.txt”,”rt”) )
+    if( FILE * fp=fopen("foo.txt","rt") )
         {
         shared_ptr&lt;FILE&gt; f(fp,fclose);
         ....
@@ -105,19 +105,19 @@ try
     }
 catch( boost::<span class="RenoLink"><a href="exception.html">exception</a></span> &amp; e )
     {
-    e <span class="RenoLink"><a href="exception_operator_shl.html">&lt;&lt;</a></span> file_name(“foo.txt”);
+    e <span class="RenoLink"><a href="exception_operator_shl.html">&lt;&lt;</a></span> file_name("foo.txt");
     throw;
     }</pre>
 <p>Finally here is how the handler retreives data from exceptions that derive from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>:</p>
 <pre>catch( io_error &amp; e )
     {
-    std::cerr &lt;&lt; “I/O Error!\n”;
+    std::cerr &lt;&lt; "I/O Error!\n";
 
     if( shared_ptr&lt;std::string const&gt; fn=<span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>&lt;file_name&gt;(e) )
-        std::cerr &lt;&lt; “File name: “ &lt;&lt; *fn &lt;&lt; “\n”;
+        std::cerr &lt;&lt; "File name: " &lt;&lt; *fn &lt;&lt; "\n";
 
     if( shared_ptr&lt;int const&gt; c=<span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>&lt;errno_code&gt;(e) )
-        std::cerr &lt;&lt; “OS says: “ &lt;&lt; strerror(*c) &lt;&lt; “\n”;
+        std::cerr &lt;&lt; "OS says: " &lt;&lt; strerror(*c) &lt;&lt; "\n";
     }</pre>
 <p>In addition, boost::<span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> can be used to compose an automatic (if not user-friendly) message that contains all of the <span class="RenoLink"><a href="error_info.html">error_info</a></span> objects added to a boost::<span class="RenoLink"><a href="exception.html">exception</a></span>. This is useful for inclusion in logs and other diagnostic objects.</p>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
