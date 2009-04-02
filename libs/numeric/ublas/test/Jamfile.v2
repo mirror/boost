@@ -88,15 +88,15 @@ test-suite numeric/uBLAS
         : : :
             <define>$(UBLAS_TESTSET)
       ]
-# Test commented out, just like in V1 Jamfile
-      [ run test7.cpp
-            test71.cpp
-            test72.cpp
-            test73.cpp
-        : : :
-            <define>BOOST_UBLAS_USE_INTERVAL
-            <define>$(UBLAS_TESTSET)
-      ]
+# Test commented out because boost::interval does not behave like a scalar type
+#      [ run test7.cpp
+#            test71.cpp
+#            test72.cpp
+#            test73.cpp
+#        : : :
+#            <define>BOOST_UBLAS_USE_INTERVAL
+#            <define>$(UBLAS_TESTSET)
+#      ]
 
       [ run placement_new.cpp
       ]
