@@ -44,6 +44,9 @@ throw e;</pre>
     e <span class="RenoLink"><a href="exception_operator_shl.html">&lt;&lt;</a></span> foo_info(foo);
     throw; //Okay, re-throwing the original exception object.
     }</pre>
+<h3>Why doesn't boost::exception derive from std::exception?</h3>
+<p>Despite that <span class="RenoLink"><a href="using_virtual_inheritance_in_exception_types.html">virtual inheritance should be used in deriving from base exception types</a></span>, many programmers fail to follow this principle when deriving from std::exception. If boost::<span class="RenoLink"><a href="exception.html">exception</a></span> derives from std::exception, using the <span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span> function with such user-defined types would introduce dangerous ambiguity which would break all catch(std::exception &amp;) statements.</p>
+<p>Of course, boost::<span class="RenoLink"><a href="exception.html">exception</a></span> should not be used to replace std::exception as a base type in exception type hierarchies. Instead, it should be included as a virtual base, in addition to std::exception (which should also be derived virtually.)</p>
 <h3>What is the space overhead of the boost::exception base class?</h3>
 <p>The space overhead for the boost::exception data members is negligible in the context of exception handling. Throwing objects that derive from boost::<span class="RenoLink"><a href="exception.html">exception</a></span> does not by itself cause dynamic memory allocations.</p>
 <p>Deriving from boost::<span class="RenoLink"><a href="exception.html">exception</a></span> enables any data to be added to exceptions, which usually does allocate memory. However, this memory is reclaimed when the exception has been handled, and since typically user code does not allocate memory during the unrolling of the stack, adding error info to exceptions should not cause memory fragmentation.</p>
