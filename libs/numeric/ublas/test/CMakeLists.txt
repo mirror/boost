@@ -50,12 +50,21 @@ boost_test_run(ublas_test6
   test6.cpp test62.cpp test63.cpp
   COMPILE_FLAGS "${UBLAS_TESTSET_DEFINES}")
 
-# Test commented out, just like in V1 and V2 Jamfiles
+# Test commented out because boost::interval does not behave like a scalar
 # boost_test_run(test7
 #   test7.cpp test71.cpp test72.cpp test73.cpp
 #   COMPILE_FLAGS "-DBOOST_UBLAS_USE_INTERVAL ${UBLAS_TESTSET_DEFINES}")
 
 boost_test_run(placement_new)
+
+boost_test_run(test_lu)
+
+boost_test_run(triangular_access
+  triangular_access.cpp
+  COMPILE_FLAGS "-DNOMESSAGES")
+
+boost_test_run(triangular_layout 
+  triangular_layout.cpp)
 
 
 SET(test_compile_flags "-DEXTERNAL")

@@ -222,3 +222,7 @@ exe triangular_matrix
 exe triangular_adaptor
     : triangular_adaptor.cpp
     ;
+
+exe ex_triangular
+    : ex_triangular.cpp
+    ;

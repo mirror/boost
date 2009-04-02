@@ -88,7 +88,7 @@ test-suite numeric/uBLAS
         : : :
             <define>$(UBLAS_TESTSET)
       ]
-# Test commented out, just like in V1 Jamfile
+# Test commented out because boost::interval does not behave like a scalar type
 #      [ run test7.cpp
 #            test71.cpp
 #            test72.cpp
@@ -105,5 +105,13 @@ test-suite numeric/uBLAS
             <define>EXTERNAL
             <toolset>intel-linux:<cxxflags>"-Xc"
 			<toolset>darwin:<cxxflags>"-fabi-version=0"
+      ]
+      [ run test_lu.cpp
+      ]
+      [ run triangular_access.cpp
+        : : :
+            <define>NOMESSAGES
+      ]
+      [ run triangular_layout.cpp
       ]
     ;

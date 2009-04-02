@@ -36,7 +36,7 @@ struct test_my_vector {
             std::cout << "v1.swap (v2) = " << v1 << " " << v2 << std::endl;
 
             // Zero assignment
-            v1 = ublas::zero_vector<> (v1.size ());
+            v1 = ublas::zero_vector<value_type> (v1.size ());
             std::cout << "v1.zero_vector = " << v1 << std::endl;
             v1 = v2;
 
