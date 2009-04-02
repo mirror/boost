@@ -2251,33 +2251,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-34</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>(:include include:)&#10;(:auto also:)&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-28</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>(:include include:)&#10;(:auto also:)&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-36</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -2329,33 +2303,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-39</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>(:include include:)&#10;(:auto also:)&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-32</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>(:include include:)&#10;(:auto also:)&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-35</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -2381,7 +2329,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-38</id>
+														<id>-34</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -2394,43 +2342,26 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>46</id>
-														<type>
-															<string>reno_context</string>
-														</type>
-														<object>
-															<hook>
-																<hook>
-																	<stream_hook_path>
-																		<container>
-																			<size>1</size>
-																			<strong>187BFD2B78A0DD006717B5B06FFD465E2468F521C32A86FB793F7A68AB5417F3</strong>
-																			<weak>4276724153</weak>
-																			<size>574</size>
-																			<position>382</position>
-																		</container>
-																	</stream_hook_path>
-																</hook>
-																<file>
-																	<path>
-																		<empty>0</empty>
-																		<string>../../example/error_info_1.cpp</string>
-																		<type>0</type>
-																		<base>0</base>
-																	</path>
-																</file>
-															</hook>
-															<title>
-																<string>adding of arbitrary data at the point of the throw</string>
-															</title>
-															<file_name>
-																<string>adding_data_at_throw</string>
-															</file_name>
-														</object>
+														<id>-35</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>0</size>
+													<size>1</size>
+													<variant>2</variant>
+													<string>(:include include:)&#10;(:auto also:)&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-36</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>1</size>
+													<variant>2</variant>
+													<string>(:include include:)&#10;(:auto also:)&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -2450,47 +2381,20 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>47</id>
-														<type>
-															<string>reno_context</string>
-														</type>
-														<object>
-															<hook>
-																<hook>
-																	<stream_hook_path>
-																		<container>
-																			<size>3</size>
-																			<strong>126BB1D8971585CBE7D78EF3C12259D72FD5E973A84626AA9FC3234220A11CAB</strong>
-																			<weak>3471702891</weak>
-																			<size>969</size>
-																			<position>344</position>
-																			<strong>A7FD310E1340E103081DA2A7899DA0E213C696C84D52C17ADA09F6942EE97D47</strong>
-																			<weak>2978648279</weak>
-																			<size>530</size>
-																			<position>433</position>
-																			<strong>38B566F2C6678B8724D18086A6F76E077DC2ADC1BB69A4B83BF0A2C3B7D31B50</strong>
-																			<weak>2218658069</weak>
-																			<size>31</size>
-																			<position>143</position>
-																		</container>
-																	</stream_hook_path>
-																</hook>
-																<file>
-																	<path>
-																		<empty>0</empty>
-																		<string>../../../../boost/exception/detail/error_info_impl.hpp</string>
-																		<type>0</type>
-																		<base>0</base>
-																	</path>
-																</file>
-															</hook>
-															<title>
-																<string>error_info::value_type</string>
-															</title>
-															<file_name>
-																<string></string>
-															</file_name>
-														</object>
+														<id>-38</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>1</size>
+													<variant>2</variant>
+													<string>(:include include:)&#10;(:auto also:)&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-39</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -2575,6 +2479,102 @@
 													<size>1</size>
 													<variant>2</variant>
 													<string>(:auto !:)&#10;&#10;(:pagelist fmt=&quot;index&quot; except_tags=&quot;index noindex&quot; mod=&quot;w&quot;:)&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>46</id>
+														<type>
+															<string>reno_context</string>
+														</type>
+														<object>
+															<hook>
+																<hook>
+																	<stream_hook_path>
+																		<container>
+																			<size>1</size>
+																			<strong>187BFD2B78A0DD006717B5B06FFD465E2468F521C32A86FB793F7A68AB5417F3</strong>
+																			<weak>4276724153</weak>
+																			<size>574</size>
+																			<position>382</position>
+																		</container>
+																	</stream_hook_path>
+																</hook>
+																<file>
+																	<path>
+																		<empty>0</empty>
+																		<string>../../example/error_info_1.cpp</string>
+																		<type>0</type>
+																		<base>0</base>
+																	</path>
+																</file>
+															</hook>
+															<title>
+																<string>adding of arbitrary data at the point of the throw</string>
+															</title>
+															<file_name>
+																<string>adding_data_at_throw</string>
+															</file_name>
+														</object>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>47</id>
+														<type>
+															<string>reno_context</string>
+														</type>
+														<object>
+															<hook>
+																<hook>
+																	<stream_hook_path>
+																		<container>
+																			<size>3</size>
+																			<strong>126BB1D8971585CBE7D78EF3C12259D72FD5E973A84626AA9FC3234220A11CAB</strong>
+																			<weak>3471702891</weak>
+																			<size>969</size>
+																			<position>344</position>
+																			<strong>A7FD310E1340E103081DA2A7899DA0E213C696C84D52C17ADA09F6942EE97D47</strong>
+																			<weak>2978648279</weak>
+																			<size>530</size>
+																			<position>433</position>
+																			<strong>38B566F2C6678B8724D18086A6F76E077DC2ADC1BB69A4B83BF0A2C3B7D31B50</strong>
+																			<weak>2218658069</weak>
+																			<size>31</size>
+																			<position>143</position>
+																		</container>
+																	</stream_hook_path>
+																</hook>
+																<file>
+																	<path>
+																		<empty>0</empty>
+																		<string>../../../../boost/exception/detail/error_info_impl.hpp</string>
+																		<type>0</type>
+																		<base>0</base>
+																	</path>
+																</file>
+															</hook>
+															<title>
+																<string>error_info::value_type</string>
+															</title>
+															<file_name>
+																<string></string>
+															</file_name>
+														</object>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>1</size>
+													<variant>2</variant>
+													<string>(:include include:)&#10;(:auto also:)&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -3083,29 +3083,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-34</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-28</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-36</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -3216,29 +3194,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-39</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-32</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-35</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -3260,7 +3216,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-38</id>
+														<id>-34</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -3271,7 +3227,18 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-46</id>
+														<id>-35</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-36</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -3293,7 +3260,18 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-47</id>
+														<id>-38</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-39</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -3360,6 +3338,28 @@
 													<expired>0</expired>
 													<shared_ptr>
 														<id>-45</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-46</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-47</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -3761,29 +3761,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-34</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-28</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-36</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -3827,40 +3805,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-39</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>3</size>
-													<variant>2</variant>
-													<string>[@(:include </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-6</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string> decl:)@]&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-32</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-35</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -3882,29 +3827,29 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-38</id>
+														<id>-34</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>3</size>
-													<variant>2</variant>
-													<string>[@(:include </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-35</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string> decl:)@]&#10;</string>
+													<size>0</size>
 												</container>
 											</pair>
 											<pair>
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-46</id>
+														<id>-35</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-36</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -3991,11 +3936,44 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-47</id>
+														<id>-38</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>0</size>
+													<size>3</size>
+													<variant>2</variant>
+													<string>[@(:include </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-35</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string> decl:)@]&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-39</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>3</size>
+													<variant>2</variant>
+													<string>[@(:include </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-6</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string> decl:)@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -4167,6 +4145,28 @@
 													<expired>0</expired>
 													<shared_ptr>
 														<id>-45</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-46</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-47</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -4755,49 +4755,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-34</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>5</size>
-													<variant>2</variant>
-													<string>[@class&#10;(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-34</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:):&#10;    public std::exception&#10;    public boost::</string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-30</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>&#10;    {&#10;    ---unspecified---&#10;    };@]&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-28</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-36</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -4863,17 +4821,6 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-39</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-32</id>
 													</shared_ptr>
 												</weak_ptr>
@@ -4890,37 +4837,6 @@
 													</weak_ptr>
 													<variant>2</variant>
 													<string>:);@]&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-35</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>5</size>
-													<variant>2</variant>
-													<string>[@std::string (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-35</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:)( boost::(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-30</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:) const &amp; );@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -4958,18 +4874,69 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-38</id>
+														<id>-34</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>0</size>
+													<size>5</size>
+													<variant>2</variant>
+													<string>[@class&#10;(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-34</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:):&#10;    public std::exception&#10;    public boost::</string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-30</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>&#10;    {&#10;    ---unspecified---&#10;    };@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-46</id>
+														<id>-35</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>5</size>
+													<variant>2</variant>
+													<string>[@std::string (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-35</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:)( boost::(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-30</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:) const &amp; );@]&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-36</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -4991,22 +4958,22 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-47</id>
+														<id>-38</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>3</size>
-													<variant>2</variant>
-													<string>[@typedef T (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-47</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string> mod=&quot;m&quot;:);@]&#10;</string>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-39</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -5073,6 +5040,39 @@
 												</weak_ptr>
 												<container>
 													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-46</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-47</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>3</size>
+													<variant>2</variant>
+													<string>[@typedef T (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-47</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string> mod=&quot;m&quot;:);@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -6817,37 +6817,6 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-34</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>5</size>
-													<variant>2</variant>
-													<string>(:auto !!!:)&#10;&#10;(:include synopsis:)&#10;&#10;This type is used by the (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-32</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:) support in Boost Exception. Please see (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-8</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:).&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-28</id>
 													</shared_ptr>
 												</weak_ptr>
@@ -6936,82 +6905,6 @@
 													</weak_ptr>
 													<variant>2</variant>
 													<string>:)&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-36</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>15</size>
-													<variant>2</variant>
-													<string>(:auto !!!:)&#10;&#10;Boost Exception responds to the following configuration macros:&#10;&#10;&apos;&apos;&apos;BOOST_NO_RTTI&apos;&apos;&apos;\\&#10;&apos;&apos;&apos;BOOST_NO_TYPEID&apos;&apos;&apos;&#10;&#10;The first macro prevents Boost Exception from using dynamic_cast and dynamic typeid. If the second macro is also defined, Boost Exception does not use static typeid either. There are no observable degrading effects on the library functionality, except for the following:&#10;&#10;-&gt;By default, the (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-12</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:) function template can be called with any exception type. If BOOST_NO_RTTI is defined, (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-12</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:) can be used only with objects of type boost::(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-30</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:).&#10;&#10;&apos;&apos;&apos;BOOST_EXCEPTION_DISABLE&apos;&apos;&apos;&#10;&#10;By default, (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-20</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:) and (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-6</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:) are integrated directly in the (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-27</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:) function. Defining BOOST_EXCEPTION_DISABLE disables this integration.&#10;&#10;Note that on some non-conformant compilers, for example MSVC 7.0 and older, as well as BCC, BOOST_EXCEPTION_DISABLE is implicitly defined in (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-44</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:).&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -7291,19 +7184,6 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-39</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>(:auto !!!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-32</id>
 													</shared_ptr>
 												</weak_ptr>
@@ -7383,6 +7263,50 @@
 													</weak_ptr>
 													<variant>2</variant>
 													<string>:) concurrently to throw the same exception object into multiple threads.&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-33</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>1</size>
+													<variant>2</variant>
+													<string>(:auto !!!:)&#10;&#10;(:include synopsis:)&#10;&#10;!!!!Precondition:&#10;&#10;ep shall not be null.&#10;&#10;!!!!Throws:&#10;&#10;&#10;&#10;The exception to which ep refers.&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-34</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>5</size>
+													<variant>2</variant>
+													<string>(:auto !!!:)&#10;&#10;(:include synopsis:)&#10;&#10;This type is used by the (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-32</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:) support in Boost Exception. Please see (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-8</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:).&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -7501,13 +7425,89 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-33</id>
+														<id>-36</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>15</size>
+													<variant>2</variant>
+													<string>(:auto !!!:)&#10;&#10;Boost Exception responds to the following configuration macros:&#10;&#10;&apos;&apos;&apos;BOOST_NO_RTTI&apos;&apos;&apos;\\&#10;&apos;&apos;&apos;BOOST_NO_TYPEID&apos;&apos;&apos;&#10;&#10;The first macro prevents Boost Exception from using dynamic_cast and dynamic typeid. If the second macro is also defined, Boost Exception does not use static typeid either. There are no observable degrading effects on the library functionality, except for the following:&#10;&#10;-&gt;By default, the (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-12</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:) function template can be called with any exception type. If BOOST_NO_RTTI is defined, (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-12</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:) can be used only with objects of type boost::(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-30</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:).&#10;&#10;!!!!Note:&#10;&#10;The library needs RTTI functionality. Disabling the language RTTI support enables an internal RTTI system, which may have more or less overhead depending on the platform.&#10;&#10;&apos;&apos;&apos;BOOST_EXCEPTION_DISABLE&apos;&apos;&apos;&#10;&#10;By default, (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-20</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:) and (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-6</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:) are integrated directly in the (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-27</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:) function. Defining BOOST_EXCEPTION_DISABLE disables this integration.&#10;&#10;Note that on some non-conformant compilers, for example MSVC 7.0 and older, as well as BCC, BOOST_EXCEPTION_DISABLE is implicitly defined in (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-44</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:).&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-37</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
 													<size>1</size>
 													<variant>2</variant>
-													<string>(:auto !!!:)&#10;&#10;(:include synopsis:)&#10;&#10;!!!!Precondition:&#10;&#10;ep shall not be null.&#10;&#10;!!!!Throws:&#10;&#10;&#10;&#10;The exception to which ep refers.&#10;</string>
+													<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -7521,6 +7521,95 @@
 													<size>1</size>
 													<variant>2</variant>
 													<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-39</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>1</size>
+													<variant>2</variant>
+													<string>(:auto !!!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-40</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>1</size>
+													<variant>2</variant>
+													<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-41</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>1</size>
+													<variant>2</variant>
+													<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-42</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>1</size>
+													<variant>2</variant>
+													<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-43</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>1</size>
+													<variant>2</variant>
+													<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-44</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>1</size>
+													<variant>2</variant>
+													<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-45</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -7612,19 +7701,6 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-37</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-47</id>
 													</shared_ptr>
 												</weak_ptr>
@@ -7650,82 +7726,6 @@
 													</weak_ptr>
 													<variant>2</variant>
 													<string> mod=&quot;m&quot;:) evaluates to T.</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-40</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-41</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-42</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-43</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-44</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-45</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -8223,29 +8223,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-34</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-28</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-36</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -8289,29 +8267,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-39</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-32</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-35</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -8333,7 +8289,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-38</id>
+														<id>-34</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -8344,7 +8300,18 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-46</id>
+														<id>-35</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-36</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -8366,7 +8333,18 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-47</id>
+														<id>-38</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-39</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -8433,6 +8411,28 @@
 													<expired>0</expired>
 													<shared_ptr>
 														<id>-45</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-46</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-47</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -8899,40 +8899,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-34</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>3</size>
-													<variant>2</variant>
-													<string>`#include &lt;(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-43</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:)&gt;&#10;&#10;[@namespace&#10;boost&#10;    {&#10;(:include decl pre_indent=&quot;4&quot;:)&#10;    }@]&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-28</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-36</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -8998,29 +8965,51 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-39</id>
+														<id>-32</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
 													<size>3</size>
 													<variant>2</variant>
-													<string>[@#include &lt;</string>
+													<string>`#include &lt;(:link </string>
 													<variant>1</variant>
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-22</id>
+															<id>-43</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
-													<string>&gt;&#10;&#10;namespace&#10;boost&#10;    {&#10;(:include api pre_indent=&quot;4&quot;:)&#10;    }@]&#10;</string>
+													<string>:)&gt;&#10;&#10;[@namespace&#10;boost&#10;    {&#10;(:include decl pre_indent=&quot;4&quot;:)&#10;    }@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-32</id>
+														<id>-33</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>3</size>
+													<variant>2</variant>
+													<string>`#include &lt;(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-43</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:)&gt;&#10;&#10;[@namespace&#10;boost&#10;    {&#10;(:include decl pre_indent=&quot;4&quot;:)&#10;    }@]&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-34</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -9064,22 +9053,24 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-33</id>
+														<id>-36</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>3</size>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-37</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>1</size>
 													<variant>2</variant>
-													<string>`#include &lt;(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-43</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:)&gt;&#10;&#10;[@namespace&#10;boost&#10;    {&#10;(:include decl pre_indent=&quot;4&quot;:)&#10;    }@]&#10;</string>
+													<string>[@(:include api:)@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -9108,46 +9099,22 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-46</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-37</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>[@(:include api:)@]&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-47</id>
+														<id>-39</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
 													<size>3</size>
 													<variant>2</variant>
-													<string>`#include &lt;(:link </string>
+													<string>[@#include &lt;</string>
 													<variant>1</variant>
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-41</id>
+															<id>-22</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
-													<string>:)&gt;&#10;&#10;[@(:include decl:)@]&#10;</string>
+													<string>&gt;&#10;&#10;namespace&#10;boost&#10;    {&#10;(:include api pre_indent=&quot;4&quot;:)&#10;    }@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -9242,6 +9209,39 @@
 												</weak_ptr>
 												<container>
 													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-46</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-47</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>3</size>
+													<variant>2</variant>
+													<string>`#include &lt;(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-41</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:)&gt;&#10;&#10;[@(:include decl:)@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -9398,13 +9398,7 @@
 									<id>-27</id>
 								</shared_ptr>
 								<shared_ptr>
-									<id>-34</id>
-								</shared_ptr>
-								<shared_ptr>
 									<id>-28</id>
-								</shared_ptr>
-								<shared_ptr>
-									<id>-36</id>
 								</shared_ptr>
 								<shared_ptr>
 									<id>-29</id>
@@ -9416,28 +9410,28 @@
 									<id>-31</id>
 								</shared_ptr>
 								<shared_ptr>
-									<id>-39</id>
-								</shared_ptr>
-								<shared_ptr>
 									<id>-32</id>
-								</shared_ptr>
-								<shared_ptr>
-									<id>-35</id>
 								</shared_ptr>
 								<shared_ptr>
 									<id>-33</id>
 								</shared_ptr>
 								<shared_ptr>
-									<id>-38</id>
+									<id>-34</id>
 								</shared_ptr>
 								<shared_ptr>
-									<id>-46</id>
+									<id>-35</id>
+								</shared_ptr>
+								<shared_ptr>
+									<id>-36</id>
 								</shared_ptr>
 								<shared_ptr>
 									<id>-37</id>
 								</shared_ptr>
 								<shared_ptr>
-									<id>-47</id>
+									<id>-38</id>
+								</shared_ptr>
+								<shared_ptr>
+									<id>-39</id>
 								</shared_ptr>
 								<shared_ptr>
 									<id>-40</id>
@@ -9456,6 +9450,12 @@
 								</shared_ptr>
 								<shared_ptr>
 									<id>-45</id>
+								</shared_ptr>
+								<shared_ptr>
+									<id>-46</id>
+								</shared_ptr>
+								<shared_ptr>
+									<id>-47</id>
 								</shared_ptr>
 								<shared_ptr>
 									<id>-48</id>
@@ -10864,15 +10864,6 @@
 									<weak_ptr>
 										<expired>0</expired>
 										<shared_ptr>
-											<id>-34</id>
-										</shared_ptr>
-									</weak_ptr>
-									<string>exception_ptr type</string>
-								</pair>
-								<pair>
-									<weak_ptr>
-										<expired>0</expired>
-										<shared_ptr>
 											<id>-28</id>
 										</shared_ptr>
 									</weak_ptr>
@@ -10909,28 +10900,10 @@
 									<weak_ptr>
 										<expired>0</expired>
 										<shared_ptr>
-											<id>-39</id>
-										</shared_ptr>
-									</weak_ptr>
-									<string>error_info</string>
-								</pair>
-								<pair>
-									<weak_ptr>
-										<expired>0</expired>
-										<shared_ptr>
 											<id>-32</id>
 										</shared_ptr>
 									</weak_ptr>
 									<string>type</string>
-								</pair>
-								<pair>
-									<weak_ptr>
-										<expired>0</expired>
-										<shared_ptr>
-											<id>-35</id>
-										</shared_ptr>
-									</weak_ptr>
-									<string>diagnostic_information free function</string>
 								</pair>
 								<pair>
 									<weak_ptr>
@@ -10945,19 +10918,19 @@
 									<weak_ptr>
 										<expired>0</expired>
 										<shared_ptr>
-											<id>-38</id>
+											<id>-34</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string></string>
+									<string>exception_ptr type</string>
 								</pair>
 								<pair>
 									<weak_ptr>
 										<expired>0</expired>
 										<shared_ptr>
-											<id>-46</id>
+											<id>-35</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>noalso noindex tutorial</string>
+									<string>diagnostic_information free function</string>
 								</pair>
 								<pair>
 									<weak_ptr>
@@ -10972,10 +10945,19 @@
 									<weak_ptr>
 										<expired>0</expired>
 										<shared_ptr>
-											<id>-47</id>
+											<id>-38</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>type</string>
+									<string></string>
+								</pair>
+								<pair>
+									<weak_ptr>
+										<expired>0</expired>
+										<shared_ptr>
+											<id>-39</id>
+										</shared_ptr>
+									</weak_ptr>
+									<string>error_info</string>
 								</pair>
 								<pair>
 									<weak_ptr>
@@ -11030,6 +11012,24 @@
 										</shared_ptr>
 									</weak_ptr>
 									<string></string>
+								</pair>
+								<pair>
+									<weak_ptr>
+										<expired>0</expired>
+										<shared_ptr>
+											<id>-46</id>
+										</shared_ptr>
+									</weak_ptr>
+									<string>noalso noindex tutorial</string>
+								</pair>
+								<pair>
+									<weak_ptr>
+										<expired>0</expired>
+										<shared_ptr>
+											<id>-47</id>
+										</shared_ptr>
+									</weak_ptr>
+									<string>type</string>
 								</pair>
 								<pair>
 									<weak_ptr>
