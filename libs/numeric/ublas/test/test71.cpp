@@ -11,16 +11,6 @@
 
 #include "test7.hpp"
 
-namespace detail {
-    template<class V>
-    void initialize_vector (V &v) {
-        typename V::size_type size = v.size ();
-        for (typename V::size_type i = 0; i < size; ++ i)
-            v [i] = typename V::value_type (i + 1.0, i + 5.0); 
-            // use float because of ticket 2473
-    }
-}
-
 // Test vector expression templates
 template<class V, int N>
 struct test_my_vector {
@@ -36,8 +26,8 @@ struct test_my_vector {
             real_type n;
 
             // Copy and swap
-            detail::initialize_vector (v1);
-            detail::initialize_vector (v2);
+            initialize_vector (v1);
+            initialize_vector (v2);
             v1 = v2;
             std::cout << "v1 = v2 = " << v1 << std::endl;
             v1.assign_temporary (v2);
@@ -46,20 +36,20 @@ struct test_my_vector {
             std::cout << "v1.swap (v2) = " << v1 << " " << v2 << std::endl;
 
             // Zero assignment
-            v1 = ublas::zero_vector<> (v1.size ());
+            v1 = ublas::zero_vector<value_type> (v1.size ());
             std::cout << "v1.zero_vector = " << v1 << std::endl;
             v1 = v2;
 
             // Unary vector operations resulting in a vector
-            detail::initialize_vector (v1);
+            initialize_vector (v1);
             v2 = - v1;
             std::cout << "- v1 = " << v2 << std::endl;
             v2 = ublas::conj (v1);
             std::cout << "conj (v1) = " << v2 << std::endl;
 
             // Binary vector operations resulting in a vector
-            detail::initialize_vector (v1);
-            detail::initialize_vector (v2);
+            initialize_vector (v1);
+            initialize_vector (v2);
             v3 = v1 + v2;
             std::cout << "v1 + v2 = " << v3 << std::endl;
 
@@ -68,20 +58,20 @@ struct test_my_vector {
 
             // Scaling a vector
             t = value_type (N);
-            detail::initialize_vector (v1);
+            initialize_vector (v1);
             v2 = value_type (1.) * v1;
             std::cout << "1. * v1 = " << v2 << std::endl;
 //            v2 = t * v1;
             std::cout << "N * v1 = " << v2 << std::endl;
-            detail::initialize_vector (v1);
+            initialize_vector (v1);
 //            v2 = v1 * value_type (1.);
             std::cout << "v1 * 1. = " << v2 << std::endl;
 //            v2 = v1 * t;
             std::cout << "v1 * N = " << v2 << std::endl;
 
             // Some assignments
-            detail::initialize_vector (v1);
-            detail::initialize_vector (v2);
+            initialize_vector (v1);
+            initialize_vector (v2);
             v2 += v1;
             std::cout << "v2 += v1 = " << v2 << std::endl;
             v2 -= v1;
@@ -96,7 +86,7 @@ struct test_my_vector {
             std::cout << "v1 *= N = " << v1 << std::endl;
 
             // Unary vector operations resulting in a scalar
-            detail::initialize_vector (v1);
+            initialize_vector (v1);
             t = ublas::sum (v1);
             std::cout << "sum (v1) = " << t << std::endl;
             n = ublas::norm_1 (v1);
@@ -110,8 +100,8 @@ struct test_my_vector {
             std::cout << "index_norm_inf (v1) = " << i << std::endl;
 
             // Binary vector operations resulting in a scalar
-            detail::initialize_vector (v1);
-            detail::initialize_vector (v2);
+            initialize_vector (v1);
+            initialize_vector (v2);
             t = ublas::inner_prod (v1, v2);
             std::cout << "inner_prod (v1, v2) = " << t << std::endl;
         }
