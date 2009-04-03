@@ -96,8 +96,11 @@ void test_variable_map()
     ("imp", po::value<int>()->implicit_value(100))
     ("iim", po::value<int>()->implicit_value(200)->default_value(201))
     ("mmp,m", po::value<int>()->implicit_value(123)->default_value(124))
+    ("foo", po::value<int>())
     ;
-    char* cmdline6_[] = {  "--imp=1", "-m" };
+    /* The -m option is implicit. It does not have value in inside the token,
+       and we should not grab the next token.  */
+    char* cmdline6_[] = {  "--imp=1", "-m", "--foo=1" };
     vector<string> cmdline6 = sv(cmdline6_,
                                  sizeof(cmdline6_)/sizeof(cmdline6_[0]));
     parsed_options a6 = command_line_parser(cmdline6).options(desc3).run();
@@ -105,7 +108,7 @@ void test_variable_map()
     variables_map vm4;
     store(a6, vm4);
     notify(vm4);
-    BOOST_REQUIRE(vm4.size() == 3);
+    BOOST_REQUIRE(vm4.size() == 4);
     BOOST_CHECK(vm4["imp"].as<int>() == 1);
     BOOST_CHECK(vm4["iim"].as<int>() == 201);
     BOOST_CHECK(vm4["mmp"].as<int>() == 123);

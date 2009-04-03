@@ -146,8 +146,23 @@ void test_command_line()
     variables_map vm;
     po::store(po::parse_command_line(3, cmdline4, desc2), vm);
 
-
-
+    char* cmdline5[] = {"", "-p7", "-o", "1", "2", "3", "-x8"};
+    options_description desc3;
+    desc3.add_options()
+        (",p", po::value<string>())
+        (",o", po::value<string>()->multitoken())
+        (",x", po::value<string>())
+        ;
+    vector<option> a5 = 
+        parse_command_line(7, cmdline5, desc3, 0, additional_parser).options;
+    BOOST_CHECK_EQUAL(a5.size(), 3u);
+    check_value(a5[0], "-p", "7");
+    BOOST_REQUIRE(a5[1].value.size() == 3);
+    BOOST_CHECK_EQUAL(a5[1].string_key, "-o");
+    BOOST_CHECK_EQUAL(a5[1].value[0], "1");
+    BOOST_CHECK_EQUAL(a5[1].value[1], "2");
+    BOOST_CHECK_EQUAL(a5[1].value[2], "3");
+    check_value(a5[2], "-x", "8");   
 }
 
 void test_config_file()
