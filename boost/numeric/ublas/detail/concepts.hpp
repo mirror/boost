@@ -969,7 +969,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
-	// read only vectors
+#if defined (VECTOR_VIEW)	
+        // read only vectors
         {
            typedef vector_view<T> container_model;
            function_requires< RandomAccessContainerConcept<container_model> >();
@@ -977,7 +978,7 @@ namespace boost { namespace numeric { namespace ublas {
            function_requires< IndexedRandomAccess1DIteratorConcept<container_model::const_iterator> >();
            function_requires< IndexedRandomAccess1DIteratorConcept<container_model::const_reverse_iterator> >();
         }
-
+#endif
 
         // Vector
 #if defined (INTERNAL_VECTOR) || defined (INTERNAL_VECTOR_DENSE)
