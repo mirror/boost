@@ -34,4 +34,3 @@ inline std::string print_time(time_type t)
 } } } // end namespace boost::graph::accounting
 
 #endif // BOOST_GRAPH_ACCOUNTING_HPP
-
