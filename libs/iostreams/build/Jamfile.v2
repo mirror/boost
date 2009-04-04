@@ -55,7 +55,23 @@ rule create-library ( library-name : windows-name unix-name : sources + : requir
 	modules.poke : NO_$(LIB) : 1 ;
     }
     
-    if $(NO_COMPRESSION) || $(NO_$(LIB))
+    if $(NO_COMPRESSION)
+    {
+        if ! $(NO_COMPRESSION) in 0 1
+        {
+            ECHO "warning: NO_COMPRESSION should be either '0' or '1'" ;
+        }        
+    }
+    
+    if $(NO_$(LIB))
+    {
+        if ! $(NO_$(LIB)) in 0 1
+        {
+            ECHO "warning: NO_$(LIB) should be either '0' or '1'" ;
+        }        
+    }
+    
+    if  $(NO_COMPRESSION) = 1 || $(NO_$(LIB)) = 1
     {
         if $(debug)
         {
