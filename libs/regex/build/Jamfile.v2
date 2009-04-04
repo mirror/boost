@@ -10,10 +10,13 @@ project boost/regex
 #
 # ICU configuration:
 #
-local ICU_PATH = [ modules.peek : ICU_PATH ] ;
+if [ modules.peek : ICU_PATH ]
+{    
+    ICU_PATH =  [ modules.peek : ICU_PATH ] ;
+}
+
 rule check-icu-config ( )
 {
-   local ICU_PATH = [ modules.peek : ICU_PATH ] ;
    local HAVE_ICU = [ modules.peek : HAVE_ICU ] ;
    local ICU_LINK = [ modules.peek : ICU_LINK ] ;
 
