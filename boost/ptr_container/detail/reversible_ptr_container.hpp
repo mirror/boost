@@ -41,6 +41,7 @@
 #if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)  
 #pragma warning(push)  
 #pragma warning(disable:4127)
+#pragma warning(disable:4224) // formal parameter was previously defined as a type.
 #endif  
 
 namespace boost
