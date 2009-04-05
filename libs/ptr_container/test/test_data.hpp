@@ -70,24 +70,17 @@ public:
     Base*    clone() const                { return do_clone(); }
     void     foo()                        { do_foo(); }
     
-    virtual bool less_than( const Base& /*b*/ ) const
+    virtual bool less_than( const Base& b ) const
     {
-        return true;
+        return data3 < b.data3;
     }
     
     virtual bool equal( const Base& b ) const
     {
-        return this == &b ;
-    }
-
-    bool data_less_than( const Base& b ) const
-    {
-        return data1 == b.data1 && data2 == b.data2 && data3 < b.data3;
-    }
-
-    bool data_less_than2( const Base& b ) const
-    {
-        return data_less_than(b) && data < b.data;
+        return data1 == b.data1 && 
+               data2 == b.data2 &&
+               data3 == b.data3 &&
+               data  == b.data;
     }
 
 #ifdef PTR_CONTAINER_DEBUG
@@ -133,7 +126,7 @@ inline bool operator<( const Base& l, const Base& r )
 
 inline bool operator>( const Base& l, const Base& r )
 {
-    return !l.less_than( r ) && r.less_than( l );
+    return r < l;
 }
 
 

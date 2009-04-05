@@ -109,12 +109,14 @@ void ptr_set_test()
     t = new T;
     c.insert( new T );
     c.erase( *t );
+    delete t;
     
     BOOST_CHECK( c3.empty() );
     c.swap( c3 );
     BOOST_CHECK( !c3.empty() );
     BOOST_CHECK( c.empty() );
     c3.clear();
+    
     //
     // remark: we cannot pass c3 directly as it would
     //         extract const iterators ... and the 
@@ -146,7 +148,8 @@ void ptr_set_test()
     hide_warning( c3size );
     unsigned long num  = c. BOOST_NESTED_TEMPLATE transfer<C>( c3.begin(), 
                                                                c3.end(), 
-                                                               c3 );
+                                                              c3 );
+    
     BOOST_CHECK( num > 0 ); 
     BOOST_CHECK_EQUAL( num, c.size() );
     BOOST_CHECK( c3.empty() ); 
