@@ -19,6 +19,12 @@ Building
 
 1. Install prerequisites.
 
+   - To install Docutils, go into its source directory and run
+     ``python setup.py install``.
+
+   - To install HTML/frames writer, go to Sandbox's ``agurtovoy/html_frames``
+     directory and run ``python setup.py install``.
+
 2. Make sure your Python ``Scripts`` directory  (e.g. ``C:\Python25\Scripts``) 
    is in your search path.
 
