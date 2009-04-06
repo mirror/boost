@@ -215,6 +215,22 @@ namespace boost {
                 }
 #endif
 
+                template <typename K, typename M>
+                void construct_pair(K const& k, M*)
+                {
+                    BOOST_ASSERT(!node_);
+                    node_constructed_ = false;
+                    value_constructed_ = false;
+
+                    node_ = allocators_.node_alloc_.allocate(1);
+
+                    allocators_.node_alloc_.construct(node_, node());
+                    node_constructed_ = true;
+
+                    new(node_->address()) value_type(k, M());
+                    value_constructed_ = true;
+                }
+
                 node_ptr get() const
                 {
                     BOOST_ASSERT(node_);
@@ -1757,7 +1773,7 @@ namespace boost {
                     // Create the node before rehashing in case it throws an
                     // exception (need strong safety in such a case).
                     node_constructor a(data_.allocators_);
-                    a.construct(value_type(k, mapped_type()));
+                    a.construct_pair(k, (mapped_type*) 0);
 
                     // reserve has basic exception safety if the hash function
                     // throws, strong otherwise.
