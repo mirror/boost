@@ -254,6 +254,54 @@ namespace boost { namespace program_options { namespace detail {
             }
         }
 
+        /* If an key option is followed by a positional option,
+           can can consume more tokens (e.g. it's multitoke option),
+           give those tokens to it.  */
+        vector<option> result2;
+        for (unsigned i = 0; i < result.size(); ++i)
+        {
+            result2.push_back(result[i]);
+            option& opt = result2.back();
+
+            if (opt.string_key.empty())
+                continue;
+
+            const option_description* xd = 
+                m_desc->find_nothrow(opt.string_key, 
+                                     (m_style & allow_guessing));
+            if (!xd)
+                continue;
+
+            int min_tokens = xd->semantic()->min_tokens();
+            int max_tokens = xd->semantic()->max_tokens();
+            if (min_tokens < max_tokens && opt.value.size() < max_tokens)
+            {
+                // This option may grab some more tokens.
+                // We only allow to grab tokens that are not already
+                // recognized as key options.
+
+                int can_take_more = max_tokens - opt.value.size();
+                int j = i+1;
+                for (; can_take_more && j < result.size(); --can_take_more, ++j)
+                {
+                    option& opt2 = result[j];
+                    if (!opt2.string_key.empty())
+                        break;
+
+                    assert(opt2.value.size() == 1);
+                    
+                    opt.value.push_back(opt2.value[0]);
+
+                    assert(opt2.original_tokens.size() == 1);
+
+                    opt.original_tokens.push_back(opt2.original_tokens[0]);
+                }
+                i = j-1;
+            }
+        }
+        result.swap(result2);
+        
+
         // Assign position keys to positional options.
         int position_key = 0;
         for(unsigned i = 0; i < result.size(); ++i) {
@@ -327,18 +375,21 @@ namespace boost { namespace program_options { namespace detail {
                     invalid_command_line_syntax::extra_parameter);                                                                
             }
             
-            max_tokens -= opt.value.size();
+            // If an option wants, at minimum, N tokens, we grab them
+            // there and don't care if they look syntactically like an
+            // option.
 
-            // A value is optional if min_tokens == 0, but max_tokens > 0.
-            // If a value is optional, it must appear in opt.value (because
-            // it was 'adjacent'.  Otherwise, remove the expectation of a
-            // non-adjacent value.  (For now, we just check max_tokens == 1,
-            // as there is no current support for max_tokens>1)
-            if (min_tokens == 0 && max_tokens == 1 && opt.value.empty())
-                --max_tokens;
+            if (opt.value.size() <= min_tokens)
+            {
+                min_tokens -= opt.value.size();
+            }
+            else
+            {
+                min_tokens = 0;
+            }
 
             // Everything's OK, move the values to the result.            
-            for(;!other_tokens.empty() && max_tokens--; ) {
+            for(;!other_tokens.empty() && min_tokens--; ) {
                 opt.value.push_back(other_tokens[0]);
                 opt.original_tokens.push_back(other_tokens[0]);
                 other_tokens.erase(other_tokens.begin());
