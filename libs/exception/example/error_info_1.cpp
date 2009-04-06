@@ -30,7 +30,7 @@ g()
     catch(
     my_error & x )
         {
-        if( boost::shared_ptr<int const> err=boost::get_error_info<errno_info>(x) )
+        if( int const * err=boost::get_error_info<errno_info>(x) )
             std::cerr << "Error code: " << *err;
         }
     }

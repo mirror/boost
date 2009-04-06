@@ -59,11 +59,11 @@ g()
     catch(
     my_error &amp; x )
         {
-        if( boost::shared_ptr&lt;int const&gt; err=boost::<span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>&lt;errno_info&gt;(x) )
+        if( int const * err=boost::<span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>&lt;errno_info&gt;(x) )
             std::cerr &lt;&lt; "Error code: " &lt;&lt; *err;
         }
     }</pre>
-<p>The <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> function template is instantiated with the typedef from (1), and is passed an exception object of a polymorphic type. If the exception object contains the requested value, the returned <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span> will point to it; otherwise an empty <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span> is returned.</p>
+<p>The <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> function template is instantiated with the typedef from (1), and is passed an exception object of a polymorphic type. If the exception object contains the requested value, err will point to it; otherwise a null pointer is returned.</p>
 </div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>Adding of Arbitrary Data to Active Exception Objects</h3>
 </div>
 <p>Sometimes the throw site does not have all the information that is needed at the catch site to make sense of what went wrong. Let's say we have an exception type file_read_error, which takes a file name in its constructor. Consider the following function:</p>

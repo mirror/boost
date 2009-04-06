@@ -21,21 +21,19 @@
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>get_error_info</h3>
 </div>
-<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_get_error_info_hpp.html">boost/exception/get_error_info.hpp</a></span>&gt;</p>
-<pre>namespace
+<div class="RenoIncludeDIV"><pre>namespace
 boost
     {
 <span class="RenoIncludeSPAN">    template &lt;class ErrorInfo,class E&gt;
-    <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span>&lt;typename ErrorInfo::value_type const&gt; <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>( E const &amp; x );</span>
+    typename ErrorInfo::value_type const * <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>( E const &amp; x );</span>
     }</pre>
 </div><h4>Requirements:</h4>
 <div><ul><li> ErrorInfo must be an instance of the <span class="RenoLink"><a href="error_info.html">error_info</a></span> template.</li>
 <li> E must be polymorphic.</li>
-<li> The <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> function must not be called outside of a catch block.</li>
 </ul></div>
 <h4>Returns:</h4>
-<div><ul><li> If dynamic_cast&lt;boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const *&gt;(&amp;x) is 0, or if x does not store an object of type ErrorInfo, the returned value is an empty shared_ptr.</li>
-<li> Otherwise, the returned shared_ptr points to the stored value (use <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span> to store values in exception objects.) The shared_ptr is valid even after x has been destroyed.</li>
+<div><ul><li> If dynamic_cast&lt;boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const *&gt;(&amp;x) is 0, or if x does not store an object of type ErrorInfo, the returned value is null.</li>
+<li> Otherwise, the returned pointer points to the stored value (use <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span> to store values in exception objects.) When x is destroyed, any pointers returned by <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> become invalid.</li>
 </ul></div>
 <h4>Throws:</h4>
 <p>Nothing.</p>

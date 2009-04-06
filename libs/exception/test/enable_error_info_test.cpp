@@ -55,7 +55,7 @@ main()
             {
 #endif
             BOOST_TEST( boost::get_error_info<test_int>(x) );
-            if( boost::shared_ptr<int const> p=boost::get_error_info<test_int>(x) )
+            if( int const * p=boost::get_error_info<test_int>(x) )
                 BOOST_TEST( 42==*p );
 #ifdef BOOST_NO_RTTI
             }

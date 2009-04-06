@@ -22,7 +22,7 @@
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>BOOST_THROW_EXCEPTION</h3>
 </div>
 <div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="throw_exception_hpp.html">boost/throw_exception.hpp</a></span>&gt;</p>
-<div class="RenoIncludeDIV"><pre>#if !defined( BOOST_NO_EXCEPTIONS ) &amp;&amp; !defined( BOOST_EXCEPTION_DISABLE )
+<div class="RenoIncludeDIV"><pre>#if !defined( BOOST_EXCEPTION_DISABLE )
     #include &lt;<span class="RenoLink"><a href="exception_exception_hpp.html">boost/exception/exception.hpp</a></span>&gt;
     #include &lt;boost/current_function.hpp&gt;
     #define <span class="RenoLink"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION</a></span>(x)\
@@ -34,10 +34,13 @@
     #define <span class="RenoLink"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION</a></span>(x) ::boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(x)
 #endif</pre>
 </div></div><p>This macro takes an exception object, records BOOST_CURRENT_FUNCTION, __FILE__ and __LINE__ in it, and forwards it to <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>. To recover this information at the catch site, use <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>; the information is also included in the message returned by <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>.</p>
-</div><div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
+</div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
+<h3>See Also:</h3>
+<div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
 </a><a href="throw_exception_hpp.html">boost/throw_exception.hpp<br/>
 </a><a href="frequently_asked_questions.html">Frequently Asked Questions<br/>
 </a></div>
+</div>
 <!-- Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->

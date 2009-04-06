@@ -132,7 +132,7 @@ copy_data( char const * src_file_name, char const * dst_file_name )
     catch(
     boost::exception & x )
         {
-        if( boost::shared_ptr<boost::weak_ptr<FILE> const> f=boost::get_error_info<file_stream_info>(x) )
+        if( boost::weak_ptr<FILE> const * f=boost::get_error_info<file_stream_info>(x) )
             if( boost::shared_ptr<FILE> fs = f->lock() )
                 {
                 if( fs==src )
@@ -150,37 +150,37 @@ copy_data( char const * src_file_name, char const * dst_file_name )
 void
 dump_copy_info( boost::exception const & x )
     {
-    if( boost::shared_ptr<std::string const> src = boost::get_error_info<file_name_src_info>(x) )
-        std::cout << "Source file name: " << *src << "\n";
-    if( boost::shared_ptr<std::string const> dst = boost::get_error_info<file_name_dst_info>(x) )
-        std::cout << "Destination file name: " << *dst << "\n";
+    if( std::string const * src = boost::get_error_info<file_name_src_info>(x) )
+        std::cerr << "Source file name: " << *src << "\n";
+    if( std::string const * dst = boost::get_error_info<file_name_dst_info>(x) )
+        std::cerr << "Destination file name: " << *dst << "\n";
     }
 
 void
 dump_file_info( boost::exception const & x )
     {
-    if( boost::shared_ptr<std::string const> fn = boost::get_error_info<file_name_info>(x) )
-        std::cout << "File name: " << *fn << "\n";
+    if( std::string const * fn = boost::get_error_info<file_name_info>(x) )
+        std::cerr << "File name: " << *fn << "\n";
     }
 
 void
 dump_clib_info( boost::exception const & x )
     {
-    if( boost::shared_ptr<int const> err=boost::get_error_info<errno_info>(x) )
-        std::cout << "OS error: " << *err << "\n";
-    if( boost::shared_ptr<std::string const> fn=boost::get_error_info<function_info>(x) )
-        std::cout << "Failed function: " << *fn << "\n";
+    if( int const * err=boost::get_error_info<errno_info>(x) )
+        std::cerr << "OS error: " << *err << "\n";
+    if( std::string const * fn=boost::get_error_info<function_info>(x) )
+        std::cerr << "Failed function: " << *fn << "\n";
     }
 
 void
 dump_all_info( boost::exception const & x )
     {
-    std::cout << "-------------------------------------------------\n";
+    std::cerr << "-------------------------------------------------\n";
     dump_copy_info(x);
     dump_file_info(x);
     dump_clib_info(x);
-    std::cout << "\nOutput from diagnostic_information():\n";
-    std::cout << diagnostic_information(x);
+    std::cerr << "\nOutput from diagnostic_information():\n";
+    std::cerr << diagnostic_information(x);
     }
 
 int
@@ -199,7 +199,7 @@ main()
         catch(
         read_error & x )
             {
-            std::cout << "\nCaught 'read_error' exception.\n";
+            std::cerr << "\nCaught 'read_error' exception.\n";
             dump_all_info(x);
             }
 
@@ -212,14 +212,14 @@ main()
         catch(
         open_error & x )
             {
-            std::cout << "\nCaught 'open_error' exception.\n";
+            std::cerr << "\nCaught 'open_error' exception.\n";
             dump_all_info(x);
             }
         }
     catch(
-    boost::exception & x )
+    ... )
         {
-        std::cout << "\nCaught unexpected boost::exception!\n";
-        dump_all_info(x);
+        std::cerr << "\nCaught unexpected exception!\n";
+        std::cerr << boost::current_exception_diagnostic_information();
         }
     }

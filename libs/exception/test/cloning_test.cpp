@@ -382,7 +382,7 @@ main()
         boost::unknown_exception & x )
             {
             BOOST_TEST(boost::get_error_info<my_info>(x));
-            if( boost::shared_ptr<int const> p=boost::get_error_info<my_info>(x) )
+            if( int const * p=boost::get_error_info<my_info>(x) )
                 BOOST_TEST(*p==42);
             boost::exception_ptr p = boost::current_exception();
             BOOST_TEST(!(p==boost::exception_ptr()));
@@ -397,7 +397,7 @@ main()
             boost::unknown_exception & x )
                 {
                 BOOST_TEST(boost::get_error_info<my_info>(x));
-                if( boost::shared_ptr<int const> p=boost::get_error_info<my_info>(x) )
+                if( int const * p=boost::get_error_info<my_info>(x) )
                     BOOST_TEST(*p==42);
                 }
             catch(
@@ -433,7 +433,7 @@ main()
         boost::unknown_exception & x )
             {
             BOOST_TEST(boost::get_error_info<my_info>(x));
-            if( boost::shared_ptr<int const> p=boost::get_error_info<my_info>(x) )
+            if( int const * p=boost::get_error_info<my_info>(x) )
                 BOOST_TEST(*p==42);
             boost::exception_ptr p = boost::current_exception();
             BOOST_TEST(!(p==boost::exception_ptr()));
@@ -448,7 +448,7 @@ main()
             boost::unknown_exception & x )
                 {
                 BOOST_TEST(boost::get_error_info<my_info>(x));
-                if( boost::shared_ptr<int const> p=boost::get_error_info<my_info>(x) )
+                if( int const * p=boost::get_error_info<my_info>(x) )
                     BOOST_TEST(*p==42);
                 }
             catch(

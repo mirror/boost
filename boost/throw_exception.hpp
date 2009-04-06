@@ -32,7 +32,7 @@
 # define BOOST_EXCEPTION_DISABLE
 #endif
 
-#if !defined( BOOST_NO_EXCEPTIONS ) && !defined( BOOST_EXCEPTION_DISABLE )
+#if !defined( BOOST_EXCEPTION_DISABLE )
 # include <boost/exception/exception.hpp>
 # include <boost/current_function.hpp>
 # define BOOST_THROW_EXCEPTION(x) ::boost::throw_exception(::boost::enable_error_info(x) <<\

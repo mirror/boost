@@ -25,10 +25,18 @@
 <pre>namespace
 boost
     {
-<span class="RenoIncludeSPAN">    std::string <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>( boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const &amp; );</span>
+<span class="RenoIncludeSPAN">    template &lt;class E&gt;
+    std::string <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>( E const &amp; e );</span>
     }</pre>
 </div><h4>Returns:</h4>
-<p>This function returns a string value that is automatically composed from the string representations of all <span class="RenoLink"><a href="error_info.html">error_info</a></span> objects stored in a boost::<span class="RenoLink"><a href="exception.html">exception</a></span> through <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span>, along with other diagnostic information relevant to the exception.</p>
+<p>A string value that contains varying amount of implementation-specific diagnostic information about the passed exception object:</p>
+<div><ul><li>If E can be statically converted to boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, the returned value contains the string representations of all <span class="RenoLink"><a href="error_info.html">error_info</a></span> objects stored in the boost::<span class="RenoLink"><a href="exception.html">exception</a></span> through <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span>, along with other diagnostic information relevant to the exception. If e can be dynamically converted to std::exception, the returned value also contains the what() string.</li>
+<li>Otherwise, if E can be statically converted std::exception:<div><ul><li>if e can be dynamically converted to boost::exception, the returned value is the same as if E could be statically converted to boost::<span class="RenoLink"><a href="exception.html">exception</a></span>;</li>
+<li>otherwise the returned value contains the what() string.</li>
+</ul></div>
+</li>
+<li>Otherwise, the boost::<span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> template is not available.</li>
+</ul></div>
 <p>The string representation of each <span class="RenoLink"><a href="error_info.html">error_info</a></span> object is deduced by a function call that is bound at the time the <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; template is instantiated. The following overload resolutions are attempted in order:</p>
 <div><ol><li>Unqualified call to to_string(x), where x is of type <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; (the return value is expected to be of type std::string.)</li>
 <li>Unqualified call to to_string(x.<span class="RenoLink"><a href="error_info_value.html">value</a></span>()) (the return value is expected to be of type std::string.)</li>
@@ -38,12 +46,11 @@ boost
 <h4>Notes:</h4>
 <div><ul><li>The format of the returned string is unspecified.</li>
 <li>The returned string is <i>not</i> user-friendly.</li>
-<li>If dynamic_cast&lt;std::exception const *&gt;(&amp;x) is not null, the returned string includes the output from std::exception::what.</li>
 <li>The returned string may include additional platform-specific diagnostic information.</li>
 </ul></div>
 <div class="RenoIncludeDIV"><h4>Example:</h4>
 <p>this is a possible output from the <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> function, as used in <i>libs/exception/example/example_io.cpp:</i></p>
-<pre>libs\exception\example\example_io.cpp(83): Throw in function class boost::shared_ptr&lt;struct _iobuf&gt; __cdecl my_fopen(const char *,const char *)
+<pre>example_io.cpp(83): Throw in function class boost::shared_ptr&lt;struct _iobuf&gt; __cdecl my_fopen(const char *,const char *)
 Dynamic exception type: class boost::exception_detail::clone_impl&lt;class fopen_error&gt;
 std::exception::what: example_io error
 [struct tag_errno *] = 2, OS says "No such file or directory"
@@ -55,6 +62,7 @@ std::exception::what: example_io error
 <div class="RenoPageList"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION<br/>
 </a><a href="boost-exception.html">Boost Exception<br/>
 </a><a href="exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp<br/>
+</a><a href="current_exception_diagnostic_information.html">current_exception_diagnostic_information<br/>
 </a><a href="tutorial_diagnostic_information.html">Diagnostic Information<br/>
 </a><a href="frequently_asked_questions.html">Frequently Asked Questions<br/>
 </a><a href="motivation.html">Motivation<br/>

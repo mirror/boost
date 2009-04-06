@@ -103,7 +103,7 @@ boost
 
         private:
 
-		exception_detail::clone_base const *
+        exception_detail::clone_base const *
         clone() const
             {
             return new unknown_exception(*this);
