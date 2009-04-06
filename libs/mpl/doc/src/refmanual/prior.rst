@@ -48,14 +48,14 @@ Parameters
 +---------------+---------------------------+-----------------------------------+
 | Parameter     | Requirement               | Description                       |
 +===============+===========================+===================================+
-| ``Iterator``  | |Forward Iterator|.       | An iterator to decrement.         |
+| ``Iterator``  | |Bidirectional Iterator|. | An iterator to decrement.         |
 +---------------+---------------------------+-----------------------------------+
 
 
 Expression semantics
 --------------------
 
-For any |Forward Iterator|\ s ``iter``:
+For any |Bidirectional Iterator|\ s ``iter``:
 
 
 .. parsed-literal::
@@ -63,7 +63,7 @@ For any |Forward Iterator|\ s ``iter``:
     typedef prior<iter>::type j; 
 
 :Return type:
-    |Forward Iterator|.
+    |Bidirectional Iterator|.
 
 :Precondition:
     ``iter`` is decrementable.
