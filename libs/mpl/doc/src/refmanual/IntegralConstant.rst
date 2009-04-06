@@ -71,6 +71,7 @@ Models
 * |bool_|
 * |int_|
 * |long_|
+* |char_|
 * |integral_c|
 
 
