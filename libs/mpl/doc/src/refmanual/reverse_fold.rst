@@ -85,10 +85,11 @@ and arbitrary type ``state``:
 
     .. parsed-literal::
     
+        typedef lambda<backward_op>::type op; 
         typedef reverse_iter_fold< 
               s
             , state
-            , apply2< lambda<backward_op>::type, _1, deref<_2> >
+            , apply_wrap2< op, _1, deref<_2> >
             >::type t; 
 
 

@@ -78,7 +78,7 @@ For any |Forward Sequence| ``s``, binary |Lambda Expression| ``op``, and arbitra
         typedef iter_fold<
               s
             , state
-            , apply2< lambda<op>::type, _1, deref<_2> >
+            , apply_wrap2< lambda<op>::type, _1, deref<_2> >
             >::type t; 
 
 
