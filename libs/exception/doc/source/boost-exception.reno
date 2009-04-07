@@ -7140,15 +7140,6 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-20</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string> mod=&quot;w&quot;:)&#10;##(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
 															<id>-11</id>
 														</shared_ptr>
 													</weak_ptr>
@@ -7177,6 +7168,15 @@
 														<expired>0</expired>
 														<shared_ptr>
 															<id>-33</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string> mod=&quot;w&quot;:)&#10;##(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
