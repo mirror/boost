@@ -101,7 +101,7 @@ fulfills the property map requirements.
 <pre>#include &lt;iostream&gt;
 #include &lt;map&gt;
 #include &lt;string&gt;
-#include &lt;boost/property_map.hpp&gt;
+#include &lt;boost/property_map/property_map.hpp&gt;
 
 
 template &lt;typename AddressMap&gt;
@@ -214,7 +214,7 @@ below, with links to the documentation for each of them.
 <P>
 There is a tag struct for each of the categories of property
 maps, which is defined in the header
-<tt>&lt;boost/property_map.hpp&gt;</tt>.
+<tt>&lt;boost/property_map/property_map.hpp&gt;</tt>.
 
 <PRE>namespace boost {
 
@@ -241,7 +241,7 @@ types, and the property map category. There is a specialization
 of <TT>boost::property_traits</TT> so that pointers can be used as
 property map objects. In addition, the property map
 functions are overloaded for pointers. These traits classes and
-functions are defined in <tt>&lt;boost/property_map.hpp&gt;</tt>.
+functions are defined in <tt>&lt;boost/property_map/property_map.hpp&gt;</tt>.
 
 <PRE>namespace boost {
 
@@ -262,7 +262,7 @@ functions are defined in <tt>&lt;boost/property_map.hpp&gt;</tt>.
     The following specialization of the <tt>property_traits</tt> class
     and the overloads of <tt>put()</tt> and <tt>get()</tt> make it
     possible to use builtin C++ pointer types as property maps. These
-    are defined in <tt>boost/property_map.hpp</tt>. More specifically,
+    are defined in <tt>boost/property_map/property_map.hpp</tt>. More specifically,
     it means that <tt>T*</tt> is a model of <a
     href="./LvaluePropertyMap.html">LvaluePropertyMap</a>, given a key
     type that is at least convertible <tt>std::ptrdiff_t</tt>.

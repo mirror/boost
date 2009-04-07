@@ -8,7 +8,7 @@
 #include <iostream>
 #include <map>
 #include <string>
-#include <boost/property_map.hpp>
+#include <boost/property_map/property_map.hpp>
 
 
 template <typename ConstAddressMap>

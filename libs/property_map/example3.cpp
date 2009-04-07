@@ -3,7 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/vector_property_map.hpp>
+#include <boost/property_map/vector_property_map.hpp>
 #include <string>
 #include <iostream>
 

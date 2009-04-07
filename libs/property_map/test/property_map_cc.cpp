@@ -3,7 +3,7 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/property_map.hpp>
+#include <boost/property_map/property_map.hpp>
 #include <map>
 
 // This file checks the property map concepts against the property map
