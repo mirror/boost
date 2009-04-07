@@ -14,6 +14,8 @@
 // $Date: 2009-04-01 02:10:26 -0700 (Wed, 1 Apr 2009) $
 // $Revision: 49239 $
 
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/mpl/char.hpp>
 #include <boost/mpl/long.hpp>
 #include <boost/mpl/back.hpp>
@@ -52,7 +54,7 @@ namespace boost { namespace mpl
     template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_MPL_STRING_MAX_PARAMS, unsigned int C, 0)>
     struct string;
 
-    template<typename Sequence, long N>
+    template<typename Sequence, unsigned long N>
     struct string_iterator;
 
     template<typename Sequence>
@@ -299,18 +301,18 @@ namespace boost { namespace mpl
         template<typename First, typename Last>
         struct apply
         {
-            typedef mpl::long_<Last::index - First::index> type;
+            typedef mpl::long_<(long)Last::index - (long)First::index> type;
         };
     };
 
-    template<typename Sequence, long N>
+    template<typename Sequence, unsigned long N>
     struct string_iterator
       : Sequence::template at<N>
     {
         typedef string_iterator_tag tag;
         typedef std::random_access_iterator_tag category;
         typedef Sequence string_type;
-        static long const index = N;
+        static unsigned long const index = N;
         typedef string_iterator<Sequence, N+1> next;
         typedef string_iterator<Sequence, N-1> prior;
     };
@@ -331,15 +333,36 @@ namespace boost { namespace mpl
 
         static std::size_t const size = BOOST_MPL_MULTICHAR_LENGTH(C0) + rest_::size;
 
-        template<long Pos, bool B = (Pos < BOOST_MPL_MULTICHAR_LENGTH(C0))>
+    #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+    private:
+        /// INTERNAL ONLY
+        template<unsigned long Pos, bool B>
+        struct at_impl
+          : boost::mpl::char_<BOOST_MPL_MULTICHAR_AT(C0,Pos)>
+        {};
+
+        /// INTERNAL ONLY
+        template<unsigned long Pos>
+        struct at_impl<Pos, false>
+          : rest_::template at<Pos-BOOST_MPL_MULTICHAR_LENGTH(C0)>
+        {};
+
+    public:
+        template<unsigned long Pos>
+        struct at
+          : at_impl<Pos, (Pos < BOOST_MPL_MULTICHAR_LENGTH(C0))>
+        {};
+    #else
+        template<unsigned long Pos, bool B = (Pos < BOOST_MPL_MULTICHAR_LENGTH(C0))>
         struct at
           : boost::mpl::char_<BOOST_MPL_MULTICHAR_AT(C0,Pos)>
         {};
 
-        template<long Pos>
+        template<unsigned long Pos>
         struct at<Pos, false>
           : rest_::template at<Pos-BOOST_MPL_MULTICHAR_LENGTH(C0)>
         {};
+    #endif
 
         static char const c_str[];
     };
@@ -378,7 +401,7 @@ namespace boost { namespace mpl
 
         static std::size_t const size = 0;
 
-        template<unsigned int>
+        template<unsigned long>
         struct at
           : boost::mpl::char_<'\0'>
         {};
