@@ -1,4 +1,4 @@
-//Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc.
+//Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc.
 
 //Distributed under the Boost Software License, Version 1.0. (See accompanying
 //file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -55,7 +55,7 @@ main()
             {
 #endif
             BOOST_TEST( boost::get_error_info<test_int>(x) );
-            if( boost::shared_ptr<int const> p=boost::get_error_info<test_int>(x) )
+            if( int const * p=boost::get_error_info<test_int>(x) )
                 BOOST_TEST( 42==*p );
 #ifdef BOOST_NO_RTTI
             }

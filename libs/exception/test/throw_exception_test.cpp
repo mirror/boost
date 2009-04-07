@@ -1,4 +1,4 @@
-//Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc.
+//Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc.
 
 //Distributed under the Boost Software License, Version 1.0. (See accompanying
 //file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -35,9 +35,9 @@ boost_throw_exception_test()
     catch(
     boost::exception & x )
         {
-        boost::shared_ptr<char const * const> file=boost::get_error_info<boost::throw_function>(x);
-        boost::shared_ptr<char const * const> function=boost::get_error_info<boost::throw_file>(x);
-        boost::shared_ptr<int const> line=boost::get_error_info<boost::throw_line>(x);
+        char const * const * file=boost::get_error_info<boost::throw_function>(x);
+        char const * const * function=boost::get_error_info<boost::throw_file>(x);
+        int const * line=boost::get_error_info<boost::throw_line>(x);
         BOOST_TEST( file && *file );
         BOOST_TEST( function && *function );
         BOOST_TEST( line && *line==32 );
@@ -55,10 +55,10 @@ boost_throw_exception_test()
     catch(
     boost::exception & x )
         {
-        boost::shared_ptr<char const * const> file=boost::get_error_info<boost::throw_function>(x);
-        boost::shared_ptr<char const * const> function=boost::get_error_info<boost::throw_file>(x);
-        boost::shared_ptr<int const> line=boost::get_error_info<boost::throw_line>(x);
-        boost::shared_ptr<int const> data=boost::get_error_info<test_data>(x);
+        char const * const * file=boost::get_error_info<boost::throw_function>(x);
+        char const * const * function=boost::get_error_info<boost::throw_file>(x);
+        int const * line=boost::get_error_info<boost::throw_line>(x);
+        int const * data=boost::get_error_info<test_data>(x);
         BOOST_TEST( file && *file );
         BOOST_TEST( function && *function );
         BOOST_TEST( line && *line==52 );
@@ -117,7 +117,7 @@ tester()
                 {
 #endif
                 BOOST_TEST(boost::get_error_info<test_data>(y));
-                if( boost::shared_ptr<int const> d=boost::get_error_info<test_data>(y) )
+                if( int const * d=boost::get_error_info<test_data>(y) )
                     BOOST_TEST(*d==42);
 #ifdef BOOST_NO_RTTI
                 }

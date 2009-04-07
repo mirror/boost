@@ -1,6 +1,6 @@
 # Boost Exception Library test Jamfile
 #
-# Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc.
+# Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc.
 #
 # Distributed under the Boost Software License, Version 1.0. (See accompanying
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -33,6 +33,8 @@ run errno_test.cpp ;
 run error_info_test.cpp ;
 run diagnostic_information_test.cpp ;
 run refcount_ptr_test.cpp ;
+run current_exception_cast_test.cpp ;
+run no_exceptions_test.cpp : : : <exception-handling>off ;
 compile-fail exception_fail.cpp ;
 compile-fail throw_exception_fail.cpp ;
 
@@ -47,3 +49,4 @@ compile info_hpp_test.cpp ;
 compile info_tuple_hpp_test.cpp ;
 compile to_string_hpp_test.cpp ;
 compile to_string_stub_hpp_test.cpp ;
+compile current_exception_cast_hpp_test.cpp ;

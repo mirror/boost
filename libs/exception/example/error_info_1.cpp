@@ -1,4 +1,4 @@
-//Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc.
+//Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc.
 
 //Distributed under the Boost Software License, Version 1.0. (See accompanying
 //file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -30,7 +30,7 @@ g()
     catch(
     my_error & x )
         {
-        if( boost::shared_ptr<int const> err=boost::get_error_info<errno_info>(x) )
+        if( int const * err=boost::get_error_info<errno_info>(x) )
             std::cerr << "Error code: " << *err;
         }
     }
