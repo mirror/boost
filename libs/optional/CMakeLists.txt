@@ -12,7 +12,7 @@ boost_library_project(
   #  SRCDIRS 
   TESTDIRS  test
   HEADERS ${lib_headers}
-  #  DOCDIRS 
+  DOCDIRS doc
   #  DESCRIPTION 
   MODULARIZED 
   #  AUTHORS 
