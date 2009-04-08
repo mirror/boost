@@ -333,7 +333,7 @@ namespace boost { namespace mpl
 
         static std::size_t const size = BOOST_MPL_MULTICHAR_LENGTH(C0) + rest_::size;
 
-    #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+    #if BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
     private:
         /// INTERNAL ONLY
         template<unsigned long Pos, bool B>
