@@ -38,6 +38,8 @@ boost
 <div><ul><li> If BOOST_NO_EXCEPTIONS is not defined, boost::<span class="RenoLink">throw_exception</span>(e) is equivalent to throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(e)), unless BOOST_EXCEPTION_DISABLE is defined, in which case boost::<span class="RenoLink">throw_exception</span>(e) is equivalent to throw e;</li>
 <li> If BOOST_NO_EXCEPTIONS is defined, the function is left undefined, and the user is expected to supply an appropriate definition. Callers of <span class="RenoLink">throw_exception</span> are allowed to assume that the function never returns; therefore, if the user-defined <span class="RenoLink">throw_exception</span> returns, the behavior is undefined.</li>
 </ul></div>
+<h4>Note:</h4>
+<p>Under BOOST_NO_EXCEPTIONS, unless BOOST_EXCEPTION_DISABLE is also defined, users can examine the passed exception object using boost::<span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>, or format an automatic diagnostic message using boost::<span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>.</p>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION<br/>
