@@ -25,13 +25,13 @@
 <pre>namespace
 boost
     {
-<span class="RenoIncludeSPAN">    std::string <span class="RenoLink"><a href="current_exception_diagnostic_information.html">current_exception_diagnostic_information</a></span>();</span>
+<span class="RenoIncludeSPAN">    std::string <span class="RenoLink">current_exception_diagnostic_information</span>();</span>
     }</pre>
 </div><h4>Requirements:</h4>
 <p>This function must not be called outside of a catch block.</p>
 <h4>Returns:</h4>
 <p>If the current exception object can be converted to boost::<span class="RenoLink"><a href="exception.html">exception</a></span> or std::exception, this function returns the same string value returned by <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> for the current exception object. Otherwise, an unspecified non-empty string is returned.</p>
-<p>Typical use is to call <span class="RenoLink"><a href="current_exception_diagnostic_information.html">current_exception_diagnostic_information</a></span> from a top-level function to output diagnostic information about unhandled exceptions:</p>
+<p>Typical use is to call <span class="RenoLink">current_exception_diagnostic_information</span> from a top-level function to output diagnostic information about unhandled exceptions:</p>
 <pre>int
 main()
     {
@@ -48,7 +48,7 @@ main()
     ...)
         {
         std::cerr &lt;&lt; "Unhandled exception!" &lt;&lt; std::endl &lt;&lt;
-            boost::<span class="RenoLink"><a href="current_exception_diagnostic_information.html">current_exception_diagnostic_information</a></span>();
+            boost::<span class="RenoLink">current_exception_diagnostic_information</span>();
         }
     }</pre>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>

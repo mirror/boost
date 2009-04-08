@@ -25,13 +25,13 @@
 <div class="RenoIncludeDIV"><pre>#if !defined( BOOST_EXCEPTION_DISABLE )
     #include &lt;<span class="RenoLink"><a href="exception_exception_hpp.html">boost/exception/exception.hpp</a></span>&gt;
     #include &lt;boost/current_function.hpp&gt;
-    #define <span class="RenoLink"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION</a></span>(x)\
+    #define <span class="RenoLink">BOOST_THROW_EXCEPTION</span>(x)\
         ::boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( ::boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(x) &lt;&lt;\
         ::boost::<span class="RenoLink"><a href="exception_exception_hpp.html">throw_function</a></span>(BOOST_CURRENT_FUNCTION) &lt;&lt;\
         ::boost::<span class="RenoLink"><a href="exception_exception_hpp.html">throw_file</a></span>(__FILE__) &lt;&lt;\
         ::boost::<span class="RenoLink"><a href="exception_exception_hpp.html">throw_line</a></span>((int)__LINE__) )
 #else
-    #define <span class="RenoLink"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION</a></span>(x) ::boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(x)
+    #define <span class="RenoLink">BOOST_THROW_EXCEPTION</span>(x) ::boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(x)
 #endif</pre>
 </div></div><p>This macro takes an exception object, records BOOST_CURRENT_FUNCTION, __FILE__ and __LINE__ in it, and forwards it to <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>. To recover this information at the catch site, use <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>; the information is also included in the message returned by <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>.</p>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
