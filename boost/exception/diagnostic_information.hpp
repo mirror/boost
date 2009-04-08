@@ -8,7 +8,6 @@
 
 #include <boost/config.hpp>
 #include <boost/exception/get_error_info.hpp>
-#include <boost/exception/current_exception_cast.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <exception>
 #include <sstream>
@@ -129,7 +128,13 @@ boost
         {
         return exception_detail::std_diagnostic_information(e);
         }
+    }
 
+#ifndef BOOST_NO_EXCEPTIONS
+#include <boost/exception/current_exception_cast.hpp>
+namespace
+boost
+    {
     inline
     std::string
     current_exception_diagnostic_information()
@@ -141,6 +146,7 @@ boost
         else
             return "No diagnostic information available.";
         }
-    }
+	}
+#endif
 
 #endif
