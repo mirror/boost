@@ -61,8 +61,13 @@
 #  endif
 #endif
 
-#if defined(_STLPORT_VERSION) && (_STLPORT_VERSION < 0x500)
+#if defined(_STLPORT_VERSION) && ((_STLPORT_VERSION < 0x500) || (_STLPORT_VERSION >= 0x520))
 #  define BOOST_NO_STD_UNORDERED
+#endif
+
+#if defined(_STLPORT_VERSION) && (_STLPORT_VERSION >= 0x520)
+#  define BOOST_HAS_TR1_UNORDERED_SET
+#  define BOOST_HAS_TR1_UNORDERED_MAP
 #endif
 //
 // Without member template support enabled, their are no template
