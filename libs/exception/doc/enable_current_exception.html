@@ -26,7 +26,7 @@
 boost
     {
 <span class="RenoIncludeSPAN">    template &lt;class T&gt;
-    ---unspecified--- <span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>( T const &amp; e );</span>
+    ---unspecified--- <span class="RenoLink">enable_current_exception</span>( T const &amp; e );</span>
     }</pre>
 </div><h4>Requirements:</h4>
 <p>T must be a class with an accessible no-throw copy constructor.</p>
@@ -41,8 +41,8 @@ my_exception:
     };
 
 ....
-throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(my_exception());</pre>
-<p>Unless <span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span> is called at the time an exception object is used in a throw-expression, an attempt to copy it using <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> may return an <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> which refers to an instance of <span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span>. See <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> for details.</p>
+throw boost::<span class="RenoLink">enable_current_exception</span>(my_exception());</pre>
+<p>Unless <span class="RenoLink">enable_current_exception</span> is called at the time an exception object is used in a throw-expression, an attempt to copy it using <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> may return an <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> which refers to an instance of <span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span>. See <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> for details.</p>
 <h4>Note:</h4>
 <p>Instead of using the throw keyword directly, it is preferable to call boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>. This is guaranteed to throw an exception that derives from boost::<span class="RenoLink"><a href="exception.html">exception</a></span> and supports the <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> functionality.</p>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>

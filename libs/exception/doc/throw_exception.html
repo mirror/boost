@@ -26,17 +26,17 @@
 boost
     {
 <span class="RenoIncludeSPAN">#ifdef BOOST_NO_EXCEPTIONS
-    void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( std::exception const &amp; e ); // user defined
+    void <span class="RenoLink">throw_exception</span>( std::exception const &amp; e ); // user defined
 #else
     template &lt;class E&gt;
-    void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( E const &amp; e );
+    void <span class="RenoLink">throw_exception</span>( E const &amp; e );
 #endif</span>
     }</pre>
 </div><h4>Requirements:</h4>
 <p>E must derive publicly from std::exception.</p>
 <h4>Effects:</h4>
-<div><ul><li> If BOOST_NO_EXCEPTIONS is not defined, boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e) is equivalent to throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(e)), unless BOOST_EXCEPTION_DISABLE is defined, in which case boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e) is equivalent to throw e;</li>
-<li> If BOOST_NO_EXCEPTIONS is defined, the function is left undefined, and the user is expected to supply an appropriate definition. Callers of <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span> are allowed to assume that the function never returns; therefore, if the user-defined <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span> returns, the behavior is undefined.</li>
+<div><ul><li> If BOOST_NO_EXCEPTIONS is not defined, boost::<span class="RenoLink">throw_exception</span>(e) is equivalent to throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(e)), unless BOOST_EXCEPTION_DISABLE is defined, in which case boost::<span class="RenoLink">throw_exception</span>(e) is equivalent to throw e;</li>
+<li> If BOOST_NO_EXCEPTIONS is defined, the function is left undefined, and the user is expected to supply an appropriate definition. Callers of <span class="RenoLink">throw_exception</span> are allowed to assume that the function never returns; therefore, if the user-defined <span class="RenoLink">throw_exception</span> returns, the behavior is undefined.</li>
 </ul></div>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
