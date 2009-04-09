@@ -56,7 +56,7 @@ typedef boost::<span class="RenoLink">error_info</span>&lt;struct tag_errno,int&
 <p>It can also be passed to <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> (#include &lt;<span class="RenoLink"><a href="exception_get_error_info_hpp.html">boost/exception/get_error_info.hpp</a></span>&gt; first) to retrieve the tag_errno int from a boost::<span class="RenoLink"><a href="exception.html">exception</a></span>:</p>
 <pre>catch( boost::<span class="RenoLink"><a href="exception.html">exception</a></span> &amp; x )
     {
-    if( boost::shared_ptr&lt;int const&gt; e=boost::<span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>&lt;errno_info&gt;(x) )
+    if( int const * e=boost::<span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>&lt;errno_info&gt;(x) )
         ....
     }</pre>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
