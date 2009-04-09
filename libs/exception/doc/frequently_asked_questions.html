@@ -19,7 +19,7 @@
 <!-- Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>Frequently Asked Questions</h3>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h2>Frequently Asked Questions</h2>
 </div>
 <h3>Why doesn't boost::exception derive from std::exception?</h3>
 <p>Despite that <span class="RenoLink"><a href="using_virtual_inheritance_in_exception_types.html">virtual inheritance should be used in deriving from base exception types</a></span>, many programmers fail to follow this principle when deriving from std::exception. If boost::<span class="RenoLink"><a href="exception.html">exception</a></span> derives from std::exception, using the <span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span> function with such user-defined types would introduce dangerous ambiguity which would break all catch(std::exception &amp;) statements.</p>
