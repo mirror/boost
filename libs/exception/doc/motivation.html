@@ -113,10 +113,10 @@ catch( boost::<span class="RenoLink"><a href="exception.html">exception</a></spa
     {
     std::cerr &lt;&lt; "I/O Error!\n";
 
-    if( shared_ptr&lt;std::string const&gt; fn=<span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>&lt;file_name&gt;(e) )
+    if( std::string const * fn=<span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>&lt;file_name&gt;(e) )
         std::cerr &lt;&lt; "File name: " &lt;&lt; *fn &lt;&lt; "\n";
 
-    if( shared_ptr&lt;int const&gt; c=<span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>&lt;errno_code&gt;(e) )
+    if( int const * c=<span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>&lt;errno_code&gt;(e) )
         std::cerr &lt;&lt; "OS says: " &lt;&lt; strerror(*c) &lt;&lt; "\n";
     }</pre>
 <p>In addition, boost::<span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> can be used to compose an automatic (if not user-friendly) message that contains all of the <span class="RenoLink"><a href="error_info.html">error_info</a></span> objects added to a boost::<span class="RenoLink"><a href="exception.html">exception</a></span>. This is useful for inclusion in logs and other diagnostic objects.</p>
