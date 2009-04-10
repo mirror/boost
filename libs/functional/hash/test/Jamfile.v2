@@ -10,8 +10,6 @@ project hash-tests
         <toolset>gcc:<define>_GLIBCXX_DEBUG
         <toolset>gcc:<cxxflags>-Wsign-promo
         #<toolset>gcc:<cxxflags>-Wextra
-        <toolset>darwin:<define>_GLIBCXX_DEBUG
-        <toolset>darwin:<cxxflags>-Wsign-promo
     ;
 
 test-suite functional/hash
