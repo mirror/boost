@@ -62,8 +62,8 @@ rule check-icu-config ( )
             }
             else
             {
-               ECHO WARNING: ICU shared common library not found in path. ;
-               ECHO HINT:    If the regex library fails to link then try again ;
+               ECHO warning: ICU shared common library not found in path. ;
+               ECHO hint:    If the regex library fails to link then try again ;
                ECHO          with the environment variable ICU_LINK set to contain ;
                ECHO          the linker options required to link to ICU. ;
                ECHO          Defaulting to look for libicuuc ... ;
@@ -94,8 +94,8 @@ rule check-icu-config ( )
             }
             else
             {
-               ECHO WARNING: ICU shared i18n library not found in path. ;
-               ECHO HINT:    If the regex library fails to link then try again ;
+               ECHO warning: ICU shared i18n library not found in path. ;
+               ECHO hint:    If the regex library fails to link then try again ;
                ECHO          with the environment variable ICU_LINK set to contain ;
                ECHO          the linker options required to link to ICU. ;
                ECHO          Defaulting to look for libicui18n ... ;
@@ -130,15 +130,15 @@ rule check-icu-config ( )
                echo $(os) ;
                if $(os) != "DARWIN"
                {
-                  ECHO WARNING: ICU shared data library not found in path. ;
-                  ECHO HINT:    If the regex library fails to link then try again ;
+                  ECHO warning: ICU shared data library not found in path. ;
+                  ECHO hint:    If the regex library fails to link then try again ;
                   ECHO          with the environment variable ICU_LINK set to contain ;
                   ECHO          the linker options required to link to ICU. ;
                }
                else
                {
-                  ECHO WARNING: ICU shared data library not found in path. ;
-                  ECHO HINT:    If the regex library fails to link then try again ;
+                  ECHO warning: ICU shared data library not found in path. ;
+                  ECHO hint:    If the regex library fails to link then try again ;
                   ECHO          with the environment variable ICU_LINK set to contain ;
                   ECHO          the linker options required to link to ICU. ;
                   ECHO          Defaulting to look for libicudata ... ;
@@ -163,14 +163,14 @@ rule check-icu-config ( )
    else
    {
       message icu_config
-		: "Building Boost.Regex with the optional Unicode/ICU support disabled."
-		: "Note: Please refer to the Boost.Regex documentation for more information"
-		: "Note: this is a strictly optional feature." ;
+		: "warning: Building Boost.Regex with the optional Unicode/ICU support disabled."
+		: "note: Please refer to the Boost.Regex documentation for more information"
+		: "note: this is a strictly optional feature." ;
 
       if $(ICU_PATH)
       {
          message icu_config2 
-           : WARNING! ICU configuration failed
+           : warning! ICU configuration failed
            : "    Couldn't find utypes.h in " $(ICU_PATH:J=" ")/include/unicode ;
       }
       else
