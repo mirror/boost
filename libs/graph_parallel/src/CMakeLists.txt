@@ -1,0 +1,24 @@
+add_definitions(-DBOOST_GRAPH_NO_LIB=1)
+
+if (MSVC)
+  # Without these flags, MSVC 7.1 and 8.0 crash
+  add_definitions(-GR-)
+endif (MSVC)
+
+FIND_PACKAGE(MPI)
+if (MPI_FOUND)
+  message(STATUS "MPI found")
+  # Add Boost.MPI link and add parallel source files
+  include_directories(${MPI_INCLUDE_PATH})
+
+  boost_add_library(
+    boost_graph_parallel
+    mpi_process_group.cpp tag_allocator.cpp
+    DEPENDS boost_mpi
+    SHARED_COMPILE_FLAGS "-DBOOST_GRAPH_DYN_LINK=1"
+    )
+endif (MPI_FOUND)
+
+if (NOT MPI_FOUND)
+ message(STATUS "MPI Not Found")
+endif (NOT MPI_FOUND)

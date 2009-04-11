@@ -14,7 +14,7 @@
 #endif
 
 #include <boost/graph/parallel/algorithm.hpp>
-#include <boost/graph/distributed/mpi_process_group.hpp>
+#include <boost/graph/parallel/process_group.hpp>
 
 namespace boost {
 
@@ -23,7 +23,8 @@ namespace boost {
   // requires an MPI process group.  Run-time is slightly worse than
   // the unique rmat generator.  Edge list generated is sorted and
   // unique.
-  template<typename Distribution, typename RandomGenerator, typename Graph>
+  template<typename ProcessGroup, typename Distribution, 
+	   typename RandomGenerator, typename Graph>
   class scalable_rmat_iterator
   {
       typedef typename graph_traits<Graph>::directed_category directed_category;
@@ -43,8 +44,7 @@ namespace boost {
       { }
 
       // Initialize for edge generation
-      scalable_rmat_iterator(boost::graph::distributed::mpi_process_group pg, 
-                             Distribution distrib,
+      scalable_rmat_iterator(ProcessGroup pg, Distribution distrib,
                              RandomGenerator& gen, vertices_size_type n, 
                              edges_size_type m, double a, double b, double c, 
                              double d, bool permute_vertices = true)
