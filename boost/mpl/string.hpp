@@ -176,7 +176,7 @@ namespace boost { namespace mpl
             type;                                                                                   \
         };
 
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_DEC(BOOST_MPL_STRING_MAX_PARAMS), M0, ~)
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_MPL_STRING_MAX_PARAMS, M0, ~)
         #undef M0
 
         template<BOOST_PP_ENUM_PARAMS(BOOST_MPL_STRING_MAX_PARAMS, unsigned C), typename Value>
@@ -263,7 +263,7 @@ namespace boost { namespace mpl
             type;                                                                                   \
         };
 
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_DEC(BOOST_MPL_STRING_MAX_PARAMS), M0, ~)
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_MPL_STRING_MAX_PARAMS, M0, ~)
         #undef M0
 
         template<BOOST_PP_ENUM_PARAMS(BOOST_MPL_STRING_MAX_PARAMS, unsigned C), typename Value>
@@ -297,7 +297,7 @@ namespace boost { namespace mpl
             type;                                                                                   \
         };
 
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_DEC(BOOST_MPL_STRING_MAX_PARAMS), M0, ~)
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_MPL_STRING_MAX_PARAMS, M0, ~)
         #undef M0
 
         template<BOOST_PP_ENUM_PARAMS(BOOST_MPL_STRING_MAX_PARAMS, unsigned C)>
