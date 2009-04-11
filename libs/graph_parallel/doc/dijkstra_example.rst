@@ -11,7 +11,7 @@ illustrate the use of both the sequential and parallel BGL to find
 the shortest paths from vertex A to every other vertex in the
 following simple graph:
 
-.. image:: dijkstra_seq_graph.png
+.. image:: ../dijkstra_seq_graph.png
 
 With the sequential BGL_, the program to calculate shortest paths has
 three stages. Readers familiar with the BGL may wish to skip ahead to
@@ -133,7 +133,7 @@ the edges outgoing from that vertex and any properties associated
 with that vertex or its edges. With three processors and the default
 block distribution, the graph would be distributed in this manner:
 
-.. image:: dijkstra_dist3_graph.png
+.. image:: ../dijkstra_dist3_graph.png
 
 Processor 0 (red) owns vertices A and B, including all edges outoing
 from those vertices, processor 1 (green) owns vertices C and D (and

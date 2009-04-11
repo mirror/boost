@@ -55,6 +55,7 @@ should read our `architectural overview`_.
   - `R-MAT generator`_
   - `Sorted R-MAT generator`_
   - `Unique R-MAT generator`_
+  - `Sorted unique R-MAT generator`_
   - `Scalable R-MAT generator`_
   - `Erdos-Renyi generator`_
   - `Sorted Erdos-Renyi generator`_
@@ -123,6 +124,7 @@ Authors: Nick Edmonds, Douglas Gregor, and Andrew Lumsdaine
 .. _R-MAT generator: rmat_generator.html
 .. _Sorted R-MAT generator: sorted_rmat_generator.html
 .. _Unique R-MAT generator: unique_rmat_generator.html
+.. _Sorted unique R-MAT generator: sorted_unique_rmat_generator.html
 .. _Scalable R-MAT generator: scalable_rmat_generator.html
 .. _Erdos-Renyi generator: http://www.boost.org/libs/graph/doc/erdos_renyi_generator.html
 .. _Sorted Erdos-Renyi generator: http://www.boost.org/libs/graph/doc/sorted_erdos_renyi_gen.html

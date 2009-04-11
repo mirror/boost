@@ -7,7 +7,7 @@
 An Overview of the Parallel Boost Graph Library
 ===============================================
 
-.. image:: graph.png
+.. image:: ../graph.png
   :width: 206
   :height: 184
   :alt: An example graph
@@ -26,7 +26,7 @@ way, e.g., "X is the child of Y". The following figure illustrates a
 typical directed graph, where *a-i* are the vertices and the arrows
 represent edges.
 
-.. image:: distributed-graph.png
+.. image:: ../distributed-graph.png
   :width: 229
   :height: 199
   :alt: A distributed graph
@@ -65,13 +65,13 @@ processors, and each of the edges outgoing from a vertex are stored on
 the processor that "owns" (stores) that vertex. The following figure
 illustrates the distributed adjacency list representation.
 
-.. image:: dist-adjlist.png
+.. image:: ../dist-adjlist.png
   :width: 446
   :height: 154
   :alt: A distributed adjacency list
   :align: center
 
-.. image:: dist-pmap.png
+.. image:: ../dist-pmap.png
   :width: 271
   :height: 175
   :alt: A distributed property map
@@ -120,7 +120,7 @@ proceeding clockwise:
    - a distributed graph, on which the breadth-first search is
      operating.
 
-.. image:: architecture.png
+.. image:: ../architecture.png
   :width: 485
   :height: 410
   :alt: Parallel Boost Graph Library architecture

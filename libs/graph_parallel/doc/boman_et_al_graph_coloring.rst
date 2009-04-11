@@ -51,7 +51,7 @@ independent set in the graph. Graph coloring has been used to solve
 various problems, including register allocation in compilers,
 optimization problems, and scheduling problems.
 
-.. image:: vertex_coloring.png
+.. image:: ../vertex_coloring.png
   :width: 462
   :height: 269
   :alt: Vertex coloring example
