@@ -9,7 +9,7 @@ bases = $(sources:S=) ;
   
 # This is a path relative to the html/ subdirectory where the
 # generated output will eventually be moved.
-stylesheet = "--stylesheet=rst.css" ;
+stylesheet = "--stylesheet=../../../../rst.css" ;
 
 for local b in $(bases)
 {
