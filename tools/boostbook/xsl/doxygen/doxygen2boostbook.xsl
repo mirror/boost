@@ -699,15 +699,6 @@
       <xsl:when test="@kind='public-static-attrib' or @kind='public-attrib'">
         <xsl:apply-templates/>
       </xsl:when>
-      <xsl:when test="@kind='protected-static-attrib' or @kind='protected-attrib'">
-        <xsl:apply-templates/>
-      </xsl:when>
-      <xsl:when test="@kind='private-static-attrib' or @kind='private-attrib'">
-        <xsl:apply-templates/>
-      </xsl:when>
-      <xsl:when test="@kind='friend'">
-        <xsl:apply-templates/>
-      </xsl:when>
       <xsl:when test="@kind='public-type'">
         <xsl:apply-templates/>
       </xsl:when>
