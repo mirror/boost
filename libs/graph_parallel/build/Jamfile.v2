@@ -26,17 +26,8 @@ if [ mpi.configured ]
         <library>../../mpi/build//boost_mpi
         <library>/mpi//mpi [ mpi.extra-requirements ]
       ;
-}
-else
-{
-    message pbgl
-      : "warning: Graph library does not contain MPI-based parallel components."
-      : "note: to enable them, add \"using mpi ;\" to your user_config.jam"
-      ;
-}
-explicit pbgl ;
-
-lib boost_graph_parallel
+    
+  lib boost_graph_parallel
     :
     pbgl
     :
@@ -48,5 +39,16 @@ lib boost_graph_parallel
     <toolset>msvc-7.1:<cxxflags>-GR-
     <toolset>msvc-8.0:<cxxflags>-GR-
     ;
+
+}
+else
+{
+  message boost_graph_parallel
+      : "warning: Graph library does not contain MPI-based parallel components."
+      : "note: to enable them, add \"using mpi ;\" to your user_config.jam"
+      ;
+}
+
+
 
 boost-install boost_graph_parallel ;
