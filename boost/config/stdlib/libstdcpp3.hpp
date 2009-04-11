@@ -9,10 +9,6 @@
 //  config for libstdc++ v3
 //  not much to go in here:
 
-#if !defined(__GLIBCXX__) && !defined(__GLIBCPP__)
-#include <utility>
-#endif
-
 #ifdef __GLIBCXX__
 #define BOOST_STDLIB "GNU libstdc++ version " BOOST_STRINGIZE(__GLIBCXX__)
 #else
