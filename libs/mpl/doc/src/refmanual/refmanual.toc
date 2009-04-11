@@ -23,6 +23,7 @@ Metafunctions/Comparisons
 Metafunctions/Logical Operations
 Metafunctions/Bitwise Operations
 Metafunctions/Trivial
+Metafunctions/String Operations
 Metafunctions/Miscellaneous
 Data Types
 Data Types/Concepts

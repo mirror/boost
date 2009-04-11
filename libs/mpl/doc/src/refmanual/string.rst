@@ -11,14 +11,15 @@ string
 Description
 -----------
 
-``string`` is a |variadic|, `random access`__, `extensible`__ |Integral Sequence Wrapper| of
+``string`` is a |variadic|, `bidirectional`__, `extensible`__ |Integral Sequence Wrapper| of
 characters that supports constant-time insertion and removal of elements at both ends, and 
 linear-time insertion and removal of elements in the middle. The parameters to ``string``
 are multi-character literals, giving a somewhat readable syntax for compile-time strings.
-``string`` also has a class static null-terminated character array called ``c_str`` that
-facilitates interoperability with runtime string processing routines.
+``string`` can also be an argument to the ``c_str`` metafunction, which generates a
+null-terminated character array that facilitates interoperability with runtime string
+processing routines.
 
-__ `Random Access Sequence`_
+__ `Bidirectional Sequence`_
 __ `Extensible Sequence`_
 
 Header
@@ -35,11 +36,10 @@ Model of
 
 * |Integral Sequence Wrapper|
 * |Variadic Sequence|
-* |Random Access Sequence|
+* |Bidirectional Sequence|
 * |Extensible Sequence|
 * |Back Extensible Sequence|
 * |Front Extensible Sequence|
-
 
 Expression semantics
 --------------------
@@ -60,24 +60,21 @@ and |c1...cn| are arbitrary (multi-)characters.
 |    string<|c1...cn|>::type            |                                                           |
 +---------------------------------------+-----------------------------------------------------------+
 | ``begin<s>::type``                    | An iterator pointing to the beginning of ``s``;           |
-|                                       | see |Random Access Sequence|.                             |
+|                                       | see |Bidirectional Sequence|.                             |
 +---------------------------------------+-----------------------------------------------------------+
 | ``end<s>::type``                      | An iterator pointing to the end of ``s``;                 |
-|                                       | see |Random Access Sequence|.                             |
+|                                       | see |Bidirectional Sequence|.                             |
 +---------------------------------------+-----------------------------------------------------------+
-| ``size<s>::type``                     | The size of ``s``; see |Random Access Sequence|.          |
+| ``size<s>::type``                     | The size of ``s``; see |Bidirectional Sequence|.          |
 +---------------------------------------+-----------------------------------------------------------+
 | ``empty<s>::type``                    | |true if and only if| the sequence is empty;              |
-|                                       | see |Random Access Sequence|.                             |
+|                                       | see |Bidirectional Sequence|.                             |
 +---------------------------------------+-----------------------------------------------------------+
 | ``front<s>::type``                    | The first element in ``s``; see                           |
-|                                       | |Random Access Sequence|.                                 |
+|                                       | |Bidirectional Sequence|.                                 |
 +---------------------------------------+-----------------------------------------------------------+
 | ``back<s>::type``                     | The last element in ``s``; see                            |
-|                                       | |Random Access Sequence|.                                 |
-+---------------------------------------+-----------------------------------------------------------+
-| ``at<s,n>::type``                     | The ``n``\ th element from the beginning of ``s``; see    |
-|                                       | |Random Access Sequence|.                                 |
+|                                       | |Bidirectional Sequence|.                                 |
 +---------------------------------------+-----------------------------------------------------------+
 | ``insert<s,pos,x>::type``             | A new ``string`` of following elements:                   |
 |                                       | [``begin<s>::type``, ``pos``), ``x``,                     |
@@ -114,11 +111,10 @@ and |c1...cn| are arbitrary (multi-)characters.
 |                                       | [``next< begin<s>::type >::type``, ``end<s>::type``);     |
 |                                       | see |Front Extensible Sequence|.                          |
 +---------------------------------------+-----------------------------------------------------------+
-| ``s::c_str``                          | A null-terminated byte string such that                   |
-|                                       | ``s::c_str[``\ *n*\ ``]`` is                              |
-|                                       | ``at<s,``\ *n*\ ``>::type::value`` for each *n* in        |
-|                                       | [``0``, ``size<s>::type::value``), and                    |
-|                                       | ``s::c_str[size<s>::type::value]`` is ``'\0'``.           |
+| ``c_str<s>::value``                   | A null-terminated byte string such that                   |
+|                                       | ``c_str<s>::value[``\ *n*\ ``]`` is equal to the *n*\ -th |
+|                                       | character in ``s``, and                                   |
+|                                       | ``c_str<s>::value[size<s>::type::value]`` is ``'\0'``.    |
 +---------------------------------------+-----------------------------------------------------------+
 
 
@@ -127,14 +123,13 @@ Example
 
 .. parsed-literal::
    
-    typedef string<'hell','o wo','rld'> hello;
-    typedef push_back<hello, char_<'!'> >::type hello2;
+    typedef mpl::string<'hell','o wo','rld'> hello;
+    typedef mpl::push_back<hello, mpl::char_<'!'> >::type hello2;
 
-    BOOST_ASSERT(0 == std::strcmp(hello2::c_str, "hello world!"));
+    BOOST_ASSERT(0 == std::strcmp(mpl::c_str<hello2>::value, "hello world!"));
 
 
 See also
 --------
 
-|Sequences|, |Variadic Sequence|, |Random Access Sequence|, |Extensible Sequence|, |Integral Sequence Wrapper|, |char_|
-
+|Sequences|, |Variadic Sequence|, |Bidirectional Sequence|, |Extensible Sequence|, |Integral Sequence Wrapper|, |char_|, |c_str|
