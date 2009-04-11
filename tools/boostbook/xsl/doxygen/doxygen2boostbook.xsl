@@ -563,6 +563,22 @@
           </xsl:if>
         </template-type-parameter>
       </xsl:when>
+      <!-- Doxygen 1.5.8 generates odd xml for template type parameters.
+           This deals with that -->
+      <xsl:when test="not(declname) and
+        (starts-with(string(type), 'class ') or starts-with(string(type), 'typename '))">
+        <template-type-parameter>
+          <xsl:attribute name="name">
+            <xsl:value-of select="normalize-space(substring-after(string(type), ' '))"/>
+          </xsl:attribute>
+          <xsl:if test="defval">
+            <default>
+              <xsl:apply-templates select="defval/*|defval/text()" 
+                mode="passthrough"/>
+            </default>
+          </xsl:if>
+        </template-type-parameter>
+      </xsl:when>
       <xsl:otherwise>
         <template-nontype-parameter>
           <xsl:attribute name="name">
