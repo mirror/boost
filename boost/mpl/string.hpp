@@ -14,11 +14,13 @@
 // $Date: 2009-04-01 02:10:26 -0700 (Wed, 1 Apr 2009) $
 // $Revision: 49239 $
 
+#include <boost/mpl/limits/string.hpp>
 #include <boost/mpl/char.hpp>
 #include <boost/mpl/copy.hpp>
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/size_t.hpp>
+#include <boost/mpl/begin_end.hpp>
 #include <boost/mpl/joint_view.hpp>
 #include <boost/mpl/insert_range.hpp>
 #include <boost/mpl/back_inserter.hpp>
@@ -37,11 +39,7 @@
 
 namespace boost { namespace mpl
 {
-    #ifndef BOOST_MPL_STRING_MAX_LENGTH
-    # define BOOST_MPL_STRING_MAX_LENGTH 32
-    #endif
-
-    #define BOOST_MPL_STRING_MAX_PARAMS BOOST_PP_DIV(BOOST_PP_ADD(BOOST_MPL_STRING_MAX_LENGTH, 3), 4)
+    #define BOOST_MPL_STRING_MAX_PARAMS BOOST_PP_DIV(BOOST_PP_ADD(BOOST_MPL_LIMIT_STRING_SIZE, 3), 4)
 
     #define BOOST_MPL_MULTICHAR_LENGTH(c)   (std::size_t)((c>0xffffff)+(c>0xffff)+(c>0xff)+1)
     #define BOOST_MPL_MULTICHAR_AT(c,i)     (char)(0xff&(c>>(8*(BOOST_MPL_MULTICHAR_LENGTH(c)-(std::size_t)(i)-1))))
@@ -135,7 +133,7 @@ namespace boost { namespace mpl
         struct apply
         {
             BOOST_MPL_ASSERT_MSG(
-                (BOOST_MPL_STRING_MAX_LENGTH != mpl::size<Sequence>::type::value)
+                (BOOST_MPL_LIMIT_STRING_SIZE != mpl::size<Sequence>::type::value)
               , PUSH_BACK_FAILED_MPL_STRING_IS_FULL
               , (Sequence)
             );
@@ -228,7 +226,7 @@ namespace boost { namespace mpl
         struct apply
         {
             BOOST_MPL_ASSERT_MSG(
-                (BOOST_MPL_STRING_MAX_LENGTH != mpl::size<Sequence>::type::value)
+                (BOOST_MPL_LIMIT_STRING_SIZE != mpl::size<Sequence>::type::value)
               , PUSH_FRONT_FAILED_MPL_STRING_IS_FULL
               , (Sequence)
             );
@@ -479,7 +477,7 @@ namespace boost { namespace mpl
         typedef                                                                                     \
             typename mpl::aux_::next_unless<BOOST_PP_CAT(i, n), iend>::type                         \
         BOOST_PP_CAT(i, BOOST_PP_INC(n));
-        BOOST_PP_REPEAT(BOOST_MPL_STRING_MAX_LENGTH, M0, ~)
+        BOOST_PP_REPEAT(BOOST_MPL_LIMIT_STRING_SIZE, M0, ~)
         #undef M0
 
         typedef c_str type;
@@ -491,7 +489,7 @@ namespace boost { namespace mpl
     {
         #define M0(z, n, data)                                                                      \
         mpl::aux_::deref_unless<BOOST_PP_CAT(i, n), iend>::type::value,
-        BOOST_PP_REPEAT(BOOST_MPL_STRING_MAX_LENGTH, M0, ~)
+        BOOST_PP_REPEAT(BOOST_MPL_LIMIT_STRING_SIZE, M0, ~)
         #undef M0
         '\0'
     };

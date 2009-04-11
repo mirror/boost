@@ -12,8 +12,8 @@ Description
 -----------
 
 ``string`` is a |variadic|, `bidirectional`__, `extensible`__ |Integral Sequence Wrapper| of
-characters that supports constant-time insertion and removal of elements at both ends, and 
-linear-time insertion and removal of elements in the middle. The parameters to ``string``
+characters that supports amortized constant-time insertion and removal of elements at both ends,
+and linear-time insertion and removal of elements in the middle. The parameters to ``string``
 are multi-character literals, giving a somewhat readable syntax for compile-time strings.
 ``string`` can also be an argument to the ``c_str`` metafunction, which generates a
 null-terminated character array that facilitates interoperability with runtime string
