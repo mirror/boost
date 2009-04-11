@@ -754,12 +754,12 @@ run_non_distributed_graph_tests(RandomGenerator& gen, const ProcessGroup& pg,
  
     while (remaining_sources > 0) {
       typename graph_traits<filteredSeqGraph>::vertex_descriptor v = 
-	vertex(rand_vertex(gen), fsg);
+        vertex(rand_vertex(gen), fsg);
     
       if (out_degree(v, fsg) != 0
-	  && std::find(temp_sources.begin(), temp_sources.end(), v) == temp_sources.end()) {
-	temp_sources.push_back(v);
-	--remaining_sources;
+          && std::find(temp_sources.begin(), temp_sources.end(), v) == temp_sources.end()) {
+        temp_sources.push_back(v);
+        --remaining_sources;
       }
     }
 
@@ -769,7 +769,7 @@ run_non_distributed_graph_tests(RandomGenerator& gen, const ProcessGroup& pg,
 
   start = get_time();
   non_distributed_brandes_betweenness_centrality(pg, fsg, buffer(sources).
- 						 centrality_map(nonDistributedApproxCentrality)); 
+                                                 centrality_map(nonDistributedApproxCentrality)); 
   extract_max_bc_vertices(pg, fsg, nonDistributedApproxCentrality, max_seq_bc_vec);
   end = get_time();
 

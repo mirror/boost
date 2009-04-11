@@ -196,14 +196,14 @@ int test_main(int argc, char* argv[])
 
   std::vector<int> nonDistributedWeightedCentralityS(num_vertices(sg), 0);
   seqCentralityMap nonDistributedWeightedCentrality(nonDistributedWeightedCentralityS.begin(), 
-						    get(vertex_index, sg));
+                                                    get(vertex_index, sg));
 
   non_distributed_brandes_betweenness_centrality(pg, sg, nonDistributedCentrality);
 
   non_distributed_brandes_betweenness_centrality(pg, sg, 
-						 centrality_map(nonDistributedWeightedCentrality).
+                                                 centrality_map(nonDistributedWeightedCentrality).
 #ifdef CSR
-						 weight_map(get(&WeightedEdge::weight, sg)));
+                                                 weight_map(get(&WeightedEdge::weight, sg)));
 #else
                                                  weight_map(get(edge_weight, sg)));
 #endif
@@ -246,17 +246,17 @@ int test_main(int argc, char* argv[])
     
     for (tie(v, v_end) = vertices(g); v != v_end; ++v) {
       if (get(centrality, *v) != seqCentralityS[(n/p) * get(owner, *v) + get(local, *v)]) {
-	std::cerr << "  " << id << ": Error - centrality of " << get(local, *v) << "@" << get(owner, *v)
-		  << " does not match the sequential result (" << get(centrality, *v) << " vs. " 
-		  << seqCentralityS[(n/p) * get(owner, *v) + get(local, *v)] << ")\n";
-	passed = false;
+        std::cerr << "  " << id << ": Error - centrality of " << get(local, *v) << "@" << get(owner, *v)
+                  << " does not match the sequential result (" << get(centrality, *v) << " vs. " 
+                  << seqCentralityS[(n/p) * get(owner, *v) + get(local, *v)] << ")\n";
+        passed = false;
       }
       
       if (get(weightedCentrality, *v) != seqWeightedCentralityS[(n/p) * get(owner, *v) + get(local, *v)]) {
-	std::cerr << "  " << id << ": Error - weighted centrality of " << get(local, *v) << "@" << get(owner, *v)
-		  << " does not match the sequential result (" << get(weightedCentrality, *v) << " vs. " 
-		  << seqWeightedCentralityS[(n/p) * get(owner, *v) + get(local, *v)] << ")\n";
-	passed = false;
+        std::cerr << "  " << id << ": Error - weighted centrality of " << get(local, *v) << "@" << get(owner, *v)
+                  << " does not match the sequential result (" << get(weightedCentrality, *v) << " vs. " 
+                  << seqWeightedCentralityS[(n/p) * get(owner, *v) + get(local, *v)] << ")\n";
+        passed = false;
       }
     }
   }
@@ -267,17 +267,17 @@ int test_main(int argc, char* argv[])
   
     for (tie(v, v_end) = vertices(sg); v != v_end; ++v) {
       if (get(seqCentrality, *v) != get(nonDistributedCentrality, *v)) {
-	std::cerr << "  " << id << ": Error - non-distributed centrality of " << *v
-		  << " does not match the sequential result (" << get(nonDistributedCentrality, *v) 
-		  << " vs. " << get(seqCentrality, *v) << ")\n";
-	passed = false;
+        std::cerr << "  " << id << ": Error - non-distributed centrality of " << *v
+                  << " does not match the sequential result (" << get(nonDistributedCentrality, *v) 
+                  << " vs. " << get(seqCentrality, *v) << ")\n";
+        passed = false;
       }
 
       if (get(seqWeightedCentrality, *v) != get(nonDistributedWeightedCentrality, *v)) {
-	std::cerr << "  " << id << ": Error - non-distributed weighted centrality of " << *v
-		  << " does not match the sequential result (" << get(nonDistributedWeightedCentrality, *v) 
-		  << " vs. " << get(seqCentrality, *v) << ")\n";
-	passed = false;
+        std::cerr << "  " << id << ": Error - non-distributed weighted centrality of " << *v
+                  << " does not match the sequential result (" << get(nonDistributedWeightedCentrality, *v) 
+                  << " vs. " << get(seqCentrality, *v) << ")\n";
+        passed = false;
       }
     }
   }
