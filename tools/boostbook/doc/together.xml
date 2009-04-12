@@ -51,6 +51,18 @@
     url="http://www.boost.org"&gt;Boost&lt;/ulink&gt;,</code> which
     appears in the document like this: <ulink
     url="http://www.boost.org">Boost</ulink>.</para>
+    
+    <para>In BoostBook, &lt;ulink&gt; supports a custom url schema for
+    linking to files within the boost distribution. This is formed by
+    setting the <code>url</code> attribute to <code>boost:</code>
+    followed by the file's path. For example, we can link to the
+    flyweight library with
+    <code>&lt;ulink
+    url="boost:/libs/flyweight/index.html"&gt;Boost.Flyweight&lt;/ulink&gt;</code>,
+    which will appear like this: <ulink
+    url="boost:/libs/flyweight/index.html">Boost.Flyweight</ulink>.
+    This schema is only supported for BoostBook &lt;ulink&gt; elements.
+    It isn't available for any other elements or in Docbook.</para>
 
     <para>The &lt;classname&gt;, &lt;functionname&gt;,
     &lt;methodname&gt;, and &lt;libraryname&gt; link to classes,

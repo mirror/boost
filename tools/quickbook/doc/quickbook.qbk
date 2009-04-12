@@ -492,6 +492,18 @@ will generate:
 
 see [@http://spirit.sourceforge.net/]
 
+Boostbook also support a custom url schema for linking to files within
+the boost distribution:
+
+[pre
+'''[@boost:/libs/spirit/index.html the Boost.Spirit documentation]'''
+]
+
+will generate: [@boost:/libs/spirit/index.html the Boost.Spirit documentation]
+
+Note that this is only available when using BoostBook, and only for links
+- it can't be used for images.
+
 [endsect]
 [section Anchor links]
 
