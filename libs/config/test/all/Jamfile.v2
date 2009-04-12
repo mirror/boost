@@ -14,6 +14,10 @@
 path-constant DOT : . ;
 include $(DOT)/options_v2.jam ;
 
+project  
+    : requirements 
+	<include>.. ;
+
 run ../config_info.cpp  : : : <threading>single <toolset>msvc:<runtime-link>static <toolset>msvc:<link>static ;
 run ../config_info.cpp  : : : <threading>multi : config_info_threaded ;
 run ../math_info.cpp : : : <toolset>borland:<runtime-link>static <toolset>borland:<link>static ;
