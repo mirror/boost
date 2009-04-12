@@ -935,10 +935,13 @@ namespace quickbook
             if(!fs::equivalent(outtmp /= *out, temp /= *file))
                 break;
         }
-        std::divides<fs::path> concat;
         out = (out == outdir.begin()) ? outdir.end() : out;
-        temp = std::accumulate(out, outdir.end(), fs::path(), boost::bind(concat, _1, ".."));
-        return std::accumulate(file, path.end(), temp, concat);
+
+        fs::path result = fs::path();
+        for(; out != outdir.end(); ++out)
+            if(*out != ".") result /= "..";
+        std::divides<fs::path> concat;
+        return std::accumulate(file, path.end(), result, concat);
     }
 
     fs::path calculate_relative_path(

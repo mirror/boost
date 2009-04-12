@@ -51,7 +51,24 @@
   <xsl:key name="compounds-by-id" match="compounddef" use="@id"/>
   <xsl:key name="members-by-id" match="memberdef" use="@id" />
 
-  <xsl:strip-space elements="briefdescription detaileddescription"/>
+  <xsl:strip-space elements="briefdescription detaileddescription inbodydescription"/>
+
+  <xsl:template name="kind-error-message">
+    <xsl:param name="message"/>
+
+    <xsl:variable name="location" select=".//location[1]" />
+    <xsl:variable name="name" select="./name" />
+
+    <xsl:message>
+      <xsl:if test="$location">
+        <xsl:value-of select="concat($location/@file, ':', $location/@line, ': ')" />
+      </xsl:if>
+      <xsl:value-of select="concat($message, ' with kind=', @kind)" />
+      <xsl:if test="$name">
+        <xsl:value-of select="concat(' (name=', $name, ') ')" />
+      </xsl:if>
+    </xsl:message>
+  </xsl:template>
 
   <!-- translate-name: given a string, return a string suitable for use as a refid -->
   <xsl:template name="translate-name">
@@ -101,6 +118,7 @@
            tell us what is \internal and what isn't. -->
       <xsl:when test="contains(detaileddescription/para, 'INTERNAL ONLY')"/>
       <xsl:when test="contains(briefdescription/para, 'INTERNAL ONLY')"/>
+      <xsl:when test="contains(inbodydescription/para, 'INTERNAL ONLY')"/>
 
       <xsl:when test="@kind='file'">
         <xsl:call-template name="file"/>
@@ -131,9 +149,9 @@
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:message>
-Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
-        </xsl:message>
+        <xsl:call-template name="kind-error-message">
+          <xsl:with-param name="message" select="'Cannot handle compounddef'"/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -242,6 +260,7 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
 
         <xsl:apply-templates select="briefdescription" mode="passthrough"/>
         <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+        <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
         <xsl:apply-templates/>
       </xsl:element>
     </xsl:if>
@@ -267,6 +286,7 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
         
         <xsl:apply-templates select="briefdescription" mode="passthrough"/>
         <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+        <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
       </enum>
     </xsl:if>
   </xsl:template>
@@ -285,6 +305,7 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
 
       <xsl:apply-templates select="briefdescription" mode="passthrough"/>
       <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+      <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
     </enumvalue>
   </xsl:template>
 
@@ -343,9 +364,10 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
           </xsl:call-template>
         </xsl:attribute>
         
-        <xsl:if test="briefdescription/*|detaileddescription/*">
+        <xsl:if test="briefdescription/*|detaileddescription/*|inbodydescription/*">
           <xsl:apply-templates select="briefdescription/*" mode="passthrough"/>
           <xsl:apply-templates select="detaileddescription/*" mode="passthrough"/>
+          <xsl:apply-templates select="inbdoydescription/*" mode="passthrough"/>
         </xsl:if>
         
         <xsl:apply-templates mode="toplevel">
@@ -436,6 +458,7 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
            tell us what is \internal and what isn't. -->
       <xsl:when test="contains(detaileddescription/para, 'INTERNAL ONLY')"/>
       <xsl:when test="contains(briefdescription/para, 'INTERNAL ONLY')"/>
+      <xsl:when test="contains(inbodydescription/para, 'INTERNAL ONLY')"/>
 
       <xsl:when test="@kind='define'">
         <macro>
@@ -459,6 +482,7 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
 
           <xsl:apply-templates select="briefdescription" mode="passthrough"/>
           <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+          <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
         </macro>
       </xsl:when>
 
@@ -470,9 +494,18 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
         <xsl:call-template name="typedef" />
       </xsl:when>
 
+      <xsl:when test="@kind='variable'">
+        <xsl:call-template name="variable" />
+      </xsl:when>
+
+      <xsl:when test="@kind='enum'">
+        <xsl:call-template name="enum" />
+      </xsl:when>
+
       <xsl:otherwise>
-        <xsl:message>Cannot handle toplevel memberdef element with
-        kind=<xsl:value-of select="@kind"/></xsl:message>
+        <xsl:call-template name="kind-error-message">
+          <xsl:with-param name="message" select="'Cannot handle toplevel memberdef element'"/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -521,6 +554,22 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
         <template-type-parameter>
           <xsl:attribute name="name">
             <xsl:value-of select="normalize-space(string(declname))"/>
+          </xsl:attribute>
+          <xsl:if test="defval">
+            <default>
+              <xsl:apply-templates select="defval/*|defval/text()" 
+                mode="passthrough"/>
+            </default>
+          </xsl:if>
+        </template-type-parameter>
+      </xsl:when>
+      <!-- Doxygen 1.5.8 generates odd xml for template type parameters.
+           This deals with that -->
+      <xsl:when test="not(declname) and
+        (starts-with(string(type), 'class ') or starts-with(string(type), 'typename '))">
+        <template-type-parameter>
+          <xsl:attribute name="name">
+            <xsl:value-of select="normalize-space(substring-after(string(type), ' '))"/>
           </xsl:attribute>
           <xsl:if test="defval">
             <default>
@@ -699,9 +748,9 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
         </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:message>
-Cannot handle sectiondef with kind=<xsl:value-of select="@kind"/>      
-        </xsl:message>
+        <xsl:call-template name="kind-error-message">
+          <xsl:with-param name="message" select="'Cannot handle sectiondef'"/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -718,6 +767,7 @@ Cannot handle sectiondef with kind=<xsl:value-of select="@kind"/>
            tell us what is \internal and what isn't. -->
       <xsl:when test="contains(detaileddescription/para, 'INTERNAL ONLY')"/>
       <xsl:when test="contains(briefdescription/para, 'INTERNAL ONLY')"/>
+      <xsl:when test="contains(inbodydescription/para, 'INTERNAL ONLY')"/>
 
       <xsl:when test="@kind='typedef'">
         <xsl:call-template name="typedef">
@@ -783,9 +833,9 @@ Cannot handle sectiondef with kind=<xsl:value-of select="@kind"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:message>
-Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
-        </xsl:message>
+        <xsl:call-template name="kind-error-message">
+          <xsl:with-param name="message" select="'Cannot handle memberdef element'"/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -805,6 +855,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
         
         <xsl:apply-templates select="briefdescription" mode="passthrough"/>
         <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+        <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
         
         <type><xsl:apply-templates select="type"/></type>
       </typedef>
@@ -843,7 +894,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
         <xsl:value-of select="normalize-space(declname/text())"/>
       </xsl:variable>
 
-      <xsl:apply-templates select="../detaileddescription//parameterlist[attribute::kind='param']/*"
+      <xsl:apply-templates select="../*[self::detaileddescription or self::inbodydescription]//parameterlist[attribute::kind='param']/*"
         mode="parameter.description">
         <xsl:with-param name="name">
           <xsl:value-of select="$name"/>
@@ -893,24 +944,25 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     <!-- The description -->
     <xsl:apply-templates select="briefdescription" mode="passthrough"/>
     <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+    <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
       
     <xsl:apply-templates 
-      select="detaileddescription/para/simplesect[@kind='pre']"
+      select="*[self::detaileddescription or self::inbodydescription]/para/simplesect[@kind='pre']"
       mode="function-clauses"/>
     <xsl:apply-templates 
-      select="detaileddescription/para/simplesect[@kind='post']"
+      select="*[self::detaileddescription or self::inbodydescription]/para/simplesect[@kind='post']"
       mode="function-clauses"/>
     <xsl:apply-templates 
-      select="detaileddescription/para/simplesect[@kind='return']"
+      select="*[self::detaileddescription or self::inbodydescription]/para/simplesect[@kind='return']"
       mode="function-clauses"/>
-    <xsl:if test="detaileddescription/para/parameterlist[@kind='exception']">
+    <xsl:if test="*[self::detaileddescription or self::inbodydescription]/para/parameterlist[@kind='exception']">
       <throws>
         <xsl:apply-templates 
-          select="detaileddescription/para/parameterlist[@kind='exception']"
+          select="*[self::detaileddescription or self::inbodydescription]/para/parameterlist[@kind='exception']"
           mode="function-clauses"/>
       </throws>
     </xsl:if>
-    <xsl:variable name="notes" select="detaileddescription/para/simplesect[@kind='note' or @kind='attention']"/>
+    <xsl:variable name="notes" select="*[self::detaileddescription or self::inbodydescription]/para/simplesect[@kind='note' or @kind='attention']"/>
     <xsl:if test="count($notes) &gt; 0"> 
       <notes>
         <xsl:apply-templates select="$notes" mode="function-clauses"/>
@@ -1107,11 +1159,14 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       </xsl:attribute>
 
       <!-- Specifiers -->
-      <xsl:if test="@static = 'yes'">
-        <xsl:attribute name="specifiers">static</xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@mutable = 'yes'">
-        <xsl:attribute name="specifiers">mutable</xsl:attribute>
+      <xsl:variable name="specifiers">
+        <xsl:if test="@static = 'yes'"><xsl:text> static</xsl:text></xsl:if>
+        <xsl:if test="@mutable = 'yes'"><xsl:text> mutable</xsl:text></xsl:if>
+      </xsl:variable>
+      <xsl:if test="normalize-space($specifiers)">
+        <xsl:attribute name="specifiers">
+          <xsl:value-of select="normalize-space($specifiers)"/>
+        </xsl:attribute>
       </xsl:if>
 
       <type>
@@ -1120,6 +1175,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
 
       <xsl:apply-templates select="briefdescription" mode="passthrough"/>
       <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+      <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
     </data-member>
     </xsl:if>
   </xsl:template>
@@ -1175,6 +1231,14 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
   </xsl:template>
 
   <xsl:template match="detaileddescription" mode="passthrough">
+    <xsl:if test="text()|*">
+      <description>
+        <xsl:apply-templates mode="passthrough"/>
+      </description>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="inbodydescription" mode="passthrough">
     <xsl:if test="text()|*">
       <description>
         <xsl:apply-templates mode="passthrough"/>
