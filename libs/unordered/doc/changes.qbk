@@ -68,5 +68,6 @@ First official release.
   on Visual C++ 2009.
 * Some other minor internal changes to the implementation, tests and
   documentation.
+* Avoid an unnecessary copy in `operator[]`.
 
 [endsect]
