@@ -23,7 +23,7 @@ boost
         struct
         enable_boost_exception_overload
             {
-            typedef struct yes { char q[100]; };
+            struct yes { char q[100]; };
             typedef char no;
             static yes check(exception const *);
             static no check(...);
@@ -34,7 +34,7 @@ boost
         struct
         enable_std_exception_overload
             {
-            typedef struct yes { char q[100]; };
+            struct yes { char q[100]; };
             typedef char no;
             static yes check(std::exception const *);
             static no check(...);
