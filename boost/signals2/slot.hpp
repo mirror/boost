@@ -24,6 +24,14 @@
 #include <boost/visit_each.hpp>
 #include <boost/weak_ptr.hpp>
 
+
+#ifndef BOOST_SIGNALS2_SLOT_MAX_BINDING_ARGS
+#define BOOST_SIGNALS2_SLOT_MAX_BINDING_ARGS 10
+#endif
+// const ArgTypeN & argN
+#define BOOST_SIGNALS2_SLOT_BINDING_ARG_DECL(z, n, data) \
+    const BOOST_PP_CAT(ArgType, n) & BOOST_PP_CAT(arg, n)
+
 namespace boost
 {
   namespace signals2
@@ -82,19 +90,13 @@ namespace boost
       slot(const F& f): base_type(f)
       {}
       // bind syntactic sugar
-// const AN & aN
-#define BOOST_SIGNALS2_SLOT_BINDING_ARG_DECL(z, n, data) \
-  const BOOST_PP_CAT(A, n) & BOOST_PP_CAT(a, n)
-// template<typename F, typename A0, typename A1, ..., typename An-1> slot(...
+// template<typename F, typename ArgType0, typename ArgType1, ..., typename ArgTypen-1> slot(...
 #define BOOST_SIGNALS2_SLOT_BINDING_CONSTRUCTOR(z, n, data) \
-  template<typename F, BOOST_PP_ENUM_PARAMS(n, typename A)> \
+  template<typename F, BOOST_PP_ENUM_PARAMS(n, typename ArgType)> \
   slot(const F &f, BOOST_PP_ENUM(n, BOOST_SIGNALS2_SLOT_BINDING_ARG_DECL, ~)): \
-    base_type(f, BOOST_PP_ENUM_PARAMS(n, a)) \
+    base_type(f, BOOST_PP_ENUM_PARAMS(n, arg)) \
   {}
-#define BOOST_SIGNALS2_SLOT_MAX_BINDING_ARGS 10
       BOOST_PP_REPEAT_FROM_TO(1, BOOST_SIGNALS2_SLOT_MAX_BINDING_ARGS, BOOST_SIGNALS2_SLOT_BINDING_CONSTRUCTOR, ~)
-#undef BOOST_SIGNALS2_SLOT_MAX_BINDING_ARGS
-#undef BOOST_SIGNALS2_SLOT_BINDING_ARG_DECL
 #undef BOOST_SIGNALS2_SLOT_BINDING_CONSTRUCTOR
     };
   } // namespace signals2
