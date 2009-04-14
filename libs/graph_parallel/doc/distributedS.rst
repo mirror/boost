@@ -45,5 +45,5 @@ Authors: Douglas Gregor and Andrew Lumsdaine
 
 .. _adjacency_list: http://www.boost.org/libs/graph/doc/adjacency_list.html
 .. _Distributed adjacency list: distributed_adjacency_list.html
-.. _Process group: ../parallel/ProcessGroup.html
+.. _Process group: process_group.html
 

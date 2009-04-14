@@ -19,6 +19,7 @@ set(PBGL_DOCS
   overview                     
   page_rank                    
   process_group                
+  mpi_bsp_process_group
   simple_trigger               
   strong_components            
   tsin_depth_first_visit       
@@ -44,13 +45,13 @@ set(PBGL_IMAGES
 set(PBGL_DOC_TARGETS)
 separate_arguments(RST2HTML_FLAGS)
 foreach(DOC ${PBGL_DOCS})
-  add_custom_command(OUTPUT "${PBGL_BINARY_DIR}/libs/graph/doc/parallel/${DOC}.html"
+  add_custom_command(OUTPUT "${PBGL_BINARY_DIR}/libs/graph_parallel/doc/${DOC}.html"
     COMMAND "${RST2HTML}" 
-    ARGS ${RST2HTML_FLAGS} "${PBGL_SOURCE_DIR}/libs/graph/doc/parallel/${DOC}.rst"
+    ARGS ${RST2HTML_FLAGS} "${PBGL_SOURCE_DIR}/libs/graph_parallel/doc/${DOC}.rst"
          "${PBGL_BINARY_DIR}/libs/graph/doc/parallel/${DOC}.html"
     COMMENT "Generating document ${DOC}.html..."
     )
-  list(APPEND PBGL_DOC_TARGETS "${PBGL_BINARY_DIR}/libs/graph/doc/parallel/${DOC}.html")
+  list(APPEND PBGL_DOC_TARGETS "${PBGL_BINARY_DIR}/libs/graph_parallel/doc/${DOC}.html")
 endforeach(DOC)
 
 add_custom_target(doc ALL
