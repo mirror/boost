@@ -224,25 +224,25 @@ namespace boost
         std::pair<iterator, bool> emplace(Args&&... args)
         {
             return boost::unordered_detail::pair_cast<iterator, bool>(
-                base.insert(std::forward<Args>(args)...));
+                base.emplace(std::forward<Args>(args)...));
         }
 
         template <class... Args>
         iterator emplace_hint(const_iterator hint, Args&&... args)
         {
-            return iterator(base.insert_hint(get(hint), std::forward<Args>(args)...));
+            return iterator(base.emplace_hint(get(hint), std::forward<Args>(args)...));
         }
 #endif
 
         std::pair<iterator, bool> insert(const value_type& obj)
         {
             return boost::unordered_detail::pair_cast<iterator, bool>(
-                    base.insert(obj));
+                    base.emplace(obj));
         }
 
         iterator insert(const_iterator hint, const value_type& obj)
         {
-            return iterator(base.insert_hint(get(hint), obj));
+            return iterator(base.emplace_hint(get(hint), obj));
         }
 
         template <class InputIterator>
@@ -630,24 +630,24 @@ namespace boost
         template <class... Args>
         iterator emplace(Args&&... args)
         {
-            return iterator(base.insert(std::forward<Args>(args)...));
+            return iterator(base.emplace(std::forward<Args>(args)...));
         }
 
         template <class... Args>
         iterator emplace_hint(const_iterator hint, Args&&... args)
         {
-            return iterator(base.insert_hint(get(hint), std::forward<Args>(args)...));
+            return iterator(base.emplace_hint(get(hint), std::forward<Args>(args)...));
         }
 #endif
 
         iterator insert(const value_type& obj)
         {
-            return iterator(base.insert(obj));
+            return iterator(base.emplace(obj));
         }
 
         iterator insert(const_iterator hint, const value_type& obj)
         {
-            return iterator(base.insert_hint(get(hint), obj));
+            return iterator(base.emplace_hint(get(hint), obj));
         }
 
         template <class InputIterator>

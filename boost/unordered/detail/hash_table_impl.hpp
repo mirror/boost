@@ -1604,67 +1604,67 @@ namespace boost {
 
             // if hash function throws, basic exception safety
             // strong otherwise
-            iterator_base insert(value_type const& v)
+            iterator_base emplace(value_type const& v)
             {
                 // Create the node before rehashing in case it throws an
                 // exception (need strong safety in such a case).
                 node_constructor a(data_.allocators_);
                 a.construct(v);
 
-                return insert_impl(a);
+                return emplace_impl(a);
             }
 
             // Insert (equivalent key containers)
 
             // if hash function throws, basic exception safety
             // strong otherwise
-            iterator_base insert_hint(iterator_base const& it, value_type const& v)
+            iterator_base emplace_hint(iterator_base const& it, value_type const& v)
             {
                 // Create the node before rehashing in case it throws an
                 // exception (need strong safety in such a case).
                 node_constructor a(data_.allocators_);
                 a.construct(v);
 
-                return insert_hint_impl(it, a);
+                return emplace_hint_impl(it, a);
             }
 
 #else
 
-            // Insert (equivalent key containers)
-            // (I'm using an overloaded insert for both 'insert' and 'emplace')
+            // Emplace (equivalent key containers)
+            // (I'm using an overloaded emplace for both 'insert' and 'emplace')
 
             // if hash function throws, basic exception safety
             // strong otherwise
             template <class... Args>
-            iterator_base insert(Args&&... args)
+            iterator_base emplace(Args&&... args)
             {
                 // Create the node before rehashing in case it throws an
                 // exception (need strong safety in such a case).
                 node_constructor a(data_.allocators_);
                 a.construct(std::forward<Args>(args)...);
 
-                return insert_impl(a);
+                return emplace_impl(a);
             }
 
             // Insert (equivalent key containers)
-            // (I'm using an overloaded insert for both 'insert' and 'emplace')
+            // (I'm using an overloaded emplace for both 'insert' and 'emplace')
 
             // if hash function throws, basic exception safety
             // strong otherwise
             template <class... Args>
-            iterator_base insert_hint(iterator_base const& it, Args&&... args)
+            iterator_base emplace_hint(iterator_base const& it, Args&&... args)
             {
                 // Create the node before rehashing in case it throws an
                 // exception (need strong safety in such a case).
                 node_constructor a(data_.allocators_);
                 a.construct(std::forward<Args>(args)...);
 
-                return insert_hint_impl(it, a);
+                return emplace_hint_impl(it, a);
             }
 
 #endif
 
-            iterator_base insert_impl(node_constructor& a)
+            iterator_base emplace_impl(node_constructor& a)
             {
                 key_type const& k = extract_key(a.get()->value());
                 size_type hash_value = hash_function()(k);
@@ -1685,13 +1685,13 @@ namespace boost {
                 );
             }
 
-            iterator_base insert_hint_impl(iterator_base const& it, node_constructor& a)
+            iterator_base emplace_hint_impl(iterator_base const& it, node_constructor& a)
             {
                 // equal can throw, but with no effects
                 if (it == data_.end() || !equal(extract_key(a.get()->value()), *it)) {
                     // Use the standard insert if the iterator doesn't point
                     // to a matching key.
-                    return insert_impl(a);
+                    return emplace_impl(a);
                 }
                 else {
                     // Find the first node in the group - so that the node
@@ -1724,7 +1724,7 @@ namespace boost {
             {
                 size_type distance = unordered_detail::distance(i, j);
                 if(distance == 1) {
-                    insert(*i);
+                    emplace(*i);
                 }
                 else {
                     // Only require basic exception safety here
@@ -1754,7 +1754,7 @@ namespace boost {
             {
                 // If only inserting 1 element, get the required
                 // safety since insert is only called once.
-                for (; i != j; ++i) insert(*i);
+                for (; i != j; ++i) emplace(*i);
             }
 
         public:
@@ -1809,7 +1809,7 @@ namespace boost {
 
             // if hash function throws, basic exception safety
             // strong otherwise
-            std::pair<iterator_base, bool> insert(value_type const& v)
+            std::pair<iterator_base, bool> emplace(value_type const& v)
             {
                 // No side effects in this initial code
                 key_type const& k = extract_key(v);
@@ -1849,12 +1849,12 @@ namespace boost {
 
             // if hash function throws, basic exception safety
             // strong otherwise
-            iterator_base insert_hint(iterator_base const& it, value_type const& v)
+            iterator_base emplace_hint(iterator_base const& it, value_type const& v)
             {
                 if(it != data_.end() && equal(extract_key(v), *it))
                     return it;
                 else
-                    return insert(v).first;
+                    return emplace(v).first;
             }
 
 #else
@@ -1869,15 +1869,15 @@ namespace boost {
             // if hash function throws, basic exception safety
             // strong otherwise
             template<typename... Args>
-            std::pair<iterator_base, bool> insert(Args&&... args)
+            std::pair<iterator_base, bool> emplace(Args&&... args)
             {
-                return insert_impl(
+                return emplace_impl(
                     extract_key(std::forward<Args>(args)...),
                     std::forward<Args>(args)...);
             }
 
             template<typename... Args>
-            std::pair<iterator_base, bool> insert_impl(key_type const& k, Args&&... args)
+            std::pair<iterator_base, bool> emplace_impl(key_type const& k, Args&&... args)
             {
                 // No side effects in this initial code
                 size_type hash_value = hash_function()(k);
@@ -1911,7 +1911,7 @@ namespace boost {
             }
 
             template<typename... Args>
-            std::pair<iterator_base, bool> insert_impl(no_key, Args&&... args)
+            std::pair<iterator_base, bool> emplace_impl(no_key, Args&&... args)
             {
                 // Construct the node regardless - in order to get the key.
                 // It will be discarded if it isn't used
@@ -1947,10 +1947,10 @@ namespace boost {
             // if hash function throws, basic exception safety
             // strong otherwise
             template<typename... Args>
-            iterator_base insert_hint(iterator_base const&, Args&&... args)
+            iterator_base emplace_hint(iterator_base const&, Args&&... args)
             {
                 // Life is complicated - just call the normal implementation.
-                return insert(std::forward<Args>(args)...).first;
+                return emplace(std::forward<Args>(args)...).first;
             }
 #endif
 
