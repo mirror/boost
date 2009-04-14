@@ -33,7 +33,6 @@
 #include <boost/signals2/detail/slot_call_iterator.hpp>
 #include <boost/signals2/mutex.hpp>
 #include <boost/signals2/connection.hpp>
-#include <boost/signals2/shared_connection_block.hpp>
 #include <boost/signals2/slot.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/type_traits.hpp>
