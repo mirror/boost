@@ -14,7 +14,7 @@
   {
   public:
     vertex_list_adaptor(const Graph& g, 
-		        const GlobalIndexMap& index_map = GlobalIndexMap());
+                        const GlobalIndexMap& index_map = GlobalIndexMap());
   };
 
   template<typename Graph, typename GlobalIndexMap>

@@ -110,21 +110,21 @@ IN/UTIL: ``SupervertexMap supervertex_map``
              typename SupervertexMap>
     OutputIterator
     dense_boruvka_minimum_spanning_tree(const Graph& g, WeightMap weight_map,
-            			      OutputIterator out, 
-          	 		      VertexIndexMap index,
-          			      RankMap rank_map, ParentMap parent_map,
-          			      SupervertexMap supervertex_map);
+                                      OutputIterator out, 
+                                      VertexIndexMap index,
+                                      RankMap rank_map, ParentMap parent_map,
+                                      SupervertexMap supervertex_map);
 
     template<typename Graph, typename WeightMap, typename OutputIterator, 
              typename VertexIndex>
     OutputIterator
     dense_boruvka_minimum_spanning_tree(const Graph& g, WeightMap weight_map,
-          			      OutputIterator out, VertexIndex index);
+                                      OutputIterator out, VertexIndex index);
 
     template<typename Graph, typename WeightMap, typename OutputIterator>
     OutputIterator
     dense_boruvka_minimum_spanning_tree(const Graph& g, WeightMap weight_map,
-      				      OutputIterator out);
+                                      OutputIterator out);
   }
 
 Description

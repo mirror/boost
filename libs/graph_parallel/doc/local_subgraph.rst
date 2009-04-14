@@ -45,8 +45,8 @@ distributed graph ``g``.
 
 ::
  
-  DistributedGraph&         base()       	 { return g; }
-  const DistributedGraph&   base() const 	 { return g; }
+  DistributedGraph&         base()               { return g; }
+  const DistributedGraph&   base() const         { return g; }
 
 Returns the underlying distributed graph.
 

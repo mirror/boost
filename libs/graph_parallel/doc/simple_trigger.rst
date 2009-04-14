@@ -40,7 +40,7 @@ Reference
       void 
       simple_trigger(ProcessGroup& pg, int tag, Class* self, 
                      Result (Class::*pmf)(int source, int tag, const T& data, 
-	  			          trigger_receive_context context))
+                                          trigger_receive_context context))
 
 The ``simple_trigger`` function registers a trigger that invokes the
 given member function (``pmf``) on the object ``self`` whenever a

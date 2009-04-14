@@ -10,7 +10,7 @@
 ::
  
   template<typename ProcessGroup, typename Distribution, 
-	   typename RandomGenerator, typename Graph>
+           typename RandomGenerator, typename Graph>
   class scalable_rmat_iterator
   {
   public:

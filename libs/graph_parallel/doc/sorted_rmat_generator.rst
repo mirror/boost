@@ -59,7 +59,7 @@ Constructs a past-the-end iterator.
   sorted_rmat_iterator(RandomGenerator& gen, vertices_size_type n, 
                        edges_size_type m, double a, double b, double c, 
                        double d, bool permute_vertices = true,
-		       EdgePredicate ep = keep_all_edges());
+                       EdgePredicate ep = keep_all_edges());
 
 Constructs an R-MAT generator iterator that creates a graph with ``n``
 vertices and ``m`` edges.  ``a``, ``b``, ``c``, and ``d`` represent
