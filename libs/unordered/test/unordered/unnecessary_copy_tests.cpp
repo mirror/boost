@@ -192,6 +192,8 @@ namespace unnecessary_copy_tests
 
         // The container will have to create b copy in order to compare with
         // the existing element.
+        //
+        // Note to self: If copy_count == 0 it's an error not an optimization.
 
         reset();
         x.emplace(b, b);

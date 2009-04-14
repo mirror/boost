@@ -1428,7 +1428,18 @@ namespace boost {
 
             // key extractors
 
+            struct no_key {
+                no_key() {}
+                template <class T> no_key(T const&) {}
+            };
+
             // no throw
+            
+            static no_key extract_key()
+            {
+                return no_key();
+            }
+            
             static key_type const& extract_key(value_type const& v)
             {
                 return extract(v, (type_wrapper<value_type>*)0);
@@ -1445,40 +1456,46 @@ namespace boost {
             {
                 return v.first;
             }
-
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
-            struct no_key {};
-
-            template <typename Arg1, typename... Args>
-            static typename boost::enable_if<
-                boost::mpl::and_<
-                    boost::mpl::not_<boost::is_same<key_type, value_type> >,
-                    boost::is_same<Arg1, key_type>
-                >,
-                key_type>::type const& extract_key(Arg1 const& k, Args const&...)
+            
+            template <typename Arg>
+            static BOOST_DEDUCED_TYPENAME
+                boost::mpl::if_<boost::is_same<Arg, key_type>, key_type const&, no_key>::type
+                extract_key(Arg const& k)
             {
                 return k;
             }
 
             template <typename First, typename Second>
-            static typename boost::enable_if<
-                boost::mpl::and_<
-                    boost::mpl::not_<boost::is_same<key_type, value_type> >,
-                    boost::is_same<key_type,
-                        typename boost::remove_const<
-                            typename boost::remove_reference<First>::type
-                        >::type>
-                >,
-                key_type>::type const& extract_key(std::pair<First, Second> const& v)
+            static BOOST_DEDUCED_TYPENAME
+                boost::mpl::if_<
+                    boost::mpl::and_<
+                        boost::mpl::not_<boost::is_same<key_type, value_type> >,
+                        boost::is_same<key_type,
+                            typename boost::remove_const<
+                                typename boost::remove_reference<First>::type
+                            >::type>
+                    >,
+                    key_type const&, no_key
+                >::type extract_key(std::pair<First, Second> const& v)
             {
                 return v.first;
             }
 
-            template <typename... Args>
-            static no_key extract_key(Args const&...)
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+
+            template <typename Arg, typename... Args>
+            static BOOST_DEDUCED_TYPENAME
+                boost::mpl::if_<
+                    boost::mpl::and_<
+                        boost::mpl::not_<boost::is_same<value_type, key_type> >,
+                        boost::is_same<Arg, key_type>
+                    >,
+                    key_type const&, no_key
+                >::type extract_key(Arg const& k, Args const&...)
             {
-                return no_key();
+                return k;
             }
+
 #endif
 
         public:
@@ -1964,6 +1981,13 @@ namespace boost {
             template <typename InputIterator>
             void insert_range(InputIterator i, InputIterator j)
             {
+                if(i != j)
+                    return insert_range_impl(extract_key(*i), i, j);
+            }
+            
+            template <typename InputIterator>
+            void insert_range_impl(key_type const&, InputIterator i, InputIterator j)
+            {
                 node_constructor a(data_.allocators_);
 
                 for (; i != j; ++i) {
@@ -1979,6 +2003,36 @@ namespace boost {
                         // Create the node before rehashing in case it throws an
                         // exception (need strong safety in such a case).
                         a.construct(*i);
+
+                        // reserve has basic exception safety if the hash function
+                        // throws, strong otherwise.
+                        if(size() + 1 >= max_load_) {
+                            reserve_for_insert(size() + insert_size(i, j));
+                            bucket = data_.bucket_ptr_from_hash(hash_value);
+                        }
+
+                        // Nothing after this point can throw.
+                        data_.link_node_in_bucket(a, bucket);
+                    }
+                }
+            }
+
+            template <typename InputIterator>
+            void insert_range_impl(no_key, InputIterator i, InputIterator j)
+            {
+                node_constructor a(data_.allocators_);
+
+                for (; i != j; ++i) {
+                    // No side effects in this initial code
+                    a.construct(*i);
+                    key_type const& k = extract_key(a.get()->value());
+                    size_type hash_value = hash_function()(extract_key(k));
+                    bucket_ptr bucket = data_.bucket_ptr_from_hash(hash_value);
+                    link_ptr pos = find_iterator(bucket, k);
+
+                    if (!BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+                        // Doesn't already exist, add to bucket.
+                        // Side effects only in this block.
 
                         // reserve has basic exception safety if the hash function
                         // throws, strong otherwise.

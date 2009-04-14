@@ -28,19 +28,15 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/aligned_storage.hpp>
 #include <boost/type_traits/alignment_of.hpp>
+#include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/remove_const.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
+#include <boost/mpl/not.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/utility/swap.hpp>
 
 #include <boost/mpl/aux_/config/eti.hpp>
-
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
-#include <boost/type_traits/remove_reference.hpp>
-#include <boost/type_traits/remove_const.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/mpl/not.hpp>
-#endif
 
 #if BOOST_WORKAROUND(__BORLANDC__, <= 0x0582)
 #define BOOST_UNORDERED_BORLAND_BOOL(x) (bool)(x)
