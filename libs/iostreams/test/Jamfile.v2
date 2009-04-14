@@ -25,7 +25,6 @@ rule test-iostreams ( sources * : requirements * ) {
             : # build requirements
                 <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
                 <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
-                <toolset>msvc,<stdlib>stlport:<runtime-link>static
                 <toolset>cw-9.3,<os>darwin:<runtime-link>static
                 <define>BOOST_IOSTREAMS_NO_LIB
                 <link>shared:<define>BOOST_IOSTREAMS_DYN_LINK=1
