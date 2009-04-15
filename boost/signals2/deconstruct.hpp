@@ -68,7 +68,7 @@ public:
         return _sp;
     }
 #if defined( BOOST_HAS_VARIADIC_TMPL ) && defined( BOOST_HAS_RVALUE_REFS )
-    template<class T, class... Args>
+    template<class... Args>
       const shared_ptr<T>& postconstruct(Args && ... args)
     {
         if(!_postconstructed)
@@ -77,6 +77,7 @@ public:
                 detail::forward<Args>(args)...);
             _postconstructed = true;
         }
+        return _sp;
     }
 #else
     template<typename A1>
@@ -481,7 +482,7 @@ template< class T > postconstructor_invoker<T> deconstruct()
 
 template< class T, class... Args > postconstructor_invoker< T > deconstruct( Args && ... args )
 {
-    return deconstruct_access::deconstruct( detail::forward<Args>( args )... );
+    return deconstruct_access::deconstruct<T>( detail::forward<Args>( args )... );
 }
 
 #else
