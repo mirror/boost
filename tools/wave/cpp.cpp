@@ -454,7 +454,7 @@ namespace {
         try {
             if (vm.count("state") > 0) {
                 fs::path state_file (
-                    boost::wave::util::create_path(vm["state"].as<string>()));
+                    boost::wave::util::create_path(vm["state"].as<std::string>()));
                 if (state_file == "-") 
                     state_file = boost::wave::util::create_path("wave.state");
 
@@ -467,8 +467,8 @@ namespace {
                 if (ifs.is_open()) {
                     using namespace boost::serialization;
                     iarchive ia(ifs);
-                    string version;
-                    
+                    std::string version;
+
                     ia >> make_nvp("version", version);  // load version
                     if (version == CPP_VERSION_FULL_STR)
                         ia >> make_nvp("state", ctx);    // load the internal tables from disc
@@ -499,7 +499,7 @@ namespace {
         try {
             if (vm.count("state") > 0) {
                 fs::path state_file (boost::wave::util::create_path(
-                    vm["state"].as<string>()));
+                    vm["state"].as<std::string>()));
                 if (state_file == "-") 
                     state_file = boost::wave::util::create_path("wave.state");
 
@@ -517,7 +517,7 @@ namespace {
                 else {
                     using namespace boost::serialization;
                     oarchive oa(ofs);
-                    string version(CPP_VERSION_FULL_STR);
+                    std::string version(CPP_VERSION_FULL_STR);
                     oa << make_nvp("version", version);  // write version
                     oa << make_nvp("state", ctx);        // write the internal tables to disc
                 }
@@ -615,19 +615,19 @@ int error_count = 0;
 
     try {
     // process the given file
-    string instring;
+    std::string instring;
 
         instream.unsetf(std::ios::skipws);
 
         if (!input_is_stdin) {
 #if defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
             // this is known to be very slow for large files on some systems
-            copy (istream_iterator<char>(instream),
-                  istream_iterator<char>(), 
-                  inserter(instring, instring.end()));
+            copy (std::istream_iterator<char>(instream),
+                  std::istream_iterator<char>(), 
+                  std::inserter(instring, instring.end()));
 #else
-            instring = string(istreambuf_iterator<char>(instream.rdbuf()),
-                              istreambuf_iterator<char>());
+            instring = std::string(std::istreambuf_iterator<char>(instream.rdbuf()),
+                                   std::istreambuf_iterator<char>());
 #endif 
         }
         
@@ -642,7 +642,7 @@ int error_count = 0;
         if (vm.count("traceto")) {
         // try to open the file, where to put the trace output
         fs::path trace_file (boost::wave::util::create_path(
-            vm["traceto"].as<string>()));
+            vm["traceto"].as<std::string>()));
         
             if (trace_file != "-") {
                 fs::create_directories(boost::wave::util::branch_path(trace_file));
@@ -666,7 +666,7 @@ int error_count = 0;
         if (vm.count("listincludes")) {
         // try to open the file, where to put the include list 
         fs::path includes_file(boost::wave::util::create_path(
-            vm["listincludes"].as<string>()));
+            vm["listincludes"].as<std::string>()));
         
             if (includes_file != "-") {
                 fs::create_directories(boost::wave::util::branch_path(includes_file));
@@ -720,8 +720,8 @@ int error_count = 0;
     // This this the central piece of the Wave library, it provides you with 
     // the iterators to get the preprocessed tokens and allows to configure
     // the preprocessing stage in advance.
-    bool allow_output = true;   // will be manipulated from inside the hooks object
-    string default_outfile;     // will be used from inside the hooks object
+    bool allow_output = true;     // will be manipulated from inside the hooks object
+    std::string default_outfile;  // will be used from inside the hooks object
     trace_macro_expansion<token_type> hooks(preserve_whitespace, 
         output, traceout, includelistout, enable_trace, enable_system_command,
         allow_output, default_outfile);
@@ -799,10 +799,10 @@ int error_count = 0;
 
     // add include directories to the system include search paths
         if (vm.count("sysinclude")) {
-        vector<string> syspaths = vm["sysinclude"].as<vector<string> >();
-        
-            vector<string>::const_iterator end = syspaths.end();
-            for (vector<string>::const_iterator cit = syspaths.begin(); 
+        vector<std::string> syspaths = vm["sysinclude"].as<vector<string> >();
+
+            vector<std::string>::const_iterator end = syspaths.end();
+            for (vector<std::string>::const_iterator cit = syspaths.begin(); 
                  cit != end; ++cit)
             {
                 ctx.add_sysinclude_path(cmd_line_utils::trim_quotes(*cit).c_str());
@@ -813,9 +813,9 @@ int error_count = 0;
         if (vm.count("include")) {
             cmd_line_utils::include_paths const &ip = 
                 vm["include"].as<cmd_line_utils::include_paths>();
-            vector<string>::const_iterator end = ip.paths.end();
+            vector<std::string>::const_iterator end = ip.paths.end();
 
-            for (vector<string>::const_iterator cit = ip.paths.begin(); 
+            for (vector<std::string>::const_iterator cit = ip.paths.begin(); 
                  cit != end; ++cit)
             {
                 ctx.add_include_path(cmd_line_utils::trim_quotes(*cit).c_str());
@@ -826,8 +826,8 @@ int error_count = 0;
                 ctx.set_sysinclude_delimiter();
                  
         // add system include directories to the include path
-            vector<string>::const_iterator sysend = ip.syspaths.end();
-            for (vector<string>::const_iterator syscit = ip.syspaths.begin(); 
+            vector<std::string>::const_iterator sysend = ip.syspaths.end();
+            for (vector<std::string>::const_iterator syscit = ip.syspaths.begin(); 
                  syscit != sysend; ++syscit)
             {
                 ctx.add_sysinclude_path(cmd_line_utils::trim_quotes(*syscit).c_str());
@@ -836,9 +836,9 @@ int error_count = 0;
     
     // add additional defined macros 
         if (vm.count("define")) {
-            vector<string> const &macros = vm["define"].as<vector<string> >();
-            vector<string>::const_iterator end = macros.end();
-            for (vector<string>::const_iterator cit = macros.begin(); 
+            vector<std::string> const &macros = vm["define"].as<vector<string> >();
+            vector<std::string>::const_iterator end = macros.end();
+            for (vector<std::string>::const_iterator cit = macros.begin(); 
                  cit != end; ++cit)
             {
                 ctx.add_macro_definition(*cit);
@@ -847,10 +847,10 @@ int error_count = 0;
 
     // add additional predefined macros 
         if (vm.count("predefine")) {
-            vector<string> const &predefmacros = 
-                vm["predefine"].as<vector<string> >();
-            vector<string>::const_iterator end = predefmacros.end();
-            for (vector<string>::const_iterator cit = predefmacros.begin(); 
+            vector<std::string> const &predefmacros = 
+                vm["predefine"].as<vector<std::string> >();
+            vector<std::string>::const_iterator end = predefmacros.end();
+            for (vector<std::string>::const_iterator cit = predefmacros.begin(); 
                  cit != end; ++cit)
             {
                 ctx.add_macro_definition(*cit, true);
@@ -859,10 +859,10 @@ int error_count = 0;
 
     // undefine specified macros
         if (vm.count("undefine")) {
-            vector<string> const &undefmacros = 
-                vm["undefine"].as<vector<string> >();
-            vector<string>::const_iterator end = undefmacros.end();
-            for (vector<string>::const_iterator cit = undefmacros.begin(); 
+            vector<std::string> const &undefmacros = 
+                vm["undefine"].as<vector<std::string> >();
+            vector<std::string>::const_iterator end = undefmacros.end();
+            for (vector<std::string>::const_iterator cit = undefmacros.begin(); 
                  cit != end; ++cit)
             {
                 ctx.remove_macro_definition(*cit, true);
@@ -884,7 +884,7 @@ int error_count = 0;
         if (vm.count("output")) {
         // try to open the file, where to put the preprocessed output
         fs::path out_file (boost::wave::util::create_path(
-            vm["output"].as<string>()));
+            vm["output"].as<std::string>()));
 
             if (out_file == "-") {
                 allow_output = false;     // inhibit output initially
@@ -941,13 +941,13 @@ int error_count = 0;
         // add the filenames to force as include files in _reverse_ order
         // the second parameter 'is_last' of the force_include function should
         // be set to true for the last (first given) file.
-            vector<string> const &force = 
-                vm["forceinclude"].as<vector<string> >();
-            vector<string>::const_reverse_iterator rend = force.rend();
-            for (vector<string>::const_reverse_iterator cit = force.rbegin(); 
+            vector<std::string> const &force = 
+                vm["forceinclude"].as<vector<std::string> >();
+            vector<std::string>::const_reverse_iterator rend = force.rend();
+            for (vector<std::string>::const_reverse_iterator cit = force.rbegin(); 
                  cit != rend; /**/)
             {
-                string filename(*cit);
+                std::string filename(*cit);
                 first.force_include(filename.c_str(), ++cit == rend);
             }
         }
@@ -1043,7 +1043,7 @@ int error_count = 0;
 
     // list all defined macros at the end of the preprocessing
         if (vm.count("macronames")) {
-            if (!list_macro_names(ctx, vm["macronames"].as<string>()))
+            if (!list_macro_names(ctx, vm["macronames"].as<std::string>()))
                 return -1;
         }
     }
@@ -1097,7 +1097,7 @@ main (int argc, char *argv[])
             ("help,h", "print out program usage (this message)")
             ("version,v", "print the version number")
             ("copyright,c", "print out the copyright statement")
-            ("config-file", po::value<vector<string> >()->composing(), 
+            ("config-file", po::value<vector<std::string> >()->composing(), 
                 "specify a config file (alternatively: @filepath)")
         ;
 
@@ -1105,22 +1105,22 @@ main (int argc, char *argv[])
     po::options_description desc_generic ("Options allowed additionally in a config file");
 
         desc_generic.add_options()
-            ("output,o", po::value<string>(), 
+            ("output,o", po::value<std::string>(), 
                 "specify a file [arg] to use for output instead of stdout or "
                 "disable output [-]")
             ("autooutput,E", 
                 "output goes into a file named <input_basename>.i")
             ("include,I", po::value<cmd_line_utils::include_paths>()->composing(), 
                 "specify an additional include directory")
-            ("sysinclude,S", po::value<vector<string> >()->composing(), 
+            ("sysinclude,S", po::value<vector<std::string> >()->composing(), 
                 "specify an additional system include directory")
-            ("forceinclude,F", po::value<vector<string> >()->composing(),
+            ("forceinclude,F", po::value<vector<std::string> >()->composing(),
                 "force inclusion of the given file")
-            ("define,D", po::value<vector<string> >()->composing(), 
+            ("define,D", po::value<vector<std::string> >()->composing(), 
                 "specify a macro to define (as macro[=[value]])")
-            ("predefine,P", po::value<vector<string> >()->composing(), 
+            ("predefine,P", po::value<vector<std::string> >()->composing(), 
                 "specify a macro to predefine (as macro[=[value]])")
-            ("undefine,U", po::value<vector<string> >()->composing(), 
+            ("undefine,U", po::value<vector<std::string> >()->composing(), 
                 "specify a macro to undefine")
             ("nesting,n", po::value<int>(), 
                 "specify a new maximal include nesting depth")
@@ -1129,7 +1129,7 @@ main (int argc, char *argv[])
     po::options_description desc_ext ("Extended options (allowed everywhere)");
 
         desc_ext.add_options()
-            ("traceto,t", po::value<string>(), 
+            ("traceto,t", po::value<std::string>(), 
                 "output macro expansion tracing information to a file [arg] "
                 "or to stderr [-]")
             ("timer", "output overall elapsed computing time to stderr")
@@ -1138,9 +1138,9 @@ main (int argc, char *argv[])
             ("variadics", "enable certain C99 extensions in C++ mode")
             ("c99", "enable C99 mode (implies --variadics)")
 #endif 
-            ("listincludes,l", po::value<string>(), 
+            ("listincludes,l", po::value<std::string>(), 
                 "list names of included files to a file [arg] or to stdout [-]")
-            ("macronames,m", po::value<string>(), 
+            ("macronames,m", po::value<std::string>(), 
                 "list all defined macros to a file [arg] or to stdout [-]")
             ("preserve,p", po::value<int>()->default_value(0), 
                 "preserve whitespace\n"
@@ -1161,7 +1161,7 @@ main (int argc, char *argv[])
             ("noguard,G", "disable include guard detection")
 #endif
 #if BOOST_WAVE_SERIALIZATION != 0
-            ("state,s", po::value<string>(), 
+            ("state,s", po::value<std::string>(), 
                 "load and save state information from/to the given file [arg] "
                 "or 'wave.state' [-] (interactive mode only)")
 #endif
@@ -1225,10 +1225,10 @@ main (int argc, char *argv[])
     // if there is specified at least one config file, parse it and add the 
     // options to the main variables_map
         if (vm.count("config-file")) {
-            vector<string> const &cfg_files = 
-                vm["config-file"].as<vector<string> >();
-            vector<string>::const_iterator end = cfg_files.end();
-            for (vector<string>::const_iterator cit = cfg_files.begin(); 
+            vector<std::string> const &cfg_files = 
+                vm["config-file"].as<vector<std::string> >();
+            vector<std::string>::const_iterator end = cfg_files.end();
+            for (vector<std::string>::const_iterator cit = cfg_files.begin(); 
                  cit != end; ++cit)
             {
             // parse a single config file and store the results
