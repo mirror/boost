@@ -23,6 +23,7 @@ compile test_mixed_value_types.cpp ;
 compile test_complicated_system.cpp ;
 compile test_reduce_unit.cpp ;
 compile test_unscale.cpp ;
+compile test_constants.cpp ;
 
 run test_dimensionless_quantity.cpp ;
 run test_implicit_conversion.cpp ;
