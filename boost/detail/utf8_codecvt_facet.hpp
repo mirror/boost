@@ -87,7 +87,6 @@
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std {
-    using ::codecvt;
     using ::mbstate_t;
     using ::size_t;
 }
