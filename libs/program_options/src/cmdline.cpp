@@ -23,6 +23,7 @@
 #include <cassert>
 #include <cstring>
 #include <cctype>
+#include <climits>
 
 #include <cstdio>
 
@@ -272,8 +273,8 @@ namespace boost { namespace program_options { namespace detail {
             if (!xd)
                 continue;
 
-            int min_tokens = xd->semantic()->min_tokens();
-            int max_tokens = xd->semantic()->max_tokens();
+            unsigned min_tokens = xd->semantic()->min_tokens();
+            unsigned max_tokens = xd->semantic()->max_tokens();
             if (min_tokens < max_tokens && opt.value.size() < max_tokens)
             {
                 // This option may grab some more tokens.
@@ -281,12 +282,20 @@ namespace boost { namespace program_options { namespace detail {
                 // recognized as key options.
 
                 int can_take_more = max_tokens - opt.value.size();
-                int j = i+1;
+                unsigned j = i+1;
                 for (; can_take_more && j < result.size(); --can_take_more, ++j)
                 {
                     option& opt2 = result[j];
                     if (!opt2.string_key.empty())
                         break;
+
+                    if (opt2.position_key == INT_MAX)
+                    {
+                        // We use INT_MAX to mark positional options that
+                        // were found after the '--' terminator and therefore
+                        // should stay positional forever.
+                        break;
+                    }
 
                     assert(opt2.value.size() == 1);
                     
@@ -543,6 +552,8 @@ namespace boost { namespace program_options { namespace detail {
             {
                 option opt;
                 opt.value.push_back(args[i]);
+                opt.original_tokens.push_back(args[i]);
+                opt.position_key = INT_MAX;
                 result.push_back(opt);
             }
             args.clear();
