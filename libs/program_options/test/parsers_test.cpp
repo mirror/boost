@@ -163,6 +163,35 @@ void test_command_line()
     BOOST_CHECK_EQUAL(a5[1].value[1], "2");
     BOOST_CHECK_EQUAL(a5[1].value[2], "3");
     check_value(a5[2], "-x", "8");   
+
+
+    po::options_description desc4( "" );
+    desc4.add_options()
+        ( "multitoken,m",
+          po::value< std::vector< std::string > >()->multitoken(),
+          "values"
+            )
+        ( "file",
+          po::value< std::string >(),
+          "the file to process"
+            )
+        ;
+
+    po::positional_options_description p;
+    p.add( "file", 1 );
+
+    char* cmdline6[] = {"", "-m", "token1", "token2", "--", "some_file"};
+    vector<option> a6 = 
+        command_line_parser(6, cmdline6).options(desc4).positional(p)
+        .run().options;
+    BOOST_CHECK_EQUAL(a6.size(), 2u);
+    BOOST_REQUIRE(a6[0].value.size() == 2);
+    BOOST_CHECK_EQUAL(a6[0].string_key, "multitoken");
+    BOOST_CHECK_EQUAL(a6[0].value[0], "token1");
+    BOOST_CHECK_EQUAL(a6[0].value[1], "token2");
+    BOOST_CHECK_EQUAL(a6[1].string_key, "file");
+    BOOST_REQUIRE(a6[1].value.size() == 1);
+    BOOST_CHECK_EQUAL(a6[1].value[0], "some_file");
 }
 
 void test_config_file()

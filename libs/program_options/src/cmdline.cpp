@@ -23,6 +23,7 @@
 #include <cassert>
 #include <cstring>
 #include <cctype>
+#include <climits>
 
 #include <cstdio>
 
@@ -288,6 +289,14 @@ namespace boost { namespace program_options { namespace detail {
                     if (!opt2.string_key.empty())
                         break;
 
+                    if (opt2.position_key == INT_MAX)
+                    {
+                        // We use INT_MAX to mark positional options that
+                        // were found after the '--' terminator and therefore
+                        // should stay positional forever.
+                        break;
+                    }
+
                     assert(opt2.value.size() == 1);
                     
                     opt.value.push_back(opt2.value[0]);
@@ -543,6 +552,8 @@ namespace boost { namespace program_options { namespace detail {
             {
                 option opt;
                 opt.value.push_back(args[i]);
+                opt.original_tokens.push_back(args[i]);
+                opt.position_key = INT_MAX;
                 result.push_back(opt);
             }
             args.clear();
