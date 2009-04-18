@@ -132,18 +132,18 @@
 class MyInt
     : boost::operators&lt;MyInt&gt;
 {
-    bool operator&lt;(const MyInt&amp; x) const; 
+    bool operator&lt;(const MyInt&amp; x) const;
     bool operator==(const MyInt&amp; x) const;
-    MyInt&amp; operator+=(const MyInt&amp; x);    
-    MyInt&amp; operator-=(const MyInt&amp; x);    
-    MyInt&amp; operator*=(const MyInt&amp; x);    
-    MyInt&amp; operator/=(const MyInt&amp; x);    
-    MyInt&amp; operator%=(const MyInt&amp; x);    
-    MyInt&amp; operator|=(const MyInt&amp; x);    
-    MyInt&amp; operator&amp;=(const MyInt&amp; x);    
-    MyInt&amp; operator^=(const MyInt&amp; x);    
-    MyInt&amp; operator++();    
-    MyInt&amp; operator--();    
+    MyInt&amp; operator+=(const MyInt&amp; x);
+    MyInt&amp; operator-=(const MyInt&amp; x);
+    MyInt&amp; operator*=(const MyInt&amp; x);
+    MyInt&amp; operator/=(const MyInt&amp; x);
+    MyInt&amp; operator%=(const MyInt&amp; x);
+    MyInt&amp; operator|=(const MyInt&amp; x);
+    MyInt&amp; operator&amp;=(const MyInt&amp; x);
+    MyInt&amp; operator^=(const MyInt&amp; x);
+    MyInt&amp; operator++();
+    MyInt&amp; operator--();
 };
 </pre>
     </blockquote>
@@ -345,7 +345,7 @@ class MyInt
     </ul>
 
     <p>As Daniel Kr&uuml;gler pointed out, this technique violates 14.6.5/2
-    and is thus non-portable. The reasoning is, that the operators injected 
+    and is thus non-portable. The reasoning is, that the operators injected
     by the instantiation of e.g.
     <code>less_than_comparable&lt;myclass&gt;</code> can not be found
     by ADL according to the rules given by 3.4.2/2, since myclass is
@@ -444,6 +444,9 @@ const point&lt;float&gt; pi_over_4_normalized = pi_over_4 / length(pi_over_4);
     single operation the base type has to provide. They have an additional
     optional template parameter <code>B</code>, which is not shown, for the
     <a href="#chaining">base class chaining</a> technique.</p>
+
+    <p>The primary operand type <code>T</code> needs to be of class type,
+    built-in types are not supported.</p>
 
     <table cellpadding="5" border="1" align="center">
       <caption>
@@ -917,7 +920,7 @@ T operator+( const T&amp; lhs, const T&amp; rhs )
     created, <code>operator+=</code> is called on it and it is copied to the
     function return value (which is another unnamed object of type
     <code>T</code>). The standard doesn't generally allow the intermediate
-    object to be optimized away: 
+    object to be optimized away:
 
     <blockquote>
       3.7.2/2: Automatic storage duration<br>
@@ -928,7 +931,7 @@ T operator+( const T&amp; lhs, const T&amp; rhs )
       unused, except that a class object or its copy may be eliminated as
       specified in 12.8.
     </blockquote>
-    The reference to 12.8 is important for us: 
+    The reference to 12.8 is important for us:
 
     <blockquote>
       12.8/15: Copying class objects<br>
@@ -942,7 +945,7 @@ T operator+( const T&amp; lhs, const T&amp; rhs )
     </blockquote>
     This optimization is known as the named return value optimization (NRVO),
     which leads us to the following implementation for
-    <code>operator+</code>: 
+    <code>operator+</code>:
 <pre>
 T operator+( const T&amp; lhs, const T&amp; rhs )
 {
@@ -956,7 +959,7 @@ T operator+( const T&amp; lhs, const T&amp; rhs )
     even implement it in an incorrect way which makes it useless here.
     Without the NRVO, the NRVO-friendly code is no worse than the original
     code showed above, but there is another possible implementation, which
-    has some very special properties: 
+    has some very special properties:
 <pre>
 T operator+( T lhs, const T&amp; rhs )
 {
@@ -982,7 +985,7 @@ T operator+( T lhs, const T&amp; rhs )
     will force the NRVO-friendly implementation to be used even for compilers
     that don't implement the NRVO. <br>
      <br>
-     
+
     <h3><a name="grpd_oprs">Grouped Arithmetic Operators</a></h3>
 
     <p>The following templates provide common groups of related operations.
@@ -1864,7 +1867,7 @@ T operator+( T lhs, const T&amp; rhs )
         V, D, P, R&gt;</a></code></td>
 
         <td>
-          Supports the operations and has the requirements of 
+          Supports the operations and has the requirements of
 
           <ul>
             <li><code><a href="#input_iteratable">input_iteratable&lt;T,
@@ -1878,7 +1881,7 @@ T operator+( T lhs, const T&amp; rhs )
         "output_iterator_helper">output_iterator_helper&lt;T&gt;</a></code></td>
 
         <td>
-          Supports the operations and has the requirements of 
+          Supports the operations and has the requirements of
 
           <ul>
             <li><code><a href=
@@ -1894,7 +1897,7 @@ T operator+( T lhs, const T&amp; rhs )
         R&gt;</a></code></td>
 
         <td>
-          Supports the operations and has the requirements of 
+          Supports the operations and has the requirements of
 
           <ul>
             <li><code><a href="#forward_iteratable">forward_iteratable&lt;T,
@@ -1909,7 +1912,7 @@ T operator+( T lhs, const T&amp; rhs )
         V, D, P, R&gt;</a></code></td>
 
         <td>
-          Supports the operations and has the requirements of 
+          Supports the operations and has the requirements of
 
           <ul>
             <li><code><a href=
@@ -1925,7 +1928,7 @@ T operator+( T lhs, const T&amp; rhs )
         V, D, P, R&gt;</a></code></td>
 
         <td>
-          Supports the operations and has the requirements of 
+          Supports the operations and has the requirements of
 
           <ul>
             <li><code><a href=
@@ -1976,8 +1979,8 @@ struct function_output_iterator
     template&lt;typename T&gt;
     function_output_iterator&amp; operator=(T const&amp; value)
     {
-        this-&gt;func(value); 
-        return *this; 
+        this-&gt;func(value);
+        return *this;
     }
 
  private:
@@ -2130,8 +2133,8 @@ public:
     <p>Revised: 7 Aug 2008</p>
 
     <p>Copyright &copy; Beman Dawes, David Abrahams, 1999-2001.</p>
-    <p>Copyright &copy; Daniel Frey, 2002-2008.</p>
-    <p>Use, modification, and distribution is subject to the Boost Software 
+    <p>Copyright &copy; Daniel Frey, 2002-2009.</p>
+    <p>Use, modification, and distribution is subject to the Boost Software
     License, Version 1.0. (See accompanying file
     <a href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or copy at
     <a href="http://www.boost.org/LICENSE_1_0.txt">
