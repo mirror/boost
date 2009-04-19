@@ -8,17 +8,42 @@
 import testing ;
 
 project
-    : source-location $(BOOST_ROOT)
+    : source-location ..
     ;
+
+run random_test.cpp ;
+run random_demo.cpp ;
+run validate.cpp ;
+
+local all-urngs = 
+    rand48
+    minstd_rand0
+    minstd_rand
+    ecuyer1988
+    kreutzer1986
+    hellekalek1995
+    mt11213b
+    mt19937
+    lagged_fibonacci
+    lagged_fibonacci607
+    ranlux3
+    ranlux4
+    ranlux3_01
+    ranlux4_01
+    ranlux64_3_01
+    ranlux64_4_01
+    taus88
+;
+
+for urng in $(all-urngs)
 {
-   test-suite "random"
-        :
-        [ run libs/random/random_test.cpp ]
-        [ run libs/random/random_demo.cpp ]
-#       [ run libs/random/nondet_random_speed.cpp ]
-#       [ run libs/random/random_device.cpp ]
-#       [ run libs/random/random_speed.cpp ]
-#       [ run libs/random/statistic_tests.cpp ]
-       ;
+    run instantiate.cpp : : : <define>BOOST_RANDOM_URNG_TEST=$(urng) : test_$(urng) ;
 }
+
+# run nondet_random_speed.cpp ;
+# run random_device.cpp ;
+# run random_speed.cpp ;
+# run statistic_tests.cpp ;
+
+
 

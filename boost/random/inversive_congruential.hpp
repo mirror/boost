@@ -21,6 +21,7 @@
 #include <stdexcept>
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/random/detail/config.hpp>
 #include <boost/random/detail/const_mod.hpp>
 
 namespace boost {
@@ -71,11 +72,11 @@ public:
     return value;
   }
 
-  bool validation(result_type x) const { return val == x; }
+  static bool validation(result_type x) { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, inversive_congruential x)

@@ -47,7 +47,7 @@
   <pre>
   boost::mt19937 rng;                 // produces randomness out of thin air
                                       // see pseudo-random number generators
-  boost::uniform_int&lt;&gt; six(1,6)       // distribution that maps to 1..6
+  boost::uniform_int&lt;&gt; six(1,6);      // distribution that maps to 1..6
                                       // see random number distributions
   boost::variate_generator&lt;boost::mt19937&amp;, boost::uniform_int&lt;&gt; &gt;
            die(rng, six);             // glues randomness with mapping
@@ -62,7 +62,7 @@
   available as <code><a href=
   "../../boost/random.hpp">boost/random.hpp</a></code>.</p>
 
-  <p>A front-end class template called <code>variate_generate</code> is
+  <p>A front-end class template called <code>variate_generator</code> is
   provided; please read the <a href="random-variate.html">documentation</a>
   about it.</p>
 

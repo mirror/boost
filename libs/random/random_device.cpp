@@ -22,7 +22,7 @@ const boost::random_device::result_type boost::random_device::max_value;
 #endif
 
 
-#ifdef __linux__
+#if defined(__linux__) || defined (__FreeBSD__)
 
 // the default is the unlimited capacity device, using some secure hash
 // try "/dev/random" for blocking when the entropy pool has drained
@@ -90,7 +90,7 @@ private:
   int fd;
 };
 
-#endif // __linux__
+#endif // __linux__ || __FreeBSD__
 
 
 boost::random_device::random_device(const std::string& token)
