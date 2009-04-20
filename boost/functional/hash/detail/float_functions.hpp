@@ -59,6 +59,10 @@
 #    define BOOST_HASH_USE_OVERLOAD_FLOAT_FUNCS
 #  endif
 
+// vxWorks. It has its own math library, but uses Dinkumware STL
+#elif defined(__VXWORKS__)
+#  define BOOST_HASH_USE_OVERLOAD_FLOAT_FUNCS
+
 // Dinkumware.
 #elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
 // Some versions of Visual C++ don't seem to have the C++ overloads but they
