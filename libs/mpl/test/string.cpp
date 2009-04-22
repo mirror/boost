@@ -293,6 +293,9 @@ int main()
         BOOST_MPL_ASSERT((boost::is_same<t7, mpl::string<'aaaa','aaaa','aaaX'> >));
     }
 
+    BOOST_MPL_ASSERT((mpl::empty<mpl::string<> >));
+    BOOST_MPL_ASSERT_NOT((mpl::empty<mpl::string<'hi!'> >));
+
     // testing push_front
     {
         typedef mpl::push_front<mpl::string<>, mpl::char_<'a'> >::type t1;
@@ -342,9 +345,6 @@ int main()
     std::string result;
     mpl::for_each<mpl::string<'Hell','o wo','rld!'> >(push_char(result));
     BOOST_TEST("Hello world!" == result);
-
-    BOOST_MPL_ASSERT((mpl::empty<mpl::string<> >));
-    BOOST_MPL_ASSERT_NOT((mpl::empty<mpl::string<'hi!'> >));
 
     BOOST_TEST(('h' == mpl::front<mpl::string<'hi!'> >::type()));
     BOOST_TEST(('!' == mpl::back<mpl::string<'hi!'> >::type()));

@@ -13,11 +13,18 @@
 // $Id: string.hpp 49239 2009-04-01 09:10:26Z eric_niebler $
 // $Date: 2009-04-01 02:10:26 -0700 (Wed, 1 Apr 2009) $
 // $Revision: 49239 $
+//
+// Thanks to:
+//   Dmitry Goncharov for porting this to the Sun compiler
 
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/mpl/limits/string.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/char.hpp>
 #include <boost/mpl/copy.hpp>
 #include <boost/mpl/size.hpp>
+#include <boost/mpl/empty.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/size_t.hpp>
 #include <boost/mpl/begin_end.hpp>
@@ -243,11 +250,13 @@ namespace boost { namespace mpl
             type;
         };
 
+        #if !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
         template<typename Value>
         struct apply<mpl::string<>, Value, false>
         {
             typedef mpl::string<(char)Value::value> type;
         };
+        #endif
 
         #define M0(z,n,data)                                                                        \
         template<BOOST_PP_ENUM_PARAMS_Z(z, n, unsigned C), typename Value>                          \
@@ -272,7 +281,19 @@ namespace boost { namespace mpl
                     ((((unsigned char)Value::value)<<(BOOST_MPL_MULTICHAR_LENGTH(C0)*8))|C0)
                   , BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_MPL_STRING_MAX_PARAMS, C)
                 >
-            type;
+            type0;
+
+            #if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
+            typedef
+                typename mpl::if_<
+                    mpl::empty<mpl::string<BOOST_PP_ENUM_PARAMS(BOOST_MPL_STRING_MAX_PARAMS, C)> >
+                  , mpl::string<(char)Value::value>
+		              , type0
+		            >::type
+		        type;
+		        #else
+		        typedef type0 type;
+		        #endif
         };
     };
 
