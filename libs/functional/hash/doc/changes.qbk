@@ -81,6 +81,7 @@
   the new location is mainly for implementation and possible modularization.
 * [@https://svn.boost.org/trac/boost/ticket/2412 Ticket 2412]: Removed deprecated
   headers.
-
+* [@https://svn.boost.org/trac/boost/ticket/2957 Ticket 2957]: Fix configuration
+  for vxworks.
 
 [endsect]
