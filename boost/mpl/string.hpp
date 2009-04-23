@@ -46,10 +46,28 @@
 
 namespace boost { namespace mpl
 {
-    #define BOOST_MPL_STRING_MAX_PARAMS BOOST_PP_DIV(BOOST_PP_ADD(BOOST_MPL_LIMIT_STRING_SIZE, 3), 4)
+    #define BOOST_MPL_STRING_MAX_PARAMS                                                             \
+      BOOST_PP_DIV(BOOST_PP_ADD(BOOST_MPL_LIMIT_STRING_SIZE, 3), 4)
 
-    #define BOOST_MPL_MULTICHAR_LENGTH(c)   (std::size_t)((c>0xffffff)+(c>0xffff)+(c>0xff)+1)
-    #define BOOST_MPL_MULTICHAR_AT(c,i)     (char)(0xff&(c>>(8*(BOOST_MPL_MULTICHAR_LENGTH(c)-(std::size_t)(i)-1))))
+    // Low-level bit-twiddling is done by macros. Any implementation-defined behavior of
+    // multi-character literals should be localized to these macros.
+    #define BOOST_MPL_MULTICHAR_LENGTH(c)                                                           \
+      (std::size_t)((c>0xffffff)+(c>0xffff)+(c>0xff)+1)
+
+    #define BOOST_MPL_MULTICHAR_AT(c,i)                                                             \
+      (char)(0xff&(c>>(8*(BOOST_MPL_MULTICHAR_LENGTH(c)-(std::size_t)(i)-1))))
+
+    #define BOOST_MPL_MULTICHAR_PUSH_BACK(c,i)                                                      \
+      (((c)<<8)|(unsigned char)(i))
+
+    #define BOOST_MPL_MULTICHAR_PUSH_FRONT(c,i)                                                     \
+      ((((unsigned char)(i))<<(BOOST_MPL_MULTICHAR_LENGTH(c)*8))|(c))
+
+    #define BOOST_MPL_MULTICHAR_POP_BACK(c)                                                         \
+      ((c)>>8)
+
+    #define BOOST_MPL_MULTICHAR_POP_FRONT(c)                                                        \
+      (((1<<((BOOST_MPL_MULTICHAR_LENGTH(c)-1)*8))-1)&(c))
 
     struct string_tag;
     struct string_iterator_tag;
@@ -173,7 +191,7 @@ namespace boost { namespace mpl
                     BOOST_PP_COMMA_IF(BOOST_PP_DEC(n))                                              \
                     (BOOST_PP_CAT(C,BOOST_PP_DEC(n))>0xffffff)                                      \
                     ?BOOST_PP_CAT(C,BOOST_PP_DEC(n))                                                \
-                    :(BOOST_PP_CAT(C,BOOST_PP_DEC(n))<<8)|(unsigned char)Value::value               \
+                    :BOOST_MPL_MULTICHAR_PUSH_BACK(BOOST_PP_CAT(C,BOOST_PP_DEC(n)), Value::value)   \
                   , (BOOST_PP_CAT(C,BOOST_PP_DEC(n))>0xffffff)                                      \
                     ?(char)Value::value                                                             \
                     :0                                                                              \
@@ -190,7 +208,7 @@ namespace boost { namespace mpl
             typedef
                 mpl::string<
                     BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(BOOST_MPL_STRING_MAX_PARAMS), C)
-                  , (BOOST_PP_CAT(C,BOOST_PP_DEC(BOOST_MPL_STRING_MAX_PARAMS))<<8)|(unsigned char)Value::value
+                  , BOOST_MPL_MULTICHAR_PUSH_BACK(BOOST_PP_CAT(C,BOOST_PP_DEC(BOOST_MPL_STRING_MAX_PARAMS)), Value::value)
                 >
             type;
         };
@@ -214,7 +232,7 @@ namespace boost { namespace mpl
                 mpl::string<                                                                        \
                     BOOST_PP_ENUM_PARAMS_Z(z, BOOST_PP_DEC(n), C)                                   \
                     BOOST_PP_COMMA_IF(BOOST_PP_DEC(n))                                              \
-                    (BOOST_PP_CAT(C,BOOST_PP_DEC(n))>>8)                                            \
+                    BOOST_MPL_MULTICHAR_POP_BACK(BOOST_PP_CAT(C,BOOST_PP_DEC(n)))                   \
                 >                                                                                   \
             type;                                                                                   \
         };
@@ -278,7 +296,7 @@ namespace boost { namespace mpl
         {
             typedef
                 mpl::string<
-                    ((((unsigned char)Value::value)<<(BOOST_MPL_MULTICHAR_LENGTH(C0)*8))|C0)
+                    BOOST_MPL_MULTICHAR_PUSH_FRONT(C0, Value::value)
                   , BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_MPL_STRING_MAX_PARAMS, C)
                 >
             type0;
@@ -324,7 +342,7 @@ namespace boost { namespace mpl
         {
             typedef
                 mpl::string<
-                    (((1<<((BOOST_MPL_MULTICHAR_LENGTH(C0)-1)*8))-1)&C0)
+                    BOOST_MPL_MULTICHAR_POP_FRONT(C0)
                   , BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_MPL_STRING_MAX_PARAMS, C)
                 >
             type;
