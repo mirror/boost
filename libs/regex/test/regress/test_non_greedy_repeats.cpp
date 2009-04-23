@@ -41,6 +41,6 @@ void test_non_greedy_repeats()
    TEST_REGEX_SEARCH("xx[/-]{0,2}?(?:[+-][0-9])??\\z", perl, "xx--", match_default, make_array(0, 4, -2, -2));
    TEST_INVALID_REGEX("a{1,3}{1}", perl);
    TEST_INVALID_REGEX("a**", perl);
-   TEST_INVALID_REGEX("a++", perl);
+   //TEST_INVALID_REGEX("a++", perl);
 }
 

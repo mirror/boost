@@ -143,6 +143,23 @@ consume as little input as possible while still producing a match.
 `{n,m}?` Matches the previous atom between n and m times, while 
    consuming as little input as possible.
    
+[h4 Pocessive repeats]
+
+By default when a repeated patten does not match then the engine will backtrack until
+a match is found.  However, this behaviour can sometime be undesireable so there are
+also "pocessive" repeats: these match as much as possible and do not then allow
+backtracking if the rest of the expression fails to match.
+
+`*+` Matches the previous atom zero or more times, while giving nothing back.
+
+`++` Matches the previous atom one or more times, while giving nothing back.
+
+`?+` Matches the previous atom zero or one times, while giving nothing back.
+
+`{n,}+` Matches the previous atom n or more times, while giving nothing back.
+
+`{n,m}+` Matches the previous atom between n and m times, while giving nothing back.
+   
 [h4 Back references]
 
 An escape character followed by a digit /n/, where /n/ is in the range 1-9, 
@@ -296,11 +313,15 @@ The following are supported by default:
 [[`\s`][`[[:space:]]`]]
 [[`\u`][`[[:upper:]]`]]
 [[`\w`][`[[:word:]]`]]
+[[`\h`][Horizontal whitespace]]
+[[`\v`][Vertical whitespace]]
 [[`\D`][`[^[:digit:]]`]]
 [[`\L`][`[^[:lower:]]`]]
 [[`\S`][`[^[:space:]]`]]
 [[`\U`][`[^[:upper:]]`]]
 [[`\W`][`[^[:word:]]`]]
+[[`\H`][Not Horizontal whitespace]]
+[[`\V`][Not Vertical whitespace]]
 ]
 
 [h5 Character Properties]

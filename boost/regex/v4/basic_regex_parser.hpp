@@ -610,6 +610,7 @@ bool basic_regex_parser<charT, traits>::parse_extended_escape()
       // fall through:
    case regex_constants::escape_type_class:
       {
+escape_type_class_jump:
          typedef typename traits::char_class_type mask_type;
          mask_type m = this->m_traits.lookup_classname(m_position, m_position+1);
          if(m != 0)
@@ -720,6 +721,10 @@ bool basic_regex_parser<charT, traits>::parse_extended_escape()
          }
          fail(regex_constants::error_ctype, m_position - m_base);
       }
+   case regex_constants::escape_type_control_v:
+      if(0 == (this->flags() & (regbase::main_option_type | regbase::no_perl_ex)))
+         goto escape_type_class_jump;
+      // fallthrough:
    default:
       this->append_literal(unescape_character());
       break;
@@ -747,6 +752,7 @@ template <class charT, class traits>
 bool basic_regex_parser<charT, traits>::parse_repeat(std::size_t low, std::size_t high)
 {
    bool greedy = true;
+   bool pocessive = false;
    std::size_t insert_point;
    // 
    // when we get to here we may have a non-greedy ? mark still to come:
@@ -758,10 +764,17 @@ bool basic_regex_parser<charT, traits>::parse_repeat(std::size_t low, std::size_
          )
       )
    {
-      // OK we have a perl regex, check for a '?':
+      // OK we have a perl or emacs regex, check for a '?':
       if(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_question)
       {
          greedy = false;
+         ++m_position;
+      }
+      // for perl regexes only check for pocessive ++ repeats.
+      if((0 == (this->flags() & regbase::main_option_type)) 
+         && (this->m_traits.syntax_type(*m_position) == regex_constants::syntax_plus))
+      {
+         pocessive = true;
          ++m_position;
       }
    }
@@ -832,6 +845,20 @@ bool basic_regex_parser<charT, traits>::parse_repeat(std::size_t low, std::size_
    // now fill in the alt jump for the repeat:
    rep = static_cast<re_repeat*>(this->getaddress(rep_off));
    rep->alt.i = this->m_pdata->m_data.size() - rep_off;
+   //
+   // If the repeat is pocessive then bracket the repeat with a (?>...)
+   // independent sub-expression construct:
+   //
+   if(pocessive)
+   {
+      re_brace* pb = static_cast<re_brace*>(this->insert_state(insert_point, syntax_element_startmark, sizeof(re_brace)));
+      pb->index = -3;
+      re_jump* jmp = static_cast<re_jump*>(this->insert_state(insert_point + sizeof(re_brace), syntax_element_jump, sizeof(re_jump)));
+      this->m_pdata->m_data.align();
+      jmp->alt.i = this->m_pdata->m_data.size() - this->getoffset(jmp);
+      pb = static_cast<re_brace*>(this->append_state(syntax_element_endmark, sizeof(re_brace)));
+      pb->index = -3;
+   }
    return true;
 }
 

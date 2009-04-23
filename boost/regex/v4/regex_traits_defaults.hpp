@@ -159,7 +159,7 @@ struct character_pointer_range
 template <class charT>
 int get_default_class_id(const charT* p1, const charT* p2)
 {
-   static const charT data[72] = {
+   static const charT data[73] = {
       'a', 'l', 'n', 'u', 'm',
       'a', 'l', 'p', 'h', 'a',
       'b', 'l', 'a', 'n', 'k',
@@ -172,11 +172,12 @@ int get_default_class_id(const charT* p1, const charT* p2)
       's', 'p', 'a', 'c', 'e',
       'u', 'n', 'i', 'c', 'o', 'd', 'e',
       'u', 'p', 'p', 'e', 'r',
+      'v',
       'w', 'o', 'r', 'd',
       'x', 'd', 'i', 'g', 'i', 't',
    };
 
-   static const character_pointer_range<charT> ranges[19] = 
+   static const character_pointer_range<charT> ranges[21] = 
    {
       {data+0, data+5,}, // alnum
       {data+5, data+10,}, // alpha
@@ -185,6 +186,7 @@ int get_default_class_id(const charT* p1, const charT* p2)
       {data+20, data+21,}, // d
       {data+20, data+25,}, // digit
       {data+25, data+30,}, // graph
+      {data+29, data+30,}, // h
       {data+30, data+31,}, // l
       {data+30, data+35,}, // lower
       {data+35, data+40,}, // print
@@ -194,9 +196,10 @@ int get_default_class_id(const charT* p1, const charT* p2)
       {data+57, data+58,}, // u
       {data+50, data+57,}, // unicode
       {data+57, data+62,}, // upper
-      {data+62, data+63,}, // w
-      {data+62, data+66,}, // word
-      {data+66, data+72,}, // xdigit
+      {data+62, data+63,}, // v
+      {data+63, data+64,}, // w
+      {data+63, data+67,}, // word
+      {data+67, data+73,}, // xdigit
    };
    static const character_pointer_range<charT>* ranges_begin = ranges;
    static const character_pointer_range<charT>* ranges_end = ranges + (sizeof(ranges)/sizeof(ranges[0]));

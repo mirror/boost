@@ -161,7 +161,9 @@ enum
    char_class_graph=char_class_alnum|char_class_punct,
    char_class_blank=1<<9,
    char_class_word=1<<10,
-   char_class_unicode=1<<11
+   char_class_unicode=1<<11,
+   char_class_horizontal=1<<12,
+   char_class_vertical=1<<13
 };
 
 c_regex_traits<wchar_t>::char_class_type BOOST_REGEX_CALL c_regex_traits<wchar_t>::lookup_classname(const wchar_t* p1, const wchar_t* p2) 
@@ -176,6 +178,7 @@ c_regex_traits<wchar_t>::char_class_type BOOST_REGEX_CALL c_regex_traits<wchar_t
       char_class_digit,
       char_class_digit,
       char_class_graph,
+      char_class_horizontal,
       char_class_lower,
       char_class_lower,
       char_class_print,
@@ -185,6 +188,7 @@ c_regex_traits<wchar_t>::char_class_type BOOST_REGEX_CALL c_regex_traits<wchar_t
       char_class_upper,
       char_class_unicode,
       char_class_upper,
+      char_class_vertical,
       char_class_alnum | char_class_word, 
       char_class_alnum | char_class_word, 
       char_class_xdigit,
@@ -216,7 +220,9 @@ bool BOOST_REGEX_CALL c_regex_traits<wchar_t>::isctype(wchar_t c, char_class_typ
       || ((mask & char_class_xdigit) && (std::iswxdigit)(c))
       || ((mask & char_class_blank) && (std::iswspace)(c) && !::boost::re_detail::is_separator(c))
       || ((mask & char_class_word) && (c == '_'))
-      || ((mask & char_class_unicode) && (c & ~static_cast<wchar_t>(0xff)));
+      || ((mask & char_class_unicode) && (c & ~static_cast<wchar_t>(0xff)))
+      || ((mask & char_class_vertical) && (::boost::re_detail::is_separator(c) || (c == L'\v')))
+      || ((mask & char_class_horizontal) && (std::iswspace)(c) && !::boost::re_detail::is_separator(c) && (c != L'\v'));
 }
 
 c_regex_traits<wchar_t>::string_type BOOST_REGEX_CALL c_regex_traits<wchar_t>::lookup_collatename(const wchar_t* p1, const wchar_t* p2) 

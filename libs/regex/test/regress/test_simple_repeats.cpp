@@ -436,3 +436,44 @@ void test_fast_repeats2()
 
 }
 
+void test_pocessive_repeats()
+{
+   using namespace boost::regex_constants;
+   // and again for sets:
+   TEST_REGEX_SEARCH("^(\\w++|\\s++)*$", perl, "now is the time for all good men to come to the aid of the party", match_default, make_array(0, 64, 59, 64, -2, -2));
+   TEST_REGEX_SEARCH("^(\\w++|\\s++)*$", perl, "this is not a line with only words and spaces!", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("(\\d++)(\\w)", perl, "12345a", match_default, make_array(0, 6, 0, 5, 5, 6, -2, -2));
+   TEST_REGEX_SEARCH("(\\d++)(\\w)", perl, "12345+", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("(\\d++)(\\w)", perl, "12345", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("a++b", perl, "aaab", match_default, make_array(0, 4, -2, -2));
+   TEST_REGEX_SEARCH("(a++b)", perl, "aaab", match_default, make_array(0, 4, 0, 4, -2, -2));
+   TEST_REGEX_SEARCH("([^()]++|\\([^()]*\\))+", perl, "((abc(ade)ufh()()x", match_default, make_array(2, 18, 17, 18, -2, -2));
+   TEST_REGEX_SEARCH("\\(([^()]++|\\([^()]+\\))+\\)", perl, "(abc)", match_default, make_array(0, 5, 1, 4, -2, -2));
+   TEST_REGEX_SEARCH("\\(([^()]++|\\([^()]+\\))+\\)", perl, "(abc(def)xyz)", match_default, make_array(0, 13, 9, 12, -2, -2));
+   TEST_REGEX_SEARCH("\\(([^()]++|\\([^()]+\\))+\\)", perl, "((()aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", match_default, make_array(-2, -2));
+   /*
+   TEST_REGEX_SEARCH("< (?: (?(R) \\d++  | [^<>]*+) | (?R)) * >", perl|mod_x, "<>", match_default, make_array(0, 2, -2, -2));
+   TEST_REGEX_SEARCH("< (?: (?(R) \\d++  | [^<>]*+) | (?R)) * >", perl|mod_x, "<abcd>", match_default, make_array(0, 6, -2, -2));
+   TEST_REGEX_SEARCH("< (?: (?(R) \\d++  | [^<>]*+) | (?R)) * >", perl|mod_x, "<abc <123> hij>", match_default, make_array(0, 15, -2, -2));
+   TEST_REGEX_SEARCH("< (?: (?(R) \\d++  | [^<>]*+) | (?R)) * >", perl|mod_x, "<abc <def> hij>", match_default, make_array(5, 10, -2, -2));
+   TEST_REGEX_SEARCH("< (?: (?(R) \\d++  | [^<>]*+) | (?R)) * >", perl|mod_x, "<abc<>def>", match_default, make_array(0, 10, -2, -2));
+   TEST_REGEX_SEARCH("< (?: (?(R) \\d++  | [^<>]*+) | (?R)) * >", perl|mod_x, "<abc<>", match_default, make_array(4, 6, -2, -2));
+   TEST_REGEX_SEARCH("< (?: (?(R) \\d++  | [^<>]*+) | (?R)) * >", perl|mod_x, "<abc", match_default, make_array(-2, -2));
+
+   TEST_REGEX_SEARCH("((< (?: (?(R) \d++  | [^<>]*+) | (?2)) * >))", perl|mod_x, "<>", match_default, make_array(0, 2, 0, 2, 0, 2, -2, -2));
+   TEST_REGEX_SEARCH("((< (?: (?(R) \d++  | [^<>]*+) | (?2)) * >))", perl|mod_x, "<abcd>", match_default, make_array(0, 6, 0, 6, 0, 6, -2, -2));
+   TEST_REGEX_SEARCH("((< (?: (?(R) \d++  | [^<>]*+) | (?2)) * >))", perl|mod_x, "<abc <123> hij>", match_default, make_array(0, 15, 0, 15, 0, 15, -2, -2));
+   TEST_REGEX_SEARCH("((< (?: (?(R) \d++  | [^<>]*+) | (?2)) * >))", perl|mod_x, "<abc <def> hij>", match_default, make_array(5, 10, 5, 10, 5, 10, -2, -2));
+   TEST_REGEX_SEARCH("((< (?: (?(R) \d++  | [^<>]*+) | (?2)) * >))", perl|mod_x, "<abc<>def>", match_default, make_array(0, 10, 0, 10, 0, 10, -2, -2));
+   TEST_REGEX_SEARCH("((< (?: (?(R) \d++  | [^<>]*+) | (?2)) * >))", perl|mod_x, "<abc<>", match_default, make_array(4, 6, 4, 6, 4, 6, -2, -2));
+   TEST_REGEX_SEARCH("((< (?: (?(R) \d++  | [^<>]*+) | (?2)) * >))", perl|mod_x, "<abc", match_default, make_array(-2, -2));
+   */
+   TEST_REGEX_SEARCH("x*+\\w", perl, "xxxxx", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("x*+\\w", perl, "xxxxxa", match_default, make_array(0, 6, -2, -2));
+   TEST_REGEX_SEARCH("x{1,6}+\\w", perl, "xxxxx", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("x{1,6}+\\w", perl, "xxxxxa", match_default, make_array(0, 6, -2, -2));
+   TEST_REGEX_SEARCH("x{1,5}+\\w", perl, "xxxxxa", match_default, make_array(0, 6, -2, -2));
+   TEST_REGEX_SEARCH("x{1,4}+\\w", perl, "xxxxxa", match_default, make_array(0, 5, -2, -2));
+   TEST_REGEX_SEARCH("x{1,3}+\\w", perl, "xxxxxa", match_default, make_array(0, 4, -2, 4, 6, -2, -2));
+}
+

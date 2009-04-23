@@ -184,7 +184,9 @@ private:
       offset_underscore = U_CHAR_CATEGORY_COUNT+3,
       offset_unicode = U_CHAR_CATEGORY_COUNT+4,
       offset_any = U_CHAR_CATEGORY_COUNT+5,
-      offset_ascii = U_CHAR_CATEGORY_COUNT+6
+      offset_ascii = U_CHAR_CATEGORY_COUNT+6,
+      offset_horizontal = U_CHAR_CATEGORY_COUNT+7,
+      offset_vertical = U_CHAR_CATEGORY_COUNT+8
    };
 
    //
@@ -197,6 +199,8 @@ private:
    static const char_class_type mask_unicode;
    static const char_class_type mask_any;
    static const char_class_type mask_ascii;
+   static const char_class_type mask_horizontal;
+   static const char_class_type mask_vertical;
 
    static char_class_type lookup_icu_mask(const ::UChar32* p1, const ::UChar32* p2);
 
