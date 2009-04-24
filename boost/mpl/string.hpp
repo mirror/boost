@@ -19,6 +19,7 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/detail/endian.hpp>
 #include <boost/mpl/limits/string.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/char.hpp>
@@ -51,23 +52,45 @@ namespace boost { namespace mpl
 
     // Low-level bit-twiddling is done by macros. Any implementation-defined behavior of
     // multi-character literals should be localized to these macros.
+
     #define BOOST_MPL_MULTICHAR_LENGTH(c)                                                           \
       (std::size_t)((c>0xffffff)+(c>0xffff)+(c>0xff)+1)
 
-    #define BOOST_MPL_MULTICHAR_AT(c,i)                                                             \
-      (char)(0xff&(c>>(8*(BOOST_MPL_MULTICHAR_LENGTH(c)-(std::size_t)(i)-1))))
+    #if defined(BOOST_LITTLE_ENDIAN) && defined(__SUNPRO_CC)
 
-    #define BOOST_MPL_MULTICHAR_PUSH_BACK(c,i)                                                      \
-      (((c)<<8)|(unsigned char)(i))
+        #define BOOST_MPL_MULTICHAR_AT(c,i)                                                         \
+          (char)(0xff&(c>>(8*(std::size_t)(i))))
 
-    #define BOOST_MPL_MULTICHAR_PUSH_FRONT(c,i)                                                     \
-      ((((unsigned char)(i))<<(BOOST_MPL_MULTICHAR_LENGTH(c)*8))|(c))
+        #define BOOST_MPL_MULTICHAR_PUSH_BACK(c,i)                                                  \
+          ((((unsigned char)(i))<<(BOOST_MPL_MULTICHAR_LENGTH(c)*8))|(c))
 
-    #define BOOST_MPL_MULTICHAR_POP_BACK(c)                                                         \
-      ((c)>>8)
+        #define BOOST_MPL_MULTICHAR_PUSH_FRONT(c,i)                                                 \
+          (((c)<<8)|(unsigned char)(i))
 
-    #define BOOST_MPL_MULTICHAR_POP_FRONT(c)                                                        \
-      (((1<<((BOOST_MPL_MULTICHAR_LENGTH(c)-1)*8))-1)&(c))
+        #define BOOST_MPL_MULTICHAR_POP_BACK(c)                                                     \
+	        (((1<<((BOOST_MPL_MULTICHAR_LENGTH(c)-1)*8))-1)&(c))
+
+        #define BOOST_MPL_MULTICHAR_POP_FRONT(c)                                                    \
+          ((c)>>8)
+
+    #else
+
+        #define BOOST_MPL_MULTICHAR_AT(c,i)                                                         \
+          (char)(0xff&(c>>(8*(BOOST_MPL_MULTICHAR_LENGTH(c)-(std::size_t)(i)-1))))
+
+        #define BOOST_MPL_MULTICHAR_PUSH_BACK(c,i)                                                  \
+          (((c)<<8)|(unsigned char)(i))
+
+        #define BOOST_MPL_MULTICHAR_PUSH_FRONT(c,i)                                                 \
+          ((((unsigned char)(i))<<(BOOST_MPL_MULTICHAR_LENGTH(c)*8))|(c))
+
+        #define BOOST_MPL_MULTICHAR_POP_BACK(c)                                                     \
+          ((c)>>8)
+
+        #define BOOST_MPL_MULTICHAR_POP_FRONT(c)                                                    \
+          (((1<<((BOOST_MPL_MULTICHAR_LENGTH(c)-1)*8))-1)&(c))
+
+    #endif
 
     struct string_tag;
     struct string_iterator_tag;
