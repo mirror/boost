@@ -205,7 +205,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_imp()
    verify_options(re.flags(), m_match_flags);
    if(0 == match_prefix())
       return false;
-   return m_result[0].second == last;
+   return (m_result[0].second == last) && (m_result[0].first == base);
 
 #if defined(BOOST_REGEX_NON_RECURSIVE) && !defined(BOOST_NO_EXCEPTIONS)
    }

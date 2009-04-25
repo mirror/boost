@@ -100,6 +100,9 @@ BOOST_REGEX_DECL const char* BOOST_REGEX_CALL get_default_syntax(regex_constants
          "p",
          "P",
          "N",
+         "g",
+         "K",
+         "R",
    };
 
    return ((n >= (sizeof(messages) / sizeof(messages[1]))) ? "" : messages[n]);
@@ -375,14 +378,14 @@ BOOST_REGEX_DECL regex_constants::escape_syntax_type BOOST_REGEX_CALL get_defaul
       regex_constants::escape_type_not_class,        /*H*/
       regex_constants::escape_type_not_class,        /*I*/
       regex_constants::escape_type_not_class,        /*J*/
-      regex_constants::escape_type_not_class,        /*K*/
+      regex_constants::escape_type_reset_start_mark, /*K*/
       regex_constants::escape_type_not_class,        /*L*/
       regex_constants::escape_type_not_class,        /*M*/
       regex_constants::escape_type_named_char,       /*N*/
       regex_constants::escape_type_not_class,        /*O*/
       regex_constants::escape_type_not_property,     /*P*/
       regex_constants::escape_type_Q,                /*Q*/
-      regex_constants::escape_type_not_class,        /*R*/
+      regex_constants::escape_type_line_ending,      /*R*/
       regex_constants::escape_type_not_class,        /*S*/
       regex_constants::escape_type_not_class,        /*T*/
       regex_constants::escape_type_not_class,        /*U*/
@@ -403,11 +406,11 @@ BOOST_REGEX_DECL regex_constants::escape_syntax_type BOOST_REGEX_CALL get_defaul
       regex_constants::escape_type_class,        /*d*/
       regex_constants::escape_type_e,        /*e*/
       regex_constants::escape_type_control_f,       /*f*/
-      regex_constants::escape_type_class,        /*g*/
+      regex_constants::escape_type_extended_backref,  /*g*/
       regex_constants::escape_type_class,        /*h*/
       regex_constants::escape_type_class,        /*i*/
       regex_constants::escape_type_class,        /*j*/
-      regex_constants::escape_type_class,        /*k*/
+      regex_constants::escape_type_extended_backref, /*k*/
       regex_constants::escape_type_class,        /*l*/
       regex_constants::escape_type_class,        /*m*/
       regex_constants::escape_type_control_n,       /*n*/

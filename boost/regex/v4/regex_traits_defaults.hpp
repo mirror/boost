@@ -317,6 +317,28 @@ int global_toi(const charT*& p1, const charT* p2, int radix, const traits& t)
    return result;
 }
 
+template <class charT>
+inline const charT* get_escape_R_string()
+{
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable:4309)
+#endif
+   static const charT e1[] = { '(', '?', '>', '\x0D', '\x0A', '?', 
+      '|', '[', '\x0A', '\x0B', '\x0C', '\x85', '\\', 'x', '{', '2', '0', '2', '8', '}', 
+                '\\', 'x', '{', '2', '0', '2', '9', '}', ']', ')' };
+   static const charT e2[] = { '(', '?', '>', '\x0D', '\x0A', '?', 
+      '|', '[', '\x0A', '\x0B', '\x0C', '\x85', ']', ')' };
+
+   charT c = static_cast<charT>(0x2029u);
+   bool b = (static_cast<unsigned>(c) == 0x2029u);
+   
+   return (b ? e1 : e2);
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
+}
+
 } // re_detail
 } // boost
 

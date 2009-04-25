@@ -144,5 +144,23 @@ void test_assertion_escapes()
    TEST_REGEX_SEARCH("a\\Gbc", perl, "abc", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("a\\Aab", perl, "abc", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("abc(?:\\Z|$)", perl, "abc\n\n", match_default, make_array(0, 3, -2, -2));
+
+   // Buffer reset \K:
+   TEST_REGEX_SEARCH("(foo)\\Kbar", perl, "foobar", match_default, make_array(3, 6, 0, 3, -2, -2));
+   TEST_REGEX_SEARCH("(foo)(\\Kbar|baz)", perl, "foobar", match_default, make_array(3, 6, 0, 3, 3, 6, -2, -2));
+   TEST_REGEX_SEARCH("(foo)(\\Kbar|baz)", perl, "foobaz", match_default, make_array(0, 6, 0, 3, 3, 6, -2, -2));
+   TEST_REGEX_SEARCH("(foo\\Kbar)baz", perl, "foobarbaz", match_default, make_array(3, 9, 0, 6, -2, -2));
+
+   // Line ending \R:
+   TEST_REGEX_SEARCH("\\R", perl, "foo\nbar", match_default, make_array(3, 4, -2, -2));
+   TEST_REGEX_SEARCH("\\R", perl, "foo\rbar", match_default, make_array(3, 4, -2, -2));
+   TEST_REGEX_SEARCH("\\R", perl, "foo\r\nbar", match_default, make_array(3, 5, -2, -2));
+   // see if \u works:
+   const wchar_t* w = "\u2028";
+   if(*w == 0x2028u)
+   {
+      TEST_REGEX_SEARCH_W(L"\\R", perl, L"foo\u2028bar", match_default, make_array(3, 4, -2, -2));
+      TEST_REGEX_SEARCH_W(L"\\R", perl, L"foo\u2029bar", match_default, make_array(3, 4, -2, -2));
+   }
 }
 

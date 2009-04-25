@@ -51,8 +51,8 @@ public:
    template <class A>
    void restore(match_results<BidiIterator, A>& w)
    {
-      w.set_first(sub.first, index);
-      w.set_second(sub.second, index, sub.matched);
+      w.set_first(sub.first, index, index == 0);
+      w.set_second(sub.second, index, sub.matched, index == 0);
    }
    const sub_match<BidiIterator>& get() { return sub; }
 };
@@ -208,6 +208,17 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_startmark()
             pstate = alt->alt.p;
          break;
       }
+      }
+   case -5:
+      {
+         // Reset start of $0, since we have a \K escape
+         backup_subex<BidiIterator> sub(*m_presult, 0);
+         m_presult->set_first(position, 0, true);
+         pstate = pstate->next.p;
+         r = match_all_states();
+         if(r == false)
+            sub.restore(*m_presult);
+         break;
       }
    default:
    {

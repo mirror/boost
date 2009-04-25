@@ -720,7 +720,89 @@ escape_type_class_jump:
             return true;
          }
          fail(regex_constants::error_ctype, m_position - m_base);
+         return false;
       }
+   case regex_constants::escape_type_reset_start_mark:
+      if(0 == (this->flags() & (regbase::main_option_type | regbase::no_perl_ex)))
+      {
+         re_brace* pb = static_cast<re_brace*>(this->append_state(syntax_element_startmark, sizeof(re_brace)));
+         pb->index = -5;
+         this->m_pdata->m_data.align();
+         ++m_position;
+         return true;
+      }
+      goto escape_type_class_jump;
+   case regex_constants::escape_type_line_ending:
+      if(0 == (this->flags() & (regbase::main_option_type | regbase::no_perl_ex)))
+      {
+         const charT* e = get_escape_R_string<charT>();
+         const charT* old_position = m_position;
+         const charT* old_end = m_end;
+         const charT* old_base = m_base;
+         m_position = e;
+         m_base = e;
+         m_end = e + traits::length(e);
+         bool r = parse_all();
+         m_position = ++old_position;
+         m_end = old_end;
+         m_base = old_base;
+         return r;
+      }
+      goto escape_type_class_jump;
+   case regex_constants::escape_type_extended_backref:
+      if(0 == (this->flags() & (regbase::main_option_type | regbase::no_perl_ex)))
+      {
+         bool have_brace = false;
+         bool negative = false;
+         if(++m_position == m_end)
+         {
+            fail(regex_constants::error_escape, m_position - m_base);
+            return false;
+         }
+         // maybe have \g{ddd}
+         if(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_open_brace)
+         {
+            if(++m_position == m_end)
+            {
+               fail(regex_constants::error_escape, m_position - m_base);
+               return false;
+            }
+            have_brace = true;
+         }
+         negative = (*m_position == static_cast<charT>('-'));
+         if((negative) && (++m_position == m_end))
+         {
+            fail(regex_constants::error_escape, m_position - m_base);
+            return false;
+         }
+         const charT* pc = m_position;
+         int i = this->m_traits.toi(pc, m_end, 10);
+         if(negative)
+            i = 1 + m_mark_count - i;
+         if((i > 0) && (this->m_backrefs & (1u << (i-1))))
+         {
+            m_position = pc;
+            re_brace* pb = static_cast<re_brace*>(this->append_state(syntax_element_backref, sizeof(re_brace)));
+            pb->index = i;
+         }
+         else
+         {
+            fail(regex_constants::error_backref, m_position - m_end);
+            return false;
+         }
+         m_position = pc;
+         if(have_brace)
+         {
+            if((m_position == m_end) || (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_brace))
+            {
+               fail(regex_constants::error_escape, m_position - m_base);
+               return false;
+            }
+            ++m_position;
+         }
+         return true;
+      }
+      goto escape_type_class_jump;
    case regex_constants::escape_type_control_v:
       if(0 == (this->flags() & (regbase::main_option_type | regbase::no_perl_ex)))
          goto escape_type_class_jump;
@@ -1499,7 +1581,7 @@ charT basic_regex_parser<charT, traits>::unescape_character()
          int i = this->m_traits.toi(m_position, m_end, 16);
          if((m_position == m_end)
             || (i < 0)
-            || ((std::numeric_limits<charT>::is_specialized) && (charT(i) > (std::numeric_limits<charT>::max)()))
+            || ((std::numeric_limits<charT>::is_specialized) && (i > (int)(std::numeric_limits<charT>::max)()))
             || (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_brace))
          {
             fail(regex_constants::error_badbrace, m_position - m_base);

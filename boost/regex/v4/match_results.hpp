@@ -230,13 +230,13 @@ public:
       m_null.matched = false;
    }
 
-   void BOOST_REGEX_CALL set_second(BidiIterator i, size_type pos, bool m = true)
+   void BOOST_REGEX_CALL set_second(BidiIterator i, size_type pos, bool m = true, bool escape_k = false)
    {
       pos += 2;
       BOOST_ASSERT(m_subs.size() > pos);
       m_subs[pos].second = i;
       m_subs[pos].matched = m;
-      if(pos == 2)
+      if((pos == 2) && !escape_k)
       {
          m_subs[0].first = i;
          m_subs[0].matched = (m_subs[0].first != m_subs[0].second);
@@ -284,11 +284,18 @@ public:
          m_subs[n].matched = false;
       }
    }
-   void BOOST_REGEX_CALL set_first(BidiIterator i, size_type pos)
+   void BOOST_REGEX_CALL set_first(BidiIterator i, size_type pos, bool escape_k = false)
    {
       BOOST_ASSERT(pos+2 < m_subs.size());
-      if(pos)
+      if(pos || escape_k)
+      {
          m_subs[pos+2].first = i;
+         if(escape_k)
+         {
+            m_subs[1].second = i;
+            m_subs[1].matched = (m_subs[1].first != m_subs[1].second);
+         }
+      }
       else
          set_first(i);
    }

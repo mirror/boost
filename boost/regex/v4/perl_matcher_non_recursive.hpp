@@ -213,7 +213,7 @@ void perl_matcher<BidiIterator, Allocator, traits>::extend_stack()
 template <class BidiIterator, class Allocator, class traits>
 inline void perl_matcher<BidiIterator, Allocator, traits>::push_matched_paren(int index, const sub_match<BidiIterator>& sub)
 {
-   BOOST_ASSERT(index);
+   //BOOST_ASSERT(index);
    saved_matched_paren<BidiIterator>* pmp = static_cast<saved_matched_paren<BidiIterator>*>(m_backup_state);
    --pmp;
    if(pmp < m_stack_base)
@@ -403,6 +403,13 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_startmark()
             pstate = alt->alt.p;
          break;
       }
+      }
+   case -5:
+      {
+         push_matched_paren(0, (*m_presult)[0]);
+         m_presult->set_first(position, 0, true);
+         pstate = pstate->next.p;
+         break;
       }
    default:
    {
@@ -911,8 +918,8 @@ bool perl_matcher<BidiIterator, Allocator, traits>::unwind_paren(bool have_match
    // restore previous values if no match was found:
    if(have_match == false)
    {
-      m_presult->set_first(pmp->sub.first, pmp->index);
-      m_presult->set_second(pmp->sub.second, pmp->index, pmp->sub.matched);
+      m_presult->set_first(pmp->sub.first, pmp->index, pmp->index == 0);
+      m_presult->set_second(pmp->sub.second, pmp->index, pmp->sub.matched, pmp->index == 0);
    }
 #ifdef BOOST_REGEX_MATCH_EXTRA
    //
