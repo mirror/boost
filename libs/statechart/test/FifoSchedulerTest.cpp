@@ -160,13 +160,29 @@ void RunScheduler(
   }
 }
 
+static int refArg1;
+static int refArg2;
+static int refArg3;
+static int refArg4;
+static int refArg5;
+static int refArg6;
+
 void Check(
   sc::fifo_scheduler<> & scheduler,
   const sc::fifo_scheduler<>::processor_handle & processor,
   int ctorArgs )
 {
+  refArg1 = 6;
+  refArg2 = 5;
+  refArg3 = 4;
+  refArg4 = 3;
+  refArg5 = 2;
+  refArg6 = 1;
+
   // Make sure the processor has been created
   RunScheduler( scheduler, 1UL );
+
+  refArg1 = refArg2 = refArg3 = refArg4 = refArg5 = refArg6 = 0;
 
   scheduler.initiate_processor( processor );
   // This event triggers the queueing of another event, which itself
@@ -209,33 +225,77 @@ int test_main( int, char* [] )
   try
   {
     sc::fifo_scheduler<> scheduler;
-    const sc::fifo_scheduler<>::processor_handle processor0 =
-      scheduler.create_processor< FifoSchedulerTest >();
-    Check( scheduler, processor0, 0 );
+    Check( scheduler, scheduler.create_processor< FifoSchedulerTest >(), 0 );
 
-    const sc::fifo_scheduler<>::processor_handle processor1 =
-      scheduler.create_processor< FifoSchedulerTest >( 1 );
-    Check( scheduler, processor1, 1 );
+    Check(
+      scheduler, scheduler.create_processor< FifoSchedulerTest >( 1 ), 1 );
 
-    const sc::fifo_scheduler<>::processor_handle processor2 =
-      scheduler.create_processor< FifoSchedulerTest >( 1, 2 );
-    Check( scheduler, processor2, 12 );
+    Check(
+      scheduler,
+      scheduler.create_processor< FifoSchedulerTest >(
+        boost::cref( refArg1 ) ),
+      6 );
 
-    const sc::fifo_scheduler<>::processor_handle processor3 =
-      scheduler.create_processor< FifoSchedulerTest >( 1, 2, 3 );
-    Check( scheduler, processor3, 123 );
+    Check(
+      scheduler,
+      scheduler.create_processor< FifoSchedulerTest >( 1, 2 ),
+      12 );
 
-    const sc::fifo_scheduler<>::processor_handle processor4 =
-      scheduler.create_processor< FifoSchedulerTest >( 1, 2, 3, 4 );
-    Check( scheduler, processor4, 1234 );
+    Check(
+      scheduler,
+      scheduler.create_processor< FifoSchedulerTest >(
+        boost::cref( refArg1 ), boost::cref( refArg2 ) ),
+      65 );
 
-    const sc::fifo_scheduler<>::processor_handle processor5 =
-      scheduler.create_processor< FifoSchedulerTest >( 1, 2, 3, 4, 5 );
-    Check( scheduler, processor5, 12345 );
+    Check(
+      scheduler,
+      scheduler.create_processor< FifoSchedulerTest >( 1, 2, 3 ),
+      123 );
 
-    const sc::fifo_scheduler<>::processor_handle processor6 =
-      scheduler.create_processor< FifoSchedulerTest >( 1, 2, 3, 4, 5, 6 );
-    Check( scheduler, processor6, 123456 );
+    Check(
+      scheduler,
+      scheduler.create_processor< FifoSchedulerTest >(
+        boost::cref( refArg1 ), boost::cref( refArg2 ),
+        boost::cref( refArg3 ) ),
+      654 );
+
+    Check(
+      scheduler,
+      scheduler.create_processor< FifoSchedulerTest >( 1, 2, 3, 4 ),
+      1234 );
+
+    Check(
+      scheduler,
+      scheduler.create_processor< FifoSchedulerTest >(
+        boost::cref( refArg1 ), boost::cref( refArg2 ),
+        boost::cref( refArg3 ), boost::cref( refArg4 ) ),
+      6543 );
+
+    Check(
+      scheduler,
+      scheduler.create_processor< FifoSchedulerTest >( 1, 2, 3, 4, 5 ),
+      12345 );
+
+    Check(
+      scheduler,
+      scheduler.create_processor< FifoSchedulerTest >(
+        boost::cref( refArg1 ), boost::cref( refArg2 ),
+        boost::cref( refArg3 ), boost::cref( refArg4 ),
+        boost::cref( refArg5 ) ),
+      65432 );
+
+    Check(
+      scheduler,
+      scheduler.create_processor< FifoSchedulerTest >( 1, 2, 3, 4, 5, 6 ),
+      123456 );
+
+    Check(
+      scheduler,
+      scheduler.create_processor< FifoSchedulerTest >(
+        boost::cref( refArg1 ), boost::cref( refArg2 ),
+        boost::cref( refArg3 ), boost::cref( refArg4 ),
+        boost::cref( refArg5 ), boost::cref( refArg6 ) ),
+      654321 );
 
     RunScheduler( scheduler, 0UL );
     bool workItem1Processed = false;

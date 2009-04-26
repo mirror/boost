@@ -12,6 +12,7 @@
 #include <boost/statechart/event_processor.hpp>
 
 #include <boost/assert.hpp>
+#include <boost/ref.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/shared_ptr.hpp>
@@ -43,6 +44,28 @@ class processor_container : noncopyable
   typedef event_processor< Scheduler > processor_base_type;
   typedef std::auto_ptr< processor_base_type > processor_holder_type;
   typedef shared_ptr< processor_holder_type > processor_holder_ptr_type;
+
+  template<bool IsReferenceWrapper>
+  struct unwrap_impl
+  {
+    template< typename T >
+    struct apply { typedef T type; };
+  };
+
+  template<>
+  struct unwrap_impl<true>
+  {
+    template< typename T >
+    struct apply { typedef typename T::type & type; };
+  };
+
+  template<typename T>
+  struct unwrap
+  {
+    typedef typename unwrap_impl<
+      is_reference_wrapper< T >::value >::template apply< T >::type type;
+  };
+
   public:
     //////////////////////////////////////////////////////////////////////////
     typedef weak_ptr< processor_holder_type > processor_handle;
@@ -102,10 +125,11 @@ class processor_container : noncopyable
       processor_holder_ptr_type pProcessor = make_processor_holder();
       handle = pProcessor;
       typedef void ( processor_container::*impl_fun_ptr )(
-        const processor_holder_ptr_type &, const processor_context &, Arg1 );
+        const processor_holder_ptr_type &, const processor_context &,
+        typename unwrap< Arg1 >::type );
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl1<
-          Processor, Arg1 >;
+          Processor, typename unwrap< Arg1 >::type >;
       return WorkItem(
         bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1 ),
@@ -119,11 +143,12 @@ class processor_container : noncopyable
       processor_holder_ptr_type pProcessor = make_processor_holder();
       handle = pProcessor;
       typedef void ( processor_container::*impl_fun_ptr )(
-        const processor_holder_ptr_type &,
-        const processor_context &, Arg1, Arg2 );
+        const processor_holder_ptr_type &, const processor_context &,
+        typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type );
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl2<
-          Processor, Arg1, Arg2 >;
+          Processor,
+          typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type >;
       return WorkItem(
         bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2 ),
@@ -138,12 +163,14 @@ class processor_container : noncopyable
       processor_holder_ptr_type pProcessor = make_processor_holder();
       handle = pProcessor;
       typedef void ( processor_container::*impl_fun_ptr )(
-        const processor_holder_ptr_type &,
-        const processor_context &,
-        Arg1, Arg2, Arg3 );
+        const processor_holder_ptr_type &, const processor_context &,
+        typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
+        typename unwrap< Arg3 >::type );
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl3<
-          Processor, Arg1, Arg2, Arg3 >;
+          Processor,
+          typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
+          typename unwrap< Arg3 >::type >;
       return WorkItem(
         bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2, arg3 ),
@@ -160,12 +187,14 @@ class processor_container : noncopyable
       processor_holder_ptr_type pProcessor = make_processor_holder();
       handle = pProcessor;
       typedef void ( processor_container::*impl_fun_ptr )(
-        const processor_holder_ptr_type &,
-        const processor_context &,
-        Arg1, Arg2, Arg3, Arg4 );
+        const processor_holder_ptr_type &, const processor_context &,
+        typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
+        typename unwrap< Arg3 >::type, typename unwrap< Arg4 >::type );
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl4<
-          Processor, Arg1, Arg2, Arg3, Arg4 >;
+          Processor,
+          typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
+          typename unwrap< Arg3 >::type, typename unwrap< Arg4 >::type >;
       return WorkItem(
         bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2, arg3, arg4 ),
@@ -182,12 +211,16 @@ class processor_container : noncopyable
       processor_holder_ptr_type pProcessor = make_processor_holder();
       handle = pProcessor;
       typedef void ( processor_container::*impl_fun_ptr )(
-        const processor_holder_ptr_type &,
-        const processor_context &,
-        Arg1, Arg2, Arg3, Arg4, Arg5 );
+        const processor_holder_ptr_type &, const processor_context &,
+        typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
+        typename unwrap< Arg3 >::type, typename unwrap< Arg4 >::type,
+        typename unwrap< Arg5 >::type );
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl5<
-          Processor, Arg1, Arg2, Arg3, Arg4, Arg5 >;
+          Processor,
+          typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
+          typename unwrap< Arg3 >::type, typename unwrap< Arg4 >::type,
+          typename unwrap< Arg5 >::type >;
       return WorkItem(
         bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2, arg3, arg4, arg5 ),
@@ -204,12 +237,16 @@ class processor_container : noncopyable
       processor_holder_ptr_type pProcessor = make_processor_holder();
       handle = pProcessor;
       typedef void ( processor_container::*impl_fun_ptr )(
-        const processor_holder_ptr_type &,
-        const processor_context &,
-        Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 );
+        const processor_holder_ptr_type &, const processor_context &,
+        typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
+        typename unwrap< Arg3 >::type, typename unwrap< Arg4 >::type,
+        typename unwrap< Arg5 >::type, typename unwrap< Arg6 >::type );
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl6<
-          Processor, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 >;
+          Processor,
+          typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
+          typename unwrap< Arg3 >::type, typename unwrap< Arg4 >::type,
+          typename unwrap< Arg5 >::type, typename unwrap< Arg6 >::type >;
       return WorkItem(
         bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2, arg3, arg4, arg5, arg6 ),
@@ -392,7 +429,6 @@ class processor_container : noncopyable
 
     event_processor_set_type processorSet_;
 };
-
 
 
 } // namespace statechart
