@@ -28,6 +28,7 @@ BOOST_ARCHIVE_LIST = [ modules.peek : BOOST_ARCHIVE_LIST ] ;
 test-suite "serialization" :
      [ test-bsl-run_files test_array : A ]
      [ test-bsl-run_files test_binary ]
+     [ test-bsl-run_files test_bitset ]
      [ test-bsl-run_files test_complex ]
      [ test-bsl-run_files test_contained_class : A ]
      [ test-bsl-run_files test_cyclic_ptrs : A ]
