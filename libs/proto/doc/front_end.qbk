@@ -185,7 +185,7 @@ Now, let's try to define a function template that returns an expression template
 
 In the code above, notice how the _function_ and _terminal_ metafunctions are used to calculate the return type: `pow()` returns an expression template representing a function call where the first child is the function to call and the second is the argument to the function. (Unfortunately, the same type calculation is repeated in the body of the function so that we can initialize a local variable of the correct type. We'll see in a moment how to avoid that.)
 
-[note As with _function_, there are metafunctions corresponding to all of the overloadable C++ operators for calculation expression types.]
+[note As with _function_, there are metafunctions corresponding to all of the overloadable C++ operators for calculating expression types.]
 
 With the above definition of the `pow()` function, we can create calculator expressions like the one below and evaluate them using the `calculator_context` we implemented in the Introduction.
 
