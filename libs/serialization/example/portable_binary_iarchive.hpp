@@ -49,8 +49,9 @@ public:
         switch(code){
         case incompatible_integer_size:
             msg = "integer cannot be represented";
+            break;
         default:
-            boost::archive::archive_exception::what();
+            msg = boost::archive::archive_exception::what();
         }
         return msg;
     }
