@@ -58,6 +58,10 @@ namespace boost
           _storage(storage)
         {
         }
+        template<typename U, std::size_t n>
+          stack_allocator(const stack_allocator<U, n> & other):
+          _storage(0)
+        {}
         typename base_class::pointer allocate(typename base_class::size_type n_elements,
           std::allocator<void>::const_pointer hint = 0)
         {
