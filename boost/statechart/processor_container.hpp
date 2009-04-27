@@ -32,19 +32,8 @@ namespace boost
 {
 namespace statechart
 {
-
-
-
-template<
-  class Scheduler,
-  class WorkItem,
-  class Allocator = std::allocator< void > >
-class processor_container : noncopyable
+namespace detail
 {
-  typedef event_processor< Scheduler > processor_base_type;
-  typedef std::auto_ptr< processor_base_type > processor_holder_type;
-  typedef shared_ptr< processor_holder_type > processor_holder_ptr_type;
-
   template<bool IsReferenceWrapper>
   struct unwrap_impl
   {
@@ -65,6 +54,18 @@ class processor_container : noncopyable
     typedef typename unwrap_impl<
       is_reference_wrapper< T >::value >::template apply< T >::type type;
   };
+}
+
+
+template<
+  class Scheduler,
+  class WorkItem,
+  class Allocator = std::allocator< void > >
+class processor_container : noncopyable
+{
+  typedef event_processor< Scheduler > processor_base_type;
+  typedef std::auto_ptr< processor_base_type > processor_holder_type;
+  typedef shared_ptr< processor_holder_type > processor_holder_ptr_type;
 
   public:
     //////////////////////////////////////////////////////////////////////////
@@ -124,12 +125,13 @@ class processor_container : noncopyable
     {
       processor_holder_ptr_type pProcessor = make_processor_holder();
       handle = pProcessor;
+      typedef typename detail::unwrap< Arg1 >::type arg1_type;
       typedef void ( processor_container::*impl_fun_ptr )(
         const processor_holder_ptr_type &, const processor_context &,
-        typename unwrap< Arg1 >::type );
+        arg1_type );
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl1<
-          Processor, typename unwrap< Arg1 >::type >;
+          Processor, arg1_type >;
       return WorkItem(
         bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1 ),
@@ -142,13 +144,14 @@ class processor_container : noncopyable
     {
       processor_holder_ptr_type pProcessor = make_processor_holder();
       handle = pProcessor;
+      typedef typename detail::unwrap< Arg1 >::type arg1_type;
+      typedef typename detail::unwrap< Arg2 >::type arg2_type;
       typedef void ( processor_container::*impl_fun_ptr )(
         const processor_holder_ptr_type &, const processor_context &,
-        typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type );
+         arg1_type, arg2_type );
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl2<
-          Processor,
-          typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type >;
+          Processor, arg1_type, arg2_type >;
       return WorkItem(
         bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2 ),
@@ -162,15 +165,15 @@ class processor_container : noncopyable
     {
       processor_holder_ptr_type pProcessor = make_processor_holder();
       handle = pProcessor;
+      typedef typename detail::unwrap< Arg1 >::type arg1_type;
+      typedef typename detail::unwrap< Arg2 >::type arg2_type;
+      typedef typename detail::unwrap< Arg3 >::type arg3_type;
       typedef void ( processor_container::*impl_fun_ptr )(
         const processor_holder_ptr_type &, const processor_context &,
-        typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
-        typename unwrap< Arg3 >::type );
+        arg1_type, arg2_type, arg3_type );
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl3<
-          Processor,
-          typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
-          typename unwrap< Arg3 >::type >;
+          Processor, arg1_type, arg2_type, arg3_type >;
       return WorkItem(
         bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2, arg3 ),
@@ -186,15 +189,16 @@ class processor_container : noncopyable
     {
       processor_holder_ptr_type pProcessor = make_processor_holder();
       handle = pProcessor;
+      typedef typename detail::unwrap< Arg1 >::type arg1_type;
+      typedef typename detail::unwrap< Arg2 >::type arg2_type;
+      typedef typename detail::unwrap< Arg3 >::type arg3_type;
+      typedef typename detail::unwrap< Arg4 >::type arg4_type;
       typedef void ( processor_container::*impl_fun_ptr )(
         const processor_holder_ptr_type &, const processor_context &,
-        typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
-        typename unwrap< Arg3 >::type, typename unwrap< Arg4 >::type );
+        arg1_type, arg2_type, arg3_type, arg4_type );
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl4<
-          Processor,
-          typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
-          typename unwrap< Arg3 >::type, typename unwrap< Arg4 >::type >;
+          Processor, arg1_type, arg2_type, arg3_type, arg4_type >;
       return WorkItem(
         bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2, arg3, arg4 ),
@@ -210,17 +214,17 @@ class processor_container : noncopyable
     {
       processor_holder_ptr_type pProcessor = make_processor_holder();
       handle = pProcessor;
+      typedef typename detail::unwrap< Arg1 >::type arg1_type;
+      typedef typename detail::unwrap< Arg2 >::type arg2_type;
+      typedef typename detail::unwrap< Arg3 >::type arg3_type;
+      typedef typename detail::unwrap< Arg4 >::type arg4_type;
+      typedef typename detail::unwrap< Arg5 >::type arg5_type;
       typedef void ( processor_container::*impl_fun_ptr )(
         const processor_holder_ptr_type &, const processor_context &,
-        typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
-        typename unwrap< Arg3 >::type, typename unwrap< Arg4 >::type,
-        typename unwrap< Arg5 >::type );
+        arg1_type, arg2_type, arg3_type, arg4_type, arg5_type );
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl5<
-          Processor,
-          typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
-          typename unwrap< Arg3 >::type, typename unwrap< Arg4 >::type,
-          typename unwrap< Arg5 >::type >;
+          Processor, arg1_type, arg2_type, arg3_type, arg4_type, arg5_type >;
       return WorkItem(
         bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2, arg3, arg4, arg5 ),
@@ -236,17 +240,19 @@ class processor_container : noncopyable
     {
       processor_holder_ptr_type pProcessor = make_processor_holder();
       handle = pProcessor;
+      typedef typename detail::unwrap< Arg1 >::type arg1_type;
+      typedef typename detail::unwrap< Arg2 >::type arg2_type;
+      typedef typename detail::unwrap< Arg3 >::type arg3_type;
+      typedef typename detail::unwrap< Arg4 >::type arg4_type;
+      typedef typename detail::unwrap< Arg5 >::type arg5_type;
+      typedef typename detail::unwrap< Arg6 >::type arg6_type;
       typedef void ( processor_container::*impl_fun_ptr )(
         const processor_holder_ptr_type &, const processor_context &,
-        typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
-        typename unwrap< Arg3 >::type, typename unwrap< Arg4 >::type,
-        typename unwrap< Arg5 >::type, typename unwrap< Arg6 >::type );
+        arg1_type, arg2_type, arg3_type, arg4_type, arg5_type, arg6_type );
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl6<
           Processor,
-          typename unwrap< Arg1 >::type, typename unwrap< Arg2 >::type,
-          typename unwrap< Arg3 >::type, typename unwrap< Arg4 >::type,
-          typename unwrap< Arg5 >::type, typename unwrap< Arg6 >::type >;
+          arg1_type, arg2_type, arg3_type, arg4_type, arg5_type, arg6_type >;
       return WorkItem(
         bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2, arg3, arg4, arg5, arg6 ),
