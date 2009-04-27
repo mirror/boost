@@ -34,22 +34,17 @@
 
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_enum.hpp>
-//#include <boost/type_traits/is_volatile.hpp>
 #include <boost/type_traits/is_const.hpp>
-//#include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
 #include <boost/type_traits/remove_extent.hpp>
 #include <boost/serialization/assume_abstract.hpp>
 
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/and.hpp>
-//#include <boost/mpl/less.hpp>
 #include <boost/mpl/greater_equal.hpp>
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/identity.hpp>
-//#include <boost/mpl/list.hpp>
-//#include <boost/mpl/empty.hpp>
 #include <boost/mpl/not.hpp>
 
  #ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO   

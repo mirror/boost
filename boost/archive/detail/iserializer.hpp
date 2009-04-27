@@ -47,14 +47,14 @@ namespace std{
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
 
-#define NO_HAS_NEW_OPERATOR (                          \
+#define DONT_USE_HAS_NEW_OPERATOR (                    \
     defined(__BORLANDC__)                              \
     || defined(__IBMCPP__)                             \
     || defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)     \
     || defined(__SUNPRO_CC) && (__SUBPRO_CC < 0x590)   \
 )
 
-#if ! NO_USE_HAS_NEW_OPERATOR
+#if ! DONT_USE_HAS_NEW_OPERATOR
 #include <boost/type_traits/has_new_operator.hpp>
 #endif
 
