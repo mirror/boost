@@ -436,6 +436,9 @@
 				RelativePath="..\..\..\boost\serialization\binary_object.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\bitset.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\collection_traits.hpp">
 			</File>
 			<File
