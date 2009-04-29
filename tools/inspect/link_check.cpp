@@ -130,10 +130,22 @@ namespace boost
       boost::match_results< string::const_iterator > what;
       boost::match_flag_type flags = boost::match_default;
 
-      boost::regex const& url_regex =
-          is_css(full_path) ? css_url_regex : html_url_regex;
+      if(is_css(full_path))
+      {
+        while( boost::regex_search( start, end, what, html_url_regex, flags) )
+        {
+          // what[0] contains the whole string iterators.
+          // what[2] contains the URL iterators.
+          do_url( string( what[2].first, what[2].second ),
+            library_name, full_path, no_link_errors );
 
-      while( boost::regex_search( start, end, what, url_regex, flags) )
+          start = what[0].second; // update search position
+          flags |= boost::match_prev_avail; // update flags
+          flags |= boost::match_not_bob;
+        }
+      }
+
+      while( boost::regex_search( start, end, what, css_url_regex, flags) )
       {
         // what[0] contains the whole string iterators.
         // what[2] contains the URL iterators.
