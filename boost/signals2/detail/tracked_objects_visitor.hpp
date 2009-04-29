@@ -64,7 +64,7 @@ namespace boost
             m_visit_signal(t, mpl::bool_<is_signal<T>::value>());
         }
         template<typename T>
-        void m_visit_not_function_pointer(const T &t, const mpl::bool_<false> &) const
+        void m_visit_not_function_pointer(const T &, const mpl::bool_<false> &) const
         {}
         template<typename T>
         void m_visit_signal(const T *signal, const mpl::bool_<true> &) const
@@ -82,7 +82,7 @@ namespace boost
           if(trackable)
             slot_->_tracked_objects.push_back(trackable->get_shared_ptr());
         }
-        void add_if_trackable(const void *trackable) const {}
+        void add_if_trackable(const void *) const {}
 
         mutable slot_base * slot_;
       };
