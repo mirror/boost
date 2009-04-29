@@ -32,7 +32,8 @@ namespace boost
       m_path_map m_paths; // first() is relative initial_path()
 
       void do_url( const string & url, const string & library_name,
-        const path & full_source_path, bool no_link_errors );
+        const path & full_source_path, bool no_link_errors,
+        bool allow_external_links );
     public:
 
       link_check();
