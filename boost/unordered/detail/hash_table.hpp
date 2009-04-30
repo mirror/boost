@@ -83,7 +83,7 @@ namespace boost {
             1610612741ul, 3221225473ul, 4294967291ul };
 
         template<typename T>
-        std::ptrdiff_t const prime_list_template<T>::length = 40;
+        std::ptrdiff_t const prime_list_template<T>::length = 28;
 
         typedef prime_list_template<std::size_t> prime_list;
 
