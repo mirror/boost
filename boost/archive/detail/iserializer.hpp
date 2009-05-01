@@ -207,7 +207,7 @@ template<class T>
 struct heap_allocator
 {
     // boost::has_new_operator<T> doesn't work on these compilers
-    #if NO_USE_HAS_NEW_OPERATOR
+    #if DONT_USE_HAS_NEW_OPERATOR
         // This doesn't handle operator new overload for class T
         static T * invoke(){
             return static_cast<T *>(operator new(sizeof(T)));
