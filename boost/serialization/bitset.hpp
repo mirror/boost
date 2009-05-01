@@ -10,8 +10,12 @@
 #ifndef BOOST_SERIALIZATION_BITSET_HPP
 #define BOOST_SERIALIZATION_BITSET_HPP
 
+// MS compatible compilers support #pragma once
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma once
+#endif
+
 #include <bitset>
-#include <string>
 
 #include <boost/config.hpp>
 #include <boost/serialization/split_free.hpp>
@@ -25,9 +29,9 @@ template <class Archive, unsigned size>
 inline void save(
     Archive & ar,
     std::bitset<size> const & t,
-    const unsigned int version
+    const unsigned int /* version */
 ){
-    std::string bits = t.template to_string<
+    const std::string bits = t.template to_string<
         std::string::value_type,
         std::string::traits_type,
         std::string::allocator_type
@@ -39,7 +43,7 @@ template <class Archive, unsigned size>
 inline void load(
     Archive & ar,
     std::bitset<size> & t,
-    const unsigned int version
+    const unsigned int /* version */
 ){
     std::string bits;
     ar >> BOOST_SERIALIZATION_NVP( bits );
