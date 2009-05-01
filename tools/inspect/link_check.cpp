@@ -169,7 +169,7 @@ namespace boost
 //  do_url  ------------------------------------------------------------------//
 
     void link_check::do_url( const string & url, const string & library_name,
-      const path & source_path, bool no_link_errors, bool allow_external_links )
+      const path & source_path, bool no_link_errors, bool allow_external_content )
         // precondition: source_path.is_complete()
     {
       if(!no_link_errors && url.empty()) {
@@ -208,11 +208,11 @@ namespace boost
         //query(m[7]),
         fragment(m[9]);
 
-      // Check for external links
-      if(!allow_external_links && (authority_matched || scheme_matched)) {
+      // Check for external content
+      if(!allow_external_content && (authority_matched || scheme_matched)) {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid external link: " + decoded_url );
+          error( library_name, source_path, string(name()) + " external content: " + decoded_url );
         }
       }
 
