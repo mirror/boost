@@ -58,6 +58,10 @@ namespace boost
           _storage(storage)
         {
         }
+        template<typename U, std::size_t n>
+          stack_allocator(const stack_allocator<U, n> & other):
+          _storage(0)
+        {}
         typename base_class::pointer allocate(typename base_class::size_type n_elements,
           std::allocator<void>::const_pointer hint = 0)
         {
@@ -79,6 +83,24 @@ namespace boost
           {
             base_class::deallocate(p, n);
           }
+        }
+        bool operator==(const stack_allocator &other)
+        {
+          return _storage == other._storage;
+        }
+        bool operator!=(const stack_allocator &other)
+        {
+          return _storage != other._storage;
+        }
+        template<typename U, std::size_t n>
+          bool operator==(const stack_allocator<U, n> &other)
+        {
+          return _storage == 0 && other._storage == 0;
+        }
+        template<typename U, std::size_t n>
+          bool operator!=(const stack_allocator<U, n> &other)
+        {
+          return _storage != 0 || other._storage != 0;
         }
       private:
         stack_storage<T, n_stack_elements> *_storage;
