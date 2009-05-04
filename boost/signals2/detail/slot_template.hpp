@@ -61,21 +61,15 @@ namespace boost
       {
       }
       // bind syntactic sugar
-// const ArgTypeN & argN
-#define BOOST_SIGNALS2_SLOT_BINDING_ARG_DECL(z, n, data) \
-    const BOOST_PP_CAT(ArgType, n) & BOOST_PP_CAT(arg, n)
 // template<typename Func, typename ArgType0, typename ArgType1, ..., typename ArgTypen-1> slotN(...
-#define BOOST_SIGNALS2_SLOT_BINDING_CONSTRUCTOR(z, n, data) \
+#define BOOST_SIGNALS2_SLOT_N_BINDING_CONSTRUCTOR(z, n, data) \
       template<typename Func, BOOST_PP_ENUM_PARAMS(n, typename ArgType)> \
       BOOST_SIGNALS2_SLOT_CLASS_NAME(BOOST_SIGNALS2_NUM_ARGS)(const Func &func,  BOOST_PP_ENUM(n, BOOST_SIGNALS2_SLOT_BINDING_ARG_DECL, ~)) \
       { \
         init_slot_function(bind(func, BOOST_PP_ENUM_PARAMS(n, arg))); \
       }
-#define BOOST_SIGNALS2_SLOT_MAX_BINDING_ARGS 10
-      BOOST_PP_REPEAT_FROM_TO(1, BOOST_SIGNALS2_SLOT_MAX_BINDING_ARGS, BOOST_SIGNALS2_SLOT_BINDING_CONSTRUCTOR, ~)
-#undef BOOST_SIGNALS2_SLOT_MAX_BINDING_ARGS
-#undef BOOST_SIGNALS2_SLOT_BINDING_ARG_DECL
-#undef BOOST_SIGNALS2_SLOT_BINDING_CONSTRUCTOR
+      BOOST_PP_REPEAT_FROM_TO(1, BOOST_SIGNALS2_SLOT_MAX_BINDING_ARGS, BOOST_SIGNALS2_SLOT_N_BINDING_CONSTRUCTOR, ~)
+#undef BOOST_SIGNALS2_SLOT_N_BINDING_CONSTRUCTOR
       // invocation
       R operator()(BOOST_SIGNALS2_SIGNATURE_FULL_ARGS(BOOST_SIGNALS2_NUM_ARGS))
       {
