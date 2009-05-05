@@ -115,7 +115,7 @@ struct conversion_helper
     struct unscaled_get_default_conversion<unscale<Source>::type>   \
     {                                                               \
         static const bool is_defined = true;                        \
-        typedef Dest type;                                          \
+        typedef Dest::unit_type type;                               \
     };                                                              \
     }                                                               \
     }                                                               \
@@ -134,7 +134,7 @@ struct conversion_helper
     struct unscaled_get_default_conversion<Source>                      \
     {                                                                   \
         static const bool is_defined = true;                            \
-        typedef Dest type;                                              \
+        typedef typename Dest::unit_type type;                          \
     };                                                                  \
     }                                                                   \
     }                                                                   \
