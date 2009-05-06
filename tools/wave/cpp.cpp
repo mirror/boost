@@ -799,7 +799,7 @@ int error_count = 0;
 
     // add include directories to the system include search paths
         if (vm.count("sysinclude")) {
-        vector<std::string> syspaths = vm["sysinclude"].as<vector<string> >();
+          vector<std::string> syspaths = vm["sysinclude"].as<vector<std::string> >();
         
             vector<std::string>::const_iterator end = syspaths.end();
             for (vector<std::string>::const_iterator cit = syspaths.begin(); 
@@ -836,7 +836,7 @@ int error_count = 0;
     
     // add additional defined macros 
         if (vm.count("define")) {
-            vector<std::string> const &macros = vm["define"].as<vector<string> >();
+          vector<std::string> const &macros = vm["define"].as<vector<std::string> >();
             vector<std::string>::const_iterator end = macros.end();
             for (vector<std::string>::const_iterator cit = macros.begin(); 
                  cit != end; ++cit)
