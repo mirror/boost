@@ -8,21 +8,38 @@ if (BUILD_QUICKBOOK)
     add_definitions(/wd4511 /wd4512 /wd4701 /wd4702 /wd4244 /wd4267 /wd4800)
   endif (MSVC)
   
-  #
-  # TDS: this needs fixing...  these are the modules that quickbook is
-  # dependent on, these paths should be set via some more generic
-  # mechanism
-  #
-  include_directories(
-    ${CMAKE_SOURCE_DIR}/libs/spirit/include
-    ${CMAKE_SOURCE_DIR}/libs/detail/include
-    ${CMAKE_SOURCE_DIR}/libs/config/include
-    ${CMAKE_SOURCE_DIR}/libs/type_traits/include
-    ${CMAKE_SOURCE_DIR}/libs/program_options/include
-    ${CMAKE_SOURCE_DIR}/libs/filesystem/include
-    ${CMAKE_SOURCE_DIR}/libs/system/include
-    )
-  
+#
+# TDS: this needs fixing...  these are the modules that quickbook is
+# dependent on.  if boost is modularized, you need these, but
+# they don't hurt if quickbook isn't modularized.
+#
+include_directories(
+  ${CMAKE_SOURCE_DIR}/libs/any/include
+  ${CMAKE_SOURCE_DIR}/libs/bind/include
+  ${CMAKE_SOURCE_DIR}/libs/concept/include
+  ${CMAKE_SOURCE_DIR}/libs/concept_check/include
+  ${CMAKE_SOURCE_DIR}/libs/config/include
+  ${CMAKE_SOURCE_DIR}/libs/detail/include
+  ${CMAKE_SOURCE_DIR}/libs/exception/include
+  ${CMAKE_SOURCE_DIR}/libs/filesystem/include
+  ${CMAKE_SOURCE_DIR}/libs/foreach/include
+  ${CMAKE_SOURCE_DIR}/libs/function/include
+  ${CMAKE_SOURCE_DIR}/libs/integer/include
+  ${CMAKE_SOURCE_DIR}/libs/iostreams/include
+  ${CMAKE_SOURCE_DIR}/libs/iterator/include
+  ${CMAKE_SOURCE_DIR}/libs/mpl/include
+  ${CMAKE_SOURCE_DIR}/libs/preprocessor/include
+  ${CMAKE_SOURCE_DIR}/libs/program_options/include
+  ${CMAKE_SOURCE_DIR}/libs/range/include
+  ${CMAKE_SOURCE_DIR}/libs/spirit/include
+  ${CMAKE_SOURCE_DIR}/libs/smart_ptr/include
+  ${CMAKE_SOURCE_DIR}/libs/static_assert/include
+  ${CMAKE_SOURCE_DIR}/libs/system/include
+  ${CMAKE_SOURCE_DIR}/libs/tuple/include
+  ${CMAKE_SOURCE_DIR}/libs/optional/include
+  ${CMAKE_SOURCE_DIR}/libs/type_traits/include
+  ${CMAKE_SOURCE_DIR}/libs/utility/include
+  )
 
   boost_add_executable(quickbook
     detail/quickbook.cpp
