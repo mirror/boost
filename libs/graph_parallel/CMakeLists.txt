@@ -9,7 +9,7 @@ boost_library_project(
   graph_parallel
   SRCDIRS  src
   TESTDIRS  test
-  HEADERS graph graph/parallel
+#  HEADERS graph graph/parallel
   # DOCDIRS doc
   DESCRIPTION  "Parallel support using MPI for Boost.Graph."
   AUTHORS  "Douglas Gregor <doug.gregor -at- gmail.com>"
