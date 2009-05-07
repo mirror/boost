@@ -1,1 +1,1 @@
-boost_module (circular_buffer DEPENDS config)
+boost_module (circular_buffer DEPENDS config thread)
