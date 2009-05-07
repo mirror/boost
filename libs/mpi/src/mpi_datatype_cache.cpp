@@ -25,7 +25,7 @@ namespace boost { namespace mpi { namespace detail {
       impl = new implementation();
   }
 
-  mpi_datatype_map::~mpi_datatype_map()
+  void mpi_datatype_map::clear()
   {
     // do not free after call to MPI_FInalize
     int finalized=0;
@@ -35,6 +35,12 @@ namespace boost { namespace mpi { namespace detail {
       for (stored_map_type::iterator it=impl->map.begin(); it != impl->map.end(); ++it)
         MPI_Type_free(&(it->second));
     }
+  }
+  
+  
+  mpi_datatype_map::~mpi_datatype_map()
+  {
+    clear();
     delete impl;
   }
 

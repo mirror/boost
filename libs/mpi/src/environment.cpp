@@ -7,6 +7,7 @@
 // Message Passing Interface 1.1 -- 7.1.1. Environmental Inquiries
 #include <boost/mpi/environment.hpp>
 #include <boost/mpi/exception.hpp>
+#include <boost/mpi/detail/mpi_datatype_cache.hpp>
 #include <cassert>
 #include <exception>
 #include <stdexcept>
@@ -45,6 +46,7 @@ environment::~environment()
     if (std::uncaught_exception() && abort_on_exception) {
       abort(-1);
     } else if (!finalized()) {
+      detail::mpi_datatype_cache().clear();
       BOOST_MPI_CHECK_RESULT(MPI_Finalize, ());
     }
   }
