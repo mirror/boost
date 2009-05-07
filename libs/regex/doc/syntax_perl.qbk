@@ -185,7 +185,11 @@ You can also use the \g escape for the same function, for example:
 	parsing of the expression in cases like =\g{1}2= or for indexes higher than 9 as in =\g{1234}=]]
 [[=\g-1=][Match whatever matched the last opened sub-expression]]
 [[=\g{-2}=][Match whatever matched the last but one opened sub-expression]]
+[[=\g{one}=][Match whatever matched the sub-expression named "one"]]
 ]
+
+Finally the \k escape can be used to refer to named subexpressions, for example [^\k<two>] will match
+whatever matched the subexpression named "two".
 
 [h4 Alternation]
 
@@ -425,6 +429,21 @@ Any other escape sequence matches the character that is escaped, for example
 
 Perl-specific extensions to the regular expression syntax all start with =(?=.
 
+[h5 Named Subexpressions]
+
+You can create a named subexpression using:
+
+	(?<NAME>expression)
+	
+Which can be then be refered to by the name /NAME/.  Alternatively you can delimit the name
+using 'NAME' as in:
+
+	(?'NAME'expression)
+	
+These named subexpressions can be refered to in a backreference using either [^\g{NAME}] or [^\k<NAME>]
+and can also be refered to by name in a [perl_format] format string for search and replace operations, or in the
+[match_results] member functions.
+	
 [h5 Comments]
 
 =(?# ... )= is treated as a comment, it's contents are ignored.

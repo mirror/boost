@@ -90,5 +90,18 @@ void test_backrefs()
    TEST_REGEX_SEARCH("a(b*)c\\g{-1}d", perl, "abbcbbbd", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("^(.)\\g{-1}", perl, "abc", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("a([bc])\\g{-1}d", perl, "abcdabbd", match_default, make_array(4, 8, 5, 6, -2, -2));
+   
+   // And again but with named subexpressions:
+   TEST_REGEX_SEARCH("a(?<foo>(?<bar>(?<bb>(?<aa>b*))))c\\g{foo}d", perl, "abbcbbd", match_default, make_array(0, 7, 1, 3, 1, 3, 1, 3, 1, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(?<foo>(?<bar>(?<bb>(?<aa>b*))))c\\g{foo}d", perl, "abbcbd", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("a(?<foo>(?<bar>(?<bb>(?<aa>b*))))c\\g{foo}d", perl, "abbcbbbd", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("^(?<foo>.)\\g{foo}", perl, "abc", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("a(?<foo>[bc])\\g{foo}d", perl, "abcdabbd", match_default, make_array(4, 8, 5, 6, -2, -2));
+
+   TEST_REGEX_SEARCH("a(?'foo'(?'bar'(?'bb'(?'aa'b*))))c\\g{foo}d", perl, "abbcbbd", match_default, make_array(0, 7, 1, 3, 1, 3, 1, 3, 1, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(?'foo'(?'bar'(?'bb'(?'aa'b*))))c\\g{foo}d", perl, "abbcbd", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("a(?'foo'(?'bar'(?'bb'(?'aa'b*))))c\\g{foo}d", perl, "abbcbbbd", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("^(?'foo'.)\\g{foo}", perl, "abc", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("a(?'foo'[bc])\\g{foo}d", perl, "abcdabbd", match_default, make_array(4, 8, 5, 6, -2, -2));
 }
 

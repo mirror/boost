@@ -27,7 +27,7 @@
 <a name="boost_regex.ref.match_results"></a><a class="link" href="match_results.html" title="match_results"> match_results</a>
 </h3></div></div></div>
 <a name="boost_regex.ref.match_results.synopsis"></a><h5>
-<a name="id818644"></a>
+<a name="id816365"></a>
         <a class="link" href="match_results.html#boost_regex.ref.match_results.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -98,9 +98,33 @@
    <span class="keyword">bool</span> <a class="link" href="match_results.html#boost_regex.match_results.empty">empty</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
    <span class="comment">// element access:
 </span>   <span class="identifier">difference_type</span> <a class="link" href="match_results.html#boost_regex.match_results.length">length</a><span class="special">(</span><span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">difference_type</span> <a class="link" href="match_results.html#boost_regex.match_results.length">length</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">char_type</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+   <span class="identifier">difference_type</span> <a class="link" href="match_results.html#boost_regex.match_results.length">length</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+   <span class="identifier">difference_type</span> <a class="link" href="match_results.html#boost_regex.match_results.length">length</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">sub</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
    <span class="identifier">difference_type</span> <a class="link" href="match_results.html#boost_regex.match_results.position">position</a><span class="special">(</span><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">difference_type</span> <a class="link" href="match_results.html#boost_regex.match_results.position">position</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">char_type</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+   <span class="identifier">difference_type</span> <a class="link" href="match_results.html#boost_regex.match_results.position">position</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+   <span class="identifier">difference_type</span> <a class="link" href="match_results.html#boost_regex.match_results.position">position</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">sub</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
    <span class="identifier">string_type</span> <a class="link" href="match_results.html#boost_regex.match_results.str">str</a><span class="special">(</span><span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">string_type</span> <a class="link" href="match_results.html#boost_regex.match_results.str">str</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">char_type</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+   <span class="identifier">string_type</span> <a class="link" href="match_results.html#boost_regex.match_results.str">str</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">char_type</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+   <span class="identifier">string_type</span> <a class="link" href="match_results.html#boost_regex.match_results.str">str</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+   <span class="identifier">string_type</span> <a class="link" href="match_results.html#boost_regex.match_results.str">str</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
    <span class="identifier">const_reference</span> <a class="link" href="match_results.html#boost_regex.match_results.subscript">operator[]</a><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">const_reference</span> <a class="link" href="match_results.html#boost_regex.match_results.subscript">operator[]</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">char_type</span><span class="special">*</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+   <span class="identifier">const_reference</span> <a class="link" href="match_results.html#boost_regex.match_results.subscript">operator[]</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">char_type</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+   <span class="identifier">const_reference</span> <a class="link" href="match_results.html#boost_regex.match_results.subscript">operator[]</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+   <span class="identifier">const_reference</span> <a class="link" href="match_results.html#boost_regex.match_results.subscript">operator[]</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
    <span class="identifier">const_reference</span> <a class="link" href="match_results.html#boost_regex.match_results.prefix">prefix</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 
@@ -142,7 +166,7 @@
          <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m2</span><span class="special">);</span>
 </pre>
 <a name="boost_regex.ref.match_results.description"></a><h5>
-<a name="id821784"></a>
+<a name="id821170"></a>
         <a class="link" href="match_results.html#boost_regex.ref.match_results.description">Description</a>
       </h5>
 <p>
@@ -375,14 +399,39 @@
 <a name="boost_regex.match_results.length"></a><p>
       </p>
 <pre class="programlisting"><span class="identifier">difference_type</span> <span class="identifier">length</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<span class="identifier">difference_type</span> <span class="identifier">length</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">char_type</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<span class="identifier">difference_type</span> <span class="identifier">length</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+<span class="identifier">difference_type</span> <span class="identifier">length</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;)</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the length of sub-expression
         <span class="emphasis"><em>sub</em></span>, that is to say: <code class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)[</span><span class="identifier">sub</span><span class="special">].</span><span class="identifier">length</span><span class="special">()</span></code>.
       </p>
+<p>
+        The overloads that accept a string refer to a named sub-expression <span class="emphasis"><em>n</em></span>.
+        In the event that there is no such named sub-expression then returns an empty
+        string.
+      </p>
+<p>
+        The template overloads of this function, allow the string and/or character
+        type to be different from the character type of the underlying sequence and/or
+        regular expression: in this case the characters will be widened to the underlying
+        character type of the original regular expression. A compiler error will
+        occur if the argument passes a wider character type than the underlying sequence.
+        These overloads allow a normal narrow character C string literal to be used
+        as an argument, even when the underlying character type of the expression
+        being matched may be something more exotic such as a Unicode character type.
+      </p>
 <a name="boost_regex.match_results.position"></a><p>
       </p>
 <pre class="programlisting"><span class="identifier">difference_type</span> <span class="identifier">position</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<span class="identifier">difference_type</span> <span class="identifier">position</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">char_type</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<span class="identifier">difference_type</span> <span class="identifier">position</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+<span class="identifier">difference_type</span> <span class="identifier">position</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;)</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns the starting location of
@@ -391,17 +440,61 @@
         will return the location of the partial match even though <code class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)[</span><span class="number">0</span><span class="special">].</span><span class="identifier">matched</span></code>
         is false.
       </p>
+<p>
+        The overloads that accept a string refer to a named sub-expression <span class="emphasis"><em>n</em></span>.
+        In the event that there is no such named sub-expression then returns an empty
+        string.
+      </p>
+<p>
+        The template overloads of this function, allow the string and/or character
+        type to be different from the character type of the underlying sequence and/or
+        regular expression: in this case the characters will be widened to the underlying
+        character type of the original regular expression. A compiler error will
+        occur if the argument passes a wider character type than the underlying sequence.
+        These overloads allow a normal narrow character C string literal to be used
+        as an argument, even when the underlying character type of the expression
+        being matched may be something more exotic such as a Unicode character type.
+      </p>
 <a name="boost_regex.match_results.str"></a><p>
       </p>
 <pre class="programlisting"><span class="identifier">string_type</span> <span class="identifier">str</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">sub</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<span class="identifier">string_type</span> <span class="identifier">str</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">char_type</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+<span class="identifier">string_type</span> <span class="identifier">str</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">char_type</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<span class="identifier">string_type</span> <span class="identifier">str</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+<span class="identifier">string_type</span> <span class="identifier">str</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">sub</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns sub-expression <span class="emphasis"><em>sub</em></span>
         as a string: <code class="computeroutput"><span class="identifier">string_type</span><span class="special">((*</span><span class="keyword">this</span><span class="special">)[</span><span class="identifier">sub</span><span class="special">])</span></code>.
       </p>
+<p>
+        The overloads that accept a string, return the string that matched the named
+        sub-expression <span class="emphasis"><em>n</em></span>. In the event that there is no such
+        named sub-expression then returns an empty string.
+      </p>
+<p>
+        The template overloads of this function, allow the string and/or character
+        type to be different from the character type of the underlying sequence and/or
+        regular expression: in this case the characters will be widened to the underlying
+        character type of the original regular expression. A compiler error will
+        occur if the argument passes a wider character type than the underlying sequence.
+        These overloads allow a normal narrow character C string literal to be used
+        as an argument, even when the underlying character type of the expression
+        being matched may be something more exotic such as a Unicode character type.
+      </p>
 <a name="boost_regex.match_results.subscript"></a><p>
       </p>
 <pre class="programlisting"><span class="identifier">const_reference</span> <span class="keyword">operator</span><span class="special">[](</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+<span class="identifier">const_reference</span> <span class="keyword">operator</span><span class="special">[](</span><span class="keyword">const</span> <span class="identifier">char_type</span><span class="special">*</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+<span class="identifier">const_reference</span> <span class="keyword">operator</span><span class="special">[](</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">char_type</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<span class="identifier">const_reference</span> <span class="keyword">operator</span><span class="special">[](</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">A</span><span class="special">&gt;</span>
+<span class="identifier">const_reference</span> <span class="keyword">operator</span><span class="special">[](</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">Traits</span><span class="special">,</span> <span class="identifier">A</span><span class="special">&gt;&amp;</span> <span class="identifier">n</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Returns a reference to the <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
@@ -412,6 +505,22 @@
         is out of range, or if <span class="emphasis"><em>n</em></span> is an unmatched sub-expression,
         then returns a <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
         object whose matched member is false.
+      </p>
+<p>
+        The overloads that accept a string, return a reference to the <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a> object representing the
+        character sequence that matched the named sub-expression <span class="emphasis"><em>n</em></span>.
+        In the event that there is no such named sub-expression then returns a <a class="link" href="sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
+        object whose matched member is false.
+      </p>
+<p>
+        The template overloads of this function, allow the string and/or character
+        type to be different from the character type of the underlying sequence and/or
+        regular expression: in this case the characters will be widened to the underlying
+        character type of the original regular expression. A compiler error will
+        occur if the argument passes a wider character type than the underlying sequence.
+        These overloads allow a normal narrow character C string literal to be used
+        as an argument, even when the underlying character type of the expression
+        being matched may be something more exotic such as a Unicode character type.
       </p>
 <a name="boost_regex.match_results.prefix"></a><p>
       </p>

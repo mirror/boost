@@ -326,9 +326,9 @@ inline const charT* get_escape_R_string()
 #endif
    static const charT e1[] = { '(', '?', '>', '\x0D', '\x0A', '?', 
       '|', '[', '\x0A', '\x0B', '\x0C', '\x85', '\\', 'x', '{', '2', '0', '2', '8', '}', 
-                '\\', 'x', '{', '2', '0', '2', '9', '}', ']', ')' };
+                '\\', 'x', '{', '2', '0', '2', '9', '}', ']', ')', '\0' };
    static const charT e2[] = { '(', '?', '>', '\x0D', '\x0A', '?', 
-      '|', '[', '\x0A', '\x0B', '\x0C', '\x85', ']', ')' };
+      '|', '[', '\x0A', '\x0B', '\x0C', '\x85', ']', ')', '\0' };
 
    charT c = static_cast<charT>(0x2029u);
    bool b = (static_cast<unsigned>(c) == 0x2029u);

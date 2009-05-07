@@ -19,6 +19,8 @@
 #ifndef BOOST_REGEX_V4_BASIC_REGEX_HPP
 #define BOOST_REGEX_V4_BASIC_REGEX_HPP
 
+#include <boost/type_traits/is_same.hpp>
+
 #ifdef BOOST_MSVC
 #pragma warning(push)
 #pragma warning(disable: 4103)
@@ -44,12 +46,123 @@ namespace re_detail{
 template <class charT, class traits>
 class basic_regex_parser;
 
+template <class I>
+void bubble_down_one(I first, I last)
+{
+   if(first != last)
+   {
+      I next = last - 1;
+      while((next != first) && !(*(next-1) < *next))
+      {
+         (next-1)->swap(*next);
+         --next;
+      }
+   }
+}
+
+//
+// Class named_subexpressions
+// Contains information about named subexpressions within the regex.
+//
+template <class charT>
+class named_subexpressions_base
+{
+public:
+   virtual int get_id(const charT* i, const charT* j) = 0;
+};
+
+template <class charT>
+class named_subexpressions : public named_subexpressions_base<charT>
+{
+   struct name
+   {
+      name(const charT* i, const charT* j, int idx)
+         : n(i, j), index(idx) {}
+      std::vector<charT> n;
+      int index;
+      bool operator < (const name& other)const
+      {
+         return std::lexicographical_compare(n.begin(), n.end(), other.n.begin(), other.n.end());
+      }
+      bool operator == (const name& other)const
+      {
+         return n == other.n;
+      }
+      void swap(name& other)
+      {
+         n.swap(other.n);
+         std::swap(index, other.index);
+      }
+   };
+public:
+   named_subexpressions(){}
+   void set_name(const charT* i, const charT* j, int index)
+   {
+      m_sub_names.push_back(name(i, j, index));
+      bubble_down_one(m_sub_names.begin(), m_sub_names.end());
+   }
+   int get_id(const charT* i, const charT* j)
+   {
+      name t(i, j, 0);
+      typename std::vector<name>::const_iterator pos = lower_bound(m_sub_names.begin(), m_sub_names.end(), t);
+      if((pos != m_sub_names.end()) && (*pos == t))
+      {
+         return pos->index;
+      }
+      return -1;
+   }
+private:
+   std::vector<name> m_sub_names;
+};
+
+template <class charT, class Other>
+class named_subexpressions_converter : public named_subexpressions_base<charT>
+{
+   boost::shared_ptr<named_subexpressions<Other> > m_converter;
+public:
+   named_subexpressions_converter(boost::shared_ptr<named_subexpressions<Other> > s)
+      : m_converter(s) {}
+   virtual int get_id(const charT* i, const charT* j)
+   {
+      if(i == j)
+         return -1;
+      std::vector<Other> v;
+      while(i != j)
+      {
+         v.push_back(*i);
+         ++i;
+      }
+      return m_converter->get_id(&v[0], &v[0] + v.size());
+   }
+};
+
+template <class To>
+inline boost::shared_ptr<named_subexpressions_base<To> > convert_to_named_subs_imp(
+   boost::shared_ptr<named_subexpressions<To> > s, 
+   boost::integral_constant<bool,true> const&)
+{
+   return s;
+}
+template <class To, class From>
+inline boost::shared_ptr<named_subexpressions_base<To> > convert_to_named_subs_imp(
+   boost::shared_ptr<named_subexpressions<From> > s, 
+   boost::integral_constant<bool,false> const&)
+{
+   return boost::shared_ptr<named_subexpressions_converter<To, From> >(new named_subexpressions_converter<To, From>(s));
+}
+template <class To, class From>
+inline boost::shared_ptr<named_subexpressions_base<To> > convert_to_named_subs(
+   boost::shared_ptr<named_subexpressions<From> > s)
+{
+   typedef typename boost::is_same<To, From>::type tag_type;
+   return convert_to_named_subs_imp<To>(s, tag_type());
+}
 //
 // class regex_data:
 // represents the data we wish to expose to the matching algorithms.
 //
 template <class charT, class traits>
-struct regex_data
+struct regex_data : public named_subexpressions<charT>
 {
    typedef regex_constants::syntax_option_type   flag_type;
    typedef std::size_t                           size_type;  
@@ -519,6 +632,10 @@ public:
    {
       BOOST_ASSERT(0 != m_pimpl.get());
       return m_pimpl->get_data();
+   }
+   boost::shared_ptr<re_detail::named_subexpressions<charT> > get_named_subs()const
+   {
+      return m_pimpl;
    }
 
 private:

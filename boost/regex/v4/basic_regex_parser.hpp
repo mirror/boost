@@ -777,6 +777,15 @@ escape_type_class_jump:
          }
          const charT* pc = m_position;
          int i = this->m_traits.toi(pc, m_end, 10);
+         if(i < 0)
+         {
+            // Check for a named capture:
+            const charT* base = m_position;
+            while((m_position != m_end) && (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_brace))
+               ++m_position;
+            i = this->m_pdata->get_id(base, m_position);
+            pc = m_position;
+         }
          if(negative)
             i = 1 + m_mark_count - i;
          if((i > 0) && (this->m_backrefs & (1u << (i-1))))
@@ -1784,6 +1793,7 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
    regex_constants::syntax_option_type old_flags = this->flags();
    bool old_case_change = m_has_case_change;
    m_has_case_change = false;
+   charT name_delim;
    //
    // select the actual extension used:
    //
@@ -1825,8 +1835,10 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
             pb->index = markid = -1;
          else
          {
-            fail(regex_constants::error_badrepeat, m_position - m_base);
-            return false;
+            // Probably a named capture which also starts (?< :
+            name_delim = '>';
+            --m_position;
+            goto named_capture_jump;
          }
          ++m_position;
          jump_offset = this->getoffset(this->append_state(syntax_element_jump, sizeof(re_jump)));
@@ -1903,7 +1915,7 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
             if((this->m_traits.syntax_type(*m_position) != regex_constants::syntax_equal)
                && (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_not))
             {
-               fail(regex_constants::error_badrepeat, m_position - m_base);
+               fail(regex_constants::error_paren, m_position - m_base);
                return false;
             }
             m_position -= 2;
@@ -1914,6 +1926,40 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
    case regex_constants::syntax_close_mark:
       fail(regex_constants::error_badrepeat, m_position - m_base);
       return false;
+   case regex_constants::escape_type_end_buffer:
+      {
+      name_delim = *m_position;
+named_capture_jump:
+      markid = 0;
+      if(0 == (this->flags() & regbase::nosubs))
+      {
+         markid = ++m_mark_count;
+   #ifndef BOOST_NO_STD_DISTANCE
+         if(this->flags() & regbase::save_subexpression_location)
+            this->m_pdata->m_subs.push_back(std::pair<std::size_t, std::size_t>(std::distance(m_base, m_position) - 2, 0));
+   #else
+         if(this->flags() & regbase::save_subexpression_location)
+            this->m_pdata->m_subs.push_back(std::pair<std::size_t, std::size_t>((m_position - m_base) - 2, 0));
+   #endif
+      }
+      pb->index = markid;
+      const charT* base = ++m_position;
+      if(m_position == m_end)
+      {
+         fail(regex_constants::error_paren, m_position - m_base);
+         return false;
+      }
+      while((m_position != m_end) && (*m_position != name_delim))
+         ++m_position;
+      if(m_position == m_end)
+      {
+         fail(regex_constants::error_paren, m_position - m_base);
+         return false;
+      }
+      this->m_pdata->set_name(base, m_position, markid);
+      ++m_position;
+      break;
+      }
    default:
       //
       // lets assume that we have a (?imsx) group and try and parse it:
@@ -2043,6 +2089,22 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
    // and the case change data:
    //
    m_has_case_change = old_case_change;
+
+   if(markid > 0)
+   {
+#ifndef BOOST_NO_STD_DISTANCE
+      if(this->flags() & regbase::save_subexpression_location)
+         this->m_pdata->m_subs.at(markid - 1).second = std::distance(m_base, m_position) - 1;
+#else
+      if(this->flags() & regbase::save_subexpression_location)
+         this->m_pdata->m_subs.at(markid - 1).second = (m_position - m_base) - 1;
+#endif
+      //
+      // allow backrefs to this mark:
+      //
+      if((markid > 0) && (markid < (int)(sizeof(unsigned) * CHAR_BIT)))
+         this->m_backrefs |= 1u << (markid - 1);
+   }
    return true;
 }
 

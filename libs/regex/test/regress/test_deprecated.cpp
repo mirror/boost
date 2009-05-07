@@ -107,7 +107,7 @@ void test_deprecated(const char&, const test_regex_search_tag&)
       int i = 0;
       while(results[2*i] != -2)
       {
-         if(max_subs > i)
+         if((int)max_subs > i)
          {
             if(results[2*i] != matches[i].rm_so)
             {
@@ -231,7 +231,7 @@ void test_deprecated(const wchar_t&, const test_regex_search_tag&)
       int i = 0;
       while(results[2*i] != -2)
       {
-         if(max_subs > i)
+         if((int)max_subs > i)
          {
             if(results[2*i] != matches[i].rm_so)
             {

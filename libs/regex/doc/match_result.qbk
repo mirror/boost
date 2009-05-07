@@ -71,9 +71,33 @@ Class template `match_results` is most commonly used as one of the typedefs
       bool ``[link boost_regex.match_results.empty empty]``() const;
       // element access:
       difference_type ``[link boost_regex.match_results.length length]``(int sub = 0) const;
+      difference_type ``[link boost_regex.match_results.length length]``(const char_type* sub) const;
+      template <class charT>
+      difference_type ``[link boost_regex.match_results.length length]``(const charT* sub) const;
+      template <class charT, class Traits, class A>
+      difference_type ``[link boost_regex.match_results.length length]``(const std::basic_string<charT, Traits, A>& sub) const;
       difference_type ``[link boost_regex.match_results.position position]``(unsigned int sub = 0) const;
+      difference_type ``[link boost_regex.match_results.position position]``(const char_type* sub) const;
+      template <class charT>
+      difference_type ``[link boost_regex.match_results.position position]``(const charT* sub) const;
+      template <class charT, class Traits, class A>
+      difference_type ``[link boost_regex.match_results.position position]``(const std::basic_string<charT, Traits, A>& sub) const;
       string_type ``[link boost_regex.match_results.str str]``(int sub = 0) const;
+      string_type ``[link boost_regex.match_results.str str]``(const char_type* sub)const;
+      template <class Traits, class A>
+      string_type ``[link boost_regex.match_results.str str]``(const std::basic_string<char_type, Traits, A>& sub)const;
+      template <class charT>
+      string_type ``[link boost_regex.match_results.str str]``(const charT* sub)const;
+      template <class charT, class Traits, class A>
+      string_type ``[link boost_regex.match_results.str str]``(const std::basic_string<charT, Traits, A>& sub)const;
       const_reference ``[link boost_regex.match_results.subscript operator\[\]]``(int n) const;
+      const_reference ``[link boost_regex.match_results.subscript operator\[\]]``(const char_type* n) const;
+      template <class Traits, class A>
+      const_reference ``[link boost_regex.match_results.subscript operator\[\]]``(const std::basic_string<char_type, Traits, A>& n) const;
+      template <class charT>
+      const_reference ``[link boost_regex.match_results.subscript operator\[\]]``(const charT* n) const;
+      template <class charT, class Traits, class A>
+      const_reference ``[link boost_regex.match_results.subscript operator\[\]]``(const std::basic_string<charT, Traits, A>& n) const;
 
       const_reference ``[link boost_regex.match_results.prefix prefix]``() const;
 
@@ -190,30 +214,86 @@ stored in *this.
 [#boost_regex.match_results.length]
 
    difference_type length(int sub = 0)const;
+   difference_type length(const char_type* sub)const;
+   template <class charT>
+   difference_type length(const charT* sub)const;
+   template <class charT, class Traits, class A>
+   difference_type length(const std::basic_string<charT, Traits, A>&)const;
 
 [*Effects]: Returns the length of sub-expression /sub/, that is to say: 
 `(*this)[sub].length()`.
 
+The overloads that accept a string refer to a named sub-expression /n/.
+In the event that there is no such named sub-expression then returns an empty string.  
+
+The template overloads of this function, allow the string and\/or character type
+to be different from the character type of the underlying sequence and\/or regular expression: 
+in this case the characters will be widened to the underlying character type of the original regular expression.
+A compiler error will occur if the argument passes a wider character type than the underlying sequence.
+These overloads allow a normal narrow character C string literal to be used as an argument, even when
+the underlying character type of the expression being matched may be something more exotic such as a 
+Unicode character type.
 
 [#boost_regex.match_results.position]
 
    difference_type position(unsigned int sub = 0)const;
+   difference_type position(const char_type* sub)const;
+   template <class charT>
+   difference_type position(const charT* sub)const;
+   template <class charT, class Traits, class A>
+   difference_type position(const std::basic_string<charT, Traits, A>&)const;
 
 [*Effects]: Returns the starting location of sub-expression /sub/, or -1 if /sub/ was 
 not matched.  Note that if this represents a partial match , then `position()` 
 will return the location of the partial match even though `(*this)[0].matched` is false.
 
+The overloads that accept a string refer to a named sub-expression /n/.
+In the event that there is no such named sub-expression then returns an empty string.  
+
+The template overloads of this function, allow the string and\/or character type
+to be different from the character type of the underlying sequence and\/or regular expression: 
+in this case the characters will be widened to the underlying character type of the original regular expression.
+A compiler error will occur if the argument passes a wider character type than the underlying sequence.
+These overloads allow a normal narrow character C string literal to be used as an argument, even when
+the underlying character type of the expression being matched may be something more exotic such as a 
+Unicode character type.
+
 
 [#boost_regex.match_results.str]
 
    string_type str(int sub = 0)const;
+   string_type str(const char_type* sub)const;
+   template <class Traits, class A>
+   string_type str(const std::basic_string<char_type, Traits, A>& sub)const;
+   template <class charT>
+   string_type str(const charT* sub)const;
+   template <class charT, class Traits, class A>
+   string_type str(const std::basic_string<charT, Traits, A>& sub)const;
 
 [*Effects]: Returns sub-expression /sub/ as a string:  `string_type((*this)[sub])`.
+
+The overloads that accept a string, return the string that matched the named sub-expression /n/.
+In the event that there is no such named sub-expression then returns an empty string.  
+
+The template overloads of this function, allow the string and\/or character type
+to be different from the character type of the underlying sequence and\/or regular expression: 
+in this case the characters will be widened to the underlying character type of the original regular expression.
+A compiler error will occur if the argument passes a wider character type than the underlying sequence.
+These overloads allow a normal narrow character C string literal to be used as an argument, even when
+the underlying character type of the expression being matched may be something more exotic such as a 
+Unicode character type.
 
 
 [#boost_regex.match_results.subscript]
 
-   const_reference operator[](int n) const;
+	const_reference operator[](int n) const;
+	const_reference operator[](const char_type* n) const;
+	template <class Traits, class A>
+	const_reference operator[](const std::basic_string<char_type, Traits, A>& n) const;
+	template <class charT>
+	const_reference operator[](const charT* n) const;
+	template <class charT, class Traits, class A>
+	const_reference operator[](const std::basic_string<charT, Traits, A>& n) const;
 
 [*Effects]: Returns a reference to the [sub_match] object representing the character 
 sequence that matched marked sub-expression /n/. If `n == 0` then returns a 
@@ -221,6 +301,19 @@ reference to a [sub_match] object representing the character sequence that
 matched the whole regular expression.  If /n/ is out of range, or if /n/ is an 
 unmatched sub-expression, then returns a [sub_match] object whose matched 
 member is false.
+
+The overloads that accept a string, return a reference to the [sub_match] 
+object representing the character sequence that matched the named sub-expression /n/.
+In the event that there is no such named sub-expression then returns a [sub_match] object whose matched 
+member is false.  
+
+The template overloads of this function, allow the string and\/or character type
+to be different from the character type of the underlying sequence and\/or regular expression: 
+in this case the characters will be widened to the underlying character type of the original regular expression.
+A compiler error will occur if the argument passes a wider character type than the underlying sequence.
+These overloads allow a normal narrow character C string literal to be used as an argument, even when
+the underlying character type of the expression being matched may be something more exotic such as a 
+Unicode character type.
 
 
 [#boost_regex.match_results.prefix]

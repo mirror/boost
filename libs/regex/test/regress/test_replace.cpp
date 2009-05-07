@@ -126,5 +126,53 @@ void test_replace()
    TEST_REGEX_REPLACE("(a+)", perl, "...aaa,,,", match_default, "/${10}/", "...//,,,");
    TEST_REGEX_REPLACE("((((((((((a+))))))))))", perl, "...aaa,,,", match_default, "/${10}/", ".../aaa/,,,");
    TEST_REGEX_REPLACE("(a+)", perl, "...aaa,,,", match_default, "/${1}0/", ".../aaa0/,,,");
+
+   // New Perl style operators:
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "$MATCH", "aaa");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "${MATCH}", "aaa");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "${^MATCH}", "aaa");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "$MATC", "$MATC");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "${MATCH", "${MATCH");
+
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "$PREMATCH", "...");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "${PREMATCH}", "...");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "${^PREMATCH}", "...");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "$PREMATC", "$PREMATC");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "${PREMATCH", "${PREMATCH");
+
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "$POSTMATCH", ",,,");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "${POSTMATCH}", ",,,");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "${^POSTMATCH}", ",,,");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "$POSTMATC", "$POSTMATC");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "${POSTMATCH", "${POSTMATCH");
+
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "$LAST_PAREN_MATCH", "");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "$LAST_PAREN_MATC", "$LAST_PAREN_MATC");
+   TEST_REGEX_REPLACE("(a+)", perl, "...aaa,,,", match_default|format_no_copy, "$LAST_PAREN_MATCH", "aaa");
+   TEST_REGEX_REPLACE("(a+)(b+)", perl, "...aaabb,,,", match_default|format_no_copy, "$LAST_PAREN_MATCH", "bb");
+
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "$+", "");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "$+foo", "foo");
+   TEST_REGEX_REPLACE("(a+)", perl, "...aaa,,,", match_default|format_no_copy, "$+", "aaa");
+   TEST_REGEX_REPLACE("(a+)(b+)", perl, "...aaabb,,,", match_default|format_no_copy, "$+foo", "bbfoo");
+   TEST_REGEX_REPLACE("(a+)(b+)", perl, "...aaabb,,,", match_default|format_no_copy, "$+{", "bb{");
+   TEST_REGEX_REPLACE("(a+)(b+)", perl, "...aaabb,,,", match_default|format_no_copy, "$+{foo", "bb{foo");
+
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "$LAST_SUBMATCH_RESULT", "");
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "$LAST_SUBMATCH_RESUL", "$LAST_SUBMATCH_RESUL");
+   TEST_REGEX_REPLACE("(a+)", perl, "...aaa,,,", match_default|format_no_copy, "$LAST_SUBMATCH_RESULT", "aaa");
+   TEST_REGEX_REPLACE("(a+)(b+)", perl, "...aaabb,,,", match_default|format_no_copy, "$LAST_SUBMATCH_RESULT", "bb");
+   TEST_REGEX_REPLACE("(a+)|(b+)", perl, "...aaa,,,", match_default|format_no_copy, "$LAST_SUBMATCH_RESULT", "aaa");
+
+   TEST_REGEX_REPLACE("a+", perl, "...aaa,,,", match_default|format_no_copy, "$^N", "");
+   TEST_REGEX_REPLACE("(a+)", perl, "...aaa,,,", match_default|format_no_copy, "$^N", "aaa");
+   TEST_REGEX_REPLACE("(a+)(b+)", perl, "...aaabb,,,", match_default|format_no_copy, "$^N", "bb");
+   TEST_REGEX_REPLACE("(a+)|(b+)", perl, "...aaa,,,", match_default|format_no_copy, "$^N", "aaa");
+
+   TEST_REGEX_REPLACE("(?<one>a+)(?<two>b+)", perl, " ...aabb,,", match_default|format_no_copy, "$&", "aabb");
+   TEST_REGEX_REPLACE("(?<one>a+)(?<two>b+)", perl, " ...aabb,,", match_default|format_no_copy, "$1", "aa");
+   TEST_REGEX_REPLACE("(?<one>a+)(?<two>b+)", perl, " ...aabb,,", match_default|format_no_copy, "$2", "bb");
+   TEST_REGEX_REPLACE("(?<one>a+)(?<two>b+)", perl, " ...aabb,,", match_default|format_no_copy, "d$+{one}c", "daac");
+   TEST_REGEX_REPLACE("(?<one>a+)(?<two>b+)", perl, " ...aabb,,", match_default|format_no_copy, "c$+{two}d", "cbbd");
 }
 

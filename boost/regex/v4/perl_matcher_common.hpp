@@ -200,6 +200,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_imp()
    m_match_flags |= regex_constants::match_all;
    m_presult->set_size((m_match_flags & match_nosubs) ? 1 : re.mark_count(), search_base, last);
    m_presult->set_base(base);
+   m_presult->set_named_subs(re_detail::convert_to_named_subs<typename match_results<BidiIterator>::char_type>(this->re.get_named_subs()));
    if(m_match_flags & match_posix)
       m_result = *m_presult;
    verify_options(re.flags(), m_match_flags);
@@ -261,6 +262,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::find_imp()
       pstate = re.get_first_state();
       m_presult->set_size((m_match_flags & match_nosubs) ? 1 : re.mark_count(), base, last);
       m_presult->set_base(base);
+      m_presult->set_named_subs(re_detail::convert_to_named_subs<typename match_results<BidiIterator>::char_type>(this->re.get_named_subs()));
       m_match_flags |= regex_constants::match_init;
    }
    else

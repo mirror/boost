@@ -537,7 +537,7 @@ BOOST_REGEX_DECL regex_constants::syntax_type BOOST_REGEX_CALL get_default_synta
       regex_constants::syntax_dollar,        /*$*/
       regex_constants::syntax_char,        /*%*/
       regex_constants::syntax_char,        /*&*/
-      regex_constants::syntax_char,        /*'*/
+      regex_constants::escape_type_end_buffer,  /*'*/
       regex_constants::syntax_open_mark,        /*(*/
       regex_constants::syntax_close_mark,        /*)*/
       regex_constants::syntax_star,        /***/

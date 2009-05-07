@@ -67,6 +67,30 @@
 <tr>
 <td>
               <p>
+                $MATCH
+              </p>
+              </td>
+<td>
+              <p>
+                As $&amp;
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ${^MATCH}
+              </p>
+              </td>
+<td>
+              <p>
+                As $&amp;
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
                 $`
               </p>
               </td>
@@ -81,12 +105,109 @@
 <tr>
 <td>
               <p>
+                $PREMATCH
+              </p>
+              </td>
+<td>
+              <p>
+                As $`
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ${^PREMATCH}
+              </p>
+              </td>
+<td>
+              <p>
+                As $`
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
                 $'
               </p>
               </td>
 <td>
               <p>
                 Outputs all the text following the end of the current match.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                $POSTMATCH
+              </p>
+              </td>
+<td>
+              <p>
+                As $'
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ${^POSTMATCH}
+              </p>
+              </td>
+<td>
+              <p>
+                As $'
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                $+
+              </p>
+              </td>
+<td>
+              <p>
+                Outputs what matched the last marked sub-expression in the regular
+                expression.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                $LAST_PAREN_MATCH
+              </p>
+              </td>
+<td>
+              <p>
+                As $+
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                $LAST_SUBMATCH_RESULT
+              </p>
+              </td>
+<td>
+              <p>
+                Outputs what matched the last sub-expression to be actually matched.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                $^N
+              </p>
+              </td>
+<td>
+              <p>
+                As $LAST_SUBMATCH_RESULT
               </p>
               </td>
 </tr>
@@ -123,6 +244,18 @@
 <td>
               <p>
                 Outputs what matched the n'th sub-expression.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                $+{NAME}
+              </p>
+              </td>
+<td>
+              <p>
+                Outputs whatever matched the sub-expression named "NAME".
               </p>
               </td>
 </tr>
