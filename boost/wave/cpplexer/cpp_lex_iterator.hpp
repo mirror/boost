@@ -67,7 +67,7 @@ public:
         { return *this; }   // nothing to do here
 #endif
 
-// interface to the multi_pass_policies::split_functor_input policy
+// interface to the iterator_policies::split_functor_input policy
     typedef TokenT result_type;
     typedef lex_iterator_functor_shim unique;
     typedef lex_input_interface<TokenT>* shared;
