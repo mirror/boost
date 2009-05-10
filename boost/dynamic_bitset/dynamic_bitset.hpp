@@ -1000,7 +1000,7 @@ dynamic_bitset<Block, Allocator>::count() const
     using detail::dynamic_bitset_impl::value_to_type;
 
 #if BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 3) && (__GNUC_PATCHLEVEL__ == 3)
-    // NOTE: Explicitly qualification of "bits_per_block"
+    // NOTE: Explicit qualification of "bits_per_block"
     //       breaks compilation on gcc 4.3.3
     const bool no_padding = bits_per_block == CHAR_BIT * sizeof(Block); 
 #else
