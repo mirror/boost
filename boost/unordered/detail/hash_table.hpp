@@ -13,6 +13,10 @@
 
 #include <boost/config.hpp>
 
+#if !defined(BOOST_UNORDERED_EMPLACE_LIMIT)
+#define BOOST_UNORDERED_EMPLACE_LIMIT 5
+#endif
+
 #include <cstddef>
 #include <boost/config/no_tr1/cmath.hpp>
 #include <algorithm>
@@ -32,6 +36,7 @@
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
+#include <boost/mpl/or.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/utility/swap.hpp>
@@ -39,6 +44,21 @@
 #include <boost/preprocessor/seq/enum.hpp>
 
 #include <boost/mpl/aux_/config/eti.hpp>
+
+#if !(defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL))
+
+#include <boost/preprocessor/repetition/enum_params.hpp>
+#include <boost/preprocessor/repetition/enum_binary_params.hpp>
+#include <boost/preprocessor/repetition/repeat_from_to.hpp>
+
+#define BOOST_UNORDERED_TEMPLATE_ARGS(z, n) \
+    BOOST_PP_ENUM_PARAMS_Z(z, n, typename Arg)
+#define BOOST_UNORDERED_FUNCTION_PARAMS(z, n) \
+    BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, Arg, const& arg)
+#define BOOST_UNORDERED_CALL_PARAMS(z, n) \
+    BOOST_PP_ENUM_PARAMS_Z(z, n, arg)
+
+#endif
 
 #if BOOST_WORKAROUND(__BORLANDC__, <= 0x0582)
 #define BOOST_UNORDERED_BORLAND_BOOL(x) (bool)(x)

@@ -183,15 +183,19 @@ namespace boost {
 
                 void construct_preamble()
                 {
-                    BOOST_ASSERT(!node_);
-                    node_constructed_ = false;
-                    value_constructed_ = false;
+                    if(!node_) {
+                        node_constructed_ = false;
+                        value_constructed_ = false;
 
-                    node_ = allocators_.node_alloc_.allocate(1);
-
-                    allocators_.node_alloc_.construct(node_, node());
-                    node_constructed_ = true;
-
+                        node_ = allocators_.node_alloc_.allocate(1);
+                        allocators_.node_alloc_.construct(node_, node());
+                        node_constructed_ = true;
+                    }
+                    else {
+                        BOOST_ASSERT(node_constructed_ && value_constructed_);
+                        BOOST_UNORDERED_DESTRUCT(&node_->value(), value_type);
+                        value_constructed_ = false;
+                    }
                 }
 
 #if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
@@ -202,31 +206,133 @@ namespace boost {
                     new(node_->address()) value_type(std::forward<Args>(args)...);
                     value_constructed_ = true;
                 }
-#else
-                template <typename V>
-                void construct(V const& v)
+
+#if defined(__GLIBCPP__) || defined(__GLIBCXX__)
+                // The GCC C++0x standard library implementation does not have
+                // a single argument pair constructor, so this works around that.
+
+                template <typename Arg>
+                void construct(Arg&& arg)
                 {
                     construct_preamble();
-                    new(node_->address()) value_type(v);
+                    construct_impl(std::forward<Arg>(arg),
+                        (value_type const*) 0,
+                        (typename boost::remove_reference<Arg>::type const*) 0);
                     value_constructed_ = true;
+                }
+
+                template <
+                    typename Arg,
+                    typename ValueType,
+                    typename Type>
+                void construct_impl(Arg&& arg, ValueType const*, Type const*)
+                {
+                    new(node_->address()) value_type(std::forward<Arg>(arg));
+                }
+
+                template <
+                    typename Arg,
+                    typename ValueFirst, typename ValueSecond,
+                    typename TypeFirst, typename TypeSecond>
+                void construct_impl(
+                    Arg&& arg,
+                    std::pair<ValueFirst, ValueSecond> const*,
+                    std::pair<TypeFirst, TypeSecond> const*)
+                {
+                    new(node_->address()) value_type(std::forward<Arg>(arg));
+                }
+
+                template <
+                    typename Arg,
+                    typename ValueFirst, typename ValueSecond,
+                    typename Type>
+                void construct_impl(
+                    Arg&& arg,
+                    std::pair<ValueFirst, ValueSecond> const*,
+                    Type const*)
+                {
+                    new(node_->address()) value_type(std::forward<Arg>(arg), ValueSecond());
                 }
 #endif
+                
+#else
 
-                template <typename K, typename M>
-                void construct_pair(K const& k, M*)
+                void construct()
                 {
-                    BOOST_ASSERT(!node_);
-                    node_constructed_ = false;
-                    value_constructed_ = false;
-
-                    node_ = allocators_.node_alloc_.allocate(1);
-
-                    allocators_.node_alloc_.construct(node_, node());
-                    node_constructed_ = true;
-
-                    new(node_->address()) value_type(k, M());
+                    construct_preamble();
+                    new(node_->address()) value_type;
                     value_constructed_ = true;
                 }
+
+#define BOOST_UNORDERED_CONSTRUCT_IMPL(z, n, _)                                 \
+                template <                                                      \
+                    BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                         \
+                >                                                               \
+                void construct(                                                 \
+                    BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                       \
+                )                                                               \
+                {                                                               \
+                    construct_preamble();                                       \
+                    construct_impl(                                             \
+                        (value_type*) 0,                                        \
+                        BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
+                    );                                                          \
+                    value_constructed_ = true;                                  \
+                }                                                               \
+                                                                                \
+                template <                                                      \
+                    typename T,                                                 \
+                    BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                         \
+                >                                                               \
+                void construct_impl(                                            \
+                    T*,                                                         \
+                    BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                       \
+                )                                                               \
+                {                                                               \
+                    new(node_->address()) value_type(                           \
+                        BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
+                    );                                                          \
+                }                                                               \
+                                                                                \
+                                                                                
+#define BOOST_UNORDERED_CONSTRUCT_IMPL2(z, n, _)                                \
+                template <typename First, typename Second, typename Key,        \
+                    BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                         \
+                >                                                               \
+                void construct_impl(                                            \
+                    std::pair<First, Second>*,                                  \
+                    Key const& k,                                               \
+                    BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                       \
+                )                                                               \
+                {                                                               \
+                    new(node_->address()) value_type(k,                         \
+                        Second(                                                 \
+                        BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
+                        )                                                       \
+                    );                                                          \
+                }
+
+                BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
+                    BOOST_UNORDERED_CONSTRUCT_IMPL, _)
+                BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
+                    BOOST_UNORDERED_CONSTRUCT_IMPL2, _)
+                
+                template <typename First, typename Second, typename T1, typename T2>
+                void construct_impl(std::pair<First, Second>*,
+                    std::pair<T1, T2> const& arg0)
+                {
+                    new(node_->address()) value_type(arg0);
+                }
+
+                template <typename First, typename Second, typename Key>
+                void construct_impl(std::pair<First, Second>*, Key const& k)
+                {
+                    new(node_->address()) value_type(First(k), Second());
+                }
+
+#undef BOOST_UNORDERED_CONSTRUCT_IMPL
+
+#endif
 
                 node_ptr get() const
                 {
@@ -1424,18 +1530,28 @@ namespace boost {
             }
 
             // key extractors
+            //
+            // no throw
+            //
+            // 'extract_key' is called with the emplace parameters to return a
+            // key if available or 'no_key' is one isn't and will need to be
+            // constructed.
 
             struct no_key {
                 no_key() {}
                 template <class T> no_key(T const&) {}
             };
 
-            // no throw
-            
+
+            // If emplace is called with no arguments then there obviously
+            // isn't an available key.
+
             static no_key extract_key()
             {
                 return no_key();
             }
+            
+            // Emplace or insert was called with the value type.
             
             static key_type const& extract_key(value_type const& v)
             {
@@ -1454,6 +1570,9 @@ namespace boost {
                 return v.first;
             }
             
+            // For maps, if emplace is called with just a key, then it's the value type
+            // with the second value default initialised.
+            
             template <typename Arg>
             static BOOST_DEDUCED_TYPENAME
                 boost::mpl::if_<boost::is_same<Arg, key_type>, key_type const&, no_key>::type
@@ -1461,6 +1580,9 @@ namespace boost {
             {
                 return k;
             }
+
+            // For a map, the argument might be a pair with the key as the first
+            // part and a convertible value as the second part.
 
             template <typename First, typename Second>
             static BOOST_DEDUCED_TYPENAME
@@ -1478,9 +1600,10 @@ namespace boost {
                 return v.first;
             }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+            // For maps if there is more than one argument, the key can be the first argument.
 
-            template <typename Arg, typename... Args>
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+            template <typename Arg, typename Arg1, typename... Args>
             static BOOST_DEDUCED_TYPENAME
                 boost::mpl::if_<
                     boost::mpl::and_<
@@ -1488,7 +1611,21 @@ namespace boost {
                         boost::is_same<Arg, key_type>
                     >,
                     key_type const&, no_key
-                >::type extract_key(Arg const& k, Args const&...)
+                >::type extract_key(Arg const& k, Arg1 const&, Args const&...)
+            {
+                return k;
+            }
+
+#else
+            template <typename Arg, typename Arg1>
+            static BOOST_DEDUCED_TYPENAME
+                boost::mpl::if_<
+                    boost::mpl::and_<
+                        boost::mpl::not_<boost::is_same<value_type, key_type> >,
+                        boost::is_same<Arg, key_type>
+                    >,
+                    key_type const&, no_key
+                >::type extract_key(Arg const& k, Arg1 const&)
             {
                 return k;
             }
@@ -1632,34 +1769,39 @@ namespace boost {
 
 #else
 
-            // Emplace (equivalent key containers)
-
-            // if hash function throws, basic exception safety
-            // strong otherwise
-            iterator_base emplace(value_type const& v)
-            {
-                // Create the node before rehashing in case it throws an
-                // exception (need strong safety in such a case).
-                node_constructor a(data_.allocators_);
-                a.construct(v);
-
-                return emplace_impl(a);
+#define BOOST_UNORDERED_INSERT_IMPL(z, n, _)                                        \
+            template <                                                              \
+               BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                                  \
+            >                                                                       \
+            iterator_base emplace(                                                  \
+               BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                                \
+            )                                                                       \
+            {                                                                       \
+                node_constructor a(data_.allocators_);                              \
+                a.construct(                                                        \
+                    BOOST_UNORDERED_CALL_PARAMS(z, n)                               \
+                );                                                                  \
+                return emplace_impl(a);                                             \
+            }                                                                       \
+                                                                                    \
+            template <                                                              \
+               BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                                  \
+            >                                                                       \
+            iterator_base emplace_hint(iterator_base const& it,                     \
+               BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                                \
+            )                                                                       \
+            {                                                                       \
+                node_constructor a(data_.allocators_);                              \
+                a.construct(                                                        \
+                    BOOST_UNORDERED_CALL_PARAMS(z, n)                               \
+                );                                                                  \
+                return emplace_hint_impl(it, a);                                    \
             }
 
-            // Emplace (equivalent key containers)
+            BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
+                BOOST_UNORDERED_INSERT_IMPL, _)
 
-            // if hash function throws, basic exception safety
-            // strong otherwise
-            iterator_base emplace_hint(iterator_base const& it, value_type const& v)
-            {
-                // Create the node before rehashing in case it throws an
-                // exception (need strong safety in such a case).
-                node_constructor a(data_.allocators_);
-                a.construct(v);
-
-                return emplace_hint_impl(it, a);
-            }
-
+#undef BOOST_UNORDERED_INSERT_IMPL
 #endif
 
             iterator_base emplace_impl(node_constructor& a)
@@ -1788,7 +1930,7 @@ namespace boost {
                     // Create the node before rehashing in case it throws an
                     // exception (need strong safety in such a case).
                     node_constructor a(data_.allocators_);
-                    a.construct_pair(k, (mapped_type*) 0);
+                    a.construct(k);
 
                     // reserve has basic exception safety if the hash function
                     // throws, strong otherwise.
@@ -1805,10 +1947,6 @@ namespace boost {
 
             // Emplace (unique keys)
             // (I'm using an overloaded emplace for both 'insert' and 'emplace')
-            //
-            // TODO:
-            // For sets: create a local key without creating the node?
-            // For maps: use the first argument as the key.
 
             // if hash function throws, basic exception safety
             // strong otherwise
@@ -1878,58 +2016,96 @@ namespace boost {
                 return emplace_impl_with_node(a);
             }
 #else
-
-            // Emplace (unique keys)
-
-            // if hash function throws, basic exception safety
-            // strong otherwise
-            std::pair<iterator_base, bool> emplace(value_type const& v)
+            template <typename Arg0>
+            std::pair<iterator_base, bool> emplace(Arg0 const& arg0)
             {
-                // No side effects in this initial code
-                key_type const& k = extract_key(v);
-                size_type hash_value = hash_function()(k);
-                bucket_ptr bucket = data_.bucket_ptr_from_hash(hash_value);
-                link_ptr pos = find_iterator(bucket, k);
-
-                if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
-                    // Found an existing key, return it (no throw).
-                    return std::pair<iterator_base, bool>(
-                        iterator_base(bucket, pos), false);
-
-                } else {
-                    // Doesn't already exist, add to bucket.
-                    // Side effects only in this block.
-
-                    // Create the node before rehashing in case it throws an
-                    // exception (need strong safety in such a case).
-                    node_constructor a(data_.allocators_);
-                    a.construct(v);
-
-                    // reserve has basic exception safety if the hash function
-                    // throws, strong otherwise.
-                    if(reserve_for_insert(size() + 1))
-                        bucket = data_.bucket_ptr_from_hash(hash_value);
-
-                    // Nothing after this point can throw.
-
-                    link_ptr n = data_.link_node_in_bucket(a, bucket);
-
-                    return std::pair<iterator_base, bool>(
-                        iterator_base(bucket, n), true);
-                }
+                return emplace_impl(extract_key(arg0), arg0);
             }
 
-            // Emplace (unique keys)
-
-            // if hash function throws, basic exception safety
-            // strong otherwise
-            iterator_base emplace_hint(iterator_base const& it, value_type const& v)
+            template <typename Arg0>
+            iterator_base emplace_hint(iterator_base const& it, Arg0 const& arg0)
             {
-                if(it != data_.end() && equal(extract_key(v), *it))
-                    return it;
-                else
-                    return emplace(v).first;
+                return emplace_impl(extract_key(arg0), arg0).first;
             }
+
+
+#define BOOST_UNORDERED_INSERT_IMPL(z, n, _)                                        \
+            template <                                                              \
+               BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                                  \
+            >                                                                       \
+            std::pair<iterator_base, bool> emplace(                                 \
+               BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                                \
+            )                                                                       \
+            {                                                                       \
+                return emplace_impl(                                                \
+                    extract_key(arg0, arg1),                                        \
+                    BOOST_UNORDERED_CALL_PARAMS(z, n)                               \
+                );                                                                  \
+            }                                                                       \
+                                                                                    \
+            template <                                                              \
+               BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                                  \
+            >                                                                       \
+            iterator_base emplace_hint(iterator_base const& it,                     \
+               BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                                \
+            )                                                                       \
+            {                                                                       \
+                return emplace_impl(                                                \
+                    extract_key(arg0, arg1),                                        \
+                    BOOST_UNORDERED_CALL_PARAMS(z, n)                               \
+                ).first;                                                            \
+            }                                                                       \
+            BOOST_UNORDERED_INSERT_IMPL2(z, n, _)
+
+#define BOOST_UNORDERED_INSERT_IMPL2(z, n, _)                                       \
+            template <                                                              \
+               BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                                  \
+            >                                                                       \
+            std::pair<iterator_base, bool> emplace_impl(key_type const& k,          \
+               BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                                \
+            )                                                                       \
+            {                                                                       \
+                size_type hash_value = hash_function()(k);                          \
+                bucket_ptr bucket = data_.bucket_ptr_from_hash(hash_value);         \
+                link_ptr pos = find_iterator(bucket, k);                            \
+                                                                                    \
+                if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {                            \
+                    return std::pair<iterator_base, bool>(                          \
+                        iterator_base(bucket, pos), false);                         \
+                } else {                                                            \
+                    node_constructor a(data_.allocators_);                          \
+                    a.construct(                                                    \
+                        BOOST_UNORDERED_CALL_PARAMS(z, n)                           \
+                    );                                                              \
+                                                                                    \
+                    if(reserve_for_insert(size() + 1))                              \
+                        bucket = data_.bucket_ptr_from_hash(hash_value);            \
+                                                                                    \
+                    return std::pair<iterator_base, bool>(iterator_base(bucket,     \
+                        data_.link_node_in_bucket(a, bucket)), true);               \
+                }                                                                   \
+            }                                                                       \
+                                                                                    \
+            template <                                                              \
+               BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                                  \
+            >                                                                       \
+            std::pair<iterator_base, bool> emplace_impl(no_key,                     \
+               BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                                \
+            )                                                                       \
+            {                                                                       \
+                node_constructor a(data_.allocators_);                              \
+                a.construct(                                                        \
+                    BOOST_UNORDERED_CALL_PARAMS(z, n)                               \
+                );                                                                  \
+                return emplace_impl_with_node(a);                                   \
+            }
+
+            BOOST_UNORDERED_INSERT_IMPL2(1, 1, _)
+
+            BOOST_PP_REPEAT_FROM_TO(2, BOOST_UNORDERED_EMPLACE_LIMIT,
+                BOOST_UNORDERED_INSERT_IMPL, _)
+
+#undef BOOST_UNORDERED_INSERT_IMPL
 
 #endif
 
@@ -1957,7 +2133,6 @@ namespace boost {
                         data_.link_node_in_bucket(a, bucket)), true);
                 }
             }
-
 
             // Insert from iterators (unique keys)
 
@@ -2137,8 +2312,9 @@ namespace boost {
                     key_type const& k) const
             {
                 link_ptr it = data_.begin(bucket);
-                while (BOOST_UNORDERED_BORLAND_BOOL(it) && !equal(k, data::get_value(it)))
+                while (BOOST_UNORDERED_BORLAND_BOOL(it) && !equal(k, data::get_value(it))) {
                     it = data::next_group(it);
+                }
 
                 return it;
             }

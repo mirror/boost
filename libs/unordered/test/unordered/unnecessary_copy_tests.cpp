@@ -68,12 +68,22 @@ namespace unnecessary_copy_tests
 #define COPY_COUNT(n) \
     if(count_copies::copies != n) { \
         BOOST_ERROR("Wrong number of copies."); \
-        std::cerr<<"Number of copies: "<<count_copies::copies<<std::endl; \
+        std::cerr<<"Number of copies: "<<count_copies::copies<<" expecting: "<<n<<std::endl; \
     }
 #define MOVE_COUNT(n) \
     if(count_copies::moves != n) { \
         BOOST_ERROR("Wrong number of moves."); \
-        std::cerr<<"Number of moves: "<<count_copies::moves<<std::endl; \
+        std::cerr<<"Number of moves: "<<count_copies::moves<<" expecting: "<<n<<std::endl; \
+    }
+#define COPY_COUNT_RANGE(a, b) \
+    if(count_copies::copies < a || count_copies::copies > b) { \
+        BOOST_ERROR("Wrong number of copies."); \
+        std::cerr<<"Number of copies: "<<count_copies::copies<<" expecting: ["<<a<<", "<<b<<"]"<<std::endl; \
+    }
+#define MOVE_COUNT_RANGE(a, b) \
+    if(count_copies::moves < a || count_copies::moves > b) { \
+        BOOST_ERROR("Wrong number of moves."); \
+        std::cerr<<"Number of moves: "<<count_copies::copies<<" expecting: ["<<a<<", "<<b<<"]"<<std::endl; \
     }
 
 namespace unnecessary_copy_tests
@@ -99,7 +109,6 @@ namespace unnecessary_copy_tests
     UNORDERED_TEST(unnecessary_copy_insert_test,
             ((set)(multiset)(map)(multimap)))
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
     template <class T>
     void unnecessary_copy_emplace_test(T*)
     {
@@ -117,9 +126,19 @@ namespace unnecessary_copy_tests
         reset();
         T x;
         x.emplace(source<BOOST_DEDUCED_TYPENAME T::value_type>());
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
         COPY_COUNT(1);
+#else
+        COPY_COUNT(2);
+#endif
     }
 
+    UNORDERED_TEST(unnecessary_copy_emplace_test,
+            ((set)(multiset)(map)(multimap)))
+    UNORDERED_TEST(unnecessary_copy_emplace_rvalue_test,
+            ((set)(multiset)(map)(multimap)))
+
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
     template <class T>
     void unnecessary_copy_emplace_move_test(T*)
     {
@@ -131,12 +150,10 @@ namespace unnecessary_copy_tests
         COPY_COUNT(1); MOVE_COUNT(1);
     }
 
-    UNORDERED_TEST(unnecessary_copy_emplace_test,
-            ((set)(multiset)(map)(multimap)))
-    UNORDERED_TEST(unnecessary_copy_emplace_rvalue_test,
-            ((set)(multiset)(map)(multimap)))
     UNORDERED_TEST(unnecessary_copy_emplace_move_test,
             ((set)(multiset)(map)(multimap)))
+
+#endif
 
     UNORDERED_AUTO_TEST(unnecessary_copy_emplace_set_test)
     {
@@ -172,10 +189,12 @@ namespace unnecessary_copy_tests
         x.emplace(source<count_copies>());
         COPY_COUNT(1); MOVE_COUNT(0);
 
+#if defined(BOOST_HAS_RVALUE_REFS)
         // No move should take place.
         reset();
         x.emplace(std::move(a));
         COPY_COUNT(0); MOVE_COUNT(0);
+#endif
 
         // Just in case a did get moved...
         count_copies b;
@@ -194,8 +213,10 @@ namespace unnecessary_copy_tests
         // the existing element.
         //
         // Note to self: If copy_count == 0 it's an error not an optimization.
+        // TODO: Devise a better test.
 
         reset();
+
         x.emplace(b, b);
         COPY_COUNT(1); MOVE_COUNT(0);
     }
@@ -232,24 +253,22 @@ namespace unnecessary_copy_tests
         x.emplace(source<std::pair<count_copies, count_copies> >());
         COPY_COUNT(2); MOVE_COUNT(0);
 
-        count_copies part;
-        reset();
-        std::pair<count_copies const&, count_copies const&> a_ref(part, part);
-        x.emplace(a_ref);
-        COPY_COUNT(0); MOVE_COUNT(0);
+        // TODO: This doesn't work on older versions of gcc.
+        //count_copies part;
+        std::pair<count_copies const, count_copies> b;
+        //reset();
+        //std::pair<count_copies const&, count_copies const&> a_ref(part, part);
+        //x.emplace(a_ref);
+        //COPY_COUNT(0); MOVE_COUNT(0);
 
+#if defined(BOOST_HAS_RVALUE_REFS)
         // No move should take place.
+        // (since a is already in the container)
         reset();
         x.emplace(std::move(a));
         COPY_COUNT(0); MOVE_COUNT(0);
+#endif
 
-        // Just in case a did get moved
-        std::pair<count_copies const, count_copies> b;
-
-        // This test requires a C++0x std::pair. Which gcc hasn't got yet.
-        //reset();
-        //x.emplace(b.first.tag_);
-        //COPY_COUNT(2); MOVE_COUNT(0);
 
         //
         // 2 arguments
@@ -269,10 +288,9 @@ namespace unnecessary_copy_tests
         COPY_COUNT(1); MOVE_COUNT(0);
 
         reset();
-        x.emplace(b.first.tag_, b.second.tag_);
-        COPY_COUNT(2); MOVE_COUNT(0);
+        x.emplace(count_copies(b.first.tag_), count_copies(b.second.tag_));
+        COPY_COUNT(2); MOVE_COUNT(0);        
     }
-#endif
 }
 
 RUN_TESTS()

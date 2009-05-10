@@ -231,6 +231,50 @@ namespace boost
             return iterator(
                 base.emplace_hint(get(hint), std::forward<Args>(args)...));
         }
+#else
+
+        std::pair<iterator, bool> emplace(value_type const& v = value_type())
+        {
+            return boost::unordered_detail::pair_cast<iterator, bool>(
+                base.emplace(v));
+        }
+
+        iterator emplace_hint(const_iterator hint, value_type const& v = value_type())
+        {
+            return iterator(base.emplace_hint(get(hint), v));
+        }
+
+#define BOOST_UNORDERED_EMPLACE(z, n, _)                                        \
+            template <                                                          \
+                BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                             \
+            >                                                                   \
+            std::pair<iterator, bool> emplace(                                  \
+                BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                           \
+            )                                                                   \
+            {                                                                   \
+                return boost::unordered_detail::pair_cast<iterator, bool>(      \
+                    base.emplace(                                               \
+                        BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
+                    ));                                                         \
+            }                                                                   \
+                                                                                \
+            template <                                                          \
+                BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                             \
+            >                                                                   \
+            iterator emplace_hint(const_iterator hint,                          \
+                BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                           \
+            )                                                                   \
+            {                                                                   \
+                return iterator(base.emplace_hint(get(hint),                    \
+                        BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
+                ));                                                             \
+            }
+
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
+            BOOST_UNORDERED_EMPLACE, _)
+
+#undef BOOST_UNORDERED_EMPLACE
+
 #endif
 
         std::pair<iterator, bool> insert(const value_type& obj)
@@ -607,6 +651,49 @@ namespace boost
         {
             return iterator(base.emplace_hint(get(hint), std::forward<Args>(args)...));
         }
+#else
+
+        iterator emplace(value_type const& v = value_type())
+        {
+            return iterator(base.emplace(v));
+        }
+
+        iterator emplace_hint(const_iterator hint, value_type const& v = value_type())
+        {
+            return iterator(base.emplace_hint(get(hint), v));
+        }
+
+#define BOOST_UNORDERED_EMPLACE(z, n, _)                                        \
+            template <                                                          \
+                BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                             \
+            >                                                                   \
+            iterator emplace(                                                   \
+                BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                           \
+            )                                                                   \
+            {                                                                   \
+                return iterator(                                                \
+                    base.emplace(                                               \
+                        BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
+                    ));                                                         \
+            }                                                                   \
+                                                                                \
+            template <                                                          \
+                BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                             \
+            >                                                                   \
+            iterator emplace_hint(const_iterator hint,                          \
+                BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                           \
+            )                                                                   \
+            {                                                                   \
+                return iterator(base.emplace_hint(get(hint),                    \
+                        BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
+                ));                                                             \
+            }
+
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
+            BOOST_UNORDERED_EMPLACE, _)
+
+#undef BOOST_UNORDERED_EMPLACE
+
 #endif
 
         iterator insert(const value_type& obj)
