@@ -32,7 +32,7 @@
         '$', '\', '(', ')', '?', and ':'.
       </p>
 <a name="boost_regex.format.boost_format_syntax.grouping"></a><h5>
-<a name="id800525"></a>
+<a name="id779996"></a>
         <a class="link" href="boost_format_syntax.html#boost_regex.format.boost_format_syntax.grouping">Grouping</a>
       </h5>
 <p>
@@ -40,7 +40,7 @@
         you want a to output literal parenthesis.
       </p>
 <a name="boost_regex.format.boost_format_syntax.conditionals"></a><h5>
-<a name="id800542"></a>
+<a name="id780012"></a>
         <a class="link" href="boost_format_syntax.html#boost_regex.format.boost_format_syntax.conditionals">Conditionals</a>
       </h5>
 <p>
@@ -65,8 +65,21 @@
         match found with "foo" if the sub-expression $1 was matched, and
         with "bar" otherwise.
       </p>
+<p>
+        For sub-expressions with an index greater than 9, or for access to named
+        sub-expressions use:
+      </p>
+<p>
+        ?{INDEX}true-expression:false-expression
+      </p>
+<p>
+        or
+      </p>
+<p>
+        ?{NAME}true-expression:false-expression
+      </p>
 <a name="boost_regex.format.boost_format_syntax.placeholder_sequences"></a><h5>
-<a name="id800579"></a>
+<a name="id780065"></a>
         <a class="link" href="boost_format_syntax.html#boost_regex.format.boost_format_syntax.placeholder_sequences">Placeholder
         Sequences</a>
       </h5>
@@ -107,6 +120,30 @@
 <tr>
 <td>
               <p>
+                $MATCH
+              </p>
+              </td>
+<td>
+              <p>
+                As $&amp;
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ${^MATCH}
+              </p>
+              </td>
+<td>
+              <p>
+                As $&amp;
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
                 $`
               </p>
               </td>
@@ -121,12 +158,109 @@
 <tr>
 <td>
               <p>
+                $PREMATCH
+              </p>
+              </td>
+<td>
+              <p>
+                As $`
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ${^PREMATCH}
+              </p>
+              </td>
+<td>
+              <p>
+                As $`
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
                 $'
               </p>
               </td>
 <td>
               <p>
                 Outputs all the text following the end of the current match.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                $POSTMATCH
+              </p>
+              </td>
+<td>
+              <p>
+                As $'
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ${^POSTMATCH}
+              </p>
+              </td>
+<td>
+              <p>
+                As $'
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                $+
+              </p>
+              </td>
+<td>
+              <p>
+                Outputs what matched the last marked sub-expression in the regular
+                expression.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                $LAST_PAREN_MATCH
+              </p>
+              </td>
+<td>
+              <p>
+                As $+
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                $LAST_SUBMATCH_RESULT
+              </p>
+              </td>
+<td>
+              <p>
+                Outputs what matched the last sub-expression to be actually matched.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                $^N
+              </p>
+              </td>
+<td>
+              <p>
+                As $LAST_SUBMATCH_RESULT
               </p>
               </td>
 </tr>
@@ -154,6 +288,30 @@
               </p>
               </td>
 </tr>
+<tr>
+<td>
+              <p>
+                ${n}
+              </p>
+              </td>
+<td>
+              <p>
+                Outputs what matched the n'th sub-expression.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                $+{NAME}
+              </p>
+              </td>
+<td>
+              <p>
+                Outputs whatever matched the sub-expression named "NAME".
+              </p>
+              </td>
+</tr>
 </tbody>
 </table></div>
 <p>
@@ -161,7 +319,7 @@
         as a literal.
       </p>
 <a name="boost_regex.format.boost_format_syntax.escape_sequences"></a><h5>
-<a name="id800719"></a>
+<a name="id780408"></a>
         <a class="link" href="boost_format_syntax.html#boost_regex.format.boost_format_syntax.escape_sequences">Escape
         Sequences</a>
       </h5>

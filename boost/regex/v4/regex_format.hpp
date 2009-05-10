@@ -581,9 +581,35 @@ void basic_regex_formatter<OutputIterator, Results, traits>::format_conditional(
       put(static_cast<char_type>('?'));
       return;
    }
-   std::ptrdiff_t len = ::boost::re_detail::distance(m_position, m_end);
-   len = (std::min)(static_cast<std::ptrdiff_t>(2), len);
-   int v = m_traits.toi(m_position, m_position + len, 10);
+   int v;
+   if(*m_position == '{')
+   {
+      const char_type* base = m_position;
+      ++m_position;
+      v = m_traits.toi(m_position, m_end, 10);
+      if(v < 0)
+      {
+         // Try a named subexpression:
+         while((m_position != m_end) && (*m_position != '}'))
+            ++m_position;
+         v = m_results.named_subexpression_index(base + 1, m_position);
+      }
+      if((v < 0) || (*m_position != '}'))
+      {
+         m_position = base;
+         // oops trailing '?':
+         put(static_cast<char_type>('?'));
+         return;
+      }
+      // Skip trailing '}':
+      ++m_position;
+   }
+   else
+   {
+      std::ptrdiff_t len = ::boost::re_detail::distance(m_position, m_end);
+      len = (std::min)(static_cast<std::ptrdiff_t>(2), len);
+      v = m_traits.toi(m_position, m_position + len, 10);
+   }
    if(v < 0)
    {
       // oops not a number:
