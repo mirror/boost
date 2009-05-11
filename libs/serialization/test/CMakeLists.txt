@@ -102,8 +102,11 @@ serialization_test_allarchives(test_derived_class test_derived_class.cpp A.cpp)
 serialization_test_allarchives(test_derived_class_ptr test_derived_class_ptr.cpp A.cpp)
 serialization_test_allarchives(test_diamond)
 serialization_test_allarchives(test_exported)
-serialization_test_allarchives(test_class_info_load)
+# The order of the save/load tests is important, because the "save"
+# tests save data that is later loaded by the "load" test. CTest will
+# always run tests in the order given in this file.
 serialization_test_allarchives(test_class_info_save)
+serialization_test_allarchives(test_class_info_load)
 serialization_test_allarchives(test_object)
 serialization_test_allarchives(test_primitive)
 serialization_test_allarchives(test_list test_list.cpp A.cpp)
