@@ -1038,6 +1038,7 @@ void print_boost_macros()
    PRINT_MACRO(BOOST_NO_VOID_RETURNS);
 
 
+
    // END GENERATED BLOCK
 
    PRINT_MACRO(BOOST_INTEL);
