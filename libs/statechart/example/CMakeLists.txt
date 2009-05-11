@@ -4,9 +4,9 @@ macro(statechart_example TESTNAME)
     set(SOURCES ${SOURCES} "${TESTNAME}/${ARG}.cpp")
   endforeach(ARG ${ARGN})
 
-  if (NOT)
+  if (NOT SOURCES)
     set(SOURCES "${TESTNAME}/${TESTNAME}.cpp")
-  endif (NOT)
+  endif ()
 
   boost_test_link("${TESTNAME}Example"
     ${SOURCES}
