@@ -553,9 +553,12 @@ mpi_process_group::send_batch(process_id_type dest,
       tag = msg_large_batch;
 #endif
 
-    int result = MPI_Isend(const_cast<void*>(oa.address()), oa.size(),
-                       MPI_PACKED, dest, tag, impl_->comm,
-                       &req.request);
+#ifndef NDEBUG // Prevent uninitialized variable warning with NDEBUG is on
+    int result =
+#endif // !NDEBUG
+      MPI_Isend(const_cast<void*>(oa.address()), oa.size(),
+                MPI_PACKED, dest, tag, impl_->comm,
+                &req.request);
     assert(result == MPI_SUCCESS);
     impl_->max_sent = (std::max)(impl_->max_sent,impl_->sent_batches.size());
 #ifdef NO_ISEND_BATCHES
