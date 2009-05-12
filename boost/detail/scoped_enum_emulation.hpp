@@ -20,6 +20,10 @@
 //  The emulation is via struct rather than namespace to allow use within classes.
 //  Thanks to Andrey Semashev for pointing that out.
 //
+//  Helpful comments and suggestions were also made by Kjell Elster, Phil Endecott,
+//  Joel Falcou, Mathias Gaunard, Felipe Magno de Almeida, Matt Calabrese, Vincente
+//  Botet, and Daniel James. 
+//
 //  Sample usage:
 //
 //     BOOST_SCOPED_ENUM_START(algae) { green, red, cyan }; BOOST_SCOPED_ENUM_END
