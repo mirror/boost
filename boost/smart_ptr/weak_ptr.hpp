@@ -70,10 +70,42 @@ public:
     weak_ptr( weak_ptr<Y> const & r )
 
 #endif
-    : pn(r.pn) // never throws
+    : px(r.lock().get()), pn(r.pn) // never throws
     {
-        px = r.lock().get();
     }
+
+#if defined( BOOST_HAS_RVALUE_REFS )
+
+    template<class Y>
+#if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
+
+    weak_ptr( weak_ptr<Y> && r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
+
+#else
+
+    weak_ptr( weak_ptr<Y> && r )
+
+#endif
+    : px(r.lock().get()), pn(std::move(r.pn)) // never throws
+    {
+        r.px = 0;
+    }
+
+    // for better efficiency in the T == Y case
+    weak_ptr( weak_ptr && r ): px( r.px ), pn(std::move(r.pn)) // never throws
+    {
+        r.px = 0;
+    }
+
+    // for better efficiency in the T == Y case
+    weak_ptr & operator=( weak_ptr && r ) // never throws
+    {
+        this_type( std::move( r ) ).swap( *this );
+        return *this;
+    }
+
+
+#endif
 
     template<class Y>
 #if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
@@ -98,6 +130,17 @@ public:
         pn = r.pn;
         return *this;
     }
+
+#if defined( BOOST_HAS_RVALUE_REFS )
+
+    template<class Y>
+    weak_ptr & operator=(weak_ptr<Y> && r)
+    {
+        this_type( std::move( r ) ).swap( *this );
+        return *this;
+    }
+
+#endif
 
     template<class Y>
     weak_ptr & operator=(shared_ptr<Y> const & r) // never throws
