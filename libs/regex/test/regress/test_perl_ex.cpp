@@ -651,3 +651,28 @@ void test_options3()
 #endif
 }
 
+void test_mark_resets()
+{
+   using namespace boost::regex_constants;
+
+   TEST_REGEX_SEARCH("(?|(abc)|(xyz))", perl, "abc", match_default, make_array(0, 3, 0, 3, -2, -2));
+   TEST_REGEX_SEARCH("(?|(abc)|(xyz))", perl, "xyz", match_default, make_array(0, 3, 0, 3, -2, -2));
+   TEST_REGEX_SEARCH("(x)(?|(abc)|(xyz))(x)", perl, "xabcx", match_default, make_array(0, 5, 0, 1, 1, 4, 4, 5, -2, -2));
+   TEST_REGEX_SEARCH("(x)(?|(abc)|(xyz))(x)", perl, "xxyzx", match_default, make_array(0, 5, 0, 1, 1, 4, 4, 5, -2, -2));
+   TEST_REGEX_SEARCH("(x)(?|(abc)(pqr)|(xyz))(x)", perl, "xabcpqrx", match_default, make_array(0, 8, 0, 1, 1, 4, 4, 7, 7, 8, -2, -2));
+   TEST_REGEX_SEARCH("(x)(?|(abc)(pqr)|(xyz))(x)", perl, "xxyzx", match_default, make_array(0, 5, 0, 1, 1, 4, -1, -1, 4, 5, -2, -2));
+   TEST_REGEX_SEARCH("(?|(abc)|(xyz))\\1", perl, "abcabc", match_default, make_array(0, 6, 0, 3, -2, -2));
+   TEST_REGEX_SEARCH("(?|(abc)|(xyz))\\1", perl, "xyzxyz", match_default, make_array(0, 6, 0, 3, -2, -2));
+   TEST_REGEX_SEARCH("(?|(abc)|(xyz))\\1", perl, "abcxyz", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("(?|(abc)|(xyz))\\1", perl, "xyzabc", match_default, make_array(-2, -2));
+   //TEST_REGEX_SEARCH("(?|(abc)|(xyz))(?1)", perl, "abcabc", match_default, make_array(0, 6, 0, 3, -2, -2));
+   //TEST_REGEX_SEARCH("(?|(abc)|(xyz))(?1)", perl, "xyzabc", match_default, make_array(0, 6, 0, 3, -2, -2));
+   //TEST_REGEX_SEARCH("(?|(abc)|(xyz))(?1)", perl, "xyzxyz", match_default, make_array(-2, -2));
+   //TEST_REGEX_SEARCH("^X(?5)(a)(?|(b)|(q))(c)(d)(Y)", perl, "XYabcdY", match_default, make_array(0, 7, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, -2, -2));
+   //TEST_INVALID_REGEX("^X(?5)(a)(?|(b)|(q))(c)(d)Y", perl);
+   //TEST_REGEX_SEARCH("^X(?&N)(a)(?|(b)|(q))(c)(d)(?<N>Y)", perl, "XYabcdY", match_default, make_array(0, 7, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, -2, -2));
+   //TEST_REGEX_SEARCH("^X(?7)(a)(?|(b)|(q)(r)(s))(c)(d)(Y)", perl, "XYabcdY", match_default, make_array(0, 7, 2, 3, 3, 4, -1, -1, -1, -1, 6, 7, -2, -2));
+   //TEST_REGEX_SEARCH("^X(?7)(a)(?|(b|(r)(s))|(q))(c)(d)(Y)", perl, "XYabcdY", match_default, make_array(0, 7, 2, 3, 3, 4, -1, -1, -1, -1, 6, 7, -2, -2));
+   //TEST_REGEX_SEARCH("^X(?7)(a)(?|(b|(?|(r)|(t))(s))|(q))(c)(d)(Y)", perl, "XYabcdY", match_default, make_array(0, 7, 2, 3, 3, 4, -1, -1, -1, -1, 6, 7, -2, -2));
+}
+

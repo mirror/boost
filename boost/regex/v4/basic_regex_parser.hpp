@@ -78,6 +78,8 @@ private:
    const charT*               m_end;            // the end of the string being parsed
    const charT*               m_position;       // our current parser position
    unsigned                   m_mark_count;     // how many sub-expressions we have
+   int                        m_mark_reset;     // used to indicate that we're inside a (?|...) block.
+   unsigned                   m_max_mark;       // largest mark count seen inside a (?|...) block.
    std::ptrdiff_t             m_paren_start;    // where the last seen ')' began (where repeats are inserted).
    std::ptrdiff_t             m_alt_insert_point; // where to insert the next alternative
    bool                       m_has_case_change; // true if somewhere in the current block the case has changed
@@ -96,7 +98,7 @@ private:
 
 template <class charT, class traits>
 basic_regex_parser<charT, traits>::basic_regex_parser(regex_data<charT, traits>* data)
-   : basic_regex_creator<charT, traits>(data), m_mark_count(0), m_paren_start(0), m_alt_insert_point(0), m_has_case_change(false)
+   : basic_regex_creator<charT, traits>(data), m_mark_count(0), m_mark_reset(-1), m_max_mark(0), m_paren_start(0), m_alt_insert_point(0), m_has_case_change(false)
 {
 }
 
@@ -1072,6 +1074,14 @@ bool basic_regex_parser<charT, traits>::parse_alt()
       fail(regex_constants::error_empty, this->m_position - this->m_base);
       return false;
    }
+   //
+   // Reset mark count if required:
+   //
+   if(m_max_mark < m_mark_count)
+      m_max_mark = m_mark_count;
+   if(m_mark_reset >= 0)
+      m_mark_count = m_mark_reset;
+
    ++m_position;
    //
    // we need to append a trailing jump: 
@@ -1794,11 +1804,16 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
    bool old_case_change = m_has_case_change;
    m_has_case_change = false;
    charT name_delim;
+   int mark_reset = m_mark_reset;
+   m_mark_reset = -1;
    //
    // select the actual extension used:
    //
    switch(this->m_traits.syntax_type(*m_position))
    {
+   case regex_constants::syntax_or:
+      m_mark_reset = m_mark_count;
+      // fall through:
    case regex_constants::syntax_colon:
       //
       // a non-capturing mark:
@@ -2089,6 +2104,15 @@ named_capture_jump:
    // and the case change data:
    //
    m_has_case_change = old_case_change;
+   //
+   // And the mark_reset data:
+   //
+   if(m_max_mark > m_mark_count)
+   {
+      m_mark_count = m_max_mark;
+   }
+   m_mark_reset = mark_reset;
+
 
    if(markid > 0)
    {

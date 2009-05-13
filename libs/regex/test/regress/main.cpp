@@ -40,7 +40,6 @@ int error_count = 0;
 
 void run_tests()
 {
-   RUN_TESTS(test_pocessive_repeats);
    RUN_TESTS(basic_tests);
    RUN_TESTS(test_simple_repeats);
    RUN_TESTS(test_alt);
@@ -71,6 +70,8 @@ void run_tests()
    RUN_TESTS(test_operators);
    RUN_TESTS(test_overloads);
    RUN_TESTS(test_unicode);
+   RUN_TESTS(test_pocessive_repeats);
+   RUN_TESTS(test_mark_resets);
 }
 
 int cpp_main(int /*argc*/, char * /*argv*/[])

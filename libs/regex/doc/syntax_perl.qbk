@@ -462,6 +462,22 @@ modifier on, letters afterward, turn it off.
 =(?:pattern)= lexically groups pattern, without generating an additional 
 sub-expression.
 
+[h5 Branch reset]
+
+=(?|pattern)=  resets the subexpression count at the start of each "|" alternative within /pattern/.
+
+The sub-expression count following this construct is that of whichever branch had the largest number of
+sub-expressions.  This construct is useful when you want to capture one of a number of alternative matches
+in a single sub-expression index. 
+
+In the following example the index of each sub-expression is shown below the expression:
+
+[pre
+# before  ---------------branch-reset----------- after        
+/ ( a )  (?| x ( y ) z | (p (q) r) | (t) u (v) ) ( z ) /x
+# 1            2         2  3        2     3     4
+]
+
 [h5 Lookahead]
 
 [^(?=pattern)] consumes zero characters, only if pattern matches.
