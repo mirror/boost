@@ -15,6 +15,7 @@
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include <new>
+#include <ios>
 
 namespace
 boost
@@ -236,7 +237,17 @@ boost
                 return shared_ptr<exception_detail::clone_base const>(e.clone());
                 }
             catch(
+            std::domain_error & e )
+                {
+                return exception_detail::current_exception_std_exception(e);
+                }
+            catch(
             std::invalid_argument & e )
+                {
+                return exception_detail::current_exception_std_exception(e);
+                }
+            catch(
+            std::length_error & e )
                 {
                 return exception_detail::current_exception_std_exception(e);
                 }
@@ -247,6 +258,31 @@ boost
                 }
             catch(
             std::logic_error & e )
+                {
+                return exception_detail::current_exception_std_exception(e);
+                }
+            catch(
+            std::range_error & e )
+                {
+                return exception_detail::current_exception_std_exception(e);
+                }
+            catch(
+            std::overflow_error & e )
+                {
+                return exception_detail::current_exception_std_exception(e);
+                }
+            catch(
+            std::underflow_error & e )
+                {
+                return exception_detail::current_exception_std_exception(e);
+                }
+            catch(
+            std::ios_base::failure & e )
+                {
+                return exception_detail::current_exception_std_exception(e);
+                }
+            catch(
+            std::runtime_error & e )
                 {
                 return exception_detail::current_exception_std_exception(e);
                 }
