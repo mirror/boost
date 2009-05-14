@@ -24,9 +24,6 @@ hash_function_pointer_test
 hash_float_test
 hash_long_double_test
 hash_string_test
-hash_float_test
-hash_long_double_test
-hash_string_test
 hash_range_test
 hash_custom_test
 hash_global_namespace_test
