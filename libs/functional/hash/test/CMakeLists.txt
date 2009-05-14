@@ -16,12 +16,14 @@ endif(GCC)
 #-------------------------------------------------------------------------
 
 SET(tests
-hash_float_test
 hash_fwd_test_1
 hash_fwd_test_2
 hash_number_test
 hash_pointer_test
 hash_function_pointer_test
+hash_string_test
+hash_float_test
+hash_long_double_test
 hash_string_test
 hash_range_test
 hash_custom_test
@@ -34,6 +36,7 @@ hash_list_test
 hash_deque_test
 hash_set_test
 hash_map_test
+hash_complex_test
 container_fwd_test
 hash_no_ext_macro_1
 hash_no_ext_macro_2
@@ -48,4 +51,3 @@ endforeach(test ${tests})
 
 boost_test_compile_fail(hash_no_ext_fail_test)
 
-# build-project ../examples ;
