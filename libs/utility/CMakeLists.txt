@@ -17,7 +17,7 @@ set (lib_headers
 boost_library_project(
   utility
   #  SRCDIRS 
-  TESTDIRS  test
+  TESTDIRS  test swap/test
   HEADERS ${lib_headers}
   #  DOCDIRS 
   DESCRIPTION  "Various small utilities for C++ programming."
