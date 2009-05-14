@@ -28,6 +28,7 @@ boost
 <span class="RenoIncludeSPAN">    typedef ---unspecified--- <span class="RenoLink">exception_ptr</span>;</span>
     }</pre>
 </div><p>The <span class="RenoLink">exception_ptr</span> type can be used to refer to a copy of an exception object. It is Default Constructible, Copy Constructible, Assignable and Equality Comparable; <span class="RenoLink">exception_ptr</span>'s operations do not throw.</p>
+<p>The referenced object remains valid at least as long as there is an <span class="RenoLink">exception_ptr</span> object that refers to it.</p>
 <p>Two instances of <span class="RenoLink">exception_ptr</span> are equivalent and compare equal if and only if they refer to the same exception.</p>
 <p>The default constructor of <span class="RenoLink">exception_ptr</span> produces the null value of the type. The null value is equivalent only to itself.</p>
 <h4>Thread safety</h4>
