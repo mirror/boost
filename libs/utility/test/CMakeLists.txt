@@ -1,6 +1,8 @@
 boost_additional_test_dependencies(utility BOOST_DEPENDS test)
 
+boost_test_run(addressof_fn_test ../addressof_fn_test.cpp)
 boost_test_run(addressof_test ../addressof_test.cpp)
+boost_test_run(addressof_test2 ../addressof_test2.cpp)
 boost_test_run(assert_test ../assert_test.cpp)
 boost_test_run(base_from_member_test ../base_from_member_test.cpp)
 boost_test_run(binary_search_test ../binary_search_test.cpp)
@@ -36,3 +38,4 @@ boost_test_compile_fail(value_init_test_fail2
   ../value_init_test_fail2.cpp)
 boost_test_compile_fail(value_init_test_fail3
   ../value_init_test_fail3.cpp)
+boost_test_run(verify_test ../verify_test.cpp)

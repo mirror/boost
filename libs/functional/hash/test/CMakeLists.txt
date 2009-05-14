@@ -21,6 +21,8 @@ hash_fwd_test_2
 hash_number_test
 hash_pointer_test
 hash_function_pointer_test
+hash_float_test
+hash_long_double_test
 hash_string_test
 hash_float_test
 hash_long_double_test
@@ -43,8 +45,8 @@ hash_no_ext_macro_2
 )
 
 boost_test_run(link_test link_test.cpp link_test_2.cpp)
-boost_test_run(link_ext_test link_ext_test.cpp link_no_ext_test.cpp)
-
+boost_test_run(link_ext_test link_ext_test.cpp link_no_ext_test.cpp
+)
 foreach(test ${tests})
   boost_test_run(${test})
 endforeach(test ${tests})

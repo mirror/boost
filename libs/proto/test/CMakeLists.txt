@@ -35,6 +35,7 @@ set (tests
     proto_fusion_s
     toy_spirit
     toy_spirit2
+    noinvoke
 )
 
 
