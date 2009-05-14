@@ -29,7 +29,7 @@
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>Adding of Arbitrary Data at the Point of the Throw</h3>
 </div>
 <p>The following example demonstrates how errno can be stored in exception objects using Boost Exception:</p>
-<pre>#include &lt;<span class="RenoLink"><a href="exception_hpp.html">boost/exception.hpp</a></span>&gt;
+<pre>#include &lt;<span class="RenoLink"><a href="boost_exception_hpp.html">boost/exception.hpp</a></span>&gt;
 #include &lt;errno.h&gt;
 #include &lt;iostream&gt;
 
@@ -75,7 +75,7 @@ file_read( FILE * f, void * buffer, size_t size )
     }</pre>
 <p>How can the file_read function pass a file name to the exception type constructor? All it has is a FILE handle.</p>
 <p>Using boost::<span class="RenoLink"><a href="exception.html">exception</a></span> allows us to free the file_read function from the burden of storing the file name in exceptions it throws:</p>
-<pre>#include &lt;<span class="RenoLink"><a href="exception_hpp.html">boost/exception.hpp</a></span>&gt;
+<pre>#include &lt;<span class="RenoLink"><a href="boost_exception_hpp.html">boost/exception.hpp</a></span>&gt;
 #include &lt;stdio.h&gt;
 #include &lt;errno.h&gt;
 
@@ -90,7 +90,7 @@ file_read( FILE * f, void * buffer, size_t size )
         throw file_read_error() &lt;&lt; errno_info(errno);
     }</pre>
 <p>If file_read detects a failure, it throws an exception which contains the information that is available at the time, namely the errno. Other relevant information, such as the file name, can be added in a context higher up the call stack, where it is known naturally:</p>
-<pre>#include &lt;<span class="RenoLink"><a href="exception_hpp.html">boost/exception.hpp</a></span>&gt;
+<pre>#include &lt;<span class="RenoLink"><a href="boost_exception_hpp.html">boost/exception.hpp</a></span>&gt;
 #include &lt;boost/shared_ptr.hpp&gt;
 #include &lt;stdio.h&gt;
 #include &lt;string&gt;
@@ -121,7 +121,7 @@ parse_file( char const * file_name )
 </div><div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>Adding Grouped Data to Exceptions</h3>
 </div>
 <p>The code snippet below demonstrates how boost::<span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html">tuple</a></span> can be used to bundle the name of the function that failed, together with the reported errno so that they can be added to exception objects more conveniently together:</p>
-<pre>#include &lt;<span class="RenoLink"><a href="exception_error_info_group_hpp.html">boost/exception/info_tuple.hpp</a></span>&gt;
+<pre>#include &lt;<span class="RenoLink"><a href="boost_exception_info_tuple_hpp.html">boost/exception/info_tuple.hpp</a></span>&gt;
 #include &lt;boost/shared_ptr.hpp&gt;
 #include &lt;stdio.h&gt;
 #include &lt;string&gt;

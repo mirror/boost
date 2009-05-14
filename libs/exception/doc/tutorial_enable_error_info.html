@@ -22,7 +22,7 @@
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h2>Integrating Boost Exception in Existing Exception Class Hierarchies</h2>
 </div>
 <p>Some exception hierarchies can not be modified to make boost::<span class="RenoLink"><a href="exception.html">exception</a></span> a base type. In this case, the <span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span> function template can be used to make exception objects derive from boost::<span class="RenoLink"><a href="exception.html">exception</a></span> anyway. Here is an example:</p>
-<pre>#include &lt;<span class="RenoLink"><a href="exception_hpp.html">boost/exception.hpp</a></span>&gt;
+<pre>#include &lt;<span class="RenoLink"><a href="boost_exception_hpp.html">boost/exception.hpp</a></span>&gt;
 #include &lt;stdexcept&gt;
 
 typedef boost::<span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_std_range_min,size_t&gt; std_range_min;

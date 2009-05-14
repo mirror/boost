@@ -5,7 +5,6 @@
 
 #include <boost/exception_ptr.hpp>
 #include <boost/exception/get_error_info.hpp>
-#include <boost/exception/info.hpp>
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/detail/workaround.hpp>
 #include <string>
@@ -125,6 +124,24 @@ test_std_exception()
             {
             BOOST_TEST(false);
             }
+        try
+            {
+            rethrow_exception(p);
+            BOOST_TEST(false);
+            }
+        catch(
+        boost::exception & x )
+            {
+#ifndef BOOST_NO_RTTI
+            std::type_info const * const * t=boost::get_error_info<boost::original_exception_type>(x);
+            BOOST_TEST(t!=0 && *t!=0 && **t==typeid(T));
+#endif
+            }
+        catch(
+        ... )
+            {
+            BOOST_TEST(false);
+            }
         }
     }
 
@@ -171,6 +188,24 @@ test_std_exception_what()
                 {
                 BOOST_TEST(false);
                 }
+            }
+        catch(
+        ... )
+            {
+            BOOST_TEST(false);
+            }
+        try
+            {
+            rethrow_exception(p);
+            BOOST_TEST(false);
+            }
+        catch(
+        boost::exception & x )
+            {
+#ifndef BOOST_NO_RTTI
+            std::type_info const * const * t=boost::get_error_info<boost::original_exception_type>(x);
+            BOOST_TEST(t!=0 && *t!=0 && **t==typeid(T));
+#endif
             }
         catch(
         ... )
@@ -342,8 +377,12 @@ main()
             BOOST_TEST(false);
             }
         catch(
-        boost::unknown_exception & )
+        boost::unknown_exception & e )
             {
+#ifndef BOOST_NO_RTTI
+            std::type_info const * const * t=boost::get_error_info<boost::original_exception_type>(e);
+            BOOST_TEST(t!=0 && *t!=0 && **t==typeid(derives_std_exception));
+#endif
             }
         catch(
         ... )
@@ -352,15 +391,23 @@ main()
             }
         }
 
+    test_std_exception_what<std::domain_error>();
     test_std_exception_what<std::invalid_argument>();
+    test_std_exception_what<std::length_error>();
     test_std_exception_what<std::out_of_range>();
     test_std_exception_what<std::logic_error>();
+    test_std_exception_what<std::range_error>();
+    test_std_exception_what<std::overflow_error>();
+    test_std_exception_what<std::underflow_error>();
+    test_std_exception_what<std::ios_base::failure>();
+    test_std_exception_what<std::runtime_error>();
     test_std_exception<std::bad_alloc>();
 #ifndef BOOST_NO_TYPEID
     test_std_exception<std::bad_cast>();
     test_std_exception<std::bad_typeid>();
 #endif
     test_std_exception<std::bad_exception>();
+    test_std_exception<std::exception>();
 
     try
         {
@@ -384,6 +431,12 @@ main()
             BOOST_TEST(boost::get_error_info<my_info>(x));
             if( int const * p=boost::get_error_info<my_info>(x) )
                 BOOST_TEST(*p==42);
+#ifndef BOOST_NO_RTTI
+                {
+            std::type_info const * const * t=boost::get_error_info<boost::original_exception_type>(x);
+            BOOST_TEST(t && *t && **t==typeid(derives_std_boost_exception));
+                }
+#endif
             boost::exception_ptr p = boost::current_exception();
             BOOST_TEST(!(p==boost::exception_ptr()));
             BOOST_TEST(p!=boost::exception_ptr());
@@ -399,6 +452,10 @@ main()
                 BOOST_TEST(boost::get_error_info<my_info>(x));
                 if( int const * p=boost::get_error_info<my_info>(x) )
                     BOOST_TEST(*p==42);
+#ifndef BOOST_NO_RTTI
+                std::type_info const * const * t=boost::get_error_info<boost::original_exception_type>(x);
+                BOOST_TEST(t && *t && **t==typeid(derives_std_boost_exception));
+#endif
                 }
             catch(
             ... )
@@ -435,6 +492,12 @@ main()
             BOOST_TEST(boost::get_error_info<my_info>(x));
             if( int const * p=boost::get_error_info<my_info>(x) )
                 BOOST_TEST(*p==42);
+#ifndef BOOST_NO_RTTI
+                {
+            std::type_info const * const * t=boost::get_error_info<boost::original_exception_type>(x);
+            BOOST_TEST(t && *t && **t==typeid(derives_boost_exception));
+                }
+#endif
             boost::exception_ptr p = boost::current_exception();
             BOOST_TEST(!(p==boost::exception_ptr()));
             BOOST_TEST(p!=boost::exception_ptr());

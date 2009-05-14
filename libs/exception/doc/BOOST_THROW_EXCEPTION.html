@@ -21,15 +21,15 @@
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>BOOST_THROW_EXCEPTION</h3>
 </div>
-<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="throw_exception_hpp.html">boost/throw_exception.hpp</a></span>&gt;</p>
+<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="boost_throw_exception_hpp.html">boost/throw_exception.hpp</a></span>&gt;</p>
 <div class="RenoIncludeDIV"><pre>#if !defined( BOOST_EXCEPTION_DISABLE )
-    #include &lt;<span class="RenoLink"><a href="exception_exception_hpp.html">boost/exception/exception.hpp</a></span>&gt;
+    #include &lt;<span class="RenoLink"><a href="boost_exception_exception_hpp.html">boost/exception/exception.hpp</a></span>&gt;
     #include &lt;boost/current_function.hpp&gt;
     #define <span class="RenoLink">BOOST_THROW_EXCEPTION</span>(x)\
         ::boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( ::boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(x) &lt;&lt;\
-        ::boost::<span class="RenoLink"><a href="exception_exception_hpp.html">throw_function</a></span>(BOOST_CURRENT_FUNCTION) &lt;&lt;\
-        ::boost::<span class="RenoLink"><a href="exception_exception_hpp.html">throw_file</a></span>(__FILE__) &lt;&lt;\
-        ::boost::<span class="RenoLink"><a href="exception_exception_hpp.html">throw_line</a></span>((int)__LINE__) )
+        ::boost::<span class="RenoLink"><a href="boost_exception_exception_hpp.html">throw_function</a></span>(BOOST_CURRENT_FUNCTION) &lt;&lt;\
+        ::boost::<span class="RenoLink"><a href="boost_exception_exception_hpp.html">throw_file</a></span>(__FILE__) &lt;&lt;\
+        ::boost::<span class="RenoLink"><a href="boost_exception_exception_hpp.html">throw_line</a></span>((int)__LINE__) )
 #else
     #define <span class="RenoLink">BOOST_THROW_EXCEPTION</span>(x) ::boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(x)
 #endif</pre>
@@ -37,7 +37,7 @@
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
-</a><a href="throw_exception_hpp.html">boost/throw_exception.hpp<br/>
+</a><a href="boost_throw_exception_hpp.html">boost/throw_exception.hpp<br/>
 </a><a href="frequently_asked_questions.html">Frequently Asked Questions<br/>
 </a></div>
 </div>

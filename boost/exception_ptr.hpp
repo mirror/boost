@@ -11,6 +11,7 @@
 #error This header requires exception handling to be enabled.
 #endif
 #include <boost/exception/exception.hpp>
+#include <boost/exception/info.hpp>
 #include <boost/exception/detail/type_info.hpp>
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
@@ -20,6 +21,17 @@
 namespace
 boost
     {
+#ifndef BOOST_NO_RTTI
+    typedef error_info<struct tag_original_exception_type,std::type_info const *> original_exception_type;
+
+    inline
+    std::string
+    to_string( original_exception_type const & x )
+        {
+        return x.value()->name();
+        }
+#endif
+
     class exception_ptr;
     exception_ptr current_exception();
     void rethrow_exception( exception_ptr const & );
@@ -93,9 +105,16 @@ boost
             }
 
         explicit
+        unknown_exception( std::exception const & e )
+            {
+            add_original_type(e);
+            }
+
+        explicit
         unknown_exception( boost::exception const & e ):
             boost::exception(e)
             {
+            add_original_type(e);
             }
 
         ~unknown_exception() throw()
@@ -115,6 +134,15 @@ boost
             {
             throw*this;
             }
+
+        template <class E>
+        void
+        add_original_type( E const & e )
+            {
+#ifndef BOOST_NO_RTTI
+            (*this) << original_exception_type(&typeid(e));
+#endif
+            }
         };
 
     namespace
@@ -133,12 +161,14 @@ boost
             current_exception_std_exception_wrapper( T const & e1 ):
                 T(e1)
                 {
+                add_original_type(e1);
                 }
 
             current_exception_std_exception_wrapper( T const & e1, boost::exception const & e2 ):
                 T(e1),
                 boost::exception(e2)
                 {
+                add_original_type(e1);
                 }
 
             ~current_exception_std_exception_wrapper() throw()
@@ -157,6 +187,15 @@ boost
             rethrow() const
                 {
                 throw *this;
+                }
+
+            template <class E>
+            void
+            add_original_type( E const & e )
+                {
+#ifndef BOOST_NO_RTTI
+                (*this) << original_exception_type(&typeid(e));
+#endif
                 }
             };
 
@@ -194,23 +233,23 @@ boost
         current_exception_std_exception( T const & e1 )
             {
             if( boost::exception const * e2 = get_boost_exception(&e1) )
-                return shared_ptr<clone_base const>(new current_exception_std_exception_wrapper<T>(e1,*e2));
+                return shared_ptr<current_exception_std_exception_wrapper<T> const>(new current_exception_std_exception_wrapper<T>(e1,*e2));
             else
-                return shared_ptr<clone_base const>(new current_exception_std_exception_wrapper<T>(e1));
+                return shared_ptr<current_exception_std_exception_wrapper<T> const>(new current_exception_std_exception_wrapper<T>(e1));
             }
 
         inline
         shared_ptr<clone_base const>
         current_exception_unknown_exception()
             {
-            return shared_ptr<clone_base const>(new unknown_exception());
+            return shared_ptr<unknown_exception const>(new unknown_exception());
             }
 
         inline
         shared_ptr<clone_base const>
         current_exception_unknown_boost_exception( boost::exception const & e )
             {
-            return shared_ptr<clone_base const>(new unknown_exception(e));
+            return shared_ptr<unknown_exception const>(new unknown_exception(e));
             }
 
         inline
@@ -220,7 +259,7 @@ boost
             if( boost::exception const * be = get_boost_exception(&e) )
                 return current_exception_unknown_boost_exception(*be);
             else
-                return current_exception_unknown_exception();
+                return shared_ptr<unknown_exception const>(new unknown_exception(e));
             }
 
         inline
