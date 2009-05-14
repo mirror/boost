@@ -450,6 +450,10 @@ namespace
 
   void worst_offenders_count()
   {
+    if ( msgs.empty() )
+    {
+      return;
+    }
     string current_library( msgs.begin()->library );
     int err_count = 0;
     for ( error_msg_vector::iterator itr ( msgs.begin() );
