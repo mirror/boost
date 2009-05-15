@@ -519,10 +519,32 @@ The compiler supports  concepts.
 [section Macros that describe C++0x features not supported]
 
 The following macros describe features in the upcoming ISO C++ standard, C++0x,
-that are not yet supported by a particular compiler.
+that are not yet supported by a particular compiler or library.
 
 [table
 [[Macro     ][Description     ]]
+
+[[`BOOST_NO_0X_HDR_ARRAY`][The standard library does not provide header <array>.]]
+[[`BOOST_NO_0X_HDR_CHRONO`][The standard library does not provide header <chrono>.]]
+[[`BOOST_NO_0X_HDR_CODECVT`][The standard library does not provide header <codecvt>.]]
+[[`BOOST_NO_0X_HDR_CONCEPTS`][The standard library does not provide header <concepts>.]]
+[[`BOOST_NO_0X_HDR_CONDITION_VARIABLE`][The standard library does not provide header <condition_variable>.]]
+[[`BOOST_NO_0X_HDR_CONTAINER_CONCEPTS`][The standard library does not provide header <container_concepts>.]]
+[[`BOOST_NO_0X_HDR_FORWARD_LIST`][The standard library does not provide header <forward_list>.]]
+[[`BOOST_NO_0X_HDR_FUTURE`][The standard library does not provide header <future>.]]
+[[`BOOST_NO_0X_HDR_INITIALIZER_LIST`][The standard library does not provide header <initializer_list>.]]
+[[`BOOST_NO_0X_HDR_ITERATOR_CONCEPTS`][The standard library does not provide header <iterator_concepts>.]]
+[[`BOOST_NO_0X_HDR_MEMORY_CONCEPTS`][The standard library does not provide header <memory_concepts>.]]
+[[`BOOST_NO_0X_HDR_MUTEX`][The standard library does not provide header <mutex>.]]
+[[`BOOST_NO_0X_HDR_RANDOM`][The standard library does not provide header <random>.]]
+[[`BOOST_NO_0X_HDR_RATIO`][The standard library does not provide header <ratio>.]]
+[[`BOOST_NO_0X_HDR_REGEX`][The standard library does not provide header <regex>.]]
+[[`BOOST_NO_0X_HDR_SYSTEM_ERROR`][The standard library does not provide header <system_error>.]]
+[[`BOOST_NO_0X_HDR_THREAD`][The standard library does not provide header <thread>.]]
+[[`BOOST_NO_0X_HDR_TUPLE`][The standard library does not provide header <tuple>.]]
+[[`BOOST_NO_0X_HDR_TYPE_TRAITS`][The standard library does not provide header <type_traits>.]]
+[[`BOOST_NO_0X_HDR_UNORDERED_MAP`][The standard library does not provide header <unordered_map>.]]
+[[`BOOST_NO_0X_HDR_UNORDERED_SET`][The standard library does not provide header <unordered_set>.]]
 
 [[`BOOST_NO_AUTO_DECLARATIONS`][The compiler does not support
 type deduction for variables declared with the `auto` keyword (`auto var = ...;`).
@@ -536,6 +558,10 @@ type `char16_t`.
 [[`BOOST_NO_CHAR32_T`][The compiler does not support 
 type `char32_t`. 
 ]]                       
+[[`BOOST_NO_CONCEPTS`][The compiler does not support Concepts. 
+]]                      
+[[`BOOST_NO_TEMPLATE_ALIASES`][The compiler does not support template aliases. 
+]]                      
 [[`BOOST_NO_CONSTEXPR`][The compiler does not support 
 `constexpr`. 
 ]]                      
@@ -557,8 +583,12 @@ explicit instantiation declarations for templates (`explicit template`).
 [[`BOOST_NO_INITIALIZER_LISTS`][
 The C++ compiler does not support C++0x initializer lists.
 ]]
+[[`BOOST_NO_LAMBDAS`][The compiler does not support Lambdas. 
+]]                      
 [[`BOOST_NO_LONG_LONG`][The compiler does not support `long long`.
 ]]                
+[[`BOOST_NO_NULLPTR`][The compiler does not support 'nullptr'. 
+]]                      
 [[`BOOST_NO_RAW_LITERALS`][The compiler does not support
 raw string literals. 
 ]]                   
@@ -574,6 +604,8 @@ scoped enumerations (`enum class`).
 [[`BOOST_NO_STD_UNORDERD`][The standard library does not support
 <unordered_map> and <unordered_set>. 
 ]]                  
+[[`BOOST_NO_TEMPLATE_ALIASES`][The compiler does not support template aliases. 
+]]                      
 [[`BOOST_NO_UNICODE_LITERALS`][The compiler does not support
 Unicode (`u8`, `u`, `U`) literals. 
 ]]               

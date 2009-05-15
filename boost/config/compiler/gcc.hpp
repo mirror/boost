@@ -106,7 +106,10 @@
 #define BOOST_NO_CONSTEXPR
 #define BOOST_NO_EXPLICIT_CONVERSION_OPERATORS
 #define BOOST_NO_EXTERN_TEMPLATE
+#define BOOST_NO_LAMBDAS
+#define BOOST_NO_NULLPTR
 #define BOOST_NO_RAW_LITERALS
+#define BOOST_NO_TEMPLATE_ALIASES
 
 // C++0x features in 4.3.n and later
 //
@@ -151,6 +154,8 @@
 #ifdef __GXX_CONCEPTS__
 #  define BOOST_HAS_CONCEPTS
 #  define BOOST_COMPILER "ConceptGCC version " __VERSION__
+#else
+#  define BOOST_NO_CONCEPTS
 #endif
 
 #ifndef BOOST_COMPILER
