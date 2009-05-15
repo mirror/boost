@@ -12,6 +12,7 @@
 #endif
 #include <boost/exception/exception.hpp>
 #include <boost/exception/info.hpp>
+#include <boost/exception/diagnostic_information.hpp>
 #include <boost/exception/detail/type_info.hpp>
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
@@ -37,7 +38,8 @@ boost
     void rethrow_exception( exception_ptr const & );
 
     class
-    exception_ptr
+    exception_ptr:
+        public exception_detail::exception_ptr_base
         {
         typedef bool exception_ptr::*unspecified_bool_type;
         friend exception_ptr current_exception();
@@ -65,6 +67,22 @@ boost
             BOOST_ASSERT(c);
             }
 
+        void
+        _rethrow() const
+            {
+            BOOST_ASSERT(*this);
+            if( bad_alloc_ )
+                throw enable_current_exception(std::bad_alloc());
+            else
+                c_->rethrow();
+            }
+
+        bool
+        _empty() const
+            {
+            return !bad_alloc_ && !c_;
+            }
+
         public:
 
         exception_ptr():
@@ -74,7 +92,7 @@ boost
 
         operator unspecified_bool_type() const
             {
-            return (bad_alloc_ || c_) ? &exception_ptr::bad_alloc_ : 0;
+            return _empty() ? 0 : &exception_ptr::bad_alloc_;
             }
 
         friend
@@ -417,11 +435,26 @@ boost
     void
     rethrow_exception( exception_ptr const & p )
         {
-        BOOST_ASSERT(p);
-        if( p.bad_alloc_ )
-            throw enable_current_exception(std::bad_alloc());
-        else
-            p.c_->rethrow();
+        p._rethrow();
+        }
+
+    inline
+    std::string
+    to_string( exception_ptr const & p )
+        {
+        std::string s='\n'+diagnostic_information(p);
+        std::string padding("  ");
+        std::string r;
+        bool f=false;
+        for( std::string::const_iterator i=s.begin(),e=s.end(); i!=e; ++i )
+            {
+            if( f )
+                r+=padding;
+            char c=*i;
+            r+=c;
+            f=(c=='\n');
+            }
+        return r;
         }
     }
 

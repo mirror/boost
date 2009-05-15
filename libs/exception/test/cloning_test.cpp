@@ -13,6 +13,8 @@
 struct my_tag {};
 #endif
 
+typedef boost::error_info<struct nested_exception_tag,boost::exception_ptr> nested_exception;
+
 typedef boost::error_info<struct my_tag,int> my_info;
 
 template <class T>
@@ -69,6 +71,17 @@ derives_std_boost_exception:
     std::exception,
     boost::exception
     {
+    char const * const wh_;
+
+    derives_std_boost_exception( char const * wh="derives_std_boost_exception" ):
+        wh_(wh)
+        {
+        }
+
+    char const * what() const throw()
+        {
+        return wh_;
+        }
     };
 
 struct
@@ -530,5 +543,30 @@ main()
     test_throw_on_copy<std::bad_alloc,std::bad_alloc>();
     test_throw_on_copy<int,std::bad_exception>();
 
+    try
+        {
+        throw boost::enable_current_exception(derives_std_boost_exception("what1"));
+        }
+    catch(
+    ... )
+        {
+        boost::exception_ptr p=boost::current_exception();
+            {
+        std::string s=diagnostic_information(p);
+        BOOST_TEST(s.find("what1")!=s.npos);
+            }
+        try
+            {
+            throw boost::enable_current_exception(derives_std_boost_exception("what2") << nested_exception(p) );
+            }
+        catch(
+        ... )
+            {
+            std::string s=boost::current_exception_diagnostic_information();
+            BOOST_TEST(s.find("what1")!=s.npos);
+            BOOST_TEST(s.find("what2")!=s.npos);
+            }
+        }
+    BOOST_TEST(!diagnostic_information(boost::exception_ptr()).empty());
     return boost::report_errors();
     }

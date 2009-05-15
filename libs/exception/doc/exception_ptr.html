@@ -36,6 +36,8 @@ boost
 <li> It is illegal for multiple threads to modify the same <span class="RenoLink">exception_ptr</span> object concurrently.</li>
 <li> While calling <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> makes a copy of the current exception object, it is still possible for the two copies to share internal state. Therefore, in general it is not safe to call <span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span> concurrently to throw the same exception object into multiple threads.</li>
 </ul></div>
+<h4>Nesting of exceptions</h4>
+<p>An <span class="RenoLink">exception_ptr</span> can be added as <span class="RenoLink"><a href="error_info.html">error_info</a></span> to any boost::<span class="RenoLink"><a href="exception.html">exception</a></span>. This is a convenient way to nest exceptions. There is no limit on the depth of the nesting, however cyclic references result in undefined behavior.</p>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
