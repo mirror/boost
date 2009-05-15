@@ -62,3 +62,8 @@ boost_glob_test_run(type_traits *.cpp "")
 message(STATUS "TR1 tests need some love")
 # boost_glob_test_compile(std_headers *.cpp "-DTEST_STD=1" STD_HEADER_TEST)
 boost_glob_test_compile(cyclic_depend *.cpp "")
+
+# Known failures
+boost_test_known_failures(test_cmath_tricky_std "gcc-4.0.[0-9]-.*")
+boost_test_known_failures(test_mem_fn_tricky_std "gcc-4.0.[0-9]-.*")
+boost_test_known_failures(test_ref_wrapper_tricky_std "gcc-4.0.[0-9]-.*")

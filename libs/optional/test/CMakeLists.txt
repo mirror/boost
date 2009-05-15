@@ -3,7 +3,8 @@ boost_additional_test_dependencies(optional BOOST_DEPENDS test tuple)
 
 boost_test_run(optional_test)
 boost_test_run(optional_test_tie)
-boost_test_run(optional_test_ref)
+boost_test_run(optional_test_ref 
+  KNOWN_FAILURES "gcc-4.[0-3].[0-9]-.*")
 boost_test_run(optional_test_inplace)
 boost_test_run(optional_test_io)
 boost_test_compile_fail(optional_test_fail1)
