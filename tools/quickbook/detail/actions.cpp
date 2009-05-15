@@ -1010,7 +1010,9 @@ namespace quickbook
             detail::unindent(code); // remove all indents
             if (code.size() != 0)
             {
-                snippet += "\n\n``\n" + code + "``\n\n";
+                snippet += "\n\n";
+                snippet += is_python ? "[python]" : "[c++]";
+                snippet += "``\n" + code + "``\n\n";
                 code.clear();
             }
         }
@@ -1030,7 +1032,9 @@ namespace quickbook
             detail::unindent(code); // remove all indents
             if (code.size() != 0)
             {
-                snippet += "\n\n```\n" + code + "```\n\n";
+                snippet += "\n\n";
+                snippet += is_python ? "[python]" : "[c++]";
+                snippet += "```\n" + code + "```\n\n";
             }
 
             if(callouts.size() > 0)
