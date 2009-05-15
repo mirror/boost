@@ -968,7 +968,7 @@ namespace quickbook
         out << "\" />\n";
     }
 
-    void code_snippet_grammar::pass_thru(iterator first, iterator last) const
+    void code_snippet_actions::pass_thru(iterator first, iterator last)
     {
         code += *first;
     }
@@ -978,7 +978,7 @@ namespace quickbook
         int callout_id = 0;
     }
 
-    void code_snippet_grammar::callout(iterator first, iterator last, char const* role) const
+    void code_snippet_actions::callout(iterator first, iterator last, char const* role)
     {
         using detail::callout_id;
         code += "``'''";
@@ -993,17 +993,17 @@ namespace quickbook
         callouts.push_back(std::string(first, last));
     }
 
-    void code_snippet_grammar::inline_callout(iterator first, iterator last) const
+    void code_snippet_actions::inline_callout(iterator first, iterator last)
     {
         callout(first, last, "callout_bug");
     }
 
-    void code_snippet_grammar::line_callout(iterator first, iterator last) const
+    void code_snippet_actions::line_callout(iterator first, iterator last)
     {
         callout(first, last, "line_callout_bug");
     }
 
-    void code_snippet_grammar::escaped_comment(iterator first, iterator last) const
+    void code_snippet_actions::escaped_comment(iterator first, iterator last)
     {
         if (!code.empty())
         {
@@ -1024,7 +1024,7 @@ namespace quickbook
         }
     }
 
-    void code_snippet_grammar::compile(iterator first, iterator last) const
+    void code_snippet_actions::compile(iterator first, iterator last)
     {
         using detail::callout_id;
         if (!code.empty())
@@ -1088,9 +1088,14 @@ namespace quickbook
         size_t fname_len = file.size();
         bool is_python = fname_len >= 3
             && file[--fname_len]=='y' && file[--fname_len]=='p' && file[--fname_len]=='.';
-        code_snippet_grammar g(storage, doc_id, is_python);
+        code_snippet_actions a(storage, doc_id, is_python);
         // TODO: Should I check that parse succeeded?
-        boost::spirit::classic::parse(first, last, g);
+        if(is_python) {
+            boost::spirit::classic::parse(first, last, python_code_snippet_grammar(a));
+        }
+        else {
+            boost::spirit::classic::parse(first, last, cpp_code_snippet_grammar(a));
+        }
 
         return 0;
     }

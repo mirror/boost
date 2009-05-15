@@ -15,10 +15,9 @@
 
 namespace quickbook
 {
-  struct code_snippet_grammar
-      : grammar<code_snippet_grammar>
-  {
-        code_snippet_grammar(std::vector<template_symbol>& storage,
+    struct code_snippet_actions
+    {
+        code_snippet_actions(std::vector<template_symbol>& storage,
                                  std::string const& doc_id,
                                  bool is_python)
             : storage(storage)
@@ -26,24 +25,43 @@ namespace quickbook
             , is_python(is_python)
         {}
 
+        void pass_thru(iterator first, iterator last);
+        void escaped_comment(iterator first, iterator last);
+        void compile(iterator first, iterator last);
+        void callout(iterator first, iterator last, char const* role);
+        void inline_callout(iterator first, iterator last);
+        void line_callout(iterator first, iterator last);
+
+        std::string code;
+        std::string snippet;
+        std::string id;
+        std::vector<std::string> callouts;
+        std::vector<template_symbol>& storage;
+        std::string const doc_id;
+        bool const is_python;
+    };
+
+    struct python_code_snippet_grammar
+        : grammar<python_code_snippet_grammar>
+    {
+        typedef code_snippet_actions actions_type;
+  
+        python_code_snippet_grammar(actions_type & actions)
+            : actions(actions)
+        {}
+
         template <typename Scanner>
         struct definition
         {
-            typedef code_snippet_grammar self_type;
+            typedef code_snippet_actions actions_type;
             
-            definition(self_type const& self)
+            definition(python_code_snippet_grammar const& self)
             {
-                self.is_python
-                    ? definition_python(self)
-                    : definition_cpp(self)
-                    ;
-            }
+                actions_type& actions = self.actions;
             
-            void definition_python(self_type const& self)
-            {
                 start_ =
                     +(
-                            snippet                 [boost::bind(&self_type::compile, &self, _1, _2)]
+                            snippet                 [boost::bind(&actions_type::compile, &actions, _1, _2)]
                         |   anychar_p
                     )
                     ;
@@ -54,7 +72,7 @@ namespace quickbook
 
                 snippet =
                     "#[" >> *space_p
-                    >> identifier                   [assign_a(self.id)]
+                    >> identifier                   [assign_a(actions.id)]
                     >> (*(code_elements - "#]"))
                     >> "#]"
                     ;
@@ -62,7 +80,7 @@ namespace quickbook
                 code_elements =
                         escaped_comment
                     |   ignore
-                    |   (anychar_p - "#]")         [boost::bind(&self_type::pass_thru, &self, _1, _2)]
+                    |   (anychar_p - "#]")         [boost::bind(&actions_type::pass_thru, &actions, _1, _2)]
                     ;
 
                 ignore =
@@ -80,18 +98,43 @@ namespace quickbook
                 escaped_comment =
                         *space_p >> "#`"
                         >> ((*(anychar_p - eol_p))
-                            >> eol_p)               [boost::bind(&self_type::escaped_comment, &self, _1, _2)]
+                            >> eol_p)               [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)]
                     |   *space_p >> "\"\"\"`"
-                        >> (*(anychar_p - "\"\"\""))    [boost::bind(&self_type::escaped_comment, &self, _1, _2)]
+                        >> (*(anychar_p - "\"\"\""))    [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)]
                         >> "\"\"\""
                     ;
             }
-            
-            void definition_cpp(self_type const& self)
+
+            rule<Scanner>
+                start_, snippet, identifier, code_elements, escaped_comment,
+                inline_callout, line_callout, ignore;
+
+            rule<Scanner> const&
+            start() const { return start_; }
+        };
+
+        actions_type& actions;
+    };  
+
+    struct cpp_code_snippet_grammar
+        : grammar<cpp_code_snippet_grammar>
+    {
+        typedef code_snippet_actions actions_type;
+  
+        cpp_code_snippet_grammar(actions_type & actions)
+            : actions(actions)
+        {}
+
+        template <typename Scanner>
+        struct definition
+        {
+            definition(cpp_code_snippet_grammar const& self)
             {
+                actions_type& actions = self.actions;
+            
                 start_ =
                     +(
-                            snippet                 [boost::bind(&self_type::compile, &self, _1, _2)]
+                            snippet                 [boost::bind(&actions_type::compile, &actions, _1, _2)]
                         |   anychar_p
                     )
                     ;
@@ -102,12 +145,12 @@ namespace quickbook
 
                 snippet =
                         "//[" >> *space_p
-                        >> identifier                   [assign_a(self.id)]
+                        >> identifier                   [assign_a(actions.id)]
                         >> (*(code_elements - "//]"))
                         >> "//]"
                     |
                         "/*[" >> *space_p
-                        >> identifier                   [assign_a(self.id)]
+                        >> identifier                   [assign_a(actions.id)]
                         >> *space_p >> "*/"
                         >> (*(code_elements - "/*]*"))
                         >> "/*]*/"
@@ -118,18 +161,18 @@ namespace quickbook
                     |   ignore
                     |   line_callout
                     |   inline_callout
-                    |   (anychar_p - "//]" - "/*]*/")    [boost::bind(&self_type::pass_thru, &self, _1, _2)]
+                    |   (anychar_p - "//]" - "/*]*/")    [boost::bind(&actions_type::pass_thru, &actions, _1, _2)]
                     ;
 
                 inline_callout =
                     "/*<"
-                    >> (*(anychar_p - ">*/"))       [boost::bind(&self_type::inline_callout, &self, _1, _2)]
+                    >> (*(anychar_p - ">*/"))       [boost::bind(&actions_type::inline_callout, &actions, _1, _2)]
                     >> ">*/"
                     ;
 
                 line_callout =
                     "/*<<"
-                    >> (*(anychar_p - ">>*/"))      [boost::bind(&self_type::line_callout, &self, _1, _2)]
+                    >> (*(anychar_p - ">>*/"))      [boost::bind(&actions_type::line_callout, &actions, _1, _2)]
                     >> ">>*/"
                     >> *space_p
                     ;
@@ -149,9 +192,9 @@ namespace quickbook
                 escaped_comment =
                         *space_p >> "//`"
                         >> ((*(anychar_p - eol_p))
-                            >> eol_p)               [boost::bind(&self_type::escaped_comment, &self, _1, _2)]
+                            >> eol_p)               [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)]
                     |   *space_p >> "/*`"
-                        >> (*(anychar_p - "*/"))    [boost::bind(&self_type::escaped_comment, &self, _1, _2)]
+                        >> (*(anychar_p - "*/"))    [boost::bind(&actions_type::escaped_comment, &actions, _1, _2)]
                         >> "*/"
                     ;
             }
@@ -164,22 +207,8 @@ namespace quickbook
             start() const { return start_; }
         };
 
-        void pass_thru(iterator first, iterator last) const;
-        void escaped_comment(iterator first, iterator last) const;
-        void compile(iterator first, iterator last) const;
-        void callout(iterator first, iterator last, char const* role) const;
-        void inline_callout(iterator first, iterator last) const;
-        void line_callout(iterator first, iterator last) const;
-
-        mutable std::string code;
-        mutable std::string snippet;
-        mutable std::string id;
-        mutable std::vector<std::string> callouts;
-        std::vector<template_symbol>& storage;
-        std::string doc_id;
-        bool is_python;
+        actions_type& actions;
     };
-  
 }
 
 #endif // BOOST_SPIRIT_QUICKBOOK_CODE_SNIPPET_HPP
