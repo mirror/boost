@@ -19,10 +19,10 @@ namespace quickbook
     {
         code_snippet_actions(std::vector<template_symbol>& storage,
                                  std::string const& doc_id,
-                                 bool is_python)
+                                 char const* source_type)
             : storage(storage)
             , doc_id(doc_id)
-            , is_python(is_python)
+            , source_type(source_type)
         {}
 
         void pass_thru(iterator first, iterator last);
@@ -38,7 +38,7 @@ namespace quickbook
         std::vector<std::string> callouts;
         std::vector<template_symbol>& storage;
         std::string const doc_id;
-        bool const is_python;
+        char const* const source_type;
     };
 
     struct python_code_snippet_grammar

@@ -1011,7 +1011,7 @@ namespace quickbook
             if (code.size() != 0)
             {
                 snippet += "\n\n";
-                snippet += is_python ? "[python]" : "[c++]";
+                snippet += source_type;
                 snippet += "``\n" + code + "``\n\n";
                 code.clear();
             }
@@ -1033,7 +1033,7 @@ namespace quickbook
             if (code.size() != 0)
             {
                 snippet += "\n\n";
-                snippet += is_python ? "[python]" : "[c++]";
+                snippet += source_type;
                 snippet += "```\n" + code + "```\n\n";
             }
 
@@ -1088,7 +1088,7 @@ namespace quickbook
         size_t fname_len = file.size();
         bool is_python = fname_len >= 3
             && file[--fname_len]=='y' && file[--fname_len]=='p' && file[--fname_len]=='.';
-        code_snippet_actions a(storage, doc_id, is_python);
+        code_snippet_actions a(storage, doc_id, is_python ? "[python]" : "[c++]");
         // TODO: Should I check that parse succeeded?
         if(is_python) {
             boost::spirit::classic::parse(first, last, python_code_snippet_grammar(a));
