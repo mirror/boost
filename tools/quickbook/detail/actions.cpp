@@ -1082,7 +1082,8 @@ namespace quickbook
         iterator_type last(code.end(), code.end());
 
         size_t fname_len = file.size();
-        bool is_python = file[--fname_len]=='y' && file[--fname_len]=='p';
+        bool is_python = fname_len >= 3
+            && file[--fname_len]=='y' && file[--fname_len]=='p' && file[--fname_len]=='.';
         code_snippet_grammar g(storage, doc_id, is_python);
         // TODO: Should I check that parse succeeded?
         boost::spirit::classic::parse(first, last, g);
