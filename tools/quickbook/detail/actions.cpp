@@ -968,7 +968,7 @@ namespace quickbook
         out << "\" />\n";
     }
 
-    void cpp_code_snippet_grammar::pass_thru(iterator first, iterator last) const
+    void code_snippet_grammar::pass_thru(iterator first, iterator last) const
     {
         code += *first;
     }
@@ -978,7 +978,7 @@ namespace quickbook
         int callout_id = 0;
     }
 
-    void cpp_code_snippet_grammar::callout(iterator first, iterator last, char const* role) const
+    void code_snippet_grammar::callout(iterator first, iterator last, char const* role) const
     {
         using detail::callout_id;
         code += "``'''";
@@ -993,17 +993,17 @@ namespace quickbook
         callouts.push_back(std::string(first, last));
     }
 
-    void cpp_code_snippet_grammar::inline_callout(iterator first, iterator last) const
+    void code_snippet_grammar::inline_callout(iterator first, iterator last) const
     {
         callout(first, last, "callout_bug");
     }
 
-    void cpp_code_snippet_grammar::line_callout(iterator first, iterator last) const
+    void code_snippet_grammar::line_callout(iterator first, iterator last) const
     {
         callout(first, last, "line_callout_bug");
     }
 
-    void cpp_code_snippet_grammar::escaped_comment(iterator first, iterator last) const
+    void code_snippet_grammar::escaped_comment(iterator first, iterator last) const
     {
         if (!code.empty())
         {
@@ -1022,7 +1022,7 @@ namespace quickbook
         }
     }
 
-    void cpp_code_snippet_grammar::compile(iterator first, iterator last) const
+    void code_snippet_grammar::compile(iterator first, iterator last) const
     {
         using detail::callout_id;
         if (!code.empty())
@@ -1081,7 +1081,9 @@ namespace quickbook
         iterator_type first(code.begin(), code.end(), file);
         iterator_type last(code.end(), code.end());
 
-        cpp_code_snippet_grammar g(storage, doc_id);
+        size_t fname_len = file.size();
+        bool is_python = file[--fname_len]=='y' && file[--fname_len]=='p';
+        code_snippet_grammar g(storage, doc_id, is_python);
         // TODO: Should I check that parse succeeded?
         boost::spirit::classic::parse(first, last, g);
 
