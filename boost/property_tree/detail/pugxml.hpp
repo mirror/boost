@@ -39,6 +39,7 @@
 #include <iostream>
 #include <ostream>
 #include <string>
+#include <cstring>
 #if defined(PUGOPT_MEMFIL) | defined(PUGOPT_NONSEG)
 #	include <assert.h>
 #endif
