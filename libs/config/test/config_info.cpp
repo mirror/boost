@@ -154,6 +154,7 @@ void print_compiler_macros()
   // GNUC options:
   PRINT_MACRO(__GNUC__);
   PRINT_MACRO(__GNUC_MINOR__);
+  PRINT_MACRO(__GNUC_PATCHLEVEL__);
   PRINT_MACRO(__STDC_VERSION__);
   PRINT_MACRO(__GNUG__);
   PRINT_MACRO(__STRICT_ANSI__);

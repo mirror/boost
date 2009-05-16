@@ -77,9 +77,21 @@
 # endif
 #endif
 
-//  C++0x headers in 20090124 (GCC 4.3.2) and later
+//  stdlibc++ C++0x support is detected via __GNUC__, __GNUC_MINOR__, and possibly
+//  __GNUC_PATCHLEVEL__ at the suggestion of Jonathan Wakely, one of the stdlibc++
+//  developers. He also commented:
 //
-#if !defined(__GLIBCXX__) || __GLIBCXX__<20090124 || !defined(__GXX_EXPERIMENTAL_CXX0X__)
+//       "I'm not sure how useful __GLIBCXX__ is for your purposes, for instance in
+//       GCC 4.2.4 it is set to 20080519 but in GCC 4.3.0 it is set to 20080305.
+//       Although 4.3.0 was released earlier than 4.2.4, it has better C++0x support
+//       than any release in the 4.2 series."
+//
+//  Another resource for understanding stdlibc++ features is:
+//  http://gcc.gnu.org/onlinedocs/libstdc++/manual/status.html#manual.intro.status.standard.200x
+
+//  C++0x headers in GCC 4.3.0 and later
+//
+#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
 #  define BOOST_NO_0X_HDR_ARRAY
 #  define BOOST_NO_0X_HDR_RANDOM
 #  define BOOST_NO_0X_HDR_REGEX
@@ -90,9 +102,9 @@
 #  define BOOST_NO_0X_HDR_UNORDERED_SET
 #endif
 
-//  C++0x headers in 20090421 (GCC 4.4.0) and later
+//  C++0x headers in GCC 4.4.0 and later
 //
-#if !defined(__GLIBCXX__) || __GLIBCXX__<20090421 || !defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 4) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
 #  define BOOST_NO_0X_HDR_CHRONO
 #  define BOOST_NO_0X_HDR_CONDITION_VARIABLE
 #  define BOOST_NO_0X_HDR_FORWARD_LIST
