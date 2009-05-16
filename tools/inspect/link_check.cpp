@@ -9,6 +9,7 @@
 #include "link_check.hpp"
 #include "boost/regex.hpp"
 #include "boost/filesystem/operations.hpp"
+#include <boost/algorithm/string/case_conv.hpp>
 #include <cstdlib>
 
 namespace fs = boost::filesystem;
@@ -16,8 +17,8 @@ namespace fs = boost::filesystem;
 namespace
 {
   boost::regex html_url_regex(
-    "<\\s*[^>]*\\s+(?:HREF|SRC)" // HREF or SRC
-    "\\s*=\\s*(['\"])(.*?)\\1",
+    "<([^\\s<>]*)\\s*[^<>]*\\s+(?:HREF|SRC)" // HREF or SRC
+    "\\s*=\\s*(['\"])(.*?)\\2",
     boost::regbase::normal | boost::regbase::icase);
   boost::regex css_url_regex(
     "(\\@import\\s*[\"']|url\\s*\\(\\s*[\"']?)([^\"')]*)",
@@ -130,15 +131,34 @@ namespace boost
       boost::match_results< string::const_iterator > what;
       boost::match_flag_type flags = boost::match_default;
 
-      boost::regex const& url_regex =
-          is_css(full_path) ? css_url_regex : html_url_regex;
+      if(!is_css(full_path))
+      {
+        while( boost::regex_search( start, end, what, html_url_regex, flags) )
+        {
+          // what[0] contains the whole string iterators.
+          // what[1] contains the element type iterators.
+          // what[3] contains the URL iterators.
 
-      while( boost::regex_search( start, end, what, url_regex, flags) )
+          string type( what[1].first, what[1].second );
+          boost::algorithm::to_lower(type);
+
+          // TODO: Complain if 'link' tags use external stylesheets.
+          do_url( string( what[3].first, what[3].second ),
+            library_name, full_path, no_link_errors,
+            type == "a" || type == "link" );
+
+          start = what[0].second; // update search position
+          flags |= boost::match_prev_avail; // update flags
+          flags |= boost::match_not_bob;
+        }
+      }
+
+      while( boost::regex_search( start, end, what, css_url_regex, flags) )
       {
         // what[0] contains the whole string iterators.
         // what[2] contains the URL iterators.
         do_url( string( what[2].first, what[2].second ),
-          library_name, full_path, no_link_errors );
+          library_name, full_path, no_link_errors, false );
 
         start = what[0].second; // update search position
         flags |= boost::match_prev_avail; // update flags
@@ -149,7 +169,7 @@ namespace boost
 //  do_url  ------------------------------------------------------------------//
 
     void link_check::do_url( const string & url, const string & library_name,
-      const path & source_path, bool no_link_errors )
+      const path & source_path, bool no_link_errors, bool allow_external_content )
         // precondition: source_path.is_complete()
     {
       if(!no_link_errors && url.empty()) {
@@ -187,6 +207,14 @@ namespace boost
         url_path(m[5]),
         //query(m[7]),
         fragment(m[9]);
+
+      // Check for external content
+      if(!allow_external_content && (authority_matched || scheme_matched)) {
+        if(!no_link_errors) {
+          ++m_invalid_errors;
+          error( library_name, source_path, string(name()) + " external content: " + decoded_url );
+        }
+      }
 
       // Protocol checks
       if(scheme_matched) {
