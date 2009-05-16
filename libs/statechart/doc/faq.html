@@ -345,7 +345,7 @@ int main()
   Machine().initiate();
   return 0;
 }</pre>
-  <p>The problem arises because <code>state_machine<>::~state_machine</code>
+  <p>The problem arises because <code>state_machine&lt;&gt;::~state_machine</code>
   inevitably destructs all remaining active states. At this time,
   <code>Machine::~Machine</code> has already been run, making it illegal to
   access any of the <code>Machine</code> members. This problem can be avoided
