@@ -22,7 +22,7 @@
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h2>boost/exception_ptr.hpp</h2>
 </div>
 <h3>Synopsis</h3>
-<div class="RenoIncludeDIV"><pre>#include &lt;<span class="RenoLink"><a href="exception_exception_hpp.html">boost/exception/exception.hpp</a></span>&gt;
+<div class="RenoIncludeDIV"><pre>#include &lt;<span class="RenoLink"><a href="boost_exception_exception_hpp.html">boost/exception/exception.hpp</a></span>&gt;
 
 namespace
 boost
@@ -35,6 +35,8 @@ boost
         ---unspecified---
         };</span>    
     
+    <span class="RenoIncludeSPAN">typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_original_exception_type,std::type_info const *&gt; <span class="RenoLink"><a href="original_exception_type.html">original_exception_type</a></span>;</span>    
+    
     <span class="RenoIncludeSPAN">typedef ---unspecified--- <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span>;</span>    
     
     <span class="RenoIncludeSPAN">template &lt;class T&gt;
@@ -46,10 +48,11 @@ boost
     }</pre>
 </div></div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
-<div class="RenoPageList"><a href="exception_hpp.html">boost/exception.hpp<br/>
+<div class="RenoPageList"><a href="boost_exception_hpp.html">boost/exception.hpp<br/>
 </a><a href="copy_exception.html">copy_exception<br/>
 </a><a href="current_exception.html">current_exception<br/>
 </a><a href="exception_ptr.html">exception_ptr<br/>
+</a><a href="original_exception_type.html">original_exception_type<br/>
 </a><a href="rethrow_exception.html">rethrow_exception<br/>
 </a><a href="synopsis.html">Synopsis<br/>
 </a><a href="unknown_exception.html">unknown_exception<br/>
