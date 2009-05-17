@@ -66,6 +66,9 @@ void check(const T&)
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    BOOST_CHECK(::tt::is_pod<t3>::value == true);
 #endif
+   BOOST_CHECK(as3.address() == &as3);
+   const t3 as4 = { 0, };
+   BOOST_CHECK(as4.address() == static_cast<const void*>(&as4));
 #endif
 }
 

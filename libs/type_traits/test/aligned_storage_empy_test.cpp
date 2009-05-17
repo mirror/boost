@@ -26,7 +26,13 @@ namespace
     };
     
     template< unsigned N, unsigned Alignment >
-    struct alignment_implementation2 : private boost::detail::aligned_storage::aligned_storage_imp<N,Alignment>
+    struct alignment_implementation2 : 
+#ifndef __BORLANDC__
+       private 
+#else
+       public
+#endif
+       boost::detail::aligned_storage::aligned_storage_imp<N,Alignment>
     {
         typedef boost::detail::aligned_storage::aligned_storage_imp<N,Alignment> type;
         const void* address() const { return static_cast<const type*>(this)->address(); }
