@@ -46,5 +46,5 @@ test_main( int /* argc */, char* /* argv */[] )
     }
     BOOST_CHECK_EQUAL(a, a1);
     std::remove(testfile);
-    return (a == a1) ? EXIT_SUCCESS : EXIT_SUCCESS;
+    return 0;
 }
