@@ -104,7 +104,7 @@ public:
    int get_id(const charT* i, const charT* j)
    {
       name t(i, j, 0);
-      typename std::vector<name>::const_iterator pos = lower_bound(m_sub_names.begin(), m_sub_names.end(), t);
+      typename std::vector<name>::const_iterator pos = std::lower_bound(m_sub_names.begin(), m_sub_names.end(), t);
       if((pos != m_sub_names.end()) && (*pos == t))
       {
          return pos->index;
