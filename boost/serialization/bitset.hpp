@@ -16,6 +16,7 @@
 #endif
 
 #include <bitset>
+#include <cstddef> // size_t
 
 #include <boost/config.hpp>
 #include <boost/serialization/split_free.hpp>
@@ -25,7 +26,7 @@
 namespace boost{
 namespace serialization{
 
-template <class Archive, unsigned size>
+template <class Archive, std::size_t size>
 inline void save(
     Archive & ar,
     std::bitset<size> const & t,
@@ -39,7 +40,7 @@ inline void save(
     ar << BOOST_SERIALIZATION_NVP( bits );
 }
 
-template <class Archive, unsigned size>
+template <class Archive, std::size_t size>
 inline void load(
     Archive & ar,
     std::bitset<size> & t,
@@ -50,7 +51,7 @@ inline void load(
     t = std::bitset<size>(bits);
 }
 
-template <class Archive, unsigned size>
+template <class Archive, std::size_t size>
 inline void serialize(
     Archive & ar,
     std::bitset<size> & t,
@@ -64,7 +65,7 @@ inline void serialize(
 // also, tracking would be hard to implement since, we're
 // serialization a representation of the data rather than
 // the data itself.
-template <unsigned size>
+template <std::size_t size>
 struct tracking_level<std::bitset<size> >
     : mpl::int_<track_never> {} ;
 
@@ -72,4 +73,3 @@ struct tracking_level<std::bitset<size> >
 } //boost
 
 #endif // BOOST_SERIALIZATION_BITSET_HPP
-
