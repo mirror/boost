@@ -205,7 +205,7 @@ Copyright (C) 2005 The Trustees of Indiana University.
 
 Authors: Douglas Gregor and Andrew Lumsdaine
 
-.. |Logo| image:: http://www.osl.iu.edu/research/pbgl/images/pbgl-logo.png
+.. |Logo| image:: pbgl-logo.png
             :align: middle
             :alt: Parallel BGL
             :target: http://www.osl.iu.edu/research/pbgl

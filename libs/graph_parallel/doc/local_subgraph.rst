@@ -61,7 +61,7 @@ Free Functions
 Constructs a local subgraph presenting the local portion of the
 distributed graph ``g``.
 
-.. |Logo| image:: http://www.osl.iu.edu/research/pbgl/images/pbgl-logo.png
+.. |Logo| image:: pbgl-logo.png
             :align: middle
             :alt: Parallel BGL
             :target: http://www.osl.iu.edu/research/pbgl

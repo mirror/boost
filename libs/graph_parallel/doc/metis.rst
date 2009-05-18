@@ -313,7 +313,7 @@ Authors: Douglas Gregor and Andrew Lumsdaine
 .. _adjacency_list: http://www.boost.org/libs/graph/doc/adjacency_list.html
 .. _input iterator: http://www.sgi.com/tech/stl/InputIterator.html
 
-.. |Logo| image:: http://www.osl.iu.edu/research/pbgl/images/pbgl-logo.png
+.. |Logo| image:: pbgl-logo.png
             :align: middle
             :alt: Parallel BGL
             :target: http://www.osl.iu.edu/research/pbgl

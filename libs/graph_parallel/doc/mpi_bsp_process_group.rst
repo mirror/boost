@@ -117,7 +117,7 @@ Copyright (C) 2007 Douglas Gregor
 
 Copyright (C) 2007 Matthias Troyer
 
-.. |Logo| image:: http://www.osl.iu.edu/research/pbgl/images/pbgl-logo.png
+.. |Logo| image:: pbgl-logo.png
             :align: middle
             :alt: Parallel BGL
             :target: http://www.osl.iu.edu/research/pbgl
