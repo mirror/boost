@@ -204,6 +204,7 @@ void_caster::recursive_unregister() const {
         if((*it)->is_shortcut()){
             if(m_derived == (*it)->m_base
             || (*it)->m_derived == m_base){
+                s.erase(it);
                 delete *it;
                 it = s.begin();
             }

@@ -95,11 +95,11 @@ extended_type_info::key_unregister() {
         for(;start != end; ++start){
             if(this == *start){
                 x.erase(start);
+                m_key = NULL;
                 break;
             }
         }
     }
-    m_key = NULL;
 }
 
 BOOST_SERIALIZATION_DECL(const extended_type_info *) 
