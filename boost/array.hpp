@@ -27,6 +27,7 @@
 #include <cstddef>
 #include <stdexcept>
 #include <boost/assert.hpp>
+#include <boost/swap.hpp>
 
 // Handles broken standard libraries better than <iterator>
 #include <boost/detail/iterator.hpp>
@@ -131,7 +132,8 @@ namespace boost {
 
         // swap (note: linear complexity)
         void swap (array<T,N>& y) {
-            std::swap_ranges(begin(),end(),y.begin());
+            for (size_type i = 0; i < N; ++i)
+                boost::swap(elems[i],y.elems[i]);
         }
 
         // direct access to data (read-only)
