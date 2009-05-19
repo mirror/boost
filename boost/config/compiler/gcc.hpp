@@ -109,6 +109,9 @@
 #define BOOST_NO_LAMBDAS
 #define BOOST_NO_NULLPTR
 #define BOOST_NO_RAW_LITERALS
+// scoped enums have a serious bug in 4.4.0, so define BOOST_NO_SCOPED_ENUMS until it
+// gets fixed. See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=38064
+#define BOOST_NO_SCOPED_ENUMS
 #define BOOST_NO_TEMPLATE_ALIASES
 
 // C++0x features in 4.3.n and later
@@ -145,7 +148,7 @@
 #  define BOOST_NO_DEFAULTED_FUNCTIONS
 #  define BOOST_NO_DELETED_FUNCTIONS
 #  define BOOST_NO_INITIALIZER_LISTS
-#  define BOOST_NO_SCOPED_ENUMS
+#  define BOOST_NO_SCOPED_ENUMS  
 #  define BOOST_NO_UNICODE_LITERALS
 #endif
 
