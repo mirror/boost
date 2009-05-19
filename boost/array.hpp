@@ -211,19 +211,19 @@ namespace boost {
         }
 
         // operator[]
-        reference operator[](size_type i)
+        reference operator[](size_type /*i*/)
         {
             return failed_rangecheck();
         }
 
-        const_reference operator[](size_type i) const
+        const_reference operator[](size_type /*i*/) const
         {
             return failed_rangecheck();
         }
 
         // at() with range check
-        reference at(size_type i)               {   return failed_rangecheck(); }
-        const_reference at(size_type i) const   {   return failed_rangecheck(); }
+        reference at(size_type /*i*/)               {   return failed_rangecheck(); }
+        const_reference at(size_type /*i*/) const   {   return failed_rangecheck(); }
 
         // front() and back()
         reference front()
@@ -252,7 +252,7 @@ namespace boost {
         static size_type max_size() { return 0; }
         enum { static_size = 0 };
 
-        void swap (array<T,0>& y) {
+        void swap (array<T,0>& /*y*/) {
         }
 
         // direct access to data (read-only)

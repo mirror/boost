@@ -21,7 +21,7 @@ int main()
 
     // copy and change order
     boost::array<std::string,4> seasons_orig = seasons;
-    for (unsigned i=seasons.size()-1; i>0; --i) {
+    for (std::size_t i=seasons.size()-1; i>0; --i) {
         std::swap(seasons.at(i),seasons.at((i+1)%seasons.size()));
     }
 
