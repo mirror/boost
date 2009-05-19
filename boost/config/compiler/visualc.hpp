@@ -131,10 +131,10 @@
 // disable Win32 API's if compiler extentions are
 // turned off:
 //
-#ifndef _MSC_EXTENSIONS
+#if !defined(_MSC_EXTENSIONS) && !defined(BOOST_DISABLE_WIN32)
 #  define BOOST_DISABLE_WIN32
 #endif
-#ifndef _CPPRTTI
+#if !defined(_CPPRTTI) && !defined(BOOST_NO_RTTI)
 #  define BOOST_NO_RTTI
 #endif
 
