@@ -178,6 +178,10 @@ namespace boost
         boost::shared_ptr<detail::connection_body_base> otherConnectionBody(other._weak_connection_body.lock());
         return connectionBody == otherConnectionBody;
       }
+      bool operator!=(const connection& other) const
+      {
+        return !(*this == other);
+      }
       bool operator<(const connection& other) const
       {
         boost::shared_ptr<detail::connection_body_base> connectionBody(_weak_connection_body.lock());

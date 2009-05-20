@@ -22,7 +22,8 @@ namespace boost
     class shared_connection_block
     {
     public:
-      shared_connection_block(const connection &conn = connection(), bool initially_blocked = true):
+      shared_connection_block(const signals2::connection &conn = signals2::connection(),
+        bool initially_blocked = true):
         _weak_connection_body(conn._weak_connection_body)
       {
         if(initially_blocked) block();
@@ -48,6 +49,10 @@ namespace boost
       {
         shared_ptr<void> empty;
         return _blocker < empty || empty < _blocker;
+      }
+      signals2::connection connection() const
+      {
+        return signals2::connection(_weak_connection_body);
       }
     private:
       boost::weak_ptr<detail::connection_body_base> _weak_connection_body;

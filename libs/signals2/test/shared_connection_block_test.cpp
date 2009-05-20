@@ -86,13 +86,27 @@ int test_main(int, char* [])
   }
 
   {
-    // default construction
+    // test default constructed block
     boost::signals2::shared_connection_block block;
     BOOST_CHECK(block.blocking() == true);
     block.unblock();
     BOOST_CHECK(block.blocking() == false);
     block.block();
     BOOST_CHECK(block.blocking() == true);
+
+    // test assignment
+    {
+      block.unblock();
+      boost::signals2::shared_connection_block block2(connections.at(0));
+      BOOST_CHECK(block.connection() != block2.connection());
+      BOOST_CHECK(block.blocking() != block2.blocking());
+      block = block2;
+      BOOST_CHECK(block.connection() == block2.connection());
+      BOOST_CHECK(block.blocking() == block2.blocking());
+    }
+    test_output.str("");
+    s0();
+    BOOST_CHECK(test_output.str() == "123");
   }
   return 0;
 }

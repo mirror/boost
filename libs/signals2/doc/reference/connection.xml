@@ -131,6 +131,17 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <throws><para>Will not throw.</para></throws>
           </method>
 
+          <method name="operator!=" cv="const">
+            <type>bool</type>
+            <parameter name="other">
+              <paramtype>const <classname>connection</classname>&amp;</paramtype>
+            </parameter>
+
+            <returns><para><computeroutput>!(*this == other)</computeroutput></para></returns>
+
+            <throws><para>Will not throw.</para></throws>
+          </method>
+
           <method name="operator&lt;" cv="const">
             <type>bool</type>
             <parameter name="other">

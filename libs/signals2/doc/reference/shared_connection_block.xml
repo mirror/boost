@@ -81,6 +81,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </para>
           </effects>
           <postconditions>
+            <para><code>this->connection() == other.connection()</code></para>
             <para><code>this->blocking() == other.blocking()</code></para>
           </postconditions>
         </constructor>
@@ -98,6 +99,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </para>
           </effects>
           <postconditions>
+            <para><code>this->connection() == rhs.connection()</code></para>
             <para><code>this->blocking() == rhs.blocking()</code></para>
           </postconditions>
           <throws><para>Will not throw.</para></throws>
@@ -123,6 +125,14 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             for the connection.  However, <code>this->blocking() == false</code> does not necessarily imply
             <code>connection::blocked() == false</code>, since the connection may be
             blocked by another <code>shared_connection_block</code> object.</para></notes>
+          </method>
+        </method-group>
+        <method-group name="queries">
+          <method name="connection" cv="const">
+            <type><classname>boost::signals2::connection</classname></type>
+            <returns>
+              <para>A connection object for the connection referenced by <code>this</code>.</para>
+            </returns>
           </method>
         </method-group>
       </class>
