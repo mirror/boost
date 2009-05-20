@@ -229,7 +229,7 @@ std::streampos file_descriptor::seek
         throw detail::bad_seek();
     } else {
        return offset_to_position(
-   	              (stream_offset(lDistanceToMoveHigh) << 32) + dwResultLow
+                  (stream_offset(lDistanceToMoveHigh) << 32) + dwResultLow
               );
     }
 #else // #ifdef BOOST_IOSTREAMS_WINDOWS

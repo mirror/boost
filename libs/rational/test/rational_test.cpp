@@ -26,6 +26,7 @@
 
 #define BOOST_TEST_MAIN  "Boost::Rational unit tests"
 
+#include <boost/config.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/operators.hpp>
 #include <boost/preprocessor/stringize.hpp>
@@ -227,8 +228,8 @@ class numeric_limits< MyInt >
 public:
     static const bool is_specialized = limits_type::is_specialized;
 
-    static MyInt min() throw()  { return limits_type::min(); }
-    static MyInt max() throw()  { return limits_type::max(); }
+    static MyInt min BOOST_PREVENT_MACRO_SUBSTITUTION () throw()  { return (limits_type::min)(); }
+    static MyInt max BOOST_PREVENT_MACRO_SUBSTITUTION () throw()  { return (limits_type::max)(); }
 
     static const int digits      = limits_type::digits;
     static const int digits10    = limits_type::digits10;
@@ -273,8 +274,8 @@ class numeric_limits< MyOverflowingUnsigned >
 public:
     static const bool is_specialized = limits_type::is_specialized;
 
-    static MyOverflowingUnsigned min() throw()  { return limits_type::min(); }
-    static MyOverflowingUnsigned max() throw()  { return limits_type::max(); }
+    static MyOverflowingUnsigned min BOOST_PREVENT_MACRO_SUBSTITUTION () throw()  { return (limits_type::min)(); }
+    static MyOverflowingUnsigned max BOOST_PREVENT_MACRO_SUBSTITUTION () throw()  { return (limits_type::max)(); }
 
     static const int digits      = limits_type::digits;
     static const int digits10    = limits_type::digits10;

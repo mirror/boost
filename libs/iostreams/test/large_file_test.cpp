@@ -292,7 +292,7 @@ bool create_large_file()
 
     // Close file
     CloseHandle(hnd);
-	return true;
+    return true;
 
 # endif // Borland workaround
 #else // #ifdef BOOST_IOSTREAMS_WINDOWS
@@ -343,7 +343,7 @@ bool create_large_file()
 
     // Close file
     BOOST_IOSTREAMS_FD_CLOSE(fd);
-	return true;
+    return true;
 
 # else // Cygwin
 

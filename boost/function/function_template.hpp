@@ -949,7 +949,7 @@ namespace boost {
           this->vtable = f.vtable;
           f.vtable->manager(f.functor, this->functor,
                             boost::detail::function::move_functor_tag);
-		  f.vtable = 0;
+          f.vtable = 0;
 #if !defined(BOOST_NO_EXCEPTIONS)      
         } else {
           clear();

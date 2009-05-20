@@ -969,7 +969,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
-#if defined (VECTOR_VIEW)	
+#if defined (VECTOR_VIEW)
         // read only vectors
         {
            typedef vector_view<T> container_model;

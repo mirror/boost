@@ -78,8 +78,8 @@ namespace date_time {
      * must contain 'size' elements. The index of the match is returned.
      * If no match is found, 'size' is returned.
      * Ex. "Jan" returns 0, "Dec" returns 11, "Tue" returns 2.
-     * 'size' can be sent in with: greg_month::max() (which 12),
-     * greg_weekday::max() + 1 (which is 7) or date_time::NumSpecialValues */
+     * 'size' can be sent in with: (greg_month::max)() (which 12),
+     * (greg_weekday::max)() + 1 (which is 7) or date_time::NumSpecialValues */
     template<class charT>
     short find_match(const charT* const* short_names, 
                      const charT* const* long_names, 

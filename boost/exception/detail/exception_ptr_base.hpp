@@ -9,18 +9,18 @@
 namespace
 boost
     {
-	namespace
-	exception_detail
-		{
-		class
-		exception_ptr_base
-			{
-			public:
+        namespace
+        exception_detail
+                {
+                class
+                exception_ptr_base
+                        {
+                        public:
 
-			virtual void _rethrow() const=0;
-			virtual bool _empty() const=0;
-			};
-		}
+                        virtual void _rethrow() const=0;
+                        virtual bool _empty() const=0;
+                        };
+                }
     }
 
 #endif

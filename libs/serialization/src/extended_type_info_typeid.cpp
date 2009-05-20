@@ -92,8 +92,8 @@ extended_type_info_typeid_0::type_unregister()
             // remove entry in map which corresponds to this type
             do{
             if(this == *start)
-            	x.erase(start++);
-     	    else
+                x.erase(start++);
+            else
                 ++start;
             }while(start != end);
         }
