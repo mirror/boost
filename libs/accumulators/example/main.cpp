@@ -54,7 +54,7 @@ void example1()
     // by value.
     //std::for_each(data.begin(), data.end(), bind<void>(ref(acc), _1));
 
-    std::cout << "  min""(acc)        = " << (min)(acc) << std::endl; // Extra quotes are to prevent complaints from Boost inspect tool
+    std::cout << "  min(acc)        = " << (min)(acc) << std::endl;
     std::cout << "  mean(acc)       = " << mean(acc) << std::endl;
 
     // since mean depends on count and sum, we can get their results, too.
