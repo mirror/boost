@@ -709,7 +709,7 @@ public:
              iterators pointing to the first <code>n</code> elements; does not invalidate any iterators if the
              <code>circular_buffer</code> is full.
         \par Complexity
-             Linear (in <code>std::min(m, n)</code>); constant if the <code>circular_buffer</code> is full.
+             Linear (in <code>(std::min)(m, n)</code>); constant if the <code>circular_buffer</code> is full.
         \sa <code><a href="http://www.sgi.com/tech/stl/rotate.html">std::rotate</a></code>
     */
     void rotate(const_iterator new_begin) {
