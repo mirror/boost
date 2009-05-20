@@ -229,7 +229,7 @@ namespace minimal
 
         void construct(pointer p, T const& t) { new((void*)p.ptr_) T(t); }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
         template<class... Args> void construct(pointer p, Args&&... args) {
             new((void*)p.ptr_) T(std::forward<Args>(args)...);
         }

@@ -21,6 +21,10 @@
 #include <boost/unordered/detail/move.hpp>
 #endif
 
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#include <initializer_list>
+#endif
+
 #if defined(BOOST_MSVC)
 #pragma warning(push)
 #if BOOST_MSVC >= 1400
@@ -135,7 +139,7 @@ namespace boost
 #endif
 #endif
 
-#if !defined(BOOST_NO_INITIALIZER_LISTS)
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
         unordered_map(std::initializer_list<value_type> list,
                 size_type n = boost::unordered_detail::default_initial_bucket_count,
                 const hasher &hf = hasher(),
@@ -219,7 +223,7 @@ namespace boost
 
         // modifiers
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
         template <class... Args>
         std::pair<iterator, bool> emplace(Args&&... args)
         {
@@ -585,7 +589,7 @@ namespace boost
 #endif
 #endif
 
-#if !defined(BOOST_NO_INITIALIZER_LISTS)
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
         unordered_multimap(std::initializer_list<value_type> list,
                 size_type n = boost::unordered_detail::default_initial_bucket_count,
                 const hasher &hf = hasher(),
@@ -670,7 +674,7 @@ namespace boost
 
         // modifiers
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
         template <class... Args>
         iterator emplace(Args&&... args)
         {

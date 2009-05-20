@@ -198,7 +198,7 @@ namespace boost {
                     }
                 }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
                 template <typename... Args>
                 void construct(Args&&... args)
                 {
@@ -1602,7 +1602,7 @@ namespace boost {
 
             // For maps if there is more than one argument, the key can be the first argument.
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
             template <typename Arg, typename Arg1, typename... Args>
             static BOOST_DEDUCED_TYPENAME
                 boost::mpl::if_<
@@ -1733,7 +1733,7 @@ namespace boost {
 
 #if BOOST_UNORDERED_EQUIVALENT_KEYS
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
 
             // Emplace (equivalent key containers)
             // (I'm using an overloaded emplace for both 'insert' and 'emplace')
@@ -1943,7 +1943,7 @@ namespace boost {
                 }
             }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
 
             // Emplace (unique keys)
             // (I'm using an overloaded emplace for both 'insert' and 'emplace')
