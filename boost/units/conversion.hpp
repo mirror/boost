@@ -41,6 +41,10 @@ struct conversion_helper;
 /// }
 /// }
 /// @endcode
+///
+/// In most cases, the predefined specializations for @c unit
+/// and @c absolute should be sufficient, so users should rarely
+/// need to use this.
 template<class From, class To>
 struct conversion_helper
 {
@@ -54,7 +58,7 @@ struct conversion_helper
 /// of this macro must appear at global scope.
 /// If the destination unit is a base unit or a unit that contains
 /// only one base unit which is raised to the first power (e.g. feet->meters)
-/// the reverse (meters->feet in this example) need not be defined.
+/// the reverse (meters->feet in this example) need not be defined explicitly.
 #define BOOST_UNITS_DEFINE_CONVERSION_FACTOR(Source, Destination, type_, value_)    \
     namespace boost {                                                       \
     namespace units {                                                       \
