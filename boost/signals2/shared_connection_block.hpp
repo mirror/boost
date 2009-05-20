@@ -22,7 +22,7 @@ namespace boost
     class shared_connection_block
     {
     public:
-      shared_connection_block(const connection &conn, bool initially_blocked = true):
+      shared_connection_block(const connection &conn = connection(), bool initially_blocked = true):
         _weak_connection_body(conn._weak_connection_body)
       {
         if(initially_blocked) block();

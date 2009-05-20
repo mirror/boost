@@ -45,6 +45,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
       <constructor>
           <parameter name="conn">
             <paramtype>const boost::signals2::connection &amp;</paramtype>
+            <default>connection()</default>
           </parameter>
           <parameter name="initially_blocking">
             <paramtype>bool</paramtype>
@@ -59,6 +60,12 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             parameter is <code>true</code>.  The block on the connection may be released
             by calling the <methodname>unblock</methodname> method,
             or destroying the <code>shared_connection_block</code> object.</para>
+            <para>Default construction of a <code>shared_connection_block</code> results in a
+              <code>shared_connection_block</code> which references the NULL connection.
+              Such a <code>shared_connection_block</code> is safe to use, though not
+              particularly useful until it is assigned another
+              <code>shared_connection_block</code> which references a real connection.
+            </para>
           </effects>
           <postconditions><para><code>this->blocking() == initially_blocking</code></para></postconditions>
         </constructor>
