@@ -127,7 +127,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             blocked by another <code>shared_connection_block</code> object.</para></notes>
           </method>
         </method-group>
-        <method-group name="queries">
+        <method-group name="miscellaneous methods">
           <method name="connection" cv="const">
             <type><classname>boost::signals2::connection</classname></type>
             <returns>
