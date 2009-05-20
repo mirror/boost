@@ -70,7 +70,7 @@ namespace boost { namespace property_tree
                 stream.imbue(loc);
                 stream >> extracted;
                 if (!stream.eof())
-                	stream >> std::ws;
+                    stream >> std::ws;
                 return stream.eof() && !stream.fail() && !stream.bad();
             }
         };
@@ -116,7 +116,7 @@ namespace boost { namespace property_tree
                 int tmp;
                 stream >> tmp;
                 if (!stream.eof())
-	               	stream >> std::ws;
+                    stream >> std::ws;
                 if (stream.eof() && !stream.fail() && !stream.bad())
                 {
                     extracted = static_cast<signed char>(tmp);
@@ -139,7 +139,7 @@ namespace boost { namespace property_tree
                 unsigned int tmp;
                 stream >> tmp;
                 if (!stream.eof())
-                	stream >> std::ws;
+                    stream >> std::ws;
                 if (stream.eof() && !stream.fail() && !stream.bad())
                 {
                     extracted = static_cast<unsigned char>(tmp);

@@ -55,7 +55,7 @@ public:
     mapmode flags() const { return params_.flags; }
     std::size_t size() const { return size_; }
     char* data() const { return data_; }
-	void resize(stream_offset new_size);
+    void resize(stream_offset new_size);
     static int alignment();
 private:
     void open_file(param_type p);
@@ -99,23 +99,23 @@ void mapped_file_impl::close()
         #ifdef BOOST_IOSTREAMS_WINDOWS
             !::CloseHandle(handle_) 
         #else
-	        ::close(handle_) != 0 
+            ::close(handle_) != 0 
         #endif
             || error;
-	clear(error);
+    clear(error);
     if (error)
-		throw_system_failure("failed closing mapped file");
+        throw_system_failure("failed closing mapped file");
 }
 
 void mapped_file_impl::resize(stream_offset new_size)
 {
     if (!is_open())
         throw BOOST_IOSTREAMS_FAILURE("file is closed");
-	if (flags() & mapped_file::priv)
+    if (flags() & mapped_file::priv)
         throw BOOST_IOSTREAMS_FAILURE("can't resize private mapped file");
-	if (!(flags() & mapped_file::readwrite))
+    if (!(flags() & mapped_file::readwrite))
         throw BOOST_IOSTREAMS_FAILURE("can't resize readonly mapped file");
-	if (params_.offset >= new_size)
+    if (params_.offset >= new_size)
         throw BOOST_IOSTREAMS_FAILURE("can't resize below mapped offset");
     if (!unmap_file())
         cleanup_and_throw("failed unmapping file");
@@ -274,12 +274,12 @@ void mapped_file_impl::open_file(param_type p)
 
 void mapped_file_impl::try_map_file(param_type p)
 {
-	bool priv = p.flags == mapped_file::priv;
+    bool priv = p.flags == mapped_file::priv;
     bool readonly = p.flags == mapped_file::readonly;
 #ifdef BOOST_IOSTREAMS_WINDOWS
 
     // Create mapping
-	DWORD protect = priv ? 
+    DWORD protect = priv ? 
         PAGE_WRITECOPY : 
         readonly ? 
             PAGE_READONLY : 
@@ -372,17 +372,17 @@ void mapped_file_impl::clear(bool error)
 void mapped_file_impl::cleanup_and_throw(const char* msg)
 {
 #ifdef BOOST_IOSTREAMS_WINDOWS
-	DWORD error = GetLastError();
+    DWORD error = GetLastError();
     if (mapped_handle_ != INVALID_HANDLE_VALUE)
         ::CloseHandle(mapped_handle_);
     if (handle_ != NULL)
         ::CloseHandle(handle_);
-	SetLastError(error);
+    SetLastError(error);
 #else
-	int error = errno;
+    int error = errno;
     if (handle_ != 0)
         ::close(handle_);
-	errno = error;
+    errno = error;
 #endif
     clear(true);
     boost::iostreams::detail::throw_system_failure(msg);

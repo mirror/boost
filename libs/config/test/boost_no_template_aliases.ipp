@@ -12,7 +12,7 @@
 
 namespace boost_no_template_aliases {
 
-using PINT = void (*)(int);		// using plus C-style type
+using PINT = void (*)(int);             // using plus C-style type
 
 int test()
 {

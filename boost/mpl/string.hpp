@@ -68,7 +68,7 @@ namespace boost { namespace mpl
           (((c)<<8)|(unsigned char)(i))
 
         #define BOOST_MPL_MULTICHAR_POP_BACK(c)                                                     \
-	        (((1<<((BOOST_MPL_MULTICHAR_LENGTH(c)-1)*8))-1)&(c))
+          (((1<<((BOOST_MPL_MULTICHAR_LENGTH(c)-1)*8))-1)&(c))
 
         #define BOOST_MPL_MULTICHAR_POP_FRONT(c)                                                    \
           ((c)>>8)
@@ -329,12 +329,12 @@ namespace boost { namespace mpl
                 typename mpl::if_<
                     mpl::empty<mpl::string<BOOST_PP_ENUM_PARAMS(BOOST_MPL_STRING_MAX_PARAMS, C)> >
                   , mpl::string<(char)Value::value>
-		              , type0
-		            >::type
-		        type;
-		        #else
-		        typedef type0 type;
-		        #endif
+                  , type0
+                >::type
+            type;
+            #else
+            typedef type0 type;
+            #endif
         };
     };
 

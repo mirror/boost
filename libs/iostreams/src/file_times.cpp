@@ -68,7 +68,7 @@ void set_last_read_time(file_handle h, time_t tm)
 {
 #ifdef BOOST_IOSTREAMS_WINDOWS
     struct std::tm* t = std::gmtime(&tm);
-	if (t == NULL)
+    if (t == NULL)
         throw_system_failure("failed settting last access time");
     SYSTEMTIME st_access;
     st_access.wSecond = t->tm_sec;
@@ -125,7 +125,7 @@ void set_last_write_time(file_handle h, time_t tm)
 {
 #ifdef BOOST_IOSTREAMS_WINDOWS
     struct std::tm* t = std::gmtime(&tm);
-	if (t == NULL)
+    if (t == NULL)
         throw_system_failure("failed settting last modification time");
     SYSTEMTIME st_modification;
     st_modification.wSecond = t->tm_sec;

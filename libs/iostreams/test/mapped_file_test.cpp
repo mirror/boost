@@ -48,15 +48,15 @@ bool test_writeable(mapped_file& mf)
 bool test_resizeable(mapped_file& mf)
 {
     // Test resizing
-	mapped_file::size_type size = mf.size();
-	if (size == 0)
-		return false;
-	mf.resize(size/2);
-	if (mf.size() != size/2)
-		return false;
-	mf.resize(size);
-	if (mf.size() != size)
-		return false;
+    mapped_file::size_type size = mf.size();
+    if (size == 0)
+        return false;
+    mf.resize(size/2);
+    if (mf.size() != size/2)
+        return false;
+    mf.resize(size);
+    if (mf.size() != size)
+        return false;
     return true;
 }
 
@@ -75,10 +75,10 @@ void mapped_file_test()
 
         // Test reading from a stream based on a mapped_file_source,
         // in chars.
-		boost::iostreams::test::test_file test1, test2;
-		boost::iostreams::stream<mapped_file_source> first(test1.name());
+        boost::iostreams::test::test_file test1, test2;
+        boost::iostreams::stream<mapped_file_source> first(test1.name());
         {
-			std::ifstream second( test2.name().c_str(), 
+            std::ifstream second( test2.name().c_str(), 
                              BOOST_IOS::in | BOOST_IOS::binary );
             BOOST_CHECK_MESSAGE(
                 boost::iostreams::test::compare_streams_in_chars(first, second),
@@ -93,9 +93,9 @@ void mapped_file_test()
 
         // Test reading from a stream based on a mapped_file_source,
         // in chunks. (Also tests reopening the stream.)
-		first.open(mapped_file_source(test1.name()));
+        first.open(mapped_file_source(test1.name()));
         {
-			std::ifstream second( test2.name().c_str(), 
+            std::ifstream second( test2.name().c_str(), 
                              BOOST_IOS::in | BOOST_IOS::binary );
             BOOST_CHECK_MESSAGE(
                 boost::iostreams::test::compare_streams_in_chunks(first, second),
@@ -116,8 +116,8 @@ void mapped_file_test()
         boost::iostreams::test::uppercase_file  first, second; // Will overwrite these.
         boost::iostreams::test::test_file       test;
 
-		boost::iostreams::stream<mapped_file_sink> out;
-		out.open(mapped_file_sink(first.name()));
+        boost::iostreams::stream<mapped_file_sink> out;
+        out.open(mapped_file_sink(first.name()));
         boost::iostreams::test::write_data_in_chars(out);
         out.close();
         BOOST_CHECK_MESSAGE(
@@ -131,7 +131,7 @@ void mapped_file_test()
 
         // Test writing to a stream based on a mapped_file_sink, in 
         // chunks. (Also tests reopening the stream.)
-		out.open(mapped_file_sink(second.name()));
+        out.open(mapped_file_sink(second.name()));
         boost::iostreams::test::write_data_in_chunks(out);
         out.close();
         BOOST_CHECK_MESSAGE(
@@ -151,10 +151,10 @@ void mapped_file_test()
         boost::iostreams::test::temp_file  first, second;
         boost::iostreams::test::test_file  test;
 
-		mapped_file_params p(first.name());
+        mapped_file_params p(first.name());
         p.new_file_size = boost::iostreams::test::data_reps * boost::iostreams::test::data_length();
-		boost::iostreams::stream<mapped_file_sink> out;
-		out.open(mapped_file_sink(p));
+        boost::iostreams::stream<mapped_file_sink> out;
+        out.open(mapped_file_sink(p));
         boost::iostreams::test::write_data_in_chars(out);
         out.close();
         BOOST_CHECK_MESSAGE(
@@ -166,7 +166,7 @@ void mapped_file_test()
         // Test writing to a newly created mapped file. 
         // (Also tests reopening the stream.)
         p.path = second.name();
-		out.open(mapped_file_sink(p));
+        out.open(mapped_file_sink(p));
         boost::iostreams::test::write_data_in_chunks(out);
         out.close();
         BOOST_CHECK_MESSAGE(
@@ -181,8 +181,8 @@ void mapped_file_test()
         // Test reading, writing and seeking within a stream based on a 
         // mapped_file, in chars.
         boost::iostreams::test::test_file test;
-		boost::iostreams::stream<mapped_file> io;
-		io.open(mapped_file(test.name()));
+        boost::iostreams::stream<mapped_file> io;
+        io.open(mapped_file(test.name()));
         BOOST_CHECK_MESSAGE(
             boost::iostreams::test::test_seekable_in_chars(io),
             "failed seeking within stream<mapped_file> in chars"
@@ -197,7 +197,7 @@ void mapped_file_test()
         // Test reading, writing and seeking within a stream based on a 
         // mapped_file, in chunks. (Also tests reopening the 
         // stream.)
-		io.open(mapped_file(test.name()));
+        io.open(mapped_file(test.name()));
         BOOST_CHECK_MESSAGE(
             boost::iostreams::test::test_seekable_in_chunks(io),
             "failed seeking within stream<mapped_file> in chunks"
@@ -220,7 +220,7 @@ void mapped_file_test()
             "failed resizing a mapped_file"
         );
         
-		BOOST_MESSAGE(
+        BOOST_MESSAGE(
             "done resizing a mapped_file"
         );
     }
@@ -228,7 +228,7 @@ void mapped_file_test()
     //--------------Random access with a private mapped_file------------------//
 
     {
- 		// Use 2 copies of the file to compare later
+        // Use 2 copies of the file to compare later
         boost::iostreams::test::test_file orig, copy;
         
         // Test reading and writing within a mapped_file. 
@@ -245,14 +245,14 @@ void mapped_file_test()
             "failed writing to private mapped_file"
         );
         
-		BOOST_MESSAGE(
+        BOOST_MESSAGE(
             "done seeking within private mapped_file"
         );
         
-		mf.close();
+        mf.close();
 
         // Test reopening the mapped file.
-		mf.open(orig.name(), mapped_file::priv);
+        mf.open(orig.name(), mapped_file::priv);
         BOOST_CHECK_MESSAGE(
             boost::iostreams::test::test_writeable(mf),
             "failed reopening private mapped_file"
@@ -262,7 +262,7 @@ void mapped_file_test()
             "failed writing to reopened private mapped_file"
         );
         
-		BOOST_MESSAGE(
+        BOOST_MESSAGE(
             "done reopening private mapped_file"
         );
     }

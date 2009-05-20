@@ -321,7 +321,7 @@ private:
 
 class BOOST_IOSTREAMS_DECL mapped_file_sink : private mapped_file {
 public:
-	friend struct boost::iostreams::operations<mapped_file_sink>;
+    friend struct boost::iostreams::operations<mapped_file_sink>;
     using mapped_file::mapmode;
     using mapped_file::readonly;
     using mapped_file::readwrite;

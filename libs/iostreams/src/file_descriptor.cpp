@@ -268,7 +268,7 @@ std::streampos file_descriptor_impl::seek
         throw system_failure("failed seeking");
     } else {
        return offset_to_position(
-   	              (stream_offset(lDistanceToMoveHigh) << 32) + dwResultLow
+                  (stream_offset(lDistanceToMoveHigh) << 32) + dwResultLow
               );
     }
 #else // #ifdef BOOST_IOSTREAMS_WINDOWS

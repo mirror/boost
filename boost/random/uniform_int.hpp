@@ -152,7 +152,7 @@ private:
         // use rejection method to handle cases like 0..5 -> 0..4
         for(;;) {
           base_unsigned result =
-	    random::detail::subtract<base_result>()(eng(), bmin);
+            random::detail::subtract<base_result>()(eng(), bmin);
           // result and range are non-negative, and result is possibly larger
           // than range, so the cast is safe
           if(result <= static_cast<base_unsigned>(range))

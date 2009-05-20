@@ -342,14 +342,14 @@ void test_binding()
   int i = 0 ;
   optional<int&> ori1 = i ;
   BOOST_CHECK(  &(*ori1) == &i ) ;
-	
+
   optional<int&> ori2(i) ;
   BOOST_CHECK(  &(*ori2) == &i ) ;
-	
+
   int const ci = 0 ;
   optional<int const&> orci1 = ci ;
   BOOST_CHECK(  &(*orci1) == &ci ) ;
-	
+
   optional<int const&> orci2(ci) ;
   BOOST_CHECK(  &(*orci2) == &ci ) ;
 }
@@ -360,7 +360,7 @@ int test_main( int, char* [] )
   {
     test_with_class_type();
     test_with_builtin_types();
-		test_binding();
+    test_binding();
   }
   catch ( ... )
   {
