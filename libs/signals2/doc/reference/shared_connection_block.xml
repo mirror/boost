@@ -42,9 +42,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           </para>
         </description>
 
-      <constructor>
+        <constructor>
           <parameter name="conn">
-            <paramtype>const boost::signals2::connection &amp;</paramtype>
+            <paramtype>const <classname>boost::signals2::connection</classname> &amp;</paramtype>
             <default>connection()</default>
           </parameter>
           <parameter name="initially_blocking">
@@ -69,9 +69,39 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           </effects>
           <postconditions><para><code>this->blocking() == initially_blocking</code></para></postconditions>
         </constructor>
+        <constructor>
+          <parameter name="other">
+            <paramtype>const boost::signals2::shared_connection_block &amp;</paramtype>
+          </parameter>
+
+          <effects>
+            <para>
+              Copy constructs a <code>shared_connection_block</code> which references
+              the same connection as <code>other</code>.
+            </para>
+          </effects>
+          <postconditions>
+            <para><code>this->blocking() == other.blocking()</code></para>
+          </postconditions>
+        </constructor>
         <destructor>
           <effects><para>If <methodname>blocking</methodname>() is true, releases the connection block.</para></effects>
         </destructor>
+        <copy-assignment>
+          <parameter name="rhs">
+            <paramtype>const boost::signals2::shared_connection_block &amp;</paramtype>
+          </parameter>
+
+          <effects>
+            <para>
+              Makes <code>this</code> reference the same connection as <code>rhs</code>.
+            </para>
+          </effects>
+          <postconditions>
+            <para><code>this->blocking() == rhs.blocking()</code></para>
+          </postconditions>
+          <throws><para>Will not throw.</para></throws>
+        </copy-assignment>
         <method-group name="connection blocking">
           <method name="unblock">
             <type>void</type>
