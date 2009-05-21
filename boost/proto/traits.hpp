@@ -1975,7 +1975,7 @@
         /// \param t The object to wrap.
         template<typename T>
         typename result_of::as_expr<T>::reference
-        as_expr(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T))
+        as_expr(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T) BOOST_PROTO_DISABLE_IF_IS_FUNCTION(T))
         {
             return result_of::as_expr<T>::call(t);
         }
@@ -1993,7 +1993,7 @@
         ///
         template<typename Domain, typename T>
         typename result_of::as_expr<T, Domain>::reference
-        as_expr(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T))
+        as_expr(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T) BOOST_PROTO_DISABLE_IF_IS_FUNCTION(T))
         {
             return result_of::as_expr<T, Domain>::call(t);
         }
@@ -2028,7 +2028,7 @@
         /// \param t The object to wrap.
         template<typename T>
         typename result_of::as_child<T>::type
-        as_child(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T))
+        as_child(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T) BOOST_PROTO_DISABLE_IF_IS_FUNCTION(T))
         {
             return result_of::as_child<T>::call(t);
         }
@@ -2046,7 +2046,7 @@
         ///
         template<typename Domain, typename T>
         typename result_of::as_child<T, Domain>::type
-        as_child(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T))
+        as_child(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T) BOOST_PROTO_DISABLE_IF_IS_FUNCTION(T))
         {
             return result_of::as_child<T, Domain>::call(t);
         }
