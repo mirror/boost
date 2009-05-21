@@ -5,6 +5,7 @@ foreach(test
     deletion_test
     ordering_test
     regression_test
+    shared_connection_block_test
     signal_n_test
     signal_test
     signal_type_test
