@@ -1,22 +1,20 @@
-#----------------------------------------------------------------------------
-# This file was automatically generated from the original CMakeLists.txt file
-# Add a variable to hold the headers for the library
-set (lib_headers
-    mpi.hpp
-    mpi
-)
+FIND_PACKAGE(MPI)
 
-# Add a library target to the build system
+if (NOT MPI_FOUND)
+ message(STATUS "MPI Not Found")
+endif (NOT MPI_FOUND)
+
+
 boost_library_project(
   mpi
-  SRCDIRS  src
+  SRCDIRS   src
   TESTDIRS  test
-  HEADERS ${lib_headers}
-  DOCDIRS  doc
+  HEADERS   mpi.hpp mpi
+  DOCDIRS   doc
   #  DESCRIPTION 
   MODULARIZED
   #  AUTHORS 
   #  MAINTAINERS 
-)
+  )
 
 
