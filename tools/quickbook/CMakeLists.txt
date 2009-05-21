@@ -1,12 +1,13 @@
 boost_tool_project(Quickbook
   DESCRIPTION "A WikiWiki style documentation tool geared towards C++ documentation"
   AUTHORS "Joel de Guzman <joel -at- boost-consulting.com>"
-  "Eric Niebler <eric -at- boost-consulting.com>")
+  "Eric Niebler <eric -at- boost-consulting.com>"
+  )
 
 if (MSVC)
   add_definitions(/wd4511 /wd4512 /wd4701 /wd4702 /wd4244 /wd4267 /wd4800)
 endif (MSVC)
-  
+
 #
 # TDS: this needs fixing...  these are the modules that quickbook is
 # dependent on.  if boost is modularized, you need these, but
@@ -40,7 +41,6 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/libs/utility/include
   )
 
-
 boost_add_executable(quickbook
   detail/quickbook.cpp
   detail/actions.cpp
@@ -53,3 +53,4 @@ boost_add_executable(quickbook
   detail/markups.cpp
   DEPENDS boost_program_options boost_filesystem
   )  
+
