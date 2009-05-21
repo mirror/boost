@@ -34,14 +34,17 @@ namespace boost
         }
 
         template <class T>
-        inline std::size_t float_hash_impl(T v)
+        inline std::size_t float_hash_impl2(T v)
         {
+            boost::hash_detail::call_frexp<T> frexp;
+            boost::hash_detail::call_ldexp<T> ldexp;
+        
             int exp = 0;
 
-            v = boost::hash_detail::call_frexp(v, &exp);
+            v = frexp(v, &exp);
 
             // A postive value is easier to hash, so combine the
-            // sign with the exponent.
+            // sign with the exponent and use the absolute value.
             if(v < 0) {
                 v = -v;
                 exp += limits<T>::max_exponent -
@@ -51,8 +54,7 @@ namespace boost
             // The result of frexp is always between 0.5 and 1, so its
             // top bit will always be 1. Subtract by 0.5 to remove that.
             v -= T(0.5);
-            v = boost::hash_detail::call_ldexp(v,
-                    limits<std::size_t>::digits + 1);
+            v = ldexp(v, limits<std::size_t>::digits + 1);
             std::size_t seed = static_cast<std::size_t>(v);
             v -= seed;
 
@@ -64,8 +66,7 @@ namespace boost
 
             for(std::size_t i = 0; i != length; ++i)
             {
-                v = boost::hash_detail::call_ldexp(v,
-                        limits<std::size_t>::digits);
+                v = ldexp(v, limits<std::size_t>::digits);
                 std::size_t part = static_cast<std::size_t>(v);
                 v -= part;
                 hash_float_combine(seed, part);
@@ -74,6 +75,13 @@ namespace boost
             hash_float_combine(seed, exp);
 
             return seed;
+        };
+
+        template <class T>
+        inline std::size_t float_hash_impl(T v)
+        {
+            typedef BOOST_DEDUCED_TYPENAME select_hash_type<T>::type type;
+            return float_hash_impl2(static_cast<type>(v));
         }
     }
 }
