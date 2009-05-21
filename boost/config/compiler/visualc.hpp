@@ -142,10 +142,24 @@
 // all versions support __declspec:
 //
 #define BOOST_HAS_DECLSPEC
+
 //
 // C++0x features
 //
 //   See above for BOOST_NO_LONG_LONG
+
+// C++ features supported by VC++ 10 (aka 2010)
+//
+#if _MSC_VER < 1600
+#define BOOST_NO_AUTO_DECLARATIONS
+#define BOOST_NO_AUTO_MULTIDECLARATIONS
+#define BOOST_NO_DECLTYPE
+#define BOOST_NO_LAMBDAS
+#define BOOST_NO_RVALUE_REFERENCES
+#define BOOST_NO_STATIC_ASSERT
+#endif // _MSC_VER < 1600
+
+// C++0x features not supported by any versions
 #define BOOST_NO_CHAR16_T
 #define BOOST_NO_CHAR32_T
 #define BOOST_NO_CONCEPTS
@@ -161,16 +175,6 @@
 #define BOOST_NO_TEMPLATE_ALIASES
 #define BOOST_NO_UNICODE_LITERALS
 #define BOOST_NO_VARIADIC_TEMPLATES
-
-// MSVC 2010 will have some support for C++0x, but we disable it until the beta ships
-// #if _MSC_VER < 1600
-#define BOOST_NO_AUTO_DECLARATIONS
-#define BOOST_NO_AUTO_MULTIDECLARATIONS
-#define BOOST_NO_DECLTYPE
-#define BOOST_NO_LAMBDAS
-#define BOOST_NO_RVALUE_REFERENCES
-#define BOOST_NO_STATIC_ASSERT
-// #endif // _MSC_VER < 1600
 
 //
 // prefix and suffix headers:
@@ -236,7 +240,7 @@
 #error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 1500 (VC9):
+// last known and checked version is 1600 (VC10, aka 2010):
 #if (_MSC_VER > 1600)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"

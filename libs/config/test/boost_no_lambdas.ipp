@@ -7,16 +7,14 @@
 //  See http://www.boost.org/libs/config for more information.
 
 //  MACRO:         BOOST_NO_LAMBDAS
-//  TITLE:         C++0x lambdas feature unavailable
-//  DESCRIPTION:   The compiler does not support the C++0x lambdas feature
-
-#include <cassert>
+//  TITLE:         C++0x lambda feature unavailable
+//  DESCRIPTION:   The compiler does not support the C++0x lambda feature
 
 namespace boost_no_lambdas {
 
 int test()
 {
-  assert( 12345 == [](){return 12345;} );
+  [](){};
   return 0;
 }
 
