@@ -192,11 +192,11 @@ const char *ok_data_9 =
 
 const char *ok_data_10 = 
     "{\n"
-    "	\"glossary\": {\n"
-    "		\"title\": \"example glossary\",\n"
-    "		\"GlossDiv\": {\n"
-    "			\"title\": \"S\",\n"
-    "			\"GlossList\": [{\n"
+    "   \"glossary\": {\n"
+    "       \"title\": \"example glossary\",\n"
+    "       \"GlossDiv\": {\n"
+    "           \"title\": \"S\",\n"
+    "           \"GlossList\": [{\n"
     "                \"ID\": \"SGML\",\n"
     "                \"SortAs\": \"SGML\",\n"
     "                \"GlossTerm\": \"Standard Generalized Markup Language\",\n"
