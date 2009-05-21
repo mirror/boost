@@ -14,7 +14,7 @@
 #include <boost/detail/lightweight_test.hpp>
 
 #include <cmath>
-#include <boost/limits.hpp>
+#include <boost/functional/hash/detail/limits.hpp>
 
 #include <iostream>
 
