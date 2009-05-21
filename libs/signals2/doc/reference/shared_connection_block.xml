@@ -42,23 +42,68 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           </para>
         </description>
 
-      <constructor>
+        <constructor>
           <parameter name="conn">
-            <paramtype>const boost::signals2::connection &amp;</paramtype>
+            <paramtype>const <classname>boost::signals2::connection</classname> &amp;</paramtype>
+            <default>connection()</default>
+          </parameter>
+          <parameter name="initially_blocking">
+            <paramtype>bool</paramtype>
+            <default>true</default>
           </parameter>
 
           <effects>
-            <para>Creates a <code>shared_connection_block</code> which references
-            the connection referenced by <code>conn</code>.  The connection will
-            initially be blocked, and remain so
-            until <methodname>unblock</methodname> is called,
-            or the <code>shared_connection_block</code> is destroyed.</para>
+            <para>Creates a <code>shared_connection_block</code> which can block
+            the connection referenced by <code>conn</code>.  The <code>shared_connection_block</code>
+            will initially block the connection if and only if the
+            <code>initially_blocking</code>
+            parameter is <code>true</code>.  The block on the connection may be released
+            by calling the <methodname>unblock</methodname> method,
+            or destroying the <code>shared_connection_block</code> object.</para>
+            <para>Default construction of a <code>shared_connection_block</code> results in a
+              <code>shared_connection_block</code> which references the NULL connection.
+              Such a <code>shared_connection_block</code> is safe to use, though not
+              particularly useful until it is assigned another
+              <code>shared_connection_block</code> which references a real connection.
+            </para>
           </effects>
-          <postconditions><para><code>this->blocking() == true</code></para></postconditions>
+          <postconditions><para><code>this->blocking() == initially_blocking</code></para></postconditions>
+        </constructor>
+        <constructor>
+          <parameter name="other">
+            <paramtype>const boost::signals2::shared_connection_block &amp;</paramtype>
+          </parameter>
+
+          <effects>
+            <para>
+              Copy constructs a <code>shared_connection_block</code> which references
+              the same connection as <code>other</code>.
+            </para>
+          </effects>
+          <postconditions>
+            <para><code>this->connection() == other.connection()</code></para>
+            <para><code>this->blocking() == other.blocking()</code></para>
+          </postconditions>
         </constructor>
         <destructor>
           <effects><para>If <methodname>blocking</methodname>() is true, releases the connection block.</para></effects>
         </destructor>
+        <copy-assignment>
+          <parameter name="rhs">
+            <paramtype>const boost::signals2::shared_connection_block &amp;</paramtype>
+          </parameter>
+
+          <effects>
+            <para>
+              Makes <code>this</code> reference the same connection as <code>rhs</code>.
+            </para>
+          </effects>
+          <postconditions>
+            <para><code>this->connection() == rhs.connection()</code></para>
+            <para><code>this->blocking() == rhs.blocking()</code></para>
+          </postconditions>
+          <throws><para>Will not throw.</para></throws>
+        </copy-assignment>
         <method-group name="connection blocking">
           <method name="unblock">
             <type>void</type>
@@ -80,6 +125,14 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             for the connection.  However, <code>this->blocking() == false</code> does not necessarily imply
             <code>connection::blocked() == false</code>, since the connection may be
             blocked by another <code>shared_connection_block</code> object.</para></notes>
+          </method>
+        </method-group>
+        <method-group name="miscellaneous methods">
+          <method name="connection" cv="const">
+            <type><classname>boost::signals2::connection</classname></type>
+            <returns>
+              <para>A connection object for the connection referenced by <code>this</code>.</para>
+            </returns>
           </method>
         </method-group>
       </class>

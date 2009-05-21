@@ -1,4 +1,4 @@
-# Boost.Signals2 Library 
+# Boost.Signals2 Library
 
 # Copyright Douglas Gregor 2001-2003.
 # Copyright Frank Mori Hess 2009.
@@ -38,6 +38,7 @@ rule thread-run ( sources )
   [ thread-run mutex_test.cpp ]
   [ run ordering_test.cpp ]
   [ run regression_test.cpp ]
+  [ run shared_connection_block_test.cpp ]
   [ run signal_n_test.cpp ]
   [ run signal_test.cpp ]
   [ run signal_type_test.cpp ]
