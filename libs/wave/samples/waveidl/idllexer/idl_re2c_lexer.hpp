@@ -68,7 +68,7 @@ public:
         PositionT const &pos, boost::wave::language_support language);
     ~lexer();
 
-    boost::wave::cpplexer::lex_token<PositionT> get();
+    token_type& get(token_type& t);
     void set_position(PositionT const &pos)
     {
         // set position has to change the file name and line number only
@@ -127,13 +127,13 @@ lexer<IteratorT, PositionT>::~lexer()
 ///////////////////////////////////////////////////////////////////////////////
 //  get the next token from the input stream
 template <typename IteratorT, typename PositionT>
-inline boost::wave::cpplexer::lex_token<PositionT> 
-lexer<IteratorT, PositionT>::get()
+inline boost::wave::cpplexer::lex_token<PositionT>&
+lexer<IteratorT, PositionT>::get(boost::wave::cpplexer::lex_token<PositionT>& t)
 {
     using namespace boost::wave;    // to import token ids to this scope
 
     if (at_eof) 
-        return boost::wave::cpplexer::lex_token<PositionT>();  // return T_EOI
+        return t = boost::wave::cpplexer::lex_token<PositionT>();  // return T_EOI
 
     token_id id = token_id(scan(&scanner));
     string_type value((char const *)scanner.tok, scanner.cur-scanner.tok);
@@ -158,7 +158,7 @@ lexer<IteratorT, PositionT>::get()
         at_eof = true;
         value.clear();
     }
-    return boost::wave::cpplexer::lex_token<PositionT>(id, value, 
+    return t = boost::wave::cpplexer::lex_token<PositionT>(id, value, 
         PositionT(filename, scanner.line, -1));
 }
 
@@ -209,7 +209,7 @@ public:
     virtual ~lex_functor() {}
     
 // get the next token from the input stream
-    token_type get() { return lexer.get(); }
+    token_type& get(token_type& t) { return lexer.get(t); }
     void set_position(PositionT const &pos) 
     { lexer.set_position(pos); }
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0

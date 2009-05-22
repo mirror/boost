@@ -17,7 +17,7 @@
 //  makes the code compilable even without having the lexertl library 
 //  available.
 #if !defined(BOOST_WAVE_LEXERTL_USE_STATIC_TABLES)
-#define BOOST_WAVE_LEXERTL_USE_STATIC_TABLES 1
+#define BOOST_WAVE_LEXERTL_USE_STATIC_TABLES 0
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////

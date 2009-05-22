@@ -68,7 +68,7 @@ public:
         Position const &pos, boost::wave::language_support language);
     ~lexer() {}
 
-    boost::wave::cpplexer::lex_token<Position> get();
+    token_type& get(token_type& t);
     void set_position(Position const &pos)
     {
         // set position has to change the file name and line number only
@@ -453,13 +453,13 @@ lexer<Iterator, Position>::lexer(Iterator const &first,
 ///////////////////////////////////////////////////////////////////////////////
 //  get the next token from the input stream
 template <typename Iterator, typename Position>
-inline boost::wave::cpplexer::lex_token<Position> 
-lexer<Iterator, Position>::get()
+inline boost::wave::cpplexer::lex_token<Position>& 
+lexer<Iterator, Position>::get(boost::wave::cpplexer::lex_token<Position>& t)
 {
     using namespace boost::wave;    // to import token ids to this scope
 
     if (at_eof) 
-        return cpplexer::lex_token<Position>();  // return T_EOI
+        return t = cpplexer::lex_token<Position>();  // return T_EOI
 
     std::string tokval;
     token_id id = xlexer.next_token(first, last, tokval);
@@ -488,10 +488,11 @@ lexer<Iterator, Position>::get()
     }
     
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-    return guards.detect_guard(cpplexer::lex_token<Position>(id, value, 
+    return t = guards.detect_guard(cpplexer::lex_token<Position>(id, value, 
         Position(filename, line, -1)));
 #else
-    return cpplexer::lex_token<Position>(id, value, Position(filename, line, -1));
+    return t = cpplexer::lex_token<Position>(id, value, 
+        Position(filename, line, -1));
 #endif
 }
 
@@ -518,7 +519,7 @@ public:
     virtual ~xlex_functor() {}
     
 // get the next token from the input stream
-    token_type get() { return lexer.get(); }
+    token_type& get(token_type& t) { return lexer.get(t); }
     void set_position(Position const &pos) { lexer.set_position(pos); }
 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0

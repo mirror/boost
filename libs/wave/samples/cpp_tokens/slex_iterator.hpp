@@ -57,7 +57,7 @@ public:
 #endif // 0 != __DECCXX_VER
     {}
 
-// interface to the boost::spirit::classic::multi_pass_policies::functor_input 
+// interface to the boost::spirit::classic::iterator_policies::functor_input 
 // policy
     typedef TokenT result_type;
     typedef slex_iterator_functor_shim unique;
@@ -141,16 +141,16 @@ struct make_multi_pass
     functor_data_type;
     typedef typename FunctorData::result_type result_type;
 
-    typedef boost::spirit::multi_pass_policies::split_functor_input input_policy;
-    typedef boost::spirit::multi_pass_policies::ref_counted ownership_policy;
+    typedef boost::spirit::iterator_policies::split_functor_input input_policy;
+    typedef boost::spirit::iterator_policies::ref_counted ownership_policy;
 #if defined(BOOST_WAVE_DEBUG)
-    typedef boost::spirit::multi_pass_policies::buf_id_check check_policy;
+    typedef boost::spirit::iterator_policies::buf_id_check check_policy;
 #else
-    typedef boost::spirit::multi_pass_policies::no_check check_policy;
+    typedef boost::spirit::iterator_policies::no_check check_policy;
 #endif
-    typedef boost::spirit::multi_pass_policies::split_std_deque storage_policy;
+    typedef boost::spirit::iterator_policies::split_std_deque storage_policy;
 
-    typedef boost::spirit::multi_pass_policies::default_policy<
+    typedef boost::spirit::iterator_policies::default_policy<
             ownership_policy, check_policy, input_policy, storage_policy>
         policy_type;
     typedef boost::spirit::multi_pass<functor_data_type, policy_type> type;

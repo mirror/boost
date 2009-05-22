@@ -29,6 +29,7 @@ path-constant TESTWAVE_DIR : $(BOOST_ROOT)/libs/wave/test/testwave/testfiles
 #
 TESTWAVE_ARGUMENTS = 
         -d4                              # use -d4 for verbose results 
+        --hooks=1                        # test hooks as well
         -S$(TESTWAVE_DIR) 
         -S$(BOOST_ROOT) -I$(BOOST_ROOT)
     ;

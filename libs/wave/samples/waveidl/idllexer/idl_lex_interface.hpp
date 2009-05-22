@@ -15,7 +15,7 @@
 
 #include <boost/wave/util/file_position.hpp>
 #include <boost/wave/language_support.hpp>
-#include <boost/wave/cpplexer/cpp_lex_interface.hpp>
+#include <boost/wave/cpplexer/cpp_lex_interface_generator.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {

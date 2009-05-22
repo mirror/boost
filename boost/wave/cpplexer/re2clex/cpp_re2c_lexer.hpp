@@ -59,18 +59,20 @@ namespace re2clex {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename IteratorT, typename PositionT = boost::wave::util::file_position_type>
+template <typename IteratorT, 
+    typename PositionT = boost::wave::util::file_position_type,
+    typename TokenT = lex_token<PositionT> >
 class lexer 
 {
 public:
-    typedef lex_token<PositionT>              token_type;
+    typedef TokenT token_type;
     typedef typename token_type::string_type  string_type;
     
     lexer(IteratorT const &first, IteratorT const &last, 
         PositionT const &pos, boost::wave::language_support language_);
     ~lexer();
 
-    lex_token<PositionT>& get(lex_token<PositionT>&);
+    token_type& get(token_type&);
     void set_position(PositionT const &pos)
     {
         // set position has to change the file name and line number only
@@ -106,9 +108,9 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 // initialize cpp lexer 
-template <typename IteratorT, typename PositionT>
+template <typename IteratorT, typename PositionT, typename TokenT>
 inline
-lexer<IteratorT, PositionT>::lexer(IteratorT const &first, 
+lexer<IteratorT, PositionT, TokenT>::lexer(IteratorT const &first, 
         IteratorT const &last, PositionT const &pos, 
         boost::wave::language_support language_) 
 :   filename(pos.get_file()), at_eof(false), language(language_)
@@ -145,9 +147,9 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
     scanner.single_line_only = boost::wave::need_single_line(language_);
 }
 
-template <typename IteratorT, typename PositionT>
+template <typename IteratorT, typename PositionT, typename TokenT>
 inline
-lexer<IteratorT, PositionT>::~lexer() 
+lexer<IteratorT, PositionT, TokenT>::~lexer() 
 {
     using namespace std;        // some systems have free in std
     aq_terminate(scanner.eol_offsets);
@@ -156,12 +158,12 @@ lexer<IteratorT, PositionT>::~lexer()
 
 ///////////////////////////////////////////////////////////////////////////////
 //  get the next token from the input stream
-template <typename IteratorT, typename PositionT>
-inline lex_token<PositionT>&
-lexer<IteratorT, PositionT>::get(lex_token<PositionT>& result)
+template <typename IteratorT, typename PositionT, typename TokenT>
+inline TokenT&
+lexer<IteratorT, PositionT, TokenT>::get(TokenT& result)
 {
     if (at_eof) 
-        return result = lex_token<PositionT>();  // return T_EOI
+        return result = token_type();  // return T_EOI
 
     unsigned int actline = scanner.line;
     token_id id = token_id(scan(&scanner));
@@ -289,9 +291,9 @@ lexer<IteratorT, PositionT>::get(lex_token<PositionT>& result)
 #endif
 }
 
-template <typename IteratorT, typename PositionT>
+template <typename IteratorT, typename PositionT, typename TokenT>
 inline int 
-lexer<IteratorT, PositionT>::report_error(Scanner const *s, int errcode, 
+lexer<IteratorT, PositionT, TokenT>::report_error(Scanner const *s, int errcode, 
     char const *msg, ...)
 {
     BOOST_ASSERT(0 != s);
@@ -317,14 +319,14 @@ lexer<IteratorT, PositionT>::report_error(Scanner const *s, int errcode,
 //   
 ///////////////////////////////////////////////////////////////////////////////
      
-template <typename IteratorT, typename PositionT = boost::wave::util::file_position_type>
+template <typename IteratorT, 
+    typename PositionT = boost::wave::util::file_position_type,
+    typename TokenT = typename lexer<IteratorT, PositionT>::token_type>
 class lex_functor 
-:   public lex_input_interface_generator<
-        typename lexer<IteratorT, PositionT>::token_type
-    >
+:   public lex_input_interface_generator<TokenT>
 {    
 public:
-    typedef typename lexer<IteratorT, PositionT>::token_type token_type;
+    typedef TokenT token_type;
     
     lex_functor(IteratorT const &first, IteratorT const &last, 
             PositionT const &pos, boost::wave::language_support language)
@@ -341,14 +343,14 @@ public:
 #endif    
 
 private:
-    lexer<IteratorT, PositionT> re2c_lexer;
+    lexer<IteratorT, PositionT, TokenT> re2c_lexer;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-template <typename IteratorT, typename PositionT>
-token_cache<typename lexer<IteratorT, PositionT>::string_type> const
-    lexer<IteratorT, PositionT>::cache = 
-        token_cache<typename lexer<IteratorT, PositionT>::string_type>();
+template <typename IteratorT, typename PositionT, typename TokenT>
+token_cache<typename lexer<IteratorT, PositionT, TokenT>::string_type> const
+    lexer<IteratorT, PositionT, TokenT>::cache = 
+        token_cache<typename lexer<IteratorT, PositionT, TokenT>::string_type>();
     
 }   // namespace re2clex
 
@@ -385,15 +387,15 @@ token_cache<typename lexer<IteratorT, PositionT>::string_type> const
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename IteratorT, typename PositionT>
+template <typename IteratorT, typename PositionT, typename TokenT>
 BOOST_WAVE_RE2C_NEW_LEXER_INLINE
-lex_input_interface<lex_token<PositionT> > *
-new_lexer_gen<IteratorT, PositionT>::new_lexer(IteratorT const &first,
+lex_input_interface<TokenT> *
+new_lexer_gen<IteratorT, PositionT, TokenT>::new_lexer(IteratorT const &first,
     IteratorT const &last, PositionT const &pos, 
     boost::wave::language_support language)
 {
     using re2clex::lex_functor;
-    return new lex_functor<IteratorT, PositionT>(first, last, pos, language);
+    return new lex_functor<IteratorT, PositionT, TokenT>(first, last, pos, language);
 }
 
 #undef BOOST_WAVE_RE2C_NEW_LEXER_INLINE

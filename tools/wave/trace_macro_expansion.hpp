@@ -80,7 +80,6 @@ public:
     }
     ~bad_pragma_exception() throw() {}
     
-    
     virtual char const *what() const throw()
     {
         return "boost::wave::bad_pragma_exception";
@@ -534,7 +533,7 @@ public:
     opened_include_file(ContextT const& ctx, std::string const &relname, 
         std::string const &absname, bool is_system_include) 
     {
-        std::size_t include_depth = ctx.get_max_include_nesting_depth();
+        std::size_t include_depth = ctx.get_iteration_depth();
 #endif
         if (enabled_include_tracing()) {
             // print indented filename

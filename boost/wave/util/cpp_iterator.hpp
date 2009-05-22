@@ -234,7 +234,7 @@ template <typename ContextT>
 class pp_iterator_functor {
 
 public:
-// interface to the boost::spirit::classic::multi_pass_policies::functor_input policy
+// interface to the boost::spirit::classic::iterator_policies::functor_input policy
     typedef typename ContextT::token_type               result_type;
 
 //  eof token

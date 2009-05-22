@@ -22,10 +22,19 @@ TODO (known issues):
 
 CHANGELOG
 
+Boost V1.40.0
+- V2.0.2
+- Switched to Re2C V0.13.5
+- Fixed --list_includes/-l command line option of the wave driver tool to 
+  correctly indent the generated list of included files.
+- Finally fixed all remaining examples. Everything seems to work fine now.
+- Specifying a custom token type now works as expected. The new lexer interface
+  introduced in V2.0 broke this part.
+
 Boost V1.39.0
 - V2.0.1
 - Fixed Wave to compile with BOOST_FILESYSTEM_NO_DEPRECATED defined (i.e. the 
-  library doesn't use the depracated filesystem interface anymore).
+  library doesn't use the deprecated filesystem interface anymore).
 
 Boost V1.37.0
 - Updated examples to reflect the recent changes in the used multi_pass 
