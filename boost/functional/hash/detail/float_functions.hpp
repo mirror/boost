@@ -153,11 +153,25 @@ namespace boost {
         // Is there is, this is a function object that will call that overload
 
         template <typename Float>
-        struct call_ldexp : select_impl
-                :: BOOST_NESTED_TEMPLATE x<Float, detect::ldexp_access>::type
-                :: BOOST_NESTED_TEMPLATE x<Float, detect::ldexpf_access>::type
-                :: BOOST_NESTED_TEMPLATE x<Float, detect::ldexpl_access>::type
+        struct call_ldexp;
+
+        template <>
+        struct call_ldexp<float> : select_impl
+                :: x<float, detect::ldexp_access>::type
+                :: x<float, detect::ldexpf_access>::type
                 :: type {};
+
+        template <>
+        struct call_ldexp<double> : select_impl
+                :: x<double, detect::ldexp_access>::type
+                :: type {};
+
+        template <>
+        struct call_ldexp<long double> : select_impl
+                :: x<long double, detect::ldexp_access>::type
+                :: x<long double, detect::ldexpl_access>::type
+                :: type {};
+
 
         // call_frexp
         //
@@ -166,10 +180,23 @@ namespace boost {
         // Is there is, this is a function object that will call that overload
 
         template <typename Float>
-        struct call_frexp : select_impl
-                :: BOOST_NESTED_TEMPLATE x<Float, detect::frexp_access>::type
-                :: BOOST_NESTED_TEMPLATE x<Float, detect::frexpf_access>::type
-                :: BOOST_NESTED_TEMPLATE x<Float, detect::frexpl_access>::type
+        struct call_frexp;
+
+        template <>
+        struct call_frexp<float> : select_impl
+                :: x<float, detect::frexp_access>::type
+                :: x<float, detect::frexpf_access>::type
+                :: type {};
+
+        template <>
+        struct call_frexp<double> : select_impl
+                :: x<double, detect::frexp_access>::type
+                :: type {};
+
+        template <>
+        struct call_frexp<long double> : select_impl
+                :: x<long double, detect::frexp_access>::type
+                :: x<long double, detect::frexpl_access>::type
                 :: type {};
 
         // has_float_functions
