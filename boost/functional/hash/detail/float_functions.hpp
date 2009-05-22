@@ -114,7 +114,7 @@ namespace boost {
             
             // Use Access for result
 
-            struct type : Access::BOOST_NESTED_TEMPLATE call<Float>
+            struct result : Access::BOOST_NESTED_TEMPLATE call<Float>
             {
                 BOOST_STATIC_CONSTANT(bool, value = true);
             };
@@ -140,7 +140,7 @@ namespace boost {
 
             // Result for nothing found.
 
-            struct type
+            struct result
             {
                 BOOST_STATIC_CONSTANT(bool, value = false);
             };
@@ -159,18 +159,18 @@ namespace boost {
         struct call_ldexp<float> : select_impl
                 :: x<float, detect::ldexp_access>::type
                 :: x<float, detect::ldexpf_access>::type
-                :: type {};
+                :: result {};
 
         template <>
         struct call_ldexp<double> : select_impl
                 :: x<double, detect::ldexp_access>::type
-                :: type {};
+                :: result {};
 
         template <>
         struct call_ldexp<long double> : select_impl
                 :: x<long double, detect::ldexp_access>::type
                 :: x<long double, detect::ldexpl_access>::type
-                :: type {};
+                :: result {};
 
 
         // call_frexp
@@ -186,18 +186,18 @@ namespace boost {
         struct call_frexp<float> : select_impl
                 :: x<float, detect::frexp_access>::type
                 :: x<float, detect::frexpf_access>::type
-                :: type {};
+                :: result {};
 
         template <>
         struct call_frexp<double> : select_impl
                 :: x<double, detect::frexp_access>::type
-                :: type {};
+                :: result {};
 
         template <>
         struct call_frexp<long double> : select_impl
                 :: x<long double, detect::frexp_access>::type
                 :: x<long double, detect::frexpl_access>::type
-                :: type {};
+                :: result {};
 
         // has_float_functions
         //
