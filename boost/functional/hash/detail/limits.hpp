@@ -16,9 +16,10 @@
 #include <boost/limits.hpp>
 
 // On OpenBSD, numeric_limits is not reliable for long doubles, but
-// the macros defined in <float.h> are.
+// the macros defined in <float.h> are and support long double when STLport
+// doesn't.
 
-#if defined(__OpenBSD__)
+#if defined(__OpenBSD__) || defined(_STLP_NO_LONG_DOUBLE)
 #include <float.h>
 #endif
 
@@ -29,7 +30,7 @@ namespace boost
         template <class T>
         struct limits : std::numeric_limits<T> {};
 
-#if defined(__OpenBSD__)
+#if defined(__OpenBSD__) || defined(_STLP_NO_LONG_DOUBLE)
         template <>
         struct limits<long double>
              : std::numeric_limits<long double>
@@ -49,6 +50,9 @@ namespace boost
             BOOST_STATIC_CONSTANT(int, digits = LDBL_MANT_DIG);
             BOOST_STATIC_CONSTANT(int, max_exponent = LDBL_MAX_EXP);
             BOOST_STATIC_CONSTANT(int, min_exponent = LDBL_MIN_EXP);
+#if defined(_STLP_NO_LONG_DOUBLE)
+            BOOST_STATIC_CONSTANT(int, radix = FLT_RADIX);
+#endif
         };
 #endif // __OpenBSD__
     }

@@ -42,7 +42,7 @@
 
 // STLport
 #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-#defined BOOST_HASH_USE_FPCLASSIFY 0
+#define BOOST_HASH_USE_FPCLASSIFY 0
 
 // GNU libstdc++ 3
 #elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
