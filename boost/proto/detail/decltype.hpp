@@ -18,6 +18,7 @@
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/mpl/and.hpp>
 #include <boost/type_traits/is_class.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/type_traits/remove_reference.hpp>
@@ -262,6 +263,20 @@ namespace boost { namespace proto
                 return boost::addressof(t);
             }
             
+            template<typename U>
+            char test_ptr_to_const(U *);
+
+            template<typename U>
+            char (&test_ptr_to_const(U const *))[2];
+
+            template<typename T>
+            struct is_ref_to_const
+            {
+                static T t;
+                BOOST_STATIC_CONSTANT(bool, value = 2 == sizeof(test_ptr_to_const(get_pointer(t))));
+                typedef mpl::bool_<value> type;
+            };
+
             ////////////////////////////////////////////////////////////////////////////////////////////
             template<
                 typename T
@@ -346,31 +361,38 @@ namespace boost { namespace proto
         struct result_of_
           : boost::result_of<T>
         {};
-        
-        template<typename T, typename U>
-        struct result_of_<T(U), typename enable_if<is_member_object_pointer<T> >::type>
-        {
-            typedef
-                typename result_of_member<T>::type
-            type;
-        };
 
         template<typename T, typename U>
-        struct result_of_<T(U &), typename enable_if<is_member_object_pointer<T> >::type>
+        struct result_of_<T(U), typename enable_if_c<is_member_object_pointer<T>::value>::type>
         {
             typedef
-                typename add_reference<
-                    typename result_of_member<T>::type
+                typename mpl::if_c<
+                    mpl::and_<
+                        has_get_pointer<U>
+                      , get_pointer_::is_ref_to_const<U const &>
+                    >::value
+                  , typename add_reference<
+                        typename add_const<
+                            typename result_of_member<T>::type
+                        >::type
+                    >::type
+                  , typename result_of_member<T>::type
                 >::type
             type;
         };
 
         template<typename T, typename U>
-        struct result_of_<T(U const &), typename enable_if<is_member_object_pointer<T> >::type>
+        struct result_of_<T(U &), typename enable_if_c<is_member_object_pointer<T>::value>::type>
         {
             typedef
-                typename add_reference<
-                    typename add_const<
+                typename mpl::if_c<
+                    get_pointer_::is_ref_to_const<U &>::value
+                  , typename add_reference<
+                        typename add_const<
+                            typename result_of_member<T>::type
+                        >::type
+                    >::type
+                  , typename add_reference<
                         typename result_of_member<T>::type
                     >::type
                 >::type
