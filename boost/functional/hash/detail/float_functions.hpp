@@ -174,7 +174,7 @@ namespace boost {
 
         // has_float_functions
         //
-        // Have we fround frexp and ldexp for the given float type.
+        // Is there an overload of frexp and ldexp for the given float type.
 
         template<typename Float>
         struct has_float_functions
