@@ -53,7 +53,7 @@ namespace boost {
             template <> struct is<float> { char x[10]; };
             template <> struct is<double> { char x[20]; };
             template <> struct is<long double> { char x[30]; };
-            template <> struct is<none> { char x[40]; };
+            template <> struct is<BOOST_HASH_DETECT_FLOAT_FUNCTIONS::none> { char x[40]; };
 
             // Convert the return type of a function to a type we can use.
             template <typename T> is<T> float_type(T);
