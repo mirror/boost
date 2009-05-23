@@ -15,39 +15,39 @@ The advanced features described in this document are all under namespace <code>:
 
 <h2>Metafunctions for tuple types</h2>
 <p>
-Suppose <code>T</code> is a tuple type, and <code>N</code> is a constant integral expression. 
+Suppose <code>T</code> is a tuple type, and <code>N</code> is a constant integral expression.</p>
 
-<code><pre>element&lt;N, T&gt;::type</pre></code>
+<pre><code>element&lt;N, T&gt;::type</code></pre>
 
-gives the type of the <code>N</code>th element in the tuple type <code>T</code>. If <code>T</code> is const, the resulting type is const qualified as well. 
+<p>gives the type of the <code>N</code>th element in the tuple type <code>T</code>. If <code>T</code> is const, the resulting type is const qualified as well. 
 Note that the constness of <code>T</code> does not affect reference type
 elements.
 </p>
 
-<code><pre>length&lt;T&gt;::value</pre></code>
+<pre><code>length&lt;T&gt;::value</code></pre>
 
-gives the length of the tuple type <code>T</code>.
+<p>gives the length of the tuple type <code>T</code>.
 </p>
 
 <h2>Cons lists</h2>
 
 <p>
 Tuples are internally represented as <i>cons lists</i>.
-For example, the tuple 
+For example, the tuple </p>
 
-<code><pre>tuple&lt;A, B, C, D&gt;</pre></code>
+<pre><code>tuple&lt;A, B, C, D&gt;</code></pre>
 
- inherits from the type
-<code><pre>cons&lt;A, cons&lt;B, cons&lt;C, cons&lt;D, null_type&gt; &gt; &gt; &gt;
-</pre></code>
+<p>inherits from the type</p>
+<pre><code>cons&lt;A, cons&lt;B, cons&lt;C, cons&lt;D, null_type&gt; &gt; &gt; &gt;
+</code></pre>
 
-The tuple template provides the typedef <code>inherited</code> to access the cons list representation. E.g.:
+<p>The tuple template provides the typedef <code>inherited</code> to access the cons list representation. E.g.:
 <code>tuple&lt;A&gt;::inherited</code> is the type <code>cons&lt;A, null_type&gt;</code>.
 </p>
 
 <h4>Empty tuple</h4>
 <p>
-The internal representation of the empty tuple <code>tuple&lt;&gt</code> is <code>null_type</code>.
+The internal representation of the empty tuple <code>tuple&lt;&gt;</code> is <code>null_type</code>.
 </p>
 
 <h4>Head and tail</h4>
@@ -83,11 +83,11 @@ inline void set_to_zero(cons&lt;H, T&gt;&amp; x) { x.get_head() = 0; set_to_zero
 A cons list can be default constructed provided that all its elements can be default constructed.
 </p>
 <p>
-A cons list can be constructed from its head and tail. The prototype of the constructor is:
+A cons list can be constructed from its head and tail. The prototype of the constructor is:</p>
 <pre><code>cons(typename access_traits&lt;head_type&gt;::parameter_type h,
      const tail_type&amp; t)
 </code></pre>
-The traits template for the head parameter selects correct parameter types for different kinds of element types (for reference elements the parameter type equals the element type, for non-reference types the parameter type is a reference to const non-volatile element type).
+<p>The traits template for the head parameter selects correct parameter types for different kinds of element types (for reference elements the parameter type equals the element type, for non-reference types the parameter type is a reference to const non-volatile element type).
 </p>
 <p>
 For a one-element cons list the tail argument (<code>null_type</code>) can be omitted.
@@ -98,16 +98,16 @@ For a one-element cons list the tail argument (<code>null_type</code>) can be om
 
 <h4><code>access_traits</code></h4>
 <p>
-The template <code>access_traits</code> defines three type functions. Let <code>T</code> be a type of an element in a tuple:
+The template <code>access_traits</code> defines three type functions. Let <code>T</code> be a type of an element in a tuple:</p>
 <ol>
-<li><code>access_traits&lt;T&gt;::non_const_type</code> maps <code>T</code> to the return type of the non-const access functions (nonmeber and member <code>get</code> functions, and the <code>get_head</code> function).</li>
+<li><code>access_traits&lt;T&gt;::non_const_type</code> maps <code>T</code> to the return type of the non-const access functions (nonmember and member <code>get</code> functions, and the <code>get_head</code> function).</li>
 <li><code>access_traits&lt;T&gt;::const_type</code> maps <code>T</code> to the return type of the const access functions.</li>
 <li><code>access_traits&lt;T&gt;::parameter_type</code> maps <code>T</code> to the parameter type of the tuple constructor.</li>
 </ol>
 <h4><code>make_tuple_traits</code></h4>
 
-The element types of the tuples that are created with the <code>make_tuple</code> functions are computed with the type function <code>make_tuple_traits</code>. 
-The type function call <code>make_tuple_traits&lt;T&gt;::type</code> implements the following type mapping:
+<p>The element types of the tuples that are created with the <code>make_tuple</code> functions are computed with the type function <code>make_tuple_traits</code>. 
+The type function call <code>make_tuple_traits&lt;T&gt;::type</code> implements the following type mapping:</p>
 <ul>
 <li><i>any reference type</i> -&gt; <i>compile time error</i>
 </li>
@@ -119,7 +119,7 @@ The type function call <code>make_tuple_traits&lt;T&gt;::type</code> implements 
 </li>
 </ul>
 
-Objects of type <code>reference_wrapper</code> are created with the <code>ref</code> and <code>cref</code> functions (see <A href="tuple_users_guide.html#make_tuple">The <code>make_tuple</code> function</A>.)
+<p>Objects of type <code>reference_wrapper</code> are created with the <code>ref</code> and <code>cref</code> functions (see <A href="tuple_users_guide.html#make_tuple">The <code>make_tuple</code> function</A>.)
 </p>
 
 <p>Reference wrappers were originally part of the tuple library, but they are now a general utility of boost. 

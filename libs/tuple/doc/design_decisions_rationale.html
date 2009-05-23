@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 
 <title>Design decisions rationale for Boost Tuple Library</title>
@@ -20,8 +21,8 @@ Tuples were originally under a subnamespace.
 As a result of the discussion, tuple definitions were moved directly under the <code>boost</code> namespace.
 As a result of a continued discussion, the subnamespace was reintroduced.
 The final (I truly hope so) solution is now to have all definitions in namespace <code>::boost::tuples</code>, and the most common names in the <code>::boost</code> namespace as well. 
-This is accomplished with using declarations (suggested by Dave Abrahams):
-<code><pre>namespace boost {
+This is accomplished with using declarations (suggested by Dave Abrahams):</p>
+<pre><code>namespace boost {
   namespace tuples {
       ...      
     // All library code
@@ -32,8 +33,8 @@ This is accomplished with using declarations (suggested by Dave Abrahams):
   using tuples::tie;
   using tuples::get;
 }
-</pre></code>
-With this arrangement, tuple creation with direct constructor calls, <code>make_tuple</code> or <code>tie</code> functions do not need the namespace qualifier.
+</code></pre>
+<p>With this arrangement, tuple creation with direct constructor calls, <code>make_tuple</code> or <code>tie</code> functions do not need the namespace qualifier.
 Further, all functions that manipulate tuples are found with Koenig-lookup.
 The only exceptions are the <code>get&lt;N&gt;</code> functions, which are always called with an explicitly qualified template argument, and thus Koenig-lookup does not apply.
 Therefore, get is lifted to <code>::boost</code> namespace with a using declaration.
@@ -54,9 +55,9 @@ The rationale for not using the most natural name 'tuple' is to avoid having an 
 Namespace names are, however, not generally in plural form in boost libraries. 
 First, no real trouble was reported for using the same name for a namespace and a class and we considered changing the name 'tuples' to 'tuple'.
 But we found some trouble after all.
-Both gcc and edg compilers reject using declarations where the namespace and class names are identical:
+Both gcc and edg compilers reject using declarations where the namespace and class names are identical:</p>
 
-<code><pre>namespace boost {
+<pre><code>namespace boost {
   namespace tuple {
     ... tie(...);
     class tuple; 
@@ -66,13 +67,13 @@ Both gcc and edg compilers reject using declarations where the namespace and cla
   using tuple::tuple; // error
     ...
 }
-</pre></code>
+</code></pre>
 
-Note, however, that a corresponding using declaration in the global namespace seems to be ok: 
+<p>Note, however, that a corresponding using declaration in the global namespace seems to be ok:</p>
 
-<code><pre>
+<pre><code>
 using boost::tuple::tuple; // ok;
-</pre></code>
+</code></pre>
 
 
 <h2>The end mark of the cons list (nil, null_type, ...)</h2>
@@ -80,14 +81,15 @@ using boost::tuple::tuple; // ok;
 <p>
 Tuples are internally represented as <code>cons</code> lists:
 
-<code><pre>tuple&lt;int, int&gt;
-</pre></code> 
-inherits from 
-<code><pre>cons&lt;int, cons&lt;int, null_type&gt; &gt;
+<pre><code>tuple&lt;int, int&gt;
+</code></pre> 
+<p>inherits from</p>
+<pre><code>cons&lt;int, cons&lt;int, null_type&gt; &gt;
 </code></pre>
 
+<p>
 <code>null_type</code> is the end mark of the list. Original proposition was <code>nil</code>, but the name is used in MacOS, and might have caused problems, so <code>null_type</code> was chosen instead.
-Other names considered were <i>null_t</i> and <i>unit</i> (the empty tuple type in SML).
+Other names considered were <i>null_t</i> and <i>unit</i> (the empty tuple type in SML).</p>
 <p>
 Note that <code>null_type</code> is the internal representation of an empty tuple: <code>tuple&lt;&gt;</code> inherits from <code>null_type</code>.
 </p>
@@ -95,22 +97,22 @@ Note that <code>null_type</code> is the internal representation of an empty tupl
 <h2>Element indexing</h2>
 
 <p>
-Whether to use 0- or 1-based indexing was discussed more than thoroughly, and the following observations were made:
+Whether to use 0- or 1-based indexing was discussed more than thoroughly, and the following observations were made:</p>
 
 <ul>
 <li> 0-based indexing is 'the C++ way' and used with arrays etc.</li>
 <li> 1-based 'name like' indexing exists as well, eg. <code>bind1st</code>, <code>bind2nd</code>, <code>pair::first</code>, etc.</li>
 </ul>
-Tuple access with the syntax <code>get&lt;N&gt;(a)</code>, or <code>a.get&lt;N&gt;()</code> (where <code>a</code> is a tuple and <code>N</code> an index), was considered to be of the first category, hence, the index of the first element in a tuple is 0.
+<p>Tuple access with the syntax <code>get&lt;N&gt;(a)</code>, or <code>a.get&lt;N&gt;()</code> (where <code>a</code> is a tuple and <code>N</code> an index), was considered to be of the first category, hence, the index of the first element in a tuple is 0.</p>
 
 <p>
 A suggestion to provide 1-based 'name like' indexing with constants like <code>_1st</code>, <code>_2nd</code>, <code>_3rd</code>, ... was made.
 By suitably chosen constant types, this would allow alternative syntaxes:
 
-<code><pre>a.get&lt;0&gt;() == a.get(_1st) == a[_1st] == a(_1st);
-</pre></code>
+<pre><code>a.get&lt;0&gt;() == a.get(_1st) == a[_1st] == a(_1st);
+</code></pre>
 
-We chose not to provide more than one indexing method for the following reasons:
+<p>We chose not to provide more than one indexing method for the following reasons:</p>
 <ul>
 <li>0-based indexing might not please everyone, but once its fixed, it is less confusing than having two different methods (would anyone want such constants for arrays?).</li>
 <li>Adding the other indexing scheme doesn't really provide anything new (like a new feature) to the user of the library.</li>
@@ -125,18 +127,18 @@ Such constants are easy to add.
 
 <h2>Tuple comparison</h2>
 
-The comparison operator implements lexicographical order. 
-Other orderings were considered, mainly dominance (<i>a &lt; b iff for each i a(i) < b(i)</i>). 
-Our belief is, that lexicographical ordering, though not mathematically the most natural one, is the most frequently needed ordering in everyday programming.
+<p>The comparison operator implements lexicographical order. 
+Other orderings were considered, mainly dominance (<i>a &lt; b iff for each i a(i) &lt; b(i)</i>). 
+Our belief is, that lexicographical ordering, though not mathematically the most natural one, is the most frequently needed ordering in everyday programming.</p>
 
 <h2>Streaming</h2>
 
 <p>
 The characters specified with tuple stream manipulators are stored within the space allocated by <code>ios_base::xalloc</code>, which allocates storage for <code>long</code> type objects.
 <code>static_cast</code> is used in casting between <code>long</code> and the stream's character type. 
-Streams that have character types not convertible back and forth to long thus fail to compile.
+Streams that have character types not convertible back and forth to long thus fail to compile.</p>
 
-This may be revisited at some point. The two possible solutions are:
+<p>This may be revisited at some point. The two possible solutions are:</p>
 <ul>
 <li>Allow only plain <code>char</code> types as the tuple delimiters and use <code>widen</code> and <code>narrow</code> to convert between the real character type of the stream. 
 This would always compile, but some calls to set manipulators might result in a different
