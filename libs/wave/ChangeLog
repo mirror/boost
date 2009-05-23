@@ -32,6 +32,8 @@ Boost V1.40.0
   introduced in V2.0 broke this part.
 - Fixed a long standing race condition inhibiting to use Wave in multi threaded 
   environments.
+- Removed old code related to pre Boost V1.31 (V1 of iterator library)
+- Incorporated the changes from latest version of the flex_string class.
 
 Boost V1.39.0
 - V2.0.1
