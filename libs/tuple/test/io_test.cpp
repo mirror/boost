@@ -70,6 +70,15 @@ int test_main(int argc, char * argv[] ) {
   os1 << make_tuple(1, 2, 3);
   BOOST_CHECK (os1.str() == std::string("[1,2,3][1,2,3]") );
 
+  // check empty tuple.
+  useThisOStringStream os3;
+  os3 << make_tuple();
+  BOOST_CHECK (os3.str() == std::string("()") );
+  os3 << set_open('[');
+  os3 << set_close(']');
+  os3 << make_tuple();
+  BOOST_CHECK (os3.str() == std::string("()[]") );
+
   ofstream tmp("temp.tmp");
 
 #if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -98,12 +107,19 @@ int test_main(int argc, char * argv[] ) {
 
 
   // reading tuple<int, int, int> in format (a b c); 
-  useThisIStringStream is("(100 200 300)"); 
+  useThisIStringStream is1("(100 200 300)"); 
    
-  tuple<int, int, int> ti; 
-  BOOST_CHECK(bool(is >> ti));
-  BOOST_CHECK(ti == make_tuple(100, 200, 300));
-   
+  tuple<int, int, int> ti1; 
+  BOOST_CHECK(bool(is1 >> ti1));
+  BOOST_CHECK(ti1 == make_tuple(100, 200, 300));
+
+  useThisIStringStream is2("()");
+  tuple<> ti2;
+  BOOST_CHECK(bool(is2 >> ti2));
+  useThisIStringStream is3("[]");
+  is3 >> set_open('[');
+  is3 >> set_close(']');
+  BOOST_CHECK(bool(is3 >> ti2));
 
   // Note that strings are problematic:
   // writing a tuple on a stream and reading it back doesn't work in
