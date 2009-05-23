@@ -27,7 +27,7 @@ int main()
     typedef boost::array<float,6> Array;
 
     // create and initialize an array
-    const Array a = { { 42.42 } };
+    const Array a = { { 42.42f } };
 
     // use some common STL container operations
     std::cout << "static_size: " << a.size() << std::endl;
