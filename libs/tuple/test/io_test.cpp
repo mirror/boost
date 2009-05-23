@@ -27,15 +27,14 @@
 #include <sstream>
 #endif
 
-using namespace std;
 using namespace boost;
 
 #if defined BOOST_NO_STRINGSTREAM
-typedef ostrstream useThisOStringStream;
-typedef istrstream useThisIStringStream;
+typedef std::ostrstream useThisOStringStream;
+typedef std::istrstream useThisIStringStream;
 #else
-typedef ostringstream useThisOStringStream;
-typedef istringstream useThisIStringStream;
+typedef std::ostringstream useThisOStringStream;
+typedef std::istringstream useThisIStringStream;
 #endif
 
 int test_main(int argc, char * argv[] ) {
@@ -79,19 +78,19 @@ int test_main(int argc, char * argv[] ) {
   os3 << make_tuple();
   BOOST_CHECK (os3.str() == std::string("()[]") );
 
-  ofstream tmp("temp.tmp");
+  std::ofstream tmp("temp.tmp");
 
 #if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   tmp << make_tuple("One", "Two", 3);
 #endif   
   tmp << set_delimiter(':');
-  tmp << make_tuple(1000, 2000, 3000) << endl;
+  tmp << make_tuple(1000, 2000, 3000) << std::endl;
 
   tmp.close();
   
   // When teading tuples from a stream, manipulators must be set correctly:
-  ifstream tmp3("temp.tmp");
-  tuple<string, string, int> j;
+  std::ifstream tmp3("temp.tmp");
+  tuple<std::string, std::string, int> j;
 
 #if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   tmp3 >> j; 
