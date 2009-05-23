@@ -10,7 +10,6 @@
 #include <boost/config/no_tr1/cmath.hpp>
 #include <boost/type_traits/ice.hpp>
 #include <boost/detail/select_type.hpp>
-//#include <boost/assert.hpp>
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
@@ -33,10 +32,18 @@ namespace BOOST_HASH_DETECT_FLOAT_FUNCTIONS {
 
     struct none {};
 
+#if !defined(ldexpf)
     none ldexpf(int, int);
+#endif
+#if !defined(ldexpl)
     none ldexpl(int, int);
+#endif
+#if !defined(frexpf)
     none frexpf(int, int*);
+#endif
+#if !defined(frexpl)
     none frexpl(int, int*);
+#endif
 
     template <class Float> none ldexp(Float, int);
     template <class Float> none frexp(Float, int*);    
@@ -80,11 +87,48 @@ namespace boost {
                 };                                                          \
             }
 
+#define BOOST_HASH_CALL_FLOAT_MACRO(func, type, type2)                      \
+            struct func##_access {                                          \
+                template <typename Float>                                   \
+                struct check {                                              \
+                    BOOST_STATIC_CONSTANT(bool, value = true);              \
+                };                                                          \
+                                                                            \
+                template <typename Float>                                   \
+                struct call                                                 \
+                {                                                           \
+                    Float operator()(Float a, type2 b)  const               \
+                    {                                                       \
+                        return func(a, b);                                  \
+                    }                                                       \
+                };                                                          \
+            } 
+
+#if defined(ldexpf)
+            BOOST_HASH_CALL_FLOAT_MACRO(ldexpf, float, int);
+#else
             BOOST_HASH_CALL_FLOAT_FUNC(ldexpf, int);
+#endif
+
+#if defined(ldexpl)
+            BOOST_HASH_CALL_FLOAT_MACRO(ldexpl, long double, int);
+#else
             BOOST_HASH_CALL_FLOAT_FUNC(ldexpl, int);
-            BOOST_HASH_CALL_FLOAT_FUNC(ldexp, int);
+#endif
+
+#if defined(frexpf)
+            BOOST_HASH_CALL_FLOAT_MACRO(frexpf, float, int*);
+#else
             BOOST_HASH_CALL_FLOAT_FUNC(frexpf, int*);
+#endif
+
+#if defined(frexpl)
+            BOOST_HASH_CALL_FLOAT_MACRO(frexpl, long double, int*);
+#else
             BOOST_HASH_CALL_FLOAT_FUNC(frexpl, int*);
+#endif
+
+            BOOST_HASH_CALL_FLOAT_FUNC(ldexp, int);
             BOOST_HASH_CALL_FLOAT_FUNC(frexp, int*);
             
 #undef BOOST_CALL_HAS_FLOAT_FUNC
