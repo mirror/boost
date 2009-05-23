@@ -343,7 +343,7 @@ seq2.push_back(3.14);
 
 are_strict_equals visitor;
 assert( std::equal(
-      v1.begin(), v1.end(), v2.begin()
+      seq1.begin(), seq1.end(), seq2.begin()
     , <functionname>boost::apply_visitor</functionname>( visitor )
     ) );</programlisting>
 

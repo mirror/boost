@@ -83,9 +83,9 @@ str += " world! ";</programlisting>
 
 <programlisting>void times_two( boost::variant&lt; int, std::string &gt; &amp; operand )
 {
-    if ( int* pi = <functionname>boost::get</functionname>&lt;int&gt;( &amp;v ) )
+    if ( int* pi = <functionname>boost::get</functionname>&lt;int&gt;( &amp;operand ) )
         *pi *= 2;
-    else if ( std::string* pstr = <functionname>boost::get</functionname>&lt;std::string&gt;( &amp;v ) )
+    else if ( std::string* pstr = <functionname>boost::get</functionname>&lt;std::string&gt;( &amp;operand ) )
         *pstr += *pstr;
 }</programlisting>
 
