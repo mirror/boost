@@ -2,7 +2,7 @@
     Boost.Wave: A Standard compliant C++ preprocessor library
 
     This is the current version of the Wave library
-    
+
     http://www.boost.org/
 
     Copyright (c) 2001-2009 Hartmut Kaiser. Distributed under the Boost

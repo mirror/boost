@@ -73,13 +73,13 @@ public:
     typedef lex_input_interface<TokenT>* shared;
 
     BOOST_WAVE_EOF_PREFIX result_type const eof;
-    
+
     template <typename MultiPass>
     static result_type& get_next(MultiPass& mp, result_type& result)
     { 
         return mp.shared->ftor->get(result); 
     }
-    
+
     // this will be called whenever the last reference to a multi_pass will
     // be released
     template <typename MultiPass>

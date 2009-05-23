@@ -332,7 +332,7 @@
 //  Decide, whether to support long long integers in the preprocessor.
 //
 //  The C++ standard requires the preprocessor to use one of the following 
-//  types for integer literals: long or unsigned long depending on a optional 
+//  types for integer literals: long or unsigned long depending on an optional 
 //  suffix ('u', 'l', 'ul', or 'lu')
 //
 //  Sometimes it's required to preprocess integer literals bigger than that

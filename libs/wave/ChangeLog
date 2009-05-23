@@ -30,6 +30,8 @@ Boost V1.40.0
 - Finally fixed all remaining examples. Everything seems to work fine now.
 - Specifying a custom token type now works as expected. The new lexer interface
   introduced in V2.0 broke this part.
+- Fixed a long standing race condition inhibiting to use Wave in multi threaded 
+  environments.
 
 Boost V1.39.0
 - V2.0.1
