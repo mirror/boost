@@ -2136,8 +2136,8 @@ public:
 
     size_type find (const value_type* s, size_type pos, size_type n) const
     {
-        const size_type size(size());
-        if (n + pos > size) 
+        const size_type size_(size());
+        if (n + pos > size_) 
             return npos; 
         for (; pos < size; ++pos)
         {
