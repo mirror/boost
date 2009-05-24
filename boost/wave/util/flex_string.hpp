@@ -2139,7 +2139,7 @@ public:
         const size_type size_(size());
         if (n + pos > size_) 
             return npos; 
-        for (; pos < size; ++pos)
+        for (; pos < size_; ++pos)
         {
             if (traits_type::compare(&*begin() + pos, s, n) == 0)
             {
