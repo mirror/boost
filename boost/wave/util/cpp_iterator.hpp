@@ -626,7 +626,7 @@ bool returned_from_include_file = returned_from_include();
         // adjust the current position (line and column)
         bool was_seen_newline = seen_newline || returned_from_include_file;
 
-        // fetch the current token        
+        // fetch the current token
             act_token = *iter_ctx->first;
             act_pos = act_token.get_position();
 
@@ -699,7 +699,7 @@ bool returned_from_include_file = returned_from_include();
 #endif
                 ++iter_ctx->first;
             }
-            
+
         } while ((iter_ctx->first != iter_ctx->last) || 
                  (returned_from_include_file = returned_from_include()));
 

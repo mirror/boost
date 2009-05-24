@@ -2,7 +2,7 @@
     Boost.Wave: A Standard compliant C++ preprocessor library
 
     Re2C based C++ lexer
-    
+
     http://www.boost.org/
 
     Copyright (c) 2001-2009 Hartmut Kaiser. Distributed under the Boost
@@ -103,7 +103,11 @@ private:
     include_guards<token_type> guards;
 #endif
 
+#if BOOST_WAVE_SUPPORT_THREADING == 0
     static token_cache<string_type> const cache;
+#else
+    token_cache<string_type> const cache;
+#endif
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -346,11 +350,13 @@ private:
     lexer<IteratorT, PositionT, TokenT> re2c_lexer;
 };
 
+#if BOOST_WAVE_SUPPORT_THREADING == 0
 ///////////////////////////////////////////////////////////////////////////////
 template <typename IteratorT, typename PositionT, typename TokenT>
 token_cache<typename lexer<IteratorT, PositionT, TokenT>::string_type> const
     lexer<IteratorT, PositionT, TokenT>::cache = 
         token_cache<typename lexer<IteratorT, PositionT, TokenT>::string_type>();
+#endif
 
 }   // namespace re2clex
 
