@@ -29,6 +29,7 @@
 #endif
 
 using namespace boost::lambda;
+namespace bl = boost::lambda;
 
 template<class T>
 bool check_tuple(int n, const T& t) 
@@ -248,7 +249,7 @@ void delayed_construction()
   std::vector<std::pair<int, int> > v;
 
   std::transform(x.begin(), x.end(), y.begin(), std::back_inserter(v),
-            bind(constructor<std::pair<int, int> >(), _1, _2) );
+            bl::bind(constructor<std::pair<int, int> >(), _1, _2) );
 }
 
 int test_main(int, char *[]) {

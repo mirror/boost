@@ -18,9 +18,7 @@
 
 #include <iostream>
 
-
-  using namespace std;
-  using namespace boost::lambda;
+using namespace boost::lambda;
 
 
 int sum_of_args_0() { return 0; }
