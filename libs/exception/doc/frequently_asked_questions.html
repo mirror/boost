@@ -79,6 +79,13 @@ e.add(bar_info(bar));
 throw e;</pre>
 <p>and looks better than something like:</p>
 <pre>throw error().add(foo_info(foo)).add(bar_info(bar));</pre>
+<h3>Why is operator&lt;&lt; allowed to throw?</h3>
+<p>This question is referring to the following issue. Consider this throw statement example:</p>
+<pre>throw file_open_error() <span class="RenoLink"><a href="exception_operator_shl.html">&lt;&lt;</a></span> file_name(fn);</pre>
+<p>The intention here is to throw a file_open_error, however if <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span> fails to copy the std::string contained in the file_name <span class="RenoLink"><a href="error_info.html">error_info</a></span> wrapper, a std::bad_alloc could propagate instead. This behavior seems undesirable to some programmers.</p>
+<p>Bjarne Stroustrup, The C++ Programming Language, 3rd Edition, page 371:</p>
+<blockquote><p><i>"Throwing an exception requires an object to throw.  A C++ implementation is required to have enough spare memory to be able to throw bad_alloc in case of memory exhaustion.  However, it is possible that throwing some other exception will cause memory exhaustion."</i></p></blockquote>
+<p>So, an attempt to throw any exception may already result in propagating std::bad_alloc instead.</p>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
