@@ -8,8 +8,6 @@
 
 #include <boost/config.hpp>
 #include <boost/config/no_tr1/cmath.hpp>
-#include <boost/type_traits/ice.hpp>
-#include <boost/detail/select_type.hpp>
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
@@ -22,240 +20,203 @@
 //
 // The following tries to automatically detect which are available.
 
-namespace BOOST_HASH_DETECT_FLOAT_FUNCTIONS {
-    // Dummy functions to detect when the actual function we want isn't
-    // available.
-    //
-    // AFAICT these have to be outside of the boost namespace, as if they're in
-    // the boost namespace they'll always be preferable to any other function
-    // (since the arguments are built in types, ADL can't be used).
-
-    struct none {};
-
-#if !defined(ldexpf)
-    none ldexpf(int, int);
-#endif
-#if !defined(ldexpl)
-    none ldexpl(int, int);
-#endif
-#if !defined(frexpf)
-    none frexpf(int, int*);
-#endif
-#if !defined(frexpl)
-    none frexpl(int, int*);
-#endif
-
-    template <class Float> none ldexp(Float, int);
-    template <class Float> none frexp(Float, int*);    
-}
-
 namespace boost {
     namespace hash_detail {
-        namespace detect {
-            using namespace std;
-            using namespace BOOST_HASH_DETECT_FLOAT_FUNCTIONS;            
+
+        // Returned by dummy versions of the float functions.
+    
+        struct not_found {
+            // Implicitly convertible to float and long double in order to avoid
+            // a compile error when the dummy float functions are used.
+
+            inline operator float() const { return 0; }
+            inline operator long double() const { return 0; }
+        };
           
-            // A type for detecting return type of functions.
-            template <typename T> struct is;
-            template <> struct is<float> { char x[10]; };
-            template <> struct is<double> { char x[20]; };
-            template <> struct is<long double> { char x[30]; };
-            template <> struct is<BOOST_HASH_DETECT_FLOAT_FUNCTIONS::none> { char x[40]; };
+        // A type for detecting the return type of functions.
 
-            // Convert the return type of a function to a type we can use.
-            template <typename T> is<T> float_type(T);
-
-#define BOOST_HASH_CALL_FLOAT_FUNC(func, type2)                             \
-            struct func##_access {                                          \
-                template <typename Float>                                   \
-                struct check                                                \
-                {                                                           \
-                    static Float x;                                         \
-                    static type2 y;                                         \
-                    BOOST_STATIC_CONSTANT(bool, value =                     \
-                        sizeof(float_type(func(x,y)))                       \
-                            == sizeof(is<Float>));                          \
-                };                                                          \
-                                                                            \
-                template <typename Float>                                   \
-                struct call                                                 \
-                {                                                           \
-                    Float operator()(Float a, type2 b) const                \
-                    {                                                       \
-                        return func(a, b);                                  \
-                    }                                                       \
-                };                                                          \
-            }
-
-#define BOOST_HASH_CALL_FLOAT_MACRO(func, type, type2)                      \
-            struct func##_access {                                          \
-                template <typename Float>                                   \
-                struct check {                                              \
-                    BOOST_STATIC_CONSTANT(bool, value = true);              \
-                };                                                          \
-                                                                            \
-                template <typename Float>                                   \
-                struct call                                                 \
-                {                                                           \
-                    Float operator()(Float a, type2 b)  const               \
-                    {                                                       \
-                        return func(a, b);                                  \
-                    }                                                       \
-                };                                                          \
-            } 
-
-#if defined(ldexpf)
-            BOOST_HASH_CALL_FLOAT_MACRO(ldexpf, float, int);
-#else
-            BOOST_HASH_CALL_FLOAT_FUNC(ldexpf, int);
-#endif
-
-#if defined(ldexpl)
-            BOOST_HASH_CALL_FLOAT_MACRO(ldexpl, long double, int);
-#else
-            BOOST_HASH_CALL_FLOAT_FUNC(ldexpl, int);
-#endif
-
-#if defined(frexpf)
-            BOOST_HASH_CALL_FLOAT_MACRO(frexpf, float, int*);
-#else
-            BOOST_HASH_CALL_FLOAT_FUNC(frexpf, int*);
-#endif
-
-#if defined(frexpl)
-            BOOST_HASH_CALL_FLOAT_MACRO(frexpl, long double, int*);
-#else
-            BOOST_HASH_CALL_FLOAT_FUNC(frexpl, int*);
-#endif
-
-            BOOST_HASH_CALL_FLOAT_FUNC(ldexp, int);
-            BOOST_HASH_CALL_FLOAT_FUNC(frexp, int*);
+        template <typename T> struct is;
+        template <> struct is<float> { char x[10]; };
+        template <> struct is<double> { char x[20]; };
+        template <> struct is<long double> { char x[30]; };
+        template <> struct is<boost::hash_detail::not_found> { char x[40]; };
             
-#undef BOOST_CALL_HAS_FLOAT_FUNC
-        }
-        
-        // check
-        //
-        // Use in select_impl to help old compilers with a value template.
-        
-        template <typename Float, typename Access>
-        struct check : Access::BOOST_NESTED_TEMPLATE check<Float> {};
+        // Used to convert the return type of a function to a type for sizeof.
 
-        // found_impl
-        //
-        // Used in select_impl when an appropriate function has
-        // been found.
-
-        template <typename Float, typename Access>
-        struct found_impl
-        {
-            // Ignore further types
-
-            template <typename Float2, typename Access2>
-            struct x {
-                typedef found_impl type;
-            };
-            
-            // Use Access for result
-
-            struct result : Access::BOOST_NESTED_TEMPLATE call<Float>
-            {
-                BOOST_STATIC_CONSTANT(bool, value = true);
-            };
-        };
-        
-        // select_impl
-        //
-        // Used to choose which floating point function to use for a particular
-        // floating point type.
-
-        struct select_impl
-        {
-            // Check if Access is appropriate for Float
-
-            template <typename Float, typename Access>
-            struct x :
-                boost::detail::if_true <
-                    ::boost::hash_detail::check<Float, Access>::value
-                >
-                ::BOOST_NESTED_TEMPLATE then<
-                    found_impl<Float, Access>, select_impl
-                > {};
-
-            // Result for nothing found.
-
-            struct result
-            {
-                BOOST_STATIC_CONSTANT(bool, value = false);
-            };
-        };
+        template <typename T> is<T> float_type(T);
 
         // call_ldexp
         //
-        // call_ldexp::value = Is there an appropriate version of call_ldexp
-        //                     for this type?
-        // Is there is, this is a function object that will call that overload
-
-        template <typename Float>
-        struct call_ldexp;
-
-        template <>
-        struct call_ldexp<float> : select_impl
-                :: x<float, detect::ldexp_access>::type
-                :: x<float, detect::ldexpf_access>::type
-                :: result {};
-
-        template <>
-        struct call_ldexp<double> : select_impl
-                :: x<double, detect::ldexp_access>::type
-                :: result {};
-
-        template <>
-        struct call_ldexp<long double> : select_impl
-                :: x<long double, detect::ldexp_access>::type
-                :: x<long double, detect::ldexpl_access>::type
-                :: result {};
-
+        // This will get specialized for float and long double
+        
+        template <typename Float> struct call_ldexp
+        {
+            typedef double float_type;
+            
+            inline double operator()(double a, int b) const
+            {
+                using namespace std;
+                return ldexp(a, b);
+            }
+        };
 
         // call_frexp
         //
-        // call_frexp::value = Is there an appropriate version of call_frexp
-        //                     for this type?
-        // Is there is, this is a function object that will call that overload
+        // This will get specialized for float and long double
 
-        template <typename Float>
-        struct call_frexp;
-
-        template <>
-        struct call_frexp<float> : select_impl
-                :: x<float, detect::frexp_access>::type
-                :: x<float, detect::frexpf_access>::type
-                :: result {};
-
-        template <>
-        struct call_frexp<double> : select_impl
-                :: x<double, detect::frexp_access>::type
-                :: result {};
-
-        template <>
-        struct call_frexp<long double> : select_impl
-                :: x<long double, detect::frexp_access>::type
-                :: x<long double, detect::frexpl_access>::type
-                :: result {};
-
-        // has_float_functions
-        //
-        // Is there an overload of frexp and ldexp for the given float type.
-
-        template<typename Float>
-        struct has_float_functions
+        template <typename Float> struct call_frexp
         {
-            BOOST_STATIC_CONSTANT(bool, value = (
-                ::boost::type_traits::ice_and<
-                    ::boost::hash_detail::call_ldexp<Float>::value,
-                    ::boost::hash_detail::call_frexp<Float>::value
-                >::value
-            ));
+            typedef double float_type;
+            
+            inline double operator()(double a, int* b) const
+            {
+                using namespace std;
+                return frexp(a, b);
+            }
+        };
+    }
+}
+            
+// A namespace for dummy functions to detect when the actual function we want
+// isn't available. ldexpl, ldexpf etc. might be added tby the macros below.
+//
+// AFAICT these have to be outside of the boost namespace, as if they're in
+// the boost namespace they'll always be preferable to any other function
+// (since the arguments are built in types, ADL can't be used).
+
+namespace BOOST_HASH_DETECT_FLOAT_FUNCTIONS {
+    template <class Float> boost::hash_detail::not_found ldexp(Float, int);
+    template <class Float> boost::hash_detail::not_found frexp(Float, int*);    
+}
+
+// Macros for generating specializations of call_ldexp and call_frexp.
+//
+// check_cpp and check_c99 check if the C++ or C99 functions are available.
+//
+// Then the call_* functions select an appropriate implementation.
+//
+// I used c99_func in a few places just to get a unique name.
+
+#define BOOST_HASH_CALL_FLOAT_FUNC(cpp_func, c99_func, type1, type2)    \
+namespace BOOST_HASH_DETECT_FLOAT_FUNCTIONS {                           \
+    boost::hash_detail::not_found c99_func(int, type2);                 \
+}                                                                       \
+                                                                        \
+namespace boost {                                                       \
+    namespace hash_detail {                                             \
+        namespace c99_func##_detect {                                   \
+            using namespace std;                                        \
+            using namespace BOOST_HASH_DETECT_FLOAT_FUNCTIONS;          \
+                                                                        \
+            struct check {                                              \
+                static type1 x;                                         \
+                static type2 y;                                         \
+                BOOST_STATIC_CONSTANT(bool, cpp =                       \
+                    sizeof(float_type(cpp_func(x,y)))                   \
+                        == sizeof(is<type1>));                          \
+                BOOST_STATIC_CONSTANT(bool, c99 =                       \
+                    sizeof(float_type(c99_func(x,y)))                   \
+                        == sizeof(is<type1>));                          \
+            };                                                          \
+        }                                                               \
+                                                                        \
+        template <bool x>                                               \
+        struct call_##c99_func##_c99 :                                  \
+            call_##cpp_func<double> {};                                 \
+                                                                        \
+        template <>                                                     \
+        struct call_##c99_func##_c99<true> {                            \
+            typedef type1 float_type;                                   \
+                                                                        \
+            inline type1 operator()(type1 a, type2 b)  const            \
+            {                                                           \
+                return c99_func(a, b);                                  \
+            }                                                           \
+        };                                                              \
+                                                                        \
+        template <bool x>                                               \
+        struct call_##c99_func##_cpp :                                  \
+            call_##c99_func##_c99<                                      \
+                ::boost::hash_detail::c99_func##_detect::check::c99     \
+            > {};                                                       \
+                                                                        \
+        template <>                                                     \
+        struct call_##c99_func##_cpp<true> {                            \
+            typedef type1 float_type;                                   \
+                                                                        \
+            inline type1 operator()(type1 a, type2 b)  const            \
+            {                                                           \
+                return cpp_func(a, b);                                  \
+            }                                                           \
+        };                                                              \
+                                                                        \
+        template <>                                                     \
+        struct call_##cpp_func<type1> :                                 \
+            call_##c99_func##_cpp<                                      \
+                ::boost::hash_detail::c99_func##_detect::check::cpp     \
+            > {};                                                       \
+    }                                                                   \
+}
+
+#define BOOST_HASH_CALL_FLOAT_MACRO(cpp_func, c99_func, type1, type2)   \
+namespace boost {                                                       \
+    namespace hash_detail {                                             \
+                                                                        \
+        template <>                                                     \
+        struct call_##cpp_func<type1> {                                 \
+            typedef type1 float_type;                                   \
+            inline type1 operator()(type1 x, type2 y) const {           \
+                return c99_func(x, y);                                  \
+            }                                                           \
+        };                                                              \
+    }                                                                   \
+}
+
+#if defined(ldexpf)
+BOOST_HASH_CALL_FLOAT_MACRO(ldexp, ldexpf, float, int)
+#else
+BOOST_HASH_CALL_FLOAT_FUNC(ldexp, ldexpf, float, int)
+#endif
+
+#if defined(ldexpl)
+BOOST_HASH_CALL_FLOAT_MACRO(ldexp, ldexpl, long double, int)
+#else
+BOOST_HASH_CALL_FLOAT_FUNC(ldexp, ldexpl, long double, int)
+#endif
+
+#if defined(frexpf)
+BOOST_HASH_CALL_FLOAT_MACRO(frexp, frexpf, float, int*)
+#else
+BOOST_HASH_CALL_FLOAT_FUNC(frexp, frexpf, float, int*)
+#endif
+
+#if defined(frexpl)
+BOOST_HASH_CALL_FLOAT_MACRO(frexp, frexpl, long double, int*)
+#else
+BOOST_HASH_CALL_FLOAT_FUNC(frexp, frexpl, long double, int*)
+#endif
+
+#undef BOOST_HASH_CALL_FLOAT_MACRO
+#undef BOOST_HASH_CALL_FLOAT_FUNC
+
+
+namespace boost
+{
+    namespace hash_detail
+    {
+        template <typename Float1, typename Float2>
+        struct select_hash_type_impl {
+            typedef double type;
+        };
+
+        template <>
+        struct select_hash_type_impl<float, float> {
+            typedef float type;
+        };
+
+        template <>
+        struct select_hash_type_impl<long double, long double> {
+            typedef long double type;
         };
 
 
@@ -265,12 +226,10 @@ namespace boost {
         // otherwise use double (there's always support for double).
              
         template <typename Float>
-        struct select_hash_type :
-            boost::detail::if_true <
-                ::boost::hash_detail::has_float_functions<Float>::value
-            > ::BOOST_NESTED_TEMPLATE then <
-                Float, double
-            > {};
+        struct select_hash_type : select_hash_type_impl<
+                BOOST_DEDUCED_TYPENAME call_ldexp<Float>::float_type,
+                BOOST_DEDUCED_TYPENAME call_frexp<Float>::float_type
+            > {};            
     }
 }
 

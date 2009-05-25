@@ -23,6 +23,10 @@
 #pragma warning(disable:4127) // conditional expression is constant
 #endif
 
+char const* float_type(float*) { return "float"; }
+char const* float_type(double*) { return "double"; }
+char const* float_type(long double*) { return "long double"; }
+
 template <class T>
 void float_tests(char const* name, T* = 0)
 {
@@ -35,6 +39,15 @@ void float_tests(char const* name, T* = 0)
             <<boost::hash_detail::limits<int>::digits<<"\n"
         <<"boost::hash_detail::limits<std::size_t>::digits = "
             <<boost::hash_detail::limits<std::size_t>::digits<<"\n"
+        <<"\n"
+        <<"boost::hash_detail::call_ldexp<T>::float_type = "
+            <<float_type((BOOST_DEDUCED_TYPENAME boost::hash_detail::call_ldexp<T>::float_type*)0)<<"\n"
+        <<"boost::call_frexp<T>::float_type = "
+            <<float_type((BOOST_DEDUCED_TYPENAME boost::hash_detail::call_frexp<T>::float_type*)0)<<"\n"
+        <<"boost::hash_detail::call_frexp<T>::float_type = "
+            <<float_type((BOOST_DEDUCED_TYPENAME boost::hash_detail::call_frexp<T>::float_type*)0)<<"\n"
+        <<"boost::hash_detail::select_hash_type<T>::type = "
+            <<float_type((BOOST_DEDUCED_TYPENAME boost::hash_detail::select_hash_type<T>::type*)0)<<"\n"
         <<"\n"
         ;
 
@@ -112,6 +125,14 @@ void float_tests(char const* name, T* = 0)
     T half_max = max / 2;
     T quarter_max = max / 4;
     T three_quarter_max = max - quarter_max;
+    
+    // Check the limits::max is in range.
+    BOOST_TEST(max != half_max);
+    BOOST_TEST(max != quarter_max);
+    BOOST_TEST(max != three_quarter_max);
+    BOOST_TEST(half_max != quarter_max);
+    BOOST_TEST(half_max != three_quarter_max);
+    BOOST_TEST(quarter_max != three_quarter_max);
 
     BOOST_TEST(x1(max) == HASH_NAMESPACE::hash_value(max));
     BOOST_TEST(x1(half_max) == HASH_NAMESPACE::hash_value(half_max));
