@@ -5561,7 +5561,7 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>65</size>
+													<size>71</size>
 													<variant>2</variant>
 													<string>(:auto !!:)&#10;&#10;!!!Why doesn&apos;t boost::exception derive from std::exception?&#10;&#10;Despite that (:link </string>
 													<variant>1</variant>
@@ -5851,7 +5851,34 @@
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
-													<string>|&lt;&lt;:) bar_info(bar);@]&#10;&#10;which saves typing compared to this possible alternative:&#10;&#10;[@error e;&#10;e.add(foo_info(foo));&#10;e.add(bar_info(bar));&#10;throw e;@]&#10;&#10;and looks better than something like:&#10;&#10;[@throw error().add(foo_info(foo)).add(bar_info(bar));@]&#10;</string>
+													<string>|&lt;&lt;:) bar_info(bar);@]&#10;&#10;which saves typing compared to this possible alternative:&#10;&#10;[@error e;&#10;e.add(foo_info(foo));&#10;e.add(bar_info(bar));&#10;throw e;@]&#10;&#10;and looks better than something like:&#10;&#10;[@throw error().add(foo_info(foo)).add(bar_info(bar));@]&#10;&#10;!!!Why is operator&lt;&lt; allowed to throw?&#10;&#10;This question is referring to the following issue. Consider this throw statement example:&#10;&#10;[@throw file_open_error() (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-52</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>|&lt;&lt;:) file_name(fn);@]&#10;&#10;The intention here is to throw a file_open_error, however if (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-52</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string> mod=&quot;/&quot;:) fails to copy the std::string contained in the file_name </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-18</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string> wrapper, a std::bad_alloc could propagate instead. This behavior seems undesirable to some programmers.&#10;&#10;Bjarne Stroustrup, The C++ Programming Language, 3rd Edition, page 371:&#10;&#10;-&gt;&apos;&apos;&quot;Throwing an exception requires an object to throw.  A C++ implementation is required to have enough spare memory to be able to throw bad_alloc in case of memory exhaustion.  However, it is possible that throwing some other exception will cause memory exhaustion.&quot;&apos;&apos;&#10;&#10;So, an attempt to throw any exception may already result in propagating std::bad_alloc instead.&#10;</string>
 												</container>
 											</pair>
 											<pair>
