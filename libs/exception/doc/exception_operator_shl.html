@@ -30,8 +30,8 @@ boost
     }</pre>
 </div><h4>Requirements:</h4>
 <p>E must be boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, or a type that derives (indirectly) from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p>
-<h4>Effects:</h4>
-<p>Stores a copy of v into x. If x already contains data of type <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt;, that data is overwritten.</p>
+<h4>Postcondition:</h4>
+<p>A copy of v is stored into x. If x already contains data of type <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt;, that data is overwritten. Basic exception safety guarantee.</p>
 <h4>Returns:</h4>
 <p>x.</p>
 <div class="RenoIncludeDIV"><h4>Throws:</h4>
