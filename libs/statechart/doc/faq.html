@@ -345,7 +345,7 @@ int main()
   Machine().initiate();
   return 0;
 }</pre>
-  <p>The problem arises because <code>state_machine<>::~state_machine</code>
+  <p>The problem arises because <code>state_machine&lt;&gt;::~state_machine</code>
   inevitably destructs all remaining active states. At this time,
   <code>Machine::~Machine</code> has already been run, making it illegal to
   access any of the <code>Machine</code> members. This problem can be avoided
@@ -767,7 +767,7 @@ Inner::~Inner()
   <hr>
 
   <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
-  "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
+  "../../../doc/images/valid-html401.png" alt="Valid HTML 4.01 Transitional"
   height="31" width="88"></a></p>
 
   <p>Revised 05 January, 2008</p>
