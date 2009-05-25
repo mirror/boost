@@ -999,11 +999,17 @@ dynamic_bitset<Block, Allocator>::count() const
     using detail::dynamic_bitset_impl::access_by_blocks;
     using detail::dynamic_bitset_impl::value_to_type;
 
+#if BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 3) && (__GNUC_PATCHLEVEL__ == 3)
+    // NOTE: Explicit qualification of "bits_per_block"
+    //       breaks compilation on gcc 4.3.3
+    enum { no_padding = bits_per_block == CHAR_BIT * sizeof(Block) };
+#else
     // NOTE: Explicitly qualifying "bits_per_block" to workaround
     //       regressions of gcc 3.4.x
     enum { no_padding =
         dynamic_bitset<Block, Allocator>::bits_per_block
         == CHAR_BIT * sizeof(Block) };
+#endif
 
     enum { enough_table_width = table_width >= CHAR_BIT };
 
