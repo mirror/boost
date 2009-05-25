@@ -12,6 +12,7 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/call_traits.hpp>
 #include <boost/progress.hpp>
 #include <boost/bind.hpp>
 #include <deque>
@@ -32,7 +33,7 @@ public:
 
     explicit bounded_buffer(size_type capacity) : m_unread(0), m_container(capacity) {}
 
-    void push_front(const value_type& item) {
+    void push_front(call_traits<value_type>::param_type item) {
         boost::mutex::scoped_lock lock(m_mutex);
         m_not_full.wait(lock, boost::bind(&bounded_buffer<value_type>::is_not_full, this));
         m_container.push_front(item);
