@@ -105,6 +105,8 @@ namespace boost
             : base(f, l, n, hf, eql, a)
         {
         }
+        
+        ~unordered_set() {}
 
 #if defined(BOOST_HAS_RVALUE_REFS)
         unordered_set(unordered_set&& other)
@@ -527,6 +529,8 @@ namespace boost
           : base(f, l, n, hf, eql, a)
         {
         }
+
+        ~unordered_multiset() {}
 
 #if defined(BOOST_HAS_RVALUE_REFS)
         unordered_multiset(unordered_multiset&& other)
