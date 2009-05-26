@@ -104,10 +104,10 @@ See <a href="../example/bimap.cpp">source code</a>.
 <p>
 This example shows how to construct a bidirectional map with
 <code>multi_index_container</code>. By a <i>bidirectional map</i> we mean
-a container of elements of <code>std::pair&lt;const FromType,const ToType></code>
-such that no two elements exists with the same <code>first</code>
-<i>or</i> <code>second</code> value (<code>std::map</code> only
-guarantees uniqueness of the first member). Fast lookup is provided
+a container of <code>(const FromType,const ToType)</code> pairs
+such that no two elements exists with the same first
+<i>or</i> second component (<code>std::map</code> only
+guarantees uniqueness of the first component). Fast lookup is provided
 for both keys. The program features a tiny Spanish-English
 dictionary with online query of words in both languages.
 </p>
@@ -450,9 +450,9 @@ Tests
 
 <br>
 
-<p>Revised July 16th 2007</p>
+<p>Revised May 26th 2009</p>
 
-<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2009 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

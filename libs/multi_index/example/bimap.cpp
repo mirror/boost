@@ -1,6 +1,6 @@
 /* Boost.MultiIndex example of a bidirectional map.
  *
- * Copyright 2003-2008 Joaquin M Lopez Munoz.
+ * Copyright 2003-2009 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -18,7 +18,6 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <iostream>
 #include <string>
-#include <utility>
 
 using boost::multi_index_container;
 using namespace boost::multi_index;
@@ -35,7 +34,15 @@ struct to{};
 template<typename FromType,typename ToType>
 struct bidirectional_map
 {
-  typedef std::pair<FromType,ToType> value_type;
+  struct value_type
+  {
+    value_type(const FromType& first_,const ToType& second_):
+      first(first_),second(second_)
+    {}
+
+    FromType first;
+    ToType   second;
+  };
 
 #if defined(BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS) ||\
     defined(BOOST_MSVC)&&(BOOST_MSVC<1300) ||\
