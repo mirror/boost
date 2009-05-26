@@ -29,7 +29,7 @@
 #endif
 
 using namespace boost::lambda;
-using namespace std;
+namespace bl = boost::lambda;
 
 template<class T>
 bool check_tuple(int n, const T& t) 
@@ -212,17 +212,17 @@ int count_deletes::count = 0;
 void test_news_and_deletes ()
 {
   int* i[10];
-  for_each(i, i+10, _1 = bind(new_ptr<int>(), 2));
+  std::for_each(i, i+10, _1 = bind(new_ptr<int>(), 2));
   int count_errors = 0;
 
-  for_each(i, i+10, (*_1 == 2) || ++var(count_errors));
+  std::for_each(i, i+10, (*_1 == 2) || ++var(count_errors));
   BOOST_CHECK(count_errors == 0);
 
 
   count_deletes* ct[10];
-  for_each(ct, ct+10, _1 = bind(new_ptr<count_deletes>()));
+  std::for_each(ct, ct+10, _1 = bind(new_ptr<count_deletes>()));
   count_deletes::count = 0;
-  for_each(ct, ct+10, bind(delete_ptr(), _1));
+  std::for_each(ct, ct+10, bind(delete_ptr(), _1));
   BOOST_CHECK(count_deletes::count == 10);
    
 }
@@ -240,16 +240,16 @@ void test_array_new_and_delete()
 
 void delayed_construction()
 {
-  vector<int> x(3);
-  vector<int> y(3);
+  std::vector<int> x(3);
+  std::vector<int> y(3);
 
-  fill(x.begin(), x.end(), 0);
-  fill(y.begin(), y.end(), 1);
+  std::fill(x.begin(), x.end(), 0);
+  std::fill(y.begin(), y.end(), 1);
   
-  vector<pair<int, int> > v;
+  std::vector<std::pair<int, int> > v;
 
-  transform(x.begin(), x.end(), y.begin(), back_inserter(v),
-            bind(constructor<pair<int, int> >(), _1, _2) );
+  std::transform(x.begin(), x.end(), y.begin(), std::back_inserter(v),
+            bl::bind(constructor<std::pair<int, int> >(), _1, _2) );
 }
 
 int test_main(int, char *[]) {

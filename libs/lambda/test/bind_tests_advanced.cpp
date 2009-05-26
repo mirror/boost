@@ -27,7 +27,8 @@
 #include <algorithm>
 
 
-using namespace boost::lambda; 
+using namespace boost::lambda;
+namespace bl = boost::lambda;
 
 int sum_0() { return 0; }
 int sum_1(int a) { return a; }
@@ -91,7 +92,7 @@ int call_with_100(const F& f) {
   // This would result in;
   // bind(_1 + 1, _1)(make_const(100)) , which would be a compile time error
 
-  return bind(unlambda(f), _1)(make_const(100));
+  return bl::bind(unlambda(f), _1)(make_const(100));
 
   // for other functors than lambda functors, unlambda has no effect
   // (except for making them const)
@@ -116,11 +117,11 @@ void test_unlambda() {
 
   BOOST_CHECK(call_with_101(_1 + 1) == 102);
 
-  BOOST_CHECK(call_with_100(bind(std_functor(std::bind1st(std::plus<int>(), 1)), _1)) == 101);
+  BOOST_CHECK(call_with_100(bl::bind(std_functor(std::bind1st(std::plus<int>(), 1)), _1)) == 101);
 
   // std_functor insturcts LL that the functor defines a result_type typedef
   // rather than a sig template.
-  bind(std_functor(std::plus<int>()), _1, _2)(i, i);
+  bl::bind(std_functor(std::plus<int>()), _1, _2)(i, i);
 }
 
 
