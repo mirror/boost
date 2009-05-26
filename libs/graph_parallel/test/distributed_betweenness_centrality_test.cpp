@@ -96,7 +96,9 @@ using boost::graph::distributed::mpi_process_group;
 typedef int weight_type;
 
 struct WeightedEdge {
-  WeightedEdge(weight_type weight = 0) : weight(weight) { }
+  WeightedEdge(weight_type weight = 1) : weight(weight) { }
+
+  void operator=(weight_type x) { weight = x; }
   
   weight_type weight;
 
@@ -128,7 +130,6 @@ int test_main(int argc, char* argv[])
                          property<edge_weight_t, int> > seqGraph;
 #endif
 
-
   typedef sorted_erdos_renyi_iterator<minstd_rand, Graph> ERIter;
 
   typedef graph_traits<Graph>::vertex_descriptor vertex_descriptor;
@@ -151,7 +152,7 @@ int test_main(int argc, char* argv[])
 
   gen.seed(1);  // Re-seed PRNG so we get the same graph
 
-  seqGraph sg(ERIter(gen, n, prob), ERIter(), 
+  seqGraph sg(edges_are_sorted, ERIter(gen, n, prob), ERIter(), 
               make_generator_iterator(gen, uniform_int<int>(1, C)),
               n);
 
