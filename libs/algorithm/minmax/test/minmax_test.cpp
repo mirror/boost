@@ -54,23 +54,23 @@ void test(BOOST_EXPLICIT_TEMPLATE_TYPE(Value))
   less_count<Value> lc(counter);
 
   // Test functionality
-  tuple<Value const&, Value const&> result1 = minmax(zero, one);
+  tuple<Value const&, Value const&> result1 = boost::minmax(zero, one);
   BOOST_CHECK_EQUAL( get<0>(result1), zero );
   BOOST_CHECK_EQUAL( get<1>(result1), one );
 
-  tuple<Value const&, Value const&> result2 = minmax(one, zero);
+  tuple<Value const&, Value const&> result2 = boost::minmax(one, zero);
   BOOST_CHECK_EQUAL( get<0>(result2), zero );
   BOOST_CHECK_EQUAL( get<1>(result2), one );
   
   // Test functionality and number of comparisons
   lc.reset();
-  tuple<Value const&, Value const&> result3 = minmax(zero, one, lc );
+  tuple<Value const&, Value const&> result3 = boost::minmax(zero, one, lc );
   BOOST_CHECK_EQUAL( get<0>(result3), zero );
   BOOST_CHECK_EQUAL( get<1>(result3), one );
   BOOST_CHECK_EQUAL( counter, 1 );
 
   lc.reset();
-  tuple<Value const&, Value const&> result4 = minmax(one, zero, lc );
+  tuple<Value const&, Value const&> result4 = boost::minmax(one, zero, lc );
   BOOST_CHECK_EQUAL( get<0>(result4), zero );
   BOOST_CHECK_EQUAL( get<1>(result4), one );
   BOOST_CHECK_EQUAL( counter, 1);
