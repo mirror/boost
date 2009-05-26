@@ -20,7 +20,6 @@
 #include <boost/graph/distributed/concepts.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/config.hpp>
-#include <boost/ref.hpp>
 
 // For additive_reducer
 #include <boost/graph/distributed/distributed_graph_utility.hpp>
@@ -1308,7 +1307,7 @@ namespace graph { namespace parallel { namespace detail {
       make_iterator_property_map(distance.begin(), vertex_index),
       make_iterator_property_map(dependency.begin(), vertex_index),
       make_iterator_property_map(path_count.begin(), vertex_index),
-      vertex_index, sources, delta,
+      vertex_index, sources.ref, delta,
       weight_map);
   }
   
@@ -1345,7 +1344,7 @@ namespace graph { namespace parallel { namespace detail {
       make_iterator_property_map(distance.begin(), vertex_index),
       make_iterator_property_map(dependency.begin(), vertex_index),
       make_iterator_property_map(path_count.begin(), vertex_index),
-      vertex_index, sources, delta); 
+      vertex_index, sources.ref, delta); 
   }
 
   template<typename WeightMap>
@@ -1389,7 +1388,7 @@ brandes_betweenness_centrality(const Graph& g,
 {
   typedef bgl_named_params<Param,Tag,Rest> named_params;
 
-  typedef queue<int> queue_t;
+  typedef queue<typename graph_traits<Graph>::vertex_descriptor> queue_t;
   queue_t q;
 
   typedef typename property_value<named_params, edge_weight_t>::type ew;
@@ -1401,7 +1400,7 @@ brandes_betweenness_centrality(const Graph& g,
                  dummy_property_map()),
     choose_const_pmap(get_param(params, vertex_index), g, vertex_index),
     choose_param(get_param(params, buffer_param_t()),
-                 boost::ref(q)),
+                 detail::wrap_ref<queue_t>(q)),
     choose_param(get_param(params, lookahead_t()), 0),
     get_param(params, edge_weight));
 }
@@ -1411,11 +1410,11 @@ void
 brandes_betweenness_centrality(const Graph& g, CentralityMap centrality
                                BOOST_GRAPH_ENABLE_IF_MODELS_PARM(Graph,distributed_graph_tag))
 {
-  typedef queue<int> queue_t;
+  typedef queue<typename graph_traits<Graph>::vertex_descriptor> queue_t;
   queue_t q;
 
   boost::graph::parallel::detail::brandes_betweenness_centrality_dispatch2(
-    g, centrality, dummy_property_map(), get(vertex_index, g), boost::ref(q), 0);
+    g, centrality, dummy_property_map(), get(vertex_index, g), detail::wrap_ref<queue_t>(q), 0);
 }
 
 template<typename Graph, typename CentralityMap, typename EdgeCentralityMap>
@@ -1428,7 +1427,7 @@ brandes_betweenness_centrality(const Graph& g, CentralityMap centrality,
   queue_t q;
 
   boost::graph::parallel::detail::brandes_betweenness_centrality_dispatch2(
-    g, centrality, edge_centrality_map, get(vertex_index, g), boost::ref(q), 0);
+    g, centrality, edge_centrality_map, get(vertex_index, g), detail::wrap_ref<queue_t>(q), 0);
 }
   
 template<typename ProcessGroup, typename Graph, typename CentralityMap, 
@@ -1525,7 +1524,7 @@ namespace detail { namespace graph {
       make_iterator_property_map(distance.begin(), vertex_index),
       make_iterator_property_map(dependency.begin(), vertex_index),
       make_iterator_property_map(path_count.begin(), vertex_index),
-      vertex_index, weight_map, sources);
+      vertex_index, weight_map, sources.ref);
   }
   
 
@@ -1562,7 +1561,7 @@ namespace detail { namespace graph {
       make_iterator_property_map(distance.begin(), vertex_index),
       make_iterator_property_map(dependency.begin(), vertex_index),
       make_iterator_property_map(path_count.begin(), vertex_index),
-      vertex_index, sources);
+      vertex_index, sources.ref);
   }
 
   template<typename WeightMap>
@@ -1616,7 +1615,7 @@ non_distributed_brandes_betweenness_centrality(const ProcessGroup& pg, const Gra
                  dummy_property_map()),
     choose_const_pmap(get_param(params, vertex_index), g, vertex_index),
     choose_param(get_param(params, buffer_param_t()),
-                 boost::ref(q)),
+                 detail::wrap_ref<queue_t>(q)),
     get_param(params, edge_weight));
 }
 
@@ -1630,7 +1629,7 @@ non_distributed_brandes_betweenness_centrality(const ProcessGroup& pg, const Gra
 
   detail::graph::non_distributed_brandes_betweenness_centrality_dispatch2(
     pg, g, centrality, dummy_property_map(), get(vertex_index, g), 
-    boost::ref(q));
+    detail::wrap_ref<queue_t>(q));
 }
 
 template<typename ProcessGroup, typename Graph, typename CentralityMap, 
