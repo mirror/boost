@@ -69,6 +69,10 @@ class named_subexpressions_base
 {
 public:
    virtual int get_id(const charT* i, const charT* j) = 0;
+#ifdef __GNUC__
+   // warning supression:
+   virtual ~named_subexpressions_base(){}
+#endif
 };
 
 template <class charT>

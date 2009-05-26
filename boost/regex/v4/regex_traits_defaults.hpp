@@ -339,6 +339,21 @@ inline const charT* get_escape_R_string()
 #endif
 }
 
+template <>
+inline const char* get_escape_R_string<char>()
+{
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable:4309)
+#endif
+   static const char e2[] = { '(', '?', '>', '\x0D', '\x0A', '?', 
+      '|', '[', '\x0A', '\x0B', '\x0C', '\x85', ']', ')', '\0' };
+   return e2;
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
+}
+
 } // re_detail
 } // boost
 
