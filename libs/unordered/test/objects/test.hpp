@@ -218,7 +218,7 @@ namespace test
             new(p) T(t);
         }
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
         template<class... Args> void construct(pointer p, Args&&... args) {
             detail::tracker.track_construct((void*) p, sizeof(T), tag_);
             new(p) T(std::forward<Args>(args)...);

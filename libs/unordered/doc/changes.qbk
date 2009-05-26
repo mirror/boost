@@ -69,15 +69,5 @@ First official release.
 * Some other minor internal changes to the implementation, tests and
   documentation.
 * Avoid an unnecessary copy in `operator[]`.
-* [@https://svn.boost.org/trac/boost/ticket/2975 Ticket 2975]: Fix length of
-  prime number list.
-
-[h2 Boost 1.40.0]
-
-* [@https://svn.boost.org/trac/boost/ticket/2975 Ticket 2975]:
-  Store the prime list as a preprocessor sequence - so that it will always get
-  the length right if it changes again in the future.
-* [@https://svn.boost.org/trac/boost/ticket/1978 Ticket 1978]:
-  Implement `emplace` for all compilers.
 
 [endsect]

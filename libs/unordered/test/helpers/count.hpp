@@ -6,8 +6,6 @@
 #if !defined(BOOST_UNORDERED_TEST_HELPERS_COUNT_HEAD)
 #define BOOST_UNORDERED_TEST_HELPERS_COUNT_HEAD
 
-#include <iostream>
-
 namespace test {
     struct object_count {
         int instances;
@@ -37,11 +35,6 @@ namespace test {
 
         bool operator!=(object_count const& x) const {
             return !(*this == x);
-        }
-        
-        friend std::ostream& operator<<(std::ostream& out, object_count const& c) {
-            out<<"[instances: "<<c.instances<<", constructions: "<<c.constructions<<"]";
-            return out;
         }
     };
 

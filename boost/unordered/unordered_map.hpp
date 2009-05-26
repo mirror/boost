@@ -21,10 +21,6 @@
 #include <boost/unordered/detail/move.hpp>
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
-#include <initializer_list>
-#endif
-
 #if defined(BOOST_MSVC)
 #pragma warning(push)
 #if BOOST_MSVC >= 1400
@@ -139,7 +135,7 @@ namespace boost
 #endif
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_INITIALIZER_LISTS)
         unordered_map(std::initializer_list<value_type> list,
                 size_type n = boost::unordered_detail::default_initial_bucket_count,
                 const hasher &hf = hasher(),
@@ -223,74 +219,30 @@ namespace boost
 
         // modifiers
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
         template <class... Args>
         std::pair<iterator, bool> emplace(Args&&... args)
         {
             return boost::unordered_detail::pair_cast<iterator, bool>(
-                base.emplace(std::forward<Args>(args)...));
+                base.insert(std::forward<Args>(args)...));
         }
 
         template <class... Args>
         iterator emplace_hint(const_iterator hint, Args&&... args)
         {
-            return iterator(base.emplace_hint(get(hint), std::forward<Args>(args)...));
+            return iterator(base.insert_hint(get(hint), std::forward<Args>(args)...));
         }
-#else
-
-        std::pair<iterator, bool> emplace(value_type const& v = value_type())
-        {
-            return boost::unordered_detail::pair_cast<iterator, bool>(
-                base.emplace(v));
-        }
-
-        iterator emplace_hint(const_iterator hint, value_type const& v = value_type())
-        {
-            return iterator(base.emplace_hint(get(hint), v));
-        }
-
-#define BOOST_UNORDERED_EMPLACE(z, n, _)                                        \
-            template <                                                          \
-                BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                             \
-            >                                                                   \
-            std::pair<iterator, bool> emplace(                                  \
-                BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                           \
-            )                                                                   \
-            {                                                                   \
-                return boost::unordered_detail::pair_cast<iterator, bool>(      \
-                    base.emplace(                                               \
-                        BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
-                    ));                                                         \
-            }                                                                   \
-                                                                                \
-            template <                                                          \
-                BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                             \
-            >                                                                   \
-            iterator emplace_hint(const_iterator hint,                          \
-                BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                           \
-            )                                                                   \
-            {                                                                   \
-                return iterator(base.emplace_hint(get(hint),                    \
-                        BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
-                ));                                                             \
-            }
-
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
-            BOOST_UNORDERED_EMPLACE, _)
-
-#undef BOOST_UNORDERED_EMPLACE
-
 #endif
 
         std::pair<iterator, bool> insert(const value_type& obj)
         {
             return boost::unordered_detail::pair_cast<iterator, bool>(
-                    base.emplace(obj));
+                    base.insert(obj));
         }
 
         iterator insert(const_iterator hint, const value_type& obj)
         {
-            return iterator(base.emplace_hint(get(hint), obj));
+            return iterator(base.insert_hint(get(hint), obj));
         }
 
         template <class InputIterator>
@@ -589,7 +541,7 @@ namespace boost
 #endif
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_INITIALIZER_LISTS)
         unordered_multimap(std::initializer_list<value_type> list,
                 size_type n = boost::unordered_detail::default_initial_bucket_count,
                 const hasher &hf = hasher(),
@@ -674,72 +626,28 @@ namespace boost
 
         // modifiers
 
-#if defined(BOOST_UNORDERED_STD_FORWARD)
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
         template <class... Args>
         iterator emplace(Args&&... args)
         {
-            return iterator(base.emplace(std::forward<Args>(args)...));
+            return iterator(base.insert(std::forward<Args>(args)...));
         }
 
         template <class... Args>
         iterator emplace_hint(const_iterator hint, Args&&... args)
         {
-            return iterator(base.emplace_hint(get(hint), std::forward<Args>(args)...));
+            return iterator(base.insert_hint(get(hint), std::forward<Args>(args)...));
         }
-#else
-
-        iterator emplace(value_type const& v = value_type())
-        {
-            return iterator(base.emplace(v));
-        }
-        
-        iterator emplace_hint(const_iterator hint, value_type const& v = value_type())
-        {
-            return iterator(base.emplace_hint(get(hint), v));
-        }
-
-
-#define BOOST_UNORDERED_EMPLACE(z, n, _)                                        \
-            template <                                                          \
-                BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                             \
-            >                                                                   \
-            iterator emplace(                                                   \
-                BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                           \
-            )                                                                   \
-            {                                                                   \
-                return iterator(                                                \
-                    base.emplace(                                               \
-                        BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
-                    ));                                                         \
-            }                                                                   \
-                                                                                \
-            template <                                                          \
-                BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                             \
-            >                                                                   \
-            iterator emplace_hint(const_iterator hint,                          \
-                BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                           \
-            )                                                                   \
-            {                                                                   \
-                return iterator(base.emplace_hint(get(hint),                    \
-                        BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
-                ));                                                             \
-            }
-
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
-            BOOST_UNORDERED_EMPLACE, _)
-
-#undef BOOST_UNORDERED_EMPLACE
-
 #endif
 
         iterator insert(const value_type& obj)
         {
-            return iterator(base.emplace(obj));
+            return iterator(base.insert(obj));
         }
 
         iterator insert(const_iterator hint, const value_type& obj)
         {
-            return iterator(base.emplace_hint(get(hint), obj));
+            return iterator(base.insert_hint(get(hint), obj));
         }
 
         template <class InputIterator>
