@@ -16,7 +16,7 @@ set_target_properties(
 if (BUILD_TESTING)
   add_test(breadth_first_search
     ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${MPIEXEC_MAX_NUMPROCS} ${MPIEXEC_PREFLAGS}
-    "${EXECUTABLE_OUTPUT_PATH}/\${CTEST_CONFIGURATION_TYPE}/breadth_first_search"
+    "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/tests/${PROJECT_NAME}/breadth_first_search"
     ${MPIEXEC_POSTFLAGS} 
     "${CMAKE_CURRENT_SOURCE_DIR}/weighted_graph.gr"
     "${CMAKE_BINARY_DIR}/test/weighted_graph-bfs.gr")
@@ -34,7 +34,7 @@ set_target_properties(
 if (BUILD_TESTING)
   add_test(dijkstra_shortest_paths
     ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${MPIEXEC_MAX_NUMPROCS} ${MPIEXEC_PREFLAGS}
-    "${EXECUTABLE_OUTPUT_PATH}/\${CTEST_CONFIGURATION_TYPE}/dijkstra_shortest_paths"
+    "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/tests/${PROJECT_NAME}/dijkstra_shortest_paths"
     ${MPIEXEC_POSTFLAGS} 
     "${CMAKE_CURRENT_SOURCE_DIR}/weighted_graph.gr"
     "${CMAKE_BINARY_DIR}/test/weighted_graph-dijkstra.gr")

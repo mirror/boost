@@ -4,12 +4,18 @@
 # License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-# Add a library target to the build system
+FIND_PACKAGE(MPI)
+
+if (NOT MPI_FOUND)
+ message(STATUS "MPI Not Found")
+endif (NOT MPI_FOUND)
+
+
 boost_library_project(
   graph_parallel
   SRCDIRS  src
   TESTDIRS  test
-#  HEADERS graph graph/parallel
+  # HEADERS graph graph/parallel
   # DOCDIRS doc
   DESCRIPTION  "Parallel support using MPI for Boost.Graph."
   AUTHORS  "Douglas Gregor <doug.gregor -at- gmail.com>"

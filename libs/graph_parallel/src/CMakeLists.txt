@@ -11,9 +11,8 @@ if (MSVC)
   add_definitions(-GR-)
 endif (MSVC)
 
-FIND_PACKAGE(MPI)
 if (MPI_FOUND)
-  message(STATUS "MPI found")
+
   # Add Boost.MPI link and add parallel source files
   include_directories(${MPI_INCLUDE_PATH})
 
@@ -23,8 +22,5 @@ if (MPI_FOUND)
     DEPENDS boost_mpi
     SHARED_COMPILE_FLAGS "-DBOOST_GRAPH_DYN_LINK=1"
     )
-endif (MPI_FOUND)
 
-if (NOT MPI_FOUND)
- message(STATUS "MPI Not Found")
-endif (NOT MPI_FOUND)
+endif (MPI_FOUND)
