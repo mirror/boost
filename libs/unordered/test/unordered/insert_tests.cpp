@@ -43,13 +43,13 @@ void unique_insert_tests1(X*, test::random_generator generator = test::default_g
         std::pair<iterator, bool> r1 = x.insert(*it);
         std::pair<BOOST_DEDUCED_TYPENAME ordered::iterator, bool> r2 = tracker.insert(*it);
 
-        BOOST_CHECK(r1.second == r2.second);
-        BOOST_CHECK(*r1.first == *r2.first);
+        BOOST_TEST(r1.second == r2.second);
+        BOOST_TEST(*r1.first == *r2.first);
 
         tracker.compare_key(x, *it);
 
         if(x.size() < b * old_bucket_count)
-            BOOST_CHECK(x.bucket_count() == old_bucket_count);
+            BOOST_TEST(x.bucket_count() == old_bucket_count);
     }
 
     test::check_equivalent_keys(x);
@@ -73,12 +73,12 @@ void equivalent_insert_tests1(X*, test::random_generator generator = test::defau
         BOOST_DEDUCED_TYPENAME X::iterator r1 = x.insert(*it);
         BOOST_DEDUCED_TYPENAME test::ordered<X>::iterator r2 = tracker.insert(*it);
 
-        BOOST_CHECK(*r1 == *r2);
+        BOOST_TEST(*r1 == *r2);
 
         tracker.compare_key(x, *it);
 
         if(x.size() < b * old_bucket_count)
-            BOOST_CHECK(x.bucket_count() == old_bucket_count);
+            BOOST_TEST(x.bucket_count() == old_bucket_count);
     }
 
     test::check_equivalent_keys(x);
@@ -107,11 +107,11 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
 
             iterator r1 = x.insert(x.begin(), *it);
             tracker_iterator r2 = tracker.insert(tracker.begin(), *it);
-            BOOST_CHECK(*r1 == *r2);
+            BOOST_TEST(*r1 == *r2);
             tracker.compare_key(x, *it);
 
             if(x.size() < b * old_bucket_count)
-                BOOST_CHECK(x.bucket_count() == old_bucket_count);
+                BOOST_TEST(x.bucket_count() == old_bucket_count);
         }
 
         test::check_equivalent_keys(x);
@@ -133,11 +133,11 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
 
             const_iterator r1 = x.insert(x_const.end(), *it);
             tracker_iterator r2 = tracker.insert(tracker.end(), *it);
-            BOOST_CHECK(*r1 == *r2);
+            BOOST_TEST(*r1 == *r2);
             tracker.compare_key(x, *it);
 
             if(x.size() < b * old_bucket_count)
-                BOOST_CHECK(x.bucket_count() == old_bucket_count);
+                BOOST_TEST(x.bucket_count() == old_bucket_count);
         }
 
         test::check_equivalent_keys(x);
@@ -159,11 +159,11 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
 
             pos = x.insert(pos, *it);
             tracker_iterator r2 = tracker.insert(tracker.begin(), *it);
-            BOOST_CHECK(*pos == *r2);
+            BOOST_TEST(*pos == *r2);
             tracker.compare_key(x, *it);
 
             if(x.size() < b * old_bucket_count)
-                BOOST_CHECK(x.bucket_count() == old_bucket_count);
+                BOOST_TEST(x.bucket_count() == old_bucket_count);
         }
 
         test::check_equivalent_keys(x);
@@ -187,7 +187,7 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
             tracker.compare_key(x, *it);
 
             if(x.size() < b * old_bucket_count)
-                BOOST_CHECK(x.bucket_count() == old_bucket_count);
+                BOOST_TEST(x.bucket_count() == old_bucket_count);
         }
 
         test::check_equivalent_keys(x);
@@ -243,13 +243,13 @@ void unique_emplace_tests1(X*, test::random_generator generator = test::default_
         std::pair<iterator, bool> r1 = x.emplace(*it);
         std::pair<BOOST_DEDUCED_TYPENAME ordered::iterator, bool> r2 = tracker.insert(*it);
 
-        BOOST_CHECK(r1.second == r2.second);
-        BOOST_CHECK(*r1.first == *r2.first);
+        BOOST_TEST(r1.second == r2.second);
+        BOOST_TEST(*r1.first == *r2.first);
 
         tracker.compare_key(x, *it);
 
         if(x.size() < b * old_bucket_count)
-            BOOST_CHECK(x.bucket_count() == old_bucket_count);
+            BOOST_TEST(x.bucket_count() == old_bucket_count);
     }
 
     test::check_equivalent_keys(x);
@@ -273,12 +273,12 @@ void equivalent_emplace_tests1(X*, test::random_generator generator = test::defa
         BOOST_DEDUCED_TYPENAME X::iterator r1 = x.emplace(*it);
         BOOST_DEDUCED_TYPENAME test::ordered<X>::iterator r2 = tracker.insert(*it);
 
-        BOOST_CHECK(*r1 == *r2);
+        BOOST_TEST(*r1 == *r2);
 
         tracker.compare_key(x, *it);
 
         if(x.size() < b * old_bucket_count)
-            BOOST_CHECK(x.bucket_count() == old_bucket_count);
+            BOOST_TEST(x.bucket_count() == old_bucket_count);
     }
 
     test::check_equivalent_keys(x);
@@ -307,7 +307,7 @@ void map_tests(X*, test::random_generator generator = test::default_generator)
         tracker.compare_key(x, *it);
 
         if(x.size() < b * old_bucket_count)
-            BOOST_CHECK(x.bucket_count() == old_bucket_count);
+            BOOST_TEST(x.bucket_count() == old_bucket_count);
     }
 
     test::check_equivalent_keys(x);   

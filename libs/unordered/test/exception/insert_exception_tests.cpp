@@ -128,10 +128,10 @@ struct insert_test_rehash1 : public insert_test_base<T>
         size_type bucket_count = x.bucket_count();
         size_type initial_elements = static_cast<size_type>(
             ceil(bucket_count * (double) x.max_load_factor()) - 1);
-        BOOST_REQUIRE(initial_elements < this->values.size());
+        BOOST_TEST(initial_elements < this->values.size());
         x.insert(this->values.begin(),
                 boost::next(this->values.begin(), initial_elements));
-        BOOST_REQUIRE(bucket_count == x.bucket_count());
+        BOOST_TEST(bucket_count == x.bucket_count());
         return x;
     }
 
@@ -150,7 +150,7 @@ struct insert_test_rehash1 : public insert_test_base<T>
 
         // This isn't actually a failure, but it means the test isn't doing its
         // job.
-        BOOST_REQUIRE(x.bucket_count() != bucket_count);
+        BOOST_TEST(x.bucket_count() != bucket_count);
     }
 };
 
@@ -173,7 +173,7 @@ struct insert_test_rehash2 : public insert_test_rehash1<T>
 
         // This isn't actually a failure, but it means the test isn't doing its
         // job.
-        BOOST_REQUIRE(x.bucket_count() != bucket_count);
+        BOOST_TEST(x.bucket_count() != bucket_count);
     }
 };
 
@@ -197,10 +197,10 @@ struct insert_test_rehash3 : public insert_test_base<T>
 
         size_type initial_elements = rehash_bucket_count - 5;
 
-        BOOST_REQUIRE(initial_elements < this->values.size());
+        BOOST_TEST(initial_elements < this->values.size());
         x.insert(this->values.begin(),
                 boost::next(this->values.begin(), initial_elements));
-        BOOST_REQUIRE(original_bucket_count == x.bucket_count());
+        BOOST_TEST(original_bucket_count == x.bucket_count());
         return x;
     }
 
@@ -212,12 +212,12 @@ struct insert_test_rehash3 : public insert_test_base<T>
 
         // This isn't actually a failure, but it means the test isn't doing its
         // job.
-        BOOST_REQUIRE(x.bucket_count() != bucket_count);
+        BOOST_TEST(x.bucket_count() != bucket_count);
     }
 
     void check(T const& x) const {
         if(x.size() < rehash_bucket_count) {
-            //BOOST_CHECK(x.bucket_count() == original_bucket_count);
+            //BOOST_TEST(x.bucket_count() == original_bucket_count);
         }
         test::check_equivalent_keys(x);
     }
