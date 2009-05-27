@@ -54,8 +54,8 @@ should read our `architectural overview`_.
 
   - `R-MAT generator`_
   - `Sorted R-MAT generator`_
-  - `Unique R-MAT generator`_
   - `Sorted unique R-MAT generator`_
+  - `Unique R-MAT generator`_
   - `Scalable R-MAT generator`_
   - `Erdos-Renyi generator`_
   - `Sorted Erdos-Renyi generator`_
@@ -93,6 +93,7 @@ should read our `architectural overview`_.
     - `Fruchterman Reingold force-directed layout`_
     - `s-t connectivity`_
     - `Betweenness centrality`_
+    - `Non-distributed betweenness centrality`_
 
 ----------------------------------------------------------------------------
 
@@ -100,7 +101,7 @@ Copyright (C) 2005-2009 The Trustees of Indiana University.
 
 Authors: Nick Edmonds, Douglas Gregor, and Andrew Lumsdaine
 
-.. |Logo| image:: pbgl-logo.png
+.. |Logo| image:: http://www.osl.iu.edu/research/pbgl/images/pbgl-logo.png
             :align: middle
             :alt: Parallel BGL
             :target: http://www.osl.iu.edu/research/pbgl
@@ -123,8 +124,8 @@ Authors: Nick Edmonds, Douglas Gregor, and Andrew Lumsdaine
 .. _Distributed property map: distributed_property_map.html
 .. _R-MAT generator: rmat_generator.html
 .. _Sorted R-MAT generator: sorted_rmat_generator.html
+.. _Sorted Unique R-MAT generator: sorted_unique_rmat_generator.html
 .. _Unique R-MAT generator: unique_rmat_generator.html
-.. _Sorted unique R-MAT generator: sorted_unique_rmat_generator.html
 .. _Scalable R-MAT generator: scalable_rmat_generator.html
 .. _Erdos-Renyi generator: http://www.boost.org/libs/graph/doc/erdos_renyi_generator.html
 .. _Sorted Erdos-Renyi generator: http://www.boost.org/libs/graph/doc/sorted_erdos_renyi_gen.html
@@ -156,3 +157,4 @@ Authors: Nick Edmonds, Douglas Gregor, and Andrew Lumsdaine
 .. _Fruchterman Reingold force-directed layout: fruchterman_reingold.html
 .. _s-t connectivity: st_connected.html
 .. _Betweenness centrality: betweenness_centrality.html
+.. _Non-distributed betweenness centrality: non_distributed_betweenness_centrality.html
