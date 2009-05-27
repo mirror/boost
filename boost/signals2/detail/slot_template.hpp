@@ -66,7 +66,7 @@ namespace boost
       template<typename Func, BOOST_PP_ENUM_PARAMS(n, typename ArgType)> \
       BOOST_SIGNALS2_SLOT_CLASS_NAME(BOOST_SIGNALS2_NUM_ARGS)(const Func &func,  BOOST_PP_ENUM(n, BOOST_SIGNALS2_SLOT_BINDING_ARG_DECL, ~)) \
       { \
-        init_slot_function(bind(func, BOOST_PP_ENUM_PARAMS(n, arg))); \
+        init_slot_function(boost::bind(func, BOOST_PP_ENUM_PARAMS(n, arg))); \
       }
       BOOST_PP_REPEAT_FROM_TO(1, BOOST_SIGNALS2_SLOT_MAX_BINDING_ARGS, BOOST_SIGNALS2_SLOT_N_BINDING_CONSTRUCTOR, ~)
 #undef BOOST_SIGNALS2_SLOT_N_BINDING_CONSTRUCTOR
