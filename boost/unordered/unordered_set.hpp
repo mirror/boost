@@ -39,6 +39,9 @@ namespace boost
     template <class Value, class Hash, class Pred, class Alloc>
     class unordered_set
     {
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+    public:
+#endif
         typedef boost::unordered_detail::hash_types_unique_keys<
             Value, Value, Hash, Pred, Alloc
         > implementation;
@@ -430,10 +433,10 @@ namespace boost
             base.rehash(n);
         }
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#if 1 || BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         friend bool operator==(unordered_set const&, unordered_set const&);
         friend bool operator!=(unordered_set const&, unordered_set const&);
-#else
+#elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<Value, Hash, Pred, Alloc>(unordered_set const&, unordered_set const&);
         friend bool operator!=<Value, Hash, Pred, Alloc>(unordered_set const&, unordered_set const&);
 #endif
@@ -463,6 +466,9 @@ namespace boost
     template <class Value, class Hash, class Pred, class Alloc>
     class unordered_multiset
     {
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+    public:
+#endif
         typedef boost::unordered_detail::hash_types_equivalent_keys<
             Value, Value, Hash, Pred, Alloc
         > implementation;
@@ -850,10 +856,10 @@ namespace boost
             base.rehash(n);
         }
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#if 1 || BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         friend bool operator==(unordered_multiset const&, unordered_multiset const&);
         friend bool operator!=(unordered_multiset const&, unordered_multiset const&);
-#else
+#elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<Value, Hash, Pred, Alloc>(unordered_multiset const&, unordered_multiset const&);
         friend bool operator!=<Value, Hash, Pred, Alloc>(unordered_multiset const&, unordered_multiset const&);
 #endif

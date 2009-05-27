@@ -39,6 +39,9 @@ namespace boost
     template <class Key, class T, class Hash, class Pred, class Alloc>
     class unordered_map
     {
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+    public:
+#endif
         typedef boost::unordered_detail::hash_types_unique_keys<
             std::pair<const Key, T>, Key, Hash, Pred, Alloc
         > implementation;
@@ -461,7 +464,7 @@ namespace boost
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         friend bool operator==(unordered_map const&, unordered_map const&);
         friend bool operator!=(unordered_map const&, unordered_map const&);
-#else
+#elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<Key, T, Hash, Pred, Alloc>(unordered_map const&, unordered_map const&);
         friend bool operator!=<Key, T, Hash, Pred, Alloc>(unordered_map const&, unordered_map const&);
 #endif
@@ -491,6 +494,9 @@ namespace boost
     template <class Key, class T, class Hash, class Pred, class Alloc>
     class unordered_multimap
     {
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+    public:
+#endif
         typedef boost::unordered_detail::hash_types_equivalent_keys<
             std::pair<const Key, T>, Key, Hash, Pred, Alloc
         > implementation;
@@ -897,7 +903,7 @@ namespace boost
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         friend bool operator==(unordered_multimap const&, unordered_multimap const&);
         friend bool operator!=(unordered_multimap const&, unordered_multimap const&);
-#else
+#elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<Key, T, Hash, Pred, Alloc>(unordered_multimap const&, unordered_multimap const&);
         friend bool operator!=<Key, T, Hash, Pred, Alloc>(unordered_multimap const&, unordered_multimap const&);
 #endif

@@ -89,7 +89,7 @@ namespace boost {
             struct value_base {
                 typename boost::aligned_storage<
                     sizeof(value_type),
-                    boost::alignment_of<value_type>::value>::type data_;
+                    ::boost::alignment_of<value_type>::value>::type data_;
 
                 void* address() { return this; }
             };
