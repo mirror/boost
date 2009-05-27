@@ -79,6 +79,7 @@ First official release.
   the length right if it changes again in the future.
 * [@https://svn.boost.org/trac/boost/ticket/1978 Ticket 1978]:
   Implement `emplace` for all compilers.
+* Better configuration for C++0x features when the headers aren't available.
 * [@https://svn.boost.org/trac/boost/ticket/2908 Ticket 2908]:
   Add explicit destructors to all containers.
 
