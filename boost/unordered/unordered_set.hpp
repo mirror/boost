@@ -433,7 +433,7 @@ namespace boost
             base.rehash(n);
         }
 
-#if 1 || BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         friend bool operator==(unordered_set const&, unordered_set const&);
         friend bool operator!=(unordered_set const&, unordered_set const&);
 #elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
@@ -856,7 +856,7 @@ namespace boost
             base.rehash(n);
         }
 
-#if 1 || BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         friend bool operator==(unordered_multiset const&, unordered_multiset const&);
         friend bool operator!=(unordered_multiset const&, unordered_multiset const&);
 #elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
