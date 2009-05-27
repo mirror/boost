@@ -102,6 +102,46 @@ namespace boost {
 
   } } // graph::distributed
 
+
+  template <typename OwnerMap, typename Tuple>
+  class get_owner_of_first_tuple_element {
+
+  public:
+    typedef typename property_traits<OwnerMap>::value_type owner_type;
+    
+    get_owner_of_first_tuple_element(OwnerMap owner) : owner(owner) { }
+
+    owner_type get_owner(Tuple t) { return boost::get(owner, get<0>(t)); }
+
+  private:
+    OwnerMap owner;
+  };
+
+  template <typename OwnerMap, typename Tuple>
+  typename get_owner_of_first_tuple_element<OwnerMap, Tuple>::owner_type
+  get(get_owner_of_first_tuple_element<OwnerMap, Tuple> o, Tuple t)
+  { return o.get_owner(t); } 
+
+  template <typename OwnerMap>
+  class get_owner_of_first_pair_element {
+
+  public:
+    typedef typename property_traits<OwnerMap>::value_type owner_type;
+    
+    get_owner_of_first_pair_element(OwnerMap owner) : owner(owner) { }
+
+    template <typename Vertex, typename T>
+    owner_type get_owner(std::pair<Vertex, T> p) { return get(owner, p.first); }
+
+  private:
+    OwnerMap owner;
+  };
+
+  template <typename OwnerMap, typename Vertex, typename T>
+  typename get_owner_of_first_pair_element<OwnerMap>::owner_type
+  get(get_owner_of_first_pair_element<OwnerMap> o, std::pair<Vertex, T> p)
+  { return o.get_owner(p); } 
+
   namespace graph { namespace parallel { namespace detail {
 
   template<typename DistanceMap, typename IncomingMap>
@@ -438,12 +478,15 @@ namespace boost {
       typedef typename property_traits<PathCountMap>::value_type PathCountType;
       typedef std::pair<Vertex, PathCountType> queue_value_type;
       typedef typename property_map<Graph, vertex_owner_t>::const_type OwnerMap;
+      typedef typename get_owner_of_first_pair_element<OwnerMap> IndirectOwnerMap;
 
       typedef boost::queue<queue_value_type> local_queue_type;
       typedef boost::graph::distributed::distributed_queue<process_group_type,
-                                                           OwnerMap,
+                                                           IndirectOwnerMap,
                                                            local_queue_type> dist_queue_type;
-      dist_queue_type Q(pg, owner);
+
+      IndirectOwnerMap indirect_owner(owner);
+      dist_queue_type Q(pg, indirect_owner);
 
       // Find sources to initialize queue
       BGL_FORALL_VERTICES_T(v, g, Graph) {
@@ -798,12 +841,15 @@ namespace boost {
     // Traverse DAG induced by forward edges in dependency order and compute path counts
     {
       typedef std::pair<vertex_descriptor, path_count_type> queue_value_type;
+      typedef get_owner_of_first_pair_element<OwnerMap>	IndirectOwnerMap;
 
       typedef boost::queue<queue_value_type> local_queue_type;
       typedef boost::graph::distributed::distributed_queue<process_group_type,
-                                                           OwnerMap,
+                                                           IndirectOwnerMap,
                                                            local_queue_type> dist_queue_type;
-      dist_queue_type Q(pg, owner);
+
+      IndirectOwnerMap indirect_owner(owner);
+      dist_queue_type Q(pg, indirect_owner);
 
       if (get(owner, s) == id)
         Q.push(std::make_pair(s, 1));
@@ -836,12 +882,15 @@ namespace boost {
     // 3) dependency of source 4) path count of source
     typedef boost::tuple<vertex_descriptor, vertex_descriptor, dependency_type, path_count_type>
       queue_value_type;
+    typedef get_owner_of_first_tuple_element<OwnerMap, queue_value_type> IndirectOwnerMap;
 
     typedef boost::queue<queue_value_type> local_queue_type;
     typedef boost::graph::distributed::distributed_queue<process_group_type,
-                                                         OwnerMap,
+                                                         IndirectOwnerMap,
                                                          local_queue_type> dist_queue_type;
-    dist_queue_type Q(pg, owner);
+
+    IndirectOwnerMap indirect_owner(owner);
+    dist_queue_type Q(pg, indirect_owner);
 
     // Calculate number of vertices each vertex depends on, when a vertex has been pushed
     // that number of times then we will update it
@@ -1307,7 +1356,7 @@ namespace graph { namespace parallel { namespace detail {
       make_iterator_property_map(distance.begin(), vertex_index),
       make_iterator_property_map(dependency.begin(), vertex_index),
       make_iterator_property_map(path_count.begin(), vertex_index),
-      vertex_index, sources.ref, delta,
+      vertex_index, unwrap_ref(sources), delta,
       weight_map);
   }
   
@@ -1344,7 +1393,7 @@ namespace graph { namespace parallel { namespace detail {
       make_iterator_property_map(distance.begin(), vertex_index),
       make_iterator_property_map(dependency.begin(), vertex_index),
       make_iterator_property_map(path_count.begin(), vertex_index),
-      vertex_index, sources.ref, delta); 
+      vertex_index, unwrap_ref(sources), delta); 
   }
 
   template<typename WeightMap>
@@ -1399,8 +1448,7 @@ brandes_betweenness_centrality(const Graph& g,
     choose_param(get_param(params, edge_centrality), 
                  dummy_property_map()),
     choose_const_pmap(get_param(params, vertex_index), g, vertex_index),
-    choose_param(get_param(params, buffer_param_t()),
-                 detail::wrap_ref<queue_t>(q)),
+    choose_param(get_param(params, buffer_param_t()), boost::ref(q)),
     choose_param(get_param(params, lookahead_t()), 0),
     get_param(params, edge_weight));
 }
@@ -1414,7 +1462,7 @@ brandes_betweenness_centrality(const Graph& g, CentralityMap centrality
   queue_t q;
 
   boost::graph::parallel::detail::brandes_betweenness_centrality_dispatch2(
-    g, centrality, dummy_property_map(), get(vertex_index, g), detail::wrap_ref<queue_t>(q), 0);
+    g, centrality, dummy_property_map(), get(vertex_index, g), boost::ref(q), 0);
 }
 
 template<typename Graph, typename CentralityMap, typename EdgeCentralityMap>
@@ -1427,7 +1475,7 @@ brandes_betweenness_centrality(const Graph& g, CentralityMap centrality,
   queue_t q;
 
   boost::graph::parallel::detail::brandes_betweenness_centrality_dispatch2(
-    g, centrality, edge_centrality_map, get(vertex_index, g), detail::wrap_ref<queue_t>(q), 0);
+    g, centrality, edge_centrality_map, get(vertex_index, g), boost::ref(q), 0);
 }
   
 template<typename ProcessGroup, typename Graph, typename CentralityMap, 
@@ -1524,7 +1572,7 @@ namespace detail { namespace graph {
       make_iterator_property_map(distance.begin(), vertex_index),
       make_iterator_property_map(dependency.begin(), vertex_index),
       make_iterator_property_map(path_count.begin(), vertex_index),
-      vertex_index, weight_map, sources.ref);
+      vertex_index, weight_map, unwrap_ref(sources));
   }
   
 
@@ -1561,7 +1609,7 @@ namespace detail { namespace graph {
       make_iterator_property_map(distance.begin(), vertex_index),
       make_iterator_property_map(dependency.begin(), vertex_index),
       make_iterator_property_map(path_count.begin(), vertex_index),
-      vertex_index, sources.ref);
+      vertex_index, unwrap_ref(sources));
   }
 
   template<typename WeightMap>
@@ -1614,8 +1662,7 @@ non_distributed_brandes_betweenness_centrality(const ProcessGroup& pg, const Gra
     choose_param(get_param(params, edge_centrality), 
                  dummy_property_map()),
     choose_const_pmap(get_param(params, vertex_index), g, vertex_index),
-    choose_param(get_param(params, buffer_param_t()),
-                 detail::wrap_ref<queue_t>(q)),
+    choose_param(get_param(params, buffer_param_t()),  boost::ref(q)),
     get_param(params, edge_weight));
 }
 
@@ -1628,8 +1675,7 @@ non_distributed_brandes_betweenness_centrality(const ProcessGroup& pg, const Gra
   queue_t q;
 
   detail::graph::non_distributed_brandes_betweenness_centrality_dispatch2(
-    pg, g, centrality, dummy_property_map(), get(vertex_index, g), 
-    detail::wrap_ref<queue_t>(q));
+    pg, g, centrality, dummy_property_map(), get(vertex_index, g), boost::ref(q));
 }
 
 template<typename ProcessGroup, typename Graph, typename CentralityMap, 
