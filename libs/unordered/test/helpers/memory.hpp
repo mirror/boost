@@ -18,11 +18,6 @@ namespace test
 {
     namespace detail
     {
-        // This annoymous namespace won't cause ODR violations as I won't
-        // be linking multiple translation units together. I'll probably
-        // move this into a cpp file before a full release, but for now it's
-        // the most convenient way.
-
         struct memory_area {
             void const* start;
             void const* end;
