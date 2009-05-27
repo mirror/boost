@@ -1,6 +1,9 @@
 // Boost.Signals library
 
-// Copyright Douglas Gregor 2001-2003. Use, modification and
+// Copyright Frank Mori Hess 2008-2009.
+// Copyright Douglas Gregor 2001-2003.
+//
+// Use, modification and
 // distribution is subject to the Boost Software License, Version
 // 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -215,6 +218,23 @@ template<typename ResultType>
   }
 }
 
+void increment_arg(int &value)
+{
+  ++value;
+}
+
+static void
+test_reference_args()
+{
+  typedef boost::signals2::signal<void (int &value)> signal_type;
+  signal_type s1;
+
+  s1.connect(&increment_arg);
+  int value = 0;
+  s1(value);
+  BOOST_CHECK(value == 1);
+}
+
 int
 test_main(int, char* [])
 {
@@ -223,6 +243,7 @@ test_main(int, char* [])
   test_signal_signal_connect();
   test_extended_slot<void>();
   test_extended_slot<int>();
+  test_reference_args();
 
   return 0;
 }
