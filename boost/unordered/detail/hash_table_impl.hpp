@@ -257,13 +257,6 @@ namespace boost {
                 
 #else
 
-                void construct()
-                {
-                    construct_preamble();
-                    new(node_->address()) value_type;
-                    value_constructed_ = true;
-                }
-
 #define BOOST_UNORDERED_CONSTRUCT_IMPL(z, n, _)                                 \
                 template <                                                      \
                     BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                         \
@@ -292,8 +285,7 @@ namespace boost {
                     new(node_->address()) value_type(                           \
                         BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
                     );                                                          \
-                }                                                               \
-                                                                                \
+                }
                                                                                 
 #define BOOST_UNORDERED_CONSTRUCT_IMPL2(z, n, _)                                \
                 template <typename First, typename Second, typename Key,        \
