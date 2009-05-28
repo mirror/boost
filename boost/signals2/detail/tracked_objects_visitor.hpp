@@ -17,7 +17,9 @@
 #include <boost/signals2/detail/signals_common.hpp>
 #include <boost/signals2/slot_base.hpp>
 #include <boost/signals2/trackable.hpp>
-#include <boost/type_traits.hpp>
+#include <boost/type_traits/is_function.hpp>
+#include <boost/type_traits/is_pointer.hpp>
+#include <boost/type_traits/remove_pointer.hpp>
 #include <boost/utility/addressof.hpp>
 
 namespace boost
