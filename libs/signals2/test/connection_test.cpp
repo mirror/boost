@@ -14,7 +14,7 @@
 
 namespace bs2 = boost::signals2;
 
-typedef bs2::signal0<void> sig_type;
+typedef bs2::signal<void ()> sig_type;
 
 void myslot()
 {}

@@ -68,7 +68,7 @@ int test_main(int, char* [])
 
   std::vector<int> sortedValues;
 
-  boost::signals2::signal0<void> sig;
+  boost::signals2::signal<void ()> sig;
   sig.connect(write_ungrouped1());
   for (int i = 0; i < 100; ++i) {
 #ifdef BOOST_NO_STDC_NAMESPACE

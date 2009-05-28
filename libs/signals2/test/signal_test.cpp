@@ -226,13 +226,31 @@ void increment_arg(int &value)
 static void
 test_reference_args()
 {
-  typedef boost::signals2::signal<void (int &value)> signal_type;
+  typedef boost::signals2::signal<void (int &)> signal_type;
   signal_type s1;
 
   s1.connect(&increment_arg);
   int value = 0;
   s1(value);
   BOOST_CHECK(value == 1);
+}
+
+static void
+test_typedefs_etc()
+{
+  typedef boost::signals2::signal<int (double, long)> signal_type;
+  typedef signal_type::slot_type slot_type;
+
+  BOOST_CHECK(typeid(signal_type::slot_result_type) == typeid(int));
+  BOOST_CHECK(typeid(signal_type::result_type) == typeid(boost::optional<int>));
+  BOOST_CHECK(typeid(signal_type::arg<0>::type) == typeid(double));
+  BOOST_CHECK(typeid(signal_type::arg<1>::type) == typeid(long));
+  BOOST_CHECK(signal_type::arity == 2);
+
+  BOOST_CHECK(typeid(slot_type::result_type) == typeid(signal_type::slot_result_type));
+  BOOST_CHECK(typeid(slot_type::arg<0>::type) == typeid(signal_type::arg<0>::type));
+  BOOST_CHECK(typeid(slot_type::arg<1>::type) == typeid(signal_type::arg<1>::type));
+  BOOST_CHECK(slot_type::arity == signal_type::arity);
 }
 
 int
@@ -244,6 +262,6 @@ test_main(int, char* [])
   test_extended_slot<void>();
   test_extended_slot<int>();
   test_reference_args();
-
+  test_typedefs_etc();
   return 0;
 }

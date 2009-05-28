@@ -53,7 +53,7 @@ static int myfunc(int i, double z)
 
 int test_main(int, char*[])
 {
-  typedef boost::signals2::signal1<int, int, max_or_default<int> > sig_type;
+  typedef boost::signals2::signal<int (int), max_or_default<int> > sig_type;
   sig_type s1;
   boost::signals2::connection connection;
 

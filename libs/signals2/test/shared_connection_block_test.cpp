@@ -33,7 +33,7 @@ struct test_slot {
 
 int test_main(int, char* [])
 {
-  boost::signals2::signal0<void> s0;
+  boost::signals2::signal<void ()> s0;
 
   for(unsigned i = 0; i < connections.size(); ++i)
   {

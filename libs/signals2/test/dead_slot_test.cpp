@@ -12,7 +12,7 @@
 #include <boost/signals2.hpp>
 #include <boost/bind.hpp>
 
-typedef boost::signals2::signal1<int, int> sig_type;
+typedef boost::signals2::signal<int (int)> sig_type;
 
 class with_constant {
 public:
