@@ -23,11 +23,11 @@
 #include <boost/type_traits/is_array.hpp>
 
 #define BOOST_LAMBDA_DISABLE_IF_ARRAY1(A1, R1)\
-	typename lazy_disable_if<is_array<A1>, typename R1 >::type
+  typename lazy_disable_if<is_array<A1>, typename R1 >::type
 #define BOOST_LAMBDA_DISABLE_IF_ARRAY2(A1, A2, R1, R2) \
-	typename lazy_disable_if<mpl::or_<is_array<A1>, is_array<A2> >, typename R1, R2 >::type
+  typename lazy_disable_if<mpl::or_<is_array<A1>, is_array<A2> >, typename R1, R2 >::type
 #define BOOST_LAMBDA_DISABLE_IF_ARRAY3(A1, A2, A3, R1, R2, R3) \
-	typename lazy_disable_if<mpl::or_<is_array<A1>, is_array<A2>, is_array<A3> >, typename R1, R2, R3 >::type
+  typename lazy_disable_if<mpl::or_<is_array<A1>, is_array<A2>, is_array<A3> >, typename R1, R2, R3 >::type
 
 #else
 
