@@ -54,7 +54,7 @@ Parameters
 
 IN:  ``const DistributedGraph& g``
   The graph type must be a model of `Distributed Graph`_.  The graph
-  type must also model the `Incidence Graph`_ and be directed.
+  type must also model the `Incidence Graph`_.
 
 IN:  ``vertex_descriptor s``
 
