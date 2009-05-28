@@ -84,4 +84,10 @@
 * [@https://svn.boost.org/trac/boost/ticket/2957 Ticket 2957]: Fix configuration
   for vxworks.
 
+[h2 Boost 1.40.0]
+
+* Automatically configure the float functions using template metaprogramming
+  instead of trying to configure every possibility manually.
+* Workaround for when STLport doesn't support long double.
+
 [endsect]
