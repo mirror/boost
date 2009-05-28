@@ -678,12 +678,12 @@ template &lt;class T, class Alloc&gt;
       typedef boost::circular_buffer&lt;T&gt; container_type;
       typedef typename container_type::size_type size_type;
       typedef typename container_type::value_type value_type;
+      typedef typename boost::call_traits&lt;value_type&gt;::param_type param_type;
 
       explicit bounded_buffer(size_type capacity) : m_unread(0), m_container(capacity) {}
 
-      void push_front(call_traits&lt;value_type&gt;::param_type item) {
-         // call_traits&lt;value_type&gt;::param_type represents the "best"
-         // way to pass a parameter of type value_type to a method
+      void push_front(boost::call_traits&lt;value_type&gt;::param_type item) {
+         // param_type represents the "best" way to pass a parameter of type value_type to a method
 
          boost::mutex::scoped_lock lock(m_mutex);
          m_not_full.wait(lock, boost::bind(&amp;bounded_buffer&lt;value_type&gt;::is_not_full, this));
@@ -717,7 +717,7 @@ template &lt;class T, class Alloc&gt;
 </pre>
     <p>
       The <code>bounded_buffer</code> relies on <a href="../../thread/doc/">Boost Threads</a> and <a href=
-      "../../bind/bind.html">Boost Bind</a> libraries and <a href="../../utility/call_traits.htm">call_traits</a>
+      "../../bind/bind.html">Boost Bind</a> libraries and <a href="../../utility/call_traits.htm">Boost call_traits</a>
       utility.
     </p>
     <p>
