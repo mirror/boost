@@ -61,7 +61,7 @@ IN:  ``const Graph& g``
   The graph type must be a model of `Distributed Graph`_.  The graph
   type must also model the `Incidence Graph`_ and be directed.
 
-IN:  ``ComponentMap c``
+OUT:  ``ComponentMap c``
   The algorithm computes how many strongly connected components are in the
   graph, and assigns each component an integer label.  The algorithm
   then records to which component each vertex in the graph belongs by
@@ -70,7 +70,7 @@ IN:  ``ComponentMap c``
   value type must be the ``vertices_size_type`` of the graph.  The key
   type must be the graph's vertex descriptor type.
 
-IN:  ``VertexComponentMap r``
+UTIL:  ``VertexComponentMap r``
   The algorithm computes a mapping from each vertex to the
   representative of the strong component, stored in this property map.
   The ``VertexComponentMap`` type must be a `Distributed Property Map`_.

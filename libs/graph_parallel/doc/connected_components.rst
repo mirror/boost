@@ -80,7 +80,7 @@ Parameters
 IN:  ``Graph& g``
   The graph typed must be a model of `Distributed Graph`_.
 
-IN:  ``ComponentMap c``
+OUT:  ``ComponentMap c``
   The algorithm computes how many connected components are in the
   graph, and assigns each component an integer label.  The algorithm
   then records to which component each vertex in the graph belongs by
@@ -92,7 +92,7 @@ IN:  ``ComponentMap c``
   component map and parent information will be provided in the parent
   map. 
 
-IN:  ``ParentMap p``
+UTIL:  ``ParentMap p``
   A parent map may be supplied to the algorithm, if not supplied the
   parent map will be constructed automatically.  The ``ParentMap`` type
   must be a `Distributed Property Map`_.  The value type and key type
