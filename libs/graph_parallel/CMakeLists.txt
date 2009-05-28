@@ -14,7 +14,7 @@ endif (NOT MPI_FOUND)
 boost_library_project(
   graph_parallel
   SRCDIRS  src
-  TESTDIRS  test
+  TESTDIRS  test example
   # HEADERS graph graph/parallel
   # DOCDIRS doc
   DESCRIPTION  "Parallel support using MPI for Boost.Graph."
