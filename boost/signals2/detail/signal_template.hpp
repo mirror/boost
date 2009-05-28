@@ -565,6 +565,7 @@ namespace boost
         typedef typename detail::variadic_arg_type<n, Args...>::type type;
       };
       BOOST_STATIC_CONSTANT(int, arity = detail::vararg_count<Args...>::value);
+      typedef typename mpl::identity<R (Args...)>::type signature_type;
 
 #endif // BOOST_NO_VARIADIC_TEMPLATES
 

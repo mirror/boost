@@ -1,6 +1,6 @@
 // Boost.Signals2 library
 
-// Copyright Frank Mori Hess 2007-2008.
+// Copyright Frank Mori Hess 2009.
 //
 // Use, modification and
 // distribution is subject to the Boost Software License, Version

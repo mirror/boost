@@ -11,6 +11,7 @@
 #ifndef BOOST_SIGNALS2_VARIADIC_SLOT_HPP
 #define BOOST_SIGNALS2_VARIADIC_SLOT_HPP
 
+#include <boost/mpl/identity.hpp>
 #include <boost/signals2/detail/variadic_arg_type.hpp>
 
 #define BOOST_SIGNALS2_SLOT_N_BINDING_CONSTRUCTORS \
