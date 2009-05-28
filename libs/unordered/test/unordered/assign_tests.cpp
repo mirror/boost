@@ -103,7 +103,7 @@ UNORDERED_TEST(assign_tests2,
     ((default_generator)(generate_collisions))
 )
 
-#if !defined(BOOST_NO_INITIALIZER_LISTS)
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
 
 UNORDERED_AUTO_TEST(assign_initializer_list)
 {
