@@ -841,7 +841,7 @@ namespace boost {
     // Traverse DAG induced by forward edges in dependency order and compute path counts
     {
       typedef std::pair<vertex_descriptor, path_count_type> queue_value_type;
-      typedef get_owner_of_first_pair_element<OwnerMap>	IndirectOwnerMap;
+      typedef get_owner_of_first_pair_element<OwnerMap> IndirectOwnerMap;
 
       typedef boost::queue<queue_value_type> local_queue_type;
       typedef boost::graph::distributed::distributed_queue<process_group_type,
