@@ -18,7 +18,8 @@
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/mpl/if.hpp>
-#include <boost/mpl/and.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
 #include <boost/type_traits/is_class.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/type_traits/remove_reference.hpp>
@@ -31,6 +32,7 @@
 #include <boost/utility/addressof.hpp>
 #include <boost/utility/result_of.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/proto/repeat.hpp>
 #include <boost/proto/detail/suffix.hpp> // must be last include
 
 // If we're generating doxygen documentation, hide all the nasty
@@ -110,7 +112,7 @@ namespace boost { namespace proto
                 friend any operator^(any, any);
                 friend any operator,(any, any);
                 friend any operator->*(any, any);
-                
+
                 friend any operator<<=(any, any);
                 friend any operator>>=(any, any);
                 friend any operator*=(any, any);
@@ -123,9 +125,9 @@ namespace boost { namespace proto
                 friend any operator^=(any, any);
             };
         }
-        
+
         using anyns::any;
-        
+
         ////////////////////////////////////////////////////////////////////////////////////////////
         template<typename T>
         struct as_mutable
@@ -227,7 +229,7 @@ namespace boost { namespace proto
         template<typename T>
         char (&check_reference(T const &))[2];
 
-        namespace has_get_pointer_
+        namespace has_get_pointerns
         {
             using boost::get_pointer;
             void *(&get_pointer(...))[2];
@@ -236,91 +238,146 @@ namespace boost { namespace proto
             template<typename T>
             struct has_get_pointer
             {
-                static T &t;
-                BOOST_STATIC_CONSTANT(bool, value = sizeof(void *) == sizeof(get_pointer(t)));
+                BOOST_STATIC_CONSTANT(bool, value = sizeof(void *) == sizeof(get_pointer(make<T &>())));
                 typedef mpl::bool_<value> type;
             };
         }
 
-        using has_get_pointer_::has_get_pointer;
-        
+        using has_get_pointerns::has_get_pointer;
+
         ////////////////////////////////////////////////////////////////////////////////////////////
-        namespace get_pointer_
+        template<typename T>
+        struct classtypeof;
+
+        template<typename T, typename U>
+        struct classtypeof<T U::*>
+        {
+            typedef U type;
+        };
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        template<typename T>
+        T &lvalue(T &t)
+        {
+            return t;
+        }
+
+        template<typename T>
+        T const &lvalue(T const &t)
+        {
+            return t;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        template<typename U, typename V>
+        U *proto_get_pointer(V *, U *u)
+        {
+            return u;
+        }
+
+        template<typename U, typename V>
+        U const *proto_get_pointer(V *, U const *u)
+        {
+            return u;
+        }
+
+        template<typename U, typename V>
+        V *proto_get_pointer(V *v, ...)
+        {
+            return v;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        #define BOOST_PROTO_USE_GET_POINTER()                                                       \
+        using namespace boost::proto::detail::get_pointerns                                         \
+        /**/
+
+        #define BOOST_PROTO_GET_POINTER(Type, Obj)                                                  \
+        boost::proto::detail::proto_get_pointer<typename boost::remove_reference<Type>::type>(      \
+            get_pointer(Obj)                                                                        \
+          , boost::addressof(boost::proto::detail::lvalue(Obj))                                     \
+        )                                                                                           \
+        /**/
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        namespace get_pointerns
         {
             using boost::get_pointer;
 
             template<typename T>
-            typename disable_if<has_get_pointer<T>, T *>::type
+            typename disable_if_c<has_get_pointer<T>::value, T *>::type
             get_pointer(T &t)
             {
                 return boost::addressof(t);
             }
 
             template<typename T>
-            typename disable_if<has_get_pointer<T>, T const *>::type
+            typename disable_if_c<has_get_pointer<T>::value, T const *>::type
             get_pointer(T const &t)
             {
                 return boost::addressof(t);
             }
-            
-            template<typename U>
-            char test_ptr_to_const(U *);
 
-            template<typename U>
-            char (&test_ptr_to_const(U const *))[2];
+            char test_ptr_to_const(void *);
+            char (&test_ptr_to_const(void const *))[2];
 
-            template<typename T>
-            struct is_ref_to_const
-            {
-                static T t;
-                BOOST_STATIC_CONSTANT(bool, value = 2 == sizeof(test_ptr_to_const(get_pointer(t))));
-                typedef mpl::bool_<value> type;
-            };
+            template<typename U> char test_V_is_a_U(U *);
+            template<typename U> char test_V_is_a_U(U const *);
+            template<typename U> char (&test_V_is_a_U(...))[2];
 
             ////////////////////////////////////////////////////////////////////////////////////////////
-            template<
-                typename T
-              , typename U
-              , bool IsMemPtr = is_member_object_pointer<
-                    typename remove_reference<U>::type
-                >::value
-            >
-            struct mem_ptr_fun
-            {
-                BOOST_PROTO_DECLTYPE_(
-                    proto::detail::make_mutable<T>() ->* proto::detail::make<U>()
-                  , result_type
-                )
+            // result_of_ is a wrapper around boost::result_of that also handles "invocations" of
+            // member object pointers.
+            template<typename T, typename Void = void>
+            struct result_of_
+              : boost::result_of<T>
+            {};
 
-                result_type operator()(
-                    typename add_reference<typename add_const<T>::type>::type t
-                  , typename add_reference<typename add_const<U>::type>::type u
-                ) const
-                {
-                    return t ->* u;
-                }
+            template<typename T, typename U, typename V>
+            struct result_of_<T U::*(V), typename enable_if_c<is_member_object_pointer<T U::*>::value>::type>
+            {
+                BOOST_STATIC_CONSTANT(bool, is_V_a_smart_ptr = 2 == sizeof(test_V_is_a_U<U>(&lvalue(make<V>()))));
+                BOOST_STATIC_CONSTANT(bool, is_ptr_to_const = 2 == sizeof(test_ptr_to_const(BOOST_PROTO_GET_POINTER(U, make<V>()))));
+
+                // If V is not a U, then it is a (smart) pointer and we can always return an lvalue.
+                // Otherwise, we can only return an lvalue if we are given one.
+                typedef
+                    typename mpl::eval_if_c<
+                        (is_V_a_smart_ptr || is_reference<V>::value)
+                      , mpl::eval_if_c<
+                            is_ptr_to_const
+                          , add_reference<typename add_const<T>::type>
+                          , add_reference<T>
+                        >
+                      , mpl::identity<T>
+                    >::type
+                type;
             };
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             template<typename T, typename U>
-            struct mem_ptr_fun<T, U, true>
+            struct mem_ptr_fun;
+
+            template<typename T, typename U, typename V>
+            struct mem_ptr_fun<T, U V::*>
             {
                 BOOST_PROTO_DECLTYPE_(
-                    get_pointer(proto::detail::make_mutable<T>()) ->* proto::detail::make<U>()
+                    BOOST_PROTO_GET_POINTER(V, proto::detail::make_mutable<T>()) ->* proto::detail::make<U V::*>()
                   , result_type
                 )
 
                 result_type operator()(
                     typename add_reference<typename add_const<T>::type>::type t
-                  , typename add_reference<typename add_const<U>::type>::type u
+                  , U V::*u
                 ) const
                 {
-                    return get_pointer(t) ->* u;
+                    return BOOST_PROTO_GET_POINTER(V, t) ->* u;
                 }
             };
         }
 
-        using get_pointer_::mem_ptr_fun;
+        using get_pointerns::result_of_;
+        using get_pointerns::mem_ptr_fun;
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         template<typename A0, typename A1>
@@ -348,58 +405,7 @@ namespace boost { namespace proto
         };
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-        template<typename T>
-        struct result_of_member;
-        
-        template<typename T, typename U>
-        struct result_of_member<T U::*>
-        {
-            typedef T type;
-        };
-
-        template<typename T, typename Void = void>
-        struct result_of_
-          : boost::result_of<T>
-        {};
-
-        template<typename T, typename U>
-        struct result_of_<T(U), typename enable_if_c<is_member_object_pointer<T>::value>::type>
-        {
-            typedef
-                typename mpl::if_c<
-                    mpl::and_<
-                        has_get_pointer<U>
-                      , get_pointer_::is_ref_to_const<U const &>
-                    >::value
-                  , typename add_reference<
-                        typename add_const<
-                            typename result_of_member<T>::type
-                        >::type
-                    >::type
-                  , typename result_of_member<T>::type
-                >::type
-            type;
-        };
-
-        template<typename T, typename U>
-        struct result_of_<T(U &), typename enable_if_c<is_member_object_pointer<T>::value>::type>
-        {
-            typedef
-                typename mpl::if_c<
-                    get_pointer_::is_ref_to_const<U &>::value
-                  , typename add_reference<
-                        typename add_const<
-                            typename result_of_member<T>::type
-                        >::type
-                    >::type
-                  , typename add_reference<
-                        typename result_of_member<T>::type
-                    >::type
-                >::type
-            type;
-        };
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
+        // normalize a function type for use with boost::result_of
         template<typename T, typename U = T>
         struct result_of_fixup
           : mpl::if_c<is_function<T>::value, T *, U>
@@ -443,36 +449,39 @@ namespace boost { namespace proto
         //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(&)()>::type>));
 
         template<typename T, typename PMF>
-        struct memfun
-        {
-            typedef typename remove_const<typename remove_reference<PMF>::type>::type pmf_type;
-            typedef typename boost::result_of<pmf_type(T)>::type result_type;
+        struct memfun;
 
-            memfun(T t, PMF p)
+        template<typename T, typename U, typename V>
+        struct memfun<T, U V::*>
+        {
+            typedef typename boost::result_of<U V::*(T)>::type result_type;
+
+            memfun(T t, U V::*p)
               : obj(t)
               , pmf(p)
             {}
-
+            
             result_type operator()() const
             {
-                using namespace get_pointer_;
-                return (get_pointer(obj) ->* pmf)();
+                BOOST_PROTO_USE_GET_POINTER();
+                return (BOOST_PROTO_GET_POINTER(V, obj) ->* pmf)();
             }
 
-            #define M0(Z, N, DATA)                                                                  \
-            template<BOOST_PP_ENUM_PARAMS_Z(Z, N, typename A)>                                      \
-            result_type operator()(BOOST_PP_ENUM_BINARY_PARAMS_Z(Z, N, A, const &a)) const          \
+            #define BOOST_PROTO_LOCAL_MACRO(N, typename_A, A_const_ref, A_const_ref_a, a)           \
+            template<typename_A(N)>                                                                 \
+            result_type operator()(A_const_ref_a(N)) const                                          \
             {                                                                                       \
-                using namespace get_pointer_;                                                       \
-                return (get_pointer(obj) ->* pmf)(BOOST_PP_ENUM_PARAMS_Z(Z, N, a));                  \
+                BOOST_PROTO_USE_GET_POINTER();                                                      \
+                return (BOOST_PROTO_GET_POINTER(V, obj) ->* pmf)(a(N));                             \
             }                                                                                       \
             /**/
-            BOOST_PP_REPEAT_FROM_TO(1, BOOST_PROTO_MAX_ARITY, M0, ~)
-            #undef M0
+            #define BOOST_PROTO_LOCAL_a BOOST_PROTO_a
+            #define BOOST_PROTO_LOCAL_LIMITS (1, BOOST_PROTO_MAX_ARITY)
+            #include BOOST_PROTO_LOCAL_ITERATE()
 
         private:
             T obj;
-            PMF pmf;
+            U V::*pmf;
         };
 
     } // namespace detail
