@@ -269,22 +269,22 @@ namespace boost { namespace proto
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-        template<typename U, typename V>
-        U *proto_get_pointer(V *, U *u)
+        template<typename U, typename V, typename T>
+        U *proto_get_pointer(T &t, V *, U *)
         {
-            return u;
+            return boost::addressof(t);
         }
 
-        template<typename U, typename V>
-        U const *proto_get_pointer(V *, U const *u)
+        template<typename U, typename V, typename T>
+        U const *proto_get_pointer(T &t, V *, U const *)
         {
-            return u;
+            return boost::addressof(t);
         }
 
-        template<typename U, typename V>
-        V *proto_get_pointer(V *v, ...)
+        template<typename U, typename V, typename T>
+        V *proto_get_pointer(T &t, V *, ...)
         {
-            return v;
+            return get_pointer(t);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////
@@ -293,9 +293,10 @@ namespace boost { namespace proto
         /**/
 
         #define BOOST_PROTO_GET_POINTER(Type, Obj)                                                  \
-        boost::proto::detail::proto_get_pointer<typename boost::remove_reference<Type>::type>(      \
-            get_pointer(Obj)                                                                        \
-          , boost::addressof(boost::proto::detail::lvalue(Obj))                                     \
+        boost::proto::detail::proto_get_pointer<Type>(                                              \
+            boost::proto::detail::lvalue(Obj)                                                       \
+          , (true ? 0 : get_pointer(Obj))                                                           \
+          , (true ? 0 : boost::addressof(boost::proto::detail::lvalue(Obj)))                        \
         )                                                                                           \
         /**/
 
@@ -460,7 +461,7 @@ namespace boost { namespace proto
               : obj(t)
               , pmf(p)
             {}
-            
+
             result_type operator()() const
             {
                 BOOST_PROTO_USE_GET_POINTER();
