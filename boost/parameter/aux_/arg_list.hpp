@@ -212,9 +212,9 @@ struct arg_list : Next
     // Create a new list by prepending arg to a copy of tail.  Used
     // when incrementally building this structure with the comma
     // operator.
-    arg_list(TaggedArg arg, Next const& tail)
+    arg_list(TaggedArg head, Next const& tail)
       : Next(tail)
-      , arg(arg)
+      , arg(head)
     {}
 
     // A metafunction class that, given a keyword and a default

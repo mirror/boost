@@ -33,8 +33,8 @@ struct maybe : maybe_base
         BOOST_DEDUCED_TYPENAME remove_reference<reference>::type
     >::type non_cv_value;
         
-    explicit maybe(T value)
-      : value(value)
+    explicit maybe(T value_)
+      : value(value_)
       , constructed(false)
     {}
 
@@ -48,23 +48,23 @@ struct maybe : maybe_base
             this->destroy();
     }
 
-    reference construct(reference value) const
+    reference construct(reference value_) const
     {
-        return value;
+        return value_;
     }
 
     template <class U>
-    reference construct2(U const& value) const
+    reference construct2(U const& value_) const
     {
-        new (m_storage.bytes) non_cv_value(value);
+        new (m_storage.bytes) non_cv_value(value_);
         constructed = true;
         return *(non_cv_value*)m_storage.bytes;
     }
 
     template <class U>
-    reference construct(U const& value) const
+    reference construct(U const& value_) const
     {
-        return this->construct2(value);
+        return this->construct2(value_);
     }
 
     void destroy()
