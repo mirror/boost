@@ -260,6 +260,7 @@ test_typedefs_etc()
   BOOST_CHECK(slot_type::arity == signal_type::arity);
 
   typedef boost::signals2::signal<void (short)> unary_signal_type;
+  BOOST_CHECK(typeid(signal_type::slot_result_type) == typeid(void));
   BOOST_CHECK(typeid(unary_signal_type::argument_type) == typeid(short));
   BOOST_CHECK(typeid(unary_signal_type::slot_type::argument_type) == typeid(short));
 }
