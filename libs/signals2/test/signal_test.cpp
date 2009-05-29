@@ -246,14 +246,22 @@ test_typedefs_etc()
   BOOST_CHECK(typeid(signal_type::result_type) == typeid(boost::optional<int>));
   BOOST_CHECK(typeid(signal_type::arg<0>::type) == typeid(double));
   BOOST_CHECK(typeid(signal_type::arg<1>::type) == typeid(long));
+  BOOST_CHECK(typeid(signal_type::arg<0>::type) == typeid(signal_type::first_argument_type));
+  BOOST_CHECK(typeid(signal_type::arg<1>::type) == typeid(signal_type::second_argument_type));
   BOOST_CHECK(typeid(signal_type::signature_type) == typeid(int (double, long)));
   BOOST_CHECK(signal_type::arity == 2);
 
   BOOST_CHECK(typeid(slot_type::result_type) == typeid(signal_type::slot_result_type));
   BOOST_CHECK(typeid(slot_type::arg<0>::type) == typeid(signal_type::arg<0>::type));
   BOOST_CHECK(typeid(slot_type::arg<1>::type) == typeid(signal_type::arg<1>::type));
+  BOOST_CHECK(typeid(slot_type::arg<0>::type) == typeid(slot_type::first_argument_type));
+  BOOST_CHECK(typeid(slot_type::arg<1>::type) == typeid(slot_type::second_argument_type));
   BOOST_CHECK(typeid(slot_type::signature_type) == typeid(signal_type::signature_type));
   BOOST_CHECK(slot_type::arity == signal_type::arity);
+
+  typedef boost::signals2::signal<void (short)> unary_signal_type;
+  BOOST_CHECK(typeid(unary_signal_type::argument_type) == typeid(short));
+  BOOST_CHECK(typeid(unary_signal_type::slot_type::argument_type) == typeid(short));
 }
 
 int
