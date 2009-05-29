@@ -135,6 +135,7 @@ template<typename Signal>
 
 int main(int argc, const char **argv)
 {
+  std::cout << "\n";
   {
     std::cout << "boost::signals2::signal, ";
     benchmark_invocation<new_signal_type>(1);
@@ -144,6 +145,7 @@ int main(int argc, const char **argv)
     benchmark_invocation<old_signal_type>(1);
   }
 
+  std::cout << "\n";
   {
     std::cout << "boost::signals2::signal, ";
     benchmark_invocation<new_signal_type>(10);
@@ -153,12 +155,15 @@ int main(int argc, const char **argv)
     benchmark_invocation<old_signal_type>(10);
   }
 
+  std::cout << "\n";
   benchmark_new_tracked_invocation(1);
   benchmark_old_tracked_invocation(1);
 
+  std::cout << "\n";
   benchmark_new_tracked_invocation(10);
   benchmark_old_tracked_invocation(10);
 
+  std::cout << "\n";
   {
     std::cout << "boost::signals2::signal, ";
     benchmark_connect_disconnect<new_signal_type>();
