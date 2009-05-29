@@ -43,7 +43,6 @@ namespace boost
       typedef typename detail::signalN<boost::function_traits<Signature>::arity,
         Signature, Combiner, Group, GroupCompare, SlotFunction, ExtendedSlotFunction, Mutex>::type base_type;
     public:
-      typedef Signature signature_type;
       signal(const Combiner &combiner = Combiner(), const GroupCompare &group_compare = GroupCompare()):
         base_type(combiner, group_compare)
       {}

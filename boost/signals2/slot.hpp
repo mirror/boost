@@ -15,6 +15,7 @@
 #include <boost/bind.hpp>
 #include <boost/config.hpp>
 #include <boost/function.hpp>
+#include <boost/mpl/identity.hpp>
 #include <boost/ref.hpp>
 #include <boost/signals2/detail/signals_common.hpp>
 #include <boost/signals2/detail/signals_common_macros.hpp>

@@ -38,6 +38,9 @@
 // T1, T2, ..., TN
 #define BOOST_SIGNALS2_ARGS_TEMPLATE_INSTANTIATION(arity) \
   BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_INC(arity), T)
+// R (T1, T2, ..., TN)
+#define BOOST_SIGNALS2_SIGNATURE_FUNCTION_TYPE(arity) \
+  R ( BOOST_SIGNALS2_ARGS_TEMPLATE_INSTANTIATION(arity) )
 // typename prefixR, typename prefixT1, typename prefixT2, ..., typename prefixTN
 #define BOOST_SIGNALS2_PREFIXED_SIGNATURE_TEMPLATE_DECL(arity, prefix) \
   typename BOOST_PP_CAT(prefix, R) BOOST_PP_COMMA_IF(arity) \
@@ -132,6 +135,7 @@
 #define BOOST_SIGNALS2_SIGNAL_IMPL_CLASS_NAME(arity) signal_impl
 #define BOOST_SIGNALS2_SIGNATURE_TEMPLATE_DECL(arity) typename Signature
 #define BOOST_SIGNALS2_SIGNATURE_TEMPLATE_INSTANTIATION(arity) R (Args...)
+#define BOOST_SIGNALS2_SIGNATURE_FUNCTION_TYPE(arity) R (Args...)
 #define BOOST_SIGNALS2_ARGS_TEMPLATE_DECL(arity) typename ... Args
 #define BOOST_SIGNALS2_FULL_REF_ARGS(arity) Args & ... args
 #define BOOST_SIGNALS2_SLOT_CLASS_NAME(arity) slot

@@ -39,6 +39,8 @@ namespace boost
 
       typedef SlotFunction slot_function_type;
       typedef R result_type;
+      typedef typename mpl::identity<BOOST_SIGNALS2_SIGNATURE_FUNCTION_TYPE(BOOST_SIGNALS2_NUM_ARGS)>::type signature_type;
+
 #ifdef BOOST_NO_VARIADIC_TEMPLATES
 
 // typedef Tn argn_type;
@@ -68,8 +70,7 @@ namespace boost
       public:
         typedef typename detail::variadic_arg_type<n, Args...>::type type;
       };
-      BOOST_STATIC_CONSTANT(int, arity = detail::vararg_count<Args...>::value);
-      typedef typename mpl::identity<R (Args...)>::type signature_type;
+      BOOST_STATIC_CONSTANT(int, arity = sizeof...(Args));
 
 #endif // BOOST_NO_VARIADIC_TEMPLATES
 

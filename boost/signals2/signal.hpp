@@ -16,6 +16,7 @@
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/function.hpp>
+#include <boost/mpl/identity.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/signals2/connection.hpp>
 #include <boost/signals2/detail/unique_lock.hpp>

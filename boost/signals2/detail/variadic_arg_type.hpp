@@ -29,22 +29,6 @@ namespace boost
       public:
         typedef typename variadic_arg_type<n - 1, Args...>::type type;
       };
-
-      template<typename ... Args> class vararg_count;
-
-      template<>
-      class vararg_count<>
-      {
-      public:
-        static const unsigned value = 0;
-      };
-
-      template<typename T, typename ... Args>
-      class vararg_count<T, Args...>
-      {
-      public:
-        static const unsigned value = vararg_count<Args...>::value + 1;
-      };
     } // namespace detail
   } // namespace signals2
 } // namespace boost

@@ -53,7 +53,6 @@ namespace boost
       typedef typename detail::slotN<boost::function_traits<Signature>::arity,
         Signature, SlotFunction>::type base_type;
     public:
-      typedef Signature signature_type;
       template<typename F>
       slot(const F& f): base_type(f)
       {}
