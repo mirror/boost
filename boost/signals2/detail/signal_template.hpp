@@ -131,12 +131,12 @@ namespace boost
         typedef ExtendedSlotFunction extended_slot_function_type;
         // typedef slotN+1<R, const connection &, T1, T2, ..., TN, extended_slot_function_type> extended_slot_type;
         typedef BOOST_SIGNALS2_EXTENDED_SLOT_TYPE(BOOST_SIGNALS2_NUM_ARGS) extended_slot_type;
-        typedef typename nonvoid<typename slot_function_type::result_type>::type slot_result_type;
+        typedef typename nonvoid<typename slot_function_type::result_type>::type nonvoid_slot_result_type;
       private:
 #ifdef BOOST_NO_VARIADIC_TEMPLATES
         class slot_invoker;
 #else // BOOST_NO_VARIADIC_TEMPLATES
-        typedef variadic_slot_invoker<slot_result_type, Args...> slot_invoker;
+        typedef variadic_slot_invoker<nonvoid_slot_result_type, Args...> slot_invoker;
 #endif // BOOST_NO_VARIADIC_TEMPLATES
         typedef typename group_key<Group>::type group_key_type;
         typedef shared_ptr<connection_body<group_key_type, slot_type, Mutex> > connection_body_type;
@@ -145,7 +145,7 @@ namespace boost
           bound_extended_slot_function_type;
       public:
         typedef Combiner combiner_type;
-        typedef typename combiner_type::result_type result_type;
+        typedef typename result_type_wrapper<typename combiner_type::result_type>::type result_type;
         typedef Group group_type;
         typedef GroupCompare group_compare_type;
         typedef typename detail::slot_call_iterator_t<slot_invoker,
@@ -236,8 +236,8 @@ namespace boost
             local_state = _shared_state;
           }
           slot_invoker invoker = slot_invoker(BOOST_SIGNALS2_SIGNATURE_ARG_NAMES(BOOST_SIGNALS2_NUM_ARGS));
-          slot_call_iterator_cache<slot_result_type, slot_invoker> cache(invoker);
-          return local_state->combiner()(
+          slot_call_iterator_cache<nonvoid_slot_result_type, slot_invoker> cache(invoker);
+          return detail::combiner_invoker<typename combiner_type::result_type>()(local_state->combiner(),
             slot_call_iterator(local_state->connection_bodies().begin(), local_state->connection_bodies().end(), cache),
             slot_call_iterator(local_state->connection_bodies().end(), local_state->connection_bodies().end(), cache));
         }
@@ -256,8 +256,8 @@ namespace boost
             local_state = _shared_state;
           }
           slot_invoker invoker = slot_invoker(BOOST_SIGNALS2_SIGNATURE_ARG_NAMES(BOOST_SIGNALS2_NUM_ARGS));
-          slot_call_iterator_cache<slot_result_type, slot_invoker> cache(invoker);
-          return local_state->combiner()(
+          slot_call_iterator_cache<nonvoid_slot_result_type, slot_invoker> cache(invoker);
+          return detail::combiner_invoker<typename combiner_type::result_type>()(local_state->combiner(),
             slot_call_iterator(local_state->connection_bodies().begin(), local_state->connection_bodies().end(), cache),
             slot_call_iterator(local_state->connection_bodies().end(), local_state->connection_bodies().end(), cache));
         }
@@ -307,7 +307,7 @@ namespace boost
         class slot_invoker
         {
         public:
-          typedef slot_result_type result_type;
+          typedef nonvoid_slot_result_type result_type;
           slot_invoker(BOOST_SIGNALS2_FULL_REF_ARGS(BOOST_SIGNALS2_NUM_ARGS)) BOOST_PP_IF(BOOST_SIGNALS2_NUM_ARGS, :, )
 // argn ( argn ) ,
 #define BOOST_SIGNALS2_MISC_STATEMENT(z, n, data) \
@@ -513,7 +513,8 @@ namespace boost
     template<BOOST_SIGNALS2_SIGNAL_TEMPLATE_SPECIALIZATION_DECL(BOOST_SIGNALS2_NUM_ARGS)>
     class BOOST_SIGNALS2_SIGNAL_CLASS_NAME(BOOST_SIGNALS2_NUM_ARGS)
       BOOST_SIGNALS2_SIGNAL_TEMPLATE_SPECIALIZATION: public signal_base,
-      public detail::BOOST_SIGNALS2_STD_FUNCTIONAL_BASE(typename Combiner::result_type)
+      public detail::BOOST_SIGNALS2_STD_FUNCTIONAL_BASE
+        (typename detail::result_type_wrapper<typename Combiner::result_type>::type)
     {
       typedef detail::BOOST_SIGNALS2_SIGNAL_IMPL_CLASS_NAME(BOOST_SIGNALS2_NUM_ARGS)
         <BOOST_SIGNALS2_SIGNAL_TEMPLATE_INSTANTIATION> impl_class;
@@ -528,9 +529,9 @@ namespace boost
       typedef typename impl_class::slot_type slot_type;
       typedef typename impl_class::extended_slot_function_type extended_slot_function_type;
       typedef typename impl_class::extended_slot_type extended_slot_type;
-      typedef typename impl_class::slot_result_type slot_result_type;
+      typedef typename slot_function_type::result_type slot_result_type;
       typedef Combiner combiner_type;
-      typedef typename combiner_type::result_type result_type;
+      typedef typename impl_class::result_type result_type;
       typedef Group group_type;
       typedef GroupCompare group_compare_type;
       typedef typename impl_class::slot_call_iterator
@@ -654,8 +655,6 @@ namespace boost
         BOOST_SIGNALS2_SIGNAL_TEMPLATE_SPECIALIZATION
       {
       public:
-        typedef SlotFunction slot_function_type;
-        typedef typename nonvoid<typename slot_function_type::result_type>::type slot_result_type;
         typedef typename BOOST_SIGNALS2_SIGNAL_CLASS_NAME(BOOST_SIGNALS2_NUM_ARGS)
           <BOOST_SIGNALS2_SIGNAL_TEMPLATE_INSTANTIATION>::result_type
           result_type;
