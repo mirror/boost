@@ -174,8 +174,8 @@
                 unref_type;
 
                 typedef
-                    typename mpl::eval_if<
-                        boost::is_reference_wrapper<T>
+                    typename mpl::eval_if_c<
+                        boost::is_reference_wrapper<T>::value
                       , proto::result_of::as_child<unref_type, Domain>
                       , proto::result_of::as_expr<unref_type, Domain>
                     >::type
@@ -183,8 +183,8 @@
 
                 static type call(T &t)
                 {
-                    return typename mpl::if_<
-                        is_reference_wrapper<T>
+                    return typename mpl::if_c<
+                        is_reference_wrapper<T>::value
                       , functional::as_child<Domain>
                       , functional::as_expr<Domain>
                     >::type()(static_cast<unref_type &>(t));
@@ -976,6 +976,7 @@
             typedef proto::expr<
                 Tag
               , BOOST_PP_CAT(list, N)<BOOST_PP_ENUM(N, BOOST_PROTO_AS_CHILD_TYPE, (A, ~, Domain)) >
+              , N
             > expr_type;
 
             typedef typename Domain::template result<void(expr_type)>::type result_type;
@@ -1009,6 +1010,7 @@
               , BOOST_PP_CAT(list, N)<
                     BOOST_PP_ENUM(N, BOOST_PROTO_FUSION_AS_CHILD_AT_TYPE, ~)
                 >
+              , N
             > expr_type;
 
             typedef typename Domain::template result<void(expr_type)>::type type;

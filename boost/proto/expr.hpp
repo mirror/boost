@@ -43,7 +43,7 @@
         /// INTERNAL ONLY
         ///
         #define BOOST_PROTO_CHILD(Z, N, DATA)                                                       \
-            typedef typename Args::BOOST_PP_CAT(child, N) BOOST_PP_CAT(proto_child, N);             \
+            typedef BOOST_PP_CAT(Arg, N) BOOST_PP_CAT(proto_child, N);                              \
             BOOST_PP_CAT(proto_child, N) BOOST_PP_CAT(child, N);                                    \
             /**< INTERNAL ONLY */
 
@@ -179,14 +179,27 @@
         ///
         /// \c proto::expr\<\> is a valid Fusion random-access sequence, where
         /// the elements of the sequence are the child expressions.
-        template<typename Tag, typename Args>
-        struct expr<Tag, Args, BOOST_PP_ITERATION() >
+
+        //template<typename Tag, typename Args>
+        //struct expr<Tag, Args, BOOST_PP_ITERATION() >
+
+        #if IS_TERMINAL
+        template<typename Tag, typename Arg0>
+        struct expr<Tag, term<Arg0>, 0>
+        #else
+        template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(ARG_COUNT, typename Arg)>
+        struct expr<Tag, BOOST_PP_CAT(list, BOOST_PP_ITERATION())<BOOST_PP_ENUM_PARAMS(ARG_COUNT, Arg)>, BOOST_PP_ITERATION() >
+        #endif
         {
             typedef Tag proto_tag;
             BOOST_STATIC_CONSTANT(long, proto_arity_c = BOOST_PP_ITERATION());
             typedef mpl::long_<BOOST_PP_ITERATION() > proto_arity;
             typedef expr proto_base_expr;
-            typedef Args proto_args;
+            #if IS_TERMINAL
+            typedef term<Arg0> proto_args;
+            #else
+            typedef BOOST_PP_CAT(list, BOOST_PP_ITERATION())<BOOST_PP_ENUM_PARAMS(ARG_COUNT, Arg)> proto_args;
+            #endif
             typedef default_domain proto_domain;
             BOOST_PROTO_FUSION_DEFINE_TAG(proto::tag::proto_expr)
             typedef expr proto_derived_expr;
@@ -281,12 +294,14 @@
             proto::expr<
                 proto::tag::assign
               , list2<expr const &, typename result_of::as_child<A>::type>
+              , 2
             > const
             operator =(A &a) const
             {
                 proto::expr<
                     proto::tag::assign
                   , list2<expr const &, typename result_of::as_child<A>::type>
+                  , 2
                 > that = {*this, proto::as_child(a)};
                 return that;
             }
@@ -297,12 +312,14 @@
             proto::expr<
                 proto::tag::assign
               , list2<expr const &, typename result_of::as_child<A const>::type>
+              , 2
             > const
             operator =(A const &a) const
             {
                 proto::expr<
                     proto::tag::assign
                   , list2<expr const &, typename result_of::as_child<A const>::type>
+                  , 2
                 > that = {*this, proto::as_child(a)};
                 return that;
             }
@@ -314,12 +331,14 @@
             proto::expr<
                 proto::tag::assign
               , list2<expr &, typename result_of::as_child<A>::type>
+              , 2
             > const
             operator =(A &a)
             {
                 proto::expr<
                     proto::tag::assign
                   , list2<expr &, typename result_of::as_child<A>::type>
+                  , 2
                 > that = {*this, proto::as_child(a)};
                 return that;
             }
@@ -330,12 +349,14 @@
             proto::expr<
                 proto::tag::assign
               , list2<expr &, typename result_of::as_child<A const>::type>
+              , 2
             > const
             operator =(A const &a)
             {
                 proto::expr<
                     proto::tag::assign
                   , list2<expr &, typename result_of::as_child<A const>::type>
+                  , 2
                 > that = {*this, proto::as_child(a)};
                 return that;
             }
@@ -349,12 +370,14 @@
             proto::expr<
                 proto::tag::subscript
               , list2<expr const &, typename result_of::as_child<A>::type>
+              , 2
             > const
             operator [](A &a) const
             {
                 proto::expr<
                     proto::tag::subscript
                   , list2<expr const &, typename result_of::as_child<A>::type>
+                  , 2
                 > that = {*this, proto::as_child(a)};
                 return that;
             }
@@ -364,12 +387,15 @@
             template<typename A>
             proto::expr<
                 proto::tag::subscript
-              , list2<expr const &, typename result_of::as_child<A const>::type> > const
+              , list2<expr const &, typename result_of::as_child<A const>::type>
+              , 2
+            > const
             operator [](A const &a) const
             {
                 proto::expr<
                     proto::tag::subscript
                   , list2<expr const &, typename result_of::as_child<A const>::type>
+                  , 2
                 > that = {*this, proto::as_child(a)};
                 return that;
             }
@@ -381,12 +407,14 @@
             proto::expr<
                 proto::tag::subscript
               , list2<expr &, typename result_of::as_child<A>::type>
+              , 2
             > const
             operator [](A &a)
             {
                 proto::expr<
                     proto::tag::subscript
                   , list2<expr &, typename result_of::as_child<A>::type>
+                  , 2
                 > that = {*this, proto::as_child(a)};
                 return that;
             }
@@ -397,12 +425,14 @@
             proto::expr<
                 proto::tag::subscript
               , list2<expr &, typename result_of::as_child<A const>::type>
+              , 2
             > const
             operator [](A const &a)
             {
                 proto::expr<
                     proto::tag::subscript
                   , list2<expr &, typename result_of::as_child<A const>::type>
+                  , 2
                 > that = {*this, proto::as_child(a)};
                 return that;
             }
@@ -419,20 +449,20 @@
             /// Function call
             ///
             /// \return A new \c expr\<\> node representing the function invocation of \c (*this)().
-            proto::expr<proto::tag::function, list1<expr const &> > const
+            proto::expr<proto::tag::function, list1<expr const &>, 1> const
             operator ()() const
             {
-                proto::expr<proto::tag::function, list1<expr const &> > that = {*this};
+                proto::expr<proto::tag::function, list1<expr const &>, 1> that = {*this};
                 return that;
             }
 
         #if IS_TERMINAL
             /// \overload
             ///
-            proto::expr<proto::tag::function, list1<expr &> > const
+            proto::expr<proto::tag::function, list1<expr &>, 1> const
             operator ()()
             {
-                proto::expr<proto::tag::function, list1<expr &> > that = {*this};
+                proto::expr<proto::tag::function, list1<expr &>, 1> that = {*this};
                 return that;
             }
         #endif

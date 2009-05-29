@@ -170,6 +170,7 @@
                   , BOOST_PP_CAT(list, N)<
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_TRANSFORM_TYPE, ~)
                     >
+                  , N
                 > result_type;
 
                 result_type operator ()(

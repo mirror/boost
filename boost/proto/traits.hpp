@@ -257,7 +257,7 @@
                       , remove_cv<T>
                     >::type
                 arg0_;
-                typedef proto::expr<proto::tag::terminal, term<arg0_> > expr_;
+                typedef proto::expr<proto::tag::terminal, term<arg0_>, 0> expr_;
                 typedef typename Domain::template result<void(expr_)>::type type;
                 typedef type const reference;
 
@@ -345,7 +345,7 @@
             >
             struct as_child
             {
-                typedef proto::expr<proto::tag::terminal, term<T &> > expr_;
+                typedef proto::expr<proto::tag::terminal, term<T &>, 0> expr_;
                 typedef typename Domain::template result<void(expr_)>::type type;
 
                 /// INTERNAL ONLY
@@ -531,7 +531,7 @@
             template<typename T>
             struct terminal : transform<terminal<T>, empty_base>
             {
-                typedef proto::expr<proto::tag::terminal, term<T> > type;
+                typedef proto::expr<proto::tag::terminal, term<T>, 0> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -571,7 +571,7 @@
             template<typename T, typename U, typename V>
             struct if_else_ : transform<if_else_<T, U, V>, empty_base>
             {
-                typedef proto::expr<proto::tag::if_else_, list3<T, U, V> > type;
+                typedef proto::expr<proto::tag::if_else_, list3<T, U, V>, 3> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -599,7 +599,7 @@
             template<typename Tag, typename T>
             struct nullary_expr : transform<nullary_expr<Tag, T>, empty_base>
             {
-                typedef proto::expr<Tag, term<T> > type;
+                typedef proto::expr<Tag, term<T>, 0> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -643,7 +643,7 @@
             template<typename Tag, typename T>
             struct unary_expr : transform<unary_expr<Tag, T>, empty_base>
             {
-                typedef proto::expr<Tag, list1<T> > type;
+                typedef proto::expr<Tag, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -668,7 +668,7 @@
             template<typename Tag, typename T, typename U>
             struct binary_expr : transform<binary_expr<Tag, T, U>, empty_base>
             {
-                typedef proto::expr<Tag, list2<T, U> > type;
+                typedef proto::expr<Tag, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -691,7 +691,7 @@
             template<typename T>
             struct unary_plus : transform<unary_plus<T>, empty_base>
             {
-                typedef proto::expr<proto::tag::unary_plus, list1<T> > type;
+                typedef proto::expr<proto::tag::unary_plus, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -712,7 +712,7 @@
             template<typename T>
             struct negate : transform<negate<T>, empty_base>
             {
-                typedef proto::expr<proto::tag::negate, list1<T> > type;
+                typedef proto::expr<proto::tag::negate, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -733,7 +733,7 @@
             template<typename T>
             struct dereference : transform<dereference<T>, empty_base>
             {
-                typedef proto::expr<proto::tag::dereference, list1<T> > type;
+                typedef proto::expr<proto::tag::dereference, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -754,7 +754,7 @@
             template<typename T>
             struct complement : transform<complement<T>, empty_base>
             {
-                typedef proto::expr<proto::tag::complement, list1<T> > type;
+                typedef proto::expr<proto::tag::complement, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -775,7 +775,7 @@
             template<typename T>
             struct address_of : transform<address_of<T>, empty_base>
             {
-                typedef proto::expr<proto::tag::address_of, list1<T> > type;
+                typedef proto::expr<proto::tag::address_of, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -796,7 +796,7 @@
             template<typename T>
             struct logical_not : transform<logical_not<T>, empty_base>
             {
-                typedef proto::expr<proto::tag::logical_not, list1<T> > type;
+                typedef proto::expr<proto::tag::logical_not, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -817,7 +817,7 @@
             template<typename T>
             struct pre_inc : transform<pre_inc<T>, empty_base>
             {
-                typedef proto::expr<proto::tag::pre_inc, list1<T> > type;
+                typedef proto::expr<proto::tag::pre_inc, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -838,7 +838,7 @@
             template<typename T>
             struct pre_dec : transform<pre_dec<T>, empty_base>
             {
-                typedef proto::expr<proto::tag::pre_dec, list1<T> > type;
+                typedef proto::expr<proto::tag::pre_dec, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -859,7 +859,7 @@
             template<typename T>
             struct post_inc : transform<post_inc<T>, empty_base>
             {
-                typedef proto::expr<proto::tag::post_inc, list1<T> > type;
+                typedef proto::expr<proto::tag::post_inc, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -880,7 +880,7 @@
             template<typename T>
             struct post_dec : transform<post_dec<T>, empty_base>
             {
-                typedef proto::expr<proto::tag::post_dec, list1<T> > type;
+                typedef proto::expr<proto::tag::post_dec, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -901,7 +901,7 @@
             template<typename T, typename U>
             struct shift_left : transform<shift_left<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::shift_left, list2<T, U> > type;
+                typedef proto::expr<proto::tag::shift_left, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -924,7 +924,7 @@
             template<typename T, typename U>
             struct shift_right : transform<shift_right<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::shift_right, list2<T, U> > type;
+                typedef proto::expr<proto::tag::shift_right, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -947,7 +947,7 @@
             template<typename T, typename U>
             struct multiplies : transform<multiplies<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::multiplies, list2<T, U> > type;
+                typedef proto::expr<proto::tag::multiplies, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -970,7 +970,7 @@
             template<typename T, typename U>
             struct divides : transform<divides<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::divides, list2<T, U> > type;
+                typedef proto::expr<proto::tag::divides, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -993,7 +993,7 @@
             template<typename T, typename U>
             struct modulus : transform<modulus<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::modulus, list2<T, U> > type;
+                typedef proto::expr<proto::tag::modulus, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1016,7 +1016,7 @@
             template<typename T, typename U>
             struct plus : transform<plus<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::plus, list2<T, U> > type;
+                typedef proto::expr<proto::tag::plus, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1039,7 +1039,7 @@
             template<typename T, typename U>
             struct minus : transform<minus<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::minus, list2<T, U> > type;
+                typedef proto::expr<proto::tag::minus, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1062,7 +1062,7 @@
             template<typename T, typename U>
             struct less : transform<less<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::less, list2<T, U> > type;
+                typedef proto::expr<proto::tag::less, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1085,7 +1085,7 @@
             template<typename T, typename U>
             struct greater : transform<greater<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::greater, list2<T, U> > type;
+                typedef proto::expr<proto::tag::greater, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1108,7 +1108,7 @@
             template<typename T, typename U>
             struct less_equal : transform<less_equal<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::less_equal, list2<T, U> > type;
+                typedef proto::expr<proto::tag::less_equal, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1131,7 +1131,7 @@
             template<typename T, typename U>
             struct greater_equal : transform<greater_equal<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::greater_equal, list2<T, U> > type;
+                typedef proto::expr<proto::tag::greater_equal, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1154,7 +1154,7 @@
             template<typename T, typename U>
             struct equal_to : transform<equal_to<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::equal_to, list2<T, U> > type;
+                typedef proto::expr<proto::tag::equal_to, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1177,7 +1177,7 @@
             template<typename T, typename U>
             struct not_equal_to : transform<not_equal_to<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::not_equal_to, list2<T, U> > type;
+                typedef proto::expr<proto::tag::not_equal_to, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1200,7 +1200,7 @@
             template<typename T, typename U>
             struct logical_or : transform<logical_or<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::logical_or, list2<T, U> > type;
+                typedef proto::expr<proto::tag::logical_or, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1223,7 +1223,7 @@
             template<typename T, typename U>
             struct logical_and : transform<logical_and<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::logical_and, list2<T, U> > type;
+                typedef proto::expr<proto::tag::logical_and, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1246,7 +1246,7 @@
             template<typename T, typename U>
             struct bitwise_and : transform<bitwise_and<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::bitwise_and, list2<T, U> > type;
+                typedef proto::expr<proto::tag::bitwise_and, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1269,7 +1269,7 @@
             template<typename T, typename U>
             struct bitwise_or : transform<bitwise_or<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::bitwise_or, list2<T, U> > type;
+                typedef proto::expr<proto::tag::bitwise_or, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1292,7 +1292,7 @@
             template<typename T, typename U>
             struct bitwise_xor : transform<bitwise_xor<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::bitwise_xor, list2<T, U> > type;
+                typedef proto::expr<proto::tag::bitwise_xor, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1315,7 +1315,7 @@
             template<typename T, typename U>
             struct comma : transform<comma<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::comma, list2<T, U> > type;
+                typedef proto::expr<proto::tag::comma, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1334,7 +1334,7 @@
             template<typename T, typename U>
             struct mem_ptr : transform<mem_ptr<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::mem_ptr, list2<T, U> > type;
+                typedef proto::expr<proto::tag::mem_ptr, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1357,7 +1357,7 @@
             template<typename T, typename U>
             struct assign : transform<assign<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::assign, list2<T, U> > type;
+                typedef proto::expr<proto::tag::assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1380,7 +1380,7 @@
             template<typename T, typename U>
             struct shift_left_assign : transform<shift_left_assign<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::shift_left_assign, list2<T, U> > type;
+                typedef proto::expr<proto::tag::shift_left_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1403,7 +1403,7 @@
             template<typename T, typename U>
             struct shift_right_assign : transform<shift_right_assign<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::shift_right_assign, list2<T, U> > type;
+                typedef proto::expr<proto::tag::shift_right_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1426,7 +1426,7 @@
             template<typename T, typename U>
             struct multiplies_assign : transform<multiplies_assign<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::multiplies_assign, list2<T, U> > type;
+                typedef proto::expr<proto::tag::multiplies_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1449,7 +1449,7 @@
             template<typename T, typename U>
             struct divides_assign : transform<divides_assign<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::divides_assign, list2<T, U> > type;
+                typedef proto::expr<proto::tag::divides_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1472,7 +1472,7 @@
             template<typename T, typename U>
             struct modulus_assign : transform<modulus_assign<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::modulus_assign, list2<T, U> > type;
+                typedef proto::expr<proto::tag::modulus_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1495,7 +1495,7 @@
             template<typename T, typename U>
             struct plus_assign : transform<plus_assign<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::plus_assign, list2<T, U> > type;
+                typedef proto::expr<proto::tag::plus_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1518,7 +1518,7 @@
             template<typename T, typename U>
             struct minus_assign : transform<minus_assign<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::minus_assign, list2<T, U> > type;
+                typedef proto::expr<proto::tag::minus_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1541,7 +1541,7 @@
             template<typename T, typename U>
             struct bitwise_and_assign : transform<bitwise_and_assign<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::bitwise_and_assign, list2<T, U> > type;
+                typedef proto::expr<proto::tag::bitwise_and_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1564,7 +1564,7 @@
             template<typename T, typename U>
             struct bitwise_or_assign : transform<bitwise_or_assign<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::bitwise_or_assign, list2<T, U> > type;
+                typedef proto::expr<proto::tag::bitwise_or_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1587,7 +1587,7 @@
             template<typename T, typename U>
             struct bitwise_xor_assign : transform<bitwise_xor_assign<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::bitwise_xor_assign, list2<T, U> > type;
+                typedef proto::expr<proto::tag::bitwise_xor_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1610,7 +1610,7 @@
             template<typename T, typename U>
             struct subscript : transform<subscript<T, U>, empty_base>
             {
-                typedef proto::expr<proto::tag::subscript, list2<T, U> > type;
+                typedef proto::expr<proto::tag::subscript, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -1633,7 +1633,7 @@
             template<typename T, typename U>
             struct member : transform<member<T, U>, empty_base>
             {
-                typedef expr<tag::member, list2<T, U> > type;
+                typedef expr<tag::member, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -2276,7 +2276,7 @@
                   , empty_base
                 >
             {
-                typedef proto::expr<proto::tag::function, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
+                typedef proto::expr<proto::tag::function, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)>, N> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
@@ -2321,7 +2321,7 @@
                   , empty_base
                 >
             {
-                typedef proto::expr<Tag, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
+                typedef proto::expr<Tag, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)>, N> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>

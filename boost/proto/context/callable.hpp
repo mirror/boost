@@ -209,8 +209,8 @@
                 /// <tt>DefaultCtx::eval\<Expr, Context\></tt>.
                 template<typename Expr, typename ThisContext = Context>
                 struct eval
-                  : mpl::if_<
-                        detail::is_expr_handled<Expr, Context>
+                  : mpl::if_c<
+                        detail::is_expr_handled<Expr, Context>::value
                       , callable_eval<Expr, ThisContext>
                       , typename DefaultCtx::template eval<Expr, Context>
                     >::type

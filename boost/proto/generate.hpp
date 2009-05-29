@@ -56,6 +56,7 @@
                     proto::expr<
                         typename expr_params<Expr>::tag
                       , term<typename detail::term_traits<typename expr_params<Expr>::args::child0>::value_type>
+                      , 0
                     >
                 type;
 
@@ -359,6 +360,7 @@
                             // typename uncvref<typename expr_params<Expr>::args::child0>::type, ...
                             BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_BY_VALUE_TYPE, Expr)
                         >
+                      , N
                     >
                 type;
 

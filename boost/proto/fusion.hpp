@@ -103,8 +103,8 @@ namespace boost { namespace proto
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
-              : mpl::if_<
-                    is_same<Tag, UNREF(Expr)::proto_tag>
+              : mpl::if_c<
+                    is_same<Tag, UNREF(Expr)::proto_tag>::value
                   , flat_view<UNREF(Expr) const>
                   , fusion::single_view<UNREF(Expr) const &>
                 >

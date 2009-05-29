@@ -29,6 +29,7 @@
                 Expr &
                 BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), M0, ~)
             >
+          , BOOST_PP_INC(BOOST_PP_ITERATION())
         > type;
 
         static type const call(

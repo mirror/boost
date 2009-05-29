@@ -46,9 +46,9 @@ namespace boost { namespace proto
         template<typename Domain, typename Tag, typename Left, typename Right>
         struct generate_if_left
           : lazy_enable_if_c<
-                matches<proto::expr<Tag, proto::list2<Left &, Right> >, typename Domain::proto_grammar>::value
+                matches<proto::expr<Tag, proto::list2<Left &, Right>, 2>, typename Domain::proto_grammar>::value
               , typename Domain::template result<void(
-                    proto::expr<Tag, proto::list2<Left &, typename Domain::template result<void(Right)>::type> >
+                    proto::expr<Tag, proto::list2<Left &, typename Domain::template result<void(Right)>::type>, 2>
                 )>
             >
         {};
@@ -57,15 +57,15 @@ namespace boost { namespace proto
         template<typename Tag, typename Left, typename Right>
         struct generate_if_left<proto::default_domain, Tag, Left, Right>
         {
-            typedef proto::expr<Tag, proto::list2<Left &, Right> > type;
+            typedef proto::expr<Tag, proto::list2<Left &, Right>, 2> type;
         };
 
         template<typename Domain, typename Tag, typename Left, typename Right>
         struct generate_if_right
           : lazy_enable_if_c<
-                matches<proto::expr<Tag, proto::list2<Left, Right &> >, typename Domain::proto_grammar>::value
+                matches<proto::expr<Tag, proto::list2<Left, Right &>, 2>, typename Domain::proto_grammar>::value
               , typename Domain::template result<void(
-                    proto::expr<Tag, proto::list2<typename Domain::template result<void(Left)>::type, Right &> >
+                    proto::expr<Tag, proto::list2<typename Domain::template result<void(Left)>::type, Right &>, 2>
                 )>
             >
         {};
@@ -74,7 +74,7 @@ namespace boost { namespace proto
         template<typename Tag, typename Left, typename Right>
         struct generate_if_right<proto::default_domain, Tag, Left, Right>
         {
-            typedef proto::expr<Tag, proto::list2<Left, Right &> > type;
+            typedef proto::expr<Tag, proto::list2<Left, Right &>, 2> type;
         };
 
         template<typename Tag, typename Left, typename Right, typename Enable1 = void, typename Enable2 = void>
@@ -87,11 +87,11 @@ namespace boost { namespace proto
                 typename Left::proto_domain
               , Tag
               , Left
-              , proto::expr<tag::terminal, term<Right &> >
+              , proto::expr<tag::terminal, term<Right &>, 0>
             >
         {
-            typedef proto::expr<tag::terminal, term<Right &> > term_type;
-            typedef proto::expr<Tag, list2<Left &, typename Left::proto_domain::template result<void(term_type)>::type> > expr_type;
+            typedef proto::expr<tag::terminal, term<Right &>, 0> term_type;
+            typedef proto::expr<Tag, list2<Left &, typename Left::proto_domain::template result<void(term_type)>::type>, 2> expr_type;
 
             static typename Left::proto_domain::template result<void(expr_type)>::type
             make(Left &left, Right &right)
@@ -107,12 +107,12 @@ namespace boost { namespace proto
           : generate_if_right<
                 typename Right::proto_domain
               , Tag
-              , proto::expr<tag::terminal, term<Left &> >
+              , proto::expr<tag::terminal, term<Left &>, 0>
               , Right
             >
         {
-            typedef proto::expr<tag::terminal, term<Left &> > term_type;
-            typedef proto::expr<Tag, list2<typename Right::proto_domain::template result<void(term_type)>::type, Right &> > expr_type;
+            typedef proto::expr<tag::terminal, term<Left &>, 0> term_type;
+            typedef proto::expr<Tag, list2<typename Right::proto_domain::template result<void(term_type)>::type, Right &>, 2> expr_type;
 
             static typename Right::proto_domain::template result<void(expr_type)>::type
             make(Left &left, Right &right)
@@ -132,10 +132,10 @@ namespace boost { namespace proto
         struct as_expr_if<Tag, Left, Right, typename Left::proto_is_expr_, typename Right::proto_is_expr_>
           : generate_if<
                 typename Left::proto_domain
-              , proto::expr<Tag, list2<Left &, Right &> >
+              , proto::expr<Tag, list2<Left &, Right &>, 2>
             >
         {
-            typedef proto::expr<Tag, list2<Left &, Right &> > expr_type;
+            typedef proto::expr<Tag, list2<Left &, Right &>, 2> expr_type;
             BOOST_MPL_ASSERT((is_same<typename Left::proto_domain, typename Right::proto_domain>));
 
             static typename Left::proto_domain::template result<void(expr_type)>::type
@@ -160,46 +160,46 @@ namespace boost { namespace proto
 
         template<typename Domain, typename Trait, typename Arg, typename Expr>
         struct enable_unary
-          : boost::enable_if<
-                boost::mpl::and_<Trait, boost::proto::matches<Expr, typename Domain::proto_grammar> >
+          : boost::enable_if_c<
+                boost::mpl::and_<Trait, boost::proto::matches<Expr, typename Domain::proto_grammar> >::value
               , Expr
             >
         {};
 
         template<typename Trait, typename Arg, typename Expr>
         struct enable_unary<deduce_domain, Trait, Arg, Expr>
-          : boost::enable_if<
+          : boost::enable_if_c<
                 boost::mpl::and_<
                     Trait
                   , boost::proto::matches<Expr, typename domain_of<Arg>::type::proto_grammar>
-                >
+                >::value
               , Expr
             >
         {};
 
         template<typename Trait, typename Arg, typename Expr>
         struct enable_unary<default_domain, Trait, Arg, Expr>
-          : boost::enable_if<Trait, Expr>
+          : boost::enable_if_c<Trait::value, Expr>
         {};
 
         template<typename Domain, typename Trait1, typename Arg1, typename Trait2, typename Arg2, typename Expr>
         struct enable_binary
-          : boost::enable_if<
+          : boost::enable_if_c<
                 boost::mpl::and_<
                     mpl::bool_<(3 <= (arg_weight<Arg1, Trait1>::value + arg_weight<Arg2, Trait2>::value))>
                   , boost::proto::matches<Expr, typename Domain::proto_grammar>
-                >
+                >::value
               , Expr
             >
         {};
 
         template<typename Trait1, typename Arg1, typename Trait2, typename Arg2, typename Expr>
         struct enable_binary<deduce_domain, Trait1, Arg1, Trait2, Arg2, Expr>
-          : boost::enable_if<
+          : boost::enable_if_c<
                 boost::mpl::and_<
                     mpl::bool_<(3 <= (arg_weight<Arg1, Trait1>::value + arg_weight<Arg2, Trait2>::value))>
                   , boost::proto::matches<Expr, typename deduce_domain2<Arg1, Arg2>::type::proto_grammar>
-                >
+                >::value
               , Expr
             >
         {};
@@ -221,22 +221,22 @@ namespace boost { namespace proto
     template<typename Arg>                                                                          \
     typename detail::generate_if<                                                                   \
         typename Arg::proto_domain                                                                  \
-      , proto::expr<TAG, list1<typename Arg::proto_derived_expr &> >                                \
+      , proto::expr<TAG, list1<typename Arg::proto_derived_expr &>, 1>                              \
     >::type const                                                                                   \
     operator OP(Arg &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                                  \
     {                                                                                               \
-        typedef proto::expr<TAG, list1<typename Arg::proto_derived_expr &> > that_type;             \
+        typedef proto::expr<TAG, list1<typename Arg::proto_derived_expr &>, 1> that_type;           \
         that_type that = {arg};                                                                     \
         return typename Arg::proto_domain()(that);                                                  \
     }                                                                                               \
     template<typename Arg>                                                                          \
     typename detail::generate_if<                                                                   \
         typename Arg::proto_domain                                                                  \
-      , proto::expr<TAG, list1<typename Arg::proto_derived_expr const &> >                          \
+      , proto::expr<TAG, list1<typename Arg::proto_derived_expr const &>, 1>                        \
     >::type const                                                                                   \
     operator OP(Arg const &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                            \
     {                                                                                               \
-        typedef proto::expr<TAG, list1<typename Arg::proto_derived_expr const &> > that_type;       \
+        typedef proto::expr<TAG, list1<typename Arg::proto_derived_expr const &>, 1> that_type;     \
         that_type that = {arg};                                                                     \
         return typename Arg::proto_domain()(that);                                                  \
     }                                                                                               \

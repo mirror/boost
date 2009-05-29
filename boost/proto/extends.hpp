@@ -200,6 +200,7 @@ namespace boost { namespace proto
                         proto_derived_expr BOOST_PROTO_CONST ## Const &                             \
                       , typename boost::proto::result_of::as_child<A, proto_domain>::type           \
                     >                                                                               \
+                  , 2                                                                               \
                 >                                                                                   \
             )                                                                                       \
         >::type const                                                                               \
@@ -211,6 +212,7 @@ namespace boost { namespace proto
                     proto_derived_expr BOOST_PROTO_CONST ## Const &                                 \
                   , typename boost::proto::result_of::as_child<A, proto_domain>::type               \
                 >                                                                                   \
+              , 2                                                                                   \
             > that_type;                                                                            \
             that_type that = {                                                                      \
                 *static_cast<proto_derived_expr BOOST_PROTO_CONST ## Const *>(this)                 \
@@ -228,6 +230,7 @@ namespace boost { namespace proto
                         proto_derived_expr BOOST_PROTO_CONST ## Const &                             \
                       , typename boost::proto::result_of::as_child<A const, proto_domain>::type     \
                     >                                                                               \
+                  , 2                                                                               \
                 >                                                                                   \
             )                                                                                       \
         >::type const                                                                               \
@@ -239,6 +242,7 @@ namespace boost { namespace proto
                     proto_derived_expr BOOST_PROTO_CONST ## Const &                                 \
                   , typename boost::proto::result_of::as_child<A const, proto_domain>::type         \
                 >                                                                                   \
+              , 2                                                                                   \
             > that_type;                                                                            \
             that_type that = {                                                                      \
                 *static_cast<proto_derived_expr BOOST_PROTO_CONST ## Const *>(this)                 \
@@ -271,6 +275,7 @@ namespace boost { namespace proto
                         proto_derived_expr BOOST_PROTO_CONST ## Const &                             \
                       , typename boost::proto::result_of::as_child<A, proto_domain>::type           \
                     >                                                                               \
+                  , 2                                                                               \
                 >                                                                                   \
             )                                                                                       \
         >::type const                                                                               \
@@ -282,6 +287,7 @@ namespace boost { namespace proto
                     proto_derived_expr BOOST_PROTO_CONST ## Const &                                 \
                   , typename boost::proto::result_of::as_child<A, proto_domain>::type               \
                 >                                                                                   \
+              , 2                                                                                   \
             > that_type;                                                                            \
             that_type that = {                                                                      \
                 *static_cast<proto_derived_expr BOOST_PROTO_CONST ## Const *>(this)                 \
@@ -299,6 +305,7 @@ namespace boost { namespace proto
                         proto_derived_expr BOOST_PROTO_CONST ## Const &                             \
                       , typename boost::proto::result_of::as_child<A const, proto_domain>::type     \
                     >                                                                               \
+                  , 2                                                                               \
                 >                                                                                   \
             )                                                                                       \
         >::type const                                                                               \
@@ -310,6 +317,7 @@ namespace boost { namespace proto
                     proto_derived_expr BOOST_PROTO_CONST ## Const &                                 \
                   , typename boost::proto::result_of::as_child<A const, proto_domain>::type         \
                 >                                                                                   \
+              , 2                                                                                   \
             > that_type;                                                                            \
             that_type that = {                                                                      \
                 *static_cast<proto_derived_expr BOOST_PROTO_CONST ## Const *>(this)                 \
@@ -534,7 +542,7 @@ namespace boost { namespace proto
     struct virtual_member
     {
         typedef
-            expr<tag::member, list2<This &, expr<tag::terminal, term<Fun> > const &> >
+            expr<tag::member, list2<This &, expr<tag::terminal, term<Fun> > const &>, 2>
         proto_base_expr;
         typedef Domain proto_domain;
         typedef virtual_member<This, Fun, Domain> proto_derived_expr;
@@ -564,7 +572,7 @@ namespace boost { namespace proto
 
         proto_child1 child1() const
         {
-            static expr<tag::terminal, term<Fun> > const that = {Fun()};
+            static expr<tag::terminal, term<Fun>, 0> const that = {Fun()};
             return that;
         }
     };
