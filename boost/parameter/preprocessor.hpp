@@ -361,7 +361,7 @@ struct funptr_predicate<void**>
 #  define BOOST_PARAMETER_FUNCTION_FWD_MATCH_Z(z, name, parameters, n) \
     , typename boost::parameter::aux::match< \
           parameters, BOOST_PP_ENUM_PARAMS(n, ParameterArgumentType) \
-      >::type boost_parameter_enabler_argument = parameters()
+      >::type = parameters()
 # else
 #  define BOOST_PARAMETER_FUNCTION_FWD_MATCH_Z(z, name, parameters, n)
 # endif
