@@ -19,4 +19,16 @@
 #define BOOST_PP_FILENAME_1 <boost/signals2/detail/preprocessed_arg_type_template.hpp>
 #include BOOST_PP_ITERATE()
 
+namespace boost
+{
+  namespace signals2
+  {
+    namespace detail
+    {
+      struct std_functional_base
+      {};
+    } // namespace detail
+  } // namespace signals2
+} // namespace boost
+
 #endif // BOOST_SIGNALS2_PREPROCESSED_ARG_TYPE_HPP

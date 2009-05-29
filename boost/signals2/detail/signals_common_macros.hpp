@@ -126,6 +126,8 @@
 #define BOOST_SIGNALS2_SIGNAL_TEMPLATE_SPECIALIZATION_DECL(arity) BOOST_SIGNALS2_SIGNAL_TEMPLATE_DECL(arity)
 #define BOOST_SIGNALS2_SIGNAL_TEMPLATE_SPECIALIZATION
 
+#define BOOST_SIGNALS2_STD_FUNCTIONAL_BASE(result_type) std_functional_base
+
 #define BOOST_SIGNALS2_PP_COMMA_IF(arity) BOOST_PP_COMMA_IF(arity)
 
 #else // BOOST_NO_VARIADIC_TEMPLATES
@@ -134,6 +136,7 @@
 #define BOOST_SIGNALS2_WEAK_SIGNAL_CLASS_NAME(arity) weak_signal
 #define BOOST_SIGNALS2_SIGNAL_IMPL_CLASS_NAME(arity) signal_impl
 #define BOOST_SIGNALS2_SIGNATURE_TEMPLATE_DECL(arity) typename Signature
+#define BOOST_SIGNALS2_ARGS_TEMPLATE_INSTANTIATION(arity) Args...
 #define BOOST_SIGNALS2_SIGNATURE_TEMPLATE_INSTANTIATION(arity) R (Args...)
 #define BOOST_SIGNALS2_SIGNATURE_FUNCTION_TYPE(arity) R (Args...)
 #define BOOST_SIGNALS2_ARGS_TEMPLATE_DECL(arity) typename ... Args
@@ -147,7 +150,6 @@
 #define BOOST_SIGNALS2_SIGNATURE_FULL_ARGS(arity) Args ... args
 #define BOOST_SIGNALS2_SIGNATURE_ARG_NAMES(arity) args...
 #define BOOST_SIGNALS2_PORTABLE_SIGNATURE(arity, Signature) Signature
-#define BOOST_SIGNALS2_EXT_SLOT_TEMPLATE_INSTANTIATION(arity) R (Args...)
 #define BOOST_SIGNALS2_SLOT_CLASS_NAME(arity) slot
 
 #define BOOST_SIGNALS2_SLOT_TEMPLATE_SPECIALIZATION_DECL(arity) \
@@ -190,6 +192,9 @@
   SlotFunction, \
   ExtendedSlotFunction, \
   Mutex>
+
+#define BOOST_SIGNALS2_STD_FUNCTIONAL_BASE(result_type) \
+  std_functional_base<result_type , Args...>
 
 #define BOOST_SIGNALS2_PP_COMMA_IF(arity) ,
 
