@@ -157,6 +157,9 @@ namespace impl
             }
         }
 
+        /**
+            @pre The number of samples must meet or exceed the cache size
+        */
         template<typename Args>
         result_type result(Args const &args) const
         {

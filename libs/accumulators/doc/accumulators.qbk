@@ -1141,6 +1141,11 @@ implementation details, see [classref boost::accumulators::impl::density_impl [^
 
     #include <_DENSITY_HPP_>
 
+[*Note]
+
+Results from the `density` accumulator can only be extracted after the number of
+samples meets or exceeds the cache size.
+
 [/ TODO add example ]
 
 [*See also]
