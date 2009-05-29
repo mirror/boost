@@ -67,7 +67,7 @@ namespace boost
         template<typename Func, typename ... Args>
           R operator()(Func &func, std::tuple<Args...> args) const
         {
-          typedef typename make_unsigned_meta_array<vararg_count<Args...>::value>::type indices_type;
+          typedef typename make_unsigned_meta_array<sizeof...(Args)>::type indices_type;
           typename Func::result_type *resolver = 0;
           return m_invoke(resolver, func, indices_type(), args);
         }
