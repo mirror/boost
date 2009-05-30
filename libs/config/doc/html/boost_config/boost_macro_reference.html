@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Boost Macro Reference</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="Microsoft FrontPage 5.0">
 <link rel="start" href="../index.html" title="Boost.Config">
 <link rel="up" href="../index.html" title="Boost.Config">
 <link rel="prev" href="../index.html" title="Boost.Config">
@@ -20,7 +20,8 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../index.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="guidelines_for_boost_authors.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../index.html">
+<img src="../../../../../doc/html/images/prev.png" alt="Prev" width="19" height="19"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up" width="19" height="19"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home" width="19" height="19"></a><a accesskey="n" href="guidelines_for_boost_authors.html"><img src="../../../../../doc/html/images/next.png" alt="Next" width="19" height="19"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -2212,7 +2213,7 @@
 </h3></div></div></div>
 <p>
         The following macros describe features in the upcoming ISO C++ standard,
-        C++0x, that are not yet supported by a particular compiler.
+        C++0x, that are not yet supported by a particular compiler or library.
       </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -2235,6 +2236,291 @@
 <tr>
 <td>
               <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_ARRAY</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;array&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_CHRONO</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;chrono&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_CODECVT</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;codecvt&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_CONCEPTS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;concepts&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_CONDITION_VARIABLE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;condition_variable&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_CONTAINER_CONCEPTS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;container_concepts&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_FORWARD_LIST</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;forward_list&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_FUTURE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;future&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_INITIALIZER_LIST</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;initializer_list&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_ITERATOR_CONCEPTS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;iterator_concepts&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_MEMORY_CONCEPTS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;memory_concepts&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_MUTEX</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;mutex&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_RANDOM</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;random&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_RATIO</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;ratio&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_REGEX</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;regex&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_SYSTEM_ERROR</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;system_error&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">
+                BOOST_NO_0X_HDR_THREAD</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;thread&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_TUPLE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;tuple&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_TYPE_TRAITS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;type_traits&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_UNORDERED_MAP</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;unordered_map&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_0X_HDR_UNORDERED_SET</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide header &lt;unordered_set&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_AUTO_DECLARATIONS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support type deduction for variables declared
+                with the <code class="computeroutput"><span class="keyword">auto</span></code> keyword
+                (<code class="computeroutput"><span class="keyword">auto</span> <span class="identifier">var</span>
+                <span class="special">=</span> <span class="special">...;</span></code>).
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_AUTO_MULTIDECLARATIONS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support type deduction for multiple variables
+                declared with the <code class="computeroutput"><span class="keyword">auto</span></code>
+                keyword (<code class="computeroutput"><span class="keyword">auto</span> <span class="identifier">var</span>
+                <span class="special">=</span> <span class="special">...,</span>
+                <span class="special">*</span><span class="identifier">ptr</span>
+                <span class="special">=</span> <span class="special">...;</span></code>).
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
                 <code class="computeroutput"><span class="identifier">BOOST_NO_CHAR16_T</span></code>
               </p>
               </td>
@@ -2253,6 +2539,30 @@
 <td>
               <p>
                 The compiler does not support type <code class="computeroutput"><span class="identifier">char32_t</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_CONCEPTS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support Concepts.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_TEMPLATE_ALIASES</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support template aliases.
               </p>
               </td>
 </tr>
@@ -2347,6 +2657,18 @@
 <tr>
 <td>
               <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_LAMBDAS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support Lambdas.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
                 <code class="computeroutput"><span class="identifier">BOOST_NO_LONG_LONG</span></code>
               </p>
               </td>
@@ -2354,6 +2676,18 @@
               <p>
                 The compiler does not support <code class="computeroutput"><span class="keyword">long</span>
                 <span class="keyword">long</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_NULLPTR</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support 'nullptr'.
               </p>
               </td>
 </tr>
@@ -2414,6 +2748,18 @@
 <td>
               <p>
                 The standard library does not support &lt;unordered_map&gt; and &lt;unordered_set&gt;.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_TEMPLATE_ALIASES</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support template aliases.
               </p>
               </td>
 </tr>
@@ -3147,7 +3493,8 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../index.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="guidelines_for_boost_authors.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../index.html">
+<img src="../../../../../doc/html/images/prev.png" alt="Prev" width="19" height="19"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up" width="19" height="19"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home" width="19" height="19"></a><a accesskey="n" href="guidelines_for_boost_authors.html"><img src="../../../../../doc/html/images/next.png" alt="Next" width="19" height="19"></a>
 </div>
 </body>
 </html>
