@@ -101,23 +101,21 @@
 #  endif
 #endif
 
+// C++0x features not implemented in any GCC version
 //
-// C++0x features
-//
-
-#define BOOST_NO_CHAR16_T
-#define BOOST_NO_CHAR32_T
 #define BOOST_NO_CONSTEXPR
-#define BOOST_NO_DEFAULTED_FUNCTIONS
-#define BOOST_NO_DELETED_FUNCTIONS
 #define BOOST_NO_EXPLICIT_CONVERSION_OPERATORS
 #define BOOST_NO_EXTERN_TEMPLATE
+#define BOOST_NO_LAMBDAS
+#define BOOST_NO_NULLPTR
 #define BOOST_NO_RAW_LITERALS
+// scoped enums have a serious bug in 4.4.0, so define BOOST_NO_SCOPED_ENUMS until it
+// gets fixed. See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=38064
 #define BOOST_NO_SCOPED_ENUMS
-#define BOOST_NO_UNICODE_LITERALS
-// See below for BOOST_NO_AUTO_DECLARATIONS
-#define BOOST_NO_AUTO_MULTIDECLARATIONS
+#define BOOST_NO_TEMPLATE_ALIASES
 
+// C++0x features in 4.3.n and later
+//
 #if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 2)) && defined(__GXX_EXPERIMENTAL_CXX0X__)
 // C++0x features are only enabled when -std=c++0x or -std=gnu++0x are
 // passed on the command line, which in turn defines
@@ -140,9 +138,18 @@
 #  endif
 #endif
 
-#if !defined(__GXX_EXPERIMENTAL_CXX0X__) || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 4)
-#  define BOOST_NO_INITIALIZER_LISTS
+// C++0x features in 4.4.n and later
+//
+#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 4) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
 #  define BOOST_NO_AUTO_DECLARATIONS
+#  define BOOST_NO_AUTO_MULTIDECLARATIONS
+#  define BOOST_NO_CHAR16_T
+#  define BOOST_NO_CHAR32_T
+#  define BOOST_NO_DEFAULTED_FUNCTIONS
+#  define BOOST_NO_DELETED_FUNCTIONS
+#  define BOOST_NO_INITIALIZER_LISTS
+#  define BOOST_NO_SCOPED_ENUMS  
+#  define BOOST_NO_UNICODE_LITERALS
 #endif
 
 // ConceptGCC compiler:
@@ -150,6 +157,8 @@
 #ifdef __GXX_CONCEPTS__
 #  define BOOST_HAS_CONCEPTS
 #  define BOOST_COMPILER "ConceptGCC version " __VERSION__
+#else
+#  define BOOST_NO_CONCEPTS
 #endif
 
 #ifndef BOOST_COMPILER
