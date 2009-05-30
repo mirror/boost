@@ -52,11 +52,11 @@ namespace move_tests
 
         {
             T y(empty(ptr));
-            BOOST_CHECK(y.empty());
-            BOOST_CHECK(test::equivalent(y.hash_function(), hf));
-            BOOST_CHECK(test::equivalent(y.key_eq(), eq));
-            BOOST_CHECK(test::equivalent(y.get_allocator(), al));
-            BOOST_CHECK(y.max_load_factor() == 1.0);
+            BOOST_TEST(y.empty());
+            BOOST_TEST(test::equivalent(y.hash_function(), hf));
+            BOOST_TEST(test::equivalent(y.key_eq(), eq));
+            BOOST_TEST(test::equivalent(y.get_allocator(), al));
+            BOOST_TEST(y.max_load_factor() == 1.0);
             test::check_equivalent_keys(y);
         }
 
@@ -64,7 +64,7 @@ namespace move_tests
             test::random_values<T> v(1000, generator);
             test::object_count count;
             T y(create(v, count));
-            BOOST_CHECK(count == test::global_object_count);
+            BOOST_TEST(count == test::global_object_count);
             test::check_container(y, v);
             test::check_equivalent_keys(y);
         }
@@ -78,7 +78,7 @@ namespace move_tests
             test::object_count count;
             T y;
             y = create(v, count);
-            BOOST_CHECK(count == test::global_object_count);
+            BOOST_TEST(count == test::global_object_count);
             test::check_container(y, v);
             test::check_equivalent_keys(y);
         }
@@ -98,12 +98,12 @@ namespace move_tests
         {
             test::random_values<T> v(500, generator);
             T y(create(v, count, hf, eq, al, 0.5));
-            BOOST_CHECK(count == test::global_object_count);
+            BOOST_TEST(count == test::global_object_count);
             test::check_container(y, v);
-            BOOST_CHECK(test::equivalent(y.hash_function(), hf));
-            BOOST_CHECK(test::equivalent(y.key_eq(), eq));
-            BOOST_CHECK(test::equivalent(y.get_allocator(), al));
-            BOOST_CHECK(y.max_load_factor() == 0.5); // Not necessarily required.
+            BOOST_TEST(test::equivalent(y.hash_function(), hf));
+            BOOST_TEST(test::equivalent(y.key_eq(), eq));
+            BOOST_TEST(test::equivalent(y.get_allocator(), al));
+            BOOST_TEST(y.max_load_factor() == 0.5); // Not necessarily required.
             test::check_equivalent_keys(y);
         }
 
@@ -111,12 +111,12 @@ namespace move_tests
             // TODO: To do this correctly requires the fancy new allocator stuff.
             test::random_values<T> v(500, generator);
             T y(create(v, count, hf, eq, al, 2.0), al2);
-            BOOST_CHECK(count != test::global_object_count);
+            BOOST_TEST(count != test::global_object_count);
             test::check_container(y, v);
-            BOOST_CHECK(test::equivalent(y.hash_function(), hf));
-            BOOST_CHECK(test::equivalent(y.key_eq(), eq));
-            BOOST_CHECK(test::equivalent(y.get_allocator(), al2));
-            BOOST_CHECK(y.max_load_factor() == 2.0); // Not necessarily required.
+            BOOST_TEST(test::equivalent(y.hash_function(), hf));
+            BOOST_TEST(test::equivalent(y.key_eq(), eq));
+            BOOST_TEST(test::equivalent(y.get_allocator(), al2));
+            BOOST_TEST(y.max_load_factor() == 2.0); // Not necessarily required.
             test::check_equivalent_keys(y);
         }
 
@@ -124,17 +124,17 @@ namespace move_tests
             test::random_values<T> v(25, generator);
             T y(create(v, count, hf, eq, al, 1.0), al);
 #if defined(BOOST_HAS_RVALUE_REFS)
-            BOOST_CHECK(count == test::global_object_count);
+            BOOST_TEST(count == test::global_object_count);
 #else
-            BOOST_CHECK(test::global_object_count.constructions - count.constructions <=
+            BOOST_TEST(test::global_object_count.constructions - count.constructions <=
                 (test::is_map<T>::value ? 50 : 25));
-            BOOST_CHECK(count.instances == test::global_object_count.instances);
+            BOOST_TEST(count.instances == test::global_object_count.instances);
 #endif
             test::check_container(y, v);
-            BOOST_CHECK(test::equivalent(y.hash_function(), hf));
-            BOOST_CHECK(test::equivalent(y.key_eq(), eq));
-            BOOST_CHECK(test::equivalent(y.get_allocator(), al));
-            BOOST_CHECK(y.max_load_factor() == 1.0); // Not necessarily required.
+            BOOST_TEST(test::equivalent(y.hash_function(), hf));
+            BOOST_TEST(test::equivalent(y.key_eq(), eq));
+            BOOST_TEST(test::equivalent(y.get_allocator(), al));
+            BOOST_TEST(y.max_load_factor() == 1.0); // Not necessarily required.
             test::check_equivalent_keys(y);
         }
     }

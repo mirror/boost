@@ -21,6 +21,10 @@
 #include <boost/unordered/detail/move.hpp>
 #endif
 
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#include <initializer_list>
+#endif
+
 #if defined(BOOST_MSVC)
 #pragma warning(push)
 #if BOOST_MSVC >= 1400
@@ -35,6 +39,9 @@ namespace boost
     template <class Value, class Hash, class Pred, class Alloc>
     class unordered_set
     {
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+    public:
+#endif
         typedef boost::unordered_detail::hash_types_unique_keys<
             Value, Value, Hash, Pred, Alloc
         > implementation;
@@ -101,6 +108,8 @@ namespace boost
             : base(f, l, n, hf, eql, a)
         {
         }
+        
+        ~unordered_set() {}
 
 #if defined(BOOST_HAS_RVALUE_REFS)
         unordered_set(unordered_set&& other)
@@ -133,7 +142,7 @@ namespace boost
 #endif
 #endif
 
-#if !defined(BOOST_NO_INITIALIZER_LISTS)
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
         unordered_set(std::initializer_list<value_type> list,
                 size_type n = boost::unordered_detail::default_initial_bucket_count,
                 const hasher &hf = hasher(),
@@ -217,7 +226,7 @@ namespace boost
 
         // modifiers
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
         template <class... Args>
         std::pair<iterator, bool> emplace(Args&&... args)
         {
@@ -427,7 +436,7 @@ namespace boost
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         friend bool operator==(unordered_set const&, unordered_set const&);
         friend bool operator!=(unordered_set const&, unordered_set const&);
-#else
+#elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<Value, Hash, Pred, Alloc>(unordered_set const&, unordered_set const&);
         friend bool operator!=<Value, Hash, Pred, Alloc>(unordered_set const&, unordered_set const&);
 #endif
@@ -457,6 +466,9 @@ namespace boost
     template <class Value, class Hash, class Pred, class Alloc>
     class unordered_multiset
     {
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+    public:
+#endif
         typedef boost::unordered_detail::hash_types_equivalent_keys<
             Value, Value, Hash, Pred, Alloc
         > implementation;
@@ -524,6 +536,8 @@ namespace boost
         {
         }
 
+        ~unordered_multiset() {}
+
 #if defined(BOOST_HAS_RVALUE_REFS)
         unordered_multiset(unordered_multiset&& other)
             : base(other.base, boost::unordered_detail::move_tag())
@@ -555,7 +569,7 @@ namespace boost
 #endif
 #endif
 
-#if !defined(BOOST_NO_INITIALIZER_LISTS)
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
         unordered_multiset(std::initializer_list<value_type> list,
                 size_type n = boost::unordered_detail::default_initial_bucket_count,
                 const hasher &hf = hasher(),
@@ -639,7 +653,7 @@ namespace boost
 
         // modifiers
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
         template <class... Args>
         iterator emplace(Args&&... args)
         {
@@ -845,7 +859,7 @@ namespace boost
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         friend bool operator==(unordered_multiset const&, unordered_multiset const&);
         friend bool operator!=(unordered_multiset const&, unordered_multiset const&);
-#else
+#elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<Value, Hash, Pred, Alloc>(unordered_multiset const&, unordered_multiset const&);
         friend bool operator!=<Value, Hash, Pred, Alloc>(unordered_multiset const&, unordered_multiset const&);
 #endif

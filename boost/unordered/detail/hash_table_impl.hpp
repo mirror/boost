@@ -89,7 +89,7 @@ namespace boost {
             struct value_base {
                 typename boost::aligned_storage<
                     sizeof(value_type),
-                    boost::alignment_of<value_type>::value>::type data_;
+                    ::boost::alignment_of<value_type>::value>::type data_;
 
                 void* address() { return this; }
             };
@@ -198,7 +198,7 @@ namespace boost {
                     }
                 }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
                 template <typename... Args>
                 void construct(Args&&... args)
                 {
@@ -257,13 +257,6 @@ namespace boost {
                 
 #else
 
-                void construct()
-                {
-                    construct_preamble();
-                    new(node_->address()) value_type;
-                    value_constructed_ = true;
-                }
-
 #define BOOST_UNORDERED_CONSTRUCT_IMPL(z, n, _)                                 \
                 template <                                                      \
                     BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                         \
@@ -292,8 +285,7 @@ namespace boost {
                     new(node_->address()) value_type(                           \
                         BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
                     );                                                          \
-                }                                                               \
-                                                                                \
+                }
                                                                                 
 #define BOOST_UNORDERED_CONSTRUCT_IMPL2(z, n, _)                                \
                 template <typename First, typename Second, typename Key,        \
@@ -1602,7 +1594,7 @@ namespace boost {
 
             // For maps if there is more than one argument, the key can be the first argument.
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
             template <typename Arg, typename Arg1, typename... Args>
             static BOOST_DEDUCED_TYPENAME
                 boost::mpl::if_<
@@ -1733,7 +1725,7 @@ namespace boost {
 
 #if BOOST_UNORDERED_EQUIVALENT_KEYS
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
 
             // Emplace (equivalent key containers)
             // (I'm using an overloaded emplace for both 'insert' and 'emplace')
@@ -1943,7 +1935,7 @@ namespace boost {
                 }
             }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
 
             // Emplace (unique keys)
             // (I'm using an overloaded emplace for both 'insert' and 'emplace')

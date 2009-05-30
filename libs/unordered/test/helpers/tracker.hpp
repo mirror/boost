@@ -49,7 +49,7 @@ namespace test
         value_list values2(x2.begin(), x2.end());
         values1.sort();
         values2.sort();
-        BOOST_CHECK(values1.size() == values2.size() &&
+        BOOST_TEST(values1.size() == values2.size() &&
                 std::equal(values1.begin(), values1.end(), values2.begin(),
                     test::equivalent));
     }
@@ -61,7 +61,7 @@ namespace test
         test::list<T> values2(x2.first, x2.second);
         values1.sort();
         values2.sort();
-        BOOST_CHECK(values1.size() == values2.size() &&
+        BOOST_TEST(values1.size() == values2.size() &&
                 std::equal(values1.begin(), values1.end(), values2.begin(), test::equivalent));
     }
 

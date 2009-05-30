@@ -42,21 +42,21 @@ UNORDERED_AUTO_TEST(use_map_fwd_declared_function) {
     y[2] = 1;
     call_swap(x, y);
 
-    BOOST_CHECK(y.find(1) != y.end() && y.find(1)->second == 2);
-    BOOST_CHECK(y.find(2) == y.end());
+    BOOST_TEST(y.find(1) != y.end() && y.find(1)->second == 2);
+    BOOST_TEST(y.find(2) == y.end());
 
-    BOOST_CHECK(x.find(1) == x.end());
-    BOOST_CHECK(x.find(2) != x.end() && x.find(2)->second == 1);
+    BOOST_TEST(x.find(1) == x.end());
+    BOOST_TEST(x.find(2) != x.end() && x.find(2)->second == 1);
 
-    BOOST_CHECK(!call_equals(x, y));
-    BOOST_CHECK(call_not_equals(x, y));
+    BOOST_TEST(!call_equals(x, y));
+    BOOST_TEST(call_not_equals(x, y));
 }
 
 UNORDERED_AUTO_TEST(use_multimap_fwd_declared_function) {
     int_multimap x, y;
     call_swap(x, y);
-    BOOST_CHECK(call_equals(x, y));
-    BOOST_CHECK(!call_not_equals(x, y));
+    BOOST_TEST(call_equals(x, y));
+    BOOST_TEST(!call_not_equals(x, y));
 }
 
 RUN_TESTS()

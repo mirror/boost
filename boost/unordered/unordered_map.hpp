@@ -21,6 +21,10 @@
 #include <boost/unordered/detail/move.hpp>
 #endif
 
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#include <initializer_list>
+#endif
+
 #if defined(BOOST_MSVC)
 #pragma warning(push)
 #if BOOST_MSVC >= 1400
@@ -35,6 +39,9 @@ namespace boost
     template <class Key, class T, class Hash, class Pred, class Alloc>
     class unordered_map
     {
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+    public:
+#endif
         typedef boost::unordered_detail::hash_types_unique_keys<
             std::pair<const Key, T>, Key, Hash, Pred, Alloc
         > implementation;
@@ -104,6 +111,8 @@ namespace boost
         {
         }
 
+        ~unordered_map() {}
+
 #if defined(BOOST_HAS_RVALUE_REFS)
         unordered_map(unordered_map&& other)
             : base(other.base, boost::unordered_detail::move_tag())
@@ -135,7 +144,7 @@ namespace boost
 #endif
 #endif
 
-#if !defined(BOOST_NO_INITIALIZER_LISTS)
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
         unordered_map(std::initializer_list<value_type> list,
                 size_type n = boost::unordered_detail::default_initial_bucket_count,
                 const hasher &hf = hasher(),
@@ -219,7 +228,7 @@ namespace boost
 
         // modifiers
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
         template <class... Args>
         std::pair<iterator, bool> emplace(Args&&... args)
         {
@@ -455,7 +464,7 @@ namespace boost
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         friend bool operator==(unordered_map const&, unordered_map const&);
         friend bool operator!=(unordered_map const&, unordered_map const&);
-#else
+#elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<Key, T, Hash, Pred, Alloc>(unordered_map const&, unordered_map const&);
         friend bool operator!=<Key, T, Hash, Pred, Alloc>(unordered_map const&, unordered_map const&);
 #endif
@@ -485,6 +494,9 @@ namespace boost
     template <class Key, class T, class Hash, class Pred, class Alloc>
     class unordered_multimap
     {
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+    public:
+#endif
         typedef boost::unordered_detail::hash_types_equivalent_keys<
             std::pair<const Key, T>, Key, Hash, Pred, Alloc
         > implementation;
@@ -554,6 +566,8 @@ namespace boost
         {
         }
 
+        ~unordered_multimap() {}
+
 #if defined(BOOST_HAS_RVALUE_REFS)
         unordered_multimap(unordered_multimap&& other)
             : base(other.base, boost::unordered_detail::move_tag())
@@ -585,7 +599,7 @@ namespace boost
 #endif
 #endif
 
-#if !defined(BOOST_NO_INITIALIZER_LISTS)
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
         unordered_multimap(std::initializer_list<value_type> list,
                 size_type n = boost::unordered_detail::default_initial_bucket_count,
                 const hasher &hf = hasher(),
@@ -670,7 +684,7 @@ namespace boost
 
         // modifiers
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if defined(BOOST_UNORDERED_STD_FORWARD)
         template <class... Args>
         iterator emplace(Args&&... args)
         {
@@ -889,7 +903,7 @@ namespace boost
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         friend bool operator==(unordered_multimap const&, unordered_multimap const&);
         friend bool operator!=(unordered_multimap const&, unordered_multimap const&);
-#else
+#elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<Key, T, Hash, Pred, Alloc>(unordered_multimap const&, unordered_multimap const&);
         friend bool operator!=<Key, T, Hash, Pred, Alloc>(unordered_multimap const&, unordered_multimap const&);
 #endif

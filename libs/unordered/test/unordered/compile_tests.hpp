@@ -87,10 +87,10 @@ void container_test(X& r, T const&)
     // I'm not sure about either of these tests...
     size_type max_diff((std::numeric_limits<difference_type>::max)());
     difference_type converted_diff(max_diff);
-    BOOST_CHECK((std::numeric_limits<difference_type>::max)()
+    BOOST_TEST((std::numeric_limits<difference_type>::max)()
             == converted_diff);
 
-    BOOST_CHECK(
+    BOOST_TEST(
         static_cast<comparison_type>(
             (std::numeric_limits<size_type>::max)()) >
         static_cast<comparison_type>(
@@ -98,8 +98,8 @@ void container_test(X& r, T const&)
 
     // I don't test the runtime post-conditions here.
     X u;
-    BOOST_CHECK(u.size() == 0);
-    BOOST_CHECK(X().size() == 0);
+    BOOST_TEST(u.size() == 0);
+    BOOST_TEST(X().size() == 0);
 
     X a,b;
 
@@ -288,7 +288,7 @@ void unordered_test(X&, Key& k, T& t, Hash& hf, Pred& eq)
     a.insert(i, j);
     test::check_return_type<size_type>::equals(a.erase(k));
 
-    BOOST_CHECK(a.empty());
+    BOOST_TEST(a.empty());
     if(a.empty()) {
         a.insert(t);
         q = a.cbegin();

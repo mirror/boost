@@ -12,6 +12,7 @@
 #endif
 
 #include <boost/config.hpp>
+#include <boost/unordered/detail/config.hpp>
 
 #if !defined(BOOST_UNORDERED_EMPLACE_LIMIT)
 #define BOOST_UNORDERED_EMPLACE_LIMIT 5
@@ -45,7 +46,7 @@
 
 #include <boost/mpl/aux_/config/eti.hpp>
 
-#if !(defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL))
+#if !(defined(BOOST_UNORDERED_STD_FORWARD))
 
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>

@@ -19,4 +19,12 @@
 #  define BOOST_UNORDERED_NO_HAS_MOVE_ASSIGN
 #endif
 
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#   if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+        // STLport doesn't have std::forward.
+#   else
+#       define BOOST_UNORDERED_STD_FORWARD
+#   endif
+#endif
+
 #endif

@@ -33,7 +33,7 @@ namespace equality_tests
         boost::unordered_set<int, mod_compare, mod_compare> set1, set2; \
         BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set1, seq1) \
         BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set2, seq2) \
-        BOOST_CHECK(set1 op set2); \
+        BOOST_TEST(set1 op set2); \
     } while(false)
 
 #define UNORDERED_EQUALITY_MULTISET_TEST(seq1, op, seq2) \
@@ -41,7 +41,7 @@ namespace equality_tests
         boost::unordered_multiset<int, mod_compare, mod_compare> set1, set2; \
         BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set1, seq1) \
         BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set2, seq2) \
-        BOOST_CHECK(set1 op set2); \
+        BOOST_TEST(set1 op set2); \
     } while(false)
 
 #define UNORDERED_EQUALITY_MAP_TEST(seq1, op, seq2) \
@@ -49,7 +49,7 @@ namespace equality_tests
         boost::unordered_map<int, int, mod_compare, mod_compare> map1, map2; \
         BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map1, seq1) \
         BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map2, seq2) \
-        BOOST_CHECK(map1 op map2); \
+        BOOST_TEST(map1 op map2); \
     } while(false)
 
 #define UNORDERED_EQUALITY_MULTIMAP_TEST(seq1, op, seq2) \
@@ -57,7 +57,7 @@ namespace equality_tests
         boost::unordered_multimap<int, int, mod_compare, mod_compare> map1, map2; \
         BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map1, seq1) \
         BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map2, seq2) \
-        BOOST_CHECK(map1 op map2); \
+        BOOST_TEST(map1 op map2); \
     } while(false)
 
 #define UNORDERED_SET_INSERT(r, set, item) set.insert(item);
@@ -67,24 +67,24 @@ namespace equality_tests
     UNORDERED_AUTO_TEST(equality_size_tests)
     {
         boost::unordered_set<int> x1, x2;
-        BOOST_CHECK(x1 == x2);
-        BOOST_CHECK(!(x1 != x2));
+        BOOST_TEST(x1 == x2);
+        BOOST_TEST(!(x1 != x2));
 
         x1.insert(1);
-        BOOST_CHECK(x1 != x2);
-        BOOST_CHECK(!(x1 == x2));
-        BOOST_CHECK(x2 != x1);
-        BOOST_CHECK(!(x2 == x1));
+        BOOST_TEST(x1 != x2);
+        BOOST_TEST(!(x1 == x2));
+        BOOST_TEST(x2 != x1);
+        BOOST_TEST(!(x2 == x1));
         
         x2.insert(1);
-        BOOST_CHECK(x1 == x2);
-        BOOST_CHECK(!(x1 != x2));
+        BOOST_TEST(x1 == x2);
+        BOOST_TEST(!(x1 != x2));
         
         x2.insert(2);
-        BOOST_CHECK(x1 != x2);
-        BOOST_CHECK(!(x1 == x2));
-        BOOST_CHECK(x2 != x1);
-        BOOST_CHECK(!(x2 == x1));
+        BOOST_TEST(x1 != x2);
+        BOOST_TEST(!(x1 == x2));
+        BOOST_TEST(x2 != x1);
+        BOOST_TEST(!(x2 == x1));
     }
     
     UNORDERED_AUTO_TEST(equality_key_value_tests)
@@ -150,15 +150,15 @@ namespace equality_tests
         typedef boost::unordered_set<int, mod_compare, mod_compare> set;
         set set1(0, mod_compare(false), mod_compare(false));
         set set2(0, mod_compare(true), mod_compare(true));
-        BOOST_CHECK(set1 == set2);
+        BOOST_TEST(set1 == set2);
         set1.insert(1); set2.insert(2);
-        BOOST_CHECK(set1 != set2);
+        BOOST_TEST(set1 != set2);
         set1.insert(2); set2.insert(1);
-        BOOST_CHECK(set1 == set2);
+        BOOST_TEST(set1 == set2);
         set1.insert(10); set2.insert(20);
-        BOOST_CHECK(set1 != set2);
+        BOOST_TEST(set1 != set2);
         set1.insert(20); set2.insert(10);
-        BOOST_CHECK(set1 == set2);
+        BOOST_TEST(set1 == set2);
     }
 
 }

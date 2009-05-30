@@ -6,15 +6,7 @@
 #if !defined(BOOST_UNORDERED_TEST_TEST_HEADER)
 #define BOOST_UNORDERED_TEST_TEST_HEADER
 
-#if defined(BOOST_UNORDERED_FULL_TEST)
-
-#include <boost/test/test_tools.hpp>
-#define UNORDERED_AUTO_TEST(x) BOOST_AUTO_TEST_CASE(x)
-#define RUN_TESTS()
-
-#else
-
-#include <boost/test/minimal.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include <iostream>
@@ -30,7 +22,8 @@
     }; \
     BOOST_PP_CAT(x, _type) x; \
     void BOOST_PP_CAT(x, _type)::run()
-#define RUN_TESTS() int test_main(int, char**) { ::test::test_list::run_tests(); return 0; }
+#define RUN_TESTS() int main(int, char**) \
+    { ::test::test_list::run_tests(); return boost::report_errors(); }
 
 namespace test {
     struct registered_test_base {
@@ -73,8 +66,6 @@ namespace test {
         }
     }
 }
-
-#endif
 
 #include <boost/preprocessor/seq/for_each_product.hpp>
 #include <boost/preprocessor/seq/fold_left.hpp>

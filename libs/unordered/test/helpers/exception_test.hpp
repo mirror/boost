@@ -8,25 +8,10 @@
 
 #include "./test.hpp"
 
-#if defined(BOOST_UNORDERED_FULL_TEST)
-#   define BOOST_TEST_MAIN
-#   include <boost/test/exception_safety.hpp>
-#   include <boost/test/unit_test.hpp>
-#endif
-
 #include <boost/preprocessor/seq/for_each_product.hpp>
 #include <boost/preprocessor/seq/elem.hpp>
 #include <boost/preprocessor/cat.hpp>
 
-#if defined(BOOST_UNORDERED_FULL_TEST)
-#   define UNORDERED_EXCEPTION_TEST_CASE(name, test_func, type) \
-        UNORDERED_AUTO_TEST(name) \
-        { \
-            test_func< type > fixture; \
-            ::test::exception_safety(fixture, BOOST_STRINGIZE(test_func<type>)); \
-        }
-#    define UNORDERED_EPOINT_IMPL BOOST_ITEST_EPOINT
-#else
 #   define UNORDERED_EXCEPTION_TEST_CASE(name, test_func, type) \
         UNORDERED_AUTO_TEST(name) \
         { \
@@ -34,7 +19,6 @@
             ::test::lightweight::exception_safety(fixture, BOOST_STRINGIZE(test_func<type>)); \
         }
 #    define UNORDERED_EPOINT_IMPL ::test::lightweight::epoint
-#endif
 
 #define UNORDERED_EXCEPTION_TEST_POSTFIX RUN_TESTS()
 
@@ -178,16 +162,7 @@ namespace test {
             }
         }
     };
-    
-    
 
-#if defined(BOOST_UNORDERED_FULL_TEST)
-    template <class Test>
-    void exception_safety(Test const& f, char const* name) {
-        test_runner<Test> runner(f);
-        ::boost::itest::exception_safety(runner, name);
-    }
-#else
     // Quick exception testing based on lightweight test
 
     namespace lightweight {
@@ -237,7 +212,6 @@ namespace test {
             } while(!success);
         }
     }
-#endif
 }
 
 #endif
