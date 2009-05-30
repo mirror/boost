@@ -133,7 +133,16 @@ namespace boost { namespace program_options {
              k != vm.end(); 
              ++k) 
         {
-            k->second.m_value_semantic->notify(k->second.value());
+            /* Users might wish to use variables_map to store their own values
+               that are not parsed, and therefore will not have value_semantics
+               defined. Do no crash on such values. In multi-module programs,
+               one module might add custom values, and the 'notify' function
+               will be called after that, so we check that value_sematics is 
+               not NULL. See:
+                   https://svn.boost.org/trac/boost/ticket/2782
+            */
+            if (k->second.m_value_semantic)
+                k->second.m_value_semantic->notify(k->second.value());
         }               
     }
 
