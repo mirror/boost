@@ -75,7 +75,7 @@ namespace boost
             hash_float_combine(seed, exp);
 
             return seed;
-        };
+        }
 
         template <class T>
         inline std::size_t float_hash_impl(T v)
