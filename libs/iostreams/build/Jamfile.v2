@@ -138,7 +138,7 @@ local z = [ create-library zlib : zll z : adler32 compress
 
 if $(z)
 {
-    sources += boost_zlib zlib.cpp ;
+    sources += boost_zlib zlib.cpp gzip.cpp ;
 }
 
 local bz2 = [ create-library bzip2 : libbz2 bz2 : 
