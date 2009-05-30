@@ -434,7 +434,8 @@ bool mapped_file_source::is_open() const
 
 void mapped_file_source::close() { pimpl_->close(); }
 
-mapped_file_source::operator safe_bool() const
+// safe_bool is explicitly qualified below to please msvc 7.1
+mapped_file_source::operator mapped_file_source::safe_bool() const
 { return pimpl_->error() ? &safe_bool_helper::x : 0; }
 
 bool mapped_file_source::operator!() const
