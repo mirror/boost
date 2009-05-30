@@ -288,7 +288,7 @@ UNORDERED_TEST(map_constructor_test,
     ((test_map)(test_multimap))
 )
 
-#if !defined(BOOST_NO_INITIALIZER_LISTS)
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
 
 UNORDERED_AUTO_TEST(test_initializer_list) {
     std::cerr<<"Initializer List Tests\n";
