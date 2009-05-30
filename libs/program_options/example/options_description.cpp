@@ -77,7 +77,7 @@ int main(int ac, char* av[])
 
         cout << "Listen port is " << portnum << "\n";                
     }
-    catch(exception& e)
+    catch(std::exception& e)
     {
         cout << e.what() << "\n";
         return 1;

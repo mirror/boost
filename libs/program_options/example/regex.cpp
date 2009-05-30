@@ -94,7 +94,7 @@ int main(int ac, char* av[])
                  << vm["magic"].as<magic_number>().n << "\"\n";
         }
     }
-    catch(exception& e)
+    catch(std::exception& e)
     {
         cout << e.what() << "\n";
     }    
