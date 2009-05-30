@@ -231,9 +231,6 @@ int get_cont_octet_out_count_impl(wchar_t word){
     return 2;
 }
 
-// note the following code will generate on some platforms where
-// wchar_t is defined as UCS2.  The warnings are superfluous as
-// the specialization is never instantitiated with such compilers.
 template<>
 int get_cont_octet_out_count_impl<4>(wchar_t word){
     if (word < 0x80) {
@@ -242,7 +239,19 @@ int get_cont_octet_out_count_impl<4>(wchar_t word){
     if (word < 0x800) {
         return 1;
     }
-    if (word < 0x10000) {
+
+    // Note that the following code will generate warnings on some platforms
+    // where wchar_t is defined as UCS2.  The warnings are superfluous as the
+    // specialization is never instantitiated with such compilers, but this
+    // can cause problems if warnings are being treated as errors, so we guard
+    // against that.  Including <boost/detail/utf8_codecvt_facet.hpp> as we do
+    // should be enough to get WCHAR_MAX defined.
+#if !defined(WCHAR_MAX)
+#   error WCHAR_MAX not defined!
+#endif    
+#if WCHAR_MAX > 0x10000
+    
+   if (word < 0x10000) {
         return 2;
     }
     if (word < 0x200000) {
@@ -252,6 +261,10 @@ int get_cont_octet_out_count_impl<4>(wchar_t word){
         return 4;
     }
     return 5;
+    
+#else
+    return 2;
+#endif
 }
 
 } // namespace anonymous
