@@ -23,7 +23,7 @@
 #include <cassert>
 
 using namespace boost::system;
-using namespace boost::system::posix_error;
+using namespace boost::system::errc;
 
 #include <cstring> // for strerror/strerror_r
 
