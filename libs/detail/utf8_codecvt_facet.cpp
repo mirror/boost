@@ -159,7 +159,7 @@ std::codecvt_base::result utf8_codecvt_facet::do_out(
             to_next = to - (i+1);
             return std::codecvt_base::partial;
         }
-        *from++;
+        ++from;
     }
     from_next = from;
     to_next = to;
