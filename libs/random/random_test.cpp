@@ -64,7 +64,8 @@ void check_uniform_int(Generator & gen, int iter)
   for(int k = 0; k < range; k++)
     sum += bucket[k];
   double avg = static_cast<double>(sum)/range;
-  double threshold = 2*avg/std::sqrt(static_cast<double>(iter));
+  double p = 1 / static_cast<double>(range);
+  double threshold = 2*std::sqrt(static_cast<double>(iter)*p*(1-p));
   for(int i = 0; i < range; i++) {
     if(std::fabs(bucket[i] - avg) > threshold) {
       // 95% confidence interval
@@ -100,11 +101,37 @@ void test_uniform_int(Generator & gen)
   // small range => larger range
   level_two uint05(uint12, int_gen(-3, 2));
   check_uniform_int(uint05, 100000);
+  
+  // small range => larger range
+  level_two uint099(uint12, int_gen(0, 99));
+  check_uniform_int(uint099, 100000);
 
   // larger => small range, rejection case
   typedef boost::variate_generator<level_two&, int_gen> level_three;
   level_three uint1_4(uint05, int_gen(1, 4));
   check_uniform_int(uint1_4, 100000);
+
+  typedef boost::uniform_int<boost::uint8_t> int8_gen;
+  typedef boost::variate_generator<Generator&, int8_gen> gen8_t;
+
+  gen8_t gen8_03(gen, int8_gen(0, 3));
+
+  // use the full range of the type, where the destination
+  // range is a power of the source range
+  typedef boost::variate_generator<gen8_t, int8_gen> uniform_uint8;
+  uniform_uint8 uint8_0255(gen8_03, int8_gen(0, 255));
+  check_uniform_int(uint8_0255, 100000);
+
+  // use the full range, but a generator whose range is not
+  // a root of the destination range.
+  gen8_t gen8_02(gen, int8_gen(0, 2));
+  uniform_uint8 uint8_0255_2(gen8_02, int8_gen(0, 255));
+  check_uniform_int(uint8_0255_2, 100000);
+
+  // expand the range to a larger type.
+  typedef boost::variate_generator<gen8_t, int_gen> uniform_uint_from8;
+  uniform_uint_from8 uint0300(gen8_03, int_gen(0, 300));
+  check_uniform_int(uint0300, 100000);
 }
 
 #if defined(BOOST_MSVC) && _MSC_VER < 1300
@@ -140,10 +167,13 @@ INSTANT(boost::mt11213b)
 class ruetti_gen
 {
 public:
+  ruetti_gen() : state((max)() - 1) {}
   typedef boost::uint64_t result_type;
   result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return 0; }
   result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return std::numeric_limits<result_type>::max BOOST_PREVENT_MACRO_SUBSTITUTION (); }
-  result_type operator()() { return (max)()-1; }
+  result_type operator()() { return state--; }
+private:
+  result_type state;
 };
 
 void test_overflow_range()
