@@ -15,71 +15,46 @@
 Use, modification and distribution is subject to the Boost Software
 License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 http://www.boost.org/LICENSE_1_0.txt) -->
-<dl class="docutils">
-<dt>::</dt>
-<dd><p class="first">namespace graph { namespace distributed {</p>
-<blockquote>
-<dl class="docutils">
-<dt>template&lt;typename Graph, typename PositionMap,</dt>
-<dd>typename AttractiveForce, typename RepulsiveForce,
-typename ForcePairs, typename Cooling, typename DisplacementMap&gt;</dd>
-</dl>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">fruchterman_reingold.rst</tt>, line 16)</p>
-Definition list ends without a blank line; unexpected unindent.</div>
-<p>void
-fruchterman_reingold_force_directed_layout
-(const Graph&amp;    g,</p>
-<div class="system-message">
-<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">fruchterman_reingold.rst</tt>, line 19)</p>
-Unexpected indentation.</div>
-<blockquote>
-PositionMap     position,
-typename property_traits&lt;PositionMap&gt;::value_type const&amp; origin,
-typename property_traits&lt;PositionMap&gt;::value_type const&amp; extent,
-AttractiveForce attractive_force,
-RepulsiveForce  repulsive_force,
-ForcePairs      force_pairs,
-Cooling         cool,
-DisplacementMap displacement)</blockquote>
-<dl class="docutils">
-<dt>template&lt;typename Graph, typename PositionMap,</dt>
-<dd>typename AttractiveForce, typename RepulsiveForce,
-typename ForcePairs, typename Cooling, typename DisplacementMap&gt;</dd>
-</dl>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">fruchterman_reingold.rst</tt>, line 31)</p>
-Definition list ends without a blank line; unexpected unindent.</div>
-<p>void
-fruchterman_reingold_force_directed_layout
-(const Graph&amp;    g,</p>
-<div class="system-message">
-<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">fruchterman_reingold.rst</tt>, line 34)</p>
-Unexpected indentation.</div>
-<blockquote>
-PositionMap     position,
-typename property_traits&lt;PositionMap&gt;::value_type const&amp; origin,
-typename property_traits&lt;PositionMap&gt;::value_type const&amp; extent,
-AttractiveForce attractive_force,
-RepulsiveForce  repulsive_force,
-ForcePairs      force_pairs,
-Cooling         cool,
-DisplacementMap displacement,
-simple_tiling   tiling)</blockquote>
-</blockquote>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">fruchterman_reingold.rst</tt>, line 43)</p>
-Block quote ends without a blank line; unexpected unindent.</div>
-<p class="last">} }</p>
-</dd>
-</dl>
+<pre class="literal-block">
+namespace graph { namespace distributed {
+
+  template&lt;typename Graph, typename PositionMap,
+           typename AttractiveForce, typename RepulsiveForce,
+           typename ForcePairs, typename Cooling, typename DisplacementMap&gt;
+  void
+  fruchterman_reingold_force_directed_layout
+  (const Graph&amp;    g,
+   PositionMap     position,
+   typename property_traits&lt;PositionMap&gt;::value_type const&amp; origin,
+   typename property_traits&lt;PositionMap&gt;::value_type const&amp; extent,
+   AttractiveForce attractive_force,
+   RepulsiveForce  repulsive_force,
+   ForcePairs      force_pairs,
+   Cooling         cool,
+   DisplacementMap displacement)
+
+  template&lt;typename Graph, typename PositionMap,
+           typename AttractiveForce, typename RepulsiveForce,
+           typename ForcePairs, typename Cooling, typename DisplacementMap&gt;
+  void
+  fruchterman_reingold_force_directed_layout
+  (const Graph&amp;    g,
+   PositionMap     position,
+   typename property_traits&lt;PositionMap&gt;::value_type const&amp; origin,
+   typename property_traits&lt;PositionMap&gt;::value_type const&amp; extent,
+   AttractiveForce attractive_force,
+   RepulsiveForce  repulsive_force,
+   ForcePairs      force_pairs,
+   Cooling         cool,
+   DisplacementMap displacement,
+   simple_tiling   tiling)
+} }
+</pre>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
 <li><a class="reference internal" href="#where-defined" id="id1">Where Defined</a></li>
 <li><a class="reference internal" href="#parameters" id="id2">Parameters</a></li>
-<li><a class="reference internal" href="#complexity" id="id3">Complexity</a></li>
-<li><a class="reference internal" href="#algorithm-description" id="id4">Algorithm Description</a></li>
 </ul>
 </div>
 <div class="section" id="where-defined">
@@ -103,15 +78,10 @@ type must also model the <a class="reference external" href="http://www.boost.or
 <p>IN:  <tt class="docutils literal"><span class="pre">ForcePairs</span> <span class="pre">force_pairs</span></tt></p>
 <p>IN:  <tt class="docutils literal"><span class="pre">Cooling</span> <span class="pre">cool</span></tt></p>
 <p>IN:  <tt class="docutils literal"><span class="pre">DisplacementMap</span> <span class="pre">displacement</span></tt></p>
-</div>
-<div class="section" id="complexity">
-<h1><a class="toc-backref" href="#id3">Complexity</a></h1>
-</div>
-<div class="section" id="algorithm-description">
-<h1><a class="toc-backref" href="#id4">Algorithm Description</a></h1>
-<div class="system-message">
-<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">fruchterman_reingold.rst</tt>, line 85)</p>
-Document or section may not begin with a transition.</div>
+<!-- Complexity
+- - - - - - - - - - -->
+<!-- Algorithm Description
+- - - - - - - - - - - - - - - - - - - - - -->
 <hr class="docutils" />
 <p>Copyright (C) 2009 The Trustees of Indiana University.</p>
 <p>Authors: Nick Edmonds and Andrew Lumsdaine</p>
@@ -119,7 +89,7 @@ Document or section may not begin with a transition.</div>
 </div>
 <div class="footer">
 <hr class="footer" />
-Generated on: 2009-05-30 23:21 UTC.
+Generated on: 2009-05-31 00:21 UTC.
 Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
