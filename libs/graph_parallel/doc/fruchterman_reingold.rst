@@ -8,6 +8,7 @@
 ===========================
 
 ::
+
     namespace graph { namespace distributed {
 
       template<typename Graph, typename PositionMap, 
@@ -75,12 +76,13 @@ IN:  ``Cooling cool``
 
 IN:  ``DisplacementMap displacement``
 
-Complexity
-----------
+..
+ Complexity
+ ----------
 
-Algorithm Description
----------------------
-
+..
+ Algorithm Description
+ ---------------------
 
 -----------------------------------------------------------------------------
 
