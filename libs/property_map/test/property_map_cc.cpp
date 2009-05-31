@@ -4,6 +4,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/property_map/property_map.hpp>
+#include <boost/property_map/shared_array_property_map.hpp>
 #include <map>
 
 // This file checks the property map concepts against the property map
@@ -102,6 +103,14 @@ main()
   {
     typedef dummy_property_map PMap;
     function_requires<ReadWritePropertyMapConcept<PMap, int> >();
+  }
+  {
+    typedef sgi_assignable_archetype<> Key; // ?
+    typedef sgi_assignable_archetype<> Value;
+    typedef random_access_iterator_archetype<Value> Iterator;
+    typedef readable_property_map_archetype<Key, std::ptrdiff_t> IndexMap;
+    typedef shared_array_property_map<Value, IndexMap> PMap;
+    function_requires<Mutable_LvaluePropertyMapConcept<PMap, Key> >();
   }
   return 0;
 }
