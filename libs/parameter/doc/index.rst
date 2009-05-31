@@ -356,8 +356,8 @@ shown in the table below.
 .. _`IncidenceGraph`: ../../../graph/doc/IncidenceGraph.html
 .. _`VertexListGraph`: ../../../graph/doc/VertexListGraph.html
 .. _`DFSVisitor`: ../../../graph/doc/DFSVisitor.html
-.. _`ReadWritePropertyMap`: ../../../property_map/ReadWritePropertyMap.html
-.. _`ReadablePropertyMap`: ../../../property_map/ReadablePropertyMap.html
+.. _`ReadWritePropertyMap`: ../../../property_map/doc/ReadWritePropertyMap.html
+.. _`ReadablePropertyMap`: ../../../property_map/doc/ReadablePropertyMap.html
 
 Don't be intimidated by the information in the second and third
 columns above.  For the purposes of this exercise, you don't need
