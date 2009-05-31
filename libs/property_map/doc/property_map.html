@@ -10,7 +10,7 @@
 <Title>Property Map Library</Title>
 <BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
 	ALINK="#ff0000"> 
-<IMG SRC="../../boost.png" 
+<IMG SRC="../../../boost.png" 
      ALT="C++ Boost" width="277" height="86"> 
 
 <BR Clear>
@@ -37,14 +37,14 @@ in the function templates of the generic library.
 
 <p>
 The need for the property map interface came from the <a
-href="../graph/doc/index.html">Boost Graph Library</a> (BGL), which
+href="../../graph/doc/index.html">Boost Graph Library</a> (BGL), which
 contains many examples of algorithms that use the property map
 concepts to specify their interface. For an example, note the
 <tt>ColorMap</tt> template parameter of the <a
-href="../graph/doc/breadth_first_search.html">
+href="../../graph/doc/breadth_first_search.html">
 <tt>breadth_first_search</tt></a>. In addition, the BGL contains many
 examples of concrete types that implement the property map interface.
-The <a href="../graph/doc/adjacency_list.html">
+The <a href="../../graph/doc/adjacency_list.html">
 <tt>adjacency_list</tt></a> class implements property maps for
 accessing objects (properties) that are attached to vertices and edges
 of the graph.
@@ -65,7 +65,7 @@ the header files for details.
 <p>Property maps are statically-typed entities. If you need to access
 property maps in a more dynamic setting (e.g., because you're reading
 an unknown set of attributes from a file), you can use the <a
-href="doc/dynamic_property_map.html"><code>dynamic_properties</code></a>
+href="dynamic_property_map.html"><code>dynamic_properties</code></a>
 class to access a set of property maps through a dynamically-typed
 interface. </p>
 
@@ -75,7 +75,7 @@ Property Map Concepts
 
 The property map interface consists of a set of concepts (see
 definition of &quot;concept&quot; in <a
-href="../concept_check/concept_check.htm#introduction">[1]</a> and <a
+href="../../concept_check/concept_check.htm#introduction">[1]</a> and <a
 href="http://www.sgi.com/tech/stl/stl_introduction.html">[2]</a>) that
 define a syntax for mapping key objects to corresponding value
 objects. Since the property map operations are global functions
@@ -85,7 +85,7 @@ possible to overload the map functions such that nearly arbitrary
 property map types and key types can be used. The interface for
 property maps consists of three functions: <tt>get()</tt>,
 <tt>put()</tt>, and <tt>operator[]</tt>. The following concrete
-example from <a href="./example1.cpp">example1.cpp</a> shows how the
+example from <a href="../example/example1.cpp">example1.cpp</a> shows how the
 three functions could be used to access the addresses associated with
 various people.  We use a separate function template here to highlight
 the parts of the program that use the property map concept

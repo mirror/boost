@@ -10,16 +10,16 @@
 <Title>Iterator Property Map Adaptor</Title>
 <BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
 	ALINK="#ff0000"> 
-<IMG SRC="../../boost.png" 
+<IMG SRC="../../../boost.png" 
      ALT="C++ Boost" width="277" height="86"> 
 
 <BR Clear>
 
 
-<H2><A NAME="sec:const-associative-property-map"></A>
+<H2><A NAME="sec:associative-property-map"></A>
 </h2>
 <PRE>
-const_associative_property_map&lt;UniquePairAssociativeContainer&gt;
+associative_property_map&lt;UniquePairAssociativeContainer&gt;
 </PRE>
 
 <P>
@@ -30,62 +30,62 @@ Associative Container</a> and <a
 href="http://www.sgi.com/tech/stl/UniqueAssociativeContainer.html">Unique
 Associative Container</a> such as <a
 href="http://www.sgi.com/tech/stl/Map.html"><tt>std::map</tt></a> into
-a constant <a href="./LvaluePropertyMap.html">Lvalue Property Map</a>.
+a mutable <a href="./LvaluePropertyMap.html">Lvalue Property Map</a>.
 Note that the adaptor only retains a reference to the container, so
 the lifetime of the container must encompass the use of the adaptor.
 </P>
 
 <h3>Example</h3>
 
-<a href="./example1.cpp">example1.cpp</a>:
-<pre>
-<font color="#008040">#include &lt;iostream&gt;</font>
-<font color="#008040">#include &lt;map&gt;</font>
-<font color="#008040">#include &lt;string&gt;</font>
-<font color="#008040">#include &lt;boost/property_map/property_map.hpp&gt;</font>
+<a href="../example/example1.cpp">example1.cpp</a>:
+<pre>#include &lt;iostream&gt;
+#include &lt;map&gt;
+#include &lt;string&gt;
+#include &lt;boost/property_map/property_map.hpp&gt;
 
 
-<B>template</B> &lt;<B>typename</B> ConstAddressMap&gt;
-<B>void</B> display(ConstAddressMap address)
+template &lt;typename AddressMap&gt;
+void foo(AddressMap address)
 {
-  <B>typedef</B> <B>typename</B> boost::property_traits&lt;ConstAddressMap&gt;::value_type
-    value_type;
-  <B>typedef</B> <B>typename</B> boost::property_traits&lt;ConstAddressMap&gt;::key_type key_type;
+  typedef typename boost::property_traits&lt;AddressMap&gt;::value_type value_type;
+  typedef typename boost::property_traits&lt;AddressMap&gt;::key_type key_type;
 
-  key_type fred = <font color="#0000FF">"Fred"</font>;
-  key_type joe = <font color="#0000FF">"Joe"</font>;
+  value_type old_address, new_address;
+  key_type fred = &quot;Fred&quot;;
+  old_address = get(address, fred);
+  new_address = &quot;384 Fitzpatrick Street&quot;;
+  put(address, fred, new_address);
 
-  value_type freds_address = get(address, fred);
-  value_type joes_address = get(address, joe);
-  
-  std::cout &lt;&lt; fred &lt;&lt; <font color="#0000FF">": "</font> &lt;&lt; freds_address &lt;&lt; <font color="#0000FF">"\n"</font>
-	    &lt;&lt; joe  &lt;&lt; <font color="#0000FF">": "</font> &lt;&lt; joes_address  &lt;&lt; <font color="#0000FF">"\n"</font>;
+  key_type joe = &quot;Joe&quot;;
+  value_type&amp; joes_address = address[joe];
+  joes_address = &quot;325 Cushing Avenue&quot;;
 }
 
-<B>int</B>
+int
 main()
 {
   std::map&lt;std::string, std::string&gt; name2address;
-  boost::const_associative_property_map&lt; std::map&lt;std::string, std::string&gt; &gt;
+  boost::associative_property_map&lt; std::map&lt;std::string, std::string&gt; &gt;
     address_map(name2address);
 
-  name2address.insert(make_pair(std::string(<font color="#0000FF">"Fred"</font>), 
-				std::string(<font color="#0000FF">"710 West 13th Street"</font>)));
-  name2address.insert(make_pair(std::string(<font color="#0000FF">"Joe"</font>), 
-				std::string(<font color="#0000FF">"710 West 13th Street"</font>)));
+  name2address.insert(make_pair(std::string(&quot;Fred&quot;), 
+				std::string(&quot;710 West 13th Street&quot;)));
+  name2address.insert(make_pair(std::string(&quot;Joe&quot;), 
+				std::string(&quot;710 West 13th Street&quot;)));
 
-  display(address_map);
+  foo(address_map);
   
-  <B>return</B> EXIT_SUCCESS;
-}
+  for (std::map&lt;std::string, std::string&gt;::iterator i = name2address.begin();
+       i != name2address.end(); ++i)
+    std::cout &lt;&lt; i-&gt;first &lt;&lt; &quot;: &quot; &lt;&lt; i-&gt;second &lt;&lt; &quot;\n&quot;;
 
-
-</PRE>
+  return EXIT_SUCCESS;
+}</pre>
 
 <H3>Where Defined</H3>
 
 <P>
-<a href="../../boost/property_map/property_map.hpp"><TT>boost/property_map/property_map.hpp</TT></a>
+<a href="../../../boost/property_map/property_map.hpp"><TT>boost/property_map/property_map.hpp</TT></a>
 
 <p>
 <H3>Model Of</H3>
@@ -127,7 +127,7 @@ class has the following members.
 <hr>
 
 <pre>
-property_traits&lt;const_associative_property_map&gt;::value_type
+property_traits&lt;associative_property_map&gt;::value_type
 </pre>
 This is the same type as
 <TT>UniquePairAssociativeContainer::data_type</TT>.
@@ -135,19 +135,19 @@ This is the same type as
 <hr>
 
 <pre>
-const_associative_property_map()
+associative_property_map()
 </pre>
 Default Constructor.
 
 <pre>
-const_associative_property_map(const UniquePairAssociativeContainer&amp; c)
+associative_property_map(UniquePairAssociativeContainer&amp; c)
 </pre>
 Constructor.
 
 <hr>
 
 <pre>
-const data_type&amp; operator[](const key_type&amp; k) const
+data_type&amp; operator[](const key_type&amp; k) const
 </pre>
 The operator bracket for property access.
 The <TT>key_type</TT> and
@@ -162,8 +162,8 @@ The <TT>key_type</TT> and
 
 <pre>
   template &lt;typename UniquePairAssociativeContainer&gt;
-  const_associative_property_map&lt;UniquePairAssociativeContainer&gt;
-  make_assoc_property_map(const UniquePairAssociativeContainer&amp; c);
+  associative_property_map&lt;UniquePairAssociativeContainer&gt;
+  make_assoc_property_map(UniquePairAssociativeContainer&amp; c);
 </pre>
 A function for conveniently creating an associative property map.
 
