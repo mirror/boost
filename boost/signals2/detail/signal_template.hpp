@@ -316,8 +316,7 @@ namespace boost
 #define BOOST_SIGNALS2_ADD_REF_ARGS(arity) \
   BOOST_PP_ENUM(arity, BOOST_SIGNALS2_ADD_REF_ARG, ~)
           slot_invoker(BOOST_SIGNALS2_ADD_REF_ARGS(BOOST_SIGNALS2_NUM_ARGS)) BOOST_PP_IF(BOOST_SIGNALS2_NUM_ARGS, :, )
-#define BOOST_SIGNALS2_ADD_REF_ARG(z, n, data) \
-#undef BOOST_SIGNALS2_ADD_REF_ARGS(arity)
+#undef BOOST_SIGNALS2_ADD_REF_ARGS
 
 // argn ( argn ) ,
 #define BOOST_SIGNALS2_MISC_STATEMENT(z, n, data) \
@@ -335,7 +334,7 @@ namespace boost
         private:
 #define BOOST_SIGNALS2_ADD_REF_ARG_STATEMENT(z, n, data) \
   BOOST_SIGNALS2_ADD_REF_ARG(z, n, data) ;
-          BOOST_PP_REPEAT(BOOST_SIGNALS2_NUM_ARGS, BOOST_SIGNALS2_ADD_REF_ARG, ~)
+          BOOST_PP_REPEAT(BOOST_SIGNALS2_NUM_ARGS, BOOST_SIGNALS2_ADD_REF_ARG_STATEMENT, ~)
 #undef BOOST_SIGNALS2_ADD_REF_ARG_STATEMENT
 #undef BOOST_SIGNALS2_ADD_REF_ARG
           result_type m_invoke(const connection_body_type &connectionBody,
