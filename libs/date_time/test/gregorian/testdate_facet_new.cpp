@@ -17,8 +17,8 @@
 
 template<class temporal_type, typename charT>
 inline
-void 
-teststreaming(std::string testname, 
+void
+teststreaming(std::string testname,
               temporal_type value,
               std::basic_string<charT> expected_result,
               const std::locale& locale = std::locale::classic())
@@ -26,7 +26,7 @@ teststreaming(std::string testname,
   std::basic_stringstream<charT> ss;
   ss.imbue(locale);
   ss << value;
-  check(testname, ss.str() == expected_result);
+  check_equal(testname, ss.str(), expected_result);
 }
 
 
@@ -76,20 +76,20 @@ const std::wstring short_weekdays[]= {L"Sun", L"Mon",L"Tue",
 
 int main() {
   using namespace boost::gregorian;
-  
-  std::copy(&month_short_names[0], 
+
+  std::copy(&month_short_names[0],
             &month_short_names[12],
             std::back_inserter(short_month_names));
 
-  std::copy(&month_long_names[0], 
+  std::copy(&month_long_names[0],
             &month_long_names[12],
             std::back_inserter(long_month_names));
 
-  std::copy(&weekday_short_names[0], 
+  std::copy(&weekday_short_names[0],
             &weekday_short_names[7],
             std::back_inserter(short_weekday_names));
 
-  std::copy(&weekday_long_names[0], 
+  std::copy(&weekday_long_names[0],
             &weekday_long_names[7],
             std::back_inserter(long_weekday_names));
 
