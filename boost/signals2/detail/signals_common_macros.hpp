@@ -77,6 +77,8 @@
   extended_slot_function_type>
 // bound_extended_slot_functionN
 #define BOOST_SIGNALS2_BOUND_EXTENDED_SLOT_FUNCTION_N(arity) BOOST_PP_CAT(bound_extended_slot_function, arity)
+// bound_extended_slot_function_helperN
+#define BOOST_SIGNALS2_BOUND_EXTENDED_SLOT_FUNCTION_INVOKER_N(arity) BOOST_PP_CAT(bound_extended_slot_function_invoker, arity)
 // typename function_traits<Signature>::argn_type
 #define BOOST_SIGNALS2_SIGNATURE_TO_ARGN_TYPE(z, n, Signature) \
   BOOST_PP_CAT(BOOST_PP_CAT(typename function_traits<Signature>::arg, BOOST_PP_INC(n)), _type)
@@ -144,6 +146,7 @@
 #define BOOST_SIGNALS2_SLOT_CLASS_NAME(arity) slot
 #define BOOST_SIGNALS2_EXTENDED_SLOT_TYPE(arity) slot<R (const connection &, Args...), extended_slot_function_type>
 #define BOOST_SIGNALS2_BOUND_EXTENDED_SLOT_FUNCTION_N(arity) bound_extended_slot_function
+#define BOOST_SIGNALS2_BOUND_EXTENDED_SLOT_FUNCTION_INVOKER_N(arity) bound_extended_slot_function_invoker
 #define BOOST_SIGNALS2_FUNCTION_N_DECL(arity) boost::function<Signature>
 #define BOOST_SIGNALS2_PREFIXED_SIGNATURE_TEMPLATE_DECL(arity, prefix) typename prefixSignature
 #define BOOST_SIGNALS2_PREFIXED_SIGNATURE_TEMPLATE_INSTANTIATION(arity, prefix) prefixSignature
