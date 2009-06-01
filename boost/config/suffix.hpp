@@ -307,7 +307,7 @@
 #endif
 
 //
-// Set BOOST_NO_INITIALIZER_LISTS is there is no library support.
+// Set BOOST_NO_INITIALIZER_LISTS if there is no library support.
 //
 
 #if defined(BOOST_NO_0X_HDR_INITIALIZER_LIST) && !defined(BOOST_NO_INITIALIZER_LISTS)
