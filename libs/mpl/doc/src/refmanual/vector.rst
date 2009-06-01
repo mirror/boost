@@ -110,7 +110,7 @@ into ``v``, ``r`` is a |Forward Sequence|, ``n`` is an |Integral Constant|, and 
 |                                       | see |Back Extensible Sequence|.                           |
 +---------------------------------------+-----------------------------------------------------------+
 | ``push_front<v,x>::type``             | A new ``vector`` of following elements:                   |
-|                                       | |begin/end<v>|, ``x``; see |Front Extensible Sequence|.   |
+|                                       | ``x``, |begin/end<v>|; see |Front Extensible Sequence|.   |
 +---------------------------------------+-----------------------------------------------------------+
 | ``pop_front<v>::type``                | A new ``vector`` of following elements:                   |
 |                                       | [``next< begin<v>::type >::type``, ``end<v>::type``);     |
