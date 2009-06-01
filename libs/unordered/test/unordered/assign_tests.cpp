@@ -105,6 +105,21 @@ UNORDERED_TEST(assign_tests2,
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
 
+UNORDERED_AUTO_TEST(assign_default_initializer_list) {
+    std::cerr<<"Initializer List Tests\n";
+    std::initializer_list<std::pair<int, int> > init;
+    boost::unordered_map<int, int> x1;
+    x1[25] = 3;
+    x1[16] = 10;
+    BOOST_TEST(!x1.empty());
+    x1 = init;
+    BOOST_TEST(x1.empty());
+}
+
+#endif
+
+#if !defined(BOOST_NO_INITIALIZER_LISTS)
+
 UNORDERED_AUTO_TEST(assign_initializer_list)
 {
     std::cerr<<"Initializer List Tests\n";
