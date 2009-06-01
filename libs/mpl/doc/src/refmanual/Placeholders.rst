@@ -1,12 +1,14 @@
 .. Metafunctions/Composition and Argument Binding//_1,_2,..._n |10
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
+.. Copyright Aleksey Gurtovoy, David Abrahams 2001-2009.
 .. Distributed under the Boost
 .. Software License, Version 1.0. (See accompanying
 .. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 Placeholders
 ============
+.. _`placeholder`:
+
 
 Synopsis
 --------
@@ -98,3 +100,20 @@ See also
 --------
 
 |Composition and Argument Binding|, |arg|, |lambda|, |bind|, |apply|, |apply_wrap|
+
+
+.. |placeholder| replace:: `placeholder`_
+
+.. |_1| replace:: `_1`_
+.. |_2| replace:: `_2`_
+.. |_3| replace:: `_3`_
+.. |_4| replace:: `_4`_
+.. |_5| replace:: `_5`_
+
+.. _`_1`: `Placeholders`_
+.. _`_2`: `Placeholders`_
+.. _`_3`: `Placeholders`_
+.. _`_4`: `Placeholders`_
+.. _`_5`: `Placeholders`_
+
+.. |_1,_2,..._n| replace:: |_1|, |_2|, |_3|,\ |...|

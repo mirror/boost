@@ -52,6 +52,12 @@ class refdoc_translator(html4_frames.frame_pages_translator):
         self.__super.depart_title(self, node)
 
 
+    def visit_table(self, node):
+        self = self.active_visitor()
+        self.body.append(
+            self.starttag(node, 'table', CLASS='docutils table', border="1"))
+ 
+
     def visit_reference(self, node):
         self.in_reference = 1
         if len(node) == 1 and isinstance(node[0], nodes.literal) and node[0].has_key('class'):
@@ -161,10 +167,24 @@ class refdoc_translator(html4_frames.frame_pages_translator):
         identifier = match.group(2)        
         if not base.document.has_name( identifier.lower() ):
             return self.encode(match.group(0))
-        
+
+        def get_section_id( id ):
+            node = base.document.ids[ id ]
+            if isinstance( node, nodes.section ):
+                return id
+
+            if isinstance( node, nodes.target ):
+                return get_section_id( node.get( 'refid' ) )
+
+            return None
+
+        id = get_section_id( base.document.nameids[ identifier.lower() ] )
+        if not id:
+            return self.encode(match.group(0))
+
         result = self.encode(match.group(1))
         result += '<a href="%s" class="identifier">%s</a>' \
-                        % ( base._chunk_ref( base._active_chunk_id(), base.document.nameids[identifier.lower()] )
+                        % ( base._chunk_ref( base._active_chunk_id(), id )
                           , self.encode(identifier)
                           )
         

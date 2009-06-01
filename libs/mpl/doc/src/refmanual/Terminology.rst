@@ -1,11 +1,10 @@
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
+.. Copyright Aleksey Gurtovoy, David Abrahams 2001-2009.
 .. Distributed under the Boost
 .. Software License, Version 1.0. (See accompanying
 .. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 .. _`Overloaded name`:
-.. |Overloaded name link| replace:: `Overloaded name`_
 
 Overloaded name
     Overloaded name is a term used in this reference documentation to designate
@@ -14,11 +13,7 @@ Overloaded name
     is implemented by other, unspecified, means.
     
 
-.. |overloaded name| replace:: `overloaded name <|Overloaded name link|>`__
-
-
 .. _`Concept-identical`:
-.. |Concept-identical link| replace:: `Concept-identical`_
 
 Concept-identical    
     A sequence ``s1`` is said to be concept-identical to a sequence ``s2`` if 
@@ -26,7 +21,6 @@ Concept-identical
 
 
 .. _`Bind expression`:
-.. |Bind expression link| replace:: `Bind expression`_
 
 Bind expression
     A bind expression is simply that |--| an instantiation of one of the |bind| 
@@ -43,5 +37,6 @@ Bind expression
         _2
 
 
-.. |bind expression| replace:: `bind expression <|Bind expression link|>`__
-.. |concept-identical| replace:: `concept-identical <|Concept-identical link|>`__
+.. |overloaded name| replace:: `overloaded name`_
+.. |concept-identical| replace:: `concept-identical`_
+.. |bind expression| replace:: `bind expression`_

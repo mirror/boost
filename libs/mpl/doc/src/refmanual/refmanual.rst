@@ -1,5 +1,5 @@
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
+.. Copyright Aleksey Gurtovoy, David Abrahams 2001-2009.
 .. Distributed under the Boost
 .. Software License, Version 1.0. (See accompanying
 .. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,7 +7,7 @@
 The MPL Reference Manual
 ************************
 
-:Copyright: Copyright ©  Aleksey Gurtovoy and David Abrahams, 2001-2007.
+:Copyright: Copyright ©  Aleksey Gurtovoy and David Abrahams, 2001-2009.
 
 :License:   Distributed under the Boost Software License, Version 1.0. (See 
             accompanying file ``LICENSE_1_0.txt`` or copy at 
@@ -84,23 +84,6 @@ __ http://www.boost.org/LICENSE_1_0.txt
 
 .. |O(1)| replace:: *O(1)*
 
-.. |_1| replace:: `|_1 refentry| <|Placeholders|>`__
-.. |_2| replace:: `|_2 refentry| <|Placeholders|>`__
-.. |_3| replace:: `|_3 refentry| <|Placeholders|>`__
-.. |_4| replace:: `|_4 refentry| <|Placeholders|>`__
-.. |_5| replace:: `|_5 refentry| <|Placeholders|>`__
-
-.. |_1 refentry| replace:: :refentry:`_1`
-.. |_2 refentry| replace:: :refentry:`_2`
-.. |_3 refentry| replace:: :refentry:`_3`
-.. |_4 refentry| replace:: :refentry:`_4`
-.. |_5 refentry| replace:: :refentry:`_5`
-
-.. |placeholder| replace:: `placeholder <|Placeholders|>`__
-
-.. |_1,_2,..._n| replace:: |_1|, |_2|, |_3|,\ |...|
-
-
 .. |--| unicode:: U+02014 .. EM DASH
 
 
@@ -122,13 +105,8 @@ __ http://www.boost.org/LICENSE_1_0.txt
 
 
 .. |preprocessed headers disclaimer| replace:: [*Note:* Overriding will take effect 
-   *only* if the library is configured not to use `preprocessed headers 
-   <|BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS_link|>`__. See 
-   |BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS_ref| for more information. |--| *end note*\]
-
-.. |BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS_ref| replace:: `:refentry:`BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS` <|BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS_link|>`__
-.. |BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS_link| replace:: `BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS`_
-
+   *only* if the library is configured not to use |preprocessed headers|. See 
+   |BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS| for more information. |--| *end note*\]
 
 .. |transformation algorithm disclaimer| replace:: 
    [*Note:* This wording applies to a no-inserter version(s) of the algorithm. See the 

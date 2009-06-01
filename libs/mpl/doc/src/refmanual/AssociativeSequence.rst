@@ -1,6 +1,6 @@
 .. Sequences/Concepts//Associative Sequence |70
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
+.. Copyright Aleksey Gurtovoy, David Abrahams 2001-2009.
 .. Distributed under the Boost
 .. Software License, Version 1.0. (See accompanying
 .. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -114,8 +114,8 @@ See also
 |Sequences|, |Extensible Associative Sequence|, |has_key|, |count|, |order|, |at|, |key_type|, |value_type|
 
 
-.. |key| replace:: `key <|key-part_link|>`__
-.. |key-part_link| replace:: `key-part`_
+.. |key| replace:: `key`_
+.. _`key`: `key-part`_
 
-.. |value| replace:: `value <|value-part_link|>`__
-.. |value-part_link| replace:: `value-part`_
+.. |value| replace:: `value`_
+.. _`value`: `value-part`_

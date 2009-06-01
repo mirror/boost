@@ -7,7 +7,6 @@
 */
 
 
-
 .first
 {
   margin-top: 0;
@@ -22,27 +21,43 @@
 
 /* <a/> */
 
-
 a
 {
-    color: #0000cc;
+    text-decoration: none; /* no underline */
 }
 
-a:visited
+a:hover
 {
-    color: #800080;
+    text-decoration: underline;
 }
 
-/*
-sup a:link,
-sup a:visited,
-a.interlink:link,
-a.interlink:visited
+@media screen
 {
-    color: #505050;
-    text-decoration: none;
+    a
+    {
+        color: #0C7445;
+    }
+
+    a:visited
+    {
+        color: #663974;
+    }
 }
-*/
+
+
+@media print
+{
+    a
+    {
+        color: black;
+    }
+
+    a:visited
+    {
+        color: black;
+    }
+}
+
 
 a.refentry
 {
@@ -78,7 +93,8 @@ a.header:visited
 a.identifier:hover,
 a.header:hover
 {
-    color: #0000cc;
+    color: #0077cc;
+    text-decoration: underline;
 }
 
 a.toc-backref:link,
@@ -117,13 +133,15 @@ caption
 
 body
 {
-    background: #fffff5;
+    margin: 1em;
+    font-family: sans-serif;
+    font-size: 10pt; 
 }
 
-body.refmanual
+p
 {
-    background: #fffff5 url(refmanual/manual.png) no-repeat top right fixed;
-    margin-right: 25pt;
+    text-align: left;
+    line-height: 1.15;
 }
 
 /* <dd/> */
@@ -500,9 +518,18 @@ pre.literal-block
     padding-right: 1em;
     margin-top: 10pt;
     margin-left: 0pt;
-/*    background-color: #f7f7f7;*/
-    background-color: #f5f5f5;
 }
+
+
+@media screen
+{
+    pre.literal-block
+    {
+
+        background-color: #fafffb;
+    }
+}
+
 
     td
 pre.literal-block
@@ -530,6 +557,15 @@ table
     margin-bottom: 0.5em;
 }
 
+@media screen
+{
+    table.table th
+    {
+        background-color:#fafffb;
+    }
+}
+
+
 table.docinfo
 {
     border: solid 0;
@@ -549,11 +585,28 @@ table.citation
     border-left: solid thin gray;
 }
 
+@media screen
+{
+    table.citation
+    {
+        background-color:#fafffb;
+    }
+}
+
 table.footnote
 {
     border: solid 0;
     border-left: solid thin black;
 }
+
+@media screen
+{
+    table.footnote
+    {
+        background-color:#fafffb;
+    }
+}
+
 
 table.header,
 table.footer
@@ -567,7 +620,7 @@ table.footer
 
 table.table
 {
-    border: solid 1px black; 
+    border: solid 1px #c7c7c7;
     border-collapse: collapse;
     margin-bottom: 10pt;
 }
@@ -581,7 +634,6 @@ td,
     table.table 
 th
 {
-    border: solid 1px black; 
     vertical-align: top;    
 }
 
@@ -591,6 +643,16 @@ th
     padding-left: 5pt;
     padding-right: 5pt;
 }
+
+
+@media screen
+{
+    table.table th
+    {
+        background-color:#fafffb;
+    }
+}
+
 
     table.table 
 td
@@ -650,10 +712,15 @@ tr.footer
 
 /* <tt/> */
 
-tt.literal
+@media screen
 {
-    background-color: #f5f5f5;
+    tt.literal
+    {
+
+        background-color: #fafffb;
+    }
 }
+
 
     h1
 tt, 

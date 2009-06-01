@@ -1,4 +1,4 @@
-# Copyright (c) Aleksey Gurtovoy 2001-2007
+# Copyright (c) Aleksey Gurtovoy 2001-2009
 #
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at
@@ -20,8 +20,7 @@ def __section_header(section):
     underline = underlines[len(parts) - 1] * len(parts[-1])
     if len(parts) > 0:
         hidden_target = '.. _`label-%s`:' % '-'.join( parts )
-        replacement_link = '.. |%s link| replace:: `label-%s`_' % ( '/'.join( parts ), '-'.join( parts ) )
-        return '\n%s\n%s\n%s\n%s\n\n' % (parts[-1], underline, hidden_target, replacement_link )
+        return '\n%s\n%s\n%s\n\n' % (parts[-1], underline, hidden_target )
     else:
         return '\n%s\n%s\n\n' % (parts[-1], underline )
 
@@ -40,15 +39,12 @@ def __include_page( output, page, name = None ):
     else:    ref = '/'.join( page.split('.')[0].split('-') )
     if ref.upper() == ref or ref.lower() == ref:
         output.write( 
-              ( '.. |%(ref)s| replace:: `|%(ref)s refentry| <|%(ref)s link|>`__\n'
-                + '.. |%(ref)s refentry| replace:: :refentry:`%(ref)s`\n'
-                + '.. |%(ref)s link| replace:: `%(ref)s`_\n'
-                ) 
+              ( '.. |%(ref)s| replace:: `%(ref)s`_\n' ) 
                     % { 'ref': ref }
             )
     else:
         if ref.find( '/' ) == -1:
-            ref = ' '.join( filter( lambda x: len(x) > 0, re.split( '([A-Z][a-z]+)', ref ) ) )
+            ref = ' '.join( filter( lambda x: len( x.strip() ) > 0, re.split( '([A-Z][a-z]+)', ref ) ) )
             output.write( '.. |%(ref)s| replace:: `%(ref)s`_\n' % { 'ref': ref } )
 
     modtime = time.gmtime( os.stat( page ).st_mtime )    

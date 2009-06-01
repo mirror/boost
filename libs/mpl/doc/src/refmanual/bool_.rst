@@ -1,6 +1,6 @@
 .. Data Types/Numeric//bool_ |10
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
+.. Copyright Aleksey Gurtovoy, David Abrahams 2001-2009.
 .. Distributed under the Boost
 .. Software License, Version 1.0. (See accompanying
 .. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -76,7 +76,7 @@ Example
 .. parsed-literal::
     
     BOOST_MPL_ASSERT(( is_same< bool_<true>::value_type, bool > ));
-    BOOST_MPL_ASSERT(( is_same< bool_<true>, |true_| > )); }
+    BOOST_MPL_ASSERT(( is_same< bool_<true>, true\_ > )); }
     BOOST_MPL_ASSERT(( is_same< bool_<true>::type, bool_<true> > ));
     BOOST_MPL_ASSERT_RELATION( bool_<true>::value, ==, true );
     assert( bool_<true>() == true );
@@ -88,5 +88,8 @@ See also
 |Data Types|, |Integral Constant|, |int_|, |long_|, |integral_c|
 
 
-.. |true_| replace:: ```true_`` <|bool_ link|>`__
-.. |false_| replace:: ```false_`` <|bool_ link|>`__
+.. |true_| replace:: `true_`_
+.. _`true_`: `bool_`_
+
+.. |false_| replace:: `false_`_
+.. _`false_`: `bool_`_
