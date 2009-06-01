@@ -793,12 +793,24 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
     </xsl:if>
 
     <!-- Nested classes/structs/unions -->
-    <xsl:apply-templates select="class|class-specialization|
+    <xsl:if test="class|class-specialization|struct|struct-specialization|union|union-specialization">
+      <xsl:text>&#10;</xsl:text>
+      <xsl:if test="typedef|static-constant">
+        <xsl:text>&#10;</xsl:text>
+      </xsl:if>
+      <xsl:call-template name="indent">
+        <xsl:with-param name="indentation" select="$indentation + 2"/>
+      </xsl:call-template>
+      <xsl:call-template name="highlight-comment">
+        <xsl:with-param name="text" select="'// member classes/structs/unions'"/>
+      </xsl:call-template>
+      <xsl:apply-templates select="class|class-specialization|
                                  struct|struct-specialization|
                                  union|union-specialization"
-      mode="reference">
-      <xsl:with-param name="indentation" select="$indentation + 2"/>
-    </xsl:apply-templates>
+        mode="reference">
+        <xsl:with-param name="indentation" select="$indentation + 2"/>
+      </xsl:apply-templates>
+    </xsl:if>
 
     <!-- Enums -->
     <xsl:apply-templates select="enum" mode="synopsis">
