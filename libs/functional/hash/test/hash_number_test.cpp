@@ -157,6 +157,9 @@ int main()
     NUMERIC_TEST(float, float)
     NUMERIC_TEST(double, double)
 
+    NUMERIC_TEST(std::size_t, size_t)
+    NUMERIC_TEST(std::ptrdiff_t, ptrdiff_t)
+
     bool_test();
 
     return boost::report_errors();
