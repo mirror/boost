@@ -107,7 +107,7 @@ UNORDERED_TEST(assign_tests2,
 
 UNORDERED_AUTO_TEST(assign_default_initializer_list) {
     std::cerr<<"Initializer List Tests\n";
-    std::initializer_list<std::pair<int, int> > init;
+    std::initializer_list<std::pair<int const, int> > init;
     boost::unordered_map<int, int> x1;
     x1[25] = 3;
     x1[16] = 10;
