@@ -9,36 +9,41 @@ Distributed under the Boost Software License, Version 1.0. (See accompanying
 file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 -->
 <header name="boost/signals2/slot.hpp" last-revision="$Date: 2007-03-06 16:51:55 -0500 (Tue, 06 Mar 2007) $">
-  <using-namespace name="boost"/>
   <using-namespace name="boost::signals2"/>
-  <using-class name="boost::signals2::signalN"/>
+  <using-namespace name="boost"/>
+  <using-class name="boost::signals2::signal"/>
   <using-class name="boost::signals2::slot_base"/>
   <namespace name="boost">
     <namespace name="signals2">
-      <class name="slotN">
+      <class name="slot">
         <template>
-          <template-type-parameter name="R"/>
-          <template-type-parameter name="T1"/>
-          <template-type-parameter name="T2"/>
-          <template-varargs/>
-          <template-type-parameter name="TN"/>
+          <template-type-parameter name="Signature">
+            <purpose>Function type R (T1, T2, ..., TN)</purpose>
+          </template-type-parameter>
           <template-type-parameter name="SlotFunction">
-            <default><classname>functionN</classname>&lt;R, T1, T2, ..., TN&gt;</default>
+            <default><classname>boost::function</classname>&lt;R (T1, T2, ..., TN)&gt;</default>
           </template-type-parameter>
         </template>
         <inherit access="public">
-          <type><classname>slot_base</classname></type>
+          <type><classname>boost::signals2::slot_base</classname></type>
         </inherit>
         <purpose>Pass slots as function arguments, and associate tracked objects with a slot.</purpose>
 
         <description>
-          <para>The class template <classname>slotN</classname> covers
-          several related classes slot0, slot1, slot2, etc.,
-          where the number suffix describes the number of function
-          parameters the slot will
-          take. Instead of enumerating all classes, a single pattern
-          <classname>slotN</classname> will be described, where N
-          represents the number of function parameters.</para>
+          <para>A slot consists of a polymorphic function wrapper (<classname>boost::function</classname> by default)
+            plus a container of <code>weak_ptr</code>s which identify the slot's "tracked objects".  If any of the
+            tracked objects expire, the slot will automatically disable itself.  That is, the slot's function
+            call operator will throw an exception instead of forwarding the function call to the slot's
+            polymorphic function wrapper.  Additionally, a slot will automatically lock all the tracked objects
+            as <code>shared_ptr</code> during invocation, to prevent any of them from expiring while
+            the polymorphic function wrapper is being run.
+          </para>
+          <para>
+            The slot constructor will search for <classname>signals2::signal</classname> and
+            <classname>signals2::trackable</classname> inside incoming function objects and
+            automatically track them.  It does so by applying a visitor
+            to the incoming functors with <functionname>boost::visit_each</functionname>.
+          </para>
         </description>
 
         <typedef name="result_type">
@@ -46,30 +51,42 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         </typedef>
         <typedef name="argument_type">
           <type>T1</type>
-          <purpose>If N == 1</purpose>
+          <purpose>Exists iff arity == 1</purpose>
         </typedef>
         <typedef name="first_argument_type">
           <type>T1</type>
-          <purpose>If N == 2</purpose>
+          <purpose>Exists iff arity == 2</purpose>
         </typedef>
         <typedef name="second_argument_type">
           <type>T2</type>
-          <purpose>If N == 2</purpose>
+          <purpose>Exists iff arity == 2</purpose>
         </typedef>
-        <typedef name="arg1_type"><type>T1</type></typedef>
-        <typedef name="arg2_type"><type>T2</type></typedef>
-        <typedef name="..."><type/></typedef>
-        <typedef name="argN_type"><type>TN</type></typedef>
+        <typedef name="signature_type">
+          <type>Signature</type>
+        </typedef>
         <typedef name="slot_function_type">
           <type>SlotFunction</type>
         </typedef>
 
+        <class name="arg">
+          <template>
+            <template-nontype-parameter name="n">
+              <type>unsigned</type>
+            </template-nontype-parameter>
+          </template>
+          <typedef name="type">
+            <type>Tn</type>
+            <purpose>The type of the <classname alt="signals2::slot">slot</classname>'s (n+1)th argument</purpose>
+          </typedef>
+        </class>
+
         <static-constant name="arity">
           <type>int</type>
           <default>N</default>
+          <purpose>The number of arguments taken by the slot.</purpose>
         </static-constant>
 
-      <constructor>
+        <constructor>
           <template>
             <template-type-parameter name="Slot"/>
           </template>
@@ -86,30 +103,11 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             constructed.
             </para>
             <para>In this special case where the template type parameter <code>Slot</code> is
-              a compatible <classname>signal</classname> or <classname>signalN</classname> type,
+              a compatible <classname>signals2::signal</classname> type,
               the signal will automatically be added to the slot's tracked object list.
               Otherwise, the slot's tracked object list is initially empty.
             </para>
           </effects>
-        </constructor>
-      <constructor>
-          <template>
-            <template-type-parameter name="OtherR"/>
-            <template-type-parameter name="OtherT1"/>
-            <template-type-parameter name="OtherT2"/>
-            <template-varargs/>
-            <template-type-parameter name="OtherTN"/>
-            <template-type-parameter name="OtherSlotFunction"/>
-          </template>
-
-          <parameter name="other_slot">
-            <paramtype>const slotN&lt;OtherR, OtherT1, OtherT2, ..., OtherTN, OtherSlotFunction&gt; &amp;</paramtype>
-          </parameter>
-
-          <effects>
-            <para>Initializes <code>this</code> with a copy of
-            <code>other_slot</code>'s <code>SlotFunction</code> object and tracked object list.
-            </para></effects>
         </constructor>
       <constructor>
           <template>
@@ -154,7 +152,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <effects>
             <para>Syntactic sugar for <code>bind()</code> when the constructor is passed more than
               one argument.  As if:
-            <code>slotN(boost::bind(f, a1, a2, ..., aN))</code>
+            <code>slot(boost::bind(f, a1, a2, ..., aN))</code>
             </para></effects>
         </constructor>
 
@@ -162,18 +160,18 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <overloaded-method name="operator()">
             <signature>
               <type>result_type</type>
-              <parameter name="a1"><paramtype>arg1_type</paramtype></parameter>
-              <parameter name="a2"><paramtype>arg2_type</paramtype></parameter>
+              <parameter name="a1"><paramtype>arg&lt;0&gt;::type</paramtype></parameter>
+              <parameter name="a2"><paramtype>arg&lt;1&gt;::_type</paramtype></parameter>
               <parameter><paramtype>...</paramtype></parameter>
-              <parameter name="aN"><paramtype>argN_type</paramtype></parameter>
+              <parameter name="aN"><paramtype>arg&lt;N-1&gt;::type</paramtype></parameter>
             </signature>
 
             <signature cv="const">
               <type>result_type</type>
-              <parameter name="a1"><paramtype>arg1_type</paramtype></parameter>
-              <parameter name="a2"><paramtype>arg2_type</paramtype></parameter>
+              <parameter name="a1"><paramtype>arg&lt;0&gt;::type</paramtype></parameter>
+              <parameter name="a2"><paramtype>arg&lt;1&gt;::_type</paramtype></parameter>
               <parameter><paramtype>...</paramtype></parameter>
-              <parameter name="aN"><paramtype>argN_type</paramtype></parameter>
+              <parameter name="aN"><paramtype>arg&lt;N-1&gt;::type</paramtype></parameter>
             </signature>
 
             <effects><para>Calls the slot's <code>SlotFunction</code> object.
@@ -196,28 +194,28 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         <method-group name="tracking">
           <overloaded-method name="track">
             <signature>
-              <type>slotN &amp;</type>
+              <type>slot &amp;</type>
               <parameter name="tracked_object">
                 <paramtype>const weak_ptr&lt;void&gt; &amp;</paramtype>
               </parameter>
             </signature>
             <signature>
-              <type>slotN &amp;</type>
+              <type>slot &amp;</type>
               <parameter name="tracked_signal">
-                <paramtype>const <classname>signal_base</classname> &amp;</paramtype>
+                <paramtype>const <classname>signals2::signal_base</classname> &amp;</paramtype>
               </parameter>
             </signature>
             <signature>
-              <type>slotN &amp;</type>
+              <type>slot &amp;</type>
               <parameter name="tracked_slot">
-                <paramtype>const <classname>slot_base</classname> &amp;</paramtype>
+                <paramtype>const <classname>signals2::slot_base</classname> &amp;</paramtype>
               </parameter>
             </signature>
             <effects>
               <para>
                 Adds object(s) to the slot's tracked object list.  Should any of the
                 tracked objects expire, then subsequent attempts to call the slot's <code>operator()</code>
-                or <code>lock()</code> methods will throw an <classname>expired_slot</classname> exception.
+                or <code>lock()</code> methods will throw an <classname>signals2::expired_slot</classname> exception.
               </para>
               <para>When tracking a signal, a <classname>shared_ptr</classname>
                 internal to the signal class is used for tracking.  The signal does not
@@ -245,78 +243,6 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <returns><para>A reference to the slot's underlying SlotFunction object.</para></returns>
           </overloaded-method>
         </method-group>
-      </class>
-
-      <class name="slot">
-        <template>
-          <template-type-parameter name="Signature">
-            <purpose>Function type R (T1, T2, ..., TN)</purpose>
-          </template-type-parameter>
-          <template-type-parameter name="SlotFunction">
-            <default><classname>function</classname>&lt;Signature&gt;</default>
-          </template-type-parameter>
-        </template>
-
-        <inherit access="public"><classname>slotN</classname>&lt;R, T1, T2, ..., TN, SlotFunction&gt;</inherit>
-        <purpose>Pass slots as function arguments, and associate tracked objects with a slot.</purpose>
-
-        <description>
-          <para>Class template <classname>slot</classname> is a thin
-          wrapper around the numbered class templates <classname
-          alt="slotN">slot0</classname>, <classname
-          alt="slotN">slot1</classname>, etc. It accepts a function
-          type with N arguments instead of N separate arguments, and
-          derives from the appropriate <classname>slotN</classname>
-          instantiation.</para>
-
-          <para>All functionality of this class template is in its base
-          class <classname>slotN</classname>.</para>
-        </description>
-
-      <constructor>
-          <template>
-            <template-type-parameter name="F"/>
-          </template>
-
-          <parameter name="f">
-            <paramtype>const F &amp;</paramtype>
-          </parameter>
-
-          <effects>
-            <para>Passes argument to the base type <classname>slotN</classname> constructor.</para>
-          </effects>
-        </constructor>
-        <constructor>
-          <template>
-            <template-type-parameter name="Func"/>
-            <template-type-parameter name="Arg1"/>
-            <template-type-parameter name="Arg2"/>
-            <template-varargs/>
-            <template-type-parameter name="ArgN"/>
-          </template>
-
-          <parameter name="f">
-            <paramtype>const Func &amp;</paramtype>
-          </parameter>
-          <parameter name="a1">
-            <paramtype>const Arg1 &amp;</paramtype>
-          </parameter>
-          <parameter name="a2">
-            <paramtype>const Arg2 &amp;</paramtype>
-          </parameter>
-          <parameter>
-            <paramtype>...</paramtype>
-          </parameter>
-          <parameter name="aN">
-            <paramtype>const ArgN &amp;</paramtype>
-          </parameter>
-
-          <effects>
-            <para>Syntactic sugar for <code>bind()</code> when the constructor is passed more than
-              one argument.  As if:
-            <code>slot(boost::bind(f, a1, a2, ..., aN))</code>
-            </para></effects>
-        </constructor>
       </class>
     </namespace>
   </namespace>

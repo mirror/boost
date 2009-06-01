@@ -21,7 +21,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   <run-test filename="dead_slot_test.cpp">
     <lib>../../../libs/test/build/boost_test_exec_monitor</lib>
     <purpose>
-<para>Ensure that calling <methodname alt="boost::signals2::signalN::connect">connect</methodname> with a slot
+<para>Ensure that calling <methodname alt="boost::signals2::signal::connect">connect</methodname> with a slot
 that has already expired does not actually
 connect to the slot.</para>
     </purpose>
@@ -53,26 +53,12 @@ connect to the slot.</para>
         to make sure they are fixed and stay fixed.</para></purpose>
   </run-test>
 
-  <run-test filename="signal_n_test.cpp">
-    <lib>../../../libs/test/build/boost_test_exec_monitor</lib>
-    <purpose>
-<para>Basic test of signal/slot connections and invocation using the
-<classname>boost::signals2::signalN</classname> class templates.</para>
-    </purpose>
-  </run-test>
-
   <run-test filename="signal_test.cpp">
     <lib>../../../libs/test/build/boost_test_exec_monitor</lib>
     <purpose>
 <para>Basic test of signal/slot connections and invocation using the
 <classname>boost::signals2::signal</classname> class template.</para>
     </purpose>
-    <if-fails>
-<para>The <classname>boost::signals2::signal</classname> class template may not
-be usable on your compiler. However, the
-<classname>boost::signals2::signalN</classname> class templates may still be
-usable.</para>
-    </if-fails>
   </run-test>
 
   <run-test filename="track_test.cpp">

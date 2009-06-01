@@ -8,8 +8,8 @@ Distributed under the Boost Software License, Version 1.0. (See accompanying
 file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 -->
 <header name="boost/signals2/shared_connection_block.hpp" last-revision="$Date: 2007-03-06 16:51:55 -0500 (Tue, 06 Mar 2007) $">
-  <using-namespace name="boost"/>
   <using-namespace name="boost::signals2"/>
+  <using-namespace name="boost"/>
   <using-class name="boost::signals2::connection"/>
   <namespace name="boost">
     <namespace name="signals2">
@@ -26,7 +26,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           its block when it is destroyed or its
           <methodname>unblock</methodname> method is called.</para>
           <para>A <code>shared_connection_block</code> is safe to use even
-          after the <classname>connection</classname> object it was constructed
+          after the <classname>signals2::connection</classname> object it was constructed
           from has been destroyed, or the connection it references has been
           disconnected.</para>
           <para>

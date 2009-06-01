@@ -11,9 +11,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 <section last-revision="$Date: 2007-06-12 14:01:23 -0400 (Tue, 12 Jun 2007) $" id="signals2.rationale">
   <title>Design Rationale</title>
 
-  <using-namespace name="boost"/>
   <using-namespace name="boost::signals2"/>
-  <using-class name="boost::signals2::signalN"/>
+  <using-namespace name="boost"/>
+  <using-class name="boost::signals2::signal"/>
 
   <section>
     <title>User-level Connection Management</title>
@@ -21,11 +21,11 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     <para> Users need to have fine control over the connection of
     signals to slots and their eventual disconnection. The primary approach
     taken by Boost.Signals2 is to return a
-    <code><classname>connection</classname></code> object that enables
+    <code><classname>signals2::connection</classname></code> object that enables
     connected/disconnected query, manual disconnection, and an
-    automatic disconnection on destruction mode (<classname>scoped_connection</classname>).
+    automatic disconnection on destruction mode (<classname>signals2::scoped_connection</classname>).
     In addition, two other interfaces are supported by the
-    <methodname alt="signalN::disconnect">signal::disconnect</methodname> overloaded method:</para>
+    <methodname alt="signal::disconnect">signal::disconnect</methodname> overloaded method:</para>
 
     <itemizedlist>
       <listitem>
@@ -71,7 +71,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
         <para> This type of interface is supported in Boost.Signals2
         via the slot grouping mechanism, and the overload of
-        <methodname alt="signalN::disconnect">signal::disconnect</methodname>
+        <methodname alt="signal::disconnect">signal::disconnect</methodname>
         which takes an argument of the signal's <code>Group</code> type.</para>
       </listitem>
     </itemizedlist>
@@ -112,7 +112,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     </para>
     <para>The new connection management scheme has the advantage of being
       non-intrusive.  Objects of any type may be tracked using the
-      <classname>shared_ptr/weak_ptr</classname> scheme.  The old
+      <classname>shared_ptr</classname>/<classname>weak_ptr</classname> scheme.  The old
       <code><classname>boost::signals::trackable</classname></code>
       scheme requires the tracked objects to be derived from the <code>trackable</code>
       base class, which is not always practical when interacting
@@ -296,7 +296,7 @@ private:
         <code>+=</code> operation: should it be a reference to the
         signal itself, to enable <code>sig += slot1 += slot2</code>,
         or should it return a
-        <code><classname>connection</classname></code> for the
+        <code><classname>signals2::connection</classname></code> for the
         newly-created signal/slot connection?</para>
       </listitem>
 
@@ -327,9 +327,7 @@ private:
       <classname>boost::signals2::mutex</classname> is simply that the <classname>boost::mutex</classname>
       class provided by the Boost.Thread library currently requires linking to libboost_thread.
       The <classname>boost::signals2::mutex</classname> class allows Signals2 to remain
-      a header-only library.  In the future, <classname>boost::signals2::mutex</classname>
-      will probably be turned into a typedef to <classname>std::mutex</classname> when
-      compiling in C++0x mode.  You may still choose to use <classname>boost::mutex</classname>
+      a header-only library.  You may still choose to use <classname>boost::mutex</classname>
       if you wish, by specifying it as the <code>Mutex</code> template type for your signals.
     </para>
     <para>

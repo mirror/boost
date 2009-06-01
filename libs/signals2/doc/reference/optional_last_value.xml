@@ -23,7 +23,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <para>
             <code>optional_last_value</code> is the default Combiner template type for signals in the
             Boost.Signals2 library.  The advantage of <code>optional_last_value</code> over
-            <classname>last_value</classname> is that <code>optional_last_value</code>
+            <classname>signals2::last_value</classname> is that <code>optional_last_value</code>
             can return an empty <classname>boost::optional</classname>. rather
             than throwing an exception, when
             its <code>InputIterator</code> sequence is empty.
@@ -66,17 +66,17 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
         <purpose>Evaluate an InputIterator sequence.</purpose>
         <description>
-          <para>This specialization of <classname>optional_last_value</classname> is provided
+          <para>This specialization of <classname>signals2::optional_last_value</classname> is provided
             to cope with the fact that there is no such thing as an
             <code><classname>optional</classname>&lt;void&gt;</code>, which
             <classname>optional_last_value</classname> would otherwise try to
-            use as its <code>result_type</code>.  Therefore,
-            this specialization leaves the <code>result_type</code> unspecified.
+            use as its <code>result_type</code>.  This specialization
+            instead sets the <code>result_type</code> to be <code>void</code>.
           </para>
         </description>
 
         <typedef name="result_type">
-          <type><emphasis>unspecified</emphasis></type>
+          <type>void</type>
         </typedef>
 
         <method-group name="invocation">

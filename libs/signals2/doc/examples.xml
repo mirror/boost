@@ -11,8 +11,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 <section last-revision="$Date: 2007-06-12 14:01:23 -0400 (Tue, 12 Jun 2007) $" id="signals2.examples">
   <title>Example programs</title>
 
-  <using-namespace name="boost"/>
   <using-namespace name="boost::signals2"/>
+  <using-namespace name="boost"/>
 
   <section id="signals2.examples.misc">
     <title>Miscellaneous Tutorial Examples</title>

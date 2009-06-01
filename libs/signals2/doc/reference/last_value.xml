@@ -61,7 +61,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         <purpose>Evaluate an InputIterator sequence.</purpose>
 
         <typedef name="result_type">
-          <type><emphasis>unspecified</emphasis></type>
+          <type>void</type>
         </typedef>
 
         <method-group name="invocation">
@@ -79,6 +79,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
             <effects><para>Attempts to dereference every iterator in the sequence <computeroutput>[first, last)</computeroutput>.
               </para></effects>
+            <throws>
+              <para>Unlike the non-void versions of <code>last_value</code>, the void specialization does not throw.</para>
+            </throws>
           </method>
         </method-group>
       </class-specialization>
@@ -86,7 +89,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
       <class name="no_slots_error">
         <inherit access="public"><classname>std::exception</classname></inherit>
         <purpose>Indicates a combiner was unable to synthesize a return value.</purpose>
-        <description>The <code>no_slots_error</code> exception may be thrown by <classname>last_value</classname>
+        <description>The <code>no_slots_error</code> exception may be thrown by <classname>signals2::last_value</classname>
           when it is run but unable to obtain any results from its input iterators.
         </description>
         <method name="what" cv="const" specifiers="virtual">
