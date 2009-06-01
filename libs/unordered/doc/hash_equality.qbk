@@ -13,7 +13,7 @@ is declared as:
             class Key, class Mapped,
             class Hash = ``[classref boost::hash]``<Key>,
             class Pred = std::equal_to<Key>,
-            class Alloc = std::allocator<Key> >
+            class Alloc = std::allocator<std::pair<Key const, Mapped> > >
         class ``[classref boost::unordered_map unordered_map]``;
 
 The hash function comes first as you might want to change the hash function
