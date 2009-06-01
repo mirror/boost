@@ -77,9 +77,9 @@ struct regex_traits_type
     typedef typename iterator_value<BidiIter>::type char_type;
 
     // if Locale is std::locale, wrap it in a cpp_regex_traits<Char>
-    typedef typename mpl::if_
+    typedef typename mpl::if_c
     <
-        is_same<Locale, std::locale>
+        is_same<Locale, std::locale>::value
       , cpp_regex_traits<char_type>
       , Locale
     >::type type;
