@@ -47,7 +47,6 @@ struct max_or_default {
 
 static int myfunc(int i, double z)
 {
-  std::cout << __FUNCTION__ << ": i is " << i << " and z is " << z << std::endl;
   return i;
 }
 
