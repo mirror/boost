@@ -1040,6 +1040,7 @@
   <xi:include href="reference/context/null.xml"/>
 
   <!-- concepts -->
+  <xi:include href="reference/concepts/BasicPrimitiveTransform.xml"/>
   <xi:include href="reference/concepts/CallableTransform.xml"/>
   <xi:include href="reference/concepts/ObjectTransform.xml"/>
   <xi:include href="reference/concepts/PrimitiveTransform.xml"/>

@@ -697,7 +697,6 @@ namespace boost { namespace proto
 
     #define BOOST_PROTO_UNEXPR() typedef int proto_is_expr_;
     #define BOOST_PROTO_CALLABLE() typedef void proto_is_callable_;
-    #define BOOST_PROTO_TRANSFORM() typedef void proto_is_transform_;
     #define BOOST_PROTO_AGGREGATE() typedef void proto_is_aggregate_;
 
     struct callable
@@ -705,11 +704,7 @@ namespace boost { namespace proto
         BOOST_PROTO_CALLABLE()
     };
 
-    struct empty_base;
-
-    struct transform_base;
-
-    template<typename PrimitiveTransform, typename Base = transform_base>
+    template<typename PrimitiveTransform>
     struct transform;
 
     template<typename Grammar, typename Fun = Grammar>

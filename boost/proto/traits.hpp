@@ -529,7 +529,7 @@
             /// a grammar element for matching terminal expressions, and a
             /// PrimitiveTransform that returns the current expression unchanged.
             template<typename T>
-            struct terminal : transform<terminal<T>, empty_base>
+            struct terminal
             {
                 typedef proto::expr<proto::tag::terminal, term<T>, 0> type;
                 typedef type proto_base_expr;
@@ -569,14 +569,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U, typename V>
-            struct if_else_ : transform<if_else_<T, U, V>, empty_base>
+            struct if_else_
             {
                 typedef proto::expr<proto::tag::if_else_, list3<T, U, V>, 3> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<if_else_>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<if_else_, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -597,7 +597,7 @@
             /// Use <tt>nullary_expr\<_, _\></tt> as a grammar element to match any
             /// nullary expression.
             template<typename Tag, typename T>
-            struct nullary_expr : transform<nullary_expr<Tag, T>, empty_base>
+            struct nullary_expr
             {
                 typedef proto::expr<Tag, term<T>, 0> type;
                 typedef type proto_base_expr;
@@ -641,14 +641,14 @@
             /// Use <tt>unary_expr\<_, _\></tt> as a grammar element to match any
             /// unary expression.
             template<typename Tag, typename T>
-            struct unary_expr : transform<unary_expr<Tag, T>, empty_base>
+            struct unary_expr
             {
                 typedef proto::expr<Tag, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<unary_expr>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<unary_expr, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -666,14 +666,14 @@
             /// Use <tt>binary_expr\<_, _, _\></tt> as a grammar element to match any
             /// binary expression.
             template<typename Tag, typename T, typename U>
-            struct binary_expr : transform<binary_expr<Tag, T, U>, empty_base>
+            struct binary_expr
             {
                 typedef proto::expr<Tag, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<binary_expr>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<binary_expr, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -689,14 +689,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T>
-            struct unary_plus : transform<unary_plus<T>, empty_base>
+            struct unary_plus
             {
                 typedef proto::expr<proto::tag::unary_plus, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<unary_plus>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<unary_plus, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -710,14 +710,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T>
-            struct negate : transform<negate<T>, empty_base>
+            struct negate
             {
                 typedef proto::expr<proto::tag::negate, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<negate>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<negate, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -731,14 +731,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T>
-            struct dereference : transform<dereference<T>, empty_base>
+            struct dereference
             {
                 typedef proto::expr<proto::tag::dereference, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<dereference>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<dereference, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -752,14 +752,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T>
-            struct complement : transform<complement<T>, empty_base>
+            struct complement
             {
                 typedef proto::expr<proto::tag::complement, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<complement>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<complement, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -773,14 +773,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T>
-            struct address_of : transform<address_of<T>, empty_base>
+            struct address_of
             {
                 typedef proto::expr<proto::tag::address_of, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<address_of>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<address_of, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -794,14 +794,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T>
-            struct logical_not : transform<logical_not<T>, empty_base>
+            struct logical_not
             {
                 typedef proto::expr<proto::tag::logical_not, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<logical_not>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<logical_not, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -815,14 +815,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T>
-            struct pre_inc : transform<pre_inc<T>, empty_base>
+            struct pre_inc
             {
                 typedef proto::expr<proto::tag::pre_inc, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<pre_inc>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<pre_inc, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -836,14 +836,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T>
-            struct pre_dec : transform<pre_dec<T>, empty_base>
+            struct pre_dec
             {
                 typedef proto::expr<proto::tag::pre_dec, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<pre_dec>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<pre_dec, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -857,14 +857,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T>
-            struct post_inc : transform<post_inc<T>, empty_base>
+            struct post_inc
             {
                 typedef proto::expr<proto::tag::post_inc, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<post_inc>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<post_inc, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -878,14 +878,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T>
-            struct post_dec : transform<post_dec<T>, empty_base>
+            struct post_dec
             {
                 typedef proto::expr<proto::tag::post_dec, list1<T>, 1> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<post_dec>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<post_dec, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -899,14 +899,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct shift_left : transform<shift_left<T, U>, empty_base>
+            struct shift_left
             {
                 typedef proto::expr<proto::tag::shift_left, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<shift_left>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<shift_left, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -922,14 +922,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct shift_right : transform<shift_right<T, U>, empty_base>
+            struct shift_right
             {
                 typedef proto::expr<proto::tag::shift_right, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<shift_right>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<shift_right, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -945,14 +945,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct multiplies : transform<multiplies<T, U>, empty_base>
+            struct multiplies
             {
                 typedef proto::expr<proto::tag::multiplies, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<multiplies>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<multiplies, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -968,14 +968,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct divides : transform<divides<T, U>, empty_base>
+            struct divides
             {
                 typedef proto::expr<proto::tag::divides, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<divides>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<divides, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -991,14 +991,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct modulus : transform<modulus<T, U>, empty_base>
+            struct modulus
             {
                 typedef proto::expr<proto::tag::modulus, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<modulus>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<modulus, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1014,14 +1014,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct plus : transform<plus<T, U>, empty_base>
+            struct plus
             {
                 typedef proto::expr<proto::tag::plus, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<plus>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<plus, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1037,14 +1037,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct minus : transform<minus<T, U>, empty_base>
+            struct minus
             {
                 typedef proto::expr<proto::tag::minus, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<minus>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<minus, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1060,14 +1060,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct less : transform<less<T, U>, empty_base>
+            struct less
             {
                 typedef proto::expr<proto::tag::less, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<less>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<less, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1083,14 +1083,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct greater : transform<greater<T, U>, empty_base>
+            struct greater
             {
                 typedef proto::expr<proto::tag::greater, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<greater>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<greater, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1106,14 +1106,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct less_equal : transform<less_equal<T, U>, empty_base>
+            struct less_equal
             {
                 typedef proto::expr<proto::tag::less_equal, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<less_equal>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<less_equal, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1129,14 +1129,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct greater_equal : transform<greater_equal<T, U>, empty_base>
+            struct greater_equal
             {
                 typedef proto::expr<proto::tag::greater_equal, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<greater_equal>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<greater_equal, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1152,14 +1152,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct equal_to : transform<equal_to<T, U>, empty_base>
+            struct equal_to
             {
                 typedef proto::expr<proto::tag::equal_to, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<equal_to>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<equal_to, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1175,14 +1175,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct not_equal_to : transform<not_equal_to<T, U>, empty_base>
+            struct not_equal_to
             {
                 typedef proto::expr<proto::tag::not_equal_to, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<not_equal_to>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<not_equal_to, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1198,14 +1198,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct logical_or : transform<logical_or<T, U>, empty_base>
+            struct logical_or
             {
                 typedef proto::expr<proto::tag::logical_or, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<logical_or>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<logical_or, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1221,14 +1221,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct logical_and : transform<logical_and<T, U>, empty_base>
+            struct logical_and
             {
                 typedef proto::expr<proto::tag::logical_and, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<logical_and>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<logical_and, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1244,14 +1244,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct bitwise_and : transform<bitwise_and<T, U>, empty_base>
+            struct bitwise_and
             {
                 typedef proto::expr<proto::tag::bitwise_and, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<bitwise_and>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<bitwise_and, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1267,14 +1267,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct bitwise_or : transform<bitwise_or<T, U>, empty_base>
+            struct bitwise_or
             {
                 typedef proto::expr<proto::tag::bitwise_or, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<bitwise_or>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<bitwise_or, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1290,14 +1290,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct bitwise_xor : transform<bitwise_xor<T, U>, empty_base>
+            struct bitwise_xor
             {
                 typedef proto::expr<proto::tag::bitwise_xor, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<bitwise_xor>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<bitwise_xor, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1313,14 +1313,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct comma : transform<comma<T, U>, empty_base>
+            struct comma
             {
                 typedef proto::expr<proto::tag::comma, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<comma>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<comma, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1332,14 +1332,14 @@
             };
 
             template<typename T, typename U>
-            struct mem_ptr : transform<mem_ptr<T, U>, empty_base>
+            struct mem_ptr
             {
                 typedef proto::expr<proto::tag::mem_ptr, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<mem_ptr>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<mem_ptr, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1355,14 +1355,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct assign : transform<assign<T, U>, empty_base>
+            struct assign
             {
                 typedef proto::expr<proto::tag::assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<assign>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<assign, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1378,14 +1378,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct shift_left_assign : transform<shift_left_assign<T, U>, empty_base>
+            struct shift_left_assign
             {
                 typedef proto::expr<proto::tag::shift_left_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<shift_left_assign>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<shift_left_assign, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1401,14 +1401,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct shift_right_assign : transform<shift_right_assign<T, U>, empty_base>
+            struct shift_right_assign
             {
                 typedef proto::expr<proto::tag::shift_right_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<shift_right_assign>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<shift_right_assign, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1424,14 +1424,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct multiplies_assign : transform<multiplies_assign<T, U>, empty_base>
+            struct multiplies_assign
             {
                 typedef proto::expr<proto::tag::multiplies_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<multiplies_assign>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<multiplies_assign, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1447,14 +1447,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct divides_assign : transform<divides_assign<T, U>, empty_base>
+            struct divides_assign
             {
                 typedef proto::expr<proto::tag::divides_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<divides_assign>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<divides_assign, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1470,14 +1470,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct modulus_assign : transform<modulus_assign<T, U>, empty_base>
+            struct modulus_assign
             {
                 typedef proto::expr<proto::tag::modulus_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<modulus_assign>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<modulus_assign, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1493,14 +1493,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct plus_assign : transform<plus_assign<T, U>, empty_base>
+            struct plus_assign
             {
                 typedef proto::expr<proto::tag::plus_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<plus_assign>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<plus_assign, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1516,14 +1516,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct minus_assign : transform<minus_assign<T, U>, empty_base>
+            struct minus_assign
             {
                 typedef proto::expr<proto::tag::minus_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<minus_assign>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<minus_assign, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1539,14 +1539,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct bitwise_and_assign : transform<bitwise_and_assign<T, U>, empty_base>
+            struct bitwise_and_assign
             {
                 typedef proto::expr<proto::tag::bitwise_and_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<bitwise_and_assign>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<bitwise_and_assign, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1562,14 +1562,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct bitwise_or_assign : transform<bitwise_or_assign<T, U>, empty_base>
+            struct bitwise_or_assign
             {
                 typedef proto::expr<proto::tag::bitwise_or_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<bitwise_or_assign>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<bitwise_or_assign, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1585,14 +1585,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct bitwise_xor_assign : transform<bitwise_xor_assign<T, U>, empty_base>
+            struct bitwise_xor_assign
             {
                 typedef proto::expr<proto::tag::bitwise_xor_assign, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<bitwise_xor_assign>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<bitwise_xor_assign, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1608,14 +1608,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct subscript : transform<subscript<T, U>, empty_base>
+            struct subscript
             {
                 typedef proto::expr<proto::tag::subscript, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<subscript>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<subscript, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -1631,14 +1631,14 @@
             /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
             /// transform.
             template<typename T, typename U>
-            struct member : transform<member<T, U>, empty_base>
+            struct member
             {
                 typedef expr<tag::member, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<member>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<member, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -2268,20 +2268,13 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
             >
             #endif
-              : transform<
-                    function<
-                        BOOST_PP_ENUM_PARAMS(N, A)
-                        BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
-                    >
-                  , empty_base
-                >
             {
                 typedef proto::expr<proto::tag::function, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)>, N> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<function>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<function, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY
@@ -2312,21 +2305,13 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
             >
             #endif
-              : transform<
-                    nary_expr<
-                        Tag
-                        BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
-                        BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
-                    >
-                  , empty_base
-                >
             {
                 typedef proto::expr<Tag, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)>, N> type;
                 typedef type proto_base_expr;
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
-                  : pass_through<nary_expr>::template impl<Expr, State, Data>
+                  : detail::pass_through_impl<nary_expr, Expr, State, Data>
                 {};
 
                 /// INTERNAL ONLY

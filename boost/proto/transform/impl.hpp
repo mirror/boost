@@ -15,14 +15,63 @@
 
 namespace boost { namespace proto
 {
-    struct transform_base
-    {
-        BOOST_PROTO_CALLABLE()
-        BOOST_PROTO_TRANSFORM()
-    };
+    /// INTERNAL ONLY
+    ///
+    #define BOOST_PROTO_BASIC_TRANSFORM(PrimitiveTransform)                                                     \
+    BOOST_PROTO_CALLABLE()                                                                                      \
+    typedef void proto_is_transform_;                                                                           \
+    typedef PrimitiveTransform transform_type;                                                                  \
+    /**/
 
-    struct empty_base
-    {};
+    /// INTERNAL ONLY
+    ///
+    #define BOOST_PROTO_TRANSFORM(PrimitiveTransform)                                                           \
+    BOOST_PROTO_BASIC_TRANSFORM(PrimitiveTransform)                                                             \
+                                                                                                                \
+    template<typename Sig>                                                                                      \
+    struct result                                                                                               \
+    {                                                                                                           \
+        typedef typename boost::proto::detail::apply_transform<Sig>::result_type type;                          \
+    };                                                                                                          \
+                                                                                                                \
+    template<typename Expr>                                                                                     \
+    typename boost::proto::detail::apply_transform<transform_type(Expr &)>::result_type                         \
+    operator ()(Expr &e) const                                                                                  \
+    {                                                                                                           \
+        int i = 0;                                                                                              \
+        return boost::proto::detail::apply_transform<transform_type(Expr &)>()(e, i, i);                        \
+    }                                                                                                           \
+                                                                                                                \
+    template<typename Expr, typename State>                                                                     \
+    typename boost::proto::detail::apply_transform<transform_type(Expr &, State &)>::result_type                \
+    operator ()(Expr &e, State &s) const                                                                        \
+    {                                                                                                           \
+        int i = 0;                                                                                              \
+        return boost::proto::detail::apply_transform<transform_type(Expr &, State &)>()(e, s, i);               \
+    }                                                                                                           \
+                                                                                                                \
+    template<typename Expr, typename State>                                                                     \
+    typename boost::proto::detail::apply_transform<transform_type(Expr &, State const &)>::result_type          \
+    operator ()(Expr &e, State const &s) const                                                                  \
+    {                                                                                                           \
+        int i = 0;                                                                                              \
+        return boost::proto::detail::apply_transform<transform_type(Expr &, State const &)>()(e, s, i);         \
+    }                                                                                                           \
+                                                                                                                \
+    template<typename Expr, typename State, typename Data>                                                      \
+    typename boost::proto::detail::apply_transform<transform_type(Expr &, State &, Data &)>::result_type        \
+    operator ()(Expr &e, State &s, Data &d) const                                                               \
+    {                                                                                                           \
+        return boost::proto::detail::apply_transform<transform_type(Expr &, State &, Data &)>()(e, s, d);       \
+    }                                                                                                           \
+                                                                                                                \
+    template<typename Expr, typename State, typename Data>                                                      \
+    typename boost::proto::detail::apply_transform<transform_type(Expr &, State const &, Data &)>::result_type  \
+    operator ()(Expr &e, State const &s, Data &d) const                                                         \
+    {                                                                                                           \
+        return boost::proto::detail::apply_transform<transform_type(Expr &, State const &, Data &)>()(e, s, d); \
+    }                                                                                                           \
+    /**/
 
     namespace detail
     {
@@ -45,57 +94,10 @@ namespace boost { namespace proto
         {};
     }
 
-    template<
-        typename PrimitiveTransform
-      , typename Base BOOST_PROTO_WHEN_BUILDING_DOCS(= transform_base)
-    >
-    struct transform : Base
+    template<typename PrimitiveTransform>
+    struct transform
     {
-        typedef PrimitiveTransform transform_type;
-
-        template<typename Sig>
-        struct result
-        {
-            typedef typename detail::apply_transform<Sig>::result_type type;
-        };
-
-        template<typename Expr>
-        typename detail::apply_transform<PrimitiveTransform(Expr &)>::result_type
-        operator ()(Expr &e) const
-        {
-            int i = 0;
-            return detail::apply_transform<PrimitiveTransform(Expr &)>()(e, i, i);
-        }
-
-        template<typename Expr, typename State>
-        typename detail::apply_transform<PrimitiveTransform(Expr &, State &)>::result_type
-        operator ()(Expr &e, State &s) const
-        {
-            int i = 0;
-            return detail::apply_transform<PrimitiveTransform(Expr &, State &)>()(e, s, i);
-        }
-
-        template<typename Expr, typename State>
-        typename detail::apply_transform<PrimitiveTransform(Expr &, State const &)>::result_type
-        operator ()(Expr &e, State const &s) const
-        {
-            int i = 0;
-            return detail::apply_transform<PrimitiveTransform(Expr &, State const &)>()(e, s, i);
-        }
-
-        template<typename Expr, typename State, typename Data>
-        typename detail::apply_transform<PrimitiveTransform(Expr &, State &, Data &)>::result_type
-        operator ()(Expr &e, State &s, Data &d) const
-        {
-            return detail::apply_transform<PrimitiveTransform(Expr &, State &, Data &)>()(e, s, d);
-        }
-
-        template<typename Expr, typename State, typename Data>
-        typename detail::apply_transform<PrimitiveTransform(Expr &, State const &, Data &)>::result_type
-        operator ()(Expr &e, State const &s, Data &d) const
-        {
-            return detail::apply_transform<PrimitiveTransform(Expr &, State const &, Data &)>()(e, s, d);
-        }
+        BOOST_PROTO_TRANSFORM(PrimitiveTransform)
     };
 
     template<typename Expr, typename State, typename Data>
