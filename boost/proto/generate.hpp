@@ -344,6 +344,16 @@
 
     }}
 
+    // Specialization of boost::result_of to eliminate some unnecessary template instantiations
+    namespace boost
+    {
+        template<typename Expr>
+        struct result_of<proto::default_domain(Expr)>
+        {
+            typedef Expr type;
+        };
+    }
+
     #endif // BOOST_PROTO_GENERATE_HPP_EAN_02_13_2007
 
 #else // BOOST_PP_IS_ITERATING

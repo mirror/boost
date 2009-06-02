@@ -72,24 +72,34 @@
                 typedef Expr *type;
             };
 
-            template<typename X, std::size_t N, typename Y>
-            void checked_copy(X (&x)[N], Y (&y)[N])
+            template<typename T, typename Tag, typename Arg0>
+            proto::expr<Tag, proto::term<Arg0>, 0> make_terminal(T &t, proto::expr<Tag, proto::term<Arg0>, 0> *)
             {
-                for(std::size_t i = 0; i < N; ++i)
-                {
-                    y[i] = x[i];
-                }
+                proto::expr<Tag, proto::term<Arg0>, 0> that = {t};
+                return that;
             }
 
-            template<typename T, std::size_t N>
-            struct if_is_array
-            {};
-
-            template<typename T, std::size_t N>
-            struct if_is_array<T[N], N>
+            template<typename T, typename Tag, typename Arg0, std::size_t N>
+            proto::expr<Tag, proto::term<Arg0[N]>, 0> make_terminal(T (&t)[N], proto::expr<Tag, proto::term<Arg0[N]>, 0> *)
             {
-                typedef int type;
-            };
+                expr<Tag, proto::term<Arg0[N]>, 0> that;
+                for(std::size_t i = 0; i < N; ++i)
+                {
+                    that.child0[i] = t[i];
+                }
+                return that;
+            }
+
+            template<typename T, typename Tag, typename Arg0, std::size_t N>
+            proto::expr<Tag, proto::term<Arg0[N]>, 0> make_terminal(T const(&t)[N], proto::expr<Tag, proto::term<Arg0[N]>, 0> *)
+            {
+                expr<Tag, proto::term<Arg0[N]>, 0> that;
+                for(std::size_t i = 0; i < N; ++i)
+                {
+                    that.child0[i] = t[i];
+                }
+                return that;
+            }
 
         }
 
@@ -111,6 +121,9 @@
         // expr<> because uses of proto_base_expr in proto::matches<> shouldn't
         // case the expr<> type to be instantiated. (<-- Check that assumtion!)
         // OR, should expr<>::proto_base_expr be a typedef for basic_expr<>?
+        // It should, and proto_base() can return *this reinterpret_cast to
+        // a basic_expr because they should be layout compatible. Or not, because
+        // that would incur an extra template instantiation. :-(
 
         BOOST_PROTO_BEGIN_ADL_NAMESPACE(exprns_)
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/proto/expr.hpp>))
@@ -179,10 +192,6 @@
         ///
         /// \c proto::expr\<\> is a valid Fusion random-access sequence, where
         /// the elements of the sequence are the child expressions.
-
-        //template<typename Tag, typename Args>
-        //struct expr<Tag, Args, BOOST_PP_ITERATION() >
-
         #if IS_TERMINAL
         template<typename Tag, typename Arg0>
         struct expr<Tag, term<Arg0>, 0>
@@ -222,6 +231,24 @@
                 return *this;
             }
 
+        #if IS_TERMINAL
+            /// \return A new \c expr\<\> object initialized with the specified
+            /// arguments.
+            ///
+            template<typename A0>
+            static expr const make(A0 &a0)
+            {
+                return detail::make_terminal(a0, static_cast<expr *>(0));
+            }
+
+            /// \overload
+            ///
+            template<typename A0>
+            static expr const make(A0 const &a0)
+            {
+                return detail::make_terminal(a0, static_cast<expr *>(0));
+            }
+        #else
             /// \return A new \c expr\<\> object initialized with the specified
             /// arguments.
             ///
@@ -229,36 +256,6 @@
             static expr const make(BOOST_PP_ENUM_BINARY_PARAMS(ARG_COUNT, A, const &a))
             {
                 expr that = {BOOST_PP_ENUM_PARAMS(ARG_COUNT, a)};
-                return that;
-            }
-
-        #if IS_TERMINAL
-            /// \overload
-            ///
-            template<typename A0>
-            static expr const make(A0 &a0)
-            {
-                expr that = {a0};
-                return that;
-            }
-
-            /// \overload
-            ///
-            template<typename A0, std::size_t N>
-            static expr const make(A0 (&a0)[N], typename detail::if_is_array<proto_child0, N>::type = 0)
-            {
-                expr that;
-                detail::checked_copy(a0, that.child0);
-                return that;
-            }
-
-            /// \overload
-            ///
-            template<typename A0, std::size_t N>
-            static expr const make(A0 const (&a0)[N], typename detail::if_is_array<proto_child0, N>::type = 0)
-            {
-                expr that;
-                detail::checked_copy(a0, that.child0);
                 return that;
             }
         #endif

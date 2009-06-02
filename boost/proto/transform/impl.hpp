@@ -15,11 +15,6 @@
 
 namespace boost { namespace proto
 {
-    template<typename PrimitiveTransform, typename Expr, typename State = int, typename Data = int>
-    struct apply_transform
-      : PrimitiveTransform::template impl<Expr, State, Data>
-    {};
-
     struct transform_base
     {
         BOOST_PROTO_CALLABLE()
@@ -28,6 +23,27 @@ namespace boost { namespace proto
 
     struct empty_base
     {};
+
+    namespace detail
+    {
+        template<typename Sig>
+        struct apply_transform;
+
+        template<typename PrimitiveTransform, typename Expr>
+        struct apply_transform<PrimitiveTransform(Expr)>
+          : PrimitiveTransform::template impl<Expr, int, int>
+        {};
+
+        template<typename PrimitiveTransform, typename Expr, typename State>
+        struct apply_transform<PrimitiveTransform(Expr, State)>
+          : PrimitiveTransform::template impl<Expr, State, int>
+        {};
+
+        template<typename PrimitiveTransform, typename Expr, typename State, typename Data>
+        struct apply_transform<PrimitiveTransform(Expr, State, Data)>
+          : PrimitiveTransform::template impl<Expr, State, Data>
+        {};
+    }
 
     template<
         typename PrimitiveTransform
@@ -38,62 +54,47 @@ namespace boost { namespace proto
         typedef PrimitiveTransform transform_type;
 
         template<typename Sig>
-        struct result;
-
-        template<typename This, typename Expr>
-        struct result<This(Expr)>
+        struct result
         {
-            typedef typename PrimitiveTransform::template impl<Expr, int, int>::result_type type;
-        };
-
-        template<typename This, typename Expr, typename State>
-        struct result<This(Expr, State)>
-        {
-            typedef typename PrimitiveTransform::template impl<Expr, State, int>::result_type type;
-        };
-
-        template<typename This, typename Expr, typename State, typename Data>
-        struct result<This(Expr, State, Data)>
-        {
-            typedef typename PrimitiveTransform::template impl<Expr, State, Data>::result_type type;
+            typedef typename detail::apply_transform<Sig>::result_type type;
         };
 
         template<typename Expr>
-        typename apply_transform<PrimitiveTransform, Expr &>::result_type
+        typename detail::apply_transform<PrimitiveTransform(Expr &)>::result_type
         operator ()(Expr &e) const
         {
             int i = 0;
-            return apply_transform<PrimitiveTransform, Expr &>()(e, i, i);
+            return detail::apply_transform<PrimitiveTransform(Expr &)>()(e, i, i);
         }
 
         template<typename Expr, typename State>
-        typename apply_transform<PrimitiveTransform, Expr &, State &>::result_type
+        typename detail::apply_transform<PrimitiveTransform(Expr &, State &)>::result_type
         operator ()(Expr &e, State &s) const
         {
             int i = 0;
-            return apply_transform<PrimitiveTransform, Expr &, State &>()(e, s, i);
+            return detail::apply_transform<PrimitiveTransform(Expr &, State &)>()(e, s, i);
         }
 
         template<typename Expr, typename State>
-        typename apply_transform<PrimitiveTransform, Expr &, State const &>::result_type
+        typename detail::apply_transform<PrimitiveTransform(Expr &, State const &)>::result_type
         operator ()(Expr &e, State const &s) const
         {
             int i = 0;
-            return apply_transform<PrimitiveTransform, Expr &, State const &>()(e, s, i);
+            return detail::apply_transform<PrimitiveTransform(Expr &, State const &)>()(e, s, i);
         }
 
         template<typename Expr, typename State, typename Data>
-        typename apply_transform<PrimitiveTransform, Expr &, State &, Data &>::result_type
+        typename detail::apply_transform<PrimitiveTransform(Expr &, State &, Data &)>::result_type
         operator ()(Expr &e, State &s, Data &d) const
         {
-            return apply_transform<PrimitiveTransform, Expr &, State &, Data &>()(e, s, d);
+            return detail::apply_transform<PrimitiveTransform(Expr &, State &, Data &)>()(e, s, d);
         }
 
         template<typename Expr, typename State, typename Data>
-        typename apply_transform<PrimitiveTransform, Expr &, State const &, Data &>::result_type
+        typename detail::apply_transform<PrimitiveTransform(Expr &, State const &, Data &)>::result_type
         operator ()(Expr &e, State const &s, Data &d) const
         {
-            return apply_transform<PrimitiveTransform, Expr &, State const &, Data &>()(e, s, d);
+            return detail::apply_transform<PrimitiveTransform(Expr &, State const &, Data &)>()(e, s, d);
         }
     };
 

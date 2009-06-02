@@ -258,6 +258,9 @@
                         )
                     );
                 operator fun_type *() const;
+
+            private:
+                callable_context_wrapper &operator =(callable_context_wrapper const &);
             };
 
             template<typename Expr, typename Context>
