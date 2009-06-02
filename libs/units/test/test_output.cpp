@@ -25,6 +25,7 @@ Test unit and quantity printing
 #include <boost/units/make_scaled_unit.hpp>
 #include <boost/units/base_unit.hpp>
 #include <boost/units/make_system.hpp>
+#include <boost/units/absolute.hpp>
 #include <boost/units/physical_dimensions/length.hpp>
 #include <boost/units/physical_dimensions/time.hpp>
 #include <boost/units/physical_dimensions/velocity.hpp>
@@ -122,6 +123,7 @@ BOOST_AUTO_TEST_CASE(test_output_unit_symbol) {
     BOOST_UNITS_TEST_OUTPUT(custom2(), "c2");
     BOOST_UNITS_TEST_OUTPUT(scaled_custom1(), "kc1");
     BOOST_UNITS_TEST_OUTPUT(scaled_custom2(), "kc2");
+    BOOST_UNITS_TEST_OUTPUT(boost::units::absolute<meter_base_unit::unit_type>(), "absolute m");
 #undef FORMATTERS
 }
 
@@ -142,6 +144,7 @@ BOOST_AUTO_TEST_CASE(test_output_unit_raw) {
     BOOST_UNITS_TEST_OUTPUT(custom2(), "m s^-2");
     BOOST_UNITS_TEST_OUTPUT(scaled_custom1(), "k(m^3)");
     BOOST_UNITS_TEST_OUTPUT(scaled_custom2(), "k(m s^-2)");
+    BOOST_UNITS_TEST_OUTPUT(boost::units::absolute<meter_base_unit::unit_type>(), "absolute m");
 #undef FORMATTERS
 }
 
@@ -161,6 +164,7 @@ BOOST_AUTO_TEST_CASE(test_output_unit_name) {
     BOOST_UNITS_TEST_OUTPUT(custom2(), "custom2");
     BOOST_UNITS_TEST_OUTPUT(scaled_custom1(), "kilocustom1");
     BOOST_UNITS_TEST_OUTPUT(scaled_custom2(), "kilocustom2");
+    BOOST_UNITS_TEST_OUTPUT(boost::units::absolute<meter_base_unit::unit_type>(), "absolute meter");
 #undef FORMATTERS
 }
 
@@ -181,6 +185,7 @@ BOOST_AUTO_TEST_CASE(test_output_quantity_symbol) {
     BOOST_UNITS_TEST_OUTPUT(1.5*custom2(), "1.5 c2");
     BOOST_UNITS_TEST_OUTPUT(1.5*scaled_custom1(), "1.5 kc1");
     BOOST_UNITS_TEST_OUTPUT(1.5*scaled_custom2(), "1.5 kc2");
+    BOOST_UNITS_TEST_OUTPUT(1.5*boost::units::absolute<meter_base_unit::unit_type>(), "1.5 absolute m");
 #undef FORMATTERS
 }
 
@@ -201,6 +206,7 @@ BOOST_AUTO_TEST_CASE(test_output_quantity_raw) {
     BOOST_UNITS_TEST_OUTPUT(1.5*custom2(), "1.5 m s^-2");
     BOOST_UNITS_TEST_OUTPUT(1.5*scaled_custom1(), "1.5 k(m^3)");
     BOOST_UNITS_TEST_OUTPUT(1.5*scaled_custom2(), "1.5 k(m s^-2)");
+    BOOST_UNITS_TEST_OUTPUT(1.5*boost::units::absolute<meter_base_unit::unit_type>(), "1.5 absolute m");
 #undef FORMATTERS
 }
 
@@ -220,6 +226,7 @@ BOOST_AUTO_TEST_CASE(test_output_quantity_name) {
     BOOST_UNITS_TEST_OUTPUT(1.5*custom2(), "1.5 custom2");
     BOOST_UNITS_TEST_OUTPUT(1.5*scaled_custom1(), "1.5 kilocustom1");
     BOOST_UNITS_TEST_OUTPUT(1.5*scaled_custom2(), "1.5 kilocustom2");
+    BOOST_UNITS_TEST_OUTPUT(1.5*boost::units::absolute<meter_base_unit::unit_type>(), "1.5 absolute meter");
 #undef FORMATTERS
 }
 
