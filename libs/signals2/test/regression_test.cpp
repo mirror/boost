@@ -13,7 +13,7 @@
 #include <boost/test/minimal.hpp>
 #include <boost/signals2.hpp>
 
-typedef boost::signals2::signal0<void> sig0_type;
+typedef boost::signals2::signal<void ()> sig0_type;
 
 // combiner that returns the number of slots invoked
 struct slot_counter {
@@ -64,7 +64,7 @@ void slot_connect_test()
 /* 2008-03-10: we weren't disconnecting old connection in scoped_connection assignment operator */
 void scoped_connection_test()
 {
-  typedef boost::signals2::signal0<void, slot_counter> signal_type;
+  typedef boost::signals2::signal<void (), slot_counter> signal_type;
   signal_type sig;
   {
     boost::signals2::scoped_connection conn(sig.connect(&my_slot));

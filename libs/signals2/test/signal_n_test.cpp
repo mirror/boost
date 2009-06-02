@@ -7,9 +7,18 @@
 
 // For more information, see http://www.boost.org
 
+#include <boost/config.hpp>
+#include <boost/test/minimal.hpp>
+
+#ifndef BOOST_NO_VARIADIC_TEMPLATES
+int test_main(int, char* [])
+{
+  return 0;
+}
+#else // BOOST_NO_VARIADIC_TEMPLATES
+
 #include <boost/optional.hpp>
 #include <boost/ref.hpp>
-#include <boost/test/minimal.hpp>
 #include <boost/signals2.hpp>
 #include <functional>
 
@@ -290,3 +299,5 @@ test_main(int, char* [])
   test_extended_slot<int>();
   return 0;
 }
+
+#endif // BOOST_NO_VARIADIC_TEMPLATES

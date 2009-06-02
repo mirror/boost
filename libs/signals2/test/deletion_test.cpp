@@ -40,7 +40,7 @@ bool operator==(const remove_connection& x, const remove_connection& y)
 static void
 test_remove_self()
 {
-  boost::signals2::signal0<void> s0;
+  boost::signals2::signal<void ()> s0;
 
   connections[0] = s0.connect(remove_connection(0));
   connections[1] = s0.connect(remove_connection(1));
@@ -115,7 +115,7 @@ test_remove_self()
 static void
 test_remove_prior()
 {
-  boost::signals2::signal0<void> s0;
+  boost::signals2::signal<void ()> s0;
 
   connections[0] = s0.connect(remove_connection(0));
   connections[1] = s0.connect(remove_connection(1, 0));
@@ -154,7 +154,7 @@ test_remove_prior()
 static void
 test_remove_after()
 {
-  boost::signals2::signal0<void> s0;
+  boost::signals2::signal<void ()> s0;
 
   connections[0] = s0.connect(remove_connection(0, 1));
   connections[1] = s0.connect(remove_connection(1));
@@ -193,7 +193,7 @@ test_remove_after()
 static void
 test_bloodbath()
 {
-  boost::signals2::signal0<void> s0;
+  boost::signals2::signal<void ()> s0;
 
   connections[0] = s0.connect(remove_connection(0, 1));
   connections[1] = s0.connect(remove_connection(1, 1));
@@ -214,7 +214,7 @@ test_bloodbath()
 static void
 test_disconnect_equal()
 {
-  boost::signals2::signal0<void> s0;
+  boost::signals2::signal<void ()> s0;
 
   connections[0] = s0.connect(remove_connection(0));
   connections[1] = s0.connect(remove_connection(1));

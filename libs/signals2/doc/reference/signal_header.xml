@@ -9,23 +9,21 @@ Distributed under the Boost Software License, Version 1.0. (See accompanying
 file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 -->
 <header name="boost/signals2/signal.hpp" last-revision="$Date: 2007-03-06 16:51:55 -0500 (Tue, 06 Mar 2007) $">
-  <using-namespace name="boost"/>
   <using-namespace name="boost::signals2"/>
+  <using-namespace name="boost"/>
   <namespace name="boost">
     <namespace name="signals2">
       <enum name="connect_position">
         <enumvalue name="at_front"/>
         <enumvalue name="at_back"/>
       </enum>
-      <class name="signalN">
+      <class name="signal">
         <template>
-          <template-type-parameter name="R"/>
-          <template-type-parameter name="T1"/>
-          <template-type-parameter name="T2"/>
-          <template-varargs/>
-          <template-type-parameter name="TN"/>
+          <template-type-parameter name="Signature">
+            <purpose>Function type R (T1, T2, ..., TN)</purpose>
+          </template-type-parameter>
           <template-type-parameter name="Combiner">
-            <default><classname>optional_last_value</classname>&lt;R&gt;</default>
+            <default><classname>boost::signals2::optional_last_value</classname>&lt;R&gt;</default>
           </template-type-parameter>
           <template-type-parameter name="Group">
             <default>int</default>
@@ -34,31 +32,29 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <default><classname>std::less</classname>&lt;Group&gt;</default>
           </template-type-parameter>
           <template-type-parameter name="SlotFunction">
-            <default><classname>functionN</classname>&lt;R, T1, T2, ..., TN&gt;</default>
+            <default><classname>boost::function</classname>&lt;Signature&gt;</default>
           </template-type-parameter>
           <template-type-parameter name="ExtendedSlotFunction">
-            <default><classname>functionN</classname>&lt;R, const <classname>connection</classname> &amp;, T1, T2, ..., TN&gt;</default>
+            <default><classname>boost::function</classname>&lt;R (const <classname alt="signals2::connection">connection</classname> &amp;, T1, T2, ..., TN)&gt;</default>
           </template-type-parameter>
           <template-type-parameter name="Mutex">
-            <default><classname>mutex</classname></default>
+            <default><classname>boost::signals2::mutex</classname></default>
           </template-type-parameter>
         </template>
         <inherit access="public">
-          <type><classname>signal_base</classname></type>
+          <type><classname>boost::signals2::signal_base</classname></type>
         </inherit>
 
-        <purpose>Set of safe multicast callback types.</purpose>
+        <purpose>Safe multicast callback.</purpose>
 
         <description>
-          <para>The class template <classname>signalN</classname> covers
-          several related classes signal0, signal1, signal2, etc.,
-          where the number suffix describes the number of function
-          parameters the signal and its connected slots will
-          take. Instead of enumerating all classes, a single pattern
-          <classname>signalN</classname> will be described, where N
-          represents the number of function parameters.</para>
+          <para>
+            See the <link linkend="signals2.tutorial">tutorial</link>
+            for more information on how to use the signal class.
+          </para>
         </description>
 
+        <typedef name="signature_type"><type>Signature</type></typedef>
         <typedef name="result_type">
           <type>typename Combiner::result_type</type>
         </typedef>
@@ -67,54 +63,66 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         <typedef name="group_compare_type"><type>GroupCompare</type></typedef>
         <typedef name="slot_function_type"><type>SlotFunction</type></typedef>
         <typedef name="slot_type">
-          <type>typename <classname>slotN</classname>&lt;R, T1, T2, ..., TN, SlotFunction&gt;</type>
+          <type>typename <classname>signals2::slot</classname>&lt;Signature, SlotFunction&gt;</type>
         </typedef>
         <typedef name="extended_slot_function_type"><type>ExtendedSlotFunction</type></typedef>
         <typedef name="extended_slot_type">
-          <type>typename <classname>slotN</classname>&lt;R, const <classname>connection</classname> &amp;, T1, ..., TN, ExtendedSlotFunction&gt;</type>
+          <type>typename <classname>signals2::slot</classname>&lt;R (const <classname alt="signals2::connection">connection</classname> &amp;, T1, ..., TN), ExtendedSlotFunction&gt;</type>
           <description>
             <para>Slots of the <code>extended_slot_type</code> may be connected to the signal using the
               <methodname>connect_extended</methodname> methods.  The <code>extended_slot_type</code>
-              has an additional <classname>connection</classname> argument in its signature,
+              has an additional <classname>signals2::connection</classname> argument in its signature,
               which gives slot functions access to their connection to the signal
               invoking them.
             </para>
           </description>
         </typedef>
         <typedef name="slot_result_type">
-          <type><emphasis>implementation-detail</emphasis></type>
+          <type>typename SlotFunction::result_type</type>
           <description>
             <para>
               This is the type returned when dereferencing the input iterators passed to the signal's
-              combiner.  It is usually <code>slot_function_type::result_type</code> unless that
-              type is <code>void</code>, in which case <code>slot_result_type</code> is
-              unspecified.
+              combiner.
             </para>
           </description>
         </typedef>
         <typedef name="slot_call_iterator">
           <type><emphasis>unspecified</emphasis></type>
+          <description>
+            <para>
+              The input iterator type passed to the combiner when the signal is invoked.
+            </para>
+          </description>
         </typedef>
         <typedef name="argument_type">
           <type>T1</type>
-          <purpose>If N == 1</purpose>
+          <purpose>Exists iff iff arity == 1</purpose>
         </typedef>
         <typedef name="first_argument_type">
           <type>T1</type>
-          <purpose>If N == 2</purpose>
+          <purpose>Exists iff iff arity == 2</purpose>
         </typedef>
         <typedef name="second_argument_type">
           <type>T2</type>
-          <purpose>If N == 2</purpose>
+          <purpose>Exists iff iff arity == 2</purpose>
         </typedef>
-        <typedef name="arg1_type"><type>T1</type></typedef>
-        <typedef name="arg2_type"><type>T2</type></typedef>
-        <typedef name="..."><type/></typedef>
-        <typedef name="argN_type"><type>TN</type></typedef>
+
+        <class name="arg">
+          <template>
+            <template-nontype-parameter name="n">
+              <type>unsigned</type>
+            </template-nontype-parameter>
+          </template>
+          <typedef name="type">
+            <type>Tn</type>
+            <purpose>The type of the <classname alt="signals2::signal">signal</classname>'s (n+1)th argument</purpose>
+          </typedef>
+        </class>
 
         <static-constant name="arity">
           <type>int</type>
           <default>N</default>
+          <purpose>The number of arguments taken by the signal.</purpose>
         </static-constant>
 
         <constructor>
@@ -139,7 +147,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         <method-group name="connection management">
           <overloaded-method name="connect">
             <signature>
-              <type><classname>connection</classname></type>
+              <type><classname alt="signals2::connection">connection</classname></type>
               <parameter name="slot">
                 <paramtype>const slot_type&amp;</paramtype>
               </parameter>
@@ -150,7 +158,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </signature>
 
             <signature>
-              <type><classname>connection</classname></type>
+              <type><classname alt="signals2::connection">connection</classname></type>
               <parameter name="group">
                 <paramtype>const group_type&amp;</paramtype>
               </parameter>
@@ -177,7 +185,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             slots.</para></effects>
 
             <returns><para>A
-            <computeroutput><classname>connection</classname></computeroutput>
+            <computeroutput><classname>signals2::connection</classname></computeroutput>
             object that references the newly-created connection between
             the signal and the slot; if the slot is inactive, returns a
             disconnected connection.</para></returns>
@@ -197,7 +205,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           </overloaded-method>
           <overloaded-method name="connect_extended">
             <signature>
-              <type><classname>connection</classname></type>
+              <type><classname alt="signals2::connection">connection</classname></type>
               <parameter name="slot">
                 <paramtype>const extended_slot_type&amp;</paramtype>
               </parameter>
@@ -208,7 +216,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </signature>
 
             <signature>
-              <type><classname>connection</classname></type>
+              <type><classname alt="signals2::connection">connection</classname></type>
               <parameter name="group">
                 <paramtype>const group_type&amp;</paramtype>
               </parameter>
@@ -225,7 +233,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 The <code>connect_extended</code> methods work the same as the <methodname>connect</methodname>
                 methods, except they take slots of type <classname>extended_slot_type</classname>.
                 This is useful if a slot needs to access the connection between it and the
-                signal invoking it, for example if it wishes to disconnect or block the connection.
+                signal invoking it, for example if it wishes to disconnect or block its own connection.
               </para>
             </description>
           </overloaded-method>
@@ -254,9 +262,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             are disconnected.
             </para>
             <para>Note, the <code>slot_func</code>
-            argument should not be an actual <classname alt="slotN">signals2::slot</classname>
+            argument should not be an actual <classname>signals2::slot</classname>
             object (which does not even support <code>operator==</code>), but rather
-            the functor you wrapped inside a <classname alt="slotN">signals2::slot</classname>
+            the functor you wrapped inside a <classname>signals2::slot</classname>
             when you initially made the connection.
             </para></effects>
 
@@ -326,18 +334,18 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <overloaded-method name="operator()">
             <signature>
               <type>result_type</type>
-              <parameter name="a1"><paramtype>arg1_type</paramtype></parameter>
-              <parameter name="a2"><paramtype>arg2_type</paramtype></parameter>
+              <parameter name="a1"><paramtype>arg&lt;0&gt;::type</paramtype></parameter>
+              <parameter name="a2"><paramtype>arg&lt;1&gt;::type</paramtype></parameter>
               <parameter><paramtype>...</paramtype></parameter>
-              <parameter name="aN"><paramtype>argN_type</paramtype></parameter>
+              <parameter name="aN"><paramtype>arg&lt;N-1&gt;::type</paramtype></parameter>
             </signature>
 
             <signature cv="const">
               <type>result_type</type>
-              <parameter name="a1"><paramtype>arg1_type</paramtype></parameter>
-              <parameter name="a2"><paramtype>arg2_type</paramtype></parameter>
+              <parameter name="a1"><paramtype>arg&lt;0&gt;::type</paramtype></parameter>
+              <parameter name="a2"><paramtype>arg&lt;1&gt;::type</paramtype></parameter>
               <parameter><paramtype>...</paramtype></parameter>
-              <parameter name="aN"><paramtype>argN_type</paramtype></parameter>
+              <parameter name="aN"><paramtype>arg&lt;N-1&gt;::type</paramtype></parameter>
             </signature>
 
             <effects><para>Invokes the combiner with a
@@ -369,7 +377,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             non-<computeroutput>const</computeroutput> version will
             invoke the combiner as
             non-<computeroutput>const</computeroutput>.</para>
-			</notes>
+            </notes>
           </overloaded-method>
         </method-group>
 
@@ -389,73 +397,6 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <throws><para>Will not throw.</para></throws>
           </method>
         </method-group>
-      </class>
-
-      <class name="signal">
-        <template>
-          <template-type-parameter name="Signature">
-            <purpose>Function type R (T1, T2, ..., TN)</purpose>
-          </template-type-parameter>
-          <template-type-parameter name="Combiner">
-            <default><classname>optional_last_value</classname>&lt;R&gt;</default>
-          </template-type-parameter>
-          <template-type-parameter name="Group">
-            <default>int</default>
-          </template-type-parameter>
-          <template-type-parameter name="GroupCompare">
-            <default><classname>std::less</classname>&lt;Group&gt;</default>
-          </template-type-parameter>
-          <template-type-parameter name="SlotFunction">
-            <default><classname>function</classname>&lt;Signature&gt;</default>
-          </template-type-parameter>
-          <template-type-parameter name="ExtendedSlotFunction">
-            <default><classname>function</classname>&lt;R (const <classname>connection</classname> &amp;, T1, T2, ..., TN)&gt;</default>
-          </template-type-parameter>
-          <template-type-parameter name="Mutex">
-            <default><classname>mutex</classname></default>
-          </template-type-parameter>
-        </template>
-
-        <inherit access="public">
-          <type><classname>signalN</classname>&lt;R, T1, T2, ..., TN, Combiner, Group, GroupCompare, SlotFunction, ExtendedSlotFunction, Mutex&gt;</type>
-        </inherit>
-        <purpose>Safe multicast callback.</purpose>
-
-        <description>
-          <para>Class template <classname>signal</classname> is a thin
-          wrapper around the numbered class templates <classname
-          alt="signalN">signal0</classname>, <classname
-          alt="signalN">signal1</classname>, etc. It accepts a function
-          type with N arguments instead of N separate arguments, and
-          derives from the appropriate <classname>signalN</classname>
-          instantiation.</para>
-
-          <para>All functionality of this class template is in its base
-          class <classname>signalN</classname>.</para>
-          <para>
-            The large number of template parameters for the <code>signal</code> class
-            can be an inconvenience.  The
-            the <classname>signal_type</classname> metafunction is provided to
-            overcome this problem.  It uses the Boost.Parameter library
-            to permit specification of the <code>signal</code> class' template type parameters
-            as named parameters.
-          </para>
-        </description>
-
-        <constructor>
-          <parameter name="combiner">
-            <paramtype>const combiner_type&amp;</paramtype>
-            <default>combiner_type()</default>
-          </parameter>
-          <parameter name="compare">
-            <paramtype>const group_compare_type&amp;</paramtype>
-            <default>group_compare_type()</default>
-          </parameter>
-
-          <effects><para>Initializes the base class with the given combiner
-          and comparison objects.</para></effects>
-        </constructor>
-        <typedef name="signature_type"><type>Signature</type></typedef>
       </class>
     </namespace>
   </namespace>

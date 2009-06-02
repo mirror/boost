@@ -11,8 +11,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 <section last-revision="$Date: 2007-06-12 14:01:23 -0400 (Tue, 12 Jun 2007) $" id="signals2.faq">
   <title>Frequently Asked Questions</title>
 
-  <using-namespace name="boost"/>
   <using-namespace name="boost::signals2"/>
+  <using-namespace name="boost"/>
 
   <qandaset>
     <qandaentry>
@@ -40,8 +40,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           with signal invocation, you will need to use automatic connection management.
           That is, the objects will need to be owned by
           <classname>shared_ptr</classname> and passed to the slot's
-          <methodname alt="slotN::track">track</methodname>() method before the slot is connected.
-          The <classname>trackable</classname> scheme of automatic connection management
+          <methodname alt="signals2::slot::track">track</methodname>() method before the slot is connected.
+          The <classname>signals2::trackable</classname> scheme of automatic connection management
           is NOT thread-safe, and is only provided to ease porting of single-threaded
           code from Boost.Signals to Boost.Signals2.
         </para>

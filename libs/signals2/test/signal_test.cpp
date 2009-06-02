@@ -1,6 +1,9 @@
 // Boost.Signals library
 
-// Copyright Douglas Gregor 2001-2003. Use, modification and
+// Copyright Frank Mori Hess 2008-2009.
+// Copyright Douglas Gregor 2001-2003.
+//
+// Use, modification and
 // distribution is subject to the Boost Software License, Version
 // 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -12,6 +15,7 @@
 #include <boost/signals2.hpp>
 #include <functional>
 #include <iostream>
+#include <typeinfo>
 
 template<typename T>
 struct max_or_default {
@@ -215,6 +219,52 @@ template<typename ResultType>
   }
 }
 
+void increment_arg(int &value)
+{
+  ++value;
+}
+
+static void
+test_reference_args()
+{
+  typedef boost::signals2::signal<void (int &)> signal_type;
+  signal_type s1;
+
+  s1.connect(&increment_arg);
+  int value = 0;
+  s1(value);
+  BOOST_CHECK(value == 1);
+}
+
+static void
+test_typedefs_etc()
+{
+  typedef boost::signals2::signal<int (double, long)> signal_type;
+  typedef signal_type::slot_type slot_type;
+
+  BOOST_CHECK(typeid(signal_type::slot_result_type) == typeid(int));
+  BOOST_CHECK(typeid(signal_type::result_type) == typeid(boost::optional<int>));
+  BOOST_CHECK(typeid(signal_type::arg<0>::type) == typeid(double));
+  BOOST_CHECK(typeid(signal_type::arg<1>::type) == typeid(long));
+  BOOST_CHECK(typeid(signal_type::arg<0>::type) == typeid(signal_type::first_argument_type));
+  BOOST_CHECK(typeid(signal_type::arg<1>::type) == typeid(signal_type::second_argument_type));
+  BOOST_CHECK(typeid(signal_type::signature_type) == typeid(int (double, long)));
+  BOOST_CHECK(signal_type::arity == 2);
+
+  BOOST_CHECK(typeid(slot_type::result_type) == typeid(signal_type::slot_result_type));
+  BOOST_CHECK(typeid(slot_type::arg<0>::type) == typeid(signal_type::arg<0>::type));
+  BOOST_CHECK(typeid(slot_type::arg<1>::type) == typeid(signal_type::arg<1>::type));
+  BOOST_CHECK(typeid(slot_type::arg<0>::type) == typeid(slot_type::first_argument_type));
+  BOOST_CHECK(typeid(slot_type::arg<1>::type) == typeid(slot_type::second_argument_type));
+  BOOST_CHECK(typeid(slot_type::signature_type) == typeid(signal_type::signature_type));
+  BOOST_CHECK(slot_type::arity == signal_type::arity);
+
+  typedef boost::signals2::signal<void (short)> unary_signal_type;
+  BOOST_CHECK(typeid(unary_signal_type::slot_result_type) == typeid(void));
+  BOOST_CHECK(typeid(unary_signal_type::argument_type) == typeid(short));
+  BOOST_CHECK(typeid(unary_signal_type::slot_type::argument_type) == typeid(short));
+}
+
 int
 test_main(int, char* [])
 {
@@ -223,6 +273,7 @@ test_main(int, char* [])
   test_signal_signal_connect();
   test_extended_slot<void>();
   test_extended_slot<int>();
-
+  test_reference_args();
+  test_typedefs_etc();
   return 0;
 }

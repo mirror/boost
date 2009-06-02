@@ -47,7 +47,7 @@ struct max_or_default {
 
 int test_main(int, char*[])
 {
-  typedef boost::signals2::signal1<int, int, max_or_default<int> > sig_type;
+  typedef boost::signals2::signal<int (int), max_or_default<int> > sig_type;
   sig_type s1;
 
   // Test auto-disconnection
@@ -65,7 +65,7 @@ int test_main(int, char*[])
     BOOST_CHECK(s1(5) == 5);
   }
   BOOST_CHECK(s1(5) == 0);
-  
+
   // Test multiple arg slot constructor
   {
     short_lived shorty;

@@ -11,10 +11,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 <section last-revision="$Date: 2007-06-12 14:01:23 -0400 (Tue, 12 Jun 2007) $" id="signals2.tutorial">
   <title>Tutorial</title>
 
-  <using-namespace name="boost"/>
   <using-namespace name="boost::signals2"/>
-  <using-class name="boost::signals2::signalN"/>
-  <using-class name="boost::signals2::slotN"/>
+  <using-namespace name="boost"/>
+  <using-class name="boost::signals2::signal"/>
+  <using-class name="boost::signals2::slot"/>
 
   <section>
     <title>How to Read this Tutorial</title>
@@ -36,19 +36,6 @@ the <emphasis>Beginner</emphasis> and <emphasis>Intermediate</emphasis> topics; 
 will not need to read the <emphasis>Advanced</emphasis> sections.</para>
 </section>
 
-<section><title>Compatibility Note</title>
-
-<para>Boost.Signals2 has two syntactical forms: the preferred form and
-the compatibility form. The preferred form fits more closely with the
-C++ language and reduces the number of separate template parameters
-that need to be considered, often improving readability; however, the
-preferred form is not supported on all platforms due to compiler
-bugs. Users of Boost.Function, please note
-that the preferred syntactic form in Signals2 is equivalent to that of
-Function's preferred syntactic form.</para>
-
-</section>
-
 <section><title>Hello, World! (Beginner)</title>
 <para>The following example writes "Hello, World!" using signals and
 slots. First, we create a signal <code>sig</code>, a signal that
@@ -60,36 +47,8 @@ invokes <code>HelloWorld::operator()</code> to print "Hello,
 World!".</para>
 <programlisting><xi:include href="hello_world_def_code_snippet.xml"
   xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
-  <informaltable>
-    <tgroup cols="2" align="left">
-      <thead>
-        <row>
-          <entry>Preferred syntax</entry>
-          <entry>Portable syntax</entry>
-        </row>
-      </thead>
-      <tbody>
-        <row>
-          <entry>
 <programlisting><xi:include href="hello_world_single_code_snippet.xml"
   xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
-</entry>
-<entry>
-<programlisting>  // Signal with no arguments and a void return value
-  boost::signals2::signal0&lt;void&gt; sig;
-
-  // Connect a HelloWorld slot
-  HelloWorld hello;
-  sig.connect(hello);
-
-  // Call all of the slots
-  sig();
-</programlisting>
-</entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </informaltable>
 </section>
 
 <section><title>Calling Multiple Slots</title>
@@ -110,33 +69,8 @@ the program. The second slot may look like this:</para>
 <code>void</code> return value. This time, we connect both a
 <code>hello</code> and a <code>world</code> slot to the same
 signal, and when we call the signal both slots will be called.</para>
-  <informaltable>
-    <tgroup cols="2" align="left">
-      <thead>
-        <row>
-          <entry>Preferred syntax</entry>
-          <entry>Portable syntax</entry>
-        </row>
-      </thead>
-      <tbody>
-        <row>
-          <entry>
 <programlisting><xi:include href="hello_world_multi_code_snippet.xml"
   xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
-          </entry>
-          <entry>
-<programlisting>  boost::signals2::signal0&lt;void&gt; sig;
-
-  sig.connect(Hello());
-  sig.connect(World());
-
-  sig();
-</programlisting>
-</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
 <para>By default, slots are pushed onto the back of the slot list,
 so the output of this program will be as expected:</para>
 <programlisting>
@@ -155,31 +89,8 @@ can supply an extra parameter at the beginning of the
 <code>connect</code> call that specifies the group. Group values
 are, by default, <code>int</code>s, and are ordered by the integer
 &lt; relation. Here's how we construct Hello, World:</para>
-  <informaltable>
-    <tgroup cols="2" align="left">
-      <thead>
-        <row>
-          <entry>Preferred syntax</entry>
-          <entry>Portable syntax</entry>
-        </row>
-      </thead>
-      <tbody>
-        <row>
-          <entry>
 <programlisting><xi:include href="hello_world_ordered_code_snippet.xml"
   xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
-</entry>
-            <entry>
-<programlisting>  boost::signals2::signal0&lt;void&gt; sig;
-
-  sig.connect(1, World());  // connect with group 1
-  sig.connect(0, Hello());  // connect with group 0</programlisting>
-</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-
 <para>Invoking the signal will correctly print "Hello, World!", because the
 <code>Hello</code> object is in group 0, which precedes group 1 where
 the <code>World</code> object resides. The group
@@ -191,7 +102,7 @@ that have been connected without specifying a group name) can be
 placed at the front or back of the slot list (by passing
 <code>boost::signals2::at_front</code> or <code>boost::signals2::at_back</code>
 as the last parameter to <code><methodname
-alt="boost::signals2::signalN::connect">connect</methodname></code>, respectively),
+alt="boost::signals2::signal::connect">connect</methodname></code>, respectively),
 and default to the end of the list. When
 a group is specified, the final <code>at_front</code> or <code>at_back</code>
 parameter describes where the slot
@@ -227,36 +138,8 @@ slots that print the results of various arithmetic operations on
 these values.</para>
 <programlisting><xi:include href="slot_arguments_slot_defs_code_snippet.xml"
   xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
-  <informaltable>
-    <tgroup cols="2" align="left">
-      <thead>
-        <row>
-          <entry>Preferred syntax</entry>
-          <entry>Portable syntax</entry>
-        </row>
-      </thead>
-      <tbody>
-        <row>
-          <entry>
 <programlisting><xi:include href="slot_arguments_main_code_snippet.xml"
   xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
-</entry>
-<entry>
-<programlisting>  boost::signals2::signal2&lt;void, float, float&gt; sig;
-
-  sig.connect(&amp;print_args);
-  sig.connect(&amp;print_sum);
-  sig.connect(&amp;print_product);
-  sig.connect(&amp;print_difference);
-  sig.connect(&amp;print_quotient);
-
-  sig(5, 3);</programlisting>
-</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
-
 <para>This program will print out the following:</para>
 <programlisting>The arguments are 5 and 3
 The sum is 8
@@ -290,26 +173,7 @@ product, quotient, sum, or difference. Then the signal itself can
 return a value based on these results to be printed:</para>
 <programlisting><xi:include href="signal_return_value_slot_defs_code_snippet.xml"
   xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
-  <informaltable>
-    <tgroup cols="2" align="left">
-      <thead>
-        <row>
-          <entry>Preferred syntax</entry>
-          <entry>Portable syntax</entry>
-        </row>
-      </thead>
-      <tbody>
-        <row>
-          <entry>
 <programlisting>boost::signals2::signal&lt;float (float, float)&gt; sig;</programlisting>
-</entry>
-<entry>
-<programlisting>boost::signals2::signal2&lt;float, float, float&gt; sig;</programlisting>
-</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
 <programlisting><xi:include href="signal_return_value_main_code_snippet.xml"
   xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 
@@ -339,33 +203,10 @@ returns that maximum value.</para>
 <para>We actually use this new function object type by installing it
 as a combiner for our signal. The combiner template argument
 follows the signal's calling signature:</para>
-  <informaltable>
-    <tgroup cols="2" align="left">
-      <thead>
-        <row>
-          <entry>Preferred syntax</entry>
-          <entry>Portable syntax</entry>
-        </row>
-      </thead>
-      <tbody>
-        <row>
-          <entry>
 <programlisting>
 <classname>boost::signals2::signal</classname>&lt;float (float x, float y),
               maximum&lt;float&gt; &gt; sig;
 </programlisting>
-</entry>
-<entry>
-<programlisting>
-<classname alt="boost::signals2::signalN">boost::signals2::signal2</classname>&lt;float, float, float,
-               maximum&lt;float&gt; &gt; sig;
-</programlisting>
-</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-
 <para>Now we can connect slots that perform arithmetic functions and
 use the signal:</para>
 <programlisting><xi:include href="custom_combiners_maximum_usage_code_snippet.xml"
@@ -382,30 +223,9 @@ is easily done with a different combiner:</para>
 <para>
 Again, we can create a signal with this new combiner:
 </para>
-  <informaltable>
-    <tgroup cols="2" align="left">
-      <thead>
-        <row>
-          <entry>Preferred syntax</entry>
-          <entry>Portable syntax</entry>
-        </row>
-      </thead>
-      <tbody>
-        <row>
-          <entry>
 <programlisting>
 <classname>boost::signals2::signal</classname>&lt;float (float, float),
     aggregate_values&lt;std::vector&lt;float&gt; &gt; &gt; sig;</programlisting>
-</entry>
-<entry>
-<programlisting>
-<classname alt="boost::signals2::signalN">boost::signals2::signal2</classname>&lt;float, float, float,
-    aggregate_values&lt;std::vector&lt;float&gt; &gt; &gt; sig;</programlisting>
-</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
 <programlisting><xi:include href="custom_combiners_aggregate_values_usage_code_snippet.xml"
   xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
 <para>The output of this program will contain 15, 8, 1.6667, and 2. It
@@ -457,7 +277,7 @@ are then disconnected, and the programmer needs control to decide
 when a slot should no longer be connected.</para>
 <para>The entry point for managing connections explicitly is the
 <code><classname>boost::signals2::connection</classname></code> class. The
-<code><classname>connection</classname></code> class uniquely represents the connection
+<code>connection</code> class uniquely represents the connection
 between a particular signal and a particular slot. The
 <code><methodname alt="connection::connected">connected</methodname>()</code> method checks if the signal and slot are
 still connected, and the <code><methodname alt="connection::disconnect">disconnect()</methodname></code> method
@@ -502,7 +322,7 @@ e.g.,</para>
 <para>
   Note, attempts to initialize a scoped_connection with the assignment syntax
   will fail due to it being noncopyable.  Either the explicit initialization syntax
-  or default construction followed by assignment from a <classname>connection</classname>
+  or default construction followed by assignment from a <classname>signals2::connection</classname>
   will work:
 </para>
 <programlisting>
@@ -521,34 +341,14 @@ c2 = sig.<methodname>connect</methodname>(ShortLived());
 <section><title>Disconnecting Equivalent Slots (Intermediate)</title>
 <para>One can disconnect slots that are equivalent to a given function
 object using a form of the
-<code><methodname alt="signalN::disconnect">signal::disconnect</methodname></code> method, so long as
+<code><methodname>signal::disconnect</methodname></code> method, so long as
 the type of the function object has an accessible <code>==</code>
 operator. For instance:
 
 </para>
 <programlisting><xi:include href="disconnect_by_slot_def_code_snippet.xml"
   xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
-  <informaltable>
-    <tgroup cols="2" align="left">
-      <thead>
-        <row>
-          <entry>Preferred syntax</entry>
-          <entry>Portable syntax</entry>
-        </row>
-      </thead>
-      <tbody>
-        <row>
-          <entry>
 <programlisting><classname>boost::signals2::signal</classname>&lt;void ()&gt; sig;</programlisting>
-</entry>
-<entry>
-<programlisting><classname alt="boost::signals2::signalN">boost::signals2::signal0</classname>&lt;void&gt; sig;</programlisting>
-</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-
 </section>
 <programlisting><xi:include href="disconnect_by_slot_usage_code_snippet.xml"
   xmlns:xi="http://www.w3.org/2001/XInclude" parse="xml"/></programlisting>
@@ -561,36 +361,12 @@ destroyed. For instance, consider a simple news delivery service,
 where clients connect to a news provider that then sends news to
 all connected clients as information arrives. The news delivery
 service may be constructed like this: </para>
-  <informaltable>
-    <tgroup cols="2" align="left">
-      <thead>
-        <row>
-          <entry>Preferred syntax</entry>
-          <entry>Portable syntax</entry>
-        </row>
-      </thead>
-      <tbody>
-        <row>
-          <entry>
 <programlisting>
 class NewsItem { /* ... */ };
 
 typedef boost::signals2::signal&lt;void (const NewsItem&amp;)&gt; signal_type;
 signal_type deliverNews;
 </programlisting>
-</entry>
-<entry>
-<programlisting>
-class NewsItem { /* ... */ };
-
-typedef boost::signals2::signal1&lt;void, const NewsItem&amp;&gt; signal_type;
-signal_type deliverNews;
-</programlisting>
-</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
 
 <para>Clients that wish to receive news updates need only connect a
 function object that can receive news items to the
@@ -621,14 +397,14 @@ destroying the <code>newsMessageArea</code> object that
 <code>deliverNews</code> knows about? Most likely, a segmentation
 fault will occur. However, with Boost.Signals2 one may track any object
 which is managed by a shared_ptr, by using
-<methodname alt="boost::signals2::slotN::track">slot::track</methodname>.  A slot will automatically
+<methodname alt="boost::signals2::slot::track">slot::track</methodname>.  A slot will automatically
 disconnect when any of its tracked objects expire.  In
 addition, Boost.Signals2 will ensure that no tracked object expires
 while the slot it is associated with is in mid-execution.  It does so by creating
 temporary shared_ptr copies of the slot's tracked objects before executing it.
 To track <code>NewsMessageArea</code>, we use a shared_ptr to manage
 its lifetime, and pass the shared_ptr to the slot via its
-<methodname alt="boost::signals2::slotN::track">slot::track</methodname>
+<methodname alt="boost::signals2::slot::track">slot::track</methodname>
 method before connecting it,
 e.g.:</para>
 <programlisting>
@@ -640,7 +416,7 @@ deliverNews.<methodname>connect</methodname>(signal_type::slot_type(&amp;NewsMes
 </programlisting>
 <para>
   Note there is no explicit call to bind() needed in the above example.  If the
-  <classname alt="slotN">slot</classname> constructor is passed more than one
+  <classname>signals2::slot</classname> constructor is passed more than one
   argument, it will automatically pass all the arguments to <code>bind</code> and use the
   returned function object.
 </para>
@@ -650,7 +426,7 @@ deliverNews.<methodname>connect</methodname>(signal_type::slot_type(&amp;NewsMes
   <code>newsMessageArea</code> itself, a copy of the <code>shared_ptr</code> would
   have been bound into the slot function, preventing the <code>shared_ptr</code>
   from expiring.  However, the use of
-  <methodname alt="boost::signals2::slotN::track">slot::track</methodname>
+  <methodname alt="boost::signals2::slot::track">slot::track</methodname>
   implies we wish to allow the tracked object to expire, and automatically
   disconnect the connection when this occurs.
 </para>
@@ -807,10 +583,10 @@ hidden in an implementation detail file.</para>
     </para>
     <para>
       For a slot to disconnect (or block) its invoking connection, it must have
-      access to a <classname>connection</classname> object which references
+      access to a <classname>signals2::connection</classname> object which references
       the invoking signal-slot connection.  The difficulty is,
-      the <classname>connection</classname> object is returned by the
-      <methodname alt="signalN::connect">signal::connect</methodname>
+      the <code>connection</code> object is returned by the
+      <methodname>signal::connect</methodname>
       method, and therefore is not available until after the slot is
       already connected to the signal.  This can be particularly troublesome
       in a multi-threaded environment where the signal may be invoked
@@ -818,20 +594,20 @@ hidden in an implementation detail file.</para>
     </para>
     <para>
       Therefore, the signal classes provide
-      <methodname alt="signalN::connect_extended">signal::connect_extended</methodname>
+      <methodname>signal::connect_extended</methodname>
       methods, which allow slots which take an extra argument to be connected to a signal.
-      The extra argument is a <classname>connection</classname> object which refers
+      The extra argument is a <classname>signals2::connection</classname> object which refers
       to the signal-slot connection currently invoking the slot.
-      <methodname alt="signalN::connect_extended">signal::connect_extended</methodname>
+      <methodname>signal::connect_extended</methodname>
       uses slots of the type given by the
-      <classname alt="signalN::extended_slot_type">signal::extended_slot_type</classname>
+      <classname>signal::extended_slot_type</classname>
       typedef.
     </para>
     <para>
       The examples section includes an
       <link linkend="signals2.examples.tutorial.extended_slot">extended_slot</link>
       program which demonstrates the syntax for using
-      <methodname alt="signalN::connect_extended">signal::connect_extended</methodname>.
+      <methodname>signal::connect_extended</methodname>.
     </para>
   </section>
 
@@ -839,7 +615,7 @@ hidden in an implementation detail file.</para>
     <title>Changing the <code>Mutex</code> Type of a Signal (Advanced).</title>
     <para>
       For most cases the default type of <classname>boost::signals2::mutex</classname> for
-      a <classname>signal</classname>'s <code>Mutex</code> template type parameter should
+      a <classname>signals2::signal</classname>'s <code>Mutex</code> template type parameter should
       be fine.  If you wish to use an alternate mutex type, it must be default-constructible
       and fulfill the <code>Lockable</code> concept defined by the Boost.Thread library.
       That is, it must have <code>lock()</code> and <code>unlock()</code> methods
@@ -847,18 +623,18 @@ hidden in an implementation detail file.</para>
       but this library does not require try locking).
     </para>
     <para>
-      The Boost.Signals2 library provides one alternate mutex class for use with <classname>signal</classname>:
+      The Boost.Signals2 library provides one alternate mutex class for use with <code>signal</code>:
       <classname>boost::signals2::dummy_mutex</classname>.  This is a fake mutex for
       use in single-threaded programs, where locking a real mutex would be useless
-      overhead.  Other mutex types you could use with <classname>signal</classname> include
-      <classname>boost::mutex</classname> and the <code>std::mutex</code> from
+      overhead.  Other mutex types you could use with <code>signal</code> include
+      <classname>boost::mutex</classname>, or the <code>std::mutex</code> from
       C++0x.
     </para>
     <para>
       Changing a signal's <code>Mutex</code> template type parameter can be tedious, due to
       the large number of template parameters which precede it.  The
       <classname>signal_type</classname> metafunction is particularly useful in this case,
-      since it enables named template type parameters for the <classname>signal</classname>
+      since it enables named template type parameters for the <classname>signals2::signal</classname>
       class.  For example, to declare a signal which takes an <code>int</code> as
       an argument and uses a <classname>boost::signals2::dummy_mutex</classname>
       for its <code>Mutex</code> types, you could write:

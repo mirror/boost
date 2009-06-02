@@ -8,8 +8,8 @@ Distributed under the Boost Software License, Version 1.0. (See accompanying
 file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 -->
 <header name="boost/signals2/mutex.hpp" last-revision="$Date: 2007-03-06 16:51:55 -0500 (Tue, 06 Mar 2007) $">
-  <using-namespace name="boost"/>
   <using-namespace name="boost::signals2"/>
+  <using-namespace name="boost"/>
   <namespace name="boost">
     <namespace name="signals2">
       <class name="mutex">
@@ -34,9 +34,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <classname>boost::mutex</classname> class instead as the mutex type for your signals.
           </para>
           <para>
-            You may wish to use a thread-unsafe signal in a multi-threaded program, if
+            You may wish to use a thread-unsafe signal, if
             the signal is only used by a single thread.  In that case, you may prefer to
-            use the <classname>dummy_mutex</classname> class as the <code>Mutex</code>
+            use the <classname>signals2::dummy_mutex</classname> class as the <code>Mutex</code>
             template type for your signal.
           </para>
         </description>

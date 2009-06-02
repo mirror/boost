@@ -21,7 +21,6 @@
 #include <boost/signals2/slot_base.hpp>
 #include <boost/signals2/detail/stack_vector.hpp>
 #include <boost/signals2/detail/unique_lock.hpp>
-#include <boost/type_traits.hpp>
 #include <boost/weak_ptr.hpp>
 
 namespace boost {

@@ -16,7 +16,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         <purpose>Query/disconnect a signal-slot connection.</purpose>
 
         <description>
-          <para>The <classname>connection</classname> class represents
+          <para>The <classname>signals2::connection</classname> class represents
           a connection between a Signal and a Slot. It is a
           lightweight object that has the ability to query whether the
           signal and slot are currently connected, and to disconnect
@@ -43,7 +43,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
         <constructor>
           <parameter name="other">
-            <paramtype>const <classname>connection</classname>&amp;</paramtype>
+            <paramtype>const <classname alt="signals2::connection">connection</classname>&amp;</paramtype>
           </parameter>
 
           <effects><para><computeroutput>this</computeroutput> references
@@ -55,7 +55,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
         <copy-assignment>
           <parameter name="other">
-            <paramtype>const <classname>connection</classname>&amp;</paramtype>
+            <paramtype>const <classname alt="signals2::connection">connection</classname>&amp;</paramtype>
           </parameter>
 
           <effects><para><computeroutput>this</computeroutput> references
@@ -104,7 +104,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <method name="swap">
             <type>void</type>
             <parameter name="other">
-              <paramtype>const <classname>connection</classname>&amp;</paramtype>
+              <paramtype>const <classname alt="signals2::connection">connection</classname>&amp;</paramtype>
             </parameter>
             <effects><para>Swaps the connections referenced in
             <computeroutput>this</computeroutput> and
@@ -118,7 +118,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <method name="operator==" cv="const">
             <type>bool</type>
             <parameter name="other">
-              <paramtype>const <classname>connection</classname>&amp;</paramtype>
+              <paramtype>const <classname alt="signals2::connection">connection</classname>&amp;</paramtype>
             </parameter>
 
             <returns><para><computeroutput>true</computeroutput> if
@@ -134,7 +134,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <method name="operator!=" cv="const">
             <type>bool</type>
             <parameter name="other">
-              <paramtype>const <classname>connection</classname>&amp;</paramtype>
+              <paramtype>const <classname alt="signals2::connection">connection</classname>&amp;</paramtype>
             </parameter>
 
             <returns><para><computeroutput>!(*this == other)</computeroutput></para></returns>
@@ -145,7 +145,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <method name="operator&lt;" cv="const">
             <type>bool</type>
             <parameter name="other">
-              <paramtype>const <classname>connection</classname>&amp;</paramtype>
+              <paramtype>const <classname alt="signals2::connection">connection</classname>&amp;</paramtype>
             </parameter>
 
             <returns><para><computeroutput>true</computeroutput> if the
@@ -165,10 +165,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <function name="swap">
             <type>void</type>
             <parameter name="x">
-              <paramtype><classname>connection</classname>&amp;</paramtype>
+              <paramtype><classname alt="signals2::connection">connection</classname>&amp;</paramtype>
             </parameter>
             <parameter name="y">
-              <paramtype><classname>connection</classname>&amp;</paramtype>
+              <paramtype><classname alt="signals2::connection">connection</classname>&amp;</paramtype>
             </parameter>
 
             <effects><para><computeroutput>x.swap(y)</computeroutput></para></effects>
@@ -179,7 +179,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
       <class name="scoped_connection">
         <inherit access="public">
-          <type><classname>connection</classname></type>
+          <type><classname alt="signals2::connection">connection</classname></type>
         </inherit>
         <purpose>Limits a signal-slot connection lifetime to a particular scope.</purpose>
 
@@ -196,7 +196,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           </constructor>
           <constructor>
             <parameter name="other">
-              <paramtype>const <classname>connection</classname>&amp;</paramtype>
+              <paramtype>const <classname alt="signals2::connection">connection</classname>&amp;</paramtype>
             </parameter>
 
             <effects><para><computeroutput>this</computeroutput> references
@@ -233,7 +233,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </postconditions>
             </method>
             <method name="release">
-              <type><classname>connection</classname></type>
+              <type><classname alt="signals2::connection">connection</classname></type>
               <effects>
                 <para>
                   Releases the connection so it will not be disconnected by the <code>scoped_connection</code>
@@ -245,7 +245,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para><code><methodname alt="connection::connected">connected</methodname>() == false</code></para>
               </postconditions>
               <returns>
-                <para>A <classname>connection</classname> object referencing the connection which was
+                <para>A <classname alt="signals2::connection">connection</classname> object referencing the connection which was
                   released by the <code>scoped_connection</code>.
                 </para>
               </returns>
@@ -255,29 +255,29 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         <access name="private">
           <constructor>
             <parameter name="other">
-              <paramtype>const <classname>scoped_connection</classname>&amp;</paramtype>
+              <paramtype>const <classname alt="signals2::scoped_connection">scoped_connection</classname>&amp;</paramtype>
             </parameter>
             <description>
-              <para>The scoped_connection class is not copyable.  It may only be constructed from a <classname>connection</classname> object.</para>
+              <para>The scoped_connection class is not copyable.  It may only be constructed from a <classname alt="signals2::connection">connection</classname> object.</para>
             </description>
           </constructor>
           <copy-assignment>
             <parameter name="rhs">
-              <paramtype>const <classname>scoped_connection</classname>&amp;</paramtype>
+              <paramtype>const <classname alt="signals2::scoped_connection">scoped_connection</classname>&amp;</paramtype>
             </parameter>
             <description>
-              <para>The scoped_connection class is not copyable.  It may only be assigned from a <classname>connection</classname> object.</para>
+              <para>The scoped_connection class is not copyable.  It may only be assigned from a <classname alt="signals2::connection">connection</classname> object.</para>
             </description>
           </copy-assignment>
         </access>
         <description>
-          <para>A <classname>connection</classname> which automatically disconnects on destruction.</para>
+          <para>A <classname alt="signals2::connection">connection</classname> which automatically disconnects on destruction.</para>
           <section>
             <title>Thread Safety</title>
             <para>The methods of the <code>scoped_connection</code> class (including those
               inherited from its base <code>connection</code> class) are thread-safe with the exception
-              of <methodname>connection::swap</methodname>, <methodname>release</methodname>, and
-              the assignment operator  A <code>scoped_connection</code> object
+              of <methodname>signals2::connection::swap</methodname>, <methodname>release</methodname>, and
+              the assignment operator.  A <code>scoped_connection</code> object
               should not be accessed concurrently when any of these operations is in progress.
               However, it is always safe to access a different <code>connection</code> object
               in another thread, even if it references the same underlying signal-slot connection.

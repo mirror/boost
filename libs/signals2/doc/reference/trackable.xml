@@ -20,9 +20,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           for new code.  The <code>trackable</code> class is not thread-safe
           since <code>trackable</code> objects disconnect their associated
           connections in the <code>trackable</code> destructor.
-          The <code>trackable</code> destructor is not run until
+          Since the <code>trackable</code> destructor is not run until
           after the destructors of any derived classes have completed,
-          which leaves a window where a partially destructed
+          that leaves open a window where a partially destructed
           object can still have active connections.
           </para>
 
@@ -30,7 +30,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           The preferred method of automatic connection management
           with Boost.Signals2 is to manage the lifetime of
           tracked objects with <code>shared_ptr</code>s and
-          to use the <methodname alt="slotN::track">slot::track</methodname>
+          to use the <methodname>signals2::slot::track</methodname>
           method to track their lifetimes.</para>
 
           <para>The <code>trackable</code> class provides automatic

@@ -23,6 +23,5 @@ int myslot2(int)
 int test_main(int, char*[])
 {
   boost::signals2::slot<void (void)> sl0(&myslot);
-  boost::signals2::slot1<int, int> sl2(&myslot2);
   return 0;
 }
