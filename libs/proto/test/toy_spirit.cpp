@@ -521,11 +521,10 @@ namespace boost { namespace spirit2
     struct no_case_directive
     {
         template<typename Expr>
-        typename SpiritGrammar::result<void(Expr, mpl::void_, mpl::void_)>::type const
+        typename boost::result_of<SpiritGrammar(Expr const &)>::type const
         operator [](Expr const &expr) const
         {
-            mpl::void_ null;
-            return SpiritGrammar()(expr, null, null);
+            return SpiritGrammar()(expr);
         }
     };
 
@@ -540,11 +539,10 @@ namespace boost { namespace spirit2
         {}
 
         template<typename Expr>
-        typename boost::result_of<SkipperGrammar(Expr const &, Skipper const &, mpl::void_ &)>::type const
+        typename boost::result_of<SkipperGrammar(Expr const &, Skipper const &)>::type const
         operator [](Expr const &expr) const
         {
-            mpl::void_ null;
-            return SkipperGrammar()(expr, this->skip_, null);
+            return SkipperGrammar()(expr, this->skip_);
         }
     private:
         Skipper skip_;
