@@ -52,13 +52,28 @@
 # endif
 #endif
 
+#ifndef BOOST_PROTO_BROKEN_CONST_QUALIFIED_FUNCTIONS
+# if BOOST_WORKAROUND(__GNUC__, == 3)
+#  define BOOST_PROTO_BROKEN_CONST_QUALIFIED_FUNCTIONS
+# endif
+#endif
+
 #ifdef BOOST_PROTO_BROKEN_CONST_OVERLOADS
 # include <boost/utility/enable_if.hpp>
 # include <boost/type_traits/is_const.hpp>
 # define BOOST_PROTO_DISABLE_IF_IS_CONST(T)\
-    , typename boost::disable_if<boost::is_const<T>, boost::proto::detail::undefined>::type * = 0
+    , typename boost::disable_if_c<boost::is_const<T>::value, boost::proto::detail::undefined>::type * = 0
 #else
 # define BOOST_PROTO_DISABLE_IF_IS_CONST(T)
+#endif
+
+#ifdef BOOST_PROTO_BROKEN_CONST_QUALIFIED_FUNCTIONS
+# include <boost/utility/enable_if.hpp>
+# include <boost/type_traits/is_function.hpp>
+# define BOOST_PROTO_DISABLE_IF_IS_FUNCTION(T)\
+    , typename boost::disable_if_c<boost::is_function<T>::value, boost::proto::detail::undefined>::type * = 0
+#else
+# define BOOST_PROTO_DISABLE_IF_IS_FUNCTION(T)
 #endif
 
 #ifndef BOOST_PROTO_BROKEN_PTS
@@ -682,7 +697,6 @@ namespace boost { namespace proto
 
     #define BOOST_PROTO_UNEXPR() typedef int proto_is_expr_;
     #define BOOST_PROTO_CALLABLE() typedef void proto_is_callable_;
-    #define BOOST_PROTO_TRANSFORM() typedef void proto_is_transform_;
     #define BOOST_PROTO_AGGREGATE() typedef void proto_is_aggregate_;
 
     struct callable
@@ -690,11 +704,7 @@ namespace boost { namespace proto
         BOOST_PROTO_CALLABLE()
     };
 
-    struct empty_base;
-
-    struct transform_base;
-
-    template<typename PrimitiveTransform, typename Base = transform_base>
+    template<typename PrimitiveTransform>
     struct transform;
 
     template<typename Grammar, typename Fun = Grammar>

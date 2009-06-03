@@ -65,7 +65,9 @@
             {};
 
             template<typename R, typename Expr, typename State, typename Data
-                , bool IsTransform = is_callable<R>::value
+                // BUGBUG this should be is_transform, but if R is a template instantiation
+                // it will cause the template to be instantiated, whereas is_callable will not.
+              , bool IsTransform = is_callable<R>::value
             >
             struct make_if_;
 
@@ -96,9 +98,11 @@
             // TODO could optimize this if R is a transform
             template<typename R, typename Expr, typename State, typename Data>
             struct make_if_<R, Expr, State, Data, true>
-              : remove_const<typename remove_reference<
-                    typename boost::result_of<R(Expr, State, Data)>::type
-                >::type>
+              : remove_const<
+                    typename remove_reference<
+                        typename R::template impl<Expr, State, Data>::result_type
+                    >::type
+                >
             {};
 
             template<typename Type, bool IsAggregate = is_aggregate<Type>::value>

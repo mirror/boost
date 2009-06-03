@@ -158,8 +158,9 @@
                 typedef typename result_of::child_c<Expr, 1>::type e1;
                 typedef typename Grammar::template impl<e0, State, Data>::result_type r0;
                 typedef typename Grammar::template impl<e1, State, Data>::result_type r1;
+                typedef typename remove_const<typename remove_reference<r1>::type>::type uncvref_r1;
             public:
-                typedef typename detail::mem_ptr_fun<r0, r1>::result_type result_type;
+                typedef typename detail::mem_ptr_fun<r0, uncvref_r1>::result_type result_type;
                 result_type operator ()(
                     typename memfun_impl::expr_param e
                   , typename memfun_impl::state_param s
@@ -168,7 +169,7 @@
                 {
                     typename Grammar::template impl<e0, State, Data> t0;
                     typename Grammar::template impl<e1, State, Data> t1;
-                    return detail::mem_ptr_fun<r0, r1>()(
+                    return detail::mem_ptr_fun<r0, uncvref_r1>()(
                         t0(proto::child_c<0>(e), s, d)
                       , t1(proto::child_c<1>(e), s, d)
                     );
@@ -420,8 +421,9 @@
                   , mpl::false_
                 ) const
                 {
-                    using namespace detail::get_pointer_;
-                    return (get_pointer(EVAL(~, 1, e)) ->* EVAL(~, 0, e))();
+                    BOOST_PROTO_USE_GET_POINTER();
+                    typedef typename detail::classtypeof<function_type>::type class_type;
+                    return (BOOST_PROTO_GET_POINTER(class_type, EVAL(~, 1, e)) ->* EVAL(~, 0, e))();
                 }
 
                 result_type invoke(
@@ -432,8 +434,9 @@
                   , mpl::true_
                 ) const
                 {
-                    using namespace detail::get_pointer_;
-                    return (get_pointer(EVAL(~, 1, e)) ->* EVAL(~, 0, e));
+                    BOOST_PROTO_USE_GET_POINTER();
+                    typedef typename detail::classtypeof<function_type>::type class_type;
+                    return (BOOST_PROTO_GET_POINTER(class_type, EVAL(~, 1, e)) ->* EVAL(~, 0, e));
                 }
             };
 
@@ -512,8 +515,9 @@
             ) const
             {
                 #define M0(Z, M, e) BOOST_PP_COMMA_IF(BOOST_PP_SUB(M, 2)) EVAL(Z, M, e)
-                using namespace detail::get_pointer_;
-                return (get_pointer(EVAL(~, 1, e)) ->* EVAL(~, 0, e))(
+                BOOST_PROTO_USE_GET_POINTER();
+                typedef typename detail::classtypeof<function_type>::type class_type;
+                return (BOOST_PROTO_GET_POINTER(class_type, EVAL(~, 1, e)) ->* EVAL(~, 0, e))(
                     BOOST_PP_REPEAT_FROM_TO(2, N, M0, e)
                 );
                 #undef M0

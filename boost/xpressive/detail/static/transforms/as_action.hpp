@@ -271,8 +271,8 @@ namespace boost { namespace xpressive { namespace grammar_detail
             marked_expr_type;
 
             typedef
-                typename mpl::if_<
-                    proto::matches<action_type, CheckAssertion>
+                typename mpl::if_c<
+                    proto::matches<action_type, CheckAssertion>::value
                   , detail::predicate_matcher<action_copy_type>
                   , detail::action_matcher<action_copy_type>
                 >::type

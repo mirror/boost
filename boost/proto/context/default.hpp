@@ -154,11 +154,12 @@
                 typedef typename result_of::child_c<Expr, 1>::type e1;
                 typedef typename proto::result_of::eval<UNREF(e0), Context>::type r0;
                 typedef typename proto::result_of::eval<UNREF(e1), Context>::type r1;
+                typedef typename remove_const<typename remove_reference<r1>::type>::type uncvref_r1;
             public:
-                typedef typename detail::mem_ptr_fun<r0, r1>::result_type result_type;
+                typedef typename detail::mem_ptr_fun<r0, uncvref_r1>::result_type result_type;
                 result_type operator ()(Expr &expr, Context &ctx) const
                 {
-                    return detail::mem_ptr_fun<r0, r1>()(
+                    return detail::mem_ptr_fun<r0, uncvref_r1>()(
                         proto::eval(proto::child_c<0>(expr), ctx)
                       , proto::eval(proto::child_c<1>(expr), ctx)
                     );
@@ -174,6 +175,7 @@
                 typedef typename result_of::child_c<Expr, 1>::type e1;
                 typedef typename proto::result_of::eval<UNREF(e0), Context>::type r0;
                 typedef typename proto::result_of::eval<UNREF(e1), Context>::type r1;
+                typedef typename remove_const<typename remove_reference<r1>::type>::type uncvref_r1;
             public:
                 typedef detail::memfun<r0, r1> result_type;
                 result_type const operator ()(Expr &expr, Context &ctx) const
@@ -353,14 +355,16 @@
 
                 result_type invoke(Expr &expr, Context &context, mpl::true_, mpl::false_) const
                 {
-                    using namespace detail::get_pointer_;
-                    return (get_pointer(EVAL(~, 1, expr)) ->* EVAL(~, 0, expr))();
+                    BOOST_PROTO_USE_GET_POINTER();
+                    typedef typename detail::classtypeof<function_type>::type class_type;
+                    return (BOOST_PROTO_GET_POINTER(class_type, EVAL(~, 1, expr)) ->* EVAL(~, 0, expr))();
                 }
 
                 result_type invoke(Expr &expr, Context &context, mpl::false_, mpl::true_) const
                 {
-                    using namespace detail::get_pointer_;
-                    return (get_pointer(EVAL(~, 1, expr)) ->* EVAL(~, 0, expr));
+                    BOOST_PROTO_USE_GET_POINTER();
+                    typedef typename detail::classtypeof<function_type>::type class_type;
+                    return (BOOST_PROTO_GET_POINTER(class_type, EVAL(~, 1, expr)) ->* EVAL(~, 0, expr));
                 }
             };
 
@@ -421,8 +425,9 @@
             result_type invoke(Expr &expr, Context &context, mpl::true_) const
             {
                 #define M0(Z, M, expr) BOOST_PP_COMMA_IF(BOOST_PP_SUB(M, 2)) EVAL(Z, M, expr)
-                using namespace detail::get_pointer_;
-                return (get_pointer(EVAL(~, 1, expr)) ->* EVAL(~, 0, expr))(
+                BOOST_PROTO_USE_GET_POINTER();
+                typedef typename detail::classtypeof<function_type>::type class_type;
+                return (BOOST_PROTO_GET_POINTER(class_type, EVAL(~, 1, expr)) ->* EVAL(~, 0, expr))(
                     BOOST_PP_REPEAT_FROM_TO(2, N, M0, expr)
                 );
                 #undef M0

@@ -170,6 +170,7 @@
                       , BOOST_PP_CAT(list, N)<
                             BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_TYPE, ~)
                         >
+                      , N
                     >
                 expr_type;
 

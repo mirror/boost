@@ -271,8 +271,8 @@ namespace boost { namespace xpressive
             {
                 typedef UNREF(Sequence) sequence_type;
                 typedef
-                    typename mpl::if_<
-                        is_const<sequence_type>
+                    typename mpl::if_c<
+                        is_const<sequence_type>::value
                       , typename sequence_type::const_reference
                       , typename sequence_type::reference
                     >::type
@@ -296,8 +296,8 @@ namespace boost { namespace xpressive
             {
                 typedef UNREF(Sequence) sequence_type;
                 typedef
-                    typename mpl::if_<
-                        is_const<sequence_type>
+                    typename mpl::if_c<
+                        is_const<sequence_type>::value
                       , typename sequence_type::const_reference
                       , typename sequence_type::reference
                     >::type
@@ -321,8 +321,8 @@ namespace boost { namespace xpressive
             {
                 typedef UNREF(Sequence) sequence_type;
                 typedef
-                    typename mpl::if_<
-                        is_const<sequence_type>
+                    typename mpl::if_c<
+                        is_const<sequence_type>::value
                       , typename sequence_type::value_type const &
                       , typename sequence_type::value_type &
                     >::type
