@@ -410,7 +410,7 @@ public:
         {
             extras_type &extras = this->get_extras_();
             std::size_t size = that.sub_matches_.size();
-            detail::sub_match_impl<BidiIter> *sub_matches = extras.sub_match_stack_.push_sequence(size);
+            detail::sub_match_impl<BidiIter> *sub_matches = extras.sub_match_stack_.push_sequence(size, detail::sub_match_impl_default());
             detail::core_access<BidiIter>::init_sub_match_vector(this->sub_matches_, sub_matches, size, that.sub_matches_);
 
             // BUGBUG this doesn't share the extras::sequence_stack
