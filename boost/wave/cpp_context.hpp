@@ -292,6 +292,7 @@ public:
 
 // access the policies
     hook_policy_type &get_hooks() { return hooks; }
+    hook_policy_type const &get_hooks() const { return hooks; }
 
 // return type of actually used context type (might be the derived type)
     actual_context_type& derived() 
