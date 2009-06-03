@@ -59,10 +59,13 @@
   references to function templates (algorithms) that would usually
   take copies of their arguments. It defines the class template
   <code><classname>boost::reference_wrapper&lt;T&gt;</classname></code>,
-  the two functions
+  two functions
   <code><functionname>boost::ref</functionname></code> and
   <code><functionname>boost::cref</functionname></code> that return
-  instances of <code>boost::reference_wrapper&lt;T&gt;</code>, and the
+  instances of <code>boost::reference_wrapper&lt;T&gt;</code>, 
+  a function <code><functionname>boost::unwrap_ref</functionname></code>
+  that unwraps a <code>boost::reference_wrapper&lt;T&gt;</code> or
+  returns a reference to any other type of object, and the
   two traits classes
   <code><classname>boost::is_reference_wrapper&lt;T&gt;</classname></code>
   and
@@ -89,6 +92,11 @@
   is the type of x. Similarly,
   <code>boost::cref(x)</code> returns a
   <code>boost::reference_wrapper&lt;X const&gt;(x)</code>.</para>
+
+  <para>The expression <code>boost::unwrap_ref(x)</code>
+  returns a
+  <code>boost::unwrap_reference&lt;X&gt;::type&amp;</code> where X
+  is the type of x.</para>
 
   <para>The expression
   <code>boost::is_reference_wrapper&lt;T&gt;::value</code>
@@ -180,6 +188,19 @@
           <throws><simpara>Does not throw.</simpara></throws>
         </function>
       </free-function-group>
+
+      <free-function-group name="access">
+        <function name="unwrap_ref">
+          <type>unwrap_reference&lt;T&gt;::type&amp;</type>
+          <parameter name="t">
+            <paramtype>T&amp;</paramtype>
+          </parameter>
+
+          <returns><simpara><computeroutput><classname>unwrap_reference</classname>&lt;T&gt;::type&amp;(t)</computeroutput></simpara></returns>
+
+          <throws><simpara>Does not throw.</simpara></throws>
+        </function>
+      </free-function-group>
     </class>
 
     <class name="is_reference_wrapper">
@@ -234,7 +255,8 @@
   Peter Dimov because they are generally useful.  Douglas Gregor and
   Dave Abrahams contributed
   <classname>is_reference_wrapper</classname> and
-  <classname>unwrap_reference</classname>.</para>
+  <classname>unwrap_reference</classname>.  Frank Mori Hess and Ronald
+  Garcia contributed <functionname>boost::unwrap_ref</functionname></para>
 </section>
 
 </library>
