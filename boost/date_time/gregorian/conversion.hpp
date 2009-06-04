@@ -12,8 +12,9 @@
 #include <string>
 #include <stdexcept>
 #include <boost/throw_exception.hpp>
-#include <boost/date_time/gregorian/gregorian_types.hpp>
 #include <boost/date_time/c_time.hpp>
+#include <boost/date_time/special_defs.hpp>
+#include <boost/date_time/gregorian/gregorian_types.hpp>
 
 namespace boost {
 
@@ -28,11 +29,11 @@ namespace gregorian {
         std::string s = "tm unable to handle ";
         switch (d.as_special())
         {
-        case not_a_date_time:
+        case date_time::not_a_date_time:
             s += "not-a-date-time value"; break;
-        case neg_infin:
+        case date_time::neg_infin:
             s += "-infinity date value"; break;
-        case pos_infin:
+        case date_time::pos_infin:
             s += "+infinity date value"; break;
         default:
             s += "a special date value"; break;
@@ -59,7 +60,6 @@ namespace gregorian {
                 static_cast<unsigned short>(datetm.tm_mon+1),
                 static_cast<unsigned short>(datetm.tm_mday));
   }
-
 
 } } //namespace boost::gregorian
 
