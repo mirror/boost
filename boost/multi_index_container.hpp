@@ -1,6 +1,6 @@
 /* Multiply indexed container.
  *
- * Copyright 2003-2008 Joaquin M Lopez Munoz.
+ * Copyright 2003-2009 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -522,9 +522,9 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 
   void erase_(node_type* x)
   {
+    --node_count;
     super::erase_(x);
     deallocate_node(x);
-    --node_count;
   }
 
   void delete_node_(node_type* x)
