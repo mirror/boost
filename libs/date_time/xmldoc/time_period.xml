@@ -123,7 +123,7 @@ tp.shift(minutes(5));
 
           <row>
 	    <entry valign="top" morerows="1"><screen>time_period expand(days)</screen></entry>
-	    <entry>Add duration to both begin and end.</entry>
+	    <entry>Subtract duration from begin and add duration to end.</entry>
 	  </row>
 	  <row>
 	    <entry>
