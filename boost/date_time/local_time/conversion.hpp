@@ -18,9 +18,8 @@ namespace local_time {
 
 //! Function that creates a tm struct from a local_date_time
 inline
-tm to_tm(const local_date_time& lt) {
-  tm lt_tm;
-  lt_tm = posix_time::to_tm(lt.local_time());
+std::tm to_tm(const local_date_time& lt) {
+  std::tm lt_tm = posix_time::to_tm(lt.local_time());
   if(lt.is_dst()){
     lt_tm.tm_isdst = 1;
   }

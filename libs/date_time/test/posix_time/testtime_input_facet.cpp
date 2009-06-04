@@ -96,25 +96,25 @@ do_all_tests()
   iss >> td;
   iss >> pt;
 #if defined(BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
-  check("Default format time_duration", td == time_duration(9,59,1,321987654));
-  check("Default format ptime", pt == ptime(date(2005,01,15),time_duration(10,15,3,123456789)));
+  check_equal("Default format time_duration", td, time_duration(9,59,1,321987654));
+  check_equal("Default format ptime", pt, ptime(date(2005,01,15),time_duration(10,15,3,123456789)));
 #else
-  check("Default format time_duration", td == time_duration(9,59,1,321987));
-  check("Default format ptime", pt == ptime(date(2005,01,15),time_duration(10,15,3,123456)));
+  check_equal("Default format time_duration", td, time_duration(9,59,1,321987));
+  check_equal("Default format ptime", pt, ptime(date(2005,01,15),time_duration(10,15,3,123456)));
 #endif
 
   // test all flags that appear in time_input_facet
   iss.str("12:34:56 2005-Jan-15 12:34:56");
   iss >> td;
   iss >> pt;
-  check("Default format time_duration no frac_sec", td == time_duration(12,34,56));
+  check_equal("Default format time_duration no frac_sec", td, time_duration(12,34,56));
   // the following test insures %F parsing stops at the appropriate point
-  check("Default format ptime", pt == ptime(date(2005,01,15),time_duration(12,34,56)));
-  
+  check_equal("Default format ptime", pt, ptime(date(2005,01,15),time_duration(12,34,56)));
+
   iss.str("14:13:12 extra stuff"); // using default %H:%M:%S%F format
   iss >> td;
-  check("Default frac_sec format time_duration", td == time_duration(14,13,12));
-  
+  check_equal("Default frac_sec format time_duration", td, time_duration(14,13,12));
+
   time_input_facet* facet = new time_input_facet();
   std::locale loc(std::locale::classic(), facet);
   facet->time_duration_format("%H:%M:%S%f");
@@ -122,61 +122,61 @@ do_all_tests()
 
   iss.str("14:13:12.0 extra stuff");
   iss >> td;
-  check("Required-frac_sec format time_duration", td == time_duration(14,13,12));
+  check_equal("Required-frac_sec format time_duration", td, time_duration(14,13,12));
 
   iss.str("12");
   facet->time_duration_format("%H");
   iss >> td;
-  check("Hours format", td == hours(12));
+  check_equal("Hours format", td, hours(12));
 
   iss.str("05");
   facet->time_duration_format("%M");
   iss >> td;
-  check("Minutes format", td == minutes(5));
+  check_equal("Minutes format", td, minutes(5));
 
   iss.str("45");
   facet->time_duration_format("%S");
   iss >> td;
-  check("Seconds w/o frac_sec format", td == seconds(45));
+  check_equal("Seconds w/o frac_sec format", td, seconds(45));
 
   iss.str("10.01");
   facet->time_duration_format("%s");
   iss >> td;
 #if defined(BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
-  check("Seconds w/ frac_sec format", td == time_duration(0,0,10,10000000));
+  check_equal("Seconds w/ frac_sec format", td, time_duration(0,0,10,10000000));
 #else
-  check("Seconds w/ frac_sec format", td == time_duration(0,0,10,10000));
+  check_equal("Seconds w/ frac_sec format", td, time_duration(0,0,10,10000));
 #endif
-  
+
   iss.str("2005-105T23:59");
   facet->format("%Y-%jT%H:%M"); // extended ordinal format
   iss >> pt;
-  check("Extended Ordinal format", pt == ptime(date(2005,4,15),time_duration(23,59,0)));
+  check_equal("Extended Ordinal format", pt, ptime(date(2005,4,15),time_duration(23,59,0)));
 
   /* this is not implemented yet. The flags: %I & %p are not parsed
   iss.str("2005-Jun-14 03:15:00 PM");
   facet->format("%Y-%b-%d %I:%M:%S %p");
   iss >> pt;
-  check("12 hour time format (AM/PM)", pt == ptime(date(2005,6,14),time_duration(15,15,0)));
+  check_equal("12 hour time format (AM/PM)", pt, ptime(date(2005,6,14),time_duration(15,15,0)));
   */
 
   iss.str("2005-Jun-14 15:15:00 %d");
   facet->format("%Y-%b-%d %H:%M:%S %%d");
   iss >> pt;
-  check("Literal '%' in format", pt == ptime(date(2005,6,14),time_duration(15,15,0)));
+  check_equal("Literal '%' in format", pt, ptime(date(2005,6,14),time_duration(15,15,0)));
   iss.str("15:15:00 %d");
   facet->time_duration_format("%H:%M:%S %%d");
   iss >> td;
-  check("Literal '%' in time_duration format", td == time_duration(15,15,0));
+  check_equal("Literal '%' in time_duration format", td, time_duration(15,15,0));
   iss.str("2005-Jun-14 15:15:00 %14");
   facet->format("%Y-%b-%d %H:%M:%S %%%d"); // %% => % & %d => day_of_month
   iss >> pt;
-  check("Multiple literal '%'s in format", pt == ptime(date(2005,6,14),time_duration(15,15,0)));
+  check_equal("Multiple literal '%'s in format", pt, ptime(date(2005,6,14),time_duration(15,15,0)));
   iss.str("15:15:00 %15");
   facet->time_duration_format("%H:%M:%S %%%M");
   iss >> td;
-  check("Multiple literal '%'s in time_duration format", td == time_duration(15,15,0));
- 
+  check_equal("Multiple literal '%'s in time_duration format", td, time_duration(15,15,0));
+
   { /****** iso format tests (and custom 'scrunched-together formats) ******/
     time_input_facet *facet = new time_input_facet();
     facet->set_iso_format();
@@ -195,21 +195,21 @@ do_all_tests()
 
     ss.str("20021017T231217.12345");
     ss >> pt;
-    check("iso_format ptime", pt == result);
+    check_equal("iso_format ptime", pt, result);
     ss.str("");
     facet->set_iso_extended_format();
     ss.str("2002-10-17 23:12:17.12345");
     ss >> pt;
-    check("iso_extended_format ptime", pt == result);
+    check_equal("iso_extended_format ptime", pt, result);
     ss.str("");
     ss.str("231217.12345");
     ss >> td;
-    check("iso_format time_duration", td == td2);
+    check_equal("iso_format time_duration", td, td2);
     ss.str("");
     ss.str("-infinity");
     ss >> td;
-    check("iso_format time_duration (special_value)", 
-        td == time_duration(neg_infin));
+    check_equal("iso_format time_duration (special_value)",
+        td, time_duration(neg_infin));
     ss.str("");
     // the above tests prove correct parsing of time values in these formats.
     // these tests show they also handle special_values & exceptions properly
@@ -221,34 +221,34 @@ do_all_tests()
       ss.str("not-a-date-time");
       ++count;
       ss >> td;
-      check("special value w/ hours flag", td == nadt);
+      check_equal("special value w/ hours flag", td, nadt);
       ss.str("");
       facet->time_duration_format("%M%S%F");
       ss.str("not-a-date-time");
       ++count;
       ss >> td;
-      check("special value w/ minutes flag", td == nadt);
+      check_equal("special value w/ minutes flag", td, nadt);
       ss.str("");
       facet->time_duration_format("%S%F");
       ss.str("not-a-date-time");
       ++count;
       ss >> td;
-      check("special value w/ seconds flag", td == nadt);
+      check_equal("special value w/ seconds flag", td, nadt);
       ss.str("");
       facet->time_duration_format("%s");
       ss.str("not-a-date-time");
       ++count;
       ss >> td;
-      check("special value w/ sec w/frac_sec (always) flag", td == nadt);
+      check_equal("special value w/ sec w/frac_sec (always) flag", td, nadt);
       ss.str("");
       facet->time_duration_format("%f");
       ss.str("not-a-date-time");
       ++count;
       ss >> td;
-      check("special value w/ frac_sec (always) flag", td == nadt);
+      check_equal("special value w/ frac_sec (always) flag", td, nadt);
       ss.str("");
     }
-    catch(...) { 
+    catch(...) {
       // any exception is a failure
       std::stringstream msg;
       msg << "special_values with scrunched formats failed at test" << count;
@@ -276,7 +276,7 @@ do_all_tests()
         failure_test(td, "bad_input", exc, new time_input_facet("%f")));
     check("silent failure test w/ frac_sec flag",
         failure_test(td, "bad_input", new time_input_facet("%f")));
-    
+
   }
   // special_values tests. prove the individual flags catch special_values
   // NOTE: these flags all by themselves will not parse a complete ptime,
@@ -286,41 +286,41 @@ do_all_tests()
   facet->time_duration_format("%H");
   iss >> pt;
   iss >> td;
-  check("Special value: ptime %H flag", pt == ptime(pos_infin));
-  check("Special value: time_duration %H flag", td == time_duration(neg_infin));
-  
+  check_equal("Special value: ptime %H flag", pt, ptime(pos_infin));
+  check_equal("Special value: time_duration %H flag", td, time_duration(neg_infin));
+
   iss.str("not-a-date-time +infinity");
   facet->format("%M");
   facet->time_duration_format("%M");
   iss >> pt;
   iss >> td;
-  check("Special value: ptime %M flag", pt == ptime(not_a_date_time));
-  check("Special value: time_duration %M flag", td == time_duration(pos_infin));
-  
+  check_equal("Special value: ptime %M flag", pt, ptime(not_a_date_time));
+  check_equal("Special value: time_duration %M flag", td, time_duration(pos_infin));
+
   iss.str("-infinity not-a-date-time ");
   facet->format("%S");
   facet->time_duration_format("%S");
   iss >> pt;
   iss >> td;
-  check("Special value: ptime %S flag", pt == ptime(neg_infin));
-  check("Special value: time_duration %S flag", td == time_duration(not_a_date_time));
-  
+  check_equal("Special value: ptime %S flag", pt, ptime(neg_infin));
+  check_equal("Special value: time_duration %S flag", td, time_duration(not_a_date_time));
+
   iss.str("+infinity -infinity");
   facet->format("%s");
   facet->time_duration_format("%s");
   iss >> pt;
   iss >> td;
-  check("Special value: ptime %s flag", pt == ptime(pos_infin));
-  check("Special value: time_duration %s flag", td == time_duration(neg_infin));
-  
+  check_equal("Special value: ptime %s flag", pt, ptime(pos_infin));
+  check_equal("Special value: time_duration %s flag", td, time_duration(neg_infin));
+
   iss.str("not-a-date-time +infinity");
   facet->format("%j");
   facet->time_duration_format("%f");
   iss >> pt;
   iss >> td;
-  check("Special value: ptime %j flag", pt == ptime(not_a_date_time));
-  check("Special value: time_duration %f flag", td == time_duration(pos_infin));
- 
+  check_equal("Special value: ptime %j flag", pt, ptime(not_a_date_time));
+  check_equal("Special value: time_duration %f flag", td, time_duration(pos_infin));
+
   // time_period tests - the time_period_parser is thoroughly tested in gregorian tests
   // default period format is closed range so last ptime is included in peiod
   iss.str("[2005-Jan-01 00:00:00/2005-Dec-31 23:59:59]");
@@ -341,21 +341,21 @@ do_all_tests()
     time_period tp3(pt3, pt4);
     ss << tp;
     ss >> tp2;
-    check("Special values period (reversibility test)", tp == tp2);
+    check_equal("Special values period (reversibility test)", tp, tp2);
     ss.str("[-infinity/+infinity]");
     ss >> tp2;
-    check("Special values period (infinities)", tp3 == tp2);
+    check_equal("Special values period (infinities)", tp3, tp2);
   }
 
   // Failure tests
   // faliure tests for date elements tested in gregorian tests
   time_input_facet* facet2 = new time_input_facet();
   facet2->time_duration_format("%H:%M:%S%f");
-  check("Failure test: Missing frac_sec with %f flag (w/exceptions)", 
+  check("Failure test: Missing frac_sec with %f flag (w/exceptions)",
         failure_test(td, "14:13:12 extra stuff", e_failure, facet2));
   time_input_facet* facet3 = new time_input_facet();
   facet3->time_duration_format("%H:%M:%S%f");
-  check("Failure test: Missing frac_sec with %f flag (no exceptions)", 
+  check("Failure test: Missing frac_sec with %f flag (no exceptions)",
         failure_test(td, "14:13:12 extra stuff", facet3));
 
   // Reversable format tests
@@ -370,22 +370,22 @@ do_all_tests()
   ss.str("");
   ss << pt_io; // stream out pt_io
   ss >> pt;
-  check("Stream out one ptime then into another: default format", pt_io == pt);
+  check_equal("Stream out one ptime then into another: default format", pt_io, pt);
   ss.str("");
   ss << td_io; // stream out td_io
   ss >> td;
-  check("Stream out one time_duration then into another: default format", td_io == td);
+  check_equal("Stream out one time_duration then into another: default format", td_io, td);
 
   td_io = time_duration(1,29,59); // no frac_sec, default format has %F
   pt_io = ptime(date(2004,2,29), td_io); // leap year
   ss.str("");
   ss << pt_io; // stream out pt_io
   ss >> pt;
-  check("Stream out one ptime then into another: default format", pt_io == pt);
+  check_equal("Stream out one ptime then into another: default format", pt_io, pt);
   ss.str("");
   ss << td_io; // stream out td_io
   ss >> td;
-  check("Stream out one time_duration then into another: default format", td_io == td);
+  check_equal("Stream out one time_duration then into another: default format", td_io, td);
 
   td_io = time_duration(13,05,0); // no seconds as the next formats won't use them
   pt_io = ptime(date(2004,2,29), td_io); // leap year
@@ -394,14 +394,14 @@ do_all_tests()
   ss.str("");
   ss << pt_io; // stream out pt_io
   ss >> pt;
-  check("Stream out one ptime then into another: extended ordinal format", pt_io == pt);
+  check_equal("Stream out one ptime then into another: extended ordinal format", pt_io, pt);
 
   otp_facet->format("Time: %H:%M, Date: %B %d, %Y"); // custom format with extra words
   inp_facet->format("Time: %H:%M, Date: %B %d, %Y");
   ss.str("");
   ss << pt_io; // stream out pt_io
   ss >> pt;
-  check("Stream out one ptime then into another: custom format (" + ss.str() + ")", pt_io == pt);
+  check_equal("Stream out one ptime then into another: custom format (" + ss.str() + ")", pt_io, pt);
 
   {
     // fully parameterized constructor - compile only test, all other features tested in gregorian
@@ -411,7 +411,7 @@ do_all_tests()
     boost::date_time::date_generator_parser<date, char> dgp; // default constructor
     time_input_facet tif("%Y-%m-%d %H:%M:%s", fdp, svp, pp, dgp);
   }
-#endif // USE_DATE_TIME_PRE_1_33_FACET_IO 
+#endif // USE_DATE_TIME_PRE_1_33_FACET_IO
 
 }
 
@@ -432,4 +432,4 @@ int main(){
   }
   return printTestStats();
 }
-                      
+

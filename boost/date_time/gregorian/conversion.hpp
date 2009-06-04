@@ -32,7 +32,7 @@ namespace gregorian {
 
   //! Converts a date to a tm struct. Throws out_of_range exception if date is a special value
   inline
-  std::tm to_tm(const date& d) 
+  std::tm to_tm(const date& d)
   {
     if(d.is_pos_infinity() || d.is_neg_infinity() || d.is_not_a_date()){
       std::string s = "tm unable to handle date value of ";
@@ -45,10 +45,10 @@ namespace gregorian {
 #endif // USE_DATE_TIME_PRE_1_33_FACET_IO
       boost::throw_exception(std::out_of_range(s));
     }
-    std::tm datetm;
+    std::tm datetm = {}; // zero initialization is needed for extension members, like tm_zone
     boost::gregorian::date::ymd_type ymd = d.year_month_day();
-    datetm.tm_year = ymd.year-1900; 
-    datetm.tm_mon = ymd.month-1; 
+    datetm.tm_year = ymd.year-1900;
+    datetm.tm_mon = ymd.month-1;
     datetm.tm_mday = ymd.day;
     datetm.tm_wday = d.day_of_week();
     datetm.tm_yday = d.day_of_year()-1;
@@ -61,11 +61,11 @@ namespace gregorian {
   inline
   date date_from_tm(const std::tm& datetm) 
   {
-    return date(static_cast<unsigned short>(datetm.tm_year+1900), 
-                static_cast<unsigned short>(datetm.tm_mon+1), 
+    return date(static_cast<unsigned short>(datetm.tm_year+1900),
+                static_cast<unsigned short>(datetm.tm_mon+1),
                 static_cast<unsigned short>(datetm.tm_mday));
   }
-  
+
 
 } } //namespace boost::gregorian
 

@@ -66,7 +66,7 @@ using namespace boost::gregorian;
 void
 wtest_format(const std::basic_string<wchar_t>& format,
              const std::basic_string<wchar_t>& value,
-             const std::string testname,
+             const std::string& testname,
              boost::gregorian::date expected_res)
 {
   typedef boost::date_time::format_date_parser<date, wchar_t> parser_type;
@@ -75,19 +75,18 @@ wtest_format(const std::basic_string<wchar_t>& format,
   try {
     //    string_type format(format);
     std::basic_stringstream<wchar_t> ws;
-    ws << value; 
+    ws << value;
     iter_type sitr(ws);
     iter_type stream_end;
-    
+
     parser_type p(format, wshort_month_names, wlong_month_names,
                   wshort_week_names, wlong_week_names);
     date d = p.parse_date(sitr, stream_end, format);
-    check(testname, d == expected_res);
+    check_equal(testname, d, expected_res);
   }
   catch(std::exception& e) {
     std::cout << "Got an exception: " << e.what() << std::endl;
     check(testname, false);
-    
   }
 }
 
@@ -95,7 +94,7 @@ wtest_format(const std::basic_string<wchar_t>& format,
 void
 test_format(const std::basic_string<char>& format,
             const std::basic_string<char>& value,
-            const std::string testname,
+            const std::string& testname,
             boost::gregorian::date expected_res)
 {
   typedef boost::date_time::format_date_parser<date, char> parser_type;
@@ -107,16 +106,15 @@ test_format(const std::basic_string<char>& format,
     ws << value; 
     iter_type sitr(ws);
     iter_type stream_end;
-    
+
     parser_type pt(format, short_month_names, long_month_names,
                    short_week_names, long_week_names);
     date d = pt.parse_date(sitr, stream_end, format);
-    check(testname, d == expected_res);
+    check_equal(testname, d, expected_res);
   }
   catch(std::exception& e) {
     std::cout << "Got an exception: " << e.what() << std::endl;
     check(testname, false);
-    
   }
 }
 
@@ -126,24 +124,22 @@ void
 test_format2(boost::date_time::format_date_parser<date, charT>& parser,
              const charT* const format,
              const charT* const value,
-             const std::string testname,
+             const std::string& testname,
              boost::gregorian::date expected_res)
 {
   try {
     date d = parser.parse_date(value, format);
-    check(testname, d == expected_res);
+    check_equal(testname, d == expected_res);
   }
   catch(std::exception& e) {
     std::cout << "Got an exception: " << e.what() << std::endl;
     check(testname, false);
-    
   }
 }
 
 int
 main()
 {
-  
   std::copy(&wmonth_short_names[0], 
             &wmonth_short_names[12],
             std::back_inserter(wshort_month_names));
@@ -231,15 +227,15 @@ main()
                "%A %B %d, %Y", date(2004,3,15));
 
   // bad format case...
-               
-  { 
+
+  {
     try {
       std::wstring format(L"%Y-%d");
       std::wstringstream ws;
       ws << L"2004-12-31";
       std::istreambuf_iterator<wchar_t> sitr(ws);
       std::istreambuf_iterator<wchar_t> stream_end;
-      
+
       boost::date_time::format_date_parser<date,wchar_t> pt(format, 
                                                             wshort_month_names,
                                                             wlong_month_names,
@@ -359,7 +355,7 @@ main()
                  "long strings from locale", date(2004,Nov,1));
     test_format2(parser, "%A %B %d, %Y", "thursday december 31, 2004",
                  "long strings from locale", date(2004,Dec,31));
-    
+
   }
 
   return printTestStats();

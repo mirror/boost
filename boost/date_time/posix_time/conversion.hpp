@@ -22,7 +22,7 @@ namespace posix_time {
 
   //! Function that converts a time_t into a ptime.
   inline
-  ptime from_time_t(std::time_t t) 
+  ptime from_time_t(std::time_t t)
   {
     ptime start(gregorian::date(1970,1,1));
     return start + seconds(static_cast<long>(t));
@@ -42,14 +42,8 @@ namespace posix_time {
   //! Convert a time_duration to a tm structure truncating any fractional seconds and zeroing fields for date components 
   inline
   std::tm to_tm(const boost::posix_time::time_duration& td) {
-    std::tm timetm;
-    timetm.tm_year = 0;
-    timetm.tm_mon = 0;
-    timetm.tm_mday = 0;
-    timetm.tm_wday = 0;
-    timetm.tm_yday = 0;
-    
-    timetm.tm_hour = date_time::absolute_value(td.hours()); 
+    std::tm timetm = {};
+    timetm.tm_hour = date_time::absolute_value(td.hours());
     timetm.tm_min = date_time::absolute_value(td.minutes());
     timetm.tm_sec = date_time::absolute_value(td.seconds());
     timetm.tm_isdst = -1; // -1 used when dst info is unknown
