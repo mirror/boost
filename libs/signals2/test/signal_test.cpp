@@ -265,6 +265,34 @@ test_typedefs_etc()
   BOOST_CHECK(typeid(unary_signal_type::slot_type::argument_type) == typeid(short));
 }
 
+class dummy_combiner
+{
+public:
+  typedef int result_type;
+
+  dummy_combiner(result_type return_value): _return_value(return_value)
+  {}
+  template<typename SlotIterator>
+  result_type operator()(SlotIterator, SlotIterator)
+  {
+    return _return_value;
+  }
+private:
+  result_type _return_value;
+};
+
+static void
+test_set_combiner()
+{
+  typedef boost::signals2::signal<int (), dummy_combiner> signal_type;
+  signal_type sig(dummy_combiner(0));
+  BOOST_CHECK(sig() == 0);
+  BOOST_CHECK(sig.combiner()(0,0) == 0);
+  sig.set_combiner(dummy_combiner(1));
+  BOOST_CHECK(sig() == 1);
+  BOOST_CHECK(sig.combiner()(0,0) == 1);
+}
+
 int
 test_main(int, char* [])
 {
@@ -275,5 +303,6 @@ test_main(int, char* [])
   test_extended_slot<int>();
   test_reference_args();
   test_typedefs_etc();
+  test_set_combiner();
   return 0;
 }

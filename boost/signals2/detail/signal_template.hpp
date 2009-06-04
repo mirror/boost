@@ -288,13 +288,13 @@ namespace boost
         combiner_type combiner() const
         {
           unique_lock<mutex_type> lock(_mutex);
-          return _shared_state->combiner;
+          return _shared_state->combiner();
         }
         void set_combiner(const combiner_type &combiner)
         {
           unique_lock<mutex_type> lock(_mutex);
           if(_shared_state.unique())
-            _shared_state->combiner = combiner;
+            _shared_state->combiner() = combiner;
           else
             _shared_state.reset(new invocation_state(*_shared_state, combiner));
         }
