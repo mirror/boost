@@ -6,31 +6,25 @@
 
 # Generates preprocessed files with wave.
 
-rule wave 
-{ 
-  Depends $1 : $2 ; 
-}
-
 actions wave
 {
-  ../../../dist/bin/wave -S../../.. $(>) -o $(<)
+  $(>[1]) -S../../.. $(>[2]) -o $(<)
 }
 
-make ../../../libs/function_types/build/timestamps/arity_loops
-  : preprocess_arity_loops.cpp : wave 
+W = ../../../tools/wave/build//wave ;
+
+make arity_loops
+  : preprocess_arity_loops.cpp $(W) : wave : <location>build/timestamps
   ;
 
-explicit ../../../libs/function_types/build/timestamps/arity_loops ; 
-
-make ../../../libs/function_types/build/timestamps/encoding
-  : preprocess_encoding.cpp : wave 
+make encoding
+  : preprocess_encoding.cpp $(W) : wave : <location>build/timestamps
   ;
 
-explicit ../../../libs/function_types/build/timestamps/encoding ;
 
-make ../../../libs/function_types/build/timestamps/cc_names
-  : preprocess_cc_names.cpp : wave
+make cc_names
+  : preprocess_cc_names.cpp $(W) : wave : <location>build/timestamps
   ;
-
-explicit ../../../libs/function_types/build/timestamps/cc_names ;
+  
+explicit arity_loops encoding cc_names ;
 
