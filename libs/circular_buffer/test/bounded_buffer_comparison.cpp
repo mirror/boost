@@ -12,6 +12,7 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/call_traits.hpp>
 #include <boost/progress.hpp>
 #include <boost/bind.hpp>
 #include <deque>
@@ -29,10 +30,11 @@ public:
     typedef boost::circular_buffer<T> container_type;
     typedef typename container_type::size_type size_type;
     typedef typename container_type::value_type value_type;
+    typedef typename boost::call_traits<value_type>::param_type param_type;
 
     explicit bounded_buffer(size_type capacity) : m_unread(0), m_container(capacity) {}
 
-    void push_front(const value_type& item) {
+    void push_front(param_type item) {
         boost::mutex::scoped_lock lock(m_mutex);
         m_not_full.wait(lock, boost::bind(&bounded_buffer<value_type>::is_not_full, this));
         m_container.push_front(item);
@@ -70,10 +72,11 @@ public:
     typedef boost::circular_buffer_space_optimized<T> container_type;
     typedef typename container_type::size_type size_type;
     typedef typename container_type::value_type value_type;
+    typedef typename boost::call_traits<value_type>::param_type param_type;
 
     explicit bounded_buffer_space_optimized(size_type capacity) : m_container(capacity) {}
 
-    void push_front(const value_type& item) {
+    void push_front(param_type item) {
         boost::mutex::scoped_lock lock(m_mutex);
         m_not_full.wait(lock, boost::bind(&bounded_buffer_space_optimized<value_type>::is_not_full, this));
         m_container.push_front(item);
@@ -111,10 +114,11 @@ public:
     typedef std::deque<T> container_type;
     typedef typename container_type::size_type size_type;
     typedef typename container_type::value_type value_type;
+    typedef typename boost::call_traits<value_type>::param_type param_type;
 
     explicit bounded_buffer_deque_based(size_type capacity) : m_capacity(capacity) {}
 
-    void push_front(const value_type& item) {
+    void push_front(param_type item) {
         boost::mutex::scoped_lock lock(m_mutex);
         m_not_full.wait(lock, boost::bind(&bounded_buffer_deque_based<value_type>::is_not_full, this));
         m_container.push_front(item);
@@ -153,10 +157,11 @@ public:
     typedef std::list<T> container_type;
     typedef typename container_type::size_type size_type;
     typedef typename container_type::value_type value_type;
+    typedef typename boost::call_traits<value_type>::param_type param_type;
 
     explicit bounded_buffer_list_based(size_type capacity) : m_capacity(capacity) {}
 
-    void push_front(const value_type& item) {
+    void push_front(param_type item) {
         boost::mutex::scoped_lock lock(m_mutex);
         m_not_full.wait(lock, boost::bind(&bounded_buffer_list_based<value_type>::is_not_full, this));
         m_container.push_front(item);
