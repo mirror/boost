@@ -19,6 +19,8 @@
 
 #include "boost/lambda/detail/suppress_unused.hpp"
 
+#include <boost/shared_ptr.hpp>
+
 #include <vector>
 #include <map>
 #include <set>
@@ -323,8 +325,18 @@ void address_of_and_dereference() {
   
   (*_1 = 7)(it);
   BOOST_CHECK(vi[0] == 7); 
+  const std::vector<int>::iterator cit(it);
+  (*_1 = 8)(cit);
+  BOOST_CHECK(vi[0] == 8);
 
   // TODO: Add tests for more complex iterator types
+
+  boost::shared_ptr<int> ptr(new int(0));
+  (*_1 = 7)(ptr);
+  BOOST_CHECK(*ptr == 7);
+  const boost::shared_ptr<int> cptr(ptr);
+  (*_1 = 8)(cptr);
+  BOOST_CHECK(*ptr == 8);
 }
 
 

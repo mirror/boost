@@ -225,37 +225,15 @@ template <> struct contentsof_type<null_type> {
 
 
 template <class A> struct contentsof_type<const A> {
-  typedef typename contentsof_type<A>::type type1;
-  // return a reference to the underlying const type
-  // the IF is because the A::reference in the primary template could
-  // be some class type rather than a real reference, hence
-  // we do not want to make it a reference here either
-  typedef typename boost::remove_reference<type1>::type no_reference;
-  typedef typename detail::IF<
-      is_reference<type1>::value, 
-      const no_reference &,
-      const no_reference
-  >::RET type;
+  typedef typename contentsof_type<A>::type type;
 };
 
 template <class A> struct contentsof_type<volatile A> {
-  typedef typename contentsof_type<A>::type type1;
-  typedef typename boost::remove_reference<type1>::type no_reference;
-  typedef typename detail::IF<
-    is_reference<type1>::value, 
-    volatile no_reference &,
-    volatile no_reference
-  >::RET type;
+  typedef typename contentsof_type<A>::type type;
 };
 
 template <class A> struct contentsof_type<const volatile A> {
-  typedef typename contentsof_type<A>::type type1;
-  typedef typename boost::remove_reference<type1>::type no_reference;
-  typedef typename detail::IF<
-    is_reference<type1>::value, 
-    const volatile no_reference &,
-    const volatile no_reference
-  >::RET type;
+  typedef typename contentsof_type<A>::type type;
 };
 
   // standard iterator traits should take care of the pointer types 
