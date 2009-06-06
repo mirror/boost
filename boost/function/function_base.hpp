@@ -889,4 +889,8 @@ namespace detail {
 #undef BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL
 #undef BOOST_FUNCTION_COMPARE_TYPE_ID
 
+#if defined(BOOST_MSVC)
+#   pragma warning( pop )
+#endif       
+
 #endif // BOOST_FUNCTION_BASE_HEADER
