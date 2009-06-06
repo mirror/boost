@@ -71,12 +71,12 @@ namespace boost { namespace program_options {
             
             std::transform(opt.value.begin(), opt.value.end(),
                            back_inserter(result.value),
-                           bind(from_utf8, _1));
+                           boost::bind(from_utf8, _1));
 
             std::transform(opt.original_tokens.begin(), 
                            opt.original_tokens.end(),
                            back_inserter(result.original_tokens),
-                           bind(from_utf8, _1));
+                           boost::bind(from_utf8, _1));
             return result;
         }
     }
