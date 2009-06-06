@@ -12,6 +12,38 @@
 
   <!-- if each new change tgroup has a "Bug Fix" as the first "Type", the columns will line up nicely -->
 
+  <bridgehead renderas="sect3">Changes from Boost 1.38 to 1.40 (date_time 1.06 to 1.07)</bridgehead>
+  <informaltable frame="all">
+    <tgroup cols="2">
+      <thead>
+        <row>
+          <entry>Type</entry>
+          <entry>Description</entry>
+        </row>
+      </thead>
+      <tbody>
+<!--
+        <row>
+          <entry>Feature</entry>
+          <entry>
+          </entry>
+        </row>
+-->
+
+        <row>
+          <entry>Bug fix</entry>
+          <entry>
+            Minor bug fixes (<ulink url="https://svn.boost.org/trac/boost/ticket/2809">#2809</ulink>,
+            <ulink url="https://svn.boost.org/trac/boost/ticket/2824">#2824</ulink>,
+            <ulink url="https://svn.boost.org/trac/boost/ticket/3015">#3015</ulink>,
+            <ulink url="https://svn.boost.org/trac/boost/ticket/3105">#3105</ulink> and others).
+          </entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </informaltable>
+
   <bridgehead renderas="sect3">Changes from Boost 1.34 to 1.38 (date_time 1.05 to 1.06)</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
