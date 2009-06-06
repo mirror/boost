@@ -43,6 +43,7 @@ public:
 
   discard_block() : _rng(), _n(0) { }
   explicit discard_block(const base_type & rng) : _rng(rng), _n(0) { }
+  template<class T> explicit discard_block(T s) : _rng(s), _n(0) {}
   template<class It> discard_block(It& first, It last)
     : _rng(first, last), _n(0) { }
   void seed() { _rng.seed(); _n = 0; }
