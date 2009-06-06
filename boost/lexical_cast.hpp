@@ -577,7 +577,7 @@ namespace boost
             lexical_stream(char_type* = 0, char_type* = 0)
             {
                 stream.unsetf(std::ios::skipws);
-                lcast_set_precision(stream, (Source*)0, (Target*)0);
+                lcast_set_precision(stream, static_cast<Source*>(0), static_cast<Target*>(0) );
             }
             ~lexical_stream()
             {
@@ -694,7 +694,7 @@ namespace boost
             {
                 this->setp(start, finish);
                 std::basic_ostream<CharT> stream(static_cast<Base*>(this));
-                lcast_set_precision(stream, (OutputStreamable*)0);
+                lcast_set_precision(stream, static_cast<OutputStreamable*>(0));
                 bool const result = !(stream << input).fail();
                 finish = this->pptr();
                 return result;
@@ -764,7 +764,7 @@ namespace boost
                 this->setg(start, start, finish);
                 std::basic_istream<CharT> stream(static_cast<Base*>(this));
                 stream.unsetf(std::ios::skipws);
-                lcast_set_precision(stream, (InputStreamable*)0);
+                lcast_set_precision(stream, static_cast<InputStreamable*>(0));
 #if (defined _MSC_VER)
 # pragma warning( pop )
 #endif
