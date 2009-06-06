@@ -67,8 +67,15 @@ class linked_object
   typedef multi_index_container<
     impl,
     indexed_by<
+
+#if BOOST_WORKAROUND(__IBMCPP__,BOOST_TESTED_AT(1010))
+      ordered_unique<member<impl,int,&linked_object::impl::n> >,
+      hashed_non_unique<member<impl,int,&linked_object::impl::n> >,
+#else
       ordered_unique<member<impl,int,&impl::n> >,
       hashed_non_unique<member<impl,int,&impl::n> >,
+#endif
+
       sequenced<>,
       random_access<>
     >
