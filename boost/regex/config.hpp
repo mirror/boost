@@ -165,8 +165,10 @@
 #     pragma warning(disable : 4251 4231 4660)
 #  endif
 #  ifdef _DLL
-#     include <string>
-      extern template class __declspec(dllimport) std::basic_string<unsigned short>;
+#     if BOOST_WORKAROUND(BOOST_MSVC, <1600)
+#        include <string>
+         extern template class __declspec(dllimport) std::basic_string<unsigned short>;
+#     endif
 #  endif
 #  ifdef BOOST_MSVC
 #     pragma warning(pop)
