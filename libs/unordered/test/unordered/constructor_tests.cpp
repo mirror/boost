@@ -290,6 +290,17 @@ UNORDERED_TEST(map_constructor_test,
 
 #if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
 
+UNORDERED_AUTO_TEST(test_default_initializer_list) {
+    std::cerr<<"Initializer List Tests\n";
+    std::initializer_list<int> init;
+    boost::unordered_set<int> x1 = init;
+    BOOST_TEST(x1.empty());
+}
+
+#endif
+
+#if !defined(BOOST_NO_INITIALIZER_LISTS)
+
 UNORDERED_AUTO_TEST(test_initializer_list) {
     std::cerr<<"Initializer List Tests\n";
     boost::unordered_set<int> x1 = { 2, 10, 45, -5 };

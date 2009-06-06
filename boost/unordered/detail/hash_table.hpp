@@ -61,6 +61,14 @@
 
 #endif
 
+#if defined(BOOST_MSVC)
+#pragma warning(push)
+#if BOOST_MSVC >= 1400
+#pragma warning(disable:4267) // conversion from 'size_t' to 'unsigned int',
+                              // possible loss of data.
+#endif
+#endif
+
 #if BOOST_WORKAROUND(__BORLANDC__, <= 0x0582)
 #define BOOST_UNORDERED_BORLAND_BOOL(x) (bool)(x)
 #else
@@ -331,5 +339,9 @@ namespace boost {
 
 #undef BOOST_UNORDERED_BORLAND_BOOL
 #undef BOOST_UNORDERED_MSVC_RESET_PTR
+
+#if defined(BOOST_MSVC)
+#pragma warning(pop)
+#endif
 
 #endif // BOOST_UNORDERED_DETAIL_HASH_TABLE_HPP_INCLUDED
