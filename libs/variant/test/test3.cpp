@@ -122,7 +122,9 @@ int test_main(int, char* [])
    std::ostringstream e1_str;
    e1_str << e1;
 
+#if !defined(BOOST_NO_TYPEID)
    BOOST_CHECK(e1.type() == typeid(Add));
+#endif
    BOOST_CHECK(e1_str.str() == "(13+((40+2)-(10+4)))");
 
    //Evaluate expression

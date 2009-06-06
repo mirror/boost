@@ -364,6 +364,11 @@
           </returns>
 
           <throws>Will not throw.</throws>
+          
+          <notes>
+            <simpara>Not available when <code>BOOST_NO_TYPEID</code> is
+              defined.</simpara>
+          </notes>
         </method>
 
       </method-group>
@@ -536,6 +541,12 @@
         <simpara>Calls <code>out &lt;&lt; x</code>, where <code>x</code> is
           the content of <code>rhs</code>.</simpara>
       </effects>
+      
+      <notes>
+        <simpara>Not available when <code>BOOST_NO_IOSTREAM</code> is
+          defined.</simpara>
+      </notes>
+
     </function>
     
     <class name="make_variant_over">
