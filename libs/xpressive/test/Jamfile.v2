@@ -71,7 +71,7 @@ test-suite "xpressive"
          [ compile test_regex_token_iterator.cpp ]
          [ compile test_regex_traits.cpp ]
          [ compile test_sub_match.cpp ]
-#         [ compile test_typeof.cpp : <define>BOOST_TYPEOF_EMULATION=1 <define>BOOST_TYPEOF_LIMIT_SIZE=200 ]
-#         [ compile test_typeof2.cpp : <define>BOOST_TYPEOF_EMULATION=1 <define>BOOST_TYPEOF_LIMIT_SIZE=200 ]
+#         [ compile test_typeof.cpp ]
+#         [ compile test_typeof2.cpp ]
     ;
 
