@@ -6,7 +6,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_TYPEOF_LIMIT_SIZE 200
-#define BOOST_TYPEOF_COMPILANT
+#define BOOST_TYPEOF_EMULATION 1
 
 #include <string>
 #include <boost/version.hpp>
