@@ -11,6 +11,7 @@
 // Note: this header is a header template and must NOT have multiple-inclusion
 // protection.
 #include <boost/function/detail/prologue.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 
 #if defined(BOOST_MSVC)
 #   pragma warning( push )
@@ -786,24 +787,26 @@ namespace boost {
     operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
       this->clear();
-      try {
+      BOOST_TRY  {
         this->assign_to(f);
-      } catch (...) {
+      } BOOST_CATCH (...) {
         vtable = 0;
-        throw;
+        BOOST_RETHROW;
       }
+      BOOST_CATCH_END
       return *this;
     }
     template<typename Functor,typename Allocator>
     void assign(Functor BOOST_FUNCTION_TARGET_FIX(const &) f, Allocator a)
     {
       this->clear();
-      try {
+      BOOST_TRY{
         this->assign_to_a(f,a);
-      } catch (...) {
+      } BOOST_CATCH (...) {
         vtable = 0;
-        throw;
+        BOOST_RETHROW;
       }
+      BOOST_CATCH_END
     }
 
 #ifndef BOOST_NO_SFINAE
@@ -828,12 +831,13 @@ namespace boost {
         return *this;
 
       this->clear();
-      try {
+      BOOST_TRY {
         this->assign_to_own(f);
-      } catch (...) {
+      } BOOST_CATCH (...) {
         vtable = 0;
-        throw;
+        BOOST_RETHROW;
       }
+      BOOST_CATCH_END
       return *this;
     }
 
@@ -965,9 +969,7 @@ namespace boost {
       if (&f == this)
         return;
 
-#if !defined(BOOST_NO_EXCEPTIONS)      
-      try {
-#endif
+      BOOST_TRY {
         if (!f.empty()) {
           this->vtable = f.vtable;
           if (this->has_trivial_copy_and_destroy())
@@ -979,12 +981,11 @@ namespace boost {
         } else {
           clear();
         }
-#if !defined(BOOST_NO_EXCEPTIONS)      
-      } catch (...) {
+      } BOOST_CATCH (...) {
         vtable = 0;
-        throw;
+        BOOST_RETHROW;
       }
-#endif
+      BOOST_CATCH_END
     }
   };
 
