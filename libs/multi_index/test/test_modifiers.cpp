@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for modifier memfuns.
  *
- * Copyright 2003-2008 Joaquin M Lopez Munoz.
+ * Copyright 2003-2009 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -11,13 +11,16 @@
 #include "test_modifiers.hpp"
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
+#include <boost/enable_shared_from_this.hpp>
 #include <boost/next_prior.hpp>
+#include <boost/shared_ptr.hpp>
 #include <iterator>
 #include <vector>
 #include "pre_multi_index.hpp"
 #include "employee.hpp"
-#include <boost/next_prior.hpp>
 #include <boost/test/test_tools.hpp>
+
+using namespace boost::multi_index;
 
 class always_one
 {
@@ -49,7 +52,58 @@ inline std::size_t hash_value(const always_one& x)
 } /* namespace boost */
 #endif
 
-using namespace boost::multi_index;
+class linked_object
+{
+  struct impl:boost::enable_shared_from_this<impl>
+  {
+    typedef boost::shared_ptr<const impl> ptr;
+
+    impl(int n_,ptr next_=ptr()):n(n_),next(next_){}
+
+    int n;
+    ptr next;
+  };
+
+  typedef multi_index_container<
+    impl,
+    indexed_by<
+
+#if BOOST_WORKAROUND(__IBMCPP__,BOOST_TESTED_AT(1010))
+      ordered_unique<member<impl,int,&linked_object::impl::n> >,
+      hashed_non_unique<member<impl,int,&linked_object::impl::n> >,
+#else
+      ordered_unique<member<impl,int,&impl::n> >,
+      hashed_non_unique<member<impl,int,&impl::n> >,
+#endif
+
+      sequenced<>,
+      random_access<>
+    >
+  > impl_repository_t;
+
+  static impl_repository_t impl_repository;
+
+public:
+  linked_object(int n):pimpl(init(impl(n))){}
+  linked_object(int n,const linked_object& x):pimpl(init(impl(n,x.pimpl))){}
+
+private:
+  impl::ptr init(const impl& x)
+  {
+    std::pair<impl_repository_t::iterator,bool> p=impl_repository.insert(x);
+    if(p.second)return impl::ptr(&*p.first,&erase_impl);
+    else        return p.first->shared_from_this();
+  }
+
+  static void erase_impl(const impl* p)
+  {
+    impl_repository.erase(p->n);
+  }
+
+  impl::ptr pimpl;
+};
+
+linked_object::impl_repository_t linked_object::impl_repository;
 
 void test_modifiers()
 {
@@ -312,4 +366,11 @@ void test_modifiers()
   BOOST_CHECK(std::distance(c.begin(),c.insert(c.upper_bound(1),1))==8);
   BOOST_CHECK(std::distance(c.begin(),c.insert(boost::prior(c.end()),1))==9);
   BOOST_CHECK(std::distance(c.begin(),c.insert(c.end(),1))==10);
+
+  /* testcase for erase() reentrancy */
+  {
+    linked_object o1(1);
+    linked_object o2(2,o1);
+    o1=o2;
+  }
 }

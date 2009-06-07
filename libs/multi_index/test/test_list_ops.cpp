@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for standard list operations.
  *
- * Copyright 2003-2008 Joaquin M Lopez Munoz.
+ * Copyright 2003-2009 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -148,6 +148,15 @@ static void test_list_ops_unique_seq(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
   si.merge(si2,std::greater<int>());
   BOOST_CHECK(is_sorted(si,std::greater<int>()));
   BOOST_CHECK(si2.empty());
+
+  /* testcase for bug reported at
+   * https://svn.boost.org/trac/boost/ticket/3076
+   */
+  {
+    Sequence         ss3;
+    sequenced_index &si3=get<1>(ss3);
+    si3.sort();
+  }
 }
 
 template<typename Sequence>
