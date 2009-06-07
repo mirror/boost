@@ -551,6 +551,7 @@ namespace boost { namespace proto
         typedef typename proto_base_expr::proto_arity proto_arity;
         typedef typename proto_base_expr::address_of_hack_type_ proto_address_of_hack_type_;
         typedef void proto_is_expr_; /**< INTERNAL ONLY */
+        BOOST_STATIC_CONSTANT(long, proto_arity_c = proto_base_expr::proto_arity_c);
         BOOST_PROTO_FUSION_DEFINE_TAG(boost::proto::tag::proto_expr)
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXTENDS_CHILD, ~)
         typedef void proto_is_aggregate_; /**< INTERNAL ONLY */
