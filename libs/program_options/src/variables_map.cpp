@@ -74,11 +74,13 @@ namespace boost { namespace program_options {
             try {
                 d.semantic()->parse(v.value(), options.options[i].value, utf8);
             }
+#ifndef BOOST_NO_EXCEPTIONS
             catch(validation_error& e)
             {
                 e.set_option_name(name);
                 throw;
             }
+#endif
             v.m_value_semantic = d.semantic();
             
             // The option is not composing, and the value is explicitly
