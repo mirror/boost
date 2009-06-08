@@ -18,8 +18,8 @@
 #endif
 
 #include <boost/test/minimal.hpp>
-#include <boost/dynamic_property_map.hpp>
-#include <boost/property_map.hpp>
+#include <boost/property_map/dynamic_property_map.hpp>
+#include <boost/property_map/property_map.hpp>
 #include <map>
 #include <iostream>
 #include <string>
