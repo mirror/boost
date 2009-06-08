@@ -5,10 +5,10 @@
 .. Software License, Version 1.0. (See accompanying
 .. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-|inserter(title)|
-=================
-
 .. _`inserter_`:
+
+inserter (class)
+================
 
 Synopsis
 --------
@@ -99,6 +99,4 @@ See also
 
 |Algorithms|, |Inserter|, |Reversible Algorithm|, |front_inserter|, |back_inserter|
 
-
-.. |inserter(title)| replace:: inserter
-.. |inserter| replace:: ':refentry:`inserter` <|inserter_|>'__
+.. |[inserter]| replace:: `inserter (class)`_

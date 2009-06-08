@@ -69,12 +69,11 @@ Example
 Models
 ------
 
-* |inserter|
+* |[inserter]|
 * |front_inserter|
 * |back_inserter|
 
 See also
 --------
 
-|Algorithms|, |Transformation Algorithms|, |inserter|, |front_inserter|, |back_inserter|
-
+|Algorithms|, |Transformation Algorithms|, |[inserter]|, |front_inserter|, |back_inserter|

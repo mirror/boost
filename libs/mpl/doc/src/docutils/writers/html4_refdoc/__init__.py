@@ -1,5 +1,5 @@
 
-# Copyright Aleksey Gurtovoy 2004-2008
+# Copyright Aleksey Gurtovoy 2004-2009
 #
 # Distributed under the Boost Software License, Version 1.0. 
 # (See accompanying file LICENSE_1_0.txt or copy at 
@@ -21,35 +21,76 @@ class Writer(html4_frames.Writer):
         self.translator = refdoc_translator
 
 
+class hacked_html_translator(nodes.NodeVisitor):
+        
+    def __init__(self, document):
+        self.__super = nodes.NodeVisitor
+        self.__super.__init__(self, document)
+        self.base = html4css1.HTMLTranslator(document)
+        self.body = self.base.body
+        self.head = self.base.head
+        self.astext = self.base.astext
+        self.starttag = self.base.starttag
+        self.words_and_spaces = self.base.words_and_spaces
+        self.encode = self.base.encode
+        self.recursion_level = 0
+
+    def visit_section(self, node):
+        if self.base.section_level == 1:
+            self.base.section_level = 2
+            
+        self.base.body_prefix = self.body_prefix
+        self.base.visit_section(node)
+        
+    def depart_section(self, node):
+        self.base.depart_section(node)
+        if self.base.section_level == 2:
+            self.base.section_level = 1
+ 
+
+    def visit_generated(self, node):
+        if node.get('class', '') == 'sectnum':
+            node[0].data = string.strip(node[0].data, u'\u00a0')
+            
+        self.base.visit_generated(node)
+
+    def depart_generated(self, node):
+        self.base.depart_generated(node)
+
+
 class refdoc_translator(html4_frames.frame_pages_translator):
 
-    tocframe_width = 25
+    tocframe_width      = 25
+    page_translator     = hacked_html_translator
+    re_include          = re.compile(r'(\s*#include\s+<)(.*?\.hpp)?(>\s*)?')
+    re_identifier       = re.compile(r'(.*?\W*)(\w+)(\W.*?)?')
+    re_modtime          = re.compile(r'\s*modtime:\s*(.*)')
+    re_auto_id          = re.compile(r'^id(\d+)$')
+    in_literal_block    = 0
+    in_reference        = 0
     
     def __init__(self, document, index_page, page_files_dir, extension):
         self.docframe += ' refmanual'
         self.__super = html4_frames.frame_pages_translator
         self.__super.__init__(self, document, index_page, page_files_dir, extension)
-        self.page_translator = hacked_html_translator
-        self.re_include = re.compile(r'(\s*#include\s+<)(.*?\.hpp)?(>\s*)?')
-        self.re_identifier = re.compile(r'(.*?\W*)(\w+)(\W.*?)?')
-        self.re_modtime = re.compile(r'\s*modtime:\s*(.*)')
-        self.in_literal_block = 0
-        self.in_reference = 0
 
 
-    def visit_title(self, node):
-        old_len = len(self.active_visitor().body)
-        self.__super.visit_title(self, node)
-        
-        self = self.active_visitor()
-        if len(self.body) - old_len > 1 and not node.has_key('refid'):
-            name = nodes.make_id(node.astext())
-            self.body[-1] = self.starttag(
+    def visit_title( self, node ):
+        self.__super.visit_title( self, node )        
+        if self.re_auto_id.match( self._node_id( node.parent ) ):
+            name = nodes.make_id( node.astext() )
+            self = self.active_visitor()
+            self.body.append( self.starttag(
                   {}, 'a', '', name=name, href='#%s' % name, CLASS='subsection-title'
-                )
+                ) )
 
-    def depart_title(self, node):
-        self.__super.depart_title(self, node)
+    def depart_title( self, node ):
+        base = self
+        if self.re_auto_id.match( self._node_id( node.parent ) ):
+            self = self.active_visitor()
+            self.body.append( '</a>')
+
+        base.__super.depart_title( base, node )
 
 
     def visit_table(self, node):
@@ -165,6 +206,7 @@ class refdoc_translator(html4_frames.frame_pages_translator):
     
     def _handle_id_sub(base, self, match):
         identifier = match.group(2)        
+
         if not base.document.has_name( identifier.lower() ):
             return self.encode(match.group(0))
 
@@ -182,9 +224,12 @@ class refdoc_translator(html4_frames.frame_pages_translator):
         if not id:
             return self.encode(match.group(0))
 
+        if id == 'inserter':
+            id = 'inserter-class'
+
         result = self.encode(match.group(1))
         result += '<a href="%s" class="identifier">%s</a>' \
-                        % ( base._chunk_ref( base._active_chunk_id(), id )
+                        % ( base._chunk_ref( base._active_chunk_id(), base._make_chunk_id( id ) )
                           , self.encode(identifier)
                           )
         
@@ -194,41 +239,15 @@ class refdoc_translator(html4_frames.frame_pages_translator):
         return result
 
 
-class hacked_html_translator(nodes.NodeVisitor):
-        
-    def __init__(self, document):
-        self.__super = nodes.NodeVisitor
-        self.__super.__init__(self, document)
-        self.base = html4css1.HTMLTranslator(document)
-        self.body = self.base.body
-        self.head = self.base.head
-        self.astext = self.base.astext
-        self.starttag = self.base.starttag
-        self.words_and_spaces = self.base.words_and_spaces
-        self.encode = self.base.encode
-        self.recursion_level = 0
+    def _make_chunk_id( self, node_id ):
+        if self.re_auto_id.match( node_id ):
+            node = self.document.ids[ node_id ]
+            return '%s-%s' % ( self._node_id( node.parent ), node['dupnames'][0] )
 
-    def visit_section(self, node):
-        if self.base.section_level == 1:
-            self.base.section_level = 2
-            
-        self.base.body_prefix = self.body_prefix
-        self.base.visit_section(node)
-        
-    def depart_section(self, node):
-        self.base.depart_section(node)
-        if self.base.section_level == 2:
-            self.base.section_level = 1
- 
+        if node_id.startswith( 'boost-mpl-' ):
+            return node_id[ len( 'boost-mpl-' ): ]
 
-    def visit_generated(self, node):
-        if node.get('class', '') == 'sectnum':
-            node[0].data = string.strip(node[0].data, u'\u00a0')
-            
-        self.base.visit_generated(node)
-
-    def depart_generated(self, node):
-        self.base.depart_generated(node)
+        return node_id
 
 
 def _setup_forwarding(visitor):

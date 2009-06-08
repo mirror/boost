@@ -91,4 +91,4 @@ Example
 See also
 --------
 
-|Algorithms|, |Inserter|, |Reversible Algorithm|, |inserter|, |back_inserter|, |push_front|
+|Algorithms|, |Inserter|, |Reversible Algorithm|, |[inserter]|, |back_inserter|, |push_front|
