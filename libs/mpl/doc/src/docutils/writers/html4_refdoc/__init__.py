@@ -21,47 +21,9 @@ class Writer(html4_frames.Writer):
         self.translator = refdoc_translator
 
 
-class hacked_html_translator(nodes.NodeVisitor):
-        
-    def __init__(self, document):
-        self.__super = nodes.NodeVisitor
-        self.__super.__init__(self, document)
-        self.base = html4css1.HTMLTranslator(document)
-        self.body = self.base.body
-        self.head = self.base.head
-        self.astext = self.base.astext
-        self.starttag = self.base.starttag
-        self.words_and_spaces = self.base.words_and_spaces
-        self.encode = self.base.encode
-        self.recursion_level = 0
-
-    def visit_section(self, node):
-        if self.base.section_level == 1:
-            self.base.section_level = 2
-            
-        self.base.body_prefix = self.body_prefix
-        self.base.visit_section(node)
-        
-    def depart_section(self, node):
-        self.base.depart_section(node)
-        if self.base.section_level == 2:
-            self.base.section_level = 1
- 
-
-    def visit_generated(self, node):
-        if node.get('class', '') == 'sectnum':
-            node[0].data = string.strip(node[0].data, u'\u00a0')
-            
-        self.base.visit_generated(node)
-
-    def depart_generated(self, node):
-        self.base.depart_generated(node)
-
-
 class refdoc_translator(html4_frames.frame_pages_translator):
 
     tocframe_width      = 25
-    page_translator     = hacked_html_translator
     re_include          = re.compile(r'(\s*#include\s+<)(.*?\.hpp)?(>\s*)?')
     re_identifier       = re.compile(r'(.*?\W*)(\w+)(\W.*?)?')
     re_modtime          = re.compile(r'\s*modtime:\s*(.*)')
@@ -73,6 +35,20 @@ class refdoc_translator(html4_frames.frame_pages_translator):
         self.docframe += ' refmanual'
         self.__super = html4_frames.frame_pages_translator
         self.__super.__init__(self, document, index_page, page_files_dir, extension)
+
+
+    def visit_section( self, node ):
+        base = self
+        self = self.active_visitor()
+        if self.section_level == 1:
+            self.section_level = 2           
+        base.__super.visit_section( base, node )
+        
+    def depart_section( self, node ):
+        self.__super.depart_section( self, node )
+        self = self.active_visitor()
+        if self.section_level == 2:
+            self.section_level = 1
 
 
     def visit_title( self, node ):
@@ -249,22 +225,3 @@ class refdoc_translator(html4_frames.frame_pages_translator):
 
         return node_id
 
-
-def _setup_forwarding(visitor):
-    for name in nodes.node_class_names:
-        if not getattr(visitor, 'visit_' + name, None):
-        
-            def forward_visit(self, node, name=name):
-                self.recursion_level += 1
-                #print '%svisit_%s' % ( '+' * self.recursion_level, name )
-                getattr(self.base, 'visit_' + name)(node)
-
-            def forward_depart(self, node, name=name):
-                #print '%sdepart_%s' % ( '-' * self.recursion_level, name )
-                self.recursion_level -= 1
-                getattr(self.base, 'depart_' + name)(node)
-            
-            setattr(visitor, 'visit_' + name, forward_visit)
-            setattr(visitor, 'depart_' + name, forward_depart)
-
-_setup_forwarding(hacked_html_translator)
