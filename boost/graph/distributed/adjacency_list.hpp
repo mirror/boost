@@ -1417,7 +1417,7 @@ namespace boost {
       in_edge_iterator;
 
     /// Iterator over the neighbors of a vertex
-    typedef adjacency_iterator<
+    typedef boost::adjacency_iterator<
               adjacency_list, vertex_descriptor, out_edge_iterator,
               typename detail::iterator_traits<base_out_edge_iterator>
                          ::difference_type>
