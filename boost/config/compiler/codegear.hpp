@@ -20,7 +20,7 @@
 //
 // versions check:
 // last known and checked version is 0x610
-#if (__CODEGEARC__ > 0x610)
+#if (__CODEGEARC__ > 0x613)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
@@ -29,7 +29,7 @@
 #endif
 
 // CodeGear C++ Builder 2009
-#if (__CODEGEARC__ <= 0x610)
+#if (__CODEGEARC__ <= 0x613)
 #  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
 #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
