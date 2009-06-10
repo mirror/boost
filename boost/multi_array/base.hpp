@@ -436,17 +436,24 @@ protected:
       const index_range& current_range = indices.ranges_[n];
       index start = current_range.get_start(default_start);
       index finish = current_range.get_finish(default_finish);
-      index index_factor = current_range.stride();
+      index factor = current_range.stride();
 
-      // integral trick for ceiling((finish-start) / index_factor)
-      index shrinkage = index_factor > 0 ? 1 : -1;
-      index len = (finish - start + (index_factor - shrinkage)) / index_factor;
+      // integral trick for ceiling((finish-start) / factor) 
+      index shrinkage = factor > 0 ? 1 : -1;
+      index len = (finish - start + (factor - shrinkage)) / factor;
 
       BOOST_ASSERT(index_bases[n] <= start &&
-                   start <= index_bases[n]+index(extents[n]));
-      BOOST_ASSERT(index_bases[n] <= finish &&
-                   finish <= index_bases[n]+index(extents[n]));
-      BOOST_ASSERT(index_factor != 0);
+                   start < index_bases[n]+index(extents[n]));
+
+#ifndef BOOST_DISABLE_ASSERTS
+      // The legal values of finish depends on the sign of the factor
+      index lb_adjustment = factor < 0 ? 1 : 0;
+      index ub_adjustment = factor > 0 ? 1 : 0;
+      BOOST_ASSERT(index_bases[n] - lb_adjustment <= finish &&
+                   finish < index_bases[n]+index(extents[n]) + ub_adjustment);
+#endif // BOOST_DISABLE_ASSERTS
+
+      BOOST_ASSERT(factor != 0);
 
       // the array data pointer is modified to account for non-zero
       // bases during slicing (see [Garcia] for the math involved)
@@ -454,9 +461,9 @@ protected:
 
       if (!current_range.is_degenerate()) {
 
-        // The index_factor for each dimension is included into the
+        // The factor for each dimension is included into the
         // strides for the array_view (see [Garcia] for the math involved).
-        new_strides[dim] = index_factor * strides[n];
+        new_strides[dim] = factor * strides[n];
         
         // calculate new extents
         new_extents[dim] = len;
