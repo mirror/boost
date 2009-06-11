@@ -228,6 +228,12 @@ namespace boost
       scoped_connection(const scoped_connection &other);
       scoped_connection& operator=(const scoped_connection &rhs);
     };
+    // Sun 5.9 compiler doesn't find the swap for base connection class when
+    // arguments are scoped_connection, so we provide this explicitly.
+    inline void swap(scoped_connection &conn1, scoped_connection &conn2)
+    {
+      conn1.swap(conn2);
+    }
   }
 }
 
