@@ -19,7 +19,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/signals2/connection.hpp>
 #include <boost/signals2/slot_base.hpp>
-#include <boost/signals2/detail/stack_vector.hpp>
+#include <boost/signals2/detail/auto_buffer.hpp>
 #include <boost/signals2/detail/unique_lock.hpp>
 #include <boost/weak_ptr.hpp>
 
@@ -34,7 +34,7 @@ namespace boost {
           f(f)
         {}
         optional<ResultType> result;
-        typedef stack_vector<boost::shared_ptr<void>, 10> tracked_ptrs_type;
+        typedef auto_buffer<boost::shared_ptr<void>, store_n_objects<10> > tracked_ptrs_type;
         tracked_ptrs_type tracked_ptrs;
         Function f;
       };
