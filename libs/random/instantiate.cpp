@@ -56,6 +56,8 @@ void instantiate_dist(URNG& urng, const char * name, const Dist& dist)
   // this keeps a reference to urng
   boost::variate_generator<URNG&, Dist> genref(urng, dist);
 
+  BOOST_CHECK(gen.engine() == genref.engine());
+
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   // and here is a pointer to (a copy of) the urng
   URNG copy = urng;
