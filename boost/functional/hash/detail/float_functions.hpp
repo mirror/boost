@@ -99,7 +99,8 @@ namespace BOOST_HASH_DETECT_FLOAT_FUNCTIONS {
 
 #define BOOST_HASH_CALL_FLOAT_FUNC(cpp_func, c99_func, type1, type2)    \
 namespace BOOST_HASH_DETECT_FLOAT_FUNCTIONS {                           \
-    boost::hash_detail::not_found c99_func(int, type2);                 \
+    template <class Float>                                              \
+    boost::hash_detail::not_found c99_func(Float, type2);               \
 }                                                                       \
                                                                         \
 namespace boost {                                                       \
