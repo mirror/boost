@@ -27,6 +27,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/random/detail/config.hpp>
+#include <boost/random/detail/seed.hpp>
 #include <boost/random/linear_congruential.hpp>
 
 
@@ -86,14 +87,16 @@ public:
 #endif
     seed();
   }
-  explicit subtract_with_carry(uint32_t value) { seed(value); }
-  template<class Generator>
-  explicit subtract_with_carry(Generator & gen) { seed(gen); }
+  BOOST_RANDOM_DETAIL_ARITHMETIC_CONSTRUCTOR(subtract_with_carry, uint32_t, value)
+  { seed(value); }
+  BOOST_RANDOM_DETAIL_GENERATOR_CONSTRUCTOR(subtract_with_carry, Generator, gen)
+  { seed(gen); }
   template<class It> subtract_with_carry(It& first, It last) { seed(first,last); }
 
   // compiler-generated copy ctor and assignment operator are fine
 
-  void seed(uint32_t value = 19780503u)
+  void seed() { seed(19780503u); }
+  BOOST_RANDOM_DETAIL_ARITHMETIC_SEED(subtract_with_carry, uint32_t, value)
   {
     random::linear_congruential<int32_t, 40014, 0, 2147483563, 0> intgen(value);
     seed(intgen);
@@ -102,8 +105,7 @@ public:
   // For GCC, moving this function out-of-line prevents inlining, which may
   // reduce overall object code size.  However, MSVC does not grok
   // out-of-line template member functions.
-  template<class Generator>
-  void seed(Generator & gen)
+  BOOST_RANDOM_DETAIL_GENERATOR_SEED(subtract_with_carry, Generator, gen)
   {
     // I could have used std::generate_n, but it takes "gen" by value
     for(unsigned int j = 0; j < long_lag; ++j)

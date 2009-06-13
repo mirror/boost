@@ -129,12 +129,61 @@ void instantiate_real_dist(URNG& urng, RealType /* ignored */)
                    boost::gamma_distribution<RealType>(1));
 }
 
+template<class URNG, class T>
+void test_seed(URNG & urng, const T & t) {
+    URNG urng2(t);
+    BOOST_CHECK(urng == urng2);
+    urng2.seed(t);
+    BOOST_CHECK(urng == urng2);
+}
+
+// rand48 uses non-standard seeding
+template<class T>
+void test_seed(boost::rand48 & urng, const T & t) {
+    boost::rand48 urng2(t);
+    urng2.seed(t);
+}
+
 template<class URNG, class ResultType>
-void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
+void instantiate_seed(const URNG &, const ResultType &) {
+    {
+        URNG urng;
+        URNG urng2;
+        urng2.seed();
+        BOOST_CHECK(urng == urng2);
+    }
+    {
+        int value = 127;
+        URNG urng(value);
+
+        // integral types
+        test_seed(urng, static_cast<char>(value));
+        test_seed(urng, static_cast<signed char>(value));
+        test_seed(urng, static_cast<unsigned char>(value));
+        test_seed(urng, static_cast<short>(value));
+        test_seed(urng, static_cast<unsigned short>(value));
+        test_seed(urng, static_cast<int>(value));
+        test_seed(urng, static_cast<unsigned int>(value));
+        test_seed(urng, static_cast<long>(value));
+        test_seed(urng, static_cast<unsigned long>(value));
+#if !defined(BOOST_NO_INT64_T)
+        test_seed(urng, static_cast<boost::int64_t>(value));
+        test_seed(urng, static_cast<boost::uint64_t>(value));
+#endif
+
+        // floating point types
+        test_seed(urng, static_cast<float>(value));
+        test_seed(urng, static_cast<double>(value));
+        test_seed(urng, static_cast<long double>(value));
+    }
+}
+
+template<class URNG, class ResultType>
+void instantiate_urng(const std::string & s, const URNG & u, const ResultType & r)
 {
   std::cout << "Basic tests for " << s;
   URNG urng;
-  urng.seed();                                  // seed() member function
+  instantiate_seed(u, r);                       // seed() member function
   int a[URNG::has_fixed_range ? 5 : 10];        // compile-time constant
   (void) a;   // avoid "unused" warning
   typename URNG::result_type x1 = urng();
@@ -147,6 +196,8 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   BOOST_CHECK(!(urng != urng2));  // operator!=
   urng();
   urng2 = urng;                  // copy assignment
+  BOOST_CHECK(urng == urng2);
+  urng2 = URNG(urng2);           // copy constructor, not templated constructor
   BOOST_CHECK(urng == urng2);
 #endif // BOOST_MSVC
 

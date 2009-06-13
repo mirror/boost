@@ -35,8 +35,8 @@
     <li><a href="#mersenne_twister">Class template
     <code>random::mersenne_twister</code></a></li>
 
-    <li><a href="#lagged_fibonacci">Class template
-    <code>random::lagged_fibonacci</code></a></li>
+    <li><a href="#lagged_fibonacci_01">Class template
+    <code>random::lagged_fibonacci_01</code></a></li>
 
     <li><a href="#performance">Performance</a></li>
   </ul>
@@ -351,18 +351,18 @@ namespace boost {
   typedef random::mersenne_twister&lt; /* ... */ &gt; mt19937;
 
   namespace random {
-    template&lt;class FloatType, unsigned int  p, unsigned int q&gt;
-    class lagged_fibonacci;
+    template&lt;class FloatType, int w, unsigned int  p, unsigned int q&gt;
+    class lagged_fibonacci_01;
   }
-  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci607;
-  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci1279;
-  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci2281;
-  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci3217;
-  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci4423;
-  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci9689;
-  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci19937;
-  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci23209;
-  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci44497;  
+  typedef random::lagged_fibonacci_01&lt; /* ... */ &gt; lagged_fibonacci607;
+  typedef random::lagged_fibonacci_01&lt; /* ... */ &gt; lagged_fibonacci1279;
+  typedef random::lagged_fibonacci_01&lt; /* ... */ &gt; lagged_fibonacci2281;
+  typedef random::lagged_fibonacci_01&lt; /* ... */ &gt; lagged_fibonacci3217;
+  typedef random::lagged_fibonacci_01&lt; /* ... */ &gt; lagged_fibonacci4423;
+  typedef random::lagged_fibonacci_01&lt; /* ... */ &gt; lagged_fibonacci9689;
+  typedef random::lagged_fibonacci_01&lt; /* ... */ &gt; lagged_fibonacci19937;
+  typedef random::lagged_fibonacci_01&lt; /* ... */ &gt; lagged_fibonacci23209;
+  typedef random::lagged_fibonacci_01&lt; /* ... */ &gt; lagged_fibonacci44497;  
 } // namespace boost
 </pre>
 
@@ -773,7 +773,7 @@ template&lt;class T&gt; void seed(T s)
 #include &lt;<a href=
 "../../boost/random/inversive_congruential.hpp">boost/random/inversive_congruential.hpp</a>&gt;
 
-template&lt;class IntType, IntType a, IntType b, IntType p&gt;
+template&lt;class IntType, IntType a, IntType b, IntType p, IntType val&gt;
 class random::inversive_congruential
 {
 public:
@@ -789,7 +789,7 @@ public:
   IntType operator()();
 };
 
-typedef random::inversive_congruential&lt;int32_t, 9102, 2147483647-36884165, 2147483647&gt; hellekalek1995;
+typedef random::inversive_congruential&lt;int32_t, 9102, 2147483647-36884165, 2147483647, 0&gt; hellekalek1995;
 </pre>
 
   <h3>Description</h3>
@@ -812,7 +812,8 @@ typedef random::inversive_congruential&lt;int32_t, 9102, 2147483647-36884165, 21
 
   <p>The template parameter <code>IntType</code> shall denote a signed
   integral type large enough to hold p; a, b, and p are the parameters of the
-  generators.</p>
+  generators. The template parameter val is the validation value checked by
+  validation.</p>
 
   <p><em>Note:</em> The implementation currently uses the Euclidian Algorithm
   to compute the multiplicative inverse. Therefore, the inversive generators
@@ -849,21 +850,19 @@ void seed(IntType y0)
 #include &lt;<a href=
 "../../boost/random/mersenne_twister.hpp">boost/random/mersenne_twister.hpp</a>&gt;
 
-template&lt;class DataType, int w, int n, int m, int r, DataType a, int u,
-int s, DataType b, int t, DataType c, int l, IntType val&gt;
+template&lt;class UIntType, int w, int n, int m, int r, UIntType a, int u,
+  int s, UIntType b, int t, UIntType c, int l, UIntType val&gt;
 class random::mersenne_twister
 {
 public:
-  typedef DataType result_type;
-  static const bool has_fixed_range = true;
-  static const result_type min_value;
-  static const result_type max_value;
+  typedef UIntType result_type;
+  static const bool has_fixed_range = false;
   mersenne_twister();
-  explicit mersenne_twister(DataType value);
+  explicit mersenne_twister(UIntType value);
   template&lt;class Generator&gt; explicit mersenne_twister(Generator &amp; gen);
   // compiler-generated copy ctor and assignment operator are fine
   void seed();
-  void seed(DataType value);
+  void seed(UIntType value);
   template&lt;class Generator&gt; void seed(Generator &amp; gen);
   result_type operator()();
   bool validation(result_type) const;
@@ -918,13 +917,9 @@ template&lt;class Generator&gt; explicit mersenne_twister(Generator &amp; gen)
   <p><strong>Effects:</strong> Constructs a <code>mersenne_twister</code> and
   calls <code>seed(gen)</code>.</p>
 
-  <p><em>Note:</em> When using direct-initialization syntax with an lvalue
-  (e.g. in the variable definition <code>Gen gen2(gen);</code>), this
-  templated constructor will be preferred over the compiler-generated copy
-  constructor. For variable definitions which should copy the state of
-  another <code>mersenne_twister</code>, use e.g. <code>Gen gen2 =
-  gen;</code>, which is copy-initialization syntax and guaranteed to invoke
-  the copy constructor.</p>
+  <p><em>Note:</em> The copy constructor will always be preferred over the
+  templated constructor.  mersenne_twister takes special steps to guarantee
+  this.</p>
 
   <h3>Seeding</h3>
   <pre>
@@ -953,39 +948,35 @@ template&lt;class Generator&gt; void seed(Generator &amp; gen)
   <p><strong>Complexity:</strong> Exactly <code>n</code> invocations of
   <code>gen</code>.</p>
 
-  <p><em>Note:</em> When invoking <code>seed</code> with an lvalue, overload
-  resolution chooses the function template unless the type of the argument
-  exactly matches <code>result_type</code>. For other integer types, you
-  should convert the argument to <code>result_type</code> explicitly.</p>
-
   <h3><a name="mt11213b" id="mt11213b"></a><a name="mt19937" id=
   "mt19937">Specializations</a></h3>
 
   <p>The specializations <code>mt11213b</code> and <code>mt19937</code> are
   from the paper cited above.</p>
 
-  <h2><a name="lagged_fibonacci" id="lagged_fibonacci">Class template
-  <code>random::lagged_fibonacci</code></a></h2>
+  <h2><a name="lagged_fibonacci_01" id="lagged_fibonacci_01">Class template
+  <code>random::lagged_fibonacci_01</code></a></h2>
 
   <h3>Synopsis</h3>
   <pre>
 #include &lt;<a href=
 "../../boost/random/lagged_fibonacci.hpp">boost/random/lagged_fibonacci.hpp</a>&gt;
 
-template&lt;class FloatType, unsigned int p, unsigned int q&gt;
-class lagged_fibonacci
+template&lt;class FloatType, int w, unsigned int p, unsigned int q&gt;
+class lagged_fibonacci_01
 {
 public:
   typedef FloatType result_type;
   static const bool has_fixed_range = false;
+  static const int word_size = w;
   static const unsigned int long_lag = p;
   static const unsigned int short_lag = q;
   result_type min() const { return 0.0; }
   result_type max() const { return 1.0; }
-  lagged_fibonacci();
-  explicit lagged_fibonacci(uint32_t value);
+  lagged_fibonacci_01();
+  explicit lagged_fibonacci_01(uint32_t value);
   template&lt;class Generator&gt;
-  explicit lagged_fibonacci(Generator &amp; gen);
+  explicit lagged_fibonacci_01(Generator &amp; gen);
   // compiler-generated copy ctor and assignment operator are fine
   void seed(uint32_t value = 331u);
   template&lt;class Generator&gt; void seed(Generator &amp; gen);
@@ -993,15 +984,15 @@ public:
   bool validation(result_type x) const;
 };
 
-typedef random::lagged_fibonacci&lt;double, 607, 273&gt; lagged_fibonacci607;
-typedef random::lagged_fibonacci&lt;double, 1279, 418&gt; lagged_fibonacci1279;
-typedef random::lagged_fibonacci&lt;double, 2281, 1252&gt; lagged_fibonacci2281;
-typedef random::lagged_fibonacci&lt;double, 3217, 576&gt; lagged_fibonacci3217;
-typedef random::lagged_fibonacci&lt;double, 4423, 2098&gt; lagged_fibonacci4423;
-typedef random::lagged_fibonacci&lt;double, 9689, 5502&gt; lagged_fibonacci9689;
-typedef random::lagged_fibonacci&lt;double, 19937, 9842&gt; lagged_fibonacci19937;
-typedef random::lagged_fibonacci&lt;double, 23209, 13470&gt; lagged_fibonacci23209;
-typedef random::lagged_fibonacci&lt;double, 44497, 21034&gt; lagged_fibonacci44497;
+typedef random::lagged_fibonacci_01&lt;double, 48, 607, 273&gt; lagged_fibonacci607;
+typedef random::lagged_fibonacci_01&lt;double, 48, 1279, 418&gt; lagged_fibonacci1279;
+typedef random::lagged_fibonacci_01&lt;double, 48, 2281, 1252&gt; lagged_fibonacci2281;
+typedef random::lagged_fibonacci_01&lt;double, 48, 3217, 576&gt; lagged_fibonacci3217;
+typedef random::lagged_fibonacci_01&lt;double, 48, 4423, 2098&gt; lagged_fibonacci4423;
+typedef random::lagged_fibonacci_01&lt;double, 48, 9689, 5502&gt; lagged_fibonacci9689;
+typedef random::lagged_fibonacci_01&lt;double, 48, 19937, 9842&gt; lagged_fibonacci19937;
+typedef random::lagged_fibonacci_01&lt;double, 48, 23209, 13470&gt; lagged_fibonacci23209;
+typedef random::lagged_fibonacci_01&lt;double, 48, 44497, 21034&gt; lagged_fibonacci44497;
 </pre>
 
   <h3>Description</h3>
@@ -1029,22 +1020,22 @@ typedef random::lagged_fibonacci&lt;double, 44497, 21034&gt; lagged_fibonacci444
 
   <h3>Constructors</h3>
   <pre>
-lagged_fibonacci()
+lagged_fibonacci_01()
 </pre>
 
-  <p><strong>Effects:</strong> Constructs a <code>lagged_fibonacci</code>
+  <p><strong>Effects:</strong> Constructs a <code>lagged_fibonacci_01</code>
   generator and calls <code>seed()</code>.</p>
   <pre>
-explicit lagged_fibonacci(uint32_t value)
+explicit lagged_fibonacci_01(uint32_t value)
 </pre>
 
-  <p><strong>Effects:</strong> Constructs a <code>lagged_fibonacci</code>
+  <p><strong>Effects:</strong> Constructs a <code>lagged_fibonacci_01</code>
   generator and calls <code>seed(value)</code>.</p>
   <pre>
-template&lt;class Generator&gt; explicit lagged_fibonacci(Generator &amp; gen)
+template&lt;class Generator&gt; explicit lagged_fibonacci_01(Generator &amp; gen)
 </pre>
 
-  <p><strong>Effects:</strong> Constructs a <code>lagged_fibonacci</code>
+  <p><strong>Effects:</strong> Constructs a <code>lagged_fibonacci_01</code>
   generator and calls <code>seed(gen)</code>.</p>
 
   <h3>Seeding</h3>
@@ -1065,7 +1056,7 @@ template&lt;class Generator&gt; void seed(Generator &amp; gen)
 </pre>
 
   <p><strong>Effects:</strong> Sets the state of this
-  <code>lagged_fibonacci</code> to the values returned by <code>p</code>
+  <code>lagged_fibonacci_01</code> to the values returned by <code>p</code>
   invocations of <code>uniform_01&lt;gen, FloatType&gt;</code>.<br>
   <strong>Complexity:</strong> Exactly <code>p</code> invocations of
   <code>gen</code>.</p>
