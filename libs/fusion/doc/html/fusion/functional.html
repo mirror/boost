@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Functional</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
-<link rel="start" href="../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter 1. Fusion 2.0">
-<link rel="prev" href="extension/iterator_facade.html" title="Iterator Facade">
+<link rel="previous" href="extension/iterator_facade.html" title="Iterator Facade">
 <link rel="next" href="functional/concepts.html" title="Concepts">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,8 +23,12 @@
 <a accesskey="p" href="extension/iterator_facade.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="functional/concepts.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="fusion.functional"></a><a href="functional.html" title="Functional">Functional</a></h2></div></div></div>
+<div class="titlepage">
+<div><div><h2 class="title" style="clear: both">
+<a name="fusion.functional"></a><a href="functional.html" title="Functional">Functional</a>
+</h2></div></div>
+<div></div>
+</div>
 <div class="toc"><dl>
 <dt><span class="section"><a href="functional/concepts.html">Concepts</a></span></dt>
 <dd><dl>
@@ -62,13 +66,13 @@
       through a function object interface.
     </p>
 <a name="fusion.functional.header"></a><h3>
-<a name="id1282710"></a>
+<a name="id607336"></a>
       <a href="functional.html#fusion.functional.header">Header</a>
     </h3>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.fused_and_unfused_forms"></a><h3>
-<a name="id1282783"></a>
+<a name="id607418"></a>
       <a href="functional.html#fusion.functional.fused_and_unfused_forms">Fused and unfused
       forms</a>
     </h3>
@@ -81,28 +85,28 @@
       It is a name and a tuple written next to each other, left-to-right.
     </p>
 <p>
-      Although the C++ syntax does not allow to replace <code class="literal">(a,b,c)</code>
+      Although the C++ syntax does not allow to replace <tt class="literal">(a,b,c)</tt>
       with some Fusion <a href="sequence.html" title="Sequence">Sequence</a>, introducing
       yet another function provides a solution:
     </p>
 <pre class="programlisting"><span class="identifier">invoke</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span><span class="identifier">my_sequence</span><span class="special">)</span>
 </pre>
 <p>
-      Alternatively it is possible to apply a simple transformation to <code class="literal">f</code>
+      Alternatively it is possible to apply a simple transformation to <tt class="literal">f</tt>
       in order to achieve the same effect:
     </p>
 <pre class="programlisting"><span class="identifier">f</span> <span class="identifier">tuple</span> <span class="special">&lt;=&gt;</span> f' <span class="special">(</span><span class="identifier">tuple</span><span class="special">)</span>
 </pre>
 <p>
-      Now, <code class="literal">f'</code> is an unary function that takes the arguments to
-      <code class="computeroutput"><span class="identifier">f</span></code> as a tuple; <code class="literal">f'</code>
-      is the <span class="emphasis"><em>fused</em></span> form of <code class="computeroutput"><span class="identifier">f</span></code>.
+      Now, <tt class="literal">f'</tt> is an unary function that takes the arguments to
+      <tt class="computeroutput"><span class="identifier">f</span></tt> as a tuple; <tt class="literal">f'</tt>
+      is the <span class="emphasis"><em>fused</em></span> form of <tt class="computeroutput"><span class="identifier">f</span></tt>.
       Reading the above equivalence right-to-left to get the inverse transformation,
-      <code class="computeroutput"><span class="identifier">f</span></code> is the <span class="emphasis"><em>unfused</em></span>
-      form of <code class="literal">f'</code>.
+      <tt class="computeroutput"><span class="identifier">f</span></tt> is the <span class="emphasis"><em>unfused</em></span>
+      form of <tt class="literal">f'</tt>.
     </p>
 <a name="fusion.functional.calling_functions_and_function_objects"></a><h3>
-<a name="id1283014"></a>
+<a name="id607678"></a>
       <a href="functional.html#fusion.functional.calling_functions_and_function_objects">Calling
       functions and function objects</a>
     </h3>
@@ -133,7 +137,7 @@
       Constructors can be called applying <a href="http://www.boost.org/libs/functional/factory/doc/html/index.html" target="_top">Boost.Functional/Factory</a>.
     </p>
 <a name="fusion.functional.making_fusion_code_callable_through_a_function_object_interface"></a><h3>
-<a name="id1283085"></a>
+<a name="id607765"></a>
       <a href="functional.html#fusion.functional.making_fusion_code_callable_through_a_function_object_interface">Making
       Fusion code callable through a function object interface</a>
     </h3>
