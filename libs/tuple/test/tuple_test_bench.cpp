@@ -21,7 +21,6 @@
 #include <string>
 #include <utility>
 
-using namespace std;
 using namespace boost;
 
 // ----------------------------------------------------------------------------
@@ -274,7 +273,7 @@ make_tuple_test()
   BOOST_CHECK(get<1>(t1) == 'a');
 
   tuple<int, std::string> t2;
-  t2 = make_tuple((short int)2, std::string("Hi"));
+  t2 = boost::make_tuple((short int)2, std::string("Hi"));
   BOOST_CHECK(get<0>(t2) == 2);
   BOOST_CHECK(get<1>(t2) == "Hi");
 
