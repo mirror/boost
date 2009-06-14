@@ -156,7 +156,7 @@ private:
           //           mult+mult*brange                  by (2), (3)         (4)
           // Therefore result+(eng()-bmin)*mult <
           //           mult*(brange+1)                   by (4)
-          result += random::detail::subtract<base_result>()(eng(), bmin) * mult;
+          result += static_cast<range_type>(random::detail::subtract<base_result>()(eng(), bmin) * mult);
 
           // equivalent to (mult * (brange+1)) == range+1, but avoids overflow.
           if(mult * range_type(brange) == range - mult + 1) {
