@@ -218,12 +218,8 @@ idealGasLaw(const quantity<si::pressure,Y>& P,
 {
     using namespace boost::units::si;
     
-    #if BOOST_UNITS_HAS_TYPEOF 
     using namespace constants::codata;
     return (P*V/(R*T));
-    #else
-    return P*V/(8.314472*(joules/(kelvin*mole))*T);
-    #endif // BOOST_UNITS_HAS_TYPEOF
 }
 //]
 

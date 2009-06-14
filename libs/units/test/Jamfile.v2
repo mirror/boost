@@ -1,6 +1,6 @@
 # Jamfile.v2
 #
-# Copyright (c) 2007-2008
+# Copyright (c) 2007-2009
 # Steven Watanabe
 #
 # Distributed under the Boost Software License, Version 1.0. (See
@@ -39,6 +39,7 @@ run test_custom_unit.cpp ;
 run test_scaled_conversion.cpp ;
 run test_lambda.cpp ;
 run test_scaled_unit.cpp test_framework ;
+run test_output.cpp test_framework ;
 
 compile-fail fail_implicit_conversion.cpp ;
 compile-fail fail_quantity_construct.cpp ;

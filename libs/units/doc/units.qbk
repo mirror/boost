@@ -89,7 +89,9 @@ compiled and tested on the following compilers/platforms :
 # Intel CC 9.1, 10.0, and 10.1 on Mac OSX 10.4
 # g++ 3.4.4, 4.2.3, and 4.3.0 on Windows XP
 # Microsoft Visual C++ 7.1, 8.0, and 9.0 on Windows XP
+# Comeau 4.3.10.1 beta2 on Windows XP
 # Metrowerks CodeWarrior 9.2 on Windows XP.  
+# Sun CC 5.9 on Solaris and Linux
 
 The following compilers/platforms are known *not* to work :
 
@@ -97,6 +99,7 @@ The following compilers/platforms are known *not* to work :
 # Microsoft Visual C++ 6.0 on Windows XP
 # Microsoft Visual C++ 7.0 on Windows XP
 # Metrowerks CodeWarrior 8.0 on Windows XP.
+# All versions of Borland.
 
 [endsect]
 
@@ -249,11 +252,11 @@ A convenience class for composite dimensions with integer powers is also provide
 
 [section:Units Units]
 
-We define a *unit* as a linear combination of base units.  Thus, the SI unit corresponding
-to the dimension of force is kg m s^-2, where kg, m, and s are base units.  We use the
-notion of a *unit system* such as SI to specify the mapping from a dimension to a
-particular unit so that instead of specifying the base units explicitly, we can just
-ask for the representation of a dimension in a particular system.
+We define a *unit* as a set of base units each of which can be raised to an arbitrary rational
+exponent.  Thus, the SI unit corresponding to the dimension of force is kg m s^-2, where kg, m,
+and s are base units.  We use the notion of a *unit system* such as SI to specify the mapping
+from a dimension to a particular unit so that instead of specifying the base units explicitly,
+we can just ask for the representation of a dimension in a particular system.
 
 Units are, like dimensions, purely compile-time variables with no associated value.
 Units obey the same algebra as dimensions do; the presence of the unit system serves to ensure that units having identical

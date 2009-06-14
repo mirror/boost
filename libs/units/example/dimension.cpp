@@ -32,13 +32,10 @@ V_type       = list<dim<length_base_dimension, static_rational<1l, 1l> >, list<d
 @endverbatim
 **/
 
-// undefine this if you don't want to demangle symbols
-// need to link with libboost_regex to get demangling functionality
-#define MCS_USE_DEMANGLING
-
 #include <boost/type_traits/is_same.hpp>
-
 #include <boost/mpl/assert.hpp>
+
+#include <iostream>
 
 #include <boost/units/detail/utility.hpp>
 
