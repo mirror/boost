@@ -45,20 +45,20 @@ namespace boost { namespace fusion
         { }
 
         typedef typename boost::result_of<
-            function_c(fusion::vector0 &) >::type call_const_0_result;
+            function_c(fusion::vector0<> &) >::type call_const_0_result;
 
         inline call_const_0_result operator()() const
         {
-            fusion::vector0 arg;
+            fusion::vector0<> arg;
             return this->fnc_transformed(arg);
         }
 
         typedef typename boost::result_of< 
-            function(fusion::vector0 &) >::type call_0_result;
+            function(fusion::vector0<> &) >::type call_0_result;
 
         inline call_0_result operator()() 
         {
-            fusion::vector0 arg;
+            fusion::vector0<> arg;
             return this->fnc_transformed(arg);
         }
     };
