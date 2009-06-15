@@ -409,7 +409,6 @@ namespace boost { namespace graph { namespace distributed {
 #ifdef PBGL_EXPLICIT_SYNCH
       synchronize(p);
 #endif
-      size_t lone_vertex_count = roots.size();
 
       // Lastly, remove roots with no adjacent vertices, this is
       // unnecessary but will speed up sparse graphs
