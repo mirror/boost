@@ -551,7 +551,7 @@
         struct llresult<This()>
           : mpl::if_c<
                 result_of<IsNullary(This &)>::type::value
-              , result_of<Eval(This &, no_exception_type const &, fusion::vector0 &)>
+              , result_of<Eval(This &, no_exception_type const &, fusion::vector0<> &)>
               , mpl::identity<void>
             >::type
         {};
@@ -586,7 +586,7 @@
             typename result<Expr const()>::type
             operator()() const
             {
-                fusion::vector0 args;
+                fusion::vector0<> args;
                 return Eval()(*this, no_exception, args);
             }
 
