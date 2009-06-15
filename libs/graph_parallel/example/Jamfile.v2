@@ -1,0 +1,7 @@
+
+project : requirements <library>../build//boost_graph_parallel 
+    <library>../../system/build//boost_system
+    ;
+
+exe breadth_first_search : breadth_first_search.cpp ;
+exe dijkstra_shortest_paths : dijkstra_shortest_paths.cpp ;
