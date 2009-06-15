@@ -182,7 +182,7 @@ void bool_test()
   
   bool my_start_value = process_id(pg) % 2;
   int next_processor = (process_id(pg) + 1) % num_processes(pg);
-  bool next_start_value = !my_start_value;
+  bool next_start_value = ((process_id(pg) + 1) % num_processes(pg)) % 2;
 
   // Initial color map: even-numbered processes are false, 
   // odd-numbered processes are true
@@ -298,7 +298,7 @@ void string_test()
   // check next processor's strings
   for (int i = 0; i < n; ++i) {
     remote_key k(next_processor, i);
-    BOOST_CHECK(get(strings, k) == std::string());
+    BOOST_CHECK(get(strings, k) == (num_processes(pg) == 1 ? my_start_string : std::string()));
   }
 
   if (process_id(pg) == 0) std::cerr << "OK.\nSynchronizing...";
