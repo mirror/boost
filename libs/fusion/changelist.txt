@@ -1,0 +1,5 @@
+Interface Changes
+
+- June 12, 2009: vector0 is now vector0<> as per Boost Trac Ticket #1608
+  to follow MPL more closely.
+  
