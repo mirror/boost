@@ -32,14 +32,14 @@ namespace boost { namespace fusion
         template <>
         struct make_vector<>
         {
-            typedef vector0 type;
+            typedef vector0<> type;
         };
     }
 
-    inline vector0
+    inline vector0<>
     make_vector()
     {
-        return vector0();
+        return vector0<>();
     }
 
 #define BOOST_FUSION_AS_FUSION_ELEMENT(z, n, data)                               \

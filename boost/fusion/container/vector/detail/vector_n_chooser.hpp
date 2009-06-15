@@ -48,7 +48,7 @@ namespace boost { namespace fusion { namespace detail
     template <>
     struct vector_n_chooser<BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, void_ BOOST_PP_INTERCEPT)>
     {
-        typedef vector0 type;
+        typedef vector0<> type;
     };
 
 #define BOOST_PP_FILENAME_1 \
