@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
   if (argc > 2)
     outfile = argv[2];
   else {
-    int i = outfile.rfind('.');
+    size_t i = outfile.rfind('.');
     if (i != std::string::npos)
       outfile.erase(outfile.begin() + i, outfile.end());
     outfile += "-dijkstra.dot";
