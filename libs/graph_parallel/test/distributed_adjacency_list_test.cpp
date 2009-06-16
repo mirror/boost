@@ -198,7 +198,7 @@ int test_main(int argc, char** argv)
       in_degree(*v, g3);
     }
 
-    int added_edges = 0;
+    graph_traits<Graph3>::vertices_size_type added_edges = 0;
     if (num_vertices(g3) >= 2) {
       graph_traits<Graph3>::vertex_iterator vi = vertices(g3).first;
       graph_traits<Graph3>::vertex_descriptor u = *vi++;
@@ -239,7 +239,7 @@ int test_main(int argc, char** argv)
     }
 
     synchronize(g3);
-    assert(std::distance(edges(g3).first, edges(g3).second) == added_edges);
+    assert(std::distance(edges(g3).first, edges(g3).second) == (ptrdiff_t)added_edges);
     assert(num_edges(g3) == added_edges);
 
     // Verify the remote edges
@@ -250,7 +250,7 @@ int test_main(int argc, char** argv)
       int prior_processor = (process_id(pg) + num_processes(pg) - 1)
         % num_processes(pg);
       const int n = 20;
-      int vertices_in_prior = (n / num_processes(pg))
+      graph_traits<Graph3>::vertices_size_type vertices_in_prior = (n / num_processes(pg))
         + (n % num_processes(pg) > prior_processor? 1 : 0);
       if (in_degree(u, g3) != vertices_in_prior + 2) {
         std::cerr << "#" << process_id(pg) << ": " << in_degree(u, g3)
