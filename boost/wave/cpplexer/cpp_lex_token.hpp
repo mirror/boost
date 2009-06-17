@@ -44,8 +44,14 @@ public:
     typedef StringTypeT string_type;
     typedef PositionT   position_type;
 
+    //  default constructed tokens correspond to EOI tokens
     token_data()
     :   id(T_EOI), refcnt(1)
+    {}
+
+    //  construct an invalid token
+    explicit token_data(int)
+    :   id(T_UNKNOWN), refcnt(1)
     {}
 
     token_data(token_id id_, string_type const &value_, position_type const &pos_)
@@ -190,8 +196,14 @@ private:
     typedef impl::token_data<string_type, position_type> data_type;
     
 public:
+    //  default constructed tokens correspond to EOI tokens
     lex_token()
     :   data(0)
+    {}
+
+    //  construct an invalid token
+    explicit lex_token(int)
+    :   data(new data_type(0))
     {}
 
     lex_token(lex_token const& rhs)
@@ -230,6 +242,7 @@ public:
     string_type const &get_value() const { return data->get_value(); }
     position_type const &get_position() const { return data->get_position(); }
     bool is_eoi() const { return 0 == data || token_id(*data) == T_EOI; }
+    bool is_valid() const { return 0 != data && token_id(*data) != T_UNKNOWN; }
 
     void set_token_id (token_id id_) { make_unique(); data->set_token_id(id_); }
     void set_value (string_type const &value_) { make_unique(); data->set_value(value_); }
@@ -285,6 +298,18 @@ private:
 
     data_type* data;
 };
+
+///////////////////////////////////////////////////////////////////////////////
+//  This overload is needed by the multi_pass/functor_input_policy to 
+//  validate a token instance. It has to be defined in the same namespace 
+//  as the token class itself to allow ADL to find it.
+///////////////////////////////////////////////////////////////////////////////
+template <typename Position>
+inline bool 
+token_is_valid(lex_token<Position> const& t)
+{
+    return t.is_valid();
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 #if defined(BOOST_SPIRIT_DEBUG)
