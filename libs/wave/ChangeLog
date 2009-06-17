@@ -38,8 +38,8 @@ Boost V1.40.0
 - Fixed another race condition triggering problems using Wave in multi-threaded
   environments.
 - Added a new commandline option --macrocounts/-c to the Wave driver application
-  which lists all macro invocation counts an optionally specified file (default 
-  is cout).
+  which lists all macro invocation counts to an optionally specified file 
+  (default is cout).
 - Fixed compilation problems caused by recent changes to the multi_pass iterator
   from Spirit V2.1.
 
