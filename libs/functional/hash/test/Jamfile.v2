@@ -38,6 +38,7 @@ test-suite functional/hash
         [ run link_ext_test.cpp link_no_ext_test.cpp ]
         [ run container_fwd_test.cpp ]
         [ compile-fail hash_no_ext_fail_test.cpp ]
+        [ compile-fail namespace_fail_test.cpp ]
         [ run hash_no_ext_macro_1.cpp ]
         [ run hash_no_ext_macro_2.cpp ]
     ;
