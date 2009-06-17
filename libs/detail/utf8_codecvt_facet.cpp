@@ -248,8 +248,11 @@ int get_cont_octet_out_count_impl<4>(wchar_t word){
     // should be enough to get WCHAR_MAX defined.
 #if !defined(WCHAR_MAX)
 #   error WCHAR_MAX not defined!
-#endif    
-#if WCHAR_MAX > 0x10000
+#endif
+    // cope with VC++ 7.1 or earlier having invalid WCHAR_MAX
+#if defined(_MSC_VER) && _MSC_VER <= 1310 // 7.1 or earlier
+    return 2;
+#elif WCHAR_MAX > 0x10000
     
    if (word < 0x10000) {
         return 2;
