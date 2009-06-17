@@ -40,9 +40,8 @@ Boost V1.40.0
 - Added a new commandline option --macrocounts/-c to the Wave driver application
   which lists all macro invocation counts an optionally specified file (default 
   is cout).
-
-- Implemented an additional command line option for the wave driver application
-   allowing to 
+- Fixed compilation problems caused by recent changes to the multi_pass iterator
+  from Spirit V2.1.
 
 Boost V1.39.0
 - V2.0.1
