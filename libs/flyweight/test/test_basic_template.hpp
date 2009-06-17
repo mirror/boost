@@ -1,6 +1,6 @@
 /* Boost.Flyweight basic test template.
  *
- * Copyright 2006-2008 Joaquin M Lopez Munoz.
+ * Copyright 2006-2009 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -225,6 +225,21 @@ void test_basic_template(BOOST_EXPLICIT_TEMPLATE_TYPE(FlyweightSpecifier))
 
   test_basic_comparison_template<texture_flyweight,texture_flyweight>(
     &textures[0],&textures[0]+LENGTHOF(textures)-1,&textures[1]);
+
+#if !defined(BOOST_NO_EXCEPTIONS)
+  typedef typename boost::mpl::apply1<
+    FlyweightSpecifier,
+    boost::flyweights::key_value<int,throwing_value,from_throwing_value_to_int>
+  >::type throwing_flyweight;
+
+  try{
+    throwing_flyweight fw(0);
+  }catch(const throwing_value_exception&){}
+  try{
+    throwing_flyweight fw((throwing_value()));
+  }catch(const throwing_value_exception&){}
+#endif
+
 }
 
 #undef LENGTHOF
