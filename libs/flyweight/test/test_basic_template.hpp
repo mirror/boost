@@ -236,7 +236,7 @@ void test_basic_template(BOOST_EXPLICIT_TEMPLATE_TYPE(FlyweightSpecifier))
     throwing_flyweight fw(0);
   }catch(const throwing_value_exception&){}
   try{
-    throwing_flyweight fw((throwing_value()));
+    throwing_flyweight fw=throwing_flyweight(throwing_value());
   }catch(const throwing_value_exception&){}
 #endif
 
