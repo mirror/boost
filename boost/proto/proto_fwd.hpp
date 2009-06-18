@@ -188,6 +188,8 @@ namespace boost { namespace proto
         ///
         #define BOOST_PROTO_UNCVREF(X)                                                              \
             typename boost::remove_const<typename boost::remove_reference<X>::type>::type
+
+        struct _default;
     }
 
     typedef detail::ignore const ignore;
@@ -743,6 +745,9 @@ namespace boost { namespace proto
 
     template<typename Grammar>
     struct pass_through;
+
+    template<typename Grammar = detail::_default>
+    struct _default;
 
     struct _expr;
     struct _state;

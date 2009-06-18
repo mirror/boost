@@ -4,7 +4,9 @@
     <namespace name="proto">
       <struct name="_default">
         <template>
-          <template-type-parameter name="Grammar"/>
+          <template-type-parameter name="Grammar">
+            <default><replaceable>unspecified</replaceable></default>
+          </template-type-parameter>
         </template>
         <inherit><classname>proto::transform</classname>&lt; _default&lt;Grammar&gt; &gt;</inherit>
         <purpose>A <conceptname>PrimitiveTransform</conceptname> that gives expressions their
@@ -15,6 +17,11 @@
             transform, see the documentation for the nested <computeroutput>
               <classname>proto::_default::impl&lt;&gt;</classname>
             </computeroutput> class template.
+          </para>
+          <para>
+            When used without specifying a <computeroutput>Grammar</computeroutput> parameter,
+            <computeroutput>proto::_default</computeroutput> behaves as if the parameter were
+            <computeroutput>proto::_default&lt;&gt;</computeroutput>.
           </para>
         </description>
         <struct name="impl">
