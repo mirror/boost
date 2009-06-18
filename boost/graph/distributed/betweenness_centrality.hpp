@@ -295,8 +295,8 @@ namespace boost {
 #endif
                                              Dist delta)
     : g(g),
-      distance(distance),
       incoming(incoming),
+      distance(distance),
       weight(weight),
       path_count(path_count),
 #ifdef COMPUTE_PATH_COUNTS_INLINE
@@ -1047,7 +1047,7 @@ namespace boost {
       vertices_size_type n = num_vertices(g);
       n = boost::parallel::all_reduce(pg, n, std::plus<vertices_size_type>());
       
-      for (int i = 0; i < n; ++i) {
+      for (vertices_size_type i = 0; i < n; ++i) {
         vertex_descriptor v = vertex(i, g);
 
         do_brandes_sssp(g, centrality, edge_centrality_map, incoming, distance,
@@ -1189,7 +1189,7 @@ namespace boost {
       }
 
       // DO SSSPs
-      for(int i = 0; i < local_sources.size(); ++i)
+      for(size_t i = 0; i < local_sources.size(); ++i)
         do_sequential_brandes_sssp(g, centrality, edge_centrality_map, incoming,
                                    distance, dependency, path_count, vertex_index,
                                    shortest_paths, ordered_vertices, local_sources[i]);
@@ -1198,7 +1198,7 @@ namespace boost {
       typedef typename graph_traits<Graph>::vertices_size_type vertices_size_type;
       vertices_size_type n = num_vertices(g);
       
-      for (int i = id; i < n; i += p) {
+      for (vertices_size_type i = id; i < n; i += p) {
         vertex_descriptor v = vertex(i, g);
 
         do_sequential_brandes_sssp(g, centrality, edge_centrality_map, incoming,

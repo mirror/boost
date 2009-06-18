@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
     outfile = argv[2];
   else {
     outfile = filename;
-    int i = outfile.rfind('.');
+    size_t i = outfile.rfind('.');
     if (i != std::string::npos)
       outfile.erase(outfile.begin() + i, outfile.end());
     outfile += "-bfs.dot";

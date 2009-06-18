@@ -139,8 +139,10 @@ test_distributed_dfs()
      make_iterator_property_map(explore.begin(), get(vertex_index, g)),
      get(vertex_index, g));
 
+#if 0
   std::size_t correct_parents1[N] = {u, u, y, y, v, w};
   std::size_t correct_parents2[N] = {u, u, y, v, x, w};
+#endif
 
   for (std::size_t i = 0; i < N; ++i) {
     vertex_descriptor v = vertex(i, g);
