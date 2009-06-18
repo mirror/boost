@@ -31,7 +31,7 @@
 
     namespace boost { namespace proto
     {
-        template<typename Grammar>
+        template<typename Grammar BOOST_PROTO_WHEN_BUILDING_DOCS(= detail::_default)>
         struct _default
           : transform<_default<Grammar> >
         {
@@ -462,6 +462,15 @@
         struct is_callable<_default<Grammar> >
           : mpl::true_
         {};
+
+        namespace detail
+        {
+            // Loopy indirection that allows proto::_default<> to be
+            // used without specifying a Grammar argument.
+            struct _default
+              : proto::_default<>
+            {};
+        }
 
     }}
 

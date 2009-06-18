@@ -18,7 +18,7 @@
 
   <description>
     <para>
-      A PrimitiveTransform is class type that
+      A BasicPrimitiveTransform is class type that
       has a nested class template called impl that takes
       three template parameters representing an expression
       type, a state type and a data type. Specializations
