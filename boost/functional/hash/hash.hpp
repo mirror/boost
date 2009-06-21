@@ -378,6 +378,18 @@ namespace boost
     //
     // boost::hash
     //
+    
+    // Define the specializations required by the standard. The general purpose
+    // boost::hash is defined later in extensions.hpp if BOOST_HASH_NO_EXTENSIONS
+    // is not defined.
+    
+    // BOOST_HASH_SPECIALIZE - define a specialization for a type which is
+    // passed by copy.
+    //
+    // BOOST_HASH_SPECIALIZE_REF - define a specialization for a type which is
+    // passed by copy.
+    //
+    // These are undefined later.
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 #define BOOST_HASH_SPECIALIZE(type) \
@@ -465,7 +477,10 @@ namespace boost
 #undef BOOST_HASH_SPECIALIZE
 #undef BOOST_HASH_SPECIALIZE_REF
 
+// Specializing boost::hash for pointers.
+
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+
     template <class T>
     struct hash<T*>
         : public std::unary_function<T*, std::size_t>
@@ -482,7 +497,15 @@ namespace boost
 #endif
         }
     };
+
 #else
+
+    // For compilers without partial specialization, we define a
+    // boost::hash for all remaining types. But hash_impl is only defined
+    // for pointers in 'extensions.hpp' - so when BOOST_HASH_NO_EXTENSIONS
+    // is defined there will still be a compile error for types not supported
+    // in the standard.
+
     namespace hash_detail
     {
         template <bool IsPointer>
@@ -515,6 +538,7 @@ namespace boost
             ::BOOST_NESTED_TEMPLATE inner<T>
     {
     };
+
 #endif
 }
 

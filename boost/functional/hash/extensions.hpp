@@ -17,6 +17,12 @@
 namespace boost
 {
 
+    //
+    // call_hash_impl
+    //
+
+    // On compilers without function template ordering, this deals with arrays.
+
 #if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
     namespace hash_detail
     {
@@ -61,6 +67,11 @@ namespace boost
     }
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
+    //
+    // boost::hash
+    //
+
+
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
     template <class T> struct hash
@@ -94,7 +105,7 @@ namespace boost
 
     // On compilers without partial specialization, boost::hash<T>
     // has already been declared to deal with pointers, so just
-    // need to supply the non-pointer version.
+    // need to supply the non-pointer version of hash_impl.
 
     namespace hash_detail
     {
@@ -126,8 +137,8 @@ namespace boost
 
 #else // Visual C++ 6.5
 
-    // There's probably a more elegant way to Visual C++ 6.5 to work
-    // but I don't know what it is.
+        // Visual C++ 6.5 has problems with nested member functions and
+        // applying const to const types in templates. So we get this:
 
         template <bool IsConst>
         struct hash_impl_msvc
