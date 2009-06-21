@@ -100,8 +100,7 @@ namespace BOOST_HASH_DETECT_FLOAT_FUNCTIONS {
 #define BOOST_HASH_CALL_FLOAT_FUNC(cpp_func, c99_func, type1, type2)    \
 namespace BOOST_HASH_DETECT_FLOAT_FUNCTIONS {                           \
     template <class Float>                                              \
-    boost::hash_detail::not_found c99_func                              \
-        BOOST_PREVENT_MACRO_SUBSTITUTION (Float, type2);                \
+    boost::hash_detail::not_found c99_func(Float, type2);               \
 }                                                                       \
                                                                         \
 namespace boost {                                                       \
@@ -164,12 +163,47 @@ namespace boost {                                                       \
     }                                                                   \
 }
 
-BOOST_HASH_CALL_FLOAT_FUNC(ldexp, ldexpf, float, int)
-BOOST_HASH_CALL_FLOAT_FUNC(ldexp, ldexpl, long double, int)
-BOOST_HASH_CALL_FLOAT_FUNC(frexp, frexpf, float, int*)
-BOOST_HASH_CALL_FLOAT_FUNC(frexp, frexpl, long double, int*)
+#define BOOST_HASH_CALL_FLOAT_MACRO(cpp_func, c99_func, type1, type2)   \
+namespace boost {                                                       \
+    namespace hash_detail {                                             \
+                                                                        \
+        template <>                                                     \
+        struct call_##cpp_func<type1> {                                 \
+            typedef type1 float_type;                                   \
+            inline type1 operator()(type1 x, type2 y) const {           \
+                return c99_func(x, y);                                  \
+            }                                                           \
+        };                                                              \
+    }                                                                   \
+}
 
+#if defined(ldexpf)
+BOOST_HASH_CALL_FLOAT_MACRO(ldexp, ldexpf, float, int)
+#else
+BOOST_HASH_CALL_FLOAT_FUNC(ldexp, ldexpf, float, int)
+#endif
+
+#if defined(ldexpl)
+BOOST_HASH_CALL_FLOAT_MACRO(ldexp, ldexpl, long double, int)
+#else
+BOOST_HASH_CALL_FLOAT_FUNC(ldexp, ldexpl, long double, int)
+#endif
+
+#if defined(frexpf)
+BOOST_HASH_CALL_FLOAT_MACRO(frexp, frexpf, float, int*)
+#else
+BOOST_HASH_CALL_FLOAT_FUNC(frexp, frexpf, float, int*)
+#endif
+
+#if defined(frexpl)
+BOOST_HASH_CALL_FLOAT_MACRO(frexp, frexpl, long double, int*)
+#else
+BOOST_HASH_CALL_FLOAT_FUNC(frexp, frexpl, long double, int*)
+#endif
+
+#undef BOOST_HASH_CALL_FLOAT_MACRO
 #undef BOOST_HASH_CALL_FLOAT_FUNC
+
 
 namespace boost
 {
