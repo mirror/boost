@@ -21,6 +21,12 @@
 #include <boost/type_traits/is_pointer.hpp>
 #endif
 
+#if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
+#define BOOST_HASH_CHAR_TRAITS string_char_traits
+#else
+#define BOOST_HASH_CHAR_TRAITS char_traits
+#endif
+
 namespace boost
 {
     std::size_t hash_value(bool);
@@ -533,6 +539,8 @@ namespace boost
 
 #endif
 }
+
+#undef BOOST_HASH_CHAR_TRAITS
 
 #endif // BOOST_FUNCTIONAL_HASH_HASH_HPP
 
