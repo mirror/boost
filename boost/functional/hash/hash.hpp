@@ -392,8 +392,8 @@ namespace boost
 #endif
 
 #if defined(BOOST_HAS_LONG_LONG)
-    BOOST_HASH_SPECIALIZE(boost::long_long_type);
-    BOOST_HASH_SPECIALIZE(boost::ulong_long_type);
+    BOOST_HASH_SPECIALIZE(boost::long_long_type)
+    BOOST_HASH_SPECIALIZE(boost::ulong_long_type)
 #endif
 
 #undef BOOST_HASH_SPECIALIZE
