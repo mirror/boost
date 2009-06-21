@@ -21,14 +21,6 @@
 #include <boost/type_traits/is_pointer.hpp>
 #endif
 
-#if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-#include <boost/type_traits/is_array.hpp>
-#endif
-
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-#include <boost/type_traits/is_const.hpp>
-#endif
-
 namespace boost
 {
     std::size_t hash_value(bool);
