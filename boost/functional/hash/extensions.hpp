@@ -7,12 +7,17 @@
 //  http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1756.pdf
 //  issue 6.18. 
 
+// This implements the extensions to the standard.
+// It's undocumented, so you shouldn't use it....
+
 #if !defined(BOOST_FUNCTIONAL_HASH_EXTENSIONS_HPP)
 #define BOOST_FUNCTIONAL_HASH_EXTENSIONS_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
+
+#include <boost/functional/hash/hash.hpp>
 
 #if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #include <boost/type_traits/is_array.hpp>
