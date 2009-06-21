@@ -5,7 +5,7 @@
 
 #if defined(TEST_STD)
 #  define TEST_STD_INCLUDES
-#  define HASH_NAMESPACE std::tr1
+#  define HASH_NAMESPACE std
 #else
 #  define HASH_NAMESPACE boost
 #  if !defined(BOOST_HASH_NO_EXTENSIONS)

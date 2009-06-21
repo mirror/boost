@@ -5,17 +5,19 @@
 
 #include "./config.hpp"
 
-#ifdef TEST_EXTENSIONS
-#  ifdef TEST_STD_INCLUDES
-#    include <functional>
-#  else
-#    include <boost/functional/hash.hpp>
-#  endif
+#if !defined(TEST_EXTENSIONS)
+
+int main() {}
+
+#else
+
+#ifdef TEST_STD_INCLUDES
+#  include <functional>
+#else
+#  include <boost/functional/hash.hpp>
 #endif
 
 #include <boost/detail/lightweight_test.hpp>
-
-#ifdef TEST_EXTENSIONS
 
 #include <boost/limits.hpp>
 #include <boost/mpl/assert.hpp>
@@ -74,8 +76,6 @@ void hash_range_tests()
     BOOST_TEST(seed == HASH_NAMESPACE::hash_range(values5.begin(), values5.end()));
 }
 
-#endif
-
 int main()
 {
     hash_range_tests();
@@ -83,3 +83,4 @@ int main()
     return boost::report_errors();
 }
 
+#endif // TEST_EXTESNIONS

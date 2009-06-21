@@ -44,4 +44,15 @@ test-suite functional/hash
         [ run hash_no_ext_macro_2.cpp ]
     ;
 
-build-project ../examples ;
+test-suite functional/hash_no_ext
+    :
+        [ run hash_number_test.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_number_test ]
+        [ run hash_pointer_test.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_pointer_test ]
+        [ run hash_function_pointer_test.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_function_pointer_test ]
+        [ run hash_float_test.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_float_test ]
+        [ run hash_long_double_test.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_long_double_test ]
+        [ run hash_string_test.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_string_test ]
+        [ run link_test.cpp link_test_2.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_link_test ]
+    ;
+
+# build-project ../examples ;

@@ -5,17 +5,19 @@
 
 #include "./config.hpp"
 
-#ifdef TEST_EXTENSIONS
-#  ifdef TEST_STD_INCLUDES
-#    include <functional>
-#  else
-#    include <boost/functional/hash.hpp>
-#  endif
+#if !defined(TEST_EXTENSIONS)
+
+int main() {}
+
+#else
+
+#ifdef TEST_STD_INCLUDES
+#  include <functional>
+#else
+#  include <boost/functional/hash.hpp>
 #endif
 
 #include <boost/detail/lightweight_test.hpp>
-
-#ifdef TEST_EXTENSIONS
 
 #include <complex>
 #include <sstream>
@@ -91,4 +93,4 @@ int main()
     return boost::report_errors();
 }
 
-#endif
+#endif // TEST_EXTENSIONS
