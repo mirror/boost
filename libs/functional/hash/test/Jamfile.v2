@@ -55,4 +55,4 @@ test-suite functional/hash_no_ext
         [ run link_test.cpp link_test_2.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_link_test ]
     ;
 
-# build-project ../examples ;
+build-project ../examples ;
