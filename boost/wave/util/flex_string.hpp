@@ -1651,7 +1651,6 @@ public:
 #ifndef NDEBUG
         Invariant checker(*this); 
 #endif
-        static std::less_equal<const value_type*> le;
         if (IsAliasedRange(s, s + n))
         {
             const size_type offset = s - &*begin();
@@ -1853,7 +1852,7 @@ private:
         InputIterator b, InputIterator e, Selector<0>)
     { 
         InsertImpl(i, b, e, 
-            std::iterator_traits<InputIterator>::iterator_category());
+            typename std::iterator_traits<InputIterator>::iterator_category());
         return *this;
     }
 
@@ -2039,7 +2038,7 @@ private:
         InputIterator b, InputIterator e, Selector<0>)
     { 
         ReplaceImpl(i1, i2, b, e, 
-            std::iterator_traits<InputIterator>::iterator_category());
+            typename std::iterator_traits<InputIterator>::iterator_category());
         return *this;
     }
 
