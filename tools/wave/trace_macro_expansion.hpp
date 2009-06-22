@@ -245,6 +245,7 @@ public:
             output(BOOST_WAVE_GETSTRING(stream));
             increment_level();
         }
+
     // output definition reference
         {
         BOOST_WAVE_OSSTREAM stream;
