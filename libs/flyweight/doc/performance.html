@@ -171,7 +171,7 @@ Alignment may introduce additional overhead.
 <tr>
   <td align="center" rowspan="2">&nbsp;&nbsp;tracking mechanism&nbsp;&nbsp;</td>
   <td align="center">&nbsp;&nbsp;<a href="tutorial/configuration.html#refcounted"><code>refcounted</code></a>&nbsp;&nbsp;</td>
-  <td align="center">&nbsp;&nbsp;1<sup>(3)</sup>&nbsp;&nbsp;</td>
+  <td align="center">&nbsp;&nbsp;2<sup>(3)</sup>&nbsp;&nbsp;</td>
 </tr>
 <tr>
   <td align="center">&nbsp;&nbsp;<a href="tutorial/configuration.html#no_tracking"><code>no_tracking</code></a>&nbsp;&nbsp;</td>
@@ -180,13 +180,13 @@ Alignment may introduce additional overhead.
 </table>
 <sup>(1)</sup> <small>Assuming that <code>sizeof(Key)&lt;=sizeof(Value)</code>.</small><br>
 <sup>(2)</sup> <small>For some implementations of <code>std::set</code> this overhead reduces to 3.</small><br>
-<sup>(3)</sup> <small>In some platforms this value can be 2.</small>
+<sup>(3)</sup> <small>In some platforms this value can be 3.</small>
 </p>
 
 <p>
 For instance, for the default configuration parameters of <code>flyweight</code>,
-<i>overhead</i> is typically 2.5(<code>hashed_factory</code>) + 1(<code>refcounted</code>)
-= 3 words.
+<i>overhead</i> is typically 2.5(<code>hashed_factory</code>) + 2(<code>refcounted</code>)
+= 4.5 words.
 </p>
 
 <h3><a name="overall_memory">Overall memory consumption</a></h3>
@@ -339,7 +339,7 @@ processor and 1 GB of RAM.
 
 <p align="center">
 <img src="memory_msvc_80.png" alt="memory consumption (MB), MSVC++ 8.0"
-width="798" height="322"><br>
+width="798" height="323"><br>
 <b>Fig. 2: Memory consumption, MSVC++ 8.0. Values in MB.</b>
 </p>
 
@@ -362,7 +362,7 @@ of the text source.
 
 <p align="center">
 <img src="time_msvc_80.png" alt="execution time (s), MSVC++ 8.0"
-width="820" height="324"><br>
+width="820" height="325"><br>
 <b>Fig. 3: Execution time, MSVC++ 8.0. Values in seconds.</b>
 </p>
 
@@ -370,10 +370,10 @@ width="820" height="324"><br>
 The figure displays execution times for the profiled scenarios in different
 usage contexts. In accordance with our previous
 <a href="#time">qualitative analysis</a>, initialization of <code>flyweight</code>s
-carries an important overhead with respect to the base case scenario (between 10% and 40%
+carries an important overhead with respect to the base case scenario (between 20% and 40%
 of additional execution time), while the other usage contexts
 (assignment, equality comparison and value access) have performance gains,
-with speedup factors of up to 14 in some cases. The use of a 
+with speedup factors of more than 10 in some cases. The use of a 
 <a href="tutorial/configuration.html#refcounted"><code>refcounted</code></a>
 tracking policy introduces penalties with respect to
 <a href="tutorial/configuration.html#no_tracking"><code>no_tracking</code></a>
@@ -393,7 +393,7 @@ Tests were run under a Cygwin terminal in the same machine as <a href="#msvc_80"
 
 <p align="center">
 <img src="memory_gcc_344.png" alt="memory consumption (MB), GCC 3.4.4"
-width="798" height="322"><br>
+width="798" height="323"><br>
 <b>Fig. 4: Memory consumption, GCC 3.4.4. Values in MB.</b>
 </p>
 
@@ -411,7 +411,7 @@ over plain copy-on-write <code>std::string</code>s.
 
 <p align="center">
 <img src="time_gcc_344.png" alt="execution time (s), GCC 3.4.4"
-width="820" height="324"><br>
+width="820" height="325"><br>
 <b>Fig. 5: Execution time, GCC 3.4.4. Values in seconds.</b>
 </p>
 
@@ -459,9 +459,9 @@ Examples
 
 <br>
 
-<p>Revised December 2nd 2008</p>
+<p>Revised June 22nd 2009</p>
 
-<p>&copy; Copyright 2006-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2006-2009 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

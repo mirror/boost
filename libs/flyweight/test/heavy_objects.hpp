@@ -1,6 +1,6 @@
-/* Boost.Flyweight basic test template.
+/* Classes for Boost.Flyweight key-value tests.
  *
- * Copyright 2006-2008 Joaquin M Lopez Munoz.
+ * Copyright 2006-2009 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -15,6 +15,7 @@
 #pragma once
 #endif
 
+#include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/noncopyable.hpp>
 #include <iosfwd>
 #include <string>
@@ -83,5 +84,23 @@ struct factorization:private boost::noncopyable
 
   int n;
 };
+
+#if !defined(BOOST_NO_EXCEPTIONS)
+struct throwing_value_exception{};
+
+struct throwing_value
+{
+  throwing_value():n(0){}
+  throwing_value(const throwing_value&){throw throwing_value_exception();}
+  throwing_value(int){throw throwing_value_exception();}
+
+  int n;
+};
+
+struct from_throwing_value_to_int
+{
+  const int& operator()(const throwing_value& x)const{return x.n;}
+};
+#endif
 
 #endif
