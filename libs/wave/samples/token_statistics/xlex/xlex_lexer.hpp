@@ -464,7 +464,7 @@ lexer<Iterator, Position>::get(boost::wave::cpplexer::lex_token<Position>& t)
     std::string tokval;
     token_id id = xlexer.next_token(first, last, tokval);
     string_type value = tokval.c_str();
-    
+
     if ((token_id)(-1) == id)
         id = T_EOF;     // end of input reached
 
@@ -486,10 +486,10 @@ lexer<Iterator, Position>::get(boost::wave::cpplexer::lex_token<Position>& t)
         at_eof = true;
         value.clear();
     }
-    
+
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-    return t = guards.detect_guard(cpplexer::lex_token<Position>(id, value, 
-        Position(filename, line, -1)));
+    cpplexer::lex_token<Position> tok(id, value, Position(filename, line, -1));
+    return t = guards.detect_guard(tok);
 #else
     return t = cpplexer::lex_token<Position>(id, value, 
         Position(filename, line, -1));
@@ -514,21 +514,21 @@ public:
     
     xlex_functor(Iterator const &first, Iterator const &last, 
             Position const &pos, boost::wave::language_support language)
-    :   lexer(first, last, pos, language)
+    :   lexer_(first, last, pos, language)
     {}
     virtual ~xlex_functor() {}
     
 // get the next token from the input stream
-    token_type& get(token_type& t) { return lexer.get(t); }
-    void set_position(Position const &pos) { lexer.set_position(pos); }
+    token_type& get(token_type& t) { return lexer_.get(t); }
+    void set_position(Position const &pos) { lexer_.set_position(pos); }
 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     bool has_include_guards(std::string& guard_name) const 
-        { return lexer.has_include_guards(guard_name); }
+        { return lexer_.has_include_guards(guard_name); }
 #endif    
 
 private:
-    lexer<Iterator, Position> lexer;
+    lexer<Iterator, Position> lexer_;
 };
 
 }   // namespace lexer

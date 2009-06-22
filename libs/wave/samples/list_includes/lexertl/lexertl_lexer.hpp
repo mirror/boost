@@ -96,13 +96,13 @@ public:
     static std::time_t get_compilation_time() 
         { return compilation_time.get_time(); }
 
-    bool load (istream& instrm);
-    bool save (ostream& outstrm);
-    
+    bool load (std::istream& instrm);
+    bool save (std::ostream& outstrm);
+
 private:
     boost::lexer::state_machine state_machine_;
     bool has_compiled_dfa_;
-    
+
 // initialization data (regular expressions for the token definitions)
     struct lexer_macro_data {
         char_type const *name;          // macro name
@@ -458,7 +458,7 @@ std::ifstream dfa_in("wave_lexertl_lexer.dfa", std::ios::in|std::ios::binary);
                     init_data_cpp[j].tokenid);
             }
         }
-        
+
         for (int i = 0; 0 != init_data[i].tokenid; ++i) {
             rules.add(init_data[i].tokenregex, init_data[i].tokenid);
         }
@@ -483,7 +483,7 @@ std::ifstream dfa_in("wave_lexertl_lexer.dfa", std::ios::in|std::ios::binary);
         if (dfa_out.is_open())
             save (dfa_out);
     }
-    
+
     has_compiled_dfa_ = true;
     return true;
 }
@@ -512,7 +512,7 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
     size_t id = *(ptr + 1);
 
     while (curr != last) {
-        size_t const state = ptr[lookup[*curr]];
+        size_t const state = ptr[lookup[int(*curr)]];
         if (0 == state)
             break;
         ++curr;

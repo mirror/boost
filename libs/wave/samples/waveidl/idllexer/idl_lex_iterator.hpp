@@ -49,7 +49,7 @@ template <typename TokenT>
 class lex_iterator_functor_shim 
 {
     typedef typename TokenT::position_type  position_type;
-        
+
 public:
     lex_iterator_functor_shim()
 #if /*0 != __DECCXX_VER || */defined(__PGI)
@@ -68,23 +68,23 @@ public:
     template <typename MultiPass>
     static result_type& get_next(MultiPass& mp, result_type& result)
     { 
-        return mp.shared->ftor->get(result); 
+        return mp.shared()->ftor->get(result); 
     }
-    
+
     // this will be called whenever the last reference to a multi_pass will
     // be released
     template <typename MultiPass>
     static void destroy(MultiPass& mp)
     { 
-        delete mp.shared->ftor; 
+        delete mp.shared()->ftor; 
     }
 
     template <typename MultiPass>
     static void set_position(MultiPass& mp, position_type const &pos)
     {
-        mp.shared->ftor->set_position(pos);
+        mp.shared()->ftor->set_position(pos);
     }
-    
+
 private:
     boost::shared_ptr<cpplexer::lex_input_interface<TokenT> > functor_ptr;
 };
@@ -159,13 +159,13 @@ class lex_iterator
 
     typedef typename input_policy_type::unique unique_functor_type;
     typedef typename input_policy_type::shared shared_functor_type;
-    
+
 public:
     typedef TokenT token_type;
-    
+
     lex_iterator()
     {}
-    
+
     template <typename IteratorT>
     lex_iterator(IteratorT const &first, IteratorT const &last, 
             typename TokenT::position_type const &pos, 
@@ -182,14 +182,14 @@ public:
     void set_position(typename TokenT::position_type const &pos)
     {
         typedef typename TokenT::position_type position_type;
-        
+
         // set the new position in the current token
         token_type& currtoken = this->base_type::dereference(*this);
         position_type currpos = currtoken.get_position();
         currpos.set_file(pos.get_file());
         currpos.set_line(pos.get_line());
         currtoken.set_position(currpos);
-        
+
         // set the new position for future tokens as well
         unique_functor_type::set_position(*this, currpos);
     }

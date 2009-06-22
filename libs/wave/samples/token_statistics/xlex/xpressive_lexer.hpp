@@ -103,9 +103,9 @@ xpressive_lexer<Iterator, Token, Callback>::next_token(
     for (iterator it = regex_list.begin(), end = regex_list.end(); it != end; ++it)
     {
         namespace xpressive = boost::xpressive;
-        
-        regex_info const& curr_regex = *it;
-//        xpressive::match_results<Iterator> regex_result;
+
+//         regex_info const& curr_regex = *it;
+//         xpressive::match_results<Iterator> regex_result;
         if (xpressive::regex_search(first, last, regex_result, (*it).regex,
             xpressive::regex_constants::match_continuous)) 
         {

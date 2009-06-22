@@ -117,7 +117,7 @@ namespace {
             return true;
         }
     }
-    
+
 ///////////////////////////////////////////////////////////////////////////////
 }   // unnamed namespace
 
@@ -125,7 +125,6 @@ namespace {
 // main entry point
 int main(int argc, char *argv[])
 {
-
     po::variables_map vm;
 
     if (!parse_command_line( argc, argv, vm))
@@ -151,7 +150,7 @@ boost::wave::util::file_position_type current_position;
         instream.unsetf(std::ios::skipws);
         instring = std::string(std::istreambuf_iterator<char>(instream.rdbuf()),
                                std::istreambuf_iterator<char>());
-            
+
     //  The template boost::wave::cpplexer::lex_token<> is the token type to be 
     //  used by the Wave library.
         typedef boost::wave::cpplexer::lex_token<> token_type;
@@ -159,7 +158,7 @@ boost::wave::util::file_position_type current_position;
     //  The template boost::wave::cpplexer::lex_iterator<> is the lexer type to
     //  be used by the Wave library.
         typedef boost::wave::cpplexer::lex_iterator<token_type> lex_iterator_type;
-        
+
     //  This is the resulting context type to use. The first template parameter
     //  should match the iterator type to be used during construction of the
     //  corresponding context object (see below).
@@ -240,7 +239,7 @@ boost::wave::util::file_position_type current_position;
     // analyze the input file
     context_type::iterator_type first = ctx.begin();
     context_type::iterator_type last = ctx.end();
-        
+
     translation_unit_skipper s; 
 
 #if HANNIBAL_DUMP_PARSE_TREE != 0

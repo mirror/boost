@@ -43,11 +43,16 @@ class slex_token
 public:
     typedef BOOST_WAVE_STRINGTYPE   string_type;
     typedef PositionT               position_type;
-    
+
     slex_token()
     :   id(T_EOI)
     {}
-    
+
+    //  construct an invalid token
+    explicit slex_token(int)
+    :   id(T_UNKNOWN)
+    {}
+
     slex_token(token_id id_, string_type const &value_, PositionT const &pos_)
     :   id(id_), value(value_), pos(pos_)
     {}
@@ -57,6 +62,7 @@ public:
     string_type const &get_value() const { return value; }
     position_type const &get_position() const { return pos; }
     bool is_eoi() const { return id == T_EOI; }
+    bool is_valid() const { return id != T_UNKNOWN; }
 
     void set_token_id (token_id id_) { id = id_; }
     void set_value (string_type const &newval) { value = newval; }
@@ -117,6 +123,18 @@ operator<< (std::ostream &stream, slex_token<PositionT> const &object)
 {
     object.print(stream);
     return stream;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  This overload is needed by the multi_pass/functor_input_policy to 
+//  validate a token instance. It has to be defined in the same namespace 
+//  as the token class itself to allow ADL to find it.
+///////////////////////////////////////////////////////////////////////////////
+template <typename Position>
+inline bool 
+token_is_valid(slex_token<Position> const& t)
+{
+    return t.is_valid();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

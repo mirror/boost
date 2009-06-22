@@ -67,7 +67,7 @@ public:
     template <typename MultiPass>
     static result_type& get_next(MultiPass& mp, result_type& result)
     { 
-        return mp.shared->ftor->get(result); 
+        return mp.shared()->ftor->get(result); 
     }
 
     // this will be called whenever the last reference to a multi_pass will
@@ -75,20 +75,20 @@ public:
     template <typename MultiPass>
     static void destroy(MultiPass& mp)
     { 
-        delete mp.shared->ftor; 
+        delete mp.shared()->ftor; 
     }
 
     template <typename MultiPass>
     static void set_position(MultiPass& mp, position_type const &pos)
     {
-        mp.shared->ftor->set_position(pos);
+        mp.shared()->ftor->set_position(pos);
     }
 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     template <typename MultiPass>
     static bool has_include_guards(MultiPass& mp, std::string& guard_name) 
     {
-        return mp.shared->ftor->has_include_guards(guard_name);
+        return mp.shared()->ftor->has_include_guards(guard_name);
     }
 #endif
 

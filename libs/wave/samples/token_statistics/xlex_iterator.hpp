@@ -64,11 +64,11 @@ public:
     BOOST_WAVE_EOF_PREFIX result_type const eof;
     typedef xlex_iterator_functor_shim unique;
     typedef lex_input_interface<TokenT>* shared;
-    
+
     template <typename MultiPass>
     static result_type& get_next(MultiPass& mp, result_type& result)
     { 
-        return mp.shared->ftor->get(result); 
+        return mp.shared()->ftor->get(result); 
     }
 
     // this will be called whenever the last reference to a multi_pass will
@@ -76,20 +76,20 @@ public:
     template <typename MultiPass>
     static void destroy(MultiPass& mp)
     { 
-        delete mp.shared->ftor; 
+        delete mp.shared()->ftor; 
     }
 
     template <typename MultiPass>
     static void set_position(MultiPass& mp, position_type const &pos)
     {
-        mp.shared->ftor->set_position(pos);
+        mp.shared()->ftor->set_position(pos);
     }
-    
+
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     template <typename MultiPass>
     static bool has_include_guards(MultiPass& mp, std::string& guard_name) 
     {
-        return mp.shared->ftor->has_include_guards(guard_name);
+        return mp.shared()->ftor->has_include_guards(guard_name);
     }
 #endif    
 
@@ -169,13 +169,13 @@ class xlex_iterator
 
     typedef typename input_policy_type::unique unique_functor_type;
     typedef typename input_policy_type::shared shared_functor_type;
-    
+
 public:
     typedef TokenT token_type;
-    
+
     xlex_iterator()
     {}
-    
+
     template <typename IteratorT>
     xlex_iterator(IteratorT const &first, IteratorT const &last, 
             typename TokenT::position_type const &pos, 
@@ -192,15 +192,15 @@ public:
     void set_position(typename TokenT::position_type const &pos)
     {
         typedef typename token_type::position_type position_type;
-        
+
     // set the new position in the current token
     token_type& currtoken = this->base_type::dereference(*this);
     position_type currpos = currtoken.get_position();
-    
+
         currpos.set_file(pos.get_file());
         currpos.set_line(pos.get_line());
         currtoken.set_position(currpos);
-        
+
     // set the new position for future tokens as well
         if (token_type::string_type::npos != 
             currtoken.get_value().find_first_of('\n'))
@@ -218,7 +218,7 @@ public:
     {
         return unique_functor_type::has_include_guards(*this, guard_name);
     }
-#endif    
+#endif
 };
 
 ///////////////////////////////////////////////////////////////////////////////

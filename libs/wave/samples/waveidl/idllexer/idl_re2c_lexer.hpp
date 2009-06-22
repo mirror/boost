@@ -56,7 +56,7 @@ template <
 class lexer 
 {
     typedef boost::wave::cpplexer::re2clex::Scanner scanner_t;
-    
+
 public:
 
     typedef char                                        char_t;
@@ -82,7 +82,7 @@ public:
 
 private:
     static char const *tok_names[];
-    
+
     scanner_t scanner;
     string_type filename;
     bool at_eof;
@@ -100,7 +100,7 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
 {
     using namespace std;        // some systems have memset in std
     using namespace boost::wave::cpplexer::re2clex;
-    
+
     memset(&scanner, '\0', sizeof(scanner_t));
     scanner.eol_offsets = aq_create();
     scanner.first = scanner.act = (uchar *)&(*first);
@@ -137,7 +137,7 @@ lexer<IteratorT, PositionT>::get(boost::wave::cpplexer::lex_token<PositionT>& t)
 
     token_id id = token_id(scan(&scanner));
     string_type value((char const *)scanner.tok, scanner.cur-scanner.tok);
-    
+
     if (T_IDENTIFIER == id) {
     // test identifier characters for validity (throws if invalid chars found)
         if (!boost::wave::need_no_character_validation(language)) {
@@ -197,7 +197,7 @@ class lex_functor
 :   public lex_input_interface_generator<
         typename lexer<IteratorT, PositionT>::token_type
     >
-{    
+{
 public:
 
     typedef typename lexer<IteratorT, PositionT>::token_type   token_type;
@@ -207,7 +207,7 @@ public:
     :   lexer(first, last, pos, language)
     {}
     virtual ~lex_functor() {}
-    
+
 // get the next token from the input stream
     token_type& get(token_type& t) { return lexer.get(t); }
     void set_position(PositionT const &pos) 

@@ -3,7 +3,7 @@
 
     Sample: Print out the preprocessed tokens returned by the Wave iterator
             Explicit instantiation of the lex_functor generation function
-    
+
     http://www.boost.org/
 
     Copyright (c) 2001-2009 Hartmut Kaiser. Distributed under the Boost 

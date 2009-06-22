@@ -79,7 +79,7 @@ protected:
     typedef boost::spirit::classic::lexer<iterator_type> base_type;
 
     lexer_base();
-    
+
 // initialization data (regular expressions for the token definitions)
     struct lexer_data {
         token_id tokenid;                       // token data
