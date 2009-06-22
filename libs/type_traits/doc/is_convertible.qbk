@@ -57,10 +57,11 @@ expression that evaluates to /false/: the conversion would require a `const_cast
 [:`is_convertible<int const&, long>::value` is an integral constant 
 expression that evaluates to /true/.]
 
-[:`is_convertible<int>::value` is an integral constant 
+[:`is_convertible<int, int>::value` is an integral constant 
 expression that evaluates to /false/.]
 
-[:`is_convertible<T>::value_type` is the type `bool`.]
+[:`is_convertible<T, T>::value_type` is the type `bool`.]
 
 [endsect]
+
 
