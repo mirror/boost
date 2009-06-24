@@ -39,7 +39,7 @@
 
 // the "|| !defined(BOOST_STRICT_CONFIG)" part should apply to the last
 // tested version *only*:
-#   if(__MWERKS__ <= 0x3206) || !defined(BOOST_STRICT_CONFIG) // 9.5
+#   if(__MWERKS__ <= 0x3207) || !defined(BOOST_STRICT_CONFIG) // 9.6
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #     define BOOST_NO_IS_ABSTRACT
 #    endif
@@ -73,6 +73,8 @@
 #     define BOOST_COMPILER_VERSION 9.4
 #   elif __MWERKS__ == 0x3206
 #     define BOOST_COMPILER_VERSION 9.5
+#   elif __MWERKS__ == 0x3207
+#     define BOOST_COMPILER_VERSION 9.6
 #   else
 #     define BOOST_COMPILER_VERSION __MWERKS__
 #   endif
