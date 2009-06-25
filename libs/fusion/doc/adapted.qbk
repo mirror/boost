@@ -157,7 +157,7 @@ necessary boilerplate to make an arbitrary struct into a __random_access_sequenc
 
 [heading Synopsis]
     BOOST_FUSION_ADAPT_STRUCT(
-        struct_name
+        struct_name,
         (member_type0, member_name0)
         (member_type1, member_name1)
         ...
@@ -190,7 +190,7 @@ namespace qualified name of the struct to be converted.
 
     // demo::employee is now a Fusion sequence
     BOOST_FUSION_ADAPT_STRUCT(
-        demo::employee
+        demo::employee,
         (std::string, name)
         (int, age))
 
@@ -205,7 +205,7 @@ and __associative_sequence__.
 
 [heading Synopsis]
     BOOST_FUSION_ADAPT_ASSOC_STRUCT(
-        struct_name
+        struct_name,
         (member_type0, member_name0, key_type0)
         (member_type1, member_name1, key_type1)
         ...
@@ -247,7 +247,7 @@ namespace qualified name of the struct to be converted.
     // It is also an associative sequence with
     // keys keys::name and keys::age present.
     BOOST_FUSION_ADAPT_ASSOC_STRUCT(
-        demo::employee
+        demo::employee,
         (std::string, name, keys::name)
         (int, age, keys::age))
 
