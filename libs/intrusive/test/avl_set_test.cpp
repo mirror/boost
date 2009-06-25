@@ -132,6 +132,7 @@ int main( int, char* [] )
    test_main_template<boost::intrusive::smart_ptr<void>, false>()();
    test_main_template<void*, true>()();
    test_main_template<boost::intrusive::smart_ptr<void>, true>()();
+
    return boost::report_errors();
 }
 
