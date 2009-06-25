@@ -72,19 +72,19 @@
 
             // and_ and or_ implementation
             template<bool B, typename Expr, typename G0>
-            struct or1
+            struct or_1
               : mpl::bool_<B>
             {
                 typedef G0 which;
             };
 
             template<bool B>
-            struct and1
+            struct and_1
               : mpl::bool_<B>
             {};
 
             template<bool B, typename Pred>
-            struct and2;
+            struct and_2;
 
             template<typename And>
             struct last;
@@ -170,7 +170,7 @@
 
             template<typename Args1, typename Args2, typename Back>
             struct vararg_matches<Args1, Args2, Back, true, false, typename Back::proto_is_vararg_>
-              : and2<
+              : and_2<
                     matches_<proto::expr<ignore, Args1, Args2::arity>, proto::expr<ignore, Args2, Args2::arity> >::value
                   , vararg_matches_impl<Args1, typename Back::proto_base_expr, Args2::arity + 1, Args1::arity>
                 >
@@ -938,15 +938,15 @@
     #define N BOOST_PP_ITERATION()
 
             template<bool B, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>
-            struct BOOST_PP_CAT(and, N)
-              : BOOST_PP_CAT(and, BOOST_PP_DEC(N))<
+            struct BOOST_PP_CAT(and_, N)
+              : BOOST_PP_CAT(and_, BOOST_PP_DEC(N))<
                     P0::value BOOST_PP_COMMA_IF(BOOST_PP_SUB(N,2))
                     BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_DEC(N), P)
                 >
             {};
 
             template<BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>
-            struct BOOST_PP_CAT(and, N)<false, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), P)>
+            struct BOOST_PP_CAT(and_, N)<false, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), P)>
               : mpl::false_
             {};
 
@@ -958,15 +958,15 @@
             };
 
             template<bool B, typename Expr, BOOST_PP_ENUM_PARAMS(N, typename G)>
-            struct BOOST_PP_CAT(or, N)
-              : BOOST_PP_CAT(or, BOOST_PP_DEC(N))<
+            struct BOOST_PP_CAT(or_, N)
+              : BOOST_PP_CAT(or_, BOOST_PP_DEC(N))<
                     matches_<Expr, typename G1::proto_base_expr>::value
                   , Expr, BOOST_PP_ENUM_SHIFTED_PARAMS(N, G)
                 >
             {};
 
             template<typename Expr BOOST_PP_ENUM_TRAILING_PARAMS(N, typename G)>
-            struct BOOST_PP_CAT(or, N)<true, Expr, BOOST_PP_ENUM_PARAMS(N, G)>
+            struct BOOST_PP_CAT(or_, N)<true, Expr, BOOST_PP_ENUM_PARAMS(N, G)>
               : mpl::true_
             {
                 typedef G0 which;
@@ -975,7 +975,7 @@
             // handle proto::or_
             template<typename Expr, BOOST_PP_ENUM_PARAMS(N, typename G)>
             struct matches_<Expr, proto::or_<BOOST_PP_ENUM_PARAMS(N, G)> >
-              : BOOST_PP_CAT(or, N)<
+              : BOOST_PP_CAT(or_, N)<
                     matches_<typename Expr::proto_base_expr, typename G0::proto_base_expr>::value,
                     typename Expr::proto_base_expr, BOOST_PP_ENUM_PARAMS(N, G)
                 >
@@ -984,7 +984,7 @@
             // handle proto::and_
             template<typename Expr, BOOST_PP_ENUM_PARAMS(N, typename G)>
             struct matches_<Expr, proto::and_<BOOST_PP_ENUM_PARAMS(N, G)> >
-              : detail::BOOST_PP_CAT(and, N)<
+              : detail::BOOST_PP_CAT(and_, N)<
                     BOOST_PROTO_DEFINE_MATCHES(~, 0, ~)::value,
                     BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_DEFINE_MATCHES, ~)
                 >
@@ -999,7 +999,7 @@
 
             template<typename Args, typename Back, long To>
             struct vararg_matches_impl<Args, Back, N, To>
-              : and2<
+              : and_2<
                     matches_<typename detail::expr_traits<typename Args::BOOST_PP_CAT(child, BOOST_PP_DEC(N))>::value_type::proto_base_expr, Back>::value
                   , vararg_matches_impl<Args, Back, N + 1, To>
                 >
@@ -1016,7 +1016,7 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Grammar)
             >
             struct lambda_matches<T<BOOST_PP_ENUM_PARAMS(N, Expr)>, T<BOOST_PP_ENUM_PARAMS(N, Grammar)> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(N) >
-              : BOOST_PP_CAT(and, N)<
+              : BOOST_PP_CAT(and_, N)<
                     BOOST_PROTO_DEFINE_LAMBDA_MATCHES(~, 0, ~)::value,
                     BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_DEFINE_LAMBDA_MATCHES, ~)
                 >
@@ -1024,7 +1024,7 @@
 
             template<typename Tag, typename Args1, typename Args2>
             struct matches_< proto::expr<Tag, Args1, N>, proto::expr<Tag, Args2, N> >
-              : BOOST_PP_CAT(and, N)<
+              : BOOST_PP_CAT(and_, N)<
                     BOOST_PROTO_MATCHES_N_FUN(~, 0, ~)::value,
                     BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_MATCHES_N_FUN, ~)
                 >
@@ -1032,7 +1032,7 @@
 
             template<typename Tag, typename Args1, typename Args2>
             struct matches_< proto::expr<Tag, Args1, N>, proto::expr<proto::_, Args2, N> >
-              : BOOST_PP_CAT(and, N)<
+              : BOOST_PP_CAT(and_, N)<
                     BOOST_PROTO_MATCHES_N_FUN(~, 0, ~)::value,
                     BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_MATCHES_N_FUN, ~)
                 >
