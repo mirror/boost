@@ -343,17 +343,15 @@ namespace ptr_container_detail
         auto_type replace( iterator where, mapped_type x ) // strong  
         { 
             BOOST_ASSERT( where != this->end() );
-
             this->enforce_null_policy( x, "Null pointer in 'replace()'" );
 
-            auto_type ptr( x );
-
+            auto_type ptr( x, *this );
             BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(),
                                                  bad_ptr_container_operation,
                                                  "'replace()' on empty container" );
 
-            auto_type old( where->second );       // nothrow
-            where.base()->second = ptr.release(); // nothrow, commit
+            auto_type old( where->second, *this ); // nothrow
+            where.base()->second = ptr.release();  // nothrow, commit
             return boost::ptr_container::move( old );
         }
 
@@ -425,7 +423,7 @@ namespace ptr_container_detail
                 if( this->find( first->first ) == this->end() )
                 {
                     const_reference p = *first.base();     // nothrow                    
-                    auto_type ptr( this->null_policy_allocate_clone( p.second ) ); 
+                    auto_type ptr( this->null_policy_allocate_clone(p.second), *this ); 
                                                            // strong 
                     this->safe_insert( p.first, 
                                        boost::ptr_container::move( ptr ) );
@@ -522,8 +520,8 @@ namespace ptr_container_detail
         std::pair<iterator,bool> insert_impl( const key_type& key, mapped_type x ) // strong
         {
             this->enforce_null_policy( x, "Null pointer in ptr_map_adapter::insert()" );
-            auto_type ptr( x );                                         // nothrow
 
+            auto_type ptr( x, *this );                                  // nothrow
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool>
                  res = this->base().insert( std::make_pair( key, x ) ); // strong, commit      
             if( res.second )                                            // nothrow     
@@ -535,7 +533,8 @@ namespace ptr_container_detail
         {
             this->enforce_null_policy( x, 
                   "Null pointer in 'ptr_map_adapter::insert()'" );
-            auto_type ptr( x );         // nothrow
+            
+            auto_type ptr( x, *this );  // nothrow
             BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
                 res = this->base().insert( before.base(), std::make_pair( key, x ) );
                                         // strong, commit        
@@ -562,7 +561,7 @@ namespace ptr_container_detail
             this->enforce_null_policy( p.second, 
                   "Null pointer in 'ptr_map_adapter::insert()'" );
  
-            auto_type ptr( this->null_policy_allocate_clone( p.second ) ); 
+            auto_type ptr( this->null_policy_allocate_clone(p.second), *this ); 
             BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
                 result = this->base().insert( before.base(), 
                                      std::make_pair(p.first,ptr.get()) ); // strong
@@ -668,7 +667,7 @@ namespace ptr_container_detail
             while( first != last )                                            
             {                                            
                 const_reference pair = *first.base();     // nothrow                     
-                auto_type ptr( this->null_policy_allocate_clone( pair.second ) );    
+                auto_type ptr( this->null_policy_allocate_clone(pair.second), *this );    
                                                           // strong
                 safe_insert( pair.first, 
                              boost::ptr_container::move( ptr ) );
@@ -760,7 +759,8 @@ namespace ptr_container_detail
         {
             this->enforce_null_policy( x, 
                   "Null pointer in 'ptr_multimap_adapter::insert()'" );
-            auto_type ptr( x );         // nothrow
+
+            auto_type ptr( x, *this );  // nothrow
             BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
                 res = this->base().insert( std::make_pair( key, x ) );
                                         // strong, commit        
@@ -772,7 +772,8 @@ namespace ptr_container_detail
         {
             this->enforce_null_policy( x, 
                   "Null pointer in 'ptr_multimap_adapter::insert()'" );
-            auto_type ptr( x );         // nothrow
+            
+            auto_type ptr( x, *this );  // nothrow
             BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
                 res = this->base().insert( before.base(), 
                                            std::make_pair( key, x ) );

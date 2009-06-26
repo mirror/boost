@@ -76,8 +76,8 @@ public:
             }
     
     template<typename TT>
-    explicit static_move_ptr(TT* tt) 
-        : impl_(tt, Deleter()) 
+    static_move_ptr(TT* tt, Deleter del) 
+        : impl_(tt, del) 
         { }
 
         // Destructor
@@ -131,13 +131,7 @@ public:
         }
 
     template<typename TT>
-    void reset(TT* tt) 
-        {
-            static_move_ptr(tt).swap(*this);
-        }
-
-    template<typename TT, typename DD>
-    void reset(TT* tt, DD dd) 
+    void reset(TT* tt, Deleter dd) 
         {
             static_move_ptr(tt, dd).swap(*this);
         }
