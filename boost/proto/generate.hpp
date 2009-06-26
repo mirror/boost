@@ -247,7 +247,7 @@
             /// \param expr The expression to modify.
             /// \return <tt>deep_copy(expr)</tt>
             template<typename Expr>
-            typename result<void(Expr)>::type operator ()(Expr const &expr) const
+            typename result<by_value_generator(Expr)>::type operator ()(Expr const &expr) const
             {
                 return detail::by_value_generator_<Expr>::make(expr);
             }
@@ -276,7 +276,7 @@
             {
                 typedef
                     typename Second::template result<
-                        void(typename First::template result<void(Expr)>::type)
+                        Second(typename First::template result<First(Expr)>::type)
                     >::type
                 type;
             };
@@ -286,7 +286,7 @@
             {
                 typedef
                     typename Second::template result<
-                        void(typename First::template result<void(Expr)>::type)
+                        Second(typename First::template result<First(Expr)>::type)
                     >::type
                 type;
             };
@@ -296,7 +296,7 @@
             {
                 typedef
                     typename Second::template result<
-                        void(typename First::template result<void(Expr)>::type)
+                        Second(typename First::template result<First(Expr)>::type)
                     >::type
                 type;
             };
@@ -304,7 +304,7 @@
             /// \param expr The expression to modify.
             /// \return Second()(First()(expr))
             template<typename Expr>
-            typename result<void(Expr)>::type operator ()(Expr const &expr) const
+            typename result<compose_generators(Expr)>::type operator ()(Expr const &expr) const
             {
                 return Second()(First()(expr));
             }

@@ -70,19 +70,6 @@
             template<typename Expr, typename Grammar>
             struct matches_;
 
-            // and_ and or_ implementation
-            template<bool B, typename Expr, typename G0>
-            struct or_1
-              : mpl::bool_<B>
-            {
-                typedef G0 which;
-            };
-
-            template<bool B>
-            struct and_1
-              : mpl::bool_<B>
-            {};
-
             template<bool B, typename Pred>
             struct and_2;
 
@@ -475,9 +462,9 @@
             /// \li An expression \c E matches <tt>and_\<B0,B1,...Bn\></tt> if \c E
             ///     matches all \c Bx for \c x in <tt>[0,n)</tt>.
             /// \li An expression \c E matches <tt>if_\<T,U,V\></tt> if
-            ///     <tt>when\<_,T\>::::result\<void(E,int,int)\>::::type::value</tt>
+            ///     <tt>boost::result_of\<when\<_,T\>(E,int,int)\>::::type::value</tt>
             ///     is \c true and \c E matches \c U; or, if
-            ///     <tt>when\<_,T\>::::result\<void(E,int,int)\>::::type::value</tt>
+            ///     <tt>boost::result_of\<when\<_,T\>(E,int,int)\>::::type::value</tt>
             ///     is \c false and \c E matches \c V. (Note: \c U defaults to \c _
             ///     and \c V defaults to \c not_\<_\>.)
             /// \li An expression \c E matches <tt>not_\<T\></tt> if \c E does
@@ -647,15 +634,15 @@
             /// When <tt>if_\<If,Then,Else\></tt> is used as a grammar, \c If
             /// must be a Proto transform and \c Then and \c Else must be grammars.
             /// An expression type \c E matches <tt>if_\<If,Then,Else\></tt> if
-            /// <tt>when\<_,If\>::::result\<void(E,int,int)\>::::type::value</tt>
+            /// <tt>boost::result_of\<when\<_,If\>(E,int,int)\>::::type::value</tt>
             /// is \c true and \c E matches \c U; or, if
-            /// <tt>when\<_,If\>::::result\<void(E,int,int)\>::::type::value</tt>
+            /// <tt>boost::result_of\<when\<_,If\>(E,int,int)\>::::type::value</tt>
             /// is \c false and \c E matches \c V.
             ///
             /// The template parameter \c Then defaults to \c _
             /// and \c Else defaults to \c not\<_\>, so an expression type \c E
             /// will match <tt>if_\<If\></tt> if and only if
-            /// <tt>when\<_,If\>::::result\<void(E,int,int)\>::::type::value</tt>
+            /// <tt>boost::result_of\<when\<_,If\>(E,int,int)\>::::type::value</tt>
             /// is \c true.
             ///
             /// \code
@@ -672,7 +659,7 @@
             /// When <tt>if_\<If,Then,Else\></tt> is used as a transform, \c If,
             /// \c Then and \c Else must be Proto transforms. When applying
             /// the transform to an expression \c E, state \c S and data \c V,
-            /// if <tt>when\<_,If\>::::result\<void(E,S,V)\>::::type::value</tt>
+            /// if <tt>boost::result_of\<when\<_,If\>(E,S,V)\>::::type::value</tt>
             /// is \c true then the \c Then transform is applied; otherwise
             /// the \c Else transform is applied.
             ///
@@ -752,7 +739,8 @@
                 /// \param s The current state
                 /// \param d A data of arbitrary type
                 /// \pre <tt>matches\<Expr,or_\>::::value</tt> is \c true.
-                /// \return <tt>result\<void(Expr, State, Data)\>::::which()(e, s, d)</tt>
+                /// \return <tt>which()(e, s, d)</tt>, where <tt>which</tt> is the
+                /// sub-grammar that matched <tt>Expr</tt>.
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
@@ -790,7 +778,8 @@
                     /// \param s The current state
                     /// \param d A data of arbitrary type
                     /// \pre <tt>matches\<Expr,and_\>::::value</tt> is \c true.
-                    /// \return <tt>result\<void(Expr, State, Data)\>::::which()(e, s, d)</tt>
+                    /// \return <tt>which()(e, s, d)</tt>, where <tt>which</tt> is
+                    /// the last non-void sub-grammar in the <tt>and_\<\></tt>.
                 };
             };
 
@@ -819,7 +808,8 @@
                 /// \param s The current state
                 /// \param d A data of arbitrary type
                 /// \pre <tt>matches\<Expr,switch_\>::::value</tt> is \c true.
-                /// \return <tt>result\<void(Expr, State, Data)\>::::which()(e, s, d)</tt>
+                /// \return <tt>which()(e, s, d)</tt>, where <tt>which</tt> is
+                /// <tt>Cases::case_<typename Expr::proto_tag></tt>
 
                 template<typename Expr, typename State, typename Data>
                 struct impl
@@ -937,13 +927,21 @@
 
     #define N BOOST_PP_ITERATION()
 
+            // Assymetry here between the handling of and_N and or_N because
+            // and_N is used by lambda_matches up to BOOST_PROTO_MAX_ARITY,
+            // regardless of how low BOOST_PROTO_MAX_LOGICAL_ARITY is.
             template<bool B, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>
             struct BOOST_PP_CAT(and_, N)
+            #if 2 == N
+              : mpl::bool_<P0::value>
+            {};
+            #else
               : BOOST_PP_CAT(and_, BOOST_PP_DEC(N))<
                     P0::value BOOST_PP_COMMA_IF(BOOST_PP_SUB(N,2))
                     BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_DEC(N), P)
                 >
             {};
+            #endif
 
             template<BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>
             struct BOOST_PP_CAT(and_, N)<false, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), P)>
@@ -959,11 +957,18 @@
 
             template<bool B, typename Expr, BOOST_PP_ENUM_PARAMS(N, typename G)>
             struct BOOST_PP_CAT(or_, N)
+            #if 2 == N
+              : mpl::bool_<matches_<Expr, typename G1::proto_base_expr>::value>
+            {
+                typedef G1 which;
+            };
+            #else
               : BOOST_PP_CAT(or_, BOOST_PP_DEC(N))<
                     matches_<Expr, typename G1::proto_base_expr>::value
                   , Expr, BOOST_PP_ENUM_SHIFTED_PARAMS(N, G)
                 >
             {};
+            #endif
 
             template<typename Expr BOOST_PP_ENUM_TRAILING_PARAMS(N, typename G)>
             struct BOOST_PP_CAT(or_, N)<true, Expr, BOOST_PP_ENUM_PARAMS(N, G)>

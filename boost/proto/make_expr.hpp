@@ -979,7 +979,7 @@
               , N
             > expr_type;
 
-            typedef typename Domain::template result<void(expr_type)>::type result_type;
+            typedef typename Domain::template result<Domain(expr_type)>::type result_type;
 
             result_type operator()(BOOST_PP_ENUM_BINARY_PARAMS(N, typename add_reference<A, >::type a)) const
             {
@@ -1013,7 +1013,7 @@
               , N
             > expr_type;
 
-            typedef typename Domain::template result<void(expr_type)>::type type;
+            typedef typename Domain::template result<Domain(expr_type)>::type type;
 
             static type const call(Sequence const &sequence)
             {

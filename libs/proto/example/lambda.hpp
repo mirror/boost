@@ -583,7 +583,7 @@
               : llresult<Sig>
             {};
 
-            typename result<Expr const()>::type
+            typename result<llexpr const()>::type
             operator()() const
             {
                 fusion::vector0<> args;
@@ -596,7 +596,7 @@
 
             #define M3(R, SIZE, PRODUCT)                                                                    \
                 template<BOOST_PP_ENUM_PARAMS(SIZE, typename A)>                                            \
-                typename result<Expr const(BOOST_PP_SEQ_FOR_EACH_I_R(R, M5, ~, PRODUCT))>::type             \
+                typename result<llexpr const(BOOST_PP_SEQ_FOR_EACH_I_R(R, M5, ~, PRODUCT))>::type           \
                 operator ()(BOOST_PP_SEQ_FOR_EACH_I_R(R, M4, ~, PRODUCT)) const                             \
                 {                                                                                           \
                     BOOST_MPL_ASSERT_RELATION(result_of<Arity(Expr const &)>::type::value, <=, SIZE);       \
@@ -622,7 +622,7 @@
 
             #define C1 const
 
-            #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_LAMBDA_MAX_ARITY, <boost/lambda2/lambda.hpp>))
+            #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_LAMBDA_MAX_ARITY, "./lambda.hpp"))
             #include BOOST_PP_ITERATE()
 
             #undef C0
@@ -650,22 +650,54 @@
         typedef llexpr<proto::terminal<exception_placeholder>::type> placeholderE_type;
         placeholderE_type const _e = {{{}}};
 
-        template<typename T>
         struct byref
         {
-            typedef llexpr<typename proto::terminal<T &>::type> type;
-        };
+            template<typename Sig>
+            struct result;
+            
+            template<typename This, typename T>
+            struct result<This(T &)>
+            {
+                typedef llexpr<typename proto::terminal<T &>::type> type;
+            };
 
-        template<typename T>
-        struct byref<llexpr<T> >
-        {
-            typedef llexpr<T> &type;
-        };
+            template<typename This, typename T>
+            struct result<This(llexpr<T> &)>
+            {
+                typedef boost::reference_wrapper<llexpr<T> > type;
+            };
 
-        template<typename T>
-        struct byref<llexpr<T> const>
-        {
-            typedef llexpr<T> const &type;
+            template<typename This, typename T>
+            struct result<This(llexpr<T> const &)>
+            {
+                typedef boost::reference_wrapper<llexpr<T> const> type;
+            };
+
+            template<typename T>
+            typename result<byref(T &)>::type operator()(T &t) const
+            {
+                typename result<byref(T &)>::type that = {{t}};
+                return that;
+            }
+
+            template<typename T>
+            typename result<byref(T const &)>::type operator()(T const &t) const
+            {
+                typename result<byref(T const &)>::type that = {{t}};
+                return that;
+            }
+
+            template<typename T>
+            boost::reference_wrapper<llexpr<T> > operator()(llexpr<T> &t) const
+            {
+                return boost::ref(t);
+            }
+
+            template<typename T>
+            boost::reference_wrapper<llexpr<T> const> operator()(llexpr<T> const &t) const
+            {
+                return boost::ref(t);
+            }
         };
 
         namespace exprns_
@@ -677,23 +709,23 @@
             typename proto::result_of::make_expr<                                                   \
                 TAG                                                                                 \
               , lldomain                                                                            \
-              , typename byref<T>::type                                                             \
+              , typename boost::result_of<byref(T &)>::type                                         \
               , U &                                                                                 \
             >::type const                                                                           \
             operator OP(T &t, U &u)                                                                 \
             {                                                                                       \
-                return proto::implicit_expr(t, u);                                                  \
+                return proto::make_expr<TAG, lldomain>(byref()(t), boost::ref(u));                  \
             }                                                                                       \
             template<typename T, typename U>                                                        \
             typename proto::result_of::make_expr<                                                   \
                 TAG                                                                                 \
               , lldomain                                                                            \
-              , typename byref<T>::type                                                             \
+              , typename boost::result_of<byref(T &)>::type                                         \
               , U const &                                                                           \
             >::type const                                                                           \
             operator OP(T &t, U const &u)                                                           \
             {                                                                                       \
-                return proto::implicit_expr(t, u);                                                  \
+                return proto::make_expr<TAG, lldomain>(byref()(t), boost::ref(u));                  \
             }                                                                                       \
             /**/
 
@@ -719,7 +751,8 @@
         llexpr<typename proto::terminal<T &>::type> const
         var(T &t)
         {
-            return proto::implicit_expr(t);
+            llexpr<typename proto::terminal<T &>::type> that = {{t}};
+            return that;
         }
 
         template<typename T>
@@ -735,7 +768,8 @@
         typename constant_type<T>::type const
         constant(T const &t)
         {
-            return proto::implicit_expr(t);
+            typename constant_type<T>::type that = {{t}};
+            return that;
         }
 
         template<typename T>
@@ -748,7 +782,8 @@
         llexpr<typename proto::terminal<T const &>::type> const
         constant_ref(T const &t)
         {
-            return proto::implicit_expr(t);
+            llexpr<typename proto::terminal<T const &>::type> that = {{t}};
+            return that;
         }
 
         template<typename Cond>
@@ -767,7 +802,10 @@
             >::type const
             operator[](Body const &body) const
             {
-                return proto::implicit_expr(this->cond, body);
+                return proto::make_expr<tag::while_, lldomain>(
+                    boost::ref(this->cond)
+                  , boost::ref(body)
+                );
             }
 
         private:
@@ -800,7 +838,11 @@
             >::type const
             operator[](Body2 const &body2) const
             {
-                return proto::implicit_expr(proto::left(this->if_), proto::right(this->if_), body2);
+                return proto::make_expr<tag::if_else_, lldomain>(
+                    boost::ref(proto::left(this->if_))
+                  , boost::ref(proto::right(this->if_))
+                  , boost::ref(body2)
+                );
             }
 
         private:
@@ -837,7 +879,10 @@
             > const
             operator[](Body const &body) const
             {
-                return proto::implicit_expr(this->cond, body);
+                return proto::make_expr<tag::if_, lldomain>(
+                    boost::ref(this->cond)
+                  , boost::ref(body)
+                );
             }
 
         private:
@@ -870,7 +915,12 @@
             >::type const
             operator[](Body const &body) const
             {
-                return proto::implicit_expr(this->init, this->cond, this->oper, body);
+                return proto::make_expr<tag::for_, lldomain>(
+                    boost::ref(this->init)
+                  , boost::ref(this->cond)
+                  , boost::ref(this->oper)
+                  , boost::ref(body)
+                );
             }
 
         private:
@@ -901,7 +951,10 @@
             >::type const
             operator()(Cond const &cond) const
             {
-                return proto::implicit_expr(this->body, cond);
+                return proto::make_expr<tag::do_while_, lldomain>(
+                    boost::ref(this->body)
+                  , boost::ref(cond)
+                );
             }
 
         private:
@@ -949,7 +1002,12 @@
         >::type const
         for_loop(Init const &init, Cond const &cond, Oper const &oper)
         {
-            return proto::implicit_expr(init, cond, oper, noop);
+            return proto::make_expr<tag::for_, lldomain>(
+                boost::ref(init)
+              , boost::ref(cond)
+              , boost::ref(oper)
+              , boost::ref(noop)
+            );
         }
 
         template<typename Init, typename Cond, typename Oper, typename Body>
@@ -963,7 +1021,12 @@
         >::type const
         for_loop(Init const &init, Cond const &cond, Oper const &oper, Body const &body)
         {
-            return proto::implicit_expr(init, cond, oper, body);
+            return proto::make_expr<tag::for_>(
+                boost::ref(init)
+              , boost::ref(cond)
+              , boost::ref(oper)
+              , boost::ref(body)
+            );
         }
 
         template<typename Cond, typename Body>
@@ -975,7 +1038,10 @@
         >::type const
         while_loop(Cond const &cond, Body const &body)
         {
-            return proto::implicit_expr(cond, body);
+            return proto::make_expr<tag::while_, lldomain>(
+                boost::ref(cond)
+              , boost::ref(body)
+            );
         }
 
         template<typename Cond>
@@ -987,7 +1053,10 @@
         >::type const
         while_loop(Cond const &cond)
         {
-            return proto::implicit_expr(cond, noop);
+            return proto::make_expr<tag::while_, lldomain>(
+                boost::ref(cond)
+              , boost::ref(noop)
+            );
         }
 
         template<typename Cond, typename Body>
@@ -999,7 +1068,10 @@
         >::type const
         do_while_loop(Cond const &cond, Body const &body)
         {
-            return proto::implicit_expr(body, cond);
+            return proto::make_expr<tag::do_while_, lldomain>(
+                boost::ref(body)
+              , boost::ref(cond)
+            );
         }
 
         template<typename Cond>
@@ -1011,7 +1083,10 @@
         >::type const
         do_while_loop(Cond const &cond)
         {
-            return proto::implicit_expr(noop, cond);
+            return proto::make_expr<tag::do_while_, lldomain>(
+                boost::ref(noop)
+              , boost::ref(cond)
+            );
         }
 
         template<typename Cond, typename Body1>
@@ -1023,7 +1098,10 @@
         >::type const
         if_then(Cond const &cond, Body1 const &body1)
         {
-            return proto::implicit_expr(cond, body1);
+            return proto::make_expr<tag::if_, lldomain>(
+                boost::ref(cond)
+              , boost::ref(body1)
+            );
         }
 
         template<typename Cond, typename Body1, typename Body2>
@@ -1036,7 +1114,11 @@
         >::type const
         if_then_else(Cond const &cond, Body1 const &body1, Body2 const &body2)
         {
-            return proto::implicit_expr(cond, body1, body2);
+            return proto::make_expr<tag::if_else_, lldomain>(
+                boost::ref(cond)
+              , boost::ref(body1)
+              , boost::ref(body2)
+            );
         }
 
         template<typename Cond, typename Body1, typename Body2>
@@ -1049,7 +1131,11 @@
         >::type const
         if_then_else_return(Cond const &cond, Body1 const &body1, Body2 const &body2)
         {
-            return proto::implicit_expr(cond, body1, body2);
+            return proto::make_expr<proto::tag::if_else_, lldomain>(
+                boost::ref(cond)
+              , boost::ref(body1)
+              , boost::ref(body2)
+            );
         }
 
         template<typename T>
@@ -1057,31 +1143,31 @@
         {
             return t;
         }
-
-        #define M1(Z, N, DATA)                                                                      \
-        template<BOOST_PP_ENUM_PARAMS_Z(Z, N, typename A)>                                          \
+        
+        #define M1(N, typename_A, A_const_ref, A_const_ref_a, ref_a)                                \
+        template<typename_A(N)>                                                                     \
         typename proto::result_of::make_expr<                                                       \
             proto::tag::function                                                                    \
           , lldomain                                                                                \
-            BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(Z, N, A, const & BOOST_PP_INTERCEPT)             \
+          , A_const_ref(N)                                                                          \
         >::type const                                                                               \
-        bind(BOOST_PP_ENUM_BINARY_PARAMS_Z(Z, N, A, const &a))                                      \
+        bind(A_const_ref_a(N))                                                                      \
         {                                                                                           \
-            return proto::implicit_expr(BOOST_PP_ENUM_PARAMS_Z(Z, N, a));                           \
+            return proto::make_expr<proto::tag::function, lldomain>(ref_a(N));                      \
         }                                                                                           \
                                                                                                     \
-        template<typename Ret BOOST_PP_ENUM_TRAILING_PARAMS_Z(Z, N, typename A)>                    \
+        template<typename Ret, typename_A(N)>                                                       \
         typename proto::result_of::make_expr<                                                       \
             proto::tag::function                                                                    \
           , lldomain                                                                                \
-            BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(Z, N, A, const & BOOST_PP_INTERCEPT)             \
+          , A_const_ref(N)                                                                          \
         >::type const                                                                               \
-        bind(BOOST_PP_ENUM_BINARY_PARAMS_Z(Z, N, A, const &a))                                      \
+        bind(A_const_ref_a(N))                                                                      \
         {                                                                                           \
-            return proto::implicit_expr(BOOST_PP_ENUM_PARAMS_Z(Z, N, a));                           \
+            return proto::make_expr<proto::tag::function, lldomain>(ref_a(N));                      \
         }                                                                                           \
         /**/
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), M1, ~)
+        BOOST_PROTO_REPEAT_FROM_TO(1, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), M1)
         #undef M1
 
         template<typename Ret, typename Expr>
@@ -1117,7 +1203,7 @@
         >::type const
         protect(Lambda const &lambda)
         {
-            return proto::implicit_expr(lambda);
+            return proto::make_expr<tag::protect, lldomain>(boost::ref(lambda));
         }
 
         template<typename T>
@@ -1154,7 +1240,7 @@
         ll_static_cast(U const &u)
         {
             ll_static_cast_fun<T> fun;
-            return proto::implicit_expr(fun, u);
+            return proto::make_expr<proto::tag::function, lldomain>(fun, boost::ref(u));
         }
 
         template<typename T>
@@ -1185,7 +1271,7 @@
         ll_const_cast(U const &u)
         {
             ll_const_cast_fun<T> fun;
-            return proto::implicit_expr(fun, u);
+            return proto::make_expr<proto::tag::function, lldomain>(fun, boost::ref(u));
         }
 
         template<typename T>
@@ -1216,7 +1302,7 @@
         ll_dynamic_cast(U const &u)
         {
             ll_dynamic_cast_fun<T> fun;
-            return proto::implicit_expr(fun, u);
+            return proto::make_expr<proto::tag::function, lldomain>(fun, boost::ref(u));
         }
 
         template<typename T>
@@ -1247,7 +1333,7 @@
         ll_reinterpret_cast(U const &u)
         {
             ll_reinterpret_cast_fun<T> fun;
-            return proto::implicit_expr(fun, u);
+            return proto::make_expr<proto::tag::function, lldomain>(fun, boost::ref(u));
         }
 
         struct ll_sizeof_fun
@@ -1271,7 +1357,7 @@
         ll_sizeof(U const &u)
         {
             ll_sizeof_fun fun;
-            return proto::implicit_expr(fun, u);
+            return proto::make_expr<proto::tag::function, lldomain>(fun, boost::ref(u));
         }
 
         struct ll_typeid_fun
@@ -1295,7 +1381,7 @@
         ll_typeid(U const &u)
         {
             ll_typeid_fun fun;
-            return proto::implicit_expr(fun, u);
+            return proto::make_expr<proto::tag::function, lldomain>(fun, boost::ref(u));
         }
 
         template<typename T>
@@ -1508,14 +1594,14 @@
         typename proto::result_of::make_expr<tag::catch_<E>, lldomain, Expr const &>::type const
         catch_exception(Expr const &expr)
         {
-            return proto::implicit_expr(expr);
+            return proto::make_expr<tag::catch_<E>, lldomain>(boost::ref(expr));
         }
 
         template<typename E>
         typename proto::result_of::make_expr<tag::catch_<E>, lldomain, noop_type const &>::type const
         catch_exception()
         {
-            return proto::implicit_expr(noop);
+            return proto::make_expr<tag::catch_<E>, lldomain>(boost::ref(noop));
         }
 
         template<typename Expr>
@@ -1526,29 +1612,29 @@
         >::type const
         catch_all(Expr const &expr)
         {
-            return proto::implicit_expr(expr);
+            return proto::make_expr<tag::catch_all_, lldomain>(boost::ref(expr));
         }
 
         inline
         proto::result_of::make_expr<tag::catch_all_, lldomain, noop_type const &>::type const
         catch_all()
         {
-            return proto::implicit_expr(noop);
+            return proto::make_expr<tag::catch_all_, lldomain>(boost::ref(noop));
         }
 
-        #define M1(Z, N, DATA)                                                                      \
-        template<BOOST_PP_ENUM_PARAMS_Z(Z, N, typename A)>                                          \
+        #define M1(N, typename_A, A_const_ref, A_const_ref_a, ref_a)                                \
+        template<typename_A(N)>                                                                     \
         typename proto::result_of::make_expr<                                                       \
             tag::try_                                                                               \
           , lldomain                                                                                \
-            BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(Z, N, A, const & BOOST_PP_INTERCEPT)             \
+          , A_const_ref(N)                                                                          \
         >::type const                                                                               \
-        try_catch(BOOST_PP_ENUM_BINARY_PARAMS_Z(Z, N, A, const & a))                                \
+        try_catch(A_const_ref_a(N))                                                                 \
         {                                                                                           \
-            return proto::implicit_expr(BOOST_PP_ENUM_PARAMS_Z(Z, N, a));                           \
+            return proto::make_expr<tag::try_, lldomain>(ref_a(N));                                 \
         }                                                                                           \
         /**/
-        BOOST_PP_REPEAT_FROM_TO(2, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), M1, ~)
+        BOOST_PROTO_REPEAT_FROM_TO(2, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), M1)
         #undef M1
 
         template<typename Expr>
@@ -1561,15 +1647,14 @@
         throw_exception(Expr const &expr)
         {
             throw_fun fun;
-            return proto::implicit_expr(fun, expr);
+            return proto::make_expr<proto::tag::function, lldomain>(fun, boost::ref(expr));
         }
 
         inline
         proto::result_of::make_expr<proto::tag::function, lldomain, rethrow_fun>::type const
         rethrow()
         {
-            rethrow_fun fun;
-            return proto::implicit_expr(fun);
+            return proto::make_expr<proto::tag::function, lldomain>(rethrow_fun());
         }
 
         struct make_void_fun
@@ -1590,50 +1675,50 @@
         make_void(Expr const &expr)
         {
             make_void_fun fun;
-            return proto::implicit_expr(fun, expr);
+            return proto::make_expr<proto::tag::function, lldomain>(fun, boost::ref(expr));
         }
 
-        #define M1(Z, N, DATA)                                                                      \
-        template<BOOST_PP_ENUM_PARAMS_Z(Z, N, typename A)>                                          \
+        #define M1(N, typename_A, A_const_ref, A_const_ref_a, ref_a)                                \
+        template<typename_A(N)>                                                                     \
         typename proto::result_of::make_expr<                                                       \
             tag::switch_                                                                            \
           , lldomain                                                                                \
-            BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(Z, N, A, const & BOOST_PP_INTERCEPT)             \
+          , A_const_ref(N)                                                                          \
         >::type const                                                                               \
-        switch_statement(BOOST_PP_ENUM_BINARY_PARAMS_Z(Z, N, A, const & a))                         \
+        switch_statement(A_const_ref_a(N))                                                          \
         {                                                                                           \
-            return proto::implicit_expr(BOOST_PP_ENUM_PARAMS_Z(Z, N, a));                           \
+            return proto::make_expr<tag::switch_, lldomain>(ref_a(N));                              \
         }                                                                                           \
         /**/
-        BOOST_PP_REPEAT_FROM_TO(2, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), M1, ~)
+        BOOST_PROTO_REPEAT_FROM_TO(2, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), M1)
         #undef M1
 
         template<int I, typename Expr>
         typename proto::result_of::make_expr<tag::case_<I>, lldomain, Expr const &>::type const
         case_statement(Expr const &expr)
         {
-            return proto::implicit_expr(expr);
+            return proto::make_expr<tag::case_<I>, lldomain>(boost::ref(expr));
         }
 
         template<int I>
         typename proto::result_of::make_expr<tag::case_<I>, lldomain, noop_type const &>::type const
         case_statement()
         {
-            return proto::implicit_expr(noop);
+            return proto::make_expr<tag::case_<I>, lldomain>(boost::ref(noop));
         }
 
         template<typename Expr>
         typename proto::result_of::make_expr<tag::default_, lldomain, Expr const &>::type const
         default_statement(Expr const &expr)
         {
-            return proto::implicit_expr(expr);
+            return proto::make_expr<tag::default_, lldomain>(boost::ref(expr));
         }
 
         inline
         proto::result_of::make_expr<tag::default_, lldomain, noop_type const &>::type const
         default_statement()
         {
-            return proto::implicit_expr(noop);
+            return proto::make_expr<tag::default_, lldomain>(boost::ref(noop));
         }
 
         namespace ll
@@ -1657,6 +1742,19 @@
         }
 
     }}
+    
+    namespace boost
+    {
+        template<typename Expr>
+        struct result_of<lambda::llexpr<Expr>()>
+          : lambda::llexpr<Expr>::template result<lambda::llexpr<Expr>()>
+        {};
+
+        template<typename Expr>
+        struct result_of<lambda::llexpr<Expr> const()>
+          : lambda::llexpr<Expr>::template result<lambda::llexpr<Expr> const()>
+        {};
+    }
 
     #ifdef _MSC_VER
     # pragma warning(pop)
