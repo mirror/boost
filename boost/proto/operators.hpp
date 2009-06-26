@@ -32,7 +32,7 @@ namespace boost { namespace proto
         struct generate_if
           : lazy_enable_if_c<
                 matches<Expr, typename Domain::proto_grammar>::value
-              , typename Domain::template result<void(Expr)>
+              , typename Domain::template result<Domain(Expr)>
             >
         {};
 
@@ -47,8 +47,8 @@ namespace boost { namespace proto
         struct generate_if_left
           : lazy_enable_if_c<
                 matches<proto::expr<Tag, proto::list2<Left &, Right>, 2>, typename Domain::proto_grammar>::value
-              , typename Domain::template result<void(
-                    proto::expr<Tag, proto::list2<Left &, typename Domain::template result<void(Right)>::type>, 2>
+              , typename Domain::template result<Domain(
+                    proto::expr<Tag, proto::list2<Left &, typename Domain::template result<Domain(Right)>::type>, 2>
                 )>
             >
         {};
@@ -64,8 +64,8 @@ namespace boost { namespace proto
         struct generate_if_right
           : lazy_enable_if_c<
                 matches<proto::expr<Tag, proto::list2<Left, Right &>, 2>, typename Domain::proto_grammar>::value
-              , typename Domain::template result<void(
-                    proto::expr<Tag, proto::list2<typename Domain::template result<void(Left)>::type, Right &>, 2>
+              , typename Domain::template result<Domain(
+                    proto::expr<Tag, proto::list2<typename Domain::template result<Domain(Left)>::type, Right &>, 2>
                 )>
             >
         {};
@@ -91,14 +91,15 @@ namespace boost { namespace proto
             >
         {
             typedef proto::expr<tag::terminal, term<Right &>, 0> term_type;
-            typedef proto::expr<Tag, list2<Left &, typename Left::proto_domain::template result<void(term_type)>::type>, 2> expr_type;
+            typedef typename Left::proto_domain proto_domain;
+            typedef proto::expr<Tag, list2<Left &, typename proto_domain::template result<proto_domain(term_type)>::type>, 2> expr_type;
 
-            static typename Left::proto_domain::template result<void(expr_type)>::type
+            static typename proto_domain::template result<proto_domain(expr_type)>::type
             make(Left &left, Right &right)
             {
                 term_type term = {right};
-                expr_type that = {left, typename Left::proto_domain()(term)};
-                return typename Left::proto_domain()(that);
+                expr_type that = {left, proto_domain()(term)};
+                return proto_domain()(that);
             }
         };
 
@@ -112,14 +113,15 @@ namespace boost { namespace proto
             >
         {
             typedef proto::expr<tag::terminal, term<Left &>, 0> term_type;
-            typedef proto::expr<Tag, list2<typename Right::proto_domain::template result<void(term_type)>::type, Right &>, 2> expr_type;
+            typedef typename Right::proto_domain proto_domain;
+            typedef proto::expr<Tag, list2<typename proto_domain::template result<proto_domain(term_type)>::type, Right &>, 2> expr_type;
 
-            static typename Right::proto_domain::template result<void(expr_type)>::type
+            static typename proto_domain::template result<proto_domain(expr_type)>::type
             make(Left &left, Right &right)
             {
                 term_type term = {left};
-                expr_type that = {typename Right::proto_domain()(term), right};
-                return typename Right::proto_domain()(that);
+                expr_type that = {proto_domain()(term), right};
+                return proto_domain()(that);
             }
         };
 
@@ -136,13 +138,14 @@ namespace boost { namespace proto
             >
         {
             typedef proto::expr<Tag, list2<Left &, Right &>, 2> expr_type;
-            BOOST_MPL_ASSERT((is_same<typename Left::proto_domain, typename Right::proto_domain>));
+            typedef typename Left::proto_domain proto_domain;
+            BOOST_MPL_ASSERT((is_same<proto_domain, typename Right::proto_domain>));
 
-            static typename Left::proto_domain::template result<void(expr_type)>::type
+            static typename proto_domain::template result<proto_domain(expr_type)>::type
             make(Left &left, Right &right)
             {
                 expr_type that = {left, right};
-                return typename Left::proto_domain()(that);
+                return proto_domain()(that);
             }
         };
 

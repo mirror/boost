@@ -258,7 +258,7 @@
                     >::type
                 arg0_;
                 typedef proto::expr<proto::tag::terminal, term<arg0_>, 0> expr_;
-                typedef typename Domain::template result<void(expr_)>::type type;
+                typedef typename Domain::template result<Domain(expr_)>::type type;
                 typedef type const reference;
 
                 /// INTERNAL ONLY
@@ -291,7 +291,7 @@
             >
             {
                 typedef typename T::proto_derived_expr expr_; // removes the const
-                typedef typename Domain::template result<void(expr_)>::type type;
+                typedef typename Domain::template result<Domain(expr_)>::type type;
                 typedef type const reference;
 
                 /// INTERNAL ONLY
@@ -346,7 +346,7 @@
             struct as_child
             {
                 typedef proto::expr<proto::tag::terminal, term<T &>, 0> expr_;
-                typedef typename Domain::template result<void(expr_)>::type type;
+                typedef typename Domain::template result<Domain(expr_)>::type type;
 
                 /// INTERNAL ONLY
                 ///
@@ -382,9 +382,9 @@
                     BOOST_WORKAROUND(BOOST_INTEL, BOOST_TESTED_AT(1010))
                 // These compilers don't strip top-level cv qualifiers
                 // on arguments in function types
-                typedef typename Domain::template result<void(typename T::proto_derived_expr)>::type type;
+                typedef typename Domain::template result<Domain(typename T::proto_derived_expr)>::type type;
                 #else
-                typedef typename Domain::template result<void(T)>::type type;
+                typedef typename Domain::template result<Domain(T)>::type type;
                 #endif
 
                 /// INTERNAL ONLY
