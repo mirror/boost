@@ -114,7 +114,7 @@ class processor_container : noncopyable
       impl_fun_ptr pImpl =
         &processor_container::template create_processor_impl0< Processor >;
       return WorkItem(
-        bind( pImpl, this, pProcessor,
+        boost::bind( pImpl, this, pProcessor,
           processor_context( scheduler, handle ) ),
         Allocator() );
     }
@@ -133,7 +133,7 @@ class processor_container : noncopyable
         &processor_container::template create_processor_impl1<
           Processor, arg1_type >;
       return WorkItem(
-        bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
+        boost::bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1 ),
         Allocator() );
     }
@@ -153,7 +153,7 @@ class processor_container : noncopyable
         &processor_container::template create_processor_impl2<
           Processor, arg1_type, arg2_type >;
       return WorkItem(
-        bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
+        boost::bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2 ),
         Allocator() );
     }
@@ -175,7 +175,7 @@ class processor_container : noncopyable
         &processor_container::template create_processor_impl3<
           Processor, arg1_type, arg2_type, arg3_type >;
       return WorkItem(
-        bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
+        boost::bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2, arg3 ),
         Allocator() );
     }
@@ -200,7 +200,7 @@ class processor_container : noncopyable
         &processor_container::template create_processor_impl4<
           Processor, arg1_type, arg2_type, arg3_type, arg4_type >;
       return WorkItem(
-        bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
+        boost::bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2, arg3, arg4 ),
         Allocator() );
     }
@@ -226,7 +226,7 @@ class processor_container : noncopyable
         &processor_container::template create_processor_impl5<
           Processor, arg1_type, arg2_type, arg3_type, arg4_type, arg5_type >;
       return WorkItem(
-        bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
+        boost::bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2, arg3, arg4, arg5 ),
         Allocator() );
     }
@@ -254,7 +254,7 @@ class processor_container : noncopyable
           Processor,
           arg1_type, arg2_type, arg3_type, arg4_type, arg5_type, arg6_type >;
       return WorkItem(
-        bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
+        boost::bind( pImpl, this, pProcessor, processor_context( scheduler, handle ),
           arg1, arg2, arg3, arg4, arg5, arg6 ),
         Allocator() );
     }
@@ -262,14 +262,14 @@ class processor_container : noncopyable
     WorkItem destroy_processor( const processor_handle & processor )
     {
       return WorkItem(
-        bind( &processor_container::destroy_processor_impl, this, processor ),
+        boost::bind( &processor_container::destroy_processor_impl, this, processor ),
         Allocator() );
     }
 
     WorkItem initiate_processor( const processor_handle & processor )
     {
       return WorkItem(
-        bind( &processor_container::initiate_processor_impl, this,
+        boost::bind( &processor_container::initiate_processor_impl, this,
           processor ),
         Allocator() );
     }
@@ -277,7 +277,7 @@ class processor_container : noncopyable
     WorkItem terminate_processor( const processor_handle & processor )
     {
       return WorkItem(
-        bind( &processor_container::terminate_processor_impl, this,
+        boost::bind( &processor_container::terminate_processor_impl, this,
           processor ),
         Allocator() );
     }
@@ -290,7 +290,7 @@ class processor_container : noncopyable
       BOOST_ASSERT( pEvent.get() != 0 );
 
       return WorkItem(
-        bind( &processor_container::queue_event_impl, this, processor,
+        boost::bind( &processor_container::queue_event_impl, this, processor,
           pEvent ),
         Allocator() );
     }
