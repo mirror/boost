@@ -9,14 +9,23 @@
 #include <vector>
 
 int f(std::size_t hash1, int* x1) {
+
     // Check that HASH_NAMESPACE::hash<int*> works in both files.
     HASH_NAMESPACE::hash<int*> ptr_hasher;
     BOOST_TEST(hash1 == ptr_hasher(x1));
+
+#if defined(TEST_EXTENSIONS)
 
     // Check that std::vector<std::size_t> is avaiable in this file.
     std::vector<std::size_t> x;
     x.push_back(*x1);
     HASH_NAMESPACE::hash<std::vector<std::size_t> > vector_hasher;
     return vector_hasher(x) != HASH_NAMESPACE::hash_value(x);
+    
+#else
+
+    return 0;
+
+#endif
 }
 

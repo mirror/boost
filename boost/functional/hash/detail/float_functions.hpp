@@ -96,10 +96,16 @@ namespace BOOST_HASH_DETECT_FLOAT_FUNCTIONS {
 // Then the call_* functions select an appropriate implementation.
 //
 // I used c99_func in a few places just to get a unique name.
+//
+// Important: when using 'using namespace' at namespace level, include as
+// little as possible in that namespace, as Visual C++ has an odd bug which
+// can cause the namespace to be imported at the global level. This seems to
+// happen mainly when there's a template in the same namesapce.
 
 #define BOOST_HASH_CALL_FLOAT_FUNC(cpp_func, c99_func, type1, type2)    \
 namespace BOOST_HASH_DETECT_FLOAT_FUNCTIONS {                           \
-    boost::hash_detail::not_found c99_func(int, type2);                 \
+    template <class Float>                                              \
+    boost::hash_detail::not_found c99_func(Float, type2);               \
 }                                                                       \
                                                                         \
 namespace boost {                                                       \
@@ -118,43 +124,45 @@ namespace boost {                                                       \
                     sizeof(float_type(c99_func(x,y)))                   \
                         == sizeof(is<type1>));                          \
             };                                                          \
-                                                                        \
-            template <bool x>                                           \
-            struct call_c99 :                                           \
-                boost::hash_detail::call_##cpp_func<double> {};         \
-                                                                        \
-            template <>                                                 \
-            struct call_c99<true> {                                     \
-                typedef type1 float_type;                               \
-                                                                        \
-                template <typename T>                                   \
-                inline type1 operator()(type1 a, T b)  const            \
-                {                                                       \
-                    return c99_func(a, b);                              \
-                }                                                       \
-            };                                                          \
-                                                                        \
-            template <bool x>                                           \
-            struct call_cpp :                                           \
-                call_c99<                                               \
-                    ::boost::hash_detail::c99_func##_detect::check::c99 \
-                > {};                                                   \
-                                                                        \
-            template <>                                                 \
-            struct call_cpp<true> {                                     \
-                typedef type1 float_type;                               \
-                                                                        \
-                template <typename T>                                   \
-                inline type1 operator()(type1 a, T b)  const            \
-                {                                                       \
-                    return cpp_func(a, b);                              \
-                }                                                       \
-            };                                                          \
         }                                                               \
+                                                                        \
+        template <bool x>                                               \
+        struct call_c99_##c99_func :                                    \
+            boost::hash_detail::call_##cpp_func<double> {};             \
+                                                                        \
+        template <>                                                     \
+        struct call_c99_##c99_func<true> {                              \
+            typedef type1 float_type;                                   \
+                                                                        \
+            template <typename T>                                       \
+            inline type1 operator()(type1 a, T b)  const                \
+            {                                                           \
+                using namespace std;                                    \
+                return c99_func(a, b);                                  \
+            }                                                           \
+        };                                                              \
+                                                                        \
+        template <bool x>                                               \
+        struct call_cpp_##c99_func :                                    \
+            call_c99_##c99_func<                                        \
+                ::boost::hash_detail::c99_func##_detect::check::c99     \
+            > {};                                                       \
+                                                                        \
+        template <>                                                     \
+        struct call_cpp_##c99_func<true> {                              \
+            typedef type1 float_type;                                   \
+                                                                        \
+            template <typename T>                                       \
+            inline type1 operator()(type1 a, T b)  const                \
+            {                                                           \
+                using namespace std;                                    \
+                return cpp_func(a, b);                                  \
+            }                                                           \
+        };                                                              \
                                                                         \
         template <>                                                     \
         struct call_##cpp_func<type1> :                                 \
-            c99_func##_detect::call_cpp<                                \
+            call_cpp_##c99_func<                                        \
                 ::boost::hash_detail::c99_func##_detect::check::cpp     \
             > {};                                                       \
     }                                                                   \

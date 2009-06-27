@@ -5,17 +5,19 @@
 
 #include "./config.hpp"
 
-#ifdef TEST_EXTENSIONS
-#  ifdef TEST_STD_INCLUDES
-#    include <functional>
-#  else
-#    include <boost/functional/hash.hpp>
-#  endif
+#if !defined(TEST_EXTENSIONS)
+
+int main() {}
+
+#else
+
+#ifdef TEST_STD_INCLUDES
+#  include <functional>
+#else
+#  include <boost/functional/hash.hpp>
 #endif
 
 #include <boost/detail/lightweight_test.hpp>
-
-#ifdef TEST_EXTENSIONS
 
 #include <complex>
 #include <sstream>
@@ -26,11 +28,6 @@
 #pragma warning(disable:4244) // conversion from 'unsigned long' to 'unsigned short', possible loss of data
 #pragma warning(disable:4512) // assignment operator could not be generated
 #endif
-
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_int.hpp>
-#include <boost/random/uniform_real.hpp>
-#include <boost/random/variate_generator.hpp>
 
 #if defined(BOOST_MSVC)
 #pragma warning(pop)
@@ -61,33 +58,24 @@ void generic_complex_tests(std::complex<T> v)
 template <class Float>
 void complex_float_tests(Float*)
 {
-    boost::mt19937 rng;
-    boost::uniform_real<Float> uniform;
-    boost::variate_generator<boost::mt19937&, boost::uniform_real<Float> >
-        uniform_generator(rng, uniform);
-
-    for(int i = 0; i < 100; ++i)
-    {
-        std::complex<Float> v(uniform_generator(), uniform_generator());
-        generic_complex_tests(v);
-    }
+    typedef std::complex<Float> complex;
+    generic_complex_tests(complex(0,0));
+    generic_complex_tests(complex(0.5,0));
+    generic_complex_tests(complex(25,0));
+    generic_complex_tests(complex(25,0));
+    generic_complex_tests(complex(-67.5324535,56.23578678));
 }
 
 template <class Integer>
 void complex_integral_tests(Integer*)
 {
-    boost::mt19937 rng;
-    boost::uniform_int<Integer> uniform(
-            (std::numeric_limits<Integer>::min)(),
-            (std::numeric_limits<Integer>::max)());
-    boost::variate_generator<boost::mt19937&, boost::uniform_int<Integer> >
-        uniform_generator(rng, uniform);
-
-    for(int i = 0; i < 100; ++i)
-    {
-        std::complex<Integer>v(uniform_generator(), uniform_generator());
-        generic_complex_tests(v);
-    }
+    typedef std::complex<Integer> complex;
+    generic_complex_tests(complex(0,0));
+    generic_complex_tests(complex(15342,124));
+    generic_complex_tests(complex(25,54356));
+    generic_complex_tests(complex(5325,2346));
+    generic_complex_tests(complex(-243897,-49923874));
+    generic_complex_tests(complex(-543,763));
 }
 
 int main()
@@ -105,4 +93,4 @@ int main()
     return boost::report_errors();
 }
 
-#endif
+#endif // TEST_EXTENSIONS

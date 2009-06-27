@@ -6,8 +6,13 @@
 // This test just makes sure a header which uses hash_fwd can compile without
 // the main hash headers.
 
-#include "./hash_fwd_test.hpp"
+#if !defined(TEST_EXTENSIONS) || defined(TEST_STD_INCLUDES)
 
+int main() {}
+
+#else
+
+#include "./hash_fwd_test.hpp"
 #include <boost/detail/lightweight_test.hpp>
 
 template <class T> void unused(T const&) {}
@@ -30,10 +35,11 @@ void fwd_test()
     unused(y1); unused(y2); unused(y3);
 }
 
-
 int main()
 {
     fwd_test();
+
     return boost::report_errors();
 }
 
+#endif // defined(TEST_EXTENSIONS) && !defined(TEST_STD_INCLUDES)

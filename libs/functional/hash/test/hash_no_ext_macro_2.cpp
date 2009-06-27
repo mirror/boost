@@ -4,10 +4,17 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define HASH_NAMESPACE boost
+
+// Include header with BOOST_HASH_NO_EXTENSIONS defined
+#if !defined(BOOST_HASH_NO_EXTENSIONS)
 #define BOOST_HASH_NO_EXTENSIONS
+#endif
 #include <boost/functional/hash.hpp>
+
+// Include header without BOOST_HASH_NO_EXTENSIONS defined
 #undef BOOST_HASH_NO_EXTENSIONS
 #include <boost/functional/hash.hpp>
+
 #include <boost/detail/lightweight_test.hpp>
 #include <map>
 

@@ -15,6 +15,8 @@
 
 #include <cmath>
 #include <boost/functional/hash/detail/limits.hpp>
+#include <boost/functional/hash/detail/float_functions.hpp>
+#include <boost/detail/workaround.hpp>
 
 #include <iostream>
 
@@ -42,8 +44,6 @@ void float_tests(char const* name, T* = 0)
         <<"\n"
         <<"boost::hash_detail::call_ldexp<T>::float_type = "
             <<float_type((BOOST_DEDUCED_TYPENAME boost::hash_detail::call_ldexp<T>::float_type*)0)<<"\n"
-        <<"boost::call_frexp<T>::float_type = "
-            <<float_type((BOOST_DEDUCED_TYPENAME boost::hash_detail::call_frexp<T>::float_type*)0)<<"\n"
         <<"boost::hash_detail::call_frexp<T>::float_type = "
             <<float_type((BOOST_DEDUCED_TYPENAME boost::hash_detail::call_frexp<T>::float_type*)0)<<"\n"
         <<"boost::hash_detail::select_hash_type<T>::type = "
@@ -59,8 +59,10 @@ void float_tests(char const* name, T* = 0)
     BOOST_TEST(zero == minus_zero);
     BOOST_TEST(x1(zero) == x1(minus_zero));
 
+#if defined(TEST_EXTENSIONS)
     BOOST_TEST(x1(zero) == HASH_NAMESPACE::hash_value(zero));
     BOOST_TEST(x1(minus_zero) == HASH_NAMESPACE::hash_value(minus_zero));
+#endif
 
     using namespace std;
 
@@ -78,9 +80,11 @@ void float_tests(char const* name, T* = 0)
         T minus_infinity2 = (T) -1. / zero;
         T minus_infinity3 = (T) 1. / minus_zero;
 
+#if defined(TEST_EXTENSIONS)
         BOOST_TEST(x1(infinity) == HASH_NAMESPACE::hash_value(infinity));
         BOOST_TEST(x1(minus_infinity)
                 == HASH_NAMESPACE::hash_value(minus_infinity));
+#endif
 
         if(infinity == infinity2)
             BOOST_TEST(x1(infinity) == x1(infinity2));
@@ -134,10 +138,12 @@ void float_tests(char const* name, T* = 0)
     BOOST_TEST(half_max != three_quarter_max);
     BOOST_TEST(quarter_max != three_quarter_max);
 
+#if defined(TEST_EXTENSIONS)
     BOOST_TEST(x1(max) == HASH_NAMESPACE::hash_value(max));
     BOOST_TEST(x1(half_max) == HASH_NAMESPACE::hash_value(half_max));
     BOOST_TEST(x1(quarter_max) == HASH_NAMESPACE::hash_value(quarter_max));
     BOOST_TEST(x1(three_quarter_max) == HASH_NAMESPACE::hash_value(three_quarter_max));
+#endif
 
     // The '!=' tests could legitimately fail, but with my hash it indicates a bug.
     BOOST_TEST(x1(max) == x1(max));
@@ -159,12 +165,18 @@ void float_tests(char const* name, T* = 0)
     T v2 = acos((T) 0);
     if(v1 == v2)
         BOOST_TEST(x1(v1) == x1(v2));
+
+#if defined(TEST_EXTENSIONS)
     BOOST_TEST(x1(v1) == HASH_NAMESPACE::hash_value(v1));
     BOOST_TEST(x1(v2) == HASH_NAMESPACE::hash_value(v2));
 #endif
+    
+#endif
 
+#if defined(TEST_EXTENSIONS)
     BOOST_TEST(x1(boost::hash_detail::limits<T>::epsilon()) ==
             HASH_NAMESPACE::hash_value(boost::hash_detail::limits<T>::epsilon()));
+#endif
 
     BOOST_TEST(boost::hash_detail::limits<T>::epsilon() != (T) 0);
     if(x1(boost::hash_detail::limits<T>::epsilon()) == x1((T) 0))
@@ -195,7 +207,7 @@ void float_tests(char const* name, T* = 0)
         if(x1(boost::hash_detail::limits<T>::denorm_min()) == x1(zero)) {
             std::cerr<<"x1(denorm_min) == x1(zero) == "<<x1(zero)<<"\n";
         }
-#if !BOOST_WORKAROUND(__DECCXX_VER,<70190006)
+#if !BOOST_WORKAROUND(__DECCXX_VER,<70190006) && defined(TEST_EXTENSIONS)
         // The Tru64/CXX standard library prior to 7.1 contains a bug in the
         // specialization of boost::hash_detail::limits::denorm_min() for long
         // doubles which causes this test to fail.
@@ -213,7 +225,7 @@ void float_tests(char const* name, T* = 0)
     }
 
 // NaN also causes borland to crash.
-#if !defined(__BORLANDC__)
+#if !defined(__BORLANDC__) && defined(TEST_EXTENSIONS)
     if(boost::hash_detail::limits<T>::has_quiet_NaN) {
         if(x1(boost::hash_detail::limits<T>::quiet_NaN()) == x1(1.0)) {
             std::cerr<<"x1(quiet_NaN) == x1(1.0) == "<<x1(1.0)<<"\n";

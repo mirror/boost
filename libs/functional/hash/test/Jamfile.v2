@@ -36,10 +36,23 @@ test-suite functional/hash
         [ run hash_complex_test.cpp ]
         [ run link_test.cpp link_test_2.cpp ]
         [ run link_ext_test.cpp link_no_ext_test.cpp ]
+        [ run extensions_hpp_test.cpp ]
         [ run container_fwd_test.cpp ]
         [ compile-fail hash_no_ext_fail_test.cpp ]
+        [ compile-fail namespace_fail_test.cpp ]
         [ run hash_no_ext_macro_1.cpp ]
         [ run hash_no_ext_macro_2.cpp ]
+    ;
+
+test-suite functional/hash_no_ext
+    :
+        [ run hash_number_test.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_number_test ]
+        [ run hash_pointer_test.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_pointer_test ]
+        [ run hash_function_pointer_test.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_function_pointer_test ]
+        [ run hash_float_test.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_float_test ]
+        [ run hash_long_double_test.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_long_double_test ]
+        [ run hash_string_test.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_string_test ]
+        [ run link_test.cpp link_test_2.cpp : : : <define>BOOST_HASH_NO_EXTENSIONS : no_ext_link_test ]
     ;
 
 build-project ../examples ;
