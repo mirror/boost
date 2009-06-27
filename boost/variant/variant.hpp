@@ -15,7 +15,10 @@
 
 #include <cstddef> // for std::size_t
 #include <new> // for placement new
+
+#if !defined(BOOST_NO_TYPEID)
 #include <typeinfo> // for typeid, std::type_info
+#endif // BOOST_NO_TYPEID
 
 #include "boost/variant/detail/config.hpp"
 #include "boost/mpl/aux_/config/eti.hpp"
@@ -691,6 +694,9 @@ public: // internal visitor interfaces
 //
 // Generic static visitor that performs a typeid on the value it visits.
 //
+
+#if !defined(BOOST_NO_TYPEID)
+
 class reflect
     : public static_visitor<const std::type_info&>
 {
@@ -703,6 +709,8 @@ public: // visitor interfaces
     }
 
 };
+
+#endif // BOOST_NO_TYPEID
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class comparer
@@ -1627,11 +1635,13 @@ public: // queries
         return false;
     }
 
+#if !defined(BOOST_NO_TYPEID)
     const std::type_info& type() const
     {
         detail::variant::reflect visitor;
         return this->apply_visitor(visitor);
     }
+#endif
 
 public: // prevent comparison with foreign types
 
@@ -1823,6 +1833,9 @@ inline void swap(
 } // namespace boost
 
 // implementation additions
+
+#if !defined(BOOST_NO_IOSTREAM)
 #include "boost/variant/detail/variant_io.hpp"
+#endif // BOOST_NO_IOSTREAM
 
 #endif // BOOST_VARIANT_VARIANT_HPP

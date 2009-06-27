@@ -232,29 +232,6 @@ struct int_adder : boost::static_visitor<>
 
 
 
-
-struct held_type_name : boost::static_visitor<std::string>
-{
-   
-   template<typename T>
-   std::string operator()(const T& ) const
-   {
-      ost_ << '[' << typeid(T).name() << ']';
-      return result();
-   }
-
-   std::string result() const
-   {
-      return ost_.str();
-   }
-
-   mutable std::ostringstream ost_;
-
-}; //held_type_name
-
-
-
-
 template<typename T>
 struct spec 
 {
@@ -267,7 +244,9 @@ inline void verify(VariantType& var, spec<S>, std::string str = "")
    const VariantType& cvar = var;
 
    BOOST_CHECK(boost::apply_visitor(total_sizeof(), cvar) == sizeof(S));
+#if !defined(BOOST_NO_TYPEID)
    BOOST_CHECK(cvar.type() == typeid(S));
+#endif
 
    //
    // Check get<>()
@@ -316,7 +295,9 @@ inline void verify_not(VariantType& var, spec<S>)
 {
    const VariantType& cvar = var;
 
+#if !defined(BOOST_NO_TYPEID)
    BOOST_CHECK(cvar.type() != typeid(S));
+#endif
 
    //
    // Check get<>()
