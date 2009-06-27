@@ -34,6 +34,7 @@ cd ${cvs_dir}
 cd boost_${cvs_branch}
 opt=""
 opt="${opt} -crlf"
+opt="${opt} -end"
 opt="${opt} -link"
 opt="${opt} -long_name"
 opt="${opt} -tab"

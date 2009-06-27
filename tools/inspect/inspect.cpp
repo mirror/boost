@@ -32,6 +32,7 @@
 // the inspectors
 #include "copyright_check.hpp"
 #include "crlf_check.hpp"
+#include "end_check.hpp"
 #include "license_check.hpp"
 #include "link_check.hpp"
 #include "path_name_check.hpp"
@@ -523,6 +524,7 @@ namespace
          "  -license\n"
          "  -copyright\n"
          "  -crlf\n"
+         "  -end\n"
          "  -link\n"
          "  -path_name\n"
          "  -tab\n"
@@ -692,6 +694,7 @@ int cpp_main( int argc_param, char * argv_param[] )
   bool license_ck = true;
   bool copyright_ck = true;
   bool crlf_ck = true;
+  bool end_ck = true;
   bool link_ck = true;
   bool path_name_ck = true;
   bool tab_ck = true;
@@ -723,6 +726,7 @@ int cpp_main( int argc_param, char * argv_param[] )
     license_ck = false;
     copyright_ck = false;
     crlf_ck = false;
+    end_ck = false;
     link_ck = false;
     path_name_ck = false;
     tab_ck = false;
@@ -740,6 +744,8 @@ int cpp_main( int argc_param, char * argv_param[] )
       copyright_ck = true;
     else if ( std::strcmp( argv[1], "-crlf" ) == 0 )
         crlf_ck = true;
+    else if ( std::strcmp( argv[1], "-end" ) == 0 )
+        end_ck = true;
     else if ( std::strcmp( argv[1], "-link" ) == 0 )
       link_ck = true;
     else if ( std::strcmp( argv[1], "-path_name" ) == 0 )
@@ -781,6 +787,8 @@ int cpp_main( int argc_param, char * argv_param[] )
     inspectors.push_back( inspector_element( new boost::inspect::copyright_check ) );
   if ( crlf_ck )
     inspectors.push_back( inspector_element( new boost::inspect::crlf_check ) );
+  if ( end_ck )
+    inspectors.push_back( inspector_element( new boost::inspect::end_check ) );
   if ( link_ck )
     inspectors.push_back( inspector_element( new boost::inspect::link_check ) );
   if ( path_name_ck )
