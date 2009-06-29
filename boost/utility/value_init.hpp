@@ -106,8 +106,10 @@ class value_initialized
       ::boost::swap( this->data(), arg.data() );
     }
 
+#if !BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 900)
     operator T const &() const { return this->data(); }
-
+#endif
+    
     operator T&() { return this->data(); }
 
 } ;
