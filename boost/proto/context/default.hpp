@@ -137,13 +137,19 @@
             /// INTERNAL ONLY
             template<typename Expr, typename Context>
             struct is_member_function_eval
-            {
-                typedef typename proto::result_of::child_c<Expr, 1>::type e1;
-                typedef typename proto::result_of::eval<UNREF(e1), Context>::type r1;
-                typedef typename remove_const<typename remove_reference<r1>::type>::type uncvref_r1;
-                typedef typename is_member_function_pointer<uncvref_r1>::type type;
-                BOOST_STATIC_CONSTANT(bool, value = type::value);
-            };
+              : is_member_function_pointer<
+                    typename remove_const<
+                        typename remove_reference<
+                            typename proto::result_of::eval<
+                                typename remove_reference<
+                                    typename proto::result_of::child_c<Expr, 1>::type
+                                >::type
+                              , Context
+                            >::type
+                        >::type
+                    >::type
+                >
+            {};
 
             /// INTERNAL ONLY
             template<typename Expr, typename Context, bool IsMemFunCall>
@@ -154,12 +160,11 @@
                 typedef typename result_of::child_c<Expr, 1>::type e1;
                 typedef typename proto::result_of::eval<UNREF(e0), Context>::type r0;
                 typedef typename proto::result_of::eval<UNREF(e1), Context>::type r1;
-                typedef typename remove_const<typename remove_reference<r1>::type>::type uncvref_r1;
             public:
-                typedef typename detail::mem_ptr_fun<r0, uncvref_r1>::result_type result_type;
+                typedef typename detail::mem_ptr_fun<r0, r1>::result_type result_type;
                 result_type operator ()(Expr &expr, Context &ctx) const
                 {
-                    return detail::mem_ptr_fun<r0, uncvref_r1>()(
+                    return detail::mem_ptr_fun<r0, r1>()(
                         proto::eval(proto::child_c<0>(expr), ctx)
                       , proto::eval(proto::child_c<1>(expr), ctx)
                     );
@@ -175,7 +180,6 @@
                 typedef typename result_of::child_c<Expr, 1>::type e1;
                 typedef typename proto::result_of::eval<UNREF(e0), Context>::type r0;
                 typedef typename proto::result_of::eval<UNREF(e1), Context>::type r1;
-                typedef typename remove_const<typename remove_reference<r1>::type>::type uncvref_r1;
             public:
                 typedef detail::memfun<r0, r1> result_type;
                 result_type const operator ()(Expr &expr, Context &ctx) const
