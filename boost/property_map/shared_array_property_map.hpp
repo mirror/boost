@@ -25,6 +25,8 @@ class shared_array_property_map
   typedef T& reference;
   typedef boost::lvalue_property_map_tag category;
 
+  inline shared_array_property_map(): data(), index() {}
+
   explicit inline shared_array_property_map(
     size_t n,
     const IndexMap& _id = IndexMap())
