@@ -140,13 +140,18 @@
             /// INTERNAL ONLY
             template<typename Expr, typename State, typename Data>
             struct is_member_function_invocation
-            {
-                typedef typename result_of::child_c<Expr, 1>::type e1;
-                typedef typename Grammar::template impl<e1, State, Data>::result_type r1;
-                typedef typename remove_const<typename remove_reference<r1>::type>::type uncvref_r1;
-                typedef typename is_member_function_pointer<uncvref_r1>::type type;
-                BOOST_STATIC_CONSTANT(bool, value = type::value);
-            };
+              : is_member_function_pointer<
+                    typename remove_const<
+                        typename remove_reference<
+                            typename Grammar::template impl<
+                                typename result_of::child_c<Expr, 1>::type
+                              , State
+                              , Data
+                            >::result_type
+                        >::type
+                    >::type
+                >
+            {};
 
             /// INTERNAL ONLY
             template<typename Expr, typename State, typename Data, bool IsMemFunCall>
@@ -158,9 +163,8 @@
                 typedef typename result_of::child_c<Expr, 1>::type e1;
                 typedef typename Grammar::template impl<e0, State, Data>::result_type r0;
                 typedef typename Grammar::template impl<e1, State, Data>::result_type r1;
-                typedef typename remove_const<typename remove_reference<r1>::type>::type uncvref_r1;
             public:
-                typedef typename detail::mem_ptr_fun<r0, uncvref_r1>::result_type result_type;
+                typedef typename detail::mem_ptr_fun<r0, r1>::result_type result_type;
                 result_type operator ()(
                     typename memfun_impl::expr_param e
                   , typename memfun_impl::state_param s
@@ -169,7 +173,7 @@
                 {
                     typename Grammar::template impl<e0, State, Data> t0;
                     typename Grammar::template impl<e1, State, Data> t1;
-                    return detail::mem_ptr_fun<r0, uncvref_r1>()(
+                    return detail::mem_ptr_fun<r0, r1>()(
                         t0(proto::child_c<0>(e), s, d)
                       , t1(proto::child_c<1>(e), s, d)
                     );

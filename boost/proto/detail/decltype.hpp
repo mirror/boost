@@ -15,8 +15,10 @@
 #include <boost/get_pointer.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
+#include <boost/preprocessor/repetition/enum_trailing_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
+#include <boost/preprocessor/iteration/local.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
@@ -255,6 +257,21 @@ namespace boost { namespace proto
             typedef U type;
         };
 
+        #define BOOST_PP_LOCAL_MACRO(N)                                                             \
+        template<typename T, typename U BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>               \
+        struct classtypeof<T (U::*)(BOOST_PP_ENUM_PARAMS(N, A))>                                    \
+        {                                                                                           \
+            typedef U type;                                                                         \
+        };                                                                                          \
+        template<typename T, typename U BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>               \
+        struct classtypeof<T (U::*)(BOOST_PP_ENUM_PARAMS(N, A)) const>                              \
+        {                                                                                           \
+            typedef U type;                                                                         \
+        };                                                                                          \
+        /**/
+        #define BOOST_PP_LOCAL_LIMITS (0, BOOST_PROTO_MAX_ARITY)
+        #include BOOST_PP_LOCAL_ITERATE()
+
         ////////////////////////////////////////////////////////////////////////////////////////////
         template<typename T>
         T &lvalue(T &t)
@@ -356,20 +373,49 @@ namespace boost { namespace proto
             };
 
             ////////////////////////////////////////////////////////////////////////////////////////////
-            template<typename T, typename U>
-            struct mem_ptr_fun;
-
-            template<typename T, typename U, typename V>
-            struct mem_ptr_fun<T, U V::*>
+            template<
+                typename T
+              , typename U
+              , bool IsMemPtr = is_member_object_pointer<
+                    typename remove_reference<U>::type
+                >::value
+            >
+            struct mem_ptr_fun
             {
                 BOOST_PROTO_DECLTYPE_(
-                    BOOST_PROTO_GET_POINTER(V, proto::detail::make_mutable<T>()) ->* proto::detail::make<U V::*>()
+                    proto::detail::make_mutable<T>() ->* proto::detail::make<U>()
                   , result_type
                 )
 
                 result_type operator()(
                     typename add_reference<typename add_const<T>::type>::type t
-                  , U V::*u
+                  , typename add_reference<typename add_const<U>::type>::type u
+                ) const
+                {
+                    return t ->* u;
+                }
+            };
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            template<typename T, typename U>
+            struct mem_ptr_fun<T, U, true>
+            {
+                typedef
+                    typename classtypeof<
+                        typename remove_const<
+                            typename remove_reference<U>::type
+                        >::type
+                    >::type
+                V;
+
+                BOOST_PROTO_DECLTYPE_(
+                    BOOST_PROTO_GET_POINTER(V, proto::detail::make_mutable<T>()) ->* proto::detail::make<U>()
+                  , result_type
+                )
+
+                result_type operator()(
+                    typename add_reference<typename add_const<T>::type>::type t
+                  , U u
                 ) const
                 {
                     return BOOST_PROTO_GET_POINTER(V, t) ->* u;
@@ -450,14 +496,13 @@ namespace boost { namespace proto
         //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(&)()>::type>));
 
         template<typename T, typename PMF>
-        struct memfun;
-
-        template<typename T, typename U, typename V>
-        struct memfun<T, U V::*>
+        struct memfun
         {
-            typedef typename boost::result_of<U V::*(T)>::type result_type;
+            typedef typename remove_const<typename remove_reference<PMF>::type>::type pmf_type;
+            typedef typename classtypeof<pmf_type>::type V;
+            typedef typename boost::result_of<pmf_type(T)>::type result_type;
 
-            memfun(T t, U V::*p)
+            memfun(T t, PMF p)
               : obj(t)
               , pmf(p)
             {}
@@ -482,7 +527,7 @@ namespace boost { namespace proto
 
         private:
             T obj;
-            U V::*pmf;
+            PMF pmf;
         };
 
     } // namespace detail
