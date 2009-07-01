@@ -9,11 +9,17 @@
 
 Squeeze the most performance out of xpressive with these tips and tricks.
 
-[h2 Use Static Regexes]
+[h2 Compile Patterns Once And Reuse Them]
 
-On average, static regexes execute about 10 to 15% faster than their
-dynamic counterparts. It's worth familiarizing yourself with the static
-regex dialect.
+Compiling a regex (dynamic or static) is /far/ more expensive than executing a
+match or search. If you have the option, prefer to compile a pattern into
+a _basic_regex_ object once and reuse it rather than recreating it over
+and over.
+
+Since _basic_regex_ objects are not mutated by any of the regex algorithms, they
+are completely thread-safe once their initialization (and that of any grammars of
+which they are members) completes. The easiest way to reuse your patterns is
+to simply make your _basic_regex_ objects "static const".
 
 [h2 Reuse _match_results_ Objects]
 
@@ -44,12 +50,11 @@ immediately by calling `strlen`. If you already know the length of the string,
 you can avoid this overhead by calling the regex algorithms with a `[begin, end)`
 pair.
 
-[h2 Compile Patterns Once And Reuse Them]
+[h2 Use Static Regexes]
 
-Compiling a regex (dynamic or static) is more expensive than executing a
-match or search. If you have the option, prefer to compile a pattern into
-a _basic_regex_ object once and reuse it rather than recreating it over
-and over.
+On average, static regexes execute about 10 to 15% faster than their
+dynamic counterparts. It's worth familiarizing yourself with the static
+regex dialect.
 
 [h2 Understand [^syntax_option_type::optimize]]
 
