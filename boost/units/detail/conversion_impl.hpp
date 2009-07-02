@@ -342,7 +342,7 @@ struct conversion_helper<quantity<Unit1, T1>, quantity<Unit2, T2> >
     {
         Unit1 u1;
         Unit2 u2;
-        return(destination_type::from_value(source.value() * conversion_factor(u1, u2)));
+        return(destination_type::from_value(static_cast<T2>(source.value() * conversion_factor(u1, u2))));
     }
 };
 
