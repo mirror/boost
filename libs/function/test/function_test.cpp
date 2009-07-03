@@ -629,6 +629,30 @@ test_ref()
   }
 }
 
+static void dummy() {}
+
+static void test_empty_ref()
+{
+  boost::function<void()> f1;
+  boost::function<void()> f2(boost::ref(f1));
+
+  try {
+    f2();
+    BOOST_ERROR("Exception didn't throw for reference to empty function.");
+  }
+  catch(runtime_error e) {}
+
+  f1 = dummy;
+
+  try {
+    f2();
+  }
+  catch(runtime_error e) {
+    BOOST_ERROR("Error calling referenced function.");
+  }
+}
+
+
 static void test_exception()
 {
   boost::function<int (int, int)> f;
@@ -674,6 +698,7 @@ int test_main(int, char* [])
   test_emptiness();
   test_member_functions();
   test_ref();
+  test_empty_ref();
   test_exception();
   test_implicit();
   test_call();

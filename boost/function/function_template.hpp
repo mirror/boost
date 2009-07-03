@@ -625,14 +625,10 @@ namespace boost {
         assign_to(const reference_wrapper<FunctionObj>& f, 
                   function_buffer& functor, function_obj_ref_tag)
         {
-          if (!boost::detail::function::has_empty_target(f.get_pointer())) {
-            functor.obj_ref.obj_ptr = (void *)f.get_pointer();
-            functor.obj_ref.is_const_qualified = is_const<FunctionObj>::value;
-            functor.obj_ref.is_volatile_qualified = is_volatile<FunctionObj>::value;
-            return true;
-          } else {
-            return false;
-          }
+          functor.obj_ref.obj_ptr = (void *)f.get_pointer();
+          functor.obj_ref.is_const_qualified = is_const<FunctionObj>::value;
+          functor.obj_ref.is_volatile_qualified = is_volatile<FunctionObj>::value;
+          return true;
         }
         template<typename FunctionObj,typename Allocator>
         bool 
