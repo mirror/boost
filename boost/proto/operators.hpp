@@ -28,7 +28,7 @@ namespace boost { namespace proto
 {
     namespace detail
     {
-        template<typename Domain, typename Expr>
+        template<typename Domain, typename Expr, typename EnableIf = void>
         struct generate_if
           : lazy_enable_if_c<
                 matches<Expr, typename Domain::proto_grammar>::value
@@ -38,7 +38,7 @@ namespace boost { namespace proto
 
         // Optimization, generate fewer templates...
         template<typename Expr>
-        struct generate_if<proto::default_domain, Expr>
+        struct generate_if<proto::default_domain, Expr, void>
         {
             typedef Expr type;
         };
@@ -224,22 +224,24 @@ namespace boost { namespace proto
     template<typename Arg>                                                                          \
     typename detail::generate_if<                                                                   \
         typename Arg::proto_domain                                                                  \
-      , proto::expr<TAG, list1<typename Arg::proto_derived_expr &>, 1>                              \
+      , proto::expr<TAG, list1<Arg &>, 1>                                                           \
+      , typename Arg::proto_is_expr_                                                                \
     >::type const                                                                                   \
     operator OP(Arg &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                                  \
     {                                                                                               \
-        typedef proto::expr<TAG, list1<typename Arg::proto_derived_expr &>, 1> that_type;           \
+        typedef proto::expr<TAG, list1<Arg &>, 1> that_type;                                        \
         that_type that = {arg};                                                                     \
         return typename Arg::proto_domain()(that);                                                  \
     }                                                                                               \
     template<typename Arg>                                                                          \
     typename detail::generate_if<                                                                   \
         typename Arg::proto_domain                                                                  \
-      , proto::expr<TAG, list1<typename Arg::proto_derived_expr const &>, 1>                        \
+      , proto::expr<TAG, list1<Arg const &>, 1>                                                     \
+      , typename Arg::proto_is_expr_                                                                \
     >::type const                                                                                   \
     operator OP(Arg const &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                            \
     {                                                                                               \
-        typedef proto::expr<TAG, list1<typename Arg::proto_derived_expr const &>, 1> that_type;     \
+        typedef proto::expr<TAG, list1<Arg const &>, 1> that_type;                                  \
         that_type that = {arg};                                                                     \
         return typename Arg::proto_domain()(that);                                                  \
     }                                                                                               \
