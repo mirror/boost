@@ -128,6 +128,10 @@ test_main(int, char*[])
   BOOST_CHECK(dealloc_count == 0);
   fv.assign( &do_nothing, std::allocator<int>() );
   fv.clear();
+  
+  function0<void> fv2;
+  fv.assign(&do_nothing, std::allocator<int>() );
+  fv2.assign(fv, std::allocator<int>() );
 
   return 0;
 }

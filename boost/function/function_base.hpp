@@ -262,6 +262,12 @@ namespace boost {
           A(a)
         {
         }
+	
+	functor_wrapper(const functor_wrapper& f) :
+          F(static_cast<const F&>(f)),
+          A(static_cast<const A&>(f))
+	{
+	}
       };
 
       /**
