@@ -10,6 +10,8 @@
 
 #if defined(BOOST_MSVC)
 #define BOOST_ATTRIBUTE_NORETURN __declspec(noreturn)
+#elif defined(__GNUC__)
+#define BOOST_ATTRIBUTE_NORETURN __attribute__((noreturn))
 #else
 #define BOOST_ATTRIBUTE_NORETURN
 #endif
