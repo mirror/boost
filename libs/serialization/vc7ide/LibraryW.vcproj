@@ -132,7 +132,7 @@
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
 				SmallerTypeCheck="FALSE"
-				RuntimeLibrary="1"
+				RuntimeLibrary="5"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
@@ -274,8 +274,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug runtime-static|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/link-static/&quot;"
-			IntermediateDirectory="$(OutDir)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="0">
 			<Tool
@@ -413,6 +413,60 @@
 				RelativePath="..\src\codecvt_null.cpp">
 			</File>
 			<File
+				RelativePath="..\src\polymorphic_binary_wiarchive.cpp">
+				<FileConfiguration
+					Name="Debug runtime-dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\polymorphic_binary_woarchive.cpp">
+				<FileConfiguration
+					Name="Debug runtime-dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\polymorphic_text_wiarchive.cpp">
+				<FileConfiguration
+					Name="Debug runtime-dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\polymorphic_text_woarchive.cpp">
+				<FileConfiguration
+					Name="Debug runtime-dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\polymorphic_xml_wiarchive.cpp">
+				<FileConfiguration
+					Name="Debug runtime-dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\polymorphic_xml_woarchive.cpp">
+				<FileConfiguration
+					Name="Debug runtime-dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\src\text_wiarchive.cpp">
 				<FileConfiguration
 					Name="Release runtime-static threading-multi|Win32">
@@ -506,6 +560,12 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\binary_woarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\polymorphic_binary_wiarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\polymorphic_binary_woarchive.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\polymorphic_text_wiarchive.hpp">

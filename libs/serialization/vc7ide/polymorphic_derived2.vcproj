@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="dll_a"
+	Name="dll_polymorphic_derived2"
 	ProjectGUID="{CED1BD64-563F-485D-AE69-668797013AA0}"
-	RootNamespace="dll_a"
+	RootNamespace="dll_derived2"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -21,10 +21,10 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;BOOST_LIB_DIAGNOSTIC=1;BOOST_ALL_DYN_LINK=1"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
+				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
@@ -35,13 +35,13 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/dll_a.dll"
+				OutputFile=""
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(ConfigurationName)"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/dll_a.pdb"
+				ProgramDatabaseFile="$(OutDir)/dll_derived2.pdb"
 				SubSystem="2"
-				ImportLibrary="$(OutDir)/dll_a.lib"
+				ImportLibrary="$(OutDir)/dll_derived2.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -82,67 +82,14 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/dll_a.dll"
+				OutputFile=""
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(ConfigurationName)"
 				GenerateDebugInformation="TRUE"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="$(OutDir)/dll_a.lib"
-				TargetMachine="1"/>
-			<Tool
-				Name="VCMIDLTool"/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-		</Configuration>
-		<Configuration
-			Name="Debug runtime-dynamic threading-multi|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
-			CharacterSet="2">
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;BOOST_LIB_DIAGNOSTIC=1;BOOST_ALL_DYN_LINK=1"
-				MinimalRebuild="TRUE"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				TreatWChar_tAsBuiltInType="TRUE"
-				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="4"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/a.dll"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(ConfigurationName)"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/dll_a.pdb"
-				SubSystem="2"
-				ImportLibrary="$(OutDir)/a.lib"
+				ImportLibrary="$(OutDir)/dll_derived2.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -167,9 +114,10 @@
 		</Configuration>
 		<Configuration
 			Name="Debug runtime-dynamic|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2">
+			ConfigurationType="2"
+			ReferencesPath="$(ConfigurationName)">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
@@ -179,12 +127,13 @@
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
+				WarningLevel="3"
 				DebugInformationFormat="4"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/$(ProjectName).dll"
+				AdditionalDependencies="dll_polymorphic_base.lib"
 				AdditionalLibraryDirectories="$(ConfigurationName)"
 				GenerateDebugInformation="TRUE"/>
 			<Tool
@@ -217,7 +166,10 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath="..\test\dll_a.cpp">
+				RelativePath="..\test\polymorphic_base.cpp">
+			</File>
+			<File
+				RelativePath="..\test\polymorphic_derived2.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -225,13 +177,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath="..\test\A.hpp">
+				RelativePath="..\test\polymorphic_base.hpp">
 			</File>
 			<File
-				RelativePath="..\test\A.ipp">
-			</File>
-			<File
-				RelativePath="..\test\test_decl.hpp">
+				RelativePath="..\test\polymorphic_derived2.hpp">
 			</File>
 		</Filter>
 	</Files>
