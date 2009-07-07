@@ -43,16 +43,8 @@ private:
     // so that different derivations of this class can be simultaneously
     // included in implementation of sets and maps.
     const unsigned int m_type_info_key;
-    virtual bool
-    is_less_than(const extended_type_info & /*rhs*/) const {
-        assert(false);
-        return false;
-    };
-    virtual bool
-    is_equal(const extended_type_info & /*rhs*/) const {
-        assert(false);
-        return false;
-    };
+    virtual bool is_less_than(const extended_type_info & /*rhs*/) const = 0;
+    virtual bool is_equal(const extended_type_info & /*rhs*/) const = 0;
     void key_unregister();
 protected:
     const char * m_key;

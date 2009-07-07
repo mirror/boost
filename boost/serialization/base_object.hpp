@@ -84,8 +84,7 @@ namespace detail
     };
 
 } // namespace detail
-
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
+#if defined(__BORLANDC__) && __BORLANDC__ < 0x610
 template<class Base, class Derived>
 const Base & 
 base_object(const Derived & d)
