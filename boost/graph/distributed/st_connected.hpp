@@ -46,8 +46,8 @@ st_connected(const DistributedGraph& g,
              typename graph_traits<DistributedGraph>::vertex_descriptor t,
              ColorMap color, OwnerMap owner)
 {
-  using boost::parallel::process_group;
-  using boost::parallel::process_group_type;
+  using boost::graph::parallel::process_group;
+  using boost::graph::parallel::process_group_type;
   using boost::parallel::all_reduce;
 
   typedef typename property_traits<ColorMap>::value_type Color;
