@@ -54,7 +54,6 @@ void
 test_dimacs_reader(const char *filename)
 {
   mpi_process_group pg;
-  mpi_process_group::process_id_type id = process_id(pg);
 
   typedef adjacency_list<vecS, 
         distributedS<mpi_process_group, vecS>,

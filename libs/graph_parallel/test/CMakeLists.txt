@@ -87,6 +87,7 @@ if (MPI_FOUND)
   boost_graph_parallel_test(distributed_rmat_cc_ps)
   boost_graph_parallel_test(distributed_rmat_cc)
   boost_graph_parallel_test(distributed_rmat_pagerank)
+  boost_graph_parallel_test(distributed_st_connected_test)
 
   boost_add_executable(ssca 
     ssca.cpp

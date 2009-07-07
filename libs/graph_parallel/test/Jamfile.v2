@@ -41,6 +41,7 @@ test-suite graph_parallel
   [ mpi-test distributed_rmat_cc_ps : : : 2 ]
   [ mpi-test distributed_rmat_cc : : : 2 ]
   [ mpi-test distributed_rmat_pagerank : : : 2 ]
+  [ mpi-test distributed_st_connected_test : : : 2 ]
   ;
 }
 

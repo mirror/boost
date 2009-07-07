@@ -29,6 +29,7 @@
 #include <boost/graph/strong_components.hpp>
 #include <boost/graph/distributed/betweenness_centrality.hpp>
 #include <boost/graph/distributed/dehne_gotz_min_spanning_tree.hpp>
+#include <boost/graph/distributed/st_connected.hpp>
 
 #if 0 // Contains internal AdjList types not present in CSR graph
 #  include <boost/graph/distributed/connected_components_parallel_search.hpp>
@@ -298,6 +299,9 @@ int test_main(int argc, char* argv[])
      make_iterator_property_map(explore.begin(), get(vertex_index, g)),
      get(vertex_index, g));
 #endif
+
+  // Test S-T Connected
+  st_connected(g, vertex(0, g), vertex(1, g), color, get(vertex_owner, g));
 
   // Test Connected Components
   //
