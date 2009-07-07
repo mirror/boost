@@ -29,6 +29,7 @@
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/tracking_enum.hpp>
+#include <boost/serialization/type_info_implementation.hpp>
 
 namespace boost {
 namespace serialization {
