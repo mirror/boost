@@ -40,11 +40,14 @@ archive_pointer_iserializer<Archive>::archive_pointer_iserializer(
 ) :
     basic_pointer_iserializer(eti)
 {
-    std::pair<BOOST_DEDUCED_TYPENAME  iserializer_map<Archive>::iterator, bool> result;
-    result = serialization::singleton<
-            iserializer_map<Archive> 
-        >::get_mutable_instance().insert(this);
-    assert(result.second);
+    // only insert the first one.  Assumes that DLLS are unloaded in
+    // the reverse sequence
+    //std::pair<BOOST_DEDUCED_TYPENAME  iserializer_map<Archive>::iterator, bool> result;
+    iserializer_map<Archive> & map 
+        = serialization::singleton<iserializer_map<Archive> >::get_mutable_instance();
+    iserializer_map<Archive>::iterator result = map.find(this);
+    if(result == map.end())
+        map.insert(this);
 }
 
 template<class Archive>
@@ -70,16 +73,19 @@ archive_pointer_iserializer<Archive>::find(
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 archive_pointer_iserializer<Archive>::~archive_pointer_iserializer(){
-    if(! serialization::singleton<
+    // note: we need to check that the map still exists as we can't depend
+    // on static variables being constructed in a specific sequence
+    if(serialization::singleton<
             iserializer_map<Archive> 
         >::is_destroyed()
-    ){
-        std::size_t count;
-        count = serialization::singleton<
-                iserializer_map<Archive> 
-            >::get_mutable_instance().erase(this);
-        assert(count);
-    }
+    )
+        return;
+        
+    iserializer_map<Archive> & map 
+        = serialization::singleton<iserializer_map<Archive> >::get_mutable_instance();
+    iserializer_map<Archive>::iterator result = map.find(this);
+    if(result == map.end())
+        map.erase(this);
 }
 
 } // namespace detail
