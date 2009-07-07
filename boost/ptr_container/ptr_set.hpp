@@ -31,11 +31,14 @@ namespace boost
         class Allocator      = std::allocator<void*>
     >
     class ptr_set : 
-        public ptr_set_adapter< Key, 
-                                std::set<void*,void_ptr_indirect_fun<Compare,Key>,Allocator>,
+        public ptr_set_adapter< Key, std::set<
+            typename ptr_container_detail::void_ptr<Key>::type,
+            void_ptr_indirect_fun<Compare,Key>,Allocator>,
                                 CloneAllocator, true >
     {
-        typedef ptr_set_adapter< Key, std::set<void*,void_ptr_indirect_fun<Compare,Key>,Allocator>,
+        typedef ptr_set_adapter< Key, std::set<
+            typename ptr_container_detail::void_ptr<Key>::type,
+            void_ptr_indirect_fun<Compare,Key>,Allocator>,
                                  CloneAllocator, true >
              base_type;
 

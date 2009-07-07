@@ -56,12 +56,14 @@ namespace boost
     >
     class ptr_array : public
         ptr_sequence_adapter< T,
-                              ptr_container_detail::ptr_array_impl<void*,N>,
+            ptr_container_detail::ptr_array_impl<
+                typename ptr_container_detail::void_ptr<T>::type,N>,
                               CloneAllocator >
     {
     private:
         typedef ptr_sequence_adapter< T,
-                                      ptr_container_detail::ptr_array_impl<void*,N>,
+            ptr_container_detail::ptr_array_impl<
+                typename ptr_container_detail::void_ptr<T>::type,N>,
                                       CloneAllocator >
             base_class;
 
@@ -88,7 +90,7 @@ namespace boost
             size_t i = 0;
             for( ; i != N; ++i )
                 this->base()[i] = this->null_policy_allocate_clone( 
-                                        static_cast<const T*>( &r[i] ) ); 
+                                        static_cast<const U*>( &r[i] ) ); 
         }
 
         template< class U >

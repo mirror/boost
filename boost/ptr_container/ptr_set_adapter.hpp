@@ -346,6 +346,14 @@ namespace ptr_container_detail
             BOOST_ASSERT( this->empty() ); 
         }
 
+        template< class SizeType, class Hash, class Pred, class Allocator >
+        ptr_set_adapter( SizeType n,
+                         const Hash& hash,
+                         const Pred& pred,
+                         const Allocator& a )
+         : base_type( n, hash, pred, a )
+        { }
+        
         template< class Hash, class Pred, class Allocator >
         ptr_set_adapter( const Hash& hash,
                          const Pred& pred,

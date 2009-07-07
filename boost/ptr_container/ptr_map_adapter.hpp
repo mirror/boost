@@ -442,6 +442,11 @@ namespace ptr_container_detail
                                   const allocator_type& a ) 
           : base_type( comp, a ) { }
 
+        template< class SizeType >
+        explicit ptr_map_adapter( SizeType n,
+            ptr_container_detail::unordered_associative_container_tag tag ) 
+          : base_type( n, tag ) { }
+
         template< class Hash, class Pred, class Allocator >
         ptr_map_adapter( const Hash& hash,
                          const Pred& pred,

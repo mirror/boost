@@ -29,16 +29,17 @@ namespace boost
         class Allocator      = std::allocator<void*>
     >
     class ptr_circular_buffer : public 
-        ptr_sequence_adapter< T, 
-                              boost::circular_buffer<void*,Allocator>, 
+        ptr_sequence_adapter< T, boost::circular_buffer<
+                typename ptr_container_detail::void_ptr<T>::type,Allocator>, 
                               CloneAllocator >
     {  
-        typedef ptr_sequence_adapter< T, 
-                                      boost::circular_buffer<void*,Allocator>, 
+        typedef ptr_sequence_adapter< T, boost::circular_buffer<
+                typename ptr_container_detail::void_ptr<T>::type,Allocator>, 
                                       CloneAllocator > 
             base_type;
 
-        typedef boost::circular_buffer<void*,Allocator>         circular_buffer_type;
+        typedef boost::circular_buffer<typename 
+            ptr_container_detail::void_ptr<T>::type,Allocator>  circular_buffer_type;
         typedef ptr_circular_buffer<T,CloneAllocator,Allocator> this_type;
         
     public: // typedefs
