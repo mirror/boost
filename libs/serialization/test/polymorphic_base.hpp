@@ -24,10 +24,15 @@ class polymorphic_base
 {
     friend class boost::serialization::access;
     template<class Archive>
-    void serialize(Archive & /* ar */, const unsigned int /* file_version */){
-    }
+    void serialize(
+        Archive & /* ar */, 
+        const unsigned int /* file_version */
+    ){}
 public:
-    virtual const char * get_key() const = 0;
+    // note that since this class uses the "no_rtti"
+    // extended_type_info implementation, it MUST
+    // implement this function
+    virtual const char * get_key() const;
     virtual ~polymorphic_base(){};
 };
 
@@ -35,7 +40,7 @@ BOOST_SERIALIZATION_ASSUME_ABSTRACT(polymorphic_base)
 
 BOOST_CLASS_TYPE_INFO(
     polymorphic_base,
-    extended_type_info_no_rtti<polymorphic_base>
+    boost::serialization::extended_type_info_no_rtti<polymorphic_base>
 )
 
 #endif // POLYMORPHIC_BASE_HPP

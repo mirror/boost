@@ -18,20 +18,29 @@
 
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/assume_abstract.hpp>
+#include <boost/preprocessor/facilities/empty.hpp>
 
-#ifndef DLL_DECL
-#define DLL_DECL
+#include "test_decl.hpp"
+
+#if defined(BASE_IMPORT)
+    #define DLL_DECL IMPORT_DECL
+#elif defined(BASE_EXPORT)
+    #define DLL_DECL EXPORT_DECL
+#else
+    #define DLL_DECL(x)
 #endif
 
-class DLL_DECL polymorphic_base
+class DLL_DECL(BOOST_PP_EMPTY()) base
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & /* ar */, const unsigned int /* file_version */);
 public:
-    virtual ~polymorphic_base(){};
+    virtual ~base(){};
 };
 
-BOOST_SERIALIZATION_ASSUME_ABSTRACT(polymorphic_base)
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(base)
+
+#undef  DLL_DECL
 
 #endif // BOOST_SERIALIZATION_TEST_BASE_HPP

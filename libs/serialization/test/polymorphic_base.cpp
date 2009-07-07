@@ -12,3 +12,10 @@
 #include "polymorphic_base.hpp"
 
 BOOST_CLASS_EXPORT(polymorphic_base)
+
+const char * polymorphic_base::get_key() const{
+    return
+        boost::serialization::type_info_implementation<
+            polymorphic_base
+        >::type::get_const_instance().get_key();
+}

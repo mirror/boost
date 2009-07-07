@@ -25,6 +25,40 @@ import ../util/test :
 
 BOOST_ARCHIVE_LIST = [ modules.peek : BOOST_ARCHIVE_LIST ] ;
 
+lib dll_a_lib 
+    : 
+        dll_a.cpp
+        ../build//boost_serialization
+    : 
+        <link>shared 
+    ;
+
+lib dll_base_lib 
+    : 
+        dll_base.cpp
+        ../build//boost_serialization
+    : 
+        <link>shared 
+    ;
+    
+lib dll_derived2_lib
+    :
+        dll_derived2.cpp 
+        dll_base_lib
+        ../build//boost_serialization
+    : 
+        <link>shared
+    ;
+
+lib dll_polymorphic_derived2_lib
+    :
+        polymorphic_derived2.cpp 
+        polymorphic_base.cpp
+        ../build//boost_serialization
+    : 
+        <link>shared
+    ;
+
 test-suite "serialization" :
      [ test-bsl-run_files test_array : A ]
      [ test-bsl-run_files test_binary ]
@@ -34,11 +68,11 @@ test-suite "serialization" :
      [ test-bsl-run_files test_cyclic_ptrs : A ]
      [ test-bsl-run_files test_delete_pointer ]
      [ test-bsl-run_files test_deque : A ]
-     # [ test-bsl-run_files test_derived ]
+     [ test-bsl-run_files test_derived ]
      [ test-bsl-run_files test_derived_class : A ]
      [ test-bsl-run_files test_derived_class_ptr : A ]
      [ test-bsl-run_files test_diamond ]
-     [ test-bsl-run_files test_exported ]
+     [ test-bsl-run_files test_exported : polymorphic_base ]
      [ test-bsl-run_files test_class_info_load ]
      [ test-bsl-run_files test_class_info_save ]
      [ test-bsl-run_files test_object ]
@@ -70,12 +104,17 @@ test-suite "serialization" :
      [ test-bsl-run_files test_new_operator : A ]
      [ test-bsl-run_files test_optional ]
      [ test-bsl-run_files test_shared_ptr ]
+     [ test-bsl-run_files test_shared_ptr_multi_base ]
      [ test-bsl-run_files test_shared_ptr_132 ]
      [ test-bsl-run_polymorphic_archive test_polymorphic : test_polymorphic_A A ]
-;
+    ;
 
 if ! $(BOOST_ARCHIVE_LIST) {
     test-suite "serialization2" : 
+        [ test-bsl-run test_dll_exported : polymorphic_base : dll_polymorphic_derived2_lib : <runtime-link>shared ]
+#       [ test-bsl-run test_dll_plugin : : dll_base_lib dll_derived2_lib : <runtime-link>shared ]
+        [ test-bsl-run test_dll_simple : : dll_a_lib : <runtime-link>shared ]
+
         [ test-bsl-run test_private_ctor ]
         [ test-bsl-run test_reset_object_address : A ]
         [ test-bsl-run test_void_cast ]

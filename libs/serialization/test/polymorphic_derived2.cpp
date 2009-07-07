@@ -12,16 +12,47 @@
 #include <boost/serialization/extended_type_info_no_rtti.hpp>
 #include <boost/serialization/export.hpp>
 
+#define POLYMORPHIC_DERIVED2_EXPORT
 #include "polymorphic_derived2.hpp"
 
-// note: types which use ...no_rtti MUST be exported
+// instantiate code for text archives
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+
+template EXPORT_DECL(void) polymorphic_derived2::serialize(
+    boost::archive::text_oarchive & ar,
+    const unsigned int version
+);
+template EXPORT_DECL(void) polymorphic_derived2::serialize(
+    boost::archive::text_iarchive & ar,
+    const unsigned int version
+);
+
+// instantiate code for polymorphic archives
+#include <boost/archive/polymorphic_iarchive.hpp>
+#include <boost/archive/polymorphic_oarchive.hpp>
+
+template EXPORT_DECL(void) polymorphic_derived2::serialize(
+    boost::archive::polymorphic_oarchive & ar,
+    const unsigned int version
+);
+template EXPORT_DECL(void) polymorphic_derived2::serialize(
+    boost::archive::polymorphic_iarchive & ar,
+    const unsigned int version
+);
+
+// MWerks users can do this to make their code work
+BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derived2)
+
+// note: export has to be AFTER #includes for all archive classes
 BOOST_CLASS_EXPORT(polymorphic_derived2)
 
-const char * polymorphic_derived2::get_key() const {
-    // use the exported key as the identifier
-    return
-        boost::serialization::type_info_implementation<
-            polymorphic_derived2
-        >::type::get_const_instance().get_key();
-}
+// export plug-in not yet working !!!
+#if 0
+#include <boost/serialization/factory.hpp>
+BOOST_SERIALIZATION_FACTORY_0(polymorphic_derived2)
 
+template
+EXPORT_DECL(polymorphic_derived2 *)
+boost::serialization::factory<polymorphic_derived2, 0>(std::va_list ap);
+#endif

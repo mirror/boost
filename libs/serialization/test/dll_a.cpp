@@ -8,13 +8,11 @@
 
 // Build a dll which contains the serialization for a class A
 // used in testing distribution of serialization code in DLLS
-#include "test_decl.hpp"
 
-#define DLL_DECL EXPORT_DECL(BOOST_PP_EMPTY())
+#define A_EXPORT
 #include "A.hpp"
 #include "A.ipp"
 #include "A.cpp"
-#undef  DLL_DECL
 
 // instantiate code for text archives
 

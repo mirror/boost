@@ -8,35 +8,47 @@
 
 // Build a dll which contains the serialization for a class A
 // used in testing distribution of serialization code in DLLS
-#include "test_decl.hpp"
-
-#define DLL_DECL IMPORT_DECL
-#include "base.hpp"
-#undef  DLL_DECL
-
-#define DLL_DECL EXPORT_DECL(BOOST_PP_EMPTY())
-#include "derived2.hpp"
-#undef  DLL_DECL
 
 #include <boost/serialization/nvp.hpp>
+
+#define DERIVED2_EXPORT
+#include "derived2.hpp"
+
 template<class Archive>
-void polymorphic_derived2::serialize(
+void derived2::serialize(
     Archive &ar, 
     const unsigned int /* file_version */
 ){
-    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
+    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(base);
 }
 
 // instantiate code for text archives
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 
-// instantiate code for polymorphic archives
+template EXPORT_DECL(void) derived2::serialize(
+    boost::archive::text_oarchive & ar,
+    const unsigned int version
+);
+template EXPORT_DECL(void) derived2::serialize(
+    boost::archive::text_iarchive & ar,
+    const unsigned int version
+);
+
 #include <boost/archive/polymorphic_oarchive.hpp>
 #include <boost/archive/polymorphic_iarchive.hpp>
+
+template EXPORT_DECL(void) derived2::serialize(
+    boost::archive::polymorphic_oarchive & ar,
+    const unsigned int version
+);
+template EXPORT_DECL(void) derived2::serialize(
+    boost::archive::polymorphic_iarchive & ar,
+    const unsigned int version
+);
 
 // note: export has to be AFTER #includes for all archive classes
 
 #include <boost/serialization/factory.hpp>
-BOOST_SERIALIZATION_FACTORY_0(polymorphic_derived2)
-BOOST_CLASS_EXPORT(polymorphic_derived2)
+BOOST_SERIALIZATION_FACTORY_0(derived2)
+BOOST_CLASS_EXPORT(derived2)
