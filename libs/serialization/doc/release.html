@@ -31,6 +31,7 @@ http://www.boost.org/LICENSE_1_0.txt)
     <hr>
     <dl class="index">
         <dt><a href="#requirements">Requirements</a></dt>
+        <dt><a href="#differences_1_39">Differences from version 1.37</a></dt>
         <dt><a href="#differences_1_37">Differences from version 1.37</a></dt>
         <dt><a href="#differences_1_35">Differences from version 1.35</a></dt>
         <dt><a href="#differences_1_34">Differences from version 1.34</a></dt>
@@ -42,8 +43,8 @@ http://www.boost.org/LICENSE_1_0.txt)
     quirks and or bugs, some tests fail with some combinations of compilers and libraries.
     <h2>
         <a name="requirements"></a>Requirements</h2>
-    This library has been tested against Boost version 1.37.
-    <!--
+    This library has been tested against Boost version 1.39.
+<!--
 <p>
 The serialization library uses the boost spirit package to load XML archives.
 We have found that all tests pass using spirit 1.6x. Spirit 1.8 and higher does not work with
@@ -60,6 +61,17 @@ If you're not using bjam and the Jamfile to build the library, be sure that
 the directory which contains the version of spirit you plan to use is placed
 at the front of the list of include paths.
 -->
+    <h2>
+        <a name="differences_1_39"></a>Differences from Boost 1.39</h2>
+    <ul>
+    <li>It is now possible to serialize an object through a pointer to a class which implements
+    its own <code style="white-space: normal">new/delete</code> operators. This functionaly
+    is not available on some compilers.
+    <li>serialization of polymorphic objects has been sped up considerably.
+    </ul>
+    As of this writing, all bug reports filed
+    as TRAK tickets have been addressed.  There are some TRAK tickets pending which
+    would best be described as feature requests. See <a href="#todo">Pending Issues</a>.
     <h2>
         <a name="differences_1_37"></a>Differences from Boost 1.37</h2>
     There are no new features in this version. As of this writing, all bug reports filed
@@ -151,9 +163,6 @@ at the front of the list of include paths.
         untracked types, but this has not been done.
         <li>
         Pointers to pointers cannot currently be serialized
-        <li>currently can't serialize through a pointer an object a of class that implements
-            its own <code style="white-space: normal">new/delete</code>
-        operators.
         <li>Its possible that <code style="white-space: normal">std::string</code> and <code
             style="white-space: normal">std::wstring</code>
         contain characters such as '\0' and -1 (EOF) which cannot be rendered in text and
