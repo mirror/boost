@@ -113,10 +113,20 @@ template <class UniformCostVisitor, class Queue,
     boost::parallel::caching_property_map<PredecessorMap> c_pred(m_predecessor);
     boost::parallel::caching_property_map<DistanceMap> c_dist(m_distance);
 
+    distance_type old_distance = get(c_dist, target(e, g));
+
     bool m_decreased = relax(e, g, m_weight, c_pred, c_dist,
                              m_combine, m_compare);
 
-    if (m_decreased) {
+    /* On x86 Linux with optimization, we sometimes get into a
+       horrible case where m_decreased is true but the distance hasn't
+       actually changed. This occurs when the comparison inside
+       relax() occurs with the 80-bit precision of the x87 floating
+       point unit, but the difference is lost when the resulting
+       values are written back to lower-precision memory (e.g., a
+       double). With the eager Dijkstra's implementation, this results
+       in looping. */
+    if (m_decreased && old_distance != get(c_dist, target(e, g))) {
       m_Q.update(target(e, g));
       m_vis.edge_relaxed(e, g);
     } else
