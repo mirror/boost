@@ -79,30 +79,6 @@ namespace boost {
 
   } // serialization
 
-  namespace graph { namespace distributed {
-
-    // HACKY: Overload get on a tuple to return the value at the key indicated 
-    // by the first element of the tuple so that we can use tuples in a distributed queue
-    template<typename PropertyMap, typename Vertex, typename X, typename Y, typename Z>
-    inline
-    typename PropertyMap::value_type
-    get(PropertyMap& pm, boost::tuple<Vertex, X, Y, Z> const& t)
-    {
-      return get(pm, boost::tuples::get<0>(t));
-    }
-
-    // HACKY: Same as above for std::pair
-    template<typename PropertyMap, typename Vertex, typename X>
-    inline
-    typename PropertyMap::value_type
-    get(PropertyMap& pm, std::pair<Vertex, X> const& t)
-    {
-      return get(pm, t.first);
-    }
-
-  } } // graph::distributed
-
-
   template <typename OwnerMap, typename Tuple>
   class get_owner_of_first_tuple_element {
 
