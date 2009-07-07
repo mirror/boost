@@ -62,6 +62,16 @@ typedef std::multiset<const extended_type_info *, key_compare> ktmap;
 
 class extended_type_info_arg : public extended_type_info
 {
+    virtual bool
+    is_less_than(const extended_type_info & /*rhs*/) const {
+        assert(false);
+        return false;
+    };
+    virtual bool
+    is_equal(const extended_type_info & /*rhs*/) const {
+        assert(false);
+        return false;
+    };
 public:
     extended_type_info_arg(const char * key) :
         extended_type_info()

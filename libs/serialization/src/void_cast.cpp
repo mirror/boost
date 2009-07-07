@@ -34,6 +34,27 @@ namespace boost {
 namespace serialization {
 namespace void_cast_detail {
 
+// note that void_casters are keyed on value of
+// member extended type info records - NOT their
+// addresses.  This is necessary in order for the
+// void cast operations to work across dll and exe
+// module boundries.
+bool void_caster::operator<(const void_caster & rhs) const {
+    // include short cut to save time and eliminate
+    // problems when when base class aren't virtual
+    if(m_derived != rhs.m_derived){
+        if(*m_derived < *rhs.m_derived)
+            return true;
+        if(*rhs.m_derived < *m_derived)
+            return false;
+    }
+    // m_derived == rhs.m_derived
+    if(m_base != rhs.m_base)
+        return *m_base < *rhs.m_base;
+    else
+        return false;
+}
+
 struct void_caster_compare {
     bool operator()(const void_caster * lhs, const void_caster * rhs) const {
         return *lhs < *rhs;
@@ -105,9 +126,11 @@ void_caster_shortcut::vbc_downcast(
                 const void * t_new;
                 t_new = void_downcast(*(*it)->m_base, *m_base, t);
                 // if we were successful
-                if(NULL != t_new)
+                if(NULL != t_new){
                     // recast to our derived
-                    return (*it)->downcast(t_new);
+                    const void_caster * vc = *it;
+                    return vc->downcast(t_new);
+                }
             }
         }
     }
@@ -170,17 +193,16 @@ void_caster::recursive_register(bool includes_virtual_base) const {
     s.insert(this);
 
     // generate all implied void_casts.
-
     void_cast_detail::set_type::const_iterator it;
     for(it = s.begin(); it != s.end(); ++it){
-        if(m_derived == (*it)->m_base)
+        if(* m_derived == * (*it)->m_base)
             new void_caster_shortcut(
                 (*it)->m_derived, 
                 m_base,
                 m_difference + (*it)->m_difference,
                 includes_virtual_base
             );
-        if((*it)->m_derived == m_base)
+        if(* (*it)->m_derived == * m_base)
             new void_caster_shortcut(
                 m_derived, 
                 (*it)->m_base, 
@@ -198,14 +220,18 @@ void_caster::recursive_unregister() const {
     void_cast_detail::set_type & s 
         = void_caster_registry::get_mutable_instance();
 
-    // delete all implied void_casts.
+    // delete all shortcuts which use this primitive
     void_cast_detail::set_type::iterator it;
     for(it = s.begin(); it != s.end(); ++it){
         if((*it)->is_shortcut()){
             if(m_derived == (*it)->m_base
             || (*it)->m_derived == m_base){
+                // save pointer to set member
+                const void_caster * vc = *it;
+                // and erase first
                 s.erase(it);
-                delete *it;
+                // since recursion could invalidate it
+                delete vc;
                 it = s.begin();
             }
         }
@@ -218,8 +244,6 @@ void_caster::recursive_unregister() const {
 
     s.erase(it);
 }
-
-
 
 } // namespace void_cast_detail
 
@@ -240,7 +264,7 @@ void_upcast(
     // check to see if base/derived pair is found in the registry
     const void_cast_detail::set_type & s
         = void_cast_detail::void_caster_registry::get_const_instance();
-    void_cast_detail::void_caster_argument ca(& derived, & base);
+    const void_cast_detail::void_caster_argument ca(& derived, & base);
 
     void_cast_detail::set_type::const_iterator it;
     it = s.find(& ca);
@@ -263,7 +287,7 @@ void_downcast(
     // check to see if base/derived pair is found in the registry
     const void_cast_detail::set_type & s
         = void_cast_detail::void_caster_registry::get_const_instance();
-    void_cast_detail::void_caster_argument ca(& derived, & base);
+    const void_cast_detail::void_caster_argument ca(& derived, & base);
 
     void_cast_detail::set_type::const_iterator it;
     it = s.find(&ca);
