@@ -39,11 +39,10 @@ public:
         unsupported_version,// archive created with library version
                             // subsequent to this one
         pointer_conflict,   // an attempt has been made to directly
-                            // serialization::detail an object
-                            // after having already serialzed the same
-                            // object through a pointer.  Were this permited,
-                            // it the archive load would result in the
-                            // creation of an extra copy of the obect.
+                            // serialize an object which has
+                            // already been serialzed through a pointer.  
+                            // Were this permited, the archive load would result 
+                            // in the creation of an extra copy of the obect.
         incompatible_native_format, // attempt to read native binary format
                             // on incompatible platform
         array_size_too_short,// array being loaded doesn't fit in array allocated
@@ -53,9 +52,11 @@ public:
                             // to insert virus via buffer overrun method.
         unregistered_cast,   // base - derived relationship not registered with 
                             // void_cast_register
-        unsupported_class_version // type saved with a version # greater than the 
+        unsupported_class_version, // type saved with a version # greater than the 
                             // one used by the program.  This indicates that the proggram
                             // needs to be rebuilt.
+        inconsistent_pointer_serialization // an object as been serialized
+                            // more than once through pointers of different types.
     } exception_code;
     exception_code code;
     archive_exception(exception_code c) : 
@@ -102,6 +103,10 @@ public:
             // if get here - it indicates a derived exception 
             // was sliced by passing by value in catch
             msg = "unknown derived exception";
+            break;
+        case inconsistent_pointer_serialization:
+            // same object saved through different kinds of pointers
+            msg = "inconsistent_pointer_serialization";
             break;
         default:
             assert(false);
