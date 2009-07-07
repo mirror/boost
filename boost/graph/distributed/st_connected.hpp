@@ -15,7 +15,7 @@
 
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/two_bit_color_map.hpp>
-#include <boost/graph/parallel/distributed_queue.hpp>
+#include <boost/graph/distributed/queue.hpp>
 #include <boost/pending/queue.hpp>
 #include <boost/graph/iteration_macros.hpp>
 #include <boost/graph/parallel/container_traits.hpp>
