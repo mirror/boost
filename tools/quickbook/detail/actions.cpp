@@ -308,12 +308,27 @@ namespace quickbook
         out << escape_actions.phrase.str();
         escape_actions.phrase.pop(); // restore the stream
     }
+    
+    std::string syntax_highlight::operator()(iterator first, iterator last) const
+    {
+        // print the code with syntax coloring
+        if (source_mode == "c++")
+        {
+            parse(first, last, cpp_p);
+        }
+        else if (source_mode == "python")
+        {
+            parse(first, last, python_p);
+        }
+
+        std::string str;
+        temp.swap(str);
+        
+        return str;
+    }
 
     void code_action::operator()(iterator first, iterator last) const
     {
-        std::string save;
-        phrase.swap(save);
-
         // preprocess the code section to remove the initial indentation
         std::string program(first, last);
         detail::unindent(program);
@@ -324,18 +339,12 @@ namespace quickbook
         iterator last_(program.end(), program.end());
         first_.set_position(first.get_position());
 
-        // print the code with syntax coloring
-        if (source_mode == "c++")
-        {
-            parse(first_, last_, cpp_p);
-        }
-        else if (source_mode == "python")
-        {
-            parse(first_, last_, python_p);
-        }
+        std::string save;
+        phrase.swap(save);
 
-        std::string str;
-        temp.swap(str);
+        // print the code with syntax coloring
+        std::string str = syntax_p(first_, last_);
+
         phrase.swap(save);
 
         //
@@ -353,16 +362,8 @@ namespace quickbook
         out.swap(save);
 
         // print the code with syntax coloring
-        if (source_mode == "c++")
-        {
-            parse(first, last, cpp_p);
-        }
-        else if (source_mode == "python")
-        {
-            parse(first, last, python_p);
-        }
-        std::string str;
-        temp.swap(str);
+        std::string str = syntax_p(first, last);
+
         out.swap(save);
 
         out << "<code>";

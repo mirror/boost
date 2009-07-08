@@ -368,6 +368,28 @@ namespace quickbook
       , unexpected_char
       , collector>
     python_p_type;
+    
+    struct syntax_highlight
+    {
+        syntax_highlight(
+            collector& temp
+          , std::string const& source_mode
+          , string_symbols const& macro
+          , actions& escape_actions)
+        : temp(temp)
+        , source_mode(source_mode)
+        , cpp_p(temp, macro, do_macro_action(temp), escape_actions)
+        , python_p(temp, macro, do_macro_action(temp), escape_actions)
+        {
+        }
+
+        std::string operator()(iterator first, iterator last) const;
+
+        collector& temp;
+        std::string const& source_mode;
+        cpp_p_type cpp_p;
+        python_p_type python_p;
+    };
 
     struct code_action
     {
@@ -376,16 +398,10 @@ namespace quickbook
         code_action(
             collector& out
           , collector& phrase
-          , collector& temp
-          , std::string const& source_mode
-          , string_symbols const& macro
-          , actions& escape_actions)
+          , syntax_highlight& syntax_p)
         : out(out)
         , phrase(phrase)
-        , temp(temp)
-        , source_mode(source_mode)
-        , cpp_p(temp, macro, do_macro_action(temp), escape_actions)
-        , python_p(temp, macro, do_macro_action(temp), escape_actions)
+        , syntax_p(syntax_p)
         {
         }
 
@@ -393,11 +409,7 @@ namespace quickbook
 
         collector& out;
         collector& phrase;
-        collector& temp;
-        std::string const& source_mode;
-
-        cpp_p_type cpp_p;
-        python_p_type python_p;
+        syntax_highlight& syntax_p;
     };
 
     struct inline_code_action
@@ -406,25 +418,15 @@ namespace quickbook
 
         inline_code_action(
             collector& out
-          , collector& temp
-          , std::string const& source_mode
-          , string_symbols const& macro
-          , actions& escape_actions)
+          , syntax_highlight& syntax_p)
         : out(out)
-        , source_mode(source_mode)
-        , temp(temp)
-        , cpp_p(temp, macro, do_macro_action(temp), escape_actions)
-        , python_p(temp, macro, do_macro_action(temp), escape_actions)
+        , syntax_p(syntax_p)
         {}
 
         void operator()(iterator first, iterator last) const;
 
         collector& out;
-        std::string const& source_mode;
-        collector& temp;
-
-        cpp_p_type cpp_p;
-        python_p_type python_p;
+        syntax_highlight& syntax_p;
     };
 
     struct raw_char_action
