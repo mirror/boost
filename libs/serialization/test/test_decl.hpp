@@ -67,8 +67,8 @@
         #endif
     #endif
 #else
-    #define IMPORT_DECL(T)
-    #define EXPORT_DECL(T)
+    #define IMPORT_DECL(T) T
+    #define EXPORT_DECL(T) T
 #endif // BOOST_HAS_DECLSPEC
 
 #endif // BOOST_TEST_DECL_HPP
