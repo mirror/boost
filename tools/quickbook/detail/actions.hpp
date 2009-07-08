@@ -345,6 +345,69 @@ namespace quickbook
         std::string& save;
     };
 
+    struct raw_char_action
+    {
+        // Prints a single raw (unprocessed) char.
+        // Allows '<', '>'... etc.
+
+        raw_char_action(collector& phrase)
+        : phrase(phrase) {}
+
+        void operator()(char ch) const;
+        void operator()(iterator first, iterator /*last*/) const;
+
+        collector& phrase;
+    };
+
+    struct plain_char_action
+    {
+        // Prints a single plain char.
+        // Converts '<' to "&lt;"... etc See utils.hpp
+
+        plain_char_action(collector& phrase)
+        : phrase(phrase) {}
+
+        void operator()(char ch) const;
+        void operator()(iterator first, iterator /*last*/) const;
+
+        collector& phrase;
+    };
+
+    struct image_action
+    {
+        // Handles inline images
+
+        image_action(collector& phrase)
+        : phrase(phrase) {}
+
+        void operator()(iterator first, iterator last) const;
+
+        collector& phrase;
+    };
+
+    struct markup_action
+    {
+        // A generic markup action
+
+        markup_action(collector& phrase, std::string const& str)
+        : phrase(phrase), str(str) {}
+
+        template <typename T>
+        void operator()(T const&) const
+        {
+            phrase << str;
+        }
+
+        template <typename T>
+        void operator()(T const&, T const&) const
+        {
+            phrase << str;
+        }
+
+        collector& phrase;
+        std::string str;
+    };
+
     typedef cpp_highlight<
         span
       , space
@@ -427,69 +490,6 @@ namespace quickbook
 
         collector& out;
         syntax_highlight& syntax_p;
-    };
-
-    struct raw_char_action
-    {
-        // Prints a single raw (unprocessed) char.
-        // Allows '<', '>'... etc.
-
-        raw_char_action(collector& phrase)
-        : phrase(phrase) {}
-
-        void operator()(char ch) const;
-        void operator()(iterator first, iterator /*last*/) const;
-
-        collector& phrase;
-    };
-
-    struct plain_char_action
-    {
-        // Prints a single plain char.
-        // Converts '<' to "&lt;"... etc See utils.hpp
-
-        plain_char_action(collector& phrase)
-        : phrase(phrase) {}
-
-        void operator()(char ch) const;
-        void operator()(iterator first, iterator /*last*/) const;
-
-        collector& phrase;
-    };
-
-    struct image_action
-    {
-        // Handles inline images
-
-        image_action(collector& phrase)
-        : phrase(phrase) {}
-
-        void operator()(iterator first, iterator last) const;
-
-        collector& phrase;
-    };
-
-    struct markup_action
-    {
-        // A generic markup action
-
-        markup_action(collector& phrase, std::string const& str)
-        : phrase(phrase), str(str) {}
-
-        template <typename T>
-        void operator()(T const&) const
-        {
-            phrase << str;
-        }
-
-        template <typename T>
-        void operator()(T const&, T const&) const
-        {
-            phrase << str;
-        }
-
-        collector& phrase;
-        std::string str;
     };
 
     struct start_varlistitem_action
