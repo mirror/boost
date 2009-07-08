@@ -224,13 +224,7 @@ void_caster::recursive_unregister() const {
     void_cast_detail::set_type::iterator it;
     for(it = s.begin(); it != s.end();){
         // note item 9 from Effective STL !!!
-        if((*it)->m_base == m_base && m_derived == (*it)->m_derived
-        && (
-               (*it)->m_base_is_destroyed
-            || (*it)->m_derived_is_destroyed
-            || *m_derived == *(*it)->m_base
-            || *(*it)->m_derived == *m_base
-        )){
+        if((*it)->m_base == m_base && m_derived == (*it)->m_derived){
             // since recursion could invalidate it
             const void_caster * vc = *it;
             s.erase(it++);
@@ -239,6 +233,22 @@ void_caster::recursive_unregister() const {
                 // and erase first
                 delete vc;
             }
+        }
+        else
+        if(    (*it)->m_base_is_destroyed
+            || (*it)->m_derived_is_destroyed
+            || *m_derived == *(*it)->m_base
+            || *(*it)->m_derived == *m_base
+        ){
+            // since recursion could invalidate it
+            const void_caster * vc = *it;
+            s.erase(it);
+            if(vc->is_shortcut()){
+                // save pointer to set member
+                // and erase first
+                delete vc;
+            }
+            it = s.begin();
         }
         else
             it++;
