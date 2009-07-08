@@ -13,8 +13,8 @@
 #include <string>
 #include <utility>
 
-using namespace boost;
-using namespace std;
+using boost::function;
+using std::string;
 
 int global_int;
 
@@ -525,7 +525,7 @@ test_zero_args()
 static void
 test_one_arg()
 {
-  negate<int> neg;
+  std::negate<int> neg;
 
   function<int (int)> f1(neg);
   BOOST_CHECK(f1(5) == -5);
@@ -607,12 +607,12 @@ struct add_with_throw_on_copy {
 
   add_with_throw_on_copy(const add_with_throw_on_copy&)
   {
-    throw runtime_error("But this CAN'T throw");
+    throw std::runtime_error("But this CAN'T throw");
   }
 
   add_with_throw_on_copy& operator=(const add_with_throw_on_copy&)
   {
-    throw runtime_error("But this CAN'T throw");
+    throw std::runtime_error("But this CAN'T throw");
   }
 };
 
@@ -621,13 +621,37 @@ test_ref()
 {
   add_with_throw_on_copy atc;
   try {
-    boost::function<int (int, int)> f(ref(atc));
+    boost::function<int (int, int)> f(boost::ref(atc));
     BOOST_CHECK(f(1, 3) == 4);
   }
-  catch(runtime_error e) {
+  catch(std::runtime_error e) {
     BOOST_ERROR("Nonthrowing constructor threw an exception");
   }
 }
+
+static void dummy() {}
+
+static void test_empty_ref()
+{
+  boost::function<void()> f1;
+  boost::function<void()> f2(boost::ref(f1));
+
+  try {
+    f2();
+    BOOST_ERROR("Exception didn't throw for reference to empty function.");
+  }
+  catch(std::runtime_error e) {}
+
+  f1 = dummy;
+
+  try {
+    f2();
+  }
+  catch(std::runtime_error e) {
+    BOOST_ERROR("Error calling referenced function.");
+  }
+}
+
 
 static void test_exception()
 {
@@ -674,6 +698,7 @@ int test_main(int, char* [])
   test_emptiness();
   test_member_functions();
   test_ref();
+  test_empty_ref();
   test_exception();
   test_implicit();
   test_call();
