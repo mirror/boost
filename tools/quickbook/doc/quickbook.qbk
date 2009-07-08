@@ -436,6 +436,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
     [[Mode]                 [Source Mode Markup]]
     [[C++]                  [[^\[c++\]]]]
     [[Python]               [[^\[python\]]]]
+    [[Plain Text]           [[^\[teletype\]]]]
 ]
 
 [note The source mode strings are lowercase.]

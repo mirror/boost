@@ -403,6 +403,7 @@ namespace quickbook
                     (
                         str_p("c++")
                     |   "python"
+                    |   "teletype"
                     )                                   [assign_a(actions.source_mode)]
                     ;
 

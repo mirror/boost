@@ -320,6 +320,14 @@ namespace quickbook
         {
             parse(first, last, python_p);
         }
+        else if (source_mode == "teletype")
+        {
+            parse(first, last, teletype_p);
+        }
+        else
+        {
+            BOOST_ASSERT(0);
+        }
 
         std::string str;
         temp.swap(str);

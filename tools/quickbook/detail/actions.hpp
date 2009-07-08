@@ -432,6 +432,16 @@ namespace quickbook
       , collector>
     python_p_type;
     
+    typedef teletype_highlight<
+        plain_char_action
+      , string_symbols
+      , do_macro_action
+      , pre_escape_back
+      , post_escape_back
+      , actions
+      , collector>
+    teletype_p_type;
+    
     struct syntax_highlight
     {
         syntax_highlight(
@@ -443,6 +453,7 @@ namespace quickbook
         , source_mode(source_mode)
         , cpp_p(temp, macro, do_macro_action(temp), escape_actions)
         , python_p(temp, macro, do_macro_action(temp), escape_actions)
+        , teletype_p(temp, macro, do_macro_action(temp), escape_actions)
         {
         }
 
@@ -452,6 +463,7 @@ namespace quickbook
         std::string const& source_mode;
         cpp_p_type cpp_p;
         python_p_type python_p;
+        teletype_p_type teletype_p;
     };
 
     struct code_action

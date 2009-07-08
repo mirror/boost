@@ -323,6 +323,85 @@ namespace quickbook
         DoMacro do_macro;
         EscapeActions& escape_actions;
     };
+
+    // Grammar for plain text (no actual highlighting)
+    template <
+        typename CharProcess
+      , typename Macro
+      , typename DoMacro
+      , typename PreEscape
+      , typename PostEscape
+      , typename EscapeActions
+      , typename Out>
+    struct teletype_highlight
+    : public grammar<teletype_highlight<CharProcess, Macro, DoMacro, PreEscape, PostEscape, EscapeActions, Out> >
+    {
+        teletype_highlight(Out& out, Macro const& macro, DoMacro do_macro, EscapeActions& escape_actions)
+        : out(out), macro(macro), do_macro(do_macro), escape_actions(escape_actions) {}
+
+        template <typename Scanner>
+        struct definition
+        {
+            definition(teletype_highlight const& self)
+                : common(self.escape_actions, unused)
+                , unused(false)
+            {
+                program
+                    =
+                    *(  macro
+                    |   escape          
+                    |   repeat_p(1)[anychar_p]          [CharProcess(self.out)]
+                    )
+                    ;
+
+                macro = 
+                    eps_p(self.macro                    // must not be followed by
+                        >> (eps_p - (alpha_p | '_')))   // alpha or underscore
+                    >> self.macro                       [self.do_macro]
+                    ;
+
+                qbk_phrase =
+                   *(   common
+                    |   (anychar_p - str_p("``"))   [self.escape_actions.plain_char]
+                    )
+                    ;
+
+                escape =
+                    str_p("``")         [PreEscape(self.escape_actions, save)]
+                    >>
+                    (
+                        (
+                            (
+                                (+(anychar_p - "``") >> eps_p("``"))
+                                & qbk_phrase
+                            )
+                            >>  str_p("``")
+                        )
+                        |
+                        (
+                            eps_p       [self.escape_actions.error]
+                            >> *anychar_p
+                        )
+                    )                   [PostEscape(self.out, self.escape_actions, save)]
+                    ;
+            }
+
+            rule<Scanner> program, macro, qbk_phrase, escape;
+
+            phrase_grammar<EscapeActions> common;
+            std::string save;
+            bool unused;
+
+            rule<Scanner> const&
+            start() const { return program; }
+        };
+
+        Out& out;
+        Macro const& macro;
+        DoMacro do_macro;
+        EscapeActions& escape_actions;
+    };
+
 }
 
 #endif // BOOST_SPIRIT_QUICKBOOK_SYNTAX_HIGHLIGHT_HPP
