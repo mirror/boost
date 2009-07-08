@@ -136,6 +136,9 @@ public:
     BOOST_DLLEXPORT static bool is_destroyed(){
         return detail::singleton_wrapper<T>::m_is_destroyed;
     }
+    BOOST_DLLEXPORT static bool & get_is_destroyed(){
+        return detail::singleton_wrapper<T>::m_is_destroyed;
+    }
 };
 
 template<class T>

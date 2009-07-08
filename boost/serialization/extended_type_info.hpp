@@ -76,6 +76,7 @@ public:
     virtual void destroy(void const * const /*p*/) const {
         assert(false); // must be implemented if used
     }
+    virtual bool & get_is_destroyed() const = 0;
 };
 
 } // namespace serialization 

@@ -70,6 +70,11 @@ class extended_type_info_typeid :
     public detail::extended_type_info_typeid_0,
     public singleton<extended_type_info_typeid<T> >
 {
+    virtual bool & get_is_destroyed() const {
+        return singleton<
+            extended_type_info_typeid<T>
+        >::get_is_destroyed();
+    }
 public:
     extended_type_info_typeid() :
         detail::extended_type_info_typeid_0()

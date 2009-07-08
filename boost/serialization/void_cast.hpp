@@ -109,6 +109,9 @@ public:
     // Data members
     const extended_type_info * m_derived;
     const extended_type_info * m_base;
+    bool & m_derived_is_destroyed;
+    bool & m_base_is_destroyed;
+
     /*const*/ std::ptrdiff_t m_difference;
     virtual bool is_shortcut() const {
         return false;
@@ -143,11 +146,15 @@ public:
     ) :
         m_derived(derived),
         m_base(base),
+        m_derived_is_destroyed(derived->get_is_destroyed()),
+        m_base_is_destroyed(base->get_is_destroyed()),
         m_difference(difference)
     {}
     void_caster(const void_caster & rhs) :
         m_derived(rhs.m_derived),
         m_base(rhs.m_base),
+        m_derived_is_destroyed(rhs.m_derived_is_destroyed),
+        m_base_is_destroyed(rhs.m_base_is_destroyed),
         m_difference(rhs.m_difference)
     {}
     virtual ~void_caster(){}
