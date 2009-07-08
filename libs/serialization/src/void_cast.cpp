@@ -222,27 +222,27 @@ void_caster::recursive_unregister() const {
 
     // delete all shortcuts which use this primitive
     void_cast_detail::set_type::iterator it;
-    for(it = s.begin(); it != s.end(); ++it){
-        if((*it)->is_shortcut()){
-            if(m_derived == (*it)->m_base
-            || (*it)->m_derived == m_base){
+    for(it = s.begin(); it != s.end();){
+        // note item 9 from Effective STL !!!
+        if((*it)->m_base == m_base && m_derived == (*it)->m_derived
+        && (
+               (*it)->m_base_is_destroyed
+            || (*it)->m_derived_is_destroyed
+            || *m_derived == *(*it)->m_base
+            || *(*it)->m_derived == *m_base
+        )){
+            // since recursion could invalidate it
+            const void_caster * vc = *it;
+            s.erase(it++);
+            if(vc->is_shortcut()){
                 // save pointer to set member
-                const void_caster * vc = *it;
                 // and erase first
-                s.erase(it);
-                // since recursion could invalidate it
                 delete vc;
-                it = s.begin();
             }
         }
+        else
+            it++;
     }   
-
-    const void_cast_detail::void_caster_argument ca(m_derived, m_base);
-    it = s.find(& ca);
-    if(s.end() == it)
-        return;
-
-    s.erase(it);
 }
 
 } // namespace void_cast_detail

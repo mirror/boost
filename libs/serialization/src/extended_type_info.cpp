@@ -72,6 +72,13 @@ class extended_type_info_arg : public extended_type_info
         assert(false);
         return false;
     };
+    virtual bool & 
+    get_is_destroyed() const {
+        static bool dummy = true;
+        assert(false);
+        return dummy;
+    }
+
 public:
     extended_type_info_arg(const char * key) :
         extended_type_info()

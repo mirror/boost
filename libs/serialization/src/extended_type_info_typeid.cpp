@@ -106,6 +106,12 @@ class extended_type_info_typeid_arg :
     public extended_type_info_typeid_0
 {
 private:
+    virtual bool & 
+    get_is_destroyed() const {
+        static bool dummy = false;
+        assert(false);
+        return dummy;
+    }
 public:
     extended_type_info_typeid_arg(const std::type_info & ti){ 
         // note absense of self register and key as this is used only as
