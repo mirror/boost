@@ -118,15 +118,15 @@ private:
     virtual void destroy(/*const*/ void *address) const {
         boost::serialization::access::destroy(static_cast<T *>(address));
     }
-    // private constructor to inhibit any existence other than the 
-    // static one
-public:
+protected:
+    // protected constructor since it's always created by singleton
     explicit iserializer() :
         basic_iserializer(
             boost::serialization::type_info_implementation<T>::type
                 ::get_const_instance()
         )
     {}
+public:
     virtual BOOST_DLLEXPORT void load_object_data(
         basic_iarchive & ar,
         void *x, 
@@ -188,7 +188,8 @@ private:
         void * & x,
         const unsigned int file_version
     ) const BOOST_USED;
-public:
+protected:
+    // this should alway be a singleton so make the constructor protected
     pointer_iserializer();
 };
 

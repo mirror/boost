@@ -23,7 +23,7 @@
 
 #include <boost/archive/detail/basic_serializer.hpp>
 #include <boost/archive/detail/basic_pointer_iserializer.hpp>
-
+#include <boost/archive/detail/basic_serializer_map.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
@@ -40,6 +40,7 @@ class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_iarchive;
 template<class Archive>
 class archive_pointer_iserializer : 
     public basic_pointer_iserializer {
+    static basic_serializer_map m_map;
 protected:
     explicit BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
     archive_pointer_iserializer(

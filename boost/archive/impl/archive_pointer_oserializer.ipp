@@ -21,12 +21,8 @@ namespace boost {
 namespace archive {
 namespace detail {
 
-namespace { // anon
-    template<class Archive>
-    class oserializer_map : public basic_serializer_map 
-    {
-    };
-}
+template<class Archive>
+basic_serializer_map archive_pointer_oserializer<Archive>::m_map;
 
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
@@ -37,12 +33,11 @@ archive_pointer_oserializer<Archive>::archive_pointer_oserializer(
 {
     // only insert the first one.  Assumes that DLLS are unloaded in
     // the reverse sequence
-    //std::pair<BOOST_DEDUCED_TYPENAME  oserializer_map<Archive>::iterator, bool> result;
-    oserializer_map<Archive> & map 
-        = serialization::singleton<oserializer_map<Archive> >::get_mutable_instance();
-    oserializer_map<Archive>::iterator result = map.find(this);
-    if(result == map.end())
-        map.insert(this);
+    //std::pair<
+    //    BOOST_DEDUCED_TYPENAME  oserializer_map<Archive>::iterator, 
+    //    bool
+    // > result =
+    m_map.insert(this);
 }
 
 template<class Archive>
@@ -52,35 +47,19 @@ archive_pointer_oserializer<Archive>::find(
 ){
     const basic_serializer_arg bs(eti);
     basic_serializer_map::const_iterator it;
-    it =  boost::serialization::singleton<
-            oserializer_map<Archive>
-        >::get_const_instance().find(& bs);
-    assert(
-        it 
-        != 
-        boost::serialization::singleton<
-                oserializer_map<Archive>
-            >::get_const_instance().end()
-    );
+    it =  m_map.find(& bs);
+    assert(it != m_map.end());
     return static_cast<const basic_pointer_oserializer *>(*it);
 }
 
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 archive_pointer_oserializer<Archive>::~archive_pointer_oserializer(){
-    // note: we need to check that the map still exists as we can't depend
-    // on static variables being constructed in a specific sequence
-    if(serialization::singleton<
-            oserializer_map<Archive> 
-        >::is_destroyed()
-    )
-        return;
-        
-    oserializer_map<Archive> & map 
-        = serialization::singleton<oserializer_map<Archive> >::get_mutable_instance();
-    oserializer_map<Archive>::iterator result = map.find(this);
-    if(result == map.end())
-        map.erase(this);
+    basic_serializer_map::iterator it;
+    it = m_map.find(this);
+    assert(it != m_map.end());
+    if(*it == static_cast<const basic_serializer *>(this))
+        m_map.erase(it);
 }
 
 } // namespace detail
