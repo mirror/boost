@@ -292,21 +292,32 @@
   </xsl:template>
 
   <xsl:template match="enumvalue">
-    <enumvalue>
-      <xsl:attribute name="name">
-        <xsl:value-of select="name"/>
-      </xsl:attribute>
+    <xsl:choose>
+      <!-- If the string INTERNAL ONLY is in the description, don't
+           emit this entity. This hack is necessary because Doxygen doesn't
+           tell us what is \internal and what isn't. -->
+      <xsl:when test="contains(detaileddescription/para, 'INTERNAL ONLY')"/>
+      <xsl:when test="contains(briefdescription/para, 'INTERNAL ONLY')"/>
+      <xsl:when test="contains(inbodydescription/para, 'INTERNAL ONLY')"/>
+      <xsl:otherwise>
+  
+        <enumvalue>
+          <xsl:attribute name="name">
+            <xsl:value-of select="name"/>
+          </xsl:attribute>
 
-      <xsl:if test="initializer">
-        <default>
-          <xsl:apply-templates select="initializer" mode="passthrough"/>
-        </default>
-      </xsl:if>
+          <xsl:if test="initializer">
+            <default>
+              <xsl:apply-templates select="initializer" mode="passthrough"/>
+            </default>
+          </xsl:if>
 
-      <xsl:apply-templates select="briefdescription" mode="passthrough"/>
-      <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
-      <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
-    </enumvalue>
+          <xsl:apply-templates select="briefdescription" mode="passthrough"/>
+          <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+          <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
+        </enumvalue>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="doxygen.include.header.rec">
