@@ -100,4 +100,10 @@ x[super 2]
 [template test[x] [join1 [join2 0 [x]]...0]]
 [test 0]
 
+[/-------------------------------- Mismatched template ]
+
+[template foo 1]
+[fool]
+
 [endsect]
+

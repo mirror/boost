@@ -145,6 +145,7 @@ namespace quickbook
                         >> !(hard_space
                             >> template_args)
                     ) )
+                    >> eps_p(']')
                     ;
 
                 brackets =
