@@ -3,7 +3,7 @@
 //Distributed under the Boost Software License, Version 1.0. (See accompanying
 //file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-//This example shows to print all data contained in a boost::exception.
+//This example shows how to print all data contained in a boost::exception.
 
 #include <boost/exception/all.hpp>
 #include <iostream>

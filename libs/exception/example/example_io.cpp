@@ -3,16 +3,17 @@
 //Distributed under the Boost Software License, Version 1.0. (See accompanying
 //file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-//This program simulates errors on copying simple data files.
-//It demonstrates how the proposed Boost exception library can be used.
-//
-//The documentation for boost::exception can be found at:
-//
-//  http://www.revergestudios.com/boost-exception/boost-exception.htm.
-//
-//The output from this program can vary depending on the compiler/OS combination.
+//This program simulates errors on copying simple data files. It demonstrates
+//typical Boost Exception usage.
+
+//The output from this program can vary depending on the platform.
 
 #include <boost/exception.hpp>
+#include <boost/exception/errinfo_file_open_mode.hpp>
+#include <boost/exception/errinfo_file_handle.hpp>
+#include <boost/exception/errinfo_file_name.hpp>
+#include <boost/exception/errinfo_api_function.hpp>
+#include <boost/exception/errinfo_errno.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <stdio.h>
@@ -21,22 +22,8 @@
 #include <iostream>
 #include <sstream>
 
-typedef boost::error_info<struct tag_errno,int> errno_info;
-typedef boost::error_info<struct tag_file_stream,boost::weak_ptr<FILE> > file_stream_info;
-typedef boost::error_info<struct tag_open_mode,std::string> open_mode_info; //The open mode of a failed fopen request.
-typedef boost::error_info<struct tag_file_name,std::string> file_name_info; //The file name of a failed file operation.
-typedef boost::error_info<struct tag_file_name_src,std::string> file_name_src_info; //The source file name of a failed copy operation.
-typedef boost::error_info<struct tag_file_name_dst,std::string> file_name_dst_info; //The destination file name of a failed copy operation.
-typedef boost::error_info<struct tag_function,std::string> function_info; //The name of the C function which reported the failure.
-
-std::string
-to_string( errno_info const & e )
-    {
-    int en=e.value();
-    std::ostringstream s;
-    s << en << ", OS says \"" << strerror(en) << "\"";
-    return s.str();
-    }
+typedef boost::error_info<struct tag_file_name_src,std::string> errinfo_src_file_name;
+typedef boost::error_info<struct tag_file_name_dst,std::string> errinfo_dst_file_name;
 
 char const data[] = "example";
 size_t const data_size = sizeof(data);
@@ -77,10 +64,10 @@ my_fopen( char const * name, char const * mode )
         return boost::shared_ptr<FILE>(f,fclose);
     else
         BOOST_THROW_EXCEPTION(fopen_error() <<
-            errno_info(errno) <<
-            file_name_info(name) <<
-            open_mode_info(mode) <<
-            function_info("fopen"));
+			boost::errinfo_errno	(errno) <<
+			boost::errinfo_file_name(name) <<
+			boost::errinfo_file_open_mode(mode) <<
+			boost::errinfo_api_function("fopen"));
     }
 
 void
@@ -89,9 +76,9 @@ my_fread( void * buffer, size_t size, size_t count, boost::shared_ptr<FILE> cons
     assert(stream);
     if( count!=fread(buffer,size,count,stream.get()) || ferror(stream.get()) )
         BOOST_THROW_EXCEPTION(fread_error() <<
-            function_info("fread") <<
-            errno_info(errno) <<
-            file_stream_info(boost::weak_ptr<FILE>(stream)));
+            boost::errinfo_api_function("fread") <<
+            boost::errinfo_errno(errno) <<
+			boost::errinfo_file_handle(boost::weak_ptr<FILE>(stream)));
     }
 
 void
@@ -100,9 +87,9 @@ my_fwrite( void const * buffer, size_t size, size_t count, boost::shared_ptr<FIL
     assert(stream);
     if( count!=fwrite(buffer,size,count,stream.get()) || ferror(stream.get()) )
         BOOST_THROW_EXCEPTION(fwrite_error() <<
-            function_info("fwrite") <<
-            errno_info(errno) <<
-            file_stream_info(boost::weak_ptr<FILE>(stream)));
+            boost::errinfo_api_function("fwrite") <<
+            boost::errinfo_errno(errno) <<
+            boost::errinfo_file_handle(boost::weak_ptr<FILE>(stream)));
     }
 
 void
@@ -132,17 +119,17 @@ copy_data( char const * src_file_name, char const * dst_file_name )
     catch(
     boost::exception & x )
         {
-        if( boost::weak_ptr<FILE> const * f=boost::get_error_info<file_stream_info>(x) )
+        if( boost::weak_ptr<FILE> const * f=boost::get_error_info<boost::errinfo_file_handle>(x) )
             if( boost::shared_ptr<FILE> fs = f->lock() )
                 {
                 if( fs==src )
-                    x << file_name_info(src_file_name);
+                    x << boost::errinfo_file_name(src_file_name);
                 else if( fs==dst )
-                    x << file_name_info(dst_file_name);
+                    x << boost::errinfo_file_name(dst_file_name);
                 }
         x <<
-            file_name_src_info(src_file_name) <<
-            file_name_dst_info(dst_file_name);
+            errinfo_src_file_name(src_file_name) <<
+            errinfo_dst_file_name(dst_file_name);
         throw;
         }
     }
@@ -150,25 +137,25 @@ copy_data( char const * src_file_name, char const * dst_file_name )
 void
 dump_copy_info( boost::exception const & x )
     {
-    if( std::string const * src = boost::get_error_info<file_name_src_info>(x) )
+    if( std::string const * src = boost::get_error_info<errinfo_src_file_name>(x) )
         std::cerr << "Source file name: " << *src << "\n";
-    if( std::string const * dst = boost::get_error_info<file_name_dst_info>(x) )
+    if( std::string const * dst = boost::get_error_info<errinfo_dst_file_name>(x) )
         std::cerr << "Destination file name: " << *dst << "\n";
     }
 
 void
 dump_file_info( boost::exception const & x )
     {
-    if( std::string const * fn = boost::get_error_info<file_name_info>(x) )
+    if( std::string const * fn = boost::get_error_info<boost::errinfo_file_name>(x) )
         std::cerr << "File name: " << *fn << "\n";
     }
 
 void
 dump_clib_info( boost::exception const & x )
     {
-    if( int const * err=boost::get_error_info<errno_info>(x) )
+    if( int const * err=boost::get_error_info<boost::errinfo_errno>(x) )
         std::cerr << "OS error: " << *err << "\n";
-    if( std::string const * fn=boost::get_error_info<function_info>(x) )
+    if( char const * const * fn=boost::get_error_info<boost::errinfo_api_function>(x) )
         std::cerr << "Failed function: " << *fn << "\n";
     }
 

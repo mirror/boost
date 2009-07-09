@@ -3,19 +3,19 @@
 //Distributed under the Boost Software License, Version 1.0. (See accompanying
 //file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-//This example shows how boost::error_info_group can be used to bundle
-//the name of the function that fails together with the reported errno.
+//This example shows how boost::tuple can be used to bundle the
+//name of the function that fails together with the reported errno.
 
 #include <boost/exception/info_tuple.hpp>
+#include <boost/exception/errinfo_file_name.hpp>
+#include <boost/exception/errinfo_api_function.hpp>
+#include <boost/exception/errinfo_errno.hpp>
 #include <boost/shared_ptr.hpp>
 #include <stdio.h>
 #include <string>
 #include <errno.h>
 
-typedef boost::error_info<struct tag_file_name,std::string> file_name_info;
-typedef boost::error_info<struct tag_function,char const *> function_info;
-typedef boost::error_info<struct tag_errno,int> errno_info;
-typedef boost::tuple<function_info,errno_info> clib_failure;
+typedef boost::tuple<boost::errinfo_api_function,boost::errinfo_errno> clib_failure;
 
 class file_open_error: public boost::exception { };
 
@@ -26,6 +26,6 @@ file_open( char const * name, char const * mode )
         return boost::shared_ptr<FILE>(f,fclose);
     else
         throw file_open_error() <<
-            file_name_info(name) <<
+			boost::errinfo_file_name(name) <<
             clib_failure("fopen",errno);
     }
