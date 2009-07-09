@@ -42,7 +42,7 @@ main()
         BOOST_TEST(false);
         }
     catch(
-    exception & e )
+    boost::exception & e )
         {
         BOOST_TEST(get_error_info<errinfo_api_function>(e) && *get_error_info<errinfo_api_function>(e)==std::string("failed_api_function"));
         BOOST_TEST(get_error_info<errinfo_at_line>(e) && *get_error_info<errinfo_at_line>(e)==42);

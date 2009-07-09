@@ -8,6 +8,7 @@
 
 #include "boost/exception/info.hpp"
 #include <errno.h>
+#include <string.h>
 
 namespace
 boost
