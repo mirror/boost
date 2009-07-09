@@ -17,7 +17,7 @@
 
 typedef boost::tuple<boost::errinfo_api_function,boost::errinfo_errno> clib_failure;
 
-class file_open_error: public boost::exception { };
+struct file_open_error: virtual boost::exception { };
 
 boost::shared_ptr<FILE>
 file_open( char const * name, char const * mode )

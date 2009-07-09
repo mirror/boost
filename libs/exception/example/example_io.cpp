@@ -29,8 +29,8 @@ size_t const data_size = sizeof(data);
 
 class
 error: //Base for all exception objects we throw.
-    public std::exception,
-    public boost::exception
+    public virtual std::exception,
+    public virtual boost::exception
     {
     public:
 
@@ -47,14 +47,12 @@ error: //Base for all exception objects we throw.
         }
     };
 
-class open_error: public error { };
-class read_error: public error { };
-class write_error: public error { };
-
-class fopen_error: public open_error { };
-class fread_error: public read_error { };
-class fwrite_error: public write_error { };
-
+struct open_error: virtual error { };
+struct read_error: virtual error { };
+struct write_error: virtual error { };
+struct fopen_error: virtual open_error { };
+struct fread_error: virtual read_error { };
+struct fwrite_error: virtual write_error { };
 
 boost::shared_ptr<FILE>
 my_fopen( char const * name, char const * mode )

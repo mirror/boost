@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <errno.h>
 
-class file_read_error: public boost::exception { };
+struct file_read_error: virtual boost::exception { };
 
 void
 file_read( FILE * f, void * buffer, size_t size )

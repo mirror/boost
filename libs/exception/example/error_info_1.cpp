@@ -11,7 +11,7 @@
 
 typedef boost::error_info<struct tag_my_info,int> my_info; //(1)
 
-class my_error: public boost::exception, public std::exception { }; //(2)
+struct my_error: virtual boost::exception, virtual std::exception { }; //(2)
 
 void
 f()

@@ -32,7 +32,7 @@
 #include &lt;stdio.h&gt;
 #include &lt;errno.h&gt;
 
-class file_read_error: public boost::<span class="RenoLink"><a href="exception.html">exception</a></span> { };
+struct file_read_error: virtual boost::<span class="RenoLink"><a href="exception.html">exception</a></span> { };
 
 void
 file_read( FILE * f, void * buffer, size_t size )

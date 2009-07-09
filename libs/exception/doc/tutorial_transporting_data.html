@@ -34,7 +34,7 @@
 
 typedef boost::<span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_my_info,int&gt; my_info; //(1)
 
-class my_error: public boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, public std::exception { }; //(2)
+struct my_error: virtual boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, virtual std::exception { }; //(2)
 
 void
 f()
@@ -73,12 +73,12 @@ file_read( FILE * f, void * buffer, size_t size )
     }</pre>
 <p>How can the file_read function pass a file name to the exception type constructor? All it has is a FILE handle.</p>
 <p>Using boost::<span class="RenoLink"><a href="exception.html">exception</a></span> allows us to free the file_read function from the burden of storing the file name in exceptions it throws:</p>
-<pre><span class="RenoLink"><a href="boost_exception_all_hpp.html">boost/exception/all.hpp</a></span>&gt;
+<pre>#include &lt;<span class="RenoLink"><a href="boost_exception_all_hpp.html">boost/exception/all.hpp</a></span>&gt;
 #include &lt;boost/shared_ptr.hpp&gt;
 #include &lt;stdio.h&gt;
 #include &lt;errno.h&gt;
 
-class file_read_error: public boost::<span class="RenoLink"><a href="exception.html">exception</a></span> { };
+struct file_read_error: virtual boost::<span class="RenoLink"><a href="exception.html">exception</a></span> { };
 
 void
 file_read( FILE * f, void * buffer, size_t size )
@@ -127,7 +127,7 @@ parse_file( char const * file_name )
 
 typedef boost::<span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html">tuple</a></span>&lt;boost::<span class="RenoLink"><a href="errinfo_api_function.html">errinfo_api_function</a></span>,boost::<span class="RenoLink"><a href="errinfo_errno.html">errinfo_errno</a></span>&gt; clib_failure;
 
-class file_open_error: public boost::<span class="RenoLink"><a href="exception.html">exception</a></span> { };
+struct file_open_error: virtual boost::<span class="RenoLink"><a href="exception.html">exception</a></span> { };
 
 boost::shared_ptr&lt;FILE&gt;
 file_open( char const * name, char const * mode )
