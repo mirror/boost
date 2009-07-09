@@ -5,7 +5,7 @@
 
 //This example shows to print all data contained in a boost::exception.
 
-#include <boost/exception.hpp>
+#include <boost/exception/all.hpp>
 #include <iostream>
 
 void f(); //throws unknown types that derive from boost::exception.

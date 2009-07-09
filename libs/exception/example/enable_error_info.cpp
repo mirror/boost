@@ -7,7 +7,7 @@
 //transporting of arbitrary data to the catch site, even for types
 //that do not derive from boost::exception.
 
-#include <boost/exception.hpp>
+#include <boost/exception/all.hpp>
 #include <stdexcept>
 
 typedef boost::error_info<struct tag_std_range_min,size_t> std_range_min;

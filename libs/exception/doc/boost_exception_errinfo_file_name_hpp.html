@@ -3,7 +3,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-	<title>boost/exception/info.hpp</title>
+	<title>boost/exception/errinfo_file_name.hpp</title>
 	<link href='reno.css' type='text/css' rel='stylesheet'/>
 </head>
 <body>
@@ -19,38 +19,21 @@
 <!-- Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h2>boost/exception/info.hpp</h2>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h2>boost/exception/errinfo_file_name.hpp</h2>
 </div>
 <h3>Synopsis</h3>
-<div class="RenoIncludeDIV"><pre>#include &lt;<span class="RenoLink"><a href="boost_exception_exception_hpp.html">boost/exception/exception.hpp</a></span>&gt;
+<div class="RenoIncludeDIV"><pre>#include &lt;<span class="RenoLink"><a href="boost_exception_error_info_hpp.html">boost/exception/error_info.hpp</a></span>&gt;
+#include &lt;string&gt;
 
 namespace
 boost
     {
-<span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">template &lt;class Tag,class T&gt;
-    class
-    <span class="RenoLink"><a href="error_info.html">error_info</a></span>
-        {
-        public:
-    
-    <span class="RenoIncludeSPAN">    typedef T <span class="RenoLink"><a href="error_info_value_type.html">value_type</a></span>;</span>    
-    
-    <span class="RenoIncludeSPAN">    <span class="RenoLink"><a href="error_info_error_info.html">error_info</a></span>( <span class="RenoLink"><a href="error_info_value_type.html">value_type</a></span> const &amp; v );</span>    
-    <span class="RenoIncludeSPAN">    <span class="RenoLink"><a href="error_info_value_type.html">value_type</a></span> const &amp; <span class="RenoLink"><a href="error_info_value.html">value</a></span>() const;</span>    
-        };</span>    
-    
-    <span class="RenoIncludeSPAN">template &lt;class E, class Tag, class T&gt;
-    E const &amp; <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span>( E const &amp; x, <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; const &amp; v );</span></span>
+<span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct errinfo_file_name_,std::string&gt; <span class="RenoLink"><a href="errinfo_file_name.html">errinfo_file_name</a></span>;</span></span>
     }</pre>
 </div></div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost_exception_all_hpp.html">boost/exception/all.hpp<br/>
-</a><a href="boost_exception_info_tuple_hpp.html">boost/exception/info_tuple.hpp<br/>
-</a><a href="error_info.html">error_info<br/>
-</a><a href="error_info_error_info.html">error_info::error_info<br/>
-</a><a href="error_info_value.html">error_info::value<br/>
-</a><a href="error_info_value_type.html">error_info::value_type<br/>
-</a><a href="exception_operator_shl.html">exception/operator&lt;&lt;<br/>
+</a><a href="errinfo_file_name.html">errinfo_file_name<br/>
 </a><a href="synopsis.html">Synopsis<br/>
 </a></div>
 </div>
