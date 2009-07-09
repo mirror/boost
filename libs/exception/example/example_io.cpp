@@ -8,7 +8,10 @@
 
 //The output from this program can vary depending on the platform.
 
-#include <boost/exception.hpp>
+#include <boost/throw_exception.hpp>
+#include <boost/exception/info.hpp>
+#include <boost/exception/get_error_info.hpp>
+#include <boost/exception/diagnostic_information.hpp>
 #include <boost/exception/errinfo_file_open_mode.hpp>
 #include <boost/exception/errinfo_file_handle.hpp>
 #include <boost/exception/errinfo_file_name.hpp>
@@ -16,11 +19,7 @@
 #include <boost/exception/errinfo_errno.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-#include <stdio.h>
-#include <errno.h>
-#include <string>
 #include <iostream>
-#include <sstream>
 
 typedef boost::error_info<struct tag_file_name_src,std::string> errinfo_src_file_name;
 typedef boost::error_info<struct tag_file_name_dst,std::string> errinfo_dst_file_name;
