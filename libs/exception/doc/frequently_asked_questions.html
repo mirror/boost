@@ -53,13 +53,13 @@ catch( ... )
     std::cerr &lt;&lt; "OMG!!!";
     }</pre>
 <p>This is a possible message it may display, the first line is only possible if <span class="RenoLink"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION</a></span> is used:</p>
-<pre>example_io.cpp(83): Throw in function void parse_file(const char *)
-Dynamic exception type: class file_open_error
+<pre>example_io.cpp(70): Throw in function class boost::shared_ptr&lt;struct _iobuf&gt; __cdecl my_fopen(const char *,const char *)
+Dynamic exception type: class boost::exception_detail::clone_impl&lt;class fopen_error&gt;
 std::exception::what: example_io error
-[struct tag_errno_code *] = 2, OS says "No such file or directory"
-[struct tag_file_name *] = tmp1.xml
-[struct tag_function *] = fopen
-[struct tag_open_mode *] = rb</pre>
+[struct boost::<span class="RenoLink"><a href="errinfo_api_function.html">errinfo_api_function</a></span>_ *] = fopen
+[struct boost::<span class="RenoLink"><a href="errinfo_errno.html">errinfo_errno</a></span>_ *] = 2, "No such file or directory"
+[struct boost::<span class="RenoLink"><a href="errinfo_file_name.html">errinfo_file_name</a></span>_ *] = tmp1.txt
+[struct boost::<span class="RenoLink"><a href="errinfo_file_open_mode.html">errinfo_file_open_mode</a></span>_ *] = rb</pre>
 <h3>Why is boost::exception integrated in boost::throw_exception?</h3>
 <p>The boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span> function predates the Boost Exception library and there has been some concern about its current behavior of injecting boost::<span class="RenoLink"><a href="exception.html">exception</a></span> as a base of any exception passed to boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>. Such concerns are dictated by the typical strict interpretation of a common principle in C and C++, that users only pay for features they actually use.</p>
 <p>The problem is that users of Boost Exception can't by themselves cause a library to throw types that derive from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, and without this they can't use any of the Boost Exception facilities.</p>
