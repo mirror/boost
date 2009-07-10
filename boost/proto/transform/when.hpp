@@ -55,7 +55,7 @@
         /// <tt>T()(e,s,v)</tt>.
         template<typename Grammar, typename PrimitiveTransform BOOST_PROTO_WHEN_BUILDING_DOCS(= Grammar)>
         struct when
-          : PrimitiveTransform::transform_type
+          : PrimitiveTransform
         {
             typedef typename Grammar::proto_base_expr proto_base_expr;
         };
