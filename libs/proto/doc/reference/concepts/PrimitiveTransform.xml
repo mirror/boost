@@ -18,14 +18,20 @@
 
   <description>
     <para>
-      A PrimitiveTransform is a <conceptname>BasicPrimitiveTransform</conceptname>
-      that is also a <conceptname>PolymorphicFunctionObject</conceptname>
-      implemented in terms of the nested <computeroutput>impl&lt;&gt;</computeroutput> template.
+      A PrimitiveTransform is a class type that
+      has a nested class template called
+      <computeroutput>impl&lt;&gt;</computeroutput> that takes
+      three template parameters representing an expression
+      type, a state type and a data type. Specializations
+      of the nested impl template are ternary monomorphic
+      function objects that accept expression, state, and
+      data parameters. A PrimitiveTransform is also a
+      <conceptname>PolymorphicFunctionObject</conceptname>
+      implemented in terms of the nested
+      <computeroutput>impl&lt;&gt;</computeroutput> template.
     </para>
   </description>
 
-  <refines const="no" concept="BasicPrimitiveTransform"/>
-  
   <notation variables="fn">
     <sample-value>
       <type name="Fn" />

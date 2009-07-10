@@ -14,7 +14,7 @@
       <struct name="when">
         <template>
           <template-type-parameter name="Grammar"/>
-          <template-type-parameter name="BasicPrimitiveTransform">
+          <template-type-parameter name="PrimitiveTransform">
             <default>Grammar</default>
           </template-type-parameter>
         </template>

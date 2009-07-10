@@ -530,6 +530,7 @@
             /// PrimitiveTransform that returns the current expression unchanged.
             template<typename T>
             struct terminal
+              : proto::transform<terminal<T>, int>
             {
                 typedef proto::expr<proto::tag::terminal, term<T>, 0> type;
                 typedef type proto_base_expr;
@@ -570,6 +571,7 @@
             /// transform.
             template<typename T, typename U, typename V>
             struct if_else_
+              : proto::transform<if_else_<T, U, V>, int>
             {
                 typedef proto::expr<proto::tag::if_else_, list3<T, U, V>, 3> type;
                 typedef type proto_base_expr;
@@ -598,6 +600,7 @@
             /// nullary expression.
             template<typename Tag, typename T>
             struct nullary_expr
+              : proto::transform<nullary_expr<Tag, T>, int>
             {
                 typedef proto::expr<Tag, term<T>, 0> type;
                 typedef type proto_base_expr;
@@ -642,6 +645,7 @@
             /// unary expression.
             template<typename Tag, typename T>
             struct unary_expr
+              : proto::transform<unary_expr<Tag, T>, int>
             {
                 typedef proto::expr<Tag, list1<T>, 1> type;
                 typedef type proto_base_expr;
@@ -667,6 +671,7 @@
             /// binary expression.
             template<typename Tag, typename T, typename U>
             struct binary_expr
+              : proto::transform<binary_expr<Tag, T, U>, int>
             {
                 typedef proto::expr<Tag, list2<T, U>, 2> type;
                 typedef type proto_base_expr;
@@ -684,970 +689,89 @@
                 typedef U proto_child1;
             };
 
-            /// \brief A metafunction for generating unary plus expression types,
-            /// a grammar element for matching unary plus expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T>
-            struct unary_plus
-            {
-                typedef proto::expr<proto::tag::unary_plus, list1<T>, 1> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<unary_plus, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::unary_plus proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-            };
-
-            /// \brief A metafunction for generating unary minus expression types,
-            /// a grammar element for matching unary minus expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T>
-            struct negate
-            {
-                typedef proto::expr<proto::tag::negate, list1<T>, 1> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<negate, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::negate proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-            };
-
-            /// \brief A metafunction for generating defereference expression types,
-            /// a grammar element for matching dereference expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T>
-            struct dereference
-            {
-                typedef proto::expr<proto::tag::dereference, list1<T>, 1> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<dereference, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::dereference proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-            };
-
-            /// \brief A metafunction for generating complement expression types,
-            /// a grammar element for matching complement expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T>
-            struct complement
-            {
-                typedef proto::expr<proto::tag::complement, list1<T>, 1> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<complement, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::complement proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-            };
-
-            /// \brief A metafunction for generating address_of expression types,
-            /// a grammar element for matching address_of expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T>
-            struct address_of
-            {
-                typedef proto::expr<proto::tag::address_of, list1<T>, 1> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<address_of, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::address_of proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-            };
-
-            /// \brief A metafunction for generating logical_not expression types,
-            /// a grammar element for matching logical_not expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T>
-            struct logical_not
-            {
-                typedef proto::expr<proto::tag::logical_not, list1<T>, 1> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<logical_not, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::logical_not proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-            };
-
-            /// \brief A metafunction for generating pre-increment expression types,
-            /// a grammar element for matching pre-increment expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T>
-            struct pre_inc
-            {
-                typedef proto::expr<proto::tag::pre_inc, list1<T>, 1> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<pre_inc, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::pre_inc proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-            };
-
-            /// \brief A metafunction for generating pre-decrement expression types,
-            /// a grammar element for matching pre-decrement expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T>
-            struct pre_dec
-            {
-                typedef proto::expr<proto::tag::pre_dec, list1<T>, 1> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<pre_dec, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::pre_dec proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-            };
-
-            /// \brief A metafunction for generating post-increment expression types,
-            /// a grammar element for matching post-increment expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T>
-            struct post_inc
-            {
-                typedef proto::expr<proto::tag::post_inc, list1<T>, 1> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<post_inc, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::post_inc proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-            };
-
-            /// \brief A metafunction for generating post-decrement expression types,
-            /// a grammar element for matching post-decrement expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T>
-            struct post_dec
-            {
-                typedef proto::expr<proto::tag::post_dec, list1<T>, 1> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<post_dec, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::post_dec proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-            };
-
-            /// \brief A metafunction for generating left-shift expression types,
-            /// a grammar element for matching left-shift expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct shift_left
-            {
-                typedef proto::expr<proto::tag::shift_left, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<shift_left, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::shift_left proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating right-shift expression types,
-            /// a grammar element for matching right-shift expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct shift_right
-            {
-                typedef proto::expr<proto::tag::shift_right, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<shift_right, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::shift_right proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating multiplies expression types,
-            /// a grammar element for matching multiplies expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct multiplies
-            {
-                typedef proto::expr<proto::tag::multiplies, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<multiplies, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::multiplies proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating divides expression types,
-            /// a grammar element for matching divides expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct divides
-            {
-                typedef proto::expr<proto::tag::divides, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<divides, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::divides proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating modulus expression types,
-            /// a grammar element for matching modulus expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct modulus
-            {
-                typedef proto::expr<proto::tag::modulus, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<modulus, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::modulus proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating binary plus expression types,
-            /// a grammar element for matching binary plus expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct plus
-            {
-                typedef proto::expr<proto::tag::plus, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<plus, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::plus proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating binary minus expression types,
-            /// a grammar element for matching binary minus expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct minus
-            {
-                typedef proto::expr<proto::tag::minus, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<minus, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::minus proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating less expression types,
-            /// a grammar element for matching less expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct less
-            {
-                typedef proto::expr<proto::tag::less, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<less, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::less proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating greater expression types,
-            /// a grammar element for matching greater expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct greater
-            {
-                typedef proto::expr<proto::tag::greater, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<greater, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::greater proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating less-or-equal expression types,
-            /// a grammar element for matching less-or-equal expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct less_equal
-            {
-                typedef proto::expr<proto::tag::less_equal, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<less_equal, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::less_equal proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating greater-or-equal expression types,
-            /// a grammar element for matching greater-or-equal expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct greater_equal
-            {
-                typedef proto::expr<proto::tag::greater_equal, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<greater_equal, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::greater_equal proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating equal-to expression types,
-            /// a grammar element for matching equal-to expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct equal_to
-            {
-                typedef proto::expr<proto::tag::equal_to, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<equal_to, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::equal_to proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating not-equal-to expression types,
-            /// a grammar element for matching not-equal-to expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct not_equal_to
-            {
-                typedef proto::expr<proto::tag::not_equal_to, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<not_equal_to, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::not_equal_to proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating logical-or expression types,
-            /// a grammar element for matching logical-or expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct logical_or
-            {
-                typedef proto::expr<proto::tag::logical_or, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<logical_or, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::logical_or proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating logical-and expression types,
-            /// a grammar element for matching logical-and expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct logical_and
-            {
-                typedef proto::expr<proto::tag::logical_and, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<logical_and, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::logical_and proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating bitwise-and expression types,
-            /// a grammar element for matching bitwise-and expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct bitwise_and
-            {
-                typedef proto::expr<proto::tag::bitwise_and, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<bitwise_and, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::bitwise_and proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating bitwise-or expression types,
-            /// a grammar element for matching bitwise-or expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct bitwise_or
-            {
-                typedef proto::expr<proto::tag::bitwise_or, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<bitwise_or, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::bitwise_or proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating bitwise-xor expression types,
-            /// a grammar element for matching bitwise-xor expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct bitwise_xor
-            {
-                typedef proto::expr<proto::tag::bitwise_xor, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<bitwise_xor, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::bitwise_xor proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating comma expression types,
-            /// a grammar element for matching comma expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct comma
-            {
-                typedef proto::expr<proto::tag::comma, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<comma, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::comma proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            template<typename T, typename U>
-            struct mem_ptr
-            {
-                typedef proto::expr<proto::tag::mem_ptr, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<mem_ptr, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::mem_ptr proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating assignment expression types,
-            /// a grammar element for matching assignment expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct assign
-            {
-                typedef proto::expr<proto::tag::assign, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<assign, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::assign proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating left-shift-assign expression types,
-            /// a grammar element for matching left-shift-assign expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct shift_left_assign
-            {
-                typedef proto::expr<proto::tag::shift_left_assign, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<shift_left_assign, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::shift_left_assign proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating right-shift-assign expression types,
-            /// a grammar element for matching right-shift-assign expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct shift_right_assign
-            {
-                typedef proto::expr<proto::tag::shift_right_assign, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<shift_right_assign, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::shift_right_assign proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating multiplies-assign expression types,
-            /// a grammar element for matching multiplies-assign expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct multiplies_assign
-            {
-                typedef proto::expr<proto::tag::multiplies_assign, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<multiplies_assign, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::multiplies_assign proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating divides-assign expression types,
-            /// a grammar element for matching divides-assign expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct divides_assign
-            {
-                typedef proto::expr<proto::tag::divides_assign, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<divides_assign, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::divides_assign proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating modulus-assign expression types,
-            /// a grammar element for matching modulus-assign expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct modulus_assign
-            {
-                typedef proto::expr<proto::tag::modulus_assign, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<modulus_assign, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::modulus_assign proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating plus-assign expression types,
-            /// a grammar element for matching plus-assign expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct plus_assign
-            {
-                typedef proto::expr<proto::tag::plus_assign, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<plus_assign, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::plus_assign proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating minus-assign expression types,
-            /// a grammar element for matching minus-assign expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct minus_assign
-            {
-                typedef proto::expr<proto::tag::minus_assign, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<minus_assign, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::minus_assign proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating bitwise-and-assign expression types,
-            /// a grammar element for matching bitwise-and-assign expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct bitwise_and_assign
-            {
-                typedef proto::expr<proto::tag::bitwise_and_assign, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<bitwise_and_assign, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::bitwise_and_assign proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating bitwise-or-assign expression types,
-            /// a grammar element for matching bitwise-or-assign expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct bitwise_or_assign
-            {
-                typedef proto::expr<proto::tag::bitwise_or_assign, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<bitwise_or_assign, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::bitwise_or_assign proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating bitwise-xor-assign expression types,
-            /// a grammar element for matching bitwise-xor-assign expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct bitwise_xor_assign
-            {
-                typedef proto::expr<proto::tag::bitwise_xor_assign, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<bitwise_xor_assign, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::bitwise_xor_assign proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating subscript expression types,
-            /// a grammar element for matching subscript expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct subscript
-            {
-                typedef proto::expr<proto::tag::subscript, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<subscript, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::subscript proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
-
-            /// \brief A metafunction for generating virtual data member expression
-            /// types, a grammar element for matching member expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U>
-            struct member
-            {
-                typedef expr<tag::member, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<member, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::member proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
+        #define BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(Op)                                           \
+            template<typename T>                                                                    \
+            struct Op                                                                               \
+              : proto::transform<Op<T>, int>                                                        \
+            {                                                                                       \
+                typedef proto::expr<proto::tag::Op, list1<T>, 1> type;                              \
+                typedef type proto_base_expr;                                                       \
+                                                                                                    \
+                template<typename Expr, typename State, typename Data>                              \
+                struct impl                                                                         \
+                  : detail::pass_through_impl<Op, Expr, State, Data>                                \
+                {};                                                                                 \
+                                                                                                    \
+                typedef proto::tag::Op proto_tag;                                                   \
+                typedef T proto_child0;                                                             \
+            };                                                                                      \
+            /**/
+
+        #define BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(Op)                                          \
+            template<typename T, typename U>                                                        \
+            struct Op                                                                               \
+              : proto::transform<Op<T, U>, int>                                                     \
+            {                                                                                       \
+                typedef proto::expr<proto::tag::Op, list2<T, U>, 2> type;                           \
+                typedef type proto_base_expr;                                                       \
+                                                                                                    \
+                template<typename Expr, typename State, typename Data>                              \
+                struct impl                                                                         \
+                  : detail::pass_through_impl<Op, Expr, State, Data>                                \
+                {};                                                                                 \
+                                                                                                    \
+                typedef proto::tag::Op proto_tag;                                                   \
+                typedef T proto_child0;                                                             \
+                typedef U proto_child1;                                                             \
+            };                                                                                      \
+            /**/
+
+            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(unary_plus)
+            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(negate)
+            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(dereference)
+            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(complement)
+            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(logical_not)
+            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(pre_inc)
+            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(pre_dec)
+            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(post_inc)
+            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(post_dec)
+
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(shift_left)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(shift_right)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(multiplies)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(divides)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(modulus)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(plus)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(minus)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(less)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(greater)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(less_equal)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(greater_equal)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(equal_to)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(not_equal_to)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(logical_or)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(logical_and)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_or)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_and)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_xor)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(comma)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(mem_ptr)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(assign)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(shift_left_assign)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(shift_right_assign)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(multiplies_assign)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(divides_assign)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(modulus_assign)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(plus_assign)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(minus_assign)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_or_assign)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_and_assign)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_xor_assign)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(subscript)
+            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(member)
+
+        #undef BOOST_PROTO_DEFINE_UNARY_METAFUNCTION
+        #undef BOOST_PROTO_DEFINE_BINARY_METAFUNCTION
 
         } // namespace op
 
@@ -2268,6 +1392,13 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
             >
             #endif
+              : proto::transform<
+                    function<
+                        BOOST_PP_ENUM_PARAMS(N, A)
+                        BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
+                    >
+                  , int
+                >
             {
                 typedef proto::expr<proto::tag::function, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)>, N> type;
                 typedef type proto_base_expr;
@@ -2305,6 +1436,14 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
             >
             #endif
+              : proto::transform<
+                    nary_expr<
+                        Tag
+                        BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
+                        BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
+                    >
+                  , int
+                >
             {
                 typedef proto::expr<Tag, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)>, N> type;
                 typedef type proto_base_expr;

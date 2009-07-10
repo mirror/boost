@@ -97,29 +97,35 @@ namespace boost { namespace xpressive
 
         struct BindArg : proto::callable
         {
-            typedef int result_type;
+            template<typename Sig>
+            struct result;
 
-            template<typename Data, typename Expr>
-            int operator ()(Data &data, Expr const &expr) const
+            template<typename This, typename MatchResults, typename Expr>
+            struct result<This(MatchResults, Expr)>
             {
-                data.let(expr);
-                return 0;
+                typedef Expr type;
+            };
+
+            template<typename MatchResults, typename Expr>
+            Expr const & operator ()(MatchResults &what, Expr const &expr) const
+            {
+                what.let(expr);
+                return expr;
             }
         };
 
         struct let_tag
         {};
 
+        // let(_a = b, _c = d)
         struct BindArgs
-          : proto::when<
-                // let(_a = b, _c = d)
-                proto::function<
-                    proto::terminal<let_tag>
-                  , proto::vararg<proto::assign<proto::_, proto::_> >
-                >
-              , proto::function<
-                    proto::_state   // no-op
-                  , proto::vararg<proto::call<BindArg(proto::_data, proto::_)> >
+          : proto::function<
+                proto::terminal<let_tag>
+              , proto::vararg<
+                    proto::when<
+                        proto::assign<proto::_, proto::_>
+                      , proto::call<BindArg(proto::_data, proto::_)>
+                    >
                 >
             >
         {};
@@ -138,11 +144,7 @@ namespace boost { namespace xpressive
         template<typename Args, typename BidiIter>
         void bind_args(let_<Args> const &args, match_results<BidiIter> &what)
         {
-            BindArgs::impl<let_<Args> const &, int, match_results<BidiIter> &>()(
-                args
-              , 0
-              , what
-            );
+            BindArgs()(args, 0, what);
         }
 
         template<typename BidiIter>

@@ -79,9 +79,9 @@
         /// {};
         /// \endcode
         template<typename PrimitiveTransform>
-        struct call : PrimitiveTransform
-        {
-        };
+        struct call
+          : PrimitiveTransform
+        {};
 
         /// \brief Either call the PolymorphicFunctionObject with 0
         /// arguments, or invoke the PrimitiveTransform with 3
