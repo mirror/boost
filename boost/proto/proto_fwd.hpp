@@ -706,7 +706,7 @@ namespace boost { namespace proto
         BOOST_PROTO_CALLABLE()
     };
 
-    template<typename PrimitiveTransform>
+    template<typename PrimitiveTransform, typename X = void>
     struct transform;
 
     template<typename Grammar, typename Fun = Grammar>

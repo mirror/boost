@@ -547,9 +547,10 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; terminal&lt;T&gt; &gt;</inherit>
         <purpose>A metafunction for generating terminal expression types, a grammar element for matching
           terminal expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that returns the current expression unchanged. </purpose>
+          a <conceptname>PrimitiveTransform</conceptname> that returns the current expression unchanged. </purpose>
         <struct name="impl">
           <template>
             <template-type-parameter name="Expr"/>
@@ -605,9 +606,10 @@
           <template-type-parameter name="U"/>
           <template-type-parameter name="V"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; if_else_&lt;T, U, V&gt; &gt;</inherit>
         <purpose>A metafunction for generating ternary conditional expression types, a grammar element for
           matching ternary conditional expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname>
+          a <conceptname>PrimitiveTransform</conceptname>
           that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
@@ -633,9 +635,10 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; unary_plus&lt;T&gt; &gt;</inherit>
         <purpose>A metafunction for generating unary plus expression types,
           a grammar element for matching unary plus expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -660,9 +663,10 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; negate&lt;T&gt; &gt;</inherit>
         <purpose>A metafunction for generating unary minus expression types, 
           a grammar element for matching unary minus expressions, and 
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the 
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the 
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput> 
           transform.</purpose>
         <struct name="impl">
@@ -687,9 +691,10 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; dereference&lt;T&gt; &gt;</inherit>
         <purpose>A metafunction for generating defereference expression types, 
           a grammar element for matching dereference expressions, and 
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the 
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the 
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -714,9 +719,10 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; complement&lt;T&gt; &gt;</inherit>
         <purpose>A metafunction for generating complement expression types, 
           a grammar element for matching complement expressions, and 
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the 
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the 
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -741,9 +747,10 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; address_of&lt;T&gt; &gt;</inherit>
         <purpose>A metafunction for generating address_of expression types, 
           a grammar element for matching address_of expressions, and 
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the 
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the 
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -768,9 +775,10 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; logical_not&lt;T&gt; &gt;</inherit>
         <purpose>A metafunction for generating logical_not expression types, 
           a grammar element for matching logical_not expressions, and 
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the 
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the 
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -795,9 +803,10 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; pre_inc&lt;T&gt; &gt;</inherit>
         <purpose>A metafunction for generating pre-increment expression types,
           a grammar element for matching pre-increment expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -822,9 +831,10 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; pre_dec&lt;T&gt; &gt;</inherit>
         <purpose>A metafunction for generating pre-decrement expression types,
           a grammar element for matching pre-decrement expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -849,9 +859,10 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; post_inc&lt;T&gt; &gt;</inherit>
         <purpose>A metafunction for generating post-increment expression types,
           a grammar element for matching post-increment expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -876,9 +887,10 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; post_dec&lt;T&gt; &gt;</inherit>
         <purpose>A metafunction for generating post-decrement expression types,
           a grammar element for matching post-decrement expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -904,9 +916,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; shift_left&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating left-shift expression types,
           a grammar element for matching left-shift expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -932,9 +945,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; shift_right&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating right-shift expression types,
           a grammar element for matching right-shift expressions, and a
-          <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -960,9 +974,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; multiplies&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating multiplies expression types,
           a grammar element for matching multiplies expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -988,9 +1003,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; divides&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating divides expression types,
           a grammar element for matching divides expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the 
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the 
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1016,9 +1032,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; modulus&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating modulus expression types,
           a grammar element for matching modulus expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1044,9 +1061,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; plus&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating binary plus expression types,
           a grammar element for matching binary plus expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1072,9 +1090,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; minus&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating binary minus expression types,
           a grammar element for matching binary minus expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1100,9 +1119,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; less&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating less expression types,
           a grammar element for matching less expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1128,9 +1148,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; greater&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating greater expression types,
           a grammar element for matching greater expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1156,9 +1177,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; less_equal&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating less-or-equal expression types,
           a grammar element for matching less-or-equal expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1184,9 +1206,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; greater_equal&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating greater-or-equal expression types,
           a grammar element for matching greater-or-equal expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1212,9 +1235,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; equal_to&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating equal-to expression types,
           a grammar element for matching equal-to expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1240,9 +1264,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; not_equal_to&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating not-equal-to expression types,
           a grammar element for matching not-equal-to expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1268,9 +1293,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; logical_or&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating logical-or expression types,
           a grammar element for matching logical-or expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1296,9 +1322,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; logical_and&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating logical-and expression types,
           a grammar element for matching logical-and expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1324,9 +1351,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; bitwise_and&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating bitwise-and expression types,
           a grammar element for matching bitwise-and expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1352,9 +1380,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; bitwise_or&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating bitwise-or expression types,
           a grammar element for matching bitwise-or expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1380,9 +1409,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; bitwise_xor&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating bitwise-xor expression types,
           a grammar element for matching bitwise-xor expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1408,9 +1438,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; comma&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating comma expression types,
           a grammar element for matching comma expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1436,6 +1467,7 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; mem_ptr&lt;T, U&gt; &gt;</inherit>
         <struct name="impl">
           <template>
             <template-type-parameter name="Expr"/>
@@ -1459,9 +1491,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; assign&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating assignment expression types,
           a grammar element for matching assignment expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1487,9 +1520,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; shift_left_assign&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating left-shift-assign expression types,
           a grammar element for matching left-shift-assign expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1515,9 +1549,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; shift_right_assign&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating right-shift-assign expression types,
           a grammar element for matching right-shift-assign expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1543,9 +1578,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; multiplies_assign&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating multiplies-assign expression types,
           a grammar element for matching multiplies-assign expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1571,9 +1607,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; divides_assign&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating divides-assign expression types,
           a grammar element for matching divides-assign expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1599,9 +1636,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; modulus_assign&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating modulus-assign expression types,
           a grammar element for matching modulus-assign expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1627,9 +1665,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; plus_assign&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating plus-assign expression types,
           a grammar element for matching plus-assign expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1655,9 +1694,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; minus_assign&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating minus-assign expression types,
           a grammar element for matching minus-assign expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1683,9 +1723,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; bitwise_and_assign&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating bitwise-and-assign expression types,
           a grammar element for matching bitwise-and-assign expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1711,9 +1752,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; bitwise_or_assign&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating bitwise-or-assign expression types,
           a grammar element for matching bitwise-or-assign expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1739,9 +1781,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; bitwise_xor_assign&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating bitwise-xor-assign expression types,
           a grammar element for matching bitwise-xor-assign expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1767,9 +1810,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; subscript&lt;T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating subscript expression types,
           a grammar element for matching subscript expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that dispatches to the
+          a <conceptname>PrimitiveTransform</conceptname> that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
         <struct name="impl">
@@ -1794,9 +1838,10 @@
         <template>
           <template-type-parameter name="A" pack="1"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; function&lt;A...&gt; &gt;</inherit>
         <purpose>A metafunction for generating function-call expression types, a grammar element for
           matching function-call expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname>
+          a <conceptname>PrimitiveTransform</conceptname>
           that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
@@ -1823,9 +1868,10 @@
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="T"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; nullary_expr&lt;Tag, T&gt; &gt;</inherit>
         <purpose>A metafunction for generating nullary expression types, a grammar element for matching
           nullary expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname> that returns the current expression unchanged. </purpose>
+          a <conceptname>PrimitiveTransform</conceptname> that returns the current expression unchanged. </purpose>
         <description>
           <para>
             Use <computeroutput>proto::nullary_expr&lt;<classname>proto::_</classname>, <classname>proto::_</classname>&gt;</computeroutput>
@@ -1886,9 +1932,10 @@
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="T"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; unary_expr&lt;Tag, T&gt; &gt;</inherit>
         <purpose>A metafunction for generating unary expression types with a specified tag type,
           a grammar element for matching unary expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname>
+          a <conceptname>PrimitiveTransform</conceptname>
           that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
@@ -1922,9 +1969,10 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; binary_expr&lt;Tag, T, U&gt; &gt;</inherit>
         <purpose>A metafunction for generating binary expression types with a specified tag type,
           a grammar element for matching binary expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname>
+          a <conceptname>PrimitiveTransform</conceptname>
           that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>
@@ -1956,9 +2004,10 @@
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="A" pack="1"/>
         </template>
+        <inherit><classname>proto::transform</classname>&lt; nary_expr&lt;Tag, A...&gt; &gt;</inherit>
         <purpose>A metafunction for generating n-ary expression types with a specified tag type,
           a grammar element for matching n-ary expressions, and
-          a <conceptname>BasicPrimitiveTransform</conceptname>
+          a <conceptname>PrimitiveTransform</conceptname>
           that dispatches to the
           <computeroutput><classname alt="proto::pass_through">proto::pass_through&lt;&gt;</classname></computeroutput>
           transform.</purpose>

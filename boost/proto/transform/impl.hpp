@@ -17,16 +17,10 @@ namespace boost { namespace proto
 {
     /// INTERNAL ONLY
     ///
-    #define BOOST_PROTO_BASIC_TRANSFORM(PrimitiveTransform)                                                     \
+    #define BOOST_PROTO_TRANSFORM_(PrimitiveTransform, X)                                                       \
     BOOST_PROTO_CALLABLE()                                                                                      \
-    typedef void proto_is_transform_;                                                                           \
+    typedef X proto_is_transform_;                                                                              \
     typedef PrimitiveTransform transform_type;                                                                  \
-    /**/
-
-    /// INTERNAL ONLY
-    ///
-    #define BOOST_PROTO_TRANSFORM(PrimitiveTransform)                                                           \
-    BOOST_PROTO_BASIC_TRANSFORM(PrimitiveTransform)                                                             \
                                                                                                                 \
     template<typename Sig>                                                                                      \
     struct result                                                                                               \
@@ -73,6 +67,10 @@ namespace boost { namespace proto
     }                                                                                                           \
     /**/
 
+    #define BOOST_PROTO_TRANSFORM(PrimitiveTransform)                                                           \
+        BOOST_PROTO_TRANSFORM_(PrimitiveTransform, void)                                                        \
+        /**/
+
     namespace detail
     {
         template<typename Sig>
@@ -94,10 +92,10 @@ namespace boost { namespace proto
         {};
     }
 
-    template<typename PrimitiveTransform>
+    template<typename PrimitiveTransform, typename X>
     struct transform
     {
-        BOOST_PROTO_TRANSFORM(PrimitiveTransform)
+        BOOST_PROTO_TRANSFORM_(PrimitiveTransform, X)
     };
 
     template<typename Expr, typename State, typename Data>
