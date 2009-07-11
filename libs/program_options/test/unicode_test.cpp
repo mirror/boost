@@ -34,9 +34,13 @@ void test_unicode_to_unicode()
     args.push_back(L"--foo=\x044F");
 
     variables_map vm;
-    store(wcommand_line_parser(args).options(desc).run(), vm);
+    basic_parsed_options<wchar_t> parsed = 
+        wcommand_line_parser(args).options(desc).run();
+    store(parsed, vm);
 
-    BOOST_CHECK(vm["foo"].as<wstring>() == L"\x044F");           
+    BOOST_CHECK(vm["foo"].as<wstring>() == L"\x044F");
+    BOOST_CHECK(parsed.options[0].original_tokens.size() == 1);
+    BOOST_CHECK(parsed.options[0].original_tokens[0] == L"--foo=\x044F");
 }
 
 // Test that unicode input is property converted into

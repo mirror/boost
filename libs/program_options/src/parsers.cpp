@@ -67,10 +67,16 @@ namespace boost { namespace program_options {
             woption result;
             result.string_key = opt.string_key;
             result.position_key = opt.position_key;
+            result.unregistered = opt.unregistered;
             
             std::transform(opt.value.begin(), opt.value.end(),
                            back_inserter(result.value),
-                           bind(from_utf8, _1));
+                           boost::bind(from_utf8, _1));
+
+            std::transform(opt.original_tokens.begin(), 
+                           opt.original_tokens.end(),
+                           back_inserter(result.original_tokens),
+                           boost::bind(from_utf8, _1));
             return result;
         }
     }

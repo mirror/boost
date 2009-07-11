@@ -152,7 +152,7 @@ namespace boost { namespace program_options { namespace detail {
             error = "style disallows all characters for short options";
 
         if (error)
-            throw invalid_command_line_style(error);
+            boost::throw_exception(invalid_command_line_style(error));
 
         // Need to check that if guessing and long disguise are enabled
         // -f will mean the same as -foo
@@ -196,24 +196,24 @@ namespace boost { namespace program_options { namespace detail {
 
         if (m_additional_parser)
             style_parsers.push_back(
-                bind(&cmdline::handle_additional_parser, this, _1));
+                boost::bind(&cmdline::handle_additional_parser, this, _1));
 
         if (m_style & allow_long)
             style_parsers.push_back(
-                bind(&cmdline::parse_long_option, this, _1));
+                boost::bind(&cmdline::parse_long_option, this, _1));
 
         if ((m_style & allow_long_disguise))
             style_parsers.push_back(
-                bind(&cmdline::parse_disguised_long_option, this, _1));
+                boost::bind(&cmdline::parse_disguised_long_option, this, _1));
 
         if ((m_style & allow_short) && (m_style & allow_dash_for_short))
             style_parsers.push_back(
-                bind(&cmdline::parse_short_option, this, _1));
+                boost::bind(&cmdline::parse_short_option, this, _1));
 
         if ((m_style & allow_short) && (m_style & allow_slash_for_short))
-            style_parsers.push_back(bind(&cmdline::parse_dos_option, this, _1));
+            style_parsers.push_back(boost::bind(&cmdline::parse_dos_option, this, _1));
 
-        style_parsers.push_back(bind(&cmdline::parse_terminator, this, _1));
+        style_parsers.push_back(boost::bind(&cmdline::parse_terminator, this, _1));
 
         vector<option> result;
         while(!args.empty())
@@ -326,8 +326,8 @@ namespace boost { namespace program_options { namespace detail {
                 if (opt.position_key != -1) {
                     if (position >= m_positional->max_total_count())
                     {
-                        throw too_many_positional_options_error(
-                            "too many positional options");
+                        boost::throw_exception(too_many_positional_options_error(
+                                               "too many positional options"));
                     }
                     opt.string_key = m_positional->name_for_position(position);
                     ++position;
@@ -380,8 +380,8 @@ namespace boost { namespace program_options { namespace detail {
         if (present_tokens >= min_tokens)
         {
             if (!opt.value.empty() && max_tokens == 0) {
-                throw invalid_command_line_syntax(opt.string_key,
-                    invalid_command_line_syntax::extra_parameter);                                                                
+                boost::throw_exception(invalid_command_line_syntax(opt.string_key,
+                                             invalid_command_line_syntax::extra_parameter));
             }
             
             // If an option wants, at minimum, N tokens, we grab them
@@ -406,8 +406,8 @@ namespace boost { namespace program_options { namespace detail {
         }
         else
         {
-            throw invalid_command_line_syntax(opt.string_key,
-                invalid_command_line_syntax::missing_parameter); 
+            boost::throw_exception(invalid_command_line_syntax(opt.string_key,
+                                            invalid_command_line_syntax::missing_parameter)); 
 
         }
     }
@@ -427,8 +427,8 @@ namespace boost { namespace program_options { namespace detail {
                 name = tok.substr(2, p-2);
                 adjacent = tok.substr(p+1);
                 if (adjacent.empty())
-                    throw invalid_command_line_syntax(name,
-                      invalid_command_line_syntax::empty_adjacent_parameter);
+                    boost::throw_exception( invalid_command_line_syntax(name,
+                                                      invalid_command_line_syntax::empty_adjacent_parameter));
             }
             else
             {
