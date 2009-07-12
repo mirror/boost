@@ -35,7 +35,7 @@ form to use for your compiler.
         <row>
           <entry>
             <itemizedlist spacing="compact">
-              <listitem><simpara>GNU C++ 2.95.x, 3.0.x and later verseions</simpara></listitem>
+              <listitem><simpara>GNU C++ 2.95.x, 3.0.x and later versions</simpara></listitem>
               <listitem><simpara>Comeau C++ 4.2.45.2</simpara></listitem>
               <listitem><simpara>SGI MIPSpro 7.3.0</simpara></listitem>
               <listitem><simpara>Intel C++ 5.0, 6.0</simpara></listitem>
