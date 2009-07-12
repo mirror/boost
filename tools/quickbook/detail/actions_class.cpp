@@ -69,9 +69,10 @@ namespace quickbook
         , extract_doc_license(doc_license, phrase)
         , extract_doc_purpose(doc_purpose, phrase)
 
-        , code(out, phrase, temp, source_mode, macro, *this)
-        , code_block(phrase, phrase, temp, source_mode, macro, *this)
-        , inline_code(phrase, temp, source_mode, macro, *this)
+        , syntax_p(temp, source_mode, macro, *this)
+        , code(out, phrase, syntax_p)
+        , code_block(phrase, phrase, syntax_p)
+        , inline_code(phrase, syntax_p)
         , paragraph(out, phrase, paragraph_pre, paragraph_post)
         , inside_paragraph(temp_para, phrase, paragraph_pre, paragraph_post)
         , h(out, phrase, doc_id, section_id, qualified_section_id, section_level)

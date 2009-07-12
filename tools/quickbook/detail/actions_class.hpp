@@ -103,6 +103,7 @@ namespace quickbook
         phrase_to_string_action extract_doc_license;
         phrase_to_string_action extract_doc_purpose;
 
+        syntax_highlight        syntax_p;
         code_action             code;
         code_action             code_block;
         inline_code_action      inline_code;

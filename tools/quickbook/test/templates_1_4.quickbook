@@ -1,0 +1,16 @@
+[article Template 1.4
+    [quickbook 1.4]
+]
+
+[/ 1.4 uses dynamic scoping ]
+
+[template x static scoping]
+[template foo1[] [x]]
+[template foo2[x] [foo1]]
+[foo2 dynamic scoping]
+
+[/ In 1.4 template arguments are scoped at the point they are used]
+
+[template y new]
+[template foo3[a y] [a]]
+[foo3 [y] old]

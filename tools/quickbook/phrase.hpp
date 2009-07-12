@@ -145,6 +145,7 @@ namespace quickbook
                         >> !(hard_space
                             >> template_args)
                     ) )
+                    >> eps_p(']')
                     ;
 
                 brackets =
@@ -403,6 +404,7 @@ namespace quickbook
                     (
                         str_p("c++")
                     |   "python"
+                    |   "teletype"
                     )                                   [assign_a(actions.source_mode)]
                     ;
 

@@ -345,88 +345,6 @@ namespace quickbook
         std::string& save;
     };
 
-    typedef cpp_highlight<
-        span
-      , space
-      , string_symbols
-      , do_macro_action
-      , pre_escape_back
-      , post_escape_back
-      , actions
-      , unexpected_char
-      , collector>
-    cpp_p_type;
-
-    typedef python_highlight<
-        span
-      , space
-      , string_symbols
-      , do_macro_action
-      , pre_escape_back
-      , post_escape_back
-      , actions
-      , unexpected_char
-      , collector>
-    python_p_type;
-
-    struct code_action
-    {
-        // Does the actual syntax highlighing of code
-
-        code_action(
-            collector& out
-          , collector& phrase
-          , collector& temp
-          , std::string const& source_mode
-          , string_symbols const& macro
-          , actions& escape_actions)
-        : out(out)
-        , phrase(phrase)
-        , temp(temp)
-        , source_mode(source_mode)
-        , cpp_p(temp, macro, do_macro_action(temp), escape_actions)
-        , python_p(temp, macro, do_macro_action(temp), escape_actions)
-        {
-        }
-
-        void operator()(iterator first, iterator last) const;
-
-        collector& out;
-        collector& phrase;
-        collector& temp;
-        std::string const& source_mode;
-
-        cpp_p_type cpp_p;
-        python_p_type python_p;
-    };
-
-    struct inline_code_action
-    {
-        // Does the actual syntax highlighing of code inlined in text
-
-        inline_code_action(
-            collector& out
-          , collector& temp
-          , std::string const& source_mode
-          , string_symbols const& macro
-          , actions& escape_actions)
-        : out(out)
-        , source_mode(source_mode)
-        , temp(temp)
-        , cpp_p(temp, macro, do_macro_action(temp), escape_actions)
-        , python_p(temp, macro, do_macro_action(temp), escape_actions)
-        {}
-
-        void operator()(iterator first, iterator last) const;
-
-        collector& out;
-        std::string const& source_mode;
-        collector& temp;
-
-        cpp_p_type cpp_p;
-        python_p_type python_p;
-    };
-
     struct raw_char_action
     {
         // Prints a single raw (unprocessed) char.
@@ -488,6 +406,102 @@ namespace quickbook
 
         collector& phrase;
         std::string str;
+    };
+
+    typedef cpp_highlight<
+        span
+      , space
+      , string_symbols
+      , do_macro_action
+      , pre_escape_back
+      , post_escape_back
+      , actions
+      , unexpected_char
+      , collector>
+    cpp_p_type;
+
+    typedef python_highlight<
+        span
+      , space
+      , string_symbols
+      , do_macro_action
+      , pre_escape_back
+      , post_escape_back
+      , actions
+      , unexpected_char
+      , collector>
+    python_p_type;
+    
+    typedef teletype_highlight<
+        plain_char_action
+      , string_symbols
+      , do_macro_action
+      , pre_escape_back
+      , post_escape_back
+      , actions
+      , collector>
+    teletype_p_type;
+    
+    struct syntax_highlight
+    {
+        syntax_highlight(
+            collector& temp
+          , std::string const& source_mode
+          , string_symbols const& macro
+          , actions& escape_actions)
+        : temp(temp)
+        , source_mode(source_mode)
+        , cpp_p(temp, macro, do_macro_action(temp), escape_actions)
+        , python_p(temp, macro, do_macro_action(temp), escape_actions)
+        , teletype_p(temp, macro, do_macro_action(temp), escape_actions)
+        {
+        }
+
+        std::string operator()(iterator first, iterator last) const;
+
+        collector& temp;
+        std::string const& source_mode;
+        cpp_p_type cpp_p;
+        python_p_type python_p;
+        teletype_p_type teletype_p;
+    };
+
+    struct code_action
+    {
+        // Does the actual syntax highlighing of code
+
+        code_action(
+            collector& out
+          , collector& phrase
+          , syntax_highlight& syntax_p)
+        : out(out)
+        , phrase(phrase)
+        , syntax_p(syntax_p)
+        {
+        }
+
+        void operator()(iterator first, iterator last) const;
+
+        collector& out;
+        collector& phrase;
+        syntax_highlight& syntax_p;
+    };
+
+    struct inline_code_action
+    {
+        // Does the actual syntax highlighing of code inlined in text
+
+        inline_code_action(
+            collector& out
+          , syntax_highlight& syntax_p)
+        : out(out)
+        , syntax_p(syntax_p)
+        {}
+
+        void operator()(iterator first, iterator last) const;
+
+        collector& out;
+        syntax_highlight& syntax_p;
     };
 
     struct start_varlistitem_action

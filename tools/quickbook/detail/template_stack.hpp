@@ -21,14 +21,18 @@
 
 namespace quickbook
 {
-    //  template symbols are stored as follows:
+    //  template symbols with N arguments are stored as follows:
     //
-    //      template name
-    //      template param name[0]
-    //      template param name[1]
+    //  vector<std::string>
+    //        0: template name
+    //        1: template param name[0]
+    //        2: template param name[1]
     //      ...
     //      template param name[N]
     //      template body
+    //        N: template param name[N-1]
+    //      N+1: template body
+    //  file position
 
     typedef boost::tuple<
             std::vector<std::string>

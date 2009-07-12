@@ -22,6 +22,9 @@ namespace example
         static const int static_const_integer;
 
         enum class_enum { enumerator };
+        
+        /// INTERNAL ONLY
+        enum internal_enum { internal_enumerator };
     protected:
         int protected_integer;
         static int protected_static_integer;
