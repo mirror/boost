@@ -30,7 +30,53 @@ boost
 <span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct errinfo_api_function_,int&gt; <span class="RenoLink">errinfo_api_function</span>;</span></span>
     }</pre>
 </div></div><p>This type is designed to be used as a standard <span class="RenoLink"><a href="error_info.html">error_info</a></span> instance for transporting the name of a relevant API function (which does not use exceptions to report errors) in exceptions deriving from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p>
-</div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
+<h3>Example:</h3>
+<div class="RenoIncludeDIV"><pre>#include &lt;<span class="RenoLink"><a href="boost_exception_errinfo_api_function_hpp.html">boost/exception/errinfo_api_function.hpp</a></span>&gt;
+#include &lt;<span class="RenoLink"><a href="boost_exception_errinfo_at_line_hpp.html">boost/exception/errinfo_at_line.hpp</a></span>&gt;
+#include &lt;<span class="RenoLink"><a href="boost_exception_errinfo_errno_hpp.html">boost/exception/errinfo_errno.hpp</a></span>&gt;
+#include &lt;<span class="RenoLink"><a href="boost_exception_errinfo_file_handle_hpp.html">boost/exception/errinfo_file_handle.hpp</a></span>&gt;
+#include &lt;<span class="RenoLink"><a href="boost_exception_errinfo_file_name_hpp.html">boost/exception/errinfo_file_name.hpp</a></span>&gt;
+#include &lt;<span class="RenoLink"><a href="boost_exception_errinfo_file_open_mode_hpp.html">boost/exception/errinfo_file_open_mode.hpp</a></span>&gt;
+#include &lt;<span class="RenoLink"><a href="boost_exception_info_hpp.html">boost/exception/info.hpp</a></span>&gt;
+#include &lt;<span class="RenoLink"><a href="boost_throw_exception_hpp.html">boost/throw_exception.hpp</a></span>&gt;
+#include &lt;boost/shared_ptr.hpp&gt;
+#include &lt;boost/weak_ptr.hpp&gt;
+#include &lt;stdio.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;exception&gt;
+
+struct error : virtual std::exception, virtual boost::<span class="RenoLink"><a href="exception.html">exception</a></span> { };
+struct file_error : virtual error { };
+struct file_open_error: virtual file_error { };
+struct file_read_error: virtual file_error { };
+
+boost::shared_ptr&lt;FILE&gt;
+open_file( char const * file, char const * mode )
+    {
+    if( FILE * f=fopen(file,mode) )
+        return boost::shared_ptr&lt;FILE&gt;(f,fclose);
+    else
+        <span class="RenoLink"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION</a></span>(
+            file_open_error() &lt;&lt;
+            boost::<span class="RenoLink">errinfo_api_function</span>("fopen") &lt;&lt;
+            boost::<span class="RenoLink"><a href="errinfo_errno.html">errinfo_errno</a></span>(errno) &lt;&lt;
+            boost::<span class="RenoLink"><a href="errinfo_file_name.html">errinfo_file_name</a></span>(file) &lt;&lt;
+            boost::<span class="RenoLink"><a href="errinfo_file_open_mode.html">errinfo_file_open_mode</a></span>(mode) );
+    }
+
+size_t
+read_file( boost::shared_ptr&lt;FILE&gt; const &amp; f, void * buf, size_t size )
+    {
+    size_t nr=fread(buf,1,size,f.get());
+    if( ferror(f.get()) )
+        <span class="RenoLink"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION</a></span>(
+            file_read_error() &lt;&lt;
+            boost::<span class="RenoLink">errinfo_api_function</span>("fread") &lt;&lt;
+            boost::<span class="RenoLink"><a href="errinfo_errno.html">errinfo_errno</a></span>(errno) &lt;&lt;
+            boost::<span class="RenoLink"><a href="errinfo_file_handle.html">errinfo_file_handle</a></span>(f) );
+    return nr;
+    }</pre>
+</div></div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost_exception_errinfo_api_function_hpp.html">boost/exception/errinfo_api_function.hpp<br/>
 </a><a href="frequently_asked_questions.html">Frequently Asked Questions<br/>
