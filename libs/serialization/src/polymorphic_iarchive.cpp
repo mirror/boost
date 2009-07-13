@@ -16,14 +16,3 @@
 
 #define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/polymorphic_iarchive.hpp>
-
-// explicitly instantiate for this type of text stream
-#include <boost/archive/impl/archive_pointer_iserializer.ipp>
-
-namespace boost {
-namespace archive {
-
-template class detail::archive_pointer_iserializer<polymorphic_iarchive> ;
-
-} // namespace serialization
-} // namespace boost

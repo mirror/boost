@@ -18,14 +18,12 @@
 
 #include <boost/archive/impl/basic_text_oarchive.ipp>
 #include <boost/archive/impl/text_woarchive_impl.ipp>
-#include <boost/archive/impl/archive_pointer_oserializer.ipp>
 
 namespace boost {
 namespace archive {
 
 template class basic_text_oarchive<text_woarchive> ;
 template class text_woarchive_impl<text_woarchive> ;
-template class detail::archive_pointer_oserializer<text_woarchive> ;
 
 } // namespace archive
 } // namespace boost

@@ -27,18 +27,15 @@
 
 // explicitly instantiate for this type of xml stream
 #include <boost/archive/impl/basic_xml_iarchive.ipp>
-#include <boost/archive/impl/archive_pointer_iserializer.ipp>
 #include <boost/archive/impl/xml_iarchive_impl.ipp>
 
 namespace boost {
 namespace archive {
 
 template class basic_xml_iarchive<naked_xml_iarchive> ;
-template class detail::archive_pointer_iserializer<naked_xml_iarchive> ;
 template class xml_iarchive_impl<naked_xml_iarchive> ;
 
 template class basic_xml_iarchive<xml_iarchive> ;
-template class detail::archive_pointer_iserializer<xml_iarchive> ;
 template class xml_iarchive_impl<xml_iarchive> ;
 
 } // namespace archive

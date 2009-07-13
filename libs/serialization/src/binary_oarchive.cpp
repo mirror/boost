@@ -15,7 +15,6 @@
 
 #include <boost/archive/impl/basic_binary_oprimitive.ipp>
 #include <boost/archive/impl/basic_binary_oarchive.ipp>
-#include <boost/archive/impl/archive_pointer_oserializer.ipp>
 
 namespace boost {
 namespace archive {
@@ -32,7 +31,6 @@ template class binary_oarchive_impl<
     std::ostream::char_type, 
     std::ostream::traits_type
 >;
-template class detail::archive_pointer_oserializer<binary_oarchive> ;
 
 } // namespace archive
 } // namespace boost

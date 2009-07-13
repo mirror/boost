@@ -15,7 +15,6 @@
 
 #include <boost/archive/impl/basic_binary_iprimitive.ipp>
 #include <boost/archive/impl/basic_binary_iarchive.ipp>
-#include <boost/archive/impl/archive_pointer_iserializer.ipp>
 
 namespace boost {
 namespace archive {
@@ -32,7 +31,6 @@ template class binary_iarchive_impl<
     std::istream::char_type, 
     std::istream::traits_type
 >;
-template class detail::archive_pointer_iserializer<naked_binary_iarchive> ;
 
 // explicitly instantiate for this type of stream
 template class basic_binary_iprimitive<
@@ -46,7 +44,6 @@ template class binary_iarchive_impl<
     std::istream::char_type, 
     std::istream::traits_type
 >;
-template class detail::archive_pointer_iserializer<binary_iarchive> ;
 
 } // namespace archive
 } // namespace boost

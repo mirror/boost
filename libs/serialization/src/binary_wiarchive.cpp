@@ -19,7 +19,6 @@
 
 #include <boost/archive/impl/basic_binary_iprimitive.ipp>
 #include <boost/archive/impl/basic_binary_iarchive.ipp>
-#include <boost/archive/impl/archive_pointer_iserializer.ipp>
 
 namespace boost {
 namespace archive {
@@ -36,7 +35,6 @@ template class binary_iarchive_impl<
     wchar_t, 
     std::char_traits<wchar_t> 
 >;
-template class detail::archive_pointer_iserializer<naked_binary_wiarchive> ;
 
 // explicitly instantiate for this type of text stream
 template class basic_binary_iprimitive<
@@ -50,7 +48,6 @@ template class binary_iarchive_impl<
     wchar_t, 
     std::char_traits<wchar_t> 
 >;
-template class detail::archive_pointer_iserializer<binary_wiarchive> ;
 
 } // namespace archive
 } // namespace boost
