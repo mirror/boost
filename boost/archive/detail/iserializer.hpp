@@ -71,13 +71,14 @@ namespace std{
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/bool.hpp>
 
- #ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO   
-     #include <boost/serialization/extended_type_info_typeid.hpp>   
- #endif 
+#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO   
+    #include <boost/serialization/extended_type_info_typeid.hpp>   
+#endif
 // the following is need only for dynamic cast of polymorphic pointers
 #include <boost/archive/detail/basic_iarchive.hpp>
 #include <boost/archive/detail/basic_iserializer.hpp>
-#include <boost/archive/detail/archive_pointer_iserializer.hpp>
+#include <boost/archive/detail/basic_pointer_iserializer.hpp>
+#include <boost/archive/detail/archive_serializer_map.hpp>
 #include <boost/archive/archive_exception.hpp>
 
 #include <boost/serialization/serialization.hpp>
@@ -174,8 +175,8 @@ BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
 }
 
 template<class Archive, class T>
-class pointer_iserializer
-  : public archive_pointer_iserializer<Archive>
+class pointer_iserializer :
+    public basic_pointer_iserializer
 {
 private:
     virtual const basic_iserializer & get_basic_serializer() const {
@@ -191,6 +192,7 @@ private:
 protected:
     // this should alway be a singleton so make the constructor protected
     pointer_iserializer();
+    ~pointer_iserializer();
 };
 
 // note trick to be sure that operator new is using class specific
@@ -261,6 +263,8 @@ private:
     T* m_p;
 };
 
+// note: BOOST_DLLEXPORT is so that code for polymorphic class
+// serialized only through base class won't get optimized out
 template<class Archive, class T>
 BOOST_DLLEXPORT void pointer_iserializer<Archive, T>::load_object_ptr(
     basic_iarchive & ar, 
@@ -303,7 +307,7 @@ BOOST_DLLEXPORT void pointer_iserializer<Archive, T>::load_object_ptr(
 
 template<class Archive, class T>
 pointer_iserializer<Archive, T>::pointer_iserializer() :
-    archive_pointer_iserializer<Archive>(
+    basic_pointer_iserializer(
         boost::serialization::type_info_implementation<T>::type
             ::get_const_instance()
     )
@@ -311,6 +315,20 @@ pointer_iserializer<Archive, T>::pointer_iserializer() :
     boost::serialization::singleton<
         iserializer<Archive, T>
     >::get_mutable_instance().set_bpis(this);
+    boost::serialization::singleton<
+        archive_serializer_map<Archive>
+    >::get_mutable_instance().insert(this);
+}
+
+template<class Archive, class T>
+pointer_iserializer<Archive, T>::~pointer_iserializer(){
+    if(boost::serialization::singleton<
+        archive_serializer_map<Archive>
+    >::is_destroyed())
+        return;
+    boost::serialization::singleton<
+        archive_serializer_map<Archive>
+    >::get_mutable_instance().erase(this);
 }
 
 template<class Archive, class T>
@@ -464,8 +482,7 @@ struct load_pointer_type {
         const basic_pointer_iserializer * bpis_ptr = register_type(ar, *t);
         const basic_pointer_iserializer * newbpis_ptr = ar.load_pointer(
             * reinterpret_cast<void **>(&t),
-            bpis_ptr,
-            archive_pointer_iserializer<Archive>::find
+            bpis_ptr
         );
         // if the pointer isn't that of the base class
         if(newbpis_ptr != bpis_ptr){
