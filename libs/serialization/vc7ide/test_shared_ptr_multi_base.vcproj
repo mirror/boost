@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="test_simple_class_ptr"
+	Name="test_shared_ptr_multi_base"
 	ProjectGUID="{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
-	RootNamespace="test_simple_class_ptr"
+	RootNamespace="test_shared_ptr_multi_base"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -124,25 +124,13 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{30E10563-960A-11D7-9FE9-525400E2CF85}"
+			Name="Library"/>
 	</References>
 	<Files>
 		<File
-			RelativePath="..\test\A.cpp">
-			<FileConfiguration
-				Name="Debug runtime-dynamic|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					SmallerTypeCheck="FALSE"/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\test\A.hpp">
-		</File>
-		<File
-			RelativePath="..\test\A.ipp">
-		</File>
-		<File
-			RelativePath="..\test\test_simple_class_ptr.cpp">
+			RelativePath="..\test\test_shared_ptr_multi_base.cpp">
 		</File>
 	</Files>
 	<Globals>

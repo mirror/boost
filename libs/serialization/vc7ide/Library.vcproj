@@ -584,10 +584,7 @@
 			Name="Archive Detail"
 			Filter="">
 			<File
-				RelativePath="..\..\..\boost\archive\detail\archive_pointer_iserializer.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\detail\archive_pointer_oserializer.hpp">
+				RelativePath="..\..\..\boost\archive\detail\archive_serializer_map.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\auto_link_archive.hpp">
@@ -717,12 +714,6 @@
 		<Filter
 			Name="Templates"
 			Filter="">
-			<File
-				RelativePath="..\..\..\boost\archive\impl\archive_pointer_iserializer.ipp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\impl\archive_pointer_oserializer.ipp">
-			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\impl\basic_binary_iarchive.ipp">
 			</File>
@@ -952,28 +943,10 @@
 				RelativePath="..\src\extended_type_info_typeid.cpp">
 			</File>
 			<File
-				RelativePath="..\src\polymorphic_binary_iarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\polymorphic_binary_oarchive.cpp">
-			</File>
-			<File
 				RelativePath="..\src\polymorphic_iarchive.cpp">
 			</File>
 			<File
 				RelativePath="..\src\polymorphic_oarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\polymorphic_text_iarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\polymorphic_text_oarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\polymorphic_xml_iarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\polymorphic_xml_oarchive.cpp">
 			</File>
 			<File
 				RelativePath="..\src\stl_port.cpp">
