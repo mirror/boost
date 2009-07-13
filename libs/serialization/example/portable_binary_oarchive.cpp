@@ -78,14 +78,11 @@ portable_binary_oarchive::init(unsigned int flags) {
     save(static_cast<unsigned char>(m_flags >> CHAR_BIT));
 }
 
-// explicitly instantiate for this type of stream
-#include <boost/archive/impl/archive_pointer_oserializer.ipp>
 #include <boost/archive/impl/basic_binary_oprimitive.ipp>
 
 namespace boost {
 namespace archive {
 
-template class detail::archive_pointer_oserializer<portable_binary_oarchive> ;
 template class basic_binary_oprimitive<
     portable_binary_oarchive,
     std::ostream::char_type, 
