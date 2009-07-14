@@ -66,6 +66,7 @@ compile numeric_ops.cpp ;
 compile pair_view.cpp ;
 compile partition.cpp ;
 compile pop_front.cpp ;
+compile push_back.cpp ;
 compile push_front.cpp ;
 compile quote.cpp ;
 compile range_c.cpp ;
