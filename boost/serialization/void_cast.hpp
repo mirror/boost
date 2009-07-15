@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // void_cast.hpp:   interface for run-time casting of void pointers.
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002-2009 Robert Ramey - http://www.rrsd.com . 
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -18,6 +18,9 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cstddef> // for ptrdiff_t
+#include <boost/weak_ptr.hpp>
+#include <boost/noncopyable.hpp>
+
 #include <boost/serialization/config.hpp>
 #include <boost/serialization/smart_cast.hpp>
 #include <boost/serialization/singleton.hpp>
@@ -85,7 +88,8 @@ void_downcast(
 
 namespace void_cast_detail {
 
-class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) void_caster
+class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) void_caster :
+    private boost::noncopyable
 {
     friend 
     BOOST_SERIALIZATION_DECL(void const *)
@@ -101,8 +105,6 @@ class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) void_caster
         extended_type_info const & base,
         void const * const
     );
-    // cw 8.3 requires this!!
-//    void_caster& operator=(void_caster const &);
 protected:
     void recursive_register(bool includes_virtual_base = false) const;
     void recursive_unregister() const;
@@ -110,13 +112,11 @@ public:
     // Data members
     const extended_type_info * m_derived;
     const extended_type_info * m_base;
-    bool & m_derived_is_destroyed;
-    bool & m_base_is_destroyed;
+    boost::weak_ptr<const extended_type_info> m_derived_observer;
+    boost::weak_ptr<const extended_type_info> m_base_observer;
+    const bool m_heap; // allocated on the heap
 
     /*const*/ std::ptrdiff_t m_difference;
-    virtual bool is_shortcut() const {
-        return false;
-    }
     // note that void_casters are keyed on value of
     // member extended type info records - NOT their
     // addresses.  This is necessary in order for the
@@ -127,12 +127,6 @@ public:
         return ! (rhs < *this);
     }
 
-    void_caster & operator=(const void_caster & rhs){
-        m_derived = rhs.m_derived;
-        m_base = rhs.m_base;
-        m_difference = rhs.m_difference;
-        return * this;
-    }
     const void_caster & operator*(){
         return *this;
     }
@@ -143,21 +137,31 @@ public:
     void_caster(
         extended_type_info const * derived,
         extended_type_info const * base,
-        std::ptrdiff_t difference = 0
+        std::ptrdiff_t difference = 0,
+        bool heap = false
     ) :
         m_derived(derived),
         m_base(base),
-        m_derived_is_destroyed(derived->get_is_destroyed()),
-        m_base_is_destroyed(base->get_is_destroyed()),
-        m_difference(difference)
+        m_derived_observer(derived->get_weak_ptr()),
+        m_base_observer(base->get_weak_ptr()),
+        m_difference(difference),
+        m_heap(heap)
     {}
+#if 0
     void_caster(const void_caster & rhs) :
         m_derived(rhs.m_derived),
         m_base(rhs.m_base),
-        m_derived_is_destroyed(rhs.m_derived_is_destroyed),
-        m_base_is_destroyed(rhs.m_base_is_destroyed),
+        m_derived_observer(rhs.m_derived_observer),
+        m_base_observer(rhs.m_base_observer),
         m_difference(rhs.m_difference)
     {}
+    void_caster & operator=(const void_caster & rhs){
+        m_derived = rhs.m_derived;
+        m_base = rhs.m_base;
+        m_difference = rhs.m_difference;
+        return * this;
+    }
+#endif
     virtual ~void_caster(){}
 };
 
