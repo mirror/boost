@@ -32,7 +32,7 @@ namespace serialization {
 namespace archive {
 namespace detail {
 
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_serializer;
+class /*BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())*/ basic_serializer;
 
 class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_serializer_map : public
     boost::noncopyable

@@ -27,20 +27,21 @@ namespace boost {
 namespace archive {
 namespace detail {
 
-class basic_serializer : private boost::noncopyable
+class basic_serializer : 
+    private boost::noncopyable
 {
-    const boost::serialization::extended_type_info & m_eti;
+    const boost::serialization::extended_type_info * m_eti;
 protected:
     explicit basic_serializer(
         const boost::serialization::extended_type_info & eti
     ) : 
-        m_eti(eti)
+        m_eti(& eti)
     {
         assert(NULL != & eti);
     }
 public:
     const boost::serialization::extended_type_info & get_eti() const {
-        return m_eti;
+        return * m_eti;
     }
 };
 
