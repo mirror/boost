@@ -21,6 +21,7 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/extended_type_info_typeid.hpp>
+#include <boost/preprocessor/empty.hpp>
 
 #include "polymorphic_base.hpp"
 
