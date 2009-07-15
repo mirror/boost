@@ -39,11 +39,23 @@ basic_serializer_map::insert(const basic_serializer * bs){
 
 BOOST_ARCHIVE_DECL(void) 
 basic_serializer_map::erase(basic_serializer * bs){
-    map_type::iterator it;
-    it = m_map.find(bs);
-    assert(it != m_map.end());
-    if(*it == bs)
-        m_map.erase(it);
+    map_type::iterator it = m_map.begin();
+    map_type::iterator it_end = m_map.end();
+
+    while(it != it_end){
+        // note item 9 from Effective STL !!! it++
+        if(*it == bs)
+            m_map.erase(it++);
+        else
+            it++;
+    }
+    // note: we can't do this since some of the eti records
+    // we're pointing to might be expired and the comparison
+    // won't work.  Leave this as a reminder not to "optimize" this.
+    //it = m_map.find(bs);
+    //assert(it != m_map.end());
+    //if(*it == bs)
+    //    m_map.erase(it);
 }
 
 BOOST_ARCHIVE_DECL(const basic_serializer *) 
