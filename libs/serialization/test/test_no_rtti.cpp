@@ -38,6 +38,7 @@ namespace std{
 
 #include "polymorphic_base.hpp"
 #include "polymorphic_derived1.hpp"
+#define POLYMORPHIC_DERIVED2_IMPORT
 #include "polymorphic_derived2.hpp"
 
 // save derived polymorphic class
