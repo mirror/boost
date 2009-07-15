@@ -62,11 +62,6 @@ class extended_type_info_no_rtti :
     public detail::extended_type_info_no_rtti_0,
     public singleton<extended_type_info_no_rtti<T> >
 {
-    bool & get_is_destroyed() const{
-        return singleton<
-            extended_type_info_no_rtti<T>
-        >::get_is_destroyed();
-    }
 public:
     extended_type_info_no_rtti() :
         detail::extended_type_info_no_rtti_0()
