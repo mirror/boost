@@ -38,7 +38,7 @@ basic_serializer_map::insert(const basic_serializer * bs){
 }
 
 BOOST_ARCHIVE_DECL(void) 
-basic_serializer_map::erase(basic_serializer * bs){
+basic_serializer_map::erase(const basic_serializer * bs){
     map_type::iterator it = m_map.begin();
     map_type::iterator it_end = m_map.end();
 
@@ -57,8 +57,7 @@ basic_serializer_map::erase(basic_serializer * bs){
     //if(*it == bs)
     //    m_map.erase(it);
 }
-
-BOOST_ARCHIVE_DECL(const basic_serializer *) 
+BOOST_ARCHIVE_DECL(const basic_serializer *)
 basic_serializer_map::find(
     const boost::serialization::extended_type_info & eti
 ) const {
@@ -72,3 +71,4 @@ basic_serializer_map::find(
 } // namespace detail
 } // namespace archive
 } // namespace boost
+

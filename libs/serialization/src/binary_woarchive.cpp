@@ -17,13 +17,15 @@
 #define BOOST_WARCHIVE_SOURCE
 #include <boost/archive/binary_woarchive.hpp>
 
+// explicitly instantiate for this type of text stream
+#include <boost/archive/impl/archive_serializer_map.ipp>
 #include <boost/archive/impl/basic_binary_oprimitive.ipp>
 #include <boost/archive/impl/basic_binary_oarchive.ipp>
 
 namespace boost {
 namespace archive {
 
-// explicitly instantiate for this type of text stream
+template class detail::archive_serializer_map<binary_woarchive>;
 template class basic_binary_oprimitive<
     binary_woarchive, 
     wchar_t, 

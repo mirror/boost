@@ -12,14 +12,17 @@
 
 #define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/detail/archive_serializer_map.hpp>
 
+// explicitly instantiate for this type of binary stream
+#include <boost/archive/impl/archive_serializer_map.ipp>
 #include <boost/archive/impl/basic_binary_oprimitive.ipp>
 #include <boost/archive/impl/basic_binary_oarchive.ipp>
 
 namespace boost {
 namespace archive {
 
-// explicitly instantiate for this type of binary stream
+template class detail::archive_serializer_map<binary_oarchive>;
 template class basic_binary_oprimitive<
     binary_oarchive, 
     std::ostream::char_type, 

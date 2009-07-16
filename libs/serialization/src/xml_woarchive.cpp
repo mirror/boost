@@ -15,16 +15,17 @@
 
 #define BOOST_WARCHIVE_SOURCE
 #include <boost/archive/xml_woarchive.hpp>
+#include <boost/archive/detail/archive_serializer_map.hpp>
 
-/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// implemenations of functions specific to wide char archives
-
+// explicitly instantiate for this type of text stream
+#include <boost/archive/impl/archive_serializer_map.ipp>
 #include <boost/archive/impl/basic_xml_oarchive.ipp>
 #include <boost/archive/impl/xml_woarchive_impl.ipp>
 
 namespace boost {
 namespace archive {
 
+template class detail::archive_serializer_map<xml_woarchive>;
 template class basic_xml_oarchive<xml_woarchive> ;
 template class xml_woarchive_impl<xml_woarchive> ;
 
