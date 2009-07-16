@@ -195,20 +195,12 @@ pointer_oserializer<Archive, T>::pointer_oserializer() :
     boost::serialization::singleton<
         oserializer<Archive, T> 
     >::get_mutable_instance().set_bpos(this);
-    boost::serialization::singleton<
-        archive_serializer_map<Archive>
-    >::get_mutable_instance().insert(this);
+    archive_serializer_map<Archive>::insert(this);
 }
 
 template<class Archive, class T>
 pointer_oserializer<Archive, T>::~pointer_oserializer(){
-    if(boost::serialization::singleton<
-            archive_serializer_map<Archive>
-    >::is_destroyed())
-        return;
-    boost::serialization::singleton<
-        archive_serializer_map<Archive>
-    >::get_mutable_instance().erase(this);
+    archive_serializer_map<Archive>::erase(this);
 }
 
 template<class Archive, class T>

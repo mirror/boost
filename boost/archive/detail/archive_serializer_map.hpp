@@ -21,7 +21,8 @@
 // basic_serializer_map so we can have a one map / archive type. 
 
 #include <boost/config.hpp>
-#include <boost/archive/detail/basic_serializer_map.hpp>
+#include <boost/archive/detail/auto_link_archive.hpp>
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
 
@@ -35,12 +36,20 @@ namespace detail {
 class basic_serializer;
 
 template<class Archive>
-class archive_serializer_map : 
-    public basic_serializer_map 
-{};
+class BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) archive_serializer_map 
+{
+public:
+    static bool insert(const basic_serializer * bs);
+    static void erase(const basic_serializer * bs);
+    static const basic_serializer * find(
+        const boost::serialization::extended_type_info & type_
+    );
+};
 
 } // namespace detail
 } // namespace archive
 } // namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // must be the last header
 
 #endif //BOOST_ARCHIVE_SERIALIZER_MAP_HPP

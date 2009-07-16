@@ -73,9 +73,7 @@ public:
     virtual const basic_pointer_iserializer * 
     find(const boost::serialization::extended_type_info & eti) const {
     	return static_cast<const basic_pointer_iserializer *>(
-            boost::serialization::singleton<
-    		    archive_serializer_map<Archive>
-    	    >::get_const_instance().find(eti)
+            archive_serializer_map<Archive>::find(eti)
         );
     }
 };

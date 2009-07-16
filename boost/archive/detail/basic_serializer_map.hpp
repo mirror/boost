@@ -19,10 +19,10 @@
 #include <set>
 
 #include <boost/config.hpp>
-#include <boost/utility.hpp>
 #include <boost/archive/detail/auto_link_archive.hpp>
-
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
+
+#include <boost/utility.hpp>
 
 namespace boost { 
 namespace serialization {
@@ -32,9 +32,9 @@ namespace serialization {
 namespace archive {
 namespace detail {
 
-class /*BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())*/ basic_serializer;
+class basic_serializer;
 
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_serializer_map : public
+class BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) basic_serializer_map : public
     boost::noncopyable
 {
     struct type_info_pointer_compare
@@ -47,10 +47,10 @@ class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_serializer_map : public
     map_type m_map;
 public:
     bool insert(const basic_serializer * bs);
+    void erase(const basic_serializer * bs);
     const basic_serializer * find(
         const boost::serialization::extended_type_info & type_
     ) const;
-    void erase(basic_serializer * bs);
 private:
     // cw 8.3 requires this
     basic_serializer_map& operator=(basic_serializer_map const&);
@@ -60,6 +60,6 @@ private:
 } // namespace archive
 } // namespace boost
 
-#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
+#include <boost/archive/detail/abi_suffix.hpp> // must be the last header
 
 #endif // BOOST_SERIALIZER_MAP_HPP
