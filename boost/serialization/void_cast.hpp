@@ -114,9 +114,9 @@ public:
     const extended_type_info * m_base;
     boost::weak_ptr<const extended_type_info> m_derived_observer;
     boost::weak_ptr<const extended_type_info> m_base_observer;
+    /*const*/ std::ptrdiff_t m_difference;
     const bool m_heap; // allocated on the heap
 
-    /*const*/ std::ptrdiff_t m_difference;
     // note that void_casters are keyed on value of
     // member extended type info records - NOT their
     // addresses.  This is necessary in order for the
