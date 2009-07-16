@@ -715,6 +715,9 @@
 			Name="Templates"
 			Filter="">
 			<File
+				RelativePath="..\..\..\boost\archive\impl\archive_serializer_map.ipp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\impl\basic_binary_iarchive.ipp">
 			</File>
 			<File

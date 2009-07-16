@@ -12,9 +12,9 @@
 	<Configurations>
 		<Configuration
 			Name="Debug runtime-dynamic|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/threading-multi&quot;"
+			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(OutDir)"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -22,7 +22,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;"
+				PreprocessorDefinitions="WIN32;_DEBUG;BOOST_LIB_DIAGNOSTIC=1;BOOST_ALL_DYN_LINK=1"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
@@ -42,8 +42,12 @@
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/boost_wserialization-vc71-mt-gd-1_34_1.lib"/>
+				Name="VCLinkerTool"
+				AdditionalDependencies="boost_serialization-vc71-mt-gd-1_39.lib"
+				OutputFile="$(ConfigurationName)\boost_wserialization-vc71-mt-gd-1_39.dll"
+				AdditionalLibraryDirectories="$(ConfigurationName)"
+				GenerateDebugInformation="TRUE"
+				SupportUnloadOfDelayLoadedDLL="FALSE"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -58,6 +62,8 @@
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
 			<Tool
 				Name="VCManagedWrapperGeneratorTool"/>
 			<Tool
@@ -384,26 +390,17 @@
 			Filter="">
 			<File
 				RelativePath="..\src\basic_text_wiprimitive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\basic_text_woprimitive.cpp">
-			</File>
-			<File
-				RelativePath="..\src\basic_xml_grammar.ipp">
-			</File>
-			<File
-				RelativePath="..\src\binary_wiarchive.cpp">
 				<FileConfiguration
-					Name="Release runtime-static threading-multi|Win32">
+					Name="Debug runtime-dynamic|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\binary_woarchive.cpp">
+				RelativePath="..\src\basic_text_woprimitive.cpp">
 				<FileConfiguration
-					Name="Release runtime-static threading-multi|Win32">
+					Name="Debug runtime-dynamic|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
@@ -411,11 +408,17 @@
 			</File>
 			<File
 				RelativePath="..\src\codecvt_null.cpp">
+				<FileConfiguration
+					Name="Debug runtime-dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\text_wiarchive.cpp">
 				<FileConfiguration
-					Name="Release runtime-static threading-multi|Win32">
+					Name="Debug runtime-dynamic|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
@@ -424,7 +427,7 @@
 			<File
 				RelativePath="..\src\text_woarchive.cpp">
 				<FileConfiguration
-					Name="Release runtime-static threading-multi|Win32">
+					Name="Debug runtime-dynamic|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
@@ -432,29 +435,17 @@
 			</File>
 			<File
 				RelativePath="..\src\utf8_codecvt_facet.cpp">
+				<FileConfiguration
+					Name="Debug runtime-dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\xml_wgrammar.cpp">
 				<FileConfiguration
-					Name="Debug runtime-static threading-multi|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release runtime-static threading-multi|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug runtime-static|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug runtime-dynamic threading-multi|Win32">
+					Name="Debug runtime-dynamic|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
@@ -463,7 +454,7 @@
 			<File
 				RelativePath="..\src\xml_wiarchive.cpp">
 				<FileConfiguration
-					Name="Release runtime-static threading-multi|Win32">
+					Name="Debug runtime-dynamic|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
@@ -471,17 +462,47 @@
 			</File>
 			<File
 				RelativePath="..\src\xml_woarchive.cpp">
-				<FileConfiguration
-					Name="Release runtime-static threading-multi|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
 			Name="Templates"
 			Filter="">
+			<File
+				RelativePath="..\..\..\boost\archive\impl\archive_serializer_map.ipp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_binary_iarchive.ipp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_binary_iprimitive.ipp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_binary_oarchive.ipp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_binary_oprimitive.ipp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_text_iarchive.ipp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_text_iprimitive.ipp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_text_oarchive.ipp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_text_oprimitive.ipp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_xml_grammar.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_xml_iarchive.ipp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_xml_oarchive.ipp">
+			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\impl\text_wiarchive_impl.ipp">
 			</File>
@@ -498,6 +519,9 @@
 		<Filter
 			Name="Headers"
 			Filter="">
+			<File
+				RelativePath="..\..\..\boost\archive\detail\archive_serializer_map.hpp">
+			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\auto_link_warchive.hpp">
 			</File>
