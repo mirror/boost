@@ -89,7 +89,7 @@ A::A() :
     #ifndef BOOST_NO_CWCHAR
     r(std::rand()),
     #endif
-    c(std::rand()),
+    c(0xff & std::rand()),
     s(std::rand()),
     t(std::rand()),
     u(std::rand()),
