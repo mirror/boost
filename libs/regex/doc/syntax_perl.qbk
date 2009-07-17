@@ -511,6 +511,17 @@ are typically used to improve performance; only the best possible match
 for pattern will be considered, if this doesn't allow the expression as a 
 whole to match then no match is found at all.
 
+[h5 Recursive Expressions]
+
+[^(?['N]) (?-['N]) (?+['N]) (?R) (?0)]
+
+=(?R)= and =(?0)= recurse to the start of the entire pattern.
+
+[^(?['N])] executes sub-expression /N/ recursively, for example =(?2)= will recurse to sub-expression 2.
+
+[^(?-['N])] and [^(?+['N])] are relative recursions, so for example =(?-1)= recurses to the last sub-expression to be declared,
+and =(?+1)= recurses to the next sub-expression to be declared.
+
 [h5 Conditional Expressions]
 
 =(?(condition)yes-pattern|no-pattern)= attempts to match /yes-pattern/ if 
@@ -519,9 +530,21 @@ the /condition/ is true, otherwise attempts to match /no-pattern/.
 =(?(condition)yes-pattern)= attempts to match /yes-pattern/ if the /condition/ 
 is true, otherwise fails.
 
-/condition/ may be either a forward lookahead assert, or the index of 
+/condition/ may be either: a forward lookahead assert, the index of 
 a marked sub-expression (the condition becomes true if the sub-expression 
-has been matched).
+has been matched), or an index of a recursion (the condition become true if we are executing
+directly inside the specified recursion).
+
+Here is a summary of the possible predicates:
+
+* [^(?(?\=assert)yes-pattern|no-pattern)]  Executes /yes-pattern/ if the forward look-ahead assert matches, otherwise
+executes /no-pattern/.
+* =(?(?!assert)yes-pattern|no-pattern)=  Executes /yes-pattern/ if the forward look-ahead assert does not match, otherwise
+executes /no-pattern/.
+* =(?(R)yes-pattern|no-pattern)=  Executes /yes-pattern/ if we are executing inside a recursion, otherwise
+executes /no-pattern/.
+* [^(?(R['N])yes-pattern|no-pattern)]  Executes /yes-pattern/ if we are executing inside a recursion to sub-expression /N/, otherwise
+executes /no-pattern/.
 
 [h4 Operator precedence]
 

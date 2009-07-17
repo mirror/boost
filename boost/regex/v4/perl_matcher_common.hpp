@@ -346,25 +346,6 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_prefix()
 }
 
 template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_endmark()
-{
-   int index = static_cast<const re_brace*>(pstate)->index;
-   if(index > 0)
-   {
-      if((m_match_flags & match_nosubs) == 0)
-         m_presult->set_second(position, index);
-   }
-   else if((index < 0) && (index != -4))
-   {
-      // matched forward lookahead:
-      pstate = 0;
-      return true;
-   }
-   pstate = pstate->next.p;
-   return true;
-}
-
-template <class BidiIterator, class Allocator, class traits>
 bool perl_matcher<BidiIterator, Allocator, traits>::match_literal()
 {
    unsigned int len = static_cast<const re_literal*>(pstate)->length;
@@ -461,35 +442,6 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_wild()
       return false;
    pstate = pstate->next.p;
    ++position;
-   return true;
-}
-
-template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_match()
-{
-   if((m_match_flags & match_not_null) && (position == (*m_presult)[0].first))
-      return false;
-   if((m_match_flags & match_all) && (position != last))
-      return false;
-   if((m_match_flags & regex_constants::match_not_initial_null) && (position == search_base))
-      return false;
-   m_presult->set_second(position);
-   pstate = 0;
-   m_has_found_match = true;
-   if((m_match_flags & match_posix) == match_posix)
-   {
-      m_result.maybe_assign(*m_presult);
-      if((m_match_flags & match_any) == 0)
-         return false;
-   }
-#ifdef BOOST_REGEX_MATCH_EXTRA
-   if(match_extra & m_match_flags)
-   {
-      for(unsigned i = 0; i < m_presult->size(); ++i)
-         if((*m_presult)[i].matched)
-            ((*m_presult)[i]).get_captures().push_back((*m_presult)[i]);
-   }
-#endif
    return true;
 }
 
@@ -760,8 +712,21 @@ template <class BidiIterator, class Allocator, class traits>
 inline bool perl_matcher<BidiIterator, Allocator, traits>::match_assert_backref()
 {
    // return true if marked sub-expression N has been matched:
-   bool result = (*m_presult)[static_cast<const re_brace*>(pstate)->index].matched;
-   pstate = pstate->next.p;
+   int index = static_cast<const re_brace*>(pstate)->index;
+   bool result;
+   if(index > 0)
+   {
+      // Have we matched subexpression "index"?
+      result = (*m_presult)[index].matched;
+      pstate = pstate->next.p;
+   }
+   else
+   {
+      // Have we recursed into subexpression "index"?
+      // If index == 0 then check for any recursion at all, otherwise for recursion to -index-1.
+      result = recursion_stack_position && ((recursion_stack[recursion_stack_position-1].id == -index-1) || (index == 0));
+      pstate = pstate->next.p;
+   }
    return result;
 }
 

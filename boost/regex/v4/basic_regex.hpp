@@ -194,6 +194,7 @@ struct regex_data : public named_subexpressions<charT>
    std::vector<
       std::pair<
       std::size_t, std::size_t> > m_subs;                 // Position of sub-expressions within the *string*.
+   bool                        m_has_recursions;          // whether we have recursive expressions;
 };
 //
 // class basic_regex_implementation

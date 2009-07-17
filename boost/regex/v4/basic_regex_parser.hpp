@@ -125,8 +125,16 @@ void basic_regex_parser<charT, traits>::parse(const charT* p1, const charT* p2, 
    switch(l_flags & regbase::main_option_type)
    {
    case regbase::perl_syntax_group:
-      m_parser_proc = &basic_regex_parser<charT, traits>::parse_extended;
-      break;
+      {
+         m_parser_proc = &basic_regex_parser<charT, traits>::parse_extended;
+         //
+         // Add a leading paren with index zero to give recursions a target:
+         //
+         re_brace* br = static_cast<re_brace*>(this->append_state(syntax_element_startmark, sizeof(re_brace)));
+         br->index = 0;
+         br->icase = this->flags() & regbase::icase;
+         break;
+      }
    case regbase::basic_syntax_group:
       m_parser_proc = &basic_regex_parser<charT, traits>::parse_basic;
       break;
@@ -387,6 +395,7 @@ bool basic_regex_parser<charT, traits>::parse_open_paren()
    }
    re_brace* pb = static_cast<re_brace*>(this->append_state(syntax_element_startmark, sizeof(re_brace)));
    pb->index = markid;
+   pb->icase = this->flags() & regbase::icase;
    std::ptrdiff_t last_paren_start = this->getoffset(pb);
    // back up insertion point for alternations, and set new point:
    std::ptrdiff_t last_alt_point = m_alt_insert_point;
@@ -398,6 +407,11 @@ bool basic_regex_parser<charT, traits>::parse_open_paren()
    regex_constants::syntax_option_type opts = this->flags();
    bool old_case_change = m_has_case_change;
    m_has_case_change = false; // no changes to this scope as yet...
+   //
+   // Back up branch reset data in case we have a nested (?|...)
+   //
+   int mark_reset = m_mark_reset;
+   m_mark_reset = -1;
    //
    // now recursively add more states, this will terminate when we get to a
    // matching ')' :
@@ -423,6 +437,10 @@ bool basic_regex_parser<charT, traits>::parse_open_paren()
    this->flags(opts);
    m_has_case_change = old_case_change;
    //
+   // restore branch reset:
+   //
+   m_mark_reset = mark_reset;
+   //
    // we either have a ')' or we have run out of characters prematurely:
    //
    if(m_position == m_end)
@@ -444,6 +462,7 @@ bool basic_regex_parser<charT, traits>::parse_open_paren()
    //
    pb = static_cast<re_brace*>(this->append_state(syntax_element_endmark, sizeof(re_brace)));
    pb->index = markid;
+   pb->icase = this->flags() & regbase::icase;
    this->m_paren_start = last_paren_start;
    //
    // restore the alternate insertion point:
@@ -729,6 +748,7 @@ escape_type_class_jump:
       {
          re_brace* pb = static_cast<re_brace*>(this->append_state(syntax_element_startmark, sizeof(re_brace)));
          pb->index = -5;
+         pb->icase = this->flags() & regbase::icase;
          this->m_pdata->m_data.align();
          ++m_position;
          return true;
@@ -795,6 +815,7 @@ escape_type_class_jump:
             m_position = pc;
             re_brace* pb = static_cast<re_brace*>(this->append_state(syntax_element_backref, sizeof(re_brace)));
             pb->index = i;
+            pb->icase = this->flags() & regbase::icase;
          }
          else
          {
@@ -946,11 +967,13 @@ bool basic_regex_parser<charT, traits>::parse_repeat(std::size_t low, std::size_
    {
       re_brace* pb = static_cast<re_brace*>(this->insert_state(insert_point, syntax_element_startmark, sizeof(re_brace)));
       pb->index = -3;
+      pb->icase = this->flags() & regbase::icase;
       re_jump* jmp = static_cast<re_jump*>(this->insert_state(insert_point + sizeof(re_brace), syntax_element_jump, sizeof(re_jump)));
       this->m_pdata->m_data.align();
       jmp->alt.i = this->m_pdata->m_data.size() - this->getoffset(jmp);
       pb = static_cast<re_brace*>(this->append_state(syntax_element_endmark, sizeof(re_brace)));
       pb->index = -3;
+      pb->icase = this->flags() & regbase::icase;
    }
    return true;
 }
@@ -1706,6 +1729,7 @@ bool basic_regex_parser<charT, traits>::parse_backref()
       m_position = pc;
       re_brace* pb = static_cast<re_brace*>(this->append_state(syntax_element_backref, sizeof(re_brace)));
       pb->index = i;
+      pb->icase = this->flags() & regbase::icase;
    }
    else
    {
@@ -1793,6 +1817,7 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
    int markid = 0;
    std::ptrdiff_t jump_offset = 0;
    re_brace* pb = static_cast<re_brace*>(this->append_state(syntax_element_startmark, sizeof(re_brace)));
+   pb->icase = this->flags() & regbase::icase;
    std::ptrdiff_t last_paren_start = this->getoffset(pb);
    // back up insertion point for alternations, and set new point:
    std::ptrdiff_t last_alt_point = m_alt_insert_point;
@@ -1806,6 +1831,7 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
    charT name_delim;
    int mark_reset = m_mark_reset;
    m_mark_reset = -1;
+   int v;
    //
    // select the actual extension used:
    //
@@ -1821,6 +1847,57 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
       pb->index = markid = 0;
       ++m_position;
       break;
+   case regex_constants::syntax_digit:
+      {
+      //
+      // a recursive subexpression:
+      //
+      v = this->m_traits.toi(m_position, m_end, 10);
+      if((v < 0) || (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark))
+      {
+         fail(regex_constants::error_backref, m_position - m_base);
+         return false;
+      }
+insert_recursion:
+      pb->index = markid = 0;
+      static_cast<re_jump*>(this->append_state(syntax_element_recurse, sizeof(re_jump)))->alt.i = v;
+      static_cast<re_case*>(
+            this->append_state(syntax_element_toggle_case, sizeof(re_case))
+            )->icase = this->flags() & regbase::icase;
+      break;
+      }
+   case regex_constants::syntax_plus:
+      //
+      // A forward-relative recursive subexpression:
+      //
+      ++m_position;
+      v = this->m_traits.toi(m_position, m_end, 10);
+      if((v <= 0) || (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark))
+      {
+         fail(regex_constants::error_backref, m_position - m_base);
+         return false;
+      }
+      v += m_mark_count;
+      goto insert_recursion;
+   case regex_constants::syntax_dash:
+      //
+      // Possibly a backward-relative recursive subexpression:
+      //
+      ++m_position;
+      v = this->m_traits.toi(m_position, m_end, 10);
+      if(v <= 0)
+      {
+         --m_position;
+         // Oops not a relative recursion at all, but a (?-imsx) group:
+         goto option_group_jump;
+      }
+      v = m_mark_count + 1 - v;
+      if(v <= 0)
+      {
+         fail(regex_constants::error_backref, m_position - m_base);
+         return false;
+      }
+      goto insert_recursion;
    case regex_constants::syntax_equal:
       pb->index = markid = -1;
       ++m_position;
@@ -1882,7 +1959,24 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
          return false;
       }
       int v = this->m_traits.toi(m_position, m_end, 10);
-      if(v > 0)
+      if(*m_position == charT('R'))
+      {
+         ++m_position;
+         v = -this->m_traits.toi(m_position, m_end, 10);
+         re_brace* br = static_cast<re_brace*>(this->append_state(syntax_element_assert_backref, sizeof(re_brace)));
+         br->index = v < 0 ? (v - 1) : 0;
+         if(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark)
+         {
+            fail(regex_constants::error_badrepeat, m_position - m_base);
+            return false;
+         }
+         if(++m_position == m_end)
+         {
+            fail(regex_constants::error_badrepeat, m_position - m_base);
+            return false;
+         }
+      }
+      else if(v > 0)
       {
          re_brace* br = static_cast<re_brace*>(this->append_state(syntax_element_assert_backref, sizeof(re_brace)));
          br->index = v;
@@ -1976,9 +2070,21 @@ named_capture_jump:
       break;
       }
    default:
+      if(*m_position == charT('R'))
+      {
+         ++m_position;
+         v = 0;
+         if(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark)
+         {
+            fail(regex_constants::error_backref, m_position - m_base);
+            return false;
+         }
+         goto insert_recursion;
+      }
       //
       // lets assume that we have a (?imsx) group and try and parse it:
       //
+option_group_jump:
       regex_constants::syntax_option_type opts = parse_options();
       if(m_position == m_end)
          return false;
@@ -2095,6 +2201,7 @@ named_capture_jump:
    //
    pb = static_cast<re_brace*>(this->append_state(syntax_element_endmark, sizeof(re_brace)));
    pb->index = markid;
+   pb->icase = this->flags() & regbase::icase;
    this->m_paren_start = last_paren_start;
    //
    // restore the alternate insertion point:
