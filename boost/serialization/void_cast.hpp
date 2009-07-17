@@ -144,8 +144,8 @@ public:
         m_base(base),
         m_derived_observer(derived->get_weak_ptr()),
         m_base_observer(base->get_weak_ptr()),
-        m_heap(heap),
-        m_difference(difference)
+        m_difference(difference),
+        m_heap(heap)
     {}
 #if 0
     void_caster(const void_caster & rhs) :
