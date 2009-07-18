@@ -223,12 +223,17 @@ void_caster::recursive_unregister() const {
     // delete all shortcuts which use this primitive
     void_cast_detail::set_type::iterator it;
     for(it = s.begin(); it != s.end();){
-        // note item 9 from Effective STL !!!
-        if(    (*it)->m_base == m_base && m_derived == (*it)->m_derived
-            || (*it)->m_base_observer.expired()
-            || (*it)->m_derived_observer.expired()
-            || *m_derived == *(*it)->m_base
-            || *(*it)->m_derived == *m_base
+        if(
+            m_base == (*it)->m_base
+        &&  m_derived == (*it)->m_derived
+        ||
+            ! m_derived_observer.expired()
+        && ! (*it)->m_base_observer.expired()
+        && *m_derived == *(*it)->m_base
+        ||
+            ! m_base_observer.expired()
+        && ! (*it)->m_derived_observer.expired()
+        && *(*it)->m_derived == *m_base
         ){
             // since recursion could invalidate it
             const void_caster * vc = *it;
