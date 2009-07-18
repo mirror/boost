@@ -123,9 +123,6 @@ public:
     // void cast operations to work across dll and exe
     // module boundries.
     bool operator<(const void_caster & rhs) const;
-    bool operator>(const void_caster & rhs) const {
-        return ! (rhs < *this);
-    }
 
     const void_caster & operator*(){
         return *this;
@@ -147,21 +144,6 @@ public:
         m_difference(difference),
         m_heap(heap)
     {}
-#if 0
-    void_caster(const void_caster & rhs) :
-        m_derived(rhs.m_derived),
-        m_base(rhs.m_base),
-        m_derived_observer(rhs.m_derived_observer),
-        m_base_observer(rhs.m_base_observer),
-        m_difference(rhs.m_difference)
-    {}
-    void_caster & operator=(const void_caster & rhs){
-        m_derived = rhs.m_derived;
-        m_base = rhs.m_base;
-        m_difference = rhs.m_difference;
-        return * this;
-    }
-#endif
     virtual ~void_caster(){}
 };
 
