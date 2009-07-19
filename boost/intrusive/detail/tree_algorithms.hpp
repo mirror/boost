@@ -1232,69 +1232,75 @@ class tree_algorithms
    //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Throws</b>: Nothing.
-   static bool is_right_child (node_ptr p)
+   static bool is_right_child(node_ptr p)
    {  return NodeTraits::get_right(NodeTraits::get_parent(p)) == p;  }
 
-   static void replace_own (node_ptr own, node_ptr x, node_ptr header)
+   //Fix header and own's parent data when replacing x with own, providing own's old data with parent
+   static void replace_own_impl(node_ptr own, node_ptr x, node_ptr header, node_ptr own_parent, bool own_was_left)
    {
       if(NodeTraits::get_parent(header) == own)
          NodeTraits::set_parent(header, x);
-      else if(is_left_child(own))
-         NodeTraits::set_left(NodeTraits::get_parent(own), x);
+      else if(own_was_left)
+         NodeTraits::set_left(own_parent, x);
       else
-         NodeTraits::set_right(NodeTraits::get_parent(own), x);
+         NodeTraits::set_right(own_parent, x);
    }
 
-   static void rotate_left(node_ptr p, node_ptr header)
+   //Fix header and own's parent data when replacing x with own, supposing own
+   //links with its parent are still ok
+   static void replace_own(node_ptr own, node_ptr x, node_ptr header)
    {
-      node_ptr x = NodeTraits::get_right(p);
-      NodeTraits::set_right(p, NodeTraits::get_left(x));
-      if(NodeTraits::get_left(x) != 0)
-         NodeTraits::set_parent(NodeTraits::get_left(x), p);
-      NodeTraits::set_parent(x, NodeTraits::get_parent(p));
-      replace_own (p, x, header);
+      node_ptr own_parent(NodeTraits::get_parent(own));
+      bool own_is_left(NodeTraits::get_left(own_parent) == own);
+      replace_own_impl(own, x, header, own_parent, own_is_left);
+   }
+
+   // rotate parent p to left (no header and p's parent fixup)
+   static node_ptr rotate_left(node_ptr p)
+   {
+      node_ptr x(NodeTraits::get_right(p));
+      node_ptr x_left(NodeTraits::get_left(x));
+      NodeTraits::set_right(p, x_left);
+      if(x_left){
+         NodeTraits::set_parent(x_left, p);
+      }
       NodeTraits::set_left(x, p);
       NodeTraits::set_parent(p, x);
+      return x;
    }
 
-   static void rotate_right(node_ptr p, node_ptr header)
+   // rotate parent p to left (with header and p's parent fixup)
+   static void rotate_left(node_ptr p, node_ptr header)
+   {
+      bool     p_was_left(is_left_child(p));
+      node_ptr p_old_parent(NodeTraits::get_parent(p));
+      node_ptr x(rotate_left(p));
+      NodeTraits::set_parent(x, p_old_parent);
+      replace_own_impl(p, x, header, p_old_parent, p_was_left);
+   }
+
+   // rotate parent p to right (no header and p's parent fixup)
+   static node_ptr rotate_right(node_ptr p)
    {
       node_ptr x(NodeTraits::get_left(p));
       node_ptr x_right(NodeTraits::get_right(x));
       NodeTraits::set_left(p, x_right);
-      if(x_right)
+      if(x_right){
          NodeTraits::set_parent(x_right, p);
-      NodeTraits::set_parent(x, NodeTraits::get_parent(p));
-      replace_own (p, x, header);
+      }
       NodeTraits::set_right(x, p);
       NodeTraits::set_parent(p, x);
-   }
-
-   // rotate node t with left child            | complexity : constant        | exception : nothrow
-   static node_ptr rotate_left(node_ptr t)
-   {
-      node_ptr x = NodeTraits::get_right(t);
-      NodeTraits::set_right(t, NodeTraits::get_left(x));
-
-      if( NodeTraits::get_right(t) != 0 ){
-         NodeTraits::set_parent(NodeTraits::get_right(t), t );
-      }
-      NodeTraits::set_left(x, t);
-      NodeTraits::set_parent(t, x);
       return x;
    }
 
-   // rotate node t with right child            | complexity : constant        | exception : nothrow
-   static node_ptr rotate_right(node_ptr t)
+   // rotate parent p to right (with header and p's parent fixup)
+   static void rotate_right(node_ptr p, node_ptr header)
    {
-      node_ptr x = NodeTraits::get_left(t);
-      NodeTraits::set_left(t, NodeTraits::get_right(x));
-      if( NodeTraits::get_left(t) != 0 ){
-         NodeTraits::set_parent(NodeTraits::get_left(t), t);
-      }
-      NodeTraits::set_right(x, t);
-      NodeTraits::set_parent(t, x);
-      return x;
+      bool     p_was_left(is_left_child(p));
+      node_ptr p_old_parent(NodeTraits::get_parent(p));
+      node_ptr x(rotate_right(p));
+      NodeTraits::set_parent(x, p_old_parent);
+      replace_own_impl(p, x, header, p_old_parent, p_was_left);
    }
 
    static void link(node_ptr header, node_ptr z, node_ptr par, bool left)
