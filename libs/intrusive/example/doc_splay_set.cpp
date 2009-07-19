@@ -36,7 +36,7 @@ class MyClass
    friend bool operator> (const MyClass &a, const MyClass &b)
       {  return a.int_ > b.int_;  }
    friend bool operator== (const MyClass &a, const MyClass &b)
-      {  return a.int_ < b.int_;  }
+      {  return a.int_ == b.int_;  }
 };
 
 //Define a set using the base hook that will store values in reverse order

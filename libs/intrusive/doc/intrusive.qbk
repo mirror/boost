@@ -3703,6 +3703,15 @@ all the objects to be inserted in intrusive containers in containers like `std::
 
 [section:release_notes Release Notes]
 
+[section:release_notes_boost_1_40_00 Boost 1.40 Release]
+
+*  Code cleanup in tree_algorithms.hpp and avl_tree_algorithms.hpp
+*  Fixed bug
+  [@https://svn.boost.org/trac/boost/ticket/3164 #3164].
+
+[endsect]
+
+
 [section:release_notes_boost_1_39_00 Boost 1.39 Release]
 
 *  Optimized `list::merge` and `slist::merge`

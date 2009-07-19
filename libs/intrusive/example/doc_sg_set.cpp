@@ -33,7 +33,7 @@ class MyClass : public bs_set_base_hook<>
    friend bool operator> (const MyClass &a, const MyClass &b)
       {  return a.int_ > b.int_;  }
    friend bool operator== (const MyClass &a, const MyClass &b)
-      {  return a.int_ < b.int_;  }
+      {  return a.int_ == b.int_;  }
 };
 
 //Define an sg_set using the base hook that will store values in reverse order
