@@ -153,9 +153,9 @@ int test_main(int argc, char* argv[])
 
   seqGraph sg(
 #ifdef CSR
-	      edges_are_sorted,
+              edges_are_sorted,
 #endif
-	      ERIter(gen, n, prob), ERIter(), 
+              ERIter(gen, n, prob), ERIter(), 
               make_generator_iterator(gen, uniform_int<int>(1, C)),
               n);
 

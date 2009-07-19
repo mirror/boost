@@ -441,7 +441,7 @@ class compressed_sparse_row_graph<
             EdgePropertyIterator ep_iter,
             EdgePropertyIterator ep_iter_end)
   { boost::add_edges_global(first, last, ep_iter, ep_iter_end, 
-			    get(vertex_local, *this), m_base); }
+                            get(vertex_local, *this), m_base); }
 
   template <typename InputIterator>
   void 
@@ -454,7 +454,7 @@ class compressed_sparse_row_graph<
   add_edges_sorted(InputIterator first_sorted, InputIterator last_sorted,
                    EdgePropertyIterator ep_iter_sorted)
   { boost::add_edges_sorted_global(first_sorted, last_sorted, ep_iter_sorted, 
-				   get(vertex_local, *this), m_base); }
+                                   get(vertex_local, *this), m_base); }
 
  protected:
   ProcessGroup m_process_group;
@@ -801,7 +801,7 @@ private:
 template <typename IndexIterator, typename Distribution, typename Graph>
 boost::transform_iterator<index_to_vertex_func<Distribution, Graph>, IndexIterator>
 make_index_to_vertex_iterator(IndexIterator it, const Distribution& dist, 
-			      const Graph& g) {
+                              const Graph& g) {
   return boost::make_transform_iterator(
     it, index_to_vertex_func<Distribution, Graph>(dist, g));
 }
@@ -1000,8 +1000,8 @@ compressed_sparse_row_graph(edges_are_unsorted_multi_pass_t,
   : m_process_group(pg),
     m_distribution(parallel::block(m_process_group, numverts)),
     m_base(edges_are_unsorted_multi_pass_global,
- 	   make_index_to_vertex_iterator(edge_begin, parallel::block(m_process_group, numverts), *this),
- 	   make_index_to_vertex_iterator(edge_end, parallel::block(m_process_group, numverts), *this),
+           make_index_to_vertex_iterator(edge_begin, parallel::block(m_process_group, numverts), *this),
+           make_index_to_vertex_iterator(edge_end, parallel::block(m_process_group, numverts), *this),
            m_distribution.block_size(process_id(m_process_group), numverts),
            get(vertex_local, *this),
            local_edge<csr_vertex_owner_map<process_id_type, vertex_descriptor>, 
@@ -1022,8 +1022,8 @@ compressed_sparse_row_graph(edges_are_unsorted_multi_pass_t,
   : m_process_group(pg),
     m_distribution(dist),
     m_base(edges_are_unsorted_multi_pass_global,
- 	   make_index_to_vertex_iterator(edge_begin, parallel::block(m_process_group, numverts), *this),
- 	   make_index_to_vertex_iterator(edge_end, parallel::block(m_process_group, numverts), *this),
+           make_index_to_vertex_iterator(edge_begin, parallel::block(m_process_group, numverts), *this),
+           make_index_to_vertex_iterator(edge_end, parallel::block(m_process_group, numverts), *this),
            m_distribution.block_size(process_id(m_process_group), numverts),
            get(vertex_local, *this),
            local_edge<csr_vertex_owner_map<process_id_type, vertex_descriptor>, 
@@ -1045,8 +1045,8 @@ compressed_sparse_row_graph(edges_are_unsorted_multi_pass_t,
   : m_process_group(pg),
     m_distribution(parallel::block(m_process_group, numverts)),
     m_base(edges_are_unsorted_multi_pass_global,
- 	   make_index_to_vertex_iterator(edge_begin, parallel::block(m_process_group, numverts), *this),
- 	   make_index_to_vertex_iterator(edge_end, parallel::block(m_process_group, numverts), *this),
+           make_index_to_vertex_iterator(edge_begin, parallel::block(m_process_group, numverts), *this),
+           make_index_to_vertex_iterator(edge_end, parallel::block(m_process_group, numverts), *this),
            ep_iter,
            m_distribution.block_size(process_id(m_process_group), numverts),
            get(vertex_local, *this),
@@ -1070,8 +1070,8 @@ compressed_sparse_row_graph(edges_are_unsorted_multi_pass_t,
   : m_process_group(pg),
     m_distribution(dist),
     m_base(edges_are_unsorted_multi_pass_global,
- 	   make_index_to_vertex_iterator(edge_begin, parallel::block(m_process_group, numverts), *this),
- 	   make_index_to_vertex_iterator(edge_end, parallel::block(m_process_group, numverts), *this),
+           make_index_to_vertex_iterator(edge_begin, parallel::block(m_process_group, numverts), *this),
+           make_index_to_vertex_iterator(edge_end, parallel::block(m_process_group, numverts), *this),
            ep_iter,
            m_distribution.block_size(process_id(m_process_group), numverts),
            get(vertex_local, *this),
@@ -1538,42 +1538,42 @@ add_vertex(BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
 template<BOOST_DISTRIB_CSR_GRAPH_TEMPLATE_PARMS>
 typename BOOST_DISTRIB_CSR_GRAPH_TYPE::vertex_descriptor
 add_vertex(const typename BOOST_DISTRIB_CSR_GRAPH_TYPE::vertex_bundled& p, 
-	   BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
+           BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
 { return g.add_vertex(p); }
 
 template<BOOST_DISTRIB_CSR_GRAPH_TEMPLATE_PARMS>
 typename BOOST_DISTRIB_CSR_GRAPH_TYPE::vertex_descriptor
 add_vertices(typename BOOST_DISTRIB_CSR_GRAPH_TYPE::vertices_size_type count, 
-	     BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
+             BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
 { return g.add_vertices(count); }
 
 template<BOOST_DISTRIB_CSR_GRAPH_TEMPLATE_PARMS, typename InputIterator>
 void 
 add_edges(InputIterator first, InputIterator last,
-	  BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
+          BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
 { g.add_edges(first, last); }
 
 template<BOOST_DISTRIB_CSR_GRAPH_TEMPLATE_PARMS, typename InputIterator, 
-	 typename EdgePropertyIterator>
+         typename EdgePropertyIterator>
 void 
 add_edges(InputIterator first, InputIterator last,
-	  EdgePropertyIterator ep_iter,
-	  EdgePropertyIterator ep_iter_end,
-	  BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
+          EdgePropertyIterator ep_iter,
+          EdgePropertyIterator ep_iter_end,
+          BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
 { return g.add_edges(first, last, ep_iter, ep_iter_end); }
 
 template<BOOST_DISTRIB_CSR_GRAPH_TEMPLATE_PARMS, typename InputIterator>
 void 
 add_edges_sorted(InputIterator first, InputIterator last,
-		 BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
+                 BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
 { return g.add_edges_sorted(first, last); }
 
 template<BOOST_DISTRIB_CSR_GRAPH_TEMPLATE_PARMS, typename InputIterator, 
-	 typename EdgePropertyIterator>
+         typename EdgePropertyIterator>
 void 
 add_edges_sorted(InputIterator first_sorted, InputIterator last_sorted,
-		 EdgePropertyIterator ep_iter_sorted,
-		 BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
+                 EdgePropertyIterator ep_iter_sorted,
+                 BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
 { g.add_edges_sorted(first_sorted, last_sorted, ep_iter_sorted); }
 #endif
 

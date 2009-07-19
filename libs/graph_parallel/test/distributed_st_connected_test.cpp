@@ -55,11 +55,11 @@ test_distributed_st_connected() {
   {
     typedef std::pair<int, int> E;
     E edge_array[] = { E(u, u), E(u, v), E(u, w), E(v, w), E(x, y), 
-		       E(x, z), E(z, y), E(z, z) };
+                       E(x, z), E(z, y), E(z, z) };
     Graph g(edge_array, edge_array + sizeof(edge_array) / sizeof(E), N);
 
     bool connected = st_connected(g, vertex(u, g), vertex(z, g), 
-				  get(vertex_color, g), get(vertex_owner, g));
+                                  get(vertex_color, g), get(vertex_owner, g));
 
     assert(!connected);
   }
@@ -67,11 +67,11 @@ test_distributed_st_connected() {
   {
     typedef std::pair<int, int> E;
     E edge_array[] = { E(u, v), E(u, w), E(u, x), E(x, v), E(y, x),
-		       E(v, y), E(w, y), E(w, z), E(z, z) };
+                       E(v, y), E(w, y), E(w, z), E(z, z) };
     Graph g(edge_array, edge_array + sizeof(edge_array) / sizeof(E), N);
 
     bool connected = st_connected(g, vertex(u, g), vertex(z, g), 
-				  get(vertex_color, g), get(vertex_owner, g));
+                                  get(vertex_color, g), get(vertex_owner, g));
 
     assert(connected);
   }

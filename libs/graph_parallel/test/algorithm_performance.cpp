@@ -360,7 +360,7 @@ void test_csr(const ProcessGroup& pg, RandomGenerator& gen, Distribution& distri
       seqGraph;
     
     seqGraph sg(edges_are_sorted,
-		sorted_rmat_iterator<RandomGenerator, seqGraph>(gen, N, M, a, b, c, d),
+                sorted_rmat_iterator<RandomGenerator, seqGraph>(gen, N, M, a, b, c, d),
                 sorted_rmat_iterator<RandomGenerator, seqGraph>(),
                 make_generator_iterator(gen, uniform_int<int>(1, C)),
                 N);
@@ -396,7 +396,7 @@ void test_csr(const ProcessGroup& pg, RandomGenerator& gen, Distribution& distri
       seqGraph;
     
     seqGraph sg(edges_are_sorted,
-		sorted_unique_rmat_iterator<RandomGenerator, seqGraph>(gen, N, M, a, b, c, d),
+                sorted_unique_rmat_iterator<RandomGenerator, seqGraph>(gen, N, M, a, b, c, d),
                 sorted_unique_rmat_iterator<RandomGenerator, seqGraph>(),
                 make_generator_iterator(gen, uniform_int<int>(1, C)),
                 N);
@@ -431,7 +431,7 @@ void test_csr(const ProcessGroup& pg, RandomGenerator& gen, Distribution& distri
       seqGraph;
     
     seqGraph sg(edges_are_sorted,
-		sorted_erdos_renyi_iterator<RandomGenerator, seqGraph>(gen, N, _p/2),
+                sorted_erdos_renyi_iterator<RandomGenerator, seqGraph>(gen, N, _p/2),
                 sorted_erdos_renyi_iterator<RandomGenerator, seqGraph>(),
                 make_generator_iterator(gen, uniform_int<int>(1, C)),
                 N);
@@ -467,7 +467,7 @@ void test_csr(const ProcessGroup& pg, RandomGenerator& gen, Distribution& distri
       seqGraph;
     
     seqGraph sg(edges_are_sorted,
-		small_world_iterator<RandomGenerator, seqGraph>(gen, N, k, p),
+                small_world_iterator<RandomGenerator, seqGraph>(gen, N, k, p),
                 small_world_iterator<RandomGenerator, seqGraph>(),
                 make_generator_iterator(gen, uniform_int<int>(1, C)),
                 N);
