@@ -90,6 +90,8 @@ namespace tag
 namespace extract
 {
     extractor<tag::weighted_skewness> const weighted_skewness = {};
+
+    BOOST_ACCUMULATORS_IGNORE_GLOBAL(weighted_skewness)
 }
 
 using extract::weighted_skewness;

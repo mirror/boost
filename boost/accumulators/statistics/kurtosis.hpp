@@ -87,6 +87,8 @@ namespace tag
 namespace extract
 {
     extractor<tag::kurtosis> const kurtosis = {};
+
+    BOOST_ACCUMULATORS_IGNORE_GLOBAL(kurtosis)
 }
 
 using extract::kurtosis;
