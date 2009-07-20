@@ -617,7 +617,7 @@ run_non_distributed_graph_tests(RandomGenerator& gen, const ProcessGroup& pg,
 
 #ifdef CSR
   seqGraph sg(edges_are_sorted,
-	      sorted_unique_rmat_iterator<RandomGenerator, seqGraph>(gen, n, m, a, b, c, d),
+              sorted_unique_rmat_iterator<RandomGenerator, seqGraph>(gen, n, m, a, b, c, d),
               sorted_unique_rmat_iterator<RandomGenerator, seqGraph>(),
               make_generator_iterator(gen, uniform_int<int>(0, maxEdgeWeight)),
               n);
