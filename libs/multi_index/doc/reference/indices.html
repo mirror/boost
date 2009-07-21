@@ -279,7 +279,10 @@ sequence of tags to be assigned to an index in instantiation time.
 
 <blockquote><pre>
 <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>T0</span><span class=special>,...,</span><span class=keyword>typename</span> <span class=identifier>Tn</span><span class=special>&gt;</span>
-<span class=keyword>struct</span> <span class=identifier>tag</span><span class=special>;</span>
+<span class=keyword>struct</span> <span class=identifier>tag</span>
+<span class=special>{</span>
+  <span class=keyword>typedef</span> <b>implementation defined</b> <span class=identifier>type</span><span class=special>;</span>
+<span class=special>};</span>
 </pre></blockquote>
 
 <p>
@@ -287,6 +290,13 @@ Elements of <code>tag</code> can be any type, though the user is expected
 to provide classes with mnemonic names. Duplicate elements are not allowed.
 The maximum number of elements of a <code>tag</code> instantiation is
 implementation defined.
+The nested
+<code>type</code> is a model of
+<a href="../../../../libs/mpl/doc/refmanual/random-access-sequence.html">
+<code>MPL Random Access Sequence</code></a> and
+<a href="../../../../libs/mpl/doc/refmanual/extensible-sequence.html">
+<code>MPL Extensible Sequence</code></a> containing the types <code>T0</code>, ... ,
+<code>Tn</code> in the same order as specified.
 </p>
 
 <h2><a name="index_catalog">Indices provided by Boost.MultiIndex</a></h2>
@@ -373,9 +383,9 @@ Ordered indices
 
 <br>
 
-<p>Revised February 6th 2006</p>
+<p>Revised July 21st 2009</p>
 
-<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2009 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
