@@ -80,13 +80,13 @@ boost
     template <class Tag,class T>
     class error_info;
 
-    typedef error_info<struct tag_throw_function,char const *> throw_function;
-    typedef error_info<struct tag_throw_file,char const *> throw_file;
-    typedef error_info<struct tag_throw_line,int> throw_line;
+    typedef error_info<struct throw_function_,char const *> throw_function;
+    typedef error_info<struct throw_file_,char const *> throw_file;
+    typedef error_info<struct throw_line_,int> throw_line;
 
     template <>
     class
-    error_info<tag_throw_function,char const *>
+    error_info<throw_function_,char const *>
         {
         public:
         typedef char const * value_type;
@@ -100,7 +100,7 @@ boost
 
     template <>
     class
-    error_info<tag_throw_file,char const *>
+    error_info<throw_file_,char const *>
         {
         public:
         typedef char const * value_type;
@@ -114,7 +114,7 @@ boost
 
     template <>
     class
-    error_info<tag_throw_line,int>
+    error_info<throw_line_,int>
         {
         public:
         typedef int value_type;
