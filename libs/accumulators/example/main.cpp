@@ -60,7 +60,7 @@ void example1()
     // since mean depends on count and sum, we can get their results, too.
     std::cout << "  count(acc)      = " << count(acc) << std::endl;
     std::cout << "  sum(acc)        = " << sum(acc) << std::endl;
-    std::cout << "  moment<2>(acc)  = " << moment<2>(acc) << std::endl;
+    std::cout << "  moment<2>(acc)  = " << accumulators::moment<2>(acc) << std::endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

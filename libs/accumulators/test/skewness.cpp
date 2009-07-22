@@ -50,8 +50,8 @@ void test_stat()
     acc2(3);
 
     BOOST_CHECK_EQUAL( mean(acc2), 5 );
-    BOOST_CHECK_EQUAL( moment<2>(acc2), 159./5. );
-    BOOST_CHECK_EQUAL( moment<3>(acc2), 1171./5. );
+    BOOST_CHECK_EQUAL( accumulators::moment<2>(acc2), 159./5. );
+    BOOST_CHECK_EQUAL( accumulators::moment<3>(acc2), 1171./5. );
     BOOST_CHECK_CLOSE( skewness(acc2), 0.406040288214, 1e-6 );
 }
 

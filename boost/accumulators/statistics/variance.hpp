@@ -51,7 +51,7 @@ namespace impl
         {
             extractor<MeanFeature> mean;
             result_type tmp = mean(args);
-            return moment<2>(args) - tmp * tmp;
+            return accumulators::moment<2>(args) - tmp * tmp;
         }
     };
 

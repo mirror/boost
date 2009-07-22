@@ -50,9 +50,9 @@ void test_stat()
     acc2(3, weight = 2);
 
     BOOST_CHECK_EQUAL( weighted_mean(acc2), 42./11. );
-    BOOST_CHECK_EQUAL( weighted_moment<2>(acc2), 212./11. );
-    BOOST_CHECK_EQUAL( weighted_moment<3>(acc2), 1350./11. );
-    BOOST_CHECK_EQUAL( weighted_moment<4>(acc2), 9956./11. );
+    BOOST_CHECK_EQUAL( accumulators::weighted_moment<2>(acc2), 212./11. );
+    BOOST_CHECK_EQUAL( accumulators::weighted_moment<3>(acc2), 1350./11. );
+    BOOST_CHECK_EQUAL( accumulators::weighted_moment<4>(acc2), 9956./11. );
     BOOST_CHECK_CLOSE( weighted_kurtosis(acc2), 0.58137026432, 1e-6 );
 }
 

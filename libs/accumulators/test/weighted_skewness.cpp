@@ -50,8 +50,8 @@ void test_stat()
     acc2(3, weight = 2);
 
     BOOST_CHECK_EQUAL( weighted_mean(acc2), 42./11. );
-    BOOST_CHECK_EQUAL( weighted_moment<2>(acc2), 212./11. );
-    BOOST_CHECK_EQUAL( weighted_moment<3>(acc2), 1350./11. );
+    BOOST_CHECK_EQUAL( accumulators::weighted_moment<2>(acc2), 212./11. );
+    BOOST_CHECK_EQUAL( accumulators::weighted_moment<3>(acc2), 1350./11. );
     BOOST_CHECK_CLOSE( weighted_skewness(acc2), 1.30708406282, 1e-6 );
 }
 

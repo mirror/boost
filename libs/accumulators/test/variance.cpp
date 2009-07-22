@@ -38,7 +38,7 @@ void test_stat()
 
     BOOST_CHECK_EQUAL(5u, count(acc1));
     BOOST_CHECK_CLOSE(3., mean(acc1), 1e-5);
-    BOOST_CHECK_CLOSE(11., moment<2>(acc1), 1e-5);
+    BOOST_CHECK_CLOSE(11., accumulators::moment<2>(acc1), 1e-5);
     BOOST_CHECK_CLOSE(2., variance(acc1), 1e-5);
 
     // immediate variance

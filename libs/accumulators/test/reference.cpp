@@ -27,8 +27,8 @@ void test_stat()
     accumulator_set<double, stats<tag::reference<int, my::tag::int_ref> > > acc(
         my::int_ref = i);
 
-    int &ref1 = reference<int, my::tag::int_ref>(acc);
-    int &ref2 = reference_tag<my::tag::int_ref>(acc);
+    int &ref1 = accumulators::reference<int, my::tag::int_ref>(acc);
+    int &ref2 = accumulators::reference_tag<my::tag::int_ref>(acc);
 
     BOOST_CHECK_EQUAL(&i, &ref1);
     BOOST_CHECK_EQUAL(&i, &ref2);

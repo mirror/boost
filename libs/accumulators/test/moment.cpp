@@ -25,7 +25,7 @@ void test_stat()
     acc1(5); // + 25
              // = 45 / 3 = 15
 
-    BOOST_CHECK_CLOSE(15., moment<2>(acc1), 1e-5);
+    BOOST_CHECK_CLOSE(15., accumulators::moment<2>(acc1), 1e-5);
 
     accumulator_set<int, stats<tag::moment<5> > > acc2;
 
@@ -35,7 +35,7 @@ void test_stat()
     acc2(5); // + 3125
              // = 4424 / 4 = 1106
 
-    BOOST_CHECK_CLOSE(1106., moment<5>(acc2), 1e-5);
+    BOOST_CHECK_CLOSE(1106., accumulators::moment<5>(acc2), 1e-5);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

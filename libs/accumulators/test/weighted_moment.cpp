@@ -29,8 +29,8 @@ void test_stat()
     acc7(2.7, weight = 1.4);
     acc7(1.8, weight = 0.9);
 
-    BOOST_CHECK_CLOSE(5.403, weighted_moment<2>(acc2), 1e-5);
-    BOOST_CHECK_CLOSE(548.54182, weighted_moment<7>(acc7), 1e-5);
+    BOOST_CHECK_CLOSE(5.403, accumulators::weighted_moment<2>(acc2), 1e-5);
+    BOOST_CHECK_CLOSE(548.54182, accumulators::weighted_moment<7>(acc7), 1e-5);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

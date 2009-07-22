@@ -62,12 +62,12 @@ namespace impl
         result_type result(Args const &args) const
         {
             return numeric::average(
-                        weighted_moment<4>(args)
-                        - 4. * weighted_moment<3>(args) * weighted_mean(args)
-                        + 6. * weighted_moment<2>(args) * weighted_mean(args) * weighted_mean(args)
+                        accumulators::weighted_moment<4>(args)
+                        - 4. * accumulators::weighted_moment<3>(args) * weighted_mean(args)
+                        + 6. * accumulators::weighted_moment<2>(args) * weighted_mean(args) * weighted_mean(args)
                         - 3. * weighted_mean(args) * weighted_mean(args) * weighted_mean(args) * weighted_mean(args)
-                      , ( weighted_moment<2>(args) - weighted_mean(args) * weighted_mean(args) )
-                        * ( weighted_moment<2>(args) - weighted_mean(args) * weighted_mean(args) )
+                      , ( accumulators::weighted_moment<2>(args) - weighted_mean(args) * weighted_mean(args) )
+                        * ( accumulators::weighted_moment<2>(args) - weighted_mean(args) * weighted_mean(args) )
                    ) - 3.;
         }
     };

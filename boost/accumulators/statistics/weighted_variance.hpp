@@ -50,7 +50,7 @@ namespace impl
         {
             extractor<MeanFeature> const some_mean = {};
             result_type tmp = some_mean(args);
-            return weighted_moment<2>(args) - tmp * tmp;
+            return accumulators::weighted_moment<2>(args) - tmp * tmp;
         }
     };
 

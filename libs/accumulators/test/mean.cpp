@@ -37,19 +37,19 @@ void test_stat()
     BOOST_CHECK_CLOSE(1., mean(acc), 1e-5);
     BOOST_CHECK_EQUAL(1u, count(acc));
     BOOST_CHECK_EQUAL(1, sum(acc));
-    BOOST_CHECK_CLOSE(3., (mean_of_variates<int, tag::covariate1>(acc)), 1e-5);
+    BOOST_CHECK_CLOSE(3., (accumulators::mean_of_variates<int, tag::covariate1>(acc)), 1e-5);
 
     acc(0, covariate1 = 4);
     BOOST_CHECK_CLOSE(0.5, mean(acc), 1e-5);
     BOOST_CHECK_EQUAL(2u, count(acc));
     BOOST_CHECK_EQUAL(1, sum(acc));
-    BOOST_CHECK_CLOSE(3.5, (mean_of_variates<int, tag::covariate1>(acc)), 1e-5);
+    BOOST_CHECK_CLOSE(3.5, (accumulators::mean_of_variates<int, tag::covariate1>(acc)), 1e-5);
 
     acc(2, covariate1 = 8);
     BOOST_CHECK_CLOSE(1., mean(acc), 1e-5);
     BOOST_CHECK_EQUAL(3u, count(acc));
     BOOST_CHECK_EQUAL(3, sum(acc));
-    BOOST_CHECK_CLOSE(5., (mean_of_variates<int, tag::covariate1>(acc)), 1e-5);
+    BOOST_CHECK_CLOSE(5., (accumulators::mean_of_variates<int, tag::covariate1>(acc)), 1e-5);
 
     assert_is_double(mean(acc));
 
@@ -64,17 +64,17 @@ void test_stat()
     acc2(1, covariate1 = 3);
     BOOST_CHECK_CLOSE(1., mean(acc2), 1e-5);
     BOOST_CHECK_EQUAL(1u, count(acc2));
-    BOOST_CHECK_CLOSE(3., (mean_of_variates<int, tag::covariate1>(acc2)), 1e-5);
+    BOOST_CHECK_CLOSE(3., (accumulators::mean_of_variates<int, tag::covariate1>(acc2)), 1e-5);
 
     acc2(0, covariate1 = 4);
     BOOST_CHECK_CLOSE(0.5, mean(acc2), 1e-5);
     BOOST_CHECK_EQUAL(2u, count(acc2));
-    BOOST_CHECK_CLOSE(3.5, (mean_of_variates<int, tag::covariate1>(acc2)), 1e-5);
+    BOOST_CHECK_CLOSE(3.5, (accumulators::mean_of_variates<int, tag::covariate1>(acc2)), 1e-5);
 
     acc2(2, covariate1 = 8);
     BOOST_CHECK_CLOSE(1., mean(acc2), 1e-5);
     BOOST_CHECK_EQUAL(3u, count(acc2));
-    BOOST_CHECK_CLOSE(5., (mean_of_variates<int, tag::covariate1>(acc2)), 1e-5);
+    BOOST_CHECK_CLOSE(5., (accumulators::mean_of_variates<int, tag::covariate1>(acc2)), 1e-5);
 
     assert_is_double(mean(acc2));
 }
