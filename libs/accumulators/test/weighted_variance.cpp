@@ -32,7 +32,7 @@ void test_stat()
 
     BOOST_CHECK_EQUAL(5u, count(acc1));
     BOOST_CHECK_CLOSE(2.9090909, weighted_mean(acc1), 1e-5);
-    BOOST_CHECK_CLOSE(10.1818182, weighted_moment<2>(acc1), 1e-5);
+    BOOST_CHECK_CLOSE(10.1818182, accumulators::weighted_moment<2>(acc1), 1e-5);
     BOOST_CHECK_CLOSE(1.7190083, weighted_variance(acc1), 1e-5);
 
     accumulator_set<int, stats<tag::weighted_variance>, int> acc2;
