@@ -223,6 +223,7 @@ requirements for these types of containers.
   <span class=keyword>typedef</span> <span class=identifier>Compare</span>                                    <span class=identifier>key_compare</span><span class=special>;</span>
   <span class=keyword>typedef</span> <b>implementation defined                     </b><span class=identifier>value_compare</span><span class=special>;</span>
   <span class=keyword>typedef</span> <span class=identifier>tuple</span><span class=special>&lt;</span><span class=identifier>key_from_value</span><span class=special>,</span><span class=identifier>key_compare</span><span class=special>&gt;</span>          <span class=identifier>ctor_args</span><span class=special>;</span>
+  <span class=keyword>typedef</span> <span class=identifier>TagList</span>                                    <span class=identifier>tag_list</span><span class=special>;</span>
   <span class=keyword>typedef</span> <span class=identifier>Allocator</span>                                  <span class=identifier>allocator_type</span><span class=special>;</span>
   <span class=keyword>typedef</span> <span class=keyword>typename</span> <span class=identifier>Allocator</span><span class=special>::</span><span class=identifier>reference</span>              <span class=identifier>reference</span><span class=special>;</span>
   <span class=keyword>typedef</span> <span class=keyword>typename</span> <span class=identifier>Allocator</span><span class=special>::</span><span class=identifier>const_reference</span>        <span class=identifier>const_reference</span><span class=special>;</span>
@@ -426,7 +427,7 @@ following types:
 <ul>
   <li><code>Value</code> from <code>multi_index_container</code>,</li>
   <li><code>Allocator</code> from <code>multi_index_container</code>,</li>
-  <li><code>TagList</code> from the index specifier (if provided),</li>
+  <li><code>TagList</code> from the index specifier (if provided, otherwise <code>tag&lt;&gt;</code> is assumed),</li>
   <li><code>KeyFromValue</code> from the index specifier,</li>
   <li><code>Compare</code> from the index specifier.</li>
 </ul>
@@ -1022,9 +1023,9 @@ Hashed indices
 
 <br>
 
-<p>Revised June 25th 2008</p>
+<p>Revised July 21st 2009</p>
 
-<p>&copy; Copyright 2003-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2009 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
