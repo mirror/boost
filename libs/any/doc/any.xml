@@ -18,6 +18,14 @@
       Safe, generic container for single values of different value types
     </librarypurpose> 
     <librarycategory name="category:data-structures"/>
+
+    <legalnotice>
+      <para>Distributed under the Boost Software License, Version 1.0.
+      (See accompanying file <filename>LICENSE_1_0.txt</filename> or copy at 
+      <ulink
+      url="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</ulink>)
+      </para>
+    </legalnotice>
   </libraryinfo>
 
   <title>Boost.Any</title>
