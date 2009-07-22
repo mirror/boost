@@ -15,7 +15,7 @@
 #include <boost/unordered/detail/config.hpp>
 
 #if !defined(BOOST_UNORDERED_EMPLACE_LIMIT)
-#define BOOST_UNORDERED_EMPLACE_LIMIT 5
+#define BOOST_UNORDERED_EMPLACE_LIMIT 10
 #endif
 
 #include <cstddef>
@@ -85,7 +85,7 @@ namespace boost {
     namespace unordered_detail {
         template <class T> struct type_wrapper {};
 
-        static const std::size_t default_initial_bucket_count = 50;
+        static const std::size_t default_initial_bucket_count = 11;
         static const float minimum_max_load_factor = 1e-3f;
 
         inline std::size_t double_to_size_t(double f)
