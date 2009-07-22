@@ -1,3 +1,9 @@
+#
+# Copyright Troy D. Straszheim
+#
+# Distributed under the Boost Software License, Version 1.0.
+# See http://www.boost.org/LICENSE_1_0.txt
+#
 boost_additional_test_dependencies(concept_check BOOST_DEPENDS utility)
 
 # this fails but looks like it isn't the build

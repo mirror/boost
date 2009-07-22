@@ -1,3 +1,9 @@
+#
+# Copyright Troy D. Straszheim
+#
+# Distributed under the Boost Software License, Version 1.0.
+# See http://www.boost.org/LICENSE_1_0.txt
+#
 boost_additional_test_dependencies(ptr_container BOOST_DEPENDS test assign numeric)
 
 boost_test_run(ptr_inserter DEPENDS boost_unit_test_framework)

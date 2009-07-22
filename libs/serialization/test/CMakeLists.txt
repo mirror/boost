@@ -1,3 +1,9 @@
+#
+# Copyright Troy D. Straszheim
+#
+# Distributed under the Boost Software License, Version 1.0.
+# See http://www.boost.org/LICENSE_1_0.txt
+#
 # The set of archives that we will use for testing the Serialization
 # library
 set(BOOST_ARCHIVE_LIST 

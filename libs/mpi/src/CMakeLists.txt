@@ -1,3 +1,9 @@
+#
+# Copyright Troy D. Straszheim
+#
+# Distributed under the Boost Software License, Version 1.0.
+# See http://www.boost.org/LICENSE_1_0.txt
+#
 #-- Make sure MPI is installed on the users system
 FIND_PACKAGE(MPI)
 

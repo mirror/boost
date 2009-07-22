@@ -1,3 +1,9 @@
+#
+# Copyright Troy D. Straszheim
+#
+# Distributed under the Boost Software License, Version 1.0.
+# See http://www.boost.org/LICENSE_1_0.txt
+#
 boost_tool_project(bcp
 DESCRIPTION "The bcp utility is a tool for extracting subsets of Boost."
 AUTHORS "John Maddock")
