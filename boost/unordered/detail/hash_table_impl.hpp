@@ -206,55 +206,6 @@ namespace boost {
                     new(node_->address()) value_type(std::forward<Args>(args)...);
                     value_constructed_ = true;
                 }
-
-#if defined(__GLIBCPP__) || defined(__GLIBCXX__)
-                // The GCC C++0x standard library implementation does not have
-                // a single argument pair constructor, so this works around that.
-
-                template <typename Arg>
-                void construct(Arg&& arg)
-                {
-                    construct_preamble();
-                    construct_impl(std::forward<Arg>(arg),
-                        (value_type const*) 0,
-                        (typename boost::remove_reference<Arg>::type const*) 0);
-                    value_constructed_ = true;
-                }
-
-                template <
-                    typename Arg,
-                    typename ValueType,
-                    typename Type>
-                void construct_impl(Arg&& arg, ValueType const*, Type const*)
-                {
-                    new(node_->address()) value_type(std::forward<Arg>(arg));
-                }
-
-                template <
-                    typename Arg,
-                    typename ValueFirst, typename ValueSecond,
-                    typename TypeFirst, typename TypeSecond>
-                void construct_impl(
-                    Arg&& arg,
-                    std::pair<ValueFirst, ValueSecond> const*,
-                    std::pair<TypeFirst, TypeSecond> const*)
-                {
-                    new(node_->address()) value_type(std::forward<Arg>(arg));
-                }
-
-                template <
-                    typename Arg,
-                    typename ValueFirst, typename ValueSecond,
-                    typename Type>
-                void construct_impl(
-                    Arg&& arg,
-                    std::pair<ValueFirst, ValueSecond> const*,
-                    Type const*)
-                {
-                    new(node_->address()) value_type(std::forward<Arg>(arg), ValueSecond());
-                }
-#endif
-                
 #else
 
 #define BOOST_UNORDERED_CONSTRUCT_IMPL(z, n, _)                                 \
@@ -316,15 +267,16 @@ namespace boost {
                     new(node_->address()) value_type(arg0);
                 }
 
-                template <typename First, typename Second, typename Key>
-                void construct_impl(std::pair<First, Second>*, Key const& k)
-                {
-                    new(node_->address()) value_type(First(k), Second());
-                }
-
 #undef BOOST_UNORDERED_CONSTRUCT_IMPL
 
 #endif
+                template <typename K, typename M>
+                void construct_pair(K const& k, M*)
+                {
+                    construct_preamble();
+                    new(node_->address()) value_type(k, M());                    
+                    value_constructed_ = true;
+                }
 
                 node_ptr get() const
                 {
@@ -1922,7 +1874,7 @@ namespace boost {
                     // Create the node before rehashing in case it throws an
                     // exception (need strong safety in such a case).
                     node_constructor a(data_.allocators_);
-                    a.construct(k);
+                    a.construct_pair(k, (mapped_type*) 0);
 
                     // reserve has basic exception safety if the hash function
                     // throws, strong otherwise.
