@@ -6,7 +6,7 @@
 
 //  Authors: Matthias Troyer
 
-#include <boost/archive/impl/archive_pointer_oserializer.ipp>
+#include <boost/archive/detail/archive_serializer_map.hpp>
 #include <boost/mpi/detail/mpi_datatype_cache.hpp>
 #include <map>
 

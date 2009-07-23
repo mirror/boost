@@ -16,6 +16,7 @@
 #include <boost/mpi/detail/mpi_datatype_primitive.hpp>
 #include <boost/mpi/datatype_fwd.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/archive/detail/register_archive.hpp>
 
 namespace boost { namespace mpi { namespace detail {
 

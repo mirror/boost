@@ -7,13 +7,14 @@
 //  Authors: Matthias Troyer
 
 #define BOOST_ARCHIVE_SOURCE
-#include <boost/archive/impl/archive_pointer_oserializer.ipp>
+#include <boost/archive/detail/archive_serializer_map.hpp>
+#include <boost/archive/impl/archive_serializer_map.ipp>
 #include <boost/mpi/skeleton_and_content.hpp>
 
 namespace boost { namespace archive { namespace detail {
 // explicitly instantiate all required template functions
 
-template class archive_pointer_oserializer<mpi::detail::content_oarchive> ;
-template class archive_pointer_oserializer<boost::mpi::detail::ignore_skeleton_oarchive<boost::mpi::detail::content_oarchive> >;
-template class archive_pointer_oserializer<boost::mpi::detail::ignore_skeleton_oarchive<boost::mpi::detail::mpi_datatype_oarchive> >;
+template class archive_serializer_map<mpi::detail::content_oarchive> ;
+template class archive_serializer_map<boost::mpi::detail::ignore_skeleton_oarchive<boost::mpi::detail::content_oarchive> >;
+template class archive_serializer_map<boost::mpi::detail::ignore_skeleton_oarchive<boost::mpi::detail::mpi_datatype_oarchive> >;
 } } }
