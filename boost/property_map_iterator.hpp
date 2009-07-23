@@ -15,3 +15,5 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #  warning "This header is deprecated. Please use: boost/property_map/property_map_iterator.hpp"
 #endif
 #endif
+
+#include <boost/property_map/property_map_iterator.hpp>
