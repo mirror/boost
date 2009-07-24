@@ -109,9 +109,6 @@
 #define BOOST_NO_LAMBDAS
 #define BOOST_NO_NULLPTR
 #define BOOST_NO_RAW_LITERALS
-// scoped enums have a serious bug in 4.4.0, so define BOOST_NO_SCOPED_ENUMS until it
-// gets fixed. See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=38064
-#define BOOST_NO_SCOPED_ENUMS
 #define BOOST_NO_TEMPLATE_ALIASES
 
 // C++0x features in 4.3.n and later
@@ -150,6 +147,14 @@
 #  define BOOST_NO_INITIALIZER_LISTS
 #  define BOOST_NO_SCOPED_ENUMS  
 #  define BOOST_NO_UNICODE_LITERALS
+#endif
+
+// C++0x features in 4.4.1 and later
+//
+#if (__GNUC__*10000 + __GNUC_MINOR__*100 + __GNUC_PATCHLEVEL__ < 40401) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
+// scoped enums have a serious bug in 4.4.0, so define BOOST_NO_SCOPED_ENUMS before 4.4.1
+// See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=38064
+#  define BOOST_NO_SCOPED_ENUMS
 #endif
 
 // ConceptGCC compiler:
