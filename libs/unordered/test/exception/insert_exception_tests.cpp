@@ -195,7 +195,7 @@ struct insert_test_rehash3 : public insert_test_base<T>
         rehash_bucket_count = static_cast<size_type>(
             ceil(original_bucket_count * (double) x.max_load_factor())) - 1;
 
-        size_type initial_elements = rehash_bucket_count - 5;
+        size_type initial_elements = rehash_bucket_count > 5 ? rehash_bucket_count - 5 : 1;
 
         BOOST_TEST(initial_elements < this->values.size());
         x.insert(this->values.begin(),

@@ -103,8 +103,16 @@ namespace boost
         template <class InputIterator>
         unordered_set(InputIterator f, InputIterator l, size_type n,
                 const hasher &hf = hasher(),
-                const key_equal &eql = key_equal(),
-                const allocator_type &a = allocator_type())
+                const key_equal &eql = key_equal())
+            : base(f, l, n, hf, eql, allocator_type())
+        {
+        }
+        
+        template <class InputIterator>
+        unordered_set(InputIterator f, InputIterator l, size_type n,
+                const hasher &hf,
+                const key_equal &eql,
+                const allocator_type &a)
             : base(f, l, n, hf, eql, a)
         {
         }
@@ -530,8 +538,16 @@ namespace boost
         template <class InputIterator>
         unordered_multiset(InputIterator f, InputIterator l, size_type n,
                 const hasher &hf = hasher(),
-                const key_equal &eql = key_equal(),
-                const allocator_type &a = allocator_type())
+                const key_equal &eql = key_equal())
+          : base(f, l, n, hf, eql, allocator_type())
+        {
+        }
+
+        template <class InputIterator>
+        unordered_multiset(InputIterator f, InputIterator l, size_type n,
+                const hasher &hf,
+                const key_equal &eql,
+                const allocator_type &a)
           : base(f, l, n, hf, eql, a)
         {
         }
