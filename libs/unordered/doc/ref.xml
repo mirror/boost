@@ -284,7 +284,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <notes>
                 <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
                 <para>Pointers and references to elements are never invalidated.</para>
-                <para>Only available on compilers with support for variadic template arguments and rvalue references.</para>
+                <para>If the compiler doesn't support variadic template arguments or rvalue
+                      references, this is emulated for up to 10 arguments, with no support
+                      for rvalue references or move semantics.</para>
               </notes>
             </method>
             <method name="emplace_hint">
@@ -313,7 +315,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>The standard is fairly vague on the meaning of the hint. But the only practical way to use it, and the only way that Boost.Unordered supports is to point to an existing element with the same value. </para>
                 <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
                 <para>Pointers and references to elements are never invalidated.</para>
-                <para>Only available on compilers with support for variadic template arguments and rvalue references.</para>
+                <para>If the compiler doesn't support variadic template arguments or rvalue
+                      references, this is emulated for up to 10 arguments, with no support
+                      for rvalue references or move semantics.</para>
               </notes>
             </method>
             <method name="insert">
@@ -1017,7 +1021,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <notes>
                 <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
                 <para>Pointers and references to elements are never invalidated.</para>
-                <para>Only available on compilers with support for variadic template arguments and rvalue references.</para>
+                <para>If the compiler doesn't support variadic template arguments or rvalue
+                      references, this is emulated for up to 10 arguments, with no support
+                      for rvalue references or move semantics.</para>
               </notes>
             </method>
             <method name="emplace_hint">
@@ -1046,7 +1052,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>The standard is fairly vague on the meaning of the hint. But the only practical way to use it, and the only way that Boost.Unordered supports is to point to an existing element with the same value. </para>
                 <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
                 <para>Pointers and references to elements are never invalidated.</para>
-                <para>Only available on compilers with support for variadic template arguments and rvalue references.</para>
+                <para>If the compiler doesn't support variadic template arguments or rvalue
+                      references, this is emulated for up to 10 arguments, with no support
+                      for rvalue references or move semantics.</para>
               </notes>
             </method>
             <method name="insert">
@@ -1762,7 +1770,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <notes>
                 <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
                 <para>Pointers and references to elements are never invalidated.</para>
-                <para>Only available on compilers with support for variadic template arguments and rvalue references.</para>
+                <para>If the compiler doesn't support variadic template arguments or rvalue
+                      references, this is emulated for up to 10 arguments, with no support
+                      for rvalue references or move semantics.</para>
               </notes>
             </method>
             <method name="emplace_hint">
@@ -1791,7 +1801,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>The standard is fairly vague on the meaning of the hint. But the only practical way to use it, and the only way that Boost.Unordered supports is to point to an existing element with the same key. </para>
                 <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
                 <para>Pointers and references to elements are never invalidated.</para>
-                <para>Only available on compilers with support for variadic template arguments and rvalue references.</para>
+                <para>If the compiler doesn't support variadic template arguments or rvalue
+                      references, this is emulated for up to 10 arguments, with no support
+                      for rvalue references or move semantics.</para>
               </notes>
             </method>
             <method name="insert">
@@ -2544,7 +2556,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <notes>
                 <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
                 <para>Pointers and references to elements are never invalidated.</para>
-                <para>Only available on compilers with support for variadic template arguments and rvalue references.</para>
+                <para>If the compiler doesn't support variadic template arguments or rvalue
+                      references, this is emulated for up to 10 arguments, with no support
+                      for rvalue references or move semantics.</para>
               </notes>
             </method>
             <method name="emplace_hint">
@@ -2573,7 +2587,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>The standard is fairly vague on the meaning of the hint. But the only practical way to use it, and the only way that Boost.Unordered supports is to point to an existing element with the same key. </para>
                 <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
                 <para>Pointers and references to elements are never invalidated.</para>
-                <para>Only available on compilers with support for variadic template arguments and rvalue references.</para>
+                <para>If the compiler doesn't support variadic template arguments or rvalue
+                      references, this is emulated for up to 10 arguments, with no support
+                      for rvalue references or move semantics.</para>
               </notes>
             </method>
             <method name="insert">
