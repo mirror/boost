@@ -1,3 +1,9 @@
+#
+# Copyright Troy D. Straszheim
+#
+# Distributed under the Boost Software License, Version 1.0.
+# See http://www.boost.org/LICENSE_1_0.txt
+#
 # Get the boost dependencies for the tests
 boost_additional_test_dependencies(function_types BOOST_DEPENDS test fusion)
 

@@ -1,3 +1,9 @@
+#
+# Copyright Troy D. Straszheim
+#
+# Distributed under the Boost Software License, Version 1.0.
+# See http://www.boost.org/LICENSE_1_0.txt
+#
 boost_additional_test_dependencies(iterator BOOST_DEPENDS test tuple smart_ptr)
 
 # These first two tests will run last, and are expected to fail

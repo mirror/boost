@@ -1,3 +1,9 @@
+#
+# Copyright Troy D. Straszheim
+#
+# Distributed under the Boost Software License, Version 1.0.
+# See http://www.boost.org/LICENSE_1_0.txt
+#
 # Look for the ICU library. If we find it, we'll compile in support for ICU
 include(FindICU)
 set(BOOST_REGEX_LIBRARIES)
