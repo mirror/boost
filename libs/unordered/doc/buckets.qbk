@@ -116,6 +116,15 @@ or close to the hint - unless your hint is unreasonably small or large.
     [[Method] [Description]]
 
     [
+        [`X(size_type n)`]
+        [Construct an empty container with at least `n` buckets (`X` is the container type).]
+    ]
+    [
+        [`X(InputIterator i, InputIterator j, size_type n)`]
+        [Construct an empty container with at least `n` buckets and insert elements
+         from the range \[`i`, `j`) (`X` is the container type).]
+    ]
+    [
         [`float load_factor() const`]
         [The average number of elements per bucket.]
     ]
