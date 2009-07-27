@@ -17,6 +17,7 @@
 
 #include <boost/mpl/string.hpp>
 
+#include <boost/mpl/at.hpp>
 #include <boost/mpl/back.hpp>
 #include <boost/mpl/empty.hpp>
 #include <boost/mpl/front.hpp>
@@ -468,6 +469,46 @@ int main()
                 mpl::pop_back<mpl::string<'aaaa','aaaa','aaaa','aaaa','aaaa','aaaa','aaaa','aaaa'> >::type
               , mpl::string<'aaaa','aaaa','aaaa','aaaa','aaaa','aaaa','aaaa','aaa'>
             >
+        ));
+    }
+
+    {
+        BOOST_TEST((
+            mpl::at_c<
+                mpl::string<'\x7f'>
+              , 0
+            >::type::value == (char)0x7f
+        ));
+
+        BOOST_TEST((
+            mpl::at_c<
+                mpl::string<'\x80'>
+              , 0
+            >::type::value == (char)0x80
+        ));
+
+        BOOST_TEST((
+            mpl::at_c<
+                mpl::string<
+                    mpl::at_c<
+                        mpl::string<'\x7f'>
+                      , 0
+                    >::type::value
+                >
+              , 0
+            >::type::value == (char)0x7f
+        ));
+
+        BOOST_TEST((
+            mpl::at_c<
+                mpl::string<
+                    mpl::at_c<
+                        mpl::string<'\x80'>
+                      , 0
+                    >::type::value
+                >
+              , 0
+            >::type::value == (char)0x80
         ));
     }
 
