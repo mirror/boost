@@ -137,6 +137,7 @@ namespace boost
 #else // BOOST_NO_VARIADIC_TEMPLATES
         typedef variadic_slot_invoker<nonvoid_slot_result_type, Args...> slot_invoker;
 #endif // BOOST_NO_VARIADIC_TEMPLATES
+        typedef slot_call_iterator_cache<nonvoid_slot_result_type, slot_invoker> slot_call_iterator_cache_type;
         typedef typename group_key<Group>::type group_key_type;
         typedef shared_ptr<connection_body<group_key_type, slot_type, Mutex> > connection_body_type;
         typedef grouped_list<Group, GroupCompare, connection_body_type> connection_list_type;
@@ -235,10 +236,14 @@ namespace boost
             local_state = _shared_state;
           }
           slot_invoker invoker = slot_invoker(BOOST_SIGNALS2_SIGNATURE_ARG_NAMES(BOOST_SIGNALS2_NUM_ARGS));
-          slot_call_iterator_cache<nonvoid_slot_result_type, slot_invoker> cache(invoker);
-          return detail::combiner_invoker<typename combiner_type::result_type>()(local_state->combiner(),
-            slot_call_iterator(local_state->connection_bodies().begin(), local_state->connection_bodies().end(), cache),
-            slot_call_iterator(local_state->connection_bodies().end(), local_state->connection_bodies().end(), cache));
+          slot_call_iterator_cache_type cache(invoker);
+          invocation_janitor janitor(cache, *this, &local_state->connection_bodies());
+          return detail::combiner_invoker<typename combiner_type::result_type>()
+            (
+              local_state->combiner(),
+              slot_call_iterator(local_state->connection_bodies().begin(), local_state->connection_bodies().end(), cache),
+              slot_call_iterator(local_state->connection_bodies().end(), local_state->connection_bodies().end(), cache)
+            );
         }
         result_type operator ()(BOOST_SIGNALS2_SIGNATURE_FULL_ARGS(BOOST_SIGNALS2_NUM_ARGS)) const
         {
@@ -255,10 +260,14 @@ namespace boost
             local_state = _shared_state;
           }
           slot_invoker invoker = slot_invoker(BOOST_SIGNALS2_SIGNATURE_ARG_NAMES(BOOST_SIGNALS2_NUM_ARGS));
-          slot_call_iterator_cache<nonvoid_slot_result_type, slot_invoker> cache(invoker);
-          return detail::combiner_invoker<typename combiner_type::result_type>()(local_state->combiner(),
-            slot_call_iterator(local_state->connection_bodies().begin(), local_state->connection_bodies().end(), cache),
-            slot_call_iterator(local_state->connection_bodies().end(), local_state->connection_bodies().end(), cache));
+          slot_call_iterator_cache_type cache(invoker);
+          invocation_janitor janitor(cache, *this, &local_state->connection_bodies());
+          return detail::combiner_invoker<typename combiner_type::result_type>()
+            (
+              local_state->combiner(),
+              slot_call_iterator(local_state->connection_bodies().begin(), local_state->connection_bodies().end(), cache),
+              slot_call_iterator(local_state->connection_bodies().end(), local_state->connection_bodies().end(), cache)
+            );
         }
         std::size_t num_slots() const
         {
@@ -375,6 +384,32 @@ namespace boost
           shared_ptr<connection_list_type> _connection_bodies;
           shared_ptr<combiner_type> _combiner;
         };
+        // Destructor of invocation_janitor does some cleanup when a signal invocation completes.
+        // Code can't be put directly in signal's operator() due to complications from void return types.
+        class invocation_janitor
+        {
+        public:
+          typedef BOOST_SIGNALS2_SIGNAL_IMPL_CLASS_NAME(BOOST_SIGNALS2_NUM_ARGS) signal_type;
+          invocation_janitor
+          (
+            const slot_call_iterator_cache_type &cache,
+            const signal_type &sig,
+            const connection_list_type *connection_bodies
+          ):_cache(cache), _sig(sig), _connection_bodies(connection_bodies)
+          {}
+          ~invocation_janitor()
+          {
+            // force a full cleanup of disconnected slots if there are too many
+            if(_cache.disconnected_slot_count > _cache.connected_slot_count)
+            {
+              _sig.force_cleanup_connections(_connection_bodies);
+            }
+          }
+        private:
+          const slot_call_iterator_cache_type &_cache;
+          const signal_type &_sig;
+          const connection_list_type *_connection_bodies;
+        };
 
         // clean up disconnected connections
         void nolock_cleanup_connections(bool grab_tracked,
@@ -428,6 +463,22 @@ namespace boost
           {
             nolock_cleanup_connections(true);
           }
+        }
+        // force a full cleanup of the connection list
+        void force_cleanup_connections(const connection_list_type *connection_bodies) const
+        {
+          unique_lock<mutex_type> list_lock(_mutex);
+          // if the connection list passed in as a parameter is no longer in use,
+          // we don't need to do any cleanup.
+          if(&_shared_state->connection_bodies() != connection_bodies)
+          {
+            return;
+          }
+          if(_shared_state.unique() == false)
+          {
+            _shared_state.reset(new invocation_state(*_shared_state, _shared_state->connection_bodies()));
+          }
+          nolock_cleanup_connections(true, _shared_state->connection_bodies().begin());
         }
         shared_ptr<invocation_state> get_readable_state() const
         {
@@ -504,7 +555,8 @@ namespace boost
           return connection(newConnectionBody);
         }
 
-        shared_ptr<invocation_state> _shared_state;
+        // _shared_state is mutable so we can do force_cleanup_connections during a const invocation
+        mutable shared_ptr<invocation_state> _shared_state;
         mutable typename connection_list_type::iterator _garbage_collector_it;
         // connection list mutex must never be locked when attempting a blocking lock on a slot,
         // or you could deadlock.
