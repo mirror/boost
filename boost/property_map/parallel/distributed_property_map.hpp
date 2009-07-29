@@ -687,7 +687,7 @@ namespace boost {
   };
 }
 
-#include <boost/property_map/parallel/impl/distributed_property_map.cpp>
+#include <boost/property_map/parallel/impl/distributed_property_map.ipp>
 
 #undef PBGL_DISTRIB_PMAP
 

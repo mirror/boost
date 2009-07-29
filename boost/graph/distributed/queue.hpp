@@ -270,7 +270,7 @@ make_distributed_queue(const ProcessGroup& process_group,
 
 } } } // end namespace boost::graph::distributed
 
-#include <boost/graph/distributed/detail/queue.cpp>
+#include <boost/graph/distributed/detail/queue.ipp>
 
 #undef BOOST_DISTRIBUTED_QUEUE_TYPE
 #undef BOOST_DISTRIBUTED_QUEUE_PARMS
