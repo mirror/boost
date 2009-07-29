@@ -670,7 +670,7 @@ void test_mark_resets()
    TEST_REGEX_SEARCH("(?|(abc)|(xyz))(?1)", perl, "xyzxyz", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("^X(?5)(a)(?|(b)|(q))(c)(d)(Y)", perl, "XYabcdY", match_default, make_array(0, 7, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, -2, -2));
    TEST_INVALID_REGEX("^X(?5)(a)(?|(b)|(q))(c)(d)Y", perl);
-   //TEST_REGEX_SEARCH("^X(?&N)(a)(?|(b)|(q))(c)(d)(?<N>Y)", perl, "XYabcdY", match_default, make_array(0, 7, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, -2, -2));
+   TEST_REGEX_SEARCH("^X(?&N)(a)(?|(b)|(q))(c)(d)(?<N>Y)", perl, "XYabcdY", match_default, make_array(0, 7, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, -2, -2));
    TEST_REGEX_SEARCH("^X(?7)(a)(?|(b)|(q)(r)(s))(c)(d)(Y)", perl, "XYabcdY", match_default, make_array(0, 7, 2, 3, 3, 4, -1, -1, -1, -1, 4, 5, 5, 6, 6, 7, -2, -2));
    TEST_REGEX_SEARCH("^X(?7)(a)(?|(b|(r)(s))|(q))(c)(d)(Y)", perl, "XYabcdY", match_default, make_array(0, 7, 2, 3, 3, 4, -1, -1, -1, -1, 4, 5, 5, 6, 6, 7, -2, -2));
    TEST_REGEX_SEARCH("^X(?7)(a)(?|(b|(?|(r)|(t))(s))|(q))(c)(d)(Y)", perl, "XYabcdY", match_default, make_array(0, 7, 2, 3, 3, 4, -1, -1, -1, -1, 4, 5, 5, 6, 6, 7, -2, -2));
@@ -833,5 +833,64 @@ void test_recursion()
    TEST_REGEX_SEARCH("< (?: (?(R) \\d++  | [^<>]*+) | (?R)) * >", perl|mod_x, "<abc<>", match_default, make_array(4, 6, -2, -2));
    TEST_REGEX_SEARCH("< (?: (?(R) \\d++  | [^<>]*+) | (?R)) * >", perl|mod_x, "<abc", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("((abc (?(R) (?(R1)1) (?(R2)2) X  |  (?1)  (?2)   (?R) ))) ", perl|mod_x, "abcabc1Xabc2XabcXabcabc", match_default, make_array(0, 17, 0, 17, 0, 17, -2, -2));
+
+   // Recursion to named sub-expressions:
+   //TEST_REGEX_SEARCH("^\\W*(?:(?<one>(?<two>.)\\W*(?&one)\\W*\\k<two>|)|(?<three>(?<four>.)\\W*(?&three)\\W*\\k'four'|\\W*.\\W*))\\W*$", perl|mod_x|icase, "Satan, oscillate my metallic sonatas!", match_default, make_array(0, 37, -1, -1, -1, -1, 0, 36, 0, 1, -2, -2));
+   TEST_REGEX_SEARCH("(?'abc'a|b)(?<doe>d|e)(?&abc){2}", perl|mod_x, "bdaa", match_default, make_array(0, 4, 0, 1, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("(?'abc'a|b)(?<doe>d|e)(?&abc){2}", perl|mod_x, "bdab", match_default, make_array(0, 4, 0, 1, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("(?'abc'a|b)(?<doe>d|e)(?&abc){2}", perl|mod_x, "bddd", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("(?&abc)X(?<abc>P)", perl|mod_x, "abcPXP123", match_default, make_array(3, 6, 5, 6, -2, -2));
+   TEST_REGEX_SEARCH("(?:a(?&abc)b)*(?<abc>x)", perl|mod_x, "123axbaxbaxbx456", match_default, make_array(3, 13, 12, 13 , -2, -2));
+   TEST_REGEX_SEARCH("(?:a(?&abc)b){1,5}(?<abc>x)", perl|mod_x, "123axbaxbaxbx456", match_default, make_array(3, 13, 12, 13 , -2, -2));
+   TEST_REGEX_SEARCH("(?:a(?&abc)b){2,5}(?<abc>x)", perl|mod_x, "123axbaxbaxbx456", match_default, make_array(3, 13, 12, 13 , -2, -2));
+   TEST_REGEX_SEARCH("(?:a(?&abc)b){2,}(?<abc>x)", perl|mod_x, "123axbaxbaxbx456", match_default, make_array(3, 13, 12, 13 , -2, -2));
+   TEST_INVALID_REGEX("(?<a>)(?&)", perl|mod_x);
+   TEST_INVALID_REGEX("(?<abc>)(?&a)", perl|mod_x);
+   TEST_INVALID_REGEX("(?<a>)(?&aaaaaaaaaaaaaaaaaaaaaaa)", perl|mod_x);
+   TEST_INVALID_REGEX("(?&N)[]a(?<N>)](?<M>abc)", perl|mod_x);
+   TEST_INVALID_REGEX("(?&N)[]a(?<N>)](abc)", perl|mod_x);
+   TEST_INVALID_REGEX("(?&N)[]a(?<N>)](abc)", perl|mod_x);
+   TEST_REGEX_SEARCH("^X(?&N)(a)(?|(b)|(q))(c)(d)(?<N>Y)", perl|mod_x, "XYabcdY", match_default, make_array(0, 7, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, -2, -2));
+   // And again with (?P> :
+   //TEST_REGEX_SEARCH("^\\W*(?:(?<one>(?<two>.)\\W*(?&one)\\W*\\k<two>|)|(?<three>(?<four>.)\\W*(?&three)\\W*\\k'four'|\\W*.\\W*))\\W*$", perl|mod_x|icase, "Satan, oscillate my metallic sonatas!", match_default, make_array(0, 37, -1, -1, -1, -1, 0, 36, 0, 1, -2, -2));
+   TEST_REGEX_SEARCH("(?'abc'a|b)(?<doe>d|e)(?P>abc){2}", perl|mod_x, "bdaa", match_default, make_array(0, 4, 0, 1, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("(?'abc'a|b)(?<doe>d|e)(?P>abc){2}", perl|mod_x, "bdab", match_default, make_array(0, 4, 0, 1, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("(?'abc'a|b)(?<doe>d|e)(?P>abc){2}", perl|mod_x, "bddd", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("(?P>abc)X(?<abc>P)", perl|mod_x, "abcPXP123", match_default, make_array(3, 6, 5, 6, -2, -2));
+   TEST_REGEX_SEARCH("(?:a(?P>abc)b)*(?<abc>x)", perl|mod_x, "123axbaxbaxbx456", match_default, make_array(3, 13, 12, 13 , -2, -2));
+   TEST_REGEX_SEARCH("(?:a(?P>abc)b){1,5}(?<abc>x)", perl|mod_x, "123axbaxbaxbx456", match_default, make_array(3, 13, 12, 13 , -2, -2));
+   TEST_REGEX_SEARCH("(?:a(?P>abc)b){2,5}(?<abc>x)", perl|mod_x, "123axbaxbaxbx456", match_default, make_array(3, 13, 12, 13 , -2, -2));
+   TEST_REGEX_SEARCH("(?:a(?P>abc)b){2,}(?<abc>x)", perl|mod_x, "123axbaxbaxbx456", match_default, make_array(3, 13, 12, 13 , -2, -2));
+   TEST_INVALID_REGEX("(?<a>)(?P>)", perl|mod_x);
+   TEST_INVALID_REGEX("(?<abc>)(?P>a)", perl|mod_x);
+   TEST_INVALID_REGEX("(?<a>)(?P>aaaaaaaaaaaaaaaaaaaaaaa)", perl|mod_x);
+   TEST_INVALID_REGEX("(?P>N)[]a(?<N>)](?<M>abc)", perl|mod_x);
+   TEST_INVALID_REGEX("(?P>N)[]a(?<N>)](abc)", perl|mod_x);
+   TEST_INVALID_REGEX("(?P>N)[]a(?<N>)](abc)", perl|mod_x);
+   TEST_REGEX_SEARCH("^X(?P>N)(a)(?|(b)|(q))(c)(d)(?<N>Y)", perl|mod_x, "XYabcdY", match_default, make_array(0, 7, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, -2, -2));
+   // Now check (?(R&NAME) :
+   TEST_REGEX_SEARCH("(?<A> (?'B' abc (?(R) (?(R&A)1) (?(R&B)2) X  |  (?1)  (?2)   (?R) ))) ", perl|mod_x, "abcabc1Xabc2XabcXabcabc", match_default, make_array(0, 17, 0, 17, 0, 17, -2, -2));
+   TEST_INVALID_REGEX("(?<A> (?'B' abc (?(R) (?(R&1)1) (?(R&B)2) X  |  (?1)  (?2)   (?R) ))) ", perl|mod_x);
+   TEST_REGEX_SEARCH("(?<1> (?'B' abc (?(R) (?(R&1)1) (?(R&B)2) X  |  (?1)  (?2)   (?R) ))) ", perl|mod_x, "abcabc1Xabc2XabcXabcabc", match_default, make_array(0, 17, 0, 17, 0, 17, -2, -2));
+
+   // Now check for named conditionals:
+   TEST_REGEX_SEARCH("^(?<ab>a)? (?(<ab>)b|c) (?('ab')d|e)", perl|mod_x, "abd", match_default, make_array(0, 3, 0, 1, -2, -2));
+   TEST_REGEX_SEARCH("^(?<ab>a)? (?(<ab>)b|c) (?('ab')d|e)", perl|mod_x, "ce", match_default, make_array(0, 2, -1, -1, -2, -2));
+
+   // Recursions in combination with (DEFINE):
+   TEST_REGEX_SEARCH("^(?(DEFINE) (?<A> a) (?<B> b) )  (?&A) (?&B) ", perl|mod_x, "abcd", match_default, make_array(0, 2, -1, -1, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("(?<NAME>(?&NAME_PAT))\\s+(?<ADDR>(?&ADDRESS_PAT))  (?(DEFINE)  (?<NAME_PAT>[a-z]+)  (?<ADDRESS_PAT>\\d+))", perl|mod_x, "metcalfe 33", match_default, make_array(0, 11, 0, 8, 9, 11, -1, -1, -1, -1, -2, -2));
+   TEST_INVALID_REGEX("^(?(DEFINE) abc | xyz ) ", perl|mod_x);
+   //TEST_INVALID_REGEX("(?(DEFINE) abc){3} xyz", perl|mod_x);
+   TEST_REGEX_SEARCH("(?(DEFINE)(?<byte>2[0-4]\\d|25[0-5]|1\\d\\d|[1-9]?\\d))\\b(?&byte)(\\.(?&byte)){3}", perl|mod_x, "1.2.3.4", match_default, make_array(0, 7, -1, -1, 5, 7, -2, -2));
+   TEST_REGEX_SEARCH("(?(DEFINE)(?<byte>2[0-4]\\d|25[0-5]|1\\d\\d|[1-9]?\\d))\\b(?&byte)(\\.(?&byte)){3}", perl|mod_x, "131.111.10.206", match_default, make_array(0, 14, -1, -1, 10, 14, -2, -2));
+   TEST_REGEX_SEARCH("(?(DEFINE)(?<byte>2[0-4]\\d|25[0-5]|1\\d\\d|[1-9]?\\d))\\b(?&byte)(\\.(?&byte)){3}", perl|mod_x, "10.0.0.0", match_default, make_array(0, 8, -1, -1, 6, 8, -2, -2));
+   TEST_REGEX_SEARCH("(?(DEFINE)(?<byte>2[0-4]\\d|25[0-5]|1\\d\\d|[1-9]?\\d))\\b(?&byte)(\\.(?&byte)){3}", perl|mod_x, "10.6", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("(?(DEFINE)(?<byte>2[0-4]\\d|25[0-5]|1\\d\\d|[1-9]?\\d))\\b(?&byte)(\\.(?&byte)){3}", perl|mod_x, "455.3.4.5", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("\\b(?&byte)(\\.(?&byte)){3}(?(DEFINE)(?<byte>2[0-4]\\d|25[0-5]|1\\d\\d|[1-9]?\\d))", perl|mod_x, "1.2.3.4", match_default, make_array(0, 7, 5, 7, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("\\b(?&byte)(\\.(?&byte)){3}(?(DEFINE)(?<byte>2[0-4]\\d|25[0-5]|1\\d\\d|[1-9]?\\d))", perl|mod_x, "131.111.10.206", match_default, make_array(0, 14, 10, 14, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("\\b(?&byte)(\\.(?&byte)){3}(?(DEFINE)(?<byte>2[0-4]\\d|25[0-5]|1\\d\\d|[1-9]?\\d))", perl|mod_x, "10.0.0.0", match_default, make_array(0, 8, 6, 8, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("\\b(?&byte)(\\.(?&byte)){3}(?(DEFINE)(?<byte>2[0-4]\\d|25[0-5]|1\\d\\d|[1-9]?\\d))", perl|mod_x, "10.6", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("\\b(?&byte)(\\.(?&byte)){3}(?(DEFINE)(?<byte>2[0-4]\\d|25[0-5]|1\\d\\d|[1-9]?\\d))", perl|mod_x, "455.3.4.5", match_default, make_array(-2, -2));
 }
 

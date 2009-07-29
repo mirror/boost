@@ -545,6 +545,8 @@ executes /no-pattern/.
 executes /no-pattern/.
 * [^(?(R['N])yes-pattern|no-pattern)]  Executes /yes-pattern/ if we are executing inside a recursion to sub-expression /N/, otherwise
 executes /no-pattern/.
+* [^(?(DEFINE)never-exectuted-pattern)]  Defines a block of code that is never executed and matches no characters:
+this is usually used to define one or more named sub-expressions which are refered to from elsewhere in the pattern.
 
 [h4 Operator precedence]
 

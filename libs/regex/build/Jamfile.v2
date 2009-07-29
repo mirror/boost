@@ -79,6 +79,10 @@ rule check-icu-config ( )
             {
                gICU_IN_LIB = icuin ;
             }
+            else if [ GLOB $(dir)/lib : icui18n.* ]
+            {
+               gICU_IN_LIB = icui18n ;
+            }
             else if [ GLOB $(dir)/lib64 : libicui18n.* ]
             {
                gICU_IN_LIB = icui18n ;

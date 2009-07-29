@@ -762,29 +762,57 @@ void basic_regex_creator<charT, traits>::fixup_recursions(re_syntax_base* state)
    {
       switch(state->type)
       {
+      case syntax_element_assert_backref:
+         {
+            // just check that the index is valid:
+            int id = static_cast<const re_brace*>(state)->index;
+            if(id < 0)
+            {
+               id = -id-1;
+               if(id >= 10000)
+               {
+                  id = m_pdata->get_id(id);
+                  if(id <= 0)
+                  {
+                     // check of sub-expression that doesn't exist:
+                     if(0 == this->m_pdata->m_status) // update the error code if not already set
+                        this->m_pdata->m_status = boost::regex_constants::error_bad_pattern;
+                     //
+                     // clear the expression, we should be empty:
+                     //
+                     this->m_pdata->m_expression = 0;
+                     this->m_pdata->m_expression_len = 0;
+                     //
+                     // and throw if required:
+                     //
+                     if(0 == (this->flags() & regex_constants::no_except))
+                     {
+                        std::string message = this->m_pdata->m_ptraits->error_string(boost::regex_constants::error_bad_pattern);
+                        boost::regex_error e(message, boost::regex_constants::error_bad_pattern, 0);
+                        e.raise();
+                     }
+                  }
+               }
+            }
+         }
+         break;
       case syntax_element_recurse:
          {
             bool ok = false;
             re_syntax_base* p = base;
-            /*
-            if(static_cast<re_jump*>(state)->alt.i == 0)
+            int id = static_cast<re_jump*>(state)->alt.i;
+            if(id > 10000)
+               id = m_pdata->get_id(id);
+            while(p)
             {
-               ok = true;
-               static_cast<re_jump*>(state)->alt.p = p;
-            }
-            else
-            {*/
-               while(p)
+               if((p->type == syntax_element_startmark) && (static_cast<re_brace*>(p)->index == id))
                {
-                  if((p->type == syntax_element_startmark) && (static_cast<re_brace*>(p)->index == static_cast<re_jump*>(state)->alt.i))
-                  {
-                     static_cast<re_jump*>(state)->alt.p = p;
-                     ok = true;
-                     break;
-                  }
-                  p = p->next.p;
+                  static_cast<re_jump*>(state)->alt.p = p;
+                  ok = true;
+                  break;
                }
-            //}
+               p = p->next.p;
+            }
             if(!ok)
             {
                // recursion to sub-expression that doesn't exist:

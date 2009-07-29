@@ -714,8 +714,16 @@ inline bool perl_matcher<BidiIterator, Allocator, traits>::match_assert_backref(
    // return true if marked sub-expression N has been matched:
    int index = static_cast<const re_brace*>(pstate)->index;
    bool result;
-   if(index > 0)
+   if(index == 9999)
    {
+      // Magic value for a (DEFINE) block:
+      return false;
+   }
+   else if(index > 0)
+   {
+      // Check if index is a hash value:
+      if(index >= 10000)
+         index = re.get_data().get_id(index);
       // Have we matched subexpression "index"?
       result = (*m_presult)[index].matched;
       pstate = pstate->next.p;
@@ -724,7 +732,10 @@ inline bool perl_matcher<BidiIterator, Allocator, traits>::match_assert_backref(
    {
       // Have we recursed into subexpression "index"?
       // If index == 0 then check for any recursion at all, otherwise for recursion to -index-1.
-      result = recursion_stack_position && ((recursion_stack[recursion_stack_position-1].id == -index-1) || (index == 0));
+      int id = -index-1;
+      if(id >= 10000)
+         id = re.get_data().get_id(id);
+      result = recursion_stack_position && ((recursion_stack[recursion_stack_position-1].id == id) || (index == 0));
       pstate = pstate->next.p;
    }
    return result;

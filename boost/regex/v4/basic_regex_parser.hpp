@@ -1961,10 +1961,81 @@ insert_recursion:
       int v = this->m_traits.toi(m_position, m_end, 10);
       if(*m_position == charT('R'))
       {
-         ++m_position;
-         v = -this->m_traits.toi(m_position, m_end, 10);
+         if(++m_position == m_end)
+         {
+            fail(regex_constants::error_badrepeat, m_position - m_base);
+            return false;
+         }
+         if(*m_position == charT('&'))
+         {
+            const charT* base = ++m_position;
+            while((m_position != m_end) && (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark))
+               ++m_position;
+            if(m_position == m_end)
+            {
+               fail(regex_constants::error_badrepeat, m_position - m_base);
+               return false;
+            }
+            v = -static_cast<int>(hash_value_from_capture_name(base, m_position));
+         }
+         else
+         {
+            v = -this->m_traits.toi(m_position, m_end, 10);
+         }
          re_brace* br = static_cast<re_brace*>(this->append_state(syntax_element_assert_backref, sizeof(re_brace)));
          br->index = v < 0 ? (v - 1) : 0;
+         if(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark)
+         {
+            fail(regex_constants::error_badrepeat, m_position - m_base);
+            return false;
+         }
+         if(++m_position == m_end)
+         {
+            fail(regex_constants::error_badrepeat, m_position - m_base);
+            return false;
+         }
+      }
+      else if((*m_position == charT('\'')) || (*m_position == charT('<')))
+      {
+         const charT* base = ++m_position;
+         while((m_position != m_end) && (*m_position != charT('>')) && (*m_position != charT('\'')))
+            ++m_position;
+         if(m_position == m_end)
+         {
+            fail(regex_constants::error_badrepeat, m_position - m_base);
+            return false;
+         }
+         v = static_cast<int>(hash_value_from_capture_name(base, m_position));
+         re_brace* br = static_cast<re_brace*>(this->append_state(syntax_element_assert_backref, sizeof(re_brace)));
+         br->index = v;
+         if((*m_position != charT('>')) && (*m_position != charT('\'')) || (++m_position == m_end))
+         {
+            fail(regex_constants::error_badrepeat, m_position - m_base);
+            return false;
+         }
+         if(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark)
+         {
+            fail(regex_constants::error_badrepeat, m_position - m_base);
+            return false;
+         }
+         if(++m_position == m_end)
+         {
+            fail(regex_constants::error_badrepeat, m_position - m_base);
+            return false;
+         }
+      }
+      else if(*m_position == charT('D'))
+      {
+         const char* def = "DEFINE";
+         while(*def && (m_position != m_end) && (*m_position == charT(*def)))
+            ++m_position, ++def;
+         if((m_position == m_end) || *def)
+         {
+            fail(regex_constants::error_badrepeat, m_position - m_base);
+            return false;
+         }
+         re_brace* br = static_cast<re_brace*>(this->append_state(syntax_element_assert_backref, sizeof(re_brace)));
+         br->index = 9999; // special magic value!
          if(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark)
          {
             fail(regex_constants::error_badrepeat, m_position - m_base);
@@ -2081,6 +2152,43 @@ named_capture_jump:
          }
          goto insert_recursion;
       }
+      if(*m_position == charT('&'))
+      {
+         ++m_position;
+         const charT* base = m_position;
+         while((m_position != m_end) && (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark))
+            ++m_position;
+         if(m_position == m_end)
+         {
+            fail(regex_constants::error_backref, m_position - m_base);
+            return false;
+         }
+         v = static_cast<int>(hash_value_from_capture_name(base, m_position));
+         goto insert_recursion;
+      }
+      if(*m_position == charT('P'))
+      {
+         ++m_position;
+         if(m_position == m_end)
+         {
+            fail(regex_constants::error_backref, m_position - m_base);
+            return false;
+         }
+         if(*m_position == charT('>'))
+         {
+            ++m_position;
+            const charT* base = m_position;
+            while((m_position != m_end) && (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark))
+               ++m_position;
+            if(m_position == m_end)
+            {
+               fail(regex_constants::error_backref, m_position - m_base);
+               return false;
+            }
+            v = static_cast<int>(hash_value_from_capture_name(base, m_position));
+            goto insert_recursion;
+         }
+      }
       //
       // lets assume that we have a (?imsx) group and try and parse it:
       //
@@ -2183,8 +2291,19 @@ option_group_jump:
       }
       else if(this->getaddress(static_cast<re_alt*>(b)->alt.i, b)->type == syntax_element_alt)
       {
+         // Can't have seen more than one alternative:
          fail(regex_constants::error_bad_pattern, m_position - m_base);
          return false;
+      }
+      else
+      {
+         // We must *not* have seen an alternative inside a (DEFINE) block:
+         b = this->getaddress(b->next.i, b);
+         if((b->type == syntax_element_assert_backref) && (static_cast<re_brace*>(b)->index == 9999))
+         {
+            fail(regex_constants::error_bad_pattern, m_position - m_base);
+            return false;
+         }
       }
       // check for invalid repetition of next state:
       b = this->getaddress(expected_alt_point);

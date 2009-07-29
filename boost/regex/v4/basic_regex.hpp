@@ -20,6 +20,7 @@
 #define BOOST_REGEX_V4_BASIC_REGEX_HPP
 
 #include <boost/type_traits/is_same.hpp>
+#include <boost/functional/hash.hpp>
 
 #ifdef BOOST_MSVC
 #pragma warning(push)
@@ -68,12 +69,22 @@ template <class charT>
 class named_subexpressions_base
 {
 public:
-   virtual int get_id(const charT* i, const charT* j) = 0;
+   virtual int get_id(const charT* i, const charT* j)const = 0;
+   virtual int get_id(std::size_t hash)const = 0;
 #ifdef __GNUC__
    // warning supression:
    virtual ~named_subexpressions_base(){}
 #endif
 };
+
+template <class Iterator>
+inline std::size_t hash_value_from_capture_name(Iterator i, Iterator j)
+{
+   std::size_t r = boost::hash_range(i, j);
+   r %= ((std::numeric_limits<int>::max)() - 10001);
+   r += 10000;
+   return r;
+}
 
 template <class charT>
 class named_subexpressions : public named_subexpressions_base<charT>
@@ -81,21 +92,30 @@ class named_subexpressions : public named_subexpressions_base<charT>
    struct name
    {
       name(const charT* i, const charT* j, int idx)
-         : n(i, j), index(idx) {}
-      std::vector<charT> n;
+         : /*n(i, j), */ index(idx) 
+      { 
+         hash = hash_value_from_capture_name(i, j); 
+      }
+      name(std::size_t h, int idx)
+         : index(idx), hash(h)
+      { 
+      }
+      //std::vector<charT> n;
       int index;
+      std::size_t hash;
       bool operator < (const name& other)const
       {
-         return std::lexicographical_compare(n.begin(), n.end(), other.n.begin(), other.n.end());
+         return hash < other.hash; //std::lexicographical_compare(n.begin(), n.end(), other.n.begin(), other.n.end());
       }
       bool operator == (const name& other)const
       {
-         return n == other.n;
+         return hash == other.hash; //n == other.n;
       }
       void swap(name& other)
       {
-         n.swap(other.n);
+         //n.swap(other.n);
          std::swap(index, other.index);
+         std::swap(hash, other.hash);
       }
    };
 public:
@@ -105,9 +125,19 @@ public:
       m_sub_names.push_back(name(i, j, index));
       bubble_down_one(m_sub_names.begin(), m_sub_names.end());
    }
-   int get_id(const charT* i, const charT* j)
+   int get_id(const charT* i, const charT* j)const
    {
       name t(i, j, 0);
+      typename std::vector<name>::const_iterator pos = std::lower_bound(m_sub_names.begin(), m_sub_names.end(), t);
+      if((pos != m_sub_names.end()) && (*pos == t))
+      {
+         return pos->index;
+      }
+      return -1;
+   }
+   int get_id(std::size_t h)const
+   {
+      name t(h, 0);
       typename std::vector<name>::const_iterator pos = std::lower_bound(m_sub_names.begin(), m_sub_names.end(), t);
       if((pos != m_sub_names.end()) && (*pos == t))
       {
@@ -126,7 +156,7 @@ class named_subexpressions_converter : public named_subexpressions_base<charT>
 public:
    named_subexpressions_converter(boost::shared_ptr<named_subexpressions<Other> > s)
       : m_converter(s) {}
-   virtual int get_id(const charT* i, const charT* j)
+   int get_id(const charT* i, const charT* j)const
    {
       if(i == j)
          return -1;
@@ -137,6 +167,10 @@ public:
          ++i;
       }
       return m_converter->get_id(&v[0], &v[0] + v.size());
+   }
+   int get_id(std::size_t h)const
+   {
+      return m_converter->get_id(h);
    }
 };
 
