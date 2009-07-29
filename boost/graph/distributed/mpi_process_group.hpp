@@ -804,6 +804,6 @@ swap(boost::graph::distributed::mpi_process_group::outgoing_messages& x,
 BOOST_CLASS_IMPLEMENTATION(boost::graph::distributed::mpi_process_group::outgoing_messages,object_serializable)
 BOOST_CLASS_TRACKING(boost::graph::distributed::mpi_process_group::outgoing_messages,track_never)
 
-#include <boost/graph/distributed/detail/mpi_process_group.tpp>
+#include <boost/graph/distributed/detail/mpi_process_group.ipp>
 
 #endif // BOOST_PARALLEL_MPI_MPI_PROCESS_GROUP_HPP
