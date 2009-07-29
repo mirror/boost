@@ -1067,7 +1067,11 @@ public:
              Linear (in the size of <code>cb</code>).
     */
     circular_buffer(const circular_buffer<T, Alloc>& cb)
-    : m_size(cb.size()), m_alloc(cb.get_allocator()) {
+    :
+#if BOOST_CB_ENABLE_DEBUG
+    debug_iterator_registry(),
+#endif
+    m_size(cb.size()), m_alloc(cb.get_allocator()) {
         initialize_buffer(cb.capacity());
         m_first = m_buff;
         BOOST_TRY {
