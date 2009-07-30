@@ -22,7 +22,7 @@ rule check-icu-config ( )
 
    if ! $(gICU_CONFIG_CHECKED)
    {
-      if $(HAVE_ICU)
+      if $(HAVE_ICU) && ! $(ICU_PATH)
       {
          gHAS_ICU = true ;
          gICU_CORE_LIB = icuuc ;
