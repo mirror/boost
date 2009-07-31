@@ -48,6 +48,9 @@ BOOST_SERIALIZATION_DECL(bool)
 extended_type_info_typeid_0::is_less_than(
     const boost::serialization::extended_type_info & rhs
 ) const {
+    // shortcut for common case
+    if(this == & rhs)
+        return false;
     return static_cast<bool>(m_ti->before(
         *(static_cast<const extended_type_info_typeid_0 &>(rhs).m_ti)
     ));
@@ -57,6 +60,9 @@ BOOST_SERIALIZATION_DECL(bool)
 extended_type_info_typeid_0::is_equal(
     const boost::serialization::extended_type_info & rhs
 ) const {
+    // shortcut for common case
+    if(this == & rhs)
+        return true;
     return static_cast<bool>(
         * m_ti 
         == *(static_cast<const extended_type_info_typeid_0 &>(rhs).m_ti)
@@ -105,13 +111,6 @@ extended_type_info_typeid_0::type_unregister()
 class extended_type_info_typeid_arg : 
     public extended_type_info_typeid_0
 {
-private:
-    virtual bool & 
-    get_is_destroyed() const {
-        static bool dummy = false;
-        assert(false);
-        return dummy;
-    }
 public:
     extended_type_info_typeid_arg(const std::type_info & ti){ 
         // note absense of self register and key as this is used only as

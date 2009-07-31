@@ -43,6 +43,9 @@ struct key_compare
         const extended_type_info * lhs, 
         const extended_type_info * rhs
     ) const {
+        // performance shortcut
+        if(lhs == rhs)
+            return false;
         const char * l = lhs->get_key();
         assert(NULL != l);
         const char * r = rhs->get_key();
@@ -72,13 +75,6 @@ class extended_type_info_arg : public extended_type_info
         assert(false);
         return false;
     };
-    virtual bool & 
-    get_is_destroyed() const {
-        static bool dummy = true;
-        assert(false);
-        return dummy;
-    }
-
 public:
     extended_type_info_arg(const char * key) :
         extended_type_info()
@@ -156,6 +152,9 @@ extended_type_info::~extended_type_info(){
 
 BOOST_SERIALIZATION_DECL(bool)  
 extended_type_info::operator<(const extended_type_info &rhs) const {
+    // short cut for a common cases
+    if(this == & rhs)
+        return false;
     if(m_type_info_key == rhs.m_type_info_key){
         return is_less_than(rhs);
     }
