@@ -16,6 +16,7 @@
 #define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/binary_oarchive_impl.hpp>
 #include <boost/archive/binary_iarchive_impl.hpp>
+#include <boost/archive/detail/register_archive.hpp>
 
 // include template definitions for base classes used.  Otherwise
 // you'll get link failure with undefined symbols
@@ -23,9 +24,6 @@
 #include <boost/archive/impl/basic_binary_iprimitive.ipp>
 #include <boost/archive/impl/basic_binary_oarchive.ipp>
 #include <boost/archive/impl/basic_binary_iarchive.ipp>
-
-#include <boost/archive/impl/archive_pointer_iserializer.ipp>
-#include <boost/archive/impl/archive_pointer_oserializer.ipp>
 
 using namespace boost::archive;
 
@@ -94,6 +92,9 @@ public:
     {}
 };
 
+// required by export
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(fast_binary_oarchive)
+
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // "Fast" input binary archive.  This is a variation of the native binary 
 class fast_binary_iarchive :
@@ -156,6 +157,9 @@ public:
         base_t(bsb, flags)
     {}
 };
+
+// required by export
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(fast_binary_iarchive)
 
 int main( int argc, char* argv[] )
 {
