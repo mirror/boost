@@ -94,7 +94,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="Library"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(ConfigurationName)"
@@ -138,9 +137,6 @@
 		</File>
 		<File
 			RelativePath="..\test\polymorphic_derived1.hpp">
-		</File>
-		<File
-			RelativePath="..\test\polymorphic_derived2.cpp">
 		</File>
 		<File
 			RelativePath="..\test\polymorphic_derived2.hpp">

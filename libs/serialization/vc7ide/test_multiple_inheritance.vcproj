@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="test_dll_simple"
+	Name="test_multiple_inheritance"
 	ProjectGUID="{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
-	RootNamespace="test_dll_simple"
+	RootNamespace="test_multiple_inheritance"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -22,7 +22,7 @@
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_LIB_DIAGNOSTIC=1;BOOST_ALL_DYN_LINK=1"
-				SmallerTypeCheck="FALSE"
+				SmallerTypeCheck="TRUE"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
 				EnableFunctionLevelLinking="FALSE"
@@ -38,7 +38,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="dll_a.lib"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(ConfigurationName)"
@@ -77,7 +76,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_LIB_DIAGNOSTIC=1"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_LIB_DIAGNOSTIC=1;BOOST_ARCHIVE_LIST=xml_warchive.hpp"
 				SmallerTypeCheck="TRUE"
 				RuntimeLibrary="1"
 				BufferSecurityCheck="TRUE"
@@ -124,19 +123,10 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<ProjectReference
-			ReferencedProjectIdentifier="{CED1BD64-563F-485D-AE69-668797013AA0}"
-			Name="dll_a"/>
 	</References>
 	<Files>
 		<File
-			RelativePath="..\test\A.hpp">
-		</File>
-		<File
-			RelativePath="..\test\B.hpp">
-		</File>
-		<File
-			RelativePath="..\test\test_dll_simple.cpp">
+			RelativePath="..\test\test_multiple_inheritance.cpp">
 		</File>
 	</Files>
 	<Globals>
