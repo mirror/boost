@@ -159,10 +159,7 @@ public:
     ) = 0;
     virtual const detail::basic_pointer_iserializer * load_pointer(
         void * & t,
-        const detail::basic_pointer_iserializer * bpis_ptr,
-        const detail::basic_pointer_iserializer * (*finder)(
-            const boost::serialization::extended_type_info & type
-        )
+        const detail::basic_pointer_iserializer * bpis_ptr
     ) = 0;
 };
 

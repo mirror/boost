@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // shared_ptr_helper.hpp: serialization for boost shared pointer
 
-// (C) Copyright 2004 Robert Ramey and Martin Ecker
+// (C) Copyright 2004-2009 Robert Ramey, Martin Ecker and Takatoshi Kondo
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -18,10 +18,12 @@
 
 #include <map>
 #include <list>
+#include <utility>
 #include <cstddef> // NULL
 
 #include <boost/config.hpp>
 #include <boost/shared_ptr.hpp>
+
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/shared_ptr_132.hpp>
 #include <boost/serialization/throw_exception.hpp>
@@ -54,7 +56,10 @@ struct null_deleter {
 // a common class for holding various types of shared pointers
 
 class shared_ptr_helper {
-    typedef std::map<const void *, shared_ptr<void> > collection_type;
+    typedef std::map<
+        const void *,
+        boost::shared_ptr<const void>
+    > collection_type;
     typedef collection_type::const_iterator iterator_type;
     // list of shared_pointers create accessable by raw pointer. This
     // is used to "match up" shared pointers loaded at different
@@ -74,6 +79,7 @@ public:
     );
 #endif
 
+//  #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
     // list of loaded pointers.  This is used to be sure that the pointers
     // stay around long enough to be "matched" with other pointers loaded
     // by the same archive.  These are created with a "null_deleter" so that
@@ -83,10 +89,17 @@ public:
     // by a change in load_construct_data below.  It makes this file suitable
     // only for loading pointers into a 1.33 or later boost system.
     std::list<boost_132::shared_ptr<void> > * m_pointers_132;
+//  #endif
 
-    // return a void pointer to the most derived type
+public:
     template<class T>
-    const void * object_identifier(T * t) const {
+    void reset(shared_ptr<T> & s, T * t){
+        if(NULL == t){
+            s.reset();
+            return;
+        }
+        // get pointer to the most derived object.  This is effectively
+        // the object identifer
         const boost::serialization::extended_type_info * true_type 
             = boost::serialization::type_info_implementation<T>::type
                 ::get_const_instance().get_derived_extended_type_info(*t);
@@ -94,59 +107,61 @@ public:
         // is either registered or exported.
         if(NULL == true_type)
             boost::serialization::throw_exception(
-                boost::archive::archive_exception(
-                    boost::archive::archive_exception::unregistered_class
-                )
+                archive_exception(archive_exception::unregistered_class)
             );
         const boost::serialization::extended_type_info * this_type
             = & boost::serialization::type_info_implementation<T>::type
                     ::get_const_instance();
-        const void * vp = void_downcast(
+
+        // get void pointer to the most derived type
+        // this uniquely identifies the object referred to
+        const void * od = void_downcast(
             *true_type, 
             *this_type, 
             static_cast<const void *>(t)
         );
-        return vp;
-    }
-public:
-    template<class T>
-    void reset(shared_ptr<T> & s, T * r){
-        if(NULL == r){
-            s.reset();
-            return;
-        }
-        // get pointer to the most derived object.  This is effectively
-        // the object identifer
-        const void * od = object_identifier(r);
 
+        // make tracking array if necessary
         if(NULL == m_pointers)
             m_pointers = new collection_type;
 
         iterator_type it = m_pointers->find(od);
 
+        // create a new shared pointer to a void
         if(it == m_pointers->end()){
-            s.reset(r);
-            m_pointers->insert(collection_type::value_type(od,s));
+            s.reset(t);
+            shared_ptr<const void> sp(s, od);
+            m_pointers->insert(collection_type::value_type(od, sp));
+            return;
         }
-        else{
-            s = static_pointer_cast<T>((*it).second);
-        }
+        t = static_cast<T *>(const_cast<void *>(void_upcast(
+            *true_type, 
+            *this_type, 
+            ((*it).second.get())
+        )));
+        s = shared_ptr<T>((*it).second, t); // aliasing 
     }
+//  #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
     void append(const boost_132::shared_ptr<void> & t){
         if(NULL == m_pointers_132)
             m_pointers_132 = new std::list<boost_132::shared_ptr<void> >;
         m_pointers_132->push_back(t);
     }
+//  #endif
 public:
     shared_ptr_helper() : 
-        m_pointers(NULL), 
-        m_pointers_132(NULL)
+        m_pointers(NULL)
+        #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
+            , m_pointers_132(NULL)
+        #endif
     {}
     ~shared_ptr_helper(){
         if(NULL != m_pointers)
             delete m_pointers;
+        #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
         if(NULL != m_pointers_132)
             delete m_pointers_132;
+        #endif
     }
 };
 

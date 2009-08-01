@@ -27,6 +27,7 @@
 #include <boost/archive/detail/auto_link_warchive.hpp>
 #include <boost/archive/basic_text_iprimitive.hpp>
 #include <boost/archive/basic_xml_iarchive.hpp>
+#include <boost/archive/detail/register_archive.hpp>
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
