@@ -13,9 +13,10 @@
 	<Configurations>
 		<Configuration
 			Name="Debug runtime-dynamic|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/&quot;"
-			IntermediateDirectory="$(OutDir)"
-			ConfigurationType="4"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
+			UseOfMFC="0"
 			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -23,7 +24,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				PreprocessorDefinitions="WIN32;_DEBUG;BOOST_LIB_DIAGNOSTIC=1;BOOST_ALL_DYN_LINK=1"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
@@ -37,13 +38,14 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="1"
+				DebugInformationFormat="3"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/boost_serialization-vc71-mt-gd-1_39.lib"/>
+				Name="VCLinkerTool"
+				OutputFile="$(ConfigurationName)\boost_serialization-vc71-mt-gd-1_39.dll"
+				GenerateDebugInformation="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -59,14 +61,16 @@
 			<Tool
 				Name="VCXMLDataGeneratorTool"/>
 			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
 				Name="VCManagedWrapperGeneratorTool"/>
 			<Tool
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release runtime-dynamic|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/release/threading-multi&quot;"
-			IntermediateDirectory="$(OutDir)"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="0">
 			<Tool
@@ -118,8 +122,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug runtime-static|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/link-static&quot;"
-			IntermediateDirectory="$(OutDir)"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="0">
 			<Tool
@@ -132,7 +136,7 @@
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
 				SmallerTypeCheck="FALSE"
-				RuntimeLibrary="5"
+				RuntimeLibrary="1"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
@@ -147,7 +151,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization-vc71-sgd-1_39.lib"/>
+				OutputFile="libboost_serialization-vc71-mt-sgd-1_39.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -169,8 +173,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug runtime-static threading-multi|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/link-static&quot;"
-			IntermediateDirectory="$(OutDir)"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="0">
 			<Tool
@@ -183,7 +187,7 @@
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
 				SmallerTypeCheck="FALSE"
-				RuntimeLibrary="5"
+				RuntimeLibrary="3"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
@@ -220,8 +224,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release runtime-static|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/release/link-static&quot;"
-			IntermediateDirectory="$(OutDir)"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="0">
 			<Tool
@@ -273,8 +277,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release runtime-static threading-multi|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/release/threading-multi/link-static&quot;"
-			IntermediateDirectory="$(OutDir)"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="0">
 			<Tool
@@ -436,6 +440,9 @@
 				RelativePath="..\..\..\boost\serialization\binary_object.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\bitset.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\collection_traits.hpp">
 			</File>
 			<File
@@ -577,10 +584,7 @@
 			Name="Archive Detail"
 			Filter="">
 			<File
-				RelativePath="..\..\..\boost\archive\detail\archive_pointer_iserializer.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\detail\archive_pointer_oserializer.hpp">
+				RelativePath="..\..\..\boost\archive\detail\archive_serializer_map.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\auto_link_archive.hpp">
@@ -711,10 +715,7 @@
 			Name="Templates"
 			Filter="">
 			<File
-				RelativePath="..\..\..\boost\archive\impl\archive_pointer_iserializer.ipp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\impl\archive_pointer_oserializer.ipp">
+				RelativePath="..\..\..\boost\archive\impl\archive_serializer_map.ipp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\impl\basic_binary_iarchive.ipp">

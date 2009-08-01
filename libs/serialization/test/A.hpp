@@ -18,6 +18,7 @@
 
 #include <ostream> // for friend output operators
 #include <cstddef> // size_t
+#include <string>
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{
@@ -41,11 +42,19 @@ namespace std{
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/string.hpp>
 
-#ifndef DLL_DECL
-#define DLL_DECL
+#include <boost/preprocessor/facilities/empty.hpp>
+
+#include "test_decl.hpp"
+
+#if defined(A_IMPORT)
+    #define DLL_DECL IMPORT_DECL
+#elif defined(A_EXPORT)
+    #define DLL_DECL EXPORT_DECL
+#else
+    #define DLL_DECL(x)
 #endif
 
-class DLL_DECL A
+class DLL_DECL(BOOST_PP_EMPTY()) A
 {
 private:
     friend class boost::serialization::access;
@@ -56,7 +65,7 @@ private:
     // reason we can't make abstract.
     #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
         template<class Archive>
-        void A::serialize(
+        void serialize(
             Archive &ar,
             const unsigned int /* file_version */
         ){
@@ -98,12 +107,13 @@ private:
             ar & BOOST_SERIALIZATION_NVP(z);
             #endif
         }
+    #else
+        template<class Archive>
+        void serialize(
+            Archive &ar,
+            const unsigned int /* file_version */
+        );
     #endif
-    template<class Archive>
-    DLL_DECL void serialize(
-        Archive &ar,
-        const unsigned int /* file_version */
-    );
     bool b;
     #ifndef BOOST_NO_INT64_T
     boost::int64_t f;
@@ -142,5 +152,7 @@ public:
     operator std::size_t () const;
     friend std::ostream & operator<<(std::ostream & os, A const & a);
 };
+
+#undef DLL_DECL
 
 #endif // BOOST_SERIALIZATION_TEST_A_HPP

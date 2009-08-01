@@ -1,4 +1,4 @@
-﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -179,7 +179,7 @@ bool operator==(const extended_type_info & rhs) const;
 bool operator!=(const extended_type_info & rhs) const;
 </code></pre></h4></dt>
 <dd>
-These functions are used to compare two 
+These functions are used to compare 'wo 
 <a target="extended_type_info.hpp" href = "../../../boost/serialization/extended_type_info.hpp">
 <code style="white-space: normal">
 extended_type_info
@@ -285,7 +285,7 @@ Compare this instance to another one using the same
 <h3><a name="models">Models</a></h3>
 The serialization library includes two distinct
 <code style="white-space: normal"><a target="extended_type_info.hpp" href="../../../boost/serialization/extended_type_info.hpp">extended_type_info</a></code>
-implementations.
+implementatio's.
 <p>
 <code style="white-space: normal"><h4><a target="extended_type_info_typeid.hpp" href = "../../../boost/serialization/extended_type_info_typeid.hpp">
 extended_type_info_typeid</a></h4></code>is implemented in terms of the standard typeid(). It presumes that RTTI support is enabled
@@ -309,7 +309,7 @@ as described above.
 The test program <code style="white-space: normal"><a target="test_no_rtti" href="../test/test_no_rtti.cpp">test_no_rtti</a></code>
 implements this function in terms of the <code style="white-space: normal"><a target="extended_type_info_no_rtti.hpp" href="../../../boost/serialization/extended_type_info_no_rtti.hpp">
 extended_type_info</a></code> API above to return the export key associated with the class.  
-This requires that non-abstract types be exported. It also demostrates the
+This requires that non-abstract types be exported. It also demonstrates the
 inter-operability with between two different implementations of
 <code style="white-space: normal">extended_type_info</code>.
 

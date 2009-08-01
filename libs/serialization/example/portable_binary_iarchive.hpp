@@ -41,7 +41,8 @@ public:
     typedef enum {
         incompatible_integer_size 
     } exception_code;
-    portable_binary_iarchive_exception(exception_code c = incompatible_integer_size )
+    portable_binary_iarchive_exception(exception_code c = incompatible_integer_size ) :
+        boost::archive::archive_exception(boost::archive::archive_exception::other_exception)
     {}
     virtual const char *what( ) const throw( )
     {
@@ -49,8 +50,11 @@ public:
         switch(code){
         case incompatible_integer_size:
             msg = "integer cannot be represented";
+            break;
         default:
-            boost::archive::archive_exception::what();
+            msg = boost::archive::archive_exception::what();
+            assert(false);
+            break;
         }
         return msg;
     }

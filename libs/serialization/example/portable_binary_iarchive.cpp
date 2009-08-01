@@ -112,14 +112,12 @@ portable_binary_iarchive::init(unsigned int flags){
     m_flags = x << CHAR_BIT;
 }
 
-// explicitly instantiate for this 
-#include <boost/archive/impl/archive_pointer_iserializer.ipp>
 #include <boost/archive/impl/basic_binary_iprimitive.ipp>
+
 
 namespace boost {
 namespace archive {
 
-template class detail::archive_pointer_iserializer<portable_binary_iarchive> ;
 template class basic_binary_iprimitive<
     portable_binary_iarchive,
     std::istream::char_type, 

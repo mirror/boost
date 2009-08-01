@@ -43,6 +43,9 @@ struct key_compare
         const extended_type_info * lhs, 
         const extended_type_info * rhs
     ) const {
+        // performance shortcut
+        if(lhs == rhs)
+            return false;
         const char * l = lhs->get_key();
         assert(NULL != l);
         const char * r = rhs->get_key();
@@ -62,6 +65,16 @@ typedef std::multiset<const extended_type_info *, key_compare> ktmap;
 
 class extended_type_info_arg : public extended_type_info
 {
+    virtual bool
+    is_less_than(const extended_type_info & /*rhs*/) const {
+        assert(false);
+        return false;
+    };
+    virtual bool
+    is_equal(const extended_type_info & /*rhs*/) const {
+        assert(false);
+        return false;
+    };
 public:
     extended_type_info_arg(const char * key) :
         extended_type_info()
@@ -95,11 +108,11 @@ extended_type_info::key_unregister() {
         for(;start != end; ++start){
             if(this == *start){
                 x.erase(start);
+                m_key = NULL;
                 break;
             }
         }
     }
-    m_key = NULL;
 }
 
 BOOST_SERIALIZATION_DECL(const extended_type_info *) 
@@ -113,10 +126,18 @@ extended_type_info::find(const char *key) {
     return *(it);
 }
 
+struct null_deleter
+{
+    void operator()(void const *) const
+    {
+    }
+};
+
 BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())
 extended_type_info::extended_type_info(
     const unsigned int type_info_key
 ) :
+    m_this(this, null_deleter()),
     m_type_info_key(type_info_key),
     m_key(NULL)
 {
@@ -131,6 +152,9 @@ extended_type_info::~extended_type_info(){
 
 BOOST_SERIALIZATION_DECL(bool)  
 extended_type_info::operator<(const extended_type_info &rhs) const {
+    // short cut for a common cases
+    if(this == & rhs)
+        return false;
     if(m_type_info_key == rhs.m_type_info_key){
         return is_less_than(rhs);
     }

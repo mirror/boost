@@ -22,18 +22,15 @@ namespace std{
 }
 #endif
 
+// for now, only test with simple text and polymorphic archive
 #include "test_tools.hpp"
-
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
+#include "text_archive.hpp"
 
 #include <boost/archive/polymorphic_text_oarchive.hpp>
 #include <boost/archive/polymorphic_text_iarchive.hpp>
 
-#include "test_decl.hpp"
-#define DLL_DECL IMPORT_DECL
+#define A_IMPORT
 #include "A.hpp"
-#undef  DLL_DECL
 
 // simple class with text archive compiled in dll
 void
@@ -41,7 +38,8 @@ test1(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    A a, a1;
+    const A a;
+    A a1;
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         boost::archive::text_oarchive oa(os, TEST_ARCHIVE_FLAGS);
@@ -63,16 +61,19 @@ test2(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    A a, a1;
+    const A a;
+    A a1;
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         boost::archive::polymorphic_text_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("a", a);
+        boost::archive::polymorphic_oarchive & poa(oa);
+        poa << boost::serialization::make_nvp("a", a);
     }
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         boost::archive::polymorphic_text_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("a", a1);
+        boost::archive::polymorphic_iarchive & pia(ia);
+        pia >> boost::serialization::make_nvp("a", a1);
     }
     BOOST_CHECK_EQUAL(a, a1);
 
@@ -85,7 +86,7 @@ test3(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    A *a = & A();
+    const A *a = new A;
     A *a1;
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
@@ -100,6 +101,7 @@ test3(){
     BOOST_CHECK_EQUAL(*a, *a1);
 
     std::remove(testfile);
+    delete a;
 }
 
 // simple class pointer with polymorphic archive compiled in dll
@@ -108,26 +110,27 @@ test4(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    A *a = & A();
+    const A *a = new A;
     A *a1;
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         boost::archive::polymorphic_text_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("a", a);
+        boost::archive::polymorphic_oarchive & poa(oa);
+        poa << boost::serialization::make_nvp("a", a);
     }
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         boost::archive::polymorphic_text_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("a", a1);
+        boost::archive::polymorphic_iarchive & pia(ia);
+        pia >> boost::serialization::make_nvp("a", a1);
     }
     BOOST_CHECK_EQUAL(*a, *a1);
 
     std::remove(testfile);
+    delete a;
 }
 
-#define DLL_DECL IMPORT_DECL
 #include "B.hpp"
-#undef  DLL_DECL
 
 // derived class with base text archive compiled in dll
 void
@@ -135,7 +138,8 @@ test5(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    B b, b1;
+    const B b;
+    B b1;
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         boost::archive::text_oarchive oa(os, TEST_ARCHIVE_FLAGS);
@@ -157,16 +161,19 @@ test6(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    B b, b1;
+    const B b;
+    B b1;
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         boost::archive::polymorphic_text_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("b", b);
+        boost::archive::polymorphic_oarchive & poa(oa);
+        poa << boost::serialization::make_nvp("b", b);
     }
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         boost::archive::polymorphic_text_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("b", b1);
+        boost::archive::polymorphic_iarchive & pia(ia);
+        pia >> boost::serialization::make_nvp("b", b1);
     }
     BOOST_CHECK_EQUAL(b, b1);
 
@@ -179,7 +186,7 @@ test7(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    B *b = & B();
+    const B *b = new B;
     B *b1;
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
@@ -194,6 +201,7 @@ test7(){
     BOOST_CHECK_EQUAL(*b, *b1);
 
     std::remove(testfile);
+    delete b;
 }
 
 // derived class pointer with base polymorphic archive compiled in dll
@@ -202,21 +210,24 @@ test8(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    B *b = & B();
+    const B *b = new B;
     B *b1;
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         boost::archive::polymorphic_text_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("b", b);
+        boost::archive::polymorphic_oarchive & poa(oa);
+        poa << boost::serialization::make_nvp("b", b);
     }
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         boost::archive::polymorphic_text_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("b", b1);
+        boost::archive::polymorphic_iarchive & pia(ia);
+        pia >> boost::serialization::make_nvp("b", b1);
     }
     BOOST_CHECK_EQUAL(*b, *b1);
 
     std::remove(testfile);
+    delete b;
 }
 
 

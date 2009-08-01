@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // void_cast.hpp:   interface for run-time casting of void pointers.
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002-2009 Robert Ramey - http://www.rrsd.com . 
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -18,11 +18,15 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cstddef> // for ptrdiff_t
+#include <boost/weak_ptr.hpp>
+#include <boost/noncopyable.hpp>
+
 #include <boost/serialization/config.hpp>
 #include <boost/serialization/smart_cast.hpp>
 #include <boost/serialization/singleton.hpp>
 #include <boost/serialization/force_include.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
+#include <boost/serialization/extended_type_info.hpp>
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <boost/config/abi_prefix.hpp> // must be the last header
@@ -84,7 +88,8 @@ void_downcast(
 
 namespace void_cast_detail {
 
-class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) void_caster
+class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) void_caster :
+    private boost::noncopyable
 {
     friend 
     BOOST_SERIALIZATION_DECL(void const *)
@@ -100,8 +105,6 @@ class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) void_caster
         extended_type_info const & base,
         void const * const
     );
-    // cw 8.3 requires this!!
-    void_caster& operator=(void_caster const &);
 protected:
     void recursive_register(bool includes_virtual_base = false) const;
     void recursive_unregister() const;
@@ -109,19 +112,20 @@ public:
     // Data members
     const extended_type_info * m_derived;
     const extended_type_info * m_base;
-    const std::ptrdiff_t m_difference;
-    virtual bool is_shortcut() const {
-        return false;
-    }
+    boost::weak_ptr<const extended_type_info> m_derived_observer;
+    boost::weak_ptr<const extended_type_info> m_base_observer;
+    /*const*/ std::ptrdiff_t m_difference;
+    const bool m_heap; // allocated on the heap
+
     // note that void_casters are keyed on value of
-    // addresses to member extended type info records
-    bool operator<(const void_caster & lhs) const {
-        if(m_derived < lhs.m_derived)
-            return true;
-        if(m_derived == lhs.m_derived)
-            if(m_base < lhs.m_base)
-                return true;
-        return false;
+    // member extended type info records - NOT their
+    // addresses.  This is necessary in order for the
+    // void cast operations to work across dll and exe
+    // module boundries.
+    bool operator<(const void_caster & rhs) const;
+
+    const void_caster & operator*(){
+        return *this;
     }
     // each derived class must re-implement these;
     virtual void const * upcast(void const * const t) const = 0;
@@ -130,11 +134,15 @@ public:
     void_caster(
         extended_type_info const * derived,
         extended_type_info const * base,
-        std::ptrdiff_t difference = 0
+        std::ptrdiff_t difference = 0,
+        bool heap = false
     ) :
         m_derived(derived),
         m_base(base),
-        m_difference(difference)
+        m_derived_observer(derived->get_weak_ptr()),
+        m_base_observer(base->get_weak_ptr()),
+        m_difference(difference),
+        m_heap(heap)
     {}
     virtual ~void_caster(){}
 };
@@ -210,8 +218,8 @@ public:
 template <class Derived, class Base>
 void_caster_virtual_base<Derived,Base>::void_caster_virtual_base() :
     void_caster( 
-        & type_info_implementation<Derived>::type::get_const_instance(), 
-        & type_info_implementation<Base>::type::get_const_instance()
+        & (type_info_implementation<Derived>::type::get_const_instance()), 
+        & (type_info_implementation<Base>::type::get_const_instance())
     )
 {
     recursive_register(true);

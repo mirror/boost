@@ -16,6 +16,7 @@
 
 #include <cstddef>
 #include <fstream>
+#include <iostream>
 
 #include <boost/config.hpp>
 #include <cstdio> // remove
@@ -35,10 +36,23 @@ namespace std{
 
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/extended_type_info_no_rtti.hpp>
+#include <boost/serialization/export.hpp>
+#include <boost/serialization/nvp.hpp>
 
 #include "polymorphic_base.hpp"
 #include "polymorphic_derived1.hpp"
+
 #include "polymorphic_derived2.hpp"
+BOOST_CLASS_EXPORT(polymorphic_derived2)
+
+template void polymorphic_derived2::serialize(
+    test_oarchive & ar,
+    const unsigned int version
+);
+template void polymorphic_derived2::serialize(
+    test_iarchive & ar,
+    const unsigned int version
+);
 
 // save derived polymorphic class
 void save_derived(const char *testfile)
@@ -49,7 +63,9 @@ void save_derived(const char *testfile)
     polymorphic_derived1 *rd1 = new polymorphic_derived1;
     polymorphic_derived2 *rd2 = new polymorphic_derived2;
 
+    std::cout << "saving polymorphic_derived1 (no_rtti)\n";
     oa << BOOST_SERIALIZATION_NVP(rd1);
+    std::cout << "saving polymorphic_derived2\n";
     oa << BOOST_SERIALIZATION_NVP(rd2);
 
     // the above opereration registers the derived classes as a side
@@ -57,7 +73,9 @@ void save_derived(const char *testfile)
     // a base class pointer.
     polymorphic_base *rb1 =  rd1;
     polymorphic_base *rb2 =  rd2;
+    std::cout << "saving polymorphic_derived1 (no_rtti) through base (no_rtti)\n";
     oa << BOOST_SERIALIZATION_NVP(rb1);
+    std::cout << "saving polymorphic_derived2 through base (no_rtti)\n";
     oa << BOOST_SERIALIZATION_NVP(rb2);
 
     delete rd1;
@@ -73,6 +91,7 @@ void load_derived(const char *testfile)
     polymorphic_derived1 *rd1 = NULL;
     polymorphic_derived2 *rd2 = NULL;
 
+    std::cout << "loading polymorphic_derived1 (no_rtti)\n";
     ia >> BOOST_SERIALIZATION_NVP(rd1);
 
     BOOST_CHECK_MESSAGE(
@@ -87,8 +106,8 @@ void load_derived(const char *testfile)
         "restored pointer d1 not of correct type"
     );
 
+    std::cout << "loading polymorphic_derived2\n";
     ia >> BOOST_SERIALIZATION_NVP(rd2);
-
     BOOST_CHECK_MESSAGE(
         boost::serialization::type_info_implementation<
             polymorphic_derived2
@@ -100,13 +119,13 @@ void load_derived(const char *testfile)
         ,
         "restored pointer d2 not of correct type"
     );
-
     polymorphic_base *rb1 = NULL;
     polymorphic_base *rb2 = NULL;
 
     // the above opereration registers the derived classes as a side
     // effect.  Hence, instances can now be correctly serialized through
     // a base class pointer.
+    std::cout << "loading polymorphic_derived1 (no_rtti) through base (no_rtti)\n";
     ia >> BOOST_SERIALIZATION_NVP(rb1);
 
     BOOST_CHECK_MESSAGE(
@@ -126,6 +145,7 @@ void load_derived(const char *testfile)
         "restored pointer b1 not of correct type"
     );
 
+    std::cout << "loading polymorphic_derived2 through base (no_rtti)\n";
     ia >> BOOST_SERIALIZATION_NVP(rb2);
 
     BOOST_CHECK_MESSAGE(

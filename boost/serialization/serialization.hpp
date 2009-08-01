@@ -95,7 +95,7 @@ inline void load_construct_data(
     // default just uses the default constructor.  going
     // through access permits usage of otherwise private default
     // constructor
-    access::construct(ar, t);
+    access::construct(t);
 }
 
 /////////////////////////////////////////////////////////////////////////////

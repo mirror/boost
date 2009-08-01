@@ -31,9 +31,8 @@
 
 // default is being compatible with version 1.34.1 files, not 1.35 files
 #ifndef BOOST_SERIALIZATION_VECTOR_VERSION
-#define BOOST_SERIALIZATION_VECTOR_VERSION 3
+#define BOOST_SERIALIZATION_VECTOR_VERSION 4
 #endif
-
 
 namespace boost { 
 namespace serialization {
@@ -83,12 +82,10 @@ inline void save(
 ){
     const collection_size_type count(t.size());
     ar << BOOST_SERIALIZATION_NVP(count);
-    if(BOOST_SERIALIZATION_VECTOR_VERSION < ar.get_library_version()) {
-      const unsigned int item_version = version<U>::value;
-      ar << BOOST_SERIALIZATION_NVP(item_version);
-    }
-   if (!t.empty())
-      ar << make_array(detail::get_data(t),t.size());
+    const unsigned int item_version = version<U>::value;
+    ar << BOOST_SERIALIZATION_NVP(item_version);
+    if (!t.empty())
+        ar << make_array(detail::get_data(t),t.size());
 }
 
 template<class Archive, class U, class Allocator>
@@ -105,7 +102,7 @@ inline void load(
     if(BOOST_SERIALIZATION_VECTOR_VERSION < ar.get_library_version())
         ar >> BOOST_SERIALIZATION_NVP(item_version);
     if (!t.empty())
-      ar >> make_array(detail::get_data(t),t.size());
+        ar >> make_array(detail::get_data(t),t.size());
   }
 
 // dispatch to either default or optimized versions
@@ -118,8 +115,8 @@ inline void save(
 ){
     typedef BOOST_DEDUCED_TYPENAME 
     boost::serialization::use_array_optimization<Archive>::template apply<
-            BOOST_DEDUCED_TYPENAME remove_const<U>::type 
-        >::type use_optimized;
+        BOOST_DEDUCED_TYPENAME remove_const<U>::type 
+    >::type use_optimized;
     save(ar,t,file_version, use_optimized());
 }
 
@@ -131,8 +128,8 @@ inline void load(
 ){
     typedef BOOST_DEDUCED_TYPENAME 
     boost::serialization::use_array_optimization<Archive>::template apply<
-            BOOST_DEDUCED_TYPENAME remove_const<U>::type 
-        >::type use_optimized;
+        BOOST_DEDUCED_TYPENAME remove_const<U>::type 
+    >::type use_optimized;
     load(ar,t,file_version, use_optimized());
 }
 

@@ -22,17 +22,12 @@ namespace std{
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
+#include <boost/serialization/extended_type_info_typeid.hpp>
 
 #include <boost/archive/archive_exception.hpp>
 #include "test_tools.hpp"
 
-#include "base.hpp"
-
-template<class Archive>
-void polymorphic_base::serialize(
-    Archive & /* ar */,
-    const unsigned int /* file_version */){
-}
+#include "polymorphic_base.hpp"
 
 class polymorphic_derived1 : public polymorphic_base
 {
@@ -40,6 +35,9 @@ class polymorphic_derived1 : public polymorphic_base
     template<class Archive>
     void serialize(Archive & ar, const unsigned int /* file_version */){
         ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
+    }
+    virtual const char * get_key() const {
+        return "polymorphic_derived1";
     }
 public:
     ~polymorphic_derived1(){}
@@ -50,16 +48,12 @@ BOOST_CLASS_EXPORT(polymorphic_derived1)
 // MWerks users can do this to make their code work
 BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derived1)
 
-#include "derived2.hpp"
+#include "polymorphic_derived2.hpp"
 
-template<class Archive>
-void polymorphic_derived2::serialize(
-    Archive &ar, 
-    const unsigned int /* file_version */
-){
-    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
-}
 BOOST_CLASS_EXPORT(polymorphic_derived2)
+
+// MWerks users can do this to make their code work
+BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derived2)
 
 // save exported polymorphic class
 void save_exported(const char *testfile)

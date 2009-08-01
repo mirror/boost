@@ -11,6 +11,7 @@
 
 #include <cstring>
 #include <cstddef> // NULL
+#include <cassert>
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
@@ -35,8 +36,20 @@ BOOST_SERIALIZATION_DECL(bool)
 extended_type_info_no_rtti_0::is_less_than(
     const boost::serialization::extended_type_info &rhs) const 
 {
+    // shortcut for common case
+    if(this == & rhs)
+        return false;
     const char * l = m_key;
     const char * r = rhs.get_key();
+    // if this assertion is triggered, it could mean one of the following
+    // a) This class was never exported - make sure all calls which use
+    // this method of type id are in fact exported.
+    // b) This class was used (e.g. serialized through a pointer) before
+    // it was exported.  Make sure that classes which use this method
+    // of type id are NOT "automatically" registered by serializating 
+    // through a pointer to the to most derived class.  OR make sure
+    // that the BOOST_CLASS_EXPORT is included in every file
+    // which does this.
     assert(NULL != l);
     assert(NULL != r);
     return std::strcmp(l, r) < 0;
@@ -46,14 +59,18 @@ BOOST_SERIALIZATION_DECL(bool)
 extended_type_info_no_rtti_0::is_equal(
     const boost::serialization::extended_type_info &rhs) const 
 {
-    const char * l = m_key;
-    const char * r = rhs.get_key();
-    if(l == r)
+    // shortcut for common case
+    if(this == & rhs)
         return true;
+    // null keys don't match with anything
+    const char * l = m_key;
+    //assert(NULL != l);
     if(NULL == l)
         return false;
+    const char * r = rhs.get_key();
     if(NULL == r)
         return false;
+    assert(NULL != r);
     return 0 == std::strcmp(l, r);
 }
 

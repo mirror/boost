@@ -8,17 +8,14 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/detail/workaround.hpp>
 #if ! BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
-#include "A.hpp"
-
-#include <boost/detail/workaround.hpp>
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
 #include <boost/archive/dinkumware.hpp>
 #endif
 
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/string.hpp>
+#include "A.hpp"
 
 template<class Archive>
 void A::serialize(
@@ -64,4 +61,4 @@ void A::serialize(
     #endif
 }
 
-#endif // workaround
+#endif // workaround BOOST_WORKAROUND(BOOST_MSVC, <= 1300)

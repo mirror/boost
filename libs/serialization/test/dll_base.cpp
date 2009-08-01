@@ -10,17 +10,11 @@
 // used in testing distribution of serialization code in DLLS
 #include <boost/serialization/export.hpp>
 
-#include "test_decl.hpp"
-#define DLL_DECL EXPORT_DECL(BOOST_PP_EMPTY())
+#define BASE_EXPORT
 #include "base.hpp"
-#undef  DLL_DECL
-
-// instantiate code for text archives
-
-#include <boost/serialization/nvp.hpp>
 
 template<class Archive>
-void polymorphic_base::serialize(
+void base::serialize(
     Archive &ar,
     const unsigned int /* file_version */){
 }
@@ -43,19 +37,19 @@ void polymorphic_base::serialize(
 // explicit instantiation in this case.
 //BOOST_CLASS_EXPORT(polymorphic_base)
 
-template EXPORT_DECL(void) polymorphic_base::serialize(
+template EXPORT_DECL(void) base::serialize(
     boost::archive::text_oarchive & ar,
     const unsigned int version
 );
-template EXPORT_DECL(void) polymorphic_base::serialize(
+template EXPORT_DECL(void) base::serialize(
     boost::archive::text_iarchive & ar,
     const unsigned int version
 );
-template EXPORT_DECL(void) polymorphic_base::serialize(
+template EXPORT_DECL(void) base::serialize(
     boost::archive::polymorphic_oarchive & ar,
     const unsigned int version
 );
-template EXPORT_DECL(void) polymorphic_base::serialize(
+template EXPORT_DECL(void) base::serialize(
     boost::archive::polymorphic_iarchive & ar,
     const unsigned int version
 );

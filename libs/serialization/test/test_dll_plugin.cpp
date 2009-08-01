@@ -27,12 +27,13 @@ namespace std{
 #endif
 
 #include <boost/archive/archive_exception.hpp>
-#include "test_tools.hpp"
-#include "test_decl.hpp"
 
-#define DLL_DECL IMPORT_DECL
-#include "base.hpp"
-#undef  DLL_DECL
+// for now, only test with simple text and polymorphic archive
+#define BOOST_ARCHIVE_TEST polymorphic_text_archive.hpp
+#include "test_tools.hpp"
+
+#include <boost/archive/polymorphic_text_oarchive.hpp>
+#include <boost/archive/polymorphic_text_iarchive.hpp>
 
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
@@ -41,6 +42,9 @@ namespace std{
 #include <boost/serialization/void_cast.hpp>
 #include <boost/serialization/extended_type_info.hpp>
 
+#include "polymorphic_base.hpp"
+
+// declare and implement a derived class in our own executable
 class polymorphic_derived1 : public polymorphic_base
 {
     friend class boost::serialization::access;
@@ -152,7 +156,8 @@ test_main( int /* argc */, char* /* argv */[] )
     BOOST_REQUIRE(NULL != testfile);
 
     HINSTANCE hDLL;               // Handle to DLL
-    hDLL = LoadLibrary("derived2.dll");
+    hDLL = LoadLibrary("dll_polymorphic_derived2.dll");
+    assert(0 != hDLL);
     save_exported(testfile);
     load_exported(testfile);
     FreeLibrary(hDLL);

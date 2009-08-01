@@ -18,27 +18,38 @@
 //  export if this is our own source, otherwise import:
 
 // usage:
+//
 // class header declarations should look something like:
+//
+// #include "test_decl.hpp"
+// #if defined(A_CPP)
+//     #define DLL_DECL IMPORT_DECL(BOOST_PP_EMPTY())
+// #else
+//     #define DLL_DECL EXPORT_DECL(BOOST_PP_EMPTY())
+// #endif
+//
 // class DLL_DECL A {
 //     ...
 // };
 //
+// #undef DLL_DECL
+//
 // code which includes such headers should look something like:
 //
-// #define DLL_DECL IMPORT_DECL
 // #include "A.hpp"
-// #undef  DLL_DECL
 //
-// for declarations used in dlls for exporting, and
-// 
-// #define DLL_DECL EXPORT_DECL
+// code which builds dll should like like
+//
+// #define A_CPP
 // #include "A.hpp"
-// #include "A.ipp"
-// #undef  DLL_DECL
 //
-// when a declaration is to be imported.
+// A::A(){
+//  ...
+// }
+// ...
+//
+
 #include <boost/config.hpp>
-#include <boost/preprocessor/facilities/empty.hpp>
 
 #ifdef BOOST_HAS_DECLSPEC // defined in config system
     #if ! defined(EXPORT_DECL)
@@ -50,11 +61,14 @@
     #endif
     #if ! defined(IMPORT_DECL)
         #if defined(__BORLANDC__)
-            #define IMPORT_DECL    __import
+            #define IMPORT_DECL(T)    T __import
         #else
-            #define IMPORT_DECL    __declspec(dllimport)
+            #define IMPORT_DECL(T)    __declspec(dllimport) T 
         #endif
     #endif
+#else
+    #define IMPORT_DECL(T) T
+    #define EXPORT_DECL(T) T
 #endif // BOOST_HAS_DECLSPEC
 
 #endif // BOOST_TEST_DECL_HPP

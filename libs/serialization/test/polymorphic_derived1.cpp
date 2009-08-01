@@ -14,11 +14,11 @@
 
 #include "polymorphic_derived1.hpp"
 
-BOOST_CLASS_EXPORT(polymorphic_derived1)
-
 const char * polymorphic_derived1::get_key() const {
     return
         boost::serialization::type_info_implementation<
             polymorphic_derived1
         >::type::get_const_instance().get_key();
 }
+
+BOOST_CLASS_EXPORT(polymorphic_derived1)

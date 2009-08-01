@@ -48,7 +48,6 @@ public:
     virtual ~A(){--count;}   // default destructor
 };
 
-//BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(A)
 BOOST_SERIALIZATION_SHARED_PTR(A)
 
 // B is a subclass of A
