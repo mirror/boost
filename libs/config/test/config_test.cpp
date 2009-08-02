@@ -1,4 +1,4 @@
-//  This file was automatically generated on Thu May 21 11:08:48 2009
+//  This file was automatically generated on Sun Aug 02 08:26:00 2009
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -262,6 +262,11 @@ namespace boost_no_explicit_function_template_arguments = empty_boost;
 #else
 namespace boost_no_extern_template = empty_boost;
 #endif
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS
+#include "boost_no_function_template_default_args.ipp"
+#else
+namespace boost_no_function_template_default_args = empty_boost;
+#endif
 #ifndef BOOST_NO_FUNCTION_TYPE_SPECIALIZATIONS
 #include "boost_no_function_type_spec.ipp"
 #else
@@ -426,6 +431,11 @@ namespace boost_no_scoped_enums = empty_boost;
 #include "boost_no_sfinae.ipp"
 #else
 namespace boost_no_sfinae = empty_boost;
+#endif
+#ifndef BOOST_NO_SFINAE_EXPR
+#include "boost_no_sfinae_expr.ipp"
+#else
+namespace boost_no_sfinae_expr = empty_boost;
 #endif
 #ifndef BOOST_NO_STRINGSTREAM
 #include "boost_no_sstream.ipp"
@@ -1331,6 +1341,11 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_EXTERN_TEMPLATE at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
+   if(0 != boost_no_function_template_default_args::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
    if(0 != boost_no_function_type_specializations::test())
    {
       std::cerr << "Failed test for BOOST_NO_FUNCTION_TYPE_SPECIALIZATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -1494,6 +1509,11 @@ int main( int, char *[] )
    if(0 != boost_no_sfinae::test())
    {
       std::cerr << "Failed test for BOOST_NO_SFINAE at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_sfinae_expr::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_SFINAE_EXPR at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_stringstream::test())
