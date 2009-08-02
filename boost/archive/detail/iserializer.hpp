@@ -51,7 +51,7 @@ namespace std{
     defined(__BORLANDC__)                              \
     || defined(__IBMCPP__)                             \
     || defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)     \
-    || defined(__SUNPRO_CC) && (__SUBPRO_CC < 0x590)   \
+    || defined(__SUNPRO_CC) && (__SUNPRO_CC < 0x590)   \
 )
 
 #if ! DONT_USE_HAS_NEW_OPERATOR
