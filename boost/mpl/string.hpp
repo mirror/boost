@@ -44,7 +44,6 @@
 #include <boost/preprocessor/repetition/enum_shifted_params.hpp>
 #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
-#include <iterator>
 
 #include <iterator> // for bidirectional_iterator_tag
 #include <climits>
@@ -499,6 +498,7 @@ namespace boost { namespace mpl
           , back_   = BOOST_PP_CAT(C, BOOST_PP_DEC(BOOST_MPL_STRING_MAX_PARAMS))
         };
 
+        typedef char        value_type;
         typedef string      type;
         typedef string_tag  tag;
     };
@@ -541,11 +541,11 @@ namespace boost { namespace mpl
         #undef M0
 
         typedef c_str type;
-        static char const value[];
+        static typename Sequence::value_type const value[BOOST_MPL_LIMIT_STRING_SIZE+1];
     };
 
     template<typename Sequence>
-    char const c_str<Sequence>::value[] =
+    typename Sequence::value_type const c_str<Sequence>::value[BOOST_MPL_LIMIT_STRING_SIZE+1] =
     {
         #define M0(z, n, data)                                                                      \
         mpl::aux_::deref_unless<BOOST_PP_CAT(i, n), iend>::type::value,
