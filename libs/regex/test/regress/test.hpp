@@ -258,6 +258,8 @@ void test_emacs();
 void test_operators();
 void test_overloads();
 void test_unicode();
-
+void test_pocessive_repeats();
+void test_mark_resets();
+void test_recursion();
 
 #endif

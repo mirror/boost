@@ -17,13 +17,24 @@ should be sent to output as follows:
 [table
 [[Placeholder][Meaning]]
 [[$&][Outputs what matched the whole expression.]]
-[[$`][Outputs the text between the end of the last match found (or the 
+[[$MATCH][As $&]]
+[[${^MATCH}][As $&]]
+[[$\`][Outputs the text between the end of the last match found (or the 
       start of the text if no previous match was found), and the start 
       of the current match.]]
+[[$PREMATCH][As $\`]]
+[[${^PREMATCH}][As $\`]]
 [[$'][Outputs all the text following the end of the current match.]]
+[[$POSTMATCH][As $']]
+[[${^POSTMATCH}][As $']]
+[[$+][Outputs what matched the last marked sub-expression in the regular expression.]]
+[[$LAST_PAREN_MATCH][As $+]]
+[[$LAST_SUBMATCH_RESULT][Outputs what matched the last sub-expression to be actually matched.]]
+[[$^N][As $LAST_SUBMATCH_RESULT]]
 [[$$][Outputs a literal '$']]
 [[$n][Outputs what matched the n'th sub-expression.]]
 [[${n}][Outputs what matched the n'th sub-expression.]]
+[[$+{NAME}][Outputs whatever matched the sub-expression named "NAME".]]
 ]
 
 Any $-placeholder sequence not listed above, results in '$' being treated 

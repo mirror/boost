@@ -22,7 +22,7 @@ rule check-icu-config ( )
 
    if ! $(gICU_CONFIG_CHECKED)
    {
-      if $(HAVE_ICU)
+      if $(HAVE_ICU) && ! $(ICU_PATH)
       {
          gHAS_ICU = true ;
          gICU_CORE_LIB = icuuc ;
@@ -78,6 +78,10 @@ rule check-icu-config ( )
             else if [ GLOB $(dir)/lib : icuin.* ]
             {
                gICU_IN_LIB = icuin ;
+            }
+            else if [ GLOB $(dir)/lib : icui18n.* ]
+            {
+               gICU_IN_LIB = icui18n ;
             }
             else if [ GLOB $(dir)/lib64 : libicui18n.* ]
             {

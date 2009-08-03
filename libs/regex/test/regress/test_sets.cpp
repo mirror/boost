@@ -266,6 +266,10 @@ void test_sets2()
    TEST_REGEX_SEARCH("[\\W]+", perl, "AB_   AB", match_default, make_array(3, 6, -2, -2));
    TEST_REGEX_SEARCH("[[:^word:]]+", perl, "AB_   AB", match_default, make_array(3, 6, -2, -2));
    TEST_REGEX_SEARCH("\\W+", perl, "AB_   AB", match_default, make_array(3, 6, -2, -2));
+   TEST_REGEX_SEARCH("\\h+", perl, "\v\f\r\n \t\n", match_default, make_array(4, 6, -2, -2));
+   TEST_REGEX_SEARCH("\\V+", perl, "\v\f\r\n \t\n", match_default, make_array(4, 6, -2, -2));
+   TEST_REGEX_SEARCH("\\H+", perl, " \t\v\f\r\n ", match_default, make_array(2, 6, -2, -2));
+   TEST_REGEX_SEARCH("\\v+", perl, " \t\v\f\r\n ", match_default, make_array(2, 6, -2, -2));
    test_sets2c();
 }
 

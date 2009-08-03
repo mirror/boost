@@ -87,6 +87,10 @@ test-suite regex
             ../build//boost_regex
       ]
       
+      [ run named_subexpressions/named_subexpressions_test.cpp
+            ../build//boost_regex
+      ]
+      
       [ run unicode/unicode_iterator_test.cpp ../build//boost_regex ]
       [ run static_mutex/static_mutex_test.cpp
             ../../thread/build//boost_thread ../build//boost_regex
