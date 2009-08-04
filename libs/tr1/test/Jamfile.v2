@@ -60,14 +60,14 @@ rule test_all
       :  # test-files
       :  # requirements
       <include>$(BOOST_ROOT)/libs/type_traits/test 
-      <define>TEST_STD=1 $(TR1_PROPERTIES) ] ;
+      <define>TEST_STD=2005 $(TR1_PROPERTIES) ] ;
    }
 # Commented due to conflict between test_complex in this dir
 # and in std_headers.
    for local file5 in [ glob std_headers/*.cpp ]
    {
       all_rules += [ compile $(file5) 
-      :   <define>TEST_STD=1 $(TR1_PROPERTIES) 
+      :   <define>TEST_STD=2005 $(TR1_PROPERTIES) 
       :   $(file5:B)_std_header
       ] ;
    }

@@ -41,8 +41,13 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<Base,void>::value), fal
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<Base,const void>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<void,Derived>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<const void,Derived>::value), false);
+#if defined(TEST_STD) && (TEST_STD < 2006)
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<int, int>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<const int, int>::value), true);
+#else
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<int, int>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<const int, int>::value), false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<VB,VD>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<VD,VB>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<test_abc1,test_abc3>::value), true);
