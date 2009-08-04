@@ -349,6 +349,7 @@ to the screen (`hello_world.cpp`):
 
   #include <boost/mpi.hpp>
   #include <iostream>
+  #include <string>
   #include <boost/serialization/string.hpp>
   namespace mpi = boost::mpi;
 
@@ -420,6 +421,7 @@ two messages are transmitted simultaneously
 
   #include <boost/mpi.hpp>
   #include <iostream>
+  #include <string>
   #include <boost/serialization/string.hpp>
   namespace mpi = boost::mpi;
 
@@ -604,6 +606,7 @@ other process. (`hello_world_broadcast.cpp`)
 
   #include <boost/mpi.hpp>
   #include <iostream>
+  #include <string>
   #include <boost/serialization/string.hpp>
   namespace mpi = boost::mpi;
 
@@ -651,6 +654,7 @@ which prints out the values that correspond to each processor.
 
   #include <boost/mpi.hpp>
   #include <iostream>
+  #include <vector>
   #include <cstdlib>
   namespace mpi = boost::mpi;
 
@@ -744,6 +748,7 @@ the function object `std::plus<std::string>` (`string_cat.cpp`):
   #include <boost/mpi.hpp>
   #include <iostream>
   #include <string>
+  #include <functional>
   #include <boost/serialization/string.hpp>
   namespace mpi = boost::mpi;
 
