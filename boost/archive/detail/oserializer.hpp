@@ -41,6 +41,7 @@
 
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/and.hpp>
+#include <boost/mpl/or.hpp>
 #include <boost/mpl/greater_equal.hpp>
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/int.hpp>
@@ -423,12 +424,50 @@ struct save_pointer_type {
         >::type type;
     };
 
+    template<class T>
+    struct warning_check {
+        typedef 
+            BOOST_DEDUCED_TYPENAME mpl::or_<
+                BOOST_DEDUCED_TYPENAME mpl::greater<
+                    serialization::implementation_level<T>,
+                    mpl::int_<serialization::object_serializable>
+                >,
+                BOOST_DEDUCED_TYPENAME mpl::not_<
+                    BOOST_DEDUCED_TYPENAME mpl::equal_to<
+                        serialization::tracking_level<T>,
+                        mpl::int_<serialization::track_selectively>
+                    >
+                >
+            > type;
+        BOOST_STATIC_CONSTANT(bool, value = type::value);
+    };
+
     // used to convert TPtr in to a pointer to a T
     template<class T>
     static void save(
         Archive & ar, 
         const T & t
     ){
+        // if your application trips the warning it means that
+        // you've invoked the following combination of events.
+        // a) This type doesn't save class information in the
+        // archive. That is, the serialization trait implementation
+        // level <= object_serializable.
+        // b) Tracking for this type is set to "track selectively"
+
+        // in this case, indication that an object is tracked is
+        // not stored in the archive itself - see level == object_serializable
+        // but rather the existence of the operation ar >> T * is used to 
+        // infer that an object of this type should be tracked.  So, if
+        // you save via a pointer but don't load via a pointer the operation
+        // will fail on load without given any valid reason for the failure.
+
+        // The reason that this is permited it all is that it is results
+        // in more efficient code.  But it comes with it's own risk.  Note
+        // that serialization for collections of primitives use this method
+        // so even if you avoid this "risky" behavior - it could trip you up.
+
+        BOOST_STATIC_WARNING(warning_check<T>::value);
         conditional<T>::type::save(ar, const_cast<T &>(t));
     }
 
@@ -438,18 +477,6 @@ struct save_pointer_type {
     }
 
     static void invoke(Archive &ar, const TPtr t){
-        #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-            // if your program traps here, its because you tried to do
-            // something like ar << t where t is a pointer to a const value
-            // void f3(A const* a, text_oarchive& oa)
-            // {
-            //     oa << a;
-            // }
-            // with a compiler which doesn't support remove_const
-            // const_check(* t);
-        #else
-            // otherwise remove the const
-        #endif
         register_type(ar, * t);
         if(NULL == t){
             basic_oarchive & boa 
