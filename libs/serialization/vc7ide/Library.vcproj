@@ -45,7 +45,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="$(ConfigurationName)\boost_serialization-vc71-mt-gd-1_39.dll"
-				GenerateDebugInformation="TRUE"/>
+				GenerateDebugInformation="TRUE"
+				GenerateMapFile="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool

@@ -171,7 +171,8 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1">
 			<Tool
-				Name="VCCLCompilerTool"/>
+				Name="VCCLCompilerTool"
+				RuntimeLibrary="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
