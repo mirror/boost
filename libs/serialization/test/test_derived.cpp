@@ -31,6 +31,8 @@ class base
     template<class Archive>
     void serialize(Archive & /* ar */, const unsigned int /* file_version */){
     }
+protected:
+    virtual ~base(){};
 };
 
 class derived1 : public base
