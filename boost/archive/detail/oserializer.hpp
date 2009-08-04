@@ -480,10 +480,11 @@ struct save_array_type
         
         save_access::end_preamble(ar);
         // consider alignment
-        int count = sizeof(t) / (
+        std::size_t c = sizeof(t) / (
             static_cast<const char *>(static_cast<const void *>(&t[1])) 
             - static_cast<const char *>(static_cast<const void *>(&t[0]))
         );
+        boost::serialization::collection_size_type count(c);
         ar << BOOST_SERIALIZATION_NVP(count);
         ar << serialization::make_array(static_cast<value_type const*>(&t[0]),count);
     }

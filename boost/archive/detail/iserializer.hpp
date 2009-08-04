@@ -502,13 +502,13 @@ struct load_array_type {
         // determine number of elements in the array. Consider the
         // fact that some machines will align elements on boundries
         // other than characters.
-        int current_count = sizeof(t) / (
+        std::size_t current_count = sizeof(t) / (
             static_cast<char *>(static_cast<void *>(&t[1])) 
             - static_cast<char *>(static_cast<void *>(&t[0]))
         );
-        int count;
+        boost::serialization::collection_size_type count;
         ar >> BOOST_SERIALIZATION_NVP(count);
-        if(count > current_count)
+        if(static_cast<std::size_t>(count) > current_count)
             boost::serialization::throw_exception(archive::archive_exception(
                 boost::archive::archive_exception::array_size_too_short
             ));
