@@ -47,7 +47,7 @@ namespace boost {
                 typedef BOOST_STRING_TYPENAME boost::detail::
                     iterator_traits<ForwardIteratorT>::iterator_category category;
 
-                return trim_end_iter_select( InBegin, InEnd, IsSpace, category() );
+                return ::boost::algorithm::detail::trim_end_iter_select( InBegin, InEnd, IsSpace, category() );
             }
 
             template< typename ForwardIteratorT, typename PredicateT >

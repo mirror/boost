@@ -37,7 +37,7 @@ namespace boost {
                 FormatterT Formatter,
                 const FindResultT& FindResult )
             {       
-                return find_format_all_copy_impl2( 
+                return ::boost::algorithm::detail::find_format_all_copy_impl2( 
                     Output,
                     Input,
                     Finder,
@@ -107,7 +107,7 @@ namespace boost {
                 FormatterT Formatter,
                 const FindResultT& FindResult)
             {
-                return find_format_all_copy_impl2(
+                return ::boost::algorithm::detail::find_format_all_copy_impl2(
                     Input,
                     Finder,
                     Formatter,
@@ -159,7 +159,7 @@ namespace boost {
                 }
 
                 // Copy the rest of the sequence
-                insert( Output, ::boost::end(Output), LastMatch, ::boost::end(Input) );
+                ::boost::algorithm::detail::insert( Output, ::boost::end(Output), LastMatch, ::boost::end(Input) );
 
                 return Output;
             }
@@ -177,7 +177,7 @@ namespace boost {
                 FormatterT Formatter,
                 FindResultT FindResult)
             {
-                find_format_all_impl2(
+                ::boost::algorithm::detail::find_format_all_impl2(
                     Input,
                     Finder,
                     Formatter,
@@ -230,14 +230,14 @@ namespace boost {
                     SearchIt=M.end();
 
                     // Copy formated replace to the storage
-                    copy_to_storage( Storage, M.format_result() );
+                    ::boost::algorithm::detail::copy_to_storage( Storage, M.format_result() );
 
                     // Find range for a next match
                     M=Finder( SearchIt, ::boost::end(Input) );
                 }
 
                 // process the last segment
-                InsertIt=process_segment( 
+                InsertIt=::boost::algorithm::detail::process_segment( 
                     Storage,
                     Input,
                     InsertIt,
@@ -247,12 +247,12 @@ namespace boost {
                 if ( Storage.empty() )
                 {
                     // Truncate input
-                    erase( Input, InsertIt, ::boost::end(Input) );
+                    ::boost::algorithm::detail::erase( Input, InsertIt, ::boost::end(Input) );
                 }
                 else
                 {
                     // Copy remaining data to the end of input
-                    insert( Input, ::boost::end(Input), Storage.begin(), Storage.end() );
+                    ::boost::algorithm::detail::insert( Input, ::boost::end(Input), Storage.begin(), Storage.end() );
                 }
             }
 

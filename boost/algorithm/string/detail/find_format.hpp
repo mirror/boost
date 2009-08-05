@@ -35,7 +35,7 @@ namespace boost {
                 FormatterT Formatter,
                 const FindResultT& FindResult )
             {       
-                return find_format_copy_impl2( 
+                return ::boost::algorithm::detail::find_format_copy_impl2( 
                     Output,
                     Input,
                     Formatter,
@@ -94,7 +94,7 @@ namespace boost {
                 FormatterT Formatter,
                 const FindResultT& FindResult)
             {
-                return find_format_copy_impl2(
+                return ::boost::algorithm::detail::find_format_copy_impl2(
                     Input,
                     Formatter,
                     FindResult,
@@ -149,7 +149,7 @@ namespace boost {
                 FormatterT Formatter,
                 const FindResultT& FindResult)
             {
-                find_format_impl2(
+                ::boost::algorithm::detail::find_format_impl2(
                     Input,
                     Formatter,
                     FindResult,
@@ -183,7 +183,7 @@ namespace boost {
                 }
 
                 // Replace match
-                replace( Input, M.begin(), M.end(), M.format_result() );
+                ::boost::algorithm::detail::replace( Input, M.begin(), M.end(), M.format_result() );
             }
 
         } // namespace detail
