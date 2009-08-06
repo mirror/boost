@@ -14,6 +14,12 @@
 
 #define BOOST_MSVC _MSC_VER
 
+#if _MSC_FULL_VER > 100000000
+#  define BOOST_MSVC_FULL_VER _MSC_FULL_VER
+#else
+#  define BOOST_MSVC_FULL_VER (_MSC_FULL_VER * 10)
+#endif
+
 // turn off the warnings before we #include anything
 #pragma warning( disable : 4503 ) // warning: decorated name length exceeded
 
