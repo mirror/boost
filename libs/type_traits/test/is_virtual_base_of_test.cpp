@@ -9,6 +9,21 @@
 #include "check_integral_constant.hpp"
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
+// for bug report 3317: https://svn.boost.org/trac/boost/ticket/3317
+class B
+{
+public:
+   B();
+   virtual ~B()throw();
+};
+
+class D : public B
+{
+public:
+   D();
+   virtual ~D()throw();
+};
+
 TT_TEST_BEGIN(is_virtual_base_of)
 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<Derived,Base>::value), false);
@@ -42,6 +57,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<boost::noncopyable,virtu
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<virtual_inherit4,boost::noncopyable>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<int_convertible,virtual_inherit5>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<virtual_inherit5,int_convertible>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<Base,virtual_inherit6>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<virtual_inherit6,Base>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_virtual_base_of<B,D>::value), false);
 
 TT_TEST_END
 

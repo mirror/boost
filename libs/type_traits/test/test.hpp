@@ -370,6 +370,7 @@ struct virtual_inherit2 : virtual_inherit1 { };
 struct virtual_inherit3 : private virtual Base {};
 struct virtual_inherit4 : virtual boost::noncopyable {};
 struct virtual_inherit5 : virtual int_convertible {};
+struct virtual_inherit6 : virtual Base { virtual ~virtual_inherit6()throw(); };
 
 typedef void foo0_t();
 typedef void foo1_t(int);
