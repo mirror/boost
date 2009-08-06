@@ -65,6 +65,13 @@ BOOST_ARCHIVE_FORWARD_IMPLEMENTATION(archive::tracking_type)
 BOOST_ARCHIVE_FORWARD_IMPLEMENTATION(archive::class_name_type)
 BOOST_ARCHIVE_FORWARD_IMPLEMENTATION(serialization::collection_size_type)
 
+    void load_override(std::string & s , int)    
+    {                            
+      serialization::collection_size_type length(s.size());              
+      load_override(length,0);       
+      s.resize(length);
+    }
+
 #undef BOOST_ARCHIVE_FORWARD_IMPLEMENTATION
 protected:
     /// the actual archive used to serialize the information we actually want to store

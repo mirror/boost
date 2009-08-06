@@ -66,6 +66,11 @@ BOOST_ARCHIVE_FORWARD_IMPLEMENTATION(archive::tracking_type)
 BOOST_ARCHIVE_FORWARD_IMPLEMENTATION(archive::class_name_type)
 BOOST_ARCHIVE_FORWARD_IMPLEMENTATION(serialization::collection_size_type)
 
+    void save_override(std::string const & t , int)    
+    {                                          
+      save_override(serialization::collection_size_type(t.size()),0);       
+    }
+
 
 #undef BOOST_ARCHIVE_FORWARD_IMPLEMENTATION
 protected:

@@ -16,6 +16,7 @@
 #include <boost/archive/basic_archive.hpp>
 #include <boost/archive/detail/oserializer.hpp>
 #include <boost/serialization/collection_size_type.hpp>
+#include <boost/serialization/array.hpp>
 
 namespace boost { namespace mpi { namespace detail {
 
@@ -59,6 +60,12 @@ BOOST_ARCHIVE_IGNORE_IMPLEMENTATION(archive::object_reference_type)
 BOOST_ARCHIVE_IGNORE_IMPLEMENTATION(archive::tracking_type)
 BOOST_ARCHIVE_IGNORE_IMPLEMENTATION(archive::class_name_type)
 BOOST_ARCHIVE_IGNORE_IMPLEMENTATION(serialization::collection_size_type)
+
+    void save_override(std::string const & s, int)       
+    {
+      if (s.size())
+        save_override(serialization::make_array(s.data(),s.size()),0);
+    }
 
 #undef BOOST_ARCHIVE_IGNORE_IMPLEMENTATION
 };
