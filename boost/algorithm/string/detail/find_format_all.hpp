@@ -24,29 +24,7 @@ namespace boost {
 
 // find_format_all_copy (iterator variant) implementation ---------------------------//
 
-            template< 
-                typename OutputIteratorT,
-                typename InputT,
-                typename FinderT,
-                typename FormatterT,
-                typename FindResultT >
-            inline OutputIteratorT find_format_all_copy_impl(
-                OutputIteratorT Output,
-                const InputT& Input,
-                FinderT Finder,
-                FormatterT Formatter,
-                const FindResultT& FindResult )
-            {       
-                return ::boost::algorithm::detail::find_format_all_copy_impl2( 
-                    Output,
-                    Input,
-                    Finder,
-                    Formatter,
-                    FindResult,
-                    Formatter(FindResult) );
-            }
-
-            template< 
+           template< 
                 typename OutputIteratorT,
                 typename InputT,
                 typename FinderT,
@@ -94,20 +72,21 @@ namespace boost {
                 return Output;
             }
 
-// find_format_all_copy implementation ----------------------------------------------//
-
             template< 
-                typename InputT, 
+                typename OutputIteratorT,
+                typename InputT,
                 typename FinderT,
                 typename FormatterT,
                 typename FindResultT >
-            inline InputT find_format_all_copy_impl(
+            inline OutputIteratorT find_format_all_copy_impl(
+                OutputIteratorT Output,
                 const InputT& Input,
                 FinderT Finder,
                 FormatterT Formatter,
-                const FindResultT& FindResult)
-            {
-                return ::boost::algorithm::detail::find_format_all_copy_impl2(
+                const FindResultT& FindResult )
+            {       
+                return ::boost::algorithm::detail::find_format_all_copy_impl2( 
+                    Output,
                     Input,
                     Finder,
                     Formatter,
@@ -115,7 +94,9 @@ namespace boost {
                     Formatter(FindResult) );
             }
 
-            template< 
+ // find_format_all_copy implementation ----------------------------------------------//
+
+           template< 
                 typename InputT, 
                 typename FinderT,
                 typename FormatterT,
@@ -164,20 +145,18 @@ namespace boost {
                 return Output;
             }
 
-// find_format_all implementation ------------------------------------------------//
-        
-            template<
-                typename InputT,
+            template< 
+                typename InputT, 
                 typename FinderT,
                 typename FormatterT,
                 typename FindResultT >
-            inline void find_format_all_impl( 
-                InputT& Input,
+            inline InputT find_format_all_copy_impl(
+                const InputT& Input,
                 FinderT Finder,
                 FormatterT Formatter,
-                FindResultT FindResult)
+                const FindResultT& FindResult)
             {
-                ::boost::algorithm::detail::find_format_all_impl2(
+                return ::boost::algorithm::detail::find_format_all_copy_impl2(
                     Input,
                     Finder,
                     Formatter,
@@ -185,6 +164,8 @@ namespace boost {
                     Formatter(FindResult) );
             }
 
+ // find_format_all implementation ------------------------------------------------//
+        
             template<
                 typename InputT,
                 typename FinderT,
@@ -254,6 +235,25 @@ namespace boost {
                     // Copy remaining data to the end of input
                     ::boost::algorithm::detail::insert( Input, ::boost::end(Input), Storage.begin(), Storage.end() );
                 }
+            }
+
+            template<
+                typename InputT,
+                typename FinderT,
+                typename FormatterT,
+                typename FindResultT >
+            inline void find_format_all_impl( 
+                InputT& Input,
+                FinderT Finder,
+                FormatterT Formatter,
+                FindResultT FindResult)
+            {
+                ::boost::algorithm::detail::find_format_all_impl2(
+                    Input,
+                    Finder,
+                    Formatter,
+                    FindResult,
+                    Formatter(FindResult) );
             }
 
         } // namespace detail
