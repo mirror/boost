@@ -81,6 +81,9 @@ ring_array_test(const communicator& comm, const T* pass_values,
   delete [] transferred_values;
 }
 
+enum color_t {red, green, blue};
+BOOST_IS_MPI_DATATYPE(color_t)
+
 int test_main(int argc, char* argv[])
 {
   boost::mpi::environment env(argc, argv);
@@ -95,6 +98,8 @@ int test_main(int argc, char* argv[])
   // Check transfer of individual objects
   ring_test(comm, 17, "integers", 0);
   ring_test(comm, 17, "integers", 1);
+  ring_test(comm, red, "enums", 1);
+  ring_test(comm, red, "enums", 1);
   ring_test(comm, gps_position(39,16,20.2799), "GPS positions", 0);
   ring_test(comm, gps_position(26,25,30.0), "GPS positions", 1);
   ring_test(comm, std::string("Rosie"), "string", 0);
