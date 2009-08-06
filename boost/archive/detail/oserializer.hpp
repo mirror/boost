@@ -424,6 +424,7 @@ struct save_pointer_type {
         >::type type;
     };
 
+    #if 0
     template<class T>
     struct warning_check {
         typedef 
@@ -441,6 +442,7 @@ struct save_pointer_type {
             > type;
         BOOST_STATIC_CONSTANT(bool, value = type::value);
     };
+    #endif
 
     // used to convert TPtr in to a pointer to a T
     template<class T>
@@ -467,7 +469,10 @@ struct save_pointer_type {
         // that serialization for collections of primitives use this method
         // so even if you avoid this "risky" behavior - it could trip you up.
 
-        BOOST_STATIC_WARNING(warning_check<T>::value);
+        // note: I decided to comment this as as this warning is almost
+        // always going to be spurious.
+
+        // BOOST_STATIC_WARNING(warning_check<T>::value);
         conditional<T>::type::save(ar, const_cast<T &>(t));
     }
 
