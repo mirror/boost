@@ -212,7 +212,7 @@ you can pass MPI-related options explicitly via the second parameter to the
 To see the results of MPI auto-detection, pass `--debug-configuration` on
 the bjam command line.
 
-The (optional) fourth argument configures Boost.MPI for running
+The (optional) third argument configures Boost.MPI for running
 regression tests. These parameters specify the executable used to
 launch jobs (default: "mpirun") followed by any necessary arguments
 to this to run tests and tell the program to expect the number of
