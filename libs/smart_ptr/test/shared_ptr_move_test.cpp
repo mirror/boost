@@ -8,10 +8,10 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
-#if defined( BOOST_HAS_RVALUE_REFS )
-
 #include <boost/shared_ptr.hpp>
 #include <boost/detail/lightweight_test.hpp>
+
+#if defined( BOOST_HAS_RVALUE_REFS )
 
 struct X
 {
@@ -43,11 +43,11 @@ int main()
         boost::shared_ptr<X> p( new X );
         BOOST_TEST( X::instances == 1 );
 
-        boost::shared_ptr<X> p2( static_cast< boost::shared_ptr<X> && >( p ) );
+        boost::shared_ptr<X> p2( std::move( p ) );
         BOOST_TEST( X::instances == 1 );
         BOOST_TEST( p.get() == 0 );
 
-        boost::shared_ptr<void> p3( static_cast< boost::shared_ptr<X> && >( p2 ) );
+        boost::shared_ptr<void> p3( std::move( p2 ) );
         BOOST_TEST( X::instances == 1 );
         BOOST_TEST( p2.get() == 0 );
 
@@ -60,12 +60,12 @@ int main()
         BOOST_TEST( X::instances == 1 );
 
         boost::shared_ptr<X> p2;
-        p2 = static_cast< boost::shared_ptr<X> && >( p );
+        p2 = std::move( p );
         BOOST_TEST( X::instances == 1 );
         BOOST_TEST( p.get() == 0 );
 
         boost::shared_ptr<void> p3;
-        p3 = static_cast< boost::shared_ptr<X> && >( p2 );
+        p3 = std::move( p2 );
         BOOST_TEST( X::instances == 1 );
         BOOST_TEST( p2.get() == 0 );
 
@@ -79,13 +79,13 @@ int main()
 
         boost::shared_ptr<X> p2( new X );
         BOOST_TEST( X::instances == 2 );
-        p2 = static_cast< boost::shared_ptr<X> && >( p );
+        p2 = std::move( p );
         BOOST_TEST( X::instances == 1 );
         BOOST_TEST( p.get() == 0 );
 
         boost::shared_ptr<void> p3( new X );
         BOOST_TEST( X::instances == 2 );
-        p3 = static_cast< boost::shared_ptr<X> && >( p2 );
+        p3 = std::move( p2 );
         BOOST_TEST( X::instances == 1 );
         BOOST_TEST( p2.get() == 0 );
 
