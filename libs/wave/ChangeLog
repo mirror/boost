@@ -22,10 +22,18 @@ TODO (known issues):
 
 CHANGELOG
 
+Boost V1.40.0
+- V2.0.2
+- Fixed a long standing race condition inhibiting to use Wave in multi threaded 
+  environments.
+- Incorporated the changes from latest version of the flex_string class (#2946).
+- Fixed another race condition triggering problems using Wave in multi-threaded
+  environments.
+
 Boost V1.39.0
 - V2.0.1
 - Fixed Wave to compile with BOOST_FILESYSTEM_NO_DEPRECATED defined (i.e. the 
-  library doesn't use the depracated filesystem interface anymore).
+  library doesn't use the deprecated filesystem interface anymore).
 
 Boost V1.37.0
 - Updated examples to reflect the recent changes in the used multi_pass 

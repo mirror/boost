@@ -862,12 +862,13 @@ macromap<ContextT>::expand_whole_tokensequence(ContainerT &expanded,
         gen_type;
     typedef typename gen_type::return_type iterator_type;
 
-iterator_type first_it = gen_type::generate(first);
-iterator_type last_it = gen_type::generate(last);
+    ContainerT empty;
+    iterator_type first_it = gen_type::generate(empty, first);
+    iterator_type last_it = gen_type::generate(last);
 
-on_exit::assign<IteratorT, iterator_type> on_exit(first, first_it);
-ContainerT pending_queue;
-bool seen_newline;
+    on_exit::assign<IteratorT, iterator_type> on_exit(first, first_it);
+    ContainerT pending_queue;
+    bool seen_newline;
     
     while (!pending_queue.empty() || first_it != last_it) {
         expanded.push_back(

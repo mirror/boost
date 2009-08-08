@@ -23,6 +23,7 @@
 
 #include <boost/throw_exception.hpp>
 #include <boost/pool/singleton_pool.hpp>
+#include <boost/detail/atomic_count.hpp>
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
@@ -131,7 +132,7 @@ private:
     token_id id;                // the token id
     string_type value;          // the text, which was parsed into this token
     position_type pos;          // the original file position
-    std::size_t refcnt;
+    boost::detail::atomic_count refcnt;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

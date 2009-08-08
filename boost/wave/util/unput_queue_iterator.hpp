@@ -283,13 +283,13 @@ namespace impl {
         static return_type 
         generate(iterator_type &it)
         {
-            return return_t(it.base(), last);
+            return return_type(it.base(), last);
         }
 
         static return_type 
         generate(ContainerT &queue, iterator_type &it)
         {
-            return return_t(it.base(), queue);
+            return return_type(it.base(), queue);
         }
     };
     
