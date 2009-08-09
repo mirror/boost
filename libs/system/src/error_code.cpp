@@ -23,7 +23,7 @@
 #include <cassert>
 
 using namespace boost::system;
-using namespace boost::system::posix_error;
+using namespace boost::system::errc;
 
 #include <cstring> // for strerror/strerror_r
 
@@ -411,11 +411,13 @@ namespace boost
   namespace system
   {
 
+# ifndef BOOST_SYSTEM_NO_DEPRECATED
     BOOST_SYSTEM_DECL error_code throws; // "throw on error" special error_code;
                                          //  note that it doesn't matter if this
                                          //  isn't initialized before use since
                                          //  the only use is to take its
                                          //  address for comparison purposes
+# endif
 
     BOOST_SYSTEM_DECL const error_category & get_system_category()
     {
