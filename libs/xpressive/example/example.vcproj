@@ -834,23 +834,15 @@
 					Name="transform"
 					>
 					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\apply.hpp"
-						>
-					</File>
-					<File
 						RelativePath="..\..\..\boost\xpressive\proto\transform\arg.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\branch.hpp"
+						RelativePath="..\..\..\boost\xpressive\proto\transform\bind.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\compose.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\construct.hpp"
+						RelativePath="..\..\..\boost\xpressive\proto\transform\call.hpp"
 						>
 					</File>
 					<File
@@ -862,15 +854,15 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\function.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\list.hpp"
+						RelativePath="..\..\..\boost\xpressive\proto\transform\make.hpp"
 						>
 					</File>
 					<File
 						RelativePath="..\..\..\boost\xpressive\proto\transform\pass_through.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\proto\transform\when.hpp"
 						>
 					</File>
 				</Filter>
@@ -878,11 +870,27 @@
 					Name="detail"
 					>
 					<File
+						RelativePath="..\..\..\boost\xpressive\proto\detail\as_lvalue.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\proto\detail\dont_care.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\boost\xpressive\proto\detail\funop.hpp"
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\boost\xpressive\proto\detail\pop_front.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\boost\xpressive\proto\detail\prefix.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\proto\detail\reverse.hpp"
 						>
 					</File>
 					<File
