@@ -7,8 +7,8 @@
 
 [library Boost.Intrusive
     [quickbook 1.3]
-    [authors [Krzikalla, Olaf], [Gazta&ntilde;aga, Ion]]
-    [copyright 2005 Olaf Krzikalla, 2006-2008 Ion Gazta&ntilde;aga]
+    [authors [Krzikalla, Olaf], [Gaztanaga, Ion]]
+    [copyright 2005 Olaf Krzikalla, 2006-2008 Ion Gaztanaga]
     [id intrusive]
     [dirname intrusive]
     [purpose Intrusive containers]
