@@ -1,4 +1,4 @@
-﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -43,7 +43,32 @@ http://www.boost.org/LICENSE_1_0.txt)
     quirks and or bugs, some tests fail with some combinations of compilers and libraries.
     <h2>
         <a name="requirements"></a>Requirements</h2>
-    This library has been tested against Boost version 1.39.
+    This library has been tested against Boost version 1.39 and 1.40.
+    <p>
+    Changes have been made to archive classes included with the library.
+    Users who have used these a guide to making their own archive classes
+    will find that these will likely no longer compile.  This can be remedied
+    by making the following changes in the code which instantiates these
+    archive classes.
+    <p>
+    Old Code:<br>
+    <code><pre>
+    ...
+    #include &lt;boost/archive/impl/archive_pointer_iserializer.ipp&gt;
+    ...
+    template class detail::archive_pointer_iserializer&lt;naked_text_iarchive&gt; ;
+    ...
+    template class detail::archive_pointer_iserializer&lt;text_iarchive&gt; ;
+    </pre></code>
+    should be replaced with this new code:
+    <p>
+    <code><pre>
+    #include &lt;boost/archive/impl/archive_serializer_map.ipp&gt;
+    ...
+    template class detail::archive_serializer_map&lt;naked_text_iarchive&gt; ;
+    ...
+    template class detail::archive_serializer_map&lt;text_iarchive&gt; ;
+    </pre></code>
 <!--
 <p>
 The serialization library uses the boost spirit package to load XML archives.
@@ -147,7 +172,7 @@ at the front of the list of include paths.
             This is compatible with public interface of <code style="white-space: normal">shared_ptr&lt;T&gt;</code>
             so it should be more robust and not have to change in the future. The implementation
             optionally includes code to load <code style="white-space: normal">shared_ptr&lt;T&gt;</code>
-            stored in archives created with boost 1.32. This code is stored in the header: <code
+            stored in archives created with boost 1.32. This code is stored in 'he header: <code
                 style="white-space: normal">boost/serialization/shared_ptr_132.hpp</code>. If
             your application needs to load archives created with boost 1.32 libraries, include
             the above header before each inclusion of <code style="white-space: normal">boost/serialization/shared_ptr.hpp</code>.
