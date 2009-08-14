@@ -22,7 +22,9 @@
 namespace std{ 
     using ::size_t; 
     using ::wcslen;
+#ifndef UNDER_CE    
     using ::w_int;
+#endif    
 } // namespace std
 #endif
 
