@@ -35,12 +35,17 @@ a:hover
 {
     a
     {
-        color: #0C7445;
+        color: #005a9c;
     }
 
     a:visited
     {
-        color: #663974;
+        color: #9c5a9c;
+    }
+
+    .copyright-footer
+    {
+        color: #8F8F8F;
     }
 }
 
@@ -110,6 +115,20 @@ a.ref-subsection-title
 {
     text-decoration: none;
     color: black;
+}
+
+
+div.copyright-footer
+{
+    text-align: right;
+    font-size: 70%;
+}
+
+div.copyright-footer div.copyright
+{
+    font-size: 120%;
+    padding-top: 4pt;
+    padding-bottom: 4pt;
 }
 
 
@@ -526,7 +545,7 @@ pre.literal-block
     pre.literal-block
     {
 
-        background-color: #fafffb;
+        background-color: #f5fbff;
     }
 }
 
@@ -557,15 +576,6 @@ table
     margin-bottom: 0.5em;
 }
 
-@media screen
-{
-    table.table th
-    {
-        background-color:#fafffb;
-    }
-}
-
-
 table.docinfo
 {
     border: solid 0;
@@ -589,7 +599,7 @@ table.citation
 {
     table.citation
     {
-        background-color:#fafffb;
+        background-color: #f5fbff;
     }
 }
 
@@ -603,7 +613,7 @@ table.footnote
 {
     table.footnote
     {
-        background-color:#fafffb;
+        background-color: #f5fbff;
     }
 }
 
@@ -640,8 +650,11 @@ th
     table.table 
 th
 {
+    white-space: nowrap;
     padding-left: 5pt;
     padding-right: 5pt;
+    padding-top: 1pt;
+    padding-bottom: 1pt;
 }
 
 
@@ -649,7 +662,7 @@ th
 {
     table.table th
     {
-        background-color:#fafffb;
+        background-color:#f0f0f0;
     }
 }
 
@@ -659,8 +672,8 @@ td
 {
     padding-left: 5pt;
     padding-right: 5pt;
-    padding-top: 1pt;
-    padding-bottom: 1pt;
+    padding-top: 2pt;
+    padding-bottom: 2pt;
 }
 
 
@@ -717,7 +730,7 @@ tr.footer
     tt.literal
     {
 
-        background-color: #fafffb;
+        background-color: #f5fbff;
     }
 }
 
