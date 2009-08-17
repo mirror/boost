@@ -1,9 +1,4 @@
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 According to their name, MPL's *transformation*, or *sequence-building
 algorithms* provide the tools for building new sequences from the existing
 ones by performing some kind of transformation. A typical transformation 
@@ -27,3 +22,8 @@ way to perform the required transformation.
 .. |transformation algorithm| replace:: `transformation algorithm`_
 .. _transformation algorithm: `Transformation Algorithms`_
 .. |transformation algorithms| replace:: `transformation algorithms`_
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

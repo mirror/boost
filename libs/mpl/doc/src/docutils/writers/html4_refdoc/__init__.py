@@ -134,6 +134,17 @@ class refdoc_translator(html4_frames.frame_pages_translator):
         self.in_literal_block = False
 
 
+    def visit_license_and_copyright(self, node):
+        self = self.active_visitor()
+        self.context.append( len( self.body ) )
+
+    def depart_license_and_copyright(self, node):
+        self = self.active_visitor()
+        start = self.context.pop()
+        self.footer = self.body[start:]
+        del self.body[start:]
+
+
     def visit_Text(self, node):
         if not self.in_literal_block:
             self.__super.visit_Text(self, node)
@@ -161,8 +172,19 @@ class refdoc_translator(html4_frames.frame_pages_translator):
         print 'Unresolved substitution_reference:', node.astext()
         raise nodes.SkipNode
 
-    def _handle_depart_page(self, translator, node):
-        pass
+
+    def _footer_content(self):    
+        self = self.active_visitor()
+        parts = ''.join( self.footer ).split( '\n' )
+        parts = [ '<div class="copyright">%s</div>' % x if x.startswith( 'Copyright' ) else x for x in parts ]        
+        return '<td><div class="copyright-footer">%s</div></td>' % '\n'.join( parts ) if len( parts ) else ''
+
+
+    def _toc_as_text( self, visitor ):
+        footer_end = visitor.body.pop()
+        visitor.body.append( self._footer_content() )
+        visitor.body.append( footer_end )
+        return visitor.astext()
 
 
     def _handle_include_sub(base, self, match):

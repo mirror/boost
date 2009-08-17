@@ -1,9 +1,4 @@
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2001-2009.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 The MPL provides a number of |Trivial Metafunction|\ s that a nothing more than
 thin wrappers for a differently-named class nested type members. While important
 in the context of `in-place metafunction composition`__, these metafunctions have
@@ -17,41 +12,10 @@ presented below.
 __ `Composition and Argument Binding`_
 __ `Trivial Metafunction`_
 
-
-Trivial Metafunctions Summary
-=============================
-
-In the following table, ``x`` is an arbitrary class type.
-
-.. |first| replace:: `:refentry:`first` <|first link|>`__
-.. |second| replace:: `:refentry:`second` <|second link|>`__
-.. |base| replace:: `:refentry:`base` <|base link|>__
-
-.. |first link| replace:: `trivial-first`_
-.. |second link| replace:: `trivial-second`_
-.. |base link| replace:: `trivial-base`_
-
-
-.. _`trivial-first`:
-.. _`trivial-second`:
-.. _`trivial-base`:
-
-
-+---------------------------+-------------------------------------------+
-| Metafunction              | Header                                    |
-+===========================+===========================================+
-| ``first<x>::type``        | ``#include <boost/mpl/pair.hpp>``         |
-+---------------------------+-------------------------------------------+
-| ``second<x>::type``       | ``#include <boost/mpl/pair.hpp>``         |
-+---------------------------+-------------------------------------------+
-| ``base<x>::type``         | ``#include <boost/mpl/base.hpp>``         |
-+---------------------------+-------------------------------------------+
-
-
-See Also
---------
-
-|Metafunctions|, |Trivial Metafunction|
-
 .. |Trivial Metafunctions| replace:: `Trivial Metafunctions`_
 .. _`Trivial Metafunctions`: `label-Metafunctions-Trivial`_
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

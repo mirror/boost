@@ -1,10 +1,5 @@
 .. Metafunctions/Composition and Argument Binding//_1,_2,..._n |10
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2001-2009.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 Placeholders
 ============
 .. _`placeholder`:
@@ -117,3 +112,8 @@ See also
 .. _`_5`: `Placeholders`_
 
 .. |_1,_2,..._n| replace:: |_1|, |_2|, |_3|,\ |...|
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

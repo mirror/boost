@@ -1,10 +1,5 @@
 .. Algorithms/Inserters//inserter
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2001-2009.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 .. _`inserter_`:
 
 inserter (class)
@@ -100,3 +95,8 @@ See also
 |Algorithms|, |Inserter|, |Reversible Algorithm|, |front_inserter|, |back_inserter|
 
 .. |[inserter]| replace:: `inserter (class)`_
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

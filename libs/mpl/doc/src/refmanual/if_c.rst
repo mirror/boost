@@ -1,10 +1,5 @@
 .. Metafunctions/Type Selection//if_c |20
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 if_c
 ====
 
@@ -103,3 +98,8 @@ See also
 --------
 
 |Metafunctions|, |Integral Constant|, |if_|, |eval_if|, |bool_|
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

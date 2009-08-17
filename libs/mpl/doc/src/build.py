@@ -8,23 +8,28 @@ import shutil
 import os
 
 
-def build():
+def build( src_dir, build_dir ):
 
+    src = os.path.join( build_dir, 'refmanual.gen' )
+    
     def cleanup():
-        if os.path.exists( 'refmanual.gen' ):
-            os.unlink( 'refmanual.gen' )
+        if os.path.exists( src ):
+            os.unlink( src )
 
-        if os.path.exists( 'build' ):
-            shutil.rmtree( 'build' )
+        if os.path.exists( build_dir ):
+            shutil.rmtree( build_dir )
 
     def generate_html():
-        os.system( 'python refmanual.py' )
-        os.mkdir( 'build' )
-        os.system( 'rst2htmlrefdoc.py -g -d -t --no-frames --dont-copy-stylesheet --stylesheet-path=style.css --traceback refmanual.gen build/refmanual.html' )
+        os.mkdir( build_dir )
+        os.chdir( build_dir )
+        os.system( 'python %s %s' % ( os.path.join( src_dir, 'refmanual.py' ), build_dir ) )
+        os.system( 'rst2htmlrefdoc.py --traceback -g -d -t --no-frames --dont-copy-stylesheet --stylesheet-path=style.css %s refmanual.html' % src ) 
 
-    os.chdir( 'refmanual' )
     cleanup()
     generate_html()
 
 
-build()
+build(
+      os.path.join( os.getcwd(), 'refmanual' )
+    , os.path.join( os.getcwd(), '_build' )
+    )

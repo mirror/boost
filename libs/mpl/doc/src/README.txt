@@ -35,7 +35,7 @@ Building
 4. Do ``python build.py``. It's going to take a couple of minutes to finish.
 
 5. If all goes well, the resulting HTML docs will be placed in
-   ``$BOOST_ROOT/libs/mpl/doc/src/refmanual/build/`` directory.
+   ``$BOOST_ROOT/libs/mpl/doc/src/_build/`` directory.
 
 
 .. _Python: http://python.org/

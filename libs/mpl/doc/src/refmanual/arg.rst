@@ -1,10 +1,5 @@
 .. Metafunctions/Composition and Argument Binding//arg |50
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 arg
 ===
 
@@ -93,3 +88,8 @@ See also
 --------
 
 |Composition and Argument Binding|, |Placeholders|, |lambda|, |bind|, |apply|, |apply_wrap|
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

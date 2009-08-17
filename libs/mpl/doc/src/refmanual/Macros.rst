@@ -1,9 +1,4 @@
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 Being a *template* metaprogramming framework, the MPL concentrates on 
 getting one thing done well and leaves most of the clearly 
 preprocessor-related tasks to the corresponding specialized 
@@ -21,3 +16,7 @@ __ http://www.boost.org/libs/preprocessor/doc/index.html
 
 .. [Ve03] Vesa Karvonen, `The Order Programming Language`, 2003.
 
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

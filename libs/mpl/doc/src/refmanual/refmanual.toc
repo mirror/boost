@@ -36,4 +36,6 @@ Macros/Configuration
 Macros/Broken Compiler Workarounds 
 Terminology
 Categorized Index
+Categorized Index/Concepts
+Categorized Index/Components
 Acknowledgements

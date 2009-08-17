@@ -1,10 +1,5 @@
 .. Algorithms/Transformation Algorithms//reverse_remove_if |170
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 reverse_remove_if
 =================
 
@@ -118,3 +113,8 @@ See also
 
 |Transformation Algorithms|, |Reversible Algorithm|, |remove_if|, |reverse_remove|, 
 |reverse_copy_if|, |replace_if|
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

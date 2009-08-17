@@ -1,33 +1,28 @@
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2001-2009.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 The MPL Reference Manual
 ************************
 
-:Copyright: Copyright ©  Aleksey Gurtovoy and David Abrahams, 2001-2009.
+:Copyright: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
 
 :License:   Distributed under the Boost Software License, Version 1.0. (See 
             accompanying file ``LICENSE_1_0.txt`` or copy at 
-            `http://www.boost.org/LICENSE_1_0.txt`__)
-
-
-__ http://www.boost.org/LICENSE_1_0.txt
-
-
-
-.. no .. section-numbering::
+            http://www.boost.org/LICENSE_1_0.txt)
 
 
 .. raw:: latex
 
    \setcounter{secnumdepth}{2}
    \setcounter{tocdepth}{2}
+
+
+.. TOC copyright:
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     
 .. contents:: Table of Contents
     :depth: 3
+
 
 .. |Boost.Bind| replace:: `Boost.Bind <http://www.boost.org/libs/bind/bind.html>`__
 .. |Boost.Lambda| replace:: `Boost.Lambda <http://www.boost.org/libs/lambda/doc/index.html>`__

@@ -1,9 +1,4 @@
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2001-2009.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 The taxonomy of sequence concepts in MPL parallels the taxonomy of the MPL 
 |iterators|, with two additional classification dimensions: 
 `extensibility` and `associativeness`. 
@@ -31,3 +26,8 @@ The taxonomy of sequence concepts in MPL parallels the taxonomy of the MPL
 
 .. |sequence concepts| replace:: `sequence concepts`_ 
 .. _`sequence concepts`: `label-Sequences-Concepts`_
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

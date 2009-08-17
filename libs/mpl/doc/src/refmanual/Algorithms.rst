@@ -1,9 +1,4 @@
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2001-2009.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 The MPL provides a broad range of fundamental algorithms aimed to 
 satisfy the majority of sequential compile-time data processing 
 needs. The algorithms include compile-time counterparts
@@ -43,3 +38,8 @@ concept.
 .. |Output Iterator| replace:: `Output Iterator <http://www.sgi.com/tech/stl/OutputIterator.html>`__
 .. |sequence algorithms| replace:: `sequence algorithms`_
 .. _`sequence algorithms`: `Algorithms`_
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
