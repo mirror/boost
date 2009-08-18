@@ -5,18 +5,13 @@ Trivial Metafunctions Summary
 
 In the following table, ``x`` is an arbitrary class type.
 
-.. |first| replace:: `:refentry:`first` <|first link|>`__
-.. |second| replace:: `:refentry:`second` <|second link|>`__
-.. |base| replace:: `:refentry:`base` <|base link|>__
+.. |first| replace:: `first`_
+.. |second| replace:: `second`_
+.. |base| replace:: `base`_
 
-.. |first link| replace:: `trivial-first`_
-.. |second link| replace:: `trivial-second`_
-.. |base link| replace:: `trivial-base`_
-
-
-.. _`trivial-first`:
-.. _`trivial-second`:
-.. _`trivial-base`:
+.. _`first`:
+.. _`second`:
+.. _`base`:
 
 
 +---------------------------+-------------------------------------------+
