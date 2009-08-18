@@ -1,10 +1,5 @@
 .. Algorithms/Runtime Algorithms//for_each |10
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 for_each
 ========
 
@@ -141,5 +136,10 @@ See also
 
 |Runtime Algorithms|, |Views|, |transform_view|
 
-.. |unary function object| replace:: `unary function object <http://www.sgi.com/tech/stl/UnaryFunction.html>`_
-.. |value_initialized| replace:: `value_initialized <http://www.boost.org/libs/utility/value_init.htm>`_
+.. |unary function object| replace:: `unary function object <http://www.sgi.com/tech/stl/UnaryFunction.html>`__
+.. |value_initialized| replace:: `value_initialized <http://www.boost.org/libs/utility/value_init.htm>`__
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

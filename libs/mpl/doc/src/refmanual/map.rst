@@ -1,10 +1,5 @@
 .. Sequences/Classes//map |50
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 map
 ===
 
@@ -89,7 +84,7 @@ Expression semantics
 +---------------------------------------+-----------------------------------------------------------+
 | ``value_type<m,x>::type``             | Identical to ``x::second``; see |Associative Sequence|.   |
 +---------------------------------------+-----------------------------------------------------------+
-| ``insert<m,x>::type``                 | A new ``map`` equivalent to ``m`` except that             |
+| ``insert<m,x>::type``                 | A new ``map``, ``t``, equivalent to ``m`` except that     |
 |                                       | ::                                                        |
 |                                       |                                                           |
 |                                       |     at< t, key_type<m,x>::type >::type                    |
@@ -98,7 +93,7 @@ Expression semantics
 +---------------------------------------+-----------------------------------------------------------+
 | ``insert<m,pos,x>::type``             | Equivalent to ``insert<m,x>::type``; ``pos`` is ignored.  |
 +---------------------------------------+-----------------------------------------------------------+
-| ``erase_key<m,k>::type``              | A new ``map`` equivalent to ``m`` except that             |
+| ``erase_key<m,k>::type``              | A new ``map``, ``t``, equivalent to ``m`` except that     |
 |                                       | ``has_key<t, k>::value == false``.                        |
 +---------------------------------------+-----------------------------------------------------------+
 | ``erase<m,pos>::type``                | Equivalent to ``erase<m, deref<pos>::type >::type``.      |
@@ -133,3 +128,7 @@ See also
 
 |Sequences|, |Variadic Sequence|, |Associative Sequence|, |Extensible Associative Sequence|, |set|, |vector|
 
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

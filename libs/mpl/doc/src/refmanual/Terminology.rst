@@ -1,9 +1,4 @@
 
-
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 .. _`Overloaded name`:
 
 Overloaded name
@@ -12,11 +7,6 @@ Overloaded name
     class template overloading is nonexistent and the referenced functionality
     is implemented by other, unspecified, means.
     
-
-.. |overloaded name| replace:: `overloaded name`__
-__ `Overloaded name`_
-
-
 
 .. _`Concept-identical`:
 
@@ -42,12 +32,11 @@ Bind expression
         _2
 
 
-.. |bind expression| replace:: `bind expression`__
-__ `Bind expression`_
+.. |overloaded name| replace:: `overloaded name`_
+.. |concept-identical| replace:: `concept-identical`_
+.. |bind expression| replace:: `bind expression`_
 
 
-
-.. |concept-identical| replace:: `concept-identical`__
-__ `Concept-identical`_
-
-
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

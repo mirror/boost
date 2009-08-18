@@ -1,10 +1,5 @@
 .. Algorithms/Iteration Algorithms//fold
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 fold
 ====
 
@@ -75,8 +70,11 @@ For any |Forward Sequence| ``s``, binary |Lambda Expression| ``op``, and arbitra
         
     .. parsed-literal::
     
-        typedef iter_fold< s,state,apply<op,_1,deref<_2> > >::type t; 
-
+        typedef iter_fold<
+              s
+            , state
+            , apply_wrap2< lambda<op>::type, _1, deref<_2> >
+            >::type t; 
 
 
 Complexity
@@ -104,3 +102,8 @@ See also
 --------
 
 |Algorithms|, |accumulate|, |reverse_fold|, |iter_fold|, |reverse_iter_fold|, |copy|, |copy_if|
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

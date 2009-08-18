@@ -1,10 +1,5 @@
 .. Metafunctions/Invocation//unpack_args |30
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 unpack_args
 ===========
 
@@ -96,3 +91,8 @@ See also
 --------
 
 |Metafunctions|, |Lambda Expression|, |Metafunction Class|, |apply|, |apply_wrap|, |bind|
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

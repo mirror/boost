@@ -1,10 +1,5 @@
 .. Sequences/Classes//vector |10
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 vector
 ======
 
@@ -110,7 +105,7 @@ into ``v``, ``r`` is a |Forward Sequence|, ``n`` is an |Integral Constant|, and 
 |                                       | see |Back Extensible Sequence|.                           |
 +---------------------------------------+-----------------------------------------------------------+
 | ``push_front<v,x>::type``             | A new ``vector`` of following elements:                   |
-|                                       | |begin/end<v>|, ``x``; see |Front Extensible Sequence|.   |
+|                                       | ``x``, |begin/end<v>|; see |Front Extensible Sequence|.   |
 +---------------------------------------+-----------------------------------------------------------+
 | ``pop_front<v>::type``                | A new ``vector`` of following elements:                   |
 |                                       | [``next< begin<v>::type >::type``, ``end<v>::type``);     |
@@ -134,3 +129,7 @@ See also
 
 |Sequences|, |Variadic Sequence|, |Random Access Sequence|, |Extensible Sequence|, |vector_c|, |list|
 
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

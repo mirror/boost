@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<!-- Copyright Aleksey Gurtovoy 2006. Distributed under the Boost -->
-<!-- Software License, Version 1.0. (See accompanying -->
-<!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.6: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.6: http://docutils.sourceforge.net/" />
 <title>The MPL Reference Manual: shift_left</title>
 <link rel="stylesheet" href="../style.css" type="text/css" />
 </head>
@@ -15,11 +12,11 @@
 <td class="header-group page-location"><a href="../refmanual.html" class="navigation-link">Front Page</a> / <a href="./metafunctions.html" class="navigation-link">Metafunctions</a> / <a href="./bitwise-operations.html" class="navigation-link">Bitwise Operations</a> / <a href="./shift-left.html" class="navigation-link">shift_left</a></td>
 </tr></table><div class="header-separator"></div>
 <div class="section" id="shift-left">
-<h1><a class="toc-backref" href="./bitwise-operations.html#id483" name="shift-left">shift_left</a></h1>
-<div class="section" id="shift-synopsis">
+<h1><a class="toc-backref" href="./bitwise-operations.html#id1540">shift_left</a></h1>
+<div class="section" id="id1116">
 <h3><a class="subsection-title" href="#synopsis" name="synopsis">Synopsis</a></h3>
 <pre class="literal-block">
-template&lt; 
+template&lt;
       typename T
     , typename Shift
     &gt;
@@ -29,62 +26,63 @@ struct <a href="./shift-left.html" class="identifier">shift_left</a>
 };
 </pre>
 </div>
-<div class="section" id="shift-description">
+<div class="section" id="id1117">
 <h3><a class="subsection-title" href="#description" name="description">Description</a></h3>
 <p>Returns the result of bitwise <em>shift left</em> (<tt class="literal"><span class="pre">&lt;&lt;</span></tt>) operation on <tt class="literal"><span class="pre">T</span></tt>.</p>
 </div>
-<div class="section" id="shift-header">
+<div class="section" id="id1118">
 <h3><a class="subsection-title" href="#header" name="header">Header</a></h3>
 <pre class="literal-block">
 #include &lt;<a href="../../../../boost/mpl/shift_left.hpp" class="header">boost/mpl/shift_left.hpp</a>&gt;
 #include &lt;<a href="../../../../boost/mpl/bitwise.hpp" class="header">boost/mpl/bitwise.hpp</a>&gt;
 </pre>
 </div>
-<div class="section" id="shift-model-of">
+<div class="section" id="id1119">
 <h3><a class="subsection-title" href="#model-of" name="model-of">Model of</a></h3>
-<p><a class="reference" href="./numeric-metafunction.html">Numeric Metafunction</a></p>
+<p><a class="reference internal" href="./numeric-metafunction.html">Numeric Metafunction</a></p>
 </div>
-<div class="section" id="shift-parameters">
+<div class="section" id="id1120">
 <h3><a class="subsection-title" href="#parameters" name="parameters">Parameters</a></h3>
-<table border="1" class="table">
+<table border="1" class="docutils table">
 <colgroup>
 <col width="21%" />
 <col width="42%" />
 <col width="37%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th>Parameter</th>
-<th>Requirement</th>
-<th>Description</th>
+<tr><th class="head">Parameter</th>
+<th class="head">Requirement</th>
+<th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr><td><tt class="literal"><span class="pre">T</span></tt></td>
-<td><a class="reference" href="./integral-constant.html">Integral Constant</a></td>
+<td><a class="reference internal" href="./integral-constant.html">Integral Constant</a></td>
 <td>A value to shift.</td>
 </tr>
 <tr><td><tt class="literal"><span class="pre">Shift</span></tt></td>
-<td>Unsigned <a class="reference" href="./integral-constant.html">Integral Constant</a></td>
+<td>Unsigned <a class="reference internal" href="./integral-constant.html">Integral Constant</a></td>
 <td>A shift distance.</td>
 </tr>
 </tbody>
 </table>
 <p>[<em>Note:</em> The requirements listed in this specification
-are the ones imposed by the default implementation. See <a class="reference" href="./numeric-metafunction.html">Numeric Metafunction</a> concept 
-for the details on how to provide an implementation for a user-defined numeric type 
-that does not satisfy the <a class="reference" href="./integral-constant.html">Integral Constant</a> requirements. — <em>end note</em>]</p>
+are the ones imposed by the default implementation. See <a class="reference internal" href="./numeric-metafunction.html">Numeric Metafunction</a> concept
+for the details on how to provide an implementation for a user-defined numeric type
+that does not satisfy the <a class="reference internal" href="./integral-constant.html">Integral Constant</a> requirements. — <em>end note</em>]</p>
 </div>
-<div class="section" id="shift-expression-semantics">
+<div class="section" id="id1121">
 <h3><a class="subsection-title" href="#expression-semantics" name="expression-semantics">Expression semantics</a></h3>
-<p>For arbitrary <a class="reference" href="./integral-constant.html">Integral Constant</a> <tt class="literal"><span class="pre">c</span></tt> and unsigned <a class="reference" href="./integral-constant.html">Integral Constant</a> <tt class="literal"><span class="pre">shift</span></tt>:</p>
+<p>For arbitrary <a class="reference internal" href="./integral-constant.html">Integral Constant</a> <tt class="literal"><span class="pre">c</span></tt> and unsigned <a class="reference internal" href="./integral-constant.html">Integral Constant</a> <tt class="literal"><span class="pre">shift</span></tt>:</p>
 <pre class="literal-block">
-typedef <a href="./shift-left.html" class="identifier">shift_left</a>&lt;c,shift&gt;::type r; 
+typedef <a href="./shift-left.html" class="identifier">shift_left</a>&lt;c,shift&gt;::type r;
 </pre>
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference" href="./integral-constant.html">Integral Constant</a>.</td>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="./integral-constant.html">Integral Constant</a>.</p>
+</td>
 </tr>
 <tr class="field"><th class="field-name">Semantics:</th><td class="field-body"><p class="first">Equivalent to</p>
 <pre class="last literal-block">
@@ -99,13 +97,14 @@ typedef <a href="./integral-c.html" class="identifier">integral_c</a>&lt;
 </table>
 <!-- .......................................................................... -->
 <pre class="literal-block">
-typedef <a href="./shift-left.html" class="identifier">shift_left</a>&lt;c,shift&gt; r; 
+typedef <a href="./shift-left.html" class="identifier">shift_left</a>&lt;c,shift&gt; r;
 </pre>
-<table class="field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference" href="./integral-constant.html">Integral Constant</a>.</td>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="./integral-constant.html">Integral Constant</a>.</p>
+</td>
 </tr>
 <tr class="field"><th class="field-name">Semantics:</th><td class="field-body"><p class="first">Equivalent to</p>
 <pre class="last literal-block">
@@ -116,11 +115,11 @@ struct r : <a href="./shift-left.html" class="identifier">shift_left</a>&lt;c,sh
 </tbody>
 </table>
 </div>
-<div class="section" id="shift-complexity">
+<div class="section" id="id1122">
 <h3><a class="subsection-title" href="#complexity" name="complexity">Complexity</a></h3>
 <p>Amortized constant time.</p>
 </div>
-<div class="section" id="shift-example">
+<div class="section" id="id1123">
 <h3><a class="subsection-title" href="#example" name="example">Example</a></h3>
 <pre class="literal-block">
 typedef <a href="./integral-c.html" class="identifier">integral_c</a>&lt;unsigned,0&gt; u0;
@@ -135,15 +134,16 @@ typedef <a href="./integral-c.html" class="identifier">integral_c</a>&lt;unsigne
 <a href="./assert-relation.html" class="identifier">BOOST_MPL_ASSERT_RELATION</a>( (<a href="./shift-left.html" class="identifier">shift_left</a>&lt;u8,u1&gt;::value), ==, 16 );
 </pre>
 </div>
-<div class="section" id="shift-see-also">
+<div class="section" id="id1124">
 <h3><a class="subsection-title" href="#see-also" name="see-also">See also</a></h3>
-<p><a class="reference" href="./bitwise-operations.html">Bitwise Operations</a>, <a class="reference" href="./numeric-metafunction.html">Numeric Metafunction</a>, <a class="refentry reference" href="./numeric-cast.html"><tt class="refentry literal"><span class="pre">numeric_cast</span></tt></a>, <a class="refentry reference" href="./shift-right.html"><tt class="refentry literal"><span class="pre">shift_right</span></tt></a>, <a class="refentry reference" href="./bitand.html"><tt class="refentry literal"><span class="pre">bitand_</span></tt></a></p>
-<!-- modtime: November 10, 2004 04:31:55 +0000 -->
+<p><a class="reference internal" href="./bitwise-operations.html">Bitwise Operations</a>, <a class="reference internal" href="./numeric-metafunction.html">Numeric Metafunction</a>, <a class="reference internal" href="./numeric-cast.html">numeric_cast</a>, <a class="reference internal" href="./shift-right.html">shift_right</a>, <a class="reference internal" href="./bitand.html">bitand_</a></p>
 <!-- Metafunctions/Bitwise Operations//shift_right -->
 </div>
 </div>
 
 <div class="footer-separator"></div>
 <table class="footer"><tr class="footer"><td class="header-group navigation-bar"><span class="navigation-group"><a href="./bitxor.html" class="navigation-link">Prev</a>&nbsp;<a href="./shift-right.html" class="navigation-link">Next</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group"><a href="./bitxor.html" class="navigation-link">Back</a>&nbsp;<a href="./shift-right.html" class="navigation-link">Along</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group"><a href="./bitwise-operations.html" class="navigation-link">Up</a>&nbsp;<a href="../refmanual.html" class="navigation-link">Home</a></span><span class="navigation-group-separator">&nbsp;|&nbsp;</span><span class="navigation-group"><a href="./refmanual_toc.html" class="navigation-link">Full TOC</a></span></td>
-</tr></table></body>
+<td><div class="copyright-footer"><div class="copyright">Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams</div>
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at <a class="reference external" href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)</div></td></tr></table></body>
 </html>

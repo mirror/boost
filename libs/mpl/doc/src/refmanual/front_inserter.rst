@@ -1,10 +1,5 @@
 .. Algorithms/Inserters//front_inserter
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 front_inserter
 ==============
 
@@ -91,4 +86,9 @@ Example
 See also
 --------
 
-|Algorithms|, |Inserter|, |Reversible Algorithm|, |inserter|, |back_inserter|, |push_front|
+|Algorithms|, |Inserter|, |Reversible Algorithm|, |[inserter]|, |back_inserter|, |push_front|
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

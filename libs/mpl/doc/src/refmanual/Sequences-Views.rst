@@ -1,9 +1,4 @@
 
-
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 A *view* is a sequence adaptor delivering an altered presentation of 
 one or more underlying sequences. Views are lazy, meaning that their 
 elements are only computed on demand. Similarly to the short-circuit 
@@ -14,3 +9,8 @@ algorithmic problems can be solved in a simpler, more conceptually
 precise, more expressive way.
 
 .. |Views| replace:: `Views`_
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

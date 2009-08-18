@@ -1,13 +1,12 @@
-# Copyright (c) Aleksey Gurtovoy 2001-2007
+# Copyright (c) Aleksey Gurtovoy 2001-2009
 #
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import time
 import fnmatch
-import os.path
 import os
+import sys
 import re
 import string
 
@@ -30,8 +29,8 @@ def __section_intro(section):
     return '%s.rst' % '-'.join( [x.split(' ')[0] for x in parts] )
 
 
-def __include_page( output, page, name = None ):
-    output.write( '.. include:: %s\n' % page )      
+def __include_page( output, src_dir, page, name = None ):
+    output.write( '.. include:: %s\n' % os.path.join( src_dir, page ) )      
     # output.write( '.. raw:: LaTeX\n\n' )
     # output.write( '   \\newpage\n\n')
     
@@ -39,18 +38,14 @@ def __include_page( output, page, name = None ):
     else:    ref = '/'.join( page.split('.')[0].split('-') )
     if ref.upper() == ref or ref.lower() == ref:
         output.write( 
-              ( '.. |%(ref)s| replace:: |``%(ref)s``|__\n'
-                + '.. |``%(ref)s``| replace:: :refentry:`%(ref)s`\n'
-                + '__ `%(ref)s`_\n' ) 
+              ( '.. |%(ref)s| replace:: `%(ref)s`_\n' ) 
                     % { 'ref': ref }
             )
     else:
         if ref.find( '/' ) == -1:
-            ref = ' '.join( filter( lambda x: len(x) > 0, re.split( '([A-Z][a-z]+)', ref ) ) )
+            ref = ' '.join( filter( lambda x: len( x.strip() ) > 0, re.split( '([A-Z][a-z]+)', ref ) ) )
             output.write( '.. |%(ref)s| replace:: `%(ref)s`_\n' % { 'ref': ref } )
 
-    modtime = time.gmtime( os.stat( page ).st_mtime )    
-    output.write( '.. modtime: %s\n' % time.strftime( '%B %d, %Y %H:%M:%S +0000', modtime ) )
     output.write( '\n' )
 
 
@@ -63,24 +58,24 @@ def __write_index( filename, index ):
     index_file.close()
 
 
-def main( filename, dir ):
+def main( filename, src_dir, build_dir ):
     sources = filter(
           lambda x: fnmatch.fnmatch(x,"*.rst") and x != filename
-        , os.listdir(dir)
+        , os.listdir( src_dir )
         )
 
-    toc = [t.strip() for t in open('%s.toc' % filename).readlines()]
+    toc = [ t.strip() for t in open( os.path.join( src_dir, '%s.toc' % filename) ).readlines() ]
     topics = {}
     for t in toc: topics[t] = []
 
     concept_index = []
     index = []
 
-    output = open('%s.gen' % filename, 'w')
-    output.writelines( open( '%s.rst' % filename, 'r' ).readlines() )
+    output = open( os.path.join( build_dir, '%s.gen' % filename ), 'w')
+    output.writelines( open( os.path.join( src_dir, '%s.rst' % filename ), 'r' ).readlines() )
     re_topic = re.compile(r'^..\s+(.+?)//(.+?)(\s*\|\s*(\d+))?\s*$')
     for src in sources:
-        placement_spec = open(src, 'r').readline()
+        placement_spec = open( os.path.join( src_dir, src ), 'r' ).readline()
         
         topic = 'Unclassified'
         name = None
@@ -111,18 +106,18 @@ def main( filename, dir ):
         
         output.write( __section_header(t) )
 
-        intro = __section_intro(t)
-        if os.path.exists(intro):
-            __include_page( output, intro )
+        intro = __section_intro( t )
+        if os.path.exists( os.path.join( src_dir, intro ) ):
+            __include_page( output, src_dir, intro )
         
         for src in content:
-            __include_page( output, src[0], src[2] )
+            __include_page( output, src_dir, src[0], src[2] )
 
     output.close()
 
-    __write_index( 'concepts.gen', concept_index )
-    __write_index( 'index.gen', index )
+    __write_index( os.path.join( build_dir, 'concepts.gen' ), concept_index )
+    __write_index( os.path.join( build_dir, 'index.gen' ), index )
     
     
 
-main( 'refmanual', os.getcwd() )
+main( 'refmanual', os.path.dirname( __file__ ), sys.argv[1] )

@@ -1,10 +1,5 @@
 .. Iterators/Iterator Metafunctions//prior |40
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 prior
 =====
 
@@ -48,14 +43,14 @@ Parameters
 +---------------+---------------------------+-----------------------------------+
 | Parameter     | Requirement               | Description                       |
 +===============+===========================+===================================+
-| ``Iterator``  | |Forward Iterator|.       | An iterator to decrement.         |
+| ``Iterator``  | |Bidirectional Iterator|. | An iterator to decrement.         |
 +---------------+---------------------------+-----------------------------------+
 
 
 Expression semantics
 --------------------
 
-For any |Forward Iterator|\ s ``iter``:
+For any |Bidirectional Iterator|\ s ``iter``:
 
 
 .. parsed-literal::
@@ -63,7 +58,7 @@ For any |Forward Iterator|\ s ``iter``:
     typedef prior<iter>::type j; 
 
 :Return type:
-    |Forward Iterator|.
+    |Bidirectional Iterator|.
 
 :Precondition:
     ``iter`` is decrementable.
@@ -100,3 +95,8 @@ See also
 --------
 
 |Iterators|, |begin| / |end|, |next|, |deref|
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

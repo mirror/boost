@@ -1,5 +1,6 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
+// Copyright Steven Watanabe 2009
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -19,6 +20,13 @@
 
 #include <boost/mpl/aux_/test.hpp>
 
+struct no_push_front_tag {};
+
+struct no_push_front
+{
+    typedef no_push_front_tag tag;
+};
+
 MPL_TEST_CASE()
 {
     typedef push_front<list0<>,long>::type res1;
@@ -37,4 +45,6 @@ MPL_TEST_CASE()
     MPL_ASSERT(( has_push_front< list1<long> > ));
 
     MPL_ASSERT_NOT(( has_push_back< list0<> > ));
+
+    MPL_ASSERT_NOT(( has_push_front< no_push_front > ));
 }

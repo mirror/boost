@@ -1,10 +1,5 @@
 .. Algorithms/Iteration Algorithms//iter_fold
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 iter_fold
 =========
 
@@ -77,7 +72,7 @@ arbitrary type ``state``:
     
     .. parsed-literal::
 
-        typedef begin<Sequence>::type i\ :sub:`1`;
+        typedef begin<s>::type i\ :sub:`1`;
         typedef apply<op,state,i\ :sub:`1`>::type state\ :sub:`1`;
         typedef next<i\ :sub:`1`>::type i\ :sub:`2`;
         typedef apply<op,state\ :sub:`1`,i\ :sub:`2`>::type state\ :sub:`2`;
@@ -117,3 +112,8 @@ See also
 --------
 
 |Algorithms|, |reverse_iter_fold|, |fold|, |reverse_fold|, |copy|
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

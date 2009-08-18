@@ -1,10 +1,5 @@
 .. Sequences/Concepts//Variadic Sequence |100
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 Variadic Sequence
 =================
 
@@ -113,11 +108,16 @@ See also
 
 |Sequences|, |Configuration|, |Integral Sequence Wrapper|
 
-.. |variadic| replace:: `variadic`__
-__ `Variadic Sequence`_
+.. |variadic| replace:: `variadic`_
+.. _`variadic`: `Variadic Sequence`_
 
-.. |variadic forms| replace:: `variadic forms`__
-__ `Variadic Sequence`_
+.. |variadic forms| replace:: `variadic forms`_
+.. _`variadic forms`: `Variadic Sequence`_
 
-.. |numbered forms| replace:: `numbered forms`__
-__ `Variadic Sequence`_
+.. |numbered forms| replace:: `numbered forms`_
+.. _`numbered forms`: `Variadic Sequence`_
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

@@ -1,10 +1,5 @@
 .. Metafunctions/Bitwise Operations//shift_right
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 shift_right
 ===========
 
@@ -126,3 +121,8 @@ See also
 --------
 
 |Bitwise Operations|, |Numeric Metafunction|, |numeric_cast|, |shift_left|, |bitand_|
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

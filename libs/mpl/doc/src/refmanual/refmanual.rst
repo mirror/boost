@@ -1,39 +1,31 @@
 
-
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 The MPL Reference Manual
 ************************
 
-:Copyright: Copyright ©  Aleksey Gurtovoy and David Abrahams, 2001-2007.
+:Copyright: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
 
 :License:   Distributed under the Boost Software License, Version 1.0. (See 
             accompanying file ``LICENSE_1_0.txt`` or copy at 
-            `http://www.boost.org/LICENSE_1_0.txt`__)
-
-
-__ http://www.boost.org/LICENSE_1_0.txt
-
-
-
-.. no .. section-numbering::
+            http://www.boost.org/LICENSE_1_0.txt)
 
 
 .. raw:: latex
 
    \setcounter{secnumdepth}{2}
    \setcounter{tocdepth}{2}
+
+
+.. TOC copyright:
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     
 .. contents:: Table of Contents
     :depth: 3
 
-.. |Boost.Bind| replace:: `Boost.Bind`__
-__ http://www.boost.org/libs/bind/bind.html
 
-.. |Boost.Lambda| replace:: `Boost.Lambda`__
-__ http://www.boost.org/libs/lambda/doc/index.html
+.. |Boost.Bind| replace:: `Boost.Bind <http://www.boost.org/libs/bind/bind.html>`__
+.. |Boost.Lambda| replace:: `Boost.Lambda <http://www.boost.org/libs/lambda/doc/index.html>`__
 
 .. role:: refentry(literal)
 
@@ -87,28 +79,6 @@ __ http://www.boost.org/libs/lambda/doc/index.html
 
 .. |O(1)| replace:: *O(1)*
 
-.. |_1| replace:: |``_1``|__
-.. |_2| replace:: |``_2``|__
-.. |_3| replace:: |``_3``|__
-.. |_4| replace:: |``_4``|__
-.. |_5| replace:: |``_5``|__
-.. |``_1``| replace:: :refentry:`_1`
-.. |``_2``| replace:: :refentry:`_2`
-.. |``_3``| replace:: :refentry:`_3`
-.. |``_4``| replace:: :refentry:`_4`
-.. |``_5``| replace:: :refentry:`_5`
-__ `Placeholders`_
-__ `Placeholders`_
-__ `Placeholders`_
-__ `Placeholders`_
-__ `Placeholders`_
-
-.. |placeholder| replace:: `placeholder`__
-__ `Placeholders`_
-
-.. |_1,_2,..._n| replace:: |_1|, |_2|, |_3|,\ |...|
-
-
 .. |--| unicode:: U+02014 .. EM DASH
 
 
@@ -130,13 +100,8 @@ __ `Placeholders`_
 
 
 .. |preprocessed headers disclaimer| replace:: [*Note:* Overriding will take effect 
-   *only* if the library is configured not to use `preprocessed headers`__. See 
-   |+BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS+|__ for more information. |--| *end note*\]
-
-.. |+BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS+| replace:: :refentry:`BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS`
-__ `BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS`_
-__ `BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS`_
-
+   *only* if the library is configured not to use |preprocessed headers|. See 
+   |BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS| for more information. |--| *end note*\]
 
 .. |transformation algorithm disclaimer| replace:: 
    [*Note:* This wording applies to a no-inserter version(s) of the algorithm. See the 

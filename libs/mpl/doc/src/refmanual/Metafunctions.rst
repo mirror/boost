@@ -1,9 +1,4 @@
 
-
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 The MPL includes a number of predefined metafunctions that can be roughly
 classified in two categories: `general purpose metafunctions`, dealing with
 conditional |type selection| and higher-order metafunction |invocation|, 
@@ -54,3 +49,8 @@ allow to pass up to N arguments, where N is defined by the value of
    internally, they elude these problems, so if you aim for portability, it is 
    generally adviced to use them in the place of the conventional operators, even 
    at the price of slightly decreased readability.
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

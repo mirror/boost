@@ -1,10 +1,5 @@
 .. Data Types/Numeric//char_ |60
 
-.. Copyright Eric Niebler 2009.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 char\_
 ======
 
@@ -87,3 +82,7 @@ See also
 
 |Data Types|, |Integral Constant|, |int_|, |size_t|, |integral_c|
 
+
+.. copyright:: Copyright ©  2009 Eric Niebler
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

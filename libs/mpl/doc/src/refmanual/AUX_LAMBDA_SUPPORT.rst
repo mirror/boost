@@ -1,10 +1,5 @@
 .. Macros/Broken Compiler Workarounds//BOOST_MPL_AUX_LAMBDA_SUPPORT
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 BOOST_MPL_AUX_LAMBDA_SUPPORT
 ============================
 
@@ -102,5 +97,9 @@ See also
 |Macros|, |Metafunctions|, |Lambda Expression|
 
 
-.. |PP-tuple| replace:: `PP-tuple`__
-__ http://www.boost.org/libs/preprocessor/doc/data/tuples.html
+.. |PP-tuple| replace:: `PP-tuple <http://www.boost.org/libs/preprocessor/doc/data/tuples.html>`__
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

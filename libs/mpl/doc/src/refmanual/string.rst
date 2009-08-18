@@ -1,10 +1,5 @@
 .. Sequences/Classes//string |100
 
-.. Copyright Eric Niebler 2009.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 string
 ======
 
@@ -133,3 +128,8 @@ See also
 --------
 
 |Sequences|, |Variadic Sequence|, |Bidirectional Sequence|, |Extensible Sequence|, |Integral Sequence Wrapper|, |char_|, |c_str|
+
+
+.. copyright:: Copyright ©  2009 Eric Niebler
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

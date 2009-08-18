@@ -1,9 +1,7 @@
 .. .. Algorithms/Iteration Algorithms
 
-.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
-.. Distributed under the Boost
-.. Software License, Version 1.0. (See accompanying
-.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+.. UNFINISHED: Expression semantics and everything that follows
+
 
 iter_fold_if
 ============
@@ -73,6 +71,9 @@ Parameters
 Expression semantics
 --------------------
 
+For any |Forward Sequence| ``s``, binary |Lambda Expression| ``op``, and an 
+arbitrary type ``state``:
+
 
 .. parsed-literal::
 
@@ -128,3 +129,8 @@ See also
 --------
 
 Algorithms, ``iter_fold_backward``, ``fold``, ``fold_backward``, ``copy``, ``copy_backward``
+
+
+.. copyright:: Copyright ©  2001-2009 Aleksey Gurtovoy and David Abrahams
+   Distributed under the Boost Software License, Version 1.0. (See accompanying
+   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
