@@ -172,6 +172,8 @@ void test_matches()
     assert_matches< terminal<char [N]> >( as_child("hello") );
     assert_matches< terminal<char [N]> >( as_expr("hello") );
 
+    assert_not_matches< if_<is_same<_value, int>()> >( lit("hello") );
+
     assert_matches< terminal<std::string> >( lit(std::string("hello")) );
     assert_matches< terminal<std::string> >( as_child(std::string("hello")) );
     assert_matches< terminal<std::string> >( as_expr(std::string("hello")) );
