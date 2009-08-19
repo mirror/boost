@@ -25,7 +25,7 @@
 
 namespace boost { namespace mpl {
 
-struct has_push_front_arg;
+struct has_push_front_arg {};
 
 // agurt 05/feb/04: no default implementation; the stub definition is needed 
 // to enable the default 'has_push_front' implementation below

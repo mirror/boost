@@ -25,7 +25,7 @@
 
 namespace boost { namespace mpl {
 
-struct has_push_back_arg;
+struct has_push_back_arg {};
 
 // agurt 05/feb/04: no default implementation; the stub definition is needed 
 // to enable the default 'has_push_back' implementation below
