@@ -36,13 +36,14 @@ public:
         xml_archive_tag_mismatch,
         xml_archive_tag_name_error
     } exception_code;
-    exception_code code;
-    xml_archive_exception(exception_code)
+    exception_code m_code;
+    xml_archive_exception(exception_code code) :
+        m_code(code)
     {}
     virtual const char *what( ) const throw( )
     {
         const char *msg;
-        switch(code){
+        switch(m_code){
         case xml_archive_parsing_error:
             msg = "unrecognized XML syntax";
             break;
