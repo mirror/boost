@@ -65,6 +65,7 @@ namespace std{
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/less.hpp>
 #include <boost/mpl/greater_equal.hpp>
+#include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/empty.hpp>
