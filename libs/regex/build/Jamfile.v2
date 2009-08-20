@@ -221,17 +221,20 @@ if $(gHAS_ICU)
       {
          lib icucore : : <name>$(gICU_CORE_LIB) $(ICU_SEARCH_OPTS) <link>shared ;
          ICU_EXTRA_SOURCE = icucore ;
+         explicit icucore ;
       }
       if $(gICU_IN_LIB)
       {
          lib icuin : : <name>$(gICU_IN_LIB) $(ICU_SEARCH_OPTS) <link>shared ;
          ICU_EXTRA_SOURCE += icuin ;
+         explicit icuin ;
       }
 #Added by Tommy Nordgren libicudata must be linked against on Mac OS X
       if $(gICU_DATA_LIB)
       {
          lib icudata : : <name>$(gICU_DATA_LIB) $(ICU_SEARCH_OPTS) <link>shared ;
          ICU_EXTRA_SOURCE += icudata ;
+         explicit icudata ; 
       }
 #End of addition by Tommy Nordgren
    }
@@ -267,9 +270,36 @@ lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE) icu_config2 icu_config
 	     <toolset>gcc-mingw:<link>static
 	     <toolset>gcc-cygwin:<link>static
 	     $(BOOST_REGEX_ICU_OPTS)
+             <conditional>@force-shared-linking
     ;
 
+shared-linking-warning-emitted = ;
+
+# The ICU is shipped as shared libraries with dynamic runtime.
+# If Boost.Regex is built against static runtime, the combination
+# will not work. The below rule forces shared runtime, and
+# prints an explanation.
+rule force-shared-linking ( properties * )
+{
+    if $(gHAS_ICU)
+    {
+        if <runtime-link>static in $(properties)
+        {
+            if ! $(shared-linking-warning-emitted)
+            {
+                shared-linking-warning-emitted = 1 ;
+                ECHO "warning: forcing runtime-link=shared for Boost.Regex" ;
+                ECHO "warning: this is required when using the ICU library" ;
+            }
+        }        
+        return <runtime-link>shared ;
+    }    
+}
+
+
+
 alias icu_options : $(ICU_EXTRA_SOURCE) : : : $(BOOST_REGEX_ICU_OPTS) ;
+explicit icu_options ;
 
 boost-install boost_regex ;
 
