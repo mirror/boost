@@ -127,12 +127,6 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\test\base.hpp">
-		</File>
-		<File
-			RelativePath="..\test\derived2.hpp">
-		</File>
-		<File
 			RelativePath="..\test\polymorphic_base.hpp">
 		</File>
 		<File

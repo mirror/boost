@@ -50,7 +50,7 @@ BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derive
 
 #include "polymorphic_derived2.hpp"
 
-BOOST_CLASS_EXPORT(polymorphic_derived2)
+BOOST_CLASS_EXPORT_IMPLEMENT(polymorphic_derived2)
 
 // MWerks users can do this to make their code work
 BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derived2)

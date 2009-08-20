@@ -9,16 +9,15 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/serialization/type_info_implementation.hpp>
-#include <boost/serialization/extended_type_info_no_rtti.hpp>
 #include <boost/serialization/export.hpp>
 
 #include "polymorphic_derived1.hpp"
 
 const char * polymorphic_derived1::get_key() const {
-    return
+    return 
         boost::serialization::type_info_implementation<
             polymorphic_derived1
         >::type::get_const_instance().get_key();
 }
 
-BOOST_CLASS_EXPORT(polymorphic_derived1)
+BOOST_CLASS_EXPORT_IMPLEMENT(polymorphic_derived1)

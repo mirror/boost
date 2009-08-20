@@ -1,4 +1,4 @@
-﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -176,7 +176,7 @@ Default tracking traits are:
 <ul>
   <li>For primitive, <code style="white-space: normal">track_never</code>.
   <li>For pointers, <code style="white-space: normal">track_never</code>.
-  That is, addresses of addresses are not tracked by default.
+  That i', addresses of addresses are not tracked by default.
   <li>All current serialization wrappers such as <code style="white-space: normal">boost::serialization::nvp</code>,
   <code style="white-space: normal">track_never</code>.
   <li>For all other types, <code style="white-space: normal">track_selectively</code>.
@@ -206,7 +206,7 @@ included with the library.
 When serializing a derived class through a base class pointer, it
 may be convenient to define an external name by which the
 derived class can be identified.  
-<i>(<a target="detail" href="special.html#derivedpointers">Elsewhere</a>
+<i>(<a target="detail" href="special.html#export">Elsewhere</a>
 in this manual, the
 serialization of derived classes is addressed in detail.)</i>
 Standard C++ does implement <code style="white-space: normal">typeid()</code> which can be
@@ -240,8 +240,28 @@ which expands to:
 <pre><code>
 BOOST_CLASS_EXPORT_GUID(my_class, "my_class")
 </code></pre>
-If the an external name is required somewhere in the program and none
-has been assigned, a static assertion will be invoked.
+Failure to export a type which requires it will result in an
+exception being thrown at runtime.
+<p>
+This above macros 
+<ul>
+<li> Add and access entries into two static global tables.
+    <ul>
+    <li> key->type
+    <li> type->key
+    </ul>
+<li> Explicitly instantiate code to serialize pointers to types
+never serialized by name.
+</ul>
+These declarations can be placed in either header or implementation
+files.  However, in some cases, namely the creation of DLLS, placment
+in header files will result code being generated in both
+the mainline and DLL.  This shouldn't create a problem, but
+it will result in the duplication of code.  It would also be
+possible that the code in the DLL might evolve so that the
+implemenations are not longer compatible.  So, placing
+these macros in a header used by DLLS and the mainline
+would seem to defeat the purpose of using a DLL in the first place.
 
 <h3><a name="abstract">Abstract</a></h3>
 When serializing an object through a pointer to its base class,
@@ -257,7 +277,7 @@ type is in fact abstract.  This will guarentee that
 will return the correct value for all compilers.
 
 <h3><a name="typeinfo">Type Information Implementation</a></h3>
-This last trait is also related to the serialization of objects
+This last trait is also related to the serialization of ob'ects
 through a base class pointer.  The implementation of this facility
 requires the ability to determine at run time the true type of the
 object that a base class pointer points to.  Different serialization
@@ -353,10 +373,8 @@ BOOST_CLASS_IS_WRAPPER(my_class)
 </code></pre>
 which expands to the code above.
 
-
-
 <h3><a name="templates">Template Serialization Traits</a></h3>
-In some instances it might be convenient to assign serialization traits
+In 'ome instances it might be convenient to assign serialization traits
 to a whole group of classes at once.  Consider, the name-value pair
 wrapper 
 <pre><code>
@@ -460,7 +478,7 @@ and template parameters should be assigned according to the following table:
 <p>
 <table border>
 <tr><th align=left>parameter</th><th align=left>description</th><th align=left>permitted values</th><th align=left>default value</th></tr>
-<tr><td><code>T</code></td><td>target class</td><td>class name<T></td><td>none</td></tr>            
+<tr><td><code>T</code></td><td>target class<'td><td>class name<T></td><td>none</td></tr>            
 <tr><td><code>Level</code></td><td>implementation level</td><td><code>not_serializable<br>primitive_type<br>object_serializable<br>object_class_info</code></td><td>none</td></tr>  
 <tr><td><code>Tracking</code></td><td>tracking level</td><td><code>track_never<br>track_selectivly<br>track_always</code></td><td>none</td></tr>
 <tr><td><code>Version</code></td><td><code>class version</td><td>unsigned integer</td><td><code>0</code></td></tr>

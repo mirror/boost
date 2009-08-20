@@ -11,7 +11,7 @@
 #include <boost/serialization/export.hpp>
 #include "polymorphic_base.hpp"
 
-BOOST_CLASS_EXPORT(polymorphic_base)
+BOOST_CLASS_EXPORT_IMPLEMENT(polymorphic_base)
 
 const char * polymorphic_base::get_key() const{
     return

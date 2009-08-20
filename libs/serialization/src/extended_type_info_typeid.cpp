@@ -24,7 +24,7 @@
 
 namespace boost { 
 namespace serialization { 
-namespace detail {
+namespace typeid_system {
 
 #define EXTENDED_TYPE_INFO_TYPE_KEY 1
 
@@ -70,8 +70,10 @@ extended_type_info_typeid_0::is_equal(
 }
 
 BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())
-extended_type_info_typeid_0::extended_type_info_typeid_0() :
-    extended_type_info(EXTENDED_TYPE_INFO_TYPE_KEY),
+extended_type_info_typeid_0::extended_type_info_typeid_0(
+	const char * key
+) :
+    extended_type_info(EXTENDED_TYPE_INFO_TYPE_KEY, key),
     m_ti(NULL)
 {}
 
@@ -112,7 +114,9 @@ class extended_type_info_typeid_arg :
     public extended_type_info_typeid_0
 {
 public:
-    extended_type_info_typeid_arg(const std::type_info & ti){ 
+    extended_type_info_typeid_arg(const std::type_info & ti) :
+        extended_type_info_typeid_0(NULL)
+    { 
         // note absense of self register and key as this is used only as
         // search argument given a type_info reference and is not to 
         // be added to the map.
@@ -127,7 +131,7 @@ BOOST_SERIALIZATION_DECL(const extended_type_info *)
 extended_type_info_typeid_0::get_extended_type_info(
     const std::type_info & ti
 ) const {
-    detail::extended_type_info_typeid_arg etia(ti);
+    typeid_system::extended_type_info_typeid_arg etia(ti);
     const tkmap & t = singleton<tkmap>::get_const_instance();
     const tkmap::const_iterator it = t.find(& etia);
     if(t.end() == it)

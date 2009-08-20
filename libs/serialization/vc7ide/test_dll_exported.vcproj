@@ -130,29 +130,18 @@
 			Name="Library"/>
 	</References>
 	<Files>
-		<Filter
-			Name="Headers"
-			Filter="">
-			<File
-				RelativePath="..\test\polymorphic_base.hpp">
-			</File>
-			<File
-				RelativePath="..\test\polymorphic_derived1.hpp">
-			</File>
-			<File
-				RelativePath="..\test\polymorphic_derived2.hpp">
-			</File>
-		</Filter>
-		<Filter
-			Name="Source"
-			Filter="">
-			<File
-				RelativePath="..\test\polymorphic_base.cpp">
-			</File>
-			<File
-				RelativePath="..\test\test_dll_exported.cpp">
-			</File>
-		</Filter>
+		<File
+			RelativePath="..\test\polymorphic_base.cpp">
+		</File>
+		<File
+			RelativePath="..\test\polymorphic_base.hpp">
+		</File>
+		<File
+			RelativePath="..\test\polymorphic_derived2.hpp">
+		</File>
+		<File
+			RelativePath="..\test\test_dll_exported.cpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
