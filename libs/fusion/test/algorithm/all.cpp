@@ -34,7 +34,19 @@ int
 main()
 {
     {
+        boost::fusion::vector<> t;
+        BOOST_TEST((boost::fusion::all(t, boost::lambda::_1 < 4)));
+        BOOST_TEST((boost::fusion::all(t, boost::lambda::_1 > 0)));
+    }
+
+    {
         boost::fusion::vector<int, short, double> t(1, 2, 3.3);
+        BOOST_TEST((boost::fusion::all(t, boost::lambda::_1 < 4)));
+        BOOST_TEST((boost::fusion::all(t, boost::lambda::_1 > 0)));
+    }
+
+    {
+        boost::fusion::vector<int, short, double, long> t(1, 2, 3.3, 2);
         BOOST_TEST((boost::fusion::all(t, boost::lambda::_1 < 4)));
         BOOST_TEST((boost::fusion::all(t, boost::lambda::_1 > 0)));
     }
