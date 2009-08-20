@@ -11,7 +11,7 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/breadth_first_search.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
-#include <boost/property_map.hpp>
+#include <boost/property_map/property_map.hpp>
 #include <boost/random.hpp>
 #include <map>
 #include <set>
