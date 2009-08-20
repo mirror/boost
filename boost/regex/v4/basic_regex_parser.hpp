@@ -2008,7 +2008,7 @@ insert_recursion:
          v = static_cast<int>(hash_value_from_capture_name(base, m_position));
          re_brace* br = static_cast<re_brace*>(this->append_state(syntax_element_assert_backref, sizeof(re_brace)));
          br->index = v;
-         if((*m_position != charT('>')) && (*m_position != charT('\'')) || (++m_position == m_end))
+         if(((*m_position != charT('>')) && (*m_position != charT('\''))) || (++m_position == m_end))
          {
             fail(regex_constants::error_badrepeat, m_position - m_base);
             return false;
