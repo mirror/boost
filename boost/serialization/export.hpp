@@ -33,7 +33,6 @@
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/force_include.hpp>
 #include <boost/serialization/singleton.hpp>
-#include <boost/serialization/non_convertible.hpp>
 
 #include <boost/archive/detail/register_archive.hpp>
 #include <boost/mpl/assert.hpp>
