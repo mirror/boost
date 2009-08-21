@@ -45,7 +45,7 @@ else
 {
   message boost_graph_parallel
       : "warning: Graph library does not contain MPI-based parallel components."
-      : "note: to enable them, add \"using mpi ;\" to your user_config.jam"
+      : "note: to enable them, add \"using mpi ;\" to your user-config.jam"
       ;
 }
 
