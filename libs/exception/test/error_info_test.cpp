@@ -84,6 +84,23 @@ basic_test()
     catch(
     test_exception & x )
         {
+        ++*boost::get_error_info<test_1>(x);
+        ++*boost::get_error_info<test_2>(x);
+        ++*boost::get_error_info<test_3>(x);
+        BOOST_TEST(*boost::get_error_info<test_1>(x)==2);
+        BOOST_TEST(*boost::get_error_info<test_2>(x)==3u);
+        BOOST_TEST(*boost::get_error_info<test_3>(x)==4.14159f);
+        BOOST_TEST(!boost::get_error_info<test_4>(x));
+        }
+    try
+        {
+        test_exception x;
+        x << test_1(1) << test_2(2u) << test_3(3.14159f);
+        throw x;
+        }
+    catch(
+    test_exception const & x )
+        {
         BOOST_TEST(*boost::get_error_info<test_1>(x)==1);
         BOOST_TEST(*boost::get_error_info<test_2>(x)==2u);
         BOOST_TEST(*boost::get_error_info<test_3>(x)==3.14159f);
@@ -317,6 +334,28 @@ test_lifetime()
     BOOST_TEST(!count);
     }
 
+bool
+is_const( int const * )
+    {
+    return true;
+    }
+
+bool
+is_const( int * )
+    {
+    return false;
+    }
+
+void
+test_const()
+    {
+    test_exception e;
+    boost::exception const & c(e);
+    boost::exception & m(e);
+    BOOST_TEST(is_const(boost::get_error_info<test_1>(c)));
+    BOOST_TEST(!is_const(boost::get_error_info<test_1>(m)));
+    }
+
 int
 main()
     {
@@ -327,5 +366,6 @@ main()
     test_catch_add_info();
     test_add_tuple();
     test_lifetime();
+    test_const();
     return boost::report_errors();
     }

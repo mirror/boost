@@ -18,7 +18,7 @@ void
 file_read( FILE * f, void * buffer, size_t size )
     {
     if( size!=fread(buffer,1,size,f) )
-		throw file_read_error() << boost::errinfo_errno(errno);
+        throw file_read_error() << boost::errinfo_errno(errno);
     }
 
 //
@@ -39,7 +39,7 @@ parse_file( char const * file_name )
     catch(
     boost::exception & e )
         {
-		e << boost::errinfo_file_name(file_name);
+        e << boost::errinfo_file_name(file_name);
         throw;
         }
     }

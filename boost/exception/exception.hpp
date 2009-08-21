@@ -144,8 +144,8 @@ boost
         error_info_container
             {
             virtual char const * diagnostic_information() const = 0;
-            virtual shared_ptr<error_info_base const> get( type_info_ const & ) const = 0;
-            virtual void set( shared_ptr<error_info_base const> const &, type_info_ const & ) = 0;
+            virtual shared_ptr<error_info_base> get( type_info_ const & ) const = 0;
+            virtual void set( shared_ptr<error_info_base> const &, type_info_ const & ) = 0;
             virtual void add_ref() const = 0;
             virtual void release() const = 0;
 

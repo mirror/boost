@@ -22,16 +22,16 @@ boost
         get_info
             {
             static
-            typename ErrorInfo::value_type const *
+            typename ErrorInfo::value_type *
             get( exception const & x )
                 {
                 if( exception_detail::error_info_container * c=x.data_.get() )
-                    if( shared_ptr<exception_detail::error_info_base const> eib = c->get(BOOST_EXCEPTION_STATIC_TYPEID(ErrorInfo)) )
+                    if( shared_ptr<exception_detail::error_info_base> eib = c->get(BOOST_EXCEPTION_STATIC_TYPEID(ErrorInfo)) )
                         {
 #ifndef BOOST_NO_RTTI
-                        BOOST_ASSERT( 0!=dynamic_cast<ErrorInfo const *>(eib.get()) );
+                        BOOST_ASSERT( 0!=dynamic_cast<ErrorInfo *>(eib.get()) );
 #endif
-                        ErrorInfo const * w = static_cast<ErrorInfo const *>(eib.get());
+                        ErrorInfo * w = static_cast<ErrorInfo *>(eib.get());
                         return &w->value();
                         }
                 return 0;
@@ -43,7 +43,7 @@ boost
         get_info<throw_function>
             {
             static
-            char const * const *
+            char const * *
             get( exception const & x )
                 {
                 return x.throw_function_ ? &x.throw_function_ : 0;
@@ -55,7 +55,7 @@ boost
         get_info<throw_file>
             {
             static
-            char const * const *
+            char const * *
             get( exception const & x )
                 {
                 return x.throw_file_ ? &x.throw_file_ : 0;
@@ -67,7 +67,7 @@ boost
         get_info<throw_line>
             {
             static
-            int const *
+            int *
             get( exception const & x )
                 {
                 return x.throw_line_!=-1 ? &x.throw_line_ : 0;
@@ -83,11 +83,28 @@ boost
         {
         return exception_detail::get_info<ErrorInfo>::get(x);
         }
+    template <class ErrorInfo>
+    inline
+    typename ErrorInfo::value_type *
+    get_error_info( boost::exception & x )
+        {
+        return exception_detail::get_info<ErrorInfo>::get(x);
+        }
 #else
     template <class ErrorInfo,class E>
     inline
     typename ErrorInfo::value_type const *
     get_error_info( E const & some_exception )
+        {
+        if( exception const * x = dynamic_cast<exception const *>(&some_exception) )
+            return exception_detail::get_info<ErrorInfo>::get(*x);
+        else
+            return 0;
+        }
+    template <class ErrorInfo,class E>
+    inline
+    typename ErrorInfo::value_type *
+    get_error_info( E & some_exception )
         {
         if( exception const * x = dynamic_cast<exception const *>(&some_exception) )
             return exception_detail::get_info<ErrorInfo>::get(*x);
