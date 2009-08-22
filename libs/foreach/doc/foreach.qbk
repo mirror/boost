@@ -485,10 +485,10 @@ so could cause iterators to become invalid, don't do it. Use a regular
 [h2 History]
 
 The ideas for _foreach_ began life in the Visual C++ group at Microsoft during the early phases of
-the design for C++/CLI. Whether to add a dedicated "foreach" looping construct to the language was
+the design for C++\/CLI. Whether to add a dedicated "foreach" looping construct to the language was
 an open question at the time. As a mental exercise, Anson Tsao sent around some proof-of-concept
 code which demonstrated that a pure library solution might be possible. The code was written in the
-proposed C++/CLI dialect of the time, for which there was no compiler as of yet. I was intrigued by
+proposed C++\/CLI dialect of the time, for which there was no compiler as of yet. I was intrigued by
 the possibility, and I ported his code to Managed C++ and got it working. We worked together to
 refine the idea and eventually published an article about it in the November 2003 issue of the
 [@http://www.cuj.com CUJ].
