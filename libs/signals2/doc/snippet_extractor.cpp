@@ -65,6 +65,7 @@ int main(int argc, const char *argv[])
             throw std::runtime_error("failed to obtain snippet name");
           }
           snippet_out_file.close();
+          snippet_out_file.clear();
           snippet_out_file.open(std::string(output_directory + "/" + snippet_name + ".xml").c_str());
           snippet_out_file << "<!-- Code snippet \"" << snippet_name <<
             "\" extracted from \"" << file_name << "\" by snippet_extractor.\n" <<
