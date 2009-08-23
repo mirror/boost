@@ -202,13 +202,23 @@ to automatically track classes used as virtual bases).</i> This
 situation is demonstrated by 
 <a href="../test/test_diamond.cpp" target="test_diamond_cpp">test_diamond.cpp</a>
 included with the library.
+
 <h3><a name="export">Export Key</a></h3>
-When serializing a derived class through a base class pointer, it
-may be convenient to define an external name by which the
-derived class can be identified.  
-<i>(<a target="detail" href="special.html#export">Elsewhere</a>
-in this manual, the
-serialization of derived classes is addressed in detail.)</i>
+
+When serializing a derived class through a virtual base class pointer,
+two issues may arise.
+<ul>
+<li> The code in the derived class might never be explicitly
+referred to.  Such code will never be instantiated.
+<p>
+This is addressed by invoking 
+<code style="white-space: normal">BOOST_CLASS_EXPORT_IMPLEMENT(T)</code>
+in the file which defines (implements) the class T.
+This ensures that code for the derived class T will
+be explicity instantiated.
+<li> There needs to be some sort of identifier which can
+be used to select the code to be invoked when the object
+is loaded.
 Standard C++ does implement <code style="white-space: normal">typeid()</code> which can be
 used to return a unique string for the class.  This is not entirely
 statisfactory for our purposes for the following reasons:
@@ -222,46 +232,36 @@ statisfactory for our purposes for the following reasons:
   <li>There might be classes with different names that we want to
   consider equivalent for purposes of of serialization.
 </ul>
-So the header file
-<a href="../../../boost/serialization/export.hpp" target="export_hpp">export.hpp</a>
-includes macro definitions to specify the external string used
-to identify the class. 
-<i>(<b>GUID</b> stands for <b>G</b>lobally <b>U</b>nique <b>ID</b>entfier.)</i>
-<pre><code>
-BOOST_CLASS_EXPORT_GUID(my_class, "my_class_external_identifier")
-</code></pre>
+<p>
+So in the serialization library, this is addressed by invoking
+<code style="white-space: normal">BOOST_CLASS_EXPORT_KEY2(my_class, "my_class_external_identifier")</code>
+in the header file which declares he class.
 In a large majority of applications, the class name works just fine
 for the external identifier string so the following short cut is
-defined
-<pre><code>
-BOOST_CLASS_EXPORT(my_class)
-</code></pre>
-which expands to:
-<pre><code>
-BOOST_CLASS_EXPORT_GUID(my_class, "my_class")
-</code></pre>
-Failure to export a type which requires it will result in an
-exception being thrown at runtime.
-<p>
-This above macros 
-<ul>
-<li> Add and access entries into two static global tables.
-    <ul>
-    <li> key->type
-    <li> type->key
-    </ul>
-<li> Explicitly instantiate code to serialize pointers to types
-never serialized by name.
+defined -
+<code style="white-space: normal">BOOST_CLASS_EXPORT_KEY(my_class)</code>.
 </ul>
-These declarations can be placed in either header or implementation
-files.  However, in some cases, namely the creation of DLLS, placment
-in header files will result code being generated in both
-the mainline and DLL.  This shouldn't create a problem, but
-it will result in the duplication of code.  It would also be
-possible that the code in the DLL might evolve so that the
-implemenations are not longer compatible.  So, placing
-these macros in a header used by DLLS and the mainline
-would seem to defeat the purpose of using a DLL in the first place.
+For programs which consist of only one module - that is 
+programs which do not use DLLS, one can specify
+<code style="white-space: normal">BOOST_CLASS_EXPORT(my_class)</code>
+or
+<code style="white-space: normal">BOOST_CLASS_EXPORT_GUID(my_class, "my_class_external_identifier")</code>
+in either he declaration header or definition.  These macros
+expand to invocation of the of both of the macros described above.
+<i>(<b>GUID</b> stands for <b>G</b>lobally <b>U</b>nique <b>ID</b>entfier.)</i>
+<p>
+<i>(<a target="detail" href="special.html#export">Elsewhere</a>
+in this manual, the serialization of derived classes is addressed in detail.)</i>
+<p>
+The header file
+<a href="../../../boost/serialization/export.hpp" target="export_hpp">export.hpp</a>
+contains all macro definitions described here.
+The library will throw a runtime exception if
+<ul>
+<li> A type not explicitly referred to is not exported.
+<li> Serialization code for the same type is instantiated
+in more than one module (or DLL).
+</ul>
 
 <h3><a name="abstract">Abstract</a></h3>
 When serializing an object through a pointer to its base class,
