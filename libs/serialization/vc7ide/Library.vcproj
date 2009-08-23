@@ -395,6 +395,9 @@
 				RelativePath="..\..\..\boost\serialization\access.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\archive\archive_exception.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\base_object.hpp">
 			</File>
 			<File
@@ -615,6 +618,9 @@
 				RelativePath="..\..\..\boost\archive\detail\basic_serializer_map.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\archive\detail\check.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\detail\common_iarchive.hpp">
 			</File>
 			<File
@@ -677,9 +683,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\force_include.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\serialization\non_convertible.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\pfto.hpp">
@@ -770,9 +773,6 @@
 		<Filter
 			Name="Archive Implementations"
 			Filter="">
-			<File
-				RelativePath="..\..\..\boost\archive\archive_exception.hpp">
-			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\binary_iarchive.hpp">
 			</File>

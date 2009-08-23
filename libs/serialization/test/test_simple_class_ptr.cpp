@@ -30,7 +30,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     
     BOOST_REQUIRE(NULL != testfile);
 
-    A *ta = new A();
+    const A *ta = new A();
     A *ta1 = NULL;
 
     {   

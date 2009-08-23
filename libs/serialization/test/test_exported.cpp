@@ -24,12 +24,15 @@ namespace std{
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/extended_type_info_typeid.hpp>
 
+#include <boost/serialization/force_include.hpp>
+
 #include <boost/archive/archive_exception.hpp>
 #include "test_tools.hpp"
 
 #include "polymorphic_base.hpp"
 
-class polymorphic_derived1 : public polymorphic_base
+class polymorphic_derived1 : 
+    public polymorphic_base
 {
     friend class boost::serialization::access;
     template<class Archive>

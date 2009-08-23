@@ -75,6 +75,9 @@ class extended_type_info_arg : public extended_type_info
         assert(false);
         return false;
     };
+    virtual const char * get_debug_info() const {
+        return get_key();
+    }
 public:
     extended_type_info_arg(const char * key) :
         extended_type_info(0, key)
