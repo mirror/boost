@@ -200,7 +200,7 @@ if $(gHAS_ICU)
       if $(ICU_PATH) != "/usr" && $(ICU_PATH) != "/usr/local"
       {
          BOOST_REGEX_ICU_OPTS += "<include>$(ICU_PATH)/include" ;
-         ICU_SEARCH_OPTS = <search>/$(ICU_PATH)/lib ;
+         ICU_SEARCH_OPTS = <search>$(ICU_PATH)/lib ;
       }
    }
    
