@@ -47,6 +47,9 @@ namespace typeid_system {
 class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info_typeid_0 : 
     public extended_type_info
 {
+    virtual const char * get_debug_info() const {
+        return m_ti->name();
+    }
 protected:
     const std::type_info * m_ti;
     extended_type_info_typeid_0(const char * key);

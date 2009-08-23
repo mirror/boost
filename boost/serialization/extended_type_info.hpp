@@ -82,6 +82,7 @@ public:
     const char * get_key() const {
         return m_key;
     }
+    virtual const char * get_debug_info() const = 0;
     bool operator<(const extended_type_info &rhs) const;
     bool operator==(const extended_type_info &rhs) const;
     bool operator!=(const extended_type_info &rhs) const {

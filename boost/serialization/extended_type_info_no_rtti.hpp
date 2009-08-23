@@ -113,7 +113,10 @@ public:
     const char * get_key() const{
         return action<guid_defined<T>::value >::invoke();
     }
-    void * construct(unsigned int count, ...) const{
+    virtual const char * get_debug_info() const{
+        return action<guid_defined<T>::value >::invoke();
+    }
+    virtual void * construct(unsigned int count, ...) const{
         // count up the arguments
         std::va_list ap;
         va_start(ap, count);
@@ -134,7 +137,7 @@ public:
             return NULL;
         }
     }
-    void destroy(void const * const p) const{
+    virtual void destroy(void const * const p) const{
         delete static_cast<T const *>(p) ;
     }
 };

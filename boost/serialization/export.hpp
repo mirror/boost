@@ -29,16 +29,17 @@
 #include <boost/preprocessor/stringize.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
 
+#include <boost/mpl/assert.hpp>
+#include <boost/mpl/and.hpp>
+#include <boost/mpl/not.hpp>
+#include <boost/mpl/bool.hpp>
+
 #include <boost/serialization/static_warning.hpp>
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/force_include.hpp>
 #include <boost/serialization/singleton.hpp>
 
 #include <boost/archive/detail/register_archive.hpp>
-#include <boost/mpl/assert.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/not.hpp>
-#include <boost/mpl/bool.hpp>
 
 #include <iostream>
 
@@ -114,50 +115,52 @@ ptr_serialization_support<Archive,Serializable>::instantiate()
     );
 }
 
-} // namespace detail
-} // namespace archive
-} // namespace boost
-
 namespace {
 
 template<class T>
 struct guid_initializer
 {  
-    void export_guid(boost::mpl::false_){
+    void export_guid(mpl::false_) const {
         // generates the statically-initialized objects whose constructors
         // register the information allowing serialization of T objects
         // through pointers to their base classes.
-        boost::archive::detail::instantiate_ptr_serialization(
-            (T*)0, 
-            0, 
-            boost::archive::detail::adl_tag()
-        );
+        instantiate_ptr_serialization((T*)0, 0, adl_tag());
     }
-    void export_guid(boost::mpl::true_){}
-    guid_initializer(){
+    const void export_guid(mpl::true_) const {
+    }
+    guid_initializer const & export_guid() const {
         BOOST_STATIC_WARNING(boost::is_polymorphic<T>::value);
         // note: exporting an abstract base class will have no effect
         // and cannot be used to instantitiate serialization code
         // (one might be using this in a DLL to instantiate code)
         //BOOST_STATIC_WARNING(! boost::serialization::is_abstract<T>::value);
         export_guid(boost::serialization::is_abstract<T>());
+        return *this;
     }
 };
 
-template<class T>
-struct init_guid {
-    static guid_initializer< T > const & g;
-};
+template<typename T>
+struct init_guid;
 
 } // anonymous
+} // namespace detail
+} // namespace archive
+} // namespace boost
 
-#define BOOST_CLASS_EXPORT_IMPLEMENT(T)                                \
-    namespace {                                                        \
-        template <> guid_initializer< T > const & init_guid< T >::g =  \
-           ::boost::serialization::singleton<                          \
-               guid_initializer< T >                                   \
-           >::get_mutable_instance();                                  \
-    }                                                                  \
+#define BOOST_CLASS_EXPORT_IMPLEMENT(T)                      \
+    namespace boost {                                        \
+    namespace archive {                                      \
+    namespace detail {                                       \
+    namespace {                                              \
+    template<>                                               \
+    struct init_guid< T > {                                  \
+        static guid_initializer< T > const & g;              \
+    };                                                       \
+    guid_initializer< T > const & init_guid< T >::g =        \
+        ::boost::serialization::singleton<                   \
+            guid_initializer< T >                            \
+        >::get_mutable_instance().export_guid();             \
+    }}}}                                                     \
 /**/
 
 #define BOOST_CLASS_EXPORT_KEY2(T, K)          \

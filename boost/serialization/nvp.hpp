@@ -43,9 +43,10 @@ struct nvp :
     public std::pair<const char *, T *>,
     public wrapper_traits<nvp<T> >
 {
-    explicit nvp(const char * name, T & t) :
+    explicit nvp(const char * name_, T & t) :
         // note: redundant cast works around borland issue
-        std::pair<const char *, T *>(name, (T*)(& t))
+        // note: added _ to suppress useless gcc warning
+        std::pair<const char *, T *>(name_, (T*)(& t))
     {}
     nvp(const nvp & rhs) : 
         // note: redundant cast works around borland issue
