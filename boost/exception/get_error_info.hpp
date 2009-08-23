@@ -73,6 +73,20 @@ boost
                 return x.throw_line_!=-1 ? &x.throw_line_ : 0;
                 }
             };
+
+        template <class T,class R>
+        struct
+        get_error_info_return_type
+            {
+            typedef R * type;
+            };
+
+        template <class T,class R>
+        struct
+        get_error_info_return_type<T const,R>
+            {
+            typedef R const * type;
+            };
         }
 
 #ifdef BOOST_NO_RTTI
@@ -93,17 +107,7 @@ boost
 #else
     template <class ErrorInfo,class E>
     inline
-    typename ErrorInfo::value_type const *
-    get_error_info( E const & some_exception )
-        {
-        if( exception const * x = dynamic_cast<exception const *>(&some_exception) )
-            return exception_detail::get_info<ErrorInfo>::get(*x);
-        else
-            return 0;
-        }
-    template <class ErrorInfo,class E>
-    inline
-    typename ErrorInfo::value_type *
+    typename exception_detail::get_error_info_return_type<E,typename ErrorInfo::value_type>::type
     get_error_info( E & some_exception )
         {
         if( exception const * x = dynamic_cast<exception const *>(&some_exception) )
