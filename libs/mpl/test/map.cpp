@@ -194,3 +194,26 @@ MPL_TEST_CASE()
     test<mymap>();
     test<mymap::type>();
 }
+
+MPL_TEST_CASE()
+{
+    typedef mpl::erase_key<
+        mpl::map<
+            mpl::pair<char, double>
+          , mpl::pair<int, float>
+        >
+      , char
+    >::type int_to_float_map;
+
+    typedef mpl::insert<
+        int_to_float_map
+      , mpl::pair<char, long>
+    >::type with_char_too;
+
+    BOOST_MPL_ASSERT((
+        boost::is_same<
+            mpl::at<with_char_too, char>::type
+          , long
+        >
+    ));
+}
