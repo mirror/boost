@@ -98,20 +98,25 @@ public:
             s.reset();
             return;
         }
+        const boost::serialization::extended_type_info * this_type
+            = & boost::serialization::type_info_implementation<T>::type
+                    ::get_const_instance();
         // get pointer to the most derived object.  This is effectively
         // the object identifer
         const boost::serialization::extended_type_info * true_type 
-            = boost::serialization::type_info_implementation<T>::type
-                ::get_const_instance().get_derived_extended_type_info(*t);
+            = boost::serialization::singleton<
+                BOOST_DEDUCED_TYPENAME 
+                boost::serialization::type_info_implementation<T>::type
+            >::get_const_instance().get_derived_extended_type_info(*t);
         // note:if this exception is thrown, be sure that derived pointer
         // is either registered or exported.
         if(NULL == true_type)
             boost::serialization::throw_exception(
-                archive_exception(archive_exception::unregistered_class)
+                archive_exception(
+                    archive_exception::unregistered_class,
+                    this_type->get_debug_info()
+                )
             );
-        const boost::serialization::extended_type_info * this_type
-            = & boost::serialization::type_info_implementation<T>::type
-                    ::get_const_instance();
 
         // get void pointer to the most derived type
         // this uniquely identifies the object referred to
@@ -120,6 +125,14 @@ public:
             *this_type, 
             static_cast<const void *>(t)
         );
+        if(NULL == od)
+            boost::serialization::throw_exception(
+                archive_exception(
+                    archive_exception::unregistered_cast,
+                    true_type->get_debug_info(),
+                    this_type->get_debug_info()
+                )
+            );
 
         // make tracking array if necessary
         if(NULL == m_pointers)
@@ -134,11 +147,20 @@ public:
             m_pointers->insert(collection_type::value_type(od, sp));
             return;
         }
-        t = static_cast<T *>(const_cast<void *>(void_upcast(
+        od = void_upcast(
             *true_type, 
             *this_type, 
             ((*it).second.get())
-        )));
+        );
+        if(NULL == od)
+            boost::serialization::throw_exception(
+                archive_exception(
+                    archive_exception::unregistered_cast,
+                    true_type->get_debug_info(),
+                    this_type->get_debug_info()
+                )
+            );
+        t = static_cast<T *>(const_cast<void *>(od));
         s = shared_ptr<T>((*it).second, t); // aliasing 
     }
 //  #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP

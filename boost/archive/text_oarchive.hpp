@@ -83,8 +83,9 @@ class text_oarchive :
 {
 public:
      
-    text_oarchive(std::ostream & os, unsigned int flags = 0) :
-        text_oarchive_impl<text_oarchive>(os, flags)
+    text_oarchive(std::ostream & os_, unsigned int flags = 0) :
+        // note: added _ to suppress useless gcc warning
+        text_oarchive_impl<text_oarchive>(os_, flags)
     {}
     ~text_oarchive(){}
 };

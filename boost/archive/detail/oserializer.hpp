@@ -26,10 +26,20 @@
 #include <cstddef> // NULL
 
 #include <boost/config.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/detail/workaround.hpp>
+
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/equal_to.hpp>
+#include <boost/mpl/greater_equal.hpp>
+#include <boost/mpl/identity.hpp>
+
+#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO   
+    #include <boost/serialization/extended_type_info_typeid.hpp>   
+#endif
 #include <boost/serialization/throw_exception.hpp>
 #include <boost/serialization/smart_cast.hpp>
-#include <boost/static_assert.hpp>
+#include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/static_warning.hpp>
 
 #include <boost/type_traits/is_pointer.hpp>
@@ -37,27 +47,6 @@
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
 #include <boost/type_traits/remove_extent.hpp>
-#include <boost/serialization/assume_abstract.hpp>
-
-#include <boost/mpl/eval_if.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/greater_equal.hpp>
-#include <boost/mpl/equal_to.hpp>
-#include <boost/mpl/int.hpp>
-#include <boost/mpl/identity.hpp>
-#include <boost/mpl/not.hpp>
-
-#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO   
-    #include <boost/serialization/extended_type_info_typeid.hpp>   
-#endif
-
-// the following is need only for dynamic cast of polymorphic pointers
-#include <boost/archive/detail/basic_oarchive.hpp>
-#include <boost/archive/detail/basic_oserializer.hpp>
-#include <boost/archive/detail/basic_pointer_oserializer.hpp>
-#include <boost/archive/detail/archive_serializer_map.hpp>
-#include <boost/archive/archive_exception.hpp>
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/version.hpp>
@@ -69,6 +58,13 @@
 #include <boost/serialization/array.hpp>
 #include <boost/serialization/collection_size_type.hpp>
 #include <boost/serialization/singleton.hpp>
+
+// the following is need only for dynamic cast of polymorphic pointers
+#include <boost/archive/archive_exception.hpp>
+#include <boost/archive/detail/basic_oarchive.hpp>
+#include <boost/archive/detail/basic_oserializer.hpp>
+#include <boost/archive/detail/basic_pointer_oserializer.hpp>
+#include <boost/archive/detail/archive_serializer_map.hpp>
 
 namespace boost {
 
@@ -104,8 +100,10 @@ private:
 public:
     explicit BOOST_DLLEXPORT oserializer() :
         basic_oserializer(
-            boost::serialization::type_info_implementation<T>::type
-                ::get_const_instance()
+            boost::serialization::singleton<
+                BOOST_DEDUCED_TYPENAME 
+                boost::serialization::type_info_implementation<T>::type
+            >::get_const_instance()
         )
     {}
     virtual BOOST_DLLEXPORT void save_object_data(
@@ -188,8 +186,10 @@ BOOST_DLLEXPORT void pointer_oserializer<Archive, T>::save_object_ptr(
 template<class Archive, class T>
 pointer_oserializer<Archive, T>::pointer_oserializer() :
     basic_pointer_oserializer(
-        boost::serialization::type_info_implementation<T>::type
-            ::get_const_instance()
+        boost::serialization::singleton<
+            BOOST_DEDUCED_TYPENAME 
+            boost::serialization::type_info_implementation<T>::type
+        >::get_const_instance()
     )
 {
     // make sure appropriate member function is instantiated
@@ -356,8 +356,10 @@ struct save_pointer_type {
         ){
             BOOST_DEDUCED_TYPENAME 
             boost::serialization::type_info_implementation<T>::type const
-            & i = boost::serialization::type_info_implementation<T>::type
-                    ::get_const_instance();
+            & i = boost::serialization::singleton<
+                BOOST_DEDUCED_TYPENAME 
+                boost::serialization::type_info_implementation<T>::type
+            >::get_const_instance();
 
             boost::serialization::extended_type_info const * const this_type = & i;
 
@@ -372,7 +374,10 @@ struct save_pointer_type {
             // is either registered or exported.
             if(NULL == true_type){
                 boost::serialization::throw_exception(
-                    archive_exception(archive_exception::unregistered_class)
+                    archive_exception(
+                        archive_exception::unregistered_class,
+                        true_type->get_debug_info()
+                    )
                 );
             }
 
@@ -392,7 +397,11 @@ struct save_pointer_type {
             );
             if(NULL == vp){
                 boost::serialization::throw_exception(
-                    archive_exception(archive_exception::unregistered_cast)
+                    archive_exception(
+                        archive_exception::unregistered_cast,
+                        true_type->get_debug_info(),
+                        this_type->get_debug_info()
+                    )
                 );
             }
 
@@ -408,7 +417,10 @@ struct save_pointer_type {
             assert(NULL != bpos);
             if(NULL == bpos)
                 boost::serialization::throw_exception(
-                    archive_exception(archive_exception::unregistered_class)
+                    archive_exception(
+                        archive_exception::unregistered_class,
+                        bpos->get_debug_info()
+                    )
                 );
             ar.save_pointer(vp, bpos);
         }
@@ -422,24 +434,6 @@ struct save_pointer_type {
             mpl::identity<polymorphic<T> >,
             mpl::identity<non_polymorphic<T> >
         >::type type;
-    };
-
-    template<class T>
-    struct warning_check {
-        typedef 
-            BOOST_DEDUCED_TYPENAME mpl::or_<
-                BOOST_DEDUCED_TYPENAME mpl::greater<
-                    serialization::implementation_level<T>,
-                    mpl::int_<serialization::object_serializable>
-                >,
-                BOOST_DEDUCED_TYPENAME mpl::not_<
-                    BOOST_DEDUCED_TYPENAME mpl::equal_to<
-                        serialization::tracking_level<T>,
-                        mpl::int_<serialization::track_selectively>
-                    >
-                >
-            > type;
-        BOOST_STATIC_CONSTANT(bool, value = type::value);
     };
 
     // used to convert TPtr in to a pointer to a T
@@ -465,7 +459,7 @@ struct save_pointer_type {
         // The reason that this is permited it all is that it is results
         // in more efficient code.  But it comes with it's own risk.
 
-        BOOST_STATIC_WARNING(warning_check<T>::value);
+//        BOOST_STATIC_WARNING(warning_check<T>::value);
         conditional<T>::type::save(ar, const_cast<T &>(t));
     }
 
@@ -568,6 +562,7 @@ inline void save(Archive & ar, T &t){
     BOOST_STATIC_WARNING(check_tracking<T>::value);
         save(ar, const_cast<const T &>(t));
 }
+
 #endif
 
 } // namespace archive

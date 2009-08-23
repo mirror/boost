@@ -46,22 +46,34 @@ basic_binary_iprimitive<Archive, Elem, Tr>::init()
     this->This()->load(size);
     if(sizeof(int) != size)
         boost::serialization::throw_exception(
-            archive_exception(archive_exception::incompatible_native_format)
+            archive_exception(
+                archive_exception::incompatible_native_format,
+                "size of int"
+            )
         );
     this->This()->load(size);
     if(sizeof(long) != size)
         boost::serialization::throw_exception(
-            archive_exception(archive_exception::incompatible_native_format)
+            archive_exception(
+                archive_exception::incompatible_native_format,
+                "size of long"
+            )
         );
     this->This()->load(size);
     if(sizeof(float) != size)
         boost::serialization::throw_exception(
-            archive_exception(archive_exception::incompatible_native_format)
+            archive_exception(
+                archive_exception::incompatible_native_format,
+                "size of float"
+            )
         );
     this->This()->load(size);
     if(sizeof(double) != size)
         boost::serialization::throw_exception(
-            archive_exception(archive_exception::incompatible_native_format)
+            archive_exception(
+                archive_exception::incompatible_native_format,
+                "size of double"
+            )
         );
 
     // for checking endian
@@ -69,7 +81,10 @@ basic_binary_iprimitive<Archive, Elem, Tr>::init()
     this->This()->load(i);
     if(1 != i)
         boost::serialization::throw_exception(
-            archive_exception(archive_exception::incompatible_native_format)
+            archive_exception(
+                archive_exception::incompatible_native_format,
+                "endian setting"
+            )
         );
 }
 

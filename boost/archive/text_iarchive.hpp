@@ -84,8 +84,9 @@ class naked_text_iarchive :
     public text_iarchive_impl<naked_text_iarchive>
 {
 public:
-    naked_text_iarchive(std::istream & is, unsigned int flags = 0) :
-        text_iarchive_impl<naked_text_iarchive>(is, flags)
+    naked_text_iarchive(std::istream & is_, unsigned int flags = 0) :
+        // note: added _ to suppress useless gcc warning
+        text_iarchive_impl<naked_text_iarchive>(is_, flags)
     {}
     ~naked_text_iarchive(){}
 };
@@ -107,8 +108,9 @@ class text_iarchive :
     public detail::shared_ptr_helper
 {
 public:
-    text_iarchive(std::istream & is, unsigned int flags = 0) :
-        text_iarchive_impl<text_iarchive>(is, flags)
+    text_iarchive(std::istream & is_, unsigned int flags = 0) :
+        // note: added _ to suppress useless gcc warning
+        text_iarchive_impl<text_iarchive>(is_, flags)
     {}
     ~text_iarchive(){}
 };

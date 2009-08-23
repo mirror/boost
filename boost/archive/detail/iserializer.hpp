@@ -33,6 +33,16 @@ namespace std{
     using ::size_t; 
 } // namespace std
 #endif
+
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/mpl/greater_equal.hpp>
+#include <boost/mpl/equal_to.hpp>
+#include <boost/mpl/bool.hpp>
+
+#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO   
+    #include <boost/serialization/extended_type_info_typeid.hpp>   
+#endif
 #include <boost/serialization/throw_exception.hpp>
 #include <boost/serialization/smart_cast.hpp>
 #include <boost/static_assert.hpp>
@@ -58,30 +68,6 @@ namespace std{
 #include <boost/type_traits/has_new_operator.hpp>
 #endif
 
-#include <boost/mpl/eval_if.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/identity.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/less.hpp>
-#include <boost/mpl/greater_equal.hpp>
-#include <boost/mpl/equal_to.hpp>
-#include <boost/mpl/int.hpp>
-#include <boost/mpl/list.hpp>
-#include <boost/mpl/empty.hpp>
-#include <boost/mpl/not.hpp>
-#include <boost/mpl/bool.hpp>
-
-#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO   
-    #include <boost/serialization/extended_type_info_typeid.hpp>   
-#endif
-// the following is need only for dynamic cast of polymorphic pointers
-#include <boost/archive/detail/basic_iarchive.hpp>
-#include <boost/archive/detail/basic_iserializer.hpp>
-#include <boost/archive/detail/basic_pointer_iserializer.hpp>
-#include <boost/archive/detail/archive_serializer_map.hpp>
-#include <boost/archive/archive_exception.hpp>
-
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/level.hpp>
@@ -92,6 +78,14 @@ namespace std{
 #include <boost/serialization/array.hpp>
 #include <boost/serialization/collection_size_type.hpp>
 #include <boost/serialization/singleton.hpp>
+
+// the following is need only for dynamic cast of polymorphic pointers
+#include <boost/archive/archive_exception.hpp>
+#include <boost/archive/detail/basic_iarchive.hpp>
+#include <boost/archive/detail/basic_iserializer.hpp>
+#include <boost/archive/detail/basic_pointer_iserializer.hpp>
+#include <boost/archive/detail/archive_serializer_map.hpp>
+#include <boost/archive/detail/check.hpp>
 
 namespace boost {
 
@@ -124,8 +118,10 @@ protected:
     // protected constructor since it's always created by singleton
     explicit iserializer() :
         basic_iserializer(
-            boost::serialization::type_info_implementation<T>::type
-                ::get_const_instance()
+            boost::serialization::singleton<
+                BOOST_DEDUCED_TYPENAME 
+                boost::serialization::type_info_implementation<T>::type
+            >::get_const_instance()
         )
     {}
 public:
@@ -162,9 +158,12 @@ BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
 ) const {
     // trap case where the program cannot handle the current version
     if(file_version > version())
-        boost::serialization::throw_exception(archive::archive_exception(
-            boost::archive::archive_exception::unsupported_class_version
-        ));
+        boost::serialization::throw_exception(
+            archive::archive_exception(
+                boost::archive::archive_exception::unsupported_class_version,
+                get_debug_info()
+            )
+        );
 
     // make sure call is routed through the higest interface that might
     // be specialized by the user.
@@ -309,8 +308,10 @@ BOOST_DLLEXPORT void pointer_iserializer<Archive, T>::load_object_ptr(
 template<class Archive, class T>
 pointer_iserializer<Archive, T>::pointer_iserializer() :
     basic_pointer_iserializer(
-        boost::serialization::type_info_implementation<T>::type
-            ::get_const_instance()
+        boost::serialization::singleton<
+            BOOST_DEDUCED_TYPENAME 
+            boost::serialization::type_info_implementation<T>::type
+        >::get_const_instance()
     )
 {
     boost::serialization::singleton<
@@ -464,8 +465,10 @@ struct load_pointer_type {
         return static_cast<T *>(
             boost::serialization::void_upcast(
                 eti,
-                boost::serialization::type_info_implementation<T>::type
-                    ::get_const_instance(),
+                boost::serialization::singleton<
+                    BOOST_DEDUCED_TYPENAME 
+                    boost::serialization::type_info_implementation<T>::type
+                >::get_const_instance(),
                 t
             )
         );
@@ -510,9 +513,11 @@ struct load_array_type {
         boost::serialization::collection_size_type count;
         ar >> BOOST_SERIALIZATION_NVP(count);
         if(static_cast<std::size_t>(count) > current_count)
-            boost::serialization::throw_exception(archive::archive_exception(
-                boost::archive::archive_exception::array_size_too_short
-            ));
+            boost::serialization::throw_exception(
+                archive::archive_exception(
+                    boost::archive::archive_exception::array_size_too_short
+                )
+            );
         ar >> serialization::make_array(static_cast<value_type*>(&t[0]),count);
     }
 };

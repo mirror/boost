@@ -18,6 +18,7 @@
 
 #include <exception>
 #include <cassert>
+#include <string>
 
 namespace boost {
 namespace archive {
@@ -55,64 +56,93 @@ public:
         unsupported_class_version, // type saved with a version # greater than the 
                             // one used by the program.  This indicates that the proggram
                             // needs to be rebuilt.
-        inconsistent_pointer_serialization // an object as been serialized
+        inconsistent_pointer_serialization, // an object as been serialized
                             // more than once through pointers of different types.
+        multiple_code_instantiation // code for implementing serialization for some
+                            // type has been instantiated in more than one module.
     } exception_code;
+private:
+    std::string m_msg;
+public:
     exception_code code;
-    archive_exception(exception_code c) : 
+    archive_exception(
+        exception_code c, 
+        const char * e1 = NULL,
+        const char * e2 = NULL
+    ) : 
         code(c)
-    {}
-    virtual const char *what( ) const throw( )
     {
-        const char *msg = "programming error";
+        m_msg = "programming error";
         switch(code){
         case no_exception:
-            msg = "uninitialized exception";
+            m_msg = "uninitialized exception";
             break;
         case unregistered_class:
-            msg = "unregistered class";
+            m_msg = "unregistered class";
+            if(NULL != e1){
+                m_msg += " - ";
+                m_msg += e1;
+            }    
             break;
         case invalid_signature:
-            msg = "invalid signature";
+            m_msg = "invalid signature";
             break;
         case unsupported_version:
-            msg = "unsupported version";
+            m_msg = "unsupported version";
             break;
         case pointer_conflict:
-            msg = "pointer conflict";
+            m_msg = "pointer conflict";
             break;
         case incompatible_native_format:
-            msg = "incompatible native format";
+            m_msg = "incompatible native format";
+            if(NULL != e1){
+                m_msg += " - ";
+                m_msg += e1;
+            }    
             break;
         case array_size_too_short:
-            msg = "array size too short";
+            m_msg = "array size too short";
             break;
         case stream_error:
-            msg = "stream error";
+            m_msg = "stream error";
             break;
         case invalid_class_name:
-            msg = "class name too long";
+            m_msg = "class name too long";
             break;
         case unregistered_cast:
-            msg = "unregistered void cast";
-            break;
+            m_msg = "unregistered void cast ";
+            m_msg += (NULL != e1) ? e1 : "?";
+            m_msg += "<-";
+            m_msg += (NULL != e2) ? e2 : "?";
+           break;
         case unsupported_class_version:
-            msg = "class version";
+            m_msg = "class version";
             break;
         case other_exception:
             // if get here - it indicates a derived exception 
             // was sliced by passing by value in catch
-            msg = "unknown derived exception";
+            m_msg = "unknown derived exception";
             break;
         case inconsistent_pointer_serialization:
             // same object saved through different kinds of pointers
-            msg = "inconsistent_pointer_serialization";
+            m_msg = "inconsistent_pointer_serialization";
+            break;
+        case multiple_code_instantiation:
+            m_msg = "code instantiated in more than one module";
+            if(NULL != e1){
+                m_msg += " - ";
+                m_msg += e1;
+            }    
             break;
         default:
             assert(false);
             break;
         }
-        return msg;
+    }
+    ~archive_exception() throw () {}
+    virtual const char *what( ) const throw()
+    {
+        return m_msg.c_str();
     }
 protected:
     archive_exception() : 
