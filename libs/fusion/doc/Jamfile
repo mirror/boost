@@ -9,6 +9,8 @@ project boost/libs/fusion/doc ;
 import boostbook : boostbook ;
 using quickbook ;
 
+path-constant images_location : html ;
+
 boostbook quickbook
     :
         fusion.qbk
@@ -21,5 +23,8 @@ boostbook quickbook
         <xsl:param>toc.section.depth=3
         <xsl:param>toc.max.depth=3
         <xsl:param>generate.section.toc.level=4
+        <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/fusion/doc/html
+        <format>pdf:<xsl:param>img.src.path=$(images_location)/
     ;
+
 
