@@ -12,6 +12,10 @@ toolset.using doxygen ;
 boostbook date_time : date_time.xml 
 	:
         <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/doc/html
+        <dependency>date_time_autodoc
+        <dependency>gregorian_autodoc
+        <dependency>posix_time_autodoc
+        <dependency>local_time_autodoc
 	;
 
 # boostbook date_time_doc : exclusive_date_time.xml ;
