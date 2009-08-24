@@ -39,7 +39,7 @@ struct map_insert_impl
             >
 #else
         , m_item<
-              next< typename Map::size >::type::value
+              Map::order::value
             , typename Pair::first
             , typename Pair::second
             , Map
