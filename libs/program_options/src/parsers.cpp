@@ -170,7 +170,7 @@ namespace boost { namespace program_options {
         return result;
     }
 
-    namespace {
+    namespace detail {
         class prefix_name_mapper {
         public:
             prefix_name_mapper(const std::string& prefix)
@@ -199,7 +199,7 @@ namespace boost { namespace program_options {
     parse_environment(const options_description& desc, 
                       const std::string& prefix)
     {
-        return parse_environment(desc, prefix_name_mapper(prefix));
+        return parse_environment(desc, detail::prefix_name_mapper(prefix));
     }
 
     BOOST_PROGRAM_OPTIONS_DECL parsed_options
