@@ -28,10 +28,10 @@ namespace std{
 #include <boost/serialization/throw_exception.hpp>
 #include <boost/serialization/tracking.hpp>
 
-#include <boost/archive/archive_exception.hpp>
-
 #define BOOST_ARCHIVE_SOURCE
 #define BOOST_SERIALIZATION_SOURCE
+
+#include <boost/archive/archive_exception.hpp>
 
 #include <boost/archive/detail/decl.hpp>
 #include <boost/archive/basic_archive.hpp>

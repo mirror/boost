@@ -433,6 +433,9 @@
 			<File
 				RelativePath="..\..\..\boost\serialization\version.hpp">
 			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\xml_archive_exception.hpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Serialization Implementations"
@@ -816,9 +819,6 @@
 				RelativePath="..\..\..\boost\archive\text_oarchive.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\boost\archive\xml_archive_exception.hpp">
-			</File>
-			<File
 				RelativePath="..\..\..\boost\archive\xml_iarchive.hpp">
 			</File>
 			<File
@@ -880,6 +880,9 @@
 		<Filter
 			Name="Source"
 			Filter="">
+			<File
+				RelativePath="..\src\archive_exception.cpp">
+			</File>
 			<File
 				RelativePath="..\src\basic_archive.cpp">
 			</File>
@@ -956,6 +959,9 @@
 				RelativePath="..\src\polymorphic_oarchive.cpp">
 			</File>
 			<File
+				RelativePath="..\src\shared_ptr_helper.cpp">
+			</File>
+			<File
 				RelativePath="..\src\stl_port.cpp">
 			</File>
 			<File
@@ -966,6 +972,9 @@
 			</File>
 			<File
 				RelativePath="..\src\void_cast.cpp">
+			</File>
+			<File
+				RelativePath="..\src\xml_archive_exception.cpp">
 			</File>
 			<File
 				RelativePath="..\src\xml_grammar.cpp">

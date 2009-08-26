@@ -15,10 +15,10 @@
 #include <set>
 #include <utility>
 
+#define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/archive_exception.hpp>
 #include <boost/serialization/throw_exception.hpp>
 
-#define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/detail/basic_serializer.hpp>
 #include <boost/archive/detail/basic_serializer_map.hpp>
 

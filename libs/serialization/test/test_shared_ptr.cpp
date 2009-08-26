@@ -23,10 +23,9 @@ namespace std{
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/weak_ptr.hpp>
 #include <boost/serialization/nvp.hpp>
+#include <boost/serialization/export.hpp>
 
 #include "test_tools.hpp"
-
-#include <boost/serialization/export.hpp>
 
 // This is a simple class.  It contains a counter of the number
 // of objects of this class which have been instantiated.
