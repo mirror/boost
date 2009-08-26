@@ -46,7 +46,7 @@ struct internal_base_hook_bool
    struct two_or_three {one _[2 + Add];};
    template <class U> static one test(...);
    template <class U> static two_or_three<U::boost_intrusive_tags::is_base_hook>
-      test (detail::bool_<U::boost_intrusive_tags::is_base_hook>* = 0);
+      test (int);
    static const std::size_t value = sizeof(test<T>(0));
 };
 
@@ -63,7 +63,7 @@ struct internal_any_hook_bool
    struct two_or_three {one _[2 + Add];};
    template <class U> static one test(...);
    template <class U> static two_or_three<U::is_any_hook>
-      test (detail::bool_<U::is_any_hook>* = 0);
+      test (int);
    static const std::size_t value = sizeof(test<T>(0));
 };
 
@@ -81,7 +81,7 @@ struct external_value_traits_bool
    struct two_or_three {one _[2 + Add];};
    template <class U> static one test(...);
    template <class U> static two_or_three<U::external_value_traits>
-      test (detail::bool_<U::external_value_traits>* = 0);
+      test (int);
    static const std::size_t value = sizeof(test<T>(0));
 };
 
@@ -92,7 +92,7 @@ struct external_bucket_traits_bool
    struct two_or_three {one _[2 + Add];};
    template <class U> static one test(...);
    template <class U> static two_or_three<U::external_bucket_traits>
-      test (detail::bool_<U::external_bucket_traits>* = 0);
+      test (int);
    static const std::size_t value = sizeof(test<T>(0));
 };
 
