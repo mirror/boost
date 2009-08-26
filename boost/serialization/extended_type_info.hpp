@@ -36,7 +36,6 @@
 
 #define BOOST_SERIALIZATION_MAX_KEY_SIZE 128
 
-
 namespace boost { 
 namespace serialization {
 

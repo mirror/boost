@@ -22,12 +22,14 @@
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
 
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits/is_polymorphic.hpp>
+
+#include <boost/serialization/static_warning.hpp>
 #include <boost/serialization/singleton.hpp>
 #include <boost/serialization/extended_type_info.hpp>
 #include <boost/serialization/factory.hpp>
 #include <boost/serialization/throw_exception.hpp>
-
-#include <boost/mpl/if.hpp>
 
 #include <boost/config/abi_prefix.hpp> // must be the last header
 #ifdef BOOST_MSVC
@@ -105,7 +107,8 @@ public:
         // this implementation doesn't depend on typeid() but assumes
         // that the specified type has a function of the following signature.
         // A common implemention of such a function is to define as a virtual
-        // function. 
+        // function. So if the is not a polymporphic type it's likely an error
+        BOOST_STATIC_WARNING(boost::is_polymorphic<T>::value);
         const char * derived_key = t.get_key();
         assert(NULL != derived_key);
         return boost::serialization::extended_type_info::find(derived_key);
