@@ -92,10 +92,10 @@ template<class Archive, class Elem, class Tr>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_binary_iprimitive<Archive, Elem, Tr>::load(wchar_t * ws)
 {
-    std::size_t l;
+    std::size_t l; // number of wchar_t !!!
     this->This()->load(l);
     load_binary(ws, l * sizeof(wchar_t) / sizeof(char));
-    ws[l / sizeof(wchar_t)] = L'\0';
+    ws[l] = L'\0';
 }
 
 template<class Archive, class Elem, class Tr>

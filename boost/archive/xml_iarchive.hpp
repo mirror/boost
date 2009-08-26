@@ -102,6 +102,8 @@ public:
 } // namespace archive
 } // namespace boost
 
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
+
 // note special treatment of shared_ptr. This type needs a special
 // structure associated with every archive.  We created a "mix-in"
 // class to provide this functionality.  Since shared_ptr holds a
@@ -127,7 +129,5 @@ public:
 
 // required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::xml_iarchive)
-
-#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_ARCHIVE_XML_IARCHIVE_HPP
