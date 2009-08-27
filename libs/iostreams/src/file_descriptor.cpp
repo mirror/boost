@@ -75,7 +75,13 @@ file_descriptor_impl::file_descriptor_impl()
     { }
 
 file_descriptor_impl::~file_descriptor_impl() 
-{ if (flags_ & close_on_exit) close(); }
+{ 
+    if (flags_ & close_on_exit) {
+        try { 
+            close(); 
+        } catch (...) { }  
+    }
+}
 
 void file_descriptor_impl::open(file_handle fd, bool close_on_exit)
 {
