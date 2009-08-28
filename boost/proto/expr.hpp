@@ -101,6 +101,17 @@
                 return that;
             }
 
+            template<typename T, typename U>
+            struct same_cv
+            {
+                typedef U type;
+            };
+
+            template<typename T, typename U>
+            struct same_cv<T const, U>
+            {
+                typedef U const type;
+            };
         }
 
         namespace result_of
@@ -142,8 +153,8 @@
         {
             BOOST_PROTO_UNEXPR()
 
-            explicit unexpr(Expr const &expr)
-              : Expr(expr)
+            explicit unexpr(Expr const &e)
+              : Expr(e)
             {}
             
             using Expr::operator =;

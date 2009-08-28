@@ -161,9 +161,9 @@ namespace boost { namespace proto
         BOOST_PROTO_FUSION_DEFINE_TAG(boost::proto::tag::proto_expr)                                \
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXTENDS_CHILD, ~)                        \
                                                                                                     \
-        static proto_derived_expr const make(Expr const &expr)                                      \
+        static proto_derived_expr const make(Expr const &e)                                         \
         {                                                                                           \
-            proto_derived_expr that = {expr};                                                       \
+            proto_derived_expr that = {e};                                                          \
             return that;                                                                            \
         }                                                                                           \
                                                                                                     \

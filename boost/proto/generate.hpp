@@ -60,9 +60,9 @@
                     >
                 type;
 
-                static type const make(Expr const &expr)
+                static type const make(Expr const &e)
                 {
-                    type that = {expr.child0};
+                    type that = {e.child0};
                     return that;
                 }
             };
@@ -106,9 +106,9 @@
             #else
             Expr const &
             #endif
-            operator ()(Expr const &expr) const
+            operator ()(Expr const &e) const
             {
-                return expr;
+                return e;
             }
         };
 
@@ -149,9 +149,9 @@
             /// \param expr A Proto expression
             /// \return Extends<Expr>(expr)
             template<typename Expr>
-            Extends<Expr> operator ()(Expr const &expr) const
+            Extends<Expr> operator ()(Expr const &e) const
             {
-                return Extends<Expr>(expr);
+                return Extends<Expr>(e);
             }
         };
 
@@ -194,9 +194,9 @@
             /// \param expr The expression to wrap
             /// \return <tt>Extends\<Expr\> that = {expr}; return that;</tt>
             template<typename Expr>
-            Extends<Expr> operator ()(Expr const &expr) const
+            Extends<Expr> operator ()(Expr const &e) const
             {
-                Extends<Expr> that = {expr};
+                Extends<Expr> that = {e};
                 return that;
             }
         };
@@ -247,9 +247,9 @@
             /// \param expr The expression to modify.
             /// \return <tt>deep_copy(expr)</tt>
             template<typename Expr>
-            typename result<by_value_generator(Expr)>::type operator ()(Expr const &expr) const
+            typename result<by_value_generator(Expr)>::type operator ()(Expr const &e) const
             {
-                return detail::by_value_generator_<Expr>::make(expr);
+                return detail::by_value_generator_<Expr>::make(e);
             }
         };
 
@@ -304,9 +304,9 @@
             /// \param expr The expression to modify.
             /// \return Second()(First()(expr))
             template<typename Expr>
-            typename result<compose_generators(Expr)>::type operator ()(Expr const &expr) const
+            typename result<compose_generators(Expr)>::type operator ()(Expr const &e) const
             {
-                return Second()(First()(expr));
+                return Second()(First()(e));
             }
         };
 
@@ -374,11 +374,11 @@
                     >
                 type;
 
-                static type const make(Expr const &expr)
+                static type const make(Expr const &e)
                 {
                     type that = {
                         // expr.child0, ...
-                        BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_BY_VALUE, expr)
+                        BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_BY_VALUE, e)
                     };
                     return that;
                 }

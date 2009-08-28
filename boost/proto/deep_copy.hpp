@@ -45,9 +45,9 @@
                 typedef typename proto_domain::template result<proto_domain(expr_type)>::type type;
 
                 template<typename Expr2>
-                static type call(Expr2 const &expr)
+                static type call(Expr2 const &e)
                 {
-                    return typename Expr::proto_domain()(expr_type::make(expr.proto_base().child0));
+                    return typename Expr::proto_domain()(expr_type::make(e.proto_base().child0));
                 }
             };
         }
@@ -107,9 +107,9 @@
                 /// value.
                 template<typename Expr>
                 typename result_of::deep_copy<Expr>::type
-                operator()(Expr const &expr) const
+                operator()(Expr const &e) const
                 {
-                    return proto::detail::deep_copy_impl<Expr>::call(expr);
+                    return proto::detail::deep_copy_impl<Expr>::call(e);
                 }
             };
         }
@@ -128,9 +128,9 @@
         /// \sa proto::functional::deep_copy.
         template<typename Expr>
         typename proto::result_of::deep_copy<Expr>::type
-        deep_copy(Expr const &expr)
+        deep_copy(Expr const &e)
         {
-            return proto::detail::deep_copy_impl<Expr>::call(expr);
+            return proto::detail::deep_copy_impl<Expr>::call(e);
         }
 
         namespace detail
@@ -144,7 +144,7 @@
             /**/
 
         #define BOOST_PROTO_DEFINE_DEEP_COPY_FUN(Z, N, DATA)                                        \
-            proto::deep_copy(expr.proto_base().BOOST_PP_CAT(child, N))                              \
+            proto::deep_copy(e.proto_base().BOOST_PP_CAT(child, N))                                 \
             /**/
 
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/proto/deep_copy.hpp>))
@@ -179,7 +179,7 @@
                 typedef typename proto_domain::template result<proto_domain(expr_type)>::type type;
 
                 template<typename Expr2>
-                static type call(Expr2 const &expr)
+                static type call(Expr2 const &e)
                 {
                     expr_type that = {
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_FUN, ~)
