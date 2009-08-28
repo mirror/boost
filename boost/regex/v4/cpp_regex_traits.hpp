@@ -716,7 +716,7 @@ void cpp_regex_traits_implementation<charT>::init()
          cpp_regex_traits_implementation<charT>::mask_unicode,
       };
 #else
-      static const char_class_type masks[14] = 
+      static const char_class_type masks[16] = 
       {
          ::boost::re_detail::char_class_alnum,
          ::boost::re_detail::char_class_alpha,
@@ -837,8 +837,8 @@ bool cpp_regex_traits_implementation<charT>::isctype(const charT c, char_class_t
       || ((mask & ::boost::re_detail::char_class_blank) && (m_pctype->is(std::ctype<charT>::space, c)) && !::boost::re_detail::is_separator(c))
       || ((mask & ::boost::re_detail::char_class_word) && (c == '_'))
       || ((mask & ::boost::re_detail::char_class_unicode) && ::boost::re_detail::is_extended(c))
-      || ((mask & ::boost::re_detail::char_class_vertical) && (is_separator(c) || (c == '\v')))
-      || ((mask & ::boost::re_detail::char_class_horizontal) && m_pctype->is(std::ctype<charT>::space, c) && !(is_separator(c) || (c == '\v')));
+      || ((mask & ::boost::re_detail::char_class_vertical_space) && (is_separator(c) || (c == '\v')))
+      || ((mask & ::boost::re_detail::char_class_horizontal_space) && m_pctype->is(std::ctype<charT>::space, c) && !(is_separator(c) || (c == '\v')));
 }
 #endif
 
