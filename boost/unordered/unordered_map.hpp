@@ -15,7 +15,8 @@
 
 #include <boost/unordered/unordered_map_fwd.hpp>
 #include <boost/functional/hash.hpp>
-#include <boost/unordered/detail/hash_table.hpp>
+#include <boost/unordered/detail/allocator_helpers.hpp>
+#include <boost/unordered/detail/insert.hpp>
 
 #if !defined(BOOST_HAS_RVALUE_REFS)
 #include <boost/unordered/detail/move.hpp>
@@ -39,38 +40,59 @@ namespace boost
     template <class Key, class T, class Hash, class Pred, class Alloc>
     class unordered_map
     {
-#if BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
     public:
-#endif
-        typedef boost::unordered_detail::hash_types_unique_keys<
-            std::pair<const Key, T>, Key, Hash, Pred, Alloc
-        > implementation;
-
-        BOOST_DEDUCED_TYPENAME implementation::hash_table base;
-
-    public:
-
-        // types
-
         typedef Key key_type;
         typedef std::pair<const Key, T> value_type;
         typedef T mapped_type;
         typedef Hash hasher;
         typedef Pred key_equal;
-
         typedef Alloc allocator_type;
-        typedef BOOST_DEDUCED_TYPENAME allocator_type::pointer pointer;
-        typedef BOOST_DEDUCED_TYPENAME allocator_type::const_pointer const_pointer;
-        typedef BOOST_DEDUCED_TYPENAME allocator_type::reference reference;
-        typedef BOOST_DEDUCED_TYPENAME allocator_type::const_reference const_reference;
 
-        typedef BOOST_DEDUCED_TYPENAME implementation::size_type size_type;
-        typedef BOOST_DEDUCED_TYPENAME implementation::difference_type difference_type;
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+    private:
+#endif
 
-        typedef BOOST_DEDUCED_TYPENAME implementation::iterator iterator;
-        typedef BOOST_DEDUCED_TYPENAME implementation::const_iterator const_iterator;
-        typedef BOOST_DEDUCED_TYPENAME implementation::local_iterator local_iterator;
-        typedef BOOST_DEDUCED_TYPENAME implementation::const_local_iterator const_local_iterator;
+        typedef BOOST_DEDUCED_TYPENAME
+            boost::unordered_detail::rebind_wrap<allocator_type, value_type>::type
+            value_allocator;
+
+        typedef boost::unordered_detail::hash_unique_table<Hash, Pred, value_allocator,
+            boost::unordered_detail::map_extractor> table;
+
+        typedef BOOST_DEDUCED_TYPENAME table::iterator_base iterator_base;
+
+    public:
+
+        typedef BOOST_DEDUCED_TYPENAME value_allocator::pointer pointer;
+        typedef BOOST_DEDUCED_TYPENAME value_allocator::const_pointer const_pointer;
+        typedef BOOST_DEDUCED_TYPENAME value_allocator::reference reference;
+        typedef BOOST_DEDUCED_TYPENAME value_allocator::const_reference const_reference;
+
+        typedef BOOST_DEDUCED_TYPENAME std::size_t size_type;
+        typedef BOOST_DEDUCED_TYPENAME std::ptrdiff_t difference_type;
+
+        typedef boost::unordered_detail::hash_const_local_iterator<
+            value_allocator, boost::unordered_detail::ungrouped> const_local_iterator;
+        typedef boost::unordered_detail::hash_local_iterator<
+            value_allocator, boost::unordered_detail::ungrouped> local_iterator;
+        typedef boost::unordered_detail::hash_const_iterator<
+            value_allocator, boost::unordered_detail::ungrouped> const_iterator;
+        typedef boost::unordered_detail::hash_iterator<
+            value_allocator, boost::unordered_detail::ungrouped> iterator;
+
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+    private:
+#endif
+
+        table table_;
+        
+        BOOST_DEDUCED_TYPENAME table::iterator_base const&
+            get(const_iterator const& it)
+        {
+            return boost::unordered_detail::iterator_access::get(it);
+        }
+
+    public:
 
         // construct/destroy/copy
 
@@ -79,26 +101,26 @@ namespace boost
                 const hasher &hf = hasher(),
                 const key_equal &eql = key_equal(),
                 const allocator_type &a = allocator_type())
-            : base(n, hf, eql, a)
+            : table_(n, hf, eql, a)
         {
         }
 
         explicit unordered_map(allocator_type const& a)
-            : base(boost::unordered_detail::default_initial_bucket_count,
+            : table_(boost::unordered_detail::default_initial_bucket_count,
                 hasher(), key_equal(), a)
         {
         }
 
         unordered_map(unordered_map const& other, allocator_type const& a)
-            : base(other.base, a)
+            : table_(other.table_, a)
         {
         }
 
         template <class InputIterator>
         unordered_map(InputIterator f, InputIterator l)
-            : base(f, l, boost::unordered_detail::default_initial_bucket_count,
-                hasher(), key_equal(), allocator_type())
+            : table_(boost::unordered_detail::initial_size(f, l), hasher(), key_equal(), allocator_type())
         {
+            table_.insert_range(f, l);
         }
 
         template <class InputIterator>
@@ -106,8 +128,9 @@ namespace boost
                 size_type n,
                 const hasher &hf = hasher(),
                 const key_equal &eql = key_equal())
-            : base(f, l, n, hf, eql, allocator_type())
+            : table_(boost::unordered_detail::initial_size(f, l, n), hf, eql, allocator_type())
         {
+            table_.insert_range(f, l);
         }
 
         template <class InputIterator>
@@ -116,38 +139,39 @@ namespace boost
                 const hasher &hf,
                 const key_equal &eql,
                 const allocator_type &a)
-            : base(f, l, n, hf, eql, a)
+            : table_(boost::unordered_detail::initial_size(f, l, n), hf, eql, a)
         {
+            table_.insert_range(f, l);
         }
 
         ~unordered_map() {}
 
 #if defined(BOOST_HAS_RVALUE_REFS)
         unordered_map(unordered_map&& other)
-            : base(other.base, boost::unordered_detail::move_tag())
+            : table_(other.table_, boost::unordered_detail::move_tag())
         {
         }
 
         unordered_map(unordered_map&& other, allocator_type const& a)
-            : base(other.base, a, boost::unordered_detail::move_tag())
+            : table_(other.table_, a, boost::unordered_detail::move_tag())
         {
         }
 
         unordered_map& operator=(unordered_map&& x)
         {
-            base.move(x.base);
+            table_.move(x.table_);
             return *this;
         }
 #else
         unordered_map(boost::unordered_detail::move_from<unordered_map<Key, T, Hash, Pred, Alloc> > other)
-            : base(other.source.base, boost::unordered_detail::move_tag())
+            : table_(other.source.table_, boost::unordered_detail::move_tag())
         {
         }
 
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
         unordered_map& operator=(unordered_map x)
         {
-            base.move(x.base);
+            table_.move(x.table_);
             return *this;
         }
 #endif
@@ -159,80 +183,71 @@ namespace boost
                 const hasher &hf = hasher(),
                 const key_equal &eql = key_equal(),
                 const allocator_type &a = allocator_type())
-            : base(list.begin(), list.end(), n, hf, eql, a)
+            : table_(boost::unordered_detail::initial_size(list.begin(), list.end(), n), hf, eql, allocator_type())
         {
+            table_.insert_range(list.begin(), list.end());
         }
 
         unordered_map& operator=(std::initializer_list<value_type> list)
         {
-            base.data_.clear();
-            base.insert_range(list.begin(), list.end());
+            table_.clear();
+            table_.insert_range(list.begin(), list.end());
             return *this;
         }
 #endif
 
-    private:
-
-        BOOST_DEDUCED_TYPENAME implementation::iterator_base const&
-            get(const_iterator const& it)
-        {
-            return boost::unordered_detail::iterator_access::get(it);
-        }
-
-    public:
-
         allocator_type get_allocator() const
         {
-            return base.get_allocator();
+            return table_.node_alloc();
         }
 
         // size and capacity
 
         bool empty() const
         {
-            return base.empty();
+            return table_.size_ == 0;
         }
 
         size_type size() const
         {
-            return base.size();
+            return table_.size_;
         }
 
         size_type max_size() const
         {
-            return base.max_size();
+            return table_.max_size();
         }
 
         // iterators
 
         iterator begin()
         {
-            return iterator(base.data_.begin());
+            return iterator(table_.begin());
         }
 
         const_iterator begin() const
         {
-            return const_iterator(base.data_.begin());
+            return const_iterator(table_.begin());
         }
 
         iterator end()
         {
-            return iterator(base.data_.end());
+            return iterator(table_.end());
         }
 
         const_iterator end() const
         {
-            return const_iterator(base.data_.end());
+            return const_iterator(table_.end());
         }
 
         const_iterator cbegin() const
         {
-            return const_iterator(base.data_.begin());
+            return const_iterator(table_.begin());
         }
 
         const_iterator cend() const
         {
-            return const_iterator(base.data_.end());
+            return const_iterator(table_.end());
         }
 
         // modifiers
@@ -242,25 +257,25 @@ namespace boost
         std::pair<iterator, bool> emplace(Args&&... args)
         {
             return boost::unordered_detail::pair_cast<iterator, bool>(
-                base.emplace(std::forward<Args>(args)...));
+                table_.emplace(std::forward<Args>(args)...));
         }
 
         template <class... Args>
         iterator emplace_hint(const_iterator hint, Args&&... args)
         {
-            return iterator(base.emplace_hint(get(hint), std::forward<Args>(args)...));
+            return iterator(table_.emplace_hint(get(hint), std::forward<Args>(args)...));
         }
 #else
 
         std::pair<iterator, bool> emplace(value_type const& v = value_type())
         {
             return boost::unordered_detail::pair_cast<iterator, bool>(
-                base.emplace(v));
+                table_.emplace(v));
         }
 
         iterator emplace_hint(const_iterator hint, value_type const& v = value_type())
         {
-            return iterator(base.emplace_hint(get(hint), v));
+            return iterator(table_.emplace_hint(get(hint), v));
         }
 
 #define BOOST_UNORDERED_EMPLACE(z, n, _)                                        \
@@ -272,7 +287,7 @@ namespace boost
             )                                                                   \
             {                                                                   \
                 return boost::unordered_detail::pair_cast<iterator, bool>(      \
-                    base.emplace(                                               \
+                    table_.emplace(                                               \
                         BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
                     ));                                                         \
             }                                                                   \
@@ -284,7 +299,7 @@ namespace boost
                 BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                           \
             )                                                                   \
             {                                                                   \
-                return iterator(base.emplace_hint(get(hint),                    \
+                return iterator(table_.emplace_hint(get(hint),                    \
                         BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
                 ));                                                             \
             }
@@ -299,175 +314,175 @@ namespace boost
         std::pair<iterator, bool> insert(const value_type& obj)
         {
             return boost::unordered_detail::pair_cast<iterator, bool>(
-                    base.emplace(obj));
+                    table_.emplace(obj));
         }
 
         iterator insert(const_iterator hint, const value_type& obj)
         {
-            return iterator(base.emplace_hint(get(hint), obj));
+            return iterator(table_.emplace_hint(get(hint), obj));
         }
 
         template <class InputIterator>
             void insert(InputIterator first, InputIterator last)
         {
-            base.insert_range(first, last);
+            table_.insert_range(first, last);
         }
 
         iterator erase(const_iterator position)
         {
-            return iterator(base.data_.erase(get(position)));
+            return iterator(table_.erase(get(position)));
         }
 
         size_type erase(const key_type& k)
         {
-            return base.erase_key(k);
+            return table_.erase_key(k);
         }
 
         iterator erase(const_iterator first, const_iterator last)
         {
-            return iterator(base.data_.erase_range(get(first), get(last)));
+            return iterator(table_.erase_range(get(first), get(last)));
         }
 
         void clear()
         {
-            base.data_.clear();
+            table_.clear();
         }
 
         void swap(unordered_map& other)
         {
-            base.swap(other.base);
+            table_.swap(other.table_);
         }
 
         // observers
 
         hasher hash_function() const
         {
-            return base.hash_function();
+            return table_.hash_function();
         }
 
         key_equal key_eq() const
         {
-            return base.key_eq();
+            return table_.key_eq();
         }
 
         mapped_type& operator[](const key_type &k)
         {
-            return base[k].second;
+            return table_[k].second;
         }
 
         mapped_type& at(const key_type& k)
         {
-            return base.at(k).second;
+            return table_.at(k).second;
         }
 
         mapped_type const& at(const key_type& k) const
         {
-            return base.at(k).second;
+            return table_.at(k).second;
         }
 
         // lookup
 
         iterator find(const key_type& k)
         {
-            return iterator(base.find(k));
+            return iterator(table_.find(k));
         }
 
         const_iterator find(const key_type& k) const
         {
-            return const_iterator(base.find(k));
+            return const_iterator(table_.find(k));
         }
 
         size_type count(const key_type& k) const
         {
-            return base.count(k);
+            return table_.count(k);
         }
 
         std::pair<iterator, iterator>
             equal_range(const key_type& k)
         {
             return boost::unordered_detail::pair_cast<iterator, iterator>(
-                    base.equal_range(k));
+                    table_.equal_range(k));
         }
 
         std::pair<const_iterator, const_iterator>
             equal_range(const key_type& k) const
         {
             return boost::unordered_detail::pair_cast<const_iterator, const_iterator>(
-                    base.equal_range(k));
+                    table_.equal_range(k));
         }
 
         // bucket interface
 
         size_type bucket_count() const
         {
-            return base.bucket_count();
+            return table_.bucket_count();
         }
 
         size_type max_bucket_count() const
         {
-            return base.max_bucket_count();
+            return table_.max_bucket_count();
         }
 
         size_type bucket_size(size_type n) const
         {
-            return base.data_.bucket_size(n);
+            return table_.bucket_size(n);
         }
 
         size_type bucket(const key_type& k) const
         {
-            return base.bucket(k);
+            return table_.bucket_index(k);
         }
 
         local_iterator begin(size_type n)
         {
-            return local_iterator(base.data_.begin(n));
+            return local_iterator(table_.bucket_begin(n));
         }
 
         const_local_iterator begin(size_type n) const
         {
-            return const_local_iterator(base.data_.begin(n));
+            return const_local_iterator(table_.bucket_begin(n));
         }
 
         local_iterator end(size_type n)
         {
-            return local_iterator(base.data_.end(n));
+            return local_iterator(table_.bucket_end(n));
         }
 
         const_local_iterator end(size_type n) const
         {
-            return const_local_iterator(base.data_.end(n));
+            return const_local_iterator(table_.bucket_end(n));
         }
 
         const_local_iterator cbegin(size_type n) const
         {
-            return const_local_iterator(base.data_.begin(n));
+            return const_local_iterator(table_.bucket_begin(n));
         }
 
         const_local_iterator cend(size_type n) const
         {
-            return const_local_iterator(base.data_.end(n));
+            return const_local_iterator(table_.bucket_end(n));
         }
 
         // hash policy
 
         float load_factor() const
         {
-            return base.load_factor();
+            return table_.load_factor();
         }
 
         float max_load_factor() const
         {
-            return base.max_load_factor();
+            return table_.mlf_;
         }
 
         void max_load_factor(float m)
         {
-            base.max_load_factor(m);
+            table_.max_load_factor(m);
         }
 
         void rehash(size_type n)
         {
-            base.rehash(n);
+            table_.rehash(n);
         }
         
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
@@ -483,14 +498,14 @@ namespace boost
     inline bool operator==(unordered_map<K, T, H, P, A> const& m1,
         unordered_map<K, T, H, P, A> const& m2)
     {
-        return boost::unordered_detail::equals(m1.base, m2.base);
+        return m1.table_.equals(m2.table_);
     }
 
     template <class K, class T, class H, class P, class A>
     inline bool operator!=(unordered_map<K, T, H, P, A> const& m1,
         unordered_map<K, T, H, P, A> const& m2)
     {
-        return !boost::unordered_detail::equals(m1.base, m2.base);
+        return !m1.table_.equals(m2.table_);
     }
 
     template <class K, class T, class H, class P, class A>
@@ -503,38 +518,58 @@ namespace boost
     template <class Key, class T, class Hash, class Pred, class Alloc>
     class unordered_multimap
     {
-#if BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
     public:
-#endif
-        typedef boost::unordered_detail::hash_types_equivalent_keys<
-            std::pair<const Key, T>, Key, Hash, Pred, Alloc
-        > implementation;
-
-        BOOST_DEDUCED_TYPENAME implementation::hash_table base;
-
-        public:
-
-        // types
 
         typedef Key key_type;
         typedef std::pair<const Key, T> value_type;
         typedef T mapped_type;
         typedef Hash hasher;
         typedef Pred key_equal;
-
         typedef Alloc allocator_type;
-        typedef BOOST_DEDUCED_TYPENAME allocator_type::pointer pointer;
-        typedef BOOST_DEDUCED_TYPENAME allocator_type::const_pointer const_pointer;
-        typedef BOOST_DEDUCED_TYPENAME allocator_type::reference reference;
-        typedef BOOST_DEDUCED_TYPENAME allocator_type::const_reference const_reference;
 
-        typedef BOOST_DEDUCED_TYPENAME implementation::size_type size_type;
-        typedef BOOST_DEDUCED_TYPENAME implementation::difference_type difference_type;
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+    private:
+#endif
+        typedef BOOST_DEDUCED_TYPENAME
+            boost::unordered_detail::rebind_wrap<allocator_type, value_type>::type
+            value_allocator;
 
-        typedef BOOST_DEDUCED_TYPENAME implementation::iterator iterator;
-        typedef BOOST_DEDUCED_TYPENAME implementation::const_iterator const_iterator;
-        typedef BOOST_DEDUCED_TYPENAME implementation::local_iterator local_iterator;
-        typedef BOOST_DEDUCED_TYPENAME implementation::const_local_iterator const_local_iterator;
+        typedef boost::unordered_detail::hash_equivalent_table<Hash, Pred, value_allocator,
+            boost::unordered_detail::map_extractor> table;
+        typedef BOOST_DEDUCED_TYPENAME table::iterator_base iterator_base;
+
+    public:
+
+        typedef BOOST_DEDUCED_TYPENAME value_allocator::pointer pointer;
+        typedef BOOST_DEDUCED_TYPENAME value_allocator::const_pointer const_pointer;
+        typedef BOOST_DEDUCED_TYPENAME value_allocator::reference reference;
+        typedef BOOST_DEDUCED_TYPENAME value_allocator::const_reference const_reference;
+
+        typedef BOOST_DEDUCED_TYPENAME std::size_t size_type;
+        typedef BOOST_DEDUCED_TYPENAME std::ptrdiff_t difference_type;
+
+        typedef boost::unordered_detail::hash_const_local_iterator<
+            value_allocator, boost::unordered_detail::grouped> const_local_iterator;
+        typedef boost::unordered_detail::hash_local_iterator<
+            value_allocator, boost::unordered_detail::grouped> local_iterator;
+        typedef boost::unordered_detail::hash_const_iterator<
+            value_allocator, boost::unordered_detail::grouped> const_iterator;
+        typedef boost::unordered_detail::hash_iterator<
+            value_allocator, boost::unordered_detail::grouped> iterator;
+
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+    private:
+#endif
+
+        table table_;
+        
+        BOOST_DEDUCED_TYPENAME table::iterator_base const&
+            get(const_iterator const& it)
+        {
+            return boost::unordered_detail::iterator_access::get(it);
+        }
+
+    public:
 
         // construct/destroy/copy
 
@@ -543,26 +578,26 @@ namespace boost
                 const hasher &hf = hasher(),
                 const key_equal &eql = key_equal(),
                 const allocator_type &a = allocator_type())
-          : base(n, hf, eql, a)
+          : table_(n, hf, eql, a)
         {
         }
 
         explicit unordered_multimap(allocator_type const& a)
-            : base(boost::unordered_detail::default_initial_bucket_count,
+            : table_(boost::unordered_detail::default_initial_bucket_count,
                 hasher(), key_equal(), a)
         {
         }
 
         unordered_multimap(unordered_multimap const& other, allocator_type const& a)
-            : base(other.base, a)
+            : table_(other.table_, a)
         {
         }
 
         template <class InputIterator>
         unordered_multimap(InputIterator f, InputIterator l)
-            : base(f, l, boost::unordered_detail::default_initial_bucket_count,
-                hasher(), key_equal(), allocator_type())
+            : table_(boost::unordered_detail::initial_size(f, l), hasher(), key_equal(), allocator_type())
         {
+            table_.insert_range(f, l);
         }
 
         template <class InputIterator>
@@ -570,8 +605,9 @@ namespace boost
                 size_type n,
                 const hasher &hf = hasher(),
                 const key_equal &eql = key_equal())
-          : base(f, l, n, hf, eql, allocator_type())
+          : table_(boost::unordered_detail::initial_size(f, l, n), hf, eql, allocator_type())
         {
+            table_.insert_range(f, l);
         }
 
         template <class InputIterator>
@@ -580,38 +616,39 @@ namespace boost
                 const hasher &hf,
                 const key_equal &eql,
                 const allocator_type &a)
-          : base(f, l, n, hf, eql, a)
+          : table_(boost::unordered_detail::initial_size(f, l, n), hf, eql, a)
         {
+            table_.insert_range(f, l);
         }
 
         ~unordered_multimap() {}
 
 #if defined(BOOST_HAS_RVALUE_REFS)
         unordered_multimap(unordered_multimap&& other)
-            : base(other.base, boost::unordered_detail::move_tag())
+            : table_(other.table_, boost::unordered_detail::move_tag())
         {
         }
 
         unordered_multimap(unordered_multimap&& other, allocator_type const& a)
-            : base(other.base, a, boost::unordered_detail::move_tag())
+            : table_(other.table_, a, boost::unordered_detail::move_tag())
         {
         }
 
         unordered_multimap& operator=(unordered_multimap&& x)
         {
-            base.move(x.base);
+            table_.move(x.table_);
             return *this;
         }
 #else
         unordered_multimap(boost::unordered_detail::move_from<unordered_multimap<Key, T, Hash, Pred, Alloc> > other)
-            : base(other.source.base, boost::unordered_detail::move_tag())
+            : table_(other.source.table_, boost::unordered_detail::move_tag())
         {
         }
 
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
         unordered_multimap& operator=(unordered_multimap x)
         {
-            base.move(x.base);
+            table_.move(x.table_);
             return *this;
         }
 #endif
@@ -623,81 +660,71 @@ namespace boost
                 const hasher &hf = hasher(),
                 const key_equal &eql = key_equal(),
                 const allocator_type &a = allocator_type())
-            : base(list.begin(), list.end(), n, hf, eql, a)
+            : table_(boost::unordered_detail::initial_size(list.begin(), list.end(), n), hf, eql, allocator_type())
         {
+            table_.insert_range(list.begin(), list.end());
         }
 
         unordered_multimap& operator=(std::initializer_list<value_type> list)
         {
-            base.data_.clear();
-            base.insert_range(list.begin(), list.end());
+            table_.clear();
+            table_.insert_range(list.begin(), list.end());
             return *this;
         }
 #endif
 
-
-    private:
-
-        BOOST_DEDUCED_TYPENAME implementation::iterator_base const&
-            get(const_iterator const& it)
-        {
-            return boost::unordered_detail::iterator_access::get(it);
-        }
-
-    public:
-
         allocator_type get_allocator() const
         {
-            return base.get_allocator();
+            return table_.node_alloc();
         }
 
         // size and capacity
 
         bool empty() const
         {
-            return base.empty();
+            return table_.size_ == 0;
         }
 
         size_type size() const
         {
-            return base.size();
+            return table_.size_;
         }
 
         size_type max_size() const
         {
-            return base.max_size();
+            return table_.max_size();
         }
 
         // iterators
 
         iterator begin()
         {
-            return iterator(base.data_.begin());
+            return iterator(table_.begin());
         }
 
         const_iterator begin() const
         {
-            return const_iterator(base.data_.begin());
+            return const_iterator(table_.begin());
         }
 
         iterator end()
         {
-            return iterator(base.data_.end());
+            return iterator(table_.end());
         }
 
         const_iterator end() const
         {
-            return const_iterator(base.data_.end());
+            return const_iterator(table_.end());
         }
 
         const_iterator cbegin() const
         {
-            return const_iterator(base.data_.begin());
+            return const_iterator(table_.begin());
         }
 
         const_iterator cend() const
         {
-            return const_iterator(base.data_.end());
+            return const_iterator(table_.end());
         }
 
         // modifiers
@@ -706,24 +733,24 @@ namespace boost
         template <class... Args>
         iterator emplace(Args&&... args)
         {
-            return iterator(base.emplace(std::forward<Args>(args)...));
+            return iterator(table_.emplace(std::forward<Args>(args)...));
         }
 
         template <class... Args>
         iterator emplace_hint(const_iterator hint, Args&&... args)
         {
-            return iterator(base.emplace_hint(get(hint), std::forward<Args>(args)...));
+            return iterator(table_.emplace_hint(get(hint), std::forward<Args>(args)...));
         }
 #else
 
         iterator emplace(value_type const& v = value_type())
         {
-            return iterator(base.emplace(v));
+            return iterator(table_.emplace(v));
         }
         
         iterator emplace_hint(const_iterator hint, value_type const& v = value_type())
         {
-            return iterator(base.emplace_hint(get(hint), v));
+            return iterator(table_.emplace_hint(get(hint), v));
         }
 
 
@@ -736,7 +763,7 @@ namespace boost
             )                                                                   \
             {                                                                   \
                 return iterator(                                                \
-                    base.emplace(                                               \
+                    table_.emplace(                                               \
                         BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
                     ));                                                         \
             }                                                                   \
@@ -748,7 +775,7 @@ namespace boost
                 BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                           \
             )                                                                   \
             {                                                                   \
-                return iterator(base.emplace_hint(get(hint),                    \
+                return iterator(table_.emplace_hint(get(hint),                    \
                         BOOST_UNORDERED_CALL_PARAMS(z, n)                       \
                 ));                                                             \
             }
@@ -762,160 +789,160 @@ namespace boost
 
         iterator insert(const value_type& obj)
         {
-            return iterator(base.emplace(obj));
+            return iterator(table_.emplace(obj));
         }
 
         iterator insert(const_iterator hint, const value_type& obj)
         {
-            return iterator(base.emplace_hint(get(hint), obj));
+            return iterator(table_.emplace_hint(get(hint), obj));
         }
 
         template <class InputIterator>
             void insert(InputIterator first, InputIterator last)
         {
-            base.insert_range(first, last);
+            table_.insert_range(first, last);
         }
 
         iterator erase(const_iterator position)
         {
-            return iterator(base.data_.erase(get(position)));
+            return iterator(table_.erase(get(position)));
         }
 
         size_type erase(const key_type& k)
         {
-            return base.erase_key(k);
+            return table_.erase_key(k);
         }
 
         iterator erase(const_iterator first, const_iterator last)
         {
-            return iterator(base.data_.erase_range(get(first), get(last)));
+            return iterator(table_.erase_range(get(first), get(last)));
         }
 
         void clear()
         {
-            base.data_.clear();
+            table_.clear();
         }
 
         void swap(unordered_multimap& other)
         {
-            base.swap(other.base);
+            table_.swap(other.table_);
         }
 
         // observers
 
         hasher hash_function() const
         {
-            return base.hash_function();
+            return table_.hash_function();
         }
 
         key_equal key_eq() const
         {
-            return base.key_eq();
+            return table_.key_eq();
         }
 
         // lookup
 
         iterator find(const key_type& k)
         {
-            return iterator(base.find(k));
+            return iterator(table_.find(k));
         }
 
         const_iterator find(const key_type& k) const
         {
-            return const_iterator(base.find(k));
+            return const_iterator(table_.find(k));
         }
 
         size_type count(const key_type& k) const
         {
-            return base.count(k);
+            return table_.count(k);
         }
 
         std::pair<iterator, iterator>
             equal_range(const key_type& k)
         {
             return boost::unordered_detail::pair_cast<iterator, iterator>(
-                    base.equal_range(k));
+                    table_.equal_range(k));
         }
 
         std::pair<const_iterator, const_iterator>
             equal_range(const key_type& k) const
         {
             return boost::unordered_detail::pair_cast<const_iterator, const_iterator>(
-                    base.equal_range(k));
+                    table_.equal_range(k));
         }
 
         // bucket interface
 
         size_type bucket_count() const
         {
-            return base.bucket_count();
+            return table_.bucket_count();
         }
 
         size_type max_bucket_count() const
         {
-            return base.max_bucket_count();
+            return table_.max_bucket_count();
         }
 
         size_type bucket_size(size_type n) const
         {
-            return base.data_.bucket_size(n);
+            return table_.bucket_size(n);
         }
 
         size_type bucket(const key_type& k) const
         {
-            return base.bucket(k);
+            return table_.bucket_index(k);
         }
 
         local_iterator begin(size_type n)
         {
-            return local_iterator(base.data_.begin(n));
+            return local_iterator(table_.bucket_begin(n));
         }
 
         const_local_iterator begin(size_type n) const
         {
-            return const_local_iterator(base.data_.begin(n));
+            return const_local_iterator(table_.bucket_begin(n));
         }
 
         local_iterator end(size_type n)
         {
-            return local_iterator(base.data_.end(n));
+            return local_iterator(table_.bucket_end(n));
         }
 
         const_local_iterator end(size_type n) const
         {
-            return const_local_iterator(base.data_.end(n));
+            return const_local_iterator(table_.bucket_end(n));
         }
 
         const_local_iterator cbegin(size_type n) const
         {
-            return const_local_iterator(base.data_.begin(n));
+            return const_local_iterator(table_.bucket_begin(n));
         }
 
         const_local_iterator cend(size_type n) const
         {
-            return const_local_iterator(base.data_.end(n));
+            return const_local_iterator(table_.bucket_end(n));
         }
 
         // hash policy
 
         float load_factor() const
         {
-            return base.load_factor();
+            return table_.load_factor();
         }
 
         float max_load_factor() const
         {
-            return base.max_load_factor();
+            return table_.mlf_;
         }
 
         void max_load_factor(float m)
         {
-            base.max_load_factor(m);
+            table_.max_load_factor(m);
         }
 
         void rehash(size_type n)
         {
-            base.rehash(n);
+            table_.rehash(n);
         }
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
@@ -931,14 +958,14 @@ namespace boost
     inline bool operator==(unordered_multimap<K, T, H, P, A> const& m1,
         unordered_multimap<K, T, H, P, A> const& m2)
     {
-        return boost::unordered_detail::equals(m1.base, m2.base);
+        return m1.table_.equals(m2.table_);
     }
 
     template <class K, class T, class H, class P, class A>
     inline bool operator!=(unordered_multimap<K, T, H, P, A> const& m1,
         unordered_multimap<K, T, H, P, A> const& m2)
     {
-        return !boost::unordered_detail::equals(m1.base, m2.base);
+        return !m1.table_.equals(m2.table_);
     }
 
     template <class K, class T, class H, class P, class A>

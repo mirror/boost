@@ -60,6 +60,7 @@ void simple_test(X const& a)
         X u;
         X& r = u;
         BOOST_TEST(&(r = r) == &r);
+
         BOOST_TEST(r.empty());
         BOOST_TEST(&(r = a) == &r);
         BOOST_TEST(equivalent(r));
@@ -91,7 +92,7 @@ UNORDERED_AUTO_TEST(simple_tests)
     std::cout<<"Test unordered_set.\n";
     boost::unordered_set<int> set;
     simple_test(set);
-    
+
     set.insert(1); set.insert(2); set.insert(1456);
     simple_test(set);
 
