@@ -119,61 +119,6 @@ namespace boost {
 #endif
 
         template <class Allocator>
-        struct allocator_constructor
-        {
-            typedef BOOST_DEDUCED_TYPENAME allocator_value_type<Allocator>::type value_type;
-            typedef BOOST_DEDUCED_TYPENAME allocator_pointer<Allocator>::type pointer;
-
-            Allocator& alloc_;
-            pointer ptr_;
-            bool constructed_;
-
-            allocator_constructor(Allocator& a)
-                : alloc_(a), ptr_(), constructed_(false)
-            {
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-                    unordered_detail::reset(ptr_);
-#endif
-            }
-
-            ~allocator_constructor() {
-                if(ptr_) {
-                    if(constructed_) alloc_.destroy(ptr_);
-                    alloc_.deallocate(ptr_, 1);
-                }
-            }
-
-            template <class V>
-            void construct(V const& v) {
-                BOOST_ASSERT(!ptr_ && !constructed_);
-                ptr_ = alloc_.allocate(1);
-                alloc_.construct(ptr_, value_type(v));
-                constructed_  = true;
-            }
-
-            void construct(value_type const& v) {
-                BOOST_ASSERT(!ptr_ && !constructed_);
-                ptr_ = alloc_.allocate(1);
-                alloc_.construct(ptr_, v);
-                constructed_  = true;
-            }
-
-            pointer get() const
-            {
-                return ptr_;
-            }
-
-            // no throw
-            pointer release()
-            {
-                pointer p = ptr_;
-                constructed_ = false;
-                unordered_detail::reset(ptr_);
-                return p;
-            }
-        };
-
-        template <class Allocator>
         struct allocator_array_constructor
         {
             typedef BOOST_DEDUCED_TYPENAME allocator_pointer<Allocator>::type pointer;
