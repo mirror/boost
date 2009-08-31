@@ -963,6 +963,12 @@ namespace quickbook
             qualified_section_id.erase(n, std::string::npos);
         }
     }
+    
+    void section_warning_action::operator()(iterator first, iterator) const
+    {
+        boost::spirit::classic::file_position const pos = first.get_position();
+        detail::outwarn(pos.file,pos.line) << "Empty section id after 'section:'.\n";        
+    }
 
     fs::path path_difference(fs::path const& outdir, fs::path const& path)
     {

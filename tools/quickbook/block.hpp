@@ -22,6 +22,7 @@
 namespace quickbook
 {
     using namespace boost::spirit::classic;
+    extern unsigned qbk_version_n;
 
     template <typename Actions, bool skip_initial_spaces = false>
     struct block_grammar : grammar<block_grammar<Actions> >
@@ -125,7 +126,13 @@ namespace quickbook
                 begin_section =
                        "section"
                     >> hard_space
-                    >>  (':' >> (*(alnum_p | '_'))      [assign_a(actions.section_id)]
+                    >>  ( ':' >>
+                            (
+                            if_p(qbk_since(105u))       [space]
+                            >> (+(alnum_p | '_'))       [assign_a(actions.section_id)]
+                            | eps_p                     [actions.section_warning]
+                                                        [assign_a(actions.section_id)]
+                            )
                         | eps_p                         [assign_a(actions.section_id)]
                         )
                     >> phrase                           [actions.begin_section]

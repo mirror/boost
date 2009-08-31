@@ -705,6 +705,11 @@ namespace quickbook
         std::string& qualified_section_id;
         int& error_count;
    };
+   
+   struct section_warning_action
+   {
+       void operator()(iterator first, iterator last) const;
+   };
 
     struct xinclude_action
     {
