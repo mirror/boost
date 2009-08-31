@@ -116,13 +116,6 @@ namespace quickbook
                     >> actions.macro                    [actions.do_macro]
                     ;
 
-                template_args =
-                    template_arg                        [push_back_a(actions.template_info)]
-                    >> *(
-                            ".." >> template_arg        [push_back_a(actions.template_info)]
-                        )
-                    ;
-
                 static const bool true_ = true;
                 static const bool false_ = false;
 
@@ -148,12 +141,23 @@ namespace quickbook
                     >> eps_p(']')
                     ;
 
-                brackets =
-                    '[' >> +template_arg >> ']'
+                template_args =
+                    template_args_1_4
                     ;
 
-                template_arg =
-                    +(brackets | (anychar_p - (str_p("..") | ']')))
+                template_args_1_4 =
+                    template_arg_1_4                    [push_back_a(actions.template_info)]
+                    >> *(
+                            ".." >> template_arg_1_4    [push_back_a(actions.template_info)]
+                        )
+                    ;
+
+                template_arg_1_4 =
+                    +(brackets_1_4 | (anychar_p - (str_p("..") | ']')))
+                    ;
+
+                brackets_1_4 =
+                    '[' >> +template_arg_1_4 >> ']'
                     ;
 
                 inline_code =
@@ -420,10 +424,10 @@ namespace quickbook
                             memberref, enumref, macroref, headerref, conceptref, globalref,
                             anchor, link, hard_space, eol, inline_code, simple_format,
                             simple_bold, simple_italic, simple_underline,
-                            simple_teletype, source_mode, template_, template_arg,
+                            simple_teletype, source_mode, template_,
                             quote, code_block, footnote, replaceable, macro,
-                            brackets, template_args, dummy_block, cond_phrase,
-                            macro_identifier
+                            dummy_block, cond_phrase, macro_identifier, template_args,
+                            template_args_1_4, template_arg_1_4, brackets_1_4
                             ;
 
             rule<Scanner> const&
