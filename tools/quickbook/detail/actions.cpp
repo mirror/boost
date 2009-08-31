@@ -524,9 +524,17 @@ namespace quickbook
           , boost::spirit::classic::file_position const& pos
         )
         {
-            if (template_.size()-1 != template_info.size())
+            // Quickbook 1.4-: If there aren't enough parameters seperated by
+            //                 '..' then seperate the last parameter using
+            //                 whitespace.
+            // Quickbook 1.5+: If '..' isn't used to seperate the parameters
+            //                 then use whitespace to separate them
+            //                 (2 = template name + argument).
+
+            if (qbk_version_n < 105 || template_info.size() == 2)
             {
-                while (template_.size()-1 > template_info.size())
+                // template_.size() - 1 because template_ also includes the body.
+                while (template_info.size() < template_.size()-1 )
                 {
                     // Try to break the last argument at the first space found
                     // and push it into the back of template_info. Do this
@@ -545,18 +553,18 @@ namespace quickbook
                     str = first;
                     template_info.push_back(second);
                 }
+            }
 
-                if (template_.size()-1 != template_info.size())
-                {
-                    detail::outerr(pos.file, pos.line)
-                        << "Invalid number of arguments passed. Expecting: "
-                        << template_.size()-2
-                        << " argument(s), got: "
-                        << template_info.size()-1
-                        << " argument(s) instead."
-                        << std::endl;
-                    return false;
-                }
+            if (template_info.size() != template_.size()-1)
+            {
+                detail::outerr(pos.file, pos.line)
+                    << "Invalid number of arguments passed. Expecting: "
+                    << template_.size()-2
+                    << " argument(s), got: "
+                    << template_info.size()-1
+                    << " argument(s) instead."
+                    << std::endl;
+                return false;
             }
             return true;
         }

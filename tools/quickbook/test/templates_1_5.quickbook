@@ -21,3 +21,18 @@
 [template echo[a b] [a] [b]]
 [template echo_twice[x] [echo [same [x]]..[same [x]]]]
 [echo_twice foo]
+
+[/ 1.5 template arguments]
+
+[template binary[x y] {[x]-[y]}]
+[binary 1..2]     [/ {1-2} ]
+[binary 1 2]      [/ {1-2} ]
+[binary 1..2 3 4] [/ {1-2 3 4} ]
+[binary 1 2..3 4] [/ {1 2-3 4} ]
+[binary 1 2 3..4] [/ {1 2 3-4} ]
+[binary 1.\.2..3] [/ {1..2-3} ]
+[binary 1.\.2 3]  [/ {1..2-3} ]
+
+[template ternary[x y z] {[x]-[y]-[z]}]
+[ternary 1..2..3]  [/ {1-2-3} ]
+[ternary 1 2 3]    [/ {1-2-3} ]

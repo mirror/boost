@@ -29,6 +29,7 @@ test-suite quickbook.test :
     [ quickbook-fail-test fail-import ]
     [ quickbook-fail-test fail-template-arguments1 ]
     [ quickbook-fail-test fail-template-arguments2 ]
+    [ quickbook-fail-test fail-template-arguments3 ]
     [ quickbook-fail-test fail-cpp-mismatched-escape ]
     [ quickbook-fail-test fail-python-mismatched-escape ]
     [ quickbook-fail-test fail-post-process ]
