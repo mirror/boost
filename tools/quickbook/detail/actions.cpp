@@ -519,6 +519,56 @@ namespace quickbook
 
     namespace
     {
+        std::string::size_type find_bracket_end(std::string const& str, std::string::size_type pos)
+        {
+            unsigned int depth = 1;
+
+            while(depth > 0) {
+                pos = str.find_first_of("[]\\", pos);
+                if(pos == std::string::npos) return pos;
+
+                if(str[pos] == '\\')
+                {
+                    pos += 2;
+                }
+                else
+                {
+                    depth += (str[pos] == '[') ? 1 : -1;
+                    ++pos;
+                }
+            }
+
+            return pos;
+        }
+
+        std::string::size_type find_first_seperator(std::string const& str)
+        {
+            if(qbk_version_n < 105) {
+                return str.find_first_of(" \t\r\n");
+            }
+            else {
+                std::string::size_type pos = 0;
+
+                while(true)
+                {
+                    pos = str.find_first_of(" \t\r\n\\[", pos);
+                    if(pos == std::string::npos) return pos;
+
+                    switch(str[pos])
+                    {
+                    case '[':
+                        pos = find_bracket_end(str, pos + 1);
+                        break;
+                    case '\\':
+                        pos += 2;
+                        break;
+                    default:
+                        return pos;
+                    }
+                }
+            }
+        }
+    
         bool break_arguments(
             std::vector<std::string>& template_info
           , std::vector<std::string> const& template_
@@ -543,7 +593,7 @@ namespace quickbook
                     // arguments, or if there are no more spaces left.
 
                     std::string& str = template_info.back();
-                    std::string::size_type l_pos = str.find_first_of(" \t\r\n");
+                    std::string::size_type l_pos = find_first_seperator(str);
                     if (l_pos == std::string::npos)
                         break;
                     std::string first(str.begin(), str.begin()+l_pos);

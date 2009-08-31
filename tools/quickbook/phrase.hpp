@@ -10,6 +10,7 @@
 #if !defined(BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP)
 #define BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP
 
+#include "./detail/quickbook.hpp"
 #include "detail/utils.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_confix.hpp>
@@ -142,7 +143,11 @@ namespace quickbook
                     ;
 
                 template_args =
-                    template_args_1_4
+                    if_p(qbk_since(105u)) [
+                        template_args_1_5
+                    ].else_p [
+                        template_args_1_4
+                    ]
                     ;
 
                 template_args_1_4 =
@@ -158,6 +163,25 @@ namespace quickbook
 
                 brackets_1_4 =
                     '[' >> +template_arg_1_4 >> ']'
+                    ;
+
+                template_args_1_5 =
+                    template_arg_1_5                    [push_back_a(actions.template_info)]
+                    >> *(
+                            ".." >> template_arg_1_5    [push_back_a(actions.template_info)]
+                        )
+                    ;
+
+                template_arg_1_5 =
+                    +(brackets_1_5 | ('\\' >> anychar_p) | (anychar_p - (str_p("..") | '[' | ']')))
+                    ;
+
+                template_inner_arg_1_5 =
+                    +(brackets_1_5 | ('\\' >> anychar_p) | (anychar_p - (str_p('[') | ']')))
+                    ;
+
+                brackets_1_5 =
+                    '[' >> +template_inner_arg_1_5 >> ']'
                     ;
 
                 inline_code =
@@ -427,7 +451,9 @@ namespace quickbook
                             simple_teletype, source_mode, template_,
                             quote, code_block, footnote, replaceable, macro,
                             dummy_block, cond_phrase, macro_identifier, template_args,
-                            template_args_1_4, template_arg_1_4, brackets_1_4
+                            template_args_1_4, template_arg_1_4, brackets_1_4,
+                            template_args_1_5, template_arg_1_5,
+                            template_inner_arg_1_5, brackets_1_5,
                             ;
 
             rule<Scanner> const&
