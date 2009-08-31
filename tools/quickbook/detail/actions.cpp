@@ -512,7 +512,7 @@ namespace quickbook
         actions.template_info.push_back(std::string(first, last));
         actions.templates.add(
             actions.template_info[0]
-          , boost::make_tuple(actions.template_info, first.get_position()));
+          , template_symbol(actions.template_info, first.get_position()));
         actions.template_info.clear();
     }
 
@@ -565,6 +565,7 @@ namespace quickbook
         get_arguments(
             std::vector<std::string>& template_info
           , std::vector<std::string> const& template_
+          , template_scope const& scope
           , boost::spirit::classic::file_position const& pos
           , quickbook::actions& actions
         )
@@ -578,7 +579,7 @@ namespace quickbook
                 std::vector<std::string> tinfo;
                 tinfo.push_back(*tpl);
                 tinfo.push_back(*arg);
-                template_symbol template_(tinfo, pos);
+                template_symbol template_(tinfo, pos, &scope);
 
                 if (actions.templates.find_top_scope(*tpl))
                 {
@@ -665,12 +666,30 @@ namespace quickbook
             return;
         }
 
+        // The template arguments should have the scope that the template was
+        // called from, not the template's own scope.
+        //
+        // Note that for quickbook 1.4- this value is just ignored when the
+        // arguments are expanded.
+        template_scope const& call_scope = actions.templates.top_scope();
+
+        template_symbol const* symbol =
+            actions.templates.find(actions.template_info[0]);
+        BOOST_ASSERT(symbol);
+            
         std::string result;
         actions.push(); // scope the actions' states
         {
             template_symbol const* symbol =
                 actions.templates.find(actions.template_info[0]);
             BOOST_ASSERT(symbol);
+
+            // Quickbook 1.4-: When expanding the tempalte continue to use the
+            //                 current scope (the dynamic scope).
+            // Quickbook 1.5+: Use the scope the template was defined in
+            //                 (the static scope).
+            if (qbk_version_n >= 105)
+                actions.templates.set_parent_scope(*boost::get<2>(*symbol));
 
             std::vector<std::string> template_ = boost::get<0>(*symbol);
             boost::spirit::classic::file_position template_pos = boost::get<1>(*symbol);
@@ -693,7 +712,8 @@ namespace quickbook
             bool get_arg_result;
             std::vector<std::string>::const_iterator tpl;
             boost::tie(get_arg_result, tpl) =
-                get_arguments(template_info, template_, pos, actions);
+                get_arguments(template_info, template_,
+                    call_scope, pos, actions);
 
             if (!get_arg_result)
             {
@@ -1069,7 +1089,7 @@ namespace quickbook
         std::vector<std::string> tinfo;
         tinfo.push_back(id);
         tinfo.push_back(snippet);
-        storage.push_back(boost::make_tuple(tinfo, first.get_position()));
+        storage.push_back(template_symbol(tinfo, first.get_position()));
 
         callout_id += callouts.size();
         callouts.clear();

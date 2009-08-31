@@ -1,0 +1,23 @@
+[article Template 1.5
+    [quickbook 1.5]
+]
+
+[/ 1.5 uses static scoping ]
+
+[template x static scoping]
+[template foo1[] [x]]
+[template foo2[x] [foo1]]
+[foo2 dynamic scoping]
+
+[/ In 1.5 template arguments are scoped at the point they are defined]
+
+[template y new]
+[template foo3[a y] [a]]
+[foo3 [y] old]
+
+[/ From https://svn.boost.org/trac/boost/ticket/2034 ]
+
+[template same[x] [x]]
+[template echo[a b] [a] [b]]
+[template echo_twice[x] [echo [same [x]]..[same [x]]]]
+[echo_twice foo]
