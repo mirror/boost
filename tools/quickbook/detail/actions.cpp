@@ -14,6 +14,7 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/lexical_cast.hpp>
+#include "./quickbook.hpp"
 #include "./actions.hpp"
 #include "./utils.hpp"
 #include "./markups.hpp"

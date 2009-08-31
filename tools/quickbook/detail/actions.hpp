@@ -41,9 +41,6 @@ namespace quickbook
     extern tm* current_time; // the current time
     extern tm* current_gm_time; // the current UTC time
     extern bool debug_mode;
-    extern unsigned qbk_major_version;
-    extern unsigned qbk_minor_version;
-    extern unsigned qbk_version_n; // qbk_major_version * 100 + qbk_minor_version
     extern std::vector<std::string> include_path;
 
     // forward declarations
