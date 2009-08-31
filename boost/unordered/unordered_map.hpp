@@ -68,8 +68,8 @@ namespace boost
         typedef BOOST_DEDUCED_TYPENAME value_allocator::reference reference;
         typedef BOOST_DEDUCED_TYPENAME value_allocator::const_reference const_reference;
 
-        typedef BOOST_DEDUCED_TYPENAME std::size_t size_type;
-        typedef BOOST_DEDUCED_TYPENAME std::ptrdiff_t difference_type;
+        typedef std::size_t size_type;
+        typedef std::ptrdiff_t difference_type;
 
         typedef boost::unordered_detail::hash_const_local_iterator<
             value_allocator, boost::unordered_detail::ungrouped> const_local_iterator;
@@ -545,8 +545,8 @@ namespace boost
         typedef BOOST_DEDUCED_TYPENAME value_allocator::reference reference;
         typedef BOOST_DEDUCED_TYPENAME value_allocator::const_reference const_reference;
 
-        typedef BOOST_DEDUCED_TYPENAME std::size_t size_type;
-        typedef BOOST_DEDUCED_TYPENAME std::ptrdiff_t difference_type;
+        typedef std::size_t size_type;
+        typedef std::ptrdiff_t difference_type;
 
         typedef boost::unordered_detail::hash_const_local_iterator<
             value_allocator, boost::unordered_detail::grouped> const_local_iterator;
