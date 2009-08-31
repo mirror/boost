@@ -164,6 +164,18 @@ Features include:
 * __cond__. Ala C++ #ifdef.
 * Searching of included and imported files in an extensible search path with
   `--include-path` (`-I`) option.
+  
+[h3 Version 1.5]
+
+* Support multiple copyright entrys in document info.
+* Improved SVG support.
+* \[globalref\] for referencing BoostBook <global> entities.
+* Fail on error.
+* Fix crash for templates with too many arguments or trailing space.
+* Improved handling of unexpected characters in code blocks.
+* Improved handling of unmatched escape in code blocks.
+* Support for python snippets.
+* `teletype` source mode.
 
 [endsect]
 
