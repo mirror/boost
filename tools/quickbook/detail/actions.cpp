@@ -819,10 +819,19 @@ namespace quickbook
         std::string::iterator first = actions.table_title.begin();
         std::string::iterator last = actions.table_title.end();
         bool has_title = first != last;
+        
+        std::string table_id;
+        if(qbk_version_n >= 105) {
+            if(!actions.element_id.empty()) table_id = actions.element_id;
+            else if(has_title) table_id = detail::make_identifier(first, last);
+        }
 
         if (has_title)
         {
-            actions.out << "<table frame=\"all\">\n";
+            actions.out << "<table frame=\"all\"";
+            if(!table_id.empty())
+                actions.out << " id=\"" << table_id << "\"";
+            actions.out << ">\n";
             actions.out << "<title>";
             while (first != last)
                 detail::print_char(*first++, actions.out.get());
@@ -830,7 +839,10 @@ namespace quickbook
         }
         else
         {
-            actions.out << "<informaltable frame=\"all\">\n";
+            actions.out << "<informaltable frame=\"all\"";
+            if(!table_id.empty())
+                actions.out << " id=\"" << table_id << "\"";
+            actions.out << ">\n";
         }
 
         actions.out << "<tgroup cols=\"" << actions.table_span << "\">\n";
@@ -965,10 +977,10 @@ namespace quickbook
         }
     }
     
-    void section_warning_action::operator()(iterator first, iterator) const
+    void element_id_warning_action::operator()(iterator first, iterator) const
     {
         boost::spirit::classic::file_position const pos = first.get_position();
-        detail::outwarn(pos.file,pos.line) << "Empty section id after 'section:'.\n";        
+        detail::outwarn(pos.file,pos.line) << "Empty id.\n";        
     }
 
     fs::path path_difference(fs::path const& outdir, fs::path const& path)

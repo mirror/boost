@@ -709,7 +709,7 @@ namespace quickbook
         int& error_count;
    };
    
-   struct section_warning_action
+   struct element_id_warning_action
    {
        void operator()(iterator first, iterator last) const;
    };

@@ -192,7 +192,7 @@ namespace quickbook
 
         begin_section_action    begin_section;
         end_section_action      end_section;
-        section_warning_action  section_warning;
+        element_id_warning_action element_id_warning;
         xinclude_action         xinclude;
         include_action          include;
         import_action           import;

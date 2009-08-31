@@ -10,6 +10,7 @@
 #if !defined(BOOST_SPIRIT_QUICKBOOK_BLOCK_HPP)
 #define BOOST_SPIRIT_QUICKBOOK_BLOCK_HPP
 
+#include "./detail/quickbook.hpp"
 #include "./detail/utils.hpp"
 #include "./phrase.hpp"
 #include <boost/spirit/include/classic_core.hpp>
@@ -22,7 +23,6 @@
 namespace quickbook
 {
     using namespace boost::spirit::classic;
-    extern unsigned qbk_version_n;
 
     template <typename Actions, bool skip_initial_spaces = false>
     struct block_grammar : grammar<block_grammar<Actions> >
@@ -122,19 +122,32 @@ namespace quickbook
                         |   eps_p                       [actions.error]
                         )
                     ;
+                
+                element_id =
+                        ':'
+                    >>
+                        (
+                            if_p(qbk_since(105u))       [space]
+                        >>  (+(alnum_p | '_'))          [assign_a(actions.element_id)]
+                        |   eps_p                       [actions.element_id_warning]
+                                                        [assign_a(actions.element_id)]
+                        )
+                    | eps_p                             [assign_a(actions.element_id)]
+                    ;
+                
+                element_id_1_5 =
+                        if_p(qbk_since(105u)) [
+                            element_id
+                        ]
+                        .else_p [
+                            eps_p                       [assign_a(actions.element_id)]
+                        ]
+                        ;
 
                 begin_section =
                        "section"
                     >> hard_space
-                    >>  ( ':' >>
-                            (
-                            if_p(qbk_since(105u))       [space]
-                            >> (+(alnum_p | '_'))       [assign_a(actions.element_id)]
-                            | eps_p                     [actions.section_warning]
-                                                        [assign_a(actions.element_id)]
-                            )
-                        | eps_p                         [assign_a(actions.element_id)]
-                        )
+                    >> element_id
                     >> phrase                           [actions.begin_section]
                     ;
 
@@ -290,6 +303,8 @@ namespace quickbook
                 table =
                     "table"
                     >>  (eps_p(*blank_p >> eol_p) | hard_space)
+                    >> element_id_1_5
+                    >>  (eps_p(*blank_p >> eol_p) | space)
                     >>  (*(anychar_p - eol))            [assign_a(actions.table_title)]
                     >>  +eol
                     >>  *table_row
@@ -426,7 +441,7 @@ namespace quickbook
                             xinclude, include, hard_space, eol, paragraph_end,
                             template_, template_id, template_formal_arg,
                             template_body, identifier, dummy_block, import,
-                            inside_paragraph;
+                            inside_paragraph, element_id, element_id_1_5;
 
             symbols<>       paragraph_end_markups;
 
