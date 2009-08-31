@@ -67,13 +67,13 @@ namespace boost { namespace unordered_detail {
         static bool group_equals(node_ptr it1, node_ptr it2, set_extractor*);
         static bool group_equals(node_ptr it1, node_ptr it2, map_extractor*);
 
-		inline node_ptr add_node(node_constructor& a, bucket_ptr bucket)
-		{
-			node_ptr n = a.release();
-			this->link_node_in_bucket(n, bucket);
-			return n;
-		}
-		
+        inline node_ptr add_node(node_constructor& a, bucket_ptr bucket)
+        {
+            node_ptr n = a.release();
+            this->link_node_in_bucket(n, bucket);
+            return n;
+        }
+        
 #if defined(BOOST_UNORDERED_STD_FORWARD)
 
         // Emplace (unique keys)
@@ -325,15 +325,15 @@ namespace boost { namespace unordered_detail {
         static bool group_equals(node_ptr it1, node_ptr it2, set_extractor*);
         static bool group_equals(node_ptr it1, node_ptr it2, map_extractor*);
 
-		inline node_ptr add_node(node_constructor& a, bucket_ptr bucket, node_ptr pos)
-		{
-			node_ptr n = a.release();
-			if(BOOST_UNORDERED_BORLAND_BOOL(pos))
-				this->link_node(n, pos);
-			else
-				this->link_node_in_bucket(n, bucket);
-			return n;
-		}
+        inline node_ptr add_node(node_constructor& a, bucket_ptr bucket, node_ptr pos)
+        {
+            node_ptr n = a.release();
+            if(BOOST_UNORDERED_BORLAND_BOOL(pos))
+                this->link_node(n, pos);
+            else
+                this->link_node_in_bucket(n, bucket);
+            return n;
+        }
 
     public:
 
@@ -585,7 +585,7 @@ namespace boost { namespace unordered_detail {
     {
         key_type const& k = extractor::extract(a.get()->value());
         bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
-		add_node(a, bucket, find_iterator(bucket, k));
+        add_node(a, bucket, find_iterator(bucket, k));
     }
 
     ////////////////////////////////////////////////////////////////////////////

@@ -120,7 +120,7 @@ namespace boost { namespace unordered_detail {
     void hash_table_manager<A, G>::destruct_node(node_ptr b)
     {
         node* raw_ptr = static_cast<node*>(&*b);
-	BOOST_UNORDERED_DESTRUCT(&raw_ptr->value(), value_type);
+        BOOST_UNORDERED_DESTRUCT(&raw_ptr->value(), value_type);
         real_node_ptr n(node_alloc().address(*raw_ptr));
         node_alloc().destroy(n);
         node_alloc().deallocate(n, 1);
