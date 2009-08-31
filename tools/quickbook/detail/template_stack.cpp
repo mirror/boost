@@ -18,14 +18,14 @@ namespace quickbook
         : scope(template_stack::parser(*this))
         , scopes()
     {
-        scopes.push_front(template_symbols());
+        scopes.push_front(template_scope());
     }
     
     template_symbol* template_stack::find(std::string const& symbol) const
     {
         for (deque::const_iterator i = scopes.begin(); i != scopes.end(); ++i)
         {
-            if (template_symbol* ts = boost::spirit::classic::find(*i, symbol.c_str()))
+            if (template_symbol* ts = boost::spirit::classic::find(i->symbols, symbol.c_str()))
                 return ts;
         }
         return 0;
@@ -33,24 +33,24 @@ namespace quickbook
 
     template_symbol* template_stack::find_top_scope(std::string const& symbol) const
     {
-        return boost::spirit::classic::find(scopes.front(), symbol.c_str());
+        return boost::spirit::classic::find(scopes.front().symbols, symbol.c_str());
     }
 
     template_symbols const& template_stack::top() const
     {
         BOOST_ASSERT(!scopes.empty());
-        return scopes.front();
+        return scopes.front().symbols;
     }
     
     void template_stack::add(std::string const& symbol, template_symbol const& ts)
     {
         BOOST_ASSERT(!scopes.empty());
-        boost::spirit::classic::add(scopes.front(), symbol.c_str(), ts);
+        boost::spirit::classic::add(scopes.front().symbols, symbol.c_str(), ts);
     }
     
     void template_stack::push()
     {
-        scopes.push_front(template_symbols());
+        scopes.push_front(template_scope());
     }
 
     void template_stack::pop()

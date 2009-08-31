@@ -40,10 +40,15 @@ namespace quickbook
     template_symbol;
 
     typedef boost::spirit::classic::symbols<template_symbol> template_symbols;
+    
+    struct template_scope
+    {
+        template_symbols symbols;
+    };
 
     struct template_stack
     {
-        typedef std::deque<template_symbols> deque;
+        typedef std::deque<template_scope> deque;
 
         struct parser
         {
@@ -62,7 +67,7 @@ namespace quickbook
                 for (template_stack::deque::const_iterator i = ts.scopes.begin();
                     i != ts.scopes.end(); ++i)
                 {
-                    boost::spirit::classic::match<> m = i->parse(scan);
+                    boost::spirit::classic::match<> m = i->symbols.parse(scan);
                     if (m.length() > len)
                         len = m.length();
                     scan.first = f;
