@@ -41,7 +41,7 @@ namespace boost { namespace unordered_detail {
         : structure(), allocators_(h.allocators_) {}
 
     template <class A, class G>
-    hash_table_manager<A, G>::hash_table_manager(hash_table_manager& x, move_tag m)
+    hash_table_manager<A, G>::hash_table_manager(hash_table_manager& x, move_tag)
         : structure(), allocators_(x.allocators_)
     {
         this->buckets_ = x.buckets_;
@@ -55,7 +55,7 @@ namespace boost { namespace unordered_detail {
     }
 
     template <class A, class G>
-    hash_table_manager<A, G>::hash_table_manager(hash_table_manager& x, value_allocator const& a, move_tag m) :
+    hash_table_manager<A, G>::hash_table_manager(hash_table_manager& x, value_allocator const& a, move_tag) :
          structure(), allocators_(a,a)
     {
         if(this->node_alloc() == x.node_alloc()) {

@@ -635,7 +635,7 @@ namespace boost { namespace unordered_detail {
 
     template <class H, class P, class A, class K>
     inline bool hash_unique_table<H, P, A, K>
-        ::group_equals(node_ptr it1, node_ptr it2, set_extractor*)
+        ::group_equals(node_ptr, node_ptr, set_extractor*)
     {
         return true;
     }
