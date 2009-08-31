@@ -25,13 +25,13 @@
 namespace boost { namespace unordered_detail {
 
     template <class BucketPtr>
-    static inline BucketPtr& next_node(BucketPtr ptr)
+    inline BucketPtr& next_node(BucketPtr ptr)
     {
         return ptr->next_;
     }
 
     template <class BucketPtr>
-    static inline std::size_t node_count(BucketPtr ptr, BucketPtr end)
+    inline std::size_t node_count(BucketPtr ptr, BucketPtr end)
     {
         std::size_t count = 0;
         while(ptr != end) {
