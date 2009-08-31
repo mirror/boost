@@ -187,7 +187,7 @@ struct store_hash_bool
    struct two_or_three {one _[2 + Add];};
    template <class U> static one test(...);
    template <class U> static two_or_three<U::store_hash>
-      test (detail::bool_<U::store_hash>* = 0);
+      test (int);
    static const std::size_t value = sizeof(test<T>(0));
 };
 
@@ -204,7 +204,7 @@ struct optimize_multikey_bool
    struct two_or_three {one _[2 + Add];};
    template <class U> static one test(...);
    template <class U> static two_or_three<U::optimize_multikey>
-      test (detail::bool_<U::optimize_multikey>* = 0);
+      test (int);
    static const std::size_t value = sizeof(test<T>(0));
 };
 
