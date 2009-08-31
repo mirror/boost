@@ -36,6 +36,7 @@ namespace quickbook
     namespace fs = boost::filesystem;
     typedef position_iterator<std::string::const_iterator> iterator;
     typedef symbols<std::string> string_symbols;
+    typedef std::map<std::string, std::string> attribute_map;
 
     struct actions;
     extern tm* current_time; // the current time
@@ -369,17 +370,40 @@ namespace quickbook
 
         collector& phrase;
     };
+    
+    struct attribute_action
+    {
+        // Handle image attributes
+        
+        attribute_action(
+            attribute_map& attributes
+          , std::string& attribute_name)
+        : attributes(attributes)
+        , attribute_name(attribute_name) {}
+
+        void operator()(iterator first, iterator last) const;
+
+        attribute_map& attributes;
+        std::string& attribute_name;
+    };
 
     struct image_action
     {
         // Handles inline images
 
-        image_action(collector& phrase)
-        : phrase(phrase) {}
+        image_action(
+            collector& phrase
+          , attribute_map& attributes
+          , std::string& image_fileref)
+        : phrase(phrase)
+        , attributes(attributes)
+        , image_fileref(image_fileref) {}
 
         void operator()(iterator first, iterator last) const;
 
         collector& phrase;
+        attribute_map& attributes;
+        std::string& image_fileref;
     };
 
     struct markup_action

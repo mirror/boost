@@ -400,11 +400,29 @@ namespace quickbook
         detail::print_char(*first, phrase.get());
     }
 
-    void image_action::operator()(iterator first, iterator last) const
+    void attribute_action::operator()(iterator first, iterator last) const
     {
-        fs::path const img_path(std::string(first, last));
+        boost::spirit::classic::file_position const pos = first.get_position();
 
-        std::string attr_text;
+        if (!attributes.insert(
+                attribute_map::value_type(attribute_name, std::string(first, last))
+            ).second)
+        {
+            detail::outerr(pos.file,pos.line)
+                << "Repeated attribute: " << attribute_name << ".\n";
+        }
+    }
+
+    void image_action::operator()(iterator, iterator) const
+    {
+        fs::path const img_path(image_fileref);
+        
+        attribute_map::iterator it = attributes.find("alt");
+        std::string alt_text = it != attributes.end() ? it->second : fs::basename(img_path);
+        attributes.erase("alt");
+
+        attributes.insert(attribute_map::value_type("fileref", image_fileref));
+
         if(fs::extension(img_path) == ".svg")
         {
            //
@@ -418,7 +436,7 @@ namespace quickbook
            //    a tiny box with scrollbars (Firefox), or else cropped to
            //    fit in a tiny box (IE7).
            //
-           attr_text = " format=\"SVG\"";
+           attributes.insert(attribute_map::value_type("format", "SVG"));
            //
            // Image paths are relative to the html subdirectory:
            //
@@ -452,8 +470,8 @@ namespace quickbook
            b = svg_text.find('\"', a + 1);
            if(a != std::string::npos)
            {
-              attr_text.append(" contentwidth=");
-              attr_text.append(svg_text.begin() + a, svg_text.begin() + b + 1);
+              attributes.insert(attribute_map::value_type("contentwidth",
+                std::string(svg_text.begin() + a + 1, svg_text.begin() + b)));
            }
            a = svg_text.find("height");
            a = svg_text.find('=', a);
@@ -461,24 +479,39 @@ namespace quickbook
            b = svg_text.find('\"', a + 1);
            if(a != std::string::npos)
            {
-              attr_text.append(" contentdepth=");
-              attr_text.append(svg_text.begin() + a, svg_text.begin() + b + 1);
+              attributes.insert(attribute_map::value_type("contentdepth",
+                std::string(svg_text.begin() + a + 1, svg_text.begin() + b)));
            }
         }
 
         phrase << "<inlinemediaobject>";
 
-        phrase << "<imageobject><imagedata ";
-        phrase << attr_text;
-        phrase << " fileref=\"";
-        while (first != last)
-            detail::print_char(*first++, phrase.get());
-        phrase << "\"></imagedata></imageobject>";
+        phrase << "<imageobject><imagedata";
+        
+        for(attribute_map::const_iterator
+            attr_first = attributes.begin(), attr_last  = attributes.end();
+            attr_first != attr_last; ++attr_first)
+        {
+            phrase << " " << attr_first->first << "=\"";
+
+            for(std::string::const_iterator
+                first = attr_first->second.begin(),
+                last  = attr_first->second.end();
+                first != last; ++first)
+            {
+                if (*first == '\\' && ++first == last) break;
+                detail::print_char(*first, phrase.get());
+            }
+
+            phrase << "\"";
+        }
+
+        phrase << "></imagedata></imageobject>";
 
         // Also add a textobject -- use the basename of the image file.
         // This will mean we get "alt" attributes of the HTML img.
         phrase << "<textobject><phrase>";
-        detail::print_string(fs::basename(img_path), phrase.get());
+        detail::print_string(alt_text, phrase.get());
         phrase << "</phrase></textobject>";
 
         phrase << "</inlinemediaobject>";

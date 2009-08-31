@@ -16,6 +16,7 @@
 #include <boost/spirit/include/classic_confix.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
 #include <boost/spirit/include/classic_assign_actor.hpp>
+#include <boost/spirit/include/classic_clear_actor.hpp>
 #include <boost/spirit/include/classic_if.hpp>
 
 namespace quickbook
@@ -290,11 +291,29 @@ namespace quickbook
                     ;
 
                 image =
-                        '$' >> blank
-                    >> (*(anychar_p -
-                            phrase_end))                [actions.image]
+                        '$' >> blank                    [clear_a(actions.attributes)]
+                    >>  if_p(qbk_since(105u)) [
+                                (+(
+                                    *space_p
+                                >>  +(anychar_p - (space_p | phrase_end | '['))
+                                ))                       [assign_a(actions.image_fileref)]
+                            >>  hard_space
+                            >>  *(
+                                    '['
+                                >>  (*(alnum_p | '_'))  [assign_a(actions.attribute_name)]
+                                >>  space
+                                >>  (*(anychar_p - (phrase_end | '[')))
+                                                        [actions.attribute]
+                                >>  ']'
+                                >>  space
+                                )
+                        ].else_p [
+                                (*(anychar_p -
+                                    phrase_end))        [assign_a(actions.image_fileref)]
+                        ]
+                    >>  eps_p(']')                      [actions.image]
                     ;
-
+                    
                 url =
                         '@'
                     >>  (*(anychar_p -
@@ -453,7 +472,7 @@ namespace quickbook
                             dummy_block, cond_phrase, macro_identifier, template_args,
                             template_args_1_4, template_arg_1_4, brackets_1_4,
                             template_args_1_5, template_arg_1_5,
-                            template_inner_arg_1_5, brackets_1_5,
+                            template_inner_arg_1_5, brackets_1_5
                             ;
 
             rule<Scanner> const&

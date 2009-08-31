@@ -92,6 +92,9 @@ namespace quickbook
         bool                    template_escape;
         template_stack          templates;
         int                     error_count;
+        std::string             image_fileref;
+        std::string             attribute_name;
+        attribute_map           attributes;
 
     // push/pop the states and the streams
         void push();
@@ -117,6 +120,7 @@ namespace quickbook
         phrase_action           warning, caution, important, note, tip;
         plain_char_action       plain_char;
         raw_char_action         raw_char;
+        attribute_action        attribute;
         image_action            image;
         cond_phrase_action_pre  cond_phrase_pre;
         cond_phrase_action_post cond_phrase_post;
