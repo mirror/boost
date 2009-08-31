@@ -52,6 +52,7 @@ namespace quickbook
         , source_mode("c++")
 
     // temporary or global state
+        , element_id()
         , table_title()
         , table_span(0)
         , table_header()
@@ -166,7 +167,7 @@ namespace quickbook
         , end_cell(phrase, temp_para)
         , anchor(out)
 
-        , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id)
+        , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id, element_id)
         , end_section(out, section_level, qualified_section_id, error_count)
         , xinclude(out, *this)
         , include(*this)

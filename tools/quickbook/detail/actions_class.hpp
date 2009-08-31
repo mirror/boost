@@ -79,6 +79,7 @@ namespace quickbook
         std::stack<state_tuple> state_stack;
 
     // temporary or global state
+        std::string             element_id;
         std::string             table_title;
         unsigned                table_span;
         std::string             table_header;

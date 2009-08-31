@@ -897,8 +897,9 @@ namespace quickbook
 
     void begin_section_action::operator()(iterator first, iterator last) const
     {
-        if (section_id.empty())
-            section_id = detail::make_identifier(first, last);
+        section_id = element_id.empty() ?
+            detail::make_identifier(first, last) :
+            element_id;
 
         if (section_level != 0)
             qualified_section_id += '.';

@@ -668,13 +668,15 @@ namespace quickbook
           , std::string& library_id
           , std::string& section_id
           , int& section_level
-          , std::string& qualified_section_id)
+          , std::string& qualified_section_id
+          , std::string& element_id)
         : out(out)
         , phrase(phrase)
         , library_id(library_id)
         , section_id(section_id)
         , section_level(section_level)
-        , qualified_section_id(qualified_section_id) {}
+        , qualified_section_id(qualified_section_id)
+        , element_id(element_id) {}
 
         void operator()(iterator first, iterator last) const;
 
@@ -684,6 +686,7 @@ namespace quickbook
         std::string& section_id;
         int& section_level;
         std::string& qualified_section_id;
+        std::string& element_id;
     };
 
     struct end_section_action

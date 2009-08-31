@@ -129,11 +129,11 @@ namespace quickbook
                     >>  ( ':' >>
                             (
                             if_p(qbk_since(105u))       [space]
-                            >> (+(alnum_p | '_'))       [assign_a(actions.section_id)]
+                            >> (+(alnum_p | '_'))       [assign_a(actions.element_id)]
                             | eps_p                     [actions.section_warning]
-                                                        [assign_a(actions.section_id)]
+                                                        [assign_a(actions.element_id)]
                             )
-                        | eps_p                         [assign_a(actions.section_id)]
+                        | eps_p                         [assign_a(actions.element_id)]
                         )
                     >> phrase                           [actions.begin_section]
                     ;
