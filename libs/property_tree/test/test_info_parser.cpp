@@ -163,7 +163,7 @@ void test_info_parser()
         ReadFunc(), WriteFunc(), ok_data_1, ok_data_1_inc, 
         "testok1.info", "testok1_inc.info", "testok1out.info", 45, 240, 192
     );
-    
+
     generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
     (
         ReadFunc(), WriteFunc(), ok_data_2, NULL, 
@@ -233,7 +233,7 @@ void test_info_parser()
         read_info("nonexisting file.nonexisting file", pt, default_pt);
         BOOST_CHECK(pt == default_pt);
     }
-    
+
 }
 
 int test_main(int argc, char *argv[])

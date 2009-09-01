@@ -38,7 +38,6 @@ void prepare_keys(int size)
 
 void clock_push_back(int size)
 {
-
     prepare_keys(size);
     int max_repeats = 1000000 / size;
     shared_array<ptree> pt_array(new ptree[max_repeats]);
@@ -51,7 +50,7 @@ void clock_push_back(int size)
             break;
         ptree &pt = pt_array[n];
         for (int i = 0; i < size; ++i)
-            pt.push_back(ptree::value_type(shuffled_keys[i], empty_ptree<ptree>()));
+            pt.push_back(ptree::value_type(shuffled_keys[i], ptree()));
         t2 = clock();
         ++n;
     } while (t2 - t1 < CLOCKS_PER_SEC);
@@ -62,7 +61,6 @@ void clock_push_back(int size)
 
 void clock_find(int size)
 {
-
     prepare_keys(size);
 
     ptree pt;
@@ -85,7 +83,6 @@ void clock_find(int size)
 
 void clock_erase(int size)
 {
-
     prepare_keys(size);
 
     int max_repeats = 100000 / size;
@@ -110,7 +107,6 @@ void clock_erase(int size)
     } while (t2 - t1 < CLOCKS_PER_SEC);
 
     cout << "  erase (" << size << "): " << double(t2 - t1) / CLOCKS_PER_SEC / n * 1000 << " ms\n";
-
 }
 
 int main()

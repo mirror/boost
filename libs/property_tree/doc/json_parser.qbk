@@ -1,12 +1,25 @@
 [section JSON Parser]
-[def __json_wiki__ [@http://en.wikipedia.org/wiki/JSON JSON format]]
-The __json_wiki__ is a data interchange format which is a subset of Javascript language.  (JSON stands for JavaScript Object Notation.)  It is considerably simpler than XML, is usually more concise, easier to read by humans, and easier to parse by machines. It's not currently as widely used as XML, but if you think XML is bloated then this may be the format worth consideration.
+[def __json__ [@http://en.wikipedia.org/wiki/JSON JSON format]]
+The __json__ is a data interchange format derived from the object literal
+notation of JavaScript. (JSON stands for JavaScript Object Notation.)
+JSON is a simple, compact format for loosely structured node trees of any depth,
+very similar to the property tree dataset. It is less stuctured than XML and has
+no schema support, but has the advantage of being simpler, smaller and typed
+without the need for a complex schema.
 
-JSON structure is slightly different from that of property tree. The differences and the way they are dealt with are summarized below:
+The property tree dataset is not typed, and does not support arrays as such.
+Thus, the following JSON / property tree mapping is used:
 
-* JSON contains 'objects' and 'arrays' - objects are collections of name-value pairs, while arrays contain only values. During parse, items of JSON arrays are translated into ptree keys with empty names. Members of objects are translated into named keys. During write, any ptree key containing only unnamed subkeys will be rendered as JSON array.
-* A JSON element cannot simultaneously have child items and data. Only one of these may be present. As a result, if property tree contains keys that have both subkeys and non-empty data, writing will fail.
-* JSON data can be a string, a numeric value, or one of literals "null", "true" and "false". During parse, any of the above is copied verbatim into ptree data string. This causes some type information to be lost, because if resulting ptree is written back into JSON format, it will only contain strings.
+* JSON objects are mapped to nodes. Each property is a child node.
+* JSON arrays are mapped to nodes. Each element is a child node with an empty
+  name. If a node has both named and unnamed child nodes, it cannot be mapped
+  to a JSON representation.
+* JSON values are mapped to nodes containing the value. However, all type
+  information is lost; numbers, as well as the literals "null", "true" and
+  "false" are simply mapped to their string form.
+* Property tree nodes containing both child nodes and data cannot be mapped.
+
+JSON round-trips, except for the type information loss.
 
 For example this JSON:
 

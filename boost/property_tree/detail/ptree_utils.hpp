@@ -11,6 +11,9 @@
 #define BOOST_PROPERTY_TREE_DETAIL_PTREE_UTILS_HPP_INCLUDED
 
 #include <boost/limits.hpp>
+#include <boost/type_traits/integral_constant.hpp>
+#include <boost/mpl/has_xxx.hpp>
+#include <boost/mpl/and.hpp>
 #include <string>
 #include <algorithm>
 #include <locale>
@@ -29,9 +32,25 @@ namespace boost { namespace property_tree { namespace detail
         }
         inline bool operator()(const T &t1, const T &t2) const
         {
-            return std::lexicographical_compare(t1.begin(), t1.end(), t2.begin(), t2.end(), *this);
+            return std::lexicographical_compare(t1.begin(), t1.end(),
+                                                t2.begin(), t2.end(), *this);
         }
     };
+
+    template <typename Ch>
+    struct is_character : public boost::false_type {};
+    template <>
+    struct is_character<char> : public boost::true_type {};
+    template <>
+    struct is_character<wchar_t> : public boost::true_type {};
+
+
+    BOOST_MPL_HAS_XXX_TRAIT_DEF(internal_type)
+    BOOST_MPL_HAS_XXX_TRAIT_DEF(external_type)
+    template <typename T>
+    struct is_translator : public boost::mpl::and_<
+        has_internal_type<T>, has_external_type<T> > {};
+
 
 
     // Naively convert narrow string to another character type
@@ -51,7 +70,6 @@ namespace boost { namespace property_tree { namespace detail
     template<class Ch>
     std::string narrow(const Ch *text)
     {
-        std::locale loc;
         std::string result;
         while (*text)
         {
@@ -66,17 +84,17 @@ namespace boost { namespace property_tree { namespace detail
 
     // Remove trailing and leading spaces
     template<class Ch>
-    std::basic_string<Ch> trim(const std::basic_string<Ch> &s, 
+    std::basic_string<Ch> trim(const std::basic_string<Ch> &s,
                                const std::locale &loc = std::locale())
     {
         typename std::basic_string<Ch>::const_iterator first = s.begin();
         typename std::basic_string<Ch>::const_iterator end = s.end();
-        while (first != end && std::isspace(*first, loc)) 
+        while (first != end && std::isspace(*first, loc))
             ++first;
         if (first == end)
             return std::basic_string<Ch>();
         typename std::basic_string<Ch>::const_iterator last = end;
-        do --last; while (std::isspace(*last, loc)); 
+        do --last; while (std::isspace(*last, loc));
         if (first != s.begin() || last + 1 != end)
             return std::basic_string<Ch>(first, last + 1);
         else

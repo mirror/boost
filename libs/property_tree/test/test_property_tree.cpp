@@ -49,26 +49,30 @@ struct SortPredRev
 };
 
 // Custom translator that works with boost::any instead of std::string
-struct MyTranslator
+template <typename E>
+struct any_translator
 {
+    typedef boost::any internal_type;
+    typedef E external_type;
 
-    // Custom extractor - converts data from boost::any to T
-    template<class Ptree, class T> 
-    bool get_value(const Ptree &pt, T &value) const
-    {
-        value = boost::any_cast<T>(pt.data());
-        return true;    // Success
+    boost::optional<E> get_value(const internal_type &v) {
+        if(const E *p = boost::any_cast<E>(&v)) {
+            return *p;
+        }
+        return boost::optional<E>();
     }
-
-    // Custom inserter - converts data from T to boost::any
-    template<class Ptree, class T> 
-    bool put_value(Ptree &pt, const T &value) const
-    {
-        pt.data() = value;
-        return true;
+    boost::optional<internal_type> put_value(const E &v) {
+        return boost::any(v);
     }
-
 };
+
+namespace boost { namespace property_tree {
+    template <typename E>
+    struct translator_between<boost::any, E>
+    {
+        typedef any_translator<E> type;
+    };
+}}
 
 // Include char tests, case sensitive
 #define CHTYPE char
@@ -161,7 +165,7 @@ int test_main(int, char *[])
         test_char(pt);
         test_leaks(pt);                  // must be a final test
     }
-
+#if 0
     // wchar_t tests, case sensitive
 #ifndef BOOST_NO_CWCHAR
     {
@@ -258,6 +262,6 @@ int test_main(int, char *[])
         test_leaks(pt);                  // must be a final test
     }
 #endif
-
+#endif
     return 0;
 }

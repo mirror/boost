@@ -1,34 +1,44 @@
 [section XML Parser]
-[def __xml_wiki__ [@http://en.wikipedia.org/wiki/XML XML format]]
+[def __xml__ [@http://en.wikipedia.org/wiki/XML XML format]]
 [def __xml_parser.hpp__ [headerref boost/property_tree/xml_parser.hpp xml_parser.hpp]]
-[def __TinyXML__ [@http://sourceforge.net/projects/tinyxml TinyXML]]
-[def __boost_homepage__ [@http://www.boost.org Boost]]
-The __xml_wiki__ is an industry standard for storing information in textual
-form. Unfortunately, there is no XML parser in __boost_homepage__ as of the
-time of this writing. Therefore, a custom parser was created. It only supports
-a core subset of XML standard. For example, declarations and entity references
-are not supported. The parser is built with Spirit, and based on XML grammar
-sample by Daniel Nuffer. As a reinforcement to it, a parser based on
-__TinyXML__ is also provided. To enable it define
-[^BOOST_PROPERTY_TREE_XML_PARSER_TINYXML] before including the
-__xml_parser.hpp__ file. __TinyXML__ library has to be obtained separately.
+[def __RapidXML__ [@http://rapidxml.sourceforge.net/ RapidXML]]
+[def __boost__ [@http://www.boost.org Boost]]
+The __xml__ is an industry standard for storing information in textual
+form. Unfortunately, there is no XML parser in __boost__ as of the
+time of this writing. The library therefore contains the fast and tiny
+__RapidXML__ parser (currently in version 1.13) to provide XML parsing support.
+RapidXML does not fully support the XML standard; it is not capable of parsing
+DTDs and therefore cannot do full entity substitution. The parser is configured
+to trim whitespace from the edges of character data. This behaviour exists for
+compatibility with older versions of PropertyTree and will be made configurable
+in the future.
 
-How XML is translated to property tree (__read_xml__):
+Please note that RapidXML does not understand the encoding specification. If
+you pass it a character buffer, it assumes the data is already correctly
+encoded; if you pass it a filename, it will read the file using the character
+conversion of the locale you give it (or the global locale if you give it none).
+This means that, in order to parse a UTF-8-encoded XML file into a wptree, you
+have to supply an alternate locale, either directly or by replacing the global
+one.
 
-* Attributes of each XML key are stored in a subkey with name [^<xmlattr>].
-  Each subkey of [^<xmlattr>] is one attribute. If [^<xmlattr>] subkey does
-  not exist or is empty, there are no attributes.
-* XML comments are stored in keys named [^<xmlcomment>], unless a flag is
-  specified that disables parsing of comments.
-* Data of XML node may be stored in two ways, depending on the flags parameter
-  setting. The default way is to have all data nodes concatenated and put in
-  data string of appropriate property tree key. The other way is to have them
-  put in separate subkeys named [^<xmltext>] each.
+XML / property tree conversion schema (__read_xml__ and __write_xml__):
 
-Translation of property tree back into XML (__write_xml__) assumes the same
-structure as outlined above. That means, for example, that if you want to have
-attributes, you need to create [^<xmlattr>] subkey and put them there. With
-appropriate flags setting, reading an XML file and writing it back will not
-change the contents (but may change formatting), unless XML file uses some
-unsupported constructs.
+* Each XML element corresponds to a property tree node. The child elements
+  correspond to the children of the node.
+* The attributes of an XML element are stored in the subkey [^<xmlattr>]. There
+  is one child node per attribute in the attribute node. Existence of the
+  [^<xmlattr>] node is not guaranteed or necessary when there are no attributes.
+* XML comments are stored in nodes named [^<xmlcomment>], unless comment
+  ignoring is enabled via the flags.
+* Text content is stored in one of two ways, depending on the flags. The default
+  way concatenates all text nodes and stores them in a single node called
+  [^<xmltext>]. This way, the entire content can be conveniently read, but the
+  relative ordering of text and child elements is lost. The other way stores
+  each text content as a separate node, all called [^<xmltext>].
+
+The XML storage encoding does not round-trip perfectly. A read-write cycle loses
+trimmed whitespace, low-level formatting information, and the distinction
+between normal data and CDATA nodes. Comments are only preserved when enabled.
+A write-read cycle loses trimmed whitespace; that is, if the origin tree has
+string data that starts or ends with whitespace, that whitespace is lost.
 [endsect] [/xml_parser]

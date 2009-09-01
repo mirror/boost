@@ -24,7 +24,7 @@ namespace boost { namespace property_tree { namespace xml_parser
                          const std::string &filename, 
                          unsigned long line): 
             file_parser_error(message, filename, line)
-        { 
+        {
         }
     };
 

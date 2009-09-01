@@ -15,7 +15,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/detail/ptree_utils.hpp>
 #include <boost/property_tree/detail/json_parser_error.hpp>
-#include <boost/spirit.hpp>
+#include <boost/spirit/include/classic.hpp>
 #include <boost/limits.hpp>
 #include <string>
 #include <locale>
@@ -154,9 +154,10 @@ namespace boost { namespace property_tree { namespace json_parser
 
     ///////////////////////////////////////////////////////////////////////
     // Json grammar
-        
+
     template<class Ptree>
-    struct json_grammar: public boost::spirit::grammar<json_grammar<Ptree> >
+    struct json_grammar :
+        public boost::spirit::classic::grammar<json_grammar<Ptree> >
     {
         
         typedef context<Ptree> Context;
@@ -168,13 +169,16 @@ namespace boost { namespace property_tree { namespace json_parser
         struct definition
         {
             
-            boost::spirit::rule<Scanner> root, object, member, array, item, value, string, number;
-            boost::spirit::rule<typename boost::spirit::lexeme_scanner<Scanner>::type> character, escape;
+            boost::spirit::classic::rule<Scanner>
+                root, object, member, array, item, value, string, number;
+            boost::spirit::classic::rule<
+                typename boost::spirit::classic::lexeme_scanner<Scanner>::type>
+                character, escape;
 
             definition(const json_grammar &self)
             {
-                
-                using namespace boost::spirit;
+
+                using namespace boost::spirit::classic;
 
                 // Assertions
                 assertion<std::string> expect_object("expected object");
@@ -260,7 +264,7 @@ namespace boost { namespace property_tree { namespace json_parser
 
             }
 
-            const boost::spirit::rule<Scanner> &start() const
+            const boost::spirit::classic::rule<Scanner> &start() const
             {
                 return root;
             }
@@ -281,7 +285,7 @@ namespace boost { namespace property_tree { namespace json_parser
                             const std::string &filename)
     {
 
-        using namespace boost::spirit;
+        using namespace boost::spirit::classic;
         typedef typename Ptree::key_type::value_type Ch;
         typedef typename std::vector<Ch>::iterator It;
 

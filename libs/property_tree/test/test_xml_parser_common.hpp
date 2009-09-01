@@ -32,6 +32,10 @@ struct WriteFunc
     }
 };
 
+template <typename Ch> int umlautsize();
+template <> inline int umlautsize<char>() { return 2; }
+template <> inline int umlautsize<wchar_t>() { return 1; }
+
 template<class Ptree>
 void test_xml_parser()
 {
@@ -53,13 +57,20 @@ void test_xml_parser()
     generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
     (
         ReadFunc(), WriteFunc(), ok_data_3, NULL, 
-        "testok3.xml", NULL, "testok3out.xml", 787, 31346, 3831
+        "testok3.xml", NULL, "testok3out.xml", 787, 31376, 3831
     );
 
     generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
     (
         ReadFunc(), WriteFunc(), ok_data_4, NULL, 
         "testok4.xml", NULL, "testok4out.xml", 5, 2, 20
+    );
+
+    generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
+    (
+        ReadFunc(), WriteFunc(), ok_data_5, NULL, 
+        "testok5.xml", NULL, "testok5out.xml",
+        2, umlautsize<typename Ptree::data_type::value_type>(), 3
     );
 
     generic_parser_test_error<Ptree, ReadFunc, WriteFunc, xml_parser_error>

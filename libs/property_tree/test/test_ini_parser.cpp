@@ -27,8 +27,7 @@ const char *ok_data_1 =
     "Key 3     =      Data 3  \n"
     "Key4=Data4\n"
     "[Section2] ;Comment\n"
-    "\t   \t; Comment\n"
-    " \t  [ Section 3   ];Comment    \n";
+    "\t   \tKey1=Data4\n";
 
 // Correct data
 const char *ok_data_2 = 
@@ -43,6 +42,11 @@ const char *ok_data_3 =
 const char *ok_data_4 = 
     ";Comment";
 
+// Correct data
+const char *ok_data_5 = 
+    "Key1=Data1\n"             // No section
+    "Key2=Data2\n";
+
 // Erroneous data
 const char *error_data_1 = 
     "[Section1]\n"
@@ -51,11 +55,6 @@ const char *error_data_1 =
 
 // Erroneous data
 const char *error_data_2 = 
-    "Key1=Data1\n"             // No section
-    "Key2=Data2\n";
-
-// Erroneous data
-const char *error_data_3 = 
     "[Section1]\n"
     "Key1=Data1\n"
     "=Data2\n";                // No key
@@ -106,7 +105,7 @@ void test_ini_parser()
     generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
     (
         ReadFunc(), WriteFunc(), ok_data_1, NULL, 
-        "testok1.ini", NULL, "testok1out.ini", 8, 21, 42
+        "testok1.ini", NULL, "testok1out.ini", 8, 26, 37
     );
     
     generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
@@ -127,6 +126,12 @@ void test_ini_parser()
         "testok4.ini", NULL, "testok4out.ini", 1, 0, 0
     );
 
+    generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
+    (
+        ReadFunc(), WriteFunc(), ok_data_5, NULL, 
+        "testok5.ini", NULL, "testok5out.ini", 3, 10, 8
+    );
+
     generic_parser_test_error<Ptree, ReadFunc, WriteFunc, ini_parser_error>
     (
         ReadFunc(), WriteFunc(), error_data_1, NULL,
@@ -136,13 +141,7 @@ void test_ini_parser()
     generic_parser_test_error<Ptree, ReadFunc, WriteFunc, ini_parser_error>
     (
         ReadFunc(), WriteFunc(), error_data_2, NULL,
-        "testerr2.ini", NULL, "testerr2out.ini", 1
-    );
-
-    generic_parser_test_error<Ptree, ReadFunc, WriteFunc, ini_parser_error>
-    (
-        ReadFunc(), WriteFunc(), error_data_3, NULL,
-        "testerr3.ini", NULL, "testerr3out.ini", 3
+        "testerr2.ini", NULL, "testerr2out.ini", 3
     );
 
 }
@@ -165,14 +164,7 @@ int test_main(int argc, char *argv[])
     // Test too deep ptrees
     {
         ptree pt;
-        pt.put_child("section.key.bogus", empty_ptree<ptree>());
-        test_erroneous_write(pt);
-    }
-
-    // Test data in sections
-    {
-        ptree pt;
-        pt.put("section", 1);
+        pt.put_child("section.key.bogus", ptree());
         test_erroneous_write(pt);
     }
 
@@ -187,7 +179,16 @@ int test_main(int argc, char *argv[])
     // Test duplicate keys
     {
         ptree pt;
-        ptree &child = pt.put_child("section", empty_ptree<ptree>());
+        ptree &child = pt.put_child("section", ptree());
+        child.push_back(std::make_pair("key", ptree()));
+        child.push_back(std::make_pair("key", ptree()));
+        test_erroneous_write(pt);
+    }
+
+    // Test mixed data and children.
+    {
+        ptree pt;
+        ptree &child = pt.put_child("section", ptree("value"));
         child.push_back(std::make_pair("key", ptree()));
         child.push_back(std::make_pair("key", ptree()));
         test_erroneous_write(pt);

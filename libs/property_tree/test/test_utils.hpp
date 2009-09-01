@@ -52,7 +52,6 @@ typename Ptree::size_type total_data_size(const Ptree &pt)
     return size;
 }
 
-template<class Ch>
 class test_file
 {
 public:
@@ -61,12 +60,8 @@ public:
         if (test_data && filename)
         {
             name = filename;
-            std::basic_ofstream<Ch> stream(name.c_str());
-            while (*test_data)
-            {
-                stream << Ch(*test_data);
-                ++test_data;
-            }
+            std::ofstream stream(name.c_str());
+            stream.write(test_data, strlen(test_data));
             BOOST_CHECK(stream.good());
         }
     }
@@ -109,9 +104,9 @@ void generic_parser_test(Ptree &pt,
     typedef typename Ptree::key_type::value_type Ch;
 
     // Create test files
-    test_file<Ch> file_1(test_data_1, filename_1);
-    test_file<Ch> file_2(test_data_2, filename_2);
-    test_file<Ch> file_out("", filename_out);
+    test_file file_1(test_data_1, filename_1);
+    test_file file_2(test_data_2, filename_2);
+    test_file file_out("", filename_out);
 
     rf(filename_1, pt);        // Read file
     wf(filename_out, pt);      // Write file
@@ -142,7 +137,7 @@ void generic_parser_test_ok(ReadFunc rf,
     std::cerr << "(progress) Starting generic parser test with test file \"" << filename_1 << "\"\n";
 
     // Make sure no instances exist
-    BOOST_CHECK(Ptree::debug_get_instances_count() == 0);
+    //BOOST_CHECK(Ptree::debug_get_instances_count() == 0);
 
     try
     {
@@ -174,7 +169,7 @@ void generic_parser_test_ok(ReadFunc rf,
     }
 
     // Test for leaks
-    BOOST_CHECK(Ptree::debug_get_instances_count() == 0);
+    //BOOST_CHECK(Ptree::debug_get_instances_count() == 0);
 
 }
 
@@ -193,7 +188,7 @@ void generic_parser_test_error(ReadFunc rf,
     std::cerr << "(progress) Starting generic parser test with test file \"" << filename_1 << "\"\n";
     
     // Make sure no instances exist
-    BOOST_CHECK(Ptree::debug_get_instances_count() == 0);
+    //BOOST_CHECK(Ptree::debug_get_instances_count() == 0);
 
     {
     
@@ -220,7 +215,7 @@ void generic_parser_test_error(ReadFunc rf,
     }
 
     // Test for leaks
-    BOOST_CHECK(Ptree::debug_get_instances_count() == 0);
+    //BOOST_CHECK(Ptree::debug_get_instances_count() == 0);
 
 }
 

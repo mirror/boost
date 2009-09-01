@@ -1,12 +1,18 @@
 [section INFO Parser]
-The INFO format is a file format created by myself at the time when I was working on property tree library. It is included here for completeness, although I do not suspect many people will use it. At the very least, it can be used for visualising property trees, because it is very intuitive and easy to read by humans. Some property tree examples in this documentation are written in this format, and I think they do not need any extra explanation to be understandable. The format has some advantages:
+The INFO format was created specifically for the property tree library. It
+provides a simple, efficient format that can be used to serialize property
+trees that are otherwise only stored in memory. It can also be used for any
+other purpose, although the lack of widespread existing use may prove to be an
+impediment.
 
-* simplicity: just a "key value" string is a valid INFO,
-* efficiency: the hand-crafted parser is fast and small,
-* corresponds to property tree structure: what can be written in INFO, can be stored in property tree, and vice versa,
-* easy on programmers: has `#include`, curly brackets for nesting, C character escape sequences.
+INFO provides several features that make it familiar to C++ programmers and
+efficient for medium-sized datasets, especially those used for test input. It
+supports C-style character escapes, nesting via curly braces, and file inclusion
+via #include.
 
-And a disadvantage: it is just yet another file format. For formal grammar see [@../../examples/info_grammar_spirit.cpp infor_grammar_spirit.cpp] example file. Usually, INFO looks similar to this:
+INFO is also used for visualization of property trees in this documentation.
+
+A typical INFO file might look like this:
 
  key1 value1
  key2
@@ -18,7 +24,7 @@ And a disadvantage: it is just yet another file format. For formal grammar see [
     key5 value5
  }
 
-Additionally, it supports comments, `#includes`, C escape sequences, multiline values. Quite unrealistic file using all of these might look like this:
+Here's a more complicated file demonstrating all of INFO's features:
 
  ; A comment
  key1 value1   ; Another comment
@@ -36,11 +42,6 @@ Additionally, it supports comments, `#includes`, C escape sequences, multiline v
  }
  #include "file.info"    ; included file
 
-INFO format may be also regarded as JSON with simplified semantics and relaxed syntax:
-
-* Does not support arrays, only objects
-* Does not support numeric values or literals (true, false, null), all data must be strings
-* If string does not contain whitespace or special characters, double quotes can be omitted
-* Whitespace is used instead of ':' and ',' characters: "a":"b", "c":"d" -> a b c d
+INFO round-trips except for the loss of comments and include directives.
 
 [endsect] [/info_parser]

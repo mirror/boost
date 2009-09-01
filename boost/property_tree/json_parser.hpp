@@ -29,14 +29,17 @@ namespace boost { namespace property_tree { namespace json_parser
      * @note Items of JSON arrays are translated into ptree keys with empty
      *       names. Members of objects are translated into named keys.
      * @note JSON data can be a string, a numeric value, or one of literals
-     *       "null", "true" and "false". During parse, any of the above is copied
-     *       verbatim into ptree data string.
-     * @throw json_parser_error In case of error deserializing the property tree.
+     *       "null", "true" and "false". During parse, any of the above is
+     *       copied verbatim into ptree data string.
+     * @throw json_parser_error In case of error deserializing the property
+     *                          tree.
      * @param stream Stream from which to read in the property tree.
      * @param[out] pt The property tree to populate.
      */
     template<class Ptree>
-    void read_json(std::basic_istream<typename Ptree::key_type::value_type> &stream,
+    void read_json(std::basic_istream<
+                       typename Ptree::key_type::value_type
+                   > &stream,
                    Ptree &pt)
     {
         read_json_internal(stream, pt, std::string());
@@ -49,9 +52,10 @@ namespace boost { namespace property_tree { namespace json_parser
      * @note Items of JSON arrays are translated into ptree keys with empty
      *       names. Members of objects are translated into named keys.
      * @note JSON data can be a string, a numeric value, or one of literals
-     *       "null", "true" and "false". During parse, any of the above is copied
-     *       verbatim into ptree data string.
-     * @throw json_parser_error In case of error deserializing the property tree.
+     *       "null", "true" and "false". During parse, any of the above is
+     *       copied verbatim into ptree data string.
+     * @throw json_parser_error In case of error deserializing the property
+     *                          tree.
      * @param filename Name of file from which to read in the property tree.
      * @param[out] pt The property tree to populate.
      * @param loc The locale to use when reading in the file contents.
@@ -61,26 +65,31 @@ namespace boost { namespace property_tree { namespace json_parser
                    Ptree &pt,
                    const std::locale &loc = std::locale())
     {
-        std::basic_ifstream<typename Ptree::key_type::value_type> stream(filename.c_str());
+        std::basic_ifstream<typename Ptree::key_type::value_type>
+            stream(filename.c_str());
         if (!stream)
-            BOOST_PROPERTY_TREE_THROW(json_parser_error("cannot open file", filename, 0));
+            BOOST_PROPERTY_TREE_THROW(json_parser_error(
+                "cannot open file", filename, 0));
         stream.imbue(loc);
         read_json_internal(stream, pt, filename);
     }
 
     /**
-     * Translates the property tree to JSON and writes it the given output stream.
-     * @note Any property tree key containing only unnamed subkeys will be rendered
-     *       as JSON arrays.
+     * Translates the property tree to JSON and writes it the given output
+     * stream.
+     * @note Any property tree key containing only unnamed subkeys will be
+     *       rendered as JSON arrays.
      * @pre @e pt cannot contain keys that have both subkeys and non-empty data.
-     * @throw json_parser_error In case of error translating the property tree to JSON
-     *                         or writing to the output stream.
-     * @param stream The stream to which to write the JSON representation of the 
+     * @throw json_parser_error In case of error translating the property tree
+     *                          to JSON or writing to the output stream.
+     * @param stream The stream to which to write the JSON representation of the
      *               property tree.
      * @param pt The property tree to tranlsate to JSON and output.
      */
     template<class Ptree>
-    void write_json(std::basic_ostream<typename Ptree::key_type::value_type> &stream, 
+    void write_json(std::basic_ostream<
+                        typename Ptree::key_type::value_type
+                    > &stream,
                     const Ptree &pt)
     {
         write_json_internal(stream, pt, std::string());
@@ -88,14 +97,14 @@ namespace boost { namespace property_tree { namespace json_parser
 
     /**
      * Translates the property tree to JSON and writes it the given file.
-     * @note Any property tree key containing only unnamed subkeys will be rendered
-     *       as JSON arrays.
+     * @note Any property tree key containing only unnamed subkeys will be
+     *       rendered as JSON arrays.
      * @pre @e pt cannot contain keys that have both subkeys and non-empty data.
-     * @throw json_parser_error In case of error translating the property tree to JSON
-     *                         or writing to the file.
-     * @param filename The name of the file to which to write the JSON representation 
-     *                 of the property tree.
-     * @param pt The property tree to tranlsate to JSON and output.
+     * @throw json_parser_error In case of error translating the property tree
+     *                          to JSON or writing to the file.
+     * @param filename The name of the file to which to write the JSON
+     *                 representation of the property tree.
+     * @param pt The property tree to translate to JSON and output.
      * @param loc The locale to use when writing out to the output file.
      */
     template<class Ptree>
@@ -103,9 +112,11 @@ namespace boost { namespace property_tree { namespace json_parser
                     const Ptree &pt,
                     const std::locale &loc = std::locale())
     {
-        std::basic_ofstream<typename Ptree::key_type::value_type> stream(filename.c_str());
+        std::basic_ofstream<typename Ptree::key_type::value_type>
+            stream(filename.c_str());
         if (!stream)
-            BOOST_PROPERTY_TREE_THROW(json_parser_error("cannot open file", filename, 0));
+            BOOST_PROPERTY_TREE_THROW(json_parser_error(
+                "cannot open file", filename, 0));
         stream.imbue(loc);
         write_json_internal(stream, pt, filename);
     }

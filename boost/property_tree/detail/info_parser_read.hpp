@@ -21,10 +21,10 @@
 
 namespace boost { namespace property_tree { namespace info_parser
 {
-    
+
     // Expand known escape sequences
     template<class It>
-    std::basic_string<typename std::iterator_traits<It>::value_type> 
+    std::basic_string<typename std::iterator_traits<It>::value_type>
         expand_escapes(It b, It e)
     {
         typedef typename std::iterator_traits<It>::value_type Ch;
@@ -36,7 +36,8 @@ namespace boost { namespace property_tree { namespace info_parser
                 ++b;
                 if (b == e)
                 {
-                    BOOST_PROPERTY_TREE_THROW(info_parser_error("character expected after backslash", "", 0));
+                    BOOST_PROPERTY_TREE_THROW(info_parser_error(
+                        "character expected after backslash", "", 0));
                 }
                 else if (*b == Ch('0')) result += Ch('\0');
                 else if (*b == Ch('a')) result += Ch('\a');
@@ -50,7 +51,8 @@ namespace boost { namespace property_tree { namespace info_parser
                 else if (*b == Ch('\'')) result += Ch('\'');
                 else if (*b == Ch('\\')) result += Ch('\\');
                 else
-                    BOOST_PROPERTY_TREE_THROW(info_parser_error("unknown escape sequence", "", 0));
+                    BOOST_PROPERTY_TREE_THROW(info_parser_error(
+                        "unknown escape sequence", "", 0));
             }
             else
                 result += *b;
@@ -58,7 +60,7 @@ namespace boost { namespace property_tree { namespace info_parser
         }
         return result;
     }
-    
+
     // Advance pointer past whitespace
     template<class Ch>
     void skip_whitespace(const Ch *&text)
@@ -67,7 +69,7 @@ namespace boost { namespace property_tree { namespace info_parser
         while (isspace(*text))
             ++text;
     }
-    
+
     // Extract word (whitespace delimited) and advance pointer accordingly
     template<class Ch>
     std::basic_string<Ch> read_word(const Ch *&text)
@@ -102,10 +104,10 @@ namespace boost { namespace property_tree { namespace info_parser
         skip_whitespace(text);
         if (*text == Ch('\"'))
         {
-            
+
             // Skip "
             ++text;
-            
+
             // Find end of string, but skip escaped "
             bool escaped = false;
             const Ch *start = text;
@@ -114,7 +116,7 @@ namespace boost { namespace property_tree { namespace info_parser
                 escaped = (!escaped && *text == Ch('\\'));
                 ++text;
             }
-            
+
             // If end of string found
             if (*text == Ch('\"'))
             {
@@ -123,13 +125,15 @@ namespace boost { namespace property_tree { namespace info_parser
                 if (*text == Ch('\\'))
                 {
                     if (!need_more_lines)
-                        BOOST_PROPERTY_TREE_THROW(info_parser_error("unexpected \\", "", 0));
+                        BOOST_PROPERTY_TREE_THROW(info_parser_error(
+                            "unexpected \\", "", 0));
                     ++text;
                     skip_whitespace(text);
                     if (*text == Ch('\0') || *text == Ch(';'))
                         *need_more_lines = true;
                     else
-                        BOOST_PROPERTY_TREE_THROW(info_parser_error("expected end of line after \\", "", 0));
+                        BOOST_PROPERTY_TREE_THROW(info_parser_error(
+                            "expected end of line after \\", "", 0));
                 }
                 else
                     if (need_more_lines)
@@ -137,13 +141,14 @@ namespace boost { namespace property_tree { namespace info_parser
                 return result;
             }
             else
-                BOOST_PROPERTY_TREE_THROW(info_parser_error("unexpected end of line", "", 0));
+                BOOST_PROPERTY_TREE_THROW(info_parser_error(
+                    "unexpected end of line", "", 0));
 
         }
         else
             BOOST_PROPERTY_TREE_THROW(info_parser_error("expected \"", "", 0));
     }
-    
+
     // Extract key
     template<class Ch>
     std::basic_string<Ch> read_key(const Ch *&text)
@@ -170,89 +175,90 @@ namespace boost { namespace property_tree { namespace info_parser
     }
 
     // Build ptree from info stream
-    template<class Ptree>
-    void read_info_internal(std::basic_istream<typename Ptree::key_type::value_type> &stream, 
-                            Ptree &pt, 
+    template<class Ptree, class Ch>
+    void read_info_internal(std::basic_istream<Ch> &stream,
+                            Ptree &pt,
                             const std::string &filename,
                             int include_depth)
     {
-        
-        // Character type
-        typedef typename Ptree::key_type::value_type Ch;
-        
+        typedef std::basic_string<Ch> str_t;
         // Possible parser states
-        enum state_t { 
+        enum state_t {
             s_key,              // Parser expects key
             s_data,             // Parser expects data
             s_data_cont         // Parser expects data continuation
         };
-        
+
         unsigned long line_no = 0;
         state_t state = s_key;          // Parser state
         Ptree *last = NULL;             // Pointer to last created ptree
-        std::basic_string<Ch> line;     // Define line here to minimize reallocations
-            
+        // Define line here to minimize reallocations
+        str_t line;
+
         // Initialize ptree stack (used to handle nesting)
         std::stack<Ptree *> stack;
         stack.push(&pt);                // Push root ptree on stack initially
-        
-        try
-        {
-        
+
+        try {
             // While there are characters in the stream
-            while (stream.good())
-            {
-            
+            while (stream.good()) {
                 // Read one line from stream
                 ++line_no;
                 std::getline(stream, line);
                 if (!stream.good() && !stream.eof())
-                    BOOST_PROPERTY_TREE_THROW(info_parser_error("read error", "", 0));
+                    BOOST_PROPERTY_TREE_THROW(info_parser_error(
+                        "read error", filename, line_no));
                 const Ch *text = line.c_str();
 
                 // If directive found
                 skip_whitespace(text);
-                if (*text == Ch('#'))
-                {
-                    
+                if (*text == Ch('#')) {
                     // Determine directive type
                     ++text;     // skip #
                     std::basic_string<Ch> directive = read_word(text);
-                    if (directive == convert_chtype<Ch, char>("include"))     // #include
-                    {
-                        if (include_depth > 100)
-                            BOOST_PROPERTY_TREE_THROW(info_parser_error("include depth too large, probably recursive include", "", 0));
-                        std::basic_string<Ch> s = read_string(text, NULL);
-                        std::string inc_name = convert_chtype<char, Ch>(s.c_str());
+                    if (directive == convert_chtype<Ch, char>("include")) {
+                        // #include
+                        if (include_depth > 100) {
+                            BOOST_PROPERTY_TREE_THROW(info_parser_error(
+                                "include depth too large, "
+                                "probably recursive include",
+                                filename, line_no));
+                        }
+                        str_t s = read_string(text, NULL);
+                        std::string inc_name =
+                            convert_chtype<char, Ch>(s.c_str());
                         std::basic_ifstream<Ch> inc_stream(inc_name.c_str());
                         if (!inc_stream.good())
-                            BOOST_PROPERTY_TREE_THROW(info_parser_error("cannot open include file " + inc_name, "", 0));
-                        read_info_internal(inc_stream, *stack.top(), inc_name, include_depth + 1);
+                            BOOST_PROPERTY_TREE_THROW(info_parser_error(
+                                "cannot open include file " + inc_name,
+                                filename, line_no));
+                        read_info_internal(inc_stream, *stack.top(),
+                                           inc_name, include_depth + 1);
+                    } else {   // Unknown directive
+                        BOOST_PROPERTY_TREE_THROW(info_parser_error(
+                            "unknown directive", filename, line_no));
                     }
-                    else    // Unknown directive
-                        BOOST_PROPERTY_TREE_THROW(info_parser_error("unknown directive", "", 0));
 
                     // Directive must be followed by end of line
                     skip_whitespace(text);
-                    if (*text != Ch('\0'))
-                        BOOST_PROPERTY_TREE_THROW(info_parser_error("expected end of line", "", 0));
+                    if (*text != Ch('\0')) {
+                        BOOST_PROPERTY_TREE_THROW(info_parser_error(
+                            "expected end of line", filename, line_no));
+                    }
 
                     // Go to next line
                     continue;
-
                 }
 
                 // While there are characters left in line
-                while (1)
-                {
+                while (1) {
 
                     // Stop parsing on end of line or comment
                     skip_whitespace(text);
-                    if (*text == Ch('\0') || *text == Ch(';'))
-                    {
+                    if (*text == Ch('\0') || *text == Ch(';')) {
                         if (state == s_data)    // If there was no data set state to s_key
                             state = s_key;
-                        break; 
+                        break;
                     }
 
                     // Process according to current parser state
@@ -282,7 +288,8 @@ namespace boost { namespace property_tree { namespace info_parser
                             else    // Key text found
                             {
                                 std::basic_string<Ch> key = read_key(text);
-                                last = &stack.top()->push_back(std::make_pair(key, Ptree()))->second;
+                                last = &stack.top()->push_back(
+                                    std::make_pair(key, Ptree()))->second;
                                 state = s_data;
                             }
 
@@ -367,7 +374,7 @@ namespace boost { namespace property_tree { namespace info_parser
         }
 
     }
-    
+
 } } }
 
 #endif

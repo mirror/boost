@@ -35,21 +35,21 @@ const char *ok_data_3 =
     "\n"
     "<!-- Last edited: 27 May 1999 by bent -->\n"
     "<header><?Pub Dtl?>\n"
-    "   <title>XML Linking Language (XLink)</title>\n"
-    "   <version>Version 1.0</version>\n"
-    "   <w3c-designation>WD-xlink-19990527</w3c-designation>\n"
-    "   <w3c-doctype>World Wide Web Consortium Working Draft</w3c-doctype>\n"
-    "   <pubdate><day>29</day><month>May</month><year>1999</year></pubdate>\n"
-    "   <notice>\n"
-    "   <p>This draft is for public discussion.</p>\n"
-    "   </notice>\n"
-    "   <publoc><loc href=\"http://www.w3.org/XML/Group/1999/05/WD-xlink-current\">http://www.w3.org/XML/Group/1999/05/WD-xlink-current</loc></publoc>\n"
-    "   <prevlocs>\n"
-    "   <!--Check: was it actually August?-->\n"
-    "   <loc href=\"http://www.w3.org/XML/Group/1999/05/WD-xlink-19990527\">http://www.w3.org/XML/Group/1999/05/WD-xlink-19990527</loc>\n"
-    "   <loc href=\"http://www.w3.org/XML/Group/1999/05/WD-xlink-19990505\">http://www.w3.org/XML/Group/1999/05/WD-xlink-19990505</loc>\n"
-    "   <loc href=\"http://www.w3.org/TR/1998/WD-xlink-19980303\">http://www.w3.org/TR/1998/WD-xlink-19980303</loc>\n"
-    "   <loc href=\"http://www.w3.org/TR/WD-xml-link-970630\">http://www.w3.org/TR/WD-xml-link-970630</loc></prevlocs>\n"
+    "	<title><![CDATA[XML Linking Language (XLink)]]></title>\n"
+    "	<version>Version 1.0</version>\n"
+    "	<w3c-designation>WD-xlink-19990527</w3c-designation>\n"
+    "	<w3c-doctype>World Wide Web Consortium Working Draft</w3c-doctype>\n"
+    "	<pubdate><day>29</day><month>May</month><year>1999</year></pubdate>\n"
+    "	<notice>\n"
+    "	<p>This draft is for public discussion.</p>\n"
+    "	</notice>\n"
+    "	<publoc><loc href=\"http://www.w3.org/XML/Group/1999/05/WD-xlink-current\">http://www.w3.org/XML/Group/1999/05/WD-xlink-current</loc></publoc>\n"
+    "	<prevlocs>\n"
+    "	<!--Check: was it actually August?-->\n"
+    "	<loc href=\"http://www.w3.org/XML/Group/1999/05/WD-xlink-19990527\">http://www.w3.org/XML/Group/1999/05/WD-xlink-19990527</loc>\n"
+    "	<loc href=\"http://www.w3.org/XML/Group/1999/05/WD-xlink-19990505\">http://www.w3.org/XML/Group/1999/05/WD-xlink-19990505</loc>\n"
+    "	<loc href=\"http://www.w3.org/TR/1998/WD-xlink-19980303\">http://www.w3.org/TR/1998/WD-xlink-19980303</loc>\n"
+    "	<loc href=\"http://www.w3.org/TR/WD-xml-link-970630\">http://www.w3.org/TR/WD-xml-link-970630</loc></prevlocs>\n"
     "\n"
     "   <authlist>\n"
     "       <!--Updated author hrefs  dorchard-->\n"
@@ -571,7 +571,6 @@ const char *ok_data_4 =
     "  \n"
     "  Based on RSS DTD originally created by\n"
     "  Lars Marius Garshol - larsga@ifi.uio.no.\n"
-    "  $Id$\n"
     "  \n"
     "-->\n"
     "<!ELEMENT rss (channel)>\n"
@@ -730,6 +729,15 @@ const char *ok_data_4 =
     "<title>PP</title>\n"
     "</channel>\n"
     "</rss>\n";
+
+// Correct, with UTF-8 data
+const char ok_data_5[] = {
+  '<', '?', 'x', 'm', 'l', ' ', 'v', 'e', 'r', 's', 'i', 'o', 'n', '=', '"',
+  '1', '.', '0', '"', ' ', 'e', 'n', 'c', 'o', 'd', 'i', 'n', 'g', '=', '"',
+  'u', 't', 'f', '-', '8', '"', '?', '>', '\n', /*39 chars*/
+  '<', 'd', 'o', 'c', '>', 0xC3, 0xA4, '<', '/', 'd', 'o', 'c', '>',
+  0
+};
 
 // Erroneous
 const char *error_data_1 = 

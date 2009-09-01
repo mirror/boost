@@ -15,6 +15,7 @@
 #include <boost/property_tree/detail/xml_parser_flags.hpp>
 #include <boost/property_tree/detail/xml_parser_utils.hpp>
 #include <boost/property_tree/detail/rapidxml.hpp>
+#include <vector>
 
 namespace boost { namespace property_tree { namespace xml_parser
 {
@@ -40,15 +41,16 @@ namespace boost { namespace property_tree { namespace xml_parser
                         pt_attr.data() = attr->value();
                     }
                 }
-                
+
                 // Copy children
-                for (rapidxml::xml_node<Ch> *child = node->first_child(); child; child = child->next_sibling())
+                for (rapidxml::xml_node<Ch> *child = node->first_node(); child; child = child->next_sibling())
                     read_xml_node(child, pt_node, flags);
             }
             break;
 
             // Data nodes
             case rapidxml::node_data:
+            case rapidxml::node_cdata:
             {
                 if (flags & no_concat_text)
                     pt.push_back(std::make_pair(xmltext<Ch>(), Ptree(node->value())));
@@ -72,7 +74,8 @@ namespace boost { namespace property_tree { namespace xml_parser
     }
 
     template<class Ptree>
-    void read_xml_internal(std::basic_istream<typename Ptree::key_type::value_type> &stream,
+    void read_xml_internal(std::basic_istream<
+                               typename Ptree::key_type::value_type> &stream,
                            Ptree &pt,
                            int flags,
                            const std::string &filename)
@@ -84,31 +87,34 @@ namespace boost { namespace property_tree { namespace xml_parser
         std::vector<Ch> v(std::istreambuf_iterator<Ch>(stream.rdbuf()),
                           std::istreambuf_iterator<Ch>());
         if (!stream.good())
-            BOOST_PROPERTY_TREE_THROW(xml_parser_error("read error", filename, 0));
-        v.push_back(0); // zero-terminate  
+            BOOST_PROPERTY_TREE_THROW(
+                xml_parser_error("read error", filename, 0));
+        v.push_back(0); // zero-terminate
 
-        try
-        {
+        try {
             // Parse using appropriate flags
             using namespace rapidxml;
+            const int ncflags = parse_normalize_whitespace
+                              | parse_trim_whitespace;
+            const int cflags = ncflags | parse_comment_nodes;
             xml_document<Ch> doc;
             if (flags & no_comments)
-                doc.BOOST_NESTED_TEMPLATE parse<parse_normalize_whitespace>(&v.front());
+                doc.BOOST_NESTED_TEMPLATE parse<ncflags>(&v.front());
             else
-                doc.BOOST_NESTED_TEMPLATE parse<parse_normalize_whitespace | parse_comment_nodes>(&v.front());
+                doc.BOOST_NESTED_TEMPLATE parse<cflags>(&v.front());
 
             // Create ptree from nodes
             Ptree local;
-            for (rapidxml::xml_node<Ch> *child = doc.first_child(); child; child = child->next_sibling())
+            for (rapidxml::xml_node<Ch> *child = doc.first_node(); child; child = child->next_sibling())
                 read_xml_node(child, local, flags);
 
             // Swap local and result ptrees
             pt.swap(local);
-        }
-        catch (rapidxml::parse_error &e)
-        {
-            long line = static_cast<long>(std::count(&v.front(), e.where<Ch>(), Ch('\n')) + 1);
-            BOOST_PROPERTY_TREE_THROW(xml_parser_error(e.what(), filename, line));  
+        } catch (rapidxml::parse_error &e) {
+            long line = static_cast<long>(
+                std::count(&v.front(), e.where<Ch>(), Ch('\n')) + 1);
+            BOOST_PROPERTY_TREE_THROW(
+                xml_parser_error(e.what(), filename, line));  
         }
     }
 
