@@ -898,6 +898,9 @@ namespace boost { namespace numeric { namespace ublas {
 #define INTERNAL_EXPRESSION
 #endif
 
+	// TODO enable this for development
+	// #define VIEW_CONCEPTS
+
         // Element value type for tests
         typedef float T;
 
@@ -966,6 +969,17 @@ namespace boost { namespace numeric { namespace ublas {
            function_requires< Mutable_StorageSparseConcept<container_model > >();
            function_requires< BidirectionalIteratorConcept<container_model::const_iterator> >();
            function_requires< BidirectionalIteratorConcept<container_model::iterator> >();
+        }
+#endif
+
+#ifdef VIEW_CONCEPTS
+	// read only vectors
+        {
+           typedef vector_view<T> container_model;
+           function_requires< RandomAccessContainerConcept<container_model> >();
+           function_requires< VectorConcept<container_model> >();
+           function_requires< IndexedRandomAccess1DIteratorConcept<container_model::const_iterator> >();
+           function_requires< IndexedRandomAccess1DIteratorConcept<container_model::const_reverse_iterator> >();
         }
 #endif
 
