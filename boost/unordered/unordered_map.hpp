@@ -485,10 +485,7 @@ namespace boost
             table_.rehash(n);
         }
         
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-        friend bool operator==(unordered_map const&, unordered_map const&);
-        friend bool operator!=(unordered_map const&, unordered_map const&);
-#elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<Key, T, Hash, Pred, Alloc>(unordered_map const&, unordered_map const&);
         friend bool operator!=<Key, T, Hash, Pred, Alloc>(unordered_map const&, unordered_map const&);
 #endif
@@ -945,10 +942,7 @@ namespace boost
             table_.rehash(n);
         }
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-        friend bool operator==(unordered_multimap const&, unordered_multimap const&);
-        friend bool operator!=(unordered_multimap const&, unordered_multimap const&);
-#elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<Key, T, Hash, Pred, Alloc>(unordered_multimap const&, unordered_multimap const&);
         friend bool operator!=<Key, T, Hash, Pred, Alloc>(unordered_multimap const&, unordered_multimap const&);
 #endif

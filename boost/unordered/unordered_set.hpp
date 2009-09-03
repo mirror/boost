@@ -454,10 +454,7 @@ namespace boost
             table_.rehash(n);
         }
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-        friend bool operator==(unordered_set const&, unordered_set const&);
-        friend bool operator!=(unordered_set const&, unordered_set const&);
-#elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<Value, Hash, Pred, Alloc>(unordered_set const&, unordered_set const&);
         friend bool operator!=<Value, Hash, Pred, Alloc>(unordered_set const&, unordered_set const&);
 #endif
@@ -894,10 +891,7 @@ namespace boost
             table_.rehash(n);
         }
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-        friend bool operator==(unordered_multiset const&, unordered_multiset const&);
-        friend bool operator!=(unordered_multiset const&, unordered_multiset const&);
-#elif !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<Value, Hash, Pred, Alloc>(unordered_multiset const&, unordered_multiset const&);
         friend bool operator!=<Value, Hash, Pred, Alloc>(unordered_multiset const&, unordered_multiset const&);
 #endif
