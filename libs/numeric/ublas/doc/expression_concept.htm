@@ -511,12 +511,14 @@ Bidirectional Column/Row Iterator</a> or an <a href=
 Access Column/Row Iterator</a> .</p>
 <h4>Refinement of</h4>
 <p>Default Constructible.</p>
+
 <h4>Associated types</h4>
-<table border="1" summary="associated types">
+<h5>immutable types</h5>
+<table border="1" summary="associated immutable types" title="">
 <tbody>
 <tr>
 <td>Public base</td>
-<td>matrix_expression&lt;M&gt;</td>
+<td><code>matrix_expression&lt;M&gt;</code></td>
 <td>M must be derived from this public base type.</td>
 </tr>
 <tr>
@@ -527,21 +529,12 @@ The element type of the matrix expression.
 </td>
 </tr>
 <tr>
-<td>Reference type</td>
-<td><code>reference</code></td>
-<td>
-The return type when accessing an element of a matrix expression.
-<br />
-Convertable to a<code>value_type</code>.
-</td>
-</tr>
-<tr>
 <td>Const reference type</td>
 <td><code>const_reference</code></td>
 <td>
 The return type when accessing an element of a constant matrix expression.
 <br />
-Convertable to a<code>value_type</code>.
+Convertable to a <code>value_type</code>.
 </td>
 </tr>
 <tr>
@@ -572,17 +565,6 @@ expression's elements.</td>
 expression's elements.</td>
 </tr>
 <tr>
-<td rowspan="2">Iterator types</td>
-<td><code>iterator1</code></td>
-<td>A type of column iterator that may be used to modify a matrix
-expression's elements.</td>
-</tr>
-<tr>
-<td><code>iterator2</code></td>
-<td>A type of row iterator that may be used to modify a matrix
-expression's elements.</td>
-</tr>
-<tr>
 <td rowspan="2">Const reverse iterator types</td>
 <td><code>const_reverse_iterator1</code></td>
 <td>A Reverse Iterator adaptor whose base iterator type is the
@@ -592,6 +574,32 @@ matrix expression's const column iterator type.</td>
 <td><code>const_reverse_iterator2</code></td>
 <td>A Reverse Iterator adaptor whose base iterator type is the
 matrix expression's const row iterator type.</td>
+</tr>
+</tbody>
+</table>
+ 
+<h5>mutable types</h5>
+<table border="1" summary="associated mutable types">
+<tbody>
+<tr>
+<td>Reference type</td>
+<td><code>reference</code></td>
+<td>
+The return type when accessing an element of a matrix expression.
+<br />
+Convertable to a <code>value_type</code>.
+</td>
+</tr>
+<tr>
+<td rowspan="2">Iterator types</td>
+<td><code>iterator1</code></td>
+<td>A type of column iterator that may be used to modify a matrix
+expression's elements.</td>
+</tr>
+<tr>
+<td><code>iterator2</code></td>
+<td>A type of row iterator that may be used to modify a matrix
+expression's elements.</td>
 </tr>
 <tr>
 <td rowspan="2">Reverse iterator types</td>
@@ -606,6 +614,8 @@ matrix expression's row iterator type.</td>
 </tr>
 </tbody>
 </table>
+
+
 <h4>Notation</h4>
 <table border="0" summary="notation">
 <tbody>
@@ -631,6 +641,33 @@ matrix expression's row iterator type.</td>
 <h4>Valid expressions</h4>
 <p>In addition to the expressions defined in Default Constructible
 the following expressions must be valid.</p>
+
+<h5>immutable expressions</h5>
+<table border="1" summary="expressions">
+<thead>
+<tr>
+<th>Name</th>
+<th>Expression</th>
+<th>Type requirements</th>
+<th>Return type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td rowspan="2">Size</td>
+<td><code>m.size1 ()</code></td>
+<td>&nbsp;</td>
+<td><code>size_type</code></td>
+</tr>
+<tr>
+<td><code>m.size2 ()</code></td>
+<td>&nbsp;</td>
+<td><code>size_type</code></td>
+</tr>
+</tbody>
+</table>
+
+<h5>possibly mutable expressions</h5>
 <table border="1" summary="expressions">
 <tbody>
 <tr>
@@ -680,17 +717,6 @@ the following expressions must be valid.</p>
 <td><code>m.end2 ()</code></td>
 <td><code>m</code> is mutable.</td>
 <td><code>iterator2</code></td>
-</tr>
-<tr>
-<td rowspan="2">Size</td>
-<td><code>m.size1 ()</code></td>
-<td>&nbsp;</td>
-<td><code>size_type</code></td>
-</tr>
-<tr>
-<td><code>m.size2 ()</code></td>
-<td>&nbsp;</td>
-<td><code>size_type</code></td>
 </tr>
 <tr>
 <td>Swap</td>
