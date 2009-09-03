@@ -46,17 +46,26 @@ namespace boost { namespace property_tree { namespace xml_parser
     {
         typedef typename std::basic_string<Ch> Str;
         Str r;
-        typename Str::const_iterator end = s.end();
-        for (typename Str::const_iterator it = s.begin(); it != end; ++it)
-        {
-            switch (*it)
+        // To properly round-trip spaces and not uglify the XML beyond
+        // recognition, we have to encode them IF the text contains only spaces.
+        Str sp(1, Ch(' '));
+        if(s.find_first_not_of(sp) == Str::npos) {
+            // The first will suffice.
+            r = detail::widen<Ch>("&#32;");
+            r += Str(s.size() - 1, Ch(' '));
+        } else {
+            typename Str::const_iterator end = s.end();
+            for (typename Str::const_iterator it = s.begin(); it != end; ++it)
             {
-                case Ch('<'): r += detail::widen<Ch>("&lt;"); break;
-                case Ch('>'): r += detail::widen<Ch>("&gt;"); break;
-                case Ch('&'): r += detail::widen<Ch>("&amp;"); break;
-                case Ch('"'): r += detail::widen<Ch>("&quot;"); break;
-                case Ch('\''): r += detail::widen<Ch>("&apos;"); break;
-                default: r += *it; break;
+                switch (*it)
+                {
+                    case Ch('<'): r += detail::widen<Ch>("&lt;"); break;
+                    case Ch('>'): r += detail::widen<Ch>("&gt;"); break;
+                    case Ch('&'): r += detail::widen<Ch>("&amp;"); break;
+                    case Ch('"'): r += detail::widen<Ch>("&quot;"); break;
+                    case Ch('\''): r += detail::widen<Ch>("&apos;"); break;
+                    default: r += *it; break;
+                }
             }
         }
         return r;

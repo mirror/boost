@@ -8,10 +8,13 @@ form. Unfortunately, there is no XML parser in __boost__ as of the
 time of this writing. The library therefore contains the fast and tiny
 __RapidXML__ parser (currently in version 1.13) to provide XML parsing support.
 RapidXML does not fully support the XML standard; it is not capable of parsing
-DTDs and therefore cannot do full entity substitution. The parser is configured
-to trim whitespace from the edges of character data. This behaviour exists for
-compatibility with older versions of PropertyTree and will be made configurable
-in the future.
+DTDs and therefore cannot do full entity substitution.
+
+By default, the parser will preserve most whitespace, but remove element content
+that consists only of whitespace. Encoded whitespaces (e.g. &#32;) does not
+count as whitespace in this regard. You can pass the trim_whitespace flag if you
+want all leading and trailing whitespace trimmed and all continuous whitespace
+collapsed into a single space.
 
 Please note that RapidXML does not understand the encoding specification. If
 you pass it a character buffer, it assumes the data is already correctly

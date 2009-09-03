@@ -14,7 +14,7 @@
 #include <boost/property_tree/xml_parser.hpp>
 #include "xml_parser_test_data.hpp"
 
-struct ReadFunc
+struct ReadFuncWS
 {
     template<class Ptree>
     void operator()(const std::string &filename, Ptree &pt) const
@@ -23,12 +23,33 @@ struct ReadFunc
     }
 };
 
-struct WriteFunc
+struct WriteFuncWS
 {
     template<class Ptree>
     void operator()(const std::string &filename, const Ptree &pt) const
     {
         boost::property_tree::write_xml(filename, pt);
+    }
+};
+
+struct ReadFuncNS
+{
+    template<class Ptree>
+    void operator()(const std::string &filename, Ptree &pt) const
+    {
+        boost::property_tree::read_xml(filename, pt,
+          boost::property_tree::xml_parser::trim_whitespace);
+    }
+};
+
+struct WriteFuncNS
+{
+    template<class Ptree>
+    void operator()(const std::string &filename, const Ptree &pt) const
+    {
+        boost::property_tree::write_xml(filename, pt, std::locale(),
+            boost::property_tree::xml_writer_make_settings(
+                typename Ptree::key_type::value_type(' '), 4));
     }
 };
 
@@ -42,46 +63,58 @@ void test_xml_parser()
 
     using namespace boost::property_tree;
 
-    generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
+    generic_parser_test_ok<Ptree, ReadFuncWS, WriteFuncWS>
     (
-        ReadFunc(), WriteFunc(), ok_data_1, NULL, 
+        ReadFuncWS(), WriteFuncWS(), ok_data_1, NULL, 
         "testok1.xml", NULL, "testok1out.xml", 2, 0, 5
     );
-    
-    generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
+
+    generic_parser_test_ok<Ptree, ReadFuncWS, WriteFuncWS>
     (
-        ReadFunc(), WriteFunc(), ok_data_2, NULL, 
-        "testok2.xml", NULL, "testok2out.xml", 5, 15, 7
+        ReadFuncWS(), WriteFuncWS(), ok_data_2, NULL, 
+        "testok2a.xml", NULL, "testok2aout.xml", 6, 18, 8
     );
 
-    generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
+    generic_parser_test_ok<Ptree, ReadFuncNS, WriteFuncNS>
     (
-        ReadFunc(), WriteFunc(), ok_data_3, NULL, 
-        "testok3.xml", NULL, "testok3out.xml", 787, 31376, 3831
+        ReadFuncNS(), WriteFuncNS(), ok_data_2, NULL, 
+        "testok2b.xml", NULL, "testok2bout.xml", 6, 15, 8
     );
 
-    generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
+    generic_parser_test_ok<Ptree, ReadFuncWS, WriteFuncWS>
     (
-        ReadFunc(), WriteFunc(), ok_data_4, NULL, 
+        ReadFuncWS(), WriteFuncWS(), ok_data_3, NULL, 
+        "testok3a.xml", NULL, "testok3aout.xml", 787, 32523, 3831
+    );
+
+    generic_parser_test_ok<Ptree, ReadFuncNS, WriteFuncNS>
+    (
+        ReadFuncNS(), WriteFuncNS(), ok_data_3, NULL, 
+        "testok3b.xml", NULL, "testok3bout.xml", 787, 31376, 3831
+    );
+
+    generic_parser_test_ok<Ptree, ReadFuncWS, WriteFuncWS>
+    (
+        ReadFuncWS(), WriteFuncWS(), ok_data_4, NULL, 
         "testok4.xml", NULL, "testok4out.xml", 5, 2, 20
     );
 
-    generic_parser_test_ok<Ptree, ReadFunc, WriteFunc>
+    generic_parser_test_ok<Ptree, ReadFuncWS, WriteFuncWS>
     (
-        ReadFunc(), WriteFunc(), ok_data_5, NULL, 
+        ReadFuncWS(), WriteFuncWS(), ok_data_5, NULL, 
         "testok5.xml", NULL, "testok5out.xml",
         2, umlautsize<typename Ptree::data_type::value_type>(), 3
     );
 
-    generic_parser_test_error<Ptree, ReadFunc, WriteFunc, xml_parser_error>
+    generic_parser_test_error<Ptree, ReadFuncWS, WriteFuncWS, xml_parser_error>
     (
-        ReadFunc(), WriteFunc(), error_data_1, NULL,
+        ReadFuncWS(), WriteFuncWS(), error_data_1, NULL,
         "testerr1.xml", NULL, "testerr1out.xml", 1
     );
 
-    generic_parser_test_error<Ptree, ReadFunc, WriteFunc, xml_parser_error>
+    generic_parser_test_error<Ptree, ReadFuncWS, WriteFuncWS, xml_parser_error>
     (
-        ReadFunc(), WriteFunc(), error_data_2, NULL,
+        ReadFuncWS(), WriteFuncWS(), error_data_2, NULL,
         "testerr2.xml", NULL, "testerr2out.xml", 2
     );
 

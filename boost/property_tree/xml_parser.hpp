@@ -33,12 +33,14 @@ namespace boost { namespace property_tree { namespace xml_parser
      * @throw xml_parser_error In case of error deserializing the property tree.
      * @param stream Stream from which to read in the property tree.
      * @param[out] pt The property tree to populate.
-     * @param flags Flags controlling the bahviour of the parser.
+     * @param flags Flags controlling the behaviour of the parser.
      *              The following flags are supported:
      * @li @c no_concat_text -- Prevents concatenation of text nodes into
      *                          datastring of property tree.  Puts them in
      *                          separate @c \<xmltext\> strings instead.
      * @li @c no_comments -- Skip XML comments.
+     * @li @c trim_whitespace -- Trim leading and trailing whitespace from text,
+     *                           and collapse sequences of whitespace.
      */
     template<class Ptree>
     void read_xml(std::basic_istream<

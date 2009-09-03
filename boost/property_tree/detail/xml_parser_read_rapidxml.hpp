@@ -94,14 +94,21 @@ namespace boost { namespace property_tree { namespace xml_parser
         try {
             // Parse using appropriate flags
             using namespace rapidxml;
-            const int ncflags = parse_normalize_whitespace
-                              | parse_trim_whitespace;
-            const int cflags = ncflags | parse_comment_nodes;
+            const int f_tws = parse_normalize_whitespace
+                            | parse_trim_whitespace;
+            const int f_c = parse_comment_nodes;
             xml_document<Ch> doc;
-            if (flags & no_comments)
-                doc.BOOST_NESTED_TEMPLATE parse<ncflags>(&v.front());
-            else
-                doc.BOOST_NESTED_TEMPLATE parse<cflags>(&v.front());
+            if (flags & no_comments) {
+                if (flags & trim_whitespace)
+                    doc.BOOST_NESTED_TEMPLATE parse<f_tws>(&v.front());
+                else
+                    doc.BOOST_NESTED_TEMPLATE parse<0>(&v.front());
+            } else {
+                if (flags & trim_whitespace)
+                    doc.BOOST_NESTED_TEMPLATE parse<f_tws | f_c>(&v.front());
+                else
+                    doc.BOOST_NESTED_TEMPLATE parse<f_c>(&v.front());
+            }
 
             // Create ptree from nodes
             Ptree local;

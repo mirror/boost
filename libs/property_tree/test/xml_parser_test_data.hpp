@@ -16,6 +16,7 @@ const char *ok_data_2 =
     "<a>&lt;&gt;&amp;</a>\n"
     "<b>1&lt;2&gt;3&amp;4</b>\n"
     "<c> &lt; &gt; &amp; </c>\n"
+    "<d>&#32;</d>\n"
     "</root>\n";
 
 // Correct

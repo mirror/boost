@@ -12,13 +12,18 @@
 
 namespace boost { namespace property_tree { namespace xml_parser
 {
-    
-    static const int no_concat_text = 1;     // Text elements should be put in separate keys, not concatenated in parent data
-    static const int no_comments = 2;        // Comments should be omitted
+
+    /// Text elements should be put in separate keys,
+    /// not concatenated in parent data.
+    static const int no_concat_text  = 0x1;
+    /// Comments should be omitted.
+    static const int no_comments     = 0x2;
+    /// Whitespace should be collapsed and trimmed.
+    static const int trim_whitespace = 0x4;
 
     inline bool validate_flags(int flags)
     {
-        return (flags & ~(no_concat_text | no_comments)) == 0;
+        return (flags & ~(no_concat_text | no_comments | trim_whitespace)) == 0;
     }
 
 } } }

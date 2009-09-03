@@ -68,6 +68,7 @@ namespace boost { namespace property_tree { namespace xml_parser
         typedef typename std::basic_string<Ch> Str;
         typedef typename Ptree::const_iterator It;
 
+        bool want_pretty = settings.indent_count > 0;
         // Find if elements present
         bool has_elements = false;
         bool has_attrs_only = pt.data().empty();
@@ -114,34 +115,43 @@ namespace boost { namespace property_tree { namespace xml_parser
                 if ( has_attrs_only )
                 {
                     // Write closing brace
-                    stream << Ch('/') << Ch('>') << std::endl;
+                    stream << Ch('/') << Ch('>');
+                    if (want_pretty)
+                        stream << Ch('\n');
                 }
                 else
                 {
                     // Write closing brace
                     stream << Ch('>');
 
-                    // Break line if needed
-                    if (has_elements)
+                    // Break line if needed and if we want pretty-printing
+                    if (has_elements && want_pretty)
                         stream << Ch('\n');
                 }
             }
-            
+
             // Write data text, if present
             if (!pt.data().empty())
-                write_xml_text(stream, pt.template get_value<std::basic_string<Ch> >(), indent + 1, has_elements, settings);
-            
+                write_xml_text(stream,
+                    pt.template get_value<std::basic_string<Ch> >(),
+                    indent + 1, has_elements && want_pretty, settings);
+
             // Write elements, comments and texts
             for (It it = pt.begin(); it != pt.end(); ++it)
             {
                 if (it->first == xmlattr<Ch>())
                     continue;
                 else if (it->first == xmlcomment<Ch>())
-                    write_xml_comment(stream, it->second.template get_value<std::basic_string<Ch> >(), indent + 1, settings);
+                    write_xml_comment(stream,
+                        it->second.template get_value<std::basic_string<Ch> >(),
+                        indent + 1, settings);
                 else if (it->first == xmltext<Ch>())
-                    write_xml_text(stream, it->second.template get_value<std::basic_string<Ch> >(), indent + 1, has_elements, settings);
+                    write_xml_text(stream,
+                        it->second.template get_value<std::basic_string<Ch> >(),
+                        indent + 1, has_elements && want_pretty, settings);
                 else
-                    write_xml_element(stream, it->first, it->second, indent + 1, settings);
+                    write_xml_element(stream, it->first, it->second,
+                        indent + 1, settings);
             }
             
             // Write closing tag
@@ -149,7 +159,9 @@ namespace boost { namespace property_tree { namespace xml_parser
             {
                 if (has_elements)
                     write_xml_indent(stream,indent,settings);
-                stream << Ch('<') << Ch('/') << key << Ch('>') << std::endl;
+                stream << Ch('<') << Ch('/') << key << Ch('>');
+                if (want_pretty)
+                    stream << Ch('\n');
             }
 
         }
