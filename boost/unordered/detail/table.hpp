@@ -327,7 +327,7 @@ namespace boost { namespace unordered_detail {
 
     // basic exception safety
     template <class H, class P, class A, class G, class K>
-    bool hash_table<H, P, A, G, K>
+    inline bool hash_table<H, P, A, G, K>
         ::reserve(std::size_t n)
     {
         bool need_to_reserve = n >= this->max_load_;
@@ -339,7 +339,7 @@ namespace boost { namespace unordered_detail {
 
     // basic exception safety
     template <class H, class P, class A, class G, class K>
-    bool hash_table<H, P, A, G, K>
+    inline bool hash_table<H, P, A, G, K>
         ::reserve_for_insert(std::size_t n)
     {
         bool need_to_reserve = n >= this->max_load_;
@@ -419,8 +419,12 @@ namespace boost { namespace unordered_detail {
                         hf(extractor::extract(node::get_value(src_bucket->next_))));
 
                 node_ptr n = src_bucket->next_;
-                std::size_t count = this->unlink_group(&src_bucket->next_);
-                dst.link_group(n, dst_bucket, count);
+                std::size_t count = node::group_count(src_bucket->next_);
+                this->size_ -= count;
+                dst.size_ += count;
+                node::unlink_group(&src_bucket->next_);
+                node::add_group_to_bucket(n, *dst_bucket);
+                if(dst_bucket < dst.cached_begin_bucket_) dst.cached_begin_bucket_ = dst_bucket;
             }
         }
     }
@@ -454,11 +458,14 @@ namespace boost { namespace unordered_detail {
 
                 a.construct(node::get_value(it));
                 node_ptr n = a.release();
-                dst.link_node_in_bucket(n, dst_bucket);
+                node::add_to_bucket(n, *dst_bucket);
+                ++dst.size_;
+                if(dst_bucket < dst.cached_begin_bucket_) dst.cached_begin_bucket_ = dst_bucket;
         
                 for(it = next_node(it); it != group_end; it = next_node(it)) {
                     a.construct(node::get_value(it));
-                    dst.link_node(a.release(), n);
+                    node::add_after_node(a.release(), n);
+                    ++dst.size_;
                 }
             }
         }

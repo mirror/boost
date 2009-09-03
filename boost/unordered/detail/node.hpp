@@ -79,13 +79,13 @@ namespace boost { namespace unordered_detail {
     }
     
     template <class A>
-    void ungrouped_node_base<A>::unlink_node(bucket& b, node_ptr node)
+    inline void ungrouped_node_base<A>::unlink_node(bucket& b, node_ptr node)
     {
         unlink_nodes(b, node, next_node(node));
     }
 
     template <class A>
-    void ungrouped_node_base<A>::unlink_nodes(bucket& b, node_ptr begin, node_ptr end)
+    inline void ungrouped_node_base<A>::unlink_nodes(bucket& b, node_ptr begin, node_ptr end)
     {
         node_ptr* pos = &b.next_;
         while(*pos != begin) pos = &next_node(*pos);
@@ -93,7 +93,7 @@ namespace boost { namespace unordered_detail {
     }
 
     template <class A>
-    void ungrouped_node_base<A>::unlink_nodes(bucket& b, node_ptr end)
+    inline void ungrouped_node_base<A>::unlink_nodes(bucket& b, node_ptr end)
     {
         b.next_ = end;
     }

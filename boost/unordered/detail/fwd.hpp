@@ -152,74 +152,11 @@ namespace boost { namespace unordered_detail {
     template <class NodeBase, class ValueType>
     class hash_node : public NodeBase, public value_base<ValueType>
     {
+    public:
         typedef ValueType value_type;
         typedef BOOST_DEDUCED_TYPENAME NodeBase::node_ptr node_ptr;
-    public:
+
         static value_type& get_value(node_ptr p) { return static_cast<hash_node&>(*p).value(); }
-    };
-
-    template <class A, class G>
-    struct hash_structure
-    {
-        typedef BOOST_DEDUCED_TYPENAME
-            G::BOOST_NESTED_TEMPLATE base<A>::type
-            node_base;
-        typedef BOOST_DEDUCED_TYPENAME node_base::bucket_allocator bucket_allocator;
-        typedef BOOST_DEDUCED_TYPENAME node_base::bucket_ptr bucket_ptr;
-        typedef BOOST_DEDUCED_TYPENAME node_base::node_ptr node_ptr;
-
-        // The actual data structure
-        
-        bucket_ptr buckets_;
-        bucket_ptr cached_begin_bucket_;
-        std::size_t size_;
-        std::size_t bucket_count_;
-        
-        // Constructor
-        
-        hash_structure() : buckets_(), cached_begin_bucket_(), size_() {}
-        
-        void swap(hash_structure& other);
-        
-        // Buckets
-        
-        std::size_t bucket_count() const;
-        std::size_t bucket_from_hash(std::size_t hashed) const;
-        bucket_ptr bucket_ptr_from_hash(std::size_t hashed) const;
-        bucket_ptr buckets_begin() const;
-        bucket_ptr buckets_end() const;
-        std::size_t bucket_size(std::size_t index) const;
-        
-        // Link a node
-        
-        void link_node(node_ptr n, node_ptr position);
-        void link_node_in_bucket(node_ptr n, bucket_ptr bucket);
-        void unlink_node(bucket_ptr bucket, node_ptr pos);
-        void unlink_nodes(bucket_ptr bucket, node_ptr begin, node_ptr end);
-        void unlink_nodes(bucket_ptr bucket, node_ptr end);
-        std::size_t unlink_group(node_ptr* pos);
-        void link_group(node_ptr n, bucket_ptr bucket, std::size_t count);
-        bucket_ptr get_bucket(std::size_t n) const;
-        node_ptr bucket_begin(std::size_t n) const;
-        node_ptr bucket_end(std::size_t) const;
-
-        // recompute_begin_bucket
-        //
-        // After an erase cached_begin_bucket_ might be left pointing to
-        // an empty bucket, so this is called to update it
-        //
-        // no throw
-
-        void recompute_begin_bucket(bucket_ptr b);
-
-        // This is called when a range has been erased
-        //
-        // no throw
-
-        void recompute_begin_bucket(bucket_ptr b1, bucket_ptr b2);
-        
-        // no throw
-        float load_factor() const;
     };
 
     // Iterator Base
@@ -256,22 +193,22 @@ namespace boost { namespace unordered_detail {
     //    methods (other than getters and setters).
 
     template <class A, class G>
-    struct hash_table_manager :
-        hash_structure<A, G>
+    struct hash_table_manager
     {
         // Types
-
-        typedef hash_bucket<A> bucket;
-        typedef hash_structure<A, G> structure;
-        typedef BOOST_DEDUCED_TYPENAME structure::bucket_allocator bucket_allocator;
-        typedef BOOST_DEDUCED_TYPENAME structure::node_base node_base;
-        typedef BOOST_DEDUCED_TYPENAME structure::bucket_ptr bucket_ptr;
-        typedef BOOST_DEDUCED_TYPENAME structure::node_ptr node_ptr;
 
         typedef A value_allocator;
         typedef BOOST_DEDUCED_TYPENAME A::value_type value_type;
 
+        typedef hash_bucket<A> bucket;
+        typedef BOOST_DEDUCED_TYPENAME G::BOOST_NESTED_TEMPLATE base<A>::type
+            node_base;
         typedef hash_node<node_base, value_type> node;
+
+        typedef BOOST_DEDUCED_TYPENAME node::bucket_allocator bucket_allocator;
+        typedef BOOST_DEDUCED_TYPENAME node::bucket_ptr bucket_ptr;
+        typedef BOOST_DEDUCED_TYPENAME node::node_ptr node_ptr;
+
         typedef BOOST_DEDUCED_TYPENAME rebind_wrap<value_allocator, node>::type node_allocator;
         typedef BOOST_DEDUCED_TYPENAME node_allocator::pointer real_node_ptr;
 
@@ -279,6 +216,10 @@ namespace boost { namespace unordered_detail {
 
         // Members
 
+        bucket_ptr buckets_;
+        bucket_ptr cached_begin_bucket_;
+        std::size_t size_;
+        std::size_t bucket_count_;
         boost::compressed_pair<bucket_allocator, node_allocator> allocators_;
         
         // Data access
@@ -306,11 +247,21 @@ namespace boost { namespace unordered_detail {
         ~hash_table_manager();
         
         // no throw
+        void swap(hash_table_manager& other);
         void move(hash_table_manager& other);
 
-        // Methods
-
+        // Buckets
+        
         void create_buckets(std::size_t bucket_count);
+        std::size_t bucket_count() const;
+        std::size_t bucket_from_hash(std::size_t hashed) const;
+        bucket_ptr bucket_ptr_from_hash(std::size_t hashed) const;
+        bucket_ptr buckets_begin() const;
+        bucket_ptr buckets_end() const;
+        std::size_t bucket_size(std::size_t index) const;
+        bucket_ptr get_bucket(std::size_t n) const;
+        node_ptr bucket_begin(std::size_t n) const;
+        node_ptr bucket_end(std::size_t) const;
 
         // Alloc/Dealloc
         
@@ -331,6 +282,24 @@ namespace boost { namespace unordered_detail {
         iterator_base erase(iterator_base r);
         std::size_t erase_group(node_ptr* it, bucket_ptr bucket);
         iterator_base erase_range(iterator_base r1, iterator_base r2);
+
+        // recompute_begin_bucket
+        //
+        // After an erase cached_begin_bucket_ might be left pointing to
+        // an empty bucket, so this is called to update it
+        //
+        // no throw
+
+        void recompute_begin_bucket(bucket_ptr b);
+
+        // This is called when a range has been erased
+        //
+        // no throw
+
+        void recompute_begin_bucket(bucket_ptr b1, bucket_ptr b2);
+        
+        // no throw
+        float load_factor() const;
     };
 
     template <class H, class P, class A, class G, class K>

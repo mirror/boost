@@ -70,7 +70,9 @@ namespace boost { namespace unordered_detail {
         inline node_ptr add_node(node_constructor& a, bucket_ptr bucket)
         {
             node_ptr n = a.release();
-            this->link_node_in_bucket(n, bucket);
+            node::add_to_bucket(n, *bucket);
+            ++this->size_;
+            if(bucket < this->cached_begin_bucket_) this->cached_begin_bucket_ = bucket;
             return n;
         }
         
@@ -328,10 +330,14 @@ namespace boost { namespace unordered_detail {
         inline node_ptr add_node(node_constructor& a, bucket_ptr bucket, node_ptr pos)
         {
             node_ptr n = a.release();
-            if(BOOST_UNORDERED_BORLAND_BOOL(pos))
-                this->link_node(n, pos);
-            else
-                this->link_node_in_bucket(n, bucket);
+            if(BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+                node::add_after_node(n, pos);                
+            }
+            else {
+                node::add_to_bucket(n, *bucket);
+                if(bucket < this->cached_begin_bucket_) this->cached_begin_bucket_ = bucket;
+            }
+            ++this->size_;
             return n;
         }
 
