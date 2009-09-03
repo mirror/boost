@@ -116,4 +116,6 @@ test-suite numeric/uBLAS
       ]
       [ run comp_mat_erase.cpp
       ]
+      [ run sparse_view_test.cpp
+      ]
     ;

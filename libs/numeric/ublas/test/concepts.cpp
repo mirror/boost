@@ -22,6 +22,8 @@
 #include <boost/numeric/ublas/matrix_sparse.hpp>
 #include <boost/numeric/ublas/vector_of_vector.hpp>
 #include <boost/numeric/ublas/detail/concepts.hpp>
+#include <boost/numeric/ublas/experimental/sparse_view.hpp>
+//#include <boost/numeric/ublas/vector_view.hpp>
 
 namespace ublas = boost::numeric::ublas;
 
