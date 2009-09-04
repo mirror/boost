@@ -124,7 +124,7 @@ public:
 
             // If no more characters are available without blocking, or
             // if read request has been satisfied, return.
-            if ( status == f_would_block && buf.ptr() == buf.eptr() ||
+            if ( (status == f_would_block && buf.ptr() == buf.eptr()) ||
                  next_s == end_s )
             {
                 return static_cast<std::streamsize>(next_s - s);
