@@ -14,7 +14,7 @@
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/preprocessor/seq/size.hpp>
 #include <boost/preprocessor/seq/enum.hpp>
-#include <boost/unordered/detail/manager.hpp>
+#include <boost/unordered/detail/buckets.hpp>
 
 #if !defined(BOOST_UNORDERED_STD_FORWARD)
 
@@ -210,20 +210,20 @@ namespace boost { namespace unordered_detail {
     template <class Alloc, class Grouped>
     class hash_node_constructor
     {
-        typedef hash_table_manager<Alloc, Grouped> manager;
-        typedef BOOST_DEDUCED_TYPENAME manager::node node;
-        typedef BOOST_DEDUCED_TYPENAME manager::real_node_ptr real_node_ptr;
-        typedef BOOST_DEDUCED_TYPENAME manager::value_type value_type;
+        typedef hash_buckets<Alloc, Grouped> buckets;
+        typedef BOOST_DEDUCED_TYPENAME buckets::node node;
+        typedef BOOST_DEDUCED_TYPENAME buckets::real_node_ptr real_node_ptr;
+        typedef BOOST_DEDUCED_TYPENAME buckets::value_type value_type;
 
-        manager& manager_;
+        buckets& buckets_;
         real_node_ptr node_;
         bool node_constructed_;
         bool value_constructed_;
 
     public:
 
-        hash_node_constructor(manager& m) :
-            manager_(m),
+        hash_node_constructor(buckets& m) :
+            buckets_(m),
             node_(),
             node_constructed_(false),
             value_constructed_(false)
@@ -281,12 +281,12 @@ namespace boost { namespace unordered_detail {
         }
 
         // no throw
-        BOOST_DEDUCED_TYPENAME manager::node_ptr release()
+        BOOST_DEDUCED_TYPENAME buckets::node_ptr release()
         {
             real_node_ptr p = node_;
             node_ = real_node_ptr();
             // node_ptr cast
-            return manager_.bucket_alloc().address(*p);
+            return buckets_.bucket_alloc().address(*p);
         }
 
     private:
@@ -305,9 +305,9 @@ namespace boost { namespace unordered_detail {
             }
 
             if (node_constructed_)
-                manager_.node_alloc().destroy(node_);
+                buckets_.node_alloc().destroy(node_);
 
-            manager_.node_alloc().deallocate(node_, 1);
+            buckets_.node_alloc().deallocate(node_, 1);
         }
     }
 
@@ -318,8 +318,8 @@ namespace boost { namespace unordered_detail {
             node_constructed_ = false;
             value_constructed_ = false;
 
-            node_ = manager_.node_alloc().allocate(1);
-            manager_.node_alloc().construct(node_, node());
+            node_ = buckets_.node_alloc().allocate(1);
+            buckets_.node_alloc().construct(node_, node());
             node_constructed_ = true;
         }
         else {

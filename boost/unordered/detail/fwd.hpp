@@ -183,7 +183,7 @@ namespace boost { namespace unordered_detail {
         void increment();
     };
 
-    // hash_table_manager
+    // hash_buckets
     //
     // This is responsible for allocating and deallocating buckets and nodes.
     //
@@ -193,8 +193,11 @@ namespace boost { namespace unordered_detail {
     //    methods (other than getters and setters).
 
     template <class A, class G>
-    struct hash_table_manager
+    class hash_buckets
     {
+        hash_buckets(hash_buckets const&);
+        hash_buckets& operator=(hash_buckets const&);
+    public:
         // Types
 
         typedef A value_allocator;
@@ -217,8 +220,6 @@ namespace boost { namespace unordered_detail {
         // Members
 
         bucket_ptr buckets_;
-        bucket_ptr cached_begin_bucket_;
-        std::size_t size_;
         std::size_t bucket_count_;
         boost::compressed_pair<bucket_allocator, node_allocator> allocators_;
         
@@ -228,8 +229,6 @@ namespace boost { namespace unordered_detail {
         node_allocator const& node_alloc() const { return allocators_.second(); }
         bucket_allocator& bucket_alloc() { return allocators_.first(); }
         node_allocator& node_alloc() { return allocators_.second(); }
-        iterator_base begin() const { return iterator_base(this->cached_begin_bucket_); }
-        iterator_base end() const { return iterator_base(this->buckets_end()); }
         std::size_t max_bucket_count() const {
             // -1 to account for the sentinel.
             return prev_prime(this->bucket_alloc().max_size() - 1);
@@ -239,20 +238,17 @@ namespace boost { namespace unordered_detail {
         //
         // The copy constructor doesn't copy the buckets.
 
-        hash_table_manager();
-        explicit hash_table_manager(value_allocator const& a);
-        explicit hash_table_manager(hash_table_manager const& h);
-        hash_table_manager(hash_table_manager& x, move_tag m);
-        hash_table_manager(hash_table_manager& x, value_allocator const& a, move_tag m);
-        ~hash_table_manager();
+        hash_buckets(node_allocator const& a, std::size_t n);
+        hash_buckets(hash_buckets& x, move_tag m);
+        hash_buckets(hash_buckets& x, value_allocator const& a, move_tag m);
+        ~hash_buckets();
         
         // no throw
-        void swap(hash_table_manager& other);
-        void move(hash_table_manager& other);
+        void swap(hash_buckets& other);
+        void move(hash_buckets& other);
 
         // Buckets
         
-        void create_buckets(std::size_t bucket_count);
         std::size_t bucket_count() const;
         std::size_t bucket_from_hash(std::size_t hashed) const;
         bucket_ptr bucket_ptr_from_hash(std::size_t hashed) const;
@@ -269,42 +265,15 @@ namespace boost { namespace unordered_detail {
 
         // 
         void delete_buckets();
-        void clear();
         void clear_bucket(bucket_ptr);
         void delete_group(node_ptr first_node);
         void delete_nodes(node_ptr begin, node_ptr end);
         void delete_to_bucket_end(node_ptr begin);
-
-        // Erase
-        //
-        // no throw
-
-        iterator_base erase(iterator_base r);
-        std::size_t erase_group(node_ptr* it, bucket_ptr bucket);
-        iterator_base erase_range(iterator_base r1, iterator_base r2);
-
-        // recompute_begin_bucket
-        //
-        // After an erase cached_begin_bucket_ might be left pointing to
-        // an empty bucket, so this is called to update it
-        //
-        // no throw
-
-        void recompute_begin_bucket(bucket_ptr b);
-
-        // This is called when a range has been erased
-        //
-        // no throw
-
-        void recompute_begin_bucket(bucket_ptr b1, bucket_ptr b2);
-        
-        // no throw
-        float load_factor() const;
     };
 
     template <class H, class P, class A, class G, class K>
     class hash_table :
-        public hash_table_manager<A, G>
+        public hash_buckets<A, G>
         
     {
     public:
@@ -313,19 +282,19 @@ namespace boost { namespace unordered_detail {
         typedef A value_allocator;
         typedef G grouped;
         typedef K key_extractor;
-        typedef hash_table_manager<A, G> manager;
+        typedef hash_buckets<A, G> buckets;
         
         typedef BOOST_DEDUCED_TYPENAME value_allocator::value_type value_type;
         typedef BOOST_DEDUCED_TYPENAME key_extractor::BOOST_NESTED_TEMPLATE apply<value_type>
             extractor;    
         typedef BOOST_DEDUCED_TYPENAME extractor::key_type key_type;
 
-        typedef BOOST_DEDUCED_TYPENAME manager::node node;
-        typedef BOOST_DEDUCED_TYPENAME manager::bucket bucket;
-        typedef BOOST_DEDUCED_TYPENAME manager::node_ptr node_ptr;
-        typedef BOOST_DEDUCED_TYPENAME manager::bucket_ptr bucket_ptr;
+        typedef BOOST_DEDUCED_TYPENAME buckets::node node;
+        typedef BOOST_DEDUCED_TYPENAME buckets::bucket bucket;
+        typedef BOOST_DEDUCED_TYPENAME buckets::node_ptr node_ptr;
+        typedef BOOST_DEDUCED_TYPENAME buckets::bucket_ptr bucket_ptr;
 
-        typedef BOOST_DEDUCED_TYPENAME manager::iterator_base iterator_base;
+        typedef BOOST_DEDUCED_TYPENAME buckets::iterator_base iterator_base;
 
         // Types for storing functions
 
@@ -340,6 +309,8 @@ namespace boost { namespace unordered_detail {
         
         bool func_; // The currently active functions.
         aligned_function funcs_[2];
+        bucket_ptr cached_begin_bucket_;
+        std::size_t size_;
         float mlf_;
         std::size_t max_load_;
         
@@ -395,6 +366,11 @@ namespace boost { namespace unordered_detail {
         ~hash_table();
         hash_table& operator=(hash_table const&);
 
+        // Iterators
+
+        iterator_base begin() const { return iterator_base(this->cached_begin_bucket_); }
+        iterator_base end() const { return iterator_base(this->buckets_end()); }
+
         // Swap & Move
 
         void swap(hash_table& x);
@@ -409,16 +385,45 @@ namespace boost { namespace unordered_detail {
 
         // Move/copy buckets
 
-        void move_buckets_to(manager& dst);
-        void copy_buckets_to(manager& dst) const;
+        void move_buckets_to(buckets& dst);
+        void copy_buckets_to(buckets& dst) const;
 
         // Misc. key methods
 
-        std::size_t erase_key(key_type const& k);
         std::size_t count(key_type const& k) const;
         iterator_base find(key_type const& k) const;
         value_type& at(key_type const& k) const;
         std::pair<iterator_base, iterator_base> equal_range(key_type const& k) const;
+
+        // Erase
+        //
+        // no throw
+
+        void clear();
+        std::size_t erase_key(key_type const& k);
+        iterator_base erase(iterator_base r);
+        std::size_t erase_group(node_ptr* it, bucket_ptr bucket);
+        iterator_base erase_range(iterator_base r1, iterator_base r2);
+
+        // recompute_begin_bucket
+
+        void recompute_begin_bucket();
+
+        // After an erase cached_begin_bucket_ might be left pointing to
+        // an empty bucket, so this is called to update it
+        //
+        // no throw
+
+        void recompute_begin_bucket(bucket_ptr b);
+
+        // This is called when a range has been erased
+        //
+        // no throw
+
+        void recompute_begin_bucket(bucket_ptr b1, bucket_ptr b2);
+        
+        // no throw
+        float load_factor() const;
     };
 
     // Iterator Access
@@ -456,9 +461,9 @@ namespace boost { namespace unordered_detail {
         typedef BOOST_DEDUCED_TYPENAME A::value_type value_type;
 
     private:
-        typedef hash_table_manager<A, G> manager;
-        typedef BOOST_DEDUCED_TYPENAME manager::node_ptr ptr;
-        typedef BOOST_DEDUCED_TYPENAME manager::node node;
+        typedef hash_buckets<A, G> buckets;
+        typedef BOOST_DEDUCED_TYPENAME buckets::node_ptr ptr;
+        typedef BOOST_DEDUCED_TYPENAME buckets::node node;
         typedef hash_const_local_iterator<A, G> const_local_iterator;
 
         friend class hash_const_local_iterator<A, G>;
@@ -491,9 +496,9 @@ namespace boost { namespace unordered_detail {
         typedef BOOST_DEDUCED_TYPENAME A::value_type value_type;
 
     private:
-        typedef hash_table_manager<A, G> manager;
-        typedef BOOST_DEDUCED_TYPENAME manager::node_ptr ptr;
-        typedef BOOST_DEDUCED_TYPENAME manager::node node;
+        typedef hash_buckets<A, G> buckets;
+        typedef BOOST_DEDUCED_TYPENAME buckets::node_ptr ptr;
+        typedef BOOST_DEDUCED_TYPENAME buckets::node node;
         typedef hash_local_iterator<A, G> local_iterator;
         friend class hash_local_iterator<A, G>;
         ptr ptr_;
@@ -531,9 +536,9 @@ namespace boost { namespace unordered_detail {
         typedef BOOST_DEDUCED_TYPENAME A::value_type value_type;
 
     private:
-        typedef hash_table_manager<A, G> manager;
-        typedef BOOST_DEDUCED_TYPENAME manager::node node;
-        typedef BOOST_DEDUCED_TYPENAME manager::iterator_base base;
+        typedef hash_buckets<A, G> buckets;
+        typedef BOOST_DEDUCED_TYPENAME buckets::node node;
+        typedef BOOST_DEDUCED_TYPENAME buckets::iterator_base base;
         typedef hash_const_iterator<A, G> const_iterator;
         friend class hash_const_iterator<A, G>;
         base base_;
@@ -566,9 +571,9 @@ namespace boost { namespace unordered_detail {
         typedef BOOST_DEDUCED_TYPENAME A::value_type value_type;
 
     private:
-        typedef hash_table_manager<A, G> manager;
-        typedef BOOST_DEDUCED_TYPENAME manager::node node;
-        typedef BOOST_DEDUCED_TYPENAME manager::iterator_base base;
+        typedef hash_buckets<A, G> buckets;
+        typedef BOOST_DEDUCED_TYPENAME buckets::node node;
+        typedef BOOST_DEDUCED_TYPENAME buckets::iterator_base base;
         typedef hash_iterator<A, G> iterator;
         friend class hash_iterator<A, G>;
         friend class iterator_access;
