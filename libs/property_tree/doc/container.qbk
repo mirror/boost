@@ -8,7 +8,7 @@ way to iterate over the entire tree.
 
 It is very important to remember that the property sequence is *not* ordered by
 the key. It preserves the order of insertion. It closely resembles a std::list.
-Fast access to children is provided via a separate lookup structure. Do not
+Fast access to children by name is provided via a separate lookup structure. Do not
 attempt to use algorithms that expect an ordered sequence (like binary_search)
 on a node's children.
 
