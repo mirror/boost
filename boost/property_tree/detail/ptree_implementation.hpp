@@ -55,19 +55,22 @@ namespace boost { namespace property_tree
         iterator, typename subs::base_container::iterator, value_type>
     {
         friend class boost::iterator_core_access;
+        typedef boost::iterator_adaptor<
+            iterator, typename subs::base_container::iterator, value_type>
+            baset;
     public:
+        typedef typename baset::reference reference;
         iterator() {}
         explicit iterator(typename iterator::base_type b)
             : iterator::iterator_adaptor_(b)
         {}
-        typename iterator::reference dereference() const
+        reference dereference() const
         {
             // multi_index doesn't allow modification of its values, because
             // indexes could sort by anything, and modification screws that up.
             // However, we only sort by the key, and it's protected against
             // modification in the value_type, so this const_cast is safe.
-            return const_cast<typename iterator::reference>(
-                *this->base_reference());
+            return const_cast<reference>(*this->base_reference());
         }
     };
     template <class K, class D, class C>
@@ -114,15 +117,19 @@ namespace boost { namespace property_tree
                                          value_type>
     {
         friend class boost::iterator_core_access;
+        typedef boost::iterator_adaptor<assoc_iterator,
+                                         typename subs::by_name_index::iterator,
+                                         value_type>
+            baset;
     public:
+        typedef typename baset::reference reference;
         assoc_iterator() {}
         explicit assoc_iterator(typename assoc_iterator::base_type b)
             : assoc_iterator::iterator_adaptor_(b)
         {}
-        typename assoc_iterator::reference dereference() const
+        reference dereference() const
         {
-            return const_cast<typename assoc_iterator::reference>(
-                *this->base_reference());
+            return const_cast<reference>(*this->base_reference());
         }
     };
     template <class K, class D, class C>

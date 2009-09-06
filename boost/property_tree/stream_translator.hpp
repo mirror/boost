@@ -17,6 +17,7 @@
 #include <boost/optional/optional_io.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/decay.hpp>
+#include <boost/type_traits/integral_constant.hpp>
 #include <sstream>
 #include <string>
 #include <locale>
@@ -52,12 +53,44 @@ namespace boost { namespace property_tree
         }
     };
 
+    // Ugly workaround for numeric_traits that don't have members when not
+    // specialized, e.g. MSVC.
+    namespace detail
+    {
+        template <bool is_specialized>
+        struct is_inexact_impl
+        {
+            template <typename T>
+            struct test
+            {
+                typedef boost::false_type type;
+            };
+        };
+        template <>
+        struct is_inexact_impl<true>
+        {
+            template <typename T>
+            struct test
+            {
+              typedef boost::integral_constant<bool,
+                  !std::numeric_limits<T>::is_exact> type;
+            };
+        };
+
+        template <typename F>
+        struct is_inexact
+        {
+            typedef typename boost::decay<F>::type decayed;
+            typedef typename is_inexact_impl<
+                std::numeric_limits<decayed>::is_specialized
+            >::BOOST_NESTED_TEMPLATE test<decayed>::type type;
+            static const bool value = type::value;
+        };
+    }
+
     template <typename Ch, typename Traits, typename F>
     struct customize_stream<Ch, Traits, F,
-        typename boost::enable_if_c<
-            std::numeric_limits<typename boost::decay<F>::type>::is_specialized
-            && !std::numeric_limits<typename boost::decay<F>::type>::is_exact
-        >::type
+        typename boost::enable_if< detail::is_inexact<F> >::type
     >
     {
         static void insert(std::basic_ostream<Ch, Traits>& s, const F& e) {
