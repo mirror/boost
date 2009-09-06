@@ -102,7 +102,8 @@ namespace boost { namespace property_tree
         explicit const_reverse_iterator(const_iterator b)
             : boost::reverse_iterator<const_iterator>(b)
         {}
-        const_reverse_iterator(reverse_iterator b)
+        const_reverse_iterator(
+            typename basic_ptree<K, D, C>::reverse_iterator b)
             : boost::reverse_iterator<const_iterator>(b)
         {}
     };

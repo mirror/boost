@@ -21,6 +21,7 @@
 #include <boost/test/minimal.hpp>
 #include <boost/property_tree/detail/ptree_utils.hpp>
 #include <fstream>
+#include <cstring>
 
 template<class Ptree>
 typename Ptree::size_type total_size(const Ptree &pt)
