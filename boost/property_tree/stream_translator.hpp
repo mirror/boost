@@ -136,8 +136,8 @@ namespace boost { namespace property_tree
             int i;
             s >> i;
             // out of range?
-            if(i > std::numeric_limits<signed char>::max() ||
-                i < std::numeric_limits<signed char>::min())
+            if(i > (std::numeric_limits<signed char>::max)() ||
+                i < (std::numeric_limits<signed char>::min)())
             {
                 s.clear(); // guarantees eof to be unset
                 return;
@@ -159,7 +159,7 @@ namespace boost { namespace property_tree
             unsigned i;
             s >> i;
             // out of range?
-            if(i > std::numeric_limits<unsigned char>::max()) {
+            if(i > (std::numeric_limits<unsigned char>::max)()) {
                 s.clear(); // guarantees eof to be unset
                 return;
             }

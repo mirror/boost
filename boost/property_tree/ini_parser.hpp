@@ -1,5 +1,6 @@
 // ----------------------------------------------------------------------------
 // Copyright (C) 2002-2006 Marcin Kalicinski
+// Copyright (C) 2009 Sebastian Redl
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 

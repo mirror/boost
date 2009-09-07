@@ -1,9 +1,15 @@
+// ----------------------------------------------------------------------------
+// Copyright (C) 2006, 2009 Marcin Kalicinski
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// For more information, see www.boost.org
+// ----------------------------------------------------------------------------
 #ifndef RAPIDXML_HPP_INCLUDED
 #define RAPIDXML_HPP_INCLUDED
 
-// Copyright (C) 2006, 2009 Marcin Kalicinski
-// Version 1.13
-// Revision $DateTime: 2009/05/13 01:46:17 $
 //! \file rapidxml.hpp This file contains rapidxml parser and DOM implementation
 
 // If standard library is disabled, user must provide implementations of required functions and typedefs

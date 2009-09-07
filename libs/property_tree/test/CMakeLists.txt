@@ -1,3 +1,10 @@
+#
+# Copyright Sebastian Redl
+#
+# Distributed under the Boost Software License, Version 1.0.
+# See http://www.boost.org/LICENSE_1_0.txt
+#
+#----------------------------------------------------------------------------
 boost_additional_test_dependencies(property_tree BOOST_DEPENDS test serialization)
 
 
@@ -19,5 +26,3 @@ foreach(test ${tests})
                     COMPILE_FLAGS ${test_compile_flags} 
                     DEPENDS boost_unit_test_framework boost_serialization STATIC) 
 endforeach(test ${tests})
-
-

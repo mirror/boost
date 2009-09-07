@@ -1,3 +1,8 @@
+Copyright (C) 2009 Sebastian Redl
+Distributed under the Boost Software License, Version 1.0.
+See http://www.boost.org/LICENSE_1_0.txt
+
+
 List all breaking changes done to the interface during the update here.
 
 - Template parameters
@@ -43,4 +48,4 @@ Impact: If you use find, you may have to change your code. Most importantly,
         you need to compare against not_found() instead of end().
 Rationale: equal_range() also returns assoc_iterators. equal_range() cannot
            return normal iterators, since the conversion would not preserve
-	   the equal range or even the range property.
+           the equal range or even the range property.
