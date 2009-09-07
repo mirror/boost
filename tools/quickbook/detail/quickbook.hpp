@@ -25,22 +25,22 @@ namespace quickbook
             typedef bool type;
         };
         
-        quickbook_range(unsigned min, unsigned max)
-            : min(min), max(max) {}
+        quickbook_range(unsigned min_, unsigned max_)
+            : min_(min_), max_(max_) {}
         
         bool operator()() const {
-            return qbk_version_n >= min && qbk_version_n < max;
+            return qbk_version_n >= min_ && qbk_version_n < max_;
         }
 
-        unsigned min, max;
+        unsigned min_, max_;
     };
     
-    inline quickbook_range qbk_since(unsigned min) {
-        return quickbook_range(min, 999);
+    inline quickbook_range qbk_since(unsigned min_) {
+        return quickbook_range(min_, 999);
     }
     
-    inline quickbook_range qbk_before(unsigned max) {
-        return quickbook_range(0, max);
+    inline quickbook_range qbk_before(unsigned max_) {
+        return quickbook_range(0, max_);
     }
 }
 
