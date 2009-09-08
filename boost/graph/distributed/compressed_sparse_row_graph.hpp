@@ -48,11 +48,11 @@ struct distributed_csr_tag
     public virtual incidence_graph_tag,
     public virtual adjacency_graph_tag {};
 
-template<typename Directed, typename VertexProperty, typename EdgeProperty,
+template<typename VertexProperty, typename EdgeProperty,
          typename GraphProperty, typename ProcessGroup, typename InVertex,
          typename InDistribution, typename InEdgeIndex>
 class compressed_sparse_row_graph<
-         Directed, VertexProperty, EdgeProperty, GraphProperty,
+         directedS, VertexProperty, EdgeProperty, GraphProperty,
          distributedS<ProcessGroup, InVertex, InDistribution>,
          InEdgeIndex>
 {
@@ -84,7 +84,7 @@ class compressed_sparse_row_graph<
   /**
    * The type of the CSR graph that will be stored locally.
    */
-  typedef compressed_sparse_row_graph<Directed, VertexProperty, EdgeProperty,
+  typedef compressed_sparse_row_graph<directedS, VertexProperty, EdgeProperty,
                                       GraphProperty, Vertex, EdgeIndex>
     base_type;
 
@@ -471,7 +471,7 @@ class compressed_sparse_row_graph<
  *  graph type.
  */
 #define BOOST_DISTRIB_CSR_GRAPH_TEMPLATE_PARMS                          \
-  typename Directed, typename VertexProperty, typename EdgeProperty,    \
+  typename VertexProperty, typename EdgeProperty,    \
   typename GraphProperty, typename ProcessGroup, typename InVertex,     \
   typename InDistribution, typename InEdgeIndex
 
@@ -487,7 +487,7 @@ class compressed_sparse_row_graph<
  */
 #define BOOST_DISTRIB_CSR_GRAPH_TYPE                            \
   compressed_sparse_row_graph<                                  \
-    Directed, VertexProperty, EdgeProperty, GraphProperty,      \
+    directedS, VertexProperty, EdgeProperty, GraphProperty,      \
     distributedS<ProcessGroup, InVertex, InDistribution>,       \
     InEdgeIndex>
 
