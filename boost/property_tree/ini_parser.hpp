@@ -89,7 +89,7 @@ namespace boost { namespace property_tree { namespace ini_parser
                     "read error", "", line_no));
 
             // If line is non-empty
-            line = detail::trim(line, stream.getloc());
+            line = property_tree::detail::trim(line, stream.getloc());
             if (!line.empty())
             {
                 // Comment, section or key?
@@ -106,8 +106,8 @@ namespace boost { namespace property_tree { namespace ini_parser
                     if (end == Str::npos)
                         BOOST_PROPERTY_TREE_THROW(ini_parser_error(
                             "unmatched '['", "", line_no));
-                    Str key = detail::trim(line.substr(1, end - 1),
-                                           stream.getloc());
+                    Str key = property_tree::detail::trim(
+                        line.substr(1, end - 1), stream.getloc());
                     if (local.find(key) != local.not_found())
                         BOOST_PROPERTY_TREE_THROW(ini_parser_error(
                             "duplicate section name", "", line_no));
@@ -124,10 +124,10 @@ namespace boost { namespace property_tree { namespace ini_parser
                     if (eqpos == 0)
                         BOOST_PROPERTY_TREE_THROW(ini_parser_error(
                             "key expected", "", line_no));
-                    Str key = detail::trim(line.substr(0, eqpos),
-                                           stream.getloc());
-                    Str data = detail::trim(line.substr(eqpos + 1, Str::npos),
-                                            stream.getloc());
+                    Str key = property_tree::detail::trim(
+                        line.substr(0, eqpos), stream.getloc());
+                    Str data = property_tree::detail::trim(
+                        line.substr(eqpos + 1, Str::npos), stream.getloc());
                     if (container.find(key) != container.not_found())
                         BOOST_PROPERTY_TREE_THROW(ini_parser_error(
                             "duplicate key name", "", line_no));
