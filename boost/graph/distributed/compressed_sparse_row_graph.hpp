@@ -1856,7 +1856,7 @@ class csr_edge_global_map
   // Readable Property Map concept requirements
   typedef std::pair<ProcessID, EdgeIndex> value_type;
   typedef value_type reference;
-  typedef csr_edge_descriptor<Vertex, EdgeIndex> key_type;
+  typedef detail::csr_edge_descriptor<Vertex, EdgeIndex> key_type;
   typedef readable_property_map_tag category;
 };
 
@@ -2144,21 +2144,21 @@ get(T Bundle::* p, const BOOST_DISTRIB_CSR_GRAPH_TYPE& g)
 
 namespace mpi {
   template<typename Vertex, typename EdgeIndex>
-  struct is_mpi_datatype<csr_edge_descriptor<Vertex, EdgeIndex> >
+  struct is_mpi_datatype<boost::detail::csr_edge_descriptor<Vertex, EdgeIndex> >
     : mpl::true_ { };
 }
 
 namespace serialization {
   template<typename Vertex, typename EdgeIndex>
-  struct is_bitwise_serializable<csr_edge_descriptor<Vertex, EdgeIndex> >
+  struct is_bitwise_serializable<boost::detail::csr_edge_descriptor<Vertex, EdgeIndex> >
     : mpl::true_ { };
 
   template<typename Vertex, typename EdgeIndex>
-  struct implementation_level<csr_edge_descriptor<Vertex, EdgeIndex> >
+  struct implementation_level<boost::detail::csr_edge_descriptor<Vertex, EdgeIndex> >
    : mpl::int_<object_serializable> {} ;
 
   template<typename Vertex, typename EdgeIndex>
-  struct tracking_level<csr_edge_descriptor<Vertex, EdgeIndex> >
+  struct tracking_level<boost::detail::csr_edge_descriptor<Vertex, EdgeIndex> >
    : mpl::int_<track_never> {} ;
 
 }
