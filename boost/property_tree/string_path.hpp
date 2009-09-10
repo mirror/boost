@@ -85,7 +85,7 @@ namespace boost { namespace property_tree
         typedef typename String::value_type char_type;
 
         /// Create an empty path.
-        string_path();
+        explicit string_path(char_type separator = char_type('.'));
         /// Create a path by parsing the given string.
         /// @param value A sequence, possibly with separators, that describes
         ///              the path, e.g. "one.two.three".
@@ -154,8 +154,8 @@ namespace boost { namespace property_tree
     };
 
     template <typename String, typename Translator> inline
-    string_path<String, Translator>::string_path()
-        : m_start(m_value.begin())
+    string_path<String, Translator>::string_path(char_type separator)
+        : m_separator(separator), m_start(m_value.begin())
     {}
 
     template <typename String, typename Translator> inline
