@@ -7,10 +7,10 @@
 //  See http://www.boost.org/libs/config for more information.
 
 //  MACRO:         BOOST_NO_DELETED_FUNCTIONS 
-//  TITLE:         C++0x delete functions unavailable
-//  DESCRIPTION:   The compiler does not support C++0x delete functions
+//  TITLE:         C++0x =delete functions unavailable
+//  DESCRIPTION:   The compiler does not support C++0x =delete functions
 
-namespace boost_no_constexpr {
+namespace boost_no_deleted_functions {
 
   struct foo {
     foo() = delete;
