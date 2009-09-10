@@ -61,7 +61,7 @@ public:
     {
       // select the right sized integer for the enum
       typedef typename boost::uint_t<8*sizeof(T)>::least int_type;
-      BOOST_MPL_ASSERT((sizeof(T)==sizeof(int_type)));
+//      BOOST_MPL_ASSERT((sizeof(T)==sizeof(int_type)));
       this->save(*reinterpret_cast<int_type const*>(&t));
     }
 
