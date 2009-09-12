@@ -47,6 +47,13 @@
 #define BOOST_LCAST_NO_WCHAR_T
 #endif
 
+#ifdef BOOST_NO_TYPEID
+#define BOOST_LCAST_THROW_BAD_CAST(S, T) throw_exception(bad_lexical_cast())
+#else
+#define BOOST_LCAST_THROW_BAD_CAST(Source, Target) \
+    throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)))
+#endif
+
 namespace boost
 {
     // exception used to indicate runtime lexical_cast failure
@@ -1111,6 +1118,12 @@ namespace boost
             typedef const T * type;
         };
 
+#if (defined _MSC_VER)
+# pragma warning( push )
+# pragma warning( disable : 4701 ) // possible use of ... before initialization
+# pragma warning( disable : 4702 ) // unreachable code
+#endif
+
         template< typename Target
                 , typename Source
                 , bool Unlimited // string representation of Source is unlimited
@@ -1136,28 +1149,14 @@ namespace boost
               , detail::lexical_stream_limited_src<CharT,base,traits>
               >::type interpreter(buf, buf + src_len);
 
-            // The original form, reproduced below, is more elegant
-            // but yields a spurious C4701 warning ("possible use of
-            // "result" before initialization") with VC7.1 (/W4).
-//
-//            Target result;
-//
-//            if(!(interpreter << arg && interpreter >> result))
-//                throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)));
-//            return result;
-
-            if(interpreter << arg) {
-                Target result;
-                if (interpreter >> result)
-                    return result;
-            }
-#ifndef BOOST_NO_TYPEID
-            throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)));
-#else
-            throw_exception(bad_lexical_cast());
-#endif
-            return Target(); // normally never reached (throw_exception)
+            Target result;
+            if(!(interpreter << arg && interpreter >> result))
+                BOOST_LCAST_THROW_BAD_CAST(Source, Target);
+            return result;
         }
+#if (defined _MSC_VER)
+# pragma warning( pop )
+#endif
     }
 
     template<typename Target, typename Source>
