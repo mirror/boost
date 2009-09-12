@@ -41,9 +41,7 @@
 #include <sstream>
 #endif
 
-#if defined(BOOST_NO_STRINGSTREAM) || \
-    defined(BOOST_NO_STD_WSTRING) || \
-    defined(BOOST_NO_STD_LOCALE) 
+#if defined(BOOST_NO_STRINGSTREAM) || defined(BOOST_NO_STD_WSTRING)
 #define BOOST_LCAST_NO_WCHAR_T
 #endif
 
