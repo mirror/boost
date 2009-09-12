@@ -2446,11 +2446,13 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size, bool preserve = true) {
             size1_ = size;
             size2_ = size;
+            size_common_ = ((std::min)(size1_, size2_));
         }
         BOOST_UBLAS_INLINE
         void resize (size_type size1, size_type size2, bool /*preserve*/ = true) {
             size1_ = size1;
             size2_ = size2;
+            size_common_ = ((std::min)(size1_, size2_));
         }
 
         // Element access
@@ -2467,6 +2469,7 @@ namespace boost { namespace numeric { namespace ublas {
         identity_matrix &operator = (const identity_matrix &m) {
             size1_ = m.size1_;
             size2_ = m.size2_;
+            size_common_ = m.size_common_;
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -2481,6 +2484,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (this != &m) {
                 std::swap (size1_, m.size1_);
                 std::swap (size2_, m.size2_);
+                std::swap (size_common_, m.size_common_);
             }
         }
         BOOST_UBLAS_INLINE
