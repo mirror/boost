@@ -21,6 +21,7 @@
 
 #include <boost/lexical_cast.hpp>
 
+#include <boost/cstdint.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
@@ -76,6 +77,7 @@ void test_conversion_from_to_int();
 void test_conversion_from_to_uint();
 void test_conversion_from_to_long();
 void test_conversion_from_to_ulong();
+void test_conversion_from_to_intmax_t();
 #ifdef LCAST_TEST_LONGLONG
 void test_conversion_from_to_longlong();
 void test_conversion_from_to_ulonglong();
@@ -112,6 +114,7 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_uint));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ulong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_long));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_intmax_t));
     #ifdef LCAST_TEST_LONGLONG
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_longlong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ulonglong));
@@ -522,27 +525,38 @@ template<class T, class CharT>
 void test_conversion_from_string_to_integral(CharT)
 {
     typedef std::numeric_limits<T> limits;
+    typedef std::basic_string<CharT> string_type;
 
-    T t;
+    string_type s;
+    string_type const zero = to_str<CharT>(0);
+    string_type const nine = to_str<CharT>(9);
+    T const min_val = (limits::min)();
+    T const max_val = (limits::max)();
 
-    t = (limits::min)();
-    BOOST_CHECK(lexical_cast<T>(to_str<CharT>(t)) == t);
+    s = to_str<CharT>(min_val);
+    BOOST_CHECK_EQUAL(lexical_cast<T>(s), min_val);
+    if(limits::is_signed)
+    {
+        BOOST_CHECK_THROW(lexical_cast<T>(s + zero), bad_lexical_cast);
+        BOOST_CHECK_THROW(lexical_cast<T>(s + nine), bad_lexical_cast);
+    }
 
-    t = (limits::max)();
-    BOOST_CHECK(lexical_cast<T>(to_str<CharT>(t)) == t);
+    s = to_str<CharT>(max_val);
+    BOOST_CHECK_EQUAL(lexical_cast<T>(s), max_val);
+    BOOST_CHECK_THROW(lexical_cast<T>(s + zero), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<T>(s + nine), bad_lexical_cast);
 
     if(limits::digits <= 16 && lcast_test_small_integral_types_completely)
         // min and max have already been tested.
-        for(t = 1 + (limits::min)(); t != (limits::max)(); ++t)
+        for(T t = 1 + min_val; t != max_val; ++t)
             BOOST_CHECK(lexical_cast<T>(to_str<CharT>(t)) == t);
     else
     {
-        T const min_val = (limits::min)();
-        T const max_val = (limits::max)();
         T const half_max_val = max_val / 2;
         T const cnt = lcast_integral_test_counter; // to supress warnings
         unsigned int const counter = cnt < half_max_val ? cnt : half_max_val;
 
+        T t;
         unsigned int i;
 
         // Test values around min:
@@ -664,6 +678,11 @@ void test_conversion_from_to_ulong()
 void test_conversion_from_to_long()
 {
     test_conversion_from_to_integral<long>();
+}
+
+void test_conversion_from_to_intmax_t()
+{
+    test_conversion_from_to_integral<boost::intmax_t>();
 }
 
 #if defined(BOOST_HAS_LONG_LONG)
