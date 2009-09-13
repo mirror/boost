@@ -78,6 +78,7 @@ void test_conversion_from_to_uint();
 void test_conversion_from_to_long();
 void test_conversion_from_to_ulong();
 void test_conversion_from_to_intmax_t();
+void test_conversion_from_to_uintmax_t();
 #ifdef LCAST_TEST_LONGLONG
 void test_conversion_from_to_longlong();
 void test_conversion_from_to_ulonglong();
@@ -112,9 +113,10 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ushort));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_int));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_uint));
-    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ulong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_long));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ulong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_intmax_t));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_uintmax_t));
     #ifdef LCAST_TEST_LONGLONG
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_longlong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ulonglong));
@@ -670,19 +672,24 @@ void test_conversion_from_to_uint()
     test_conversion_from_to_integral<unsigned int>();
 }
 
-void test_conversion_from_to_ulong()
-{
-    test_conversion_from_to_integral<unsigned long>();
-}
-
 void test_conversion_from_to_long()
 {
     test_conversion_from_to_integral<long>();
 }
 
+void test_conversion_from_to_ulong()
+{
+    test_conversion_from_to_integral<unsigned long>();
+}
+
 void test_conversion_from_to_intmax_t()
 {
     test_conversion_from_to_integral<boost::intmax_t>();
+}
+
+void test_conversion_from_to_uintmax_t()
+{
+    test_conversion_from_to_integral<boost::uintmax_t>();
 }
 
 #if defined(BOOST_HAS_LONG_LONG)
