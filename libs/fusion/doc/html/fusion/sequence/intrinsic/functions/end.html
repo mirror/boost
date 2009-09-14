@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>end</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
-<link rel="prev" href="begin.html" title="begin">
+<link rel="previous" href="begin.html" title="begin">
 <link rel="next" href="empty.html" title="empty">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,21 +23,24 @@
 <a accesskey="p" href="begin.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="empty.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.sequence.intrinsic.functions.end"></a><a href="end.html" title="end">end</a></h5></div></div></div>
+<div class="titlepage">
+<div><div><h5 class="title">
+<a name="fusion.sequence.intrinsic.functions.end"></a><a href="end.html" title="end">end</a>
+</h5></div></div>
+<div></div>
+</div>
 <a name="fusion.sequence.intrinsic.functions.end.description"></a><h6>
-<a name="id498708"></a>
+<a name="id450314"></a>
             <a href="end.html#fusion.sequence.intrinsic.functions.end.description">Description</a>
           </h6>
 <p>
             Returns an iterator pointing to one element past the end of the sequence.
           </p>
 <a name="fusion.sequence.intrinsic.functions.end.synopsis"></a><h6>
-<a name="id498739"></a>
+<a name="id450344"></a>
             <a href="end.html#fusion.sequence.intrinsic.functions.end.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
 <span class="keyword">typename</span> <a href="../metafunctions/end.html" title="end"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">end</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">end</span><span class="special">(</span><span class="identifier">Sequence</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
 
@@ -46,7 +49,7 @@
 <span class="identifier">end</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <a name="fusion.sequence.intrinsic.functions.end.parameters"></a><h6>
-<a name="id499014"></a>
+<a name="id450615"></a>
             <a href="end.html#fusion.sequence.intrinsic.functions.end.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -56,49 +59,36 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                  <p>
+<th><p>
                     Parameter
-                  </p>
-                  </th>
-<th>
-                  <p>
+                  </p></th>
+<th><p>
                     Requirement
-                  </p>
-                  </th>
-<th>
-                  <p>
+                  </p></th>
+<th><p>
                     Description
-                  </p>
-                  </th>
+                  </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-                  <p>
+<td><p>
                     <tt class="computeroutput"><span class="identifier">seq</span></tt>
-                  </p>
-                  </td>
-<td>
-                  <p>
+                  </p></td>
+<td><p>
                     Model of <a href="../../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
                     Sequence</a>
-                  </p>
-                  </td>
-<td>
-                  <p>
+                  </p></td>
+<td><p>
                     The sequence we wish to get an iterator from.
-                  </p>
-                  </td>
+                  </p></td>
 </tr></tbody>
 </table></div>
 <a name="fusion.sequence.intrinsic.functions.end.expression_semantics"></a><h6>
-<a name="id499128"></a>
+<a name="id450728"></a>
             <a href="end.html#fusion.sequence.intrinsic.functions.end.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<span class="identifier">end</span><span class="special">(</span><span class="identifier">seq</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">end</span><span class="special">(</span><span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <p>
             <span class="bold"><b>Return type</b></span>: <a href="../../../iterator/concepts/forward_iterator.html" title="Forward
@@ -123,19 +113,17 @@
             to one element past the end of the sequence.
           </p>
 <a name="fusion.sequence.intrinsic.functions.end.header"></a><h6>
-<a name="id499299"></a>
+<a name="id450896"></a>
             <a href="end.html#fusion.sequence.intrinsic.functions.end.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">intrinsic</span><span class="special">/</span><span class="identifier">end</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">intrinsic</span><span class="special">/</span><span class="identifier">end</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">end</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequence.intrinsic.functions.end.example"></a><h6>
-<a name="id499468"></a>
+<a name="id451061"></a>
             <a href="end.html#fusion.sequence.intrinsic.functions.end.example">Example</a>
           </h6>
-<pre class="programlisting">
-<a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">);</span>
+<pre class="programlisting"><a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">);</span>
 <span class="identifier">assert</span><span class="special">(</span><a href="../../../iterator/functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a><span class="special">(</span><a href="../../../iterator/functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><span class="identifier">end</span><span class="special">(</span><span class="identifier">v</span><span class="special">)))</span> <span class="special">==</span> <span class="number">3</span><span class="special">);</span>
 </pre>
 </div>

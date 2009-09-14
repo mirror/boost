@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>advance_c</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
-<link rel="prev" href="advance.html" title="advance">
+<link rel="previous" href="advance.html" title="advance">
 <link rel="next" href="../../sequence.html" title="Sequence">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,21 +23,24 @@
 <a accesskey="p" href="advance.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../metafunctions.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="../../sequence.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
-<a name="fusion.iterator.metafunctions.advance_c"></a><a href="advance_c.html" title="advance_c">advance_c</a></h4></div></div></div>
+<div class="titlepage">
+<div><div><h4 class="title">
+<a name="fusion.iterator.metafunctions.advance_c"></a><a href="advance_c.html" title="advance_c">advance_c</a>
+</h4></div></div>
+<div></div>
+</div>
 <a name="fusion.iterator.metafunctions.advance_c.description"></a><h5>
-<a name="id489152"></a>
+<a name="id440866"></a>
           <a href="advance_c.html#fusion.iterator.metafunctions.advance_c.description">Description</a>
         </h5>
 <p>
           Moves an iterator by a specified distance.
         </p>
 <a name="fusion.iterator.metafunctions.advance_c.synopsis"></a><h5>
-<a name="id489183"></a>
+<a name="id440896"></a>
           <a href="advance_c.html#fusion.iterator.metafunctions.advance_c.synopsis">Synopsis</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">I</span><span class="special">,</span>
     <span class="keyword">int</span> <span class="identifier">N</span>
     <span class="special">&gt;</span>
@@ -47,7 +50,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id489302"></a><p class="title"><b>Table 1.18. Parameters</b></p>
+<a name="id441012"></a><p class="title"><b>Table 1.18. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -55,69 +58,50 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-              <p>
+<th><p>
                 Parameter
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Requirement
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Description
-              </p>
-              </th>
+              </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">I</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Model of <a href="../concepts/forward_iterator.html" title="Forward
         Iterator">Forward
                 Iterator</a>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Iterator to move relative to
-              </p>
-              </td>
+              </p></td>
 </tr>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">N</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Integer constant
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Number of positions to move
-              </p>
-              </td>
+              </p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.iterator.metafunctions.advance_c.expression_semantics"></a><h5>
-<a name="id489440"></a>
+<a name="id441149"></a>
           <a href="advance_c.html#fusion.iterator.metafunctions.advance_c.expression_semantics">Expression
           Semantics</a>
         </h5>
-<pre class="programlisting">
-<a href="advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<pre class="programlisting"><a href="advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
           <span class="bold"><b>Return type</b></span>: A model of the same iterator
@@ -132,19 +116,17 @@
           may be negative. Equivalent to <tt class="computeroutput"><a href="advance.html" title="advance"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">int_</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span></tt>.
         </p>
 <a name="fusion.iterator.metafunctions.advance_c.header"></a><h5>
-<a name="id489721"></a>
+<a name="id441427"></a>
           <a href="advance_c.html#fusion.iterator.metafunctions.advance_c.header">Header</a>
         </h5>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">advance</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">advance</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">advance</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.iterator.metafunctions.advance_c.example"></a><h5>
-<a name="id489879"></a>
+<a name="id441583"></a>
           <a href="advance_c.html#fusion.iterator.metafunctions.advance_c.example">Example</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">typedef</span> <a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">double</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">typedef</span> <a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">double</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
 <span class="keyword">typedef</span> <a href="../../sequence/intrinsic/metafunctions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></tt></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">first</span><span class="special">;</span>
 <span class="keyword">typedef</span> <a href="next.html" title="next"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></tt></a><span class="special">&lt;</span><span class="identifier">first</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">second</span><span class="special">;</span>
 <span class="keyword">typedef</span> <a href="next.html" title="next"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></tt></a><span class="special">&lt;</span><span class="identifier">second</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">third</span><span class="special">;</span>

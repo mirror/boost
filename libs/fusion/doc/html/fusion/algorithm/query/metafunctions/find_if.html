@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>find_if</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
-<link rel="prev" href="find.html" title="find">
+<link rel="previous" href="find.html" title="find">
 <link rel="next" href="count.html" title="count">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,10 +23,14 @@
 <a accesskey="p" href="find.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../metafunctions.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="count.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.algorithm.query.metafunctions.find_if"></a><a href="find_if.html" title="find_if">find_if</a></h5></div></div></div>
+<div class="titlepage">
+<div><div><h5 class="title">
+<a name="fusion.algorithm.query.metafunctions.find_if"></a><a href="find_if.html" title="find_if">find_if</a>
+</h5></div></div>
+<div></div>
+</div>
 <a name="fusion.algorithm.query.metafunctions.find_if.description"></a><h6>
-<a name="id599244"></a>
+<a name="id553516"></a>
             <a href="find_if.html#fusion.algorithm.query.metafunctions.find_if.description">Description</a>
           </h6>
 <p>
@@ -34,11 +38,10 @@
             given the sequence and predicate types.
           </p>
 <a name="fusion.algorithm.query.metafunctions.find_if.synopsis"></a><h6>
-<a name="id599288"></a>
+<a name="id553558"></a>
             <a href="find_if.html#fusion.algorithm.query.metafunctions.find_if.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">Pred</span>
     <span class="special">&gt;</span>
@@ -48,7 +51,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id599408"></a><p class="title"><b>Table 1.50. Parameters</b></p>
+<a name="id553675"></a><p class="title"><b>Table 1.50. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -56,70 +59,51 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Parameter
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Requirement
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Description
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
                   Sequence</a>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Operation's argument
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">Pred</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   A model of <a href="http://www.boost.org/libs/mpl/doc/refmanual/lambda-expression.html" target="_top">MPL
                   Lambda Expression</a>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Operation's arguments
-                </p>
-                </td>
+                </p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.algorithm.query.metafunctions.find_if.expression_semantics"></a><h6>
-<a name="id599555"></a>
+<a name="id553822"></a>
             <a href="find_if.html#fusion.algorithm.query.metafunctions.find_if.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<a href="find_if.html" title="find_if"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">find_if</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">Pred</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<pre class="programlisting"><a href="find_if.html" title="find_if"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">find_if</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">Pred</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
             <span class="bold"><b>Return type</b></span>: A model of the same iterator
@@ -132,18 +116,17 @@
             to true. Returns <tt class="computeroutput"><a href="../../../sequence/intrinsic/metafunctions/end.html" title="end"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">end</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span></tt> if there is no such element.
           </p>
 <a name="fusion.algorithm.query.metafunctions.find_if.complexity"></a><h6>
-<a name="id599760"></a>
+<a name="id554022"></a>
             <a href="find_if.html#fusion.algorithm.query.metafunctions.find_if.complexity">Complexity</a>
           </h6>
 <p>
             Linear. At most <tt class="computeroutput"><a href="../../../sequence/intrinsic/metafunctions/size.html" title="size"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">size</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">value</span></tt> comparisons.
           </p>
 <a name="fusion.algorithm.query.metafunctions.find_if.header"></a><h6>
-<a name="id599842"></a>
+<a name="id554103"></a>
             <a href="find_if.html#fusion.algorithm.query.metafunctions.find_if.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">query</span><span class="special">/</span><span class="identifier">find_if</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">query</span><span class="special">/</span><span class="identifier">find_if</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">find_if</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 </div>

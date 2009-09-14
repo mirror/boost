@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>is_view</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../support.html" title="Support">
-<link rel="prev" href="is_sequence.html" title="is_sequence">
+<link rel="previous" href="is_sequence.html" title="is_sequence">
 <link rel="next" href="tag_of.html" title="tag_of">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,10 +23,14 @@
 <a accesskey="p" href="is_sequence.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../support.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="tag_of.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="fusion.support.is_view"></a><a href="is_view.html" title="is_view">is_view</a></h3></div></div></div>
+<div class="titlepage">
+<div><div><h3 class="title">
+<a name="fusion.support.is_view"></a><a href="is_view.html" title="is_view">is_view</a>
+</h3></div></div>
+<div></div>
+</div>
 <a name="fusion.support.is_view.description"></a><h4>
-<a name="id460869"></a>
+<a name="id413283"></a>
         <a href="is_view.html#fusion.support.is_view.description">Description</a>
       </h4>
 <p>
@@ -40,11 +44,10 @@
         specialized to accomodate clients providing Fusion conforming views.
       </p>
 <a name="fusion.support.is_view.synopsis"></a><h4>
-<a name="id460981"></a>
+<a name="id413377"></a>
         <a href="is_view.html#fusion.support.is_view.synopsis">Synopsis</a>
       </h4>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">traits</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">traits</span>
 <span class="special">{</span>
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">is_view</span>
@@ -54,7 +57,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.support.is_view.parameters"></a><h4>
-<a name="id461111"></a>
+<a name="id413493"></a>
         <a href="is_view.html#fusion.support.is_view.parameters">Parameters</a>
       </h4>
 <div class="informaltable"><table class="table">
@@ -64,46 +67,33 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-              <p>
+<th><p>
                 Parameter
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Requirement
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Description
-              </p>
-              </th>
+              </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">T</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Any type
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 The type to query.
-              </p>
-              </td>
+              </p></td>
 </tr></tbody>
 </table></div>
 <a name="fusion.support.is_view.expression_semantics"></a><h4>
-<a name="id461217"></a>
+<a name="id413592"></a>
         <a href="is_view.html#fusion.support.is_view.expression_semantics">Expression Semantics</a>
       </h4>
-<pre class="programlisting">
-<span class="keyword">typedef</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">is_view</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">c</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">is_view</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">c</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><b>Return type</b></span>: An <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
@@ -116,19 +106,17 @@
         otherwise.
       </p>
 <a name="fusion.support.is_view.header"></a><h4>
-<a name="id461388"></a>
+<a name="id413741"></a>
         <a href="is_view.html#fusion.support.is_view.header">Header</a>
       </h4>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">is_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">is_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">is_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.support.is_view.example"></a><h4>
-<a name="id461544"></a>
+<a name="id413879"></a>
         <a href="is_view.html#fusion.support.is_view.example">Example</a>
       </h4>
-<pre class="programlisting">
-<span class="identifier">BOOST_MPL_ASSERT_NOT</span><span class="special">((</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">is_view</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">));</span>
+<pre class="programlisting"><span class="identifier">BOOST_MPL_ASSERT_NOT</span><span class="special">((</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">is_view</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">));</span>
 <span class="identifier">BOOST_MPL_ASSERT_NOT</span><span class="special">((</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">is_view</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="special">));</span>
 
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">_</span>

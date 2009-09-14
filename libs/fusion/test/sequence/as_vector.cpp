@@ -27,7 +27,7 @@ main()
     std::cout << tuple_delimiter(", ");
 
     {
-        vector0 empty;
+        vector0<> empty;
         std::cout << as_vector(make_list(1, 1.23, "harru")) << std::endl;
         std::cout << as_vector(push_back(empty, 999)) << std::endl;
         

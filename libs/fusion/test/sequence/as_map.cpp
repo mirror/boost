@@ -28,7 +28,7 @@ main()
     std::cout << tuple_delimiter(", ");
 
     {
-        vector0 empty;
+        vector0<> empty;
         std::cout << as_map(make_list(make_pair<int>('X'), make_pair<double>("Men"))) << std::endl;
         std::cout << as_map(push_back(empty, make_pair<int>(999))) << std::endl;
     }

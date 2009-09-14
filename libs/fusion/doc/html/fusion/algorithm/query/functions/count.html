@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>count</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
-<link rel="prev" href="find_if.html" title="find_if">
+<link rel="previous" href="find_if.html" title="find_if">
 <link rel="next" href="count_if.html" title="count_if">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,21 +23,24 @@
 <a accesskey="p" href="find_if.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="count_if.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.algorithm.query.functions.count"></a><a href="count.html" title="count">count</a></h5></div></div></div>
+<div class="titlepage">
+<div><div><h5 class="title">
+<a name="fusion.algorithm.query.functions.count"></a><a href="count.html" title="count">count</a>
+</h5></div></div>
+<div></div>
+</div>
 <a name="fusion.algorithm.query.functions.count.description"></a><h6>
-<a name="id594273"></a>
+<a name="id548586"></a>
             <a href="count.html#fusion.algorithm.query.functions.count.description">Description</a>
           </h6>
 <p>
             Returns the number of elements of a given type within a sequence.
           </p>
 <a name="fusion.algorithm.query.functions.count.synopsis"></a><h6>
-<a name="id594303"></a>
+<a name="id548614"></a>
             <a href="count.html#fusion.algorithm.query.functions.count.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">T</span>
     <span class="special">&gt;</span>
@@ -45,7 +48,7 @@
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">t</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id594507"></a><p class="title"><b>Table 1.44. Parameters</b></p>
+<a name="id548815"></a><p class="title"><b>Table 1.44. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -53,72 +56,53 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Parameter
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Requirement
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Description
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">seq</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
                   Sequence</a>, <tt class="computeroutput"><span class="identifier">e</span> <span class="special">==</span> <span class="identifier">t</span></tt>
                   must be a valid expression, convertible to <tt class="computeroutput"><span class="keyword">bool</span></tt>,
                   for each element <tt class="computeroutput"><span class="identifier">e</span></tt>
                   in <tt class="computeroutput"><span class="identifier">seq</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   The sequence to search
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">T</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Any type
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   The type to count
-                </p>
-                </td>
+                </p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.algorithm.query.functions.count.expression_semantics"></a><h6>
-<a name="id594700"></a>
+<a name="id549006"></a>
             <a href="count.html#fusion.algorithm.query.functions.count.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<a href="count.html" title="count"><tt class="computeroutput"><span class="identifier">count</span></tt></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">t</span><span class="special">);</span>
+<pre class="programlisting"><a href="count.html" title="count"><tt class="computeroutput"><span class="identifier">count</span></tt></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">t</span><span class="special">);</span>
 </pre>
 <p>
             <span class="bold"><b>Return type</b></span>: <tt class="computeroutput"><span class="keyword">int</span></tt>
@@ -129,26 +113,24 @@
             <tt class="computeroutput"><span class="identifier">t</span></tt> in <tt class="computeroutput"><span class="identifier">seq</span></tt>.
           </p>
 <a name="fusion.algorithm.query.functions.count.complexity"></a><h6>
-<a name="id594838"></a>
+<a name="id549142"></a>
             <a href="count.html#fusion.algorithm.query.functions.count.complexity">Complexity</a>
           </h6>
 <p>
             Linear. At most <tt class="computeroutput"><a href="../../../sequence/intrinsic/metafunctions/size.html" title="size"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">size</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">value</span></tt> comparisons.
           </p>
 <a name="fusion.algorithm.query.functions.count.header"></a><h6>
-<a name="id594919"></a>
+<a name="id549220"></a>
             <a href="count.html#fusion.algorithm.query.functions.count.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">query</span><span class="special">/</span><span class="identifier">count</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">query</span><span class="special">/</span><span class="identifier">count</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">count</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithm.query.functions.count.example"></a><h6>
-<a name="id595085"></a>
+<a name="id549383"></a>
             <a href="count.html#fusion.algorithm.query.functions.count.example">Example</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">const</span> <a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">1.0</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">const</span> <a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">1.0</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">);</span>
 <span class="identifier">assert</span><span class="special">(</span><a href="count.html" title="count"><tt class="computeroutput"><span class="identifier">count</span></tt></a><span class="special">(</span><span class="identifier">vec</span><span class="special">,</span><span class="number">2</span><span class="special">)</span> <span class="special">==</span> <span class="number">1</span><span class="special">);</span>
 </pre>
 </div>

@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Quick Start</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter 1. Fusion 2.0">
-<link rel="prev" href="introduction.html" title="Introduction">
+<link rel="previous" href="introduction.html" title="Introduction">
 <link rel="next" href="organization.html" title="Organization">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,8 +23,12 @@
 <a accesskey="p" href="introduction.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="organization.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="fusion.quick_start"></a><a href="quick_start.html" title="Quick Start">Quick Start</a></h2></div></div></div>
+<div class="titlepage">
+<div><div><h2 class="title" style="clear: both">
+<a name="fusion.quick_start"></a><a href="quick_start.html" title="Quick Start">Quick Start</a>
+</h2></div></div>
+<div></div>
+</div>
 <p>
       I assume the reader is already familiar with tuples (<a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html" target="_top">Boost.Tuple</a>)
       and its ancestor <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></tt>. The tuple is a generalization of <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></tt>
@@ -33,20 +37,18 @@
     </p>
 <p>
       For starters, we shall include all of Fusion's <a href="sequence.html" title="Sequence">Sequence</a>(s)
-      <sup>[<a name="id456330" href="#ftn.id456330">2</a>]</sup>
+      <sup>[<a name="id409224" href="#ftn.id409224">2</a>]</sup>
       :
     </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
       Let's begin with a <tt class="computeroutput"><a href="container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a></tt>
-      <sup>[<a name="id456497" href="#ftn.id456497">3</a>]</sup>
+      <sup>[<a name="id409371" href="#ftn.id409371">3</a>]</sup>
       :
     </p>
-<pre class="programlisting">
-<a href="container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="identifier">stuff</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'x'</span><span class="special">,</span> <span class="string">"howdy"</span><span class="special">);</span>
+<pre class="programlisting"><a href="container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="identifier">stuff</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'x'</span><span class="special">,</span> <span class="string">"howdy"</span><span class="special">);</span>
 <span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <a href="sequence/intrinsic/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">stuff</span><span class="special">);</span>
 <span class="keyword">char</span> <span class="identifier">ch</span> <span class="special">=</span> <a href="sequence/intrinsic/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">stuff</span><span class="special">);</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">s</span> <span class="special">=</span> <a href="sequence/intrinsic/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">2</span><span class="special">&gt;(</span><span class="identifier">stuff</span><span class="special">);</span>
@@ -60,23 +62,21 @@
       Let's see some examples.
     </p>
 <a name="fusion.quick_start.print_the_vector_as_xml"></a><h3>
-<a name="id456960"></a>
+<a name="id409787"></a>
       <a href="quick_start.html#fusion.quick_start.print_the_vector_as_xml">Print the vector
       as XML</a>
     </h3>
 <p>
       First, let's include the algorithms:
     </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
       Now, let's write a function object that prints XML of the form &lt;type&gt;data&lt;/type&gt;
       for each member in the tuple.
     </p>
-<pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">print_xml</span>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">print_xml</span>
 <span class="special">{</span>
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
     <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="keyword">const</span>
@@ -92,8 +92,7 @@
 <p>
       Now, finally:
     </p>
-<pre class="programlisting">
-<a href="algorithm/iteration/functions/for_each.html" title="for_each"><tt class="computeroutput"><span class="identifier">for_each</span></tt></a><span class="special">(</span><span class="identifier">stuff</span><span class="special">,</span> <span class="identifier">print_xml</span><span class="special">());</span>
+<pre class="programlisting"><a href="algorithm/iteration/functions/for_each.html" title="for_each"><tt class="computeroutput"><span class="identifier">for_each</span></tt></a><span class="special">(</span><span class="identifier">stuff</span><span class="special">,</span> <span class="identifier">print_xml</span><span class="special">());</span>
 </pre>
 <p>
       That's it! <tt class="computeroutput"><a href="algorithm/iteration/functions/for_each.html" title="for_each"><tt class="computeroutput"><span class="identifier">for_each</span></tt></a></tt> is a fusion algorithm.
@@ -118,7 +117,7 @@
       print just about any Fusion <a href="sequence.html" title="Sequence">Sequence</a>.
     </p>
 <a name="fusion.quick_start.print_only_pointers"></a><h3>
-<a name="id457618"></a>
+<a name="id410381"></a>
       <a href="quick_start.html#fusion.quick_start.print_only_pointers">Print only pointers</a>
     </h3>
 <p>
@@ -127,14 +126,12 @@
       which are pointers. Ah, easy. First, let's include the <tt class="computeroutput"><span class="identifier">is_pointer</span></tt>
       boost type trait:
     </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">is_pointer</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">is_pointer</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
       Then, simply:
     </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
 <span class="keyword">void</span> <span class="identifier">xml_print_pointers</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">)</span>
 <span class="special">{</span>
     <a href="algorithm/iteration/functions/for_each.html" title="for_each"><tt class="computeroutput"><span class="identifier">for_each</span></tt></a><span class="special">(</span><a href="algorithm/transformation/functions/filter_if.html" title="filter_if"><tt class="computeroutput"><span class="identifier">filter_if</span></tt></a><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_pointer</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;</span> <span class="special">&gt;(</span><span class="identifier">seq</span><span class="special">),</span> <span class="identifier">print_xml</span><span class="special">());</span>
@@ -152,7 +149,7 @@
       Easy, right?
     </p>
 <a name="fusion.quick_start.associative_tuples"></a><h3>
-<a name="id458029"></a>
+<a name="id410745"></a>
       <a href="quick_start.html#fusion.quick_start.associative_tuples">Associative tuples</a>
     </h3>
 <p>
@@ -169,8 +166,7 @@
       associate types with elements. It can be used as a cleverer replacement of
       the <tt class="computeroutput"><span class="keyword">struct</span></tt>. Example:
     </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">fields</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">fields</span>
 <span class="special">{</span>
     <span class="keyword">struct</span> <span class="identifier">name</span><span class="special">;</span>
     <span class="keyword">struct</span> <span class="identifier">age</span><span class="special">;</span>
@@ -190,8 +186,7 @@
       For example, given a <tt class="computeroutput"><span class="identifier">a_person</span></tt>
       of type, <tt class="computeroutput"><span class="identifier">person</span></tt>, you can do:
     </p>
-<pre class="programlisting">
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">fields</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">fields</span><span class="special">;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">person_name</span> <span class="special">=</span> <a href="sequence/intrinsic/functions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">name</span><span class="special">&gt;(</span><span class="identifier">a_person</span><span class="special">);</span>
 <span class="keyword">int</span> <span class="identifier">person_age</span> <span class="special">=</span> <a href="sequence/intrinsic/functions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">age</span><span class="special">&gt;(</span><span class="identifier">a_person</span><span class="special">);</span>
 </pre>
@@ -204,8 +199,7 @@
       <tt class="computeroutput"><a href="container/map.html" title="map"><tt class="computeroutput"><span class="identifier">map</span></tt></a></tt>s.
       Example:
     </p>
-<pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">saver</span>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">saver</span>
 <span class="special">{</span>
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Pair</span><span class="special">&gt;</span>
     <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Pair</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">data</span><span class="special">)</span> <span class="keyword">const</span>
@@ -227,7 +221,7 @@
       a <tt class="computeroutput"><span class="identifier">dog</span></tt> or a whole <tt class="computeroutput"><span class="identifier">alternate_universe</span></tt>.
     </p>
 <a name="fusion.quick_start.tip_of_the_iceberg"></a><h3>
-<a name="id459070"></a>
+<a name="id411659"></a>
       <a href="quick_start.html#fusion.quick_start.tip_of_the_iceberg">Tip of the Iceberg</a>
     </h3>
 <p>
@@ -238,12 +232,12 @@
     </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id456330" href="#id456330">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id409224" href="#id409224">2</a>] </sup>
           There are finer grained header files available if you wish to have more
           control over which components to include (see section <a href="organization.html" title="Organization">Orgainization</a>
           for details).
         </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id456497" href="#id456497">3</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id409371" href="#id409371">3</a>] </sup>
           Unless otherwise noted, components are in namespace <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">fusion</span></tt>.
           For the sake of simplicity, code in this quick start implies <tt class="computeroutput"><span class="keyword">using</span></tt> directives for the fusion components
           we will be using.

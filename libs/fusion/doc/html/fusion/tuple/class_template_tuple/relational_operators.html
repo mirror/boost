@@ -4,10 +4,10 @@
 <title>Relational
         operators</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../class_template_tuple.html" title="Class template tuple">
-<link rel="prev" href="element_access.html" title="Element
+<link rel="previous" href="element_access.html" title="Element
         access">
 <link rel="next" href="../pairs.html" title="Pairs">
 </head>
@@ -25,12 +25,16 @@
 <a accesskey="p" href="element_access.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../class_template_tuple.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="../pairs.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
+<div class="titlepage">
+<div><div><h4 class="title">
 <a name="fusion.tuple.class_template_tuple.relational_operators"></a><a href="relational_operators.html" title="Relational
         operators">Relational
-        operators</a></h4></div></div></div>
+        operators</a>
+</h4></div></div>
+<div></div>
+</div>
 <a name="fusion.tuple.class_template_tuple.relational_operators.description"></a><h5>
-<a name="id639554"></a>
+<a name="id593064"></a>
           <a href="relational_operators.html#fusion.tuple.class_template_tuple.relational_operators.description">Description</a>
         </h5>
 <p>
@@ -38,7 +42,7 @@
           Tuple</a> provides the standard boolean relational operators.
         </p>
 <a name="fusion.tuple.class_template_tuple.relational_operators.specification"></a><h5>
-<a name="id639594"></a>
+<a name="id593102"></a>
           <a href="relational_operators.html#fusion.tuple.class_template_tuple.relational_operators.specification">Specification</a>
         </h5>
 <div class="variablelist">
@@ -69,8 +73,7 @@
             </p></dd>
 </dl>
 </div>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
          <span class="keyword">typename</span> <span class="identifier">U1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">UN</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">==(</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
@@ -95,8 +98,7 @@
           <span class="special">==</span> <span class="identifier">f</span></tt>
           returns <tt class="computeroutput"><span class="keyword">true</span></tt>.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
          <span class="keyword">typename</span> <span class="identifier">U1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">UN</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">&lt;(</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
@@ -116,8 +118,7 @@
           comparison of between <tt class="computeroutput"><span class="identifier">lhs</span></tt>
           and <tt class="computeroutput"><span class="identifier">rhs</span></tt>.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
          <span class="keyword">typename</span> <span class="identifier">U1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">UN</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">!=(</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
@@ -135,8 +136,7 @@
 <p>
           <span class="bold"><b>Semantics</b></span>: Returns <tt class="computeroutput"><span class="special">!(</span><span class="identifier">lhs</span> <span class="special">==</span> <span class="identifier">rhs</span><span class="special">)</span></tt>.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
          <span class="keyword">typename</span> <span class="identifier">U1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">UN</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">&lt;=(</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
@@ -154,8 +154,7 @@
 <p>
           <span class="bold"><b>Semantics</b></span>: Returns <tt class="computeroutput"><span class="special">!(</span><span class="identifier">rhs</span> <span class="special">&lt;</span> <span class="identifier">lhs</span><span class="special">)</span></tt>
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
          <span class="keyword">typename</span> <span class="identifier">U1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">UN</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">&gt;(</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>
@@ -174,8 +173,7 @@
           <span class="bold"><b>Semantics</b></span>: Returns <tt class="computeroutput"><span class="identifier">rhs</span>
           <span class="special">&lt;</span> <span class="identifier">lhs</span></tt>.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">,</span>
          <span class="keyword">typename</span> <span class="identifier">U1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">U2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">UN</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">&gt;=(</span>
     <span class="keyword">const</span> <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&gt;&amp;</span> <span class="identifier">lhs</span><span class="special">,</span>

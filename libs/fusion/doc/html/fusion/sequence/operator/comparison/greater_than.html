@@ -4,10 +4,10 @@
 <title>greater
           than</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../comparison.html" title="Comparison">
-<link rel="prev" href="less_than_equal.html" title="less
+<link rel="previous" href="less_than_equal.html" title="less
           than equal">
 <link rel="next" href="greater_than_equal.html" title="greater
           than equal">
@@ -26,24 +26,27 @@
 <a accesskey="p" href="less_than_equal.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../comparison.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="greater_than_equal.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
+<div class="titlepage">
+<div><div><h5 class="title">
 <a name="fusion.sequence.operator.comparison.greater_than"></a><a href="greater_than.html" title="greater
           than">greater
-          than</a></h5></div></div></div>
+          than</a>
+</h5></div></div>
+<div></div>
+</div>
 <p>
             Lexicographically compare two sequences.
           </p>
 <a name="fusion.sequence.operator.comparison.greater_than.synopsis"></a><h6>
-<a name="id525513"></a>
+<a name="id476664"></a>
             <a href="greater_than.html#fusion.sequence.operator.comparison.greater_than.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Seq1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Seq2</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Seq1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Seq2</span><span class="special">&gt;</span>
 <span class="keyword">bool</span>
 <span class="keyword">operator</span><span class="special">&gt;(</span><span class="identifier">Seq1</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Seq2</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">b</span><span class="special">);</span>
 </pre>
 <a name="fusion.sequence.operator.comparison.greater_than.parameters"></a><h6>
-<a name="id525669"></a>
+<a name="id476816"></a>
             <a href="greater_than.html#fusion.sequence.operator.comparison.greater_than.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -53,48 +56,35 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                  <p>
+<th><p>
                     Parameter
-                  </p>
-                  </th>
-<th>
-                  <p>
+                  </p></th>
+<th><p>
                     Requirement
-                  </p>
-                  </th>
-<th>
-                  <p>
+                  </p></th>
+<th><p>
                     Description
-                  </p>
-                  </th>
+                  </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-                  <p>
+<td><p>
                     <tt class="computeroutput"><span class="identifier">a</span><span class="special">,</span>
                     <span class="identifier">b</span></tt>
-                  </p>
-                  </td>
-<td>
-                  <p>
+                  </p></td>
+<td><p>
                     Instances of <a href="../../../sequence.html" title="Sequence">Sequence</a>
-                  </p>
-                  </td>
-<td>
-                  <p>
+                  </p></td>
+<td><p>
                     <a href="../../../sequence.html" title="Sequence">Sequence</a>(s) to compare
-                  </p>
-                  </td>
+                  </p></td>
 </tr></tbody>
 </table></div>
 <a name="fusion.sequence.operator.comparison.greater_than.expression_semantics"></a><h6>
-<a name="id525803"></a>
+<a name="id476948"></a>
             <a href="greater_than.html#fusion.sequence.operator.comparison.greater_than.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<span class="identifier">a</span> <span class="special">&gt;</span> <span class="identifier">b</span>
+<pre class="programlisting"><span class="identifier">a</span> <span class="special">&gt;</span> <span class="identifier">b</span>
 </pre>
 <p>
             <span class="bold"><b>Return type</b></span>: <tt class="computeroutput"><span class="keyword">bool</span></tt>
@@ -117,19 +107,17 @@
             <span class="bold"><b>Semantics</b></span>: Returns b &lt; a.
           </p>
 <a name="fusion.sequence.operator.comparison.greater_than.header"></a><h6>
-<a name="id525983"></a>
+<a name="id477125"></a>
             <a href="greater_than.html#fusion.sequence.operator.comparison.greater_than.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">comparison</span><span class="special">/</span><span class="identifier">less_equal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">comparison</span><span class="special">/</span><span class="identifier">less_equal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">less_equal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequence.operator.comparison.greater_than.example"></a><h6>
-<a name="id526153"></a>
+<a name="id477292"></a>
             <a href="greater_than.html#fusion.sequence.operator.comparison.greater_than.example">Example</a>
           </h6>
-<pre class="programlisting">
-<a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">v1</span><span class="special">(</span><span class="number">4</span><span class="special">,</span> <span class="number">3.3f</span><span class="special">);</span>
+<pre class="programlisting"><a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">v1</span><span class="special">(</span><span class="number">4</span><span class="special">,</span> <span class="number">3.3f</span><span class="special">);</span>
 <a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">short</span><span class="special">,</span> <span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">v2</span><span class="special">(</span><span class="number">5</span><span class="special">,</span> <span class="number">3.3f</span><span class="special">);</span>
 <a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">long</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v3</span><span class="special">(</span><span class="number">5</span><span class="special">,</span> <span class="number">4.4</span><span class="special">);</span>
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">v2</span> <span class="special">&gt;</span> <span class="identifier">v1</span><span class="special">);</span>

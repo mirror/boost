@@ -340,7 +340,7 @@ void result_type_tests()
     using boost::is_same;
 
     BOOST_TEST(( is_same<
-      fusion::result_of::invoke<int (*)(), fusion::vector0 >::type, int
+      fusion::result_of::invoke<int (*)(), fusion::vector0<> >::type, int
     >::value ));
 // disabled until boost::result_of supports it
 //    BOOST_TEST(( is_same<

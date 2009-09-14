@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>single_view</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../view.html" title="View">
-<link rel="prev" href="../view.html" title="View">
+<link rel="previous" href="../view.html" title="View">
 <link rel="next" href="filter_view.html" title="filter_view">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,30 +23,32 @@
 <a accesskey="p" href="../view.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../view.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="filter_view.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="fusion.view.single_view"></a><a href="single_view.html" title="single_view">single_view</a></h3></div></div></div>
+<div class="titlepage">
+<div><div><h3 class="title">
+<a name="fusion.view.single_view"></a><a href="single_view.html" title="single_view">single_view</a>
+</h3></div></div>
+<div></div>
+</div>
 <p>
         <tt class="computeroutput"><span class="identifier">single_view</span></tt> is a view into
         a value as a single element sequence.
       </p>
 <a name="fusion.view.single_view.header"></a><h4>
-<a name="id563267"></a>
+<a name="id517956"></a>
         <a href="single_view.html#fusion.view.single_view.header">Header</a>
       </h4>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">single_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">single_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">single_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.view.single_view.synopsis"></a><h4>
-<a name="id563424"></a>
+<a name="id518112"></a>
         <a href="single_view.html#fusion.view.single_view.synopsis">Synopsis</a>
       </h4>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">single_view</span><span class="special">;</span>
 </pre>
 <a name="fusion.view.single_view.template_parameters"></a><h4>
-<a name="id563504"></a>
+<a name="id518189"></a>
         <a href="single_view.html#fusion.view.single_view.template_parameters">Template parameters</a>
       </h4>
 <div class="informaltable"><table class="table">
@@ -56,41 +58,29 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-              <p>
+<th><p>
                 Parameter
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Description
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Default
-              </p>
-              </th>
+              </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">T</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Any type
-              </p>
-              </td>
-<td>
-              <p>
-              </p>
-              </td>
+              </p></td>
+<td><p>
+              </p></td>
 </tr></tbody>
 </table></div>
 <a name="fusion.view.single_view.model_of"></a><h4>
-<a name="id563608"></a>
+<a name="id518292"></a>
         <a href="single_view.html#fusion.view.single_view.model_of">Model of</a>
       </h4>
 <div class="itemizedlist"><ul type="disc"><li><a href="../sequence/concepts/forward_sequence.html" title="Forward
@@ -114,7 +104,7 @@
 </dl>
 </div>
 <a name="fusion.view.single_view.expression_semantics"></a><h4>
-<a name="id563773"></a>
+<a name="id518455"></a>
         <a href="single_view.html#fusion.view.single_view.expression_semantics">Expression Semantics</a>
       </h4>
 <p>
@@ -129,68 +119,51 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-              <p>
+<th><p>
                 Expression
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Semantics
-              </p>
-              </th>
+              </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Creates a <tt class="computeroutput"><span class="identifier">single_view</span></tt>
                 from <tt class="computeroutput"><span class="identifier">x</span></tt>.
-              </p>
-              </td>
+              </p></td>
 </tr>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Copy constructs a <tt class="computeroutput"><span class="identifier">single_view</span></tt>
                 from another <tt class="computeroutput"><span class="identifier">single_view</span></tt>,
                 <tt class="computeroutput"><span class="identifier">s</span></tt>.
-              </p>
-              </td>
+              </p></td>
 </tr>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">s</span> <span class="special">=</span>
                 <span class="identifier">s2</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Assigns to a <tt class="computeroutput"><span class="identifier">single_view</span></tt>,
                 <tt class="computeroutput"><span class="identifier">s</span></tt>, from another
                 <tt class="computeroutput"><span class="identifier">single_view</span></tt>, <tt class="computeroutput"><span class="identifier">s2</span></tt>.
-              </p>
-              </td>
+              </p></td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.view.single_view.example"></a><h4>
-<a name="id564085"></a>
+<a name="id518764"></a>
         <a href="single_view.html#fusion.view.single_view.example">Example</a>
       </h4>
-<pre class="programlisting">
-<span class="identifier">single_view</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">view</span><span class="special">(</span><span class="number">3</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">single_view</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">view</span><span class="special">(</span><span class="number">3</span><span class="special">);</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">view</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
 </div>

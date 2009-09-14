@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>pop_back</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
-<link rel="prev" href="zip.html" title="zip">
+<link rel="previous" href="zip.html" title="zip">
 <link rel="next" href="pop_front.html" title="pop_front">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,10 +23,14 @@
 <a accesskey="p" href="zip.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../metafunctions.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="pop_front.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.algorithm.transformation.metafunctions.pop_back"></a><a href="pop_back.html" title="pop_back">pop_back</a></h5></div></div></div>
+<div class="titlepage">
+<div><div><h5 class="title">
+<a name="fusion.algorithm.transformation.metafunctions.pop_back"></a><a href="pop_back.html" title="pop_back">pop_back</a>
+</h5></div></div>
+<div></div>
+</div>
 <a name="fusion.algorithm.transformation.metafunctions.pop_back.description"></a><h6>
-<a name="id634433"></a>
+<a name="id588036"></a>
             <a href="pop_back.html#fusion.algorithm.transformation.metafunctions.pop_back.description">Description</a>
           </h6>
 <p>
@@ -34,11 +38,10 @@
             type.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.pop_back.synopsis"></a><h6>
-<a name="id634483"></a>
+<a name="id588083"></a>
             <a href="pop_back.html#fusion.algorithm.transformation.metafunctions.pop_back.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span>
     <span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">pop_back</span>
@@ -47,7 +50,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id634586"></a><p class="title"><b>Table 1.87. Parameters</b></p>
+<a name="id588183"></a><p class="title"><b>Table 1.87. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -55,50 +58,37 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Parameter
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Requirement
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Description
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
                   Sequence</a>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Operation's argument
-                </p>
-                </td>
+                </p></td>
 </tr></tbody>
 </table>
 </div>
 <a name="fusion.algorithm.transformation.metafunctions.pop_back.expression_semantics"></a><h6>
-<a name="id634690"></a>
+<a name="id588288"></a>
             <a href="pop_back.html#fusion.algorithm.transformation.metafunctions.pop_back.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<a href="pop_back.html" title="pop_back"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">pop_back</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<pre class="programlisting"><a href="pop_back.html" title="pop_back"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">pop_back</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
             <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
@@ -111,18 +101,17 @@
             except the last element.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.pop_back.complexity"></a><h6>
-<a name="id634819"></a>
+<a name="id588411"></a>
             <a href="pop_back.html#fusion.algorithm.transformation.metafunctions.pop_back.complexity">Complexity</a>
           </h6>
 <p>
             Constant.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.pop_back.header"></a><h6>
-<a name="id634849"></a>
+<a name="id588441"></a>
             <a href="pop_back.html#fusion.algorithm.transformation.metafunctions.pop_back.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">tranformation</span><span class="special">/</span><span class="identifier">pop_back</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">tranformation</span><span class="special">/</span><span class="identifier">pop_back</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">pop_back</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 </div>

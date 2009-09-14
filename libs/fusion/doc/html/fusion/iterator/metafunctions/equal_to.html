@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>equal_to</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
-<link rel="prev" href="prior.html" title="prior">
+<link rel="previous" href="prior.html" title="prior">
 <link rel="next" href="distance.html" title="distance">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,10 +23,14 @@
 <a accesskey="p" href="prior.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../metafunctions.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="distance.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
-<a name="fusion.iterator.metafunctions.equal_to"></a><a href="equal_to.html" title="equal_to">equal_to</a></h4></div></div></div>
+<div class="titlepage">
+<div><div><h4 class="title">
+<a name="fusion.iterator.metafunctions.equal_to"></a><a href="equal_to.html" title="equal_to">equal_to</a>
+</h4></div></div>
+<div></div>
+</div>
 <a name="fusion.iterator.metafunctions.equal_to.description"></a><h5>
-<a name="id486044"></a>
+<a name="id437799"></a>
           <a href="equal_to.html#fusion.iterator.metafunctions.equal_to.description">Description</a>
         </h5>
 <p>
@@ -35,11 +39,10 @@
           and <tt class="computeroutput"><span class="identifier">J</span></tt> are equal.
         </p>
 <a name="fusion.iterator.metafunctions.equal_to.synopsis"></a><h5>
-<a name="id486107"></a>
+<a name="id437859"></a>
           <a href="equal_to.html#fusion.iterator.metafunctions.equal_to.synopsis">Synopsis</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">I</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">J</span>
     <span class="special">&gt;</span>
@@ -49,7 +52,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id486224"></a><p class="title"><b>Table 1.15. Parameters</b></p>
+<a name="id437975"></a><p class="title"><b>Table 1.15. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -57,48 +60,35 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-              <p>
+<th><p>
                 Parameter
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Requirement
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Description
-              </p>
-              </th>
+              </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">I</span></tt>, <tt class="computeroutput"><span class="identifier">J</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Any fusion iterators
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Operation's arguments
-              </p>
-              </td>
+              </p></td>
 </tr></tbody>
 </table>
 </div>
 <a name="fusion.iterator.metafunctions.equal_to.expression_semantics"></a><h5>
-<a name="id486329"></a>
+<a name="id438078"></a>
           <a href="equal_to.html#fusion.iterator.metafunctions.equal_to.expression_semantics">Expression
           Semantics</a>
         </h5>
-<pre class="programlisting">
-<a href="equal_to.html" title="equal_to"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">equal_to</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<pre class="programlisting"><a href="equal_to.html" title="equal_to"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">equal_to</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
           <span class="bold"><b>Return type</b></span>: A model of <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
@@ -110,19 +100,17 @@
           Returns <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span></tt> otherwise.
         </p>
 <a name="fusion.iterator.metafunctions.equal_to.header"></a><h5>
-<a name="id486536"></a>
+<a name="id438284"></a>
           <a href="equal_to.html#fusion.iterator.metafunctions.equal_to.header">Header</a>
         </h5>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">equal_to</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">equal_to</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">equal_to</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.iterator.metafunctions.equal_to.example"></a><h5>
-<a name="id486695"></a>
+<a name="id438440"></a>
           <a href="equal_to.html#fusion.iterator.metafunctions.equal_to.example">Example</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">typedef</span> <a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">typedef</span> <a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
 <span class="keyword">typedef</span> <a href="../../sequence/intrinsic/metafunctions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></tt></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">first</span><span class="special">;</span>
 <span class="keyword">typedef</span> <a href="../../sequence/intrinsic/metafunctions/end.html" title="end"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">end</span></tt></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">last</span><span class="special">;</span>
 <span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><a href="equal_to.html" title="equal_to"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">equal_to</span></tt></a><span class="special">&lt;</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">first</span><span class="special">&gt;));</span>

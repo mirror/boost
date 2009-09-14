@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Adapted</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter 1. Fusion 2.0">
-<link rel="prev" href="view/reverse_view.html" title="reverse_view">
+<link rel="previous" href="view/reverse_view.html" title="reverse_view">
 <link rel="next" href="adapted/std__pair.html" title="std::pair">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,8 +23,12 @@
 <a accesskey="p" href="view/reverse_view.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="adapted/std__pair.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="fusion.adapted"></a><a href="adapted.html" title="Adapted">Adapted</a></h2></div></div></div>
+<div class="titlepage">
+<div><div><h2 class="title" style="clear: both">
+<a name="fusion.adapted"></a><a href="adapted.html" title="Adapted">Adapted</a>
+</h2></div></div>
+<div></div>
+</div>
 <div class="toc"><dl>
 <dt><span class="section"><a href="adapted/std__pair.html">std::pair</a></span></dt>
 <dt><span class="section"><a href="adapted/mpl_sequence.html">mpl sequence</a></span></dt>
@@ -46,11 +50,10 @@
       various data structures, non-intrusively, as full fledged Fusion sequences.
     </p>
 <a name="fusion.adapted.header"></a><h3>
-<a name="id573642"></a>
+<a name="id528254"></a>
       <a href="adapted.html#fusion.adapted.header">Header</a>
     </h3>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
@@ -60,15 +63,13 @@
       and Fusion. To make Fusion sequences fully conforming <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a>
       sequences, include:
     </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">mpl</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">mpl</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
       If you want bi-directional adaptation to and from <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a>
       and Fusion, simply include:
     </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">mpl</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">mpl</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
       The header includes all the necessary headers.

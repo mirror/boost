@@ -48,7 +48,6 @@ sequence container, and in many cases the most efficient.
 
 [*Numbered forms]
 
-    template <>
     struct vector0;
 
     template <typename T0>
@@ -629,14 +628,13 @@ Create a __set__ from one or more values.
     typename __result_of_make_set__<T0, T1,... TN>::type
     make_set(T0 const& x0, T1 const& x1... TN const& xN);
 
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote
-`set` is implemented in terms of the vector. That is why we reuse
-`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user
-definable predefined maximum that defaults to `10`. You may define the
-preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion
-header to change the default. Example:
+The variadic function accepts `0` to `FUSION_MAX_SET_SIZE` elements,
+where `FUSION_MAX_SET_SIZE` is a user definable predefined maximum that
+defaults to `10`. You may define the preprocessor constant
+`FUSION_MAX_SET_SIZE` before including any Fusion header to change the
+default. Example:
 
-    #define FUSION_MAX_VECTOR_SIZE 20
+    #define FUSION_MAX_SET_SIZE 20
 
 [heading Parameters]
 
@@ -683,15 +681,14 @@ Create a __map__ from one or more key/data pairs.
       , typename T0, typename T1,... typename TN>
     typename __result_of_make_map__<K0, K0,... KN, T0, T1,... TN>::type
     make_map(T0 const& x0, T1 const& x1... TN const& xN);
+    
+The variadic function accepts `0` to `FUSION_MAX_MAP_SIZE` elements,
+where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that
+defaults to `10`. You may define the preprocessor constant
+`FUSION_MAX_MAP_SIZE` before including any Fusion header to change the
+default. Example:
 
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote
-`map` is implemented in terms of the vector. That is why we reuse
-`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user
-definable predefined maximum that defaults to `10`. You may define the
-preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion
-header to change the default. Example:
-
-    #define FUSION_MAX_VECTOR_SIZE 20
+    #define FUSION_MAX_MAP_SIZE 20
 
 [heading Parameters]
 
@@ -1063,14 +1060,13 @@ Returns the result type of __make_set__.
     template <typename T0, typename T1,... typename TN>
     struct make_set;
 
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote
-`set` is implemented in terms of the vector. That is why we reuse
-`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user
-definable predefined maximum that defaults to `10`. You may define the
-preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion
-header to change the default. Example:
+The variadic function accepts `0` to `FUSION_MAX_SET_SIZE` elements,
+where `FUSION_MAX_SET_SIZE` is a user definable predefined maximum that
+defaults to `10`. You may define the preprocessor constant
+`FUSION_MAX_SET_SIZE` before including any Fusion header to change the
+default. Example:
 
-    #define FUSION_MAX_VECTOR_SIZE 20
+    #define FUSION_MAX_SET_SIZE 20
 
 [heading Parameters]
 
@@ -1114,14 +1110,13 @@ Returns the result type of __make_map__.
       , typename T0, typename T1,... typename TN>
     struct make_map;
 
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote
-`map` is implemented in terms of the vector. That is why we reuse
-`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user
-definable predefined maximum that defaults to `10`. You may define the
-preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion
-header to change the default. Example:
+The variadic function accepts `0` to `FUSION_MAX_MAP_SIZE` elements,
+where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that
+defaults to `10`. You may define the preprocessor constant
+`FUSION_MAX_MAP_SIZE` before including any Fusion header to change the
+default. Example:
 
-    #define FUSION_MAX_VECTOR_SIZE 20
+    #define FUSION_MAX_MAP_SIZE 20
 
 [heading Parameters]
 

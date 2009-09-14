@@ -4,10 +4,10 @@
 <title>Element
         access</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../class_template_tuple.html" title="Class template tuple">
-<link rel="prev" href="tuple_helper_classes.html" title="Tuple
+<link rel="previous" href="tuple_helper_classes.html" title="Tuple
         helper classes">
 <link rel="next" href="relational_operators.html" title="Relational
         operators">
@@ -26,12 +26,16 @@
 <a accesskey="p" href="tuple_helper_classes.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../class_template_tuple.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="relational_operators.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
+<div class="titlepage">
+<div><div><h4 class="title">
 <a name="fusion.tuple.class_template_tuple.element_access"></a><a href="element_access.html" title="Element
         access">Element
-        access</a></h4></div></div></div>
+        access</a>
+</h4></div></div>
+<div></div>
+</div>
 <a name="fusion.tuple.class_template_tuple.element_access.description"></a><h5>
-<a name="id638868"></a>
+<a name="id592387"></a>
           <a href="element_access.html#fusion.tuple.class_template_tuple.element_access.description">Description</a>
         </h5>
 <p>
@@ -40,11 +44,10 @@
           function to provide access to it's elements by zero based numeric index.
         </p>
 <a name="fusion.tuple.class_template_tuple.element_access.specification"></a><h5>
-<a name="id638920"></a>
+<a name="id592437"></a>
           <a href="element_access.html#fusion.tuple.class_template_tuple.element_access.specification">Specification</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">I</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">I</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">RJ</span> <span class="identifier">get</span><span class="special">(</span><span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">t</span><span class="special">);</span>
 </pre>
 <p>
@@ -62,8 +65,7 @@
 <p>
           <span class="bold"><b>Returns</b></span>: A reference to the <tt class="computeroutput"><span class="identifier">I</span></tt>th element of <tt class="computeroutput"><span class="identifier">T</span></tt>.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">I</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">I</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">PJ</span> <span class="identifier">get</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">t</span><span class="special">);</span>
 </pre>
 <p>

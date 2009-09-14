@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>insert</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
-<link rel="prev" href="erase_key.html" title="erase_key">
+<link rel="previous" href="erase_key.html" title="erase_key">
 <link rel="next" href="insert_range.html" title="insert_range">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,10 +23,14 @@
 <a accesskey="p" href="erase_key.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="insert_range.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.algorithm.transformation.functions.insert"></a><a href="insert.html" title="insert">insert</a></h5></div></div></div>
+<div class="titlepage">
+<div><div><h5 class="title">
+<a name="fusion.algorithm.transformation.functions.insert"></a><a href="insert.html" title="insert">insert</a>
+</h5></div></div>
+<div></div>
+</div>
 <a name="fusion.algorithm.transformation.functions.insert.description"></a><h6>
-<a name="id614265"></a>
+<a name="id568270"></a>
             <a href="insert.html#fusion.algorithm.transformation.functions.insert.description">Description</a>
           </h6>
 <p>
@@ -34,11 +38,10 @@
             element inserted the position described by a given iterator.
           </p>
 <a name="fusion.algorithm.transformation.functions.insert.synposis"></a><h6>
-<a name="id614297"></a>
+<a name="id568301"></a>
             <a href="insert.html#fusion.algorithm.transformation.functions.insert.synposis">Synposis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">Pos</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">T</span>
@@ -46,7 +49,7 @@
 <span class="emphasis"><em>unspecified</em></span> <span class="identifier">insert</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">Pos</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">pos</span><span class="special">,</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">t</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id614488"></a><p class="title"><b>Table 1.65. Parameters</b></p>
+<a name="id568488"></a><p class="title"><b>Table 1.65. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -54,88 +57,63 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Parameter
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Requirement
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Description
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">seq</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
                   Sequence</a>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Operation's argument
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">pos</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   A model of <a href="../../../iterator/concepts/forward_iterator.html" title="Forward
         Iterator">Forward
                   Iterator</a>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   The position to insert at
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">t</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Any type
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   The value to insert
-                </p>
-                </td>
+                </p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.algorithm.transformation.functions.insert.expression_semantics"></a><h6>
-<a name="id614672"></a>
+<a name="id568671"></a>
             <a href="insert.html#fusion.algorithm.transformation.functions.insert.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<a href="insert.html" title="insert"><tt class="computeroutput"><span class="identifier">insert</span></tt></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">t</span><span class="special">);</span>
+<pre class="programlisting"><a href="insert.html" title="insert"><tt class="computeroutput"><span class="identifier">insert</span></tt></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">t</span><span class="special">);</span>
 </pre>
 <p>
             <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
@@ -150,26 +128,24 @@
             <tt class="computeroutput"><span class="identifier">pos</span></tt>.
           </p>
 <a name="fusion.algorithm.transformation.functions.insert.complexity"></a><h6>
-<a name="id614827"></a>
+<a name="id568823"></a>
             <a href="insert.html#fusion.algorithm.transformation.functions.insert.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithm.transformation.functions.insert.header"></a><h6>
-<a name="id614858"></a>
+<a name="id568851"></a>
             <a href="insert.html#fusion.algorithm.transformation.functions.insert.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">insert</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">insert</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">insert</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithm.transformation.functions.insert.example"></a><h6>
-<a name="id615027"></a>
+<a name="id569017"></a>
             <a href="insert.html#fusion.algorithm.transformation.functions.insert.example">Example</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">const</span> <a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">const</span> <a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">);</span>
 <span class="identifier">assert</span><span class="special">(</span><a href="insert.html" title="insert"><tt class="computeroutput"><span class="identifier">insert</span></tt></a><span class="special">(</span><span class="identifier">vec</span><span class="special">,</span> <a href="../../../iterator/functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><a href="../../../sequence/intrinsic/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">vec</span><span class="special">)),</span> <span class="number">3</span><span class="special">)</span> <span class="special">==</span> <a href="../../../container/generation/functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">2</span><span class="special">));</span>
 </pre>
 </div>

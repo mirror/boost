@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title> BOOST_FUSION_ADAPT_STRUCT</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../adapted.html" title="Adapted">
-<link rel="prev" href="boost__tuple.html" title="boost::tuple">
+<link rel="previous" href="boost__tuple.html" title="boost::tuple">
 <link rel="next" href="adapt_assoc.html" title=" BOOST_FUSION_ADAPT_ASSOC_STRUCT">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,10 +23,14 @@
 <a accesskey="p" href="boost__tuple.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapted.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="adapt_assoc.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="fusion.adapted.adapt_struct"></a><a href="adapt_struct.html" title=" BOOST_FUSION_ADAPT_STRUCT"> BOOST_FUSION_ADAPT_STRUCT</a></h3></div></div></div>
+<div class="titlepage">
+<div><div><h3 class="title">
+<a name="fusion.adapted.adapt_struct"></a><a href="adapt_struct.html" title=" BOOST_FUSION_ADAPT_STRUCT"> BOOST_FUSION_ADAPT_STRUCT</a>
+</h3></div></div>
+<div></div>
+</div>
 <a name="fusion.adapted.adapt_struct.description"></a><h4>
-<a name="id577189"></a>
+<a name="id531764"></a>
         <a href="adapt_struct.html#fusion.adapted.adapt_struct.description">Description</a>
       </h4>
 <p>
@@ -36,11 +40,10 @@
         Access Sequence</a>.
       </p>
 <a name="fusion.adapted.adapt_struct.synopsis"></a><h4>
-<a name="id577230"></a>
+<a name="id531804"></a>
         <a href="adapt_struct.html#fusion.adapted.adapt_struct.synopsis">Synopsis</a>
       </h4>
-<pre class="programlisting">
-<span class="identifier">BOOST_FUSION_ADAPT_STRUCT</span><span class="special">(</span>
+<pre class="programlisting"><span class="identifier">BOOST_FUSION_ADAPT_STRUCT</span><span class="special">(</span>
     <span class="identifier">struct_name</span>
     <span class="special">(</span><span class="identifier">member_type0</span><span class="special">,</span> <span class="identifier">member_name0</span><span class="special">)</span>
     <span class="special">(</span><span class="identifier">member_type1</span><span class="special">,</span> <span class="identifier">member_name1</span><span class="special">)</span>
@@ -48,7 +51,7 @@
     <span class="special">)</span>
 </pre>
 <a name="fusion.adapted.adapt_struct.semantics"></a><h4>
-<a name="id577347"></a>
+<a name="id531918"></a>
         <a href="adapt_struct.html#fusion.adapted.adapt_struct.semantics">Semantics</a>
       </h4>
 <p>
@@ -65,19 +68,17 @@
         should be the fully namespace qualified name of the struct to be converted.
       </p>
 <a name="fusion.adapted.adapt_struct.header"></a><h4>
-<a name="id577451"></a>
+<a name="id532021"></a>
         <a href="adapt_struct.html#fusion.adapted.adapt_struct.header">Header</a>
       </h4>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="keyword">struct</span><span class="special">/</span><span class="identifier">adapt_struct</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="keyword">struct</span><span class="special">/</span><span class="identifier">adapt_struct</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">adapt_struct</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.adapted.adapt_struct.example"></a><h4>
-<a name="id577618"></a>
+<a name="id532186"></a>
         <a href="adapt_struct.html#fusion.adapted.adapt_struct.example">Example</a>
       </h4>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">demo</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">demo</span>
 <span class="special">{</span>
     <span class="keyword">struct</span> <span class="identifier">employee</span>
     <span class="special">{</span>

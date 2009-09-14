@@ -2,7 +2,7 @@
     Copyright (c) 2001-2006 Joel de Guzman
     Copyright (c) 2006 Dan Marsden
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
@@ -57,8 +57,8 @@ int main()
         BOOST_TEST(distance(begin(v), end(v)) == 2);
         BOOST_STATIC_ASSERT((boost::fusion::result_of::distance<boost::fusion::result_of::begin<view>::type, boost::fusion::result_of::end<view>::type>::value == 2));
 
-        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::value_at_c<view,0>::type, vector<int,char,char> >));
-        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::value_of<boost::fusion::result_of::begin<view>::type>::type, vector<int,char,char> >));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::value_at_c<view,0>::type, vector3<int,char,char> >));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::value_of<boost::fusion::result_of::begin<view>::type>::type, vector3<int,char,char> >));
     }
     return boost::report_errors();
 }

@@ -4,10 +4,10 @@
 <title>Bidirectional
         Sequence</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
-<link rel="prev" href="forward_sequence.html" title="Forward
+<link rel="previous" href="forward_sequence.html" title="Forward
         Sequence">
 <link rel="next" href="random_access_sequence.html" title="Random
         Access Sequence">
@@ -26,12 +26,16 @@
 <a accesskey="p" href="forward_sequence.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="random_access_sequence.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
+<div class="titlepage">
+<div><div><h4 class="title">
 <a name="fusion.sequence.concepts.bidirectional_sequence"></a><a href="bidirectional_sequence.html" title="Bidirectional
         Sequence">Bidirectional
-        Sequence</a></h4></div></div></div>
+        Sequence</a>
+</h4></div></div>
+<div></div>
+</div>
 <a name="fusion.sequence.concepts.bidirectional_sequence.description"></a><h5>
-<a name="id492945"></a>
+<a name="id444611"></a>
           <a href="bidirectional_sequence.html#fusion.sequence.concepts.bidirectional_sequence.description">Description</a>
         </h5>
 <p>
@@ -42,7 +46,7 @@
           Iterator</a>.
         </p>
 <a name="fusion.sequence.concepts.bidirectional_sequence.refinement_of"></a><h5>
-<a name="id492995"></a>
+<a name="id444659"></a>
           <a href="bidirectional_sequence.html#fusion.sequence.concepts.bidirectional_sequence.refinement_of">Refinement
           of</a>
         </h5>
@@ -72,7 +76,7 @@
 </dl>
 </div>
 <a name="fusion.sequence.concepts.bidirectional_sequence.valid_expressions"></a><h5>
-<a name="id493135"></a>
+<a name="id444796"></a>
           <a href="bidirectional_sequence.html#fusion.sequence.concepts.bidirectional_sequence.valid_expressions">Valid
           Expressions</a>
         </h5>
@@ -89,125 +93,85 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Expression
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Return type
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Type Requirements
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Runtime Complexity
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../intrinsic/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   <a href="../../iterator/concepts/bidirectional_iterator.html" title="Bidirectional
         Iterator">Bidirectional
                   Iterator</a>
-                </p>
-                </td>
-<td>
-                <p>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
+                </p></td>
+<td><p>
                   Constant
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../intrinsic/functions/end.html" title="end"><tt class="computeroutput"><span class="identifier">end</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   <a href="../../iterator/concepts/bidirectional_iterator.html" title="Bidirectional
         Iterator">Bidirectional
                   Iterator</a>
-                </p>
-                </td>
-<td>
-                <p>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
+                </p></td>
+<td><p>
                   Constant
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../intrinsic/functions/back.html" title="back"><tt class="computeroutput"><span class="identifier">back</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Any type
-                </p>
-                </td>
-<td>
-                <p>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
+                </p></td>
+<td><p>
                   Constant
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../intrinsic/functions/back.html" title="back"><tt class="computeroutput"><span class="identifier">back</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span>
                   <span class="special">=</span> <span class="identifier">o</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Any type
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">s</span></tt> is mutable and
                   <tt class="computeroutput"><span class="identifier">e</span> <span class="special">=</span>
                   <span class="identifier">o</span></tt>, where <tt class="computeroutput"><span class="identifier">e</span></tt> is the first element in the
                   sequence, is a valid expression.
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Constant
-                </p>
-                </td>
+                </p></td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequence.concepts.bidirectional_sequence.result_type_expressions"></a><h5>
-<a name="id493575"></a>
+<a name="id445233"></a>
           <a href="bidirectional_sequence.html#fusion.sequence.concepts.bidirectional_sequence.result_type_expressions">Result
           Type Expressions</a>
         </h5>
@@ -217,58 +181,42 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Expression
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Compile Time Complexity
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../intrinsic/metafunctions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Amortized constant time
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../intrinsic/metafunctions/end.html" title="end"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">end</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Amortized constant time
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../intrinsic/metafunctions/back.html" title="back"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">back</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Amortized constant time
-                </p>
-                </td>
+                </p></td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequence.concepts.bidirectional_sequence.expression_semantics"></a><h5>
-<a name="id493852"></a>
+<a name="id445507"></a>
           <a href="bidirectional_sequence.html#fusion.sequence.concepts.bidirectional_sequence.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -284,32 +232,24 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Expression
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Semantics
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../intrinsic/functions/back.html" title="back"><tt class="computeroutput"><span class="identifier">back</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   The last element in the sequence; see <a href="../intrinsic/functions/back.html" title="back"><tt class="computeroutput"><span class="identifier">back</span></tt></a>.
-                </p>
-                </td>
+                </p></td>
 </tr></tbody>
 </table></div>
 <a name="fusion.sequence.concepts.bidirectional_sequence.models"></a><h5>
-<a name="id494005"></a>
+<a name="id445659"></a>
           <a href="bidirectional_sequence.html#fusion.sequence.concepts.bidirectional_sequence.models">Models</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">

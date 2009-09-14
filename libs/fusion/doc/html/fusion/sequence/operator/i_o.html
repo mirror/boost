@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>I/O</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../operator.html" title="Operator">
-<link rel="prev" href="../operator.html" title="Operator">
+<link rel="previous" href="../operator.html" title="Operator">
 <link rel="next" href="i_o/in.html" title="in">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,8 +23,12 @@
 <a accesskey="p" href="../operator.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../operator.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="i_o/in.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
-<a name="fusion.sequence.operator.i_o"></a><a href="i_o.html" title="I/O">I/O</a></h4></div></div></div>
+<div class="titlepage">
+<div><div><h4 class="title">
+<a name="fusion.sequence.operator.i_o"></a><a href="i_o.html" title="I/O">I/O</a>
+</h4></div></div>
+<div></div>
+</div>
 <div class="toc"><dl>
 <dt><span class="section"><a href="i_o/in.html">in</a></span></dt>
 <dt><span class="section"><a href="i_o/out.html">out</a></span></dt>
@@ -43,8 +47,7 @@
           The default delimiter between the elements is space, and the <a href="../../sequence.html" title="Sequence">Sequence</a>
           is enclosed in parenthesis. For Example:
         </p>
-<pre class="programlisting">
-<a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">float</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="identifier">a</span><span class="special">(</span><span class="number">1.0f</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="string">"Howdy folks!"</span><span class="special">);</span>
+<pre class="programlisting"><a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">float</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="identifier">a</span><span class="special">(</span><span class="number">1.0f</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="string">"Howdy folks!"</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">a</span><span class="special">;</span>
 </pre>
 <p>
@@ -79,8 +82,7 @@
 <p>
           Example:
         </p>
-<pre class="programlisting">
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">tuple_open</span><span class="special">(</span><span class="char">'['</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">tuple_close</span><span class="special">(</span><span class="char">']'</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">tuple_delimiter</span><span class="special">(</span><span class="string">", "</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">a</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">tuple_open</span><span class="special">(</span><span class="char">'['</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">tuple_close</span><span class="special">(</span><span class="char">']'</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">tuple_delimiter</span><span class="special">(</span><span class="string">", "</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">a</span><span class="special">;</span>
 </pre>
 <p>
           outputs the same <a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a>, <tt class="computeroutput"><span class="identifier">a</span></tt>
@@ -91,14 +93,12 @@
           as well. Suppose the <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cin</span></tt>
           stream contains the following data:
         </p>
-<pre class="programlisting">
-<span class="special">(</span><span class="number">1</span> <span class="number">2</span> <span class="number">3</span><span class="special">)</span> <span class="special">[</span><span class="number">4</span><span class="special">:</span><span class="number">5</span><span class="special">]</span>
+<pre class="programlisting"><span class="special">(</span><span class="number">1</span> <span class="number">2</span> <span class="number">3</span><span class="special">)</span> <span class="special">[</span><span class="number">4</span><span class="special">:</span><span class="number">5</span><span class="special">]</span>
 </pre>
 <p>
           The code:
         </p>
-<pre class="programlisting">
-<a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">i</span><span class="special">;</span>
+<pre class="programlisting"><a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">i</span><span class="special">;</span>
 <a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">j</span><span class="special">;</span>
 
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cin</span> <span class="special">&gt;&gt;</span> <span class="identifier">i</span><span class="special">;</span>
@@ -116,11 +116,10 @@
           representation may not be unambiguously parseable.
         </p>
 <a name="fusion.sequence.operator.i_o.header"></a><h5>
-<a name="id519616"></a>
+<a name="id470872"></a>
           <a href="i_o.html#fusion.sequence.operator.i_o.header">Header</a>
         </h5>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">io</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">io</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">io</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 </div>

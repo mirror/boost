@@ -4,10 +4,10 @@
 <title> Polymorphic Function
         Object</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
-<link rel="prev" href="def_callable.html" title=" Deferred
+<link rel="previous" href="def_callable.html" title=" Deferred
         Callable Object">
 <link rel="next" href="../invocation.html" title="Invocation">
 </head>
@@ -25,12 +25,16 @@
 <a accesskey="p" href="def_callable.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="../invocation.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
+<div class="titlepage">
+<div><div><h4 class="title">
 <a name="fusion.functional.concepts.poly"></a><a href="poly.html" title=" Polymorphic Function
         Object"> Polymorphic Function
-        Object</a></h4></div></div></div>
+        Object</a>
+</h4></div></div>
+<div></div>
+</div>
 <a name="fusion.functional.concepts.poly.description"></a><h5>
-<a name="id656328"></a>
+<a name="id609834"></a>
           <a href="poly.html#fusion.functional.concepts.poly.description">Description</a>
         </h5>
 <p>
@@ -39,7 +43,7 @@
           Callable Object</a> type.
         </p>
 <a name="fusion.functional.concepts.poly.refinement_of"></a><h5>
-<a name="id656368"></a>
+<a name="id609872"></a>
           <a href="poly.html#fusion.functional.concepts.poly.refinement_of">Refinement
           of</a>
         </h5>
@@ -83,7 +87,7 @@
 </dl>
 </div>
 <a name="fusion.functional.concepts.poly.expression_requirements"></a><h5>
-<a name="id656658"></a>
+<a name="id610160"></a>
           <a href="poly.html#fusion.functional.concepts.poly.expression_requirements">Expression
           requirements</a>
         </h5>
@@ -94,45 +98,33 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Expression
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Return Type
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Runtime Complexity
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">a1</span><span class="special">,</span>
                   <span class="special">...</span><span class="identifier">aN</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">result_of</span><span class="special">&lt;</span>
                   <span class="identifier">F</span><span class="special">(</span><span class="identifier">T1</span><span class="special">,</span>
                   <span class="special">...</span><span class="identifier">TN</span><span class="special">)</span> <span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Unspecified
-                </p>
-                </td>
+                </p></td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.concepts.poly.models"></a><h5>
-<a name="id656856"></a>
+<a name="id610358"></a>
           <a href="poly.html#fusion.functional.concepts.poly.models">Models</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">
@@ -147,11 +139,10 @@
 </li>
 </ul></div>
 <a name="fusion.functional.concepts.poly.examples"></a><h5>
-<a name="id656910"></a>
+<a name="id610410"></a>
           <a href="poly.html#fusion.functional.concepts.poly.examples">Examples</a>
         </h5>
-<pre class="programlisting">
-<span class="special">&amp;</span> <span class="identifier">a_free_function</span>
+<pre class="programlisting"><span class="special">&amp;</span> <span class="identifier">a_free_function</span>
 <span class="special">&amp;</span> <span class="identifier">a_class</span><span class="special">::</span><span class="identifier">a_static_member_function</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;()</span>
 <span class="comment">// using namespace boost;

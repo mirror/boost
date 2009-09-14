@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Organization</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter 1. Fusion 2.0">
-<link rel="prev" href="quick_start.html" title="Quick Start">
+<link rel="previous" href="quick_start.html" title="Quick Start">
 <link rel="next" href="support.html" title="Support">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,8 +23,12 @@
 <a accesskey="p" href="quick_start.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="support.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="fusion.organization"></a><a href="organization.html" title="Organization">Organization</a></h2></div></div></div>
+<div class="titlepage">
+<div><div><h2 class="title" style="clear: both">
+<a name="fusion.organization"></a><a href="organization.html" title="Organization">Organization</a>
+</h2></div></div>
+<div></div>
+</div>
 <p>
       The library is organized into layers of modules, with each module addressing
       a particular area of responsibility. A module may not depend on modules in
@@ -34,14 +38,14 @@
       The library is organized in three layers:
     </p>
 <a name="fusion.organization.layers"></a><h3>
-<a name="id459129"></a>
+<a name="id411712"></a>
       <a href="organization.html#fusion.organization.layers">Layers</a>
     </h3>
 <div class="blockquote"><blockquote class="blockquote">
 <p>
         </p>
 <p>
-          <span class="inlinemediaobject"><img src="../images/fusion_org.png" alt="fusion_org"></span>
+          <span class="inlinemediaobject"><img src="images/fusion_org.png" alt="fusion_org"></span>
         </p>
 <p>
       </p>
@@ -65,7 +69,7 @@
       against.
     </p>
 <a name="fusion.organization.directory"></a><h3>
-<a name="id459228"></a>
+<a name="id411808"></a>
       <a href="organization.html#fusion.organization.directory">Directory</a>
     </h3>
 <div class="itemizedlist"><ul type="disc">
@@ -186,7 +190,7 @@
       </li>
 </ul></div>
 <a name="fusion.organization.example"></a><h3>
-<a name="id459407"></a>
+<a name="id411996"></a>
       <a href="organization.html#fusion.organization.example">Example</a>
     </h3>
 <p>
@@ -194,20 +198,19 @@
       depending on the granularity that you desire, you may do so by including one
       of
     </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">container</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">list</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">list</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
       The first includes all containers The second includes only <tt class="computeroutput"><span class="identifier">list</span></tt>
-      <sup>[<a name="id459705" href="#ftn.id459705">4</a>]</sup>
+      <sup>[<a name="id412262" href="#ftn.id412262">4</a>]</sup>
       .
     </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id459705" href="#id459705">4</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id412262" href="#id412262">4</a>] </sup>
           Modules may contain smaller components. Header file information for each
           component will be provided as part of the component's documentation.
         </p></div>

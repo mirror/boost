@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Functional</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter 1. Fusion 2.0">
-<link rel="prev" href="extension/iterator_facade.html" title="Iterator Facade">
+<link rel="previous" href="extension/iterator_facade.html" title="Iterator Facade">
 <link rel="next" href="functional/concepts.html" title="Concepts">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,8 +23,12 @@
 <a accesskey="p" href="extension/iterator_facade.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="functional/concepts.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="fusion.functional"></a><a href="functional.html" title="Functional">Functional</a></h2></div></div></div>
+<div class="titlepage">
+<div><div><h2 class="title" style="clear: both">
+<a name="fusion.functional"></a><a href="functional.html" title="Functional">Functional</a>
+</h2></div></div>
+<div></div>
+</div>
 <div class="toc"><dl>
 <dt><span class="section"><a href="functional/concepts.html">Concepts</a></span></dt>
 <dd><dl>
@@ -40,16 +44,16 @@
 <dd><dl>
 <dt><span class="section"><a href="functional/invocation/functions.html">Functions</a></span></dt>
 <dt><span class="section"><a href="functional/invocation/metafunctions.html">Metafunctions</a></span></dt>
+<dt><span class="section"><a href="functional/invocation/limits.html">Limits</a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="functional/adapters.html"> Adapters</a></span></dt>
 <dd><dl>
 <dt><span class="section"><a href="functional/adapters/fused.html">fused</a></span></dt>
 <dt><span class="section"><a href="functional/adapters/fused_procedure.html">fused_procedure</a></span></dt>
 <dt><span class="section"><a href="functional/adapters/fused_function_object.html">fused_function_object</a></span></dt>
-<dt><span class="section"><a href="functional/adapters/unfused_generic.html">unfused_generic</a></span></dt>
-<dt><span class="section"><a href="functional/adapters/unfused_lvalue_args.html">unfused_lvalue_args</a></span></dt>
-<dt><span class="section"><a href="functional/adapters/unfused_rvalue_args.html">unfused_rvalue_args</a></span></dt>
+<dt><span class="section"><a href="functional/adapters/unfused.html">unfused</a></span></dt>
 <dt><span class="section"><a href="functional/adapters/unfused_typed.html">unfused_typed</a></span></dt>
+<dt><span class="section"><a href="functional/adapters/limits.html">Limits</a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="functional/generation.html">Generation</a></span></dt>
 <dd><dl>
@@ -61,19 +65,21 @@
       Components to call functions and function objects and to make Fusion code callable
       through a function object interface.
     </p>
-<p>
-      /functional.hpp&gt;
-    </p>
+<a name="fusion.functional.header"></a><h3>
+<a name="id607336"></a>
+      <a href="functional.html#fusion.functional.header">Header</a>
+    </h3>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
 <a name="fusion.functional.fused_and_unfused_forms"></a><h3>
-<a name="id653897"></a>
+<a name="id607418"></a>
       <a href="functional.html#fusion.functional.fused_and_unfused_forms">Fused and unfused
       forms</a>
     </h3>
 <p>
       What is a function call?
     </p>
-<pre class="programlisting">
-<span class="identifier">f</span> <span class="special">(</span><span class="identifier">a</span><span class="special">,</span><span class="identifier">b</span><span class="special">,</span><span class="identifier">c</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">f</span> <span class="special">(</span><span class="identifier">a</span><span class="special">,</span><span class="identifier">b</span><span class="special">,</span><span class="identifier">c</span><span class="special">)</span>
 </pre>
 <p>
       It is a name and a tuple written next to each other, left-to-right.
@@ -83,15 +89,13 @@
       with some Fusion <a href="sequence.html" title="Sequence">Sequence</a>, introducing
       yet another function provides a solution:
     </p>
-<pre class="programlisting">
-<span class="identifier">invoke</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span><span class="identifier">my_sequence</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">invoke</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span><span class="identifier">my_sequence</span><span class="special">)</span>
 </pre>
 <p>
       Alternatively it is possible to apply a simple transformation to <tt class="literal">f</tt>
       in order to achieve the same effect:
     </p>
-<pre class="programlisting">
-<span class="identifier">f</span> <span class="identifier">tuple</span> <span class="special">&lt;=&gt;</span> f' <span class="special">(</span><span class="identifier">tuple</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">f</span> <span class="identifier">tuple</span> <span class="special">&lt;=&gt;</span> f' <span class="special">(</span><span class="identifier">tuple</span><span class="special">)</span>
 </pre>
 <p>
       Now, <tt class="literal">f'</tt> is an unary function that takes the arguments to
@@ -102,7 +106,7 @@
       form of <tt class="literal">f'</tt>.
     </p>
 <a name="fusion.functional.calling_functions_and_function_objects"></a><h3>
-<a name="id654163"></a>
+<a name="id607678"></a>
       <a href="functional.html#fusion.functional.calling_functions_and_function_objects">Calling
       functions and function objects</a>
     </h3>
@@ -129,8 +133,11 @@
       variant has a corresponding generator function template that returns an adapter
       instance for the given argument.
     </p>
+<p>
+      Constructors can be called applying <a href="http://www.boost.org/libs/functional/factory/doc/html/index.html" target="_top">Boost.Functional/Factory</a>.
+    </p>
 <a name="fusion.functional.making_fusion_code_callable_through_a_function_object_interface"></a><h3>
-<a name="id654239"></a>
+<a name="id607765"></a>
       <a href="functional.html#fusion.functional.making_fusion_code_callable_through_a_function_object_interface">Making
       Fusion code callable through a function object interface</a>
     </h3>
@@ -141,11 +148,14 @@
       or function call operators.
     </p>
 <p>
-      The library provides several adapter variants that implement this transformation,
-      ranging from strictly typed to fully generic. The latter provides a reusable,
-      approximate solution to <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1385.htm" target="_top">The
-      Forwarding Problem</a>. Every generic variant has a corresponding generator
-      function template that returns an adapter instance for the given argument.
+      The library provides both a strictly typed and a generic variant for this transformation.
+      The latter should be used in combination with <a href="http://www.boost.org/libs/functional/forward/doc/html/index.html" target="_top">Boost.Functional/Forward</a>
+      to attack <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1385.htm" target="_top">The
+      Forwarding Problem</a>.
+    </p>
+<p>
+      Both variants have a corresponding generator function template that returns
+      an adapter instance for the given argument.
     </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

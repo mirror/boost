@@ -4,10 +4,10 @@
 <title>Forward
         Iterator</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
-<link rel="prev" href="../concepts.html" title="Concepts">
+<link rel="previous" href="../concepts.html" title="Concepts">
 <link rel="next" href="bidirectional_iterator.html" title="Bidirectional
         Iterator">
 </head>
@@ -25,12 +25,16 @@
 <a accesskey="p" href="../concepts.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="bidirectional_iterator.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
+<div class="titlepage">
+<div><div><h4 class="title">
 <a name="fusion.iterator.concepts.forward_iterator"></a><a href="forward_iterator.html" title="Forward
         Iterator">Forward
-        Iterator</a></h4></div></div></div>
+        Iterator</a>
+</h4></div></div>
+<div></div>
+</div>
 <a name="fusion.iterator.concepts.forward_iterator.description"></a><h5>
-<a name="id468503"></a>
+<a name="id420480"></a>
           <a href="forward_iterator.html#fusion.iterator.concepts.forward_iterator.description">Description</a>
         </h5>
 <p>
@@ -63,7 +67,7 @@
 </dl>
 </div>
 <a name="fusion.iterator.concepts.forward_iterator.expression_requirements"></a><h5>
-<a name="id468674"></a>
+<a name="id420650"></a>
           <a href="forward_iterator.html#fusion.iterator.concepts.forward_iterator.expression_requirements">Expression
           requirements</a>
         </h5>
@@ -78,173 +82,119 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Expression
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Return type
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Runtime Complexity
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   <a href="forward_iterator.html" title="Forward
         Iterator">Forward
                   Iterator</a>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Constant
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">i</span> <span class="special">==</span>
                   <span class="identifier">j</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Convertible to bool
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Constant
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">i</span> <span class="special">!=</span>
                   <span class="identifier">j</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Convertible to bool
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Constant
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../functions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   <a href="forward_iterator.html" title="Forward
         Iterator">Forward
                   Iterator</a>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Constant
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../functions/advance.html" title="advance"><tt class="computeroutput"><span class="identifier">advance</span></tt></a><span class="special">&lt;</span><span class="identifier">M</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   <a href="forward_iterator.html" title="Forward
         Iterator">Forward
                   Iterator</a>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Constant
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../functions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">distance</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span>
                   <span class="identifier">j</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   <tt class="computeroutput"><a href="../metafunctions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">distance</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span>
                   <span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Constant
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   <tt class="computeroutput"><a href="../metafunctions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Constant
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="special">*</span><span class="identifier">i</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   <tt class="computeroutput"><a href="../metafunctions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Constant
-                </p>
-                </td>
+                </p></td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.iterator.concepts.forward_iterator.meta_expressions"></a><h5>
-<a name="id469420"></a>
+<a name="id421390"></a>
           <a href="forward_iterator.html#fusion.iterator.concepts.forward_iterator.meta_expressions">Meta
           Expressions</a>
         </h5>
@@ -254,108 +204,76 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Expression
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Compile Time Complexity
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../metafunctions/next.html" title="next"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Amortized constant time
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../metafunctions/equal_to.html" title="equal_to"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">equal_to</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span>
                   <span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Amortized constant time
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../metafunctions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span>
                   <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Linear
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../metafunctions/advance.html" title="advance"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span> <span class="special">,</span><span class="identifier">M</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Linear
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../metafunctions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">distance</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span> <span class="special">,</span><span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Linear
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../metafunctions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Amortized constant time
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../metafunctions/value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_of</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Amortized constant time
-                </p>
-                </td>
+                </p></td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.iterator.concepts.forward_iterator.expression_semantics"></a><h5>
-<a name="id470023"></a>
+<a name="id421989"></a>
           <a href="forward_iterator.html#fusion.iterator.concepts.forward_iterator.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -365,123 +283,87 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Expression
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Semantics
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   An iterator to the element following <tt class="computeroutput"><span class="identifier">i</span></tt>
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">i</span> <span class="special">==</span>
                   <span class="identifier">j</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Iterator equality comparison
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">i</span> <span class="special">!=</span>
                   <span class="identifier">j</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Iterator inequality comparison
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../functions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   An iterator n elements after <tt class="computeroutput"><span class="identifier">i</span></tt>
                   in the sequence
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../functions/advance.html" title="advance"><tt class="computeroutput"><span class="identifier">advance</span></tt></a><span class="special">&lt;</span><span class="identifier">M</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Equivalent to <tt class="computeroutput"><span class="identifier">advance_c</span><span class="special">&lt;</span><span class="identifier">M</span><span class="special">::</span><span class="identifier">value</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></tt>
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../functions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">distance</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span>
                   <span class="identifier">j</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   The number of elements between <tt class="computeroutput"><span class="identifier">i</span></tt>
                   and <tt class="computeroutput"><span class="identifier">j</span></tt>
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><a href="../functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   The element at position<tt class="computeroutput"><span class="identifier">i</span></tt>
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="special">*</span><span class="identifier">i</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Equivalent to <tt class="computeroutput"><span class="identifier">deref</span><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></tt>
-                </p>
-                </td>
+                </p></td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.iterator.concepts.forward_iterator.invariants"></a><h5>
-<a name="id470631"></a>
+<a name="id422595"></a>
           <a href="forward_iterator.html#fusion.iterator.concepts.forward_iterator.invariants">Invariants</a>
         </h5>
 <p>
@@ -505,7 +387,7 @@
 </li>
 </ul></div>
 <a name="fusion.iterator.concepts.forward_iterator.models"></a><h5>
-<a name="id471055"></a>
+<a name="id423019"></a>
           <a href="forward_iterator.html#fusion.iterator.concepts.forward_iterator.models">Models</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">

@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>category_of</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../support.html" title="Support">
-<link rel="prev" href="tag_of.html" title="tag_of">
+<link rel="previous" href="tag_of.html" title="tag_of">
 <link rel="next" href="deduce.html" title="deduce">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,10 +23,14 @@
 <a accesskey="p" href="tag_of.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../support.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="deduce.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="fusion.support.category_of"></a><a href="category_of.html" title="category_of">category_of</a></h3></div></div></div>
+<div class="titlepage">
+<div><div><h3 class="title">
+<a name="fusion.support.category_of"></a><a href="category_of.html" title="category_of">category_of</a>
+</h3></div></div>
+<div></div>
+</div>
 <a name="fusion.support.category_of.description"></a><h4>
-<a name="id463019"></a>
+<a name="id415178"></a>
         <a href="category_of.html#fusion.support.category_of.description">Description</a>
       </h4>
 <p>
@@ -36,11 +40,10 @@
         <a href="../sequence/concepts.html" title="Concepts">Sequence Concepts</a>).
       </p>
 <a name="fusion.support.category_of.synopsis"></a><h4>
-<a name="id463087"></a>
+<a name="id415228"></a>
         <a href="category_of.html#fusion.support.category_of.synopsis">Synopsis</a>
       </h4>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">traits</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">traits</span>
 <span class="special">{</span>
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">category_of</span>
@@ -50,7 +53,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.support.category_of.parameters"></a><h4>
-<a name="id463218"></a>
+<a name="id415344"></a>
         <a href="category_of.html#fusion.support.category_of.parameters">Parameters</a>
       </h4>
 <div class="informaltable"><table class="table">
@@ -60,47 +63,34 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-              <p>
+<th><p>
                 Parameter
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Requirement
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Description
-              </p>
-              </th>
+              </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">T</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Any type
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 The type to query.
-              </p>
-              </td>
+              </p></td>
 </tr></tbody>
 </table></div>
 <a name="fusion.support.category_of.expression_semantics"></a><h4>
-<a name="id463324"></a>
+<a name="id415443"></a>
         <a href="category_of.html#fusion.support.category_of.expression_semantics">Expression
         Semantics</a>
       </h4>
-<pre class="programlisting">
-<span class="keyword">typedef</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">category_of</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">category</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">category_of</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">category</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><b>Return type</b></span>:
@@ -108,8 +98,7 @@
 <p>
         For Iterators, the return type is derived from one of:
       </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span>
 <span class="special">{</span>
     <span class="keyword">struct</span> <span class="identifier">incrementable_traversal_tag</span> <span class="special">{};</span>
 
@@ -129,8 +118,7 @@
 <p>
         For Sequences, the return type is derived from one of:
       </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span>
 <span class="special">{</span>
     <span class="keyword">struct</span> <span class="identifier">incrementable_sequence_tag</span> <span class="special">{};</span>
 
@@ -150,8 +138,7 @@
 <p>
         And optionally from:
       </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span>
 <span class="special">{</span>
     <span class="keyword">struct</span> <span class="identifier">associative_sequence_tag</span> <span class="special">{};</span>
 <span class="special">}}</span>
@@ -161,19 +148,17 @@
         of a particular <a href="../sequence.html" title="Sequence">Sequence</a> or <a href="../iterator.html" title="Iterator">Iterator</a>.
       </p>
 <a name="fusion.support.category_of.header"></a><h4>
-<a name="id463928"></a>
+<a name="id415989"></a>
         <a href="category_of.html#fusion.support.category_of.header">Header</a>
       </h4>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">category_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">category_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">category_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.support.category_of.example"></a><h4>
-<a name="id464085"></a>
+<a name="id416127"></a>
         <a href="category_of.html#fusion.support.category_of.example">Example</a>
       </h4>
-<pre class="programlisting">
-<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_base_of</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_base_of</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">category_of</span><span class="special">&lt;</span><a href="../container/list.html" title="list"><tt class="computeroutput"><span class="identifier">list</span></tt></a><span class="special">&lt;&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">list_category</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">category_of</span><span class="special">&lt;</span><a href="../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">vector_category</span><span class="special">;</span>
 <span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span> <span class="identifier">is_base_of</span><span class="special">&lt;</span><span class="identifier">forward_traversal_tag</span><span class="special">,</span> <span class="identifier">list_category</span><span class="special">&gt;</span> <span class="special">));</span>

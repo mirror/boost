@@ -4,10 +4,10 @@
 <title> Regular Callable
         Object</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
-<link rel="prev" href="callable.html" title=" Callable Object">
+<link rel="previous" href="callable.html" title=" Callable Object">
 <link rel="next" href="def_callable.html" title=" Deferred
         Callable Object">
 </head>
@@ -25,12 +25,16 @@
 <a accesskey="p" href="callable.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="def_callable.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
+<div class="titlepage">
+<div><div><h4 class="title">
 <a name="fusion.functional.concepts.reg_callable"></a><a href="reg_callable.html" title=" Regular Callable
         Object"> Regular Callable
-        Object</a></h4></div></div></div>
+        Object</a>
+</h4></div></div>
+<div></div>
+</div>
 <a name="fusion.functional.concepts.reg_callable.description"></a><h5>
-<a name="id654747"></a>
+<a name="id608274"></a>
           <a href="reg_callable.html#fusion.functional.concepts.reg_callable.description">Description</a>
         </h5>
 <p>
@@ -39,7 +43,7 @@
           can appear immediately to the left of a function call operator.
         </p>
 <a name="fusion.functional.concepts.reg_callable.refinement_of"></a><h5>
-<a name="id654790"></a>
+<a name="id608315"></a>
           <a href="reg_callable.html#fusion.functional.concepts.reg_callable.refinement_of">Refinement
           of</a>
         </h5>
@@ -69,7 +73,7 @@
 </dl>
 </div>
 <a name="fusion.functional.concepts.reg_callable.expression_requirements"></a><h5>
-<a name="id654976"></a>
+<a name="id608500"></a>
           <a href="reg_callable.html#fusion.functional.concepts.reg_callable.expression_requirements">Expression
           requirements</a>
         </h5>
@@ -80,43 +84,31 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Expression
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Return Type
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Runtime Complexity
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">a1</span><span class="special">,</span>
                   <span class="special">...</span><span class="identifier">aN</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Unspecified
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Unspecified
-                </p>
-                </td>
+                </p></td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.concepts.reg_callable.models"></a><h5>
-<a name="id655112"></a>
+<a name="id608634"></a>
           <a href="reg_callable.html#fusion.functional.concepts.reg_callable.models">Models</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">
@@ -128,11 +120,10 @@
           </li>
 </ul></div>
 <a name="fusion.functional.concepts.reg_callable.examples"></a><h5>
-<a name="id655150"></a>
+<a name="id608671"></a>
           <a href="reg_callable.html#fusion.functional.concepts.reg_callable.examples">Examples</a>
         </h5>
-<pre class="programlisting">
-<span class="special">&amp;</span> <span class="identifier">a_free_function</span>
+<pre class="programlisting"><span class="special">&amp;</span> <span class="identifier">a_free_function</span>
 <span class="special">&amp;</span> <span class="identifier">a_class</span><span class="special">::</span><span class="identifier">a_static_member_function</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;()</span>
 <span class="comment">// using namespace boost;

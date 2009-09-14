@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>boost::array</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../adapted.html" title="Adapted">
-<link rel="prev" href="mpl_sequence.html" title="mpl sequence">
+<link rel="previous" href="mpl_sequence.html" title="mpl sequence">
 <link rel="next" href="boost__tuple.html" title="boost::tuple">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,8 +23,12 @@
 <a accesskey="p" href="mpl_sequence.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapted.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="boost__tuple.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="fusion.adapted.boost__array"></a><a href="boost__array.html" title="boost::array">boost::array</a></h3></div></div></div>
+<div class="titlepage">
+<div><div><h3 class="title">
+<a name="fusion.adapted.boost__array"></a><a href="boost__array.html" title="boost::array">boost::array</a>
+</h3></div></div>
+<div></div>
+</div>
 <p>
         This module provides adapters for <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></tt>.
         Including the module header makes <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></tt>
@@ -33,26 +37,24 @@
         Access Sequence</a>.
       </p>
 <a name="fusion.adapted.boost__array.header"></a><h4>
-<a name="id575683"></a>
+<a name="id530274"></a>
         <a href="boost__array.html#fusion.adapted.boost__array.header">Header</a>
       </h4>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="identifier">array</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="identifier">array</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">array</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.adapted.boost__array.model_of"></a><h4>
-<a name="id575841"></a>
+<a name="id530429"></a>
         <a href="boost__array.html#fusion.adapted.boost__array.model_of">Model of</a>
       </h4>
 <div class="itemizedlist"><ul type="disc"><li><a href="../sequence/concepts/random_access_sequence.html" title="Random
         Access Sequence">Random
           Access Sequence</a></li></ul></div>
 <a name="fusion.adapted.boost__array.example"></a><h4>
-<a name="id575882"></a>
+<a name="id530469"></a>
         <a href="boost__array.html#fusion.adapted.boost__array.example">Example</a>
       </h4>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="number">3</span><span class="special">&gt;</span> <span class="identifier">arr</span> <span class="special">=</span> <span class="special">{{</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">}};</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="number">3</span><span class="special">&gt;</span> <span class="identifier">arr</span> <span class="special">=</span> <span class="special">{{</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">}};</span>
 
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="special">*</span><a href="../sequence/intrinsic/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">arr</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="special">*</span><a href="../iterator/functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><a href="../sequence/intrinsic/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">arr</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
@@ -61,7 +63,7 @@
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">2</span><span class="special">&gt;(</span><span class="identifier">arr</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
 <a name="fusion.adapted.boost__array.see_also"></a><h4>
-<a name="id576502"></a>
+<a name="id531087"></a>
         <a href="boost__array.html#fusion.adapted.boost__array.see_also">See also</a>
       </h4>
 <p>

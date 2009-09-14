@@ -4,10 +4,10 @@
 <title> Operator
         ==</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../operator.html" title="Operator">
-<link rel="prev" href="operator_unary_star.html" title=" Operator
+<link rel="previous" href="operator_unary_star.html" title=" Operator
         *">
 <link rel="next" href="operator_inequality.html" title=" Operator
         !=">
@@ -26,30 +26,33 @@
 <a accesskey="p" href="operator_unary_star.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../operator.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="operator_inequality.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
+<div class="titlepage">
+<div><div><h4 class="title">
 <a name="fusion.iterator.operator.operator_equality"></a><a href="operator_equality.html" title=" Operator
         =="> Operator
-        ==</a></h4></div></div></div>
+        ==</a>
+</h4></div></div>
+<div></div>
+</div>
 <a name="fusion.iterator.operator.operator_equality.description"></a><h5>
-<a name="id480742"></a>
+<a name="id432579"></a>
           <a href="operator_equality.html#fusion.iterator.operator.operator_equality.description">Description</a>
         </h5>
 <p>
           Compares 2 iterators for equality.
         </p>
 <a name="fusion.iterator.operator.operator_equality.synopsis"></a><h5>
-<a name="id480773"></a>
+<a name="id432608"></a>
           <a href="operator_equality.html#fusion.iterator.operator.operator_equality.synopsis">Synopsis</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">I</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">J</span>
     <span class="special">&gt;</span>
 <span class="emphasis"><em>unspecified</em></span> <span class="keyword">operator</span><span class="special">==(</span><span class="identifier">I</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">,</span> <span class="identifier">J</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id480915"></a><p class="title"><b>Table 1.9. Parameters</b></p>
+<a name="id432748"></a><p class="title"><b>Table 1.9. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -57,48 +60,35 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-              <p>
+<th><p>
                 Parameter
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Requirement
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Description
-              </p>
-              </th>
+              </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">i</span></tt>, <tt class="computeroutput"><span class="identifier">j</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Any fusion iterators
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Operation's arguments
-              </p>
-              </td>
+              </p></td>
 </tr></tbody>
 </table>
 </div>
 <a name="fusion.iterator.operator.operator_equality.expression_semantics"></a><h5>
-<a name="id481019"></a>
+<a name="id432851"></a>
           <a href="operator_equality.html#fusion.iterator.operator.operator_equality.expression_semantics">Expression
           Semantics</a>
         </h5>
-<pre class="programlisting">
-<span class="identifier">i</span> <span class="special">==</span> <span class="identifier">j</span>
+<pre class="programlisting"><span class="identifier">i</span> <span class="special">==</span> <span class="identifier">j</span>
 </pre>
 <p>
           <span class="bold"><b>Return type</b></span>: Convertible to <tt class="computeroutput"><span class="keyword">bool</span></tt>.
@@ -109,11 +99,10 @@
           and <tt class="computeroutput"><span class="identifier">j</span></tt> respectively.
         </p>
 <a name="fusion.iterator.operator.operator_equality.header"></a><h5>
-<a name="id481213"></a>
+<a name="id433042"></a>
           <a href="operator_equality.html#fusion.iterator.operator.operator_equality.header">Header</a>
         </h5>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">equal_to</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">equal_to</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">equal_to</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 </div>

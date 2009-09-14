@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>distance</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
-<link rel="prev" href="equal_to.html" title="equal_to">
+<link rel="previous" href="equal_to.html" title="equal_to">
 <link rel="next" href="advance.html" title="advance">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,21 +23,24 @@
 <a accesskey="p" href="equal_to.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../metafunctions.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="advance.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
-<a name="fusion.iterator.metafunctions.distance"></a><a href="distance.html" title="distance">distance</a></h4></div></div></div>
+<div class="titlepage">
+<div><div><h4 class="title">
+<a name="fusion.iterator.metafunctions.distance"></a><a href="distance.html" title="distance">distance</a>
+</h4></div></div>
+<div></div>
+</div>
 <a name="fusion.iterator.metafunctions.distance.description"></a><h5>
-<a name="id487059"></a>
+<a name="id438801"></a>
           <a href="distance.html#fusion.iterator.metafunctions.distance.description">Description</a>
         </h5>
 <p>
           Returns the distance between two iterators.
         </p>
 <a name="fusion.iterator.metafunctions.distance.synopsis"></a><h5>
-<a name="id487090"></a>
+<a name="id438830"></a>
           <a href="distance.html#fusion.iterator.metafunctions.distance.synopsis">Synopsis</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">I</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">J</span>
     <span class="special">&gt;</span>
@@ -47,7 +50,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id487208"></a><p class="title"><b>Table 1.16. Parameters</b></p>
+<a name="id438946"></a><p class="title"><b>Table 1.16. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -55,50 +58,37 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-              <p>
+<th><p>
                 Parameter
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Requirement
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Description
-              </p>
-              </th>
+              </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">I</span></tt>, <tt class="computeroutput"><span class="identifier">J</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Models of <a href="../concepts/forward_iterator.html" title="Forward
         Iterator">Forward
                 Iterator</a> into the same sequence
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 The start and end points of the distance to be measured
-              </p>
-              </td>
+              </p></td>
 </tr></tbody>
 </table>
 </div>
 <a name="fusion.iterator.metafunctions.distance.expression_semantics"></a><h5>
-<a name="id487322"></a>
+<a name="id439058"></a>
           <a href="distance.html#fusion.iterator.metafunctions.distance.expression_semantics">Expression
           Semantics</a>
         </h5>
-<pre class="programlisting">
-<a href="distance.html" title="distance"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">distance</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<pre class="programlisting"><a href="distance.html" title="distance"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">distance</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
           <span class="bold"><b>Return type</b></span>: A model of <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
@@ -110,19 +100,17 @@
           <tt class="computeroutput"><span class="identifier">J</span></tt>.
         </p>
 <a name="fusion.iterator.metafunctions.distance.header"></a><h5>
-<a name="id487468"></a>
+<a name="id439201"></a>
           <a href="distance.html#fusion.iterator.metafunctions.distance.header">Header</a>
         </h5>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">distance</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">distance</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">distance</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.iterator.metafunctions.distance.example"></a><h5>
-<a name="id487626"></a>
+<a name="id439357"></a>
           <a href="distance.html#fusion.iterator.metafunctions.distance.example">Example</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">typedef</span> <a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">double</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">typedef</span> <a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">double</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
 <span class="keyword">typedef</span> <a href="../../sequence/intrinsic/metafunctions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></tt></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">first</span><span class="special">;</span>
 <span class="keyword">typedef</span> <a href="next.html" title="next"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></tt></a><span class="special">&lt;</span><span class="identifier">first</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">second</span><span class="special">;</span>
 <span class="keyword">typedef</span> <a href="next.html" title="next"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></tt></a><span class="special">&lt;</span><span class="identifier">second</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">third</span><span class="special">;</span>

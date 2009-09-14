@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>insert_range</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
-<link rel="prev" href="insert.html" title="insert">
+<link rel="previous" href="insert.html" title="insert">
 <link rel="next" href="join.html" title="join">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,10 +23,14 @@
 <a accesskey="p" href="insert.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="join.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.algorithm.transformation.functions.insert_range"></a><a href="insert_range.html" title="insert_range">insert_range</a></h5></div></div></div>
+<div class="titlepage">
+<div><div><h5 class="title">
+<a name="fusion.algorithm.transformation.functions.insert_range"></a><a href="insert_range.html" title="insert_range">insert_range</a>
+</h5></div></div>
+<div></div>
+</div>
 <a name="fusion.algorithm.transformation.functions.insert_range.description"></a><h6>
-<a name="id615319"></a>
+<a name="id569303"></a>
             <a href="insert_range.html#fusion.algorithm.transformation.functions.insert_range.description">Description</a>
           </h6>
 <p>
@@ -34,11 +38,10 @@
             iterator.
           </p>
 <a name="fusion.algorithm.transformation.functions.insert_range.synposis"></a><h6>
-<a name="id615351"></a>
+<a name="id569334"></a>
             <a href="insert_range.html#fusion.algorithm.transformation.functions.insert_range.synposis">Synposis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">Pos</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">Range</span>
@@ -47,7 +50,7 @@
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">Pos</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">pos</span><span class="special">,</span> <span class="identifier">Range</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">range</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id615623"></a><p class="title"><b>Table 1.66. Parameters</b></p>
+<a name="id569602"></a><p class="title"><b>Table 1.66. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -55,90 +58,65 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Parameter
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Requirement
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Description
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">seq</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
                   Sequence</a>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Operation's argument
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">pos</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   A model of <a href="../../../iterator/concepts/forward_iterator.html" title="Forward
         Iterator">Forward
                   Iterator</a>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   The position to insert at
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">range</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
                   Sequence</a>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Range to insert
-                </p>
-                </td>
+                </p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.algorithm.transformation.functions.insert_range.expression_semantics"></a><h6>
-<a name="id615816"></a>
+<a name="id569795"></a>
             <a href="insert_range.html#fusion.algorithm.transformation.functions.insert_range.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<a href="insert.html" title="insert"><tt class="computeroutput"><span class="identifier">insert</span></tt></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">pos</span><span class="special">,</span> <span class="identifier">range</span><span class="special">);</span>
+<pre class="programlisting"><a href="insert.html" title="insert"><tt class="computeroutput"><span class="identifier">insert</span></tt></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">pos</span><span class="special">,</span> <span class="identifier">range</span><span class="special">);</span>
 </pre>
 <p>
             <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
@@ -153,26 +131,24 @@
             All elements retaining their ordering from the orignal sequences.
           </p>
 <a name="fusion.algorithm.transformation.functions.insert_range.complexity"></a><h6>
-<a name="id615976"></a>
+<a name="id569950"></a>
             <a href="insert_range.html#fusion.algorithm.transformation.functions.insert_range.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithm.transformation.functions.insert_range.header"></a><h6>
-<a name="id616006"></a>
+<a name="id569977"></a>
             <a href="insert_range.html#fusion.algorithm.transformation.functions.insert_range.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">insert_range</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">insert_range</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">insert_range</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithm.transformation.functions.insert_range.example"></a><h6>
-<a name="id616176"></a>
+<a name="id570144"></a>
             <a href="insert_range.html#fusion.algorithm.transformation.functions.insert_range.example">Example</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">const</span> <a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">const</span> <a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">);</span>
 <span class="identifier">assert</span><span class="special">(</span><a href="insert_range.html" title="insert_range"><tt class="computeroutput"><span class="identifier">insert_range</span></tt></a><span class="special">(</span><span class="identifier">vec</span><span class="special">,</span> <a href="../../../iterator/functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><a href="../../../sequence/intrinsic/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">vec</span><span class="special">)),</span> <a href="../../../container/generation/functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">))</span> <span class="special">==</span> <a href="../../../container/generation/functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">2</span><span class="special">));</span>
 </pre>
 </div>

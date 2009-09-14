@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>fused_procedure</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../adapters.html" title=" Adapters">
-<link rel="prev" href="fused.html" title="fused">
+<link rel="previous" href="fused.html" title="fused">
 <link rel="next" href="fused_function_object.html" title="fused_function_object">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,10 +23,14 @@
 <a accesskey="p" href="fused.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapters.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="fused_function_object.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
-<a name="fusion.functional.adapters.fused_procedure"></a><a href="fused_procedure.html" title="fused_procedure">fused_procedure</a></h4></div></div></div>
+<div class="titlepage">
+<div><div><h4 class="title">
+<a name="fusion.functional.adapters.fused_procedure"></a><a href="fused_procedure.html" title="fused_procedure">fused_procedure</a>
+</h4></div></div>
+<div></div>
+</div>
 <a name="fusion.functional.adapters.fused_procedure.description"></a><h5>
-<a name="id662974"></a>
+<a name="id617042"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.description">Description</a>
         </h5>
 <p>
@@ -62,19 +66,21 @@
           such a pointer without returning anything does not make sense, so this
           case is not implemented).
         </p>
-<p>
-          /functional/adapter/fused_procedure.hpp&gt;
-        </p>
+<a name="fusion.functional.adapters.fused_procedure.header"></a><h5>
+<a name="id617199"></a>
+          <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.header">Header</a>
+        </h5>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">fused_procedure</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
 <a name="fusion.functional.adapters.fused_procedure.synopsis"></a><h5>
-<a name="id663138"></a>
+<a name="id617302"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.synopsis">Synopsis</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">fused_procedure</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.fused_procedure.template_parameters"></a><h5>
-<a name="id663219"></a>
+<a name="id617380"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.template_parameters">Template
           parameters</a>
         </h5>
@@ -85,42 +91,30 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Parameter
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Description
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Default
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">Function</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   <a href="../concepts/callable.html" title=" Callable Object">Callable Object</a>
                   type
-                </p>
-                </td>
-<td>
-                <p>
-                </p>
-                </td>
+                </p></td>
+<td><p>
+                </p></td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_procedure.model_of"></a><h5>
-<a name="id663333"></a>
+<a name="id617493"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.model_of">Model
           of</a>
         </h5>
@@ -156,7 +150,7 @@
 </dl>
 </div>
 <a name="fusion.functional.adapters.fused_procedure.expression_semantics"></a><h5>
-<a name="id663554"></a>
+<a name="id617712"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -166,65 +160,48 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                <p>
+<th><p>
                   Expression
-                </p>
-                </th>
-<th>
-                <p>
+                </p></th>
+<th><p>
                   Semantics
-                </p>
-                </th>
+                </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">fused_procedure</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;(</span><span class="identifier">r</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Creates a fused function as described above, initializes the target
                   function with <tt class="computeroutput"><span class="identifier">r</span></tt>.
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">fused_procedure</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;()</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Creates a fused function as described above, attempts to use <tt class="computeroutput"><span class="identifier">R</span></tt>'s default constructor.
-                </p>
-                </td>
+                </p></td>
 </tr>
 <tr>
-<td>
-                <p>
+<td><p>
                   <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt>
-                </p>
-                </td>
-<td>
-                <p>
+                </p></td>
+<td><p>
                   Calls <tt class="computeroutput"><span class="identifier">r</span></tt> with the
                   elements in <tt class="computeroutput"><span class="identifier">s</span></tt> as
                   its arguments.
-                </p>
-                </td>
+                </p></td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_procedure.example"></a><h5>
-<a name="id663811"></a>
+<a name="id617967"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.example">Example</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">SequenceOfSequences</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Func</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">SequenceOfSequences</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Func</span><span class="special">&gt;</span>
 <span class="keyword">void</span> <span class="identifier">n_ary_for_each</span><span class="special">(</span><span class="identifier">SequenceOfSequences</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="identifier">Func</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">f</span><span class="special">)</span>
 <span class="special">{</span>
     <a href="../../algorithm/iteration/functions/for_each.html" title="for_each"><tt class="computeroutput"><span class="identifier">for_each</span></tt></a><span class="special">(</span><a href="../../view/zip_view.html" title="zip_view"><tt class="computeroutput"><span class="identifier">zip_view</span></tt></a><span class="special">&lt;</span><span class="identifier">SequenceOfSequences</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">),</span>
@@ -241,7 +218,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.fused_procedure.see_also"></a><h5>
-<a name="id664419"></a>
+<a name="id618572"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.see_also">See
           also</a>
         </h5>
@@ -250,6 +227,8 @@
 <li><a href="fused_function_object.html" title="fused_function_object"><tt class="computeroutput"><span class="identifier">fused_function_object</span></tt></a></li>
 <li><a href="../invocation/functions/invoke_proc.html" title="
           invoke_procedure"><tt class="computeroutput"><span class="identifier">invoke_procedure</span></tt></a></li>
+<li><a href="../generation/functions/mk_fused_proc.html" title="
+          make_fused_procedure"><tt class="computeroutput"><span class="identifier">make_fused_procedure</span></tt></a></li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>transform_view</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../view.html" title="View">
-<link rel="prev" href="zip_view.html" title="zip_view">
+<link rel="previous" href="zip_view.html" title="zip_view">
 <link rel="next" href="reverse_view.html" title="reverse_view">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,8 +23,12 @@
 <a accesskey="p" href="zip_view.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../view.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="reverse_view.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="fusion.view.transform_view"></a><a href="transform_view.html" title="transform_view">transform_view</a></h3></div></div></div>
+<div class="titlepage">
+<div><div><h3 class="title">
+<a name="fusion.view.transform_view"></a><a href="transform_view.html" title="transform_view">transform_view</a>
+</h3></div></div>
+<div></div>
+</div>
 <p>
         The unary version of <tt class="computeroutput"><span class="identifier">transform_view</span></tt>
         presents a view of its underlying sequence given a unary function object
@@ -35,33 +39,30 @@
         Traversal Concept</a>) of its underlying sequence or sequences.
       </p>
 <a name="fusion.view.transform_view.header"></a><h4>
-<a name="id570168"></a>
+<a name="id524797"></a>
         <a href="transform_view.html#fusion.view.transform_view.header">Header</a>
       </h4>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">transform_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">transform_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">transform_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.view.transform_view.synopsis"></a><h4>
-<a name="id570326"></a>
+<a name="id524953"></a>
         <a href="transform_view.html#fusion.view.transform_view.synopsis">Synopsis</a>
       </h4>
 <p>
         <span class="bold"><b>Unary Version</b></span>
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">F1</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">F1</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">transform_view</span><span class="special">;</span>
 </pre>
 <p>
         <span class="bold"><b>Binary Version</b></span>
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Sequence2</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">F2</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Sequence2</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">F2</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">transform_view</span><span class="special">;</span>
 </pre>
 <a name="fusion.view.transform_view.template_parameters"></a><h4>
-<a name="id570533"></a>
+<a name="id525157"></a>
         <a href="transform_view.html#fusion.view.transform_view.template_parameters">Template parameters</a>
       </h4>
 <div class="informaltable"><table class="table">
@@ -71,119 +72,83 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-              <p>
+<th><p>
                 Parameter
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Description
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Default
-              </p>
-              </th>
+              </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 A <a href="../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
                 Sequence</a>
-              </p>
-              </td>
-<td>
-              <p>
-              </p>
-              </td>
+              </p></td>
+<td><p>
+              </p></td>
 </tr>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">Sequence1</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 A <a href="../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
                 Sequence</a>
-              </p>
-              </td>
-<td>
-              <p>
-              </p>
-              </td>
+              </p></td>
+<td><p>
+              </p></td>
 </tr>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">Sequence2</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 A <a href="../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
                 Sequence</a>
-              </p>
-              </td>
-<td>
-              <p>
-              </p>
-              </td>
+              </p></td>
+<td><p>
+              </p></td>
 </tr>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">F1</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 A unary function object or function pointer. <tt class="computeroutput"><a href="http://www.boost.org/libs/utility/utility.htm#result_of" target="_top"><tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">result_of</span></tt></a><span class="special">&lt;</span><span class="identifier">F1</span><span class="special">(</span><span class="identifier">E</span><span class="special">)&gt;::</span><span class="identifier">type</span></tt> is the return type of an instance
                 of <tt class="computeroutput"><span class="identifier">F1</span></tt> when called
                 with a value of each element type <tt class="computeroutput"><span class="identifier">E</span></tt>
                 in the input sequence.
-              </p>
-              </td>
-<td>
-              <p>
-              </p>
-              </td>
+              </p></td>
+<td><p>
+              </p></td>
 </tr>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">F2</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 A binary function object or function pointer. <tt class="computeroutput"><a href="http://www.boost.org/libs/utility/utility.htm#result_of" target="_top"><tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">result_of</span></tt></a><span class="special">&lt;</span><span class="identifier">F2</span><span class="special">(</span><span class="identifier">E1</span><span class="special">,</span> <span class="identifier">E2</span><span class="special">)&gt;::</span><span class="identifier">type</span></tt> is the return type of an instance
                 of <tt class="computeroutput"><span class="identifier">F2</span></tt> when called
                 with a value of each corresponding pair of element type <tt class="computeroutput"><span class="identifier">E1</span></tt> and <tt class="computeroutput"><span class="identifier">E2</span></tt>
                 in the input sequences.
-              </p>
-              </td>
-<td>
-              <p>
-              </p>
-              </td>
+              </p></td>
+<td><p>
+              </p></td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.view.transform_view.model_of"></a><h4>
-<a name="id570998"></a>
+<a name="id525622"></a>
         <a href="transform_view.html#fusion.view.transform_view.model_of">Model of</a>
       </h4>
 <div class="itemizedlist"><ul type="disc"><li>
@@ -242,7 +207,7 @@
 </dl>
 </div>
 <a name="fusion.view.transform_view.expression_semantics"></a><h4>
-<a name="id571400"></a>
+<a name="id526025"></a>
         <a href="transform_view.html#fusion.view.transform_view.expression_semantics">Expression
         Semantics</a>
       </h4>
@@ -263,85 +228,64 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-              <p>
+<th><p>
                 Expression
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Semantics
-              </p>
-              </th>
+              </p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">UTV</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="identifier">f1</span><span class="special">)</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Creates a unary <tt class="computeroutput"><span class="identifier">transform_view</span></tt>
                 given sequence, <tt class="computeroutput"><span class="identifier">s</span></tt>
                 and unary function object or function pointer, <tt class="computeroutput"><span class="identifier">f1</span></tt>.
-              </p>
-              </td>
+              </p></td>
 </tr>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">BTV</span><span class="special">(</span><span class="identifier">s1</span><span class="special">,</span> <span class="identifier">s2</span><span class="special">,</span> <span class="identifier">f2</span><span class="special">)</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Creates a binary <tt class="computeroutput"><span class="identifier">transform_view</span></tt>
                 given sequences, <tt class="computeroutput"><span class="identifier">s1</span></tt>
                 and <tt class="computeroutput"><span class="identifier">s2</span></tt> and binary
                 function object or function pointer, <tt class="computeroutput"><span class="identifier">f2</span></tt>.
-              </p>
-              </td>
+              </p></td>
 </tr>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">TV</span><span class="special">(</span><span class="identifier">tv</span><span class="special">)</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Copy constructs a <tt class="computeroutput"><span class="identifier">transform_view</span></tt>
                 from another <tt class="computeroutput"><span class="identifier">transform_view</span></tt>,
                 <tt class="computeroutput"><span class="identifier">tv</span></tt>.
-              </p>
-              </td>
+              </p></td>
 </tr>
 <tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">tv</span> <span class="special">=</span>
                 <span class="identifier">tv2</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Assigns to a <tt class="computeroutput"><span class="identifier">transform_view</span></tt>,
                 <tt class="computeroutput"><span class="identifier">tv</span></tt>, from another
                 <tt class="computeroutput"><span class="identifier">transform_view</span></tt>,
                 <tt class="computeroutput"><span class="identifier">tv2</span></tt>.
-              </p>
-              </td>
+              </p></td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.view.transform_view.example"></a><h4>
-<a name="id571879"></a>
+<a name="id526503"></a>
         <a href="transform_view.html#fusion.view.transform_view.example">Example</a>
       </h4>
-<pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">square</span>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">square</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sig</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">;</span>

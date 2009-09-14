@@ -4,10 +4,10 @@
 <title> Operator
         *</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../operator.html" title="Operator">
-<link rel="prev" href="../operator.html" title="Operator">
+<link rel="previous" href="../operator.html" title="Operator">
 <link rel="next" href="operator_equality.html" title=" Operator
         ==">
 </head>
@@ -25,29 +25,32 @@
 <a accesskey="p" href="../operator.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../operator.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="operator_equality.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
+<div class="titlepage">
+<div><div><h4 class="title">
 <a name="fusion.iterator.operator.operator_unary_star"></a><a href="operator_unary_star.html" title=" Operator
         *"> Operator
-        *</a></h4></div></div></div>
+        *</a>
+</h4></div></div>
+<div></div>
+</div>
 <a name="fusion.iterator.operator.operator_unary_star.description"></a><h5>
-<a name="id479758"></a>
+<a name="id431609"></a>
           <a href="operator_unary_star.html#fusion.iterator.operator.operator_unary_star.description">Description</a>
         </h5>
 <p>
           Dereferences an iterator.
         </p>
 <a name="fusion.iterator.operator.operator_unary_star.synopsis"></a><h5>
-<a name="id479790"></a>
+<a name="id431640"></a>
           <a href="operator_unary_star.html#fusion.iterator.operator.operator_unary_star.synopsis">Synopsis</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">I</span>
     <span class="special">&gt;</span>
 <span class="keyword">typename</span> <a href="../metafunctions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="keyword">operator</span><span class="special">*(</span><span class="emphasis"><em>unspecified</em></span><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id479949"></a><p class="title"><b>Table 1.8. Parameters</b></p>
+<a name="id431797"></a><p class="title"><b>Table 1.8. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -55,50 +58,37 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-              <p>
+<th><p>
                 Parameter
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Requirement
-              </p>
-              </th>
-<th>
-              <p>
+              </p></th>
+<th><p>
                 Description
-              </p>
-              </th>
+              </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-              <p>
+<td><p>
                 <tt class="computeroutput"><span class="identifier">i</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Model of <a href="../concepts/forward_iterator.html" title="Forward
         Iterator">Forward
                 Iterator</a>
-              </p>
-              </td>
-<td>
-              <p>
+              </p></td>
+<td><p>
                 Operation's argument
-              </p>
-              </td>
+              </p></td>
 </tr></tbody>
 </table>
 </div>
 <a name="fusion.iterator.operator.operator_unary_star.expression_semantics"></a><h5>
-<a name="id480051"></a>
+<a name="id431898"></a>
           <a href="operator_unary_star.html#fusion.iterator.operator.operator_unary_star.expression_semantics">Expression
           Semantics</a>
         </h5>
-<pre class="programlisting">
-<span class="special">*</span><span class="identifier">i</span>
+<pre class="programlisting"><span class="special">*</span><span class="identifier">i</span>
 </pre>
 <p>
           <span class="bold"><b>Return type</b></span>: Equivalent to the return
@@ -108,19 +98,17 @@
           <span class="bold"><b>Semantics</b></span>: Equivalent to <tt class="computeroutput"><a href="../functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></tt>.
         </p>
 <a name="fusion.iterator.operator.operator_unary_star.header"></a><h5>
-<a name="id480192"></a>
+<a name="id432035"></a>
           <a href="operator_unary_star.html#fusion.iterator.operator.operator_unary_star.header">Header</a>
         </h5>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">deref</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">deref</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">deref</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.iterator.operator.operator_unary_star.example"></a><h5>
-<a name="id480351"></a>
+<a name="id432191"></a>
           <a href="operator_unary_star.html#fusion.iterator.operator.operator_unary_star.example">Example</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">typedef</span> <a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">typedef</span> <a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
 
 <span class="keyword">int</span> <span class="identifier">i</span><span class="special">(</span><span class="number">0</span><span class="special">);</span>
 <span class="identifier">vec</span> <span class="identifier">v</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="identifier">i</span><span class="special">);</span>

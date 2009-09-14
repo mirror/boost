@@ -4,10 +4,10 @@
 <title>
           make_fused_procedure</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
-<link rel="prev" href="mk_fused.html" title="
+<link rel="previous" href="mk_fused.html" title="
           make_fused">
 <link rel="next" href="mk_fused_fobj.html" title="
           make_fused_function_object">
@@ -26,12 +26,16 @@
 <a accesskey="p" href="mk_fused.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="mk_fused_fobj.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
+<div class="titlepage">
+<div><div><h5 class="title">
 <a name="fusion.functional.generation.functions.mk_fused_proc"></a><a href="mk_fused_proc.html" title="
           make_fused_procedure">
-          make_fused_procedure</a></h5></div></div></div>
+          make_fused_procedure</a>
+</h5></div></div>
+<div></div>
+</div>
 <a name="fusion.functional.generation.functions.mk_fused_proc.description"></a><h6>
-<a name="id675793"></a>
+<a name="id626602"></a>
             <a href="mk_fused_proc.html#fusion.functional.generation.functions.mk_fused_proc.description">Description</a>
           </h6>
 <p>
@@ -42,17 +46,16 @@
             conversion</em></span></a> applied to the target function.
           </p>
 <a name="fusion.functional.generation.functions.mk_fused_proc.synopsis"></a><h6>
-<a name="id675862"></a>
+<a name="id626669"></a>
             <a href="mk_fused_proc.html#fusion.functional.generation.functions.mk_fused_proc.synopsis">Synopsis</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">F</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">F</span><span class="special">&gt;</span>
 <span class="keyword">inline</span> <span class="keyword">typename</span> <a href="../metafunctions/mk_fused_proc.html" title="
           make_fused_procedure"><tt class="computeroutput"><span class="identifier">make_fused_procedure</span></tt></a><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">make_fused_procedure</span><span class="special">(</span><span class="identifier">F</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <a name="fusion.functional.generation.functions.mk_fused_proc.parameters"></a><h6>
-<a name="id676018"></a>
+<a name="id626821"></a>
             <a href="mk_fused_proc.html#fusion.functional.generation.functions.mk_fused_proc.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -62,48 +65,35 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>
-                  <p>
+<th><p>
                     Parameter
-                  </p>
-                  </th>
-<th>
-                  <p>
+                  </p></th>
+<th><p>
                     Requirement
-                  </p>
-                  </th>
-<th>
-                  <p>
+                  </p></th>
+<th><p>
                     Description
-                  </p>
-                  </th>
+                  </p></th>
 </tr></thead>
 <tbody><tr>
-<td>
-                  <p>
+<td><p>
                     <tt class="computeroutput"><span class="identifier">f</span></tt>
-                  </p>
-                  </td>
-<td>
-                  <p>
+                  </p></td>
+<td><p>
                     Model of <a href="../../concepts/callable.html" title=" Callable Object">Callable
                     Object</a>
-                  </p>
-                  </td>
-<td>
-                  <p>
+                  </p></td>
+<td><p>
                     The function to transform.
-                  </p>
-                  </td>
+                  </p></td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.generation.functions.mk_fused_proc.expression_semantics"></a><h6>
-<a name="id676134"></a>
+<a name="id626934"></a>
             <a href="mk_fused_proc.html#fusion.functional.generation.functions.mk_fused_proc.expression_semantics">Expression
             Semantics</a>
           </h6>
-<pre class="programlisting">
-<span class="identifier">make_fused_procedure</span><span class="special">(</span><span class="identifier">f</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">make_fused_procedure</span><span class="special">(</span><span class="identifier">f</span><span class="special">);</span>
 </pre>
 <p>
             <span class="bold"><b>Return type</b></span>: A specialization of <a href="../../adapters/fused_procedure.html" title="fused_procedure"><tt class="computeroutput"><span class="identifier">fused_procedure</span></tt></a>.
@@ -113,25 +103,23 @@
             <tt class="computeroutput"><span class="identifier">f</span></tt>.
           </p>
 <a name="fusion.functional.generation.functions.mk_fused_proc.header"></a><h6>
-<a name="id676260"></a>
+<a name="id627056"></a>
             <a href="mk_fused_proc.html#fusion.functional.generation.functions.mk_fused_proc.header">Header</a>
           </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_fused_procedure</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_fused_procedure</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">make_fused_procedure</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.generation.functions.mk_fused_proc.example"></a><h6>
-<a name="id676430"></a>
+<a name="id627223"></a>
             <a href="mk_fused_proc.html#fusion.functional.generation.functions.mk_fused_proc.example">Example</a>
           </h6>
-<pre class="programlisting">
-<a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">);</span>
+<pre class="programlisting"><a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">);</span>
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">lambda</span><span class="special">;</span>
 <span class="identifier">make_fused_procedure</span><span class="special">(</span><span class="identifier">_1</span> <span class="special">+=</span> <span class="identifier">_2</span> <span class="special">-</span> <span class="identifier">_3</span><span class="special">)(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">assert</span><span class="special">(</span><a href="../../../sequence/intrinsic/functions/front.html" title="front"><tt class="computeroutput"><span class="identifier">front</span></tt></a><span class="special">(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">==</span> <span class="number">0</span><span class="special">);</span>
 </pre>
 <a name="fusion.functional.generation.functions.mk_fused_proc.see_also"></a><h6>
-<a name="id676700"></a>
+<a name="id627490"></a>
             <a href="mk_fused_proc.html#fusion.functional.generation.functions.mk_fused_proc.see_also">See
             also</a>
           </h6>

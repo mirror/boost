@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title> The Full Extension Mechanism</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../extension.html" title="Extension">
-<link rel="prev" href="../extension.html" title="Extension">
+<link rel="previous" href="../extension.html" title="Extension">
 <link rel="next" href="sequence_facade.html" title="Sequence Facade">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,8 +23,12 @@
 <a accesskey="p" href="../extension.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../extension.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="sequence_facade.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="fusion.extension.ext_full"></a><a href="ext_full.html" title=" The Full Extension Mechanism"> The Full Extension Mechanism</a></h3></div></div></div>
+<div class="titlepage">
+<div><div><h3 class="title">
+<a name="fusion.extension.ext_full"></a><a href="ext_full.html" title=" The Full Extension Mechanism"> The Full Extension Mechanism</a>
+</h3></div></div>
+<div></div>
+</div>
 <p>
         The Fusion library is designed to be extensible, new sequences types can
         easily be added. In fact, the library support for <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></tt>,
@@ -48,15 +52,14 @@
         </li>
 </ol></div>
 <a name="fusion.extension.ext_full.our_example"></a><h4>
-<a name="id643992"></a>
+<a name="id597483"></a>
         <a href="ext_full.html#fusion.extension.ext_full.our_example">Our example</a>
       </h4>
 <p>
         In order to illustrate enabling a new sequence type for use with Fusion,
         we are going to use the type:
       </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">example</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">example</span>
 <span class="special">{</span>
     <span class="keyword">struct</span> <span class="identifier">example_struct</span>
     <span class="special">{</span>
@@ -80,7 +83,7 @@
         Start</a> guide.
       </p>
 <a name="fusion.extension.ext_full.enabling_tag_dispatching"></a><h4>
-<a name="id644280"></a>
+<a name="id597772"></a>
         <a href="ext_full.html#fusion.extension.ext_full.enabling_tag_dispatching">Enabling
         Tag Dispatching</a>
       </h4>
@@ -90,8 +93,7 @@
         type. In order to exploit the tag dispatching mechanism we must first declare
         a new tag type for the mechanism to use. For example:
       </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">example</span> <span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">example</span> <span class="special">{</span>
     <span class="keyword">struct</span> <span class="identifier">example_sequence_tag</span><span class="special">;</span> <span class="comment">// Only definition needed
 </span><span class="special">}</span>
 </pre>
@@ -101,8 +103,7 @@
         our sequence. This is done by specializing <tt class="computeroutput"><span class="identifier">traits</span><span class="special">::</span><span class="identifier">tag_of</span></tt>
         for our sequence type.
       </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">tag_of_fwd</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">tag_of_fwd</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">tag_of_fwd</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">traits</span> <span class="special">{</span>
@@ -119,12 +120,11 @@
         to provide tag support for groups of related types. This feature is not necessary
         for our sequence, but for an example see the code in:
       </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="identifier">array</span><span class="special">/</span><span class="identifier">tag_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="identifier">array</span><span class="special">/</span><span class="identifier">tag_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">tag_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.extension.ext_full.designing_a_suitable_iterator"></a><h4>
-<a name="id644907"></a>
+<a name="id598393"></a>
         <a href="ext_full.html#fusion.extension.ext_full.designing_a_suitable_iterator">Designing
         a suitable iterator</a>
       </h4>
@@ -138,8 +138,7 @@
         are given numbered indices, 0 for <tt class="computeroutput"><span class="identifier">name</span></tt>
         and 1 for <tt class="computeroutput"><span class="identifier">age</span></tt> respectively.
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Struct</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">Pos</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Struct</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">Pos</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">example_struct_iterator</span>
     <span class="special">:</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">iterator_base</span><span class="special">&lt;</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="identifier">Pos</span><span class="special">&gt;</span> <span class="special">&gt;</span>
 <span class="special">{</span>
@@ -187,7 +186,7 @@
         clearer as we add features to our implementation.
       </p>
 <a name="fusion.extension.ext_full.a_first_couple_of_instructive_features"></a><h4>
-<a name="id645568"></a>
+<a name="id599049"></a>
         <a href="ext_full.html#fusion.extension.ext_full.a_first_couple_of_instructive_features">A
         first couple of instructive features</a>
       </h4>
@@ -196,8 +195,7 @@
         do this, we provide a specialization of the <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">extension</span><span class="special">::</span><span class="identifier">value_of_impl</span></tt>
         template for our iterator's tag type.
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">value_of_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator_tag</span><span class="special">&gt;</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
@@ -225,8 +223,7 @@
         To understand how <tt class="computeroutput"><span class="identifier">value_of_impl</span></tt>
         is used by the library we will look at the implementation of <a href="../iterator/metafunctions/value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">value_of</span></tt></a>:
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <a href="../iterator/metafunctions/value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">value_of</span></tt></a>
     <span class="special">:</span> <span class="identifier">extension</span><span class="special">::</span><span class="identifier">value_of_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">tag_of</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span>
         <span class="keyword">template</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;</span>
@@ -243,8 +240,7 @@
         Ok, lets enable dereferencing of our iterator. In this case we must provide
         a suitable specialization of <tt class="computeroutput"><span class="identifier">deref_impl</span></tt>.
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">deref_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator_tag</span><span class="special">&gt;</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
@@ -285,8 +281,7 @@
         <tt class="computeroutput"><span class="identifier">deref_impl</span></tt> is used, lets
         have a look at the implementation of <a href="../iterator/functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a>:
       </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">result_of</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">result_of</span>
 <span class="special">{</span>
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <a href="../iterator/functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a>
@@ -331,7 +326,7 @@
         </p></td></tr>
 </table></div>
 <a name="fusion.extension.ext_full.implementing_the_remaining_iterator_functionality"></a><h4>
-<a name="id647880"></a>
+<a name="id601356"></a>
         <a href="ext_full.html#fusion.extension.ext_full.implementing_the_remaining_iterator_functionality">Implementing
         the remaining iterator functionality</a>
       </h4>
@@ -340,8 +335,7 @@
         work in pretty much the same way. Lets start with forward iteration, by providing
         a <tt class="computeroutput"><span class="identifier">next_impl</span></tt>:
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">next_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator_tag</span><span class="special">&gt;</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
@@ -386,7 +380,7 @@
         are provided in the example code.
       </p>
 <a name="fusion.extension.ext_full.implementing_the_intrinsic_functions_of_the_sequence"></a><h4>
-<a name="id648532"></a>
+<a name="id602004"></a>
         <a href="ext_full.html#fusion.extension.ext_full.implementing_the_intrinsic_functions_of_the_sequence">Implementing
         the intrinsic functions of the sequence</a>
       </h4>
@@ -396,8 +390,7 @@
         for our sequence type. As usual we just create an <tt class="computeroutput"><span class="identifier">impl</span></tt>
         type specialized for our sequence tag:
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">is_sequence_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_sequence_tag</span><span class="special">&gt;</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -415,8 +408,7 @@
         get <a href="../sequence/intrinsic/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a> working so that we can get
         an iterator to start accessing the data in our sequence.
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">begin_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_sequence_tag</span><span class="special">&gt;</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
@@ -445,7 +437,7 @@
         <tt class="computeroutput"><span class="identifier">value_at_impl</span></tt> and <tt class="computeroutput"><span class="identifier">at_impl</span></tt>.
       </p>
 <a name="fusion.extension.ext_full.enabling_our_type_as_an_associative_container"></a><h4>
-<a name="id649140"></a>
+<a name="id602607"></a>
         <a href="ext_full.html#fusion.extension.ext_full.enabling_our_type_as_an_associative_container">Enabling
         our type as an associative container</a>
       </h4>
@@ -464,8 +456,7 @@
         Start</a> guide with the appropriate members of <tt class="computeroutput"><span class="identifier">example_struct</span></tt>.
         Our implementation is as follows:
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">at_key_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_sequence_tag</span><span class="special">&gt;</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Key</span><span class="special">&gt;</span>
@@ -513,7 +504,7 @@
         of <tt class="computeroutput"><span class="identifier">is_associative_impl</span></tt>.
       </p>
 <a name="fusion.extension.ext_full.summary"></a><h4>
-<a name="id650149"></a>
+<a name="id603614"></a>
         <a href="ext_full.html#fusion.extension.ext_full.summary">Summary</a>
       </h4>
 <p>

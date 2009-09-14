@@ -4,10 +4,10 @@
 <title>Tuple
         creation functions</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
-<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../class_template_tuple.html" title="Class template tuple">
-<link rel="prev" href="construction.html" title="Construction">
+<link rel="previous" href="construction.html" title="Construction">
 <link rel="next" href="tuple_helper_classes.html" title="Tuple
         helper classes">
 </head>
@@ -25,12 +25,16 @@
 <a accesskey="p" href="construction.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../class_template_tuple.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="tuple_helper_classes.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
-<div class="titlepage"><div><div><h4 class="title">
+<div class="titlepage">
+<div><div><h4 class="title">
 <a name="fusion.tuple.class_template_tuple.tuple_creation_functions"></a><a href="tuple_creation_functions.html" title="Tuple
         creation functions">Tuple
-        creation functions</a></h4></div></div></div>
+        creation functions</a>
+</h4></div></div>
+<div></div>
+</div>
 <a name="fusion.tuple.class_template_tuple.tuple_creation_functions.description"></a><h5>
-<a name="id637621"></a>
+<a name="id591155"></a>
           <a href="tuple_creation_functions.html#fusion.tuple.class_template_tuple.tuple_creation_functions.description">Description</a>
         </h5>
 <p>
@@ -40,11 +44,10 @@
           functions are described in this section.
         </p>
 <a name="fusion.tuple.class_template_tuple.tuple_creation_functions.specification"></a><h5>
-<a name="id637695"></a>
+<a name="id591226"></a>
           <a href="tuple_creation_functions.html#fusion.tuple.class_template_tuple.tuple_creation_functions.specification">Specification</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">&gt;</span>
 <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">V1</span><span class="special">,</span> <span class="identifier">V2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">VN</span><span class="special">&gt;</span> <span class="identifier">make_tuple</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T1</span><span class="special">&amp;</span> <span class="identifier">t1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T2</span><span class="special">&amp;</span> <span class="identifier">t2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">const</span> <span class="identifier">TN</span><span class="special">&amp;</span> <span class="identifier">tn</span><span class="special">);</span>
 </pre>
 <p>
@@ -56,8 +59,7 @@
 <p>
           <span class="bold"><b>Returns</b></span>: <tt class="computeroutput"><span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">V1</span><span class="special">,</span> <span class="identifier">V2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">VN</span><span class="special">&gt;(</span><span class="identifier">t1</span><span class="special">,</span> <span class="identifier">t2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">tN</span><span class="special">)</span></tt>
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">,</span> <span class="special">...,</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">&gt;</span>
 <span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">&amp;,</span> <span class="identifier">T2</span><span class="special">&amp;,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&amp;&gt;</span> <span class="identifier">tie</span><span class="special">(</span><span class="identifier">T1</span><span class="special">&amp;</span> <span class="identifier">t1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">&amp;</span> <span class="identifier">t2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">TN</span><span class="special">&amp;</span> <span class="identifier">tn</span><span class="special">);</span>
 </pre>
 <p>
