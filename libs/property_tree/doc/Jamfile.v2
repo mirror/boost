@@ -37,18 +37,14 @@ xml property_tree : property_tree.qbk ;
 
 boostbook standalone
     : property_tree
-    : <xsl:param>boost.root=../../../..
+    : <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
+      <xsl:param>boost.root=../../../..
       <xsl:param>boost.libraries=../../../libraries.htm
       <xsl:param>toc.max.depth=3
-      <xsl:param>toc.section.depth=4
+      <xsl:param>toc.section.depth=2
       <xsl:param>chunk.section.depth=3
       <dependency>autodoc
-    ;
-
-install html 
-    : ../../../doc/src/boostbook.css
-      ../../../doc/src/reference.css
-      ../../../doc/src/docutils.css
+      <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/functional/hash/doc/html
     ;
 
 #install ../
