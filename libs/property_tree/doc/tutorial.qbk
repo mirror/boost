@@ -44,6 +44,9 @@ All that needs to be done now is to write implementations of load() and save()
 member functions. Let's first deal with load(). It contains just 7 lines of
 code, although it does all the necessary things, including error reporting:
 
+    #include <boost/property_tree/ptree.hpp>
+    #include <boost/property_tree/xml_parser.hpp>
+
     // Loads debug_settings structure from the specified XML file
     void debug_settings::load(const std::string &filename)
     {
