@@ -32,14 +32,14 @@
 #if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES != 0
 #include "wave_lexertl_tables.hpp"
 #else
-#include "lexertl/generator.hpp"
-#include "lexertl/rules.hpp"
-#include "lexertl/state_machine.hpp"
-#include "lexertl/consts.h"
-#include "lexertl/examples/serialise.hpp"
-#if BOOST_WAVE_LEXERTL_GENERATE_CPP_CODE != 0
-#include "lexertl/examples/cpp_code.hpp"
-#endif
+#include <boost/spirit/home/support/detail/lexer/generator.hpp>
+#include <boost/spirit/home/support/detail/lexer/rules.hpp>
+#include <boost/spirit/home/support/detail/lexer/state_machine.hpp>
+#include <boost/spirit/home/support/detail/lexer/consts.hpp>
+//#include "lexertl/examples/serialise.hpp>
+// #if BOOST_WAVE_LEXERTL_GENERATE_CPP_CODE != 0
+// #include "lexertl/examples/cpp_code.hpp"
+// #endif
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,13 +96,13 @@ public:
     static std::time_t get_compilation_time() 
         { return compilation_time.get_time(); }
 
-    bool load (istream& instrm);
-    bool save (ostream& outstrm);
-    
+    bool load (std::istream& instrm);
+    bool save (std::ostream& outstrm);
+
 private:
-    ::lexertl::state_machine state_machine_;
+    boost::lexer::state_machine state_machine_;
     bool has_compiled_dfa_;
-    
+
 // initialization data (regular expressions for the token definitions)
     struct lexer_macro_data {
         char_type const *name;          // macro name
@@ -438,7 +438,7 @@ std::ifstream dfa_in("wave_lexertl_lexer.dfa", std::ios::in|std::ios::binary);
         state_machine_.clear();
         
     // register macro definitions
-        ::lexertl::rules rules;
+        boost::lexer::rules rules;
         for (int k = 0; NULL != init_macro_data[k].name; ++k) {
             rules.add_macro(init_macro_data[k].name, init_macro_data[k].macro);
         }
@@ -458,15 +458,15 @@ std::ifstream dfa_in("wave_lexertl_lexer.dfa", std::ios::in|std::ios::binary);
                     init_data_cpp[j].tokenid);
             }
         }
-        
+
         for (int i = 0; 0 != init_data[i].tokenid; ++i) {
             rules.add(init_data[i].tokenregex, init_data[i].tokenid);
         }
 
     // generate minimized DFA
         try {
-            ::lexertl::generator::build (rules, state_machine_);
-            ::lexertl::generator::minimise_dfa (state_machine_);
+            boost::lexer::generator::build (rules, state_machine_);
+            boost::lexer::generator::minimise (state_machine_);
         }
         catch (std::runtime_error const& e) {
             string_type msg("lexertl initialization error: ");
@@ -483,7 +483,7 @@ std::ifstream dfa_in("wave_lexertl_lexer.dfa", std::ios::in|std::ios::binary);
         if (dfa_out.is_open())
             save (dfa_out);
     }
-    
+
     has_compiled_dfa_ = true;
     return true;
 }
@@ -497,11 +497,11 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
     string_type& token_value)
 {
 #if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
-    size_t const* const lookup = &state_machine_._lookup[0]->front ();
-    size_t const dfa_alphabet = state_machine_._dfa_alphabet[0];
+    size_t const* const lookup = &state_machine_.data()._lookup[0]->front ();
+    size_t const dfa_alphabet = state_machine_.data()._dfa_alphabet[0];
 
-    size_t const* dfa = &state_machine_._dfa[0]->front();
-    size_t const* ptr = dfa + dfa_alphabet + ::lexertl::dfa_offset;
+    size_t const* dfa = &state_machine_.data()._dfa[0]->front();
+    size_t const* ptr = dfa + dfa_alphabet + boost::lexer::dfa_offset;
 #else
     const std::size_t *ptr = dfa + dfa_offset;
 #endif // BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
@@ -512,13 +512,13 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
     size_t id = *(ptr + 1);
 
     while (curr != last) {
-        size_t const state = ptr[lookup[*curr]];
+        size_t const state = ptr[lookup[int(*curr)]];
         if (0 == state)
             break;
         ++curr;
 
 #if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
-        ptr = &dfa[state * (dfa_alphabet + ::lexertl::dfa_offset)];
+        ptr = &dfa[state * (dfa_alphabet + boost::lexer::dfa_offset)];
 #else
         ptr = &dfa[state * dfa_offset];
 #endif // BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
@@ -551,15 +551,15 @@ template <typename Iterator, typename Position>
 inline bool
 lexertl<Iterator, Position>::load (std::istream& instrm)
 {
-#if !defined(BOOST_WAVE_LEXERTL_GENERATE_CPP_CODE)
-    std::size_t version = 0;
-    ::lexertl::serialise::load_as_binary(instrm, state_machine_, version);
-    if (version != (std::size_t)get_compilation_time())
-        return false;       // too new for us
-    return instrm.good();
-#else
+// #if !defined(BOOST_WAVE_LEXERTL_GENERATE_CPP_CODE)
+//     std::size_t version = 0;
+//     boost::lexer::serialise::load_as_binary(instrm, state_machine_, version);
+//     if (version != (std::size_t)get_compilation_time())
+//         return false;       // too new for us
+//     return instrm.good();
+// #else
     return false;   // always create the dfa when generating the C++ code
-#endif
+// #endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -568,12 +568,12 @@ template <typename Iterator, typename Position>
 inline bool
 lexertl<Iterator, Position>::save (std::ostream& outstrm)
 {
-#if defined(BOOST_WAVE_LEXERTL_GENERATE_CPP_CODE)
-    cpp_code::generate(state_machine_, outstrm);
-#else
-    ::lexertl::serialise::save_as_binary(state_machine_, outstrm, 
-        (std::size_t)get_compilation_time());
-#endif
+// #if defined(BOOST_WAVE_LEXERTL_GENERATE_CPP_CODE)
+//     cpp_code::generate(state_machine_, outstrm);
+// #else
+//     boost::lexer::serialise::save_as_binary(state_machine_, outstrm, 
+//         (std::size_t)get_compilation_time());
+// #endif
     return outstrm.good();
 }
 #endif // #if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0

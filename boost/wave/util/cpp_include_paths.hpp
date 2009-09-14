@@ -140,7 +140,7 @@ private:
     typedef std::list<std::pair<boost::filesystem::path, std::string> > 
         include_list_type;
     typedef include_list_type::value_type include_value_type;
-    
+
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     typedef bidirectional_map<std::string, std::string>::type 
         pragma_once_set_type;
@@ -350,7 +350,7 @@ include_paths::find_include_file (std::string &s, std::string &dir,
     bool is_system, char const *current_file) const
 {
     namespace fs = boost::filesystem;
-    
+
 // if not system include (<...>), then search current directory first
     if (!is_system) {
         if (!was_sys_include_path) {  // set_sys_include_delimiter() not called
@@ -369,7 +369,7 @@ include_paths::find_include_file (std::string &s, std::string &dir,
                     dirpath = create_path(current_rel_dir.string());
                     dirpath /= create_path(s);
                 }
-                
+
                 dir = dirpath.string();
                 s = normalize(currpath).string();    // found in local directory
                 return true;

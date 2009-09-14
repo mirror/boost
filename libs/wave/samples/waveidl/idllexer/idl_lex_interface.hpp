@@ -15,7 +15,7 @@
 
 #include <boost/wave/util/file_position.hpp>
 #include <boost/wave/language_support.hpp>
-#include <boost/wave/cpplexer/cpp_lex_interface.hpp>
+#include <boost/wave/cpplexer/cpp_lex_interface_generator.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
@@ -56,7 +56,7 @@ struct lex_input_interface_generator
 :   cpplexer::lex_input_interface<TokenT>
 {
     typedef typename cpplexer::lex_input_interface<TokenT>::position_type position_type;
-    
+
 //  The new_lexer function allows the opaque generation of a new lexer object.
 //  It is coupled to the token type to allow to distinguish different 
 //  lexer/token configurations at compile time.

@@ -193,8 +193,8 @@
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || \
     BOOST_WORKAROUND(__MWERKS__, < 0x3200) || \
     (defined(__DECCXX) && defined(__alpha)) || \
-    defined(BOOST_WAVE_STRINGTYPE_USE_STDSTRING)
-    
+    defined(BOOST_WAVE_STRINGTYPE_USE_STDSTRING) 
+
 #define BOOST_WAVE_STRINGTYPE std::string
 
 #if !defined(BOOST_WAVE_STRINGTYPE_USE_STDSTRING)

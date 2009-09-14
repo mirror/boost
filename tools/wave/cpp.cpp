@@ -468,7 +468,7 @@ namespace {
                     using namespace boost::serialization;
                     iarchive ia(ifs);
                     std::string version;
-
+                    
                     ia >> make_nvp("version", version);  // load version
                     if (version == CPP_VERSION_FULL_STR)
                         ia >> make_nvp("state", ctx);    // load the internal tables from disc
@@ -599,6 +599,42 @@ namespace {
         return true;
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    // list macro invocation counts
+    bool list_macro_counts(context_type const& ctx, std::string filename)
+    {
+    // open file for macro invocation count listing
+        std::ofstream macrocounts_out;
+        fs::path macrocounts_file (boost::wave::util::create_path(filename));
+
+        if (macrocounts_file != "-") {
+            macrocounts_file = fs::complete(macrocounts_file);
+            fs::create_directories(boost::wave::util::branch_path(macrocounts_file));
+            macrocounts_out.open(macrocounts_file.string().c_str());
+            if (!macrocounts_out.is_open()) {
+                cerr << "wave: could not open file for macro invocation count listing: " 
+                     << macrocounts_file.string() << endl;
+                return false;
+            }
+        }
+        else {
+            macrocounts_out.copyfmt(cout);
+            macrocounts_out.clear(cout.rdstate());
+            static_cast<std::basic_ios<char> &>(macrocounts_out).rdbuf(cout.rdbuf());
+        }
+
+        // list all expanded macro names and their counts in alphabetical order
+        std::map<std::string, std::size_t> const& counts =
+            ctx.get_hooks().get_macro_counts();
+
+        typedef std::map<std::string, std::size_t>::const_iterator iterator;
+        iterator end = counts.end();
+        for (iterator it = counts.begin(); it != end; ++it)
+            macrocounts_out << (*it).first << "," << (*it).second << std::endl;
+
+        return true;
+    }
+
 ///////////////////////////////////////////////////////////////////////////////
 }   // anonymous namespace
 
@@ -636,14 +672,14 @@ int error_count = 0;
     std::ofstream output;
     std::ofstream traceout;
     std::ofstream includelistout;
-    
+
     trace_flags enable_trace = trace_nothing;
-    
+
         if (vm.count("traceto")) {
         // try to open the file, where to put the trace output
         fs::path trace_file (boost::wave::util::create_path(
             vm["traceto"].as<std::string>()));
-        
+
             if (trace_file != "-") {
                 fs::create_directories(boost::wave::util::branch_path(trace_file));
                 traceout.open(trace_file.string().c_str());
@@ -667,7 +703,7 @@ int error_count = 0;
         // try to open the file, where to put the include list 
         fs::path includes_file(boost::wave::util::create_path(
             vm["listincludes"].as<std::string>()));
-        
+
             if (includes_file != "-") {
                 fs::create_directories(boost::wave::util::branch_path(includes_file));
                 includelistout.open(includes_file.string().c_str());
@@ -677,7 +713,7 @@ int error_count = 0;
                     return -1;
                 }
             }
-            enable_trace = trace_includes;
+            enable_trace = trace_flags(enable_trace | trace_includes);
         }
         if ((enable_trace & trace_includes) && !includelistout.is_open()) {
         // by default list included names to std::cout
@@ -686,14 +722,14 @@ int error_count = 0;
             static_cast<std::basic_ios<char> &>(includelistout).
                 rdbuf(cout.rdbuf());
         }
-        
+
     // enable preserving comments mode
     bool preserve_comments = false;
     bool preserve_whitespace = false;
-    
+
         if (vm.count("preserve")) {
         int preserve = vm["preserve"].as<int>();
-        
+
             switch(preserve) {
             case 0:   break;
             case 2:
@@ -702,7 +738,7 @@ int error_count = 0;
             case 1:
                 preserve_comments = true;
                 break;
-                
+
             default:
                 cerr << "wave: bogus preserve whitespace option value: " 
                      << preserve << ", should be 0, 1, or 2" << endl;
@@ -713,18 +749,23 @@ int error_count = 0;
     // Since the #pragma wave system() directive may cause a potential security 
     // threat, it has to be enabled explicitly by --extended or -x
     bool enable_system_command = false;
-    
+
         if (vm.count("extended")) 
             enable_system_command = true;
 
     // This this the central piece of the Wave library, it provides you with 
     // the iterators to get the preprocessed tokens and allows to configure
     // the preprocessing stage in advance.
-    bool allow_output = true;     // will be manipulated from inside the hooks object
+    bool allow_output = true;   // will be manipulated from inside the hooks object
     std::string default_outfile;  // will be used from inside the hooks object
     trace_macro_expansion<token_type> hooks(preserve_whitespace, 
         output, traceout, includelistout, enable_trace, enable_system_command,
         allow_output, default_outfile);
+
+    // enable macro invocation count, if appropriate
+        if (vm.count("macrocounts")) 
+            hooks.enable_macro_counting();
+
     context_type ctx (instring.begin(), instring.end(), file_name.c_str(), hooks);
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
@@ -800,7 +841,7 @@ int error_count = 0;
     // add include directories to the system include search paths
         if (vm.count("sysinclude")) {
           vector<std::string> syspaths = vm["sysinclude"].as<vector<std::string> >();
-
+        
             vector<std::string>::const_iterator end = syspaths.end();
             for (vector<std::string>::const_iterator cit = syspaths.begin(); 
                  cit != end; ++cit)
@@ -1046,6 +1087,10 @@ int error_count = 0;
             if (!list_macro_names(ctx, vm["macronames"].as<std::string>()))
                 return -1;
         }
+        if (vm.count("macrocounts")) {
+            if (!list_macro_counts(ctx, vm["macrocounts"].as<std::string>()))
+                return -1;
+        }
     }
     catch (boost::wave::cpp_exception const &e) {
     // some preprocessing error
@@ -1096,7 +1141,7 @@ main (int argc, char *argv[])
         desc_cmdline.add_options()
             ("help,h", "print out program usage (this message)")
             ("version,v", "print the version number")
-            ("copyright,c", "print out the copyright statement")
+            ("copyright", "print out the copyright statement")
             ("config-file", po::value<vector<std::string> >()->composing(), 
                 "specify a config file (alternatively: @filepath)")
         ;
@@ -1142,6 +1187,8 @@ main (int argc, char *argv[])
                 "list names of included files to a file [arg] or to stdout [-]")
             ("macronames,m", po::value<std::string>(), 
                 "list all defined macros to a file [arg] or to stdout [-]")
+            ("macrocounts,c", po::value<std::string>(), 
+                "list macro invocation counts to a file [arg] or to stdout [-]")
             ("preserve,p", po::value<int>()->default_value(0), 
                 "preserve whitespace\n"
                             "0: no whitespace is preserved (default),\n"
@@ -1194,10 +1241,10 @@ main (int argc, char *argv[])
 
     // extract the arguments from the parsed command line
     vector<po::option> arguments;
-    
+
         std::remove_copy_if(opts.options.begin(), opts.options.end(), 
             back_inserter(arguments), cmd_line_utils::is_argument());
-            
+
     // try to find a config file somewhere up the filesystem hierarchy 
     // starting with the input file path. This allows to use a general wave.cfg 
     // file for all files in a certain project.
@@ -1221,7 +1268,7 @@ main (int argc, char *argv[])
                 input_dir = boost::wave::util::branch_path(input_dir);
             }
         }
-        
+
     // if there is specified at least one config file, parse it and add the 
     // options to the main variables_map
         if (vm.count("config-file")) {

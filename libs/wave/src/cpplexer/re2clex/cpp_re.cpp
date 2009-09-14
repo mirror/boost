@@ -162,7 +162,7 @@ int count_backslash_newlines(Scanner *s, uchar *cursor)
 {
     std::size_t diff, offset;
     int skipped = 0;
-    
+
     /* figure out how many backslash-newlines skipped over unknowingly. */
     diff = cursor - s->bot;
     offset = get_first_eol_offset(s);
@@ -219,7 +219,7 @@ uchar *fill(Scanner *s, uchar *cursor)
                 }
                 else 
                     printf("Out of memory!\n");
-                    
+
                 /* get the scanner to stop */
                 *cursor = 0;
                 return cursor;
@@ -346,7 +346,7 @@ uchar *fill(Scanner *s, uchar *cursor)
                 aq_enqueue(s->eol_offsets, cnt + (s->lim - s->bot));    
             }
         }
-        
+
         s->lim += cnt;
         if (s->eof) /* eof needs adjusting if we erased backslash-newlines */
         {
@@ -364,37 +364,37 @@ struct uchar_wrapper
     uchar_wrapper (uchar *base_cursor, unsigned int column = 1)
     :   base_cursor(base_cursor), column(column)
     {}
-    
+
     uchar_wrapper& operator++() 
     {
         ++base_cursor;
         ++column;
         return *this;
     }
-    
+
     uchar_wrapper& operator--() 
     {
         --base_cursor;
         --column;
         return *this;
     }
-    
+
     uchar operator* () const
     {
         return *base_cursor;
     }
-    
+
     operator uchar *() const
     {
         return base_cursor;
     }
-    
+
     friend std::ptrdiff_t 
     operator- (uchar_wrapper const& lhs, uchar_wrapper const& rhs)
     {
         return lhs.base_cursor - rhs.base_cursor;
     }
-    
+
     uchar *base_cursor;
     unsigned int column;
 };
@@ -403,7 +403,7 @@ struct uchar_wrapper
 boost::wave::token_id scan(Scanner *s)
 {
     BOOST_ASSERT(0 != s->error_proc);     // error handler must be given
-    
+
     uchar_wrapper cursor (s->tok = s->cur, s->column = s->curr_column);
     uchar_wrapper marker (s->ptr);
     uchar_wrapper limit (s->lim);

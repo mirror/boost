@@ -10,7 +10,7 @@
 #if !defined(CPP_VERSION_HPP_CE4FE67F_63F9_468D_8364_C855F89D3C5D_INCLUDED)
 #define CPP_VERSION_HPP_CE4FE67F_63F9_468D_8364_C855F89D3C5D_INCLUDED
 
-#include <boost/wave/wave_version.hpp>  
+#include <boost/wave/wave_version.hpp>
 
 #define CPP_VERSION_MAJOR           BOOST_WAVE_VERSION_MAJOR
 #define CPP_VERSION_MINOR           BOOST_WAVE_VERSION_MINOR
@@ -18,8 +18,8 @@
 #define CPP_VERSION_FULL            BOOST_WAVE_VERSION
 
 #define CPP_VERSION_FULL_STR        BOOST_PP_STRINGIZE(CPP_VERSION_FULL)
-                                     
-#define CPP_VERSION_DATE            20090309L
-#define CPP_VERSION_DATE_STR        "20090309"
+
+#define CPP_VERSION_DATE            20090602L
+#define CPP_VERSION_DATE_STR        "20090602"
 
 #endif // !defined(CPP_VERSION_HPP_CE4FE67F_63F9_468D_8364_C855F89D3C5D_INCLUDED)

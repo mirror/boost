@@ -48,9 +48,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 template struct boost::wave::cpplexer::new_lexer_gen<
-    BOOST_WAVE_STRINGTYPE::iterator>;
+    BOOST_WAVE_STRINGTYPE::iterator, boost::wave::util::file_position_type,
+    lex_token<boost::wave::util::file_position_type> >;
 template struct boost::wave::cpplexer::new_lexer_gen<
-    BOOST_WAVE_STRINGTYPE::const_iterator>;
+    BOOST_WAVE_STRINGTYPE::const_iterator, boost::wave::util::file_position_type,
+    lex_token<boost::wave::util::file_position_type> >;
 
 // the suffix header occurs after all of the code
 #ifdef BOOST_HAS_ABI_HEADERS

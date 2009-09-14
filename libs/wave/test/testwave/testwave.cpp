@@ -167,12 +167,12 @@ main(int argc, char *argv[])
                 if (cvm.count("input")) {
                     std::vector<std::string> const &infiles = 
                         cvm["input"].as<std::vector<std::string> >();
-                    
+
                     if (9 == app.get_debuglevel()) {
                         std::cerr << "found " << (unsigned)infiles.size() 
                                   << " entries" << std::endl;
                     }
-                    
+
                     std::vector<std::string>::const_iterator iend = infiles.end();
                     for (std::vector<std::string>::const_iterator iit = infiles.begin(); 
                          iit != iend; ++iit)
@@ -184,14 +184,14 @@ main(int argc, char *argv[])
                         fs::path filepath = 
                             boost::wave::util::branch_path(cfgpath) / 
                                 boost::wave::util::create_path(*iit);
-                        
+
                         if (9 == app.get_debuglevel()) {
                             std::cerr << std::string(79, '-') << std::endl;
                             std::cerr << "executing test: " 
                                       << boost::wave::util::native_file_string(filepath)
                                       << std::endl;
                         }
-                    
+
                     // execute this unit test case
                         if (!app.test_a_file(
                               boost::wave::util::native_file_string(filepath))) 
@@ -209,7 +209,7 @@ main(int argc, char *argv[])
                                       << std::endl;
                         }
                         ++input_count;
-                        
+
                         if (9 == app.get_debuglevel()) {
                             std::cerr << std::string(79, '-') << std::endl;
                         }
@@ -244,7 +244,7 @@ main(int argc, char *argv[])
                           << boost::wave::util::native_file_string(filepath)
                           << std::endl;
             }
-                    
+
             if (!app.test_a_file(boost::wave::util::native_file_string(filepath))) 
             {
                 if (9 == app.get_debuglevel()) {

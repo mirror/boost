@@ -42,7 +42,7 @@ operator<< (std::ostream &stream, lex_token<PositionT> const &t)
 {
     using namespace std;
     using namespace boost::wave;
-    
+
     token_id id = token_id(t);
     stream << setw(16) 
         << left << boost::wave::get_token_name(id) << " ("
@@ -60,11 +60,11 @@ operator<< (std::ostream &stream, lex_token<PositionT> const &t)
             stream << ", AltExtTokenType";
         }
     }
-    
+
     stream << "): >";
-    
+
     typedef typename lex_token<PositionT>::string_type string_type;
-        
+
     string_type const& value = t.get_value();
     for (std::size_t i = 0; i < value.size(); ++i) {
         switch (value[i]) {
@@ -85,7 +85,7 @@ operator<< (std::ostream &stream, lex_token<PositionT> const &t)
         << setw(3) << right << t.get_corrected_position().get_line() << "/" 
         << setw(2) << right << t.get_corrected_position().get_column() 
         << ")";
-        
+
     return stream;
 }
 
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
         std::cerr << "Usage: real_positions infile" << std::endl;
         return -1;
     }
-    
+
 // current file position is saved for exception handling
 boost::wave::util::file_position_type current_position;
 
@@ -113,29 +113,29 @@ boost::wave::util::file_position_type current_position;
         instream.unsetf(std::ios::skipws);
         instring = std::string(std::istreambuf_iterator<char>(instream.rdbuf()),
                                 std::istreambuf_iterator<char>());
-            
+
     //  The template real_positions::lex_token<> is the token type to be 
     //  used by the Wave library.
         typedef lex_token<> token_type;
-    
+
     //  The template boost::wave::cpplexer::lex_iterator<> is the lexer type to
     //  be used by the Wave library.
         typedef boost::wave::cpplexer::lex_iterator<token_type> 
             lex_iterator_type;
-        
+
     //  This is the resulting context type to use. The first template parameter
     //  should match the iterator type to be used during construction of the
     //  corresponding context object (see below).
-    typedef boost::wave::context<
-            std::string::iterator, lex_iterator_type,
-            boost::wave::iteration_context_policies::load_file_to_string,
-            correct_token_position<token_type> > 
-        context_type;
+        typedef boost::wave::context<
+                std::string::iterator, lex_iterator_type,
+                boost::wave::iteration_context_policies::load_file_to_string,
+                correct_token_position<token_type> > 
+            context_type;
 
     // This preprocessor hooks are used to correct the file positions inside 
     // the tokens returned from the library
     correct_token_position<token_type> hooks(argv[1]);
-    
+
     // The preprocessor iterator shouldn't be constructed directly. It is 
     // to be generated through a wave::context<> object. This wave:context<> 
     // object is to be used additionally to initialize and define different 

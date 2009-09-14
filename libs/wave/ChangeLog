@@ -22,6 +22,22 @@ TODO (known issues):
 
 CHANGELOG
 
+Boost V1.41.0
+- V2.0.3
+- Switched to Re2C V0.13.5
+- Fixed --list_includes/-l command line option of the wave driver tool to 
+  correctly indent the generated list of included files.
+- Finally fixed all remaining examples. Everything seems to work fine now.
+- Specifying a custom token type now works as expected. The new lexer interface
+  introduced in V2.0 broke this part.
+- Removed old code related to pre Boost V1.31 (related to V1 of iterator 
+  library).
+- Added a new commandline option --macrocounts/-c to the Wave driver application
+  which lists all macro invocation counts to an optionally specified file 
+  (default is cout).
+- Fixed compilation problems caused by recent changes to the multi_pass iterator
+  from Spirit V2.1.
+
 Boost V1.40.0
 - V2.0.2
 - Fixed a long standing race condition inhibiting to use Wave in multi threaded 

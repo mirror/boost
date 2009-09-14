@@ -5,7 +5,7 @@
 
     This sample shows, how it is possible to use a custom lexer type and a 
     custom token type with the Wave library. 
-    
+
     http://www.boost.org/
 
     Copyright (c) 2001-2009 Hartmut Kaiser. Distributed under the Boost 
@@ -101,7 +101,7 @@ main(int argc, char *argv[])
         while (first != last) {
         // retrieve next token
             current_token = *first;
-        
+
         // output token info
             cout << "matched " << current_token << endl;
             ++first;

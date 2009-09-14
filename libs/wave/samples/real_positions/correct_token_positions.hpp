@@ -29,7 +29,7 @@ namespace detail
         }
         return newlines;
     }
-    
+
     // return the length of the last line in a C style comment
     template <typename String>
     unsigned last_line_length(String const& str)
@@ -50,7 +50,7 @@ struct correct_token_position
 {
     correct_token_position(typename Token::string_type filename)
     :   pos(filename) {}
-    
+
     ///////////////////////////////////////////////////////////////////////////
     //
     //  The function 'generated_token' will be called by the library whenever a
@@ -78,15 +78,15 @@ struct correct_token_position
     { 
         typedef typename Token::string_type string_type;
         typedef typename Token::position_type position_type;
-        
+
         using namespace boost::wave;
-        
+
         // adjust the current position
         position_type current_pos(pos);
 
         token_id id = token_id(token);
         string_type const& v (token.get_value());
-        
+
         switch (id) {
         case T_NEWLINE:
         case T_CPPCOMMENT:
@@ -107,17 +107,17 @@ struct correct_token_position
                 }
             }
             break;
-            
+
         default:
             pos.set_column(current_pos.get_column() + v.size());
             break;
         }
-        
+
         // set the new position in the token to be returned
         token.set_corrected_position(current_pos);
         return token;
     }
-    
+
     typename Token::position_type pos;
 };
 
