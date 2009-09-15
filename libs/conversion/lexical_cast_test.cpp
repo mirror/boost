@@ -28,12 +28,6 @@
 #include <string>
 #include <memory>
 
-#if defined(BOOST_NO_STRINGSTREAM) || \
-    defined(BOOST_NO_STD_WSTRING) || \
-    defined(BOOST_NO_STD_LOCALE)
-#define DISABLE_WIDE_CHAR_SUPPORT
-#endif
-
 #if (defined(BOOST_HAS_LONG_LONG) || defined(BOOST_HAS_MS_INT64)) \
     && !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
 #define LCAST_TEST_LONGLONG
@@ -101,7 +95,7 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(test_conversion_from_to_wchar_t_alias));
     suite->add(BOOST_TEST_CASE(test_conversion_to_pointer));
     suite->add(BOOST_TEST_CASE(test_conversion_to_string));
-    #ifndef DISABLE_WIDE_CHAR_SUPPORT
+    #ifndef BOOST_LCAST_NO_WCHAR_T
     suite->add(BOOST_TEST_CASE(test_conversion_from_wchar_t));
     suite->add(BOOST_TEST_CASE(test_conversion_to_wchar_t));
     suite->add(BOOST_TEST_CASE(test_conversion_from_wstring));
@@ -268,14 +262,14 @@ void test_conversion_from_to_wchar_t_alias()
 void test_conversion_to_pointer()
 {
     BOOST_CHECK_THROW(lexical_cast<char *>("Test"), bad_lexical_cast);
-    #ifndef DISABLE_WIDE_CHAR_SUPPORT
+    #ifndef BOOST_LCAST_NO_WCHAR_T
     BOOST_CHECK_THROW(lexical_cast<wchar_t *>("Test"), bad_lexical_cast);
     #endif
 }
 
 void test_conversion_from_wchar_t()
 {
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#ifndef BOOST_LCAST_NO_WCHAR_T
 #if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
     BOOST_CHECK_EQUAL(1, lexical_cast<int>(L'1'));
     BOOST_CHECK_THROW(lexical_cast<int>(L'A'), bad_lexical_cast);
@@ -308,7 +302,7 @@ void test_conversion_from_wchar_t()
 
 void test_conversion_to_wchar_t()
 {
-#if !defined(DISABLE_WIDE_CHAR_SUPPORT) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
     BOOST_CHECK_EQUAL(L'1', lexical_cast<wchar_t>(1));
     BOOST_CHECK_EQUAL(L'0', lexical_cast<wchar_t>(0));
     BOOST_CHECK_EQUAL(L'1', lexical_cast<wchar_t>('1'));
@@ -335,7 +329,7 @@ void test_conversion_to_wchar_t()
 
 void test_conversion_from_wstring()
 {
-    #ifndef DISABLE_WIDE_CHAR_SUPPORT
+    #ifndef BOOST_LCAST_NO_WCHAR_T
     BOOST_CHECK_EQUAL(123, lexical_cast<int>(std::wstring(L"123")));
     BOOST_CHECK_THROW(
         lexical_cast<int>(std::wstring(L"")), bad_lexical_cast);
@@ -353,7 +347,7 @@ void test_conversion_from_wstring()
 
 void test_conversion_to_wstring()
 {
-    #ifndef DISABLE_WIDE_CHAR_SUPPORT
+    #ifndef BOOST_LCAST_NO_WCHAR_T
     wchar_t buf[] = L"hello";
     wchar_t* str = buf;
     BOOST_CHECK(str == lexical_cast<std::wstring>(str));
@@ -593,7 +587,7 @@ void test_conversion_from_to_integral_for_locale()
     test_conversion_from_integral_to_integral<T>();
     test_conversion_from_integral_to_string<T>('0');
     test_conversion_from_string_to_integral<T>('0');
-#if !defined(DISABLE_WIDE_CHAR_SUPPORT) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
     test_conversion_from_integral_to_string<T>(L'0');
     test_conversion_from_string_to_integral<T>(L'0');
 #endif
@@ -614,7 +608,7 @@ void test_conversion_from_to_integral()
     test_conversion_from_integral_to_char<T>(zero);
     test_conversion_from_integral_to_char<T>(szero);
     test_conversion_from_integral_to_char<T>(uzero);
-#if !defined(DISABLE_WIDE_CHAR_SUPPORT) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
     wchar_t const wzero = L'0';
     test_conversion_from_integral_to_char<T>(wzero);
 #endif
