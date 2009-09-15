@@ -688,14 +688,14 @@ namespace boost { namespace property_tree
     basic_ptree<K, D, C>::get(const path_type &path,
                               Translator tr) const
     {
-        return get_child(path).get_value<Type>(tr);
+        return get_child(path).BOOST_NESTED_TEMPLATE get_value<Type>(tr);
     }
 
     template<class K, class D, class C>
     template<class Type> inline
     Type basic_ptree<K, D, C>::get(const path_type &path) const
     {
-        return get_child(path).get_value<Type>();
+        return get_child(path).BOOST_NESTED_TEMPLATE get_value<Type>();
     }
 
     template<class K, class D, class C>
@@ -757,7 +757,7 @@ namespace boost { namespace property_tree
                                                 const path_type &path) const
     {
         if (optional<const self_type&> child = get_child_optional(path))
-            return child.get().get_value_optional<Type>();
+            return child.get().BOOST_NESTED_TEMPLATE get_value_optional<Type>();
         else
             return optional<Type>();
     }
