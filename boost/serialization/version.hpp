@@ -49,7 +49,7 @@ struct version
             traits_class_version<T>,
             mpl::int_<0>
         >::type type;
-    BOOST_STATIC_CONSTANT(unsigned int, value = version::type::value);
+    BOOST_STATIC_CONSTANT(int, value = version::type::value);
 };
 
 } // namespace serialization

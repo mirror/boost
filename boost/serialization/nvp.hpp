@@ -41,7 +41,7 @@ namespace serialization {
 template<class T>
 struct nvp : 
     public std::pair<const char *, T *>,
-    public wrapper_traits<nvp<T> >
+    public wrapper_traits<const nvp<T> >
 {
     explicit nvp(const char * name_, T & t) :
         // note: redundant cast works around borland issue

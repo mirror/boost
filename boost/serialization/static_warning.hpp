@@ -77,7 +77,7 @@ namespace boost {
 namespace serialization {
 
 template<int L> 
-struct STATIC_WARNING{};
+struct STATIC_WARNING_LINE{};
 
 template<bool B, int L>
 struct static_warning_test{
@@ -86,7 +86,7 @@ struct static_warning_test{
         boost::mpl::true_,
         typename boost::mpl::identity<
             boost::mpl::print<
-                STATIC_WARNING<L>
+                STATIC_WARNING_LINE<L>
             >
         >
     >::type type;
