@@ -44,10 +44,10 @@ namespace boost { namespace property_tree
             return *static_cast<const base_container*>(s->m_children);
         }
         static by_name_index& assoc(self_type *s) {
-            return ch(s).get<by_name>();
+            return ch(s).BOOST_NESTED_TEMPLATE get<by_name>();
         }
         static const by_name_index& assoc(const self_type *s) {
-            return ch(s).get<by_name>();
+            return ch(s).BOOST_NESTED_TEMPLATE get<by_name>();
         }
     };
     template <class K, class D, class C>

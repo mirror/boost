@@ -62,6 +62,7 @@ public:
         {
             name = filename;
             std::ofstream stream(name.c_str());
+            using namespace std;
             stream.write(test_data, strlen(test_data));
             BOOST_CHECK(stream.good());
         }
