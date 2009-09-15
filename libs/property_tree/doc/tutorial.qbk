@@ -112,6 +112,6 @@ Now the save() function. It is also 7 lines of code:
       __write_xml__(filename, pt);
    }
 
-The full program [@../../examples/debug_settings.cpp debug_settings.cpp] is
+The full program [@boost:/libs/property_tree/examples/debug_settings.cpp debug_settings.cpp] is
 included in the examples directory.
 [endsect] [/tutorial]
