@@ -85,7 +85,7 @@ public:
     }
     void save_override(const class_id_reference_type & t, int){
         // upto 32K classes
-        assert(t.t <= boost::integer_traits<boost::uint_least16_t>::const_max);
+        assert(t.t <= boost::integer_traits<boost::int_least16_t>::const_max);
         const boost::uint_least16_t x = t.t;
         * this->This() << x;
     }

@@ -20,8 +20,17 @@
 #include <cassert>
 #include <string>
 
+#include <boost/config.hpp> 
 #include <boost/preprocessor/empty.hpp>
 #include <boost/archive/detail/decl.hpp>
+
+// note: the only reason this is in here is that windows header
+// includes #define exception_code _exception_code (arrrgghhhh!).
+// the most expedient way to address this is be sure that this
+// header is always included whenever this header file is included.
+#if defined(BOOST_WINDOWS) 
+#include <excpt.h> 
+#endif 
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
