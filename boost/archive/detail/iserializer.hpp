@@ -34,28 +34,30 @@ namespace std{
 } // namespace std
 #endif
 
+#include <boost/static_assert.hpp>
+
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/greater_equal.hpp>
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 
 #ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO   
     #include <boost/serialization/extended_type_info_typeid.hpp>   
 #endif
 #include <boost/serialization/throw_exception.hpp>
 #include <boost/serialization/smart_cast.hpp>
-#include <boost/static_assert.hpp>
 #include <boost/serialization/static_warning.hpp>
-#include <boost/detail/no_exceptions_support.hpp>
 
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_enum.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_extent.hpp>
-#include <boost/serialization/assume_abstract.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
+
+#include <boost/serialization/assume_abstract.hpp>
 
 #define DONT_USE_HAS_NEW_OPERATOR (                    \
     defined(__BORLANDC__)                              \
@@ -78,6 +80,7 @@ namespace std{
 #include <boost/serialization/array.hpp>
 #include <boost/serialization/collection_size_type.hpp>
 #include <boost/serialization/singleton.hpp>
+#include <boost/serialization/wrapper.hpp>
 
 // the following is need only for dynamic cast of polymorphic pointers
 #include <boost/archive/archive_exception.hpp>
@@ -85,6 +88,7 @@ namespace std{
 #include <boost/archive/detail/basic_iserializer.hpp>
 #include <boost/archive/detail/basic_pointer_iserializer.hpp>
 #include <boost/archive/detail/archive_serializer_map.hpp>
+#include <boost/archive/detail/check.hpp>
 
 namespace boost {
 
@@ -324,11 +328,12 @@ pointer_iserializer<Archive, T>::~pointer_iserializer(){
     archive_serializer_map<Archive>::erase(this);
 }
 
-template<class Archive, class T>
+template<class Archive>
 struct load_non_pointer_type {
     // note this bounces the call right back to the archive
     // with no runtime overhead
     struct load_primitive {
+        template<class T>
         static void invoke(Archive & ar, T & t){
             load_access::load_primitive(ar, t);
         }
@@ -336,12 +341,15 @@ struct load_non_pointer_type {
     // note this bounces the call right back to the archive
     // with no runtime overhead
     struct load_only {
-        static void invoke(Archive & ar, T & t){
+        template<class T>
+        static void invoke(Archive & ar, const T & t){
             // short cut to user's serializer
             // make sure call is routed through the higest interface that might
             // be specialized by the user.
             boost::serialization::serialize_adl(
-                ar, t, boost::serialization::version<T>::value
+                ar, 
+                const_cast<T &>(t), 
+                boost::serialization::version<T>::value
             );
         }
     };
@@ -349,12 +357,9 @@ struct load_non_pointer_type {
     // note this save class information including version
     // and serialization level to the archive
     struct load_standard {
-        static void invoke(Archive &ar, T &t){
-            //BOOST_STATIC_ASSERT(! boost::is_const<T>::value);
-            // borland - for some reason T is const here - even though
-            // its not called that way - so fix it her
-            typedef BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type typex;
-            void * x = & const_cast<typex &>(t);
+        template<class T>
+        static void invoke(Archive &ar, const T & t){
+            void * x = & const_cast<T &>(t);
             ar.load_object(
                 x, 
                 boost::serialization::singleton<
@@ -365,6 +370,7 @@ struct load_non_pointer_type {
     };
 
     struct load_conditional {
+        template<class T>
         static void invoke(Archive &ar, T &t){
             //if(0 == (ar.get_flags() & no_tracking))
                 load_standard::invoke(ar, t);
@@ -373,57 +379,48 @@ struct load_non_pointer_type {
         }
     };
 
-    typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
-            // if its primitive
-            mpl::equal_to<
-                boost::serialization::implementation_level<T>,
-                mpl::int_<boost::serialization::primitive_type>
-            >,
-            mpl::identity<load_primitive>,
+    template<class T>
+    static void invoke(Archive & ar, T &t){
+        typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
+                // if its primitive
+                mpl::equal_to<
+                    boost::serialization::implementation_level<T>,
+                    mpl::int_<boost::serialization::primitive_type>
+                >,
+                mpl::identity<load_primitive>,
+            // else
+            BOOST_DEDUCED_TYPENAME mpl::eval_if<
+            // class info / version
+            mpl::greater_equal<
+                        boost::serialization::implementation_level<T>,
+                        mpl::int_<boost::serialization::object_class_info>
+                    >,
+            // do standard load
+            mpl::identity<load_standard>,
         // else
         BOOST_DEDUCED_TYPENAME mpl::eval_if<
-        // class info / version
-        mpl::greater_equal<
-                    boost::serialization::implementation_level<T>,
-                    mpl::int_<boost::serialization::object_class_info>
+            // no tracking
+                    mpl::equal_to<
+                        boost::serialization::tracking_level<T>,
+                        mpl::int_<boost::serialization::track_never>
                 >,
-        // do standard load
-        mpl::identity<load_standard>,
-    // else
-    BOOST_DEDUCED_TYPENAME mpl::eval_if<
-        // no tracking
-                mpl::equal_to<
-                    boost::serialization::tracking_level<T>,
-                    mpl::int_<boost::serialization::track_never>
-            >,
-            // do a fast load
-            mpl::identity<load_only>,
-        // else
-        // do a fast load only tracking is turned off
-        mpl::identity<load_conditional>
-    > > >::type typex;
-
-    static void invoke(Archive & ar, T &t){
-        // check that we're not trying to serialize something that
-        // has been marked not to be serialized.  If this your program
-        // traps here, you've tried to serialize a class whose trait
-        // has been marked "non-serializable". Either reset the trait
-        // (see level.hpp) or change program not to serialize items of this class
-        BOOST_STATIC_ASSERT((
-            mpl::greater_equal<
-                boost::serialization::implementation_level<T>, 
-                mpl::int_<boost::serialization::primitive_type>
-            >::value
-        ));
+                // do a fast load
+                mpl::identity<load_only>,
+            // else
+            // do a fast load only tracking is turned off
+            mpl::identity<load_conditional>
+        > > >::type typex;
+        check_object_versioning<T>();
+        check_object_level<T>();
         typex::invoke(ar, t);
     }
 };
 
-template<class Archive, class Tptr>
+template<class Archive>
 struct load_pointer_type {
-    template<class T>
     struct abstract
     {
+        template<class T>
         static const basic_pointer_iserializer * register_type(Archive & /* ar */){
             // it has? to be polymorphic
             BOOST_STATIC_ASSERT(boost::is_polymorphic<T>::value);
@@ -431,9 +428,9 @@ struct load_pointer_type {
          }
     };
 
-    template<class T>
     struct non_abstract
     {
+        template<class T>
         static const basic_pointer_iserializer * register_type(Archive & ar){
             return ar.register_type(static_cast<T *>(NULL));
         }
@@ -448,10 +445,10 @@ struct load_pointer_type {
         typedef BOOST_DEDUCED_TYPENAME
             mpl::eval_if<
                 boost::serialization::is_abstract<const T>,
-                mpl::identity<abstract<T> >,
-                mpl::identity<non_abstract<T> >    
+                boost::mpl::identity<abstract>,
+                boost::mpl::identity<non_abstract>  
             >::type typex;
-        return typex::register_type(ar);
+        return typex::template register_type<T>(ar);
     }
 
     template<class T>
@@ -473,7 +470,15 @@ struct load_pointer_type {
         );
     }
 
+    template<class T>
+    static void load(Archive &ar, T & t){
+        check_pointer_level<T>();
+        check_pointer_tracking<T>();
+    }
+
+    template<class Tptr>
     static void invoke(Archive & ar, Tptr & t){
+        load(ar, *t);
         const basic_pointer_iserializer * bpis_ptr = register_type(ar, *t);
         const basic_pointer_iserializer * newbpis_ptr = ar.load_pointer(
             * reinterpret_cast<void **>(&t),
@@ -486,8 +491,9 @@ struct load_pointer_type {
     }
 };
 
-template<class Archive, class T>
+template<class Archive>
 struct load_enum_type {
+    template<class T>
     static void invoke(Archive &ar, T &t){
         // convert integers to correct enum to load
         int i;
@@ -496,8 +502,9 @@ struct load_enum_type {
     }
 };
 
-template<class Archive, class T>
+template<class Archive>
 struct load_array_type {
+    template<class T>
     static void invoke(Archive &ar, T &t){
         typedef BOOST_DEDUCED_TYPENAME remove_extent<T>::type value_type;
         
@@ -524,33 +531,35 @@ struct load_array_type {
 } // detail
 
 template<class Archive, class T>
-inline void load(Archive &ar, T &t){
+inline void load(Archive & ar, T &t){
     // if this assertion trips. It means we're trying to load a
     // const object with a compiler that doesn't have correct
     // funtion template ordering.  On other compilers, this is
     // handled below.
-    BOOST_STATIC_ASSERT(! boost::is_const<T>::value);
+    detail::check_const_loading<T>();
     typedef
         BOOST_DEDUCED_TYPENAME mpl::eval_if<is_pointer<T>,
-            mpl::identity<detail::load_pointer_type<Archive, T> >
+            mpl::identity<detail::load_pointer_type<Archive> >
         ,//else
         BOOST_DEDUCED_TYPENAME mpl::eval_if<is_array<T>,
-            mpl::identity<detail::load_array_type<Archive, T> >
+            mpl::identity<detail::load_array_type<Archive> >
         ,//else
         BOOST_DEDUCED_TYPENAME mpl::eval_if<is_enum<T>,
-            mpl::identity<detail::load_enum_type<Archive, T> >
+            mpl::identity<detail::load_enum_type<Archive> >
         ,//else
-            mpl::identity<detail::load_non_pointer_type<Archive, T> >
+            mpl::identity<detail::load_non_pointer_type<Archive> >
         >
         >
         >::type typex;
     typex::invoke(ar, t);
 }
 
+#if 0
+
 // BORLAND
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
 // borland has a couple of problems
-// a) if function is partiall specialized - see below
+// a) if function is partially specialized - see below
 // const paramters are transformed to non-const ones
 // b) implementation of base_object can't be made to work
 // correctly which results in all base_object s being const.
@@ -575,6 +584,8 @@ inline void load(Archive &ar, const T&t){
   load_wrapper(ar,t,serialization::is_wrapper<T>());
 }
 #endif 
+#endif
+
 #endif
 
 } // namespace archive
