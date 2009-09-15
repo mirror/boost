@@ -465,10 +465,18 @@ boost::mpi::request::wait wait] method). Multiple requests
 can be completed at the same time with the [funcref
 boost::mpi::wait_all wait_all] operation. 
 
-Important note: Unlike with the MPI C API one always has to wait for the 
-completion of a request and cannot just discard the request, since the
-request object might contain temporary buffers that have to be kept
-until the send is completed.
+Important note: The MPI standard requires users to keep the request
+handle for a non-blocking communication, and to call the "wait"
+operation (or successfully test for completion) to complete the send
+or receive. Unlike most C MPI implementations, which allow the user to
+discard the request for a non-blocking send, Boost.MPI requires the
+user to call "wait" or "test", since the request object might contain
+temporary buffers that have to be kept until the send is
+completed. Moreover, the MPI standard does not guarantee that the
+receive makes any progress before a call to "wait" or "test", although
+most implementations of the C MPI do allow receives to progress before
+the call to "wait" or "test". Boost.MPI, on the other hand, generally
+requires "test" or "wait" calls to make progress.
 
 If you run this program multiple times, you may see some strange
 results: namely, some runs will produce:
