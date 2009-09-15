@@ -398,13 +398,13 @@
 				RelativePath="..\..\..\boost\archive\archive_exception.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\assume_abstract.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\base_object.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\export.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\serialization\is_abstract.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\level.hpp">
@@ -432,6 +432,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\version.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\wrapper.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\xml_archive_exception.hpp">
@@ -520,9 +523,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\weak_ptr.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\serialization\wrapper.hpp">
 			</File>
 			<Filter
 				Name="detail"
