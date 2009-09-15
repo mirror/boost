@@ -533,14 +533,26 @@ void test_conversion_from_string_to_integral(CharT)
     BOOST_CHECK_EQUAL(lexical_cast<T>(s), min_val);
     if(limits::is_signed)
     {
-        BOOST_CHECK_THROW(lexical_cast<T>(s + zero), bad_lexical_cast);
-        BOOST_CHECK_THROW(lexical_cast<T>(s + nine), bad_lexical_cast);
+#if defined(BOOST_MSVC) && BOOST_MSVC == 1400
+        // VC++ 8.0 bug, see libs/conversion/test/lexical_cast_vc8_bug_test.cpp
+        if(sizeof(T) < sizeof(boost::intmax_t))
+#endif
+        {
+            BOOST_CHECK_THROW(lexical_cast<T>(s + zero), bad_lexical_cast);
+            BOOST_CHECK_THROW(lexical_cast<T>(s + nine), bad_lexical_cast);
+        }
     }
 
     s = to_str<CharT>(max_val);
     BOOST_CHECK_EQUAL(lexical_cast<T>(s), max_val);
-    BOOST_CHECK_THROW(lexical_cast<T>(s + zero), bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<T>(s + nine), bad_lexical_cast);
+#if defined(BOOST_MSVC) && BOOST_MSVC == 1400
+    // VC++ 8.0 bug, see libs/conversion/test/lexical_cast_vc8_bug_test.cpp
+    if(sizeof(T) != sizeof(boost::intmax_t))
+#endif
+    {
+        BOOST_CHECK_THROW(lexical_cast<T>(s + zero), bad_lexical_cast);
+        BOOST_CHECK_THROW(lexical_cast<T>(s + nine), bad_lexical_cast);
+    }
 
     if(limits::digits <= 16 && lcast_test_small_integral_types_completely)
         // min and max have already been tested.
