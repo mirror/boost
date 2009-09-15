@@ -95,12 +95,12 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(test_conversion_from_to_wchar_t_alias));
     suite->add(BOOST_TEST_CASE(test_conversion_to_pointer));
     suite->add(BOOST_TEST_CASE(test_conversion_to_string));
-    #ifndef BOOST_LCAST_NO_WCHAR_T
+#ifndef BOOST_LCAST_NO_WCHAR_T
     suite->add(BOOST_TEST_CASE(test_conversion_from_wchar_t));
     suite->add(BOOST_TEST_CASE(test_conversion_to_wchar_t));
     suite->add(BOOST_TEST_CASE(test_conversion_from_wstring));
     suite->add(BOOST_TEST_CASE(test_conversion_to_wstring));
-    #endif
+#endif
     suite->add(BOOST_TEST_CASE(test_bad_lexical_cast));
     suite->add(BOOST_TEST_CASE(test_no_whitespace_stripping));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_short));
@@ -111,16 +111,16 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ulong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_intmax_t));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_uintmax_t));
-    #ifdef LCAST_TEST_LONGLONG
+#ifdef LCAST_TEST_LONGLONG
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_longlong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ulonglong));
-    #endif
-    #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#endif
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     suite->add(BOOST_TEST_CASE(&test_traits));
     suite->add(BOOST_TEST_CASE(&test_wtraits));
     suite->add(BOOST_TEST_CASE(&test_allocator));
     suite->add(BOOST_TEST_CASE(&test_wallocator));
-    #endif
+#endif
 
     return suite;
 }
@@ -262,9 +262,9 @@ void test_conversion_from_to_wchar_t_alias()
 void test_conversion_to_pointer()
 {
     BOOST_CHECK_THROW(lexical_cast<char *>("Test"), bad_lexical_cast);
-    #ifndef BOOST_LCAST_NO_WCHAR_T
+#ifndef BOOST_LCAST_NO_WCHAR_T
     BOOST_CHECK_THROW(lexical_cast<wchar_t *>("Test"), bad_lexical_cast);
-    #endif
+#endif
 }
 
 void test_conversion_from_wchar_t()
@@ -324,12 +324,12 @@ void test_conversion_to_wchar_t()
         lexical_cast<wchar_t>(std::wstring(L"")), bad_lexical_cast);
     BOOST_CHECK_THROW(
         lexical_cast<wchar_t>(std::wstring(L"Test")), bad_lexical_cast);
-    #endif
+#endif
 }
 
 void test_conversion_from_wstring()
 {
-    #ifndef BOOST_LCAST_NO_WCHAR_T
+#ifndef BOOST_LCAST_NO_WCHAR_T
     BOOST_CHECK_EQUAL(123, lexical_cast<int>(std::wstring(L"123")));
     BOOST_CHECK_THROW(
         lexical_cast<int>(std::wstring(L"")), bad_lexical_cast);
@@ -342,12 +342,12 @@ void test_conversion_from_wstring()
         lexical_cast<bool>(std::wstring(L"")), bad_lexical_cast);
     BOOST_CHECK_THROW(
         lexical_cast<bool>(std::wstring(L"Test")), bad_lexical_cast);
-    #endif
+#endif
 }
 
 void test_conversion_to_wstring()
 {
-    #ifndef BOOST_LCAST_NO_WCHAR_T
+#ifndef BOOST_LCAST_NO_WCHAR_T
     wchar_t buf[] = L"hello";
     wchar_t* str = buf;
     BOOST_CHECK(str == lexical_cast<std::wstring>(str));
@@ -367,7 +367,7 @@ void test_conversion_to_wstring()
     BOOST_CHECK(L"Test" == lexical_cast<std::wstring>(std::wstring(L"Test")));
     BOOST_CHECK(L" " == lexical_cast<std::wstring>(std::wstring(L" ")));
     BOOST_CHECK(L"" == lexical_cast<std::wstring>(std::wstring(L"")));
-    #endif
+#endif
 }
 
 void test_bad_lexical_cast()
@@ -599,7 +599,7 @@ void test_conversion_from_to_integral_for_locale()
     test_conversion_from_integral_to_integral<T>();
     test_conversion_from_integral_to_string<T>('0');
     test_conversion_from_string_to_integral<T>('0');
-#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+#if !defined(BOOST_LCAST_NO_WCHAR_T)
     test_conversion_from_integral_to_string<T>(L'0');
     test_conversion_from_string_to_integral<T>(L'0');
 #endif
