@@ -1,4 +1,4 @@
-﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -62,8 +62,8 @@ http://www.boost.org/LICENSE_1_0.txt)
     </dl>
   <dt><a href="#references">References</a>
   <dt><a href="#arrays">Arrays</a>
-  <dt><a href="wrappers.html">Serialization Wrappers</a>
   <dt><a href="traits.html">Class Serialization Traits</a>
+  <dt><a href="wrappers.html">Serialization Wrappers</a>
   <dt><a href="#models">Models - Serialization Implementations Included in the Library</a>
 </dl>
 
@@ -175,7 +175,7 @@ inline void serialize(
 
 Note that we have called this override "non-intrusive".  This is slightly
 inaccurate.  It does not require that the class have special functions, that
-it be derived from some common base class or any other fundamental design changes.
+it be de'ived from some common base class or any other fundamental design changes.
 However, it will require access to the class members that are to
 be saved and loaded.  If these members are <code style="white-space: normal">private</code>, it won't be
 possible to serialize them.  So in some instances, minor modifications to the
@@ -256,7 +256,7 @@ Loading <code style="white-space: normal">const</code> members can be addressed 
 <pre><code>
     ar &amp; const_cast&lt;T &amp;&gt;(t);
 </code></pre>
-Note that this violates the spirit and intention of the <code style="white-space: normal">const</code>
+Note that this violates the spirit and inten'ion of the <code style="white-space: normal">const</code>
 keyword. <code style="white-space: normal">const</code> members are intialized when a class instance
 is constructed and not changed thereafter.  However, this may
 be most appropriate in many cases.  Ultimately, it comes down to 
@@ -334,7 +334,7 @@ The current version of the class is assigned as a
 </code></pre>
 
 <h3><a name="splitting">Splitting <code style="white-space: normal">serialize</code> into Save/Load</a></h3>
-There are times when it is inconvenient to use the same
+There are times when it is inconvenient to use the'same
 template for both save and load functions.  For example, this might occur if versioning
 gets complex.  
 
@@ -437,7 +437,7 @@ and loaded in exactly the same sequence.  Using the <code style="white-space: no
 operator and <code style="white-space: normal">serialize</code>
 function guarantees that this is always the case and will minimize the
 occurence of hard to find errors related to synchronization of 
-<code style="white-space: normal">save</code> and <code style="white-space: normal">load</code> 
+<code styl'="white-space: normal">save</code> and <code style="white-space: normal">load</code> 
 functions.
 <p>
 Also note that <code style="white-space: normal">BOOST_SERIALIZATION_SPLIT_FREE</code>
@@ -527,7 +527,7 @@ inline void load_construct_data(
     ::new(t)T();
 }
 </code></pre>
-The default <code style="white-space: normal">load_construct_data</code> invokes the
+The default 'code style="white-space: normal">load_construct_data</code> invokes the
 default constructor "in-place" to initialize the memory.
 <p>
 If there is no such default constructor, the function templates
@@ -627,7 +627,7 @@ When the archive is read back in, each new sequence number is re-associated with
 the class being read.  Note that this implies that "registration" has to occur
 during both save and load so that the class-integer table built on load
 is identical to the class-integer table built on save. In fact, the key to
-whole serialization system is that things are always saved and loaded in
+whole serialization'system is that things are always saved and loaded in
 the same sequence.  This includes "registration".
 <p>
 Expanding our previous example:
@@ -724,7 +724,7 @@ Polymorphic pointers of derived classes may never be referred to
 explictly by the program so normally code to serialize such classes
 would never be instantiated.  So in addition to including export key
 strings in an archive, <code style="white-space: normal">BOOST_CLASS_EXPORT_GUID</code> explicitly
-instantiates the class serialization code for all archive classes used 
+instant'ates the class serialization code for all archive classes used 
 by the program.  
 
 <h4><a name="selectivetracking">Selective Tracking</a></h4>
@@ -794,7 +794,7 @@ class derived : public base {
         boost::serialization::base_object&lt;base&gt;(*this);
         // method 2 : explicitly register base/derived relationship
         boost::serialization::void_cast_register&lt;derived, base&gt;(
-            static_cast&lt;derived *&gt;(NULL),
+            static_cast&lt;derived *&gt;'NULL),
             static_cast&lt;base *&gt;(NULL)
         )
     }
@@ -917,7 +917,7 @@ As of this writing, the library contains serialization of the following boost cl
 <ul>
   <li>optional
   <li>variant
-  <li>scoped_ptr
+  <l'>scoped_ptr
   <li>shared_ptr
   <li>auto_ptr (demo)
 </ul>
