@@ -180,6 +180,15 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Assignment
+#ifdef BOOST_UBLAS_MOVE_SEMANTICS
+
+        /*! @note "pass by value" the key idea to enable move semantics */
+        BOOST_UBLAS_INLINE
+        matrix &operator = (matrix m) {
+            assign_temporary(m);
+            return *this;
+        }
+#else
         BOOST_UBLAS_INLINE
         matrix &operator = (const matrix &m) {
             size1_ = m.size1_;
@@ -187,6 +196,7 @@ namespace boost { namespace numeric { namespace ublas {
             data () = m.data ();
             return *this;
         }
+#endif
         template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         matrix &operator = (const matrix_container<C> &m) {
@@ -1005,11 +1015,21 @@ namespace boost { namespace numeric { namespace ublas {
         ~bounded_matrix () {}
 
         // Assignment
+#ifdef BOOST_UBLAS_MOVE_SEMANTICS
+
+        /*! @note "pass by value" the key idea to enable move semantics */
+        BOOST_UBLAS_INLINE
+        bounded_matrix &operator = (bounded_matrix m) {
+            matrix_type::operator = (m);
+            return *this;
+        }
+#else
         BOOST_UBLAS_INLINE
         bounded_matrix &operator = (const bounded_matrix &m) {
             matrix_type::operator = (m);
             return *this;
         }
+#endif
         template<class L2, class A2>        // Generic matrix assignment
         BOOST_UBLAS_INLINE
         bounded_matrix &operator = (const matrix<T, L2, A2> &m) {
@@ -3298,7 +3318,7 @@ namespace boost { namespace numeric { namespace ublas {
             size1_ (m.size1_), size2_ (m.size2_) /* , data_ () */ {
             if (size1_ > N || size2_ > M)
                 bad_size ().raise ();
-            *this = m;
+            assign(m);
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -3382,6 +3402,15 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Assignment
+#ifdef BOOST_UBLAS_MOVE_SEMANTICS
+
+        /*! @note "pass by value" the key idea to enable move semantics */
+        BOOST_UBLAS_INLINE
+        c_matrix &operator = (c_matrix m) {
+            assign_temporary(m);
+            return *this;
+        }
+#else
         BOOST_UBLAS_INLINE
         c_matrix &operator = (const c_matrix &m) {
             size1_ = m.size1_;
@@ -3390,6 +3419,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::copy (m.data_ [i], m.data_ [i] + m.size2_, data_ [i]);
             return *this;
         }
+#endif
         template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         c_matrix &operator = (const matrix_container<C> &m) {
