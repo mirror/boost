@@ -2,15 +2,32 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta name="generator" content="HTML Tidy for Linux (vers 6 November 2007), see www.w3.org" />
-<!-- tidy options: -w 120 -asxhtml -clean --vertical-space yes -f index.htm.err -m index.htm -->
+<!-- tidy options: -w 120 -asxhtml -clean - - vertical-space yes -f index.htm.err -m index.htm -->
 <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 <link href="ublas.css" type="text/css" />
 <title>Boost Basic Linear Algebra - Release Notes</title>
 </head>
 <body>
-<h1><img src="../../../../boost.png" align="middle" /> Boost Basic Linear Algebra - Release Notes</h1>
+<h1><img src="../../../../boost.png" align="middle" alt="logo"/>Boost Basic Linear Algebra - Release Notes</h1>
+
+<div class="navigation">
+<a href="index.htm">back to uBLAS home</a>
+</div>
 
 <h2>Release 1.41.1</h2>
+
+<h3>new features</h3>
+
+<ul>
+<li>Move semantics of vector/matrix container assignments have been
+implemented. They can be enabled by setting
+BOOST_UBLAS_MOVE_SEMANTICS. More details are on the <a
+href="options.htm">preprocessor options page</a>.
+</li>
+</ul>
+
+<h3>bug fixes</h3>
+
 <ul>
 <li><a href="https://svn.boost.org/trac/boost/ticket/3293">[3293]</a>Fix resizing problem in <code>identity_matrix</code>
 </li>
@@ -30,7 +47,7 @@
 </p>
 <!-- Created: Sun Sep 13 00:57:13 CEST 2009 -->
 <!-- hhmts start -->
-Last modified: Sun Sep 13 01:04:23 CEST 2009
+Last modified: Wed Sep 16 23:18:50 CEST 2009
 <!-- hhmts end -->
   </body>
 </html>

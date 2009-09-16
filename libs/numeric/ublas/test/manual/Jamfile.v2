@@ -4,3 +4,5 @@
 # LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 exe sp_resize : sp_resize.cpp ;
+
+exe test_move_semantics : test_move_semantics.cpp ;
