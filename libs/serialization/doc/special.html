@@ -177,7 +177,7 @@ class serialization traits cannot be changed without invalidating the old
 archives.  Including the class information in the archive assures us
 that they will be readable in the future even if the class definition
 is revised.  A light weight structure such as display pixel might be
-declared in a header l'ke this:
+declared in a header like this:
 
 <pre><code>
 #include &lt;boost/serialization/serialization.hpp&gt;
@@ -265,7 +265,7 @@ One remedy for this is to assign serialization traits to the template
 information for instantiations of this template is never serialized.  This 
 process is described <a target="detail" href="traits.html#templates">above</a> and
 has been used for <a target="detail" href="wrappers.html#nvp"><strong>Name-Value Pairs</strong></a>.
-Wrappers would typically be assigned'such traits.
+Wrappers would typically be assigned such traits.
 <p>
 Another way to avoid this problem is to assign serialization traits
 to all specializations of the template <code style="white-space: normal">my_wrapper</code>
@@ -439,7 +439,7 @@ where implementation of serializaton is also completely separate
 from the main program but the code is loaded at runtime.  In this
 example, this code is loaded automatically when the program which
 uses it starts up, but it could just as well be loaded and unloaded 
-with an OS depende't API call.
+with an OS dependent API call.
 <p>
 Also included are
 <a href = "../test/test_dll_exported.cpp" target="test_dll_exported">
@@ -542,7 +542,7 @@ for the binary archives.
 
 <hr>
 <p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2002-2004. 
-Dist'ibuted under the Boost Software License, Version 1.0. (See
+Distributed under the Boost Software License, Version 1.0. (See
 accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 </i></p>
 </body>

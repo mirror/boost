@@ -178,7 +178,7 @@ Default tracking traits are:
 <ul>
   <li>For primitive, <code style="white-space: normal">track_never</code>.
   <li>For pointers, <code style="white-space: normal">track_never</code>.
-  That i', addresses of addresses are not tracked by default.
+  That is, addresses of addresses are not tracked by default.
   <li>All current serialization wrappers such as <code style="white-space: normal">boost::serialization::nvp</code>,
   <code style="white-space: normal">track_never</code>.
   <li>For all other types, <code style="white-space: normal">track_selectively</code>.
@@ -279,7 +279,7 @@ type is in fact abstract.  This will guarentee that
 will return the correct value for all compilers.
 
 <h3><a name="typeinfo">Type Information Implementation</a></h3>
-This last trait is also related to the serialization of ob'ects
+This last trait is also related to the serialization of objects
 through a base class pointer.  The implementation of this facility
 requires the ability to determine at run time the true type of the
 object that a base class pointer points to.  Different serialization
@@ -505,7 +505,7 @@ and template parameters should be assigned according to the following table:
 <p>
 <table border>
 <tr><th align=left>parameter</th><th align=left>description</th><th align=left>permitted values</th><th align=left>default value</th></tr>
-<tr><td><code>T</code></td><td>target class<'td><td>class name<T></td><td>none</td></tr>            
+<tr><td><code>T</code></td><td>target class</td><td>class name<T></td><td>none</td></tr>            
 <tr><td><code>Level</code></td><td>implementation level</td><td><code>not_serializable<br>primitive_type<br>object_serializable<br>object_class_info</code></td><td>none</td></tr>  
 <tr><td><code>Tracking</code></td><td>tracking level</td><td><code>track_never<br>track_selectivly<br>track_always</code></td><td>none</td></tr>
 <tr><td><code>Version</code></td><td><code>class version</td><td>unsigned integer</td><td><code>0</code></td></tr>
