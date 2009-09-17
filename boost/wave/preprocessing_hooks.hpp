@@ -238,7 +238,7 @@ struct default_preprocessing_hooks
         std::string const& absname, bool is_system_include) 
     {}
 #endif
-    
+
     ///////////////////////////////////////////////////////////////////////////
     //  
     //  The function 'returning_from_include_file' is called, whenever an
@@ -260,6 +260,55 @@ struct default_preprocessing_hooks
     returning_from_include_file(ContextT const& ctx) 
     {}
 #endif
+
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    ///////////////////////////////////////////////////////////////////////////
+    //  
+    //  The function 'detected_pragma_once' is called whenever either a 
+    //  include file is about to be added to the list of #pragma once headers.
+    //  That means this header file will not be opened and parsed again even 
+    //  if it is specified in a later #include directive.
+    //  This function is called either as the result of a detected directive
+    //  #pragma once, or as the result of a detected include guard scheme. 
+    //  
+    //  The implemented heuristics for include guards detects two forms of 
+    //  include guards:
+    // 
+    //       #ifndef INCLUDE_GUARD_MACRO
+    //       #define INCLUDE_GUARD_MACRO
+    //       ...
+    //       #endif
+    // 
+    //   or
+    // 
+    //       if !defined(INCLUDE_GUARD_MACRO)
+    //       #define INCLUDE_GUARD_MACRO
+    //       ...
+    //       #endif
+    // 
+    //  note, that the parenthesis are optional (i.e. !defined INCLUDE_GUARD_MACRO
+    //  will work as well). The code allows for any whitespace, newline and single 
+    //  '#' tokens before the #if/#ifndef and after the final #endif.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 'filename' contains the file system path of the 
+    //  opened file (this is relative to the directory of the currently 
+    //  processed file or a absolute path depending on the paths given as the
+    //  include search paths).
+    //
+    //  The parameter include_guard is either "__BOOST_WAVE_PRAGMA_ONCE__" (if 
+    //  a #pragma once has been detected) or contains the name of the detected 
+    //  include guard.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContextT>
+    void
+    detected_pragma_once(ContextT const& ctx, std::string const& filename,
+        std::string const& include_guard) 
+    {}
+#endif 
 
     ///////////////////////////////////////////////////////////////////////////
     //  
@@ -368,7 +417,7 @@ struct default_preprocessing_hooks
     undefined_macro(ContextT const& ctx, TokenT const& macro_name)
     {}
 #endif
-    
+
     ///////////////////////////////////////////////////////////////////////////
     //
     //  The function 'found_directive' is called, whenever a preprocessor 
@@ -441,7 +490,7 @@ struct default_preprocessing_hooks
         bool expression_value)
     { return false; }         // ok to continue, do not re-evaluate expression
 #endif
-    
+
     ///////////////////////////////////////////////////////////////////////////
     //
     //  The function 'skipped_token' is called, whenever a token is about to be
@@ -591,7 +640,7 @@ struct default_preprocessing_hooks
     found_line_directive(ContextT const& ctx, ContainerT const& arguments,
         unsigned int line, std::string const& filename)
     {}
-    
+
     ///////////////////////////////////////////////////////////////////////////
     //
     //  The function 'throw_exception' will be called by the library whenever a

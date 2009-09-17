@@ -404,7 +404,10 @@ public:
         { return includes.has_pragma_once(filename_); }
     bool add_pragma_once_header(std::string const &filename_,
             std::string const& guard_name = "__BOOST_WAVE_PRAGMA_ONCE__")
-        { return includes.add_pragma_once_header(filename_, guard_name); }
+    { 
+        get_hooks().detected_pragma_once(derived(), filename_, guard_name);
+        return includes.add_pragma_once_header(filename_, guard_name); 
+    }
 #endif 
 
 #if BOOST_WAVE_SERIALIZATION != 0
