@@ -64,6 +64,9 @@
 // All problems to gcc-3.x and earlier here:
 //
 #define BOOST_NO_TWO_PHASE_NAME_LOOKUP
+#  ifdef __OPEN64__
+#     define BOOST_NO_IS_ABSTRACT
+#  endif
 #endif
 
 #ifndef __EXCEPTIONS
