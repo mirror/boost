@@ -640,7 +640,7 @@ namespace boost { namespace proto
     typedef functional::pop_front   _pop_front;
     typedef functional::reverse     _reverse;
     typedef functional::eval        _eval;
-    typedef functional::deep_copy   _deep_copy;
+    struct _deep_copy;
 
     typedef functional::make_expr<tag::terminal>           _make_terminal;
     typedef functional::make_expr<tag::unary_plus>         _make_unary_plus;

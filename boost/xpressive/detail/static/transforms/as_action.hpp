@@ -113,7 +113,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
     struct DeepCopy
       : or_<
             when< terminal<detail::attribute_placeholder<_> >,  as_read_attr>
-          , when< terminal<_>,                                  proto::_deep_copy(_)>
+          , when< terminal<_>,                                  proto::_deep_copy>
           , otherwise< nary_expr<_, vararg<DeepCopy> > >
         >
     {};
