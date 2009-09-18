@@ -305,6 +305,8 @@ void print_compiler_macros()
   PRINT_MACRO(__QNXNTO__);
   PRINT_MACRO(__QNX__);
   PRINT_MACRO(_NTO_VERSION);
+  PRINT_MACRO(__OPEN64__);
+  PRINT_MACRO(__open64);
 }
 
 void print_stdlib_macros()
