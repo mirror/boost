@@ -403,10 +403,17 @@ public:
     bool has_pragma_once(std::string const &filename_)
         { return includes.has_pragma_once(filename_); }
     bool add_pragma_once_header(std::string const &filename_,
-            std::string const& guard_name = "__BOOST_WAVE_PRAGMA_ONCE__")
+            std::string const& guard_name)
     { 
-        get_hooks().detected_pragma_once(derived(), filename_, guard_name);
+        get_hooks().detected_include_guard(derived(), filename_, guard_name);
         return includes.add_pragma_once_header(filename_, guard_name); 
+    }
+    bool add_pragma_once_header(token_type const &pragma_, 
+        std::string const &filename_)
+    { 
+        get_hooks().detected_pragma_once(derived(), pragma_, filename_);
+        return includes.add_pragma_once_header(filename_, 
+            "__BOOST_WAVE_PRAGMA_ONCE__"); 
     }
 #endif 
 

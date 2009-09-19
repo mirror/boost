@@ -576,13 +576,13 @@ public:
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     ///////////////////////////////////////////////////////////////////////////
     //  
-    //  The function 'detected_pragma_once' is called, whenever either a 
+    //  The function 'detected_include_guard' is called whenever either a 
     //  include file is about to be added to the list of #pragma once headers.
     //  That means this header file will not be opened and parsed again even 
     //  if it is specified in a later #include directive.
-    //  This function is called either as the result of a detected directive
-    //  #pragma once, or as the result of a detected include guard scheme. 
-    //  
+    //  This function is called as the result of a detected include guard 
+    //  scheme. 
+    //
     //  The implemented heuristics for include guards detects two forms of 
     //  include guards:
     // 
@@ -610,22 +610,17 @@ public:
     //  processed file or a absolute path depending on the paths given as the
     //  include search paths).
     //
-    //  The parameter include_guard is either "__BOOST_WAVE_PRAGMA_ONCE__" (if 
-    //  a #pragma once has been detected) or contains the name of the detected 
-    //  include guard.
+    //  The parameter contains the name of the detected include guard.
     //
     ///////////////////////////////////////////////////////////////////////////
     template <typename ContextT>
     void
-    detected_pragma_once(ContextT const& ctx, std::string const& filename,
+    detected_include_guard(ContextT const& ctx, std::string const& filename,
         std::string const& include_guard) 
-    {
+   {
         if (enabled_guard_tracing()) {
-            if (include_guard == "__BOOST_WAVE_PRAGMA_ONCE__") 
-                guardstrm << "#pragma once:" << std::endl;
-            else
-                guardstrm << include_guard << ":" << std::endl;
-            guardstrm << "  " << filename << std::endl;
+            guardstrm << include_guard << ":" << std::endl
+                      << "  " << filename << std::endl;
         }
     }
 #endif 

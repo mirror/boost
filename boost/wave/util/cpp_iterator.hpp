@@ -427,7 +427,9 @@ pp_iterator_functor<ContextT>::returned_from_include()
 
     // restore the actual current file and directory 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-        ctx.set_current_filename(iter_ctx->real_filename.c_str());
+        fs::path rfp(wave::util::create_path(iter_ctx->real_filename.c_str()));
+        std::string real_filename(rfp.string());
+        ctx.set_current_filename(real_filename.c_str());
 #endif 
         ctx.set_current_directory(iter_ctx->real_filename.c_str());
 
@@ -1523,18 +1525,17 @@ fs::path native_path(wave::util::create_path(file_path));
     }
 
 // test, if this file is known through a #pragma once directive
+    std::string native_path_str(wave::util::native_file_string(native_path));
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-    if (!ctx.has_pragma_once(wave::util::native_file_string(native_path))) 
+    if (!ctx.has_pragma_once(native_path.string())) 
 #endif 
     {
     // the new include file determines the actual current directory
-        ctx.set_current_directory(
-            wave::util::native_file_string(native_path).c_str());
+        ctx.set_current_directory(native_path_str.c_str());
 
     // preprocess the opened file
     boost::shared_ptr<base_iteration_context_type> new_iter_ctx (
-        new iteration_context_type(ctx, 
-            wave::util::native_file_string(native_path).c_str(), 
+        new iteration_context_type(ctx, native_path_str.c_str(), 
             act_pos, boost::wave::enable_prefer_pp_numbers(ctx.get_language())));
 
     // call the include policy trace function
@@ -1559,7 +1560,9 @@ fs::path native_path(wave::util::create_path(file_path));
 
         act_pos.set_file(iter_ctx->filename);  // initialize file position
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-        ctx.set_current_filename(iter_ctx->real_filename.c_str());
+        fs::path rfp(wave::util::create_path(iter_ctx->real_filename.c_str()));
+        std::string real_filename(rfp.string());
+        ctx.set_current_filename(real_filename.c_str());
 #endif 
 
         act_pos.set_line(iter_ctx->line);

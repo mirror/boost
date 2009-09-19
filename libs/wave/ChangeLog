@@ -35,9 +35,10 @@ Boost V1.41.0
   (default is cout).
 - Fixed compilation problems caused by recent changes to the multi_pass iterator
   from Spirit V2.1.
-- Added a new preprocessing hook detected_pragma_once() which is getting called 
-  whenever either a #pragma once has been detected or if the include guard 
-  heuristics detected an include guard for a particular include file.
+- Added a new preprocessing hooks detected_pragma_once() and 
+  detected_include_guard() which are getting called whenever either a #pragma 
+  once has been detected or if the include guard heuristics detected an 
+  include guard for a particular include file.
 - Added a new command line option to the wave driver tool: --listguards/-g 
   allowing to trace all include files which are either contain a #pragma once 
   or contain include guards.

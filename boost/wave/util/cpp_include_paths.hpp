@@ -440,7 +440,7 @@ inline void load (Archive & ar, boost::filesystem::path &p,
     using namespace boost::serialization;
     std::string path_str;
     ar & make_nvp("filepath", path_str);
-    p = boost::filesystem::path(path_str, boost::filesystem::native);
+    p = wave::util::create_path(path_str);
 }
 
 // split non-intrusive serialization function member into separate
