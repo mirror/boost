@@ -47,12 +47,12 @@
     <span class="keyword">public</span>:
         <a href="class_reference_filepos.html#constructors">file_position</a>();
         <span class="keyword">explicit</span> <a href="class_reference_filepos.html#constructors">file_position</a>(String const &amp;file, 
-            int line_ = 1, int column_ = 1);
+            <span class="keyword">unsigned int</span> line_ = 1, <span class="keyword">unsigned int </span>column_ = 1);
 
     // accessors
         String <span class="keyword">const</span> &amp;<a href="class_reference_filepos.html#get_accessors">get_file</a>() <span class="keyword">const</span>;
-        <span class="keyword">int</span> <a href="class_reference_filepos.html#get_accessors">get_line</a>() <span class="keyword">const</span>;
-        <span class="keyword">int</span> <a href="class_reference_filepos.html#get_accessors">get_column</a>() <span class="keyword">const</span>;
+        <span class="keyword">unsigned int</span> <a href="class_reference_filepos.html#get_accessors">get_line</a>() <span class="keyword">const</span>;
+        <span class="keyword">unsigned int</span> <a href="class_reference_filepos.html#get_accessors">get_column</a>() <span class="keyword">const</span>;
     
         <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_file</a>(String <span class="keyword">const</span> &amp;file);
         <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_line</a>(<span class="keyword">int</span> line);
@@ -73,7 +73,7 @@
 <h3><a name="constructors"></a>Constructors</h3>
 <pre>        <a href="class_reference_filepos.html#constructors">file_position</a>();
         <span class="keyword">explicit</span> <a href="class_reference_filepos.html#constructors">file_position</a>(String const &amp;file, 
-            int line_ = 1, int column_ = 1);
+            <span class="keyword">unsigned int </span>line_ = 1, <span class="keyword">unsigned int </span>column_ = 1);
 </pre>
 <blockquote>
   <p>The constructors initialize a new instance of a <tt>file_position</tt> in 
@@ -82,8 +82,8 @@
 </blockquote>
 <p><a name="get_accessors"></a><b>get_file</b>, <b>get_line</b>, <b>get_column</b></p>
 <pre>        String <span class="keyword">const</span> &amp;<a href="class_reference_filepos.html#get_accessors">get_file</a>() <span class="keyword">const</span>;
-        <span class="keyword">int</span> <a href="class_reference_filepos.html#get_accessors">get_line</a>() <span class="keyword">const</span>;
-        <span class="keyword">int</span> <a href="class_reference_filepos.html#get_accessors">get_column</a>() <span class="keyword">const</span>;
+        <span class="keyword">unsigned int</span> <a href="class_reference_filepos.html#get_accessors">get_line</a>() <span class="keyword">const</span>;
+        <span class="keyword">unsigned int</span> <a href="class_reference_filepos.html#get_accessors">get_column</a>() <span class="keyword">const</span>;
 </pre>
 <blockquote>
   <p>The <tt>get_...</tt> functions are used to access the current values of the 
@@ -92,8 +92,8 @@
 </blockquote>
 <p><a name="set_accessors"></a><b>set_file</b>, <b>set_line</b>, <b>set_column</b></p>
 <pre>        <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_file</a>(String <span class="keyword">const</span> &amp;file);
-        <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_line</a>(<span class="keyword">int</span> line);
-        <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_column</a>(<span class="keyword">int</span> column);
+        <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_line</a>(<span class="keyword">unsigned int</span> line);
+        <span class="keyword">void</span> <a href="class_reference_filepos.html#set_accessors">set_column</a>(<span class="keyword">unsigned int</span> column);
 </pre>
 <blockquote>
   <p>The <tt>set_...</tt> functions are used to set new values to the file position 
@@ -113,7 +113,7 @@
   <br>
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Sunday, October 12, 2008  20:14<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Saturday, September 18, 2009 15:14<!-- #EndDate -->
 </span></p>
 </body>
 </html>
