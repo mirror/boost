@@ -10,7 +10,7 @@ struct foo {
 
 template <class T>
 template <class U>
-bool foo<T>::bar(U x) { return x; }
+bool foo<T>::bar(U x) { return x ? true : false; }
 
 int main() {
     foo<int> x;

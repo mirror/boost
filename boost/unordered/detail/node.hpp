@@ -24,23 +24,6 @@
 
 namespace boost { namespace unordered_detail {
 
-    template <class BucketPtr>
-    inline BucketPtr& next_node(BucketPtr ptr)
-    {
-        return ptr->next_;
-    }
-
-    template <class BucketPtr>
-    inline std::size_t node_count(BucketPtr ptr, BucketPtr end)
-    {
-        std::size_t count = 0;
-        while(ptr != end) {
-            ++count;
-            ptr = next_node(ptr);
-        }
-        return count;
-    }
-    
     ////////////////////////////////////////////////////////////////////////////
     // ungrouped node implementation
     
@@ -48,7 +31,7 @@ namespace boost { namespace unordered_detail {
     inline BOOST_DEDUCED_TYPENAME ungrouped_node_base<A>::node_ptr&
         ungrouped_node_base<A>::next_group(node_ptr ptr)
     {
-        return next_node(ptr);
+        return ptr->next_;
     }
 
     template <class A>
@@ -60,35 +43,24 @@ namespace boost { namespace unordered_detail {
     template <class A>
     inline void ungrouped_node_base<A>::add_to_bucket(node_ptr n, bucket& b)
     {
-        next_node(n) = b.next_;
+        n->next_ = b.next_;
         b.next_ = n;
     }
 
     template <class A>
-    inline void ungrouped_node_base<A>::add_group_to_bucket(node_ptr n, bucket& b)
+    inline void ungrouped_node_base<A>::add_after_node(node_ptr n,
+        node_ptr position)
     {
-        next_node(n) = b.next_;
-        b.next_ = n;
-    }
-
-    template <class A>
-    inline void ungrouped_node_base<A>::add_after_node(node_ptr n, node_ptr position)
-    {
-        next_node(n) = next_node(position);
-        next_node(position) = position;
+        n->next_ = position->next_;
+        position->next_ = position;
     }
     
     template <class A>
-    inline void ungrouped_node_base<A>::unlink_node(bucket& b, node_ptr node)
-    {
-        unlink_nodes(b, node, next_node(node));
-    }
-
-    template <class A>
-    inline void ungrouped_node_base<A>::unlink_nodes(bucket& b, node_ptr begin, node_ptr end)
+    inline void ungrouped_node_base<A>::unlink_nodes(bucket& b,
+        node_ptr begin, node_ptr end)
     {
         node_ptr* pos = &b.next_;
-        while(*pos != begin) pos = &next_node(*pos);
+        while(*pos != begin) pos = &(*pos)->next_;
         *pos = end;
     }
 
@@ -99,26 +71,30 @@ namespace boost { namespace unordered_detail {
     }
 
     template <class A>
-    inline void ungrouped_node_base<A>::unlink_group(node_ptr* b)
+    inline void ungrouped_node_base<A>::unlink_node(bucket& b, node_ptr node)
     {
-        *b = next_node(*b);
+        unlink_nodes(b, node, node->next_);
     }
 
     ////////////////////////////////////////////////////////////////////////////
     // grouped node implementation
     
-    template <class A>
-    inline BOOST_DEDUCED_TYPENAME grouped_node_base<A>::node_ptr&
-        grouped_node_base<A>::group_prev(node_ptr ptr)
-    {
-        return get(ptr).group_prev_;
-    }
-
+    // If ptr is the first element in a group, return pointer to next group.
+    // Otherwise returns a pointer to ptr.
     template <class A>
     inline BOOST_DEDUCED_TYPENAME grouped_node_base<A>::node_ptr&
         grouped_node_base<A>::next_group(node_ptr ptr)
     {
-        return next_node(group_prev(ptr));
+        return get(ptr).group_prev_->next_;
+    }
+
+    template <class A>
+    inline BOOST_DEDUCED_TYPENAME grouped_node_base<A>::node_ptr
+        grouped_node_base<A>::first_in_group(node_ptr ptr)
+    {
+        while(next_group(ptr) == ptr)
+            ptr = get(ptr).group_prev_;
+        return ptr;
     }
 
     template <class A>
@@ -128,7 +104,7 @@ namespace boost { namespace unordered_detail {
         std::size_t size = 0;
         do {
             ++size;
-            ptr = group_prev(ptr);
+            ptr = get(ptr).group_prev_;
         } while(ptr != start);
         return size;
     }
@@ -136,25 +112,18 @@ namespace boost { namespace unordered_detail {
     template <class A>
     inline void grouped_node_base<A>::add_to_bucket(node_ptr n, bucket& b)
     {
-        next_node(n) = b.next_;
-        group_prev(n) = n;
+        n->next_ = b.next_;
+        get(n).group_prev_ = n;
         b.next_ = n;
     }
 
     template <class A>
-    inline void grouped_node_base<A>::add_group_to_bucket(node_ptr n, bucket& b)
+    inline void grouped_node_base<A>::add_after_node(node_ptr n, node_ptr pos)
     {
-        next_group(n) = b.next_;
-        b.next_ = n;
-    }
-
-    template <class A>
-    inline void grouped_node_base<A>::add_after_node(node_ptr n, node_ptr position)
-    {
-        next_node(n) = next_group(position);
-        group_prev(n) = group_prev(position);
-        next_group(position) = n;
-        group_prev(position) = n;
+        n->next_ = next_group(pos);
+        get(n).group_prev_ = get(pos).group_prev_;
+        next_group(pos) = n;
+        get(pos).group_prev_ = n;
     }
 
     // Break a ciruclar list into two, with split as the beginning
@@ -164,29 +133,21 @@ namespace boost { namespace unordered_detail {
     inline BOOST_DEDUCED_TYPENAME grouped_node_base<A>::node_ptr
         grouped_node_base<A>::split_group(node_ptr split)
     {
-        // If split is at the beginning of the group then there's
-        // nothing to split.
-        if(next_node(group_prev(split)) != split)
-            return split;
+        node_ptr first = first_in_group(split);
+        if(first == split) return split;
 
-        // Find the start of the group.
-        node_ptr start = split;
-        do {
-            start = group_prev(start);
-        } while(next_node(group_prev(start)) == start);
+        node_ptr last = get(first).group_prev_;
+        get(first).group_prev_ = get(split).group_prev_;
+        get(split).group_prev_ = last;
 
-        node_ptr last = group_prev(start);
-        group_prev(start) = group_prev(split);
-        group_prev(split) = last;
-
-        return start;
+        return first;
     }
 
     template <class A>
     void grouped_node_base<A>::unlink_node(bucket& b, node_ptr node)
     {
-        node_ptr next = next_node(node);
-        node_ptr* pos = &next_node(group_prev(node));
+        node_ptr next = node->next_;
+        node_ptr* pos = &next_group(node);
 
         if(*pos != node) {
             // The node is at the beginning of a group.
@@ -196,31 +157,37 @@ namespace boost { namespace unordered_detail {
             while(*pos != node) pos = &next_group(*pos);
 
             // Remove from group
-            if(BOOST_UNORDERED_BORLAND_BOOL(next) && group_prev(next) == node)
-                group_prev(next) = group_prev(node);
+            if(BOOST_UNORDERED_BORLAND_BOOL(next) &&
+                get(next).group_prev_ == node)
+            {
+                get(next).group_prev_ = get(node).group_prev_;
+            }
         }
-        else if(BOOST_UNORDERED_BORLAND_BOOL(next) && group_prev(next) == node) {
+        else if(BOOST_UNORDERED_BORLAND_BOOL(next) &&
+            get(next).group_prev_ == node)
+        {
             // The deleted node is not at the end of the group, so
             // change the link from the next node.
-            group_prev(next) = group_prev(node);
+            get(next).group_prev_ = get(node).group_prev_;
         }
         else {
             // The deleted node is at the end of the group, so the
             // first node in the group is pointing to it.
             // Find that to change its pointer.
-            node_ptr x = group_prev(node);
-            while(group_prev(x) != node) {
-                x = group_prev(x);
+            node_ptr x = get(node).group_prev_;
+            while(get(x).group_prev_ != node) {
+                x = get(x).group_prev_;
             }
-            group_prev(x) = group_prev(node);
+            get(x).group_prev_ = get(node).group_prev_;
         }
         *pos = next;
     }
 
     template <class A>
-    void grouped_node_base<A>::unlink_nodes(bucket& b, node_ptr begin, node_ptr end)
+    void grouped_node_base<A>::unlink_nodes(bucket& b,
+        node_ptr begin, node_ptr end)
     {
-        node_ptr* pos = &next_node(group_prev(begin));
+        node_ptr* pos = &next_group(begin);
 
         if(*pos != begin) {
             // The node is at the beginning of a group.
@@ -238,10 +205,10 @@ namespace boost { namespace unordered_detail {
                 node_ptr group2 = split_group(end);
 
                 if(begin == group2) {
-                    node_ptr end1 = group_prev(group1);
-                    node_ptr end2 = group_prev(group2);
-                    group_prev(group1) = end2;
-                    group_prev(group2) = end1;
+                    node_ptr end1 = get(group1).group_prev_;
+                    node_ptr end2 = get(group2).group_prev_;
+                    get(group1).group_prev_ = end2;
+                    get(group2).group_prev_ = end1;
                 }
             }
         }
@@ -254,12 +221,6 @@ namespace boost { namespace unordered_detail {
         split_group(end);
         b.next_ = end;
     }
-
-    template <class A>
-    inline void grouped_node_base<A>::unlink_group(node_ptr* b)
-    {
-        *b = next_group(*b);
-    }    
 }}
 
 #endif

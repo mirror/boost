@@ -109,6 +109,8 @@ struct move_from
 {
     explicit move_from(T& x) : source(x) { }
     T& source;
+private:
+    move_from& operator=(move_from const&);
 };
 
 /*************************************************************************************************/

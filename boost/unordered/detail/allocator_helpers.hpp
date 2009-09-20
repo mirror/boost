@@ -99,7 +99,8 @@ namespace boost { namespace unordered_detail {
         }
     private:
         allocator_array_constructor(allocator_array_constructor const&);
-        allocator_array_constructor& operator=(allocator_array_constructor const&);
+        allocator_array_constructor& operator=(
+            allocator_array_constructor const&);
     };
 }}
 

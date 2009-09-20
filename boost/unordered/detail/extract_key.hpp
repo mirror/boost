@@ -66,6 +66,11 @@ namespace unordered_detail {
                 return no_key();
             }
     #endif
+
+            static bool compare_mapped(value_type const&, value_type const&)
+            {
+                return true;
+            }
         };
     };
 
@@ -75,7 +80,9 @@ namespace unordered_detail {
         struct apply
         {
             typedef ValueType value_type;
-            typedef BOOST_DEDUCED_TYPENAME remove_const<BOOST_DEDUCED_TYPENAME ValueType::first_type>::type key_type;
+            typedef BOOST_DEDUCED_TYPENAME
+                remove_const<BOOST_DEDUCED_TYPENAME ValueType::first_type>::type
+                key_type;
 
             static key_type const& extract(value_type const& v)
             {
@@ -94,19 +101,22 @@ namespace unordered_detail {
             }
 
             template <class Second>
-            static key_type const& extract(std::pair<key_type const, Second> const& v)
+            static key_type const& extract(
+                std::pair<key_type const, Second> const& v)
             {
                 return v.first;
             }
 /*
             template <class Second>
-            static key_type const& extract(std::pair<key_type&, Second> const& v)
+            static key_type const& extract(
+                std::pair<key_type&, Second> const& v)
             {
                 return v.first;
             }
 
             template <class Second>
-            static key_type const& extract(std::pair<key_type const&, Second> const& v)
+            static key_type const& extract(
+                std::pair<key_type const&, Second> const& v)
             {
                 return v.first;
             }
@@ -114,7 +124,8 @@ namespace unordered_detail {
 
 #if defined(BOOST_UNORDERED_STD_FORWARD)
             template <class Arg1, class... Args>
-            static key_type const& extract(key_type const& k, Arg1 const&, Args const&...)
+            static key_type const& extract(key_type const& k,
+                Arg1 const&, Args const&...)
             {
                 return k;
             }
@@ -149,6 +160,10 @@ namespace unordered_detail {
             }
 #endif
 
+            static bool compare_mapped(value_type const& x, value_type const& y)
+            {
+                return x.second == y.second;
+            }
         };
     };
 }}
