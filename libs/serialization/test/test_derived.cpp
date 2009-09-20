@@ -31,6 +31,8 @@ class base
     template<class Archive>
     void serialize(Archive & /* ar */, const unsigned int /* file_version */){
     }
+protected:
+    virtual ~base(){};
 };
 
 class derived1 : public base
@@ -105,6 +107,10 @@ void load_derived(const char *testfile)
     base *b1 = NULL;
     base *b2 = NULL;
     
+    // note: this will produce incorrect results for non-polymorphic classes
+    ia >> BOOST_SERIALIZATION_NVP(b1);
+    ia >> BOOST_SERIALIZATION_NVP(b2);
+
     // Warning, the current type id system does not yield true
     // type id for non-polymorphic types
     const boost::serialization::extended_type_info & this_type
@@ -120,9 +126,8 @@ void load_derived(const char *testfile)
         "current type id system does fails for non-polymorphic types"
     );
 
-    // note: this will produce incorrect results for non-polymorphic classes
-    ia >> BOOST_SERIALIZATION_NVP(b1);
-    ia >> BOOST_SERIALIZATION_NVP(b2);
+    BOOST_CHECK(b1 == static_cast<base *>(d1));
+    BOOST_CHECK(b2 == static_cast<base *>(d2));
 
     delete d1;
     delete d2;

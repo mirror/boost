@@ -1,4 +1,4 @@
-﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -36,6 +36,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   <dt><a href="#binary_archives">Binary Archives</a>
   <dt><a href="#xml_archives">XML Archives</a>
   <dt><a href="#export">Exporting Class Serialization</a>
+  <dt><a href="#static_libraries">Static Libraries and Serialization</a>
   <dt><a href="#dlls">DLLS - Serialization and Runtime Linking</a>
   <dt><a href="#plugins">Plugins</a>
   <dt><a href="#multi_threading">Multi-Threading</a>
@@ -339,16 +340,18 @@ This will be true regardless of whether the is part
 of a stand alone executable, a static library or
 a dyanmic or shared library.  
 <p>
-Note that including
+Including
 <code style="white-space: normal">BOOST_CLASS_EXPORT</code>
 in the "a.hpp" header itself as one would do with
 other serialization traits will make it difficult
 or impossible to follow the rule above regarding
 inclusion of archive headers before
 <code style="white-space: normal">BOOST_CLASS_EXPORT</code>
-is invoked.  This is different than other serialization
-traits which would normally be included in same file
-as the class declaration.
+is invoked. This can best be addressed by using
+<code style="white-space: normal">BOOST_CLASS_EXPORT_KEY</code>
+in the header declarations and
+<code style="white-space: normal">BOOST_CLASS_EXPORT_IMPLEMENT</code>
+in the class definition file.
 
 <p>
 This system has certain implications for placing code in static or shared
@@ -358,13 +361,6 @@ also included.  So when building a library, one should include all headers
 for all the archive classes which he anticipates using. Alternatively,
 one can include headers for just the
 <a href="archive_reference.html#polymorphic">Polymoprhic Archives</a>.
-Also, when making shared libraries, there is currently a restriction
-that only one such library can use <code style="white-space: normal">BOOST_CLASS_EXPORT</code>
-for any given type. All this will most likely make it inconvenient
-to include <code style="white-space: normal">BOOST_CLASS_EXPORT</code>
-as part of the header of the class to be serialized. So, <b>the 
-best way to use <code style="white-space: normal">BOOST_CLASS_EXPORT</code>
-is to include it in the same module which implements the class</b>.
 
 <p>
 Strictly speaking, export should not be necessary if all pointer serialization
@@ -383,19 +379,33 @@ includes the extra declarations required by each of these compilers.
 It's reasonable to expect that future C++ compilers will support
 these extensions or something equivalent.
 
-<h3><a name="dlls">DLLS - Serialization and Runtime Linking</a></h3>
-Serialization code can be placed in libraries to be linked at runtime.  That is,
-code can be placed in DLLS(Windows) Shared Libraries(*nix), or static libraries
-as well as the main executable.  As long as
-
-<a target="detail" href="serialization.html#export">
-<code style="white-space: normal">BOOST_CLASS_EXPORT</code>
-</a>
-
-is not used, The serialization library imposes no special requirements
-that need be taken into account when distributing code among various modules.
-<p>
-For static libraries, this is illustrated by
+<h3><a name="static_libraries">Static Libraries and Serialization</a></h3>
+Code for serialization of data types can be saved in libraries
+just as it can for the rest of the type implementation.
+This works well, and can save huge amount of compilation time.
+<ul>
+<li>Only compile serialization definitions in the library.
+<li>Explicitly instantiate serialization code for ALL
+archive classes you intend to use in the library.
+<li>For exported types, only use <code style="white-space: normal">BOOST_CLASS_EXPORT_KEY</code>
+in headers.
+<li>For exported types, only use <code style="white-space: normal">BOOST_CLASS_EXPORT_IMPLEMENT</code>
+in definitions compiled in the library.  For any particular type,
+there should be only one file which contains
+<code style="white-space: normal">BOOST_CLASS_EXPORT_IMPLEMENT</code>
+for that type.  This ensures that only one copy
+of serialization code will exist within the program.  It avoids
+wasted space and the possibility of having different
+versions of the serialization code in the same program.
+Including
+<code style="white-space: normal">BOOST_CLASS_EXPORT_IMPLEMENT</code>
+in multiple files could result in a failure
+to link due to duplicated symbols or the throwing
+of a runtime exception.
+<li> Code for serialization should be only in the library,
+<li>Familiarize yourself with the <b>PIMPL</b> idiom.
+</ul>
+This is illustrated by
 <a href = "../example/demo_pimpl.cpp" target="demo_pimpl">
 <code style="white-space: normal">demo_pimpl.cpp</code>
 </a>,
@@ -409,8 +419,14 @@ and
 where implementation of serializaton is in a static library 
 completely separate from the main program.
 
+<h3><a name="dlls">DLLS - Serialization and Runtime Linking</a></h3>
+Serialization code can be placed in libraries to be linked at runtime.  That is,
+code can be placed in DLLS(Windows) Shared Libraries(*nix), or static libraries
+as well as the main executable.  The best technique is the
+same as that described above for libraries.  The serialization
+library test suite includes the following programs
+to illustrate how this works:
 <p>
-For runtime linked libraries this is illustrated by one of the tests:
 
 <a href = "../test/test_dll_simple.cpp" target="test_dll_simple">
 <code style="white-space: normal">test_dll_simple</code>
@@ -424,6 +440,17 @@ from the main program but the code is loaded at runtime.  In this
 example, this code is loaded automatically when the program which
 uses it starts up, but it could just as well be loaded and unloaded 
 with an OS dependent API call.
+<p>
+Also included are
+<a href = "../test/test_dll_exported.cpp" target="test_dll_exported">
+<code style="white-space: normal">test_dll_exported.cpp</code>
+</a>,
+and
+<a href = "../test/polymorphic_derived2.cpp" target="polymorphic_derived2">
+<code style="white-space: normal">polymorphic_derived2.cpp</code>
+</a>
+which are similar to the above but include tests of the export
+and no_rtti facilities in the context of DLLS.
 
 <h3><a name="plugins">Plugins</a></h3>
 In order to implement the library, various facilities for runtime

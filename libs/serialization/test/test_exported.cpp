@@ -24,12 +24,15 @@ namespace std{
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/extended_type_info_typeid.hpp>
 
+#include <boost/serialization/force_include.hpp>
+
 #include <boost/archive/archive_exception.hpp>
 #include "test_tools.hpp"
 
 #include "polymorphic_base.hpp"
 
-class polymorphic_derived1 : public polymorphic_base
+class polymorphic_derived1 : 
+    public polymorphic_base
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -50,7 +53,7 @@ BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derive
 
 #include "polymorphic_derived2.hpp"
 
-BOOST_CLASS_EXPORT(polymorphic_derived2)
+BOOST_CLASS_EXPORT_IMPLEMENT(polymorphic_derived2)
 
 // MWerks users can do this to make their code work
 BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derived2)

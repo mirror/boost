@@ -1,4 +1,4 @@
-﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -62,8 +62,8 @@ http://www.boost.org/LICENSE_1_0.txt)
     </dl>
   <dt><a href="#references">References</a>
   <dt><a href="#arrays">Arrays</a>
-  <dt><a href="wrappers.html">Serialization Wrappers</a>
   <dt><a href="traits.html">Class Serialization Traits</a>
+  <dt><a href="wrappers.html">Serialization Wrappers</a>
   <dt><a href="#models">Models - Serialization Implementations Included in the Library</a>
 </dl>
 
@@ -794,7 +794,7 @@ class derived : public base {
         boost::serialization::base_object&lt;base&gt;(*this);
         // method 2 : explicitly register base/derived relationship
         boost::serialization::void_cast_register&lt;derived, base&gt;(
-            static_cast&lt;derived *&gt;(NULL),
+            static_cast&lt;derived *&gt;=NULL),
             static_cast&lt;base *&gt;(NULL)
         )
     }

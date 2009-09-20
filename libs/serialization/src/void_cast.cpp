@@ -15,6 +15,9 @@
 
 #include <cassert>
 #include <cstddef> // NULL
+#ifdef BOOST_SERIALIZATION_LOG
+#include <iostream>
+#endif
 
 // STL
 #include <set>
@@ -189,6 +192,14 @@ BOOST_SERIALIZATION_DECL(void)
 void_caster::recursive_register(bool includes_virtual_base) const {
     void_cast_detail::set_type & s
         = void_cast_detail::void_caster_registry::get_mutable_instance();
+
+    #ifdef BOOST_SERIALIZATION_LOG
+    std::clog << "recursive_register\n";
+    std::clog << m_derived->get_debug_info();
+    std::clog << "<-";
+    std::clog << m_base->get_debug_info();
+    std::clog << "\n";
+    #endif
 
     s.insert(this);
 

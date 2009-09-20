@@ -12,7 +12,13 @@
 #  pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
+#include <set>
+#include <utility>
+
 #define BOOST_ARCHIVE_SOURCE
+#include <boost/archive/archive_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
+
 #include <boost/archive/detail/basic_serializer.hpp>
 #include <boost/archive/detail/basic_serializer_map.hpp>
 
@@ -23,52 +29,59 @@ namespace boost {
 namespace archive {
 namespace detail {
 
-// note: We can't implement this as an associative
-// container as such a container might be dependent
-// upon the extended_type_info::m_key which might not
-// be assigned until later.  So we use a "slower" method.
-// This not a big deal however as the slower "find" operations
-// operations are only called occasionally:
-// a) At module unloading
-// b) Once per input archive - the value is cached in the archive
-//    implemenation.
+bool  
+basic_serializer_map::type_info_pointer_compare::operator()(
+    const basic_serializer * lhs, const basic_serializer * rhs
+) const {
+    return *lhs < *rhs;
+}
 
-BOOST_ARCHIVE_DECL(void) 
+BOOST_ARCHIVE_DECL(bool) 
 basic_serializer_map::insert(const basic_serializer * bs){
-    m_map.push_back(bs);
+    // attempt to insert serializer into it's map
+    const std::pair<map_type::iterator, bool> result =
+        m_map.insert(bs);
+    // if this fails, it's because it's been instantiated
+    // in multiple modules - DLLS - a recipe for problems.
+    // So trap this here
+    if(!result.second){
+        boost::serialization::throw_exception(
+            archive_exception(
+                archive_exception::multiple_code_instantiation,
+                bs->get_debug_info()
+            )
+        );
+    }
+    return true;
 }
 
 BOOST_ARCHIVE_DECL(void) 
 basic_serializer_map::erase(const basic_serializer * bs){
     map_type::iterator it = m_map.begin();
     map_type::iterator it_end = m_map.end();
-    it = std::find(it, it_end, bs);
-    if(it != it_end){
-        m_map.erase(it);
+
+    while(it != it_end){
+        // note item 9 from Effective STL !!! it++
+        if(*it == bs)
+            m_map.erase(it++);
+        else
+            it++;
     }
-    else
-        assert(false); // this should never occur
+    // note: we can't do this since some of the eti records
+    // we're pointing to might be expired and the comparison
+    // won't work.  Leave this as a reminder not to "optimize" this.
+    //it = m_map.find(bs);
+    //assert(it != m_map.end());
+    //if(*it == bs)
+    //    m_map.erase(it);
 }
-
-class equals {
-    const boost::serialization::extended_type_info * m_eti;
-public:
-    bool operator()(const basic_serializer * bs) const {
-        return *m_eti == bs->get_eti();
-    }
-    equals(const boost::serialization::extended_type_info * eti) :
-        m_eti(eti)
-    {}
-};
-
-// find the "oldest" matching pointer serializer
 BOOST_ARCHIVE_DECL(const basic_serializer *)
 basic_serializer_map::find(
     const boost::serialization::extended_type_info & eti
 ) const {
-    map_type::const_iterator it = m_map.begin();
-    map_type::const_iterator it_end = m_map.end();
-    it = std::find_if(it, it_end, equals(& eti));
+    const basic_serializer_arg bs(eti);
+    map_type::const_iterator it;
+    it = m_map.find(& bs);
     assert(it != m_map.end());
     return *it;
 }

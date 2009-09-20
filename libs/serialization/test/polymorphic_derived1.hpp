@@ -23,6 +23,7 @@
 #include <boost/serialization/extended_type_info_no_rtti.hpp>
 
 #include "polymorphic_base.hpp"
+
 class polymorphic_derived1 : public polymorphic_base
 {
     friend class boost::serialization::access;
@@ -33,6 +34,8 @@ class polymorphic_derived1 : public polymorphic_base
 public:
     virtual const char * get_key() const ;
 };
+
+BOOST_CLASS_EXPORT_KEY(polymorphic_derived1)
 
 BOOST_CLASS_TYPE_INFO(
     polymorphic_derived1,

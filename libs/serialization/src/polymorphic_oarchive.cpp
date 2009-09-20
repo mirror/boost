@@ -14,8 +14,6 @@
 
 #define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/detail/archive_serializer_map.hpp>
-#define BOOST_ARCHIVE_SOURCE
-#include <boost/archive/detail/archive_serializer_map.hpp>
 
 #include <boost/archive/impl/archive_serializer_map.ipp>
 #include <boost/archive/polymorphic_oarchive.hpp>

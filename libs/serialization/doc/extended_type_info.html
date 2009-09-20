@@ -105,14 +105,15 @@ protected:
     // this class can't be used as is. It's just the 
     // common functionality for all type_info replacement
     // systems.  Hence, make these protected
-    const char * m_key;
-    extended_type_info(const unsigned int type_info_key);
+    extended_type_info(
+        const unsigned int type_info_key,
+        const char * key
+    );
     ~extended_type_info();
+    void key_register();
+    void key_unregister();
 public:
-    void key_register(const char *key);
-    const char * get_key() const {
-        return m_key;
-    }
+    const char * get_key() const;
     bool operator<(const extended_type_info &rhs) const;
     bool operator==(const extended_type_info &rhs) const;
     bool operator!=(const extended_type_info &rhs) const {
@@ -139,30 +140,43 @@ the instances contain.
 <dl>
 
 <dt><h4><pre><code>
-extended_type_info(unsigned int type_info_key);
+extended_type_info(unsigned int type_info_key, const char *key);
 </code></pre></h4></dt>
 <dd>
 This constructor should be called by all derived classes.
-The argument should be the particular implementation. For
-this default implementation base on typeid(), this is the 
+The first argument should be the particular implementation. 
+For this default implementation base on typeid(), this is the 
 value 1.  Each system must have its own integer.  This value
 is used to permit the inter-operability of different typeinfo
 systems.
+<p>
+The second argument is a const string which is the external
+name of the type to which this record corresponds.  
+It may sometimes be referred to as a GUID - a <b>G</b>lobal <b>U</b>nique <b>ID</b>entifier.
+It is passed through archives from one program invocation to
+another to uniquely identify the types that the archive contains.
+If the "export" facility is not going to be used, 
+this value may be NULL.
 </dd>
 
 <dt><h4><pre><code>
-void key_register(const char *key);
+void key_register();
+void key_unregister();
 </code></pre></h4></dt>
 <dd>
-Assign a unique character string identifier to this
-<code style="white-space: normal"><a target="extended_type_info.hpp" href = "../../../boost/serialization/extended_type_info.hpp">extended_type_info</a></code>
-instance and add it to the corresponding global trable. 
-This key is used to identify a type accross different instances of the program.  
-In this way, one instance may know what type to create when necessary.  
-For this purpose, it must be the same in all program instances which
-refer to the same type.
+This system maintains a global table which relates
+external strings to 
+<code style="white-space: normal">extended_type_info</code> records.
+This table is used when loading pointers to objects serialized
+through a base class pointer.  In this case, the archive 
+contains a string which is looked up in this table to
+determine which <code style="white-space: normal">extended_type_info</code>
+to use for creating a new object.
 <p>
-It may sometimes be referred to as a GUID - a <b>G</b>lobal <b>U</b>nique <b>ID</b>entifier.
+These functions are called by constructors and
+destructors of classes which implement 
+<code style="white-space: normal">extended_type_info</code>
+to add and remove entries from this table.
 </dd>
 
 <dt><h4><pre><code>
@@ -185,7 +199,8 @@ These functions are used to compare 'wo
 extended_type_info
 </code> 
 </a>
-objects. They a strict total ordering on all instances of this class.
+objects. They impose a strict total ordering on all
+<code style="white-space: normal">extended_type_info</code> records.
 </dd>
 
 <dt><h4><pre><code>
@@ -245,20 +260,6 @@ and also implement the following:
 
 <dt><h4><code style="white-space: normal"><pre>
 template&lt;class ETI&gt;
-static extended_type_info &
-ETI::get_mutable_instance();
-static const extended_type_info &
-ETI::get_const:instance();
-</pre></code></h4></dt>
-<dd>
-Return a pointer to the instance of
-<code style="white-space: normal">extended_type_info</code>
-which corresponds to type T.  Normally these instances are static objects so
-this just amounts to returning the address of this static object.
-</dd>
-
-<dt><h4><code style="white-space: normal"><pre>
-template&lt;class ETI&gt;
 const extended_type_info *
 ETI::get_derived_extended_type_info(const T & t) const;
 </pre></code></h4></dt>
@@ -274,12 +275,47 @@ with a particular <code style="white-space: normal">extended_type_info</code> im
 </dd>
 
 <dt><h4><code style="white-space: normal"><pre>
-bool ETI::less_than(const extended_type_info &rhs) const;
+virtual bool ETI::is_less_than(const extended_type_info &rhs) const;
 </pre></code></h4></dt>
 <dd>
 Compare this instance to another one using the same
 <code style="white-space: normal">extended_type_info</code> implementation.
 </dd>
+
+<dt><h4><code style="white-space: normal"><pre>
+virtual bool ETI::is_equal(const extended_type_info &rhs) const;
+</pre></code></h4></dt>
+<dd>
+Compare this instance to another one using the same
+<code style="white-space: normal">extended_type_info</code> implementation.
+Return <code style="white-space: normal">true</code> if the types referred
+to are the same.  Otherwise return 
+<code style="white-space: normal">false</code>
+</dd>
+
+<dt><h4><code style="white-space: normal"><pre>
+const char ETI::get_key() const;
+</pre></code></h4></dt>
+<dd>
+Retrieve the external key (aka GUID) for this class.
+</dd>
+
+<dt><h4><code style="white-space: normal"><pre>
+virtual void * construct(unsigned int count, ...) const;
+</pre></code></h4></dt>
+<dd>
+Construct an instance of the corresponding type
+with the include argument list.
+</dd>
+
+<dt><h4><code style="white-space: normal"><pre>
+virtual void * destroy(void const * const ptr ) ) const;
+</pre></code></h4></dt>
+<dd>
+Destroy an instance of this type. This calls the
+proper destructor and recovers allocated memory.
+</dd>
+
 </dl>
 
 <h3><a name="models">Models</a></h3>
@@ -294,7 +330,8 @@ by the compiler.
 <code style="white-space: normal"><h4><a target="extended_type_info_no_rtti.hpp" href="../../../boost/serialization/extended_type_info_no_rtti.hpp">
 extended_type_info_no_rtti</a></h4></code>
 is implemented in a way that doesn't rely on the existence RTTI.
-However, if the export facility is to be used to serialize types
+Instead, it requires that all polymorphic types be explictly exported.
+In addition, if the export facility is to be used to serialize types
 through base class pointers, those types are required to implement
 a virtual function with the signature:
 
@@ -304,7 +341,8 @@ virtual const char * get_key();
 which returns a unique string the most derived object this class.  
 This function must be virtual in order to implement the functionality required by
 <code style="white-space: normal">ETI::get_derived_extended_type_info</code>
-as described above.  
+as described above.
+
 <h3><a name="example">Example</a></h3>
 The test program <code style="white-space: normal"><a target="test_no_rtti" href="../test/test_no_rtti.cpp">test_no_rtti</a></code>
 implements this function in terms of the <code style="white-space: normal"><a target="extended_type_info_no_rtti.hpp" href="../../../boost/serialization/extended_type_info_no_rtti.hpp">

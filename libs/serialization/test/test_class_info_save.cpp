@@ -42,6 +42,7 @@ BOOST_CLASS_IMPLEMENTATION(A, ::boost::serialization::object_serializable)
 BOOST_CLASS_TRACKING(A, ::boost::serialization::track_never)
 
 // second case : serialize WITH class information
+// note: GCC compile fails if this is after the class declaration
 class B;
 BOOST_CLASS_VERSION(B, 2)
 
@@ -78,7 +79,6 @@ void out(const char *testfile, const A & a, const B & b)
     BOOST_CHECK(b.count == 1);  // tracking => no redundant saves
     std::cout << "b.count=" << b.count << '\n' ;
 }
-
 
 int
 test_main( int /* argc */, char* /* argv */[] )

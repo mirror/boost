@@ -19,7 +19,9 @@
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::remove;
+#ifndef UNDER_CE    
     using ::numeric_limits;
+#endif
 }
 #endif
 

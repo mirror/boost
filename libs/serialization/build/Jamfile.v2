@@ -75,9 +75,12 @@ SOURCES =
     text_iarchive
     text_oarchive
     void_cast
+    archive_exception
     xml_grammar
     xml_iarchive
     xml_oarchive
+    xml_archive_exception
+    shared_ptr_helper
 ;
     
 WSOURCES = 

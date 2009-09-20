@@ -1,5 +1,5 @@
-#ifndef DERIVED2_HPP
-#define DERIVED2_HPP
+#ifndef POLYMORPHIC_DERIVED2_HPP
+#define POLYMORPHIC_DERIVED2_HPP
 
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
@@ -51,6 +51,13 @@ class DLL_DECL(BOOST_PP_EMPTY()) polymorphic_derived2 :
     }
 };
 
+// we use this because we want to assign a key to this type
+// but we don't want to explicitly instantiate code every time
+// we do so!!!.  If we don't do this, we end up with the same
+// code in BOTH the DLL which implements polymorphic_derived2
+// as well as the main program.
+BOOST_CLASS_EXPORT_KEY(polymorphic_derived2)
+
 // note the mixing of type_info systems is supported.
 BOOST_CLASS_TYPE_INFO(
     polymorphic_derived2,
@@ -59,5 +66,5 @@ BOOST_CLASS_TYPE_INFO(
 
 #undef DLL_DECL
 
-#endif // DERIVED2_HPP
+#endif // POLYMORPHIC_DERIVED2_HPP
 

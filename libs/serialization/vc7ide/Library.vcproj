@@ -45,7 +45,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="$(ConfigurationName)\boost_serialization-vc71-mt-gd-1_39.dll"
-				GenerateDebugInformation="TRUE"/>
+				GenerateDebugInformation="TRUE"
+				GenerateMapFile="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -394,13 +395,16 @@
 				RelativePath="..\..\..\boost\serialization\access.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\archive\archive_exception.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\assume_abstract.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\base_object.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\export.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\serialization\is_abstract.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\level.hpp">
@@ -428,6 +432,12 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\version.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\wrapper.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\xml_archive_exception.hpp">
 			</File>
 		</Filter>
 		<Filter
@@ -513,9 +523,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\weak_ptr.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\serialization\wrapper.hpp">
 			</File>
 			<Filter
 				Name="detail"
@@ -612,6 +619,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\basic_serializer_map.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\detail\check.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\common_iarchive.hpp">
@@ -767,9 +777,6 @@
 			Name="Archive Implementations"
 			Filter="">
 			<File
-				RelativePath="..\..\..\boost\archive\archive_exception.hpp">
-			</File>
-			<File
 				RelativePath="..\..\..\boost\archive\binary_iarchive.hpp">
 			</File>
 			<File
@@ -810,9 +817,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\text_oarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\xml_archive_exception.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\xml_iarchive.hpp">
@@ -876,6 +880,9 @@
 		<Filter
 			Name="Source"
 			Filter="">
+			<File
+				RelativePath="..\src\archive_exception.cpp">
+			</File>
 			<File
 				RelativePath="..\src\basic_archive.cpp">
 			</File>
@@ -952,6 +959,9 @@
 				RelativePath="..\src\polymorphic_oarchive.cpp">
 			</File>
 			<File
+				RelativePath="..\src\shared_ptr_helper.cpp">
+			</File>
+			<File
 				RelativePath="..\src\stl_port.cpp">
 			</File>
 			<File
@@ -962,6 +972,9 @@
 			</File>
 			<File
 				RelativePath="..\src\void_cast.cpp">
+			</File>
+			<File
+				RelativePath="..\src\xml_archive_exception.cpp">
 			</File>
 			<File
 				RelativePath="..\src\xml_grammar.cpp">

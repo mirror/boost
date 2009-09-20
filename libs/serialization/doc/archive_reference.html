@@ -270,21 +270,19 @@ will throw an
 exception.
 <p>
 
-
 <h4><a name="testing">Testing</h4>
 Exhaustive testing of the library requires testing the different aspects of object
-serialization with each archive.  There are 36 different tests that can run with any archive.  There are
-5 "standard archives" included with the system. (3 in systems which don't support wide
-charactor i/o). 
+serialization with each archive.  There are 46 different tests that can run with any archive.  
+There are 5 "standard archives" included with the system. 
+(3 in systems don't support wide charactor i/o). 
 <p>
-In addition, there are 22 other tests which aren't related to any particular archive
-class.
+In addition, there are 28 other tests which aren't related to any particular archive class.
 <p>
 The default <code style="white-space: normal">bjam</code> testing setup will run all
-the above described tests.  This will result in as many as 39 archive tests * 5 
-standard archives + 25 general tests = 220 tests. Note that a complete test of the
+the above described tests.  This will result in as many as 46 archive tests * 5 
+standard archives + 28 general tests = 258 tests. Note that a complete test of the
 library would include DLL vs static library, release vs debug so the actual total 
-would be closer to 880 tests.
+would be closer to 1032 tests.
 <p>
 For each archive there is a header file in the test directory similar to the one below.
 The name of this archive is passed to the test program by setting the

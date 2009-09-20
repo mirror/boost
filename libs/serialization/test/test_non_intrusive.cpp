@@ -24,7 +24,9 @@ namespace std{
     using ::rand;
     using ::fabs;
     using ::remove;
+#ifndef UNDER_CE    
     using ::numeric_limits; 
+#endif
 }
 #endif
 
