@@ -24,11 +24,15 @@
 #include <boost/config.hpp>
 #include <boost/shared_ptr.hpp>
 
+#include <boost/type_traits/is_polymorphic.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/shared_ptr_132.hpp>
 #include <boost/serialization/throw_exception.hpp>
 
 #include <boost/archive/archive_exception.hpp>
+#include <boost/archive/detail/decl.hpp>
+
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost_132 {
     template<class T> class shared_ptr;
@@ -44,20 +48,15 @@ namespace boost {
             const unsigned int file_version
         );
     }
-
 namespace archive{
 namespace detail {
-
-struct null_deleter {
-    void operator()(void const *) const {}
-};
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // a common class for holding various types of shared pointers
 
 class shared_ptr_helper {
     typedef std::map<
-        const void *,
+        void *,
         boost::shared_ptr<const void>
     > collection_type;
     typedef collection_type::const_iterator iterator_type;
@@ -67,6 +66,10 @@ class shared_ptr_helper {
     // it is actually used since this is by default included as
     // a "mix-in" even if shared_ptr isn't used.
     collection_type * m_pointers;
+
+    struct null_deleter {
+        void operator()(void const *) const {}
+    };
 
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
@@ -91,6 +94,36 @@ public:
     std::list<boost_132::shared_ptr<void> > * m_pointers_132;
 //  #endif
 
+    typedef std::pair<const iterator_type, void *> result_type;
+
+    // returns pointer to object and an indicator whether this is a
+    // new entry (true) or a previous one (false)
+    BOOST_ARCHIVE_DECL(result_type) get_od(
+            void * od,
+            const boost::serialization::extended_type_info * true_type, 
+            const boost::serialization::extended_type_info * this_type
+    );
+
+    template<class T>
+    struct non_polymorphic {
+        static const boost::serialization::extended_type_info * 
+        get_object_identifier(T & t){
+            return boost::serialization::singleton<
+                BOOST_DEDUCED_TYPENAME 
+                boost::serialization::type_info_implementation<T>::type
+            >::get_const_instance();
+        }
+    };
+    template<class T>
+    struct polymorphic {
+        static const boost::serialization::extended_type_info * 
+        get_object_identifier(T & t){
+            return boost::serialization::singleton<
+                BOOST_DEDUCED_TYPENAME 
+                boost::serialization::type_info_implementation<T>::type
+            >::get_const_instance().get_derived_extended_type_info(t);
+        }
+    };
 public:
     template<class T>
     void reset(shared_ptr<T> & s, T * t){
@@ -98,75 +131,57 @@ public:
             s.reset();
             return;
         }
-        // get pointer to the most derived object.  This is effectively
-        // the object identifer
-        const boost::serialization::extended_type_info * true_type 
-            = boost::serialization::type_info_implementation<T>::type
-                ::get_const_instance().get_derived_extended_type_info(*t);
-        // note:if this exception is thrown, be sure that derived pointer
-        // is either registered or exported.
-        if(NULL == true_type)
-            boost::serialization::throw_exception(
-                archive_exception(archive_exception::unregistered_class)
-            );
         const boost::serialization::extended_type_info * this_type
             = & boost::serialization::type_info_implementation<T>::type
                     ::get_const_instance();
 
-        // get void pointer to the most derived type
-        // this uniquely identifies the object referred to
-        const void * od = void_downcast(
-            *true_type, 
-            *this_type, 
-            static_cast<const void *>(t)
+        // get pointer to the most derived object.  This is effectively
+        // the object identifer
+        typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
+            is_polymorphic<T>,
+            mpl::identity<polymorphic<T> >,
+            mpl::identity<non_polymorphic<T> >
+        >::type type;
+
+        const boost::serialization::extended_type_info * true_type
+            = type::get_object_identifier(*t);
+
+        // note:if this exception is thrown, be sure that derived pointer
+        // is either registered or exported.
+        if(NULL == true_type)
+            boost::serialization::throw_exception(
+                archive_exception(
+                    archive_exception::unregistered_class,
+                    this_type->get_debug_info()
+                )
+            );
+        result_type r =
+            get_od(
+                t, 
+                true_type,
+                this_type
+            );
+        s = shared_ptr<T>(
+            r.first->second,
+            static_cast<T *>(r.second)
         );
-
-        // make tracking array if necessary
-        if(NULL == m_pointers)
-            m_pointers = new collection_type;
-
-        iterator_type it = m_pointers->find(od);
-
-        // create a new shared pointer to a void
-        if(it == m_pointers->end()){
-            s.reset(t);
-            shared_ptr<const void> sp(s, od);
-            m_pointers->insert(collection_type::value_type(od, sp));
-            return;
-        }
-        t = static_cast<T *>(const_cast<void *>(void_upcast(
-            *true_type, 
-            *this_type, 
-            ((*it).second.get())
-        )));
-        s = shared_ptr<T>((*it).second, t); // aliasing 
     }
+
 //  #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
-    void append(const boost_132::shared_ptr<void> & t){
-        if(NULL == m_pointers_132)
-            m_pointers_132 = new std::list<boost_132::shared_ptr<void> >;
-        m_pointers_132->push_back(t);
-    }
+    BOOST_ARCHIVE_DECL(void)
+    append(const boost_132::shared_ptr<void> & t);
 //  #endif
 public:
-    shared_ptr_helper() : 
-        m_pointers(NULL)
-        #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
-            , m_pointers_132(NULL)
-        #endif
-    {}
-    ~shared_ptr_helper(){
-        if(NULL != m_pointers)
-            delete m_pointers;
-        #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
-        if(NULL != m_pointers_132)
-            delete m_pointers_132;
-        #endif
-    }
+    BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
+    shared_ptr_helper();
+    BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
+    ~shared_ptr_helper();
 };
 
 } // namespace detail
-} // namespace serialization
+} // namespace archive
 } // namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_ARCHIVE_SHARED_PTR_HELPER_HPP

@@ -85,7 +85,7 @@ public:
     }
     void save_override(const class_id_reference_type & t, int){
         // upto 32K classes
-        assert(t.t <= boost::integer_traits<boost::uint_least32_t>::const_max);
+        assert(t.t <= boost::integer_traits<boost::int_least16_t>::const_max);
         const boost::uint_least16_t x = t.t;
         * this->This() << x;
     }
@@ -114,7 +114,7 @@ public:
 
     void save_override(const serialization::collection_size_type & t, int){
     // for backward compatibility, 64 bit integer or variable length integer would be preferred
-        unsigned int x = t.t;
+        std::size_t x = t.t;
         * this->This() << x;
    }
 

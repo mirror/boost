@@ -28,7 +28,7 @@ namespace { // anon
 }
 
 template<class Archive>
-BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
+BOOST_ARCHIVE_OR_WARCHIVE_DECL(bool)
 archive_serializer_map<Archive>::insert(const basic_serializer * bs){
     return boost::serialization::singleton<
         map<Archive>

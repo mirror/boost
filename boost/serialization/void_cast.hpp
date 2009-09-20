@@ -230,6 +230,22 @@ void_caster_virtual_base<Derived,Base>::~void_caster_virtual_base(){
     recursive_unregister();
 }
 
+template <class Derived, class Base>
+struct void_caster_base :
+    public void_caster
+{
+    typedef
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<boost::is_virtual_base_of<Base,Derived>,
+            mpl::identity<
+                void_cast_detail::void_caster_virtual_base<Derived, Base>
+            >
+        ,// else
+            mpl::identity<
+                void_cast_detail::void_caster_primitive<Derived, Base>
+            >
+        >::type type;
+};
+
 } // void_cast_detail 
 
 // Register a base/derived pair.  This indicates that it is possible
@@ -261,6 +277,12 @@ inline const void_cast_detail::void_caster & void_cast_register(
         >::type typex;
     return singleton<typex>::get_const_instance();
 }
+
+template<class Derived, class Base>
+class void_caster :
+    public void_cast_detail::void_caster_base<Derived, Base>::type
+{
+};
 
 } // namespace serialization
 } // namespace boost
