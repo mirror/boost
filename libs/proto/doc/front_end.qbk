@@ -169,7 +169,7 @@ Now, let's try to define a function template that returns an expression template
     typename proto::function<
         typename proto::terminal<pow_fun<Exp> >::type
       , Arg const &
-    >::type
+    >::type const
     pow(Arg const &arg)
     {
         typedef
@@ -214,7 +214,7 @@ Proto expressions can only have other Proto expressions as children. But if we l
     typename proto::function<
         typename proto::terminal<pow_fun<Exp> >::type
       , Arg const & // <=== ERROR! This may not be a Proto type!
-    >::type
+    >::type const
     pow(Arg const &arg)
 
 What we want is a way to make `Arg` into a Proto terminal if it is not a Proto expression already, and leave it alone if it is. For that, we can use _as_child_. The following implementation of the `pow()` function handles all argument types, expression templates or otherwise.
@@ -226,7 +226,7 @@ What we want is a way to make `Arg` into a Proto terminal if it is not a Proto e
     typename proto::function<
         typename proto::terminal<pow_fun<Exp> >::type
       , typename proto::result_of::as_child<Arg const>::type
-    >::type
+    >::type const
     pow(Arg const &arg)
     {
         typedef
@@ -255,7 +255,7 @@ The versions of the `pow()` function we've seen above are rather verbose. In the
         proto::tag::function  // Tag type
       , pow_fun<Exp>          // First child (by value)
       , Arg const &           // Second child (by reference)
-    >::type
+    >::type const
     pow(Arg const &arg)
     {
         return proto::make_expr<proto::tag::function>(
