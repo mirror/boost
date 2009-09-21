@@ -427,6 +427,7 @@ pp_iterator_functor<ContextT>::returned_from_include()
 
     // restore the actual current file and directory 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+        namespace fs = boost::filesystem;
         fs::path rfp(wave::util::create_path(iter_ctx->real_filename.c_str()));
         std::string real_filename(rfp.string());
         ctx.set_current_filename(real_filename.c_str());
