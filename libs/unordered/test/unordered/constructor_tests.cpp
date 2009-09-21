@@ -250,6 +250,19 @@ void constructor_tests2(T*, test::random_generator const& generator = test::defa
         test::check_equivalent_keys(x);
         test::check_equivalent_keys(y);
     }
+    
+    std::cerr<<"Construct 9\n";
+    {
+        test::random_values<T> v(100, generator);
+        T x(50);
+        BOOST_TEST(x.bucket_count() >= 50);
+        x.max_load_factor(10);
+        BOOST_TEST(x.bucket_count() >= 50);
+        x.insert(v.begin(), v.end());
+        BOOST_TEST(x.bucket_count() >= 50);
+        test::check_container(x, v);
+        test::check_equivalent_keys(x);
+    }
 }
 
 template <class T>
