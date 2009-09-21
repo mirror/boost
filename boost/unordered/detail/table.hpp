@@ -443,22 +443,18 @@ namespace boost { namespace unordered_detail {
             this->create_buckets();
             this->init_buckets();
         }
-        // TODO: Another bug:
-        else if(min_buckets != this->bucket_count_) {
+        else {
             // no throw:
             // TODO: Needlessly calling next_prime twice.
             std::size_t min_size = this->min_buckets_for_size(this->size_);
             min_buckets = next_prime(min_buckets);
             min_buckets = min_size > min_buckets ? min_size : min_buckets;
-
-            rehash_impl(min_buckets);
+            if(min_buckets != this->bucket_count_) rehash_impl(min_buckets);
         }
     }
 
     // if hash function throws, basic exception safety
     // strong otherwise
-
-    // TODO: Rewrite so that it doesn't need to keep updating size_.
 
     template <class H, class P, class A, class G, class K>
     void hash_table<H, P, A, G, K>
