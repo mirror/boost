@@ -177,27 +177,27 @@ namespace boost { namespace unordered_detail {
 
 #else
 
-#define BOOST_UNORDERED_INSERT_IMPL(z, n, _)                                \
+#define BOOST_UNORDERED_INSERT_IMPL(z, num_params, _)                       \
     template <class H, class P, class A, class K>                           \
-    template <BOOST_UNORDERED_TEMPLATE_ARGS(z, n)>                          \
+    template <BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)>                 \
     BOOST_DEDUCED_TYPENAME hash_equivalent_table<H, P, A, K>::iterator_base \
         hash_equivalent_table<H, P, A, K>                                   \
-            ::emplace(BOOST_UNORDERED_FUNCTION_PARAMS(z, n))                \
+            ::emplace(BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))       \
     {                                                                       \
         node_constructor a(*this);                                          \
-        a.construct(BOOST_UNORDERED_CALL_PARAMS(z, n));                     \
+        a.construct(BOOST_UNORDERED_CALL_PARAMS(z, num_params));            \
         return emplace_impl(a);                                             \
     }                                                                       \
                                                                             \
     template <class H, class P, class A, class K>                           \
-    template <BOOST_UNORDERED_TEMPLATE_ARGS(z, n)>                          \
+    template <BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)>                 \
     BOOST_DEDUCED_TYPENAME hash_equivalent_table<H, P, A, K>::iterator_base \
         hash_equivalent_table<H, P, A, K>                                   \
             ::emplace_hint(iterator_base const& it,                         \
-                BOOST_UNORDERED_FUNCTION_PARAMS(z, n))                      \
+                BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))             \
     {                                                                       \
         node_constructor a(*this);                                          \
-        a.construct(BOOST_UNORDERED_CALL_PARAMS(z, n));                     \
+        a.construct(BOOST_UNORDERED_CALL_PARAMS(z, num_params));            \
         return emplace_hint_impl(it, a);                                    \
     }
 

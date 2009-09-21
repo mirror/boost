@@ -61,24 +61,24 @@ namespace boost { namespace unordered_detail {
     typedef prime_list_template<std::size_t> prime_list;
 
     // no throw
-    inline std::size_t next_prime(std::size_t n) {
+    inline std::size_t next_prime(std::size_t num) {
         std::size_t const* const prime_list_begin = prime_list::value;
         std::size_t const* const prime_list_end = prime_list_begin +
             prime_list::length;
         std::size_t const* bound =
-            std::lower_bound(prime_list_begin, prime_list_end, n);
+            std::lower_bound(prime_list_begin, prime_list_end, num);
         if(bound == prime_list_end)
             bound--;
         return *bound;
     }
 
     // no throw
-    inline std::size_t prev_prime(std::size_t n) {
+    inline std::size_t prev_prime(std::size_t num) {
         std::size_t const* const prime_list_begin = prime_list::value;
         std::size_t const* const prime_list_end = prime_list_begin +
             prime_list::length;
         std::size_t const* bound =
-            std::upper_bound(prime_list_begin,prime_list_end, n);
+            std::upper_bound(prime_list_begin,prime_list_end, num);
         if(bound != prime_list_begin)
             bound--;
         return *bound;
@@ -129,9 +129,10 @@ namespace boost { namespace unordered_detail {
     
     template <class I>
     inline std::size_t initial_size(I i, I j,
-        std::size_t n = boost::unordered_detail::default_bucket_count)
+        std::size_t num_buckets = boost::unordered_detail::default_bucket_count)
     {
-        return (std::max)(static_cast<std::size_t>(insert_size(i, j)) + 1, n);
+        return (std::max)(static_cast<std::size_t>(insert_size(i, j)) + 1,
+            num_buckets);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -158,29 +159,29 @@ namespace boost { namespace unordered_detail {
 
 #else
 
-#define BOOST_UNORDERED_CONSTRUCT_IMPL(z, n, _)                                \
+#define BOOST_UNORDERED_CONSTRUCT_IMPL(z, num_params, _)                       \
     template <                                                                 \
         class T,                                                               \
-        BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                                    \
+        BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                           \
     >                                                                          \
     inline void construct_impl(                                                \
         T*, void* address,                                                     \
-        BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                                  \
+        BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params)                         \
     )                                                                          \
     {                                                                          \
         new(address) T(                                                        \
-            BOOST_UNORDERED_CALL_PARAMS(z, n));                                \
+            BOOST_UNORDERED_CALL_PARAMS(z, num_params));                       \
     }                                                                          \
                                                                                \
     template <class First, class Second, class Key,                            \
-        BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                                    \
+        BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                           \
     >                                                                          \
     inline void construct_impl(                                                \
         std::pair<First, Second>*, void* address,                              \
-        Key const& k, BOOST_UNORDERED_FUNCTION_PARAMS(z, n))                   \
+        Key const& k, BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))          \
     {                                                                          \
         new(address) std::pair<First, Second>(k,                               \
-            Second(BOOST_UNORDERED_CALL_PARAMS(z, n)));                        \
+            Second(BOOST_UNORDERED_CALL_PARAMS(z, num_params)));               \
     }
 
     BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
@@ -230,18 +231,18 @@ namespace boost { namespace unordered_detail {
         }
 #else
 
-#define BOOST_UNORDERED_CONSTRUCT(z, n, _)                                     \
+#define BOOST_UNORDERED_CONSTRUCT(z, num_params, _)                            \
         template <                                                             \
-            BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                                \
+            BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)                       \
         >                                                                      \
         void construct(                                                        \
-            BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                              \
+            BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params)                     \
         )                                                                      \
         {                                                                      \
             construct_preamble();                                              \
             construct_impl(                                                    \
                 (value_type*) 0, node_->address(),                             \
-                BOOST_UNORDERED_CALL_PARAMS(z, n)                              \
+                BOOST_UNORDERED_CALL_PARAMS(z, num_params)                     \
             );                                                                 \
             value_constructed_ = true;                                         \
         }

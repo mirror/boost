@@ -116,7 +116,7 @@ namespace boost { namespace unordered_detail {
     // no throw
     template <class H, class P, class A, class G, class K>
     inline std::size_t hash_table<H, P, A, G, K>::min_buckets_for_size(
-        std::size_t n) const
+        std::size_t size) const
     {
         BOOST_ASSERT(this->mlf_ != 0);
 
@@ -128,7 +128,7 @@ namespace boost { namespace unordered_detail {
         //
         // Or from rehash post-condition:
         // count > size / mlf_
-        return next_prime(double_to_size_t(floor(n / (double) mlf_)) + 1);
+        return next_prime(double_to_size_t(floor(size / (double) mlf_)) + 1);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -199,9 +199,9 @@ namespace boost { namespace unordered_detail {
     // Constructors
 
     template <class H, class P, class A, class G, class K>
-    hash_table<H, P, A, G, K>::hash_table(std::size_t n,
+    hash_table<H, P, A, G, K>::hash_table(std::size_t num_buckets,
         hasher const& hf, key_equal const& eq, node_allocator const& a)
-      : buckets(a, next_prime(n)),
+      : buckets(a, next_prime(num_buckets)),
         base(hf, eq),
         size_(),
         mlf_(1.0f),
@@ -404,24 +404,26 @@ namespace boost { namespace unordered_detail {
 
     // basic exception safety
     template <class H, class P, class A, class G, class K>
-    inline void hash_table<H, P, A, G, K>::create_for_insert(std::size_t n)
+    inline void hash_table<H, P, A, G, K>::create_for_insert(std::size_t size)
     {
-        if(n > this->bucket_count_)
-            this->bucket_count_ = this->min_buckets_for_size(n);
+        // TODO: Write a test to detect this bug:
+        if(size > this->bucket_count_)
+            this->bucket_count_ = this->min_buckets_for_size(size);
         this->create_buckets();
         this->init_buckets();
     }
 
     // basic exception safety
     template <class H, class P, class A, class G, class K>
-    inline bool hash_table<H, P, A, G, K>::reserve_for_insert(std::size_t n)
+    inline bool hash_table<H, P, A, G, K>::reserve_for_insert(std::size_t size)
     {
-        if(n >= max_load_) {
+        if(size >= max_load_) {
             std::size_t s = this->size_;
             s = s + (s >> 1);
-            n = this->min_buckets_for_size(s > n ? s : n);
-            if(n != this->bucket_count_) {
-                rehash_impl(n);
+            std::size_t num_buckets
+                = this->min_buckets_for_size(s > size ? s : size);
+            if(num_buckets != this->bucket_count_) {
+                rehash_impl(num_buckets);
                 return true;
             }
         }
@@ -433,24 +435,24 @@ namespace boost { namespace unordered_detail {
     // strong otherwise.
     // TODO: Should this always create buckets?
     template <class H, class P, class A, class G, class K>
-    inline void hash_table<H, P, A, G, K>
-        ::rehash(std::size_t n)
+    inline void hash_table<H, P, A, G, K>::rehash(std::size_t min_buckets)
     {
         using namespace std;
 
         if(!this->buckets_) {
-            this->bucket_count_ = next_prime(n);
+            this->bucket_count_ = next_prime(min_buckets);
             this->create_buckets();
             this->init_buckets();
         }
-        else if(n != this->bucket_count_) {
+        // TODO: Another bug:
+        else if(min_buckets != this->bucket_count_) {
             // no throw:
             // TODO: Needlessly calling next_prime twice.
             std::size_t min_size = this->min_buckets_for_size(this->size_);
-            n = next_prime(n);
-            n = min_size > n ? min_size : n;
+            min_buckets = next_prime(min_buckets);
+            min_buckets = min_size > min_buckets ? min_size : min_buckets;
 
-            rehash_impl(n);
+            rehash_impl(min_buckets);
         }
     }
 
@@ -461,13 +463,13 @@ namespace boost { namespace unordered_detail {
 
     template <class H, class P, class A, class G, class K>
     void hash_table<H, P, A, G, K>
-        ::rehash_impl(std::size_t n)
+        ::rehash_impl(std::size_t num_buckets)
     {    
         hasher const& hf = this->hash_function();
         std::size_t size = this->size_;
         bucket_ptr end = this->get_bucket(this->bucket_count_);
 
-        buckets dst(this->node_alloc(), n);
+        buckets dst(this->node_alloc(), num_buckets);
         dst.create_buckets();
 
         buckets src(this->node_alloc(), this->bucket_count_);
@@ -726,18 +728,18 @@ namespace boost { namespace unordered_detail {
     template <class H, class P, class A, class G, class K>
     BOOST_DEDUCED_TYPENAME hash_table<H, P, A, G, K>::iterator_base
         hash_table<H, P, A, G, K>::emplace_empty_impl_with_node(
-            node_constructor& a, std::size_t n)
+            node_constructor& a, std::size_t size)
     {
         key_type const& k = get_key(a.value());
         std::size_t hash_value = this->hash_function()(k);
-        if(this->buckets_) this->reserve_for_insert(n);
-        else this->create_for_insert(n);
+        if(this->buckets_) this->reserve_for_insert(size);
+        else this->create_for_insert(size);
         bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
-        node_ptr node = a.release();
-        node::add_to_bucket(node, *bucket);
+        node_ptr n = a.release();
+        node::add_to_bucket(n, *bucket);
         ++this->size_;
         this->cached_begin_bucket_ = bucket;
-        return iterator_base(bucket, node);
+        return iterator_base(bucket, n);
     }
 }}
 

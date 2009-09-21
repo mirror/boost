@@ -71,9 +71,9 @@ namespace boost { namespace unordered_detail {
     }
 
     template <class A>
-    inline void ungrouped_node_base<A>::unlink_node(bucket& b, node_ptr node)
+    inline void ungrouped_node_base<A>::unlink_node(bucket& b, node_ptr n)
     {
-        unlink_nodes(b, node, node->next_);
+        unlink_nodes(b, n, n->next_);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -144,41 +144,41 @@ namespace boost { namespace unordered_detail {
     }
 
     template <class A>
-    void grouped_node_base<A>::unlink_node(bucket& b, node_ptr node)
+    void grouped_node_base<A>::unlink_node(bucket& b, node_ptr n)
     {
-        node_ptr next = node->next_;
-        node_ptr* pos = &next_group(node);
+        node_ptr next = n->next_;
+        node_ptr* pos = &next_group(n);
 
-        if(*pos != node) {
+        if(*pos != n) {
             // The node is at the beginning of a group.
 
             // Find the previous node pointer:
             pos = &b.next_;
-            while(*pos != node) pos = &next_group(*pos);
+            while(*pos != n) pos = &next_group(*pos);
 
             // Remove from group
             if(BOOST_UNORDERED_BORLAND_BOOL(next) &&
-                get(next).group_prev_ == node)
+                get(next).group_prev_ == n)
             {
-                get(next).group_prev_ = get(node).group_prev_;
+                get(next).group_prev_ = get(n).group_prev_;
             }
         }
         else if(BOOST_UNORDERED_BORLAND_BOOL(next) &&
-            get(next).group_prev_ == node)
+            get(next).group_prev_ == n)
         {
             // The deleted node is not at the end of the group, so
             // change the link from the next node.
-            get(next).group_prev_ = get(node).group_prev_;
+            get(next).group_prev_ = get(n).group_prev_;
         }
         else {
             // The deleted node is at the end of the group, so the
             // first node in the group is pointing to it.
             // Find that to change its pointer.
-            node_ptr x = get(node).group_prev_;
-            while(get(x).group_prev_ != node) {
+            node_ptr x = get(n).group_prev_;
+            while(get(x).group_prev_ != n) {
                 x = get(x).group_prev_;
             }
-            get(x).group_prev_ = get(node).group_prev_;
+            get(x).group_prev_ = get(n).group_prev_;
         }
         *pos = next;
     }

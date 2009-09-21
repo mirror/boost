@@ -50,12 +50,12 @@
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 
-#define BOOST_UNORDERED_TEMPLATE_ARGS(z, n) \
-    BOOST_PP_ENUM_PARAMS_Z(z, n, class Arg)
-#define BOOST_UNORDERED_FUNCTION_PARAMS(z, n) \
-    BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, Arg, const& arg)
-#define BOOST_UNORDERED_CALL_PARAMS(z, n) \
-    BOOST_PP_ENUM_PARAMS_Z(z, n, arg)
+#define BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params) \
+    BOOST_PP_ENUM_PARAMS_Z(z, num_params, class Arg)
+#define BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params) \
+    BOOST_PP_ENUM_BINARY_PARAMS_Z(z, num_params, Arg, const& arg)
+#define BOOST_UNORDERED_CALL_PARAMS(z, num_params) \
+    BOOST_PP_ENUM_PARAMS_Z(z, num_params, arg)
 
 #endif
 
@@ -126,7 +126,7 @@ namespace boost { namespace unordered_detail {
         static inline std::size_t group_count(node_ptr ptr);
         static inline void add_to_bucket(node_ptr n, bucket& b);
         static inline void add_after_node(node_ptr n, node_ptr position);
-        static void unlink_node(bucket& b, node_ptr node);
+        static void unlink_node(bucket& b, node_ptr n);
         static void unlink_nodes(bucket& b, node_ptr begin, node_ptr end);
         static void unlink_nodes(bucket& b, node_ptr end);
     };
@@ -146,7 +146,7 @@ namespace boost { namespace unordered_detail {
         static inline std::size_t group_count(node_ptr ptr);
         static inline void add_to_bucket(node_ptr n, bucket& b);
         static inline void add_after_node(node_ptr n, node_ptr position);
-        static void unlink_node(bucket& b, node_ptr node);
+        static void unlink_node(bucket& b, node_ptr n);
         static void unlink_nodes(bucket& b, node_ptr begin, node_ptr end);
         static void unlink_nodes(bucket& b, node_ptr end);
 
@@ -237,12 +237,12 @@ namespace boost { namespace unordered_detail {
             return node::get_value(node_);
         }
     
-        void increment_bucket(node_ptr node) {
-            while(!node) {
+        void increment_bucket(node_ptr n) {
+            while(!n) {
                 ++bucket_;
-                node = bucket_->next_;
+                n = bucket_->next_;
             }
-            node_ = bucket_ == node ? node_ptr() : node;
+            node_ = bucket_ == n ? node_ptr() : n;
         }
 
         void increment() {

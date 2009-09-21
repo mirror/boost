@@ -19,9 +19,9 @@ namespace boost { namespace unordered_detail {
     
     template <class A, class G>
     inline BOOST_DEDUCED_TYPENAME hash_buckets<A, G>::bucket_ptr
-        hash_buckets<A, G>::get_bucket(std::size_t n) const
+        hash_buckets<A, G>::get_bucket(std::size_t num) const
     {
-        return buckets_ + static_cast<std::ptrdiff_t>(n);
+        return buckets_ + static_cast<std::ptrdiff_t>(num);
     }
 
     template <class A, class G>
@@ -46,9 +46,9 @@ namespace boost { namespace unordered_detail {
 
     template <class A, class G>
     inline BOOST_DEDUCED_TYPENAME hash_buckets<A, G>::node_ptr
-        hash_buckets<A, G>::bucket_begin(std::size_t n) const
+        hash_buckets<A, G>::bucket_begin(std::size_t num) const
     {
-        return buckets_ ? get_bucket(n)->next_ : node_ptr();
+        return buckets_ ? get_bucket(num)->next_ : node_ptr();
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -103,9 +103,9 @@ namespace boost { namespace unordered_detail {
     {
         std::size_t count = 0;
         while(begin != end) {
-            node_ptr node = begin;
+            node_ptr n = begin;
             begin = begin->next_;
-            delete_node(node);
+            delete_node(n);
             ++count;
         }
         return count;
