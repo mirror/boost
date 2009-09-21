@@ -417,10 +417,9 @@ namespace boost { namespace unordered_detail {
     inline bool hash_table<H, P, A, G, K>::reserve_for_insert(std::size_t size)
     {
         if(size >= max_load_) {
-            std::size_t s = this->size_;
-            s = s + (s >> 1);
             std::size_t num_buckets
-                = this->min_buckets_for_size(s > size ? s : size);
+                = this->min_buckets_for_size((std::max)(size,
+                    this->size_ + (this->size_ >> 1)));
             if(num_buckets != this->bucket_count_) {
                 rehash_impl(num_buckets);
                 return true;
@@ -446,9 +445,9 @@ namespace boost { namespace unordered_detail {
         else {
             // no throw:
             // TODO: Needlessly calling next_prime twice.
-            std::size_t min_size = this->min_buckets_for_size(this->size_);
-            min_buckets = next_prime(min_buckets);
-            min_buckets = min_size > min_buckets ? min_size : min_buckets;
+            min_buckets = (std::max)(
+                next_prime(min_buckets),
+                this->min_buckets_for_size(this->size_));
             if(min_buckets != this->bucket_count_) rehash_impl(min_buckets);
         }
     }
