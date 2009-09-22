@@ -406,8 +406,8 @@ namespace boost { namespace unordered_detail {
     template <class H, class P, class A, class G, class K>
     inline void hash_table<H, P, A, G, K>::create_for_insert(std::size_t size)
     {
-        std::size_t min_buckets = this->min_buckets_for_size(size);
-        if(min_buckets > this->bucket_count_) this->bucket_count_ = min_buckets;
+        this->bucket_count_ = (std::max)(this->bucket_count_,
+            this->min_buckets_for_size(size));
         this->create_buckets();
         this->init_buckets();
     }
