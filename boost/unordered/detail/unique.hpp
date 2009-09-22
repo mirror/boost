@@ -272,25 +272,6 @@ namespace boost { namespace unordered_detail {
             emplace_empty_impl(std::forward<Args>(args)...);
     }
 
-    // Insert (unique keys)
-    // (I'm using an overloaded emplace for both 'insert' and 'emplace')
-    // I'm just ignoring hints here for now.
-
-    // if hash function throws, basic exception safety
-    // strong otherwise
-    template <class H, class P, class A, class K>
-    template<class... Args>
-    BOOST_DEDUCED_TYPENAME hash_unique_table<H, P, A, K>::iterator_base
-        hash_unique_table<H, P, A, K>::emplace_hint(iterator_base const&,
-            Args&&... args)
-    {
-        return this->size_ ?
-            emplace_impl(
-                extractor::extract(std::forward<Args>(args)...),
-                std::forward<Args>(args)...).first :
-            emplace_empty_impl(std::forward<Args>(args)...).first;
-    }
-
 #else
 
     template <class H, class P, class A, class K>
@@ -301,17 +282,6 @@ namespace boost { namespace unordered_detail {
         return this->size_ ?
             emplace_impl(extractor::extract(arg0), arg0) :
             emplace_empty_impl(arg0);
-    }
-
-    template <class H, class P, class A, class K>
-    template <class Arg0>
-    BOOST_DEDUCED_TYPENAME hash_unique_table<H, P, A, K>::iterator_base
-        hash_unique_table<H, P, A, K>::emplace_hint(iterator_base const&,
-            Arg0 const& arg0)
-    {
-        return this->size_ ?
-            emplace_impl(extractor::extract(arg0), arg0).first :
-            emplace_empty_impl(arg0).first;
     }
 
 #define BOOST_UNORDERED_INSERT_IMPL(z, num_params, _)                          \
@@ -326,21 +296,7 @@ namespace boost { namespace unordered_detail {
                 BOOST_UNORDERED_CALL_PARAMS(z, num_params)) :                  \
             emplace_empty_impl(                                                \
                 BOOST_UNORDERED_CALL_PARAMS(z, num_params));                   \
-    }                                                                          \
-                                                                               \
-    template <class H, class P, class A, class K>                              \
-    template <BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)>                    \
-    BOOST_DEDUCED_TYPENAME hash_unique_table<H, P, A, K>::iterator_base        \
-        hash_unique_table<H, P, A, K>::                                        \
-            emplace_hint(iterator_base const& it,                              \
-                BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))                \
-    {                                                                          \
-        return this->size_ ?                                                   \
-            emplace_impl(extractor::extract(arg0, arg1),                       \
-                BOOST_UNORDERED_CALL_PARAMS(z, num_params)) :                  \
-            emplace_empty_impl(                                                \
-                BOOST_UNORDERED_CALL_PARAMS(z, num_params));                   \
-    }                                                                          \
+    }
 
     BOOST_PP_REPEAT_FROM_TO(2, BOOST_UNORDERED_EMPLACE_LIMIT,
         BOOST_UNORDERED_INSERT_IMPL, _)

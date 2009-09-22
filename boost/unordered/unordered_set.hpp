@@ -270,10 +270,9 @@ namespace boost
         }
 
         template <class... Args>
-        iterator emplace_hint(const_iterator hint, Args&&... args)
+        iterator emplace_hint(const_iterator, Args&&... args)
         {
-            return iterator(
-                table_.emplace_hint(get(hint), std::forward<Args>(args)...));
+            return iterator(table_.emplace(std::forward<Args>(args)...).first);
         }
 #else
 
@@ -283,10 +282,10 @@ namespace boost
                 table_.emplace(v));
         }
 
-        iterator emplace_hint(const_iterator hint,
+        iterator emplace_hint(const_iterator,
             value_type const& v = value_type())
         {
-            return iterator(table_.emplace_hint(get(hint), v));
+            return iterator(table_.emplace(v).first);
         }
 
 #define BOOST_UNORDERED_EMPLACE(z, n, _)                                       \
@@ -306,13 +305,12 @@ namespace boost
             template <                                                         \
                 BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                            \
             >                                                                  \
-            iterator emplace_hint(const_iterator hint,                         \
+            iterator emplace_hint(const_iterator,                              \
                 BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                          \
             )                                                                  \
             {                                                                  \
-                return iterator(table_.emplace_hint(get(hint),                 \
-                        BOOST_UNORDERED_CALL_PARAMS(z, n)                      \
-                ));                                                            \
+                return iterator(table_.emplace(                                \
+                    BOOST_UNORDERED_CALL_PARAMS(z, n)).first);                 \
             }
 
         BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
@@ -330,7 +328,7 @@ namespace boost
 
         iterator insert(const_iterator hint, const value_type& obj)
         {
-            return iterator(table_.emplace_hint(get(hint), obj));
+            return iterator(table_.emplace(obj).first);
         }
 
         template <class InputIt>

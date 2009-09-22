@@ -629,29 +629,17 @@ namespace boost { namespace unordered_detail {
         template<class... Args>
         emplace_return emplace(Args&&... args);
         template<class... Args>
-        iterator_base emplace_hint(iterator_base const&, Args&&... args);
-        template<class... Args>
         emplace_return emplace_impl(key_type const& k, Args&&... args);
         template<class... Args>
         emplace_return emplace_impl(no_key, Args&&... args);
         template<class... Args>
         emplace_return emplace_empty_impl(Args&&... args);
 #else
-        template <class Arg0>
-        emplace_return emplace(Arg0 const& arg0);
-        template <class Arg0>
-        iterator_base emplace_hint(iterator_base const&, Arg0 const& arg0);
 
 #define BOOST_UNORDERED_INSERT_IMPL(z, n, _)                                   \
         template <BOOST_UNORDERED_TEMPLATE_ARGS(z, n)>                         \
         emplace_return emplace(                                                \
             BOOST_UNORDERED_FUNCTION_PARAMS(z, n));                            \
-        template <BOOST_UNORDERED_TEMPLATE_ARGS(z, n)>                         \
-        iterator_base emplace_hint(iterator_base const& it,                    \
-           BOOST_UNORDERED_FUNCTION_PARAMS(z, n));                             \
-        BOOST_UNORDERED_INSERT_IMPL2(z, n, _)
-
-#define BOOST_UNORDERED_INSERT_IMPL2(z, n, _)                                  \
         template <BOOST_UNORDERED_TEMPLATE_ARGS(z, n)>                         \
         emplace_return emplace_impl(key_type const& k,                         \
            BOOST_UNORDERED_FUNCTION_PARAMS(z, n));                             \
@@ -662,13 +650,10 @@ namespace boost { namespace unordered_detail {
         emplace_return emplace_empty_impl(                                     \
            BOOST_UNORDERED_FUNCTION_PARAMS(z, n));
 
-        BOOST_UNORDERED_INSERT_IMPL2(1, 1, _)
-
-        BOOST_PP_REPEAT_FROM_TO(2, BOOST_UNORDERED_EMPLACE_LIMIT,
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
             BOOST_UNORDERED_INSERT_IMPL, _)
 
 #undef BOOST_UNORDERED_INSERT_IMPL
-#undef BOOST_UNORDERED_INSERT_IMPL2
 
 #endif
 
