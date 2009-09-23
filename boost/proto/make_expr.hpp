@@ -310,15 +310,15 @@
             {};
 
             template<typename Base, typename Expr>
-            Expr implicit_expr_wrap(Base const &expr, mpl::false_, Expr *)
+            Expr implicit_expr_wrap(Base const &e, mpl::false_, Expr *)
             {
-                return Expr(expr);
+                return Expr(e);
             }
 
             template<typename Base, typename Expr>
-            Expr implicit_expr_wrap(Base const &expr, mpl::true_, Expr *)
+            Expr implicit_expr_wrap(Base const &e, mpl::true_, Expr *)
             {
-                Expr that = {expr};
+                Expr that = {e};
                 return that;
             }
 

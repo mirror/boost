@@ -905,18 +905,18 @@
                 /// \throw nothrow
                 template<typename Expr>
                 typename result_of::child_c<Expr &, N>::type
-                operator ()(Expr &expr) const
+                operator ()(Expr &e) const
                 {
-                    return result_of::child_c<Expr &, N>::call(expr);
+                    return result_of::child_c<Expr &, N>::call(e);
                 }
 
                 /// \overload
                 ///
                 template<typename Expr>
                 typename result_of::child_c<Expr const &, N>::type
-                operator ()(Expr const &expr) const
+                operator ()(Expr const &e) const
                 {
-                    return result_of::child_c<Expr const &, N>::call(expr);
+                    return result_of::child_c<Expr const &, N>::call(e);
                 }
             };
 
@@ -948,18 +948,18 @@
                 /// \throw nothrow
                 template<typename Expr>
                 typename result_of::child<Expr &, N>::type
-                operator ()(Expr &expr) const
+                operator ()(Expr &e) const
                 {
-                    return result_of::child<Expr &, N>::call(expr);
+                    return result_of::child<Expr &, N>::call(e);
                 }
 
                 /// \overload
                 ///
                 template<typename Expr>
                 typename result_of::child<Expr const &, N>::type
-                operator ()(Expr const &expr) const
+                operator ()(Expr const &e) const
                 {
-                    return result_of::child<Expr const &, N>::call(expr);
+                    return result_of::child<Expr const &, N>::call(e);
                 }
             };
 
@@ -986,18 +986,18 @@
                 /// \throw nothrow
                 template<typename Expr>
                 typename result_of::value<Expr &>::type
-                operator ()(Expr &expr) const
+                operator ()(Expr &e) const
                 {
-                    return expr.proto_base().child0;
+                    return e.proto_base().child0;
                 }
 
                 /// \overload
                 ///
                 template<typename Expr>
                 typename result_of::value<Expr const &>::type
-                operator ()(Expr const &expr) const
+                operator ()(Expr const &e) const
                 {
-                    return expr.proto_base().child0;
+                    return e.proto_base().child0;
                 }
             };
 
@@ -1024,18 +1024,18 @@
                 /// \throw nothrow
                 template<typename Expr>
                 typename result_of::left<Expr &>::type
-                operator ()(Expr &expr) const
+                operator ()(Expr &e) const
                 {
-                    return expr.proto_base().child0;
+                    return e.proto_base().child0;
                 }
 
                 /// \overload
                 ///
                 template<typename Expr>
                 typename result_of::left<Expr const &>::type
-                operator ()(Expr const &expr) const
+                operator ()(Expr const &e) const
                 {
-                    return expr.proto_base().child0;
+                    return e.proto_base().child0;
                 }
             };
 
@@ -1062,16 +1062,16 @@
                 /// \throw nothrow
                 template<typename Expr>
                 typename result_of::right<Expr &>::type
-                operator ()(Expr &expr) const
+                operator ()(Expr &e) const
                 {
-                    return expr.proto_base().child1;
+                    return e.proto_base().child1;
                 }
 
                 template<typename Expr>
                 typename result_of::right<Expr const &>::type
-                operator ()(Expr const &expr) const
+                operator ()(Expr const &e) const
                 {
-                    return expr.proto_base().child1;
+                    return e.proto_base().child1;
                 }
             };
 
@@ -1200,18 +1200,18 @@
         /// \return A reference to the Nth child
         template<typename N, typename Expr>
         typename result_of::child<Expr &, N>::type
-        child(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
+        child(Expr &e BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
         {
-            return result_of::child<Expr &, N>::call(expr);
+            return result_of::child<Expr &, N>::call(e);
         }
 
         /// \overload
         ///
         template<typename N, typename Expr>
         typename result_of::child<Expr const &, N>::type
-        child(Expr const &expr)
+        child(Expr const &e)
         {
-            return result_of::child<Expr const &, N>::call(expr);
+            return result_of::child<Expr const &, N>::call(e);
         }
 
         /// \overload
@@ -1244,18 +1244,18 @@
         /// \return A reference to the Nth child
         template<long N, typename Expr>
         typename result_of::child_c<Expr &, N>::type
-        child_c(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
+        child_c(Expr &e BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
         {
-            return result_of::child_c<Expr &, N>::call(expr);
+            return result_of::child_c<Expr &, N>::call(e);
         }
 
         /// \overload
         ///
         template<long N, typename Expr>
         typename result_of::child_c<Expr const &, N>::type
-        child_c(Expr const &expr)
+        child_c(Expr const &e)
         {
-            return result_of::child_c<Expr const &, N>::call(expr);
+            return result_of::child_c<Expr const &, N>::call(e);
         }
 
         /// \brief Return the value stored within the specified Proto
@@ -1271,18 +1271,18 @@
         /// \return A reference to the terminal's value
         template<typename Expr>
         typename result_of::value<Expr &>::type
-        value(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
+        value(Expr &e BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
         {
-            return expr.proto_base().child0;
+            return e.proto_base().child0;
         }
 
         /// \overload
         ///
         template<typename Expr>
         typename result_of::value<Expr const &>::type
-        value(Expr const &expr)
+        value(Expr const &e)
         {
-            return expr.proto_base().child0;
+            return e.proto_base().child0;
         }
 
         /// \brief Return the left child of the specified binary Proto
@@ -1298,18 +1298,18 @@
         /// \return A reference to the left child
         template<typename Expr>
         typename result_of::left<Expr &>::type
-        left(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
+        left(Expr &e BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
         {
-            return expr.proto_base().child0;
+            return e.proto_base().child0;
         }
 
         /// \overload
         ///
         template<typename Expr>
         typename result_of::left<Expr const &>::type
-        left(Expr const &expr)
+        left(Expr const &e)
         {
-            return expr.proto_base().child0;
+            return e.proto_base().child0;
         }
 
         /// \brief Return the right child of the specified binary Proto
@@ -1325,18 +1325,18 @@
         /// \return A reference to the right child
         template<typename Expr>
         typename result_of::right<Expr &>::type
-        right(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
+        right(Expr &e BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
         {
-            return expr.proto_base().child1;
+            return e.proto_base().child1;
         }
 
         /// \overload
         ///
         template<typename Expr>
         typename result_of::right<Expr const &>::type
-        right(Expr const &expr)
+        right(Expr const &e)
         {
-            return expr.proto_base().child1;
+            return e.proto_base().child1;
         }
 
         /// INTERNAL ONLY
@@ -1519,9 +1519,9 @@
 
                 /// INTERNAL ONLY
                 ///
-                static type call(Expr &expr)
+                static type call(Expr &e)
                 {
-                    return expr.proto_base().BOOST_PP_CAT(child, N);
+                    return e.proto_base().BOOST_PP_CAT(child, N);
                 }
             };
 
@@ -1541,9 +1541,9 @@
 
                 /// INTERNAL ONLY
                 ///
-                static type call(Expr const &expr)
+                static type call(Expr const &e)
                 {
-                    return expr.proto_base().BOOST_PP_CAT(child, N);
+                    return e.proto_base().BOOST_PP_CAT(child, N);
                 }
             };
         }

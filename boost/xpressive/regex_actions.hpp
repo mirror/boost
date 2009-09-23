@@ -20,6 +20,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/int.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/utility/enable_if.hpp>
@@ -80,6 +81,7 @@ namespace boost { namespace xpressive
 
         template<typename T>
         struct value_wrapper
+          : private noncopyable
         {
             value_wrapper()
               : value()
@@ -743,9 +745,6 @@ namespace boost { namespace xpressive
         {
             return proto::value(*this);
         }
-
-    private:
-        local(local const &);
     };
 
     /// as (a.k.a., lexical_cast)

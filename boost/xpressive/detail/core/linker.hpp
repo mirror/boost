@@ -141,9 +141,9 @@ template<typename Char>
 struct xpression_linker
 {
     template<typename Traits>
-    explicit xpression_linker(Traits const &traits)
+    explicit xpression_linker(Traits const &tr)
       : back_stack_()
-      , traits_(&traits)
+      , traits_(&tr)
       , traits_type_(&typeid(Traits))
       , has_backrefs_(false)
     {
