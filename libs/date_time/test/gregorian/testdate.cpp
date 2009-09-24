@@ -1,5 +1,5 @@
 /* Copyright (c) 2002,2003 CrystalClear Software, Inc.
- * Use, modification and distribution is subject to the 
+ * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt)
  * Author: Jeff Garland, Bart Garst
@@ -10,9 +10,9 @@
 #include "../testfrmwk.hpp"
 
 int
-main() 
+main()
 {
-  
+
   using namespace boost::gregorian;
 
   //various constructors
@@ -31,12 +31,12 @@ main()
   check("month_rep constructor",   d4 == d4a);
   //std::cout << d3 << std::endl;
   //retrieval functions
-  check("1900-01-01 day is 01",     d1.day()   == 1);
-  check("1900-01-01 month is 01",   d1.month() == 1);
-  check("1900-01-01 year is 1900",  d1.year()  == 1900);
-  check("2000-12-31 day is 31",     d4.day()   == 31);
-  check("2000-12-31 month is 12",   d4.month() == 12);
-  check("2000-12-31 year is 2000",  d4.year()  == 2000);
+  check_equal("1900-01-01 day is 01",     d1.day(),   1);
+  check_equal("1900-01-01 month is 01",   d1.month(), 1);
+  check_equal("1900-01-01 year is 1900",  d1.year(),  1900);
+  check_equal("2000-12-31 day is 31",     d4.day(),   31);
+  check_equal("2000-12-31 month is 12",   d4.month(), 12);
+  check_equal("2000-12-31 year is 2000",  d4.year(),  2000);
   //operator<
   check("1900-01-01 is less than 2000-01-01",          d1 < d2);
   check("2000-01-01 is NOT less than 2000-01-01",      !(d1 < d1));
@@ -50,17 +50,17 @@ main()
   //operator!=
   check("2000-01-01 is NOT equal to 1900-01-01",       d2 != d1);
   //operator==
-  check("2000-01-01 is equal 2000-01-01",              d3 == d2);
+  check_equal("2000-01-01 is equal 2000-01-01",        d3,   d2);
   check("2000-01-01 is greater equal 2000-01-01",      d3 >= d2);
   check("2000-01-01 is greater equal 2000-01-01",      d3 <= d2);
 
   date::ymd_type ymd = d1.year_month_day();
-  check("ymd year",  ymd.year  == 1900);
-  check("ymd month", ymd.month == 1);
-  check("ymd day",   ymd.day   == 1);
-  
+  check_equal("ymd year",  ymd.year,  1900);
+  check_equal("ymd month", ymd.month, 1);
+  check_equal("ymd day",   ymd.day,   1);
+
   //The max function will not compile with Borland 5.5
-  //Complains about must specialize basic_data<limits> ??? 
+  //Complains about must specialize basic_data<limits> ???
 //   std::cout << "Max date is " << (date::max)() << std::endl;
 //   //std::cout << "Max date is " << (basic_date< date_limits<unsigned int,1900> >::max)() << std::endl;
 //   //std::cout << "Max date is " << (date_limits<unsigned int, 1900>::max)() << std::endl;
@@ -90,13 +90,13 @@ main()
   date_duration twoDays(2);
   date_duration negtwoDays(-2);
   date_duration zeroDays(0);
-  check("2000-03-01 - 2000-02-28 == 2 days",   twoDays    == (d7-d6));
-  check("2000-02-28 - 2000-03-01 == - 2 days", negtwoDays == (d6-d7));
-  check("2000-02-28 - 2000-02-28 == 0 days",   zeroDays   == (d6-d6));
-  check("2000-02-28 + 2 days == 2000-03-01 ",  d6 + twoDays == d7);
-  check("2000-03-01 - 2 days == 2000-02-28 ",  d7 - twoDays == d6);
-  check("Add duration to date", date(1999,1,1) + date_duration(365) == date(2000,1,1));
-  check("Add zero days", date(1999,1,1) + zeroDays == date(1999,1,1));
+  check_equal("2000-03-01 - 2000-02-28 == 2 days",   twoDays,     (d7-d6));
+  check_equal("2000-02-28 - 2000-03-01 == - 2 days", negtwoDays,  (d6-d7));
+  check_equal("2000-02-28 - 2000-02-28 == 0 days",   zeroDays,    (d6-d6));
+  check_equal("2000-02-28 + 2 days == 2000-03-01 ",  d6 + twoDays, d7);
+  check_equal("2000-03-01 - 2 days == 2000-02-28 ",  d7 - twoDays, d6);
+  check_equal("Add duration to date", date(1999,1,1) + date_duration(365), date(2000,1,1));
+  check_equal("Add zero days", date(1999,1,1) + zeroDays, date(1999,1,1));
   //can't do this...
   //check("Add date to duration", date_duration(365) + date(1999,1,1) == date(2000,1,1));
 
@@ -117,16 +117,16 @@ main()
   {
     date d(2003,Oct,31);
     date_duration dd1(pos_infin), dd2(neg_infin), dd3(not_a_date_time);
-    check("date + inf_dur", d + dd1 == date(pos_infin));
-    check("date + inf_dur", d + dd2 == date(neg_infin));
-    check("date + nan_dur", d + dd3 == date(not_a_date_time));
-    check("date - inf_dur", d - dd1 == date(neg_infin));
-    check("date - inf_dur", d - dd2 == date(pos_infin));
-    check("date - nan_dur", d - dd3 == date(not_a_date_time));
-    check("inf_date + inf_dur", date(pos_infin) + dd1 == date(pos_infin));
-    check("inf_date - inf_dur", date(pos_infin) - dd1 == date(not_a_date_time));
-    check("inf_date + inf_dur", date(neg_infin) + dd1 == date(not_a_date_time));
-    check("inf_date - inf_dur", date(neg_infin) - dd1 == date(neg_infin));
+    check_equal("date + inf_dur", d + dd1, date(pos_infin));
+    check_equal("date + inf_dur", d + dd2, date(neg_infin));
+    check_equal("date + nan_dur", d + dd3, date(not_a_date_time));
+    check_equal("date - inf_dur", d - dd1, date(neg_infin));
+    check_equal("date - inf_dur", d - dd2, date(pos_infin));
+    check_equal("date - nan_dur", d - dd3, date(not_a_date_time));
+    check_equal("inf_date + inf_dur", date(pos_infin) + dd1, date(pos_infin));
+    check_equal("inf_date - inf_dur", date(pos_infin) - dd1, date(not_a_date_time));
+    check_equal("inf_date + inf_dur", date(neg_infin) + dd1, date(not_a_date_time));
+    check_equal("inf_date - inf_dur", date(neg_infin) - dd1, date(neg_infin));
   }
 
 
@@ -213,58 +213,58 @@ main()
   check("check infinity nad compare   ",      d12 != d11);
   date d13(max_date_time);
   check("check infinity - max compare   ",      d13 < d11);
-  check("max date_time value   ",       d13 == date(9999,Dec, 31));
+  check_equal("max date_time value   ",       d13, date(9999,Dec, 31));
   std::cout << to_simple_string(d13) << std::endl;
   date d14(min_date_time);
   check("check infinity - min compare   ",      d14 > d10);
   std::cout << to_simple_string(d14) << std::endl;
-  check("min date_time value   ",      d14 == date(1400,Jan, 1));
+  check_equal("min date_time value   ",      d14, date(1400,Jan, 1));
 
- 
+
   date d15(1400,1,1);
   std::cout << d15.day_of_week().as_long_string() << std::endl;
   check("check infinity - min compare   ",      d10 < d15);
 
   // most of this testing is in the gregorian_calendar tests
   std::cout << d15.julian_day() << std::endl;
-  check("check julian day   ", d15.julian_day() == 2232400);
-  check("check modjulian day   ", d15.modjulian_day() == -167601);
+  check_equal("check julian day   ", d15.julian_day(), 2232400);
+  check_equal("check modjulian day   ", d15.modjulian_day(), -167601);
   date d16(2004,2,29);
-  check("check julian day   ", d16.julian_day() == 2453065);
-  check("check modjulian day   ", d16.modjulian_day() == 53064);
+  check_equal("check julian day   ", d16.julian_day(), 2453065);
+  check_equal("check modjulian day   ", d16.modjulian_day(), 53064);
 
   // most of this testing is in the gregorian_calendar tests
   date d31(2000, Jun, 1);
-  check("check iso week number   ", d31.week_number() == 22);
+  check_equal("check iso week number   ", d31.week_number(), 22);
   date d32(2000, Aug, 1);
-  check("check iso week number   ", d32.week_number() == 31);
+  check_equal("check iso week number   ", d32.week_number(), 31);
   date d33(2000, Oct, 1);
-  check("check iso week number   ", d33.week_number() == 39);
+  check_equal("check iso week number   ", d33.week_number(), 39);
   date d34(2000, Dec, 1);
-  check("check iso week number   ", d34.week_number() == 48);
+  check_equal("check iso week number   ", d34.week_number(), 48);
   date d35(2000, Dec, 24);
-  check("check iso week number   ", d35.week_number() == 51);
+  check_equal("check iso week number   ", d35.week_number(), 51);
   date d36(2000, Dec, 25);
-  check("check iso week number   ", d36.week_number() == 52);
+  check_equal("check iso week number   ", d36.week_number(), 52);
   date d37(2000, Dec, 31);
-  check("check iso week number   ", d37.week_number() == 52);
+  check_equal("check iso week number   ", d37.week_number(), 52);
   date d38(2001, Jan, 1);
-  check("check iso week number   ", d38.week_number() == 1);
+  check_equal("check iso week number   ", d38.week_number(), 1);
 
   try {
     int dayofyear1 = d38.day_of_year();
-    check("check day of year number", dayofyear1 == 1);
-    check("check day of year number", d37.day_of_year() == 366);
+    check_equal("check day of year number", dayofyear1, 1);
+    check_equal("check day of year number", d37.day_of_year(), 366);
     date d39(2001,Dec,31);
-    check("check day of year number", d39.day_of_year() == 365);
+    check_equal("check day of year number", d39.day_of_year(), 365);
     date d40(2000,Feb,29);
-    check("check day of year number", d40.day_of_year() == 60);
+    check_equal("check day of year number", d40.day_of_year(), 60);
     date d41(1400,Jan,1);
-    check("check day of year number", d41.day_of_year() == 1);
+    check_equal("check day of year number", d41.day_of_year(), 1);
     date d42(1400,Jan,1);
-    check("check day of year number", d42.day_of_year() == 1);
+    check_equal("check day of year number", d42.day_of_year(), 1);
     date d43(2002,Nov,17);
-    check("check day of year number", d43.day_of_year() == 321);
+    check_equal("check day of year number", d43.day_of_year(), 321);
   }
   catch(std::exception& e) {
     std::cout << e.what() << std::endl;
@@ -272,10 +272,10 @@ main()
   }
 
   //converts to date and back -- should get same result
-  check("tm conversion functions 2000-1-1", date_from_tm(to_tm(d)) == d);
-  check("tm conversion functions 1900-1-1", date_from_tm(to_tm(d1)) == d1);
-  check("tm conversion functions min date 1400-1-1 ", date_from_tm(to_tm(d14)) == d14);
-  check("tm conversion functions max date 9999-12-31", date_from_tm(to_tm(d13)) == d13);
+  check_equal("tm conversion functions 2000-1-1", date_from_tm(to_tm(d)), d);
+  check_equal("tm conversion functions 1900-1-1", date_from_tm(to_tm(d1)), d1);
+  check_equal("tm conversion functions min date 1400-1-1 ", date_from_tm(to_tm(d14)), d14);
+  check_equal("tm conversion functions max date 9999-12-31", date_from_tm(to_tm(d13)), d13);
 
   try{
     date d(neg_infin);
@@ -286,7 +286,7 @@ main()
   }catch(...){
     check("Caught un-expected exception (special_value to_tm)", false);
   }
-  
+
   return printTestStats();
 
 }
