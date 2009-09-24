@@ -21,14 +21,17 @@ namespace test
 
     namespace test_detail
     {
-        template <typename T> struct list_node;
+        template <typename T> class list_node;
         template <typename T> class list_data;
         template <typename T> class list_iterator;
         template <typename T> class list_const_iterator;
 
         template <typename T>
-        struct list_node
+        class list_node
         {
+	    list_node(list_node const&);
+	    list_node& operator=(list_node const&);
+        public:
             T value_;
             list_node* next_;
                     
@@ -243,8 +246,8 @@ namespace test
         node** merge_adjacent_ranges(node** first, node** second,
                 node** third, Less less)
         {
-            while(true) {
-                while(true) {
+            for(;;) {
+                for(;;) {
                     if(first == second) return third;
                     if(less((*second)->value_, (*first)->value_)) break;
                     first = &(*first)->next_;
@@ -256,7 +259,7 @@ namespace test
                 // Since the two ranges we just swapped, the order is now:
                 // first...third...second
                 
-                while(true) {
+                for(;;) {
                     if(first == third) return second;
                     if(!less((*first)->value_, (*third)->value_)) break;
                     first = &(*first)->next_;

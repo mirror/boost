@@ -116,7 +116,7 @@ bool compare(Range1 const& x, Range2 const& y)
 }
 
 template <class Container>
-bool general_erase_range_test(Container& x, int start, int end)
+bool general_erase_range_test(Container& x, std::size_t start, std::size_t end)
 {
     collide_list l(x.begin(), x.end());
     l.erase(boost::next(l.begin(), start), boost::next(l.begin(), end));

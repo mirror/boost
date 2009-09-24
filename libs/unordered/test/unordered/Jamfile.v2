@@ -10,6 +10,7 @@ project unordered-test/unordered
         <toolset>intel-linux:"<cxxflags>-strict_ansi -cxxlib-icc"
         <toolset>gcc:<cxxflags>"-Wsign-promo -Wunused-parameter"
         #<toolset>msvc:<cxxflags>/W4
+        <warnings>all
     ;
 
 test-suite unordered

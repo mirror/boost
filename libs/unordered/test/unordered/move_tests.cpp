@@ -119,7 +119,7 @@ namespace move_tests
             BOOST_TEST(y.max_load_factor() == 2.0); // Not necessarily required.
             test::check_equivalent_keys(y);
         }
-
+/*
         {
             test::random_values<T> v(25, generator);
             T y(create(v, count, hf, eq, al, 1.0), al);
@@ -137,7 +137,7 @@ namespace move_tests
             BOOST_TEST(y.max_load_factor() == 1.0); // Not necessarily required.
             test::check_equivalent_keys(y);
         }
-    }
+*/    }
 
     boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
     boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
