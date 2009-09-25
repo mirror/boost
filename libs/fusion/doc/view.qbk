@@ -293,7 +293,7 @@ __random_access_sequence__ depending on the traversal characteristics (see
 __traversal_concept__) of its underlying sequence.
 
 [variablelist Notation
-    [[`ZV`]             [A `joint_view` type]]
+    [[`ZV`]             [A `zip_view` type]]
     [[`s`]             [An instance of `Sequences`]]
     [[`zv1`, `zv2`]             [Instances of `ZV`]]
 ]
@@ -470,6 +470,76 @@ defined in __bidirectional_sequence__.
 
     reverse_view<vector_type> reverse(vec);
     std::cout << reverse << std::endl;
+
+[endsect]
+
+[section nview]
+
+[heading Description]
+
+`nview` presents a view which iterates over a given __sequence__ in a specified order. 
+A `nview` is constructed from an arbitrary __sequence__ and a list of indicies specifying
+the elements to iterate over.
+
+[heading Header]
+
+    #include <boost/fusion/view/nview.hpp>
+    #include <boost/fusion/include/nview.hpp>
+
+[heading Synopsis]
+
+    template <typename Sequence, typename Indicies>
+    struct nview;
+
+    template <typename Sequence, int I1, int I2 = -1, ...>
+    typename result_of::nview<Sequence, I1, I2, ...>::type
+    as_nview(Sequence& s);
+
+[heading Template parameters]
+
+[table
+    [[Parameter]            [Description]                   [Default]]
+    [[`Sequence`]           [An arbitrary Fusion __forward_sequence__]
+                                                            []]
+    [[`Indicies`]           [A `mpl::vector_c<int, ...>` holding the indicies defining 
+                             the required iteration order.] []]
+    [[`I1`, `I2`, `I3`...]  [A list of integers specifying the required 
+                             iteration order.]              [`-1` for `I2`, `I3`...]]
+]
+
+[heading Model of]
+
+* __random_access_sequence__ (see __traversal_concept__) 
+
+[variablelist Notation
+    [[`NV`]            [A `nview` type]]
+    [[`s`]             [An instance of `Sequences`]]
+    [[`nv1`, `nv2`]    [Instances of `NV`]]
+]
+
+[heading Expression Semantics]
+
+Semantics of an expression is defined only where it differs from, or is not
+defined in __random_access_sequence__.
+
+[table
+    [[Expression]           [Semantics]]
+    [[`NV(s)`]              [Creates a `nview` given a sequence and a list of indicies.]]
+    [[`NV(nv1)`]            [Copy constructs a `nview` from another `nview`, `nv1`.]]
+    [[`nv1 = nv2`]          [Assigns to a `nview`, `nv1`, from another `nview`, `nv2`.]]
+]
+
+The `nview` internally stores a Fusion __vector__ of references to the elements
+of the original Fusion __sequence__
+
+[heading Example]
+    typedef __vector__<int, char, double> vec;
+    typedef mpl::vector_c<int, 2, 1, 0, 2, 0> indicies;
+
+    vec v1(1, 'c', 2.0);
+
+    std::cout << nview<vec, indicies>(v1) << std::endl; // (2.0 c 1 2.0 1)
+    std::cout << as_nview<2, 1, 1, 0>(v1) << std::endl; // (2.0 c c 1)
 
 [endsect]
 
