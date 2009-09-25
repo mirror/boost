@@ -31,10 +31,28 @@ namespace boost { namespace fusion
             struct result;
 
             template<typename U>
-            struct result<addref(U)> : boost::add_reference<U> {};
+            struct result<addref(U)> : add_reference<U> {};
 
             template <typename T>
             typename boost::result_of<addref(T)>::type 
+            operator()(T& x) const
+            {
+                return x;
+            }
+        };
+
+        struct addconstref
+        {
+            template<typename Sig>
+            struct result;
+
+            template<typename U>
+            struct result<addconstref(U)> 
+              : add_reference<typename add_const<U>::type> 
+            {};
+
+            template <typename T>
+            typename boost::result_of<addconstref(T)>::type 
             operator()(T& x) const
             {
                 return x;
@@ -58,12 +76,15 @@ namespace boost { namespace fusion
         typedef Indicies index_type;
         typedef typename mpl::size<Indicies>::type size;
 
-        typedef transform_view<Sequence, detail::addref> transform_view_type;
+        typedef typename mpl::if_<
+            is_const<Sequence>, detail::addconstref, detail::addref
+        >::type transform_type;
+        typedef transform_view<Sequence, transform_type> transform_view_type;
         typedef typename result_of::as_vector<transform_view_type>::type 
             sequence_type;
 
         explicit nview(Sequence& val)
-          : seq(as_vector(transform_view_type(val, detail::addref()))) 
+          : seq(sequence_type(transform_view_type(val, transform_type()))) 
         {}
 
         sequence_type seq;
