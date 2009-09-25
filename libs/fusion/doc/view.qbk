@@ -504,7 +504,7 @@ the elements to iterate over.
     [[`Indicies`]           [A `mpl::vector_c<int, ...>` holding the indicies defining 
                              the required iteration order.] []]
     [[`I1`, `I2`, `I3`...]  [A list of integers specifying the required 
-                             iteration order.]              [`-1` for `I2`, `I3`...]]
+                             iteration order.]              [`INT_MAX` for `I2`, `I3`...]]
 ]
 
 [heading Model of]
