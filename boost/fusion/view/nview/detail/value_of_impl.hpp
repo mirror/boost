@@ -33,7 +33,8 @@ namespace boost { namespace fusion
                 typedef typename Iterator::sequence_type sequence_type;
 
                 typedef typename result_of::deref<first_type>::type index;
-                typedef typename result_of::at<sequence_type, index>::type type;
+                typedef typename result_of::at<
+                    typename sequence_type::sequence_type, index>::type type;
             };
         };
     }

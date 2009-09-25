@@ -30,15 +30,14 @@ namespace boost { namespace fusion
             template <typename Sequence>
             struct apply
             {
-                typedef typename Sequence::sequence_type sequence_type;
                 typedef typename Sequence::index_type index_type;
 
-                typedef nview_iterator<sequence_type, 
+                typedef nview_iterator<Sequence, 
                     typename mpl::end<index_type>::type> type;
 
-                static type call(Sequence& v)
+                static type call(Sequence& s)
                 {
-                    return type(v.seq);
+                    return type(s);
                 }
             };
         };

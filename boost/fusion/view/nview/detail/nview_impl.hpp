@@ -10,6 +10,7 @@
 #if !defined(BOOST_FUSION_NVIEW_IMPL_SEP_23_2009_1017PM)
 #define BOOST_FUSION_NVIEW_IMPL_SEP_23_2009_1017PM
 
+#include <climits>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/repeat.hpp>
 #include <boost/preprocessor/iterate.hpp>
@@ -28,7 +29,7 @@
 namespace boost { namespace fusion { namespace result_of
 {
     template <typename Sequence
-      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(FUSION_MAX_VECTOR_SIZE, int I, -1)>
+      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(FUSION_MAX_VECTOR_SIZE, int I, INT_MAX)>
     struct as_nview
     {
         typedef mpl::vector_c<
