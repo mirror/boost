@@ -106,7 +106,7 @@ namespace unordered_detail {
             {
                 return v.first;
             }
-/*
+
             template <class Second>
             static key_type const& extract(
                 std::pair<key_type&, Second> const& v)
@@ -120,7 +120,6 @@ namespace unordered_detail {
             {
                 return v.first;
             }
-*/
 
 #if defined(BOOST_UNORDERED_STD_FORWARD)
             template <class Arg1, class... Args>
