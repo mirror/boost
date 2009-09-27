@@ -98,11 +98,13 @@ boost
                 }
 
             char const *
-            diagnostic_information() const
+            diagnostic_information( char const * header ) const
                 {
-                if( diagnostic_info_str_.empty() )
+                if( header )
                     {
+                    BOOST_ASSERT(*header!=0);
                     std::ostringstream tmp;
+                    tmp << header;
                     for( error_info_map::const_iterator i=info_.begin(),end=info_.end(); i!=end; ++i )
                         {
                         shared_ptr<error_info_base const> const & x = i->second;

@@ -143,7 +143,7 @@ boost
         struct
         error_info_container
             {
-            virtual char const * diagnostic_information() const = 0;
+            virtual char const * diagnostic_information( char const * ) const = 0;
             virtual shared_ptr<error_info_base> get( type_info_ const & ) const = 0;
             virtual void set( shared_ptr<error_info_base> const &, type_info_ const & ) = 0;
             virtual void add_ref() const = 0;
@@ -169,7 +169,7 @@ boost
         template <>
         struct get_info<throw_line>;
 
-        char const * get_diagnostic_information( exception const & );
+        char const * get_diagnostic_information( exception const &, char const * );
         }
 
     class
@@ -231,7 +231,7 @@ boost
             return x;
             }
 
-        friend char const * exception_detail::get_diagnostic_information( exception const & );
+        friend char const * exception_detail::get_diagnostic_information( exception const &, char const * );
 
         template <class E,class Tag,class T>
         friend E const & operator<<( E const &, error_info<Tag,T> const & );
