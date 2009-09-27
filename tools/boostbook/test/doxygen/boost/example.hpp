@@ -1,7 +1,7 @@
 /*!
-    \class example
+    \class example::example
     
-    \brief Documentation for class example (why isn't this working?)
+    \brief Documentation for class example
  */
 
 /*!
