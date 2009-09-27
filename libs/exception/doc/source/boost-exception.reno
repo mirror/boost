@@ -102,6 +102,51 @@
 																<hook>
 																	<stream_hook_path>
 																		<container>
+																			<size>1</size>
+																			<strong>66E0BD9724AB83012F5B35D887E3313960DC0E69B94E0C03CA1F3C85A0D84A5C</strong>
+																			<weak>2883671483</weak>
+																			<size>311</size>
+																			<position>306</position>
+																		</container>
+																	</stream_hook_path>
+																</hook>
+																<file>
+																	<path>
+																		<empty>0</empty>
+																		<string>../../example/logging.cpp</string>
+																		<type>0</type>
+																		<base>0</base>
+																	</path>
+																</file>
+															</hook>
+															<title>
+																<string>diagnostic information</string>
+															</title>
+															<file_name>
+																<string>tutorial_diagnostic_information</string>
+															</file_name>
+														</object>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
+													<size>1</size>
+													<variant>2</variant>
+													<string>(:include include:)&#10;(:auto also:)&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>7</id>
+														<type>
+															<string>reno_context</string>
+														</type>
+														<object>
+															<hook>
+																<hook>
+																	<stream_hook_path>
+																		<container>
 																			<size>0</size>
 																		</container>
 																	</stream_hook_path>
@@ -131,7 +176,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>7</id>
+														<id>8</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -180,7 +225,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>8</id>
+														<id>9</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -229,7 +274,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>9</id>
+														<id>10</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -274,7 +319,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>10</id>
+														<id>11</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -323,7 +368,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>11</id>
+														<id>12</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -368,7 +413,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>12</id>
+														<id>13</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -421,7 +466,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>13</id>
+														<id>14</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -474,7 +519,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>14</id>
+														<id>15</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -512,7 +557,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>15</id>
+														<id>16</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -565,7 +610,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>16</id>
+														<id>17</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -610,7 +655,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>17</id>
+														<id>18</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -648,7 +693,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>18</id>
+														<id>19</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -686,7 +731,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>19</id>
+														<id>20</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -735,7 +780,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>20</id>
+														<id>21</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -784,7 +829,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>21</id>
+														<id>22</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -827,7 +872,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>22</id>
+														<id>23</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -865,7 +910,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>23</id>
+														<id>24</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -910,7 +955,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>24</id>
+														<id>25</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -947,51 +992,6 @@
 												</weak_ptr>
 												<container>
 													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>25</id>
-														<type>
-															<string>reno_context</string>
-														</type>
-														<object>
-															<hook>
-																<hook>
-																	<stream_hook_path>
-																		<container>
-																			<size>1</size>
-																			<strong>66E0BD9724AB83012F5B35D887E3313960DC0E69B94E0C03CA1F3C85A0D84A5C</strong>
-																			<weak>2883671483</weak>
-																			<size>311</size>
-																			<position>306</position>
-																		</container>
-																	</stream_hook_path>
-																</hook>
-																<file>
-																	<path>
-																		<empty>0</empty>
-																		<string>../../example/logging.cpp</string>
-																		<type>0</type>
-																		<base>0</base>
-																	</path>
-																</file>
-															</hook>
-															<title>
-																<string>diagnostic information</string>
-															</title>
-															<file_name>
-																<string>tutorial_diagnostic_information</string>
-															</file_name>
-														</object>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>(:include include:)&#10;(:auto also:)&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -2895,7 +2895,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-14</id>
+															<id>-15</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -2904,7 +2904,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-16</id>
+															<id>-17</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -2913,7 +2913,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-22</id>
+															<id>-23</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -3609,6 +3609,17 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-21</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
 													<size>5</size>
 													<variant>2</variant>
 													<string>[@typedef </string>
@@ -3625,22 +3636,11 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-20</id>
+															<id>-21</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
 													<string>;@]&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-21</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -3927,7 +3927,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-15</id>
+															<id>-16</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -4042,7 +4042,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-13</id>
+															<id>-14</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -4051,7 +4051,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-10</id>
+															<id>-11</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -4523,6 +4523,17 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-10</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
 													<size>29</size>
 													<variant>2</variant>
 													<string>[@#include &lt;(:link </string>
@@ -4611,7 +4622,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-23</id>
+															<id>-24</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -4658,7 +4669,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-10</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -4669,7 +4680,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-11</id>
+														<id>-12</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -4685,17 +4696,6 @@
 													</weak_ptr>
 													<variant>2</variant>
 													<string> decl:)@]&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-12</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -4761,6 +4761,17 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-19</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
 													<size>3</size>
 													<variant>2</variant>
 													<string>[@(:include </string>
@@ -4773,17 +4784,6 @@
 													</weak_ptr>
 													<variant>2</variant>
 													<string> decl:)@]&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-19</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -4827,18 +4827,7 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>3</size>
-													<variant>2</variant>
-													<string>[@(:include </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-20</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string> def:)@]&#10;</string>
+													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -4849,7 +4838,18 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>0</size>
+													<size>3</size>
+													<variant>2</variant>
+													<string>[@(:include </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-21</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string> def:)@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -5297,7 +5297,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-8</id>
+															<id>-9</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -5383,7 +5383,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -5482,7 +5482,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -5508,7 +5508,7 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>5</size>
+													<size>7</size>
 													<variant>2</variant>
 													<string>[@(:include </string>
 													<variant>1</variant>
@@ -5516,6 +5516,15 @@
 														<expired>0</expired>
 														<shared_ptr>
 															<id>-58</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string> decl:)&#10;&#10;(:include </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-78</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -5774,6 +5783,17 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-8</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
 													<size>5</size>
 													<variant>2</variant>
 													<string>[@template &lt;class E, class Tag, class T&gt;&#10;E const &amp; (:link </string>
@@ -5781,7 +5801,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -5801,7 +5821,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-8</id>
+														<id>-9</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -5812,7 +5832,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-8</id>
+															<id>-9</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -5841,42 +5861,11 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-9</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-10</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>5</size>
-													<variant>2</variant>
-													<string>[@(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-10</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string> mod=&quot;m&quot;:)( (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-13</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string> mod=&quot;m&quot;:) const &amp; v );@]&#10;</string>
+													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -5887,7 +5876,27 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>0</size>
+													<size>5</size>
+													<variant>2</variant>
+													<string>[@(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-11</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string> mod=&quot;m&quot;:)( (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-14</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string> mod=&quot;m&quot;:) const &amp; v );@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -5909,18 +5918,7 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>3</size>
-													<variant>2</variant>
-													<string>[@typedef T (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-13</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string> mod=&quot;m&quot;:);@]&#10;</string>
+													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -5931,7 +5929,18 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>0</size>
+													<size>3</size>
+													<variant>2</variant>
+													<string>[@typedef T (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-14</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string> mod=&quot;m&quot;:);@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -5942,6 +5951,17 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-16</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
 													<size>7</size>
 													<variant>2</variant>
 													<string>[@(:link </string>
@@ -5949,7 +5969,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-15</id>
+															<id>-16</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -5958,7 +5978,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-15</id>
+															<id>-16</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -5972,17 +5992,6 @@
 													</weak_ptr>
 													<variant>2</variant>
 													<string>:) const &amp; x );@]&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-16</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -6015,9 +6024,7 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>[@template &lt;class ErrorInfo,class E&gt;&#10;typename ErrorInfo::(:link error_info::value_type mod=&quot;m&quot;:) const * (:link get_error_info:)( E const &amp; x );&#10;&#10;template &lt;class ErrorInfo,class E&gt;&#10;typename ErrorInfo::(:link error_info::value_type mod=&quot;m&quot;:) * (:link get_error_info:)( E &amp; x );@]&#10;</string>
+													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -6028,7 +6035,9 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>0</size>
+													<size>1</size>
+													<variant>2</variant>
+													<string>[@template &lt;class ErrorInfo,class E&gt;&#10;typename ErrorInfo::(:link error_info::value_type mod=&quot;m&quot;:) const * (:link get_error_info:)( E const &amp; x );&#10;&#10;template &lt;class ErrorInfo,class E&gt;&#10;typename ErrorInfo::(:link error_info::value_type mod=&quot;m&quot;:) * (:link get_error_info:)( E &amp; x );@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -6231,7 +6240,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-13</id>
+															<id>-14</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -6249,7 +6258,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-13</id>
+															<id>-14</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7161,6 +7170,100 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
+													<size>19</size>
+													<variant>2</variant>
+													<string>(:auto !!:)&#10;&#10;Boost Exception provides a namespace-scope function (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-58</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:) which takes a boost::(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-42</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:). The returned string contains:&#10;&#10;*the string representation of all data objects added to the boost::(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-42</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:) through (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-8</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string> mod=&quot;/&quot;:);&#10;*the output from std::exception::what;&#10;*additional platform-specific diagnostic information.&#10;&#10;The returned string is not presentable as a friendly user message, but because it is generated automatically, it is useful for debugging or logging purposes. Here is an example:&#10;&#10;[@#include &lt;(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-10</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:)&gt;&#10;#include &lt;iostream&gt;&#10;&#10;void f(); //throws unknown types that derive from boost::(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-42</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:).&#10;&#10;void&#10;g()&#10;    {&#10;    try&#10;        {&#10;        f();&#10;        }&#10;    catch(&#10;    boost::(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-42</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:) &amp; e )&#10;        {&#10;        std::cerr &lt;&lt; (:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-58</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:)(e);&#10;        }&#10;    }@]&#10;&#10;(:include </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-65</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:)&#10;</string>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-7</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
 													<size>1</size>
 													<variant>2</variant>
 													<string>(:auto !!:)&#10;&#10;(:pagelist fmt=&quot;index&quot; tags=&quot;function&quot;:)&#10;</string>
@@ -7170,7 +7273,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-7</id>
+														<id>-8</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7210,7 +7313,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-8</id>
+														<id>-9</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7241,7 +7344,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-9</id>
+														<id>-10</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7254,7 +7357,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-10</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7276,7 +7379,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-11</id>
+														<id>-12</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7289,7 +7392,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-12</id>
+														<id>-13</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7300,7 +7403,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7309,7 +7412,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7383,7 +7486,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-13</id>
+														<id>-14</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7403,7 +7506,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-13</id>
+															<id>-14</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7414,7 +7517,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-15</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7454,7 +7557,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7483,7 +7586,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7494,7 +7597,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-16</id>
+														<id>-17</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7532,7 +7635,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-9</id>
+															<id>-10</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7595,7 +7698,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7624,7 +7727,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-17</id>
+														<id>-18</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7662,7 +7765,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-24</id>
+															<id>-25</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7682,7 +7785,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-18</id>
+														<id>-19</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7695,7 +7798,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-19</id>
+														<id>-20</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7724,7 +7827,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7733,7 +7836,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7742,7 +7845,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7751,7 +7854,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-12</id>
+															<id>-13</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7762,7 +7865,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-20</id>
+														<id>-21</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7802,7 +7905,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-21</id>
+														<id>-22</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7822,7 +7925,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-9</id>
+															<id>-10</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7840,7 +7943,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-20</id>
+															<id>-21</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7849,7 +7952,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-9</id>
+															<id>-10</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7896,7 +7999,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-22</id>
+														<id>-23</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -7961,7 +8064,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -7988,7 +8091,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8096,7 +8199,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-20</id>
+															<id>-21</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8204,7 +8307,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8213,7 +8316,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8222,7 +8325,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8231,7 +8334,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8240,7 +8343,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8260,7 +8363,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-23</id>
+														<id>-24</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -8273,7 +8376,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-24</id>
+														<id>-25</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -8293,7 +8396,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-23</id>
+															<id>-24</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8320,7 +8423,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-20</id>
+															<id>-21</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8343,100 +8446,6 @@
 													</weak_ptr>
 													<variant>2</variant>
 													<string>:).&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-25</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>19</size>
-													<variant>2</variant>
-													<string>(:auto !!:)&#10;&#10;Boost Exception provides a namespace-scope function (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-58</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:) which takes a boost::(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-42</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:). The returned string contains:&#10;&#10;*the string representation of all data objects added to the boost::(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-42</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:) through (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-7</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string> mod=&quot;/&quot;:);&#10;*the output from std::exception::what;&#10;*additional platform-specific diagnostic information.&#10;&#10;The returned string is not presentable as a friendly user message, but because it is generated automatically, it is useful for debugging or logging purposes. Here is an example:&#10;&#10;[@#include &lt;(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-9</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:)&gt;&#10;#include &lt;iostream&gt;&#10;&#10;void f(); //throws unknown types that derive from boost::(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-42</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:).&#10;&#10;void&#10;g()&#10;    {&#10;    try&#10;        {&#10;        f();&#10;        }&#10;    catch(&#10;    boost::(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-42</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:) &amp; e )&#10;        {&#10;        std::cerr &lt;&lt; (:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-58</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:)(e);&#10;        }&#10;    }@]&#10;&#10;(:include </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
-															<id>-65</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:)&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -8626,7 +8635,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-17</id>
+															<id>-18</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8662,15 +8671,6 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-16</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string> mod=&quot;w&quot;:)&#10;##(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
 															<id>-17</id>
 														</shared_ptr>
 													</weak_ptr>
@@ -8680,7 +8680,16 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-14</id>
+															<id>-18</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string> mod=&quot;w&quot;:)&#10;##(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-15</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8698,7 +8707,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-25</id>
+															<id>-6</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8743,15 +8752,6 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
-														</shared_ptr>
-													</weak_ptr>
-													<variant>2</variant>
-													<string>:)&#10;###(:link </string>
-													<variant>1</variant>
-													<weak_ptr>
-														<expired>0</expired>
-														<shared_ptr>
 															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
@@ -8761,7 +8761,16 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-9</id>
+														</shared_ptr>
+													</weak_ptr>
+													<variant>2</variant>
+													<string>:)&#10;###(:link </string>
+													<variant>1</variant>
+													<weak_ptr>
+														<expired>0</expired>
+														<shared_ptr>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8887,7 +8896,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-6</id>
+															<id>-7</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8905,7 +8914,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-12</id>
+															<id>-13</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -8914,7 +8923,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-22</id>
+															<id>-23</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9115,7 +9124,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9181,7 +9190,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-14</id>
+															<id>-15</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9243,7 +9252,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-21</id>
+															<id>-22</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9301,7 +9310,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9319,7 +9328,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9448,7 +9457,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9550,7 +9559,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9622,7 +9631,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9649,7 +9658,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9658,7 +9667,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9694,7 +9703,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9712,7 +9721,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9855,7 +9864,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-11</id>
+															<id>-12</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9864,7 +9873,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-11</id>
+															<id>-12</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9891,7 +9900,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-18</id>
+															<id>-19</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9900,7 +9909,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-18</id>
+															<id>-19</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9963,7 +9972,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-23</id>
+															<id>-24</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -9972,7 +9981,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-23</id>
+															<id>-24</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10053,7 +10062,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-9</id>
+															<id>-10</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10062,7 +10071,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-9</id>
+															<id>-10</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10119,7 +10128,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10364,7 +10373,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10543,7 +10552,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-9</id>
+															<id>-10</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10588,7 +10597,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10597,7 +10606,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10606,7 +10615,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10698,7 +10707,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-20</id>
+															<id>-21</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10778,7 +10787,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10814,7 +10823,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10832,7 +10841,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-7</id>
+															<id>-8</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10850,7 +10859,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10859,7 +10868,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -10979,7 +10988,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-9</id>
+															<id>-10</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -11216,7 +11225,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-23</id>
+															<id>-24</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -11234,7 +11243,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-20</id>
+															<id>-21</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -11261,7 +11270,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-19</id>
+															<id>-20</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -11314,7 +11323,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-23</id>
+															<id>-24</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -11395,7 +11404,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-20</id>
+															<id>-21</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -11440,7 +11449,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-20</id>
+															<id>-21</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -11620,9 +11629,7 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>!!!!Throws:&#10;&#10;std::bad_alloc, or any exception emitted by the T copy constructor.&#10;</string>
+													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -11635,7 +11642,7 @@
 												<container>
 													<size>1</size>
 													<variant>2</variant>
-													<string>!!!!Throws:&#10;&#10;std::bad_alloc, or any exception emitted by T1..TN copy constructor.&#10;</string>
+													<string>!!!!Throws:&#10;&#10;std::bad_alloc, or any exception emitted by the T copy constructor.&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -11646,7 +11653,9 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>0</size>
+													<size>1</size>
+													<variant>2</variant>
+													<string>!!!!Throws:&#10;&#10;std::bad_alloc, or any exception emitted by T1..TN copy constructor.&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -11657,9 +11666,7 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>1</size>
-													<variant>2</variant>
-													<string>!!!!Throws:&#10;&#10;Any exception emitted by v&apos;s copy constructor.</string>
+													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -11670,7 +11677,9 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
-													<size>0</size>
+													<size>1</size>
+													<variant>2</variant>
+													<string>!!!!Throws:&#10;&#10;Any exception emitted by v&apos;s copy constructor.</string>
 												</container>
 											</pair>
 											<pair>
@@ -12439,7 +12448,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-18</id>
+															<id>-19</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -12465,6 +12474,17 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-8</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
 													<size>3</size>
 													<variant>2</variant>
 													<string>`#include &lt;(:link </string>
@@ -12483,7 +12503,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-8</id>
+														<id>-9</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -12503,7 +12523,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-8</id>
+															<id>-9</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -12514,7 +12534,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-9</id>
+														<id>-10</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -12527,7 +12547,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-10</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -12549,7 +12569,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-11</id>
+														<id>-12</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -12562,7 +12582,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-12</id>
+														<id>-13</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -12573,7 +12593,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-13</id>
+														<id>-14</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -12589,17 +12609,6 @@
 													</weak_ptr>
 													<variant>2</variant>
 													<string>:)&gt;&#10;&#10;[@(:include decl:)@]&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-14</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -12643,6 +12652,17 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-19</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
 													<size>3</size>
 													<variant>2</variant>
 													<string>[@#include &lt;</string>
@@ -12661,7 +12681,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-19</id>
+														<id>-20</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -12674,7 +12694,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-20</id>
+														<id>-21</id>
 													</shared_ptr>
 												</weak_ptr>
 												<container>
@@ -12685,7 +12705,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-23</id>
+															<id>-24</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -12694,22 +12714,11 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-23</id>
+															<id>-24</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
 													<string> synopsis:)&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-21</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -12731,6 +12740,17 @@
 													</shared_ptr>
 												</weak_ptr>
 												<container>
+													<size>0</size>
+												</container>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-24</id>
+													</shared_ptr>
+												</weak_ptr>
+												<container>
 													<size>3</size>
 													<variant>2</variant>
 													<string>[@#include &lt;</string>
@@ -12743,17 +12763,6 @@
 													</weak_ptr>
 													<variant>2</variant>
 													<string>&gt;&#10;#include &lt;errno.h&gt;&#10;&#10;namespace&#10;boost&#10;    {&#10;(:include api pre_indent=&quot;4&quot;:)&#10;    }@]&#10;</string>
-												</container>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-24</id>
-													</shared_ptr>
-												</weak_ptr>
-												<container>
-													<size>0</size>
 												</container>
 											</pair>
 											<pair>
@@ -13013,7 +13022,7 @@
 													<weak_ptr>
 														<expired>0</expired>
 														<shared_ptr>
-															<id>-11</id>
+															<id>-12</id>
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
@@ -14051,7 +14060,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-17</id>
+										<id>-18</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14119,7 +14128,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-18</id>
+										<id>-19</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14170,7 +14179,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-14</id>
+										<id>-15</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14187,7 +14196,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-22</id>
+										<id>-23</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14204,7 +14213,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-6</id>
+										<id>-7</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14696,7 +14705,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-23</id>
+										<id>-24</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14720,7 +14729,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-24</id>
+										<id>-25</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14848,7 +14857,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-21</id>
+										<id>-22</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14908,7 +14917,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-13</id>
+										<id>-14</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14964,7 +14973,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-25</id>
+										<id>-6</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -15016,7 +15025,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-20</id>
+										<id>-21</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -15040,7 +15049,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-9</id>
+										<id>-10</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -15260,7 +15269,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-15</id>
+										<id>-16</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -15360,7 +15369,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-11</id>
+										<id>-12</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -15388,7 +15397,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-19</id>
+										<id>-20</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -15520,7 +15529,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-12</id>
+										<id>-13</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -15672,7 +15681,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-10</id>
+										<id>-11</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -15700,7 +15709,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-7</id>
+										<id>-8</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -15752,7 +15761,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-16</id>
+										<id>-17</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -15808,7 +15817,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-8</id>
+										<id>-9</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -15869,10 +15878,10 @@
 									<weak_ptr>
 										<expired>0</expired>
 										<shared_ptr>
-											<id>-7</id>
+											<id>-6</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>error_info free function</string>
+									<string>diagnostic_information tutorial</string>
 								</pair>
 								<pair>
 									<weak_ptr>
@@ -15887,10 +15896,10 @@
 									<weak_ptr>
 										<expired>0</expired>
 										<shared_ptr>
-											<id>-10</id>
+											<id>-9</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>function member</string>
+									<string>error_info free function</string>
 								</pair>
 								<pair>
 									<weak_ptr>
@@ -15899,13 +15908,22 @@
 											<id>-11</id>
 										</shared_ptr>
 									</weak_ptr>
+									<string>function member</string>
+								</pair>
+								<pair>
+									<weak_ptr>
+										<expired>0</expired>
+										<shared_ptr>
+											<id>-12</id>
+										</shared_ptr>
+									</weak_ptr>
 									<string></string>
 								</pair>
 								<pair>
 									<weak_ptr>
 										<expired>0</expired>
 										<shared_ptr>
-											<id>-13</id>
+											<id>-14</id>
 										</shared_ptr>
 									</weak_ptr>
 									<string>type</string>
@@ -15914,19 +15932,10 @@
 									<weak_ptr>
 										<expired>0</expired>
 										<shared_ptr>
-											<id>-15</id>
-										</shared_ptr>
-									</weak_ptr>
-									<string>function</string>
-								</pair>
-								<pair>
-									<weak_ptr>
-										<expired>0</expired>
-										<shared_ptr>
 											<id>-16</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>tutorial</string>
+									<string>function</string>
 								</pair>
 								<pair>
 									<weak_ptr>
@@ -15944,7 +15953,7 @@
 											<id>-18</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>exception_ptr</string>
+									<string>tutorial</string>
 								</pair>
 								<pair>
 									<weak_ptr>
@@ -15953,7 +15962,7 @@
 											<id>-19</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>error_info free function</string>
+									<string>exception_ptr</string>
 								</pair>
 								<pair>
 									<weak_ptr>
@@ -15962,7 +15971,7 @@
 											<id>-20</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>error_info_instance noalso type</string>
+									<string>error_info free function</string>
 								</pair>
 								<pair>
 									<weak_ptr>
@@ -15971,16 +15980,16 @@
 											<id>-21</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>noalso noindex tutorial</string>
+									<string>error_info_instance noalso type</string>
 								</pair>
 								<pair>
 									<weak_ptr>
 										<expired>0</expired>
 										<shared_ptr>
-											<id>-24</id>
+											<id>-22</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>noindex tutorial</string>
+									<string>noalso noindex tutorial</string>
 								</pair>
 								<pair>
 									<weak_ptr>
@@ -15989,7 +15998,7 @@
 											<id>-25</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>diagnostic_information tutorial</string>
+									<string>noindex tutorial</string>
 								</pair>
 								<pair>
 									<weak_ptr>
