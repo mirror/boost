@@ -29,12 +29,13 @@ UNORDERED_AUTO_TEST(needless_copies_2) {
 
     test::object_count count = test::global_object_count;
     dst.emplace(src);
-    BOOST_TEST(test::global_object_count.instances == count.instances + 1);
+    BOOST_TEST_EQ(test::global_object_count.instances, count.instances + 1);
     BOOST_TEST_EQ(test::global_object_count.constructions, count.constructions + 1);
 
     count = test::global_object_count;
     dst.emplace(src);
-    BOOST_TEST_EQ(test::global_object_count, count);
+    BOOST_TEST_EQ(test::global_object_count.instances, count.instances);
+    BOOST_TEST(test::global_object_count.constructions <= count.constructions + 1);
 }
 
 RUN_TESTS()
