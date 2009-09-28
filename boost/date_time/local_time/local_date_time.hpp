@@ -19,6 +19,7 @@
 #include <boost/date_time/dst_rules.hpp>
 #include <boost/date_time/time_zone_base.hpp>
 #include <boost/date_time/special_defs.hpp>
+#include <boost/date_time/time_resolution_traits.hpp> // absolute_value
 
 namespace boost {
 namespace local_time {

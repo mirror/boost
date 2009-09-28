@@ -27,6 +27,7 @@
 #include <boost/date_time/date_facet.hpp>
 #include <boost/date_time/string_convert.hpp>
 #include <boost/date_time/special_defs.hpp>
+#include <boost/date_time/time_resolution_traits.hpp> // absolute_value
 
 namespace boost {
 namespace date_time {

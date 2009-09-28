@@ -9,14 +9,14 @@
  * $Date$
  */
 
-#include "boost/date_time/gregorian/gregorian.hpp"
-#include "boost/date_time/compiler_config.hpp"
-#include "boost/date_time/iso_format.hpp"
-#include "boost/date_time/date_format_simple.hpp"
-#include "boost/date_time/posix_time/posix_time_types.hpp"
-#include "boost/date_time/time_formatting_streams.hpp"
-
-#include "boost/date_time/time_parsing.hpp"
+#include <boost/date_time/gregorian/gregorian.hpp>
+#include <boost/date_time/compiler_config.hpp>
+#include <boost/date_time/iso_format.hpp>
+#include <boost/date_time/date_format_simple.hpp>
+#include <boost/date_time/posix_time/posix_time_types.hpp>
+#include <boost/date_time/time_formatting_streams.hpp>
+#include <boost/date_time/time_resolution_traits.hpp> // absolute_value
+#include <boost/date_time/time_parsing.hpp>
 
 /* NOTE: The "to_*_string" code for older compilers, ones that define 
  * BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS, is located in 

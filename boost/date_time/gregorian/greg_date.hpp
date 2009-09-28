@@ -99,7 +99,7 @@ namespace gregorian {
       return day_of_year_type(doy);
     }
     //!Return the Modified Julian Day number for the date.
-    long modjulian_day() const
+    date_int_type modjulian_day() const
     {
       ymd_type ymd = year_month_day();
       return gregorian_calendar::modjulian_day_number(ymd);      

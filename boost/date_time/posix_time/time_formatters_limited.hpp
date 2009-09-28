@@ -9,12 +9,13 @@
  * $Date$
  */
 
-#include "boost/date_time/gregorian/gregorian.hpp"
-#include "boost/date_time/compiler_config.hpp"
-#include "boost/date_time/iso_format.hpp"
-#include "boost/date_time/date_format_simple.hpp"
-#include "boost/date_time/posix_time/posix_time_types.hpp"
-#include "boost/date_time/time_formatting_streams.hpp"
+#include <boost/date_time/gregorian/gregorian.hpp>
+#include <boost/date_time/compiler_config.hpp>
+#include <boost/date_time/iso_format.hpp>
+#include <boost/date_time/date_format_simple.hpp>
+#include <boost/date_time/posix_time/posix_time_types.hpp>
+#include <boost/date_time/time_formatting_streams.hpp>
+#include <boost/date_time/time_resolution_traits.hpp> // absolute_value
  
 namespace boost {
 
