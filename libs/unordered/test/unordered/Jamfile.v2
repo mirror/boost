@@ -27,7 +27,6 @@ test-suite unordered
         [ run move_tests.cpp : : : <test-info>always_show_run_output ]
         [ run assign_tests.cpp ]
         [ run insert_tests.cpp ]
-        [ run insert_range_tests.cpp ]
         [ run insert_stable_tests.cpp ]
         [ run unnecessary_copy_tests.cpp ]
         [ run erase_tests.cpp ]
