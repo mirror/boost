@@ -478,7 +478,7 @@ defined in __bidirectional_sequence__.
 [heading Description]
 
 `nview` presents a view which iterates over a given __sequence__ in a specified order. 
-A `nview` is constructed from an arbitrary __sequence__ and a list of indicies specifying
+An `nview` is constructed from an arbitrary __sequence__ and a list of indicies specifying
 the elements to iterate over.
 
 [heading Header]
@@ -524,9 +524,9 @@ defined in __random_access_sequence__.
 
 [table
     [[Expression]           [Semantics]]
-    [[`NV(s)`]              [Creates a `nview` given a sequence and a list of indicies.]]
-    [[`NV(nv1)`]            [Copy constructs a `nview` from another `nview`, `nv1`.]]
-    [[`nv1 = nv2`]          [Assigns to a `nview`, `nv1`, from another `nview`, `nv2`.]]
+    [[`NV(s)`]              [Creates an `nview` given a sequence and a list of indicies.]]
+    [[`NV(nv1)`]            [Copy constructs an `nview` from another `nview`, `nv1`.]]
+    [[`nv1 = nv2`]          [Assigns to an `nview`, `nv1`, from another `nview`, `nv2`.]]
 ]
 
 The `nview` internally stores a Fusion __vector__ of references to the elements
