@@ -26,6 +26,6 @@ file_open( char const * name, char const * mode )
         return boost::shared_ptr<FILE>(f,fclose);
     else
         throw file_open_error() <<
-			boost::errinfo_file_name(name) <<
+            boost::errinfo_file_name(name) <<
             clib_failure("fopen",errno);
     }

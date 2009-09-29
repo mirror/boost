@@ -38,6 +38,7 @@ run no_exceptions_test.cpp : : : <exception-handling>off ;
 run errinfos_test.cpp ;
 compile-fail exception_fail.cpp ;
 compile-fail throw_exception_fail.cpp ;
+compile-fail error_info_const_fail.cpp ;
 
 #headers
 

@@ -3,7 +3,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-	<title>Functions</title>
+	<title>diagnostic_information_what</title>
 	<link href='reno.css' type='text/css' rel='stylesheet'/>
 </head>
 <body>
@@ -19,35 +19,24 @@
 <!-- Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h2>Functions</h2>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>diagnostic_information_what</h3>
 </div>
-<div class="RenoIndex"><h3>c</h3>
-<p><a href="copy_exception.html">copy_exception</a></p>
-<p><a href="current_exception.html">current_exception</a></p>
-<p><a href="current_exception_cast.html">current_exception_cast</a></p>
-<p><a href="current_exception_diagnostic_information.html">current_exception_diagnostic_information</a></p>
-<h3>d</h3>
-<p><a href="diagnostic_information.html">diagnostic_information</a></p>
-<p><a href="diagnostic_information_what.html">diagnostic_information_what</a></p>
-<h3>e</h3>
-<p><a href="enable_current_exception.html">enable_current_exception</a></p>
-<p><a href="enable_error_info.html">enable_error_info</a></p>
-<p><a href="error_info_error_info.html">error_info::error_info</a></p>
-<p><a href="error_info_value.html">error_info::value</a></p>
-<p><a href="exception_operator_shl.html">exception/operator&lt;&lt;</a></p>
-<p><a href="exception_constructors.html">exception::exception</a></p>
-<p><a href="exception_destructor.html">exception::~exception</a></p>
-<h3>g</h3>
-<p><a href="get_error_info.html">get_error_info</a></p>
-<h3>r</h3>
-<p><a href="rethrow_exception.html">rethrow_exception</a></p>
-<h3>t</h3>
-<p><a href="throw_exception.html">throw_exception</a></p>
-<p><a href="tuple_operator_shl.html">tuple/operator&lt;&lt;</a></p>
-</div>
+<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span>&gt;<span class="RenoBR">&nbsp;</span><br/></p>
+<pre>namespace
+boost
+    {
+<span class="RenoIncludeSPAN">    char const * <span class="RenoLink">diagnostic_information_what</span>( boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const &amp; e ) throw();</span>
+    }</pre>
+</div><p>The <span class="RenoLink">diagnostic_information_what</span> function is intended to be called from a user-defined std::exception::what() override. This allows diagnostic information to be returned as the what() string.</p>
+<h4>Returns:</h4>
+<p>A pointer to a zero-terminated buffer that contains a string similar to the std::string returned by the <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span> function, or null to indicate a failure.</p>
+<h4>Throws:</h4>
+<p>Nothing.</p>
+<h4>Note:</h4>
+<p>The returned pointer becomes invalid if any <span class="RenoLink"><a href="error_info.html">error_info</a></span> is modified or added to the exception object, or if another diagnostic information function is called.</p>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
 <h3>See Also:</h3>
-<div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
+<div class="RenoPageList"><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp<br/>
 </a></div>
 </div>
 <!-- Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc. -->

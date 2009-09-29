@@ -30,15 +30,19 @@ main()
     using namespace boost;
     try
         {
-        BOOST_THROW_EXCEPTION(
-            test_exception() <<
+        test_exception e;
+        e <<
             errinfo_api_function("failed_api_function") <<
             errinfo_at_line(42) <<
             errinfo_errno(errno) <<
             errinfo_file_handle(weak_ptr<FILE>()) <<
             errinfo_file_name("filename.txt") <<
-            errinfo_file_open_mode("rb") <<
-            errinfo_type_info_name(typeid(int).name()) );
+            errinfo_file_open_mode("rb");
+#ifdef BOOST_NO_TYPEID
+        BOOST_THROW_EXCEPTION(e);
+#else
+        BOOST_THROW_EXCEPTION(e<<errinfo_type_info_name(typeid(int).name()));
+#endif
         BOOST_TEST(false);
         }
     catch(
@@ -50,7 +54,9 @@ main()
         BOOST_TEST(get_error_info<errinfo_file_handle>(e) && get_error_info<errinfo_file_handle>(e)->expired());
         BOOST_TEST(get_error_info<errinfo_file_name>(e) && *get_error_info<errinfo_file_name>(e)=="filename.txt");
         BOOST_TEST(get_error_info<errinfo_file_open_mode>(e) && *get_error_info<errinfo_file_open_mode>(e)=="rb");
+#ifndef BOOST_NO_TYPEID
         BOOST_TEST(get_error_info<errinfo_type_info_name>(e) && *get_error_info<errinfo_type_info_name>(e)==typeid(int).name());
+#endif
         }
     catch(
     ... )

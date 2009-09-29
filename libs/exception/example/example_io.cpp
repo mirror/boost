@@ -61,10 +61,10 @@ my_fopen( char const * name, char const * mode )
         return boost::shared_ptr<FILE>(f,fclose);
     else
         BOOST_THROW_EXCEPTION(fopen_error() <<
-			boost::errinfo_errno	(errno) <<
-			boost::errinfo_file_name(name) <<
-			boost::errinfo_file_open_mode(mode) <<
-			boost::errinfo_api_function("fopen"));
+            boost::errinfo_errno    (errno) <<
+            boost::errinfo_file_name(name) <<
+            boost::errinfo_file_open_mode(mode) <<
+            boost::errinfo_api_function("fopen"));
     }
 
 void
@@ -75,7 +75,7 @@ my_fread( void * buffer, size_t size, size_t count, boost::shared_ptr<FILE> cons
         BOOST_THROW_EXCEPTION(fread_error() <<
             boost::errinfo_api_function("fread") <<
             boost::errinfo_errno(errno) <<
-			boost::errinfo_file_handle(boost::weak_ptr<FILE>(stream)));
+            boost::errinfo_file_handle(boost::weak_ptr<FILE>(stream)));
     }
 
 void

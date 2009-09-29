@@ -27,7 +27,7 @@
 namespace
 boost
     {
-<span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct errinfo_api_function_,int&gt; <span class="RenoLink">errinfo_api_function</span>;</span></span>
+<span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct errinfo_api_function_,char const *&gt; <span class="RenoLink">errinfo_api_function</span>;</span></span>
     }</pre>
 </div></div><p>This type is designed to be used as a standard <span class="RenoLink"><a href="error_info.html">error_info</a></span> instance for transporting the name of a relevant API function (which does not use exceptions to report errors) in exceptions deriving from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p>
 <h3>Example:</h3>

@@ -17,5 +17,5 @@ file_read( FILE * f, void * buffer, size_t size )
     {
     if( size!=fread(buffer,1,size,f) )
         throw boost::enable_current_exception(file_read_error()) <<
-			boost::errinfo_errno(errno);
+            boost::errinfo_errno(errno);
     }
