@@ -76,6 +76,7 @@ import testing ;
     [ run sequence/make_vector.cpp :  :  :  : ]
     [ run sequence/map.cpp :  :  :  : ]
     [ run sequence/map_tie.cpp :  :  :  : ]
+    [ run sequence/nview.cpp :  :  :  : ]
     [ run sequence/reverse_view.cpp :  :  :  : ]
     [ run sequence/set.cpp :  :  :  : ]
     [ run sequence/single_view.cpp :  :  :  : ]

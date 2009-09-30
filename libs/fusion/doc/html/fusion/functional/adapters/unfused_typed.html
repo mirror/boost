@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>unfused_typed</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
 <link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
-<link rel="up" href="../adapters.html" title=" Adapters">
-<link rel="previous" href="unfused.html" title="unfused">
+<link rel="up" href="../adapters.html" title="Adapters">
+<link rel="prev" href="unfused.html" title="unfused">
 <link rel="next" href="limits.html" title="Limits">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -22,67 +22,67 @@
 <div class="spirit-nav">
 <a accesskey="p" href="unfused.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapters.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="limits.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
-<div class="titlepage">
-<div><div><h4 class="title">
-<a name="fusion.functional.adapters.unfused_typed"></a><a href="unfused_typed.html" title="unfused_typed">unfused_typed</a>
-</h4></div></div>
-<div></div>
-</div>
-<a name="fusion.functional.adapters.unfused_typed.description"></a><h5>
-<a name="id622348"></a>
-          <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.description">Description</a>
-        </h5>
+<div class="section" title="unfused_typed">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="fusion.functional.adapters.unfused_typed"></a><a class="link" href="unfused_typed.html" title="unfused_typed">unfused_typed</a>
+</h4></div></div></div>
+<a name="fusion.functional.adapters.unfused_typed.description"></a><h6>
+<a name="id761056"></a>
+          <a class="link" href="unfused_typed.html#fusion.functional.adapters.unfused_typed.description">Description</a>
+        </h6>
 <p>
-          An n-ary <a href="../concepts/poly.html" title=" Polymorphic Function
-        Object">Polymorphic Function
-          Object</a> adapter template for an unary <a href="../concepts/poly.html" title=" Polymorphic Function
-        Object">Polymorphic
+          An n-ary <a class="link" href="../concepts/poly.html" title="Polymorphic Function Object">Polymorphic Function
+          Object</a> adapter template for an unary <a class="link" href="../concepts/poly.html" title="Polymorphic Function Object">Polymorphic
           Function Object</a> target function. When called, its arguments are
-          bundled to a <a href="../../sequence/concepts/random_access_sequence.html" title="Random
-        Access Sequence">Random
+          bundled to a <a class="link" href="../../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
           Access Sequence</a> that is passed to the target function object.
         </p>
 <p>
           The call operators of esulting function objects are strictly typed (in
-          other words, non-templatized) with the types from a <a href="../../sequence.html" title="Sequence">Sequence</a>.
+          other words, non-templatized) with the types from a <a class="link" href="../../sequence.html" title="Sequence">Sequence</a>.
         </p>
 <p>
           The type of the target function is allowed to be const qualified or a reference.
           Const qualification is preserved and propagated appropriately (in other
-          words, only const versions of <tt class="literal">operator()</tt> can be used
+          words, only const versions of <code class="literal">operator()</code> can be used
           if the target function object is const - or, in case the target function
           object is held by value, the adapter is const).
         </p>
-<div class="sidebar"><p>
-          <span class="inlinemediaobject"><img src="images/note.png" alt="note"></span> For Microsoft Visual C++ 7.1 (Visual Studio 2003)
+<div class="sidebar">
+<p class="title"><b></b></p>
+<p>
+          <span class="inlinemediaobject"><img src="../../../images/note.png" alt="note"></span> For Microsoft Visual C++ 7.1 (Visual Studio 2003)
           the detection of the Function Object's const qualification easily causes
           an internal error. Therefore the adapter is always treated as if it was
           const.
-        </p></div>
-<div class="sidebar"><p>
-          <span class="inlinemediaobject"><img src="images/tip.png" alt="tip"></span> If the type sequence passed to this template contains
+        </p>
+</div>
+<div class="sidebar">
+<p class="title"><b></b></p>
+<p>
+          <span class="inlinemediaobject"><img src="../../../images/tip.png" alt="tip"></span> If the type sequence passed to this template contains
           non-reference elements, the element is copied only once - the call operator's
           signature is optimized automatically to avoid by-value parameters.
-        </p></div>
-<a name="fusion.functional.adapters.unfused_typed.header"></a><h5>
-<a name="id622496"></a>
-          <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.header">Header</a>
-        </h5>
+        </p>
+</div>
+<a name="fusion.functional.adapters.unfused_typed.header"></a><h6>
+<a name="id761149"></a>
+          <a class="link" href="unfused_typed.html#fusion.functional.adapters.unfused_typed.header">Header</a>
+        </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">unfused_typed</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
-<a name="fusion.functional.adapters.unfused_typed.synopsis"></a><h5>
-<a name="id622599"></a>
-          <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.synopsis">Synopsis</a>
-        </h5>
+<a name="fusion.functional.adapters.unfused_typed.synopsis"></a><h6>
+<a name="id761219"></a>
+          <a class="link" href="unfused_typed.html#fusion.functional.adapters.unfused_typed.synopsis">Synopsis</a>
+        </h6>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Function</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">unfused_typed</span><span class="special">;</span>
 </pre>
-<a name="fusion.functional.adapters.unfused_typed.template_parameters"></a><h5>
-<a name="id622694"></a>
-          <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.template_parameters">Template
+<a name="fusion.functional.adapters.unfused_typed.template_parameters"></a><h6>
+<a name="id761286"></a>
+          <a class="link" href="unfused_typed.html#fusion.functional.adapters.unfused_typed.template_parameters">Template
           parameters</a>
-        </h5>
+        </h6>
 <div class="informaltable"><table class="table">
 <colgroup>
 <col>
@@ -90,141 +90,171 @@
 <col>
 </colgroup>
 <thead><tr>
-<th><p>
+<th>
+                <p>
                   Parameter
-                </p></th>
-<th><p>
+                </p>
+                </th>
+<th>
+                <p>
                   Description
-                </p></th>
-<th><p>
+                </p>
+                </th>
+<th>
+                <p>
                   Default
-                </p></th>
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><p>
-                  <tt class="computeroutput"><span class="identifier">Function</span></tt>
-                </p></td>
-<td><p>
-                  A unary <a href="../concepts/poly.html" title=" Polymorphic Function
-        Object">Polymorphic
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Function</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A unary <a class="link" href="../concepts/poly.html" title="Polymorphic Function Object">Polymorphic
                   Function Object</a>
-                </p></td>
-<td><p>
-                </p></td>
+                </p>
+                </td>
+<td>
+                <p>
+                </p>
+                </td>
 </tr>
 <tr>
-<td><p>
-                  <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
-                </p></td>
-<td><p>
-                  A <a href="../../sequence.html" title="Sequence">Sequence</a>
-                </p></td>
-<td><p>
-                </p></td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Sequence</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A <a class="link" href="../../sequence.html" title="Sequence">Sequence</a>
+                </p>
+                </td>
+<td>
+                <p>
+                </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
-<a name="fusion.functional.adapters.unfused_typed.model_of"></a><h5>
-<a name="id622850"></a>
-          <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.model_of">Model
+<a name="fusion.functional.adapters.unfused_typed.model_of"></a><h6>
+<a name="id761411"></a>
+          <a class="link" href="unfused_typed.html#fusion.functional.adapters.unfused_typed.model_of">Model
           of</a>
-        </h5>
-<div class="itemizedlist"><ul type="disc">
-<li><a href="../concepts/poly.html" title=" Polymorphic Function
-        Object">Polymorphic Function
+        </h6>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><a class="link" href="../concepts/poly.html" title="Polymorphic Function Object">Polymorphic Function
             Object</a></li>
-<li><a href="../concepts/def_callable.html" title=" Deferred
-        Callable Object">Deferred Callable
+<li class="listitem"><a class="link" href="../concepts/def_callable.html" title="Deferred Callable Object">Deferred Callable
             Object</a></li>
 </ul></div>
-<div class="variablelist">
+<div class="variablelist" title="Notation">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">F</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">F</span></code></span></dt>
 <dd><p>
-              A possibly const qualified, unary <a href="../concepts/poly.html" title=" Polymorphic Function
-        Object">Polymorphic
+              A possibly const qualified, unary <a class="link" href="../concepts/poly.html" title="Polymorphic Function Object">Polymorphic
               Function Object</a> type or reference type thereof
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">f</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">f</span></code></span></dt>
 <dd><p>
-              An object convertible to <tt class="computeroutput"><span class="identifier">F</span></tt>
+              An object convertible to <code class="computeroutput"><span class="identifier">F</span></code>
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">S</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">S</span></code></span></dt>
 <dd><p>
-              A <a href="../../sequence.html" title="Sequence">Sequence</a> of parameter types
+              A <a class="link" href="../../sequence.html" title="Sequence">Sequence</a> of parameter types
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">UT</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">UT</span></code></span></dt>
 <dd><p>
-              The type <tt class="computeroutput"><span class="identifier">unfused_typed</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">,</span><span class="identifier">S</span><span class="special">&gt;</span></tt>
+              The type <code class="computeroutput"><span class="identifier">unfused_typed</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">,</span><span class="identifier">S</span><span class="special">&gt;</span></code>
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">ut</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">ut</span></code></span></dt>
 <dd><p>
-              An instance of <tt class="computeroutput"><span class="identifier">UT</span></tt>,
-              initialized with <tt class="computeroutput"><span class="identifier">f</span></tt>
+              An instance of <code class="computeroutput"><span class="identifier">UT</span></code>,
+              initialized with <code class="computeroutput"><span class="identifier">f</span></code>
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">a0</span></tt>...<tt class="computeroutput"><span class="identifier">aN</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span></code></span></dt>
 <dd><p>
-              Arguments to <tt class="computeroutput"><span class="identifier">ut</span></tt>, convertible
-              to the types in <tt class="computeroutput"><span class="identifier">S</span></tt>
+              Arguments to <code class="computeroutput"><span class="identifier">ut</span></code>, convertible
+              to the types in <code class="computeroutput"><span class="identifier">S</span></code>
             </p></dd>
 </dl>
 </div>
-<a name="fusion.functional.adapters.unfused_typed.expression_semantics"></a><h5>
-<a name="id623172"></a>
-          <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.expression_semantics">Expression
+<a name="fusion.functional.adapters.unfused_typed.expression_semantics"></a><h6>
+<a name="id761640"></a>
+          <a class="link" href="unfused_typed.html#fusion.functional.adapters.unfused_typed.expression_semantics">Expression
           Semantics</a>
-        </h5>
+        </h6>
 <div class="informaltable"><table class="table">
 <colgroup>
 <col>
 <col>
 </colgroup>
 <thead><tr>
-<th><p>
+<th>
+                <p>
                   Expression
-                </p></th>
-<th><p>
+                </p>
+                </th>
+<th>
+                <p>
                   Semantics
-                </p></th>
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><p>
-                  <tt class="computeroutput"><span class="identifier">UT</span><span class="special">(</span><span class="identifier">f</span><span class="special">)</span></tt>
-                </p></td>
-<td><p>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">UT</span><span class="special">(</span><span class="identifier">f</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
                   Creates a fused function as described above, initializes the target
-                  function with <tt class="computeroutput"><span class="identifier">f</span></tt>.
-                </p></td>
+                  function with <code class="computeroutput"><span class="identifier">f</span></code>.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><p>
-                  <tt class="computeroutput"><span class="identifier">UT</span><span class="special">()</span></tt>
-                </p></td>
-<td><p>
-                  Creates a fused function as described above, attempts to use <tt class="computeroutput"><span class="identifier">F</span></tt>'s default constructor.
-                </p></td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">UT</span><span class="special">()</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a fused function as described above, attempts to use <code class="computeroutput"><span class="identifier">F</span></code>'s default constructor.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><p>
-                  <tt class="computeroutput"><span class="identifier">ut</span><span class="special">(</span><span class="identifier">a0</span></tt>...<tt class="computeroutput"><span class="identifier">aN</span><span class="special">)</span></tt>
-                </p></td>
-<td><p>
-                  Calls <tt class="computeroutput"><span class="identifier">f</span></tt> with an
-                  instance of <tt class="computeroutput"><span class="identifier">S</span></tt> (or
-                  a subsequence of <tt class="computeroutput"><span class="identifier">S</span></tt>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">ut</span><span class="special">(</span><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Calls <code class="computeroutput"><span class="identifier">f</span></code> with an
+                  instance of <code class="computeroutput"><span class="identifier">S</span></code> (or
+                  a subsequence of <code class="computeroutput"><span class="identifier">S</span></code>
                   starting at the first element, if fewer arguments are given and
-                  the overload hasn't been disabled) initialized with <tt class="computeroutput"><span class="identifier">a0</span></tt>...<tt class="computeroutput"><span class="identifier">aN</span></tt>.
-                </p></td>
+                  the overload hasn't been disabled) initialized with <code class="computeroutput"><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span></code>.
+                </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
-<a name="fusion.functional.adapters.unfused_typed.example"></a><h5>
-<a name="id623454"></a>
-          <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.example">Example</a>
-        </h5>
+<a name="fusion.functional.adapters.unfused_typed.example"></a><h6>
+<a name="id761844"></a>
+          <a class="link" href="unfused_typed.html#fusion.functional.adapters.unfused_typed.example">Example</a>
+        </h6>
 <pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">add_assign</span> <span class="comment">// applies operator+=
 </span><span class="special">{</span>
     <span class="keyword">typedef</span> <span class="keyword">void</span> <span class="identifier">result_type</span><span class="special">;</span> <span class="comment">// for simplicity
@@ -289,14 +319,14 @@
     <span class="identifier">assert</span><span class="special">(</span><span class="identifier">a</span> <span class="special">==</span> <span class="number">8</span> <span class="special">&amp;&amp;</span> <span class="identifier">b</span> <span class="special">==</span> <span class="char">'Z'</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
-<a name="fusion.functional.adapters.unfused_typed.see_also"></a><h5>
-<a name="id624945"></a>
-          <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.see_also">See also</a>
-        </h5>
-<div class="itemizedlist"><ul type="disc">
-<li><a href="unfused.html" title="unfused"><tt class="computeroutput"><span class="identifier">unfused</span></tt></a></li>
-<li><a href="../../support/deduce.html" title="deduce"><tt class="computeroutput"><span class="identifier">deduce</span></tt></a></li>
-<li><a href="../../support/deduce_sequence.html" title="deduce_sequence"><tt class="computeroutput"><span class="identifier">deduce_sequence</span></tt></a></li>
+<a name="fusion.functional.adapters.unfused_typed.see_also"></a><h6>
+<a name="id762966"></a>
+          <a class="link" href="unfused_typed.html#fusion.functional.adapters.unfused_typed.see_also">See also</a>
+        </h6>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><a class="link" href="unfused.html" title="unfused"><code class="computeroutput"><span class="identifier">unfused</span></code></a></li>
+<li class="listitem"><a class="link" href="../../support/deduce.html" title="deduce"><code class="computeroutput"><span class="identifier">deduce</span></code></a></li>
+<li class="listitem"><a class="link" href="../../support/deduce_sequence.html" title="deduce_sequence"><code class="computeroutput"><span class="identifier">deduce_sequence</span></code></a></li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

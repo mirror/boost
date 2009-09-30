@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>filter_view</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
 <link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../view.html" title="View">
-<link rel="previous" href="single_view.html" title="single_view">
+<link rel="prev" href="single_view.html" title="single_view">
 <link rel="next" href="iterator_range.html" title="iterator_range">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -22,42 +22,39 @@
 <div class="spirit-nav">
 <a accesskey="p" href="single_view.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../view.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="iterator_range.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
-<div class="titlepage">
-<div><div><h3 class="title">
-<a name="fusion.view.filter_view"></a><a href="filter_view.html" title="filter_view">filter_view</a>
-</h3></div></div>
-<div></div>
-</div>
-<a name="fusion.view.filter_view.description"></a><h4>
-<a name="id518909"></a>
-        <a href="filter_view.html#fusion.view.filter_view.description">Description</a>
-      </h4>
+<div class="section" title="filter_view">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="fusion.view.filter_view"></a><a class="link" href="filter_view.html" title="filter_view">filter_view</a>
+</h3></div></div></div>
+<a name="fusion.view.filter_view.description"></a><h5>
+<a name="id655494"></a>
+        <a class="link" href="filter_view.html#fusion.view.filter_view.description">Description</a>
+      </h5>
 <p>
-        <tt class="computeroutput"><span class="identifier">filter_view</span></tt> is a view into
+        <code class="computeroutput"><span class="identifier">filter_view</span></code> is a view into
         a subset of its underlying sequence's elements satisfying a given predicate
         (an <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a> metafunction).
-        The <tt class="computeroutput"><span class="identifier">filter_view</span></tt> presents
-        only those elements for which its predicate evaluates to <tt class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></tt>.
+        The <code class="computeroutput"><span class="identifier">filter_view</span></code> presents
+        only those elements for which its predicate evaluates to <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></code>.
       </p>
-<a name="fusion.view.filter_view.header"></a><h4>
-<a name="id518990"></a>
-        <a href="filter_view.html#fusion.view.filter_view.header">Header</a>
-      </h4>
+<a name="fusion.view.filter_view.header"></a><h5>
+<a name="id655545"></a>
+        <a class="link" href="filter_view.html#fusion.view.filter_view.header">Header</a>
+      </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">filter_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">filter_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
-<a name="fusion.view.filter_view.synopsis"></a><h4>
-<a name="id519145"></a>
-        <a href="filter_view.html#fusion.view.filter_view.synopsis">Synopsis</a>
-      </h4>
+<a name="fusion.view.filter_view.synopsis"></a><h5>
+<a name="id655653"></a>
+        <a class="link" href="filter_view.html#fusion.view.filter_view.synopsis">Synopsis</a>
+      </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Pred</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">filter_view</span><span class="special">;</span>
 </pre>
-<a name="fusion.view.filter_view.template_parameters"></a><h4>
-<a name="id519241"></a>
-        <a href="filter_view.html#fusion.view.filter_view.template_parameters">Template parameters</a>
-      </h4>
+<a name="fusion.view.filter_view.template_parameters"></a><h5>
+<a name="id655717"></a>
+        <a class="link" href="filter_view.html#fusion.view.filter_view.template_parameters">Template parameters</a>
+      </h5>
 <div class="informaltable"><table class="table">
 <colgroup>
 <col>
@@ -65,74 +62,88 @@
 <col>
 </colgroup>
 <thead><tr>
-<th><p>
+<th>
+              <p>
                 Parameter
-              </p></th>
-<th><p>
+              </p>
+              </th>
+<th>
+              <p>
                 Description
-              </p></th>
-<th><p>
+              </p>
+              </th>
+<th>
+              <p>
                 Default
-              </p></th>
+              </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><p>
-                <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
-              </p></td>
-<td><p>
-                A <a href="../sequence/concepts/forward_sequence.html" title="Forward
-        Sequence">Forward
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">Sequence</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                A <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
                 Sequence</a>
-              </p></td>
-<td><p>
-              </p></td>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
 </tr>
 <tr>
-<td><p>
-                <tt class="computeroutput"><span class="identifier">Pred</span></tt>
-              </p></td>
-<td><p>
-                Unary Metafunction returning an <tt class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span></tt>
-              </p></td>
-<td><p>
-              </p></td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">Pred</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Unary Metafunction returning an <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
-<a name="fusion.view.filter_view.model_of"></a><h4>
-<a name="id519408"></a>
-        <a href="filter_view.html#fusion.view.filter_view.model_of">Model of</a>
-      </h4>
-<div class="itemizedlist"><ul type="disc"><li><a href="../sequence/concepts/forward_sequence.html" title="Forward
-        Sequence">Forward Sequence</a></li></ul></div>
-<div class="variablelist">
+<a name="fusion.view.filter_view.model_of"></a><h5>
+<a name="id656415"></a>
+        <a class="link" href="filter_view.html#fusion.view.filter_view.model_of">Model of</a>
+      </h5>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a></li></ul></div>
+<div class="variablelist" title="Notation">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">F</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">F</span></code></span></dt>
 <dd><p>
-            A <tt class="computeroutput"><span class="identifier">filter_view</span></tt> type
+            A <code class="computeroutput"><span class="identifier">filter_view</span></code> type
           </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">f</span></tt>,
-        <tt class="computeroutput"><span class="identifier">f2</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">f</span></code>,
+        <code class="computeroutput"><span class="identifier">f2</span></code></span></dt>
 <dd><p>
-            Instances of <tt class="computeroutput"><span class="identifier">filter_view</span></tt>
+            Instances of <code class="computeroutput"><span class="identifier">filter_view</span></code>
           </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">s</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
 <dd><p>
-            A <a href="../sequence/concepts/forward_sequence.html" title="Forward
-        Sequence">Forward Sequence</a>
+            A <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a>
           </p></dd>
 </dl>
 </div>
-<a name="fusion.view.filter_view.expression_semantics"></a><h4>
-<a name="id519568"></a>
-        <a href="filter_view.html#fusion.view.filter_view.expression_semantics">Expression Semantics</a>
-      </h4>
+<a name="fusion.view.filter_view.expression_semantics"></a><h5>
+<a name="id656528"></a>
+        <a class="link" href="filter_view.html#fusion.view.filter_view.expression_semantics">Expression Semantics</a>
+      </h5>
 <p>
         Semantics of an expression is defined only where it differs from, or is not
-        defined in <a href="../sequence/concepts/forward_sequence.html" title="Forward
-        Sequence">Forward
+        defined in <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
         Sequence</a>.
       </p>
 <div class="informaltable"><table class="table">
@@ -141,55 +152,71 @@
 <col>
 </colgroup>
 <thead><tr>
-<th><p>
+<th>
+              <p>
                 Expression
-              </p></th>
-<th><p>
+              </p>
+              </th>
+<th>
+              <p>
                 Semantics
-              </p></th>
+              </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><p>
-                <tt class="computeroutput"><span class="identifier">F</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt>
-              </p></td>
-<td><p>
-                Creates a <tt class="computeroutput"><span class="identifier">filter_view</span></tt>
-                given a sequence, <tt class="computeroutput"><span class="identifier">s</span></tt>.
-              </p></td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">F</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Creates a <code class="computeroutput"><span class="identifier">filter_view</span></code>
+                given a sequence, <code class="computeroutput"><span class="identifier">s</span></code>.
+              </p>
+              </td>
 </tr>
 <tr>
-<td><p>
-                <tt class="computeroutput"><span class="identifier">F</span><span class="special">(</span><span class="identifier">f</span><span class="special">)</span></tt>
-              </p></td>
-<td><p>
-                Copy constructs a <tt class="computeroutput"><span class="identifier">filter_view</span></tt>
-                from another <tt class="computeroutput"><span class="identifier">filter_view</span></tt>,
-                <tt class="computeroutput"><span class="identifier">f</span></tt>.
-              </p></td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">F</span><span class="special">(</span><span class="identifier">f</span><span class="special">)</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Copy constructs a <code class="computeroutput"><span class="identifier">filter_view</span></code>
+                from another <code class="computeroutput"><span class="identifier">filter_view</span></code>,
+                <code class="computeroutput"><span class="identifier">f</span></code>.
+              </p>
+              </td>
 </tr>
 <tr>
-<td><p>
-                <tt class="computeroutput"><span class="identifier">f</span> <span class="special">=</span>
-                <span class="identifier">f2</span></tt>
-              </p></td>
-<td><p>
-                Assigns to a <tt class="computeroutput"><span class="identifier">filter_view</span></tt>,
-                <tt class="computeroutput"><span class="identifier">f</span></tt>, from another
-                <tt class="computeroutput"><span class="identifier">filter_view</span></tt>, <tt class="computeroutput"><span class="identifier">f2</span></tt>.
-              </p></td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">f</span> <span class="special">=</span>
+                <span class="identifier">f2</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Assigns to a <code class="computeroutput"><span class="identifier">filter_view</span></code>,
+                <code class="computeroutput"><span class="identifier">f</span></code>, from another
+                <code class="computeroutput"><span class="identifier">filter_view</span></code>, <code class="computeroutput"><span class="identifier">f2</span></code>.
+              </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
-<a name="fusion.view.filter_view.example"></a><h4>
-<a name="id519879"></a>
-        <a href="filter_view.html#fusion.view.filter_view.example">Example</a>
-      </h4>
+<a name="fusion.view.filter_view.example"></a><h5>
+<a name="id656751"></a>
+        <a class="link" href="filter_view.html#fusion.view.filter_view.example">Example</a>
+      </h5>
 <pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">_</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">not_</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_class</span><span class="special">;</span>
 
-<span class="keyword">typedef</span> <a href="../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">long</span><span class="special">,</span> <span class="keyword">bool</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">vector_type</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a class="link" href="../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">long</span><span class="special">,</span> <span class="keyword">bool</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">vector_type</span><span class="special">;</span>
 
 <span class="identifier">vector_type</span> <span class="identifier">v</span><span class="special">(</span><span class="string">"a-string"</span><span class="special">,</span> <span class="char">'@'</span><span class="special">,</span> <span class="number">987654</span><span class="special">,</span> <span class="keyword">true</span><span class="special">,</span> <span class="number">6.6</span><span class="special">);</span>
 <span class="identifier">filter_view</span><span class="special">&lt;</span><span class="identifier">vector_type</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">not_</span><span class="special">&lt;</span><span class="identifier">is_class</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">view</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>

@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>iterator_range</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
 <link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../view.html" title="View">
-<link rel="previous" href="filter_view.html" title="filter_view">
+<link rel="prev" href="filter_view.html" title="filter_view">
 <link rel="next" href="joint_view.html" title="joint_view">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -22,39 +22,36 @@
 <div class="spirit-nav">
 <a accesskey="p" href="filter_view.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../view.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="joint_view.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
-<div class="titlepage">
-<div><div><h3 class="title">
-<a name="fusion.view.iterator_range"></a><a href="iterator_range.html" title="iterator_range">iterator_range</a>
-</h3></div></div>
-<div></div>
-</div>
-<a name="fusion.view.iterator_range.description"></a><h4>
-<a name="id520352"></a>
-        <a href="iterator_range.html#fusion.view.iterator_range.description">Description</a>
-      </h4>
+<div class="section" title="iterator_range">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="fusion.view.iterator_range"></a><a class="link" href="iterator_range.html" title="iterator_range">iterator_range</a>
+</h3></div></div></div>
+<a name="fusion.view.iterator_range.description"></a><h5>
+<a name="id657093"></a>
+        <a class="link" href="iterator_range.html#fusion.view.iterator_range.description">Description</a>
+      </h5>
 <p>
-        <tt class="computeroutput"><span class="identifier">iterator_range</span></tt> presents a
+        <code class="computeroutput"><span class="identifier">iterator_range</span></code> presents a
         sub-range of its underlying sequence delimited by a pair of iterators.
       </p>
-<a name="fusion.view.iterator_range.header"></a><h4>
-<a name="id520392"></a>
-        <a href="iterator_range.html#fusion.view.iterator_range.header">Header</a>
-      </h4>
+<a name="fusion.view.iterator_range.header"></a><h5>
+<a name="id657117"></a>
+        <a class="link" href="iterator_range.html#fusion.view.iterator_range.header">Header</a>
+      </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">iterator_range</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">iterator_range</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
-<a name="fusion.view.iterator_range.synopsis"></a><h4>
-<a name="id520548"></a>
-        <a href="iterator_range.html#fusion.view.iterator_range.synopsis">Synopsis</a>
-      </h4>
+<a name="fusion.view.iterator_range.synopsis"></a><h5>
+<a name="id657225"></a>
+        <a class="link" href="iterator_range.html#fusion.view.iterator_range.synopsis">Synopsis</a>
+      </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Last</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">iterator_range</span><span class="special">;</span>
 </pre>
-<a name="fusion.view.iterator_range.template_parameters"></a><h4>
-<a name="id520644"></a>
-        <a href="iterator_range.html#fusion.view.iterator_range.template_parameters">Template parameters</a>
-      </h4>
+<a name="fusion.view.iterator_range.template_parameters"></a><h5>
+<a name="id657290"></a>
+        <a class="link" href="iterator_range.html#fusion.view.iterator_range.template_parameters">Template parameters</a>
+      </h5>
 <div class="informaltable"><table class="table">
 <colgroup>
 <col>
@@ -62,85 +59,99 @@
 <col>
 </colgroup>
 <thead><tr>
-<th><p>
+<th>
+              <p>
                 Parameter
-              </p></th>
-<th><p>
+              </p>
+              </th>
+<th>
+              <p>
                 Description
-              </p></th>
-<th><p>
+              </p>
+              </th>
+<th>
+              <p>
                 Default
-              </p></th>
+              </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><p>
-                <tt class="computeroutput"><span class="identifier">First</span></tt>
-              </p></td>
-<td><p>
-                A fusion <a href="../iterator.html" title="Iterator">Iterator</a>
-              </p></td>
-<td><p>
-              </p></td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">First</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                A fusion <a class="link" href="../iterator.html" title="Iterator">Iterator</a>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
 </tr>
 <tr>
-<td><p>
-                <tt class="computeroutput"><span class="identifier">Last</span></tt>
-              </p></td>
-<td><p>
-                A fusion <a href="../iterator.html" title="Iterator">Iterator</a>
-              </p></td>
-<td><p>
-              </p></td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">Last</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                A fusion <a class="link" href="../iterator.html" title="Iterator">Iterator</a>
+              </p>
+              </td>
+<td>
+              <p>
+              </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
-<a name="fusion.view.iterator_range.model_of"></a><h4>
-<a name="id520797"></a>
-        <a href="iterator_range.html#fusion.view.iterator_range.model_of">Model of</a>
-      </h4>
-<div class="itemizedlist"><ul type="disc"><li>
-<a href="../sequence/concepts/forward_sequence.html" title="Forward
-        Sequence">Forward Sequence</a>,
-          <a href="../sequence/concepts/bidirectional_sequence.html" title="Bidirectional
-        Sequence">Bidirectional
-          Sequence</a> or <a href="../sequence/concepts/random_access_sequence.html" title="Random
-        Access Sequence">Random
+<a name="fusion.view.iterator_range.model_of"></a><h5>
+<a name="id657412"></a>
+        <a class="link" href="iterator_range.html#fusion.view.iterator_range.model_of">Model of</a>
+      </h5>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a>,
+          <a class="link" href="../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
+          Sequence</a> or <a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
           Access Sequence</a> depending on the traversal characteristics (see
-          <a href="../sequence/concepts.html#fusion.sequence.concepts.traversal">Sequence Traversal Concept</a>)
+          <a class="link" href="../sequence/concepts.html#fusion.sequence.concepts.traversal">Sequence Traversal Concept</a>)
           of its underlying sequence.
         </li></ul></div>
-<div class="variablelist">
+<div class="variablelist" title="Notation">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">IR</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">IR</span></code></span></dt>
 <dd><p>
-            An <tt class="computeroutput"><span class="identifier">iterator_range</span></tt> type
+            An <code class="computeroutput"><span class="identifier">iterator_range</span></code> type
           </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">f</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">f</span></code></span></dt>
 <dd><p>
-            An instance of <tt class="computeroutput"><span class="identifier">First</span></tt>
+            An instance of <code class="computeroutput"><span class="identifier">First</span></code>
           </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">l</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">l</span></code></span></dt>
 <dd><p>
-            An instance of <tt class="computeroutput"><span class="identifier">Last</span></tt>
+            An instance of <code class="computeroutput"><span class="identifier">Last</span></code>
           </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">ir</span></tt>,
-        <tt class="computeroutput"><span class="identifier">ir2</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">ir</span></code>,
+        <code class="computeroutput"><span class="identifier">ir2</span></code></span></dt>
 <dd><p>
-            Instances of <tt class="computeroutput"><span class="identifier">iterator_range</span></tt>
+            Instances of <code class="computeroutput"><span class="identifier">iterator_range</span></code>
           </p></dd>
 </dl>
 </div>
-<a name="fusion.view.iterator_range.expression_semantics"></a><h4>
-<a name="id521027"></a>
-        <a href="iterator_range.html#fusion.view.iterator_range.expression_semantics">Expression
+<a name="fusion.view.iterator_range.expression_semantics"></a><h5>
+<a name="id657568"></a>
+        <a class="link" href="iterator_range.html#fusion.view.iterator_range.expression_semantics">Expression
         Semantics</a>
-      </h4>
+      </h5>
 <p>
         Semantics of an expression is defined only where it differs from, or is not
-        defined in <a href="../sequence/concepts/forward_sequence.html" title="Forward
-        Sequence">Forward
+        defined in <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
         Sequence</a>.
       </p>
 <div class="informaltable"><table class="table">
@@ -149,60 +160,76 @@
 <col>
 </colgroup>
 <thead><tr>
-<th><p>
+<th>
+              <p>
                 Expression
-              </p></th>
-<th><p>
+              </p>
+              </th>
+<th>
+              <p>
                 Semantics
-              </p></th>
+              </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><p>
-                <tt class="computeroutput"><span class="identifier">IR</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">l</span><span class="special">)</span></tt>
-              </p></td>
-<td><p>
-                Creates an <tt class="computeroutput"><span class="identifier">iterator_range</span></tt>
-                given iterators, <tt class="computeroutput"><span class="identifier">f</span></tt>
-                and <tt class="computeroutput"><span class="identifier">l</span></tt>.
-              </p></td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">IR</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">l</span><span class="special">)</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Creates an <code class="computeroutput"><span class="identifier">iterator_range</span></code>
+                given iterators, <code class="computeroutput"><span class="identifier">f</span></code>
+                and <code class="computeroutput"><span class="identifier">l</span></code>.
+              </p>
+              </td>
 </tr>
 <tr>
-<td><p>
-                <tt class="computeroutput"><span class="identifier">IR</span><span class="special">(</span><span class="identifier">ir</span><span class="special">)</span></tt>
-              </p></td>
-<td><p>
-                Copy constructs an <tt class="computeroutput"><span class="identifier">iterator_range</span></tt>
-                from another <tt class="computeroutput"><span class="identifier">iterator_range</span></tt>,
-                <tt class="computeroutput"><span class="identifier">ir</span></tt>.
-              </p></td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">IR</span><span class="special">(</span><span class="identifier">ir</span><span class="special">)</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Copy constructs an <code class="computeroutput"><span class="identifier">iterator_range</span></code>
+                from another <code class="computeroutput"><span class="identifier">iterator_range</span></code>,
+                <code class="computeroutput"><span class="identifier">ir</span></code>.
+              </p>
+              </td>
 </tr>
 <tr>
-<td><p>
-                <tt class="computeroutput"><span class="identifier">ir</span> <span class="special">=</span>
-                <span class="identifier">ir2</span></tt>
-              </p></td>
-<td><p>
-                Assigns to a <tt class="computeroutput"><span class="identifier">iterator_range</span></tt>,
-                <tt class="computeroutput"><span class="identifier">ir</span></tt>, from another
-                <tt class="computeroutput"><span class="identifier">iterator_range</span></tt>,
-                <tt class="computeroutput"><span class="identifier">ir2</span></tt>.
-              </p></td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">ir</span> <span class="special">=</span>
+                <span class="identifier">ir2</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Assigns to a <code class="computeroutput"><span class="identifier">iterator_range</span></code>,
+                <code class="computeroutput"><span class="identifier">ir</span></code>, from another
+                <code class="computeroutput"><span class="identifier">iterator_range</span></code>,
+                <code class="computeroutput"><span class="identifier">ir2</span></code>.
+              </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
-<a name="fusion.view.iterator_range.example"></a><h4>
-<a name="id521361"></a>
-        <a href="iterator_range.html#fusion.view.iterator_range.example">Example</a>
-      </h4>
+<a name="fusion.view.iterator_range.example"></a><h5>
+<a name="id657807"></a>
+        <a class="link" href="iterator_range.html#fusion.view.iterator_range.example">Example</a>
+      </h5>
 <pre class="programlisting"><span class="keyword">char</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">s</span> <span class="special">=</span> <span class="string">"Ruby"</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a href="../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="keyword">char</span> <span class="keyword">const</span><span class="special">*&gt;</span> <span class="identifier">vector_type</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a class="link" href="../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="keyword">char</span> <span class="keyword">const</span><span class="special">*&gt;</span> <span class="identifier">vector_type</span><span class="special">;</span>
 <span class="identifier">vector_type</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'x'</span><span class="special">,</span> <span class="number">3.3</span><span class="special">,</span> <span class="identifier">s</span><span class="special">);</span>
 
-<span class="keyword">typedef</span> <a href="../sequence/intrinsic/metafunctions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></tt></a><span class="special">&lt;</span><span class="identifier">vector_type</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">A</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a href="../sequence/intrinsic/metafunctions/end.html" title="end"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">end</span></tt></a><span class="special">&lt;</span><span class="identifier">vector_type</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">B</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a href="../iterator/metafunctions/next.html" title="next"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></tt></a><span class="special">&lt;</span><span class="identifier">A</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">C</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a href="../iterator/metafunctions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">prior</span></tt></a><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">D</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a class="link" href="../sequence/intrinsic/metafunctions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></code></a><span class="special">&lt;</span><span class="identifier">vector_type</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">A</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a class="link" href="../sequence/intrinsic/metafunctions/end.html" title="end"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">end</span></code></a><span class="special">&lt;</span><span class="identifier">vector_type</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">B</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a class="link" href="../iterator/metafunctions/next.html" title="next"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></code></a><span class="special">&lt;</span><span class="identifier">A</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">C</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a class="link" href="../iterator/metafunctions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">prior</span></code></a><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">D</span><span class="special">;</span>
 
 <span class="identifier">C</span> <span class="identifier">c</span><span class="special">(</span><span class="identifier">vec</span><span class="special">);</span>
 <span class="identifier">D</span> <span class="identifier">d</span><span class="special">(</span><span class="identifier">vec</span><span class="special">);</span>
