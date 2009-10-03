@@ -31,7 +31,7 @@ struct insert_test_base : public test::exception_base
         std::string scope(test::scope);
 
         if(scope.find("hash::operator()") == std::string::npos)
-            strong.test(x);
+            strong.test(x, test::exception::detail::tracker.count_allocations);
         test::check_equivalent_keys(x);
     }
 };
@@ -47,7 +47,7 @@ struct emplace_test1 : public insert_test_base<T>
         for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
                 it = this->values.begin(), end = this->values.end(); it != end; ++it)
         {
-            strong.store(x);
+            strong.store(x, test::exception::detail::tracker.count_allocations);
             x.emplace(*it);
         }
     }
@@ -64,7 +64,7 @@ struct insert_test1 : public insert_test_base<T>
         for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
                 it = this->values.begin(), end = this->values.end(); it != end; ++it)
         {
-            strong.store(x);
+            strong.store(x, test::exception::detail::tracker.count_allocations);
             x.insert(*it);
         }
     }
@@ -79,7 +79,7 @@ struct insert_test2 : public insert_test_base<T>
         for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
                 it = this->values.begin(), end = this->values.end(); it != end; ++it)
         {
-            strong.store(x);
+            strong.store(x, test::exception::detail::tracker.count_allocations);
             x.insert(x.begin(), *it);
         }
     }
@@ -106,7 +106,7 @@ struct insert_test4 : public insert_test_base<T>
         for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
                 it = this->values.begin(), end = this->values.end(); it != end; ++it)
         {
-            strong.store(x);
+            strong.store(x, test::exception::detail::tracker.count_allocations);
             x.insert(it, boost::next(it));
         }
     }
@@ -144,7 +144,7 @@ struct insert_test_rehash1 : public insert_test_base<T>
             it = boost::next(this->values.begin(), x.size()), end = this->values.end();
             it != end && count < 10; ++it, ++count)
         {
-            strong.store(x);
+            strong.store(x, test::exception::detail::tracker.count_allocations);
             pos = x.insert(pos, *it);
         }
 
@@ -167,7 +167,7 @@ struct insert_test_rehash2 : public insert_test_rehash1<T>
             it = boost::next(this->values.begin(), x.size()), end = this->values.end();
             it != end && count < 10; ++it, ++count)
         {
-            strong.store(x);
+            strong.store(x, test::exception::detail::tracker.count_allocations);
             x.insert(*it);
         }
 
