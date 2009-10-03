@@ -43,7 +43,9 @@ namespace date_time {
    * user created std::tm struct whereas the regular functions use a 
    * staticly created struct and return a pointer to that. These wrapper 
    * functions require the user to create a std::tm struct and send in a 
-   * pointer to it. A pointer to the user created struct will be returned.
+   * pointer to it. This struct may be used to store the resulting time.
+   * The returned pointer may or may not point to this struct, however,
+   * it will point to the result of the corresponding function.
    * All functions do proper checking of the C function results and throw
    * exceptions on error. Therefore the functions will never return NULL.
    */
