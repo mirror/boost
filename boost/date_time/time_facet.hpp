@@ -160,7 +160,7 @@ namespace date_time {
   template <class CharT>  
   const typename time_formats<CharT>::char_type 
   time_formats<CharT>::default_time_duration_format[11] = 
-    {'%','H',':','%','M',':','%','S','%','F'};
+    {'%','O',':','%','M',':','%','S','%','F'};
 
 
 
