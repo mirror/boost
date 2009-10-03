@@ -324,10 +324,9 @@ namespace boost { namespace unordered_detail {
 
         do {
             // No side effects in this initial code
-            // Note: can't use get_key as '*i' might not be value_type.
-            // TODO: Check if std::pair has an appropriate constructor. If not
-            // that might not be true.
-            // TODO: Test this line better.
+            // Note: can't use get_key as '*i' might not be value_type - it could
+            // be a pair with first_types as key_type without const or a
+            // different second_type.
             key_type const& k = extractor::extract(*i);
             std::size_t hash_value = this->hash_function()(k);
             bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);

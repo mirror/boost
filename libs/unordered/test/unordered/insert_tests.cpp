@@ -313,13 +313,29 @@ void map_tests(X*, test::random_generator generator = test::default_generator)
     test::check_equivalent_keys(x);   
 }
 
+// Some tests for when the range's value type doesn't match the container's value type.
+
 template <class X>
-void associative_insert_range_test(X*, test::random_generator generator = test::default_generator)
+void map_insert_range_test1(X*, test::random_generator generator = test::default_generator)
 {
-    std::cerr<<"associative_insert_range_test\n";
+    std::cerr<<"map_insert_range_test1\n";
 
     typedef test::list<std::pair<BOOST_DEDUCED_TYPENAME X::key_type, BOOST_DEDUCED_TYPENAME X::mapped_type> > list;
     test::random_values<X> v(1000, generator);
+    list l(v.begin(), v.end());
+
+    X x; x.insert(l.begin(), l.end());
+
+    test::check_equivalent_keys(x);
+}
+
+template <class X>
+void map_insert_range_test2(X*, test::random_generator generator = test::default_generator)
+{
+    std::cerr<<"map_insert_range_test2\n";
+
+    typedef test::list<std::pair<BOOST_DEDUCED_TYPENAME X::key_type const, int> > list;
+    test::random_values<boost::unordered_map<BOOST_DEDUCED_TYPENAME X::key_type, int> > v(1000, generator);
     list l(v.begin(), v.end());
 
     X x; x.insert(l.begin(), l.end());
@@ -367,7 +383,12 @@ UNORDERED_TEST(map_tests,
     ((default_generator)(generate_collisions))
 )
 
-UNORDERED_TEST(associative_insert_range_test,
+UNORDERED_TEST(map_insert_range_test1,
+    ((test_map)(test_multimap))
+    ((default_generator)(generate_collisions))
+)
+
+UNORDERED_TEST(map_insert_range_test2,
     ((test_map)(test_multimap))
     ((default_generator)(generate_collisions))
 )
