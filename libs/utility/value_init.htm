@@ -253,7 +253,33 @@ its internal data, prior to constructing the object that it contains.
                    
 <h2><a name="val_init"><code>template class value_initialized&lt;T&gt;</code></a></h2>
                    
-<pre>namespace boost {<br><br>template&lt;class T&gt;<br>class value_initialized<br>{<br>  public :<br>    value_initialized() : x() {}<br>    operator T&amp;() const { return x ; }<br>    T&amp; data() const { return x ; }<br>    void swap( value_initialized&lt;T&gt;&amp; );<br><br>  private :<br>    <i>unspecified</i> x ;<br>} ;<br><br>template&lt;class T&gt;<br>T const&amp; get ( value_initialized&lt;T&gt; const&amp; x )<br>{<br>  return x.data() ;<br>}<br><br>template&lt;class T&gt;<br>T&amp; get ( value_initialized&lt;T&gt;&amp; x )<br>{<br>  return x.data() ;<br>}<br><br>} // namespace boost<br></pre>
+<pre>namespace boost {<br><br>template&lt;class T&gt;<br>class value_initialized<br>{
+<br>  public :
+<br>    value_initialized() : x() {}
+<br>    operator T const &amp;() const { return x ; }
+<br>    operator T&amp;() { return x ; }
+<br>    T const &amp;data() const { return x ; }
+<br>    T&amp; data() { return x ; }
+<br>    void swap( value_initialized&lt;T&gt;&amp; );
+<br>
+<br>  private :
+<br>    <i>unspecified</i> x ;
+<br>} ;
+<br>
+<br>template&lt;class T&gt;
+<br>T const&amp; get ( value_initialized&lt;T&gt; const&amp; x )
+<br>{
+<br>  return x.data() ;
+<br>}
+<br>
+<br>template&lt;class T&gt;
+<br>T&amp; get ( value_initialized&lt;T&gt;&amp; x )
+<br>{
+<br>  return x.data() ;
+<br>}
+<br>
+<br>} // namespace boost
+<br></pre>
                     
 <p>An object of this template class is a <code>T</code>-wrapper convertible 
     to <code>'T&amp;'</code> whose wrapped object (data member of type <code>T</code>) 
@@ -271,7 +297,8 @@ its internal data, prior to constructing the object that it contains.
      <code>T&amp;</code>, the member function <code>data()</code>, or the
 non-member    function <code>get()</code>:  </p>
                    
-<pre>void watch(int);<br>value_initialized&lt;int&gt; x;<br><br>watch(x) ; // operator T&amp; used.<br>watch(x.data());<br>watch( get(x) ) // function get() used</pre>
+<pre>void watch(int);<br>value_initialized&lt;int&gt; x;
+<br><br>watch(x) ; // operator T&amp; used.<br>watch(x.data());<br>watch( get(x) ) // function get() used</pre>
                     
 <p>Both <code>const</code> and non-<code>const</code> objects can be wrapped. 
     Mutable objects can be modified directly from within the wrapper but constant
@@ -281,37 +308,34 @@ non-member    function <code>get()</code>:  </p>
     is swappable as well, by calling its <code>swap</code> member function
     as well as by calling <code>boost::swap</code>.</p>
                    
-<pre>value_initialized&lt;int&gt; x ; <br>static_cast&lt;int&amp;&gt;(x) = 1 ; // OK<br>get(x) = 1 ; // OK<br><br>value_initialized&lt;int const&gt; y ; <br>static_cast&lt;int&amp;&gt;(y) = 1 ; // ERROR: cannot cast to int&amp;<br>static_cast&lt;int const&amp;&gt;(y) = 1 ; // ERROR: cannot modify a const value<br>get(y) = 1 ; // ERROR: cannot modify a const value</pre>
+<pre>value_initialized&lt;int&gt; x ; <br>static_cast&lt;int&amp;&gt;(x) = 1 ; // OK<br>get(x) = 1 ; // OK
+<br><br>value_initialized&lt;int const&gt; y ; <br>static_cast&lt;int&amp;&gt;(y) = 1 ; // ERROR: cannot cast to int&amp;<br>static_cast&lt;int const&amp;&gt;(y) = 1 ; // ERROR: cannot modify a const value<br>get(y) = 1 ; // ERROR: cannot modify a const value</pre>
                     
 <h3>Warning:</h3>
                    
-<p>Both the conversion operator and the <code>data()</code> member function 
-    are <code>const</code> in order to allow access to the wrapped object 
-from    a constant wrapper:</p>
+<p>The <code>value_initialized</code> implementation of Boost version 1.40.0 and older
+allowed <i>non-const</i> access to the wrapped object, from a constant wrapper,
+both by its conversion operator and its <code>data()</code> member function. For example:</p>
                    
-<pre>void foo(int);<br>value_initialized&lt;int&gt; const x ;<br>foo(x);<br></pre>
+<pre>value_initialized&lt;int&gt; const x_c ;<br>int&amp; xr = x_c ; // OK, conversion to int&amp; available even though x_c is itself const.
+<br>xr = 2 ; </pre>
                     
-<p>But notice that this conversion operator is to <code>T&amp;</code> although 
-    it is itself <code>const</code>. As a consequence, if <code>T</code> is
-  a  non-<code>const</code> type, you can modify the wrapped object even from
-   within a constant wrapper:</p>
-                   
-<pre>value_initialized&lt;int&gt; const x_c ;<br>int&amp; xr = x_c ; // OK, conversion to int&amp; available even though x_c is itself const.<br>xr = 2 ; </pre>
-                    
-<p>The reason for this obscure behavior is that some commonly used compilers
-     just don't accept the following valid code:</p>
+<p>The reason for this obscure behavior was that some compilers 
+     didn't accept the following valid code:</p>
                    
 <pre>struct X<br>{<br>  operator int&amp;() ;<br>  operator int const&amp;() const ;   <br>};<br>X x ;<br>(x == 1 ) ; // ERROR HERE!</pre>
                     
-<p>These compilers complain about ambiguity between the conversion operators. 
-    This complaint is incorrect, but the only workaround that I know of is 
- to   provide only one of them, which leads to the obscure behavior just explained.<br>
+<p>The current version of <code>value_initialized</code> no longer has this obscure behavior.
+As compilers nowadays widely support overloading the conversion operator by having a <code>const</code> and a <code>non-const</code> version, we have decided to fix the issue accordingly. So the current version supports the idea of logical constness.
+<br>
           </p>
                    
 <h3>Recommended practice: The non-member get() idiom</h3>
                    
 <p>The obscure behavior of being able to modify a non-<code>const</code>
-wrapped object from within a constant wrapper can be avoided if access to
+wrapped object from within a constant wrapper (as was supported by previous
+versions of <code>value_initialized</code>)
+can be avoided if access to
 the wrapped object is always performed with the <code>get()</code> idiom:</p>
                    
 <pre>value_initialized&lt;int&gt; x ;<br>get(x) = 1 ; // OK<br><br>value_initialized&lt;int const&gt; cx ;<br>get(x) = 1 ; // ERROR: Cannot modify a const object<br><br>value_initialized&lt;int&gt; const x_c ;<br>get(x_c) = 1 ; // ERROR: Cannot modify a const object<br><br>value_initialized&lt;int const&gt; const cx_c ;<br>get(cx_c) = 1 ; // ERROR: Cannot modify a const object<br></pre>
@@ -383,9 +407,9 @@ for Boost release version 1.35 (2008), offering a workaround to various compiler
      </p>
                     
 <hr>          
-<p>Revised 28 August 2008</p>
+<p>Revised 03 October 2009</p>
                    
-<p>&copy; Copyright Fernando Cacciola, 2002, 2008.</p>
+<p>&copy; Copyright Fernando Cacciola, 2002, 2009.</p>
                    
 <p>Distributed under the Boost Software License, Version 1.0. See
 <a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</a></p>
