@@ -372,6 +372,54 @@ UNORDERED_TEST(associative_insert_range_test,
     ((default_generator)(generate_collisions))
 )
 
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+
+UNORDERED_AUTO_TEST(insert_initializer_list_set)
+{
+    boost::unordered_set<int> set;
+    set.insert({1,2,3,1});
+    BOOST_TEST_EQ(set.size(), 3u);
+    BOOST_TEST(set.find(1) != set.end());
+    BOOST_TEST(set.find(4) == set.end());
+}
+
+UNORDERED_AUTO_TEST(insert_initializer_list_multiset)
+{
+    boost::unordered_multiset<std::string> multiset;
+    multiset.insert({});
+    BOOST_TEST(multiset.empty());
+    multiset.insert({"a"});
+    BOOST_TEST_EQ(multiset.size(), 1u);
+    BOOST_TEST(multiset.find("a") != multiset.end());
+    BOOST_TEST(multiset.find("b") == multiset.end());
+    multiset.insert({"a","b"});
+    BOOST_TEST(multiset.size() == 3);
+    BOOST_TEST_EQ(multiset.count("a"), 2u);
+    BOOST_TEST_EQ(multiset.count("b"), 1u);
+    BOOST_TEST_EQ(multiset.count("c"), 0u);
+}
+
+UNORDERED_AUTO_TEST(insert_initializer_list_map)
+{
+    boost::unordered_map<std::string, std::string> map;
+    map.insert({});
+    BOOST_TEST(map.empty());
+    map.insert({{"a", "b"},{"a", "b"},{"d", ""}});
+    BOOST_TEST_EQ(map.size(), 2u);
+}
+
+UNORDERED_AUTO_TEST(insert_initializer_list_multimap)
+{
+    boost::unordered_multimap<std::string, std::string> multimap;
+    multimap.insert({});
+    BOOST_TEST(multimap.empty());
+    multimap.insert({{"a", "b"},{"a", "b"},{"d", ""}});
+    BOOST_TEST_EQ(multimap.size(), 3u);
+    BOOST_TEST_EQ(multimap.count("a"), 2u);
+}
+
+#endif
+
 }
 
 RUN_TESTS()

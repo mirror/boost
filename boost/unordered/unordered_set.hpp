@@ -337,6 +337,13 @@ namespace boost
             table_.insert_range(first, last);
         }
 
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+        void insert(std::initializer_list<value_type> list)
+        {
+            table_.insert_range(list.begin(), list.end());
+        }
+#endif
+
         iterator erase(const_iterator position)
         {
             return iterator(table_.erase(get(position)));
@@ -792,6 +799,13 @@ namespace boost
         {
             table_.insert_range(first, last);
         }
+
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+        void insert(std::initializer_list<value_type> list)
+        {
+            table_.insert_range(list.begin(), list.end());
+        }
+#endif
 
         iterator erase(const_iterator position)
         {
