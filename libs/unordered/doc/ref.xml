@@ -93,7 +93,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A constant iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
               <para>Convertible to <type>const_iterator</type>.</para>
             </description>
           </typedef>
@@ -101,7 +101,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A constant iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
             </description>
           </typedef>
           <typedef name="local_iterator">
@@ -831,7 +831,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A constant iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
               <para>Convertible to <type>const_iterator</type>.</para>
             </description>
           </typedef>
@@ -839,7 +839,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A constant iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
             </description>
           </typedef>
           <typedef name="local_iterator">
@@ -1579,7 +1579,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
               <para>Convertible to <type>const_iterator</type>.</para>
             </description>
           </typedef>
@@ -1587,7 +1587,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A constant iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
             </description>
           </typedef>
           <typedef name="local_iterator">
@@ -2366,7 +2366,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
               <para>Convertible to <type>const_iterator</type>.</para>
             </description>
           </typedef>
@@ -2374,7 +2374,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A constant iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
             </description>
           </typedef>
           <typedef name="local_iterator">
