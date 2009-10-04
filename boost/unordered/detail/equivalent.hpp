@@ -257,7 +257,6 @@ namespace boost { namespace unordered_detail {
 
     // if hash function throws, or inserting > 1 element, basic exception safety
     // strong otherwise
-    // TODO: Should I special case an empty container?
     template <class H, class P, class A, class K>
     template <class I>
     void hash_equivalent_table<H, P, A, K>::insert_range(I i, I j)

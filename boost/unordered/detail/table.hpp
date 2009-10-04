@@ -431,23 +431,20 @@ namespace boost { namespace unordered_detail {
 
     // if hash function throws, basic exception safety
     // strong otherwise.
-    // TODO: Should this always create buckets?
+
     template <class H, class P, class A, class G, class K>
     inline void hash_table<H, P, A, G, K>::rehash(std::size_t min_buckets)
     {
         using namespace std;
 
-        if(!this->buckets_) {
+        if(!this->size_) {
+            if(this->buckets_) this->delete_buckets();
             this->bucket_count_ = next_prime(min_buckets);
-            this->create_buckets();
-            this->init_buckets();
         }
         else {
             // no throw:
-            // TODO: Needlessly calling next_prime twice.
-            min_buckets = (std::max)(
-                next_prime(min_buckets),
-                this->min_buckets_for_size(this->size_));
+            min_buckets = next_prime((std::max)(min_buckets,
+                    double_to_size_t(floor(this->size_ / (double) mlf_)) + 1));
             if(min_buckets != this->bucket_count_) rehash_impl(min_buckets);
         }
     }
@@ -619,7 +616,6 @@ namespace boost { namespace unordered_detail {
     template <class H, class P, class A, class G, class K>
     void hash_table<H, P, A, G, K>::clear()
     {
-        // TODO: Is this check needed when called internally?
         if(!this->size_) return;
 
         bucket_ptr end = this->get_bucket(this->bucket_count_);
@@ -645,8 +641,7 @@ namespace boost { namespace unordered_detail {
     }
     
     template <class H, class P, class A, class G, class K>
-    std::size_t hash_table<H, P, A, G, K>
-        ::erase_key(key_type const& k)
+    std::size_t hash_table<H, P, A, G, K>::erase_key(key_type const& k)
     {
         if(!this->size_) return 0;
     
