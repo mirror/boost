@@ -3,13 +3,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
-<link href="ublas.css" type="text/css" />
+<link rel="stylesheet" href="../../../../boost.css" type="text/css"/>
+<link rel="stylesheet" href="ublas.css" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.3.2.min.js" async="async" ></script>
+<script type="text/javascript" src="js/jquery.toc-gw.js" async="async" ></script>
 <title>Unbounded array</title>
 </head>
 <body>
-<h1><img src="../../../../boost.png" align="middle" />
-Unbounded Array Storage</h1>
-<h2><a name="unbounded_array" id="unbounded_array"></a>Unbounded Array</h2>
+<h1><img src="../../../../boost.png" align="middle" />Unbounded Array Storage</h1>
+<div class="toc" id="toc"></div>
+<h2 id="unbounded_array"><a name="unbounded_array" id="unbounded_array"></a>Unbounded Array</h2>
 <h4>Description</h4>
 <p>The templated class <code>unbounded_array&lt;T, ALLOC&gt;</code> implements a unbounded storage array using an allocator. 
 The unbounded array is similar to a <code>std::vector</code> in that in can grow in size beyond any fixed bound. 
@@ -207,5 +210,10 @@ the <code>unbounded_array</code>.</td>
       http://www.boost.org/LICENSE_1_0.txt
    </a>).
 </p>
+<script type="text/javascript">
+(function($) {
+    $('#toc').toc();
+})(jQuery);
+</script>
 </body>
 </html>

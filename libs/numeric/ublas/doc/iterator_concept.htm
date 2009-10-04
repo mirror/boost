@@ -6,15 +6,18 @@
 "HTML Tidy for Linux/x86 (vers 1st March 2004), see www.w3.org" />
 <meta http-equiv="Content-Type" content=
 "text/html; charset=us-ascii" />
-<link href="ublas.css" type="text/css" />
+<link rel="stylesheet" href="../../../../boost.css" type="text/css"/>
+<link rel="stylesheet" href="ublas.css" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.3.2.min.js" async="async" ></script>
+<script type="text/javascript" src="js/jquery.toc-gw.js" async="async" ></script>
 <title>Iterator Concepts</title>
 </head>
 <body>
-<h1><img src="../../../../boost.png" align="middle" />
-Iterator Concepts</h1>
+<h1><img src="../../../../boost.png" align="middle" />Iterator Concepts</h1>
+<div class="toc" id="toc"></div>
 <p>An Iterator is a restricted pointer-like object pointing into a
 vector or matrix container.</p>
-<h2><a name="indexed_bidirectional_iterator" id=
+<h2 id="indexed_bidirectional_iterator"><a name="indexed_bidirectional_iterator" id=
 "indexed_bidirectional_iterator"></a>Indexed Bidirectional Iterator</h2>
 <h4>Description</h4>
 <p>An Indexed Bidirectional Iterator is an iterator of a container
@@ -293,7 +296,7 @@ operator</td>
 <ul>
 <li><code>sparse_vector::iterator</code></li>
 </ul>
-<h2><a name="indexed_random_access_iterator" id=
+<h2 id="indexed_random_access_iterator"><a name="indexed_random_access_iterator" id=
 "indexed_random_access_iterator"></a>Indexed Random Access Iterator</h2>
 <h4>Description</h4>
 <p>An Indexed Random Access Iterator is an iterator of a container
@@ -523,7 +526,7 @@ it2 + (it1 - it2)</code>.</td>
 <ul>
 <li><code>vector::iterator</code></li>
 </ul>
-<h2><a name="indexed_bidirectional_cr_iterator" id=
+<h2 id="indexed_bidirectional_cr_iterator"><a name="indexed_bidirectional_cr_iterator" id=
 "indexed_bidirectional_cr_iterator"></a>Indexed Bidirectional Column/Row Iterator</h2>
 <h4>Description</h4>
 <p>An Indexed Bidirectional Column/Row Iterator is an iterator of a
@@ -920,7 +923,7 @@ it2t.index1 ()</code> for all <code>it2t</code> with <code>it2t ()
 <li><code>sparse_matrix::iterator1</code></li>
 <li><code>sparse_matrix::iterator2</code></li>
 </ul>
-<h2><a name="indexed_random_access_cr_iterator" id=
+<h2 id="indexed_random_access_cr_iterator"><a name="indexed_random_access_cr_iterator" id=
 "indexed_random_access_cr_iterator"></a>Indexed Random Access Column/Row Iterator</h2>
 <h4>Description</h4>
 <p>An Indexed Random Access Column/Row Iterator is an iterator of a
@@ -1156,5 +1159,10 @@ it2 + (it1 - it2)</code>.</td>
       http://www.boost.org/LICENSE_1_0.txt
    </a>).
 </p>
+<script type="text/javascript">
+(function($) {
+    $('#toc').toc();
+})(jQuery);
+</script>
 </body>
 </html>

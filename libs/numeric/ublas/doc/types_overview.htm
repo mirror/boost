@@ -5,12 +5,15 @@
 <meta name="generator" content=
 "HTML Tidy for Linux/x86 (vers 1st March 2004), see www.w3.org" />
 <meta name="GENERATOR" content="Quanta Plus" />
-<link href="ublas.css" type="text/css" />
+<link rel="stylesheet" href="../../../../boost.css" type="text/css"/>
+<link rel="stylesheet" href="ublas.css" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.3.2.min.js" async="async" ></script>
+<script type="text/javascript" src="js/jquery.toc-gw.js" async="async" ></script>
 <title>Types Overview</title>
 </head>
 <body>
-<h1><img src="../../../../boost.png" align="middle" />
-Overview of Matrix- and Vector-Types </h1>
+<h1><img src="../../../../boost.png" align="middle" />Overview of Matrix- and Vector-Types </h1>
+<div class="toc" id="toc"></div>
 
 <dl>
 <dt>Contents:</dt>
@@ -22,7 +25,7 @@ Overview of Matrix- and Vector-Types </h1>
 </dl>
 
 
-<h3>Notation:</h3>
+<h2>Notation</h2>
 
 <table style="border: none;" summary="notation">
 <tr><td><code>T</code></td> 
@@ -51,7 +54,7 @@ strict_upper</code></td></tr>
 look at the section "storage layout".</td></tr>
 </table>
 
-<h2><a name="vectors">Vectors</a></h2>
+<h2><a id="vectors">Vectors</a></h2>
 <table border="1" summary="vector types">
 <thead>
 <tr>
@@ -119,7 +122,7 @@ value.</td>
 <p><em>Note:</em> the default types are defined in
 <code>boost/numeric/ublas/fwd.hpp</code>.</p>
 
-<h2><a name="vector_proxies">Vector Proxies</a></h2>
+<h2><a id="vector_proxies">Vector Proxies</a></h2>
 
 <table border="1" summary="vector proxies">
 <thead>
@@ -154,7 +157,7 @@ vector <code>v</code> containing all elements specified by
 </tbody>
 </table>
 
-<h2><a name="matrices">Matrices</a></h2>
+<h2><a id="matrices">Matrices</a></h2>
 
 <table border="1" summary="matrix types">
 <thead>
@@ -283,7 +286,7 @@ unbounded_array&lt;coordinate_vector&lt;double&gt;&nbsp;&gt;&nbsp;&gt;</code></t
 <p><em>Note:</em> the default types are defined in
 <code>boost/numeric/ublas/fwd.hpp</code>.</p>
 
-<h2><a name="matrix_proxies">Matrix Proxies</a></h2>
+<h2><a id="matrix_proxies">Matrix Proxies</a></h2>
 
 <table border="1" summary="matrix proxies">
 <thead>
@@ -331,7 +334,7 @@ the matrix <code>m</code>.</td>
 
 
 
-<h2><a name="storage_layout">Special Storage Layouts</a></h2>
+<h2><a id="storage_layout">Special Storage Layouts</a></h2>
 
 
 <p>The library supports conventional dense, packed and basic sparse
@@ -568,5 +571,10 @@ Winkler, Michael Stevens<br />
       http://www.boost.org/LICENSE_1_0.txt
    </a>).
 </p>
+<script type="text/javascript">
+(function($) {
+    $('#toc').toc();
+})(jQuery);
+</script>
 </body>
 </html>

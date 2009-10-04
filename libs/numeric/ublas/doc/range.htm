@@ -3,13 +3,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
-<link href="ublas.css" type="text/css" />
+<link rel="stylesheet" href="../../../../boost.css" type="text/css"/>
+<link rel="stylesheet" href="ublas.css" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.3.2.min.js" async="async" ></script>
+<script type="text/javascript" src="js/jquery.toc-gw.js" async="async" ></script>
 <title>Range and slice</title>
 </head>
 <body>
-<h1><img src="../../../../boost.png" align="middle" />
-Range and Slice Storage</h1>
-<h2><a name="range" id="range"></a>Range&lt;SizeType,DistanceType&gt;</h2>
+<h1><img src="../../../../boost.png" align="middle" />Range and Slice Storage</h1>
+<div class="toc" id="toc"></div>
+<h2 id="range"><a name="range" id="range"></a>Range&lt;SizeType,DistanceType&gt;</h2>
 <h4>Description</h4>
 <p>The class <code>range</code> specifies a range of indicies. The range is a sequence of indices
 from a start value to stop value. The indices increase by one and exlude the stop value.
@@ -101,7 +104,7 @@ end of the reversed <code>range</code>.</td>
 <li><code>start () &lt;= stop ()</code></li>
 </ul>
 
-<h2><a name="slice" id="slice"></a>Slice&lt;SizeType,DistanceType&gt;</h2>
+<h2 id="slice"><a name="slice" id="slice"></a>Slice&lt;SizeType,DistanceType&gt;</h2>
 <h4>Description</h4>
 <p>The class <code>slice</code> specifies a 'slice' of indicies. Slices are more general
 then ranges, the stride allows the sequence of indicies to increase and decrease by the specified amount between element.
@@ -217,5 +220,10 @@ value must be representable as the size_type.</li>
          http://www.boost.org/LICENSE_1_0.txt
       </a>).
    </p>
+<script type="text/javascript">
+(function($) {
+    $('#toc').toc();
+})(jQuery);
+</script>
 </body>
 </html>

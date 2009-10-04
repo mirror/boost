@@ -3,13 +3,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
-<link href="ublas.css" type="text/css" />
+<link rel="stylesheet" href="../../../../boost.css" type="text/css"/>
+<link rel="stylesheet" href="ublas.css" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.3.2.min.js" async="async" ></script>
+<script type="text/javascript" src="js/jquery.toc-gw.js" async="async" ></script>
 <title>Bounded Array;</title>
 </head>
 <body>
-<h1><img src="../../../../boost.png" align="middle" />
-Bounded Array Storage</h1>
-<h2><a name="bounded_array" id="bounded_array"></a>Bounded Array</h2>
+<h1><img src="../../../../boost.png" align="middle" />Bounded Array Storage</h1>
+<div class="toc" id="toc"></div>
+<h2 id="bounded_array"><a name="bounded_array" id="bounded_array"></a>Bounded Array</h2>
 <h4>Description</h4>
 <p>The templated class <code>bounded_array&lt;T, N, ALLOC&gt;</code> implements a bounded storage array. The bounded array is similar to a C++ array type in that its maximum size is bounded by N and is allocated on the stack instead of the heap. Similarly a <code>bounded_array</code> requires no secondary storage and ALLOC is only used to specify <code>size_type</code> and <code>difference_type</code>.
 </p>
@@ -207,5 +210,10 @@ member inside this model of the concept.</li>
          http://www.boost.org/LICENSE_1_0.txt
       </a>).
    </p>
+<script type="text/javascript">
+(function($) {
+    $('#toc').toc();
+})(jQuery);
+</script>
 </body>
 </html>

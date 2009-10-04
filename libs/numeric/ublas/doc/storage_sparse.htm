@@ -6,13 +6,16 @@
 "HTML Tidy for Linux/x86 (vers 1st March 2004), see www.w3.org" />
 <meta http-equiv="Content-Type" content=
 "text/html; charset=us-ascii" />
-<link href="ublas.css" type="text/css" />
+<link rel="stylesheet" href="../../../../boost.css" type="text/css"/>
+<link rel="stylesheet" href="ublas.css" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.3.2.min.js" async="async" ></script>
+<script type="text/javascript" src="js/jquery.toc-gw.js" async="async" ></script>
 <title>Sparse Storage</title>
 </head>
 <body>
-<h1><img src="../../../../boost.png" align="middle" />
-Sparse Storage</h1>
-<h2><a name="map_std" id="map_std"></a>Default Standard Map</h2>
+<h1><img src="../../../../boost.png" align="middle" />Sparse Storage</h1>
+<div class="toc" id="toc"></div>
+<h2 id="map_std"><a name="map_std" id="map_std"></a>Default Standard Map</h2>
 <h4>Description</h4>
 <p>The templated class <code>map_std&lt;I, T, ALLOC&gt;</code> provides a
 wrapper for the standard library associative container
@@ -66,7 +69,7 @@ int main () {
 Container.</p>
 <h4>Public base classes</h4>
 <p>std::map</p>
-<h2><a name="map_array" id="map_array"></a>Map Array</h2>
+<h2 id="map_array"><a name="map_array" id="map_array"></a>Map Array</h2>
 <h4>Description</h4>
 <p>The templated class <code>map_array&lt;I, T, ALLOC&gt;</code> implements a <code>std::map</code> like associative container as a sorted array. It therefore some of the Associative Container interface without having the same semantics as an std::map.
 <p>At any time the <code>map_array</code> has a capacity up to which new element can be inserted.
@@ -276,5 +279,10 @@ the reversed <code>map_array</code>.</td>
       http://www.boost.org/LICENSE_1_0.txt
    </a>).
 </p>
+<script type="text/javascript">
+(function($) {
+    $('#toc').toc();
+})(jQuery);
+</script>
 </body>
 </html>

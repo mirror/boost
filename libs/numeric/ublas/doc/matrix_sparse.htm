@@ -6,13 +6,16 @@
 "HTML Tidy for Linux/x86 (vers 1st March 2004), see www.w3.org" />
 <meta http-equiv="Content-Type" content=
 "text/html; charset=us-ascii" />
-<link href="ublas.css" type="text/css" />
+<link rel="stylesheet" href="../../../../boost.css" type="text/css"/>
+<link rel="stylesheet" href="ublas.css" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.3.2.min.js" async="async" ></script>
+<script type="text/javascript" src="js/jquery.toc-gw.js" async="async" ></script>
 <title>Sparse Matrix</title>
 </head>
 <body>
-<h1><img src="../../../../boost.png" align="middle" />
-Sparse Matricies</h1>
-<h2><a name="mapped_matrix" id="mapped_matrix"></a>Mapped Matrix</h2>
+<h1><img src="../../../../boost.png" align="middle" />Sparse Matricies</h1>
+<div class="toc" id="toc"></div>
+<h2 id="mapped_matrix"><a name="mapped_matrix" id="mapped_matrix"></a>Mapped Matrix</h2>
 <h4>Description</h4>
 <p>The templated class <code>mapped_matrix&lt;T, F, A&gt;</code> is
 the base container adaptor for sparse matricies using element maps.
@@ -316,7 +319,7 @@ parameters for the adapted array are
 <code>map_array&lt;std::size_t, T&gt;</code> and
 <code>map_std&lt;std::size_t, T&gt;</code>. The latter is
 equivalent to <code>std::map&lt;std::size_t, T&gt;</code>.</p>
-<h2><a name="compressed_matrix" id="compressed_matrix"></a>Compressed Matrix</h2>
+<h2 id="compressed_matrix"><a name="compressed_matrix" id="compressed_matrix"></a>Compressed Matrix</h2>
 <h4>Description</h4>
 <p>The templated class <code>compressed_matrix&lt;T, F, IB, IA,
 TA&gt;</code> is the base container adaptor for compressed
@@ -636,7 +639,7 @@ Supported parameters for the adapted array are
 <code>unbounded_array&lt;&gt;</code> ,
 <code>bounded_array&lt;&gt;</code> and
 <code>std::vector&lt;&gt;</code> .</p>
-<h2><a name="coordinate_matrix" id="coordinate_matrix"></a>Coordinate Matrix</h2>
+<h2 id="coordinate_matrix"><a name="coordinate_matrix" id="coordinate_matrix"></a>Coordinate Matrix</h2>
 <h4>Description</h4>
 <p>The templated class <code>coordinate_matrix&lt;T, F, IB, IA,
 TA&gt;</code> is the base container adaptor for compressed
@@ -971,5 +974,10 @@ Supported parameters for the adapted array are
       http://www.boost.org/LICENSE_1_0.txt
    </a>).
 </p>
+<script type="text/javascript">
+(function($) {
+    $('#toc').toc();
+})(jQuery);
+</script>
 </body>
 </html>

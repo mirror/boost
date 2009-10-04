@@ -2,17 +2,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta name="generator" content=
-"HTML Tidy for Linux/x86 (vers 1st March 2004), see www.w3.org" />
-<meta http-equiv="Content-Type" content=
-"text/html; charset=us-ascii" />
-<link href="ublas.css" type="text/css" />
+<meta name="generator" content="HTML Tidy for Linux/x86 (vers 1st March 2004), see www.w3.org" />
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<link rel="stylesheet" href="../../../../boost.css" type="text/css"/>
+<link rel="stylesheet" href="ublas.css" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.3.2.min.js" async="async" ></script>
+<script type="text/javascript" src="js/jquery.toc-gw.js" async="async" ></script>
 <title>uBLAS Overview</title>
 </head>
 <body>
-<h1><img src="../../../../boost.png" align="middle" alt="logo"/>
-uBLAS Overview</h1>
-<h2><a name="rationale" id="rationale" />Rationale</h2>
+<h1><img src="../../../../boost.png" align="middle" alt="logo"/>uBLAS Overview</h1>
+<div class="toc" id="toc"></div>
+<h2 id="rationale"><a name="rationale" id="rationale" />Rationale</h2>
 <p><cite>It would be nice if every kind of numeric software could
 be written in C++ without loss of efficiency, but unless something
 can be found that achieves this without compromising the C++ type
@@ -22,7 +23,7 @@ architecture-specific extensions (Bjarne Stroustrup).</cite></p>
 level of basic linear algebra constructions with matrices and
 vectors and their corresponding abstract operations. The primary
 design goals were:</p>
-<ul type="Disc">
+<ul type="disc">
 <li>mathematical notation</li>
 <li>efficiency</li>
 <li>functionality</li>
@@ -34,7 +35,7 @@ acceptable.</p>
 <h2>Resources</h2>
 <p>The development of this library was guided by a couple of
 similar efforts:</p>
-<ul type="Disc">
+<ul type="disc">
 <li><a href="http://www.netlib.org/blas/index.html">BLAS</a> by
 Jack Dongarra et al.</li>
 <li><a href="http://www.oonumerics.org/blitz/">Blitz++</a> by Todd
@@ -264,7 +265,7 @@ development cycle. Switching from debug mode to release mode is
 controlled by the <code>NDEBUG</code> preprocessor symbol of
 <code>&lt;cassert&gt;</code>.</p>
 
-<h2><a name="functionality" id="functionality"/>Functionality</h2>
+<h2 id="functionality"><a name="functionality" id="functionality"/>Functionality</h2>
 
 <p>Every C++ library supporting linear algebra will be measured
 against the long-standing Fortran package BLAS. We now describe how
@@ -955,5 +956,10 @@ w.r.t. alias assumptions remains visible, too.</p>
       http://www.boost.org/LICENSE_1_0.txt
    </a>).
 </p>
+<script type="text/javascript">
+(function($) {
+    $('#toc').toc();
+})(jQuery);
+</script>
 </body>
 </html>
