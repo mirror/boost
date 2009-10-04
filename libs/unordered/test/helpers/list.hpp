@@ -29,8 +29,8 @@ namespace test
         template <typename T>
         class list_node
         {
-	    list_node(list_node const&);
-	    list_node& operator=(list_node const&);
+            list_node(list_node const&);
+            list_node& operator=(list_node const&);
         public:
             T value_;
             list_node* next_;

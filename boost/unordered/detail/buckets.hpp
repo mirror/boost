@@ -156,7 +156,7 @@ namespace boost { namespace unordered_detail {
     template <class A, class G>
     inline void hash_buckets<A, G>::move(hash_buckets& other)
     {
-    	BOOST_ASSERT(node_alloc() == other.node_alloc());
+        BOOST_ASSERT(node_alloc() == other.node_alloc());
         if(this->buckets_) { this->delete_buckets(); }
         this->buckets_ = other.buckets_;
         this->bucket_count_ = other.bucket_count_;

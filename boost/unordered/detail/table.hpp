@@ -193,7 +193,7 @@ namespace boost { namespace unordered_detail {
         BOOST_ASSERT(this->bucket_count_ != 0);
         return static_cast<float>(this->size_)
             / static_cast<float>(this->bucket_count_);
-	}
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     // Constructors
