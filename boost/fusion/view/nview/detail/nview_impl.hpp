@@ -10,7 +10,7 @@
 #if !defined(BOOST_FUSION_NVIEW_IMPL_SEP_23_2009_1017PM)
 #define BOOST_FUSION_NVIEW_IMPL_SEP_23_2009_1017PM
 
-//#include <climits>
+#include <climits>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/repeat.hpp>
 #include <boost/preprocessor/iterate.hpp>

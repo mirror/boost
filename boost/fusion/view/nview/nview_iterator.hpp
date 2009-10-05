@@ -13,6 +13,7 @@
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/adapted/mpl/mpl_iterator.hpp>
 
+#include <boost/fusion/view/nview/detail/size_impl.hpp>
 #include <boost/fusion/view/nview/detail/begin_impl.hpp>
 #include <boost/fusion/view/nview/detail/end_impl.hpp>
 #include <boost/fusion/view/nview/detail/deref_impl.hpp>
