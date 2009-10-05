@@ -114,4 +114,6 @@ test-suite numeric/uBLAS
       ]
       [ run triangular_layout.cpp
       ]
+      [ run comp_mat_erase.cpp
+      ]
     ;

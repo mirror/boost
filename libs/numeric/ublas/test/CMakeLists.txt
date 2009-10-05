@@ -72,6 +72,7 @@ boost_test_run(triangular_access
 boost_test_run(triangular_layout 
   triangular_layout.cpp)
 
+boost_test_run(comp_mat_erase)
 
 SET(test_compile_flags "-DEXTERNAL")
 #-- Intel Compiler flags
