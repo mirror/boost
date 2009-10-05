@@ -103,8 +103,10 @@ test-suite numeric/uBLAS
       [ compile concepts.cpp
         : # requirements
             <define>EXTERNAL
+#            <define>INTERAL
+#            <define>SKIP_BAD
             <toolset>intel-linux:<cxxflags>"-Xc"
-			<toolset>darwin:<cxxflags>"-fabi-version=0"
+            <toolset>darwin:<cxxflags>"-fabi-version=0"
       ]
       [ run test_lu.cpp
       ]
@@ -117,5 +119,13 @@ test-suite numeric/uBLAS
       [ run comp_mat_erase.cpp
       ]
       [ run sparse_view_test.cpp
+      ]
+      [ run begin_end.cpp
+      ]
+      [ run num_columns.cpp
+      ]
+      [ run num_rows.cpp
+      ]
+      [ run size.cpp
       ]
     ;
