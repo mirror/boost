@@ -1,6 +1,6 @@
 //
-//  Copyright (c) 2000-2002
-//  Joerg Walter, Mathias Koch
+//  Copyright (c) 2000-2009
+//  Joerg Walter, Mathias Koch, Gunter Winkler
 //
 //  Distributed under the Boost Software License, Version 1.0. (See
 //  accompanying file LICENSE_1_0.txt or copy at
