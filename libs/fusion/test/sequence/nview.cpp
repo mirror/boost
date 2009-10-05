@@ -28,48 +28,48 @@ BOOST_FUSION_ADAPT_STRUCT(
     (double, double_)
 );
 
-using namespace boost::fusion;
+namespace fusion = boost::fusion;
 
 template <typename Sequence>
-bool check_size(Sequence& s, int seqsize)
+bool check_size(Sequence const& s, int seqsize)
 {
-    return size(s) == seqsize;
+    return fusion::size(s) == seqsize;
 }
 
 template <typename Sequence, typename T>
-bool check_deref_begin(Sequence& s, T val)
+bool check_deref_begin(Sequence const& s, T val)
 {
-    return deref(begin(s)) == val;
+    return fusion::deref(fusion::begin(s)) == val;
 }
 
 template <typename Sequence, typename T>
-bool check_deref_next(Sequence& s, T val)
+bool check_deref_next(Sequence const& s, T val)
 {
-    return deref(next(begin(s))) == val;
+    return fusion::deref(fusion::next(fusion::begin(s))) == val;
 }
 
 template <int N, typename Sequence, typename T>
-bool check_deref_advance(Sequence& s, T val)
+bool check_deref_advance(Sequence const& s, T val)
 {
-    return deref(advance_c<N>(begin(s))) == val;
+    return fusion::deref(fusion::advance_c<N>(fusion::begin(s))) == val;
 }
 
 template <typename Sequence, typename T>
-bool check_deref_prior(Sequence& s, T val)
+bool check_deref_prior(Sequence const& s, T val)
 {
-    return deref(prior(end(s))) == val;
+    return fusion::deref(fusion::prior(fusion::end(s))) == val;
 }
 
 template <int N, typename Sequence, typename T>
-bool check_at(Sequence& s, T val)
+bool check_at(Sequence const& s, T val)
 {
-    return at_c<N>(s) == val;
+    return fusion::at_c<N>(s) == val;
 }
 
 template <typename Sequence>
-bool check_distance(Sequence& s, int val)
+bool check_distance(Sequence const& s, int val)
 {
-    return distance(begin(s), end(s)) == val;
+    return fusion::distance(fusion::begin(s), fusion::end(s)) == val;
 }
 
 int main()
@@ -78,6 +78,8 @@ int main()
     t.int_ = 1;
     t.string_ = "test";
     t.double_ = 2.0;
+
+    using fusion::as_nview;
 
     // check size()
     {
