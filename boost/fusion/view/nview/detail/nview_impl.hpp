@@ -10,7 +10,7 @@
 #if !defined(BOOST_FUSION_NVIEW_IMPL_SEP_23_2009_1017PM)
 #define BOOST_FUSION_NVIEW_IMPL_SEP_23_2009_1017PM
 
-#include <climits>
+//#include <climits>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/repeat.hpp>
 #include <boost/preprocessor/iterate.hpp>
@@ -23,8 +23,6 @@
     "boost/fusion/view/nview/detail/nview_impl.hpp"))                         \
     /**/
 
-#include BOOST_PP_ITERATE()
-
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost { namespace fusion { namespace result_of
 {
@@ -35,11 +33,11 @@ namespace boost { namespace fusion { namespace result_of
         typedef mpl::vector_c<
             int, BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, I)
         > index_type;
-
         typedef nview<Sequence, index_type> type;
     };
-
 }}}
+
+#include BOOST_PP_ITERATE()
 
 #endif
 
@@ -49,6 +47,18 @@ namespace boost { namespace fusion { namespace result_of
 #else // defined(BOOST_PP_IS_ITERATING)
 
 #define N BOOST_PP_ITERATION()
+
+#if N < FUSION_MAX_VECTOR_SIZE
+namespace boost { namespace fusion { namespace result_of
+{
+    template <typename Sequence, BOOST_PP_ENUM_PARAMS(N, int I)>
+    struct as_nview<Sequence, BOOST_PP_ENUM_PARAMS(N, I)>
+    {
+        typedef mpl::vector_c<int, BOOST_PP_ENUM_PARAMS(N, I)> index_type;
+        typedef nview<Sequence, index_type> type;
+    };
+}}}
+#endif
 
 namespace boost { namespace fusion
 {
