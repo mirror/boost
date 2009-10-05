@@ -167,7 +167,7 @@ namespace boost { namespace unordered_detail {
     template <class A, class G>
     inline void hash_buckets<A, G>::swap(hash_buckets<A, G>& other)
     {
-    	BOOST_ASSERT(node_alloc() == other.node_alloc());
+        BOOST_ASSERT(node_alloc() == other.node_alloc());
         std::swap(buckets_, other.buckets_);
         std::swap(bucket_count_, other.bucket_count_);
     }
