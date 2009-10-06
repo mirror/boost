@@ -1,5 +1,5 @@
 /*
- *  Copyright 2000-2004 Michael Stevens, Mathias Koch, 
+ *  Copyright 2000-2009 Michael Stevens, Mathias Koch, 
  *  Joerg Walter, Gunter Winkler.
  *
  *  Use, modification and distribution are subject to the
@@ -23,3 +23,15 @@ td {
 th {
   text-align:left; 
 } 
+
+pre.screen { 
+  border:1px solid #DCDCDC;
+  display:block;
+  font-size:9pt;
+  margin:1pc 4% 0;
+  padding:0.5pc;
+}
+
+p.credit { 
+  font-style: italic;
+}
