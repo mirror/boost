@@ -18,6 +18,9 @@
 
 static const double TOL(1.0e-5); ///< Used for comparing two real numbers.
 
+#ifdef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
+#error "sorry this feature is not supported by your compiler"
+#endif
 
 BOOST_UBLAS_TEST_DEF( test_vector_iteration )
 {
