@@ -32,14 +32,14 @@ adds a lot of very useful runtime check. However these are very slow!
 
 <p class="credit">The patch and description was provided by Nasos Iliopoulos.</p>
 
-<p>
-An immediate effect of this define is the elimination of the need for
-noalias in types <tt>vector&lt;T&gt;</tt> and
-<tt>matrix&lt;T&gt;</tt>, when assigned to the same type. Although
-this patch implements move semantics for bounded_ and c_ (vector and
-matrix) types, they don't have any effect at those types, due to their
-underlying storage. I included it for possible future exploitation.
-</p>
+<p>An immediate effect of this option is the elimination of the need
+for noalias in types <tt>vector&lt;T&gt;</tt> and <tt>matrix&lt;T&gt;</tt>,
+when assigned to the same type. This option doesn't have an effect on
+bounded and c types. Although it is rare, not all compilers support copy
+elision (that allows for move semantics), so a test must be performed to
+make sure that there is a benefit when it is enabled. A small
+demonstration and test can be found in
+<a href="../test/manual/test_move_semantics.cpp"><tt>test_move_semantics.cpp</tt></a></p>
 
 <p>
 In the <a href="../test/manual/test_move_semantics.cpp">test
