@@ -921,6 +921,9 @@ namespace boost { namespace numeric { namespace ublas {
 #define INTERNAL_EXPRESSION
 #endif
 
+	// TODO enable this for development
+	// #define VIEW_CONCEPTS
+
         // Element value type for tests
         typedef float T;
 
@@ -992,8 +995,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
-#if defined (VECTOR_VIEW)
-        // read only vectors
+#ifdef VIEW_CONCEPTS
+	// read only vectors
         {
            typedef vector_view<T> container_model;
            function_requires< RandomAccessContainerConcept<container_model> >();
