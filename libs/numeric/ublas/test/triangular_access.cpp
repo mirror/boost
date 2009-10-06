@@ -14,6 +14,10 @@
 
 #include "common/testhelper.hpp"
 
+#ifdef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
+using boost::numeric::ublas::iterator1_tag;
+using boost::numeric::ublas::iterator2_tag;
+#endif
 
 template < class MAT >
 void test_iterator( MAT & A ) {
@@ -26,8 +30,13 @@ void test_iterator( MAT & A ) {
   typename MAT::iterator1 it1_end = A.end1();
   
   for ( ; it1 != it1_end; ++it1 ) {
+#ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
     typename MAT::iterator2 it2 = it1.begin();
     typename MAT::iterator2 it2_end = it1.end();
+#else
+    typename MAT::iterator2 it2 = begin(it1, iterator1_tag());
+    typename MAT::iterator2 it2_end = end(it1, iterator1_tag());
+#endif
     for ( ; it2 != it2_end ; ++ it2 ) {
 #ifndef NOMESSAGES
       std::cout << "( " << it2.index1() << ", " << it2.index2() << ") " << std::flush;
@@ -52,8 +61,13 @@ void test_iterator2( MAT & A ) {
   typename MAT::iterator2 it2_end = A.end2();
   
   for ( ; it2 != it2_end; ++it2 ) {
+#ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
     typename MAT::iterator1 it1 = it2.begin();
     typename MAT::iterator1 it1_end = it2.end();
+#else
+    typename MAT::iterator1 it1 = begin(it2, iterator2_tag());
+    typename MAT::iterator1 it1_end = end(it2, iterator2_tag());
+#endif
     for ( ; it1 != it1_end ; ++ it1 ) {
 #ifndef NOMESSAGES
       std::cout << "( " << it1.index1() << ", " << it1.index2() << ") " << std::flush;
@@ -81,8 +95,13 @@ test_iterator3( const MAT & A ) {
   typename MAT::const_iterator1 it1_end = A.end1();
   
   for ( ; it1 != it1_end; ++it1 ) {
+#ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
     typename MAT::const_iterator2 it2 = it1.begin();
     typename MAT::const_iterator2 it2_end = it1.end();
+#else
+    typename MAT::const_iterator2 it2 = begin(it1, iterator1_tag());
+    typename MAT::const_iterator2 it2_end = end(it1, iterator1_tag());
+#endif
     for ( ; it2 != it2_end ; ++ it2 ) {
 #ifndef NOMESSAGES
       std::cout << "( " << it2.index1() << ", " << it2.index2() << ") " << std::flush;
