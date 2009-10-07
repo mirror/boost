@@ -59,6 +59,8 @@
     -l [ --listincludes ] arg:   list included file to a file [arg] or to stdout [-]
     -m [ --macronames ] arg:     list names of all defined macros to a file [arg] or 
                                  to stdout [-]
+    -c [ --macrocounts ] arg     list macro invocation counts to a file [arg] or to
+                                 stdout [-]
     -p [ --preserve ] arg (=0):  preserve whitespace
                                  0: no whitespace is preserved (default),
                                  1: comments are preserved,
@@ -68,6 +70,8 @@
                                  1: #line directives will be emitted (default)
     -x [ --extended ]:           enable the #pragma wave system() directive
     -G [ --noguard ]:            disable include guard detection
+    -g [ --listguards ]:         list names of files flagged as 'include once' to a
+                                 file [arg] or to stdout [-]
     -s [ --state ] arg:          load and save state information from/to the given
                                  file [arg] or 'wave.state' [-] (interactive mode
                                  only)
@@ -194,6 +198,10 @@
 <blockquote>
   <p dir="ltr">Enable the output of all defined macros. This includes the macro names, its parameter names (if the macro is a function like macro) and its definition. The path specifies the filename to use for the output of the generated macro list. If the filename given equals to <tt>'-'</tt> (without the quotes), the macro  list is put into the standard output stream (stdout).</p>
 </blockquote>
+<p dir="ltr">-c [--macrocounts] path</p>
+<blockquote>
+  <p dir="ltr">Enable the output of all macro invocation counts. The path specifies the filename to use for the output of the generated list. If the filename given equals to <tt>'-'</tt> (without the quotes), the macro  list is put into the standard output stream (stdout).</p>
+</blockquote>
 <p dir="ltr">-p [--preserve] arg </p>
 <blockquote>
   <p dir="ltr">Preserve the whitespace from the input stream not located inside of macro definitions. The argument defines the amount of whitespace to be preserved. A value of '0' (zero) skips all whitespace, a value of '1' preserves all the comments and a value of '2' will preserve all whitespace in the output.</p>
@@ -211,6 +219,13 @@ is now disabled by default because it may cause a potential security threat. The
 <p dir="ltr">-G [--noguard] </p>
 <blockquote>
   <p dir="ltr">This option disables the automatic include guard detection normally performed by the Wave library during the processing of included files. For more information about automatic include guard detection please refer to <a href="class_reference_context.html">The Context Object</a> class reference. </p>
+</blockquote>
+<p dir="ltr">-g [--listguards] arg </p>
+<blockquote>
+  <p dir="ltr">This option lists all found include files which either contain a
+  <span class="preprocessor">#pragma once</span> or contain an include guard 
+  into the given file. If the filename given equals to <tt>'-'</tt> (without the quotes), the 
+  guards log is put into the standard output stream (stdout). For more information about automatic include guard detection please refer to <a href="class_reference_context.html">The Context Object</a> class reference. </p>
 </blockquote>
 <p dir="ltr">-s [--state]</p>
 <blockquote>
@@ -273,7 +288,7 @@ is now disabled by default because it may cause a potential security threat. The
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Tuesday, July 29, 2008  20:40<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Thursday, September 17, 2009 12:40<!-- #EndDate -->
 </span></p>
 </body>
 </html>

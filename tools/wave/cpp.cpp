@@ -672,6 +672,7 @@ int error_count = 0;
     std::ofstream output;
     std::ofstream traceout;
     std::ofstream includelistout;
+    std::ofstream listguardsout;
 
     trace_flags enable_trace = trace_nothing;
 
@@ -723,6 +724,31 @@ int error_count = 0;
                 rdbuf(cout.rdbuf());
         }
 
+    // Open the stream where to output the list of included file names
+        if (vm.count("listguards")) {
+        // try to open the file, where to put the include list 
+        fs::path listguards_file(boost::wave::util::create_path(
+            vm["listguards"].as<std::string>()));
+
+            if (listguards_file != "-") {
+                fs::create_directories(boost::wave::util::branch_path(listguards_file));
+                listguardsout.open(listguards_file.string().c_str());
+                if (!listguardsout.is_open()) {
+                    cerr << "wave: could not open include guard list file: " 
+                         << listguards_file.string() << endl;
+                    return -1;
+                }
+            }
+            enable_trace = trace_flags(enable_trace | trace_guards);
+        }
+        if ((enable_trace & trace_guards) && !listguardsout.is_open()) {
+        // by default list included names to std::cout
+            listguardsout.copyfmt(cout);
+            listguardsout.clear(cout.rdstate());
+            static_cast<std::basic_ios<char> &>(listguardsout).
+                rdbuf(cout.rdbuf());
+        }
+
     // enable preserving comments mode
     bool preserve_comments = false;
     bool preserve_whitespace = false;
@@ -759,8 +785,8 @@ int error_count = 0;
     bool allow_output = true;   // will be manipulated from inside the hooks object
     std::string default_outfile;  // will be used from inside the hooks object
     trace_macro_expansion<token_type> hooks(preserve_whitespace, 
-        output, traceout, includelistout, enable_trace, enable_system_command,
-        allow_output, default_outfile);
+        output, traceout, includelistout, listguardsout, enable_trace, 
+        enable_system_command, allow_output, default_outfile);
 
     // enable macro invocation count, if appropriate
         if (vm.count("macrocounts")) 
@@ -1206,6 +1232,9 @@ main (int argc, char *argv[])
             ("extended,x", "enable the #pragma wave system() directive")
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
             ("noguard,G", "disable include guard detection")
+            ("listguards,g", po::value<std::string>(), 
+                "list names of files flagged as 'include once' to a file [arg] "
+                "or to stdout [-]")
 #endif
 #if BOOST_WAVE_SERIALIZATION != 0
             ("state,s", po::value<std::string>(), 

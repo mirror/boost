@@ -54,7 +54,8 @@ enum trace_flags {
     trace_nothing = 0,      // disable tracing
     trace_macros = 1,       // enable macro tracing
     trace_macro_counts = 2, // enable invocation counting
-    trace_includes = 4      // enable include file tracing
+    trace_includes = 4,     // enable include file tracing
+    trace_guards = 8        // enable include guard tracing
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -144,10 +145,11 @@ class trace_macro_expansion
 public:
     trace_macro_expansion(bool preserve_whitespace_, 
             std::ofstream &output_, std::ostream &tracestrm_, 
-            std::ostream &includestrm_, trace_flags flags_, 
-            bool enable_system_command_, bool& generate_output_,
-            std::string const& default_outfile_)
-    :   outputstrm(output_), tracestrm(tracestrm_), includestrm(includestrm_), 
+            std::ostream &includestrm_, std::ostream &guardstrm_, 
+            trace_flags flags_, bool enable_system_command_, 
+            bool& generate_output_, std::string const& default_outfile_)
+    :   outputstrm(output_), tracestrm(tracestrm_), 
+        includestrm(includestrm_), guardstrm(guardstrm_), 
         level(0), flags(flags_), logging_flags(trace_nothing), 
         enable_system_command(enable_system_command_),
         preserve_whitespace(preserve_whitespace_),
@@ -570,6 +572,58 @@ public:
             includestrm << std::endl;
         }
     }
+
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    ///////////////////////////////////////////////////////////////////////////
+    //  
+    //  The function 'detected_include_guard' is called whenever either a 
+    //  include file is about to be added to the list of #pragma once headers.
+    //  That means this header file will not be opened and parsed again even 
+    //  if it is specified in a later #include directive.
+    //  This function is called as the result of a detected include guard 
+    //  scheme. 
+    //
+    //  The implemented heuristics for include guards detects two forms of 
+    //  include guards:
+    // 
+    //       #ifndef INCLUDE_GUARD_MACRO
+    //       #define INCLUDE_GUARD_MACRO
+    //       ...
+    //       #endif
+    // 
+    //   or
+    // 
+    //       if !defined(INCLUDE_GUARD_MACRO)
+    //       #define INCLUDE_GUARD_MACRO
+    //       ...
+    //       #endif
+    // 
+    //  note, that the parenthesis are optional (i.e. !defined INCLUDE_GUARD_MACRO
+    //  will work as well). The code allows for any whitespace, newline and single 
+    //  '#' tokens before the #if/#ifndef and after the final #endif.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 'filename' contains the file system path of the 
+    //  opened file (this is relative to the directory of the currently 
+    //  processed file or a absolute path depending on the paths given as the
+    //  include search paths).
+    //
+    //  The parameter contains the name of the detected include guard.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContextT>
+    void
+    detected_include_guard(ContextT const& ctx, std::string const& filename,
+        std::string const& include_guard) 
+   {
+        if (enabled_guard_tracing()) {
+            guardstrm << include_guard << ":" << std::endl
+                      << "  " << filename << std::endl;
+        }
+    }
+#endif 
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -1129,6 +1183,10 @@ protected:
     { 
         return (flags & trace_includes); 
     }
+    bool enabled_guard_tracing() const 
+    { 
+        return (flags & trace_guards); 
+    }
     bool enabled_macro_counting() const 
     { 
         return logging_flags & trace_macro_counts; 
@@ -1178,6 +1236,7 @@ private:
     std::ofstream &outputstrm;      // main output stream
     std::ostream &tracestrm;        // trace output stream
     std::ostream &includestrm;      // included list output stream
+    std::ostream &guardstrm;        // include guard output stream
     int level;                      // indentation level
     trace_flags flags;              // enabled globally
     trace_flags logging_flags;      // enabled by a #pragma

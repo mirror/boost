@@ -4,6 +4,11 @@
 <title>The Context Policy</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link href="theme/style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+.style1 {
+	background-color: #EEEEEE;
+}
+</style>
 </head>
 <body>
 <table background="theme/bkd2.gif" border="0" cellspacing="2" width="100%">
@@ -56,21 +61,33 @@
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ExceptionT&gt;<br>        void <a href="class_reference_ctxpolicy.html#trow_exception">throw_exception</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            ExceptionT <span class="keyword">const</span>&amp; e);<br><br>        <span class="comment">// test, whether a given token may be skipped</span><br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#may_skip_whitespace">may_skip_whitespace</a> (ContextT <span class="keyword">const</span>&amp; ctx,<br>            TokenT &amp;token, <span class="keyword">bool</span> &amp;skipped_newline);<br>
         <span class="comment">// Conditional compilation</span><span class="keyword">
         template</span> &lt;<br>            <span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT, <br>            <span class="keyword">typename</span> ContainerT<br>        &gt;<br>        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#evaluated_conditional_expression">evaluated_conditional_expression</a>(<br>            ContextT <span class="keyword">const</span> &amp;ctx, TokenT <span class="keyword">const</span>&amp; directive, <br>            ContainerT <span class="keyword">const</span>&amp; expression, <span class="keyword">bool</span> expression_value);<br>
-        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#skipped_token">skipped_token</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            TokenT <span class="keyword">const</span>&amp; token);<br><br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>        TokenT <span class="keyword">const</span>&amp; <a href="class_reference_ctxpolicy.html#generated_token">generated_token</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            TokenT <span class="keyword">const</span>&amp; token);<br><br>        <span class="comment">// macro expansion tracing</span><span class="keyword">
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>            <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#skipped_token">skipped_token</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            TokenT <span class="keyword">const</span>&amp; token);<br><br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>        TokenT <span class="keyword">const</span>&amp; <a href="class_reference_ctxpolicy.html#generated_token">generated_token</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            TokenT <span class="keyword">const</span>&amp; token);<br><br>        <span class="comment">// macro expansion tracing</span><span class="keyword">
         template</span> &lt;<span class="keyword">
-            typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT,<br>            <span class="keyword">typename</span> IteratorT<br>        &gt;<br>        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#expanding_function_like_macro">expanding_function_like_macro</a>(<br>            ContextT <span class="keyword">const</span> &amp;ctx, TokenT <span class="keyword">const</span> &amp;macrodef, <br>            <span class="keyword">std::vector</span>&lt;TokenT&gt; <span class="keyword">const</span> &amp;formal_args, <br>            ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall, <br>            <span class="keyword">std::vector</span>&lt;ContainerT&gt; <span class="keyword">const</span> &amp;arguments,<br>            IteratorT <span class="keyword">const</span> &amp;seqstart, Iterator <span class="keyword">const</span> &amp;seqend);<br> <br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#expanding_object_like_macro">expanding_object_like_macro</a>(<br>            ContextT <span class="keyword">const</span> &amp;ctx, TokenT <span class="keyword">const</span> &amp;macro, <br>            ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall);<br> <br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#expanded_macro">expanded_macro</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            ContainerT <span class="keyword">const</span> &amp;result);<br> <br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#expanded_macro">rescanned_macro</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            ContainerT <span class="keyword">const</span> &amp;result);<br><br>        <span class="comment">// include file tracing functions</span>
-        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#opened_include_file">found_include_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            std::string <span class="keyword">const</span> &amp;filename, <span class="keyword">bool</span> include_next);<br><br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>        <span class="keyword">void </span><a href="class_reference_ctxpolicy.html#opened_include_file">opened_include_file</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            std::string <span class="keyword">const</span> &amp;relname, std::string const&amp; absname,<br>            <span class="keyword">bool</span> is_system_include); <br><br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#returning_from_include_file">returning_from_include_file</a>(ContextT <span class="keyword">const</span> &amp;ctx);<br><br>        <span class="comment">// interpretation of #pragma's of the form </span>
+            typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT,<br>            <span class="keyword">typename</span> IteratorT<br>        &gt;<br>        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#expanding_function_like_macro">expanding_function_like_macro</a>(<br>            ContextT <span class="keyword">const</span> &amp;ctx, TokenT <span class="keyword">const</span> &amp;macrodef, <br>            <span class="keyword">std::vector</span>&lt;TokenT&gt; <span class="keyword">const</span> &amp;formal_args, <br>            ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall, <br>            <span class="keyword">std::vector</span>&lt;ContainerT&gt; <span class="keyword">const</span> &amp;arguments,<br>            IteratorT <span class="keyword">const</span> &amp;seqstart, Iterator <span class="keyword">const</span> &amp;seqend);<br> <br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#expanding_object_like_macro">expanding_object_like_macro</a>(<br>            ContextT <span class="keyword">const</span> &amp;ctx, TokenT <span class="keyword">const</span> &amp;macro, <br>            ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall);<br> <br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#expanded_macro">expanded_macro</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            ContainerT <span class="keyword">const</span> &amp;result);<br> <br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#expanded_macro">rescanned_macro</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            ContainerT <span class="keyword">const</span> &amp;result);<br><br>
+        <span class="comment">// include file tracing functions</span>
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#opened_include_file">found_include_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            std::string <span class="keyword">const</span> &amp;filename, <span class="keyword">bool</span> include_next);<br>
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>        <span class="keyword">void </span><a href="class_reference_ctxpolicy.html#opened_include_file">opened_include_file</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            std::string <span class="keyword">const</span> &amp;relname, std::string <span class="keyword">const</span>&amp; absname,<br>            <span class="keyword">bool</span> is_system_include); <br>
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#returning_from_include_file">returning_from_include_file</a>(ContextT <span class="keyword">const</span> &amp;ctx);<br>
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>        <span class="keyword">void</span> <a href="#detected_include_guard">detected_include_guard</a>(ContextT <span class="keyword">const</span> &amp;ctx, 
+            std::string <span class="keyword">const</span>&amp; filename,
+            std::string <span class="keyword">const</span>&amp; include_guard);<br>
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>        <span class="keyword">void</span> <a href="#detected_pragma_once">detected_pragma_once</a>(ContextT <span class="keyword">const</span> &amp;ctx,
+            TokenT <span class="keyword">const</span>&amp; pragma_token, 
+            std::string <span class="keyword">const</span>&amp; filename);<br><br>
+        <span class="comment">// interpretation of #pragma's of the form </span>
         <span class="comment">// 'wave option[(value)]'</span>
-        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#interpret_pragma">interpret_pragma</a>(ContextT <span class="keyword">const</span> &amp;ctx, ContainerT &amp;pending, <br>            <span class="keyword">typename</span> ContextT::token_type <span class="keyword">const</span> &amp;option, <br>            ContainerT <span class="keyword">const</span> &amp;values, <br>            <span class="keyword">typename</span> ContextT::token_type <span class="keyword">const</span> &amp;pragma_token);<br><br>        <span class="comment">// macro definition hooks</span>
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#interpret_pragma">interpret_pragma</a>(ContextT <span class="keyword">const</span> &amp;ctx, ContainerT &amp;pending, <br>            <span class="keyword">typename</span> ContextT::token_type <span class="keyword">const</span> &amp;option, <br>            ContainerT <span class="keyword">const</span> &amp;values, <br>            <span class="keyword">typename</span> ContextT::token_type <span class="keyword">const</span> &amp;pragma_token);<br><br>
+        <span class="comment">// macro definition hooks</span>
         <span class="keyword">template</span> &lt;<br>            <span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">
             typename</span> ParametersT, <span class="keyword">typename</span> DefinitionT<br>        &gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#defined_macro">defined_macro</a>(ContextT <span class="keyword">const</span> &amp;ctx, TokenT <span class="keyword">const</span> &amp;name, <span class="keyword">
-            bool</span> is_functionlike, ParametersT <span class="keyword">const</span> &amp;parameters, <br>            DefinitionT <span class="keyword">const</span> &amp;definition, <span class="keyword">bool</span> is_predefined);<br><br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#undefined_macro">undefined_macro</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            TokenT<span class="keyword"> const</span> &amp;name);<br><br>        <span class="comment">// #error and #warning directive hooks</span>
+            bool</span> is_functionlike, ParametersT <span class="keyword">const</span> &amp;parameters, <br>            DefinitionT <span class="keyword">const</span> &amp;definition, <span class="keyword">bool</span> is_predefined);<br><br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#undefined_macro">undefined_macro</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            TokenT<span class="keyword"> const</span> &amp;name);<br><br>
+        <span class="comment">// #error and #warning directive hooks</span>
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#found_warning_directive">found_warning_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            ContainerT <span class="keyword">const</span> &amp;message);<br><br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#found_error_directive">found_error_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            ContainerT <span class="keyword">const</span> &amp;message);<br><br>        <span class="comment">// #line directive hook</span>
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_line_directive">found_line_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, <br>            ContainerT <span class="keyword">const</span> &amp;arguments, <span class="keyword">unsigned int</span> line,<br>            std::string <span class="keyword">const</span>&amp; filename);<br>    };<br><br>}}}   <span class="comment">// namespace boost::wave::context_policies</span></pre>
 <h2><a name="member_functions"></a>Member functions</h2>
 <h3>General hook functions </h3>
 <p><a name="found_directive"></a><strong>found_directive</strong></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>    <span class="keyword">bool</span> found_directive(ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const </span>&amp;directive);<br>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>    <span class="keyword">bool</span> found_directive(ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const </span>&amp;directive);
 </pre>
 <blockquote>
   <p>The function <tt>found_directive</tt> is called, whenever the preprocessor has detected one of the preprocessing directives (<span class="preprocessor">#define</span>, <span class="preprocessor">#undef</span>, <span class="preprocessor">#if</span>, <span class="preprocessor">#idef</span>, <span class="preprocessor">#ifndef</span>, <span class="preprocessor">#elif</span>, <span class="preprocessor">#endif</span>, <span class="preprocessor">#error</span>, <span class="preprocessor">#include</span>, <span class="preprocessor">#pragma</span> or <span class="preprocessor">#warning</span>) .</p>
@@ -83,14 +100,14 @@
     value is <tt>false</tt>, the directive is processed in the normal manner. </p>
 </blockquote>
 <p><a name="throw_exception"></a><strong>throw_exception</strong></p>
-<pre>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ExceptionT&gt;<br>        void throw_exception(ContextT <span class="keyword">const</span> &amp;ctx, <br>            ExceptionT <span class="keyword">const</span>&amp; e);</pre>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ExceptionT&gt;<br>    void throw_exception(ContextT <span class="keyword">const</span> &amp;ctx, <br>            ExceptionT <span class="keyword">const</span>&amp; e);</pre>
 <blockquote>
   <p>he function&nbsp;<tt>throw_exception</tt> is called, whenever a preprocessing exception occurs .</p>
   <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user.&nbsp; </p>
   <p>The parameter&nbsp;<tt>e</tt> is the exception object containing detailed error information. </p>
 </blockquote>
 <p><a name="may_skip_whitespace" id="may_skip"></a><strong>may_skipwhitespace</strong></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>    <span class="keyword">bool</span> may_skip_whitespace(ContextT <span class="keyword">const</span>&amp; ctx, TokenT &amp;token, <br>        <span class="keyword">bool</span>&amp; skipped_newline);<br>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>    <span class="keyword">bool</span> may_skip_whitespace(ContextT <span class="keyword">const</span>&amp; ctx, TokenT &amp;token, <br>        <span class="keyword">bool</span>&amp; skipped_newline);
 </pre>
 <blockquote>
   <p>The function <tt>may_skipwhitespace</tt> will be called by the library, whenever a token is about to be returned to the calling application. </p>
@@ -104,7 +121,8 @@
 </blockquote>
 <h3>Conditional compilation hook functions </h3>
 <p><a name="evaluated_conditional_expression"></a><strong>evaluated_conditional_expression</strong></p>
-<pre><span class="keyword">    template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;<br><span class="keyword">    bool</span> evaluated_conditional_expression(ContextT <span class="keyword">const</span>&amp; ctx, <br>        TokenT <span class="keyword">const</span>&amp; directive, ContainerT <span class="keyword">const</span>&amp; expression, <span class="keyword"><br>        bool</span> expression_value);<br>
+<pre><span class="keyword">   template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;
+<span class="keyword">    bool</span> evaluated_conditional_expression(ContextT <span class="keyword">const</span>&amp; ctx, <br>        TokenT <span class="keyword">const</span>&amp; directive, ContainerT <span class="keyword">const</span>&amp; expression, <span class="keyword"><br>        bool</span> expression_value);
 </pre>
 <blockquote>
   <p>The function <tt>evaluated_conditional_expression</tt> is called, whenever the preprocessor has encountered a <span class="preprocessor">#if</span>, <span class="preprocessor">#elif</span>, <span class="preprocessor">#ifdef</span> or <span class="preprocessor">#ifndef</span> directive. This hook gets passed the non-expanded conditional
@@ -124,7 +142,7 @@
   </p>
 </blockquote>
 <p><a name="skipped_token"></a><strong>skipped_token</strong></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>    <span class="keyword">void</span> skipped_token(ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const</span>&amp; token);<br>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>    <span class="keyword">void</span> skipped_token(ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const</span>&amp; token);
 </pre>
 <blockquote>
   <p>The function <tt>skipped_token</tt> is called, whenever a token is about to be skipped due to a false preprocessor condition (code fragments to be
@@ -134,7 +152,7 @@
   <p>The parameter <tt>token</tt> refers to the token to be skipped.</p>
 </blockquote>
 <p><a name="generated_token"></a><strong>generated_token</strong></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>    TokenT <span class="keyword">const</span>&amp; generated_token(ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const</span>&amp; token);<br>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;<br>    TokenT <span class="keyword">const</span>&amp; generated_token(ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const</span>&amp; token);
 </pre>
 <blockquote>
   <p>The function <tt>generated_token</tt> is called, whenever a token is about to be returned from the library.</p>
@@ -148,7 +166,7 @@
 </blockquote>
 <h3>Macro expansion tracking functions</h3>
 <p><a name="expanding_function_like_macro"></a><b>expanding_function_like_macro</b></p>
-<pre><span class="keyword">    template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;<br>    <span class="keyword">bool</span> expanding_function_like_macro(<br>        ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const</span> &amp;macrodef, <br>        <span class="keyword">std::vector</span>&lt;TokenT&gt; <span class="keyword">const</span> &amp;formal_args, <br>        ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall, <br>        <span class="keyword">std::vector</span>&lt;ContainerT&gt; <span class="keyword">const</span> &amp;arguments,<br>        IteratorT <span class="keyword">const</span> &amp;seqstart, Iterator <span class="keyword">const</span> &amp;seqend);</pre>
+<pre><span class="keyword">   template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;<br>    <span class="keyword">bool</span> expanding_function_like_macro(<br>        ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const</span> &amp;macrodef, <br>        <span class="keyword">std::vector</span>&lt;TokenT&gt; <span class="keyword">const</span> &amp;formal_args, <br>        ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall, <br>        <span class="keyword">std::vector</span>&lt;ContainerT&gt; <span class="keyword">const</span> &amp;arguments,<br>        IteratorT <span class="keyword">const</span> &amp;seqstart, Iterator <span class="keyword">const</span> &amp;seqend);</pre>
 <blockquote>
   <p>The function <tt>expanding_function_like_macro</tt> is called, whenever a 
     function-like macro is to be expanded, i.e. <i>before</i> the actual expansion 
@@ -181,7 +199,7 @@
   </p>
 </blockquote>
 <p><a name="expanding_object_like_macro"></a><b>expanding_object_like_macro</b></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;<br>    <span class="keyword">bool</span> expanding_object_like_macro(<br>        ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const</span> &amp;macro, <br>        ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall);<br>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;<br>    <span class="keyword">bool</span> expanding_object_like_macro(<br>        ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const</span> &amp;macro, <br>        ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall);
 </pre>
 <blockquote>
   <p>The function <tt>expanding_object_like_macro</tt> is called, whenever a object-like 
@@ -201,7 +219,7 @@
   </p>
 </blockquote>
 <p><a name="expanded_macro"></a><b>expanded_macro</b></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>    <span class="keyword">void</span> expanded_macro(ContextT <span class="keyword">const</span>&amp; ctx, ContainerT <span class="keyword">const</span> &amp;result);<br>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>    <span class="keyword">void</span> expanded_macro(ContextT <span class="keyword">const</span>&amp; ctx, ContainerT <span class="keyword">const</span> &amp;result);
 </pre>
 <blockquote>
   <p>The function <tt>expanded_macro</tt> is called whenever the expansion of 
@@ -213,7 +231,7 @@
     so far. This is a standard STL container containing the generated token sequence.</p>
 </blockquote>
 <p><a name="rescanned_macro"></a><b>rescanned_macro</b></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>    <span class="keyword">void</span> rescanned_macro(ContextT <span class="keyword">const</span>&amp; ctx, ContainerT <span class="keyword">const</span> &amp;result);<br>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>    <span class="keyword">void</span> rescanned_macro(ContextT <span class="keyword">const</span>&amp; ctx, ContainerT <span class="keyword">const</span> &amp;result);
 </pre>
 <blockquote>
   <p>The function <tt>rescanned_macro</tt> is called whenever the rescanning 
@@ -226,7 +244,7 @@
 </blockquote>
 <h3>Include file tracing functions</h3>
 <p><a name="opened_include_file" id="found_include_directive"></a><strong>found_include_directive</strong></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>    <span class="keyword">bool</span> found_include_directive(ContextT <span class="keyword">const</span>&amp; ctx, <br>        std::string <span class="keyword">const</span> &amp;filename, <span class="keyword">bool</span> include_next);<br>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>    <span class="keyword">bool</span> found_include_directive(ContextT <span class="keyword">const</span>&amp; ctx, <br>        std::string <span class="keyword">const</span> &amp;filename, <span class="keyword">bool</span> include_next);
 </pre>
 <blockquote>
   <p>The function <tt>found_include_directive</tt> is called whenever whenever a #include directive was located..</p>
@@ -246,7 +264,7 @@
   </p>
 </blockquote>
 <p><a name="opened_include_file" id="opened_include_file"></a><strong>opened_include_file</strong></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>    <span class="keyword">void</span> opened_include_file(ContextT <span class="keyword">const</span>&amp; ctx, <br>        std::string <span class="keyword">const</span> &amp;rel_filename, std::string <span class="keyword">const</span> &amp;abs_filename, <br>        <span class="keyword">bool</span> is_system_include);<br>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>    <span class="keyword">void</span> opened_include_file(ContextT <span class="keyword">const</span>&amp; ctx, <br>        std::string <span class="keyword">const</span> &amp;rel_filename, std::string <span class="keyword">const</span> &amp;abs_filename, <br>        <span class="keyword">bool</span> is_system_include);
 </pre>
 <blockquote>
   <p>The function <tt>opened_include_file</tt> is called whenever a file referred 
@@ -263,13 +281,50 @@
     as a result of a <tt>#include&nbsp;&lt;...&gt;</tt> directive.</p>
 </blockquote>
 <p><a name="returning_from_include_file" id="returning_from_include_file"></a><strong>returning_from_include_file</strong></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>    <span class="keyword">void</span> returning_from_include_file(ContextT <span class="keyword">const</span>&amp; ctx);<br>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>    <span class="keyword">void</span> returning_from_include_file(ContextT <span class="keyword">const</span>&amp; ctx);
 </pre>
 <blockquote>
   <p>The function <tt>returning_from_include_file</tt> is called whenever an 
     included file is about to be closed after it's processing is complete.</p>
   <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user.
     Note, this parameter was added for the Boost V1.35.0 release. </p>
+</blockquote>
+<p><a name="detected_include_guard" id="detected_include_guard"></a><strong>detected_include_guard</strong></p>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;<br>    <span class="keyword">void</span> detected_include_guard(ContextT <span class="keyword">const</span>&amp; ctx, 
+        std::string <span class="keyword">const</span>&amp; filename,
+        std::string <span class="keyword">const</span>&amp; include_guard);
+</pre>
+<blockquote>
+  <p>The function <tt>detected_include_guard</tt> is called whenever a<span lang="de">n</span> 
+  include file is about to be added to the list of #pragma once headers as the 
+  result of a detected include guard scheme. That means this header file will 
+  not be opened and parsed again even if it is specified in a later
+  <span class="preprocessor">#include</span> directive.&nbsp; </p>
+  <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> 
+  used during instantiation of the preprocessing iterators by the user. </p>
+	<p>The parameter <tt>filename</tt> contains the file system path of the opened file 
+	(this is relative to the directory of the currently processed file or a 
+	absolute path depending on the paths given as the include search paths).</p>
+	<p>The parameter <tt>include_guard</tt> contains the name of the detected include guard.<br> </p>
+</blockquote>
+<p><a name="detected_pragma_once" id="detected_pragma_once"></a><strong>detected_pragma_once</strong></p>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename </span>TokenT&gt;<br>    <span class="keyword">void</span> detected_<span lang="de">p<span class="style1">ragma<span lang="en-us">_</span>once</span></span>(ContextT <span class="keyword">const</span>&amp; ctx,
+<span lang="de">        TokenT <span class="keyword">const</span>&amp; pragma_token,</span>
+        std::string <span class="keyword">const</span>&amp; filename);</pre>
+<blockquote>
+  <p>The function <tt>detected_pragma_once</tt> is called whenever either a<span lang="de">n</span> 
+  include file is about to be added to the list of #pragma once headers as the 
+  result of a detected <span lang="de"><span class="preprocessor">#pragma once</span> 
+  directive</span>. That means this header file will not be opened and parsed 
+  again even if it is specified in a later <span class="preprocessor">#include</span> 
+  directive. </p>
+  <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> 
+  used during instantiation of the preprocessing iterators by the user. </p>
+	<p><span lang="de">The parameter pragma_token refers to the token &quot;#pragma&quot; 
+	triggering this preprocessing hook.</span></p>
+	<p>The parameter <tt>filename</tt> contains the file system path of the opened file 
+	(this is relative to the directory of the currently processed file or a 
+	absolute path depending on the paths given as the include search paths).</p>
 </blockquote>
 <h3>Interpretation of #pragma's</h3>
 <p><strong><a name="interpret_pragma"></a>interpret_pragma</strong></p>
@@ -346,7 +401,7 @@
     exception of the type <code>error_directive</code> (normal execution continues), if the return value is <tt>true</tt> the execution continues as if no <span class="preprocessor">#error</span> directive has been found and the overall directive is replaced by a single newline. </p>
 </blockquote>
 <p><strong><a name="found_line_directive" id="found_line_directive"></a>found_line_drective</strong></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>    <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_error_directive"><strong>found_line_drective</strong></a>(ContextT <span class="keyword">const</span>&amp; ctx, <br>        ContainerT <span class="keyword">const</span> &amp;arguments, <span class="keyword">unsigned int</span> line,<br>        std::string <span class="keyword">const</span>&amp; filename);<br>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br>    <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_error_directive"><strong>found_line_drective</strong></a>(ContextT <span class="keyword">const</span>&amp; ctx, <br>        ContainerT <span class="keyword">const</span> &amp;arguments, <span class="keyword">unsigned int</span> line,<br>        std::string <span class="keyword">const</span>&amp; filename);
 </pre>
 <blockquote>
   <p>The function <tt>found_line_directive </tt> is called whenever a <span class="preprocessor">#line </span>directive has been encountered. Note, this function was added for the Boost V1.35.0 release. </p>
@@ -373,7 +428,8 @@
   1.0. (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <p class="copyright"><span class="updated">Last updated:
-  <!-- #BeginDate format:fcAm1m -->Tuesday, October 14, 2008  18:45<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Thursday, September 1<span lang="de">8</span>, 2009  
+<span lang="de">09</span>:<span lang="de">10</span><!-- #EndDate -->
   </span></p>
 </body>
 </html>
