@@ -183,11 +183,14 @@ namespace boost
     {
     public:
       virtual ~error_category(){}
-      virtual inline const char *    name() const;  // see implementation note below
-      virtual inline std::string     message( int ev ) const;   // see implementation note below
-      virtual inline error_condition default_error_condition( int ev ) const;
-      virtual inline bool equivalent( int code, const error_condition & condition ) const;
-      virtual inline bool equivalent( const error_code & code, int condition ) const;
+
+      virtual const char *     name() const = 0;
+      virtual std::string      message( int ev ) const = 0;
+      virtual error_condition  default_error_condition( int ev ) const;
+      virtual bool             equivalent( int code, 
+                                           const error_condition & condition ) const;
+      virtual bool             equivalent( const error_code & code,
+                                           int condition ) const;
 
       bool operator==(const error_category & rhs) const { return this == &rhs; }
       bool operator!=(const error_category & rhs) const { return this != &rhs; }
@@ -494,19 +497,6 @@ namespace boost
       int condition ) const
     {
       return *this == code.category() && code.value() == condition;
-    }
-
-    //  error_category implementation note: VC++ 8.0 objects to name() and
-    //  message() being pure virtual functions. Thus these implementations.
-    inline const char * error_category::name() const
-    { 
-      return "error: should never be called";
-    }
-
-    inline std::string error_category::message( int ) const
-    { 
-      static std::string s("error: should never be called");
-      return s;
     }
 
   } // namespace system
