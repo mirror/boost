@@ -39,7 +39,11 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_constructor<foo0_t>::value, fals
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<foo0_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<foo0_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<foo0_t>::value, false);
+#if defined(TEST_STD) && (TEST_STD < 2006)
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<foo0_t, foo0_t>::value), true); // TR1 required behaviour (new to 1.34)
+#else
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<foo0_t, foo0_t>::value), false); // C++0x required behaviour (new to 1.40)
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<foo0_t, int>::value), false);
 
 

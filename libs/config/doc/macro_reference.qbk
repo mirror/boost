@@ -204,6 +204,9 @@ of an object is not supported.
 The compiler does not support the "Substitution Failure Is Not An Error"
 meta-programming idiom.
 ]]
+[[`BOOST_NO_SFINAE_EXPR`][Compiler][
+The compiler does not support usage of SFINAE with arbitrary expressions.
+]]
 [[`BOOST_NO_STD_ALLOCATOR`][Standard library][
 The C++ standard library does not provide a standards conforming
 `std::allocator`.
@@ -580,6 +583,9 @@ explicit conversion operators (`explicit operator T()`).
 [[`BOOST_NO_EXTERN_TEMPLATE`][The compiler does not support 
 explicit instantiation declarations for templates (`explicit template`).
 ]]
+[[`BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS`][The compiler does not support
+default template arguments for function templates.
+]]
 [[`BOOST_NO_INITIALIZER_LISTS`][
 The C++ compiler does not support C++0x initializer lists.
 ]]
@@ -785,7 +791,13 @@ integral constant expressions.
 ]]
 [[`BOOST_MSVC`][`<boost/config.hpp>`][
 Defined if the compiler is really Microsoft Visual C++, as opposed to one
-of the many other compilers that also define `_MSC_VER`.
+of the many other compilers that also define `_MSC_VER`.  Has the same value as 
+_MSC_VER.
+]]
+[[`BOOST_MSVC_FULL_VER`][`<boost/config.hpp>`][
+Defined to a normalised 9 digit version of _MSC_FULL_VER (which sometimes only has 8 digits), 
+the macro has the form VVMMPPPPP where VV is the major version number, MM is the minor version number, and
+PPPPP is the compiler build number.
 ]]
 [[`BOOST_INTEL`][`<boost/config.hpp>`][
 Defined if the compiler is an Intel compiler, takes the same value as the
