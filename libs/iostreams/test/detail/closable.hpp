@@ -126,7 +126,7 @@ public:
     typedef direct_input  category;
     closable_device(operation close) : close_(close) { }
     std::pair<char*, char*> input_sequence()
-    { return std::pair<char*, char*>(0, 0); }
+    { return std::pair<char*, char*>(static_cast<char*>(0), static_cast<char*>(0)); }
     void close() { close_.execute(); }
 private:
     operation close_;
@@ -140,7 +140,7 @@ public:
     typedef direct_output  category;
     closable_device(operation close) : close_(close) { }
     std::pair<char*, char*> output_sequence()
-    { return std::pair<char*, char*>(0, 0); }
+    { return std::pair<char*, char*>(static_cast<char*>(0), static_cast<char*>(0)); }
     void close() { close_.execute(); }
 private:
     operation close_;
@@ -156,9 +156,9 @@ public:
         : close_input_(close_input), close_output_(close_output)
         { }
     std::pair<char*, char*> input_sequence()
-    { return std::pair<char*, char*>(0, 0); }
+    { return std::pair<char*, char*>(static_cast<char*>(0), static_cast<char*>(0)); }
     std::pair<char*, char*> output_sequence()
-    { return std::pair<char*, char*>(0, 0); }
+    { return std::pair<char*, char*>(static_cast<char*>(0), static_cast<char*>(0)); }
     void close(BOOST_IOS::openmode which) 
     { 
         switch (which) {
@@ -185,9 +185,9 @@ public:
     typedef direct_seekable  category;
     closable_device(operation close) : close_(close) { }
     std::pair<char*, char*> input_sequence()
-    { return std::pair<char*, char*>(0, 0); }
+    { return std::pair<char*, char*>(static_cast<char*>(0), static_cast<char*>(0)); }
     std::pair<char*, char*> output_sequence()
-    { return std::pair<char*, char*>(0, 0); }
+    { return std::pair<char*, char*>(static_cast<char*>(0), static_cast<char*>(0)); }
     void close() { close_.execute(); }
 private:
     operation close_;

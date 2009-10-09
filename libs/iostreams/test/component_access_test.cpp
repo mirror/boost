@@ -39,7 +39,7 @@ struct direct_source {
     void foo() { }
     std::pair<char*, char*> input_sequence() 
     { 
-        return std::pair<char*, char*>(0, 0);
+        return std::pair<char*, char*>(static_cast<char*>(0), static_cast<char*>(0));;
     }
 };
 
