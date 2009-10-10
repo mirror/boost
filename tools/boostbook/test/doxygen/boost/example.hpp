@@ -20,6 +20,11 @@ namespace example
         mutable int mutable_integer;
         const int const_integer;
         static const int static_const_integer;
+        
+        class inner_class {
+        public:
+            int x;
+        }
 
         enum class_enum { enumerator };
         

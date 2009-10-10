@@ -23,8 +23,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             An unordered associative container that stores unique values.
           </simpara></purpose>
           <description>
-            <para>For the normative reference see chapter 23 of
-              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
+            <para>Based on chapter 23 of
+              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2960.pdf">the working draft of the C++ standard [n2960]</ulink>.
+              But without the updated rules for allocators.
+            </para>
             <para><emphasis role="bold">Template Parameters</emphasis>
               <informaltable>
                 <tgroup cols="2">
@@ -93,7 +95,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A constant iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
               <para>Convertible to <type>const_iterator</type>.</para>
             </description>
           </typedef>
@@ -101,7 +103,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A constant iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
             </description>
           </typedef>
           <typedef name="local_iterator">
@@ -180,6 +182,26 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <description>
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
             </description>
+            <requires>
+              <para><code>value_type</code> is copy constructible</para>
+            </requires>
+          </constructor>
+          <constructor>
+            <parameter>
+              <paramtype>unordered_set &amp;&amp;</paramtype>
+            </parameter>
+            <description>
+              <para>The move constructor.</para>
+            </description>
+            <notes>
+              <para>This is emulated on compilers without rvalue references.</para>
+            </notes>
+            <requires>
+              <para>
+                <code>value_type</code> is move constructible.
+                (TODO: This is not actually required in this implementation).
+              </para>
+            </requires>
           </constructor>
           <constructor specifiers="explicit">
             <parameter name="a">
@@ -201,6 +223,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </description>
           </constructor>
           <destructor>
+            <notes>
+              <para>The destructor is applied to every element, and all memory is deallocated</para>
+            </notes>
           </destructor>
           <method name="operator=">
             <parameter>
@@ -210,6 +235,38 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <description>
               <para>The assignment operator. Copies the contained elements, hash function, predicate and maximum load factor but not the allocator.</para>
             </description>
+            <notes>
+              <para>
+                On compilers without rvalue references, there is a single assignment
+                operator with the signature <code>operator=(unordered_set)</code>
+                in order to emulate move semantics.
+              </para>
+            </notes>
+            <requires>
+              <para><code>value_type</code> is copy constructible</para>
+            </requires>
+          </method>
+          <method name="operator=">
+            <parameter>
+              <paramtype>unordered_set &amp;&amp;</paramtype>
+            </parameter>
+            <type>unordered_set&amp;</type>
+            <description>
+              <para>The move assignment operator.</para>
+            </description>
+            <notes>
+              <para>
+                On compilers without rvalue references, there is a single assignment
+                operator with the signature <code>operator=(unordered_set)</code>
+                in order to emulate move semantics.
+              </para>
+            </notes>
+            <requires>
+              <para>
+                <code>value_type</code> is move constructible.
+                (TODO: This is not actually required in this implementation).
+              </para>
+            </requires>
           </method>
           <method name="get_allocator" cv="const">
             <type>allocator_type</type>
@@ -761,8 +818,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             An unordered associative container that stores  values. The same key can be stored multiple times.
           </simpara></purpose>
           <description>
-            <para>For the normative reference see chapter 23 of
-              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
+            <para>Based on chapter 23 of
+              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2960.pdf">the working draft of the C++ standard [n2960]</ulink>.
+              But without the updated rules for allocators.
+            </para>
             <para><emphasis role="bold">Template Parameters</emphasis>
               <informaltable>
                 <tgroup cols="2">
@@ -831,7 +890,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A constant iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
               <para>Convertible to <type>const_iterator</type>.</para>
             </description>
           </typedef>
@@ -839,7 +898,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A constant iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
             </description>
           </typedef>
           <typedef name="local_iterator">
@@ -918,6 +977,26 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <description>
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
             </description>
+            <requires>
+              <para><code>value_type</code> is copy constructible</para>
+            </requires>
+          </constructor>
+          <constructor>
+            <parameter>
+              <paramtype>unordered_multiset &amp;&amp;</paramtype>
+            </parameter>
+            <description>
+              <para>The move constructor.</para>
+            </description>
+            <notes>
+              <para>This is emulated on compilers without rvalue references.</para>
+            </notes>
+            <requires>
+              <para>
+                <code>value_type</code> is move constructible.
+                (TODO: This is not actually required in this implementation).
+              </para>
+            </requires>
           </constructor>
           <constructor specifiers="explicit">
             <parameter name="a">
@@ -939,6 +1018,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </description>
           </constructor>
           <destructor>
+            <notes>
+              <para>The destructor is applied to every element, and all memory is deallocated</para>
+            </notes>
           </destructor>
           <method name="operator=">
             <parameter>
@@ -948,6 +1030,38 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <description>
               <para>The assignment operator. Copies the contained elements, hash function, predicate and maximum load factor but not the allocator.</para>
             </description>
+            <notes>
+              <para>
+                On compilers without rvalue references, there is a single assignment
+                operator with the signature <code>operator=(unordered_multiset)</code>
+                in order to emulate move semantics.
+              </para>
+            </notes>
+            <requires>
+              <para><code>value_type</code> is copy constructible</para>
+            </requires>
+          </method>
+          <method name="operator=">
+            <parameter>
+              <paramtype>unordered_multiset &amp;&amp;</paramtype>
+            </parameter>
+            <type>unordered_multiset&amp;</type>
+            <description>
+              <para>The move assignment operator.</para>
+            </description>
+            <notes>
+              <para>
+                On compilers without rvalue references, there is a single assignment
+                operator with the signature <code>operator=(unordered_multiset)</code>
+                in order to emulate move semantics.
+              </para>
+            </notes>
+            <requires>
+              <para>
+                <code>value_type</code> is move constructible.
+                (TODO: This is not actually required in this implementation).
+              </para>
+            </requires>
           </method>
           <method name="get_allocator" cv="const">
             <type>allocator_type</type>
@@ -1503,8 +1617,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             An unordered associative container that associates unique keys with another value.
           </simpara></purpose>
           <description>
-            <para>For the normative reference see chapter 23 of
-              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
+            <para>Based on chapter 23 of
+              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2960.pdf">the working draft of the C++ standard [n2960]</ulink>.
+              But without the updated rules for allocators.
+            </para>
             <para><emphasis role="bold">Template Parameters</emphasis>
               <informaltable>
                 <tgroup cols="2">
@@ -1579,7 +1695,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
               <para>Convertible to <type>const_iterator</type>.</para>
             </description>
           </typedef>
@@ -1587,7 +1703,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A constant iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
             </description>
           </typedef>
           <typedef name="local_iterator">
@@ -1666,6 +1782,26 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <description>
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
             </description>
+            <requires>
+              <para><code>value_type</code> is copy constructible</para>
+            </requires>
+          </constructor>
+          <constructor>
+            <parameter>
+              <paramtype>unordered_map &amp;&amp;</paramtype>
+            </parameter>
+            <description>
+              <para>The move constructor.</para>
+            </description>
+            <notes>
+              <para>This is emulated on compilers without rvalue references.</para>
+            </notes>
+            <requires>
+              <para>
+                <code>value_type</code> is move constructible.
+                (TODO: This is not actually required in this implementation).
+              </para>
+            </requires>
           </constructor>
           <constructor specifiers="explicit">
             <parameter name="a">
@@ -1687,6 +1823,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </description>
           </constructor>
           <destructor>
+            <notes>
+              <para>The destructor is applied to every element, and all memory is deallocated</para>
+            </notes>
           </destructor>
           <method name="operator=">
             <parameter>
@@ -1696,6 +1835,38 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <description>
               <para>The assignment operator. Copies the contained elements, hash function, predicate and maximum load factor but not the allocator.</para>
             </description>
+            <notes>
+              <para>
+                On compilers without rvalue references, there is a single assignment
+                operator with the signature <code>operator=(unordered_map)</code>
+                in order to emulate move semantics.
+              </para>
+            </notes>
+            <requires>
+              <para><code>value_type</code> is copy constructible</para>
+            </requires>
+          </method>
+          <method name="operator=">
+            <parameter>
+              <paramtype>unordered_map &amp;&amp;</paramtype>
+            </parameter>
+            <type>unordered_map&amp;</type>
+            <description>
+              <para>The move assignment operator.</para>
+            </description>
+            <notes>
+              <para>
+                On compilers without rvalue references, there is a single assignment
+                operator with the signature <code>operator=(unordered_map)</code>
+                in order to emulate move semantics.
+              </para>
+            </notes>
+            <requires>
+              <para>
+                <code>value_type</code> is move constructible.
+                (TODO: This is not actually required in this implementation).
+              </para>
+            </requires>
           </method>
           <method name="get_allocator" cv="const">
             <type>allocator_type</type>
@@ -2290,8 +2461,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             An unordered associative container that associates  keys with another value. The same key can be stored multiple times.
           </simpara></purpose>
           <description>
-            <para>For the normative reference see chapter 23 of
-              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2691.pdf">the working draft of the C++ standard [n2691].</ulink></para>
+            <para>Based on chapter 23 of
+              <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2960.pdf">the working draft of the C++ standard [n2960]</ulink>.
+              But without the updated rules for allocators.
+            </para>
             <para><emphasis role="bold">Template Parameters</emphasis>
               <informaltable>
                 <tgroup cols="2">
@@ -2366,7 +2539,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
               <para>Convertible to <type>const_iterator</type>.</para>
             </description>
           </typedef>
@@ -2374,7 +2547,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type><emphasis>implementation-defined</emphasis></type>
             <description>
               <para>A constant iterator whose value type is <type>value_type</type>. </para>
-              <para>Any iterator category except output iterator.</para>
+              <para>The iterator category is at least a forward iterator.</para>
             </description>
           </typedef>
           <typedef name="local_iterator">
@@ -2453,6 +2626,26 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <description>
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
             </description>
+            <requires>
+              <para><code>value_type</code> is copy constructible</para>
+            </requires>
+          </constructor>
+          <constructor>
+            <parameter>
+              <paramtype>unordered_multimap &amp;&amp;</paramtype>
+            </parameter>
+            <description>
+              <para>The move constructor.</para>
+            </description>
+            <notes>
+              <para>This is emulated on compilers without rvalue references.</para>
+            </notes>
+            <requires>
+              <para>
+                <code>value_type</code> is move constructible.
+                (TODO: This is not actually required in this implementation).
+              </para>
+            </requires>
           </constructor>
           <constructor specifiers="explicit">
             <parameter name="a">
@@ -2474,6 +2667,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </description>
           </constructor>
           <destructor>
+            <notes>
+              <para>The destructor is applied to every element, and all memory is deallocated</para>
+            </notes>
           </destructor>
           <method name="operator=">
             <parameter>
@@ -2483,6 +2679,38 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <description>
               <para>The assignment operator. Copies the contained elements, hash function, predicate and maximum load factor but not the allocator.</para>
             </description>
+            <notes>
+              <para>
+                On compilers without rvalue references, there is a single assignment
+                operator with the signature <code>operator=(unordered_multimap)</code>
+                in order to emulate move semantics.
+              </para>
+            </notes>
+            <requires>
+              <para><code>value_type</code> is copy constructible</para>
+            </requires>
+          </method>
+          <method name="operator=">
+            <parameter>
+              <paramtype>unordered_multimap &amp;&amp;</paramtype>
+            </parameter>
+            <type>unordered_multimap&amp;</type>
+            <description>
+              <para>The move assignment operator.</para>
+            </description>
+            <notes>
+              <para>
+                On compilers without rvalue references, there is a single assignment
+                operator with the signature <code>operator=(unordered_multimap)</code>
+                in order to emulate move semantics.
+              </para>
+            </notes>
+            <requires>
+              <para>
+                <code>value_type</code> is move constructible.
+                (TODO: This is not actually required in this implementation).
+              </para>
+            </requires>
           </method>
           <method name="get_allocator" cv="const">
             <type>allocator_type</type>

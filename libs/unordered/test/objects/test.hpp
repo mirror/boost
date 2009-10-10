@@ -93,6 +93,10 @@ namespace test
             return x1.type_ != x2.type_;
         }
     };
+    
+    std::size_t hash_value(test::object const& x) {
+        return hash()(x);
+    }
 
     class less
     {
