@@ -308,7 +308,7 @@
 
           <xsl:if test="initializer">
             <default>
-              <xsl:apply-templates select="initializer" mode="passthrough"/>
+              <xsl:apply-templates select="initializer/*|initializer/text()" mode="passthrough"/>
             </default>
           </xsl:if>
 
@@ -1216,18 +1216,23 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="computeroutput|orderedlist|itemizedlist|listitem" 
-    mode="passthrough">
-    <xsl:element name="{name(.)}">
+  <xsl:template match="*" mode="passthrough">
+    <xsl:copy>
+      <xsl:copy-of select="@*"/>
       <xsl:apply-templates mode="passthrough"/>
-    </xsl:element>
+    </xsl:copy>
   </xsl:template>
+
   <xsl:template match="parameterlist" mode="passthrough"/>
 
   <xsl:template match="bold" mode="passthrough">
     <emphasis role="bold">
       <xsl:apply-templates mode="passthrough"/>
     </emphasis>
+  </xsl:template>
+
+  <xsl:template match="linebreak" mode="passthrough">
+    <sbr/>
   </xsl:template>
 
   <xsl:template match="briefdescription" mode="passthrough">
@@ -1252,6 +1257,12 @@
         <xsl:apply-templates mode="passthrough"/>
       </description>
     </xsl:if>
+  </xsl:template>
+
+  <!-- Ignore ref elements for now, as there is a lot of documentation which
+       will have incorrect ref elements at the moment -->
+  <xsl:template match="ref" mode="passthrough">
+    <xsl:apply-templates mode="passthrough"/>
   </xsl:template>
 
   <!-- Handle function clauses -->

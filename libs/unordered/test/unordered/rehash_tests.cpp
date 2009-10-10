@@ -33,6 +33,43 @@ void rehash_empty_test1(X* = 0)
 }
 
 template <class X>
+void rehash_empty_test2(X* = 0, test::random_generator generator = test::default_generator)
+{
+    test::random_values<X> v(1000, generator);
+    test::ordered<X> tracker;
+
+    X x;
+
+    x.rehash(10000);
+    BOOST_TEST(postcondition(x, 10000));
+
+    tracker.insert_range(v.begin(), v.end());
+    x.insert(v.begin(), v.end());
+    tracker.compare(x);
+
+    BOOST_TEST(postcondition(x, 10000));
+}
+
+template <class X>
+void rehash_empty_test3(X* = 0, test::random_generator generator = test::default_generator)
+{
+    test::random_values<X> v(1000, generator);
+    test::ordered<X> tracker;
+
+    X x;
+
+    x.rehash(0);
+    BOOST_TEST(postcondition(x, 0));
+
+    tracker.insert_range(v.begin(), v.end());
+    x.insert(v.begin(), v.end());
+    tracker.compare(x);
+
+    BOOST_TEST(postcondition(x, 0));
+}
+
+
+template <class X>
 void rehash_test1(X* = 0, test::random_generator generator = test::default_generator)
 {
     test::random_values<X> v(1000, generator);
@@ -61,6 +98,12 @@ boost::unordered_map<int, int>* int_map_ptr;
 boost::unordered_multimap<int, int>* int_multimap_ptr;
 
 UNORDERED_TEST(rehash_empty_test1,
+    ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
+)
+UNORDERED_TEST(rehash_empty_test2,
+    ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
+)
+UNORDERED_TEST(rehash_empty_test3,
     ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
 )
 UNORDERED_TEST(rehash_test1,

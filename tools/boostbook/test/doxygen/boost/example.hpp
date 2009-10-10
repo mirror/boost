@@ -1,8 +1,25 @@
+
+// Copyright 2009 Daniel James.
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+/*!
+    \class example::example
+    
+    \brief Documentation for class example
+ */
+
+/*!
+    \def EXAMPLE
+    
+    \brief Documentation for macro example
+ */
+
 int global_integer;
 static int global_static_integer;
 const int global_const_integer = 1;
 static const int global_static_const_integer = 2;
-enum global_enum { enumerator };
+enum global_enum { enumerator1 = 1, enumerator2 };
 
 namespace example
 {
@@ -48,7 +65,35 @@ namespace example
         enum private_class_enum { enumerator3 };
     };
     
+    /**
+     * Test some doxygen markup
+     *
+     * Embedded docbook list:
+     *
+     * \xmlonly
+     * <orderedlist><listitem>1</listitem><listitem>2</listitem></orderedlist>
+     * \endxmlonly
+     *
+     * \a Special \b Bold \c Typewriter \e Italics \em emphasis \p parameter
+     *
+     * \arg Arg1 first argument.
+     * \arg Arg2 second argument.
+     *
+     * \li First list item.
+     * \li Second list item
+     *
+     * Line 1\n
+     * Line 2
+     *
+     * \code
+     *     void foo() {}
+     * \endcode
+     *
+     */
+
     template <typename TypeParameter, int NonTypeParameter,
         typename TypeParameterWithDefault = int>
     struct example_template {};
 }
+
+#define EXAMPLE(m) The macro

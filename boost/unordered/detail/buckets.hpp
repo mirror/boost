@@ -15,7 +15,6 @@ namespace boost { namespace unordered_detail {
     
     ////////////////////////////////////////////////////////////////////////////
     // Buckets
-    // TODO: Are these needed?
     
     template <class A, class G>
     inline BOOST_DEDUCED_TYPENAME hash_buckets<A, G>::bucket_ptr
@@ -32,7 +31,7 @@ namespace boost { namespace unordered_detail {
     }
     
     template <class A, class G>
-    inline std::size_t hash_buckets<A, G>::bucket_size(std::size_t index) const
+    std::size_t hash_buckets<A, G>::bucket_size(std::size_t index) const
     {
         if(!buckets_) return 0;
         bucket_ptr ptr = get_bucket(index)->next_;
@@ -157,7 +156,7 @@ namespace boost { namespace unordered_detail {
     template <class A, class G>
     inline void hash_buckets<A, G>::move(hash_buckets& other)
     {
-    	BOOST_ASSERT(node_alloc() == other.node_alloc());
+        BOOST_ASSERT(node_alloc() == other.node_alloc());
         if(this->buckets_) { this->delete_buckets(); }
         this->buckets_ = other.buckets_;
         this->bucket_count_ = other.bucket_count_;
@@ -168,7 +167,7 @@ namespace boost { namespace unordered_detail {
     template <class A, class G>
     inline void hash_buckets<A, G>::swap(hash_buckets<A, G>& other)
     {
-    	BOOST_ASSERT(node_alloc() == other.node_alloc());
+        BOOST_ASSERT(node_alloc() == other.node_alloc());
         std::swap(buckets_, other.buckets_);
         std::swap(bucket_count_, other.bucket_count_);
     }
