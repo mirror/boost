@@ -17,7 +17,7 @@ set (lib_headers
 boost_library_project(
   unordered
   #  SRCDIRS 
-  #  TESTDIRS 
+  TESTDIRS test
   HEADERS ${lib_headers}
   #  DOCDIRS 
   #  DESCRIPTION 
