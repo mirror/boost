@@ -8,15 +8,14 @@
 
 //  MACRO:         BOOST_NO_UNICODE_LITERALS
 //  TITLE:         C++0x unicode literals unavailable
-//  DESCRIPTION:   The compiler does not support C++0x unicode literals
+//  DESCRIPTION:   The compiler does not support C++0x Unicode literals (N2442)
 
 namespace boost_no_unicode_literals {
 
+
 int test()
 {
-  const char* u8 = u8"";
-  const char16_t* u16 = u"";
-  const char32_t* u32 = U"";
+  const char* c8 = u8"";
   return 0;
 }
 
