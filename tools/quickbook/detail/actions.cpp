@@ -25,6 +25,20 @@
 
 namespace quickbook
 {
+    namespace {
+        std::string fully_qualified_id(std::string const& library_id,
+            std::string const& qualified_section_id,
+            std::string const& section_id)
+        {
+            std::string id = library_id;
+            if(!id.empty() && !qualified_section_id.empty()) id += '.';
+            id += qualified_section_id;
+            if(!id.empty() && !section_id.empty()) id += '.';
+            id += section_id;
+            return id;
+        }
+    }
+
     // Handles line-breaks (DEPRECATED!!!)
     void break_action::operator()(iterator first, iterator) const
     {
@@ -65,9 +79,8 @@ namespace quickbook
         }
         else // version 1.3 and above
         {
-            std::string anchor =
-                library_id + '.' + qualified_section_id + '.' +
-                detail::make_identifier(str.begin(), str.end());
+            std::string anchor = fully_qualified_id(library_id, qualified_section_id,
+                detail::make_identifier(str.begin(), str.end()));
 
             out << "<anchor id=\"" << anchor << "\"/>"
                 << pre
@@ -89,9 +102,8 @@ namespace quickbook
         std::string str;
         phrase.swap(str);
 
-        std::string anchor =
-            library_id + '.' + qualified_section_id + '.' +
-            detail::make_identifier(str.begin(), str.end());
+        std::string anchor = fully_qualified_id(library_id, qualified_section_id,
+            detail::make_identifier(str.begin(), str.end()));
 
         out
             << "<anchor id=\"" << anchor << "\"/>"
@@ -905,8 +917,15 @@ namespace quickbook
         
         std::string table_id;
         if(qbk_version_n >= 105) {
-            if(!actions.element_id.empty()) table_id = actions.element_id;
-            else if(has_title) table_id = detail::make_identifier(first, last);
+            if(!actions.element_id.empty()) {
+                table_id = fully_qualified_id(actions.doc_id,
+                    actions.qualified_section_id, actions.element_id);
+            }
+            else if(has_title) {
+                table_id = fully_qualified_id(actions.doc_id,
+                    actions.qualified_section_id,
+                    detail::make_identifier(first, last));
+            }
         }
 
         if (has_title)
