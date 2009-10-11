@@ -178,6 +178,7 @@ Features include:
 * `teletype` source mode.
 * Use static scoping in templates, should be a lot more intuitive.
 * Accept a space between `section:` and the section id.
+* Support table ids.
 
 [endsect]
 
@@ -1491,7 +1492,7 @@ appropriate.]
 [section Tables]
 
 [pre'''
-[table A Simple Table
+[table:id A Simple Table
     [[Heading 1] [Heading 2] [Heading 3]]
     [[R0-C0]     [R0-C1]     [R0-C2]]
     [[R1-C0]     [R1-C1]     [R1-C2]]
@@ -1501,7 +1502,7 @@ appropriate.]
 
 will generate:
 
-[table A Simple Table
+[table:id A Simple Table
     [[Heading 1] [Heading 2] [Heading 3]]
     [[R0-C0]     [R0-C1]     [R0-C2]]
     [[R2-C0]     [R2-C1]     [R2-C2]]
@@ -1509,10 +1510,24 @@ will generate:
 ]
 
 The table title is optional. The first row of the table is automatically
-treated as the table header; that is, it is wrapped in
-[^<thead>...</thead>] XML tags. Note that unlike the original QuickDoc, the
-columns are nested in [ cells... ]. The syntax is free-format and allows
-big cells to be formatted nicely. Example:
+treated as the table header; that is, it is wrapped in [^<thead>...</thead>]
+XML tags. Note that unlike the original QuickDoc, the columns are nested in
+[cells... ].
+
+Giving tables an id is a new feature for quickbook 1.5 onwards. As with
+sections, the id is optional. If the table has a title but no id, an id will
+be generated from the title. The table above can be linked to using:
+
+[pre'''
+[link quickbook.syntax.block.tables.id link to table]
+''']
+
+which will generate:
+
+[link quickbook.syntax.block.tables.id link to table]
+
+The syntax is free-format and allows big cells to be formatted
+nicely. Example:
 
 [pre'''
 [table Table with fat cells
