@@ -716,9 +716,7 @@ default. Example:
 
 [heading Example]
 
-    make_map(
-        __fusion_make_pair__<int>('X')
-      , __fusion_make_pair__<double>("Men"))
+    make_map<int, double>('X', "Men")
 
 [heading See also]
 

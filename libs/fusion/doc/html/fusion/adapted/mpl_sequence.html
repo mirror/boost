@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>mpl sequence</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
 <link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../adapted.html" title="Adapted">
-<link rel="prev" href="std__pair.html" title="std::pair">
+<link rel="previous" href="std__pair.html" title="std::pair">
 <link rel="next" href="boost__array.html" title="boost::array">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -22,60 +22,66 @@
 <div class="spirit-nav">
 <a accesskey="p" href="std__pair.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapted.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="boost__array.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" title="mpl sequence">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="fusion.adapted.mpl_sequence"></a><a class="link" href="mpl_sequence.html" title="mpl sequence">mpl sequence</a>
-</h3></div></div></div>
+<div class="section" lang="en">
+<div class="titlepage">
+<div><div><h3 class="title">
+<a name="fusion.adapted.mpl_sequence"></a><a href="mpl_sequence.html" title="mpl sequence">mpl sequence</a>
+</h3></div></div>
+<div></div>
+</div>
 <p>
         This module provides adapters for <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a>
         sequences. Including the module header makes all <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a>
         sequences fully conforming fusion sequences.
       </p>
-<a name="fusion.adapted.mpl_sequence.header"></a><h5>
-<a name="id667469"></a>
-        <a class="link" href="mpl_sequence.html#fusion.adapted.mpl_sequence.header">Header</a>
-      </h5>
+<a name="fusion.adapted.mpl_sequence.header"></a><h4>
+<a name="id531191"></a>
+        <a href="mpl_sequence.html#fusion.adapted.mpl_sequence.header">Header</a>
+      </h4>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="identifier">mpl</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">mpl</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
-<a name="fusion.adapted.mpl_sequence.model_of"></a><h5>
-<a name="id667577"></a>
-        <a class="link" href="mpl_sequence.html#fusion.adapted.mpl_sequence.model_of">Model of</a>
-      </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
-<a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a>
+<a name="fusion.adapted.mpl_sequence.model_of"></a><h4>
+<a name="id531346"></a>
+        <a href="mpl_sequence.html#fusion.adapted.mpl_sequence.model_of">Model of</a>
+      </h4>
+<div class="itemizedlist"><ul type="disc">
+<li>
+<a href="../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward Sequence</a>
           (If the <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a>
           sequence is a forward sequence.)
         </li>
-<li class="listitem">
-<a class="link" href="../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
+<li>
+<a href="../sequence/concepts/bidirectional_sequence.html" title="Bidirectional
+        Sequence">Bidirectional
           Sequence</a> (If the <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a>
           sequence is a bidirectional sequence.)
         </li>
-<li class="listitem">
-<a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
+<li>
+<a href="../sequence/concepts/random_access_sequence.html" title="Random
+        Access Sequence">Random
           Access Sequence</a> (If the <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a>
           sequence is a random access sequence.)
         </li>
 </ul></div>
-<a name="fusion.adapted.mpl_sequence.example"></a><h5>
-<a name="id667636"></a>
-        <a class="link" href="mpl_sequence.html#fusion.adapted.mpl_sequence.example">Example</a>
-      </h5>
+<a name="fusion.adapted.mpl_sequence.example"></a><h4>
+<a name="id531436"></a>
+        <a href="mpl_sequence.html#fusion.adapted.mpl_sequence.example">Example</a>
+      </h4>
 <pre class="programlisting"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">vector_c</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="number">123</span><span class="special">,</span> <span class="number">456</span><span class="special">&gt;</span> <span class="identifier">vec_c</span><span class="special">;</span>
 <span class="identifier">fusion</span><span class="special">::</span><span class="identifier">vector2</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">long</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">(</span><span class="identifier">vec_c</span><span class="special">);</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a class="link" href="../sequence/intrinsic/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a class="link" href="../sequence/intrinsic/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 
 <span class="identifier">v</span> <span class="special">=</span> <span class="identifier">mpl</span><span class="special">::</span><span class="identifier">vector_c</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="number">456</span><span class="special">,</span> <span class="number">789</span><span class="special">&gt;();</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a class="link" href="../sequence/intrinsic/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a class="link" href="../sequence/intrinsic/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
-<a name="fusion.adapted.mpl_sequence.see_also"></a><h5>
-<a name="id668761"></a>
-        <a class="link" href="mpl_sequence.html#fusion.adapted.mpl_sequence.see_also">See also</a>
-      </h5>
+<a name="fusion.adapted.mpl_sequence.see_also"></a><h4>
+<a name="id532022"></a>
+        <a href="mpl_sequence.html#fusion.adapted.mpl_sequence.see_also">See also</a>
+      </h4>
 <p>
         <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a>
       </p>
