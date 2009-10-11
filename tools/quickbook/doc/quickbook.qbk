@@ -1,6 +1,6 @@
 [article Quickbook
-    [quickbook 1.4]
-    [version 1.4]
+    [quickbook 1.5]
+    [version 1.5]
     [authors [de Guzman, Joel], [Niebler, Eric]]
     [copyright 2002 2004 2006 Joel de Guzman, Eric Niebler]
     [purpose /WikiWiki/ style documentation tool]
@@ -11,7 +11,7 @@
     ]
 ]
 
-[/ QuickBook Document version 1.4 ]
+[/ QuickBook Document version 1.5 ]
 [/ Sept 24, 2002 ]
 [/ Sept 2, 2004 ]
 [/ Feb 14, 2005 ]
@@ -1391,9 +1391,9 @@ brackets, though.
 
 [heading Simple Arguments]
 
-As mentioned, arguments are separated by the double dot [^".."]. If there
-are less arguments passed than expected, QuickBook attempts to break the
-last argument into two or more arguments following this logic:
+As mentioned, arguments are separated by the double dot [^".."]. Alternatively,
+if the double dot isn't used and more than one argument is expected, QuickBook
+uses whitespace to separate the arguments, following this logic:
 
 * Break the last argument into two, at the first space found ([^'', '\\n',
   \\t' or '\\r']).
@@ -1429,18 +1429,12 @@ will produce:
 
 The arguments being: "w", "x", "y" and "z trail".
 
-It should be obvious now that for simple arguments with no spaces, we can
-get by without separating the arguments with [^".."] separators. It is
-possible to combine [^".."] separators with the argument passing
-simplification presented above. Example:
-
-[pre'''
-[simple what do you think ..m a n?]
-''']
-
-will produce:
-
-[simple what do you think ..m a n?]
+[caution The behavior described here is for QuickBook 1.5. In older versions you
+could use both the double dot and whitespace as separators in the same template
+call. If your document is marked up as an older version, it will use the old
+behavior, which is described in the
+[@http://www.boost.org/doc/libs/1_40_0/doc/html/quickbook/syntax.html#quickbook.syntax.block.templates.simple_arguments
+QuickBook 1.4 documentation].]
 
 [heading Punctuation Templates]
 
