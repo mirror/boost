@@ -9,7 +9,7 @@
 #if !defined(FUSION_MACRO_05042005)
 #define FUSION_MACRO_05042005
 
-#define FUSION_MEMBER_DEFAULT_INIT(z, n, _)     m##n(T##n())
+#define FUSION_MEMBER_DEFAULT_INIT(z, n, _)     m##n()
 #define FUSION_MEMBER_INIT(z, n, _)             m##n(_##n)
 #define FUSION_COPY_INIT(z, n, _)               m##n(other.m##n)
 #define FUSION_MEMBER_DECL(z, n, _)             T##n m##n;

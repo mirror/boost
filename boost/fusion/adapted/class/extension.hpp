@@ -20,18 +20,6 @@ namespace boost { namespace fusion { namespace extension
 
     template <typename Class, int N>
     struct class_member<Class const, N> : class_member<Class, N> {};
-    //~ {
-        //~ typedef typename class_member<Class, N>::type type;
-        //~ typedef typename class_member<Class, N>::get_type get_type;
-        //~ typedef typename class_member<Class, N>::proxy proxy;
-
-        //~ static get_type&
-        //~ call(Class const& class_)
-        //~ {
-            //~ return class_member<Class, N>::call(
-                //~ const_cast<Class&>(class_));
-        //~ }
-    //~ };
 
     template <typename Class>
     struct class_size<Class const>
