@@ -702,7 +702,7 @@ like this:
 
 [pre'''
 [document-type The Document Title
-    [quickbook 1.3]
+    [quickbook 1.5]
     [version 1.0]
     [id the_document_name]
     [dirname the_document_dir]
@@ -729,7 +729,7 @@ Where document-type is one of:
 * reference
 * set
 
-quickbook 1.3 declares the version of quickbook the document is written for.
+quickbook 1.5 declares the version of quickbook the document is written for.
 In its absence, version 1.1 is assumed.
 
 =version=, =id=, =dirname=, =copyright=, =purpose=, =category=, =authors=,
