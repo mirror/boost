@@ -125,19 +125,11 @@ extended_type_info::find(const char *key) {
     return *(it);
 }
 
-struct null_deleter
-{
-    void operator()(void const *) const
-    {
-    }
-};
-
 BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())
 extended_type_info::extended_type_info(
     const unsigned int type_info_key,
     const char * key
 ) :
-    m_this(this, null_deleter()),
     m_type_info_key(type_info_key),
     m_key(key)
 {
