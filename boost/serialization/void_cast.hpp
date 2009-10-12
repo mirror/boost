@@ -18,7 +18,6 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cstddef> // for ptrdiff_t
-#include <boost/weak_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
 #include <boost/serialization/config.hpp>
@@ -112,10 +111,8 @@ public:
     // Data members
     const extended_type_info * m_derived;
     const extended_type_info * m_base;
-    boost::weak_ptr<const extended_type_info> m_derived_observer;
-    boost::weak_ptr<const extended_type_info> m_base_observer;
     /*const*/ std::ptrdiff_t m_difference;
-    const bool m_heap; // allocated on the heap
+    void_caster const * const m_parent;
 
     // note that void_casters are keyed on value of
     // member extended type info records - NOT their
@@ -135,14 +132,12 @@ public:
         extended_type_info const * derived,
         extended_type_info const * base,
         std::ptrdiff_t difference = 0,
-        bool heap = false
+        void_caster const * const parent = 0
     ) :
         m_derived(derived),
         m_base(base),
-        m_derived_observer(derived->get_weak_ptr()),
-        m_base_observer(base->get_weak_ptr()),
         m_difference(difference),
-        m_heap(heap)
+        m_parent(parent)
     {}
     virtual ~void_caster(){}
 };
