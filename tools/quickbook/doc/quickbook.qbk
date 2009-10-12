@@ -1,6 +1,6 @@
 [article Quickbook
-    [quickbook 1.4]
-    [version 1.4]
+    [quickbook 1.5]
+    [version 1.5]
     [authors [de Guzman, Joel], [Niebler, Eric]]
     [copyright 2002 2004 2006 Joel de Guzman, Eric Niebler]
     [purpose /WikiWiki/ style documentation tool]
@@ -11,7 +11,7 @@
     ]
 ]
 
-[/ QuickBook Document version 1.4 ]
+[/ QuickBook Document version 1.5 ]
 [/ Sept 24, 2002 ]
 [/ Sept 2, 2004 ]
 [/ Feb 14, 2005 ]
@@ -164,6 +164,21 @@ Features include:
 * __cond__. Ala C++ #ifdef.
 * Searching of included and imported files in an extensible search path with
   `--include-path` (`-I`) option.
+  
+[h3 Version 1.5]
+
+* Support multiple copyright entrys in document info.
+* Improved SVG support.
+* \[globalref\] for referencing BoostBook <global> entities.
+* Fail on error.
+* Fix crash for templates with too many arguments or trailing space.
+* Improved handling of unexpected characters in code blocks.
+* Improved handling of unmatched escape in code blocks.
+* Support for python snippets.
+* `teletype` source mode.
+* Use static scoping in templates, should be a lot more intuitive.
+* Accept a space between `section:` and the section id.
+* Support table ids.
 
 [endsect]
 
@@ -688,7 +703,7 @@ like this:
 
 [pre'''
 [document-type The Document Title
-    [quickbook 1.3]
+    [quickbook 1.5]
     [version 1.0]
     [id the_document_name]
     [dirname the_document_dir]
@@ -715,7 +730,7 @@ Where document-type is one of:
 * reference
 * set
 
-quickbook 1.3 declares the version of quickbook the document is written for.
+quickbook 1.5 declares the version of quickbook the document is written for.
 In its absence, version 1.1 is assumed.
 
 =version=, =id=, =dirname=, =copyright=, =purpose=, =category=, =authors=,
@@ -1377,9 +1392,9 @@ brackets, though.
 
 [heading Simple Arguments]
 
-As mentioned, arguments are separated by the double dot [^".."]. If there
-are less arguments passed than expected, QuickBook attempts to break the
-last argument into two or more arguments following this logic:
+As mentioned, arguments are separated by the double dot [^".."]. Alternatively,
+if the double dot isn't used and more than one argument is expected, QuickBook
+uses whitespace to separate the arguments, following this logic:
 
 * Break the last argument into two, at the first space found ([^'', '\\n',
   \\t' or '\\r']).
@@ -1415,18 +1430,12 @@ will produce:
 
 The arguments being: "w", "x", "y" and "z trail".
 
-It should be obvious now that for simple arguments with no spaces, we can
-get by without separating the arguments with [^".."] separators. It is
-possible to combine [^".."] separators with the argument passing
-simplification presented above. Example:
-
-[pre'''
-[simple what do you think ..m a n?]
-''']
-
-will produce:
-
-[simple what do you think ..m a n?]
+[caution The behavior described here is for QuickBook 1.5. In older versions you
+could use both the double dot and whitespace as separators in the same template
+call. If your document is marked up as an older version, it will use the old
+behavior, which is described in the
+[@http://www.boost.org/doc/libs/1_40_0/doc/html/quickbook/syntax.html#quickbook.syntax.block.templates.simple_arguments
+QuickBook 1.4 documentation].]
 
 [heading Punctuation Templates]
 
@@ -1483,7 +1492,7 @@ appropriate.]
 [section Tables]
 
 [pre'''
-[table A Simple Table
+[table:id A Simple Table
     [[Heading 1] [Heading 2] [Heading 3]]
     [[R0-C0]     [R0-C1]     [R0-C2]]
     [[R1-C0]     [R1-C1]     [R1-C2]]
@@ -1493,7 +1502,7 @@ appropriate.]
 
 will generate:
 
-[table A Simple Table
+[table:id A Simple Table
     [[Heading 1] [Heading 2] [Heading 3]]
     [[R0-C0]     [R0-C1]     [R0-C2]]
     [[R2-C0]     [R2-C1]     [R2-C2]]
@@ -1501,10 +1510,24 @@ will generate:
 ]
 
 The table title is optional. The first row of the table is automatically
-treated as the table header; that is, it is wrapped in
-[^<thead>...</thead>] XML tags. Note that unlike the original QuickDoc, the
-columns are nested in [ cells... ]. The syntax is free-format and allows
-big cells to be formatted nicely. Example:
+treated as the table header; that is, it is wrapped in [^<thead>...</thead>]
+XML tags. Note that unlike the original QuickDoc, the columns are nested in
+[cells... ].
+
+Giving tables an id is a new feature for quickbook 1.5 onwards. As with
+sections, the id is optional. If the table has a title but no id, an id will
+be generated from the title. The table above can be linked to using:
+
+[pre'''
+[link quickbook.syntax.block.tables.id link to table]
+''']
+
+which will generate:
+
+[link quickbook.syntax.block.tables.id link to table]
+
+The syntax is free-format and allows big cells to be formatted
+nicely. Example:
 
 [pre'''
 [table Table with fat cells

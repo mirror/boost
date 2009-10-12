@@ -7,6 +7,7 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
+#include "./quickbook.hpp"
 #include "./actions_class.hpp"
 #include "../block.hpp"
 #include "../doc_info.hpp"
@@ -28,7 +29,7 @@
 #pragma warning(disable:4355)
 #endif
 
-#define QUICKBOOK_VERSION "Quickbook Version 1.4"
+#define QUICKBOOK_VERSION "Quickbook Version 1.5"
 
 namespace quickbook
 {

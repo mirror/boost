@@ -10,11 +10,13 @@
 #if !defined(BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP)
 #define BOOST_SPIRIT_QUICKBOOK_PHRASE_HPP
 
+#include "./detail/quickbook.hpp"
 #include "detail/utils.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_confix.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
 #include <boost/spirit/include/classic_assign_actor.hpp>
+#include <boost/spirit/include/classic_clear_actor.hpp>
 #include <boost/spirit/include/classic_if.hpp>
 
 namespace quickbook
@@ -116,13 +118,6 @@ namespace quickbook
                     >> actions.macro                    [actions.do_macro]
                     ;
 
-                template_args =
-                    template_arg                        [push_back_a(actions.template_info)]
-                    >> *(
-                            ".." >> template_arg        [push_back_a(actions.template_info)]
-                        )
-                    ;
-
                 static const bool true_ = true;
                 static const bool false_ = false;
 
@@ -148,12 +143,46 @@ namespace quickbook
                     >> eps_p(']')
                     ;
 
-                brackets =
-                    '[' >> +template_arg >> ']'
+                template_args =
+                    if_p(qbk_since(105u)) [
+                        template_args_1_5
+                    ].else_p [
+                        template_args_1_4
+                    ]
                     ;
 
-                template_arg =
-                    +(brackets | (anychar_p - (str_p("..") | ']')))
+                template_args_1_4 =
+                    template_arg_1_4                    [push_back_a(actions.template_info)]
+                    >> *(
+                            ".." >> template_arg_1_4    [push_back_a(actions.template_info)]
+                        )
+                    ;
+
+                template_arg_1_4 =
+                    +(brackets_1_4 | (anychar_p - (str_p("..") | ']')))
+                    ;
+
+                brackets_1_4 =
+                    '[' >> +template_arg_1_4 >> ']'
+                    ;
+
+                template_args_1_5 =
+                    template_arg_1_5                    [push_back_a(actions.template_info)]
+                    >> *(
+                            ".." >> template_arg_1_5    [push_back_a(actions.template_info)]
+                        )
+                    ;
+
+                template_arg_1_5 =
+                    +(brackets_1_5 | ('\\' >> anychar_p) | (anychar_p - (str_p("..") | '[' | ']')))
+                    ;
+
+                template_inner_arg_1_5 =
+                    +(brackets_1_5 | ('\\' >> anychar_p) | (anychar_p - (str_p('[') | ']')))
+                    ;
+
+                brackets_1_5 =
+                    '[' >> +template_inner_arg_1_5 >> ']'
                     ;
 
                 inline_code =
@@ -262,11 +291,29 @@ namespace quickbook
                     ;
 
                 image =
-                        '$' >> blank
-                    >> (*(anychar_p -
-                            phrase_end))                [actions.image]
+                        '$' >> blank                    [clear_a(actions.attributes)]
+                    >>  if_p(qbk_since(105u)) [
+                                (+(
+                                    *space_p
+                                >>  +(anychar_p - (space_p | phrase_end | '['))
+                                ))                       [assign_a(actions.image_fileref)]
+                            >>  hard_space
+                            >>  *(
+                                    '['
+                                >>  (*(alnum_p | '_'))  [assign_a(actions.attribute_name)]
+                                >>  space
+                                >>  (*(anychar_p - (phrase_end | '[')))
+                                                        [actions.attribute]
+                                >>  ']'
+                                >>  space
+                                )
+                        ].else_p [
+                                (*(anychar_p -
+                                    phrase_end))        [assign_a(actions.image_fileref)]
+                        ]
+                    >>  eps_p(']')                      [actions.image]
                     ;
-
+                    
                 url =
                         '@'
                     >>  (*(anychar_p -
@@ -420,10 +467,12 @@ namespace quickbook
                             memberref, enumref, macroref, headerref, conceptref, globalref,
                             anchor, link, hard_space, eol, inline_code, simple_format,
                             simple_bold, simple_italic, simple_underline,
-                            simple_teletype, source_mode, template_, template_arg,
+                            simple_teletype, source_mode, template_,
                             quote, code_block, footnote, replaceable, macro,
-                            brackets, template_args, dummy_block, cond_phrase,
-                            macro_identifier
+                            dummy_block, cond_phrase, macro_identifier, template_args,
+                            template_args_1_4, template_arg_1_4, brackets_1_4,
+                            template_args_1_5, template_arg_1_5,
+                            template_inner_arg_1_5, brackets_1_5
                             ;
 
             rule<Scanner> const&

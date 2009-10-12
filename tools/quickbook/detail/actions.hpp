@@ -36,14 +36,12 @@ namespace quickbook
     namespace fs = boost::filesystem;
     typedef position_iterator<std::string::const_iterator> iterator;
     typedef symbols<std::string> string_symbols;
+    typedef std::map<std::string, std::string> attribute_map;
 
     struct actions;
     extern tm* current_time; // the current time
     extern tm* current_gm_time; // the current UTC time
     extern bool debug_mode;
-    extern unsigned qbk_major_version;
-    extern unsigned qbk_minor_version;
-    extern unsigned qbk_version_n; // qbk_major_version * 100 + qbk_minor_version
     extern std::vector<std::string> include_path;
 
     // forward declarations
@@ -372,17 +370,40 @@ namespace quickbook
 
         collector& phrase;
     };
+    
+    struct attribute_action
+    {
+        // Handle image attributes
+        
+        attribute_action(
+            attribute_map& attributes
+          , std::string& attribute_name)
+        : attributes(attributes)
+        , attribute_name(attribute_name) {}
+
+        void operator()(iterator first, iterator last) const;
+
+        attribute_map& attributes;
+        std::string& attribute_name;
+    };
 
     struct image_action
     {
         // Handles inline images
 
-        image_action(collector& phrase)
-        : phrase(phrase) {}
+        image_action(
+            collector& phrase
+          , attribute_map& attributes
+          , std::string& image_fileref)
+        : phrase(phrase)
+        , attributes(attributes)
+        , image_fileref(image_fileref) {}
 
         void operator()(iterator first, iterator last) const;
 
         collector& phrase;
+        attribute_map& attributes;
+        std::string& image_fileref;
     };
 
     struct markup_action
@@ -671,13 +692,15 @@ namespace quickbook
           , std::string& library_id
           , std::string& section_id
           , int& section_level
-          , std::string& qualified_section_id)
+          , std::string& qualified_section_id
+          , std::string& element_id)
         : out(out)
         , phrase(phrase)
         , library_id(library_id)
         , section_id(section_id)
         , section_level(section_level)
-        , qualified_section_id(qualified_section_id) {}
+        , qualified_section_id(qualified_section_id)
+        , element_id(element_id) {}
 
         void operator()(iterator first, iterator last) const;
 
@@ -687,6 +710,7 @@ namespace quickbook
         std::string& section_id;
         int& section_level;
         std::string& qualified_section_id;
+        std::string& element_id;
     };
 
     struct end_section_action
@@ -707,6 +731,11 @@ namespace quickbook
         int& section_level;
         std::string& qualified_section_id;
         int& error_count;
+   };
+   
+   struct element_id_warning_action
+   {
+       void operator()(iterator first, iterator last) const;
    };
 
     struct xinclude_action

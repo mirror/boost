@@ -52,6 +52,7 @@ namespace quickbook
         , source_mode("c++")
 
     // temporary or global state
+        , element_id()
         , table_title()
         , table_span(0)
         , table_header()
@@ -63,6 +64,9 @@ namespace quickbook
         , template_escape(false)
         , templates()
         , error_count(0)
+        , image_fileref()
+        , attribute_name()
+        , attributes()
 
     // actions
         , error(error_count)
@@ -93,7 +97,8 @@ namespace quickbook
         , tip(out, temp_para, tip_pre, tip_post)
         , plain_char(phrase)
         , raw_char(phrase)
-        , image(phrase)
+        , attribute(attributes, attribute_name)
+        , image(phrase, attributes, image_fileref)
         , cond_phrase_pre(phrase, conditions, macro)
         , cond_phrase_post(phrase, conditions, macro)
 
@@ -166,7 +171,7 @@ namespace quickbook
         , end_cell(phrase, temp_para)
         , anchor(out)
 
-        , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id)
+        , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id, element_id)
         , end_section(out, section_level, qualified_section_id, error_count)
         , xinclude(out, *this)
         , include(*this)

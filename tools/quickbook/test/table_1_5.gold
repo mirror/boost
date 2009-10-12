@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<article id="table_1_5" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Table 1.5</title>
+  <articleinfo>
+  </articleinfo>
+  <table frame="all" id="table_1_5.table1"> <title>Table 1</title>
+  <tgroup cols="1">
+    <thead>
+      <row>
+        <entry>
+        <para>
+          Heading
+        </para>
+        </entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+        <entry>
+        <para>
+          cell
+        </para>
+        </entry>
+      </row>
+    </tbody>
+  </tgroup>
+  </table> <table frame="all" id="table_1_5.table_2"> <title>Table 2</title>
+  <tgroup cols="1">
+    <thead>
+      <row>
+        <entry>
+        <para>
+          Heading
+        </para>
+        </entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+        <entry>
+        <para>
+          cell
+        </para>
+        </entry>
+      </row>
+    </tbody>
+  </tgroup>
+  </table>
+  <informaltable frame="all">
+    <tgroup cols="1">
+      <thead>
+        <row>
+          <entry>
+          <para>
+            Heading
+          </para>
+          </entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>
+          <para>
+            cell
+          </para>
+          </entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </informaltable>
+  <informaltable frame="all" id="table_1_5.table4">
+    <tgroup cols="1">
+      <thead>
+        <row>
+          <entry>
+          <para>
+            Heading
+          </para>
+          </entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>
+          <para>
+            cell
+          </para>
+          </entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </informaltable>
+  <table frame="all" id="table_1_5._table5_"> <title>-table5-</title>
+  <tgroup cols="1">
+    <thead>
+      <row>
+        <entry>
+        <para>
+          Heading
+        </para>
+        </entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+        <entry>
+        <para>
+          cell
+        </para>
+        </entry>
+      </row>
+    </tbody>
+  </tgroup>
+  </table>
+  <section id="table_1_5.section1">
+    <title><link linkend="table_1_5.section1"> Section 1</link></title> <table frame="all"
+    id="table_1_5.section1.table1"> <title>Table 1</title>
+    <tgroup cols="1">
+      <thead>
+        <row>
+          <entry>
+          <para>
+            Heading
+          </para>
+          </entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>
+          <para>
+            cell
+          </para>
+          </entry>
+        </row>
+      </tbody>
+    </tgroup>
+    </table>
+  </section>
+</article>

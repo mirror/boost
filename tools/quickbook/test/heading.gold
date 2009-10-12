@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<article id="header" last-revision="$Date: 2009/10/11 16:14:06 $" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Header</title>
+  <articleinfo>
+  </articleinfo>
+  <anchor id="header.header_test"/>
+  <bridgehead renderas="sect2">
+    <link linkend="header.header_test">Header Test</link>
+  </bridgehead>
+  <para>
+    Testing headers without sections.
+  </para>
+</article>

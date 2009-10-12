@@ -1,0 +1,38 @@
+[article Table 1.5
+    [quickbook 1.5]
+    [id table_1_5]
+]
+
+[table:table1 Table 1
+    [[Heading]]
+    [[cell]]
+]
+
+[table Table 2
+    [[Heading]]
+    [[cell]]
+]
+
+[table
+    [[Heading]]
+    [[cell]]
+]
+
+[table:table4
+    [[Heading]]
+    [[cell]]
+]
+
+[table:-table5-
+    [[Heading]]
+    [[cell]]
+]
+
+[section:section1 Section 1]
+
+[table:table1 Table 1
+    [[Heading]]
+    [[cell]]
+]
+
+[endsect]
