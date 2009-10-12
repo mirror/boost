@@ -33,6 +33,16 @@ struct class_with_new_op6 {
    void* operator new[] (std::size_t size, void* ptr);
 };
 
+struct class_with_all_ops
+{
+   void * operator new(std::size_t);
+   void* operator new(std::size_t size, const std::nothrow_t&);
+   void* operator new[](std::size_t size);
+   void* operator new[](std::size_t size, const std::nothrow_t&);
+   void* operator new (std::size_t size, void* ptr);
+   void* operator new[] (std::size_t size, void* ptr);
+};
+
 TT_TEST_BEGIN(has_new_operator)
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_new_operator<class_with_new_op>::value, true);
@@ -42,6 +52,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_new_operator<class_with_new_op3>::value,
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_new_operator<class_with_new_op4>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_new_operator<class_with_new_op5>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_new_operator<class_with_new_op6>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_new_operator<class_with_all_ops>::value, true);
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_new_operator<bool>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_new_operator<bool const>::value, false);
