@@ -44,7 +44,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(ConfigurationName)\boost_serialization-vc71-mt-gd-1_39.dll"
+				OutputFile="$(ConfigurationName)\boost_serialization-vc71-mt-gd-1_41.dll"
 				GenerateDebugInformation="TRUE"
 				GenerateMapFile="TRUE"/>
 			<Tool
@@ -152,7 +152,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="libboost_serialization-vc71-mt-sgd-1_39.lib"/>
+				OutputFile="$(ConfigurationName)\libboost_serialization-vc71-mt-sgd-1_41.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
