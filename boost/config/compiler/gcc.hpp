@@ -112,6 +112,7 @@
 #define BOOST_NO_NULLPTR
 #define BOOST_NO_RAW_LITERALS
 #define BOOST_NO_TEMPLATE_ALIASES
+#define BOOST_NO_UNICODE_LITERALS
 
 // C++0x features in 4.3.n and later
 //
@@ -149,7 +150,6 @@
 #  define BOOST_NO_DELETED_FUNCTIONS
 #  define BOOST_NO_INITIALIZER_LISTS
 #  define BOOST_NO_SCOPED_ENUMS  
-#  define BOOST_NO_UNICODE_LITERALS
 #endif
 
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 4)
