@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
+#include <functional>
 
 std::vector<int> valuesOutput;
 bool ungrouped1 = false;
