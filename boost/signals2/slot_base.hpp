@@ -18,6 +18,7 @@
 #include <boost/signals2/detail/foreign_ptr.hpp>
 #include <boost/signals2/signal_base.hpp>
 #include <boost/throw_exception.hpp>
+#include <boost/mpl/not.hpp> // work around missing include in Boost.Variant headers
 #include <boost/variant/apply_visitor.hpp>
 #include <boost/variant/variant.hpp>
 #include <vector>
