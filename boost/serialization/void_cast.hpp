@@ -250,8 +250,8 @@ struct void_caster_base :
 template<class Derived, class Base>
 BOOST_DLLEXPORT 
 inline const void_cast_detail::void_caster & void_cast_register(
-    const Derived * dnull, 
-    const Base * bnull
+    const Derived * dnull = NULL, 
+    const Base * bnull = NULL
 ) BOOST_USED;
 
 template<class Derived, class Base>
