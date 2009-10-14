@@ -27,6 +27,7 @@
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/extended_type_info.hpp>
 #include <boost/type_traits/is_virtual_base_of.hpp>
+#include <boost/serialization/void_cast_fwd.hpp>
 
 #include <boost/config/abi_prefix.hpp> // must be the last header
 
@@ -242,17 +243,6 @@ struct void_caster_base :
 };
 
 } // void_cast_detail 
-
-// Register a base/derived pair.  This indicates that it is possible
-// to upcast a void pointer from Derived to Base and downcast a
-// void pointer from Base to Derived.  Note bogus arguments to workaround
-// bug in msvc 6.0
-template<class Derived, class Base>
-BOOST_DLLEXPORT 
-inline const void_cast_detail::void_caster & void_cast_register(
-    const Derived * dnull = NULL, 
-    const Base * bnull = NULL
-) BOOST_USED;
 
 template<class Derived, class Base>
 BOOST_DLLEXPORT 
