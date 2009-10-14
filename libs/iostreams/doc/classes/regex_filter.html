@@ -30,10 +30,10 @@
     The class template <CODE>basic_regex_filter</CODE> performs text substitutions using regular expressions from the <A HREF="http://www.boost.org/libs/regex" TARGET="_top">Boost Regular Expression Library</A> (<A CLASS="bib_ref" HREF="../bibliography.html#maddock">[Maddock]</A>).
 </P>
 <P>
-    Each <CODE>basic_regex_filter</CODE> stores a regular expression and a formatting function. As unfiltered data is scanned for matches, portions of data which fall between regular expression matches are forwarded unchanged. Each time a match is found, the corresponding <A HREF="http://www.boost.org/libs/regex/doc/match_results.html" TARGET="_top"><CODE>match_results</CODE></A> object is passed to the formatting function and the return value is forwarded in place of the matched text.
+    Each <CODE>basic_regex_filter</CODE> stores a regular expression and a formatting function. As unfiltered data is scanned for matches, portions of data which fall between regular expression matches are forwarded unchanged. Each time a match is found, the corresponding <A HREF="http://www.boost.org/libs/regex/doc/html/boost_regex/ref/match_results.html" TARGET="_top"><CODE>match_results</CODE></A> object is passed to the formatting function and the return value is forwarded in place of the matched text.
 </P>
 <P>
-    Users may construct instances of <CODE>basic_regex_filter</CODE> either from <A HREF="#formatter">formatting functions</A> or from <A HREF="http://www.boost.org/libs/regex/doc/format_syntax.html" TARGET="_top">format strings</A>.
+    Users may construct instances of <CODE>basic_regex_filter</CODE> either from <A HREF="#formatter">formatting functions</A> or from <A HREF="http://www.boost.org/libs/regex/doc/html/boost_regex/format.html" TARGET="_top">format strings</A>.
 </P>
 <P>
     Since a regular expression may need to look arbitrarily far ahead in a character sequence, <CODE>basic_regex_filter</CODE> derives from <A HREF="aggregate.html"><CODE>aggregate_filter</CODE></A> and processes an entire sequence of data at once.
@@ -50,7 +50,7 @@
 <H2>Installation</H2>
 
 <P>
-    The template <CODE>basic_regex_filter</CODE> uses the <A HREF="http://www.boost.org/libs/regex" TARGET="_top">Boost Regular Expression Library</A>, which must be built separately. See <A HREF="http://www.boost.org/libs/regex/doc/install.html" TARGET="_top">here</A> for details.
+    The template <CODE>basic_regex_filter</CODE> uses the <A HREF="http://www.boost.org/libs/regex" TARGET="_top">Boost Regular Expression Library</A>, which must be built separately. See <A HREF="http://www.boost.org/libs/regex/doc/html/boost_regex/install.html" TARGET="_top">here</A> for details.
 </P>
 
 <A NAME="reference"></A>
@@ -109,7 +109,7 @@
     </TR>
     <TR>
         <TD VALIGN="top"><I>Tr</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>The <A HREF="../../../regex/doc/concepts.html#traits" TARGET="_top">regular expression traits</A> type</TD>
+        <TD>The <A HREF="http://www.boost.org/libs/regex/doc/html/boost_regex/ref/regex_traits.html" TARGET="_top">regular expression traits</A> type</TD>
     </TR>
     <TR>
         <TD VALIGN="top"><I>Alloc</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
@@ -164,7 +164,7 @@
     </TR>
     <TR>
         <TD VALIGN="top"><I>flags</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>Used to construct a <A HREF="http://www.boost.org/libs/regex/doc/regex_iterator.html#c2" TARGET="_top">regex_iterator</A></TD>
+        <TD>Used to construct a <A HREF="http://www.boost.org/libs/regex/doc/html/boost_regex/ref/regex_iterator.html" TARGET="_top">regex_iterator</A></TD>
     </TR>
 </TABLE>
 
@@ -189,15 +189,15 @@
     </TR>
     <TR>
         <TD VALIGN="top"><I>fmt</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>A <A HREF="http://www.boost.org/libs/regex/doc/format_syntax.html" TARGET="_top">format string</A> which specifies the replacement text for each regular expression match, using <A HREF="http://www.boost.org/libs/regex/doc/match_results.html#m13" TARGET="_top">match_results::format</A></TD>
+        <TD>A <A HREF="http://www.boost.org/libs/regex/doc/html/boost_regex/format.html" TARGET="_top">format string</A> which specifies the replacement text for each regular expression match, using <A HREF="http://www.boost.org/libs/regex/doc/html/boost_regex/ref/match_results.html#boost_regex.match_results.format2" TARGET="_top">match_results::format</A></TD>
     </TR>
     <TR>
         <TD VALIGN="top"><I>flags</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>Used to construct a <A HREF="http://www.boost.org/libs/regex/doc/regex_iterator.html#c2" TARGET="_top">regex_iterator</A></TD>
+        <TD>Used to construct a <A HREF="http://www.boost.org/libs/regex/doc/html/boost_regex/ref/regex_iterator.html" TARGET="_top">regex_iterator</A></TD>
     </TR>
     <TR>
         <TD VALIGN="top"><I>fmt_flags</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>The flags argument to <A HREF="http://www.boost.org/libs/regex/doc/match_results.html#m13" TARGET="_top">match_results::format</A></TD>
+        <TD>The flags argument to <A HREF="http://www.boost.org/libs/regex/doc/html/boost_regex/ref/match_results.html#boost_regex.match_results.format2" TARGET="_top">match_results::format</A></TD>
     </TR>
 </TABLE>
 
@@ -220,15 +220,15 @@
     </TR>
     <TR>
         <TD VALIGN="top"><I>fmt</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>A <A HREF="http://www.boost.org/libs/regex/doc/format_syntax.html" TARGET="_top">format string</A> which specifies the replacement text for each regular expression match, using <A HREF="http://www.boost.org/libs/regex/doc/match_results.html#m13" TARGET="_top">match_results::format</A></TD>
+        <TD>A <A HREF="http://www.boost.org/libs/regex/doc/html/boost_regex/format.html" TARGET="_top">format string</A> which specifies the replacement text for each regular expression match, using <A HREF="http://www.boost.org/libs/regex/doc/html/boost_regex/ref/match_results.html#boost_regex.match_results.format2" TARGET="_top">match_results::format</A></TD>
     </TR>
     <TR>
         <TD VALIGN="top"><I>flags</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>Used to construct a <A HREF="http://www.boost.org/libs/regex/doc/regex_iterator.html#c2" TARGET="_top">regex_iterator</A></TD>
+        <TD>Used to construct a <A HREF="http://www.boost.org/libs/regex/doc/html/boost_regex/ref/regex_iterator.html" TARGET="_top">regex_iterator</A></TD>
     </TR>
     <TR>
         <TD VALIGN="top"><I>fmt_flags</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>The flags argument to <A HREF="http://www.boost.org/libs/regex/doc/match_results.html#m13" TARGET="_top">match_results::format</A></TD>
+        <TD>The flags argument to <A HREF="http://www.boost.org/libs/regex/doc/html/boost_regex/ref/match_results.html#boost_regex.match_results.format2" TARGET="_top">match_results::format</A></TD>
     </TR>
 </TABLE>
 

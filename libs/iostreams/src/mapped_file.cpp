@@ -1,12 +1,7 @@
-// (C) Copyright 2008 CodeRage, LLC (turkanis at coderage dot com)
-// (C) Copyright 2004-2007 Jonathan Turkanis
 // (C) Copyright Craig Henderson 2002 'boost/memmap.hpp' from sandbox
+// (C) Copyright Jonathan Turkanis 2004.
 // (C) Copyright Jonathan Graehl 2004.
-
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
-
-// See http://www.boost.org/libs/iostreams for documentation.
+// (C) Copyright Jorge Lodos 2008.
 
 // Define BOOST_IOSTREAMS_SOURCE so that <boost/iostreams/detail/config.hpp>
 // knows that we are building the library (possibly exporting code), rather
@@ -14,21 +9,15 @@
 #define BOOST_IOSTREAMS_SOURCE
 
 #include <cassert>
-#ifndef NDEBUG
-# include <boost/iostreams/detail/absolute_path.hpp>
-#endif
-#include <boost/iostreams/detail/config/dyn_link.hpp>
+#include <boost/iostreams/detail/config/rtl.hpp>
 #include <boost/iostreams/detail/config/windows_posix.hpp>
-#include <boost/iostreams/detail/ios.hpp>  // failure.
+#include <boost/iostreams/detail/file_handle.hpp>
 #include <boost/iostreams/detail/system_failure.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
 
 #ifdef BOOST_IOSTREAMS_WINDOWS
 # define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
 # include <windows.h>
-# ifndef INVALID_SET_FILE_POINTER
-#  define INVALID_SET_FILE_POINTER ((DWORD)-1)
-# endif
 #else
 # include <errno.h>
 # include <fcntl.h>
@@ -38,423 +27,454 @@
 # include <unistd.h>        // sysconf.
 #endif
 
-#include <boost/iostreams/detail/config/disable_warnings.hpp>
-
 namespace boost { namespace iostreams {
 
 namespace detail {
 
-struct mapped_file_impl {
-    mapped_file_impl() { clear(false); }
-    ~mapped_file_impl() { try { close(); } catch (...) { } }
-    void clear(bool error)
-    {
-        data_ = 0;
-        size_ = 0;
-        mode_ = BOOST_IOS::openmode();
-        error_ = error;
-    #ifdef BOOST_IOSTREAMS_WINDOWS
-        handle_ = INVALID_HANDLE_VALUE;
-        mapped_handle_ = NULL;
-    #else
-        handle_ = 0;
-    #endif
-    #ifndef NDEBUG
-        path_.erase();
-    #endif
-    }
-    void close()
-    {
-        bool error = false;
-    #ifdef BOOST_IOSTREAMS_WINDOWS
-        if (handle_ == INVALID_HANDLE_VALUE)
-            return;
-        error = !::UnmapViewOfFile(data_) || error;
-        error = !::CloseHandle(mapped_handle_) || error;
-        error = !::CloseHandle(handle_) || error;
-        handle_ = INVALID_HANDLE_VALUE;
-        mapped_handle_ = NULL;
-    #else
-        if (!handle_)
-            return;
-        error = ::munmap(reinterpret_cast<char*>(data_), size_) != 0 || error;
-        error = ::close(handle_) != 0 || error;
-        handle_ = 0;
-    #endif
-        data_ = 0;
-        size_ = 0;
-        mode_ = BOOST_IOS::openmode();
-        if (error) {
-            std::string msg("error closing mapped file");
-            #ifndef NDEBUG
-                msg += std::string(" (\"") + path_ + "\")";
-            #endif
-            throw_system_failure(msg);
-        }
-    #ifndef NDEBUG
-        path_.erase();
-    #endif
-    }
-    char*                data_;
-    std::size_t          size_;
-    BOOST_IOS::openmode  mode_;
-    bool                 error_;
+// Class containing the platform-sepecific implementation
+// Invariant: The members params_, data_, size_, handle_ (and mapped_handle_ 
+// on Windows) either
+//    - all have default values (or INVALID_HANDLE_VALUE for
+//      Windows handles), or
+//    - all have values reflecting a successful mapping.
+// In the first case, error_ may be true, reflecting a recent unsuccessful
+// open or close attempt; in the second case, error_ is always false.
+class mapped_file_impl {
+public:
+    typedef mapped_file_source::size_type   size_type;
+    typedef mapped_file_source::param_type  param_type;
+    typedef mapped_file_source::mapmode     mapmode;
+    BOOST_STATIC_CONSTANT(
+        size_type, max_length =  mapped_file_source::max_length);
+    mapped_file_impl();
+    ~mapped_file_impl();
+    void open(param_type p);
+    bool is_open() const { return data_ != 0; }
+    void close();
+    bool error() const { return error_; }
+    mapmode flags() const { return params_.flags; }
+    std::size_t size() const { return size_; }
+    char* data() const { return data_; }
+    void resize(stream_offset new_size);
+    static int alignment();
+private:
+    void open_file(param_type p);
+    void try_map_file(param_type p);
+    void map_file(param_type& p);
+    bool unmap_file();
+    void clear(bool error);
+    void cleanup_and_throw(const char* msg);
+    param_type     params_;
+    char*          data_;
+    stream_offset  size_;
+    file_handle    handle_;
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    HANDLE               handle_;
-    HANDLE               mapped_handle_;
-#else
-    int                  handle_;
+    file_handle    mapped_handle_;
 #endif
-#ifndef NDEBUG
-    std::string          path_;
-#endif
+    bool           error_;
 };
 
-} // End namespace detail.
+mapped_file_impl::mapped_file_impl() { clear(false); }
 
-//------------------Definition of mapped_file_source--------------------------//
+mapped_file_impl::~mapped_file_impl() 
+{ try { close(); } catch (...) { } }
 
-mapped_file_source::mapped_file_source(mapped_file_params p) { open(p); }
-
-mapped_file_source::mapped_file_source( const std::string& path,
-                                        mapped_file_source::size_type length,
-                                        boost::intmax_t offset )
-{ open(path, length, offset); }
-
-void mapped_file_source::open(mapped_file_params p)
+void mapped_file_impl::open(param_type p)
 {
-    p.mode &= ~BOOST_IOS::out;
-    open_impl(p);
-}
-
-void mapped_file_source::open( const std::string& path,
-                               mapped_file_source::size_type length,
-                               boost::intmax_t offset )
-{
-    mapped_file_params p(path);
-    p.mode = BOOST_IOS::in;
-    p.length = length;
-    p.offset = offset;
-    open_impl(p);
-}
-
-mapped_file_source::size_type mapped_file_source::size() const
-{ return pimpl_->size_; }
-
-void mapped_file_source::close() { pimpl_->close(); }
-
-mapped_file_source::operator mapped_file_source::safe_bool() const
-{
-    return !!pimpl_ && pimpl_->error_ == false ?
-        &safe_bool_helper::x : 0;
-}
-
-bool mapped_file_source::operator!() const
-{ return !!pimpl_ || pimpl_->error_; }
-
-BOOST_IOS::openmode mapped_file_source::mode() const { return pimpl_->mode_; }
-
-const char* mapped_file_source::data() const { return pimpl_->data_; }
-
-const char* mapped_file_source::begin() const { return data(); }
-
-const char* mapped_file_source::end() const { return data() + size(); }
-
-#ifdef BOOST_IOSTREAMS_WINDOWS //---------------------------------------------//
-
-namespace detail {
-
-void cleanup_and_throw(detail::mapped_file_impl& impl, std::string msg)
-{
-    #ifndef NDEBUG
-        msg += std::string(" (\"") + impl.path_ + "\")";
-    #endif
-    if (impl.mapped_handle_ != INVALID_HANDLE_VALUE)
-        ::CloseHandle(impl.mapped_handle_);
-    if (impl.handle_ != NULL)
-        ::CloseHandle(impl.handle_);
-    impl.clear(true);
-    throw_system_failure(msg);
-}
-
-} // End namespace detail.
-
-void mapped_file_source::open_impl(mapped_file_params p)
-{
-    using namespace std;
-
     if (is_open())
         throw BOOST_IOSTREAMS_FAILURE("file already open");
-    if (!pimpl_)
-        pimpl_.reset(new impl_type);
-    else
-        pimpl_->clear(false);
-    bool readonly = (p.mode & BOOST_IOS::out) == 0;
-    pimpl_->mode_ = readonly ? BOOST_IOS::in : (BOOST_IOS::in | BOOST_IOS::out);
-    #ifndef NDEBUG
-        pimpl_->path_ = detail::absolute_path(p.path);
-    #endif
+    p.normalize();
+    open_file(p);
+    map_file(p);  // May modify p.hint
+    params_ = p;
+}
 
-    //--------------Open underlying file--------------------------------------//
+void mapped_file_impl::close()
+{
+    if (data_ == 0)
+        return;
+    bool error = false;
+    error = !unmap_file() || error;
+    error = 
+        #ifdef BOOST_IOSTREAMS_WINDOWS
+            !::CloseHandle(handle_) 
+        #else
+            ::close(handle_) != 0 
+        #endif
+            || error;
+    clear(error);
+    if (error)
+        throw_system_failure("failed closing mapped file");
+}
 
-    pimpl_->handle_ =
-        ::CreateFileA( p.path.c_str(),
-                       readonly ? GENERIC_READ : GENERIC_ALL,
-                       FILE_SHARE_READ,
-                       NULL,
-                       (p.new_file_size != 0 && !readonly) ? 
-                           CREATE_ALWAYS : 
-                           OPEN_EXISTING,
-                       readonly ?
-                           FILE_ATTRIBUTE_READONLY :
-                           FILE_ATTRIBUTE_TEMPORARY,
-                       NULL );
+void mapped_file_impl::resize(stream_offset new_size)
+{
+    if (!is_open())
+        throw BOOST_IOSTREAMS_FAILURE("file is closed");
+    if (flags() & mapped_file::priv)
+        throw BOOST_IOSTREAMS_FAILURE("can't resize private mapped file");
+    if (!(flags() & mapped_file::readwrite))
+        throw BOOST_IOSTREAMS_FAILURE("can't resize readonly mapped file");
+    if (params_.offset >= new_size)
+        throw BOOST_IOSTREAMS_FAILURE("can't resize below mapped offset");
+    if (!unmap_file())
+        cleanup_and_throw("failed unmapping file");
+#ifdef BOOST_IOSTREAMS_WINDOWS
+    stream_offset offset = ::SetFilePointer(handle_, 0, NULL, FILE_CURRENT);
+    if (::GetLastError() != NO_ERROR)
+        cleanup_and_throw("failed querying file pointer");
+    LONG sizehigh = (new_size >> (sizeof(LONG) * 8));
+    LONG sizelow = (new_size & 0xffffffff);
+    ::SetFilePointer(handle_, sizelow, &sizehigh, FILE_BEGIN);
+    if (::GetLastError() != NO_ERROR || !::SetEndOfFile(handle_))
+        cleanup_and_throw("failed resizing mapped file");
+    sizehigh = (offset >> (sizeof(LONG) * 8));
+    sizelow = (offset & 0xffffffff);
+    ::SetFilePointer(handle_, sizelow, &sizehigh, FILE_BEGIN);
+#else
+    if (BOOST_IOSTREAMS_FD_TRUNCATE(handle_, new_size) == -1)
+        cleanup_and_throw("failed resizing mapped file");
+#endif
+    size_ = new_size;
+    param_type p(params_);
+    map_file(p);  // May modify p.hint
+    params_ = p;
+}
 
-    if (pimpl_->handle_ == INVALID_HANDLE_VALUE) {
-        detail::cleanup_and_throw(*pimpl_, "failed opening file");
-    }
+int mapped_file_impl::alignment()
+{
+#ifdef BOOST_IOSTREAMS_WINDOWS
+    SYSTEM_INFO info;
+    ::GetSystemInfo(&info);
+    return static_cast<int>(info.dwAllocationGranularity);
+#else
+    return static_cast<int>(sysconf(_SC_PAGESIZE));
+#endif
+}
 
-    //--------------Set file size---------------------------------------------//
+void mapped_file_impl::open_file(param_type p)
+{
+    bool readonly = p.flags != mapped_file::readwrite;
+#ifdef BOOST_IOSTREAMS_WINDOWS
 
+    // Open file
+    DWORD dwDesiredAccess = readonly ? GENERIC_READ : GENERIC_ALL;
+    DWORD dwCreationDisposition = (p.new_file_size != 0 && !readonly) ? 
+        CREATE_ALWAYS : 
+        OPEN_EXISTING;
+    DWORD dwFlagsandAttributes =
+        readonly ?
+            FILE_ATTRIBUTE_READONLY :
+            FILE_ATTRIBUTE_TEMPORARY;
+    handle_ = p.path.is_wide() ?
+        ::CreateFileW( 
+            p.path.c_wstr(),
+            dwDesiredAccess,
+            FILE_SHARE_READ,
+            NULL,
+            dwCreationDisposition,
+            dwFlagsandAttributes,
+            NULL ) :
+        ::CreateFileA( 
+            p.path.c_str(),
+            dwDesiredAccess,
+            FILE_SHARE_READ,
+            NULL,
+            dwCreationDisposition,
+            dwFlagsandAttributes,
+            NULL );
+    if (handle_ == INVALID_HANDLE_VALUE)
+        cleanup_and_throw("failed opening file");
+
+    // Set file size
     if (p.new_file_size != 0 && !readonly) {
         LONG sizehigh = (p.new_file_size >> (sizeof(LONG) * 8));
         LONG sizelow = (p.new_file_size & 0xffffffff);
-        DWORD result =
-            ::SetFilePointer(pimpl_->handle_, sizelow, &sizehigh, FILE_BEGIN);
-        if ( result == INVALID_SET_FILE_POINTER && 
-                 ::GetLastError() != NO_ERROR || 
-             !::SetEndOfFile(pimpl_->handle_) )
-        {
-            detail::cleanup_and_throw(*pimpl_, "failed setting file size");
-        }
+        ::SetFilePointer(handle_, sizelow, &sizehigh, FILE_BEGIN);
+        if (::GetLastError() != NO_ERROR || !::SetEndOfFile(handle_))
+            cleanup_and_throw("failed setting file size");
     }
 
-    //--------------Create mapping--------------------------------------------//
-
-    try_again: // Target of goto in following section.
-
-    pimpl_->mapped_handle_ =
-        ::CreateFileMappingA( pimpl_->handle_, NULL,
-                              readonly ? PAGE_READONLY : PAGE_READWRITE,
-                              0, 0, NULL );
-    if (pimpl_->mapped_handle_ == NULL) {
-        detail::cleanup_and_throw(*pimpl_, "couldn't create mapping");
-    }
-
-    //--------------Access data-----------------------------------------------//
-
-    void* data =
-        ::MapViewOfFileEx( pimpl_->mapped_handle_,
-                           readonly ? FILE_MAP_READ : FILE_MAP_WRITE,
-                           (DWORD) (p.offset >> 32),
-                           (DWORD) (p.offset & 0xffffffff),
-                           p.length != max_length ? p.length : 0, (LPVOID) p.hint );
-    if (!data) {
-        if (p.hint != 0) {
-            p.hint = 0;
-            goto try_again;
-        }
-        detail::cleanup_and_throw(*pimpl_, "failed mapping view");
-    }
-
-    //--------------Determing file size---------------------------------------//
-
-    // Dynamically locate GetFileSizeEx (thanks to Pavel Vozenilik).
+    // Determine file size. Dynamically locate GetFileSizeEx for compatibility
+    // with old Platform SDK (thanks to Pavel Vozenilik).
     typedef BOOL (WINAPI *func)(HANDLE, PLARGE_INTEGER);
     HMODULE hmod = ::GetModuleHandleA("kernel32.dll");
     func get_size =
         reinterpret_cast<func>(::GetProcAddress(hmod, "GetFileSizeEx"));
-
     if (get_size) {
         LARGE_INTEGER info;
-        if (get_size(pimpl_->handle_, &info)) {
+        if (get_size(handle_, &info)) {
             boost::intmax_t size =
                 ( (static_cast<boost::intmax_t>(info.HighPart) << 32) |
                   info.LowPart );
-            pimpl_->size_ =
+            size_ =
                 static_cast<std::size_t>(
                     p.length != max_length ?
                         std::min<boost::intmax_t>(p.length, size) :
                         size
                 );
         } else {
-            detail::cleanup_and_throw(*pimpl_, "failed getting file size");
+            cleanup_and_throw("failed querying file size");
             return;
         }
     } else {
         DWORD hi;
         DWORD low;
-        if ( (low = ::GetFileSize(pimpl_->handle_, &hi))
+        if ( (low = ::GetFileSize(handle_, &hi))
                  !=
              INVALID_FILE_SIZE )
         {
             boost::intmax_t size =
                 (static_cast<boost::intmax_t>(hi) << 32) | low;
-            pimpl_->size_ =
+            size_ =
                 static_cast<std::size_t>(
                     p.length != max_length ?
                         std::min<boost::intmax_t>(p.length, size) :
                         size
                 );
         } else {
-            detail::cleanup_and_throw(*pimpl_, "failed getting file size");
+            cleanup_and_throw("failed querying file size");
             return;
         }
     }
+#else // #ifdef BOOST_IOSTREAMS_WINDOWS
 
-    pimpl_->data_ = reinterpret_cast<char*>(data);
-}
-
-bool mapped_file_source::is_open() const
-{ return !!pimpl_ && pimpl_->handle_ != INVALID_HANDLE_VALUE; }
-
-int mapped_file_source::alignment()
-{
-    SYSTEM_INFO info;
-    ::GetSystemInfo(&info);
-    return static_cast<int>(info.dwAllocationGranularity);
-}
-
-#else // #ifdef BOOST_IOSTREAMS_WINDOWS //------------------------------------//
-
-namespace detail {
-
-    void cleanup_and_throw(detail::mapped_file_impl& impl, std::string msg)
-{
-    #ifndef NDEBUG
-        msg += std::string(" (\"") + impl.path_ + "\")";
-    #endif
-    if (impl.handle_ != 0)
-        ::close(impl.handle_);
-    impl.clear(true);
-    throw_system_failure(msg);
-}
-
-} // End namespace detail.
-
-
-void mapped_file_source::open_impl(mapped_file_params p)
-{
-    using namespace std;
-
-    if (is_open())
-        throw BOOST_IOSTREAMS_FAILURE("file already open");
-    if (!pimpl_)
-        pimpl_.reset(new impl_type);
-    else
-        pimpl_->clear(false);
-    bool readonly = (p.mode & BOOST_IOS::out) == 0;
-    pimpl_->mode_ = readonly ? BOOST_IOS::in : (BOOST_IOS::in | BOOST_IOS::out);
-    #ifndef NDEBUG
-        pimpl_->path_ = detail::absolute_path(p.path);
-    #endif
-
-    //--------------Open underlying file--------------------------------------//
-
+    // Open file
     int flags = (readonly ? O_RDONLY : O_RDWR);
     if (p.new_file_size != 0 && !readonly)
         flags |= (O_CREAT | O_TRUNC);
+    #ifdef _LARGEFILE64_SOURCE
+        flags |= O_LARGEFILE;
+    #endif
     errno = 0;
-    pimpl_->handle_ = ::open(p.path.c_str(), flags, S_IRWXU);
+    handle_ = ::open(p.path.c_str(), flags, S_IRWXU);
     if (errno != 0)
-        detail::cleanup_and_throw(*pimpl_, "failed opening file");
+        cleanup_and_throw("failed opening file");
 
     //--------------Set file size---------------------------------------------//
 
     if (p.new_file_size != 0 && !readonly)
-        if (ftruncate(pimpl_->handle_, p.new_file_size) == -1)
-            detail::cleanup_and_throw(*pimpl_, "failed setting file size");
+        if (BOOST_IOSTREAMS_FD_TRUNCATE(handle_, p.new_file_size) == -1)
+            cleanup_and_throw("failed setting file size");
 
     //--------------Determine file size---------------------------------------//
 
     bool success = true;
-    struct stat info;
-    if (p.length != max_length)
-        pimpl_->size_ = p.length;
-    else {
-        success = ::fstat(pimpl_->handle_, &info) != -1;
-        pimpl_->size_ = info.st_size;
+    if (p.length != max_length) {
+        size_ = p.length;
+    } else {
+        struct BOOST_IOSTREAMS_FD_STAT info;
+        success = ::BOOST_IOSTREAMS_FD_FSTAT(handle_, &info) != -1;
+        size_ = info.st_size;
     }
     if (!success)
-        detail::cleanup_and_throw(*pimpl_, "failed getting file size");
-
-    //--------------Create mapping--------------------------------------------//
-
-    try_again: // Target of goto in following section.
-
-    char* hint = const_cast<char*>(p.hint);
-    void* data = ::mmap( hint, pimpl_->size_,
-                         readonly ? PROT_READ : (PROT_READ | PROT_WRITE),
-                         readonly ? MAP_PRIVATE : MAP_SHARED,
-                         pimpl_->handle_, p.offset );
-    if (data == MAP_FAILED) {
-        if (hint != 0) {
-            hint = 0;
-            goto try_again;
-        }
-        detail::cleanup_and_throw(*pimpl_, "failed mapping file");
-    }
-    pimpl_->data_ = reinterpret_cast<char*>(data);
-
-    return;
+        cleanup_and_throw("failed querying file size");
+#endif // #ifdef BOOST_IOSTREAMS_WINDOWS
 }
 
+void mapped_file_impl::try_map_file(param_type p)
+{
+    bool priv = p.flags == mapped_file::priv;
+    bool readonly = p.flags == mapped_file::readonly;
+#ifdef BOOST_IOSTREAMS_WINDOWS
+
+    // Create mapping
+    DWORD protect = priv ? 
+        PAGE_WRITECOPY : 
+        readonly ? 
+            PAGE_READONLY : 
+            PAGE_READWRITE;
+    mapped_handle_ = 
+        ::CreateFileMappingA( 
+            handle_, 
+            NULL,
+            protect,
+            0, 
+            0, 
+            NULL );
+    if (mapped_handle_ == NULL)
+        cleanup_and_throw("failed create mapping");
+
+    // Access data
+    DWORD access = priv ? 
+        FILE_MAP_COPY : 
+        readonly ? 
+            FILE_MAP_READ : 
+            FILE_MAP_WRITE;
+    void* data =
+        ::MapViewOfFileEx( 
+            mapped_handle_,
+            access,
+            (DWORD) (p.offset >> 32),
+            (DWORD) (p.offset & 0xffffffff),
+            size_ != max_length ? size_ : 0, 
+            (LPVOID) p.hint );
+    if (!data)
+        cleanup_and_throw("failed mapping view");
+#else
+    void* data = 
+        ::BOOST_IOSTREAMS_FD_MMAP( 
+            const_cast<char*>(p.hint), 
+            size_,
+            readonly ? PROT_READ : (PROT_READ | PROT_WRITE),
+            priv ? MAP_PRIVATE : MAP_SHARED,
+            handle_, 
+            p.offset );
+    if (data == MAP_FAILED)
+        cleanup_and_throw("failed mapping file");
+#endif
+    data_ = static_cast<char*>(data);
+}
+
+void mapped_file_impl::map_file(param_type& p)
+{
+    try {
+        try_map_file(p);
+    } catch (const std::exception& e) {
+        if (p.hint) {
+            p.hint = 0;
+            try_map_file(p);
+        } else {
+            throw e;
+        }
+    }
+}
+
+bool mapped_file_impl::unmap_file()
+{
+#ifdef BOOST_IOSTREAMS_WINDOWS
+    bool error = false;
+    error = !::UnmapViewOfFile(data_) || error;
+    error = !::CloseHandle(mapped_handle_) || error;
+    mapped_handle_ = NULL;
+    return !error;
+#else
+    return ::munmap(data_, size_) == 0;
+#endif
+}
+
+void mapped_file_impl::clear(bool error)
+{
+    params_ = param_type();
+    data_ = 0;
+    size_ = 0;
+#ifdef BOOST_IOSTREAMS_WINDOWS
+    handle_ = INVALID_HANDLE_VALUE;
+    mapped_handle_ = NULL;
+#else
+    handle_ = 0;
+#endif
+    error_ = error;
+}
+
+// Called when an error is encountered during the execution of open_file or
+// map_file
+void mapped_file_impl::cleanup_and_throw(const char* msg)
+{
+#ifdef BOOST_IOSTREAMS_WINDOWS
+    DWORD error = GetLastError();
+    if (mapped_handle_ != INVALID_HANDLE_VALUE)
+        ::CloseHandle(mapped_handle_);
+    if (handle_ != NULL)
+        ::CloseHandle(handle_);
+    SetLastError(error);
+#else
+    int error = errno;
+    if (handle_ != 0)
+        ::close(handle_);
+    errno = error;
+#endif
+    clear(true);
+    boost::iostreams::detail::throw_system_failure(msg);
+}
+
+//------------------Implementation of mapped_file_params_base-----------------//
+
+void mapped_file_params_base::normalize()
+{
+    if (mode && flags)
+        throw BOOST_IOSTREAMS_FAILURE(
+            "at most one of 'mode' and 'flags' may be specified"
+        );
+    if (flags) {
+        switch (flags) {
+        case mapped_file::readonly:
+        case mapped_file::readwrite:
+        case mapped_file::priv:
+            break;
+        default:
+            throw BOOST_IOSTREAMS_FAILURE("invalid flags");
+        }
+    } else {
+        flags = (mode & BOOST_IOS::out) ? 
+            mapped_file::readwrite :
+            mapped_file::readonly;
+        mode = BOOST_IOS::openmode();
+    }
+    if (offset < 0)
+        throw BOOST_IOSTREAMS_FAILURE("invalid offset");
+    if (new_file_size < 0)
+        throw BOOST_IOSTREAMS_FAILURE("invalid new file size");
+}
+
+} // End namespace detail.
+
+//------------------Implementation of mapped_file_source----------------------//
+
+mapped_file_source::mapped_file_source() 
+    : pimpl_(new impl_type)
+    { }
+
+mapped_file_source::mapped_file_source(const mapped_file_source& other)
+    : pimpl_(other.pimpl_)
+    { }
+
 bool mapped_file_source::is_open() const
-{ return !!pimpl_ && pimpl_->handle_ != 0; }
+{ return pimpl_->is_open(); }
 
+void mapped_file_source::close() { pimpl_->close(); }
+
+// safe_bool is explicitly qualified below to please msvc 7.1
+mapped_file_source::operator mapped_file_source::safe_bool() const
+{ return pimpl_->error() ? &safe_bool_helper::x : 0; }
+
+bool mapped_file_source::operator!() const
+{ return pimpl_->error(); }
+
+mapped_file_source::mapmode mapped_file_source::flags() const 
+{ return pimpl_->flags(); }
+
+mapped_file_source::size_type mapped_file_source::size() const
+{ return pimpl_->size(); }
+
+const char* mapped_file_source::data() const { return pimpl_->data(); }
+
+const char* mapped_file_source::begin() const { return data(); }
+
+const char* mapped_file_source::end() const { return data() + size(); }
 int mapped_file_source::alignment()
-{ return static_cast<int>(sysconf(_SC_PAGESIZE)); }
+{ return detail::mapped_file_impl::alignment(); }
 
-#endif // #ifdef BOOST_IOSTREAMS_WINDOWS //-----------------------------------//
+void mapped_file_source::init() { pimpl_.reset(new impl_type); }
+
+void mapped_file_source::open_impl(const param_type& p)
+{ pimpl_->open(p); }
 
 //------------------Implementation of mapped_file-----------------------------//
 
-mapped_file::mapped_file(mapped_file_params p) { delegate_.open_impl(p); }
+mapped_file::mapped_file(const mapped_file& other)
+    : delegate_(other.delegate_)
+    { }
 
-mapped_file::mapped_file( const std::string& path, BOOST_IOS::openmode mode,
-                          size_type length, stream_offset offset )
-{ open(path, mode, length, offset); }
-
-void mapped_file::open(mapped_file_params p)
-{ delegate_.open_impl(p); }
-
-void mapped_file::open( const std::string& path, BOOST_IOS::openmode mode,
-                        size_type length, stream_offset offset )
-{
-    mapped_file_params p(path);
-    p.mode = mode;
-    p.length = length;
-    p.offset = offset;
-    open(p);
-}
+void mapped_file::resize(stream_offset new_size)
+{ delegate_.pimpl_->resize(new_size); }
 
 //------------------Implementation of mapped_file_sink------------------------//
 
-mapped_file_sink::mapped_file_sink(mapped_file_params p) { open(p); }
-
-mapped_file_sink::mapped_file_sink( const std::string& path,
-                                    size_type length, stream_offset offset )
-{ open(path, length, offset); }
-
-void mapped_file_sink::open(mapped_file_params p)
-{
-    p.mode |= BOOST_IOS::out;
-    p.mode &= ~BOOST_IOS::in;
-    mapped_file::open(p);
-}
-
-void mapped_file_sink::open( const std::string& path, size_type length,
-                             stream_offset offset )
-{
-    mapped_file_params p(path);
-    p.mode = BOOST_IOS::out;
-    p.length = length;
-    p.offset = offset;
-    open(p);
-}
+mapped_file_sink::mapped_file_sink(const mapped_file_sink& other)
+    : mapped_file(static_cast<const mapped_file&>(other))
+    { }
 
 //----------------------------------------------------------------------------//
 
 } } // End namespaces iostreams, boost.
-
-#include <boost/iostreams/detail/config/enable_warnings.hpp>

@@ -27,6 +27,36 @@ namespace io = boost::iostreams;
 void read_write_test()
 {
     {
+        test_file          src1, src2;
+        temp_file          dest;
+        filtering_istream  first, second;
+        first.push(tee(file_sink(dest.name(), out_mode)));
+        first.push(file_source(src1.name(), in_mode));
+        second.push(file_source(src2.name(), in_mode));
+        compare_streams_in_chars(first, second);  // ignore return value
+        first.reset();
+        BOOST_CHECK_MESSAGE(
+            compare_files(dest.name(), src1.name()),
+            "failed reading from a tee_filter in chars"
+        );
+    }
+
+    {
+        test_file          src1, src2;
+        temp_file          dest;
+        filtering_istream  first, second;
+        first.push(tee(file_sink(dest.name(), out_mode)));
+        first.push(file_source(src1.name(), in_mode));
+        second.push(file_source(src2.name(), in_mode));
+        compare_streams_in_chunks(first, second);  // ignore return value
+        first.reset();
+        BOOST_CHECK_MESSAGE(
+            compare_files(dest.name(), src1.name()),
+            "failed reading from a tee_filter in chunks"
+        );
+    }
+
+    {
         temp_file          dest1;
         temp_file          dest2;
         filtering_ostream  out;
@@ -51,6 +81,36 @@ void read_write_test()
         BOOST_CHECK_MESSAGE(
             compare_files(dest1.name(), dest2.name()),
             "failed writing to a tee_filter in chunks"
+        );
+    }
+
+    {
+        test_file          src1, src2;
+        temp_file          dest;
+        filtering_istream  first, second;
+        first.push( tee( file_source(src1.name(), in_mode),
+                         file_sink(dest.name(), out_mode) ) );
+        second.push(file_source(src2.name(), in_mode));
+        compare_streams_in_chars(first, second);  // ignore return value
+        first.reset();
+        BOOST_CHECK_MESSAGE(
+            compare_files(dest.name(), src1.name()),
+            "failed reading from a tee_device in chars"
+        );
+    }
+
+    {
+        test_file          src1, src2;
+        temp_file          dest;
+        filtering_istream  first, second;
+        first.push( tee( file_source(src1.name(), in_mode),
+                         file_sink(dest.name(), out_mode) ) );
+        second.push(file_source(src2.name(), in_mode));
+        compare_streams_in_chunks(first, second);  // ignore return value
+        first.reset();
+        BOOST_CHECK_MESSAGE(
+            compare_files(dest.name(), src1.name()),
+            "failed reading from a tee_device in chunks"
         );
     }
 

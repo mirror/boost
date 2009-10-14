@@ -5,8 +5,8 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-#ifndef BOOST_IOSTREAMS_CONTAINTER_DEVICE_HPP_INCLUDED
-#define BOOST_IOSTREAMS_CONTAINTER_DEVICE_HPP_INCLUDED
+#ifndef BOOST_IOSTREAMS_EXAMPLE_CONTAINTER_DEVICE_HPP_INCLUDED
+#define BOOST_IOSTREAMS_EXAMPLE_CONTAINTER_DEVICE_HPP_INCLUDED
 
 #include <algorithm>         // copy, min.
 #include <cassert>
@@ -152,4 +152,4 @@ private:
 
 } } } // End namespaces example, iostreams, boost.
 
-#endif // #ifndef BOOST_IOSTREAMS_CONTAINTER_DEVICE_HPP_INCLUDED
+#endif // #ifndef BOOST_IOSTREAMS_EXAMPLE_CONTAINTER_DEVICE_HPP_INCLUDED

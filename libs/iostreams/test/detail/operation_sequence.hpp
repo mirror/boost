@@ -150,8 +150,8 @@ inline operation operation_sequence::new_operation(int id, int error_code)
 {
     using namespace std;
     if ( error_code < 0 || 
-         error_code > BOOST_IOSTREAMS_TEST_MAX_OPERATION_ERROR &&
-             error_code != INT_MAX )
+         (error_code > BOOST_IOSTREAMS_TEST_MAX_OPERATION_ERROR &&
+             error_code != INT_MAX) )
     {
         throw runtime_error( string("The error code ") + 
                              lexical_cast<string>(error_code) +
