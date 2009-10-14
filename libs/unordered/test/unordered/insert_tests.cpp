@@ -393,7 +393,8 @@ UNORDERED_TEST(map_insert_range_test2,
     ((default_generator)(generate_collisions))
 )
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST) && \
+    !defined(BOOST_NO_INITIALIZER_LISTS)
 
 UNORDERED_AUTO_TEST(insert_initializer_list_set)
 {
