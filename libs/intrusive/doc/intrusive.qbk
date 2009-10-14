@@ -1,14 +1,14 @@
 [/
- / Copyright (c) 2007 Ion Gaztanaga
+ / Copyright (c) 2007-2009 Ion Gaztanaga
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
 [library Boost.Intrusive
-    [quickbook 1.3]
+    [quickbook 1.4]
     [authors [Krzikalla, Olaf], [Gaztanaga, Ion]]
-    [copyright 2005 Olaf Krzikalla, 2006-2008 Ion Gaztanaga]
+    [copyright 2005 Olaf Krzikalla, 2006-2009 Ion Gaztanaga]
     [id intrusive]
     [dirname intrusive]
     [purpose Intrusive containers]
@@ -2071,11 +2071,36 @@ no need for these advanced insertion functions, since insertions are always succ
 
 [endsect]
 
+[section:positional_insertions Positional insertions]
+
+Some ordered associative containers offer low-level functions to bypass ordering
+checks and insert nodes directly in desired tree positions. These functions are
+provided for performance reasons when values to be inserted in the container are
+known to fulfill order (sets and multisets) and uniqueness (sets) invariants. A
+typical usage of these functions is when intrusive associative containers are used
+to build non-intrusive containers and the programmer wants to speed up assignments
+from other associative containers: if the ordering and uniqueness properties are the same,
+there is no need to waste time checking the position of each source value, because values
+are already ordered: back insertions will be much more efficient.
+
+[*Note:] These functions [*don't check preconditions] so they must used with care. These
+are functions are low-level operations [*will break container invariants if
+ordering and uniqueness preconditions are not assured by the caller.]
+
+Let's see an example:
+
+[import ../example/doc_positional_insertion.cpp]
+[doc_positional_insertion]
+
+
+[endsect]
+
 For more information about advanced lookup and insertion functions see
+associative containers' documentation (e.g. 
 [classref boost::intrusive::set set],
 [classref boost::intrusive::multiset multiset],
 [classref boost::intrusive::unordered_set unordered_set] and
-[classref boost::intrusive::unordered_multiset unordered_multiset] references.
+[classref boost::intrusive::unordered_multiset unordered_multiset] references).
 
 [endsect]
 
@@ -2269,7 +2294,7 @@ decide to insert two hooks in the same class.
 
 However, there is a more size-efficient alternative in [*Boost.Intrusive]: "any" hooks
 ([classref boost::intrusive::any_base_hook any_base_hook] and
-[classref boost::intrusive::any_member_hook any_member_hook].
+[classref boost::intrusive::any_member_hook any_member_hook]).
 These hooks can be used to store a type in several containers
 offered by [*Boost.Intrusive] minimizing the size of the class.
 
@@ -2288,8 +2313,8 @@ These hooks support these options:
    internally in the hook and propagated to the container.
    Default: `void_pointer<void*>`.
 
-`auto_unlink` can't be supported because the hook does not know in which type of might
-be inserted container. Additionally, these hooks don't support `unlink()` and
+`auto_unlink` can't be supported because the hook does not know in which type of
+container might be currently inserted. Additionally, these hooks don't support `unlink()` and
 `swap_nodes()` operations for the same reason.
 
 Here is an example that creates a class with two any hooks, and uses one to insert the
@@ -3157,13 +3182,12 @@ to define the needed value traits classes:
 Until now all shown custom value traits are stateless, that is, [*the transformation between nodes
 and values is implemented in terms of static functions]. It's possible to use [*stateful] value traits
 so that we can separate nodes and values and [*avoid modifying types to insert nodes].
-[*Boost.Intrusive] differentiates between stateful and stateless value traits by checking if the ValueTraits
-class is empty:
+[*Boost.Intrusive] differentiates between stateful and stateless value traits by checking if all
+Node <-> Value transformation functions are static or not:
 
-*  If the class is empty, a [*stateless] value traits is assumed.
-   Node <-> Value transformations must be static functions.
-*  If the class is not empty, a [*stateful] value traits is assumed.
-   Node <-> Value transformations must be non-static functions.
+*  If all Node <-> Value transformation functions are static , a [*stateless]
+   value traits is assumed.  transformations must be static functions.
+*  Otherwise a [*stateful] value traits is assumed.
 
 Using stateful value traits it's possible to create containers of non-copyable/movable objects [*without modifying]
 the definition of the class to be inserted. This interesting property is achieved without using global variables

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2008.
+// (C) Copyright Ion Gaztanaga  2006-2009.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -115,12 +115,13 @@ std::size_t hash_value(const testvalue<Hooks, ConstantTimeSize> &t)
 }
 
 template<class Hooks, bool ConstantTimeSize>
-bool priority_order(const testvalue<Hooks, ConstantTimeSize> &t1, const testvalue<Hooks, ConstantTimeSize> &t2)
+bool priority_order( const testvalue<Hooks, ConstantTimeSize> &t1
+                   , const testvalue<Hooks, ConstantTimeSize> &t2)
 {
    std::size_t hash1 = hash_value(t1);
-   boost::hash_combine(hash1,&t1);
+   boost::hash_combine(hash1, &t1);
    std::size_t hash2 = hash_value(t2);
-   boost::hash_combine(hash2,&t2);
+   boost::hash_combine(hash2, &t2);
    return hash1 < hash2;
 }
 
@@ -150,6 +151,31 @@ struct is_even
       (const testvalue<Hooks, constant_time_size>& v1) const
    {  return (v1.value_ & 1) == 0;  }  
 };
+/*
+struct int_testvalue_comp
+{
+   template<class Hooks, bool constant_time_size>
+   bool operator()
+      (const testvalue<Hooks, constant_time_size>& v1, const int &i) const
+   {  return v1.value_ < i; }
+   template<class Hooks, bool constant_time_size>
+   bool operator()
+      (const int &i, const testvalue<Hooks, constant_time_size>& v1) const
+   {  return i < v1.value_; }
+};
+
+struct int_testvalue_pcomp
+{
+   template<class Hooks, bool constant_time_size>
+   bool operator()
+      (const testvalue<Hooks, constant_time_size>& v1, const int &i) const
+   {  return v1.value_ < i; }
+   template<class Hooks, bool constant_time_size>
+   bool operator()
+      (const int &i, const testvalue<Hooks, constant_time_size>& v1) const
+   {  return i < v1.value_; }
+};
+*/
 
 }  //namespace boost{
 }  //namespace intrusive{

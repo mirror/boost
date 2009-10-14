@@ -244,10 +244,16 @@
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\ebo_functor_holder.hpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\function_detector.hpp">
+				</File>
+				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\generic_hook.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\hashtable_node.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\is_stateful_value_traits.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\list_node.hpp">
@@ -381,6 +387,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\example\doc_offset_ptr.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\example\doc_positional_insertion.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\example\doc_rbtree_algorithms.cpp">
