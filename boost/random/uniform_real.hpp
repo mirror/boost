@@ -52,9 +52,11 @@ public:
 
   template<class Engine>
   result_type operator()(Engine& eng) {
-    return static_cast<result_type>(eng() - eng.min BOOST_PREVENT_MACRO_SUBSTITUTION())
-           / static_cast<result_type>(eng.max BOOST_PREVENT_MACRO_SUBSTITUTION() - eng.min BOOST_PREVENT_MACRO_SUBSTITUTION())
-           * (_max - _min) + _min;
+    result_type numerator = static_cast<result_type>(eng() - eng.min BOOST_PREVENT_MACRO_SUBSTITUTION());
+    result_type divisor = static_cast<result_type>(eng.max BOOST_PREVENT_MACRO_SUBSTITUTION() - eng.min BOOST_PREVENT_MACRO_SUBSTITUTION());
+    assert(divisor > 0);
+    assert(numerator >= 0 && numerator <= divisor);
+    return numerator / divisor * (_max - _min) + _min;
   }
 
 #ifndef BOOST_RANDOM_NO_STREAM_OPERATORS

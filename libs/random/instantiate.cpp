@@ -56,6 +56,8 @@ void instantiate_dist(URNG& urng, const char * name, const Dist& dist)
   // this keeps a reference to urng
   boost::variate_generator<URNG&, Dist> genref(urng, dist);
 
+  BOOST_CHECK(gen.engine() == genref.engine());
+
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   // and here is a pointer to (a copy of) the urng
   URNG copy = urng;
@@ -69,10 +71,12 @@ void instantiate_dist(URNG& urng, const char * name, const Dist& dist)
     (void) genptr();
 #endif
   }
+  // If the values are not exactly equal, we cannot
+  // rely on them being close...
   typename Dist::result_type g = gen();
-  BOOST_CHECK(std::abs(g - genref()) < 1e-6);
+  BOOST_CHECK_EQUAL(g, genref());
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  BOOST_CHECK(std::abs(g - genptr()) < 1e-6);
+  BOOST_CHECK_EQUAL(g, genptr());
 #endif
 
   (void) gen.engine();
