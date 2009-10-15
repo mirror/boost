@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2008.
+// (C) Copyright Ion Gaztanaga  2006-2009.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -23,6 +23,12 @@ namespace boost{
 namespace intrusive{
 namespace test{
 
+template<class T>
+struct is_treap
+{
+   static const bool value = false;
+};
+
 template<class ValueTraits, template <class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none> class ContainerDefiner>
 struct test_generic_set 
 {
@@ -30,6 +36,9 @@ struct test_generic_set
    static void test_all();
    static void test_sort(std::vector<value_type>& values);
    static void test_insert(std::vector<value_type>& values);
+   static void test_insert_advanced(std::vector<value_type>& values, boost::intrusive::detail::true_type);
+   static void test_insert_advanced(std::vector<value_type>& values, boost::intrusive::detail::false_type);
+   static void test_insert_advanced(std::vector<value_type>& values);
    static void test_swap(std::vector<value_type>& values);
    static void test_find(std::vector<value_type>& values);
    static void test_impl();
@@ -65,6 +74,7 @@ void test_generic_set<ValueTraits, ContainerDefiner>::test_all()
    }
    test_sort(values);
    test_insert(values);
+   test_insert_advanced(values);
    test_swap(values);
    test_find(values);
    test_impl();
@@ -139,32 +149,94 @@ void test_generic_set<ValueTraits, ContainerDefiner>::test_insert(std::vector<ty
       , value_traits<ValueTraits>
       , constant_time_size<value_type::constant_time_size>
       >::type set_type;
-   set_type testset;
-   testset.insert(&values[0] + 2, &values[0] + 5);
+   {
+      set_type testset;
+      testset.insert(&values[0] + 2, &values[0] + 5);
 
-   const set_type& const_testset = testset;
-   {  int init_values [] = { 1, 4, 5 };
-      TEST_INTRUSIVE_SEQUENCE( init_values, const_testset.begin() );  }
+      const set_type& const_testset = testset;
+      {  int init_values [] = { 1, 4, 5 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, const_testset.begin() );  }
 
-   typename set_type::iterator i = testset.begin();
-   BOOST_TEST (i->value_ == 1);
+      typename set_type::iterator i = testset.begin();
+      BOOST_TEST (i->value_ == 1);
 
-   i = testset.insert (i, values[0]);
-   BOOST_TEST (&*i == &values[0]);
+      i = testset.insert (i, values[0]);
+      BOOST_TEST (&*i == &values[0]);
 
-   {  int init_values [] = { 5, 4, 3, 1 };
-      TEST_INTRUSIVE_SEQUENCE( init_values, testset.rbegin() );  }
+      {  int init_values [] = { 5, 4, 3, 1 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testset.rbegin() );  }
 
-   i = testset.iterator_to (values[2]);
-   BOOST_TEST (&*i == &values[2]);
+      i = testset.iterator_to (values[2]);
+      BOOST_TEST (&*i == &values[2]);
 
-   i = set_type::s_iterator_to(values[2]);
-   BOOST_TEST (&*i == &values[2]);
+      i = set_type::s_iterator_to(values[2]);
+      BOOST_TEST (&*i == &values[2]);
 
-   testset.erase (i);
-   {  int init_values [] = { 1, 3, 5 };
-      TEST_INTRUSIVE_SEQUENCE( init_values, testset.begin() );  }
-}  
+      testset.erase (i);
+      {  int init_values [] = { 1, 3, 5 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testset.begin() );  }
+   }
+}
+
+template<class ValueTraits, template <class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none> class ContainerDefiner>
+void test_generic_set<ValueTraits, ContainerDefiner>::test_insert_advanced
+(std::vector<typename ValueTraits::value_type>& values, boost::intrusive::detail::true_type)
+{
+   typedef typename ValueTraits::value_type value_type;
+   typedef typename ContainerDefiner
+      < value_type
+      , value_traits<ValueTraits>
+      , constant_time_size<value_type::constant_time_size>
+      >::type set_type;
+   {
+      set_type testset;
+      testset.insert(&values[0], &values[0] + values.size());
+      value_type v(1);
+      typename set_type::insert_commit_data data;
+      BOOST_TEST (!testset.insert_check(v, testset.value_comp(), testset.priority_comp(), data).second);
+      BOOST_TEST (!testset.insert_check(testset.begin(), v, testset.value_comp(), testset.priority_comp(), data).second);
+   }
+}
+
+
+template<class ValueTraits, template <class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none> class ContainerDefiner>
+void test_generic_set<ValueTraits, ContainerDefiner>::test_insert_advanced
+(std::vector<typename ValueTraits::value_type>& values)
+{
+   typedef typename ValueTraits::value_type value_type;
+   typedef typename ContainerDefiner
+      < value_type
+      , value_traits<ValueTraits>
+      , constant_time_size<value_type::constant_time_size>
+      >::type set_type;
+   typedef typename detail::remove_const<set_type>::type Type;
+   typedef detail::bool_<is_treap<Type>::value> enabler;
+   test_insert_advanced(values, enabler());
+}
+
+
+//test: insert, const_iterator, const_reverse_iterator, erase, s_iterator_to:
+template<class ValueTraits, template <class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none> class ContainerDefiner>
+void test_generic_set<ValueTraits, ContainerDefiner>::test_insert_advanced
+   ( std::vector<typename ValueTraits::value_type>& values
+   , boost::intrusive::detail::false_type)
+{
+   typedef typename ValueTraits::value_type value_type;
+   typedef typename ContainerDefiner
+      < value_type
+      , value_traits<ValueTraits>
+      , constant_time_size<value_type::constant_time_size>
+      >::type set_type;
+   {
+      set_type testset;
+      testset.insert(&values[0], &values[0] + values.size());
+      value_type v(1);
+      typename set_type::insert_commit_data data;
+      BOOST_TEST (!testset.insert_check(v, testset.value_comp(), data).second);
+      BOOST_TEST (!testset.insert_check(testset.begin(), v, testset.value_comp(), data).second);
+   }
+}
+
 
 //test: insert (seq-version), swap, erase (seq-version), size:
 template<class ValueTraits, template <class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none> class ContainerDefiner>

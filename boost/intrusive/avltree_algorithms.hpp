@@ -531,6 +531,66 @@ class avltree_algorithms
    }
 
    //! <b>Requires</b>: "header" must be the header node of a tree.
+   //!   "pos" must be a valid iterator or header (end) node.
+   //!   "pos" must be an iterator pointing to the successor to "new_node"
+   //!   once inserted according to the order of already inserted nodes. This function does not
+   //!   check "pos" and this precondition must be guaranteed by the caller.
+   //!   
+   //! <b>Effects</b>: Inserts new_node into the tree before "pos".
+   //!
+   //! <b>Complexity</b>: Constant-time.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: If "pos" is not the successor of the newly inserted "new_node"
+   //! tree invariants might be broken.
+   static node_ptr insert_before
+      (node_ptr header, node_ptr pos, node_ptr new_node)
+   {
+      tree_algorithms::insert_before(header, pos, new_node);
+      rebalance_after_insertion(header, new_node);
+      return new_node;
+   }
+
+   //! <b>Requires</b>: "header" must be the header node of a tree.
+   //!   "new_node" must be, according to the used ordering no less than the
+   //!   greatest inserted key.
+   //!   
+   //! <b>Effects</b>: Inserts new_node into the tree before "pos".
+   //!
+   //! <b>Complexity</b>: Constant-time.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: If "new_node" is less than the greatest inserted key
+   //! tree invariants are broken. This function is slightly faster than
+   //! using "insert_before".
+   static void push_back(node_ptr header, node_ptr new_node)
+   {
+      tree_algorithms::push_back(header, new_node);
+      rebalance_after_insertion(header, new_node);
+   }
+
+   //! <b>Requires</b>: "header" must be the header node of a tree.
+   //!   "new_node" must be, according to the used ordering, no greater than the
+   //!   lowest inserted key.
+   //!   
+   //! <b>Effects</b>: Inserts new_node into the tree before "pos".
+   //!
+   //! <b>Complexity</b>: Constant-time.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: If "new_node" is greater than the lowest inserted key
+   //! tree invariants are broken. This function is slightly faster than
+   //! using "insert_before".
+   static void push_front(node_ptr header, node_ptr new_node)
+   {
+      tree_algorithms::push_front(header, new_node);
+      rebalance_after_insertion(header, new_node);
+   }
+
+   //! <b>Requires</b>: "header" must be the header node of a tree.
    //!   KeyNodePtrCompare is a function object that induces a strict weak
    //!   ordering compatible with the strict weak ordering used to create the
    //!   the tree. NodePtrCompare compares KeyType with a node_ptr.

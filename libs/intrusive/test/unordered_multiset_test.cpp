@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2008.
+// (C) Copyright Ion Gaztanaga  2006-2009.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -22,6 +22,26 @@
 #include <boost/detail/lightweight_test.hpp>
 #include "test_macros.hpp"
 #include "test_container.hpp"
+
+namespace boost { namespace intrusive { namespace test {
+
+#if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+template<class T, class O1, class O2, class O3, class O4, class O5, class O6>
+#else
+template<class T, class ...Options>
+#endif
+struct is_unordered<boost::intrusive::unordered_multiset<T,
+   #if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+   O1, O2, O3, O4, O5, O6
+   #else
+   Options...
+   #endif
+> >
+{
+   static const bool value = true;
+};
+
+}}}
 
 using namespace boost::intrusive;
 

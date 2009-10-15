@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2008.
+// (C) Copyright Ion Gaztanaga  2006-2009.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -11,10 +11,31 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include <boost/intrusive/detail/config_begin.hpp>
+
 #include <boost/intrusive/set.hpp>
 #include "itestvalue.hpp"
 #include "smart_ptr.hpp"
 #include "generic_set_test.hpp"
+
+namespace boost { namespace intrusive { namespace test {
+
+#if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+template<class T, class O1, class O2, class O3, class O4>
+#else
+template<class T, class ...Options>
+#endif
+struct has_insert_before<boost::intrusive::set<T, 
+   #if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+   O1, O2, O3, O4
+   #else
+   Options...
+   #endif
+> >
+{
+   static const bool value = true;
+};
+
+}}}
 
 struct my_tag;
 
@@ -134,4 +155,5 @@ int main( int, char* [] )
    test_main_template<boost::intrusive::smart_ptr<void>, true>()();
    return boost::report_errors();
 }
+
 #include <boost/intrusive/detail/config_end.hpp>
