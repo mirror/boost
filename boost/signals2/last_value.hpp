@@ -35,7 +35,6 @@ namespace boost {
       template<typename InputIterator>
       T operator()(InputIterator first, InputIterator last) const
       {
-        T * resolver = 0;
         if(first == last)
         {
           boost::throw_exception(no_slots_error());

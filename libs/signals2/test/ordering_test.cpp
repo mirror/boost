@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
+#include <functional>
 
 std::vector<int> valuesOutput;
 bool ungrouped1 = false;
@@ -61,6 +62,27 @@ struct write_ungrouped3 {
   }
 };
 
+int return_argument(int x)
+{
+  return x;
+}
+
+void test_group_compare()
+{
+  boost::signals2::signal
+  <
+    int (),
+    boost::signals2::last_value<int>,
+    int,
+    std::greater< int >
+  > sig;
+
+  sig.connect( 1, boost::bind( &return_argument, 1) );
+  sig.connect( 2, boost::bind( &return_argument, 2) );
+
+  BOOST_CHECK(sig() == 1);
+}
+
 int test_main(int, char* [])
 {
   using namespace std;
@@ -100,5 +122,8 @@ int test_main(int, char* [])
   BOOST_CHECK(ungrouped1);
   BOOST_CHECK(ungrouped2);
   BOOST_CHECK(ungrouped3);
+
+  test_group_compare();
+
   return 0;
 }
