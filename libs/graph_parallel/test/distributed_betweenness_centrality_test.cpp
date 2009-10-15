@@ -145,7 +145,7 @@ int test_main(int argc, char* argv[])
   // NOTE: Weighted betweenness centrality only works with non-zero edge weights
 
   // Build graphs
-  Graph g(ERIter(gen, n, prob), ERIter(), 
+  Graph g(edges_are_sorted, ERIter(gen, n, prob), ERIter(), 
           make_generator_iterator(gen, uniform_int<int>(1, C)),
           n);
 
