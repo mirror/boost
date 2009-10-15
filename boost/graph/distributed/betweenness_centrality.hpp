@@ -87,7 +87,7 @@ namespace boost {
     
     get_owner_of_first_tuple_element(OwnerMap owner) : owner(owner) { }
 
-    owner_type get_owner(Tuple t) { return boost::get(owner, get<0>(t)); }
+    owner_type get_owner(Tuple t) { return get(owner, get<0>(t)); }
 
   private:
     OwnerMap owner;

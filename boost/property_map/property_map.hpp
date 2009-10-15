@@ -581,6 +581,22 @@ namespace boost {
     value_type c;
   };
 
+  // Convert a Readable property map into a function object
+  template <typename PropMap>
+  class property_map_function {
+    PropMap pm;
+    typedef typename property_traits<PropMap>::key_type param_type;
+    public:
+    explicit property_map_function(const PropMap& pm): pm(pm) {}
+    typedef typename property_traits<PropMap>::value_type result_type;
+    result_type operator()(const param_type& k) const {return get(pm, k);}
+  };
+
+  template <typename PropMap>
+  property_map_function<PropMap>
+  make_property_map_function(const PropMap& pm) {
+    return property_map_function<PropMap>(pm);
+  }
 
 } // namespace boost
 
