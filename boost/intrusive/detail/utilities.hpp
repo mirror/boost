@@ -569,7 +569,7 @@ struct store_cont_ptr_on_it_impl
 template<class ValueTraits>
 struct  store_cont_ptr_on_it_impl<ValueTraits, true>
 {
-   static const bool value = false;
+   static const bool value = true;
 };
 
 template <class Container>
