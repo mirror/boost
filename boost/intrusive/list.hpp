@@ -107,7 +107,6 @@ class list_impl
 
    static const bool constant_time_size = Config::constant_time_size;
    static const bool stateful_value_traits = detail::is_stateful_value_traits<real_value_traits>::value;
-   BOOST_STATIC_ASSERT(( stateful_value_traits == false ));
 
    /// @cond
 
