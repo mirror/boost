@@ -88,4 +88,19 @@ First official release.
 * Better configuration for C++0x features when the headers aren't available.
 * Create less buckets by default.
 
+[h2 Boost 1.41.0 - Major update]
+
+* The original version made heavy use of macros to sidestep some of the older
+  compilers' poor template support. But since I no longer support those
+  compilers and the macro use was starting to become a maintenance burden it
+  has been rewritten to use templates instead of macros for the implementation
+  classes.
+
+* The container objcet is now smaller thanks to using `boost::compressed_pair`
+  for EBO and a slightly different function buffer - now using a bool instead
+  of a member pointer.
+
+* Buckets are allocated lazily which means that constructing an empty container
+  will not allocate any memory.
+
 [endsect]
