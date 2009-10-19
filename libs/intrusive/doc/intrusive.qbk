@@ -3183,7 +3183,8 @@ Until now all shown custom value traits are stateless, that is, [*the transforma
 and values is implemented in terms of static functions]. It's possible to use [*stateful] value traits
 so that we can separate nodes and values and [*avoid modifying types to insert nodes].
 [*Boost.Intrusive] differentiates between stateful and stateless value traits by checking if all
-Node <-> Value transformation functions are static or not:
+Node <-> Value transformation functions are static or not (except for Visual 7.1, since overloaded 
+static function detection is not possible, in this case the implementation checks if the class is empty):
 
 *  If all Node <-> Value transformation functions are static , a [*stateless]
    value traits is assumed.  transformations must be static functions.
