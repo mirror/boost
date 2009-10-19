@@ -26,6 +26,8 @@
 #include <boost/random/detail/const_mod.hpp>
 #include <boost/detail/workaround.hpp>
 
+#include <boost/random/detail/disable_warnings.hpp>
+
 namespace boost {
 namespace random {
 
@@ -269,5 +271,7 @@ private:
 #endif /* !BOOST_NO_INT64_T && !BOOST_NO_INTEGRAL_INT64_T */
 
 } // namespace boost
+
+#include <boost/random/detail/enable_warnings.hpp>
 
 #endif // BOOST_RANDOM_LINEAR_CONGRUENTIAL_HPP

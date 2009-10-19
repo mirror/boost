@@ -29,6 +29,8 @@
 #include <boost/type_traits/is_integral.hpp>
 #endif
 
+#include <boost/random/detail/disable_warnings.hpp>
+
 namespace boost {
 
 namespace random {
@@ -129,5 +131,7 @@ private:
 };
 
 } // namespace boost
+
+#include <boost/random/detail/disable_warnings.hpp>
 
 #endif // BOOST_RANDOM_RANDOM_GENERATOR_HPP

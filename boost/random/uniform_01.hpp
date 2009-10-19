@@ -23,6 +23,8 @@
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/pass_through_engine.hpp>
 
+#include <boost/random/detail/disable_warnings.hpp>
+
 namespace boost {
 
 namespace detail {
@@ -216,5 +218,7 @@ public:
 };
 
 } // namespace boost
+
+#include <boost/random/detail/enable_warnings.hpp>
 
 #endif // BOOST_RANDOM_UNIFORM_01_HPP

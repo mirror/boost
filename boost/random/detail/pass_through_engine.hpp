@@ -16,7 +16,7 @@
 
 #include <boost/config.hpp>
 #include <boost/random/detail/ptr_helper.hpp>
-
+#include <boost/random/detail/disable_warnings.hpp>
 
 namespace boost {
 namespace random {
@@ -93,6 +93,8 @@ operator>>(std::istream& is,
 } // namespace detail
 } // namespace random
 } // namespace boost
+
+#include <boost/random/detail/enable_warnings.hpp>
 
 #endif // BOOST_RANDOM_DETAIL_PASS_THROUGH_ENGINE_HPP
 
