@@ -215,6 +215,13 @@ void test_alloc()
   //  clean up memory leak
   tmp->~tester();
   boost::pool_allocator<tester>::deallocate(tmp, 1);
+
+  // test allocating zero elements
+  {
+      boost::pool_allocator<tester> alloc;
+      tester* ip = alloc.allocate(0);
+      alloc.deallocate(ip, 0);
+  }
 }
 
 // This is a wrapper around a UserAllocator.  It just registers alloc/dealloc

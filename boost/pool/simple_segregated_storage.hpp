@@ -147,7 +147,8 @@ class simple_segregated_storage
     void free_n(void * const chunks, const size_type n,
         const size_type partition_size)
     {
-      add_block(chunks, n * partition_size, partition_size);
+      if(n != 0)
+        add_block(chunks, n * partition_size, partition_size);
     }
 
     // pre: chunks was previously allocated from *this with the same
@@ -156,7 +157,8 @@ class simple_segregated_storage
     void ordered_free_n(void * const chunks, const size_type n,
         const size_type partition_size)
     {
-      add_ordered_block(chunks, n * partition_size, partition_size);
+      if(n != 0)
+        add_ordered_block(chunks, n * partition_size, partition_size);
     }
 };
 
@@ -247,6 +249,8 @@ template <typename SizeType>
 void * simple_segregated_storage<SizeType>::malloc_n(const size_type n,
     const size_type partition_size)
 {
+  if(n == 0)
+    return 0;
   void * start = &first;
   void * iter;
   do
