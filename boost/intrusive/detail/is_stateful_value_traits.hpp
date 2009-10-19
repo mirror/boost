@@ -14,6 +14,25 @@
 #define BOOST_INTRUSIVE_DETAIL_IS_STATEFUL_VALUE_TRAITS_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
+
+#if defined(_MSC_VER) && (_MSC_VER <= 1310)
+
+#include <boost/intrusive/detail/mpl.hpp>
+
+namespace boost {
+namespace intrusive {
+namespace detail {
+
+template<class ValueTraits>
+struct is_stateful_value_traits
+{
+   static const bool value = !detail::is_empty_class<ValueTraits>::value;
+};
+
+}}}
+
+#else
+
 #include <boost/intrusive/detail/function_detector.hpp>
 
 BOOST_INTRUSIVE_CREATE_FUNCTION_DETECTOR(to_node_ptr, boost_intrusive)
@@ -50,6 +69,8 @@ struct is_stateful_value_traits
 };
 
 }}}
+
+#endif
 
 #include <boost/intrusive/detail/config_end.hpp>
 
