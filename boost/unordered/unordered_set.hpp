@@ -192,7 +192,7 @@ namespace boost
                 const allocator_type &a = allocator_type())
           : table_(boost::unordered_detail::initial_size(
                     list.begin(), list.end(), n),
-                hf, eql, allocator_type())
+                hf, eql, a)
         {
             table_.insert_range(list.begin(), list.end());
         }
@@ -658,7 +658,7 @@ namespace boost
                 const allocator_type &a = allocator_type())
           : table_(boost::unordered_detail::initial_size(
                     list.begin(), list.end(), n),
-                hf, eql, allocator_type())
+                hf, eql, a)
         {
             table_.insert_range(list.begin(), list.end());
         }
