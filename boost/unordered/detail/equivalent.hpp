@@ -97,36 +97,6 @@ namespace boost { namespace unordered_detail {
     }
     
     template <class H, class P, class A, class K>
-    inline BOOST_DEDUCED_TYPENAME
-        hash_equivalent_table<H, P, A, K>::iterator_base
-        hash_equivalent_table<H, P, A, K>
-            ::emplace_hint_impl(iterator_base const& it, node_constructor& a)
-    {
-        // equal can throw, but with no effects
-        if (!it.node_ || !equal(get_key(a.value()), *it)) {
-            // Use the standard emplace if the iterator doesn't point
-            // to a matching key.
-            return emplace_impl(a);
-        }
-        else {
-            // Find the first node in the group - so that the node
-            // will be added at the end of the group.
-
-            node_ptr start = node::first_in_group(it.node_);
-
-            // reserve has basic exception safety if the hash function
-            // throws, strong otherwise.
-            bucket_ptr bucket = this->reserve_for_insert(this->size_ + 1) ?
-                get_bucket(this->bucket_index(get_key(a.value()))) :
-                it.bucket_;
-
-            // Nothing after this point can throw
-
-            return iterator_base(bucket, add_node(a, bucket, start));
-        }
-    }
-
-    template <class H, class P, class A, class K>
     inline void hash_equivalent_table<H, P, A, K>
             ::emplace_impl_no_rehash(node_constructor& a)
     {
@@ -156,25 +126,6 @@ namespace boost { namespace unordered_detail {
         return emplace_impl(a);
     }
 
-    // Emplace (equivalent key containers)
-    // (I'm using an overloaded emplace for both 'insert' and 'emplace')
-
-    // if hash function throws, basic exception safety
-    // strong otherwise
-    template <class H, class P, class A, class K>
-    template <class... Args>
-    BOOST_DEDUCED_TYPENAME hash_equivalent_table<H, P, A, K>::iterator_base
-        hash_equivalent_table<H, P, A, K>
-            ::emplace_hint(iterator_base const& it, Args&&... args)
-    {
-        // Create the node before rehashing in case it throws an
-        // exception (need strong safety in such a case).
-        node_constructor a(*this);
-        a.construct(std::forward<Args>(args)...);
-
-        return emplace_hint_impl(it, a);
-    }
-
 #else
 
 #define BOOST_UNORDERED_INSERT_IMPL(z, num_params, _)                       \
@@ -187,18 +138,6 @@ namespace boost { namespace unordered_detail {
         node_constructor a(*this);                                          \
         a.construct(BOOST_UNORDERED_CALL_PARAMS(z, num_params));            \
         return emplace_impl(a);                                             \
-    }                                                                       \
-                                                                            \
-    template <class H, class P, class A, class K>                           \
-    template <BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)>                 \
-    BOOST_DEDUCED_TYPENAME hash_equivalent_table<H, P, A, K>::iterator_base \
-        hash_equivalent_table<H, P, A, K>                                   \
-            ::emplace_hint(iterator_base const& it,                         \
-                BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))             \
-    {                                                                       \
-        node_constructor a(*this);                                          \
-        a.construct(BOOST_UNORDERED_CALL_PARAMS(z, num_params));            \
-        return emplace_hint_impl(it, a);                                    \
     }
 
     BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
