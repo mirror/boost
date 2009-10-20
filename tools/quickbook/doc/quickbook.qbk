@@ -628,6 +628,14 @@ from the output.
 [$image.jpg]
 ''']
 
+From version 1.5, you can also use
+[@http://www.docbook.org/tdg/en/html/imagedata.html
+DocBook imagedata attributes]:
+
+[pre'''
+[$image.jpg [width 200in] [height 200in]]
+''']
+
 [endsect]
 [section Footnotes]
 
