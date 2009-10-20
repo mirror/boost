@@ -263,6 +263,59 @@ void constructor_tests2(T*, test::random_generator const& generator = test::defa
         test::check_container(x, v);
         test::check_equivalent_keys(x);
     }
+
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+    std::initializer_list<BOOST_DEDUCED_TYPENAME T::value_type> list;
+    
+    std::cerr<<"Initializer list construct 1\n";
+    {
+        T x(list);
+        BOOST_TEST(x.empty());
+        BOOST_TEST(test::equivalent(x.hash_function(), hf));
+        BOOST_TEST(test::equivalent(x.key_eq(), eq));
+        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+    }
+
+    std::cerr<<"Initializer list construct 2\n";
+    {
+        T x(list, 1000);
+        BOOST_TEST(x.empty());
+        BOOST_TEST(x.bucket_count() >= 1000);
+        BOOST_TEST(test::equivalent(x.hash_function(), hf));
+        BOOST_TEST(test::equivalent(x.key_eq(), eq));
+        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+    }
+
+    std::cerr<<"Initializer list construct 3\n";
+    {
+        T x(list, 10, hf1);
+        BOOST_TEST(x.empty());
+        BOOST_TEST(x.bucket_count() >= 10);
+        BOOST_TEST(test::equivalent(x.hash_function(), hf1));
+        BOOST_TEST(test::equivalent(x.key_eq(), eq));
+        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+    }
+
+    std::cerr<<"Initializer list construct 4\n";
+    {
+        T x(list, 10, hf1, eq1);
+        BOOST_TEST(x.empty());
+        BOOST_TEST(x.bucket_count() >= 10);
+        BOOST_TEST(test::equivalent(x.hash_function(), hf1));
+        BOOST_TEST(test::equivalent(x.key_eq(), eq1));
+        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+    }
+
+    std::cerr<<"Initializer list construct 5\n";
+    {
+        T x(list, 10, hf1, eq1, al1);
+        BOOST_TEST(x.empty());
+        BOOST_TEST(x.bucket_count() >= 10);
+        BOOST_TEST(test::equivalent(x.hash_function(), hf1));
+        BOOST_TEST(test::equivalent(x.key_eq(), eq1));
+        BOOST_TEST(test::equivalent(x.get_allocator(), al1));
+    }
+#endif
 }
 
 template <class T>

@@ -710,8 +710,6 @@ namespace boost { namespace unordered_detail {
         // Insert methods
 
         iterator_base emplace_impl(node_constructor& a);
-        iterator_base emplace_hint_impl(iterator_base const& it,
-            node_constructor& a);
         void emplace_impl_no_rehash(node_constructor& a);
 
         // equals
@@ -725,18 +723,12 @@ namespace boost { namespace unordered_detail {
 
         template <class... Args>
         iterator_base emplace(Args&&... args);
-        template <class... Args>
-        iterator_base emplace_hint(iterator_base const& it, Args&&... args);
 
 #else
 
 #define BOOST_UNORDERED_INSERT_IMPL(z, n, _)                                   \
         template <BOOST_UNORDERED_TEMPLATE_ARGS(z, n)>                         \
-        iterator_base emplace(BOOST_UNORDERED_FUNCTION_PARAMS(z, n));          \
-                                                                               \
-        template <BOOST_UNORDERED_TEMPLATE_ARGS(z, n)>                         \
-        iterator_base emplace_hint(iterator_base const& it,                    \
-           BOOST_UNORDERED_FUNCTION_PARAMS(z, n));
+        iterator_base emplace(BOOST_UNORDERED_FUNCTION_PARAMS(z, n));
 
         BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
             BOOST_UNORDERED_INSERT_IMPL, _)

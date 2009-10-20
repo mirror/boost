@@ -192,7 +192,7 @@ namespace boost
                 const allocator_type &a = allocator_type())
           : table_(boost::unordered_detail::initial_size(
                     list.begin(), list.end(), n),
-                hf, eql, allocator_type())
+                hf, eql, a)
         {
             table_.insert_range(list.begin(), list.end());
         }
@@ -326,7 +326,7 @@ namespace boost
                     table_.emplace(obj));
         }
 
-        iterator insert(const_iterator hint, const value_type& obj)
+        iterator insert(const_iterator, const value_type& obj)
         {
             return iterator(table_.emplace(obj).first);
         }
@@ -658,7 +658,7 @@ namespace boost
                 const allocator_type &a = allocator_type())
           : table_(boost::unordered_detail::initial_size(
                     list.begin(), list.end(), n),
-                hf, eql, allocator_type())
+                hf, eql, a)
         {
             table_.insert_range(list.begin(), list.end());
         }
@@ -735,10 +735,9 @@ namespace boost
         }
 
         template <class... Args>
-        iterator emplace_hint(const_iterator hint, Args&&... args)
+        iterator emplace_hint(const_iterator, Args&&... args)
         {
-            return iterator(table_.emplace_hint(get(hint),
-                std::forward<Args>(args)...));
+            return iterator(table_.emplace(std::forward<Args>(args)...));
         }
 #else
 
@@ -747,10 +746,10 @@ namespace boost
             return iterator(table_.emplace(v));
         }
 
-        iterator emplace_hint(const_iterator hint,
+        iterator emplace_hint(const_iterator,
             value_type const& v = value_type())
         {
-            return iterator(table_.emplace_hint(get(hint), v));
+            return iterator(table_.emplace(v));
         }
 
 #define BOOST_UNORDERED_EMPLACE(z, n, _)                                       \
@@ -768,11 +767,11 @@ namespace boost
             template <                                                         \
                 BOOST_UNORDERED_TEMPLATE_ARGS(z, n)                            \
             >                                                                  \
-            iterator emplace_hint(const_iterator hint,                         \
+            iterator emplace_hint(const_iterator,                              \
                 BOOST_UNORDERED_FUNCTION_PARAMS(z, n)                          \
             )                                                                  \
             {                                                                  \
-                return iterator(table_.emplace_hint(get(hint),                 \
+                return iterator(table_.emplace(                                \
                         BOOST_UNORDERED_CALL_PARAMS(z, n)                      \
                 ));                                                            \
             }
@@ -789,9 +788,9 @@ namespace boost
             return iterator(table_.emplace(obj));
         }
 
-        iterator insert(const_iterator hint, const value_type& obj)
+        iterator insert(const_iterator, const value_type& obj)
         {
-            return iterator(table_.emplace_hint(get(hint), obj));
+            return iterator(table_.emplace(obj));
         }
 
         template <class InputIt>
