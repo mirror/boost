@@ -171,6 +171,7 @@ hr
 	color: black;
 	background-color: black;
 	height: 1px;
+	margin-top: 20pt;
 }
 
 blockquote
@@ -189,6 +190,7 @@ blockquote
 
 #footer
 {
+	margin-top:20pt;
 }
 
 .logo_pic
