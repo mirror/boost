@@ -20,6 +20,7 @@
 #include <boost/exception/errinfo_file_open_mode.hpp>
 #include <boost/exception/errinfo_type_info_name.hpp>
 #ifndef BOOST_NO_EXCEPTIONS
+#include <boost/exception/errinfo_nested_exception.hpp>
 #include <boost/exception_ptr.hpp>
 #endif
 

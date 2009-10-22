@@ -3,7 +3,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-	<title>exception::exception</title>
+	<title>errinfo_nested_exception</title>
 	<link href='reno.css' type='text/css' rel='stylesheet'/>
 </head>
 <body>
@@ -19,18 +19,20 @@
 <!-- Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>exception::exception</h3>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>errinfo_nested_exception</h3>
 </div>
-<div class="RenoIncludeDIV"><pre><span class="RenoLink">exception</span>();
-<span class="RenoLink">exception</span>( <span class="RenoLink"><a href="exception.html">exception</a></span> const &amp; x );</pre>
-</div><h4>Effects:</h4>
-<div><ul><li> Default constructor: initializes an empty boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object.</li>
-<li> Copy constructor: initializes a boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object which shares ownership with x of all data added through <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span>, including data that is added at a future time.</li>
-</ul></div>
-<h4>Throws:</h4>
-<p>Nothing.</p>
+<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="boost_exception_errinfo_nested_exception_hpp.html">boost/exception/errinfo_nested_exception.hpp</a></span>&gt;</p>
+<div class="RenoIncludeDIV"><pre>#include &lt;<span class="RenoLink"><a href="boost_exception_error_info_hpp.html">boost/exception/error_info.hpp</a></span>&gt;
+
+namespace
+boost
+    {
+<span class="RenoIncludeSPAN">    typedef ---unspecified--- <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span>;</span>
+<span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">typedef <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct errinfo_nested_exception_,<span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span>&gt; <span class="RenoLink">errinfo_nested_exception</span>;</span></span>
+    }</pre>
+</div></div><p>This type is designed to be used as a standard <span class="RenoLink"><a href="error_info.html">error_info</a></span> instance for transporting (in exceptions deriving from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>) an <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> to an exception nested into another exception.</p>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
-See also: <span class="RenoPageList"><a href="exception.html">exception</a></span>
+See also: <span class="RenoPageList"><a href="boost_exception_errinfo_nested_exception_hpp.html">boost/exception/errinfo_nested_exception.hpp</a></span>
 </div>
 <!-- Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
