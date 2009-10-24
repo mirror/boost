@@ -49,6 +49,8 @@ public:
 
 BOOST_SERIALIZATION_SHARED_PTR(A)
 
+int A::count = 0;
+
 // B is a subclass of A
 class B : public A
 {
@@ -69,7 +71,28 @@ public:
 BOOST_CLASS_EXPORT(B)
 BOOST_SERIALIZATION_SHARED_PTR(B)
 
-int A::count = 0;
+// test a non-polymorphic class
+class C
+{
+private:
+    friend class boost::serialization::access;
+    int z;
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int /* file_version */){
+        ar & BOOST_SERIALIZATION_NVP(z);
+    }
+public:
+    static int count;
+    bool operator==(const C & rhs) const {
+        return z == rhs.z;
+    }
+    C() :
+        z(++count)    // default constructor
+    {}
+    virtual ~C(){--count;}   // default destructor
+};
+
+int C::count = 0;
 
 void save(const char * testfile, const boost::shared_ptr<A>& spa)
 {
@@ -194,6 +217,36 @@ void save_and_load3(
     std::remove(testfile);
 }
 
+void save4(const char * testfile, const boost::shared_ptr<C>& spc)
+{
+    test_ostream os(testfile, TEST_STREAM_FLAGS);
+    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
+    oa << BOOST_SERIALIZATION_NVP(spc);
+}
+
+void load4(const char * testfile, boost::shared_ptr<C>& spc)
+{
+    test_istream is(testfile, TEST_STREAM_FLAGS);
+    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
+    ia >> BOOST_SERIALIZATION_NVP(spc);
+}
+
+// trivial test
+void save_and_load4(boost::shared_ptr<C>& spc)
+{
+    const char * testfile = boost::archive::tmpnam(NULL);
+    BOOST_REQUIRE(NULL != testfile);
+    save4(testfile, spc);
+    boost::shared_ptr<C> spc1;
+    load4(testfile, spc1);
+
+    BOOST_CHECK(
+        (spc.get() == NULL && spc1.get() == NULL)
+        || * spc == * spc1
+    );
+    std::remove(testfile);
+}
+
 // This does the tests
 int test_main(int /* argc */, char * /* argv */[])
 {
@@ -207,7 +260,7 @@ int test_main(int /* argc */, char * /* argv */[])
     spa = boost::shared_ptr<A>(new A);
     save_and_load(spa);
 
-    // Try to save and load pointers to As, to a text archive
+    // Try to save and load pointers to As
     spa = boost::shared_ptr<A>(new A);
     boost::shared_ptr<A> spa1 = spa;
     save_and_load2(spa, spa1);
@@ -218,12 +271,18 @@ int test_main(int /* argc */, char * /* argv */[])
     boost::weak_ptr<A> wp = spa;
     save_and_load3(spa, spa1, wp);
     
-    // Try to save and load pointers to Bs, to a text archive
+    // Try to save and load pointers to Bs
     spa = boost::shared_ptr<A>(new B);
     spa1 = spa;
     save_and_load2(spa, spa1);
 
     // obj of type B gets destroyed
     // as smart_ptr goes out of scope
+
+    // Try to save and load pointers to Bs
+    boost::shared_ptr<C> spc;
+    spc = boost::shared_ptr<C>(new C);
+    save_and_load4(spc);
+
     return EXIT_SUCCESS;
 }

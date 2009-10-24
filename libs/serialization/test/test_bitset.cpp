@@ -1,12 +1,13 @@
-/*!
- * \file      test_bitset.cpp
- * \brief     Test that serialization of std::bitset works.
- * \note      Should pass compilation and execution
- * \author    Brian Ravnsgaard Riis
- * \author    Kenneth Riddile
- * \date      16.09.2004, updated 04.03.2009
- * \license   Boost Software License 1.0
- */
+//  (C) Copyright 2009 Brian Ravnsgaard and Kenneth Riddile
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+//  See http://www.boost.org for most recent version including documentation.
+
+// Test that serialization of std::bitset works.
+// Should pass compilation and execution
+// 16.09.2004, updated 04.03.2009
 
 #include <cstddef> // NULL
 #include <cstdio> // remove
