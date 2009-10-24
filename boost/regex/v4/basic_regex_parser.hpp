@@ -141,6 +141,11 @@ void basic_regex_parser<charT, traits>::parse(const charT* p1, const charT* p2, 
    case regbase::literal:
       m_parser_proc = &basic_regex_parser<charT, traits>::parse_literal;
       break;
+   default:
+      // Ooops, someone has managed to set more than one of the main option flags, 
+      // so this must be an error:
+      fail(regex_constants::error_unknown, 0);
+      return;
    }
 
    // parse all our characters:

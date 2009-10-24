@@ -411,6 +411,7 @@ public:
    }
    void BOOST_REGEX_CALL set_first(BidiIterator i)
    {
+      BOOST_ASSERT(m_subs.size() > 2);
       // set up prefix:
       m_subs[1].second = i;
       m_subs[1].matched = (m_subs[1].first != i);
