@@ -250,14 +250,14 @@ namespace
         template<typename Lhs, typename Rhs>
         struct result
         {
-            typedef Rhs type;
+            typedef Lhs type;
         };
         
         template<typename Lhs, typename Rhs>
         typename result<Lhs,Rhs>::type
         operator()(const Lhs& lhs, const Rhs& rhs) const
         {
-            return rhs + boost::fusion::at_c<0>(lhs) * boost::fusion::at_c<1>(lhs);
+            return lhs + boost::fusion::at_c<0>(rhs) * boost::fusion::at_c<1>(rhs);
         }
     };
 

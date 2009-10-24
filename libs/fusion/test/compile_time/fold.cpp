@@ -22,7 +22,7 @@ namespace
     typedef int result_type;
 
     template<int n, int batch>
-    int operator()(distinct<n, batch> const& d, int state) const
+    int operator()(int state, distinct<n, batch> const& d) const
     {
       return state + n;
     }
