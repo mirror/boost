@@ -8,11 +8,7 @@ import testing ;
 #alias framework : /boost/test//boost_unit_test_framework ;
 alias framework : ;
 
-project unordered-test/exception-tests
-    : requirements
-        <toolset>intel-linux:"<cxxflags>-strict_ansi -cxxlib-icc"
-        <toolset>gcc:<cxxflags>"-Wsign-promo -Wunused-parameter"
-    ;
+project unordered-test/exception-tests ;
 
 test-suite unordered-exception
     :

@@ -7,10 +7,10 @@ import testing ;
 
 project unordered-test/unordered
     : requirements
-        <toolset>intel-linux:"<cxxflags>-strict_ansi -cxxlib-icc"
-        <toolset>gcc:<cxxflags>"-Wsign-promo -Wunused-parameter"
-        #<toolset>msvc:<cxxflags>/W4
         <warnings>all
+        <toolset>intel:<warnings>on
+        <toolset>msvc:<cxxflags>/W4
+        <toolset>gcc:<cxxflags>"-Wsign-promo -Wunused-parameter"
     ;
 
 test-suite unordered
