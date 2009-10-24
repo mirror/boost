@@ -24,8 +24,6 @@
 #include <boost/config.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/serialization/config.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 #include <boost/mpl/bool.hpp>
 
 #include <boost/config/abi_prefix.hpp> // must be the last header
@@ -48,11 +46,6 @@ class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info :
 {
 private:
     friend class boost::serialization::void_cast_detail::void_caster;
-    boost::shared_ptr<const extended_type_info> m_this;
-    boost::weak_ptr<const extended_type_info>
-    get_weak_ptr() const {
-        return m_this;
-    }
 
     // used to uniquely identify the type of class derived from this one
     // so that different derivations of this class can be simultaneously
@@ -115,4 +108,3 @@ inline const char * guid(){
 #include <boost/config/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_SERIALIZATION_EXTENDED_TYPE_INFO_HPP
-
