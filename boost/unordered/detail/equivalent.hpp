@@ -28,7 +28,7 @@ namespace boost { namespace unordered_detail {
             node_ptr it1 = i->next_;
             while(BOOST_UNORDERED_BORLAND_BOOL(it1))
             {
-                node_ptr it2 = other.find_iterator(get_key_from_ptr(it1));
+                node_ptr it2 = other.find_iterator(this->get_key_from_ptr(it1));
                 if(!BOOST_UNORDERED_BORLAND_BOOL(it2)) return false;
                 
                 node_ptr end1 = node::next_group(it1);
@@ -77,7 +77,7 @@ namespace boost { namespace unordered_detail {
         hash_equivalent_table<H, P, A, K>::iterator_base
         hash_equivalent_table<H, P, A, K>::emplace_impl(node_constructor& a)
     {
-        key_type const& k = get_key(a.value());
+        key_type const& k = this->get_key(a.value());
         std::size_t hash_value = this->hash_function()(k);
         
         if(!this->size_) {
@@ -85,7 +85,7 @@ namespace boost { namespace unordered_detail {
         }
         else {
             bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
-            node_ptr position = find_iterator(bucket, k);
+            node_ptr position = this->find_iterator(bucket, k);
 
             // reserve has basic exception safety if the hash function
             // throws, strong otherwise.
@@ -100,9 +100,9 @@ namespace boost { namespace unordered_detail {
     inline void hash_equivalent_table<H, P, A, K>
             ::emplace_impl_no_rehash(node_constructor& a)
     {
-        key_type const& k = get_key(a.value());
+        key_type const& k = this->get_key(a.value());
         bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
-        add_node(a, bucket, find_iterator(bucket, k));
+        add_node(a, bucket, this->find_iterator(bucket, k));
     }
 
 #if defined(BOOST_UNORDERED_STD_FORWARD)

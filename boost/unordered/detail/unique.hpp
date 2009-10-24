@@ -28,7 +28,7 @@ namespace boost { namespace unordered_detail {
             node_ptr it1 = i->next_;
             while(BOOST_UNORDERED_BORLAND_BOOL(it1))
             {
-                node_ptr it2 = other.find_iterator(get_key_from_ptr(it1));
+                node_ptr it2 = other.find_iterator(this->get_key_from_ptr(it1));
                 if(!BOOST_UNORDERED_BORLAND_BOOL(it2)) return false;
                 if(!extractor::compare_mapped(
                     node::get_value(it1), node::get_value(it2)))
@@ -76,7 +76,7 @@ namespace boost { namespace unordered_detail {
             return *this->emplace_empty_impl_with_node(a, 1);
         }
 
-        node_ptr pos = find_iterator(bucket, k);
+        node_ptr pos = this->find_iterator(bucket, k);
 
         if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
             return node::get_value(pos);
@@ -102,14 +102,13 @@ namespace boost { namespace unordered_detail {
 
     template <class H, class P, class A, class K>
     inline BOOST_DEDUCED_TYPENAME hash_unique_table<H, P, A, K>::emplace_return
-    hash_unique_table<H, P, A, K>
-        ::emplace_impl_with_node(node_constructor& a)
+    hash_unique_table<H, P, A, K>::emplace_impl_with_node(node_constructor& a)
     {
         // No side effects in this initial code
-        key_type const& k = get_key(a.value());
+        key_type const& k = this->get_key(a.value());
         std::size_t hash_value = this->hash_function()(k);
         bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
-        node_ptr pos = find_iterator(bucket, k);
+        node_ptr pos = this->find_iterator(bucket, k);
         
         if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
             // Found an existing key, return it (no throw).
@@ -139,7 +138,7 @@ namespace boost { namespace unordered_detail {
         // No side effects in this initial code
         std::size_t hash_value = this->hash_function()(k);
         bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
-        node_ptr pos = find_iterator(bucket, k);
+        node_ptr pos = this->find_iterator(bucket, k);
 
         if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
             // Found an existing key, return it (no throw).
@@ -203,7 +202,7 @@ namespace boost { namespace unordered_detail {
         std::size_t hash_value = this->hash_function()(k);                     \
         bucket_ptr bucket                                                      \
             = this->bucket_ptr_from_hash(hash_value);                          \
-        node_ptr pos = find_iterator(bucket, k);                               \
+        node_ptr pos = this->find_iterator(bucket, k);                         \
                                                                                \
         if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {                               \
             return emplace_return(iterator_base(bucket, pos), false);          \
@@ -330,7 +329,7 @@ namespace boost { namespace unordered_detail {
             key_type const& k = extractor::extract(*i);
             std::size_t hash_value = this->hash_function()(k);
             bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
-            node_ptr pos = find_iterator(bucket, k);
+            node_ptr pos = this->find_iterator(bucket, k);
 
             if (!BOOST_UNORDERED_BORLAND_BOOL(pos)) {
                 // Doesn't already exist, add to bucket.
