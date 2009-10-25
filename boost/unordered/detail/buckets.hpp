@@ -10,12 +10,19 @@
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/unordered/detail/node.hpp>
+#include <boost/unordered/detail/util.hpp>
 
 namespace boost { namespace unordered_detail {
     
     ////////////////////////////////////////////////////////////////////////////
     // Buckets
     
+    template <class A, class G>
+    inline std::size_t hash_buckets<A, G>::max_bucket_count() const {
+        // -1 to account for the sentinel.
+        return prev_prime(this->bucket_alloc().max_size() - 1);
+    }
+
     template <class A, class G>
     inline BOOST_DEDUCED_TYPENAME hash_buckets<A, G>::bucket_ptr
         hash_buckets<A, G>::get_bucket(std::size_t num) const

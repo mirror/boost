@@ -298,10 +298,7 @@ namespace boost { namespace unordered_detail {
             return allocators_.first(); }
         node_allocator& node_alloc() {
             return allocators_.second(); }
-        std::size_t max_bucket_count() const {
-            // -1 to account for the sentinel.
-            return prev_prime(this->bucket_alloc().max_size() - 1);
-        }
+        std::size_t max_bucket_count() const;
 
         // Constructors
 
