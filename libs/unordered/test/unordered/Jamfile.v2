@@ -8,7 +8,8 @@ import testing ;
 project unordered-test/unordered
     : requirements
         <warnings>all
-        <toolset>intel:<warnings>on <cxxflags>-strict_ansi
+        <toolset>intel:<warnings>on
+        <toolset>intel:<cxxflags>-strict-ansi
         <toolset>msvc:<cxxflags>/W4
         <toolset>gcc:<cxxflags>"-Wsign-promo -Wunused-parameter"
     ;
