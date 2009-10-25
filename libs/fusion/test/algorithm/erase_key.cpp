@@ -66,8 +66,8 @@ main()
     std::cout << tuple_close(']');
     std::cout << tuple_delimiter(", ");
 
-    test_set(as_set(erase_key<char>(make_set(1, 'x', 1.5, std::string("hello")))));
-    test_map(as_map(erase_key<_2>(make_map<_1, _2, _3, _4>(1, 'x', 1.5, "hello"))));
+    test_set(erase_key<char>(make_set(1, 'x', 1.5, std::string("hello"))));
+    test_map(erase_key<_2>(make_map<_1, _2, _3, _4>(1, 'x', 1.5, "hello")));
 
     return boost::report_errors();
 }

@@ -10,7 +10,12 @@
 #include <boost/fusion/sequence/intrinsic/at_key.hpp>
 #include <boost/fusion/sequence/intrinsic/value_at_key.hpp>
 #include <boost/fusion/sequence/intrinsic/has_key.hpp>
+#include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
+#include <boost/fusion/iterator/key_of.hpp>
+#include <boost/fusion/iterator/deref_data.hpp>
+#include <boost/fusion/iterator/value_of_data.hpp>
+#include <boost/fusion/iterator/next.hpp>
 #include <boost/fusion/support/pair.hpp>
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/static_assert.hpp>
@@ -48,12 +53,23 @@ main()
             boost::is_same<result_of::value_at_key<set_type, int>::type, int>::value));
         BOOST_STATIC_ASSERT((
             boost::is_same<result_of::value_at_key<set_type, std::string>::type, std::string>::value));
-        
+
         std::cout << m << std::endl;
 
         BOOST_STATIC_ASSERT((result_of::has_key<set_type, int>::value));
         BOOST_STATIC_ASSERT((result_of::has_key<set_type, std::string>::value));
         BOOST_STATIC_ASSERT((!result_of::has_key<set_type, double>::value));
+
+        std::cout << deref_data(begin(m)) << std::endl;
+        std::cout << deref_data(next(begin(m))) << std::endl;
+
+        BOOST_TEST(deref_data(begin(m)) == 123);
+        BOOST_TEST(deref_data(next(begin(m))) == "Hola");
+
+        BOOST_STATIC_ASSERT((is_same<result_of::key_of<result_of::begin<set_type>::type>::type, int>::value));
+        BOOST_STATIC_ASSERT((is_same<result_of::key_of<result_of::next<result_of::begin<set_type>::type>::type>::type, std::string>::value));
+        BOOST_STATIC_ASSERT((is_same<result_of::value_of_data<result_of::begin<set_type>::type>::type, int>::value));
+        BOOST_STATIC_ASSERT((is_same<result_of::value_of_data<result_of::next<result_of::begin<set_type>::type>::type>::type, std::string>::value));
     }
     
     {

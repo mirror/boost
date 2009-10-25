@@ -20,6 +20,9 @@
 #include <boost/type_traits/is_base_of.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/inherit.hpp>
+#include <boost/mpl/identity.hpp>
 
 namespace boost { namespace fusion
 {
@@ -32,8 +35,15 @@ namespace boost { namespace fusion
         typedef reverse_view_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::true_ is_view;
+        typedef typename traits::category_of<Sequence>::type seq_category;
 
-        typedef typename traits::category_of<Sequence>::type category;
+        typedef typename
+            mpl::eval_if<
+                traits::is_associative<Sequence>
+              , mpl::inherit2<seq_category,associative_sequence_tag>
+              , mpl::identity<seq_category>
+            >::type
+        category;
         typedef typename result_of::begin<Sequence>::type first_type;
         typedef typename result_of::end<Sequence>::type last_type;
         typedef typename result_of::size<Sequence>::type size;

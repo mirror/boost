@@ -56,7 +56,7 @@ namespace detail
     {
         typedef typename
         static_fold<
-            typename result_of::next<First>::type
+              typename result_of::next<First>::type
             , Last
             , typename fold_apply<State, First, F>::type
             , F

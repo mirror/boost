@@ -11,11 +11,13 @@
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/support/detail/access.hpp>
 #include <boost/fusion/container/map/map_fwd.hpp>
-#include <boost/fusion/container/map/detail/lookup_key.hpp>
 #include <boost/fusion/container/map/detail/begin_impl.hpp>
 #include <boost/fusion/container/map/detail/end_impl.hpp>
-#include <boost/fusion/container/map/detail/at_key_impl.hpp>
-#include <boost/fusion/container/map/detail/value_at_key_impl.hpp>
+#include <boost/fusion/container/map/detail/value_of_impl.hpp>
+#include <boost/fusion/container/map/detail/deref_data_impl.hpp>
+#include <boost/fusion/container/map/detail/deref_impl.hpp>
+#include <boost/fusion/container/map/detail/key_of_impl.hpp>
+#include <boost/fusion/container/map/detail/value_of_data_impl.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/bool.hpp>
@@ -23,7 +25,6 @@
 namespace boost { namespace fusion
 {
     struct void_;
-    struct map_tag;
     struct fusion_sequence_tag;
 
     template <BOOST_PP_ENUM_PARAMS(FUSION_MAX_MAP_SIZE, typename T)>
@@ -49,7 +50,6 @@ namespace boost { namespace fusion
             : data(rhs) {}
 
         #include <boost/fusion/container/map/detail/map_forward_ctor.hpp>
-        #include <boost/fusion/container/map/detail/map_lookup.hpp>
 
         template <typename T>
         map&

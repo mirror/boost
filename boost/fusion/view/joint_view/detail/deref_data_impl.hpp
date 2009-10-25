@@ -1,40 +1,34 @@
 /*=============================================================================
-    Copyright (c) 2001-2006 Joel de Guzman
     Copyright (c) 2009 Christopher Schmidt
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef BOOST_FUSION_CONTAINER_MAP_DETAIL_BEGIN_IMPL_HPP
-#define BOOST_FUSION_CONTAINER_MAP_DETAIL_BEGIN_IMPL_HPP
+#ifndef BOOST_FUSION_VIEW_JOINT_VIEW_DETAIL_DEREF_DATA_IMPL_HPP
+#define BOOST_FUSION_VIEW_JOINT_VIEW_DETAIL_DEREF_DATA_IMPL_HPP
 
-#include <boost/fusion/iterator/basic_iterator.hpp>
+#include <boost/fusion/iterator/deref_data.hpp>
 
 namespace boost { namespace fusion { namespace extension
 {
     template <typename>
-    struct begin_impl;
+    struct deref_data_impl;
 
     template <>
-    struct begin_impl<map_tag>
+    struct deref_data_impl<joint_view_iterator_tag>
     {
-        template <typename Seq>
+        template <typename It>
         struct apply
         {
-            typedef
-                basic_iterator<
-                    map_iterator_tag
-                  , typename Seq::category
-                  , Seq
-                  , 0
-                >
+            typedef typename
+                result_of::deref_data<typename It::first_type>::type
             type;
 
             static type
-            call(Seq& seq)
+            call(It const& it)
             {
-                return type(seq,0);
+                return fusion::deref_data(it.first);
             }
         };
     };
