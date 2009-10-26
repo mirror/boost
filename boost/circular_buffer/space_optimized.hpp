@@ -513,6 +513,12 @@ public:
     */
     ~circular_buffer_space_optimized();
 
+    //! no-comment
+    void erase_begin(size_type n);
+
+    //! no-comment
+    void erase_end(size_type n);
+
 #endif // #if defined(BOOST_CB_NEVER_DEFINED)
 
     //! The assign operator.

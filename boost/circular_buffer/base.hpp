@@ -20,6 +20,7 @@
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/type_traits/is_stateless.hpp>
 #include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/is_scalar.hpp>
 #include <algorithm>
 #include <utility>
 #include <deque>
@@ -1805,7 +1806,8 @@ public:
         \par Complexity
              Linear (in <code>std::distance(pos, end())</code>).
         \sa <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,
-            <code>rerase(iterator, iterator)</code>, <code>clear()</code>
+            <code>rerase(iterator, iterator)</code>, <code>erase_begin(size_type)</code>,
+            <code>erase_end(size_type)</code>, <code>clear()</code>
     */
     iterator erase(iterator pos) {
         BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
@@ -1842,7 +1844,7 @@ public:
         \par Complexity
              Linear (in <code>std::distance(first, end())</code>).
         \sa <code>erase(iterator)</code>, <code>rerase(iterator)</code>, <code>rerase(iterator, iterator)</code>,
-            <code>clear()</code>
+            <code>erase_begin(size_type)</code>, <code>erase_end(size_type)</code>, <code>clear()</code>
     */
     iterator erase(iterator first, iterator last) {
         BOOST_CB_ASSERT(first.is_valid(this)); // check for uninitialized or invalidated iterator
@@ -1881,7 +1883,8 @@ public:
               <code>erase(iterator)</code> if the iterator <code>pos</code> is close to the beginning of the
               <code>circular_buffer</code>. (See the <i>Complexity</i>.)
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
-            <code>rerase(iterator, iterator)</code>, <code>clear()</code>
+            <code>rerase(iterator, iterator)</code>, <code>erase_begin(size_type)</code>,
+            <code>erase_end(size_type)</code>, <code>clear()</code>
     */
     iterator rerase(iterator pos) {
         BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
@@ -1921,7 +1924,7 @@ public:
               <code>erase(iterator, iterator)</code> if <code>std::distance(begin(), first)</code> is lower that
               <code>std::distance(last, end())</code>.
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,
-            <code>clear()</code>
+            <code>erase_begin(size_type)</code>, <code>erase_end(size_type)</code>, <code>clear()</code>
     */
     iterator rerase(iterator first, iterator last) {
         BOOST_CB_ASSERT(first.is_valid(this)); // check for uninitialized or invalidated iterator
@@ -1947,6 +1950,70 @@ public:
         return iterator(this, last.m_it);
     }
 
+    //! Remove first <code>n</code> elements (with constant complexity for scalar types).
+    /*!
+        \pre <code>n \<= size()</code>
+        \post The <code>n</code> elements at the beginning of the <code>circular_buffer</code> will be removed.
+        \param n The number of elements to be removed.
+        \throws Whatever <code>T::operator = (const T&)</code> throws. (Does not throw anything in case of scalars.)
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything. (I.e. no throw in
+             case of scalars.)
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the first <code>n</code> erased elements.
+        \par Complexity
+             Constant (in <code>n</code>) for scalar types; linear for other types.
+        \note This method has been specially designed for types which do not require an explicit destructruction (e.g.
+              integer, float or a pointer). For these scalar types a call to a destructor is not required which makes
+              it possible to implement the "erase from beginning" operation with a constant complexity. For non-sacalar
+              types the complexity is linear (hence the explicit destruction is needed) and the implementation is
+              actually equivalent to
+              <code>\link circular_buffer::rerase(iterator, iterator) rerase(begin(), begin() + n)\endlink</code>.
+        \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
+            <code>rerase(iterator)</code>, <code>rerase(iterator, iterator)</code>,
+            <code>erase_end(size_type)</code>, <code>clear()</code>
+    */
+    void erase_begin(size_type n) {
+        BOOST_CB_ASSERT(n <= size()); // check for n greater than size
+#if BOOST_CB_ENABLE_DEBUG
+        erase_begin(n, false_type());
+#else
+        erase_begin(n, is_scalar<value_type>());
+#endif
+    }
+
+    //! Remove last <code>n</code> elements (with constant complexity for scalar types).
+    /*!
+        \pre <code>n \<= size()</code>
+        \post The <code>n</code> elements at the end of the <code>circular_buffer</code> will be removed.
+        \param n The number of elements to be removed.
+        \throws Whatever <code>T::operator = (const T&)</code> throws. (Does not throw anything in case of scalars.)
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything. (I.e. no throw in
+             case of scalars.)
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the last <code>n</code> erased elements.
+        \par Complexity
+             Constant (in <code>n</code>) for scalar types; linear for other types.
+        \note This method has been specially designed for types which do not require an explicit destructruction (e.g.
+              integer, float or a pointer). For these scalar types a call to a destructor is not required which makes
+              it possible to implement the "erase from end" operation with a constant complexity. For non-sacalar
+              types the complexity is linear (hence the explicit destruction is needed) and the implementation is
+              actually equivalent to
+              <code>\link circular_buffer::erase(iterator, iterator) erase(end() - n, end())\endlink</code>.
+        \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
+            <code>rerase(iterator)</code>, <code>rerase(iterator, iterator)</code>,
+            <code>erase_begin(size_type)</code>, <code>clear()</code>
+    */
+    void erase_end(size_type n) {
+        BOOST_CB_ASSERT(n <= size()); // check for n greater than size
+#if BOOST_CB_ENABLE_DEBUG
+        erase_end(n, false_type());
+#else
+        erase_end(n, is_scalar<value_type>());
+#endif
+    }
+
     //! Remove all stored elements from the <code>circular_buffer</code>.
     /*!
         \post <code>size() == 0</code>
@@ -1959,7 +2026,8 @@ public:
         \par Complexity
              Linear (in the size of the <code>circular_buffer</code>).
         \sa <code>~circular_buffer()</code>, <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
-            <code>rerase(iterator)</code>, <code>rerase(iterator, iterator)</code>
+            <code>rerase(iterator)</code>, <code>rerase(iterator, iterator)</code>,
+            <code>erase_begin(size_type)</code>, <code>erase_end(size_type)</code>
     */
     void clear() {
         destroy_content();
@@ -2563,6 +2631,30 @@ private:
         m_first = sub(m_first, n);
         m_last = sub(m_last, n - construct);
         m_size += construct;
+    }
+
+    //! Specialized erase_begin method.
+    void erase_begin(size_type n, const true_type&) {
+        m_first = add(m_first, n);
+        m_size -= n;
+    }
+
+    //! Specialized erase_begin method.
+    void erase_begin(size_type n, const false_type&) {
+        iterator b = begin();
+        rerase(b, b + n);
+    }
+
+    //! Specialized erase_end method.
+    void erase_end(size_type n, const true_type&) {
+        m_last = sub(m_last, n);
+        m_size -= n;
+    }
+
+    //! Specialized erase_end method.
+    void erase_end(size_type n, const false_type&) {
+        iterator e = end();
+        erase(e - n, e);
     }
 };
 

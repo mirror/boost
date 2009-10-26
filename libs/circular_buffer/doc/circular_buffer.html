@@ -338,6 +338,8 @@ public:
    iterator <a href="#classboost_1_1circular__buffer_1b6d4ae77d7445f844e30e78592f1e06f">rerase</a>(iterator pos);
    iterator <a href=
 "#classboost_1_1circular__buffer_1b0f98ae303584ded5397f067bbfc911f">rerase</a>(iterator first, iterator last);
+   void <a href="#classboost_1_1circular__buffer_1b25d379cf66ace025036a47ddb344abd">erase_begin</a>(size_type n);
+   void <a href="#classboost_1_1circular__buffer_17485ee7f58b01363170114f2123a48d7">erase_end</a>(size_type n);
    void <a href="#classboost_1_1circular__buffer_1826f5770a40b8b752eb9587378464d1e">clear</a>();
 };
 
@@ -6110,7 +6112,10 @@ template &lt;class T, class Alloc&gt;
                 "#classboost_1_1circular__buffer_1b6d4ae77d7445f844e30e78592f1e06f">rerase(iterator)</a></code>,
                 <code><a href="#classboost_1_1circular__buffer_1b0f98ae303584ded5397f067bbfc911f">rerase(iterator,
                 iterator)</a></code>, <code><a href=
-                "#classboost_1_1circular__buffer_1826f5770a40b8b752eb9587378464d1e">clear()</a></code>
+                "#classboost_1_1circular__buffer_1b25d379cf66ace025036a47ddb344abd">erase_begin(size_type)</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_17485ee7f58b01363170114f2123a48d7">erase_end(size_type)</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_1826f5770a40b8b752eb9587378464d1e">clear()</a></code>
               </dd>
             </dl>
           </td>
@@ -6222,7 +6227,10 @@ template &lt;class T, class Alloc&gt;
                 "#classboost_1_1circular__buffer_1b6d4ae77d7445f844e30e78592f1e06f">rerase(iterator)</a></code>,
                 <code><a href="#classboost_1_1circular__buffer_1b0f98ae303584ded5397f067bbfc911f">rerase(iterator,
                 iterator)</a></code>, <code><a href=
-                "#classboost_1_1circular__buffer_1826f5770a40b8b752eb9587378464d1e">clear()</a></code>
+                "#classboost_1_1circular__buffer_1b25d379cf66ace025036a47ddb344abd">erase_begin(size_type)</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_17485ee7f58b01363170114f2123a48d7">erase_end(size_type)</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_1826f5770a40b8b752eb9587378464d1e">clear()</a></code>
               </dd>
             </dl>
           </td>
@@ -6335,7 +6343,10 @@ template &lt;class T, class Alloc&gt;
                 iterator)</a></code>, <code><a href=
                 "#classboost_1_1circular__buffer_1b0f98ae303584ded5397f067bbfc911f">rerase(iterator,
                 iterator)</a></code>, <code><a href=
-                "#classboost_1_1circular__buffer_1826f5770a40b8b752eb9587378464d1e">clear()</a></code>
+                "#classboost_1_1circular__buffer_1b25d379cf66ace025036a47ddb344abd">erase_begin(size_type)</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_17485ee7f58b01363170114f2123a48d7">erase_end(size_type)</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_1826f5770a40b8b752eb9587378464d1e">clear()</a></code>
               </dd>
             </dl>
           </td>
@@ -6460,6 +6471,219 @@ template &lt;class T, class Alloc&gt;
                 <code><a href="#classboost_1_1circular__buffer_1a96415389509a18bd7d7b5d8e4dda9bd">erase(iterator,
                 iterator)</a></code>, <code><a href=
                 "#classboost_1_1circular__buffer_1b6d4ae77d7445f844e30e78592f1e06f">rerase(iterator)</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_1b25d379cf66ace025036a47ddb344abd">erase_begin(size_type)</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_17485ee7f58b01363170114f2123a48d7">erase_end(size_type)</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_1826f5770a40b8b752eb9587378464d1e">clear()</a></code>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="classboost_1_1circular__buffer_1b25d379cf66ace025036a47ddb344abd" name=
+            "classboost_1_1circular__buffer_1b25d379cf66ace025036a47ddb344abd"></a><code><b>void erase_begin(<a href=
+            "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> n);</b></code><br>
+            <br>
+            Remove first <code>n</code> elements (with constant complexity for scalar types).
+            <dl>
+              <dt>
+                <b>Precondition:</b>
+              </dt>
+              <dd>
+                <code>n &lt;= <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                The <code>n</code> elements at the beginning of the <code>circular_buffer</code> will be removed.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>n</code>
+                  </dt>
+                  <dd>
+                    The number of elements to be removed.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws. (Does not throw anything in case of
+                scalars.)
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything. (I.e. no throw
+                in case of scalars.)
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates iterators pointing to the first <code>n</code> erased elements.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in <code>n</code>) for scalar types; linear for other types.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Note:</b>
+              </dt>
+              <dd>
+                This method has been specially designed for types which do not require an explicit destructruction
+                (e.g. integer, float or a pointer). For these scalar types a call to a destructor is not required which
+                makes it possible to implement the "erase from beginning" operation with a constant complexity. For
+                non-sacalar types the complexity is linear (hence the explicit destruction is needed) and the
+                implementation is actually equivalent to <code><a href=
+                "#classboost_1_1circular__buffer_1b0f98ae303584ded5397f067bbfc911f">rerase(begin(), begin() +
+                n)</a></code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer_197155de712db1759e1698455b49a0be3">erase(iterator)</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_1a96415389509a18bd7d7b5d8e4dda9bd">erase(iterator,
+                iterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1b6d4ae77d7445f844e30e78592f1e06f">rerase(iterator)</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_1b0f98ae303584ded5397f067bbfc911f">rerase(iterator,
+                iterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_17485ee7f58b01363170114f2123a48d7">erase_end(size_type)</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_1826f5770a40b8b752eb9587378464d1e">clear()</a></code>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a id="classboost_1_1circular__buffer_17485ee7f58b01363170114f2123a48d7" name=
+            "classboost_1_1circular__buffer_17485ee7f58b01363170114f2123a48d7"></a><code><b>void erase_end(<a href=
+            "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> n);</b></code><br>
+            <br>
+            Remove last <code>n</code> elements (with constant complexity for scalar types).
+            <dl>
+              <dt>
+                <b>Precondition:</b>
+              </dt>
+              <dd>
+                <code>n &lt;= <a href=
+                "#classboost_1_1circular__buffer_15fa0edd153e2591dd6bf070eb663ee32">size()</a></code>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Effect:</b>
+              </dt>
+              <dd>
+                The <code>n</code> elements at the end of the <code>circular_buffer</code> will be removed.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Parameter(s):</b>
+              </dt>
+              <dd>
+                <dl compact>
+                  <dt>
+                    <code>n</code>
+                  </dt>
+                  <dd>
+                    The number of elements to be removed.
+                  </dd>
+                </dl>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Throws:</b>
+              </dt>
+              <dd>
+                Whatever <code>T::operator = (const T&amp;)</code> throws. (Does not throw anything in case of
+                scalars.)
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Exception Safety:</b>
+              </dt>
+              <dd>
+                Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything. (I.e. no throw
+                in case of scalars.)
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Iterator Invalidation:</b>
+              </dt>
+              <dd>
+                Invalidates iterators pointing to the last <code>n</code> erased elements.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Complexity:</b>
+              </dt>
+              <dd>
+                Constant (in <code>n</code>) for scalar types; linear for other types.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Note:</b>
+              </dt>
+              <dd>
+                This method has been specially designed for types which do not require an explicit destructruction
+                (e.g. integer, float or a pointer). For these scalar types a call to a destructor is not required which
+                makes it possible to implement the "erase from end" operation with a constant complexity. For
+                non-sacalar types the complexity is linear (hence the explicit destruction is needed) and the
+                implementation is actually equivalent to <code><a href=
+                "#classboost_1_1circular__buffer_1a96415389509a18bd7d7b5d8e4dda9bd">erase(end() - n, end())</a></code>.
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>See Also:</b>
+              </dt>
+              <dd>
+                <code><a href=
+                "#classboost_1_1circular__buffer_197155de712db1759e1698455b49a0be3">erase(iterator)</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_1a96415389509a18bd7d7b5d8e4dda9bd">erase(iterator,
+                iterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1b6d4ae77d7445f844e30e78592f1e06f">rerase(iterator)</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_1b0f98ae303584ded5397f067bbfc911f">rerase(iterator,
+                iterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1b25d379cf66ace025036a47ddb344abd">erase_begin(size_type)</a></code>,
                 <code><a href="#classboost_1_1circular__buffer_1826f5770a40b8b752eb9587378464d1e">clear()</a></code>
               </dd>
             </dl>
@@ -6527,7 +6751,10 @@ template &lt;class T, class Alloc&gt;
                 iterator)</a></code>, <code><a href=
                 "#classboost_1_1circular__buffer_1b6d4ae77d7445f844e30e78592f1e06f">rerase(iterator)</a></code>,
                 <code><a href="#classboost_1_1circular__buffer_1b0f98ae303584ded5397f067bbfc911f">rerase(iterator,
-                iterator)</a></code>
+                iterator)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1b25d379cf66ace025036a47ddb344abd">erase_begin(size_type)</a></code>,
+                <code><a href=
+                "#classboost_1_1circular__buffer_17485ee7f58b01363170114f2123a48d7">erase_end(size_type)</a></code>
               </dd>
             </dl>
           </td>
@@ -7123,6 +7350,18 @@ template &lt;class T, class Alloc&gt;
       <a name="relnotes" id="relnotes">Release Notes</a>
     </h2>
     <dl>
+      <dd>
+        <h3>
+          Boost 1.42
+        </h3>
+      </dd>
+      <dd>
+        <ul>
+          <li>Added methods <code>erase_begin(size_type)</code> and <code>erase_end(size_type)</code> with constant
+          complexity for such types of stored elements which do not need an explicit destruction.
+          </li>
+        </ul>
+      </dd>
       <dd>
         <h3>
           Boost 1.37
