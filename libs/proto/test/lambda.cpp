@@ -6,19 +6,12 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <sstream>
-#include <boost/version.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/min_max.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/next_prior.hpp>
-#if BOOST_VERSION < 103500
-# include <boost/spirit/fusion/sequence/at.hpp>
-# include <boost/spirit/fusion/sequence/tuple.hpp>
-namespace boost { namespace fusion { namespace result_of { using namespace meta; }}}
-#else
-# include <boost/fusion/tuple.hpp>
-#endif
+#include <boost/fusion/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <boost/typeof/std/sstream.hpp>
 #include <boost/typeof/std/ostream.hpp>
@@ -95,11 +88,7 @@ struct lambda_context
     typename fusion::result_of::at<Tuple, I>::type
     operator ()(proto::tag::terminal, placeholder<I> const &) const
     {
-        #if BOOST_VERSION < 103500
-        return fusion::at<I::value>(this->args_);
-        #else
         return fusion::at<I>(this->args_);
-        #endif
     }
 
     Tuple args_;

@@ -14,7 +14,6 @@
     #ifndef BOOST_PROTO_CONTEXT_CALLABLE_HPP_EAN_06_23_2007
     #define BOOST_PROTO_CONTEXT_CALLABLE_HPP_EAN_06_23_2007
 
-    #include <boost/proto/detail/prefix.hpp> // must be first include
     #include <boost/config.hpp>
     #include <boost/detail/workaround.hpp>
     #include <boost/preprocessor/cat.hpp>
@@ -32,7 +31,6 @@
     #include <boost/type_traits/remove_cv.hpp>
     #include <boost/proto/proto_fwd.hpp>
     #include <boost/proto/traits.hpp> // for child_c
-    #include <boost/proto/detail/suffix.hpp> // must be last include
 
     namespace boost { namespace proto
     {
@@ -86,7 +84,7 @@
             template<
                 typename Expr
               , typename Context
-              , long Arity          BOOST_PROTO_WHEN_BUILDING_DOCS(= Expr::proto_arity_c)
+              , long Arity          // = Expr::proto_arity_c
             >
             struct callable_eval
             {};
@@ -191,7 +189,7 @@
             /// \endcode
             template<
                 typename Context
-              , typename DefaultCtx BOOST_PROTO_WHEN_BUILDING_DOCS(= default_context)
+              , typename DefaultCtx // = default_context
             >
             struct callable_context
             {

@@ -11,14 +11,9 @@
 #include <boost/proto/core.hpp>
 #include <boost/proto/transform.hpp>
 #include <boost/utility/result_of.hpp>
-#if BOOST_VERSION < 103500
-# include <boost/spirit/fusion/sequence/cons.hpp>
-# include <boost/spirit/fusion/sequence/tuple.hpp>
-#else
-# include <boost/fusion/include/cons.hpp>
-# include <boost/fusion/include/tuple.hpp>
-# include <boost/fusion/include/pop_front.hpp>
-#endif
+#include <boost/fusion/include/cons.hpp>
+#include <boost/fusion/include/tuple.hpp>
+#include <boost/fusion/include/pop_front.hpp>
 #include <boost/test/unit_test.hpp>
 
 namespace mpl = boost::mpl;

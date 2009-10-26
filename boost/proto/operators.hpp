@@ -10,7 +10,6 @@
 #ifndef BOOST_PROTO_OPERATORS_HPP_EAN_04_01_2005
 #define BOOST_PROTO_OPERATORS_HPP_EAN_04_01_2005
 
-#include <boost/proto/detail/prefix.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>
 #include <boost/preprocessor/seq/seq.hpp>
 #include <boost/mpl/or.hpp>
@@ -22,7 +21,6 @@
 #include <boost/proto/matches.hpp>
 #include <boost/proto/generate.hpp>
 #include <boost/proto/make_expr.hpp>
-#include <boost/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto
 {
@@ -274,63 +272,63 @@ namespace boost { namespace proto
     }                                                                                               \
     /**/
 
-    BOOST_PROTO_BEGIN_ADL_NAMESPACE(exprns_)
-
-    BOOST_PROTO_DEFINE_UNARY_OPERATOR(+, tag::unary_plus, 0)
-    BOOST_PROTO_DEFINE_UNARY_OPERATOR(-, tag::negate, 0)
-    BOOST_PROTO_DEFINE_UNARY_OPERATOR(*, tag::dereference, 0)
-    BOOST_PROTO_DEFINE_UNARY_OPERATOR(~, tag::complement, 0)
-    BOOST_PROTO_DEFINE_UNARY_OPERATOR(&, tag::address_of, 0)
-    BOOST_PROTO_DEFINE_UNARY_OPERATOR(!, tag::logical_not, 0)
-    BOOST_PROTO_DEFINE_UNARY_OPERATOR(++, tag::pre_inc, 0)
-    BOOST_PROTO_DEFINE_UNARY_OPERATOR(--, tag::pre_dec, 0)
-    BOOST_PROTO_DEFINE_UNARY_OPERATOR(++, tag::post_inc, 1)
-    BOOST_PROTO_DEFINE_UNARY_OPERATOR(--, tag::post_dec, 1)
-
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(<<, tag::shift_left)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(>>, tag::shift_right)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(*, tag::multiplies)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(/, tag::divides)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(%, tag::modulus)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(+, tag::plus)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(-, tag::minus)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(<, tag::less)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(>, tag::greater)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(<=, tag::less_equal)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(>=, tag::greater_equal)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(==, tag::equal_to)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(!=, tag::not_equal_to)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(||, tag::logical_or)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(&&, tag::logical_and)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(&, tag::bitwise_and)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(|, tag::bitwise_or)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(^, tag::bitwise_xor)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(BOOST_PP_COMMA(), tag::comma)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(->*, tag::mem_ptr)
-
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(<<=, tag::shift_left_assign)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(>>=, tag::shift_right_assign)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(*=, tag::multiplies_assign)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(/=, tag::divides_assign)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(%=, tag::modulus_assign)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(+=, tag::plus_assign)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(-=, tag::minus_assign)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(&=, tag::bitwise_and_assign)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(|=, tag::bitwise_or_assign)
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(^=, tag::bitwise_xor_assign)
-
-    /// if_else
-    ///
-    template<typename A0, typename A1, typename A2>
-    typename functional::make_expr<tag::if_else_>::impl<A0 const &, A1 const &, A2 const &>::result_type const
-    if_else(A0 const &a0, A1 const &a1, A2 const &a2)
+    namespace exprns_
     {
-        return functional::make_expr<tag::if_else_>::impl<A0 const &, A1 const &, A2 const &>()(a0, a1, a2);
+
+        BOOST_PROTO_DEFINE_UNARY_OPERATOR(+, tag::unary_plus, 0)
+        BOOST_PROTO_DEFINE_UNARY_OPERATOR(-, tag::negate, 0)
+        BOOST_PROTO_DEFINE_UNARY_OPERATOR(*, tag::dereference, 0)
+        BOOST_PROTO_DEFINE_UNARY_OPERATOR(~, tag::complement, 0)
+        BOOST_PROTO_DEFINE_UNARY_OPERATOR(&, tag::address_of, 0)
+        BOOST_PROTO_DEFINE_UNARY_OPERATOR(!, tag::logical_not, 0)
+        BOOST_PROTO_DEFINE_UNARY_OPERATOR(++, tag::pre_inc, 0)
+        BOOST_PROTO_DEFINE_UNARY_OPERATOR(--, tag::pre_dec, 0)
+        BOOST_PROTO_DEFINE_UNARY_OPERATOR(++, tag::post_inc, 1)
+        BOOST_PROTO_DEFINE_UNARY_OPERATOR(--, tag::post_dec, 1)
+
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(<<, tag::shift_left)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(>>, tag::shift_right)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(*, tag::multiplies)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(/, tag::divides)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(%, tag::modulus)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(+, tag::plus)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(-, tag::minus)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(<, tag::less)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(>, tag::greater)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(<=, tag::less_equal)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(>=, tag::greater_equal)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(==, tag::equal_to)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(!=, tag::not_equal_to)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(||, tag::logical_or)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(&&, tag::logical_and)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(&, tag::bitwise_and)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(|, tag::bitwise_or)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(^, tag::bitwise_xor)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(BOOST_PP_COMMA(), tag::comma)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(->*, tag::mem_ptr)
+
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(<<=, tag::shift_left_assign)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(>>=, tag::shift_right_assign)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(*=, tag::multiplies_assign)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(/=, tag::divides_assign)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(%=, tag::modulus_assign)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(+=, tag::plus_assign)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(-=, tag::minus_assign)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(&=, tag::bitwise_and_assign)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(|=, tag::bitwise_or_assign)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(^=, tag::bitwise_xor_assign)
+
+        /// if_else
+        ///
+        template<typename A0, typename A1, typename A2>
+        typename functional::make_expr<tag::if_else_>::impl<A0 const &, A1 const &, A2 const &>::result_type const
+        if_else(A0 const &a0, A1 const &a1, A2 const &a2)
+        {
+            return functional::make_expr<tag::if_else_>::impl<A0 const &, A1 const &, A2 const &>()(a0, a1, a2);
+        }
     }
 
-    BOOST_PROTO_END_ADL_NAMESPACE(exprns_)
-
-    BOOST_PROTO_WHEN_NOT_BUILDING_DOCS(using exprns_::if_else;)
+    using exprns_::if_else;
 
 #undef BOOST_PROTO_DEFINE_UNARY_OPERATOR
 #undef BOOST_PROTO_DEFINE_BINARY_OPERATOR
@@ -437,13 +435,11 @@ namespace boost { namespace proto
       : mpl::false_
     {};
 
-    #ifndef BOOST_PROTO_BUILDING_DOCS
     namespace exops
     {
         BOOST_PROTO_DEFINE_OPERATORS(is_extension, default_domain)
         using proto::if_else;
     }
-    #endif
 
 }}
 

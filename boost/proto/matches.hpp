@@ -11,7 +11,6 @@
     #ifndef BOOST_PROTO_MATCHES_HPP_EAN_11_03_2006
     #define BOOST_PROTO_MATCHES_HPP_EAN_11_03_2006
 
-    #include <boost/proto/detail/prefix.hpp> // must be first include
     #include <boost/config.hpp>
     #include <boost/detail/workaround.hpp>
     #include <boost/preprocessor/cat.hpp>
@@ -43,7 +42,6 @@
     #include <boost/proto/traits.hpp>
     #include <boost/proto/transform/when.hpp>
     #include <boost/proto/transform/impl.hpp>
-    #include <boost/proto/detail/suffix.hpp> // must be last include
 
     // Some compilers (like GCC) need extra help figuring out a template's arity.
     // I use MPL's BOOST_MPL_AUX_LAMBDA_ARITY_PARAM() macro to disambiguate, which
@@ -517,7 +515,8 @@
             {};
         }
 
-        BOOST_PROTO_BEGIN_ADL_NAMESPACE(wildcardns_)
+        namespace wildcardns_
+        {
 
             /// \brief A wildcard grammar element that matches any expression,
             /// and a transform that returns the current expression unchanged.
@@ -586,8 +585,7 @@
                     }
                 };
             };
-
-        BOOST_PROTO_END_ADL_NAMESPACE(wildcardns_)
+        }
 
         namespace control
         {
@@ -679,8 +677,8 @@
             /// \endcode
             template<
                 typename If
-              , typename Then   BOOST_PROTO_WHEN_BUILDING_DOCS(= _)
-              , typename Else   BOOST_PROTO_WHEN_BUILDING_DOCS(= not_<_>)
+              , typename Then   // = _
+              , typename Else   // = not_<_>
             >
             struct if_ : transform<if_<If, Then, Else> >
             {

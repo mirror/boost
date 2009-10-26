@@ -10,24 +10,16 @@
 #include <cstring>
 #include <iomanip>
 #include <iostream>
-#include <boost/version.hpp>
 #include <boost/assert.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/utility/result_of.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/proto/core.hpp>
 #include <boost/proto/transform.hpp>
-#if BOOST_VERSION < 103500
-# include <boost/spirit/fusion/algorithm/for_each.hpp>
-# include <boost/spirit/fusion/algorithm/fold.hpp>
-# include <boost/spirit/fusion/algorithm/any.hpp>
-# include <boost/spirit/fusion/sequence/cons.hpp>
-#else
-# include <boost/fusion/include/for_each.hpp>
-# include <boost/fusion/include/fold.hpp>
-# include <boost/fusion/include/cons.hpp>
-# include <boost/fusion/include/any.hpp>
-#endif
+#include <boost/fusion/include/for_each.hpp>
+#include <boost/fusion/include/fold.hpp>
+#include <boost/fusion/include/cons.hpp>
+#include <boost/fusion/include/any.hpp>
 #include <boost/test/unit_test.hpp>
 
 namespace boost
@@ -291,18 +283,10 @@ namespace boost { namespace spirit2
           : parse(p)
         {}
 
-        #if BOOST_VERSION < 103500
-        template<typename, typename>
-        struct apply
-        {
-            typedef bool type;
-        };
-        #else
         typedef bool result_type;
-        #endif
 
         template<typename T>
-        bool operator ()(T const &t, bool success) const
+        bool operator ()(bool success, T const &t) const
         {
             return success && this->parse(t);
         }
