@@ -287,6 +287,9 @@ namespace boost { namespace xpressive { namespace detail
     template<typename BidiIter>
     struct sub_match_impl;
 
+    template<typename T>
+    struct list;
+
     template<typename BidiIter>
     struct results_cache;
 
