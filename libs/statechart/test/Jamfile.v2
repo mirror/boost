@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright 2005-2006 Andreas Huber Doenni
+# Copyright 2005-2009 Andreas Huber Doenni
 # Distributed under the Boost Software License, Version 1.0. (See accompany-
 # ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ##############################################################################
@@ -137,6 +137,7 @@ test-suite statechart
     [ statechart-st-run-variants TypeInfoTest ]
     [ statechart-st-run-variants StateIterationTest ]
     [ statechart-st-run-variants FifoSchedulerTest ]
+    [ statechart-st-run-variants TriggeringEventTest ]
     [ statechart-st-lib-run LibTestNormal
         : TuTestMain : TuTest : <link>static $(normal) ]
     [ statechart-st-lib-run LibTestNative
