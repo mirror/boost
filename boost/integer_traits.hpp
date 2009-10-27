@@ -158,6 +158,16 @@ class integer_traits<unsigned long>
 { };
 
 #if !defined(BOOST_NO_INTEGRAL_INT64_T) && !defined(BOOST_NO_INT64_T) && BOOST_HAS_XINT
+
+#if defined(__GNUC__) && ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
+// 
+// The following code emits warnings when built with -pedantic, and there appears
+// to be no other way of suppressing these warnings as use of __extension__ has no 
+// effect, so declare the rest of this header a system header.
+//
+#  pragma GCC system_header
+#endif
+
 template<>
 class integer_traits< detail::xint_t >
   : public std::numeric_limits< detail::xint_t >,
