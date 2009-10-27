@@ -298,10 +298,7 @@ namespace boost { namespace unordered_detail {
             return allocators_.first(); }
         node_allocator& node_alloc() {
             return allocators_.second(); }
-        std::size_t max_bucket_count() const {
-            // -1 to account for the sentinel.
-            return prev_prime(this->bucket_alloc().max_size() - 1);
-        }
+        std::size_t max_bucket_count() const;
 
         // Constructors
 
@@ -443,7 +440,6 @@ namespace boost { namespace unordered_detail {
         typedef H hasher;
         typedef P key_equal;
         typedef A value_allocator;
-        typedef G grouped;
         typedef K key_extractor;
         typedef hash_buffered_functions<H, P> base;
         typedef hash_buckets<A, G> buckets;
@@ -575,7 +571,7 @@ namespace boost { namespace unordered_detail {
 
     template <class H, class P, class A, class K>
     class hash_unique_table :
-        public hash_table<H, P, A, boost::unordered_detail::ungrouped, K>
+        public hash_table<H, P, A, ungrouped, K>
         
     {
     public:
@@ -669,7 +665,7 @@ namespace boost { namespace unordered_detail {
 
     template <class H, class P, class A, class K>
     class hash_equivalent_table :
-        public hash_table<H, P, A, boost::unordered_detail::grouped, K>
+        public hash_table<H, P, A, grouped, K>
         
     {
     public:
@@ -678,9 +674,8 @@ namespace boost { namespace unordered_detail {
         typedef A value_allocator;
         typedef K key_extractor;
 
-        typedef hash_table<H, P, A, boost::unordered_detail::grouped, K> table;
-        typedef hash_node_constructor<A, boost::unordered_detail::grouped>
-            node_constructor;
+        typedef hash_table<H, P, A, grouped, K> table;
+        typedef hash_node_constructor<A, grouped> node_constructor;
         typedef hash_iterator_base<A, grouped> iterator_base;
 
         typedef BOOST_DEDUCED_TYPENAME table::key_type key_type;

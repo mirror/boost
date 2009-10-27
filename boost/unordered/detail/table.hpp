@@ -14,7 +14,6 @@
 #include <boost/iterator/iterator_categories.hpp>
 
 #include <boost/unordered/detail/buckets.hpp>
-#include <boost/unordered/detail/util.hpp>
 
 namespace boost { namespace unordered_detail {
 
