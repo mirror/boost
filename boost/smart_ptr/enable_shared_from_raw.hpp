@@ -26,30 +26,6 @@ namespace detail
 {
 template< class X, class Y > inline void sp_enable_shared_from_this( boost::shared_ptr<X> * ppx, Y const * py, boost::enable_shared_from_raw const * pe );
 
-class esft2_deleter_wrapper
-{
-private:
-
-    shared_ptr<void> deleter_;
-
-public:
-
-    esft2_deleter_wrapper()
-    {
-    }
-
-    template< class T > void set_deleter( shared_ptr<T> const & deleter )
-    {
-        deleter_ = deleter;
-    }
-
-    template< class T> void operator()( T* )
-    {
-        BOOST_ASSERT( deleter_.use_count() <= 1 );
-        deleter_.reset();
-    }
-};
-
 } // namespace detail
 
 class enable_shared_from_raw

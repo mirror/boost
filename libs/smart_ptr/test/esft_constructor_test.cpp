@@ -93,8 +93,8 @@ int main()
         px.reset();
         BOOST_TEST( early_px.use_count() == 1 );
         BOOST_TEST( X::instances == 1 );
-        // X::deleter_type *pd = boost::get_deleter<X::deleter_type>(early_px);
-        // BOOST_TEST(pd && *pd == &X::deleter2 );
+        X::deleter_type *pd = boost::get_deleter<X::deleter_type>(early_px);
+        BOOST_TEST(pd && *pd == &X::deleter2 );
     }
 
     BOOST_TEST( X::instances == 0 );
