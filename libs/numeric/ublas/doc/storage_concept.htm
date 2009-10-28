@@ -6,13 +6,16 @@
 "HTML Tidy for Linux/x86 (vers 1st March 2004), see www.w3.org" />
 <meta http-equiv="Content-Type" content=
 "text/html; charset=us-ascii" />
-<link href="ublas.css" type="text/css" />
+<link rel="stylesheet" href="../../../../boost.css" type="text/css"/>
+<link rel="stylesheet" href="ublas.css" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.3.2.min.js" async="async" ></script>
+<script type="text/javascript" src="js/jquery.toc-gw.js" async="async" ></script>
 <title>Storage concept</title>
 </head>
 <body>
-<h1><img src="../../../../boost.png" align="middle" />
-Storage concept</h1>
-<h2><a name="range" id="range"></a>Storage concept</h2>
+<h1><img src="../../../../boost.png" align="middle" />Storage concept</h1>
+<div class="toc" id="toc"></div>
+<h2 id="range"><a name="range" id="range"></a>Storage concept</h2>
 <h4>Description</h4>
 <p>Storage is a variable-size container whose elements are arranged in a strict linear order.
 <p>Storage extends the STL Container concept with some STL Sequence-like functionality. The main difference with
@@ -145,5 +148,10 @@ each element value may be a previously assigned value or default construced valu
    </a>).
 </p>
 
+<script type="text/javascript">
+(function($) {
+    $('#toc').toc();
+})(jQuery);
+</script>
 </body>
 </html>
