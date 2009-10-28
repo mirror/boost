@@ -61,7 +61,7 @@ namespace boost
 template<class T> class shared_ptr;
 template<class T> class weak_ptr;
 template<class T> class enable_shared_from_this;
-template<class T> class enable_shared_from_this2;
+class enable_shared_from_raw;
 
 namespace detail
 {
@@ -110,13 +110,7 @@ template< class X, class Y, class T > inline void sp_enable_shared_from_this( bo
     }
 }
 
-template< class X, class Y, class T > inline void sp_enable_shared_from_this( boost::shared_ptr<X> * ppx, Y const * py, boost::enable_shared_from_this2< T > const * pe )
-{
-    if( pe != 0 )
-    {
-        pe->_internal_accept_owner( ppx, const_cast< Y* >( py ) );
-    }
-}
+template< class X, class Y > inline void sp_enable_shared_from_this( boost::shared_ptr<X> * ppx, Y const * py, boost::enable_shared_from_raw const * pe );
 
 #ifdef _MANAGED
 
