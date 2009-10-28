@@ -40,7 +40,7 @@ namespace boost { namespace xpressive { namespace detail
 
         struct node : node_base
         {
-            explicit node(T const &value = T())
+            explicit node(T const &value)
               : _value(value)
             {}
 
@@ -49,40 +49,29 @@ namespace boost { namespace xpressive { namespace detail
 
         node_base _sentry;
 
-    public:
-        struct iterator
-          : boost::iterator_facade<iterator, T, std::bidirectional_iterator_tag>
+        template<typename Ref = T &>
+        struct list_iterator
+          : boost::iterator_facade<list_iterator<Ref>, T, std::bidirectional_iterator_tag, Ref>
         {
-            explicit iterator(node_base *n = 0) : _node(n) {}
+            list_iterator(list_iterator<> const &it) : _node(it._node) {}
+            explicit list_iterator(node_base *n = 0) : _node(n) {}
         private:
             friend struct list<T>;
             friend class boost::iterator_core_access;
-            T &dereference() const { return static_cast<node *>(_node)->_value; }
+            Ref dereference() const { return static_cast<node *>(_node)->_value; }
             void increment() { _node = _node->_next; }
             void decrement() { _node = _node->_prev; }
-            bool equal(iterator it) const { return _node == it._node; }
+            bool equal(list_iterator const &it) const { return _node == it._node; }
             node_base *_node;
         };
 
-        struct const_iterator
-          : boost::iterator_facade<const_iterator, T, std::bidirectional_iterator_tag, T const &>
-        {
-            const_iterator(iterator it) : _node(it._node) {}
-            explicit const_iterator(node_base const *n = 0) : _node(n) {}
-        private:
-            friend struct list<T>;
-            friend class boost::iterator_core_access;
-            T const &dereference() const { return static_cast<node const *>(_node)->_value; }
-            void increment() { _node = _node->_next; }
-            void decrement() { _node = _node->_prev; }
-            bool equal(const_iterator it) const { return _node == it._node; }
-            node_base const *_node;
-        };
-
+    public:
         typedef T *pointer;
         typedef T const *const_pointer;
         typedef T &reference;
         typedef T const &const_reference;
+        typedef list_iterator<> iterator;
+        typedef list_iterator<T const &> const_iterator;
         typedef std::size_t size_type;
 
         list()
@@ -90,7 +79,7 @@ namespace boost { namespace xpressive { namespace detail
             _sentry._next = _sentry._prev = &_sentry;
         }
 
-        list(list<T> const &that)
+        list(list const &that)
         {
             _sentry._next = _sentry._prev = &_sentry;
             const_iterator it = that.begin(), e = that.end();
@@ -98,9 +87,9 @@ namespace boost { namespace xpressive { namespace detail
                 push_back(*it);
         }
 
-        list &operator =(list<T> const &that)
+        list &operator =(list const &that)
         {
-            list<T>(that).swap(*this);
+            list(that).swap(*this);
             return *this;
         }
 
@@ -115,12 +104,12 @@ namespace boost { namespace xpressive { namespace detail
                 pop_front();
         }
 
-        void swap(list<T> &that) // throw()
+        void swap(list &that) // throw()
         {
-            list<T> tmp;
-            tmp.splice(tmp.begin(), *this); // move this to tmp
-            splice(begin(), that);          // move that to this
-            that.splice(that.begin(), tmp); // move tmp to that
+            list temp;
+            temp.splice(temp.begin(), that);  // move that to temp
+            that.splice(that.begin(), *this); // move this to that
+            splice(begin(), temp);            // move temp to this
         }
 
         void push_front(T const &t)
@@ -168,21 +157,21 @@ namespace boost { namespace xpressive { namespace detail
             return _sentry._next == &_sentry;
         }
 
-        void splice(iterator it, list<T> &x)
+        void splice(iterator it, list &x)
         {
-            if(!x.empty())
-            {
-                x._sentry._prev->_next = it._node;
-                x._sentry._next->_prev = it._node->_prev;
+            if(x.empty())
+                return;
 
-                it._node->_prev->_next = x._sentry._next;
-                it._node->_prev = x._sentry._prev;
+            x._sentry._prev->_next = it._node;
+            x._sentry._next->_prev = it._node->_prev;
 
-                x._sentry._prev = x._sentry._next = &x._sentry;
-            }
+            it._node->_prev->_next = x._sentry._next;
+            it._node->_prev = x._sentry._prev;
+
+            x._sentry._prev = x._sentry._next = &x._sentry;
         }
 
-        void splice(iterator it, list<T> &, iterator xit)
+        void splice(iterator it, list &, iterator xit)
         {
             xit._node->_prev->_next = xit._node->_next;
             xit._node->_next->_prev = xit._node->_prev;
@@ -190,8 +179,7 @@ namespace boost { namespace xpressive { namespace detail
             xit._node->_next = it._node;
             xit._node->_prev = it._node->_prev;
 
-            it._node->_prev->_next = xit._node;
-            it._node->_prev = xit._node;
+            it._node->_prev = it._node->_prev->_next = xit._node;
         }
 
         reference front()
@@ -235,7 +223,7 @@ namespace boost { namespace xpressive { namespace detail
 
         const_iterator end() const
         {
-            return const_iterator(&_sentry);
+            return const_iterator(const_cast<node_base *>(&_sentry));
         }
 
         size_type size() const
