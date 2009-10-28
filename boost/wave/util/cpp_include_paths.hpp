@@ -57,10 +57,13 @@ struct bidirectional_map
 {
     typedef std::pair<FromType, ToType> value_type;
 
-// _MSC_FULL_VER == 160020506 detects the VC10 Beta 1 compiler
+// _MSC_FULL_VER == 160020506 || 160021003 detects the VC10 Beta 1 and 2 
+// compilers
 #if defined(BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS) || \
-    defined(BOOST_MSVC) && ((BOOST_MSVC < 1300) || (_MSC_FULL_VER == 160020506)) || \
-    defined(BOOST_INTEL_CXX_VERSION) && defined(_MSC_VER) && (BOOST_INTEL_CXX_VERSION <= 700) 
+    (defined(BOOST_MSVC) && ((BOOST_MSVC < 1300) || \
+        (_MSC_FULL_VER == 160020506 || _MSC_FULL_VER == 160021003))) || \
+    (defined(BOOST_INTEL_CXX_VERSION) && \
+        (defined(_MSC_VER) && (BOOST_INTEL_CXX_VERSION <= 700))) 
 
     BOOST_STATIC_CONSTANT(unsigned, from_offset = offsetof(value_type, first));
     BOOST_STATIC_CONSTANT(unsigned, to_offset   = offsetof(value_type, second));
