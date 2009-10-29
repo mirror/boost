@@ -88,15 +88,27 @@ namespace boost { namespace proto
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
+              : result<This(Expr const &)>
+            {};
+
+            template<typename This, typename Expr>
+            struct result<This(Expr &)>
               : mpl::if_c<
-                    is_same<Tag, UNREF(Expr)::proto_tag>::value
-                  , flat_view<UNREF(Expr) const>
-                  , fusion::single_view<UNREF(Expr) const &>
+                    is_same<Tag, typename Expr::proto_tag>::value
+                  , flat_view<Expr>
+                  , fusion::single_view<Expr &>
                 >
             {};
 
             template<typename Expr>
-            typename result<as_element(Expr const &)>::type
+            typename result<as_element(Expr &)>::type const
+            operator ()(Expr &e) const
+            {
+                return typename result<as_element(Expr &)>::type(e);
+            }
+
+            template<typename Expr>
+            typename result<as_element(Expr const &)>::type const
             operator ()(Expr const &e) const
             {
                 return typename result<as_element(Expr const &)>::type(e);
@@ -108,14 +120,13 @@ namespace boost { namespace proto
     {
         template<typename Expr>
         struct flatten
-        {
-            typedef detail::flat_view<Expr const> type;
-        };
+          : flatten<Expr const &>
+        {};
 
         template<typename Expr>
         struct flatten<Expr &>
         {
-            typedef detail::flat_view<Expr const> type;
+            typedef detail::flat_view<Expr> type;
         };
     }
 
@@ -142,12 +153,24 @@ namespace boost { namespace proto
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
+              : result<This(Expr const &)>
+            {};
+
+            template<typename This, typename Expr>
+            struct result<This(Expr &)>
             {
-                typedef proto::detail::flat_view<UNREF(Expr) const> type;
+                typedef proto::detail::flat_view<Expr> type;
             };
 
             template<typename Expr>
-            proto::detail::flat_view<Expr const>
+            proto::detail::flat_view<Expr> const
+            operator ()(Expr &e) const
+            {
+                return proto::detail::flat_view<Expr>(e);
+            }
+
+            template<typename Expr>
+            proto::detail::flat_view<Expr const> const
             operator ()(Expr const &e) const
             {
                 return proto::detail::flat_view<Expr const>(e);
@@ -173,11 +196,20 @@ namespace boost { namespace proto
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
+              : result<This(Expr const &)>
+            {};
+
+            template<typename This, typename Expr>
+            struct result<This(Expr &)>
+              : fusion::result_of::pop_front<Expr>
+            {};
+
+            template<typename Expr>
+            typename fusion::result_of::pop_front<Expr>::type
+            operator ()(Expr &e) const
             {
-                typedef
-                    typename fusion::result_of::pop_front<UNREF(Expr) const>::type
-                type;
-            };
+                return fusion::pop_front(e);
+            }
 
             template<typename Expr>
             typename fusion::result_of::pop_front<Expr const>::type
@@ -204,11 +236,20 @@ namespace boost { namespace proto
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
+              : result<This(Expr const &)>
+            {};
+
+            template<typename This, typename Expr>
+            struct result<This(Expr &)>
+              : fusion::result_of::reverse<Expr>
+            {};
+
+            template<typename Expr>
+            typename fusion::result_of::reverse<Expr>::type
+            operator ()(Expr &e) const
             {
-                typedef
-                    typename fusion::result_of::reverse<UNREF(Expr) const>::type
-                type;
-            };
+                return fusion::reverse(e);
+            }
 
             template<typename Expr>
             typename fusion::result_of::reverse<Expr const>::type
@@ -231,7 +272,16 @@ namespace boost { namespace proto
     /// [a, b, c], even though the tree is grouped as
     /// <tt>((a | b) | c)</tt>.
     template<typename Expr>
-    proto::detail::flat_view<Expr const>
+    proto::detail::flat_view<Expr> const
+    flatten(Expr &e)
+    {
+        return proto::detail::flat_view<Expr>(e);
+    }
+
+    /// \overload
+    ///
+    template<typename Expr>
+    proto::detail::flat_view<Expr const> const
     flatten(Expr const &e)
     {
         return proto::detail::flat_view<Expr const>(e);
@@ -272,15 +322,24 @@ namespace boost { namespace proto
 
         template<typename This, typename Expr>
         struct result<This(Expr)>
-        {
-            typedef
-                typename proto::result_of::eval<UNREF(Expr), Context>::type
-            type;
-        };
+          : result<This(Expr const &)>
+        {};
+
+        template<typename This, typename Expr>
+        struct result<This(Expr &)>
+          : proto::result_of::eval<Expr, Context>
+        {};
 
         template<typename Expr>
         typename proto::result_of::eval<Expr, Context>::type
         operator ()(Expr &e) const
+        {
+            return proto::eval(e, this->ctx_);
+        }
+
+        template<typename Expr>
+        typename proto::result_of::eval<Expr const, Context>::type
+        operator ()(Expr const &e) const
         {
             return proto::eval(e, this->ctx_);
         }
