@@ -10,7 +10,6 @@
 #define BOOST_PROTO_FUSION_HPP_EAN_11_04_2006
 
 #include <boost/config.hpp>
-#include <boost/type_traits/remove_reference.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/long.hpp>
 #include <boost/mpl/sequence_tag_fwd.hpp>
@@ -40,10 +39,6 @@
 
 namespace boost { namespace proto
 {
-
-/// INTERNAL ONLY
-///
-#define UNREF(x) typename boost::remove_reference<x>::type
 
     namespace detail
     {
@@ -730,8 +725,6 @@ namespace boost { namespace mpl
         typedef fusion::fusion_sequence_tag type;
     };
 }} 
-
-#undef UNREF
 
 #if BOOST_MSVC
 #pragma warning(pop)
