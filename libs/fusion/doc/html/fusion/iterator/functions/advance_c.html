@@ -7,7 +7,7 @@
 <link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="advance.html" title="advance">
-<link rel="next" href="../operator.html" title="Operator">
+<link rel="next" href="deref_data.html" title="deref_data">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,21 +20,21 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="advance.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="../operator.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="advance.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="deref_data.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" title="advance_c">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.iterator.functions.advance_c"></a><a class="link" href="advance_c.html" title="advance_c">advance_c</a>
 </h4></div></div></div>
 <a name="fusion.iterator.functions.advance_c.description"></a><h6>
-<a name="id682772"></a>
+<a name="id638680"></a>
           <a class="link" href="advance_c.html#fusion.iterator.functions.advance_c.description">Description</a>
         </h6>
 <p>
           Moves an iterator by a specified distance.
         </p>
 <a name="fusion.iterator.functions.advance_c.synopsis"></a><h6>
-<a name="id682790"></a>
+<a name="id638698"></a>
           <a class="link" href="advance_c.html#fusion.iterator.functions.advance_c.synopsis">Synopsis</a>
         </h6>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
@@ -44,7 +44,7 @@
 <span class="keyword">typename</span> <a class="link" href="../metafunctions/advance_c.html" title="advance_c"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance_c</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">advance_c</span><span class="special">(</span><span class="identifier">I</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id682913"></a><p class="title"><b>Table 1.7. Parameters</b></p>
+<a name="id638820"></a><p class="title"><b>Table 1.7. Parameters</b></p>
 <div class="table-contents"><table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -108,7 +108,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="fusion.iterator.functions.advance_c.expression_semantics"></a><h6>
-<a name="id683029"></a>
+<a name="id638937"></a>
           <a class="link" href="advance_c.html#fusion.iterator.functions.advance_c.expression_semantics">Expression
           Semantics</a>
         </h6>
@@ -127,14 +127,14 @@
           may be negative.
         </p>
 <a name="fusion.iterator.functions.advance_c.header"></a><h6>
-<a name="id684226"></a>
+<a name="id639041"></a>
           <a class="link" href="advance_c.html#fusion.iterator.functions.advance_c.header">Header</a>
         </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">advance</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">advance</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.iterator.functions.advance_c.example"></a><h6>
-<a name="id684334"></a>
+<a name="id639149"></a>
           <a class="link" href="advance_c.html#fusion.iterator.functions.advance_c.example">Example</a>
         </h6>
 <pre class="programlisting"><span class="keyword">typedef</span> <a class="link" href="../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
@@ -154,7 +154,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="advance.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="../operator.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="advance.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="deref_data.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

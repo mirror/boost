@@ -27,7 +27,7 @@
 <a name="fusion.algorithm.transformation.metafunctions.reverse"></a><a class="link" href="reverse.html" title="reverse">reverse</a>
 </h5></div></div></div>
 <a name="fusion.algorithm.transformation.metafunctions.reverse.description"></a><h6>
-<a name="id835745"></a>
+<a name="id799882"></a>
             <a class="link" href="reverse.html#fusion.algorithm.transformation.metafunctions.reverse.description">Description</a>
           </h6>
 <p>
@@ -35,7 +35,7 @@
             type.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.reverse.synopsis"></a><h6>
-<a name="id835774"></a>
+<a name="id799911"></a>
             <a class="link" href="reverse.html#fusion.algorithm.transformation.metafunctions.reverse.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
@@ -47,7 +47,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id835848"></a><p class="title"><b>Table 1.81. Parameters</b></p>
+<a name="id799986"></a><p class="title"><b>Table 1.85. Parameters</b></p>
 <div class="table-contents"><table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -92,29 +92,40 @@
 </table></div>
 </div>
 <br class="table-break"><a name="fusion.algorithm.transformation.metafunctions.reverse.expression_semantics"></a><h6>
-<a name="id835931"></a>
+<a name="id800068"></a>
             <a class="link" href="reverse.html#fusion.algorithm.transformation.metafunctions.reverse.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting"><a class="link" href="reverse.html" title="reverse"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">reverse</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: A model of <a class="link" href="../../../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
-            Sequence</a>.
+            <span class="bold"><strong>Return type</strong></span>:
           </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+              A model of <a class="link" href="../../../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
+              Sequence</a>.
+            </li>
+<li class="listitem">
+              A model of <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+              Sequence</a> if <code class="computeroutput"><span class="identifier">Sequence</span></code>
+              implements the <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+              Sequence</a> model.
+            </li>
+</ul></div>
 <p>
             <span class="bold"><strong>Semantics</strong></span>: Returns a sequence with the
             elements in the reverse order to <code class="computeroutput"><span class="identifier">Sequence</span></code>.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.reverse.complexity"></a><h6>
-<a name="id836008"></a>
+<a name="id800173"></a>
             <a class="link" href="reverse.html#fusion.algorithm.transformation.metafunctions.reverse.complexity">Complexity</a>
           </h6>
 <p>
             Constant.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.reverse.header"></a><h6>
-<a name="id836027"></a>
+<a name="id800192"></a>
             <a class="link" href="reverse.html#fusion.algorithm.transformation.metafunctions.reverse.header">Header</a>
           </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">reverse</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>

@@ -20,7 +20,9 @@ provide access to data within an underlying __sequence__.
 Fusion iterators are divided into different traversal categories.
 __forward_iterator__ is the most basic concept. __bidirectional_iterator__
 is a refinement of __forward_iterator__. __random_access_iterator__ is a
-refinement of __bidirectional_iterator__.
+refinement of __bidirectional_iterator__. __associative_iterator__ is a
+refinement of __forward_iterator__, __bidirectional_iterator__ or
+__random_access_iterator__.
 
 [section Forward Iterator]
 
@@ -207,6 +209,47 @@ the following expressions must be valid:
 * __iterator_range__ iterator (where adapted sequence is a __random_access_sequence__)
 * __transform_view__ iterator (where adapted sequence is a __random_access_sequence__)
 * __reverse_view__ iterator (where adapted sequence is a __random_access_sequence__)
+
+[endsect]
+
+[section Associative Iterator]
+[heading Description]
+An Associative Iterator provides additional semantics to obtain the properties
+of the element of an associative forward, bidirectional or random access sequence.
+
+[variablelist Notation
+    [[`i`]         [Associative Iterator]]
+    [[`I`]         [Associative Iterator type]]
+]
+
+[heading Refinement of]
+__forward_iterator__, __bidirectional_iterator__ or __random_access_iterator__
+
+[heading Expression requirements]
+In addition to the requirements defined in __forward_iterator__,
+__bidirectional_iterator__ or __random_access_iterator__ the following
+expressions must be valid:
+
+[table
+    [[Expression]        [Return type]                [Runtime Complexity]]
+    [[`__deref_data__(i)`][`__result_of_deref_data__<I>::type`][Constant]]
+]
+
+[heading Meta Expressions]
+[table
+    [[Expression]                       [Compile Time Complexity]]
+    [[`__result_of_key_of__<I>::type`][Amortized constant time]]
+    [[`__result_of_value_of_data__<I>::type`][Amortized constant time]]
+    [[`__result_of_deref_data__<I>::type`][Amortized constant time]]
+]
+
+[heading Models]
+* __map__ iterator
+* __set__ iterator
+* __filter_view__ iterator (where adapted sequence is an __associative_sequence__ and a __forward_sequence__)
+* __iterator_range__ iterator (where adapted iterators are __associative_iterator__\ s)
+* __joint_view__ iterator (where adapted sequences are __associative_sequence__\ s and __forward_sequence__\ s)
+* __reverse_view__ iterator (where adapted sequence is an __associative_sequence__ and a __bidirectional_sequence__)
 
 [endsect]
 
@@ -434,6 +477,43 @@ Moves an iterator by a specified distance.
 
     vec v(1,2,3);
     assert(__deref__(__advance_c__<2>(__begin__(v))) == 3);
+
+[endsect]
+
+[section deref_data]
+
+[heading Description]
+Deferences the data property associated with the element referenced by an associative iterator.
+
+[heading Synopsis]
+    template<
+        typename I
+        >
+    typename __result_of_deref_data__<I>::type deref(I const& i);
+
+[table Parameters
+    [[Parameter]      [Requirement]    [Description]]
+    [[`i`]            [Model of __associative_iterator__] [Operation's argument]]
+]
+
+[heading Expression Semantics]
+    __deref_data__(i);
+
+[*Return type]: `__result_of_deref_data__<I>::type`
+
+[*Semantics]: Dereferences the data property associated with the element referenced by an associative iterator `i`.
+
+[heading Header]
+    #include <boost/fusion/iterator/deref_data.hpp>
+    #include <boost/fusion/include/deref_data.hpp>
+
+[heading Example]
+    typedef __map__<__pair__<float,int&> > map;
+
+    int i(0);
+    map m(1.0f,i);
+    assert(__deref_data__(__begin__(m)) == 0);
+    assert(&(__deref_data__(__begin__(m))) == &i);
 
 [endsect]
 
@@ -873,6 +953,122 @@ Moves an iterator by a specified distance.
     typedef __result_of_next__<second>::type third;
 
     BOOST_MPL_ASSERT((__result_of_equal_to__<__result_of_advance_c__<first, 2>::type, third>));
+
+[endsect]
+
+[section key_of]
+
+[heading Description]
+
+Returns the key type associated with the element referenced by an associative iterator.
+
+[heading Synopsis]
+    template<
+        typename I
+        >
+    struct key_of
+    {
+        typedef __unspecified__ type;
+    };
+
+[table Parameters
+    [[Parameter]    [Requirement]   [Description]]
+    [[`I`]          [Model of __associative_iterator__] [Operation's argument]]
+]
+
+[heading Expression Semantics]
+    __result_of_key_of__<I>::type
+
+[*Return type]: Any type
+
+[*Semantics]: Returns the key type associated with the element referenced by an associative iterator `I`.
+
+[heading Header]
+    #include <boost/fusion/iterator/key_of.hpp>
+    #include <boost/fusion/include/key_of.hpp>
+
+[heading Example]
+    typedef __map__<__pair__<float,int> > vec;
+    typedef __result_of_begin__<vec>::type first;
+	
+    BOOST_MPL_ASSERT((boost::is_same<__result_of_key_of__<first>::type, float>));
+    
+[endsect]
+
+[section value_of_data]
+
+[heading Description]
+
+Returns the type of the data property associated with the element referenced by an associative iterator references.
+
+[heading Synopsis]
+    template<
+        typename I
+        >
+    struct value_of_data
+    {
+        typedef __unspecified__ type;
+    };
+
+[table Parameters
+    [[Parameter]    [Requirement]   [Description]]
+    [[`I`]          [Model of __associative_iterator__] [Operation's argument]]
+]
+
+[heading Expression Semantics]
+    __result_of_value_of_data__<I>::type
+
+[*Return type]: Any type
+
+[*Semantics]: Returns the type of the data property associated with the element referenced by an associative iterator `I`.
+
+[heading Header]
+    #include <boost/fusion/iterator/value_of_data.hpp>
+    #include <boost/fusion/include/value_of_data.hpp>
+
+[heading Example]
+    typedef __map__<__pair__<float,int> > vec;
+    typedef __result_of_begin__<vec>::type first;
+	
+    BOOST_MPL_ASSERT((boost::is_same<__result_of_value_of_data__<first>::type, int>));
+    
+[endsect]
+
+[section deref_data]
+
+[heading Description]
+Returns the type that will be returned by dereferencing the data property referenced by an associative iterator.
+
+[heading Synposis]
+    template<
+        typename I
+        >
+    struct deref_data
+    {
+        typedef __unspecified__ type;
+    };
+
+[table Parameters
+    [[Parameter] [Requirement]                   [Description]]
+    [[`I`]       [Model of __associative_iterator__] [Operation's argument]]
+]
+
+[heading Expression Semantics]
+    __result_of_deref_data__<I>::type
+
+[*Return type]: Any type
+
+[*Semantics]: Returns the result of dereferencing the data property referenced by an associative iterator of type `I`.
+
+[heading Header]
+    #include <boosta/fusion/iterator/deref_data.hpp>
+    #include <boost/fusion/include/deref_data.hpp>
+
+[heading Example]
+    typedef __map__<__pair__<float,int> > map;
+    typedef __result_of_begin__<vec>::type first;
+
+    BOOST_MPL_ASSERT((boost::is_same<__result_of_deref_data__<first>::type, int&>));
 
 [endsect]
 

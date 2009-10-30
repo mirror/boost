@@ -583,8 +583,8 @@ or `__end__(seq)` if there is no such element.
 [heading Complexity]
 Linear. At most `__result_of_size__<Sequence>::value` comparisons.
 
-
-/algorithm/query/find_if.hpp>
+#include <boost/fusion/algorithm/query/find_if.hpp>
+#include <boost/fusion/include/find_if.hpp>
 
 [heading Example]
     const __vector__<double,int> vec(1.0,2);
@@ -795,7 +795,7 @@ Constant.
 [section find]
 
 [heading Description]
-Returns the result type of `find`, given the sequence and search types.
+Returns the result type of __find__, given the sequence and search types.
 
 [heading Synopsis]
     template<
@@ -833,7 +833,7 @@ Linear, at most `__result_of_size__<Sequence>::value` comparisons.
 [section find_if]
 
 [heading Description]
-Returns the result type of `find_if` given the sequence and predicate types.
+Returns the result type of __find_if__ given the sequence and predicate types.
 
 [heading Synopsis]
     template<
@@ -983,7 +983,10 @@ For a given sequence, filter returns a new sequences containing only the element
 [heading Expression Semantics]
     __filter__<T>(seq);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence containing all the elements of `seq` of type `T`.
 Equivalent to `__filter_if__<boost::same_type<_, T> >(seq)`.
@@ -1024,7 +1027,10 @@ only the elements with types for which a given __mpl_lambda_expression__ evaluat
 [heading Expression Semantics]
     __filter_if__<Pred>(seq);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence containing all the elements of `seq` with types for which `Pred` evaluates
 to `boost::mpl::true_`. The order of the retained elements is the same as in the original sequence.
@@ -1225,7 +1231,10 @@ Returns a new sequence, with all the elements of the original sequence, except t
 [heading Expression Semantics]
     __remove__<T>(seq);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence, containing all the elements of `seq`, in their original order, except
 those of type `T`. Equivalent to `__remove_if__<boost::is_same<_,T> >(seq)`.
@@ -1266,7 +1275,10 @@ function object evaluates to `true`.
 [heading Expression Semantics]
     __remove_if__<Pred>(seq);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence, containing all the elements of `seq`, in their original order, except
 those elements with types for which `Pred` evaluates to `boost::mpl::true_`.
@@ -1305,7 +1317,10 @@ Returns a new sequence with the elements of the original in reverse order.
 [heading Expression Semantics]
     __reverse__(seq);
 
-[*Return type]: A model of __bidirectional_sequence__.
+[*Return type]:
+
+* A model of __bidirectional_sequence__.
+* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence containing all the elements of `seq` in reverse order.
 
@@ -1390,13 +1405,19 @@ between two iterators.
 [heading Expression Semantics]
     __erase__(seq, pos);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence, containing all the elements of `seq` except the element at `pos`.
 
     __erase__(seq, first, last);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence, with all the elements of `seq`, in their original order, except those
 in the range [`first`,`last`).
@@ -1419,26 +1440,27 @@ Constant. Returns a view which is lazily evaluated.
 [section erase_key]
 
 [heading Description]
-For an __associative_sequence__ `seq`, returns a __forward_sequence__ containing all the
-elements of the original except those with a given key.
+For an [link fusion.sequence.concepts.associative_sequence associative]] __forward_sequence__ `seq`,
+returns a [link fusion.sequence.concepts.associative_sequence associative]] __forward_sequence__ containing
+all the elements of the original except those with a given key.
 
 [heading Synposis]
     template<
         typename Key,
         typename Sequence
         >
-    typename result_of::erase_key<Sequence const, Key>::type erase_key(Sequence const& seq);
+    typename __result_of_erase_key__<Sequence const, Key>::type erase_key(Sequence const& seq);
 
 [table Parameters
     [[Parameter][Requirement][Description]]
-    [[`seq`][A model of __associative_sequence__][Operation's argument]]
+    [[`seq`][A model of __forward_sequence__ and __associative_sequence__][Operation's argument]]
     [[`Key`][Any type][Key to erase]]
 ]
 
 [heading Expression Semantics]
     __erase_key__<Key>(seq);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]: A model of __forward_sequence__ and __associative_sequence__.
 
 [*Semantics]: Returns a new sequence, containing all the elements of `seq`, except those with key `Key`.
 
@@ -1467,7 +1489,8 @@ position described by a given iterator.
         typename Pos,
         typename T
         >
-    __unspecified__ insert(Sequence const& seq, Pos const& pos, T const& t);
+    typename __result_of_insert__<Sequence const, Pos, T>::type insert(
+        Sequence const& seq, Pos const& pos, T const& t);
 
 [table Parameters
     [[Parameter][Requirement][Description]]
@@ -1479,7 +1502,10 @@ position described by a given iterator.
 [heading Expression Semantics]
     __insert__(seq, p, t);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence, containing all the elements of `seq`, in their original order, and a new element with the
 type and value of `t` inserted at iterator `pos`.
@@ -1522,7 +1548,10 @@ Returns a new sequence with another sequence inserted at a specified iterator.
 [heading Expression Semantics]
     __insert__(seq, pos, range);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence, containing all the elements of `seq`, and the elements of
 `range` inserted at iterator `pos`. All elements retaining their ordering from the orignal sequences.
@@ -1561,9 +1590,12 @@ Takes 2 sequences and returns a sequence containing the elements of the first fo
 [heading Expression Semantics]
     __join__(lhs, rhs);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
 
-[*Semantics]: Returns a sequence containing all the elements of `lhs` followed by all the elements of `rhs`. The order of th elements is preserved.
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `lhs` and `rhs` implement the __associative_sequence__ model.
+
+[*Semantics]: Returns a sequence containing all the elements of `lhs` followed by all the elements of `rhs`. The order of the elements is preserved.
 
 [heading Complexity]
 Constant. Returns a view which is lazily evaluated.
@@ -1641,7 +1673,10 @@ Returns a new sequence, with the last element of the original removed.
 [heading Expression Semantics]
     __pop_back__(seq);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence containing all the elements of `seq`, except the last element. The elements in the new sequence are in the same order as they were in `seq`.
 
@@ -1678,7 +1713,10 @@ Returns a new sequence, with the first element of the original removed.
 [heading Expression Semantics]
     __pop_front__(seq);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence containing all the elements of `seq`, except the first element. The elements in the new sequence are in the same order as they were in `seq`.
 
@@ -1717,7 +1755,10 @@ Returns a new sequence with an element added at the end.
 [heading Expression Semantics]
     __push_back__(seq, t);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence, containing all the elements of `seq`, and new element `t` appended to the end. The elements are in the same order as they were in `seq`.
 
@@ -1756,7 +1797,10 @@ Returns a new sequence with an element added at the beginning.
 [heading Expression Semantics]
     __push_back__(seq, t);
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence, containing all the elements of `seq`, and new element `t` appended to the beginning. The elements are in the same order as they were in `seq`.
 
@@ -1801,7 +1845,10 @@ Returns the result type of __filter__ given the sequence type and type to retain
 [heading Expression Semantics]
     __result_of_filter__<Sequence, T>::type
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence containing the elements of `Sequence` that are of type `T`. Equivalent to `__result_of_filter_if__<Sequence, boost::is_same<mpl::_, T> >::type`.
 
@@ -1839,7 +1886,10 @@ Returns the result type of __filter_if__ given the sequence and unary __mpl_lamb
 [heading Expression Semantics]
     __result_of_filter_if__<Sequence, Pred>::type
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence containing the elements of `Sequence` for which `Pred` evaluates to `boost::mpl::true_`.
 
@@ -1876,7 +1926,10 @@ with elements created by applying `f(e)` to each element of `e` of `seq`.
 [heading Expression Semantics]
     __transform__(seq, f);
 
-[*Return type]: A model of __forward_sequence__
+[*Return type]:
+
+* A model of __forward_sequence__
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence, containing the return values of `f(e)` for each element `e` within `seq`.
 
@@ -2024,7 +2077,10 @@ Returns the result type of __remove__, given the sequence and removal types.
 [heading Expression Semantics]
     __result_of_remove__<Sequence, T>::type
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence containing the elements of `Sequence` not of type `T`. Equivalent to `__result_of_replace_if__<Sequence, boost::is_same<mpl::_, T> >::type`.
 
@@ -2062,7 +2118,10 @@ Returns the result type of __remove_if__, given the input sequence and unary __m
 [heading Expression Semantics]
     __result_of_remove_if__<Sequence, Pred>::type
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence containing the elements of `Sequence` for which `Pred` evaluates to `boost::mpl::false_`.
 
@@ -2098,7 +2157,10 @@ Returns the result type of __reverse__, given the input sequence type.
 [heading Expression Semantics]
     __result_of_reverse__<Sequence>::type
 
-[*Return type]: A model of __bidirectional_sequence__.
+[*Return type]:
+
+* A model of __bidirectional_sequence__.
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence with the elements in the reverse order to `Sequence`.
 
@@ -2173,7 +2235,10 @@ Returns the result type of __erase__, given the input sequence and range delimit
 [heading Expression Semantics]
     __result_of_erase__<Sequence, It1>::type
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence with the element at `It1` removed.
 
@@ -2210,14 +2275,14 @@ Returns the result type of __erase_key__, given the sequence and key types.
 
 [table Parameters
     [[Parameter][Requirement][Description]]
-    [[`Sequence`][A model of __associative_sequence__][Operation's argument]]
+    [[`Sequence`][A model of __forward_sequence__ and __associative_sequence__][Operation's argument]]
     [[`Key`][Any type][Key type]]
 ]
 
 [heading Expression Semantics]
     __result_of_erase_key__<Sequence, Key>::type
 
-[*Return type]: A model of __associative_sequence__.
+[*Return type]: A model of __forward_sequence__ and __associative_sequence__.
 
 [*Semantics]: Returns a sequence with the elements of `Sequence`, except those with key `Key`.
 
@@ -2257,7 +2322,10 @@ Returns the result type of __insert__, given the sequence, position iterator and
 [heading Expression Semantics]
     __result_of_insert__<Sequence, Position, T>::type
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence with an element of type `T` inserted at position `Position` in `Sequence`.
 
@@ -2297,7 +2365,10 @@ Returns the result type of __insert_range__, given the input sequence, position 
 [heading Expression Semantics]
     __result_of_insert_range__<Sequence, Position, Range>::type
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence with the elements of `Range` inserted at position `Position` into `Sequence`.
 
@@ -2329,7 +2400,10 @@ Returns the result of joining 2 sequences, given the sequence types.
 [heading Expression Semantics]
     __result_of_join__<LhSequence, RhSequence>::type
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `LhSequence` amd `RhSequence` implement the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence containing the elements of `LhSequence` followed by the elements of `RhSequence`. The order of the elements in the 2 sequences is preserved.
 
@@ -2399,7 +2473,10 @@ Returns the result type of __pop_back__, given the input sequence type.
 [heading Expression Semantics]
     __result_of_pop_back__<Sequence>::type
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence with all the elements of `Sequence` except the last element.
 
@@ -2408,7 +2485,7 @@ Constant.
 
 [heading Header]
 
-    #include <boost/fusion/algorithm/tranformation/pop_back.hpp>
+    #include <boost/fusion/algorithm/transformation/pop_back.hpp>
     #include <boost/fusion/include/pop_back.hpp>
 
 [endsect]
@@ -2435,14 +2512,20 @@ Returns the result type of __pop_front__, given the input sequence type.
 [heading Expression Semantics]
     __result_of_pop_front__<Sequence>::type
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence with all the elements of `Sequence` except the first element.
 
 [heading Complexity]
 Constant.
 
-/algorithm/transformation/pop_front.hpp>
+[heading Header]
+
+    #include <boost/fusion/algorithm/transformation/pop_front.hpp>
+    #include <boost/fusion/include/pop_front.hpp>
 
 [endsect]
 
@@ -2470,14 +2553,20 @@ Returns the result type of __push_back__, given the types of the input sequence 
 [heading Expression Semantics]
     __result_of_push_back__<Sequence, T>::type
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence with the elements of `Sequence` and an element of type `T` added to the end.
 
 [heading Complexity]
 Constant.
 
-/algorithm/transformation/push_back.hpp>
+[heading Header]
+
+    #include <boost/fusion/algorithm/transformation/push_back.hpp>
+    #include <boost/fusion/include/push_back.hpp>
 
 [endsect]
 
@@ -2505,14 +2594,20 @@ Returns the result type of __push_front__, given the types of the input sequence
 [heading Expression Semantics]
     __result_of_push_front__<Sequence, T>::type
 
-[*Return type]: A model of __forward_sequence__.
+[*Return type]:
+
+* A model of __forward_sequence__.
+* A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence with the elements of `Sequence` and an element of type `T` added to the beginning.
 
 [heading Complexity]
 Constant.
 
-/algorithm/transformation/push_front.hpp>
+[heading Header]
+
+    #include <boost/fusion/algorithm/transformation/push_front.hpp>
+    #include <boost/fusion/include/push_front.hpp>
 
 [endsect]
 

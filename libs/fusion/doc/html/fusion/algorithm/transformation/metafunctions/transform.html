@@ -27,7 +27,7 @@
 <a name="fusion.algorithm.transformation.metafunctions.transform"></a><a class="link" href="transform.html" title="transform">transform</a>
 </h5></div></div></div>
 <a name="fusion.algorithm.transformation.metafunctions.transform.description"></a><h6>
-<a name="id831637"></a>
+<a name="id793780"></a>
             <a class="link" href="transform.html#fusion.algorithm.transformation.metafunctions.transform.description">Description</a>
           </h6>
 <p>
@@ -38,7 +38,7 @@
             of <code class="computeroutput"><span class="identifier">seq</span></code>.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.transform.unary_version_synopsis"></a><h6>
-<a name="id831708"></a>
+<a name="id793850"></a>
             <a class="link" href="transform.html#fusion.algorithm.transformation.metafunctions.transform.unary_version_synopsis">Unary
             version synopsis</a>
           </h6>
@@ -50,7 +50,7 @@
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id831849"></a><p class="title"><b>Table 1.75. Parameters</b></p>
+<a name="id793992"></a><p class="title"><b>Table 1.79. Parameters</b></p>
 <div class="table-contents"><table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -117,23 +117,34 @@
 </table></div>
 </div>
 <br class="table-break"><a name="fusion.algorithm.transformation.metafunctions.transform.expression_semantics"></a><h6>
-<a name="id832052"></a>
+<a name="id794195"></a>
             <a class="link" href="transform.html#fusion.algorithm.transformation.metafunctions.transform.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting"><a class="link" href="../functions/transform.html" title="transform"><code class="computeroutput"><span class="identifier">transform</span></code></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
-            Sequence</a>
+            <span class="bold"><strong>Return type</strong></span>:
           </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+              A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+              Sequence</a>
+</li>
+<li class="listitem">
+              A model of <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+              Sequence</a> if <code class="computeroutput"><span class="identifier">Sequence</span></code>
+              implements the <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+              Sequence</a> model.
+            </li>
+</ul></div>
 <p>
             <span class="bold"><strong>Semantics</strong></span>: Returns a new sequence, containing
             the return values of <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e</span><span class="special">)</span></code> for each element <code class="computeroutput"><span class="identifier">e</span></code>
             within <code class="computeroutput"><span class="identifier">seq</span></code>.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.transform.binary_version_synopsis"></a><h6>
-<a name="id832152"></a>
+<a name="id794322"></a>
             <a class="link" href="transform.html#fusion.algorithm.transformation.metafunctions.transform.binary_version_synopsis">Binary
             version synopsis</a>
           </h6>
@@ -146,7 +157,7 @@
     <span class="identifier">Sequence1</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq1</span><span class="special">,</span> <span class="identifier">Sequence2</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq2</span><span class="special">,</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id832341"></a><p class="title"><b>Table 1.76. Parameters</b></p>
+<a name="id794512"></a><p class="title"><b>Table 1.80. Parameters</b></p>
 <div class="table-contents"><table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -241,21 +252,21 @@
             within <code class="computeroutput"><span class="identifier">seq1</span></code> and <code class="computeroutput"><span class="identifier">seq2</span></code> respectively.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.transform.complexity"></a><h6>
-<a name="id832692"></a>
+<a name="id794862"></a>
             <a class="link" href="transform.html#fusion.algorithm.transformation.metafunctions.transform.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.transform.header"></a><h6>
-<a name="id832711"></a>
+<a name="id794881"></a>
             <a class="link" href="transform.html#fusion.algorithm.transformation.metafunctions.transform.header">Header</a>
           </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">transform</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">transform</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithm.transformation.metafunctions.transform.example"></a><h6>
-<a name="id832831"></a>
+<a name="id795001"></a>
             <a class="link" href="transform.html#fusion.algorithm.transformation.metafunctions.transform.example">Example</a>
           </h6>
 <pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">triple</span>

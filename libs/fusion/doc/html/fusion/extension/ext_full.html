@@ -49,7 +49,7 @@
         </li>
 </ol></div>
 <a name="fusion.extension.ext_full.our_example"></a><h5>
-<a name="id850755"></a>
+<a name="id815238"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.our_example">Our example</a>
       </h5>
 <p>
@@ -79,7 +79,7 @@
         Start</a> guide.
       </p>
 <a name="fusion.extension.ext_full.enabling_tag_dispatching"></a><h5>
-<a name="id850959"></a>
+<a name="id815442"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.enabling_tag_dispatching">Enabling
         Tag Dispatching</a>
       </h5>
@@ -120,7 +120,7 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">tag_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.extension.ext_full.designing_a_suitable_iterator"></a><h5>
-<a name="id851394"></a>
+<a name="id815878"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.designing_a_suitable_iterator">Designing
         a suitable iterator</a>
       </h5>
@@ -182,7 +182,7 @@
         clearer as we add features to our implementation.
       </p>
 <a name="fusion.extension.ext_full.a_first_couple_of_instructive_features"></a><h5>
-<a name="id851853"></a>
+<a name="id816336"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.a_first_couple_of_instructive_features">A
         first couple of instructive features</a>
       </h5>
@@ -217,18 +217,17 @@
       </p>
 <p>
         To understand how <code class="computeroutput"><span class="identifier">value_of_impl</span></code>
-        is used by the library we will look at the implementation of <a class="link" href="../iterator/metafunctions/value_of.html" title="value_of"><code class="computeroutput"><span class="identifier">value_of</span></code></a>:
+        is used by the library we will look at the implementation of __value<span class="underline">of</span>_:
       </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a class="link" href="../iterator/metafunctions/value_of.html" title="value_of"><code class="computeroutput"><span class="identifier">value_of</span></code></a>
+<span class="keyword">struct</span> <span class="identifier">__value_of__</span>
     <span class="special">:</span> <span class="identifier">extension</span><span class="special">::</span><span class="identifier">value_of_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">tag_of</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span>
         <span class="keyword">template</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;</span>
 <span class="special">{};</span>
 </pre>
 <p>
-        So <a class="link" href="../iterator/metafunctions/value_of.html" title="value_of"><code class="computeroutput"><span class="identifier">value_of</span></code></a>
-        uses <a class="link" href="../notes.html#fusion.notes.tag_dispatching"><span class="emphasis"><em>tag dispatching</em></span></a>
-        to select an <a href="http://www.boost.org/libs/mpl/doc/refmanual/metafunction-class.html" target="_top">MPL
+        So __value<span class="underline">of</span>_ uses <a class="link" href="../notes.html#fusion.notes.tag_dispatching"><span class="emphasis"><em>tag
+        dispatching</em></span></a> to select an <a href="http://www.boost.org/libs/mpl/doc/refmanual/metafunction-class.html" target="_top">MPL
         Metafunction Class</a> to provide its functionality. You will notice
         this pattern throughout the implementation of Fusion.
       </p>
@@ -296,8 +295,10 @@
 </pre>
 <p>
         So again <a class="link" href="../iterator/metafunctions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></code></a> uses <a class="link" href="../notes.html#fusion.notes.tag_dispatching"><span class="emphasis"><em>tag
-        dispatching</em></span></a> in exactly the same way as the <a class="link" href="../iterator/metafunctions/value_of.html" title="value_of"><code class="computeroutput"><span class="identifier">value_of</span></code></a> implementation. The runtime
-        functionality used by <a class="link" href="../iterator/functions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a> is provided by the <code class="computeroutput"><span class="identifier">call</span></code> static function of the selected <a href="http://www.boost.org/libs/mpl/doc/refmanual/metafunction-class.html" target="_top">MPL
+        dispatching</em></span></a> in exactly the same way as the __value<span class="underline">of</span>_ implementation. The runtime functionality
+        used by <a class="link" href="../iterator/functions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a>
+        is provided by the <code class="computeroutput"><span class="identifier">call</span></code> static
+        function of the selected <a href="http://www.boost.org/libs/mpl/doc/refmanual/metafunction-class.html" target="_top">MPL
         Metafunction Class</a>.
       </p>
 <p>
@@ -315,21 +316,22 @@
 </tr>
 <tr><td align="left" valign="top"><p>
           Although there is a fair amount of left to do to produce a fully fledged
-          Fusion sequence, <a class="link" href="../iterator/metafunctions/value_of.html" title="value_of"><code class="computeroutput"><span class="identifier">value_of</span></code></a> and <a class="link" href="../iterator/functions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a> illustrate all the signficant
-          concepts required. The remainder of the process is very repetitive, simply
-          requiring implementation of a suitable <code class="computeroutput"><span class="identifier">xxxx_impl</span></code>
-          for each feature <code class="computeroutput"><span class="identifier">xxxx</span></code>.
+          Fusion sequence, __value<span class="underline">of</span>_ and
+          <a class="link" href="../iterator/functions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a>
+          illustrate all the signficant concepts required. The remainder of the process
+          is very repetitive, simply requiring implementation of a suitable <code class="computeroutput"><span class="identifier">xxxx_impl</span></code> for each feature <code class="computeroutput"><span class="identifier">xxxx</span></code>.
         </p></td></tr>
 </table></div>
 <a name="fusion.extension.ext_full.implementing_the_remaining_iterator_functionality"></a><h5>
-<a name="id855106"></a>
+<a name="id819023"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.implementing_the_remaining_iterator_functionality">Implementing
         the remaining iterator functionality</a>
       </h5>
 <p>
-        Ok, now we have seen the way <a class="link" href="../iterator/metafunctions/value_of.html" title="value_of"><code class="computeroutput"><span class="identifier">value_of</span></code></a> and <a class="link" href="../iterator/functions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a> work, everything else will
-        work in pretty much the same way. Lets start with forward iteration, by providing
-        a <code class="computeroutput"><span class="identifier">next_impl</span></code>:
+        Ok, now we have seen the way __value<span class="underline">of</span>_
+        and <a class="link" href="../iterator/functions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a>
+        work, everything else will work in pretty much the same way. Lets start with
+        forward iteration, by providing a <code class="computeroutput"><span class="identifier">next_impl</span></code>:
       </p>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">next_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator_tag</span><span class="special">&gt;</span>
@@ -373,7 +375,7 @@
         are provided in the example code.
       </p>
 <a name="fusion.extension.ext_full.implementing_the_intrinsic_functions_of_the_sequence"></a><h5>
-<a name="id855542"></a>
+<a name="id819455"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.implementing_the_intrinsic_functions_of_the_sequence">Implementing
         the intrinsic functions of the sequence</a>
       </h5>
@@ -429,7 +431,7 @@
         <code class="computeroutput"><span class="identifier">value_at_impl</span></code> and <code class="computeroutput"><span class="identifier">at_impl</span></code>.
       </p>
 <a name="fusion.extension.ext_full.enabling_our_type_as_an_associative_container"></a><h5>
-<a name="id856364"></a>
+<a name="id819866"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.enabling_our_type_as_an_associative_container">Enabling
         our type as an associative container</a>
       </h5>
@@ -496,7 +498,7 @@
         of <code class="computeroutput"><span class="identifier">is_associative_impl</span></code>.
       </p>
 <a name="fusion.extension.ext_full.summary"></a><h5>
-<a name="id857064"></a>
+<a name="id820703"></a>
         <a class="link" href="ext_full.html#fusion.extension.ext_full.summary">Summary</a>
       </h5>
 <p>

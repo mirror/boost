@@ -27,28 +27,29 @@
 <a name="fusion.algorithm.transformation.functions.erase_key"></a><a class="link" href="erase_key.html" title="erase_key">erase_key</a>
 </h5></div></div></div>
 <a name="fusion.algorithm.transformation.functions.erase_key.description"></a><h6>
-<a name="id820735"></a>
+<a name="id782544"></a>
             <a class="link" href="erase_key.html#fusion.algorithm.transformation.functions.erase_key.description">Description</a>
           </h6>
 <p>
-            For an <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
-            Sequence</a> <code class="computeroutput"><span class="identifier">seq</span></code>,
-            returns a <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
-            Sequence</a> containing all the elements of the original except those
-            with a given key.
+            For an <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">associative</a>]
+            <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a>
+            <code class="computeroutput"><span class="identifier">seq</span></code>, returns a <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">associative</a>]
+            <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a>
+            containing all the elements of the original except those with a given
+            key.
           </p>
 <a name="fusion.algorithm.transformation.functions.erase_key.synposis"></a><h6>
-<a name="id820774"></a>
+<a name="id782592"></a>
             <a class="link" href="erase_key.html#fusion.algorithm.transformation.functions.erase_key.synposis">Synposis</a>
           </h6>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Key</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span>
     <span class="special">&gt;</span>
-<span class="keyword">typename</span> <span class="identifier">result_of</span><span class="special">::</span><span class="identifier">erase_key</span><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">Key</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">erase_key</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
+<span class="keyword">typename</span> <a class="link" href="../metafunctions/erase_key.html" title="erase_key"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">erase_key</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">Key</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">erase_key</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id820898"></a><p class="title"><b>Table 1.64. Parameters</b></p>
+<a name="id783814"></a><p class="title"><b>Table 1.68. Parameters</b></p>
 <div class="table-contents"><table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -81,7 +82,8 @@
                 </td>
 <td>
                 <p>
-                  A model of <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+                  A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+                  Sequence</a> and <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
                   Sequence</a>
                 </p>
                 </td>
@@ -112,7 +114,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="fusion.algorithm.transformation.functions.erase_key.expression_semantics"></a><h6>
-<a name="id821011"></a>
+<a name="id783932"></a>
             <a class="link" href="erase_key.html#fusion.algorithm.transformation.functions.erase_key.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -120,6 +122,7 @@
 </pre>
 <p>
             <span class="bold"><strong>Return type</strong></span>: A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+            Sequence</a> and <a class="link" href="../../../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
             Sequence</a>.
           </p>
 <p>
@@ -128,21 +131,21 @@
             except those with key <code class="computeroutput"><span class="identifier">Key</span></code>.
           </p>
 <a name="fusion.algorithm.transformation.functions.erase_key.complexity"></a><h6>
-<a name="id821094"></a>
+<a name="id784020"></a>
             <a class="link" href="erase_key.html#fusion.algorithm.transformation.functions.erase_key.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithm.transformation.functions.erase_key.header"></a><h6>
-<a name="id821116"></a>
+<a name="id784041"></a>
             <a class="link" href="erase_key.html#fusion.algorithm.transformation.functions.erase_key.header">Header</a>
           </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">erase_key</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">erase_key</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithm.transformation.functions.erase_key.example"></a><h6>
-<a name="id821236"></a>
+<a name="id784161"></a>
             <a class="link" href="erase_key.html#fusion.algorithm.transformation.functions.erase_key.example">Example</a>
           </h6>
 <pre class="programlisting"><span class="identifier">assert</span><span class="special">(</span><a class="link" href="erase_key.html" title="erase_key"><code class="computeroutput"><span class="identifier">erase_key</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(</span><a class="link" href="../../../container/generation/functions/make_map.html" title="make_map"><code class="computeroutput"><span class="identifier">make_map</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">long</span><span class="special">&gt;(</span><span class="char">'a'</span><span class="special">,</span> <span class="char">'b'</span><span class="special">))</span> <span class="special">==</span> <a class="link" href="../../../container/generation/functions/make_map.html" title="make_map"><code class="computeroutput"><span class="identifier">make_map</span></code></a><span class="special">&lt;</span><span class="keyword">long</span><span class="special">&gt;(</span><span class="char">'b'</span><span class="special">));</span>

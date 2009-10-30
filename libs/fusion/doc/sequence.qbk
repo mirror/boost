@@ -277,13 +277,7 @@ are not defined in __bidirectional_sequence__.
 An Associative Sequence allows efficient retrieval of elements based on keys.
 Like associative sequences in __mpl__, and unlike associative containers in
 __stl__, Fusion associative sequences have no implied ordering relation.
-Instead, type identity is used to impose an equivalence relation on keys, and
-the order in which sequence elements are traversed during iteration is left
-unspecified. In addition, unlike __stl__, Associative Sequences have mutable
-iterators. This is due to the fact that there is no associated ordering relation
-and the runtime value of the keys themselves do not have any effect on the
-associativity of the sequence.
-
+Instead, type identity is used to impose an equivalence relation on keys.
 
 [variablelist Notation
     [[`s`]       [An Associative Sequence]]
@@ -388,9 +382,12 @@ Returns an iterator pointing to the first element in the sequence.
 
     begin(seq);
 
-[*Return type]: __forward_iterator__ if `seq` is a __forward_sequence__
+[*Return type]:
+
+* A model of __forward_iterator__ if `seq` is a __forward_sequence__
 else, __bidirectional_iterator__ if `seq` is a __bidirectional_sequence__
 else, __random_access_iterator__ if `seq` is a __random_access_sequence__.
+* A model of __associative_iterator__ if `seq` is an __associative_sequence__.
 
 [*Semantics]: Returns an iterator pointing to the first element in the sequence.
 
@@ -433,9 +430,12 @@ Returns an iterator pointing to one element past the end of the sequence.
 
     end(seq);
 
-[*Return type]: __forward_iterator__ if `seq` is a __forward_sequence__
+[*Return type]:
+
+* A model of __forward_iterator__ if `seq` is a __forward_sequence__
 else, __bidirectional_iterator__ if `seq` is a __bidirectional_sequence__
 else, __random_access_iterator__ if `seq` is a __random_access_sequence__.
+* A model of __associative_iterator__ if `seq` is an __associative_sequence__.
 
 [*Semantics]: Returns an iterator pointing to one element past the end of
 the sequence.
@@ -888,11 +888,19 @@ Returns the result type of __begin__.
 [heading Expression Semantics]
     result_of::begin<Seq>::type
 
-[*Return type]: An iterator modelling the same traversal concept as `Seq`.
+[*Return type]:
+
+* A model of __forward_iterator__ if `seq` is a __forward_sequence__
+else, __bidirectional_iterator__ if `seq` is a __bidirectional_sequence__
+else, __random_access_iterator__ if `seq` is a __random_access_sequence__.
+* A model of __associative_iterator__ if `seq` is an __associative_sequence__.
 
 [*Semantics]: Returns the type of an iterator to the first element of `Seq`.
 
-/sequence/intrinsic/begin.hpp>
+[heading Header]
+
+    #include <boost/fusion/sequence/intrinsic/begin.hpp>
+    #include <boost/fusion/include/begin.hpp>
 
 [heading Example]
     typedef __vector__<int> vec;
@@ -921,11 +929,19 @@ Returns the result type of __end__.
 [heading Expression Semantics]
     result_of::end<Seq>::type
 
-[*Return type]: A model of the same traversal concept as `Seq`.
+[*Return type]:
+
+* A model of __forward_iterator__ if `seq` is a __forward_sequence__
+else, __bidirectional_iterator__ if `seq` is a __bidirectional_sequence__
+else, __random_access_iterator__ if `seq` is a __random_access_sequence__.
+* A model of __associative_iterator__ if `seq` is an __associative_sequence__.
 
 [*Semantics]: Returns the type of an iterator one past the end of `Seq`.
 
-/sequence/intrinsic/end.hpp>
+[heading Header]
+
+    #include <boost/fusion/sequence/intrinsic/end.hpp>
+    #include <boost/fusion/include/end.hpp>
 
 [heading Example]
     typedef __vector__<int> vec;
@@ -958,7 +974,10 @@ Returns the result type of __empty__.
 
 [*Semantics]: Returns `mpl::true_` if `Seq` has zero elements, `mpl::false_` otherwise.
 
-/sequence/intrinsic/empty.hpp>
+[heading Header]
+
+    #include <boost/fusion/sequence/intrinsic/empty.hpp>
+    #include <boost/fusion/include/empty.hpp>
 
 [heading Example]
     typedef __vector__<> empty_vec;
@@ -993,7 +1012,10 @@ Returns the result type of __front__.
 
 [*Semantics]: The type returned by dereferencing an iterator to the first element in `Seq`. Equivalent to `__result_of_deref__<__result_of_begin__<Seq>::type>::type`.
 
-/sequence/intrinsic/front.hpp>
+[heading Header]
+
+    #include <boost/fusion/sequence/intrinsic/front.hpp>
+    #include <boost/fusion/include/front.hpp>
 
 [heading Example]
     typedef __vector__<int,char> vec;
@@ -1025,7 +1047,10 @@ Returns the result type of __back__.
 
 [*Semantics]: The type returned by dereferencing an iterator to the last element in the sequence. Equivalent to `__result_of_deref__<__result_of_prior__<__result_of_end__<Seq>::type>::type>::type`.
 
-/sequence/intrinsic/back.hpp>
+[heading Header]
+
+    #include <boost/fusion/sequence/intrinsic/back.hpp>
+    #include <boost/fusion/include/back.hpp>
 
 [heading Example]
     typedef __vector__<int,char> vec;
@@ -1057,7 +1082,10 @@ Returns the result type of __size__.
 
 [*Semantics]: Returns the number of elements in `Seq`.
 
-/sequence/intrinsic/size.hpp>
+[heading Header]
+
+    #include <boost/fusion/sequence/intrinsic/size.hpp>
+    #include <boost/fusion/include/size.hpp>
 
 [heading Example]
     typedef __vector__<int,float,char> vec;
@@ -1097,7 +1125,10 @@ the actual element type, use __result_of_value_at__].
 
 [*Semantics]: Returns the result type of using __at__ to access the `N`th element of `Seq`.
 
-/sequence/intrinsic/at.hpp>
+[heading Header]
+
+    #include <boost/fusion/sequence/intrinsic/at.hpp>
+    #include <boost/fusion/include/at.hpp>
 
 [heading Example]
     typedef __vector__<int,float,char> vec;
@@ -1136,7 +1167,10 @@ get the actual element type, use __result_of_value_at_c__].
 
 [*Semantics]: Returns the result type of using __at_c__ to access the `M`th element of `Seq`.
 
-/sequence/intrinsic/at.hpp>
+[heading Header]
+
+    #include <boost/fusion/sequence/intrinsic/at.hpp>
+    #include <boost/fusion/include/at.hpp>
 
 [heading Example]
     typedef __vector__<int,float,char> vec;
@@ -1172,7 +1206,10 @@ Returns the actual type at a given index from the __sequence__.
 
 [*Semantics]: Returns the actual type at the `N`th element of `Seq`.
 
-/sequence/intrinsic/value_at.hpp>
+[heading Header]
+
+    #include <boost/fusion/sequence/intrinsic/value_at.hpp>
+    #include <boost/fusion/include/value_at.hpp>
 
 [heading Example]
     typedef __vector__<int,float,char> vec;
@@ -1208,7 +1245,10 @@ Returns the actual type at a given index from the __sequence__.
 
 [*Semantics]: Returns the actual type at the `M`th element of `Seq`.
 
-/sequence/intrinsic/value_at.hpp>
+[heading Header]
+
+    #include <boost/fusion/sequence/intrinsic/value_at.hpp>
+    #include <boost/fusion/include/value_at.hpp>
 
 [heading Example]
     typedef __vector__<int,float,char> vec;
@@ -1243,7 +1283,10 @@ Returns the result type of __has_key__.
 
 [*Semantics]: Returns `mpl::true_` if `Seq` contains an element with key type `Key`, returns `mpl::false_` otherwise.
 
-/sequence/intrinsic/has_key.hpp>
+[heading Header]
+
+    #include <boost/fusion/sequence/intrinsic/has_key.hpp>
+    #include <boost/fusion/include/has_key.hpp>
 
 [heading Example]
     typedef __map__<__pair__<int, char>, __pair__<char, char>, __pair__<double, char> > mymap;
@@ -1283,7 +1326,10 @@ you want to get the actual element type, use __result_of_value_at_key__].
 
 [*Semantics]: Returns the result of using __at_key__ to access the element with key type `Key` in `Seq`.
 
-/sequence/intrinsic/at_key.hpp>
+[heading Header]
+
+    #include <boost/fusion/sequence/intrinsic/at_key.hpp>
+    #include <boost/fusion/include/at_key.hpp>
 
 [heading Example]
     typedef __map__<__pair__<int, char>, __pair__<char, char>, __pair__<double, char> > mymap;
@@ -1319,8 +1365,11 @@ Returns the actual element type associated with a Key from the __sequence__.
 [*Semantics]: Returns the actual element type associated with key type
 `Key` in `Seq`.
 
-/sequence/intrinsic/value_at_key.hpp>
+[heading Header]
 
+    #include <boost/fusion/sequence/intrinsic/value_at_key.hpp>
+    #include <boost/fusion/include/value_at_key.hpp>
+    
 [heading Example]
     typedef __map__<__pair__<int, char>, __pair__<char, char>, __pair__<double, char> > mymap;
     BOOST_MPL_ASSERT((boost::is_same<__result_of_at_key__<mymap, int>::type, char>));
@@ -1351,7 +1400,10 @@ Returns the return type of swap.
 
 [*Semantics]: Always returns `void`.
 
-/sequence/intrinsic/swap.hpp>
+[heading Header]
+
+    #include <boost/fusion/sequence/intrinsic/swap.hpp>
+    #include <boost/fusion/include/swap.hpp>
 
 [endsect]
 

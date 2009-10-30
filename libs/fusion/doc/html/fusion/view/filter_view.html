@@ -27,7 +27,7 @@
 <a name="fusion.view.filter_view"></a><a class="link" href="filter_view.html" title="filter_view">filter_view</a>
 </h3></div></div></div>
 <a name="fusion.view.filter_view.description"></a><h5>
-<a name="id770090"></a>
+<a name="id731275"></a>
         <a class="link" href="filter_view.html#fusion.view.filter_view.description">Description</a>
       </h5>
 <p>
@@ -38,21 +38,21 @@
         only those elements for which its predicate evaluates to <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></code>.
       </p>
 <a name="fusion.view.filter_view.header"></a><h5>
-<a name="id770141"></a>
+<a name="id731325"></a>
         <a class="link" href="filter_view.html#fusion.view.filter_view.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">filter_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">filter_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.view.filter_view.synopsis"></a><h5>
-<a name="id770249"></a>
+<a name="id731433"></a>
         <a class="link" href="filter_view.html#fusion.view.filter_view.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Pred</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">filter_view</span><span class="special">;</span>
 </pre>
 <a name="fusion.view.filter_view.template_parameters"></a><h5>
-<a name="id770314"></a>
+<a name="id732600"></a>
         <a class="link" href="filter_view.html#fusion.view.filter_view.template_parameters">Template parameters</a>
       </h5>
 <div class="informaltable"><table class="table">
@@ -115,10 +115,18 @@
 </tbody>
 </table></div>
 <a name="fusion.view.filter_view.model_of"></a><h5>
-<a name="id770719"></a>
+<a name="id732732"></a>
         <a class="link" href="filter_view.html#fusion.view.filter_view.model_of">Model of</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a></li></ul></div>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a></li>
+<li class="listitem">
+<a class="link" href="../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+          Sequence</a> if <code class="computeroutput"><span class="identifier">Sequence</span></code>
+          implements the <a class="link" href="../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+          Sequence</a> model.
+        </li>
+</ul></div>
 <div class="variablelist" title="Notation">
 <p class="title"><b>Notation</b></p>
 <dl>
@@ -138,13 +146,12 @@
 </dl>
 </div>
 <a name="fusion.view.filter_view.expression_semantics"></a><h5>
-<a name="id770832"></a>
+<a name="id732865"></a>
         <a class="link" href="filter_view.html#fusion.view.filter_view.expression_semantics">Expression Semantics</a>
       </h5>
 <p>
         Semantics of an expression is defined only where it differs from, or is not
-        defined in <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
-        Sequence</a>.
+        defined in the implemented models.
       </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -209,7 +216,7 @@
 </tbody>
 </table></div>
 <a name="fusion.view.filter_view.example"></a><h5>
-<a name="id771055"></a>
+<a name="id733084"></a>
         <a class="link" href="filter_view.html#fusion.view.filter_view.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">_</span><span class="special">;</span>

@@ -5,3 +5,5 @@ Interface Changes
 - September 24, 2009: added nview and friends
 - October 12, 2009: the accumulator is the first argument to the functor of
   fold and accumulate. Fixes Boost Trac Ticket #2355.
+- October 30, 2009: Added support for associative iterators & views. Fixes
+  Boost Trac Ticket #3473.

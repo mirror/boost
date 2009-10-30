@@ -202,26 +202,7 @@ __sequence_concepts__).
 
 [*Return type]:
 
-For Iterators, the return type is derived from one of:
-
-        namespace boost { namespace fusion
-        {
-            struct incrementable_traversal_tag {};
-
-            struct single_pass_traversal_tag
-                : incrementable_traversal_tag {};
-
-            struct forward_traversal_tag
-                : single_pass_traversal_tag {};
-
-            struct bidirectional_traversal_tag
-                : forward_traversal_tag {};
-
-            struct random_access_traversal_tag
-                : bidirectional_traversal_tag {};
-        }}
-
-For Sequences, the return type is derived from one of:
+The return type is derived from one of:
 
         namespace boost { namespace fusion
         {
@@ -363,7 +344,7 @@ constructor accepting the original type as its argument.
 
 Fusion `pair` type is a half runtime pair. A half runtime pair is similar
 to a __std_pair__, but, unlike __std_pair__, the first type does not have data.
-It is used as elements in __map__s, for example.
+It is used as elements in __map__\ s, for example.
 
 [heading Synopsis]
 
