@@ -11,6 +11,10 @@
 [h4 Boost 1.42]
 
 * Added support for Functors rather than strings as format expressions.
+* Fixed tickets
+[@https://svn.boost.org/trac/boost/ticket/2802 #2802],
+[@https://svn.boost.org/trac/boost/ticket/2802 #3425],
+[@https://svn.boost.org/trac/boost/ticket/2802 #3507]
 
 [h4 Boost 1.40]
 
