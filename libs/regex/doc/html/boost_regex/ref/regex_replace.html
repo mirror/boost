@@ -38,37 +38,40 @@
         set. If the flag <code class="computeroutput"><span class="identifier">format_first_only</span></code>
         is set then only the first occurrence is replaced rather than all occurrences.
       </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
 <span class="identifier">OutputIterator</span> <span class="identifier">regex_replace</span><span class="special">(</span><span class="identifier">OutputIterator</span> <span class="identifier">out</span><span class="special">,</span>
                              <span class="identifier">BidirectionalIterator</span> <span class="identifier">first</span><span class="special">,</span>
                              <span class="identifier">BidirectionalIterator</span> <span class="identifier">last</span><span class="special">,</span>
                              <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">,</span>
-                             <span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
+                             <span class="identifier">Formatter</span> <span class="identifier">fmt</span><span class="special">,</span>
                              <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
 <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="identifier">regex_replace</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">,</span>
                                   <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">,</span>
-                                  <span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
+                                  <span class="identifier">Formatter</span> <span class="identifier">fmt</span><span class="special">,</span>
                                   <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <a name="boost_regex.ref.regex_replace.description"></a><h5>
-<a name="id733770"></a>
+<a name="id866765"></a>
         <a class="link" href="regex_replace.html#boost_regex.ref.regex_replace.description">Description</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
 <span class="identifier">OutputIterator</span> <span class="identifier">regex_replace</span><span class="special">(</span><span class="identifier">OutputIterator</span> <span class="identifier">out</span><span class="special">,</span>
                              <span class="identifier">BidirectionalIterator</span> <span class="identifier">first</span><span class="special">,</span>
                              <span class="identifier">BidirectionalIterator</span> <span class="identifier">last</span><span class="special">,</span>
                              <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">,</span>
-                             <span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
+                             <span class="identifier">Formatter</span> <span class="identifier">fmt</span><span class="special">,</span>
                              <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <p>
         Enumerates all the occurences of expression <span class="emphasis"><em>e</em></span> in the
         sequence [first, last), replacing each occurence with the string that results
         by merging the match found with the format string <span class="emphasis"><em>fmt</em></span>,
-        and copies the resulting string to <span class="emphasis"><em>out</em></span>.
+        and copies the resulting string to <span class="emphasis"><em>out</em></span>. In the case
+        that <span class="emphasis"><em>fmt</em></span> is a unary, binary or ternary function object,
+        then the character sequence generated by that object is copied unchanged
+        to the output when performing a substitution.
       </p>
 <p>
         If the flag <code class="computeroutput"><span class="identifier">format_no_copy</span></code>
@@ -84,6 +87,21 @@
         The manner in which the format string <span class="emphasis"><em>fmt</em></span> is interpretted,
         along with the rules used for finding matches, are determined by the flags
         set in <span class="emphasis"><em>flags</em></span>: see <a class="link" href="match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a>.
+      </p>
+<p>
+        <span class="bold"><strong>Requires</strong></span> The type <code class="computeroutput"><span class="identifier">Formatter</span></code>
+        must be either a pointer to a null-terminated string of type <code class="computeroutput"><span class="identifier">char_type</span><span class="special">[]</span></code>,
+        or be a container of <code class="computeroutput"><span class="identifier">char_type</span></code>'s
+        (for example <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">char_type</span><span class="special">&gt;</span></code>)
+        or be a unary, binary or ternary functor that computes the replacement string
+        from a function call: either <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(</span><span class="identifier">what</span><span class="special">)</span></code>
+        which must return a container of <code class="computeroutput"><span class="identifier">char_type</span></code>'s
+        to be used as the replacement text, or either <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(</span><span class="identifier">what</span><span class="special">,</span>
+        <span class="identifier">out</span><span class="special">)</span></code>
+        or <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(</span><span class="identifier">what</span><span class="special">,</span> <span class="identifier">out</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></code>, both of which write the replacement text
+        to <code class="computeroutput"><span class="special">*</span><span class="identifier">out</span></code>,
+        and then return the new OutputIterator position. In each case <code class="computeroutput"><span class="identifier">what</span></code> is the <a class="link" href="match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a> object that represents
+        the match found.
       </p>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Constructs an <a class="link" href="regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a> object:
@@ -150,12 +168,27 @@
 <p>
         <span class="bold"><strong>Returns</strong></span>: out.
       </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
 <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="identifier">regex_replace</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">,</span>
                                   <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">,</span>
-                                  <span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
+                                  <span class="identifier">Formatter</span> <span class="identifier">fmt</span><span class="special">,</span>
                                   <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
+<p>
+        <span class="bold"><strong>Requires</strong></span> The type <code class="computeroutput"><span class="identifier">Formatter</span></code>
+        must be either a pointer to a null-terminated string of type <code class="computeroutput"><span class="identifier">char_type</span><span class="special">[]</span></code>,
+        or be a container of <code class="computeroutput"><span class="identifier">char_type</span></code>'s
+        (for example <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">char_type</span><span class="special">&gt;</span></code>)
+        or be a unary, binary or ternary functor that computes the replacement string
+        from a function call: either <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(</span><span class="identifier">what</span><span class="special">)</span></code>
+        which must return a container of <code class="computeroutput"><span class="identifier">char_type</span></code>'s
+        to be used as the replacement text, or either <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(</span><span class="identifier">what</span><span class="special">,</span>
+        <span class="identifier">out</span><span class="special">)</span></code>
+        or <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(</span><span class="identifier">what</span><span class="special">,</span> <span class="identifier">out</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></code>, both of which write the replacement text
+        to <code class="computeroutput"><span class="special">*</span><span class="identifier">out</span></code>,
+        and then return the new OutputIterator position. In each case <code class="computeroutput"><span class="identifier">what</span></code> is the <a class="link" href="match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a> object that represents
+        the match found.
+      </p>
 <p>
         <span class="bold"><strong>Effects</strong></span>: Constructs an object <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="identifier">result</span></code>, calls <code class="computeroutput"><span class="identifier">regex_replace</span><span class="special">(</span><span class="identifier">back_inserter</span><span class="special">(</span><span class="identifier">result</span><span class="special">),</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">e</span><span class="special">,</span>
         <span class="identifier">fmt</span><span class="special">,</span>
@@ -163,7 +196,7 @@
         and then returns <code class="computeroutput"><span class="identifier">result</span></code>.
       </p>
 <a name="boost_regex.ref.regex_replace.examples"></a><h5>
-<a name="id734884"></a>
+<a name="id869301"></a>
         <a class="link" href="regex_replace.html#boost_regex.ref.regex_replace.examples">Examples</a>
       </h5>
 <p>

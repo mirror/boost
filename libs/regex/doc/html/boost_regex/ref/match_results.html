@@ -27,7 +27,7 @@
 <a name="boost_regex.ref.match_results"></a><a class="link" href="match_results.html" title="match_results"> match_results</a>
 </h3></div></div></div>
 <a name="boost_regex.ref.match_results.synopsis"></a><h5>
-<a name="id687993"></a>
+<a name="id820550"></a>
         <a class="link" href="match_results.html#boost_regex.ref.match_results.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -132,11 +132,12 @@
    <span class="identifier">const_iterator</span> <a class="link" href="match_results.html#boost_regex.match_results.begin">begin</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
    <span class="identifier">const_iterator</span> <a class="link" href="match_results.html#boost_regex.match_results.end">end</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
    <span class="comment">// format:
-</span>   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">&gt;</span>
+</span>   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
    <span class="identifier">OutputIterator</span> <a class="link" href="match_results.html#boost_regex.match_results.format">format</a><span class="special">(</span><span class="identifier">OutputIterator</span> <span class="identifier">out</span><span class="special">,</span>
-                        <span class="keyword">const</span> <span class="identifier">string_type</span><span class="special">&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
+                        <span class="identifier">Formatter</span> <span class="identifier">fmt</span><span class="special">,</span>
                         <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">format_default</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="identifier">string_type</span> <a class="link" href="match_results.html#boost_regex.match_results.format2">format</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">string_type</span><span class="special">&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
+   <span class="identifier">string_type</span> <a class="link" href="match_results.html#boost_regex.match_results.format2">format</a><span class="special">(</span><span class="identifier">Formatter</span> <span class="identifier">fmt</span><span class="special">,</span>
                      <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">format_default</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
    <span class="identifier">allocator_type</span> <a class="link" href="match_results.html#boost_regex.match_results.get_allocator">get_allocator</a><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
@@ -166,7 +167,7 @@
          <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m2</span><span class="special">);</span>
 </pre>
 <a name="boost_regex.ref.match_results.description"></a><h5>
-<a name="id691227"></a>
+<a name="id824075"></a>
         <a class="link" href="match_results.html#boost_regex.ref.match_results.description">Description</a>
       </h5>
 <p>
@@ -558,18 +559,32 @@
       </p>
 <a name="boost_regex.match_results_format"></a><a name="boost_regex.match_results.format"></a><p>
       </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
 <span class="identifier">OutputIterator</span> <span class="identifier">format</span><span class="special">(</span><span class="identifier">OutputIterator</span> <span class="identifier">out</span><span class="special">,</span>
-                     <span class="keyword">const</span> <span class="identifier">string_type</span><span class="special">&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
-                     <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">format_default</span><span class="special">);</span>
+                      <span class="identifier">Formatter</span> <span class="identifier">fmt</span><span class="special">,</span>
+                      <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">format_default</span><span class="special">);</span>
 </pre>
 <p>
         <span class="bold"><strong>Requires</strong></span>: The type <code class="computeroutput"><span class="identifier">OutputIterator</span></code>
         conforms to the Output Iterator requirements (C++ std 24.1.2).
       </p>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Copies the character sequence
-        <code class="computeroutput"><span class="special">[</span><span class="identifier">fmt</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">fmt</span><span class="special">.</span><span class="identifier">end</span><span class="special">())</span></code>
+        The type <code class="computeroutput"><span class="identifier">Formatter</span></code> must be
+        either a pointer to a null-terminated string of type <code class="computeroutput"><span class="identifier">char_type</span><span class="special">[]</span></code>, or be a container of <code class="computeroutput"><span class="identifier">char_type</span></code>'s
+        (for example <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">char_type</span><span class="special">&gt;</span></code>)
+        or be a unary, binary or ternary functor that computes the replacement string
+        from a function call: either <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(*</span><span class="keyword">this</span><span class="special">)</span></code>
+        which must return a container of <code class="computeroutput"><span class="identifier">char_type</span></code>'s
+        to be used as the replacement text, or either <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(*</span><span class="keyword">this</span><span class="special">,</span>
+        <span class="identifier">out</span><span class="special">)</span></code>
+        or <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(*</span><span class="keyword">this</span><span class="special">,</span> <span class="identifier">out</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></code>, both of which write the replacement text
+        to <code class="computeroutput"><span class="special">*</span><span class="identifier">out</span></code>,
+        and then return the new OutputIterator position.
+      </p>
+<p>
+        <span class="bold"><strong>Effects</strong></span>: If <code class="computeroutput"><span class="identifier">fmt</span></code>
+        is either a null-terminated string, or a container of <code class="computeroutput"><span class="identifier">char_type</span></code>'s,
+        then copies the character sequence <code class="computeroutput"><span class="special">[</span><span class="identifier">fmt</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">fmt</span><span class="special">.</span><span class="identifier">end</span><span class="special">())</span></code>
         to <code class="computeroutput"><span class="identifier">OutputIterator</span></code> <span class="emphasis"><em>out</em></span>.
         For each format specifier or escape sequence in <span class="emphasis"><em>fmt</em></span>,
         replace that sequence with either the character(s) it represents, or the
@@ -579,6 +594,27 @@
         Chapter 15 part 5.4.11 String.prototype.replace.
       </p>
 <p>
+        If <code class="computeroutput"><span class="identifier">fmt</span></code> is a function object,
+        then depending on the number of arguments the function object accepts, it
+        will either:
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+          Call <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(*</span><span class="keyword">this</span><span class="special">)</span></code> and
+          copy the result to <code class="computeroutput"><span class="identifier">OutputIterator</span></code><span class="emphasis"><em>out</em></span>.
+        </li>
+<li>
+          Call <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(*</span><span class="keyword">this</span><span class="special">,</span> <span class="identifier">out</span><span class="special">)</span></code>.
+        </li>
+<li>
+          Call <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(*</span><span class="keyword">this</span><span class="special">,</span> <span class="identifier">out</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></code>.
+        </li>
+</ul></div>
+<p>
+        In all cases the new position of the <code class="computeroutput"><span class="identifier">OutputIterator</span></code>
+        is returned.
+      </p>
+<p>
         See the <a class="link" href="../format.html" title="Search and Replace Format String Syntax">format syntax guide for more information</a>.
       </p>
 <p>
@@ -586,18 +622,57 @@
       </p>
 <a name="boost_regex.match_results.format2"></a><p>
       </p>
-<pre class="programlisting"><span class="identifier">string_type</span> <span class="identifier">format</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">string_type</span><span class="special">&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
-                  <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">format_default</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
+<span class="identifier">string_type</span> <span class="identifier">format</span><span class="special">(</span><span class="identifier">Formatter</span> <span class="identifier">fmt</span><span class="special">,</span>
+                   <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">format_default</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns a copy of the string <span class="emphasis"><em>fmt</em></span>.
-        For each format specifier or escape sequence in <span class="emphasis"><em>fmt</em></span>,
-        replace that sequence with either the character(s) it represents, or the
-        sequence of characters within <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> to which it refers. The bitmasks specified
-        in flags determines what format specifiers or escape sequences are recognized,
-        by default this is the format used by ECMA-262, ECMAScript Language Specification,
-        Chapter 15 part 5.4.11 String.prototype.replace.
+        <span class="bold"><strong>Requires</strong></span> The type <code class="computeroutput"><span class="identifier">Formatter</span></code>
+        must be either a pointer to a null-terminated string of type <code class="computeroutput"><span class="identifier">char_type</span><span class="special">[]</span></code>,
+        or be a container of <code class="computeroutput"><span class="identifier">char_type</span></code>'s
+        (for example <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">char_type</span><span class="special">&gt;</span></code>)
+        or be a unary, binary or ternary functor that computes the replacement string
+        from a function call: either <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(*</span><span class="keyword">this</span><span class="special">)</span></code>
+        which must return a container of <code class="computeroutput"><span class="identifier">char_type</span></code>'s
+        to be used as the replacement text, or either <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(*</span><span class="keyword">this</span><span class="special">,</span>
+        <span class="identifier">out</span><span class="special">)</span></code>
+        or <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(*</span><span class="keyword">this</span><span class="special">,</span> <span class="identifier">out</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></code>, both of which write the replacement text
+        to <code class="computeroutput"><span class="special">*</span><span class="identifier">out</span></code>,
+        and then return the new OutputIterator position.
       </p>
+<p>
+        <span class="bold"><strong>Effects</strong></span>: If <code class="computeroutput"><span class="identifier">fmt</span></code>
+        is either a null-terminated string, or a container of <code class="computeroutput"><span class="identifier">char_type</span></code>'s,
+        then copies the string <span class="emphasis"><em>fmt</em></span>: For each format specifier
+        or escape sequence in <span class="emphasis"><em>fmt</em></span>, replace that sequence with
+        either the character(s) it represents, or the sequence of characters within
+        <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>
+        to which it refers. The bitmasks specified in flags determines what format
+        specifiers or escape sequences are recognized, by default this is the format
+        used by ECMA-262, ECMAScript Language Specification, Chapter 15 part 5.4.11
+        String.prototype.replace.
+      </p>
+<p>
+        If <code class="computeroutput"><span class="identifier">fmt</span></code> is a function object,
+        then depending on the number of arguments the function object accepts, it
+        will either:
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+          Call <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(*</span><span class="keyword">this</span><span class="special">)</span></code> and
+          return the result.
+        </li>
+<li>
+          Call <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(*</span><span class="keyword">this</span><span class="special">,</span> <span class="identifier">unspecified</span><span class="special">-</span><span class="identifier">output</span><span class="special">-</span><span class="identifier">iterator</span><span class="special">)</span></code>, where <code class="computeroutput"><span class="identifier">unspecified</span><span class="special">-</span><span class="identifier">output</span><span class="special">-</span><span class="identifier">iterator</span></code>
+          is an unspecified OutputIterator type used to copy the output to the string
+          result.
+        </li>
+<li>
+          Call <code class="computeroutput"><span class="identifier">fmt</span><span class="special">(*</span><span class="keyword">this</span><span class="special">,</span> <span class="identifier">unspecified</span><span class="special">-</span><span class="identifier">output</span><span class="special">-</span><span class="identifier">iterator</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></code>, where <code class="computeroutput"><span class="identifier">unspecified</span><span class="special">-</span><span class="identifier">output</span><span class="special">-</span><span class="identifier">iterator</span></code>
+          is an unspecified OutputIterator type used to copy the output to the string
+          result.
+        </li>
+</ul></div>
 <p>
         See the <a class="link" href="../format.html" title="Search and Replace Format String Syntax">format syntax guide for more information</a>.
       </p>

@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2002
+ * Copyright (c) 1998-2009
  * John Maddock
  *
  * Use, modification and distribution are subject to the 
@@ -282,42 +282,55 @@ public:
       return m_subs.end();
    }
    // format:
-   template <class OutputIterator>
+   template <class OutputIterator, class Functor>
    OutputIterator format(OutputIterator out,
-                         const string_type& fmt,
+                         Functor fmt,
                          match_flag_type flags = format_default) const
    {
-      re_detail::trivial_format_traits<char_type> traits;
-      return re_detail::regex_format_imp(out, *this, fmt.data(), fmt.data() + fmt.size(), flags, traits);
+      typedef typename re_detail::compute_functor_type<Functor, match_results<BidiIterator, Allocator>, OutputIterator>::type F;
+      F func(fmt);
+      return func(*this, out, flags);
    }
-   string_type format(const string_type& fmt,
-                      match_flag_type flags = format_default) const
+   template <class Functor>
+   string_type format(Functor fmt, match_flag_type flags = format_default) const
    {
-      string_type result;
-      re_detail::string_out_iterator<string_type> i(result);
-      re_detail::trivial_format_traits<char_type> traits;
-      re_detail::regex_format_imp(i, *this, fmt.data(), fmt.data() + fmt.size(), flags, traits);
+      std::basic_string<char_type> result;
+      re_detail::string_out_iterator<std::basic_string<char_type> > i(result);
+
+      typedef typename re_detail::compute_functor_type<Functor, match_results<BidiIterator, Allocator>, re_detail::string_out_iterator<std::basic_string<char_type> > >::type F;
+      F func(fmt);
+
+      func(*this, i, flags);
       return result;
    }
    // format with locale:
-   template <class OutputIterator, class RegexT>
+   template <class OutputIterator, class Functor, class RegexT>
    OutputIterator format(OutputIterator out,
-                         const string_type& fmt,
+                         Functor fmt,
                          match_flag_type flags,
                          const RegexT& re) const
    {
-      return ::boost::re_detail::regex_format_imp(out, *this, fmt.data(), fmt.data() + fmt.size(), flags, re.get_traits());
+      typedef ::boost::regex_traits_wrapper<typename RegexT::traits_type> traits_type;
+      typedef typename re_detail::compute_functor_type<Functor, match_results<BidiIterator, Allocator>, OutputIterator, traits_type>::type F;
+      F func(fmt);
+      return func(*this, out, flags, re.get_traits());
    }
-   template <class RegexT>
-   string_type format(const string_type& fmt,
+   template <class RegexT, class Functor>
+   string_type format(Functor fmt,
                       match_flag_type flags,
                       const RegexT& re) const
    {
-      string_type result;
-      re_detail::string_out_iterator<string_type> i(result);
-      ::boost::re_detail::regex_format_imp(i, *this, fmt.data(), fmt.data() + fmt.size(), flags, re.get_traits());
+      typedef ::boost::regex_traits_wrapper<typename RegexT::traits_type> traits_type;
+      std::basic_string<char_type> result;
+      re_detail::string_out_iterator<std::basic_string<char_type> > i(result);
+
+      typedef typename re_detail::compute_functor_type<Functor, match_results<BidiIterator, Allocator>, re_detail::string_out_iterator<std::basic_string<char_type> >, traits_type >::type F;
+      F func(fmt);
+
+      func(*this, i, flags, re.get_traits());
       return result;
    }
+
    const_reference get_last_closed_paren()const
    {
       return m_last_closed_paren == 0 ? m_null : (*this)[m_last_closed_paren];

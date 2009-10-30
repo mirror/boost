@@ -8,6 +8,10 @@
 
 [section:history History]
 
+[h4 Boost 1.42]
+
+* Added support for Functors rather than strings as format expressions.
+
 [h4 Boost 1.40]
 
 * Added support for many Perl 5.10 syntax elements including named
