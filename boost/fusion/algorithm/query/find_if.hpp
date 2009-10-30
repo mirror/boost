@@ -55,7 +55,7 @@ namespace boost { namespace fusion
     inline typename result_of::find_if<Sequence const, Pred>::type const
     find_if(Sequence const& seq)
     {
-        typedef typename result_of::find_if<Sequence, Pred>::filter filter;
+        typedef typename result_of::find_if<Sequence const, Pred>::filter filter;
         return filter::call(fusion::begin(seq));
     }
 }}
