@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
-	Name="example"
+	Version="9.00"
+	Name="example-vc9"
 	ProjectGUID="{5B83CA94-A2A6-43A6-8363-E5F4731443F7}"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -47,12 +48,13 @@
 				ExceptionHandling="0"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				DisableLanguageExtensions="false"
 				TreatWChar_tAsBuiltInType="true"
 				ForceConformanceInForLoopScope="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -71,6 +73,8 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/example.pdb"
 				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -90,9 +94,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -128,7 +129,7 @@
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -148,6 +149,8 @@
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -167,9 +170,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -303,6 +303,10 @@
 					</File>
 					<File
 						RelativePath="..\..\..\boost\xpressive\detail\core\linker.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\detail\core\list.hpp"
 						>
 					</File>
 					<File
@@ -723,178 +727,6 @@
 					>
 					<File
 						RelativePath="..\..\..\boost\xpressive\traits\detail\c_ctype.hpp"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
-				Name="proto"
-				>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\args.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\context.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\debug.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\deep_copy.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\domain.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\eval.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\expr.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\extends.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\fusion.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\generate.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\literal.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\make_expr.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\matches.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\operators.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\proto.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\proto_fwd.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\proto_typeof.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\ref.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\tags.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\traits.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\boost\xpressive\proto\transform.hpp"
-					>
-				</File>
-				<Filter
-					Name="context"
-					>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\context\callable.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\context\default.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\context\null.hpp"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="transform"
-					>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\arg.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\bind.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\call.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\fold.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\fold_tree.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\make.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\pass_through.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\transform\when.hpp"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="detail"
-					>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\detail\as_lvalue.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\detail\dont_care.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\detail\funop.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\detail\pop_front.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\detail\prefix.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\detail\reverse.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\proto\detail\suffix.hpp"
 						>
 					</File>
 				</Filter>
