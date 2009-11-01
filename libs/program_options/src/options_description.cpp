@@ -72,10 +72,12 @@ namespace boost { namespace program_options {
             if (approx)
             {
                 if (m_long_name.find(option) == 0)
+                {
                     if (m_long_name == option)
                         result = full_match;
                     else
                         result = approximate_match;
+                }
             }
             else
             {
