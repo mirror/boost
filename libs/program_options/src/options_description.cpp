@@ -504,11 +504,18 @@ namespace boost { namespace program_options {
 
             if (!opt.description().empty())
             {
-                for(unsigned pad = first_column_width - ss.str().size(); 
-                    pad > 0; 
-                    --pad)
+                if (ss.str().size() >= first_column_width)
                 {
-                    os.put(' ');
+                   os.put('\n'); // first column is too long, lets put description in new line
+                   for (unsigned pad = first_column_width; pad > 0; --pad)
+                   {
+                      os.put(' ');
+                   }
+                } else {
+                   for(unsigned pad = first_column_width - ss.str().size(); pad > 0; --pad)
+                   {
+                      os.put(' ');
+                   }
                 }
             
                 format_description(os, opt.description(),
@@ -533,6 +540,11 @@ namespace boost { namespace program_options {
             ss << "  " << opt.format_name() << ' ' << opt.format_parameter();
             width = (max)(width, static_cast<unsigned>(ss.str().size()));            
         }
+        /* this is the column were description should start, if first
+           column is longer, we go to a new line */
+        unsigned start_of_description_column = m_line_length / 2;
+
+        width = (min)(width, start_of_description_column-1);
         
         /* add an additional space to improve readability */
         ++width;

@@ -76,10 +76,28 @@ void test_formatting()
     ss << desc;
 }
 
+void test_long_default_value()
+{
+    options_description desc;
+    desc.add_options()
+        ("cfgfile,c",
+         value<std::string>()->default_value("/usr/local/etc/myprogramXXXXXXXXX/configuration.conf"),
+         "the configfile");
+
+    stringstream ss;
+    ss << desc;
+    BOOST_CHECK_EQUAL(ss.str(),
+"  -c [ --cfgfile ] arg (=/usr/local/etc/myprogramXXXXXXXXX/configuration.conf)\n"
+"                                        the configfile\n"
+        );
+
+}
+
 int main(int, char* [])
 {
     test_type();
     test_approximation();
     test_formatting();
+    test_long_default_value();
     return 0;
 }
