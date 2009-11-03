@@ -25,7 +25,7 @@ namespace boost { namespace fusion {
             template<typename Sequence>
             struct apply
             {
-                struct type : random_access_traversal_tag, associative_sequence_tag {};
+                struct type : random_access_traversal_tag, associative_tag {};
             };
         };
     }

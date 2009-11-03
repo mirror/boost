@@ -446,7 +446,8 @@ element will be its last and the last element will be its first.
 
 [heading Model of]
 
-A model of the same sequence concept as `Sequence`.
+* __bidirectional_sequence__
+* __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [variablelist Notation
     [[`RV`]             [A `reverse_view` type]]

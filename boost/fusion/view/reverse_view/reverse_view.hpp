@@ -28,6 +28,7 @@ namespace boost { namespace fusion
 {
     struct reverse_view_tag;
     struct fusion_sequence_tag;
+    struct bidirectional_traversal_tag;
 
     template <typename Sequence>
     struct reverse_view : sequence_base<reverse_view<Sequence> >
@@ -35,13 +36,12 @@ namespace boost { namespace fusion
         typedef reverse_view_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::true_ is_view;
-        typedef typename traits::category_of<Sequence>::type seq_category;
 
         typedef typename
             mpl::eval_if<
                 traits::is_associative<Sequence>
-              , mpl::inherit2<seq_category,associative_sequence_tag>
-              , mpl::identity<seq_category>
+              , mpl::inherit2<bidirectional_traversal_tag,associative_tag>
+              , mpl::identity<bidirectional_traversal_tag>
             >::type
         category;
         typedef typename result_of::begin<Sequence>::type first_type;

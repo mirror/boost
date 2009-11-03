@@ -20,8 +20,6 @@
 
 namespace boost { namespace fusion
 {
-    struct associative_sequence_tag;
-
     namespace result_of
     {
         template <

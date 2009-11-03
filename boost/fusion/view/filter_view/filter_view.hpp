@@ -36,7 +36,7 @@ namespace boost { namespace fusion
         typedef typename
             mpl::eval_if<
                 traits::is_associative<Sequence>
-              , mpl::inherit2<forward_traversal_tag,associative_sequence_tag>
+              , mpl::inherit2<forward_traversal_tag,associative_tag>
               , mpl::identity<forward_traversal_tag>
             >::type
         category;

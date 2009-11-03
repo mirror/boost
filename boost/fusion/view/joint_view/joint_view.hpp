@@ -40,7 +40,7 @@ namespace boost { namespace fusion
                     traits::is_associative<Sequence1>
                   , traits::is_associative<Sequence2>
                 >
-              , mpl::inherit2<forward_traversal_tag,associative_sequence_tag>
+              , mpl::inherit2<forward_traversal_tag,associative_tag>
               , mpl::identity<forward_traversal_tag>
             >::type
         category;

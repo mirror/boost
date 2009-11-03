@@ -225,7 +225,7 @@ And optionally from:
 
         namespace boost { namespace fusion
         {
-            struct associative_sequence_tag {};
+            struct associative_tag {};
         }}
 
 [*Semantics]: Establishes the conceptual classification of a particular
