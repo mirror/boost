@@ -7,10 +7,11 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt
 
+import testing ;
+
 warning-options = <warnings>all <warnings-as-errors>on ;
 warning-compilers =
-    <toolset>msvc,<toolset-msvc:version>9.0express
-    <toolset>msvc,<toolset-msvc:version>8.0express
+    <toolset>msvc
 ;
 
 project boost/units/test :
@@ -19,13 +20,9 @@ project boost/units/test :
         <include>../../..
         <toolset>msvc:<asynch-exceptions>on
         $(warning-compilers):$(warning-options)
-        # This warning comes from the test library.  It appears
-        # to be a serious warning, but I'm disabling it here since its
-        # not my problem.
+        # This warning comes from the test library.
         <toolset>msvc:<cxxflags>"/wd4701"
 ;
-
-import testing ;
 
 alias test_framework : /boost//unit_test_framework/<warnings-as-errors>off ;
 
