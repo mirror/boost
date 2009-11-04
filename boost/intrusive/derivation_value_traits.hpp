@@ -47,7 +47,7 @@ struct derivation_value_traits
    {  return pointer(static_cast<T*>(detail::get_pointer(n))); }
 
    static const_pointer to_value_ptr(const_node_ptr n)
-   {  return const_pointer(static_cast<T*>(detail::get_pointer(n))); }
+   {  return const_pointer(static_cast<const T*>(detail::get_pointer(n))); }
 };
 
 } //namespace intrusive 
