@@ -31,27 +31,27 @@ namespace util {
     //  pattern_and class
     //
     ///////////////////////////////////////////////////////////////////////////
-    template <typename CharT = char>
+    template <typename CharT = char, typename Pattern = unsigned long>
     struct pattern_and 
       : public boost::spirit::classic::char_parser<pattern_and<CharT> >
     {
-        pattern_and(CharT pattern_, unsigned long pattern_mask_ = 0UL)
+        pattern_and(CharT pattern_, Pattern pattern_mask_ = Pattern())
         :   pattern(pattern_), 
-            pattern_mask((0UL != pattern_mask_) ? pattern_mask_ : pattern_)
+            pattern_mask((Pattern() != pattern_mask_) ? pattern_mask_ : Pattern(pattern_))
         {}
 
         template <typename T>
         bool test(T pattern_) const
-        { return ((unsigned long)pattern_ & pattern_mask) == (unsigned long)pattern; }
+        { return ((Pattern)pattern_ & pattern_mask) == (Pattern)pattern; }
 
-        CharT         pattern;
-        unsigned long pattern_mask;
+        CharT   pattern;
+        Pattern pattern_mask;
     };
 
-    template <typename CharT>
-    inline pattern_and<CharT>
-    pattern_p(CharT pattern, long pattern_mask = 0L)
-    { return pattern_and<CharT>(pattern, (unsigned long)pattern_mask); }
+    template <typename CharT, typename Pattern>
+    inline pattern_and<CharT, Pattern>
+    pattern_p(CharT pattern, Pattern pattern_mask = Pattern())
+    { return pattern_and<CharT, Pattern>(pattern, pattern_mask); }
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace util

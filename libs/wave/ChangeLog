@@ -42,6 +42,8 @@ Boost V1.41.0
 - Added a new command line option to the wave driver tool: --listguards/-g 
   allowing to trace all include files which are either contain a #pragma once 
   or contain include guards.
+- Started to elminate g++ struct aliasing warnings (more to fix, mostly in 
+  flex_string).
 
 Boost V1.40.0
 - V2.0.2
