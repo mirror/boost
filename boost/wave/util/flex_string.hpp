@@ -647,7 +647,7 @@ public:
 
     iterator begin()
     { return pData_->buffer_; }
-    
+
     const_iterator begin() const
     { return pData_->buffer_; }
 
@@ -692,7 +692,7 @@ public:
         newStr.Init(size(), res_arg);
 
         flex_string_details::pod_copy(begin(), end(), newStr.begin());
-        
+
         swap(newStr);
     }
 
@@ -1207,7 +1207,10 @@ private:
     };
 
     Storage& Data() const
-    { Storage* v= reinterpret_cast<Storage*>(buf_); return *v; }
+    { 
+        Storage* p = reinterpret_cast<Storage*>(&buf_[0]);
+        return *p;
+    }
 
     RefCountType GetRefs() const
     {
@@ -1236,8 +1239,10 @@ private:
         } temp;
 
         --(*Data().begin()); // decrement the use count of the remaining object
+
+        Storage* p = reinterpret_cast<Storage*>(&temp.buf_[0]);
         new(buf_) Storage(
-            *new(temp.buf_) Storage(Data()), 
+            *new(p) Storage(Data()), 
             flex_string_details::Shallow());
         *Data().begin() = 1;
     }
