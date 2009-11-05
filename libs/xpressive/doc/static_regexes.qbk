@@ -169,7 +169,6 @@ static xpressive.
 [def _before_   [funcref boost::xpressive::before before]]
 [def _after_    [funcref boost::xpressive::after after]]
 [def _keep_     [funcref boost::xpressive::keep keep]]
-[def _mark_tag_ [classref boost::xpressive::mark_tag mark_tag]]
 
 [table Perl syntax vs. Static xpressive syntax
     [[Perl]               [Static xpressive]                              [Meaning]]

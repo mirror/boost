@@ -49,6 +49,7 @@
 [def _regex_compiler_        [^[classref boost::xpressive::regex_compiler regex_compiler<>]]]
 [def _regex_iterator_        [^[classref boost::xpressive::regex_iterator regex_iterator<>]]]
 [def _regex_token_iterator_  [^[classref boost::xpressive::regex_token_iterator regex_token_iterator<>]]]
+[def _mark_tag_              [^[classref boost::xpressive::mark_tag mark_tag]]]
 [def _regex_match_           [^[funcref boost::xpressive::regex_match regex_match()]]]
 [def _regex_search_          [^[funcref boost::xpressive::regex_search regex_search()]]]
 [def _regex_replace_         [^[funcref boost::xpressive::regex_replace regex_replace()]]]
@@ -91,6 +92,8 @@ and dynamic.
 [include substitutions.qbk]
 
 [include tokenization.qbk]
+
+[include named_captures.qbk]
 
 [include grammars.qbk]
 
