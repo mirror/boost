@@ -224,6 +224,8 @@ static xpressive.
     [[[^(?!['stuff])]]    [`~_before_(`[^['stuff]]`)`]                    [negative look-ahead assertion, match if not before ['stuff].]]
     [[[^(?<=['stuff])]]   [`_after_(`[^['stuff]]`)`]                      [positive look-behind assertion, match if after ['stuff] but don't include ['stuff] in the match. (['stuff] must be constant-width.)]]
     [[[^(?<!['stuff])]]   [`~_after_(`[^['stuff]]`)`]                     [negative look-behind assertion, match if not after ['stuff]. (['stuff] must be constant-width.)]]
+    [[[^(?P<['name]>['stuff])]]     [`_mark_tag_ `[^['name]]`(`['n]`);`\n ...\n `(`[^['name]]`= `[^['stuff]]`)`]      [Create a named capture.]]
+    [[[^(?P=['name])]]              [`_mark_tag_ `[^['name]]`(`['n]`);`\n ...\n [^['name]]]                           [Refer back to a previously created named capture.]]
 ]
 \n
 
