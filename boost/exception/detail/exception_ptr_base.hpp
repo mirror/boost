@@ -22,7 +22,10 @@ boost
 
                         protected:
 
-                        ~exception_ptr_base() throw() { }
+                        virtual
+                        ~exception_ptr_base() throw()
+                            {
+                            }
                         };
                 }
     }
