@@ -21,6 +21,7 @@
 namespace boost
 {
 template<typename T> boost::shared_ptr<T> shared_from_raw(T *);
+template<typename T> boost::weak_ptr<T> weak_from_raw(T *);
 
 namespace detail
 {
@@ -72,6 +73,7 @@ public:
 private:
     template<class Y> friend class shared_ptr;
     template<typename T> friend boost::shared_ptr<T> shared_from_raw(T *);
+    template<typename T> friend boost::weak_ptr<T> weak_from_raw(T *);
     template< class X, class Y > friend inline void detail::sp_enable_shared_from_this( boost::shared_ptr<X> * ppx, Y const * py, boost::enable_shared_from_raw const * pe );
 #endif
 
@@ -114,7 +116,17 @@ private:
 template<typename T>
 boost::shared_ptr<T> shared_from_raw(T *p)
 {
+    BOOST_ASSERT(p != 0);
     return boost::shared_ptr<T>(p->enable_shared_from_raw::shared_from_this(), p);
+}
+
+template<typename T>
+boost::weak_ptr<T> weak_from_raw(T *p)
+{
+    BOOST_ASSERT(p != 0);
+    boost::weak_ptr<T> result;
+    result._internal_aliasing_assign(p->enable_shared_from_raw::weak_this_, p);
+    return result;
 }
 
 namespace detail

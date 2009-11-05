@@ -59,6 +59,7 @@ import testing ;
           [ run sp_recursive_assign_rv_test.cpp ]
           [ run sp_recursive_assign2_rv_test.cpp ]
           [ run esft_constructor_test.cpp ]
+          [ run enable_shared_from_raw_test.cpp ]
           [ compile-fail auto_ptr_lv_fail.cpp ]
           [ run atomic_count_test2.cpp ]
         ;
