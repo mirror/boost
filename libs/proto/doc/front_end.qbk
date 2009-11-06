@@ -347,6 +347,10 @@ We use this domain type when extending the _expr_ type, which we do with the _ex
 
 We want calculator expressions to be function objects, so we have to define an `operator()` that takes and returns doubles. The `calculator<>` wrapper above does that with the help of the _extends_ template. The first template to _extends_ parameter is the expression type we are extending. The second is the type of the wrapped expression. The third parameter is the domain that this wrapper is associated with. A wrapper type like `calculator<>` that inherits from _extends_ behaves just like the expression type it has extended, with any additional behaviors you choose to give it.
 
+[note [*Why not just inherit from [^proto::expr<>]?]
+
+You might be thinking that this expression extension business is unnecessarily complicated. After all, isn't this why C++ supports inheritance? Why can't [^calculator<Expr>] just inherit from [^Expr] directly? The reason is because [^Expr], which presumably is an instantiation of _expr_, has expression template-building operator overloads that will be incorrect for derived types. They will store `*this` by reference to `proto::expr<>`, effectively slicing off any derived parts. _extends_ gives your derived types operator overloads that don't slice off your additional members.]
+
 Although not strictly necessary in this case, we bring `extends<>::operator=` into scope with a `using` declaration. This is really only necessary if you want expressions like `_1 = 3` to create a lazily evaluated assignment. _extends_ defines the appropriate `operator=` for you, but the compiler-generated `calculator<>::operator=` will hide it unless you make it available with the `using` declaration.
 
 Note that in the implementation of `calculator<>::operator()`, we evaluate the expression with the `calculator_context` we defined earlier. As we saw before, the context is what gives the operators their meaning. In the case of the calculator, the context is also what defines the meaning of the placeholder terminals.

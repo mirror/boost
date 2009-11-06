@@ -44,6 +44,61 @@
           </template-type-parameter>
         </template>
         <purpose>For adding behaviors to a Proto expression template.</purpose>
+        <description>
+          <para>
+            Use <computeroutput>proto::extends&lt;&gt;</computeroutput> to give expressions in your
+            domain custom data members and member functions.
+          </para>
+          <para>
+            Conceptually, using <computeroutput>proto::extends&lt;&gt;</computeroutput> is akin
+            to inheriting from <computeroutput><classname>proto::expr</classname>&lt;&gt;</computeroutput>
+            and adding your own members. Using <computeroutput>proto::extends&lt;&gt;</computeroutput> is
+            generally preferrable to straight inheritance because the members that would be inherited from
+            <computeroutput><classname>proto::expr</classname>&lt;&gt;</computeroutput> would
+            be wrong; they would incorrectly slice off your additional members when building
+            larger expressions from smaller ones. <computeroutput>proto::extends&lt;&gt;</computeroutput>
+            automatically gives your expression types the appropriate operator overloads that
+            preserve your domain-specific members when composing expression trees.
+          </para>
+          <para>
+            Expression extensions are typically defined as follows:
+          </para>
+          <para>
+            <programlisting>template&lt; typename Expr &gt;
+struct my_expr
+  : proto::extends&lt;
+        Expr            // The expression type we're extending
+      , my_expr&lt; Expr &gt; // The type we're defining
+      , my_domain       // The domain associated with this expression extension
+    &gt;
+{
+    typedef proto::extends&lt; Expr, my_expr&lt; Expr &gt;, my_domain &gt; base_type;
+    
+    // An expression extension is constructed from the expression
+    // it is extending.
+    my_expr( Expr const &amp; e = Expr() )
+      : base_type( e )
+    {}
+    
+    // Unhide proto::extends::operator=
+    // (This is only necessary if a lazy assignment operator
+    // makes sense for your domain-specific language.)
+    using base_type::operator=;
+    
+    /*
+    ... domain-specific members go here ...
+    */
+};</programlisting>
+          </para>
+          <para>
+            See also:
+            <itemizedlist>
+              <listitem>
+                <computeroutput><macroname>BOOST_PROTO_EXTENDS</macroname>()</computeroutput>
+              </listitem>
+            </itemizedlist>
+          </para>
+        </description>
         <struct name="result">
           <template>
             <template-type-parameter name="Signature"/>
@@ -51,10 +106,12 @@
           <typedef name="type">
             <type><replaceable>unspecified</replaceable></type>
           </typedef>
+          <description>
+            <para>So that <computeroutput>boost::result_of&lt;&gt;</computeroutput>
+            can compute the return type of <computeroutput>proto::extends::operator()</computeroutput>.
+          </para>
+          </description>
         </struct>
-        <data-member name="proto_expr_">
-          <type>Expr</type>
-        </data-member>
         <typedef name="proto_base_expr">
           <type>typename Expr::proto_base_expr</type>
         </typedef>
@@ -74,7 +131,7 @@
           <type>typename proto_base_expr::proto_arity</type>
         </typedef>
         <typedef name="proto_childN">
-          <purpose>For each <replaceable>N</replaceable> in <replaceable>[0,max(1,proto_arity::value))</replaceable></purpose>
+          <purpose>For each <replaceable>N</replaceable> in <replaceable>[0,max(1,proto_arity_c))</replaceable></purpose>
           <type>typename proto_base_expr::proto_child<replaceable>N</replaceable></type>
         </typedef>
 
@@ -92,11 +149,15 @@
         </constructor>
 
         <method-group name="public static functions">
-          <method name="make">
-            <type>static Derived const</type>
+          <method name="make" specifiers="static">
+            <type>Derived const</type>
             <parameter name="expr">
               <paramtype>Expr const &amp;</paramtype>
             </parameter>
+            <description>
+              <para>Construct an expression extension from the base expression.</para>
+            </description>
+            <return>Derived(expr)</return>
           </method>
         </method-group>
 
@@ -277,6 +338,16 @@
             </description>
           </method>
         </method-group>
+
+        <data-member name="proto_expr_">
+          <type>Expr</type>
+          <purpose>For exposition only.</purpose>
+        </data-member>
+
+        <data-member name="proto_arity_c" specifiers="static">
+          <type>const long</type>
+          <purpose><computeroutput>= proto_base_expr::proto_arity_c;</computeroutput></purpose>
+        </data-member>
 
       </struct>
 

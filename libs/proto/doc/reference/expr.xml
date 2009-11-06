@@ -103,8 +103,8 @@
         <method-group name="public static functions">
 
           <!-- make -->
-          <method name="make">
-            <type>static expr const</type>
+          <method name="make" specifiers="static">
+            <type>expr const</type>
             <template>
               <template-type-parameter name="A" pack="1"/>
             </template>
@@ -308,6 +308,13 @@
         <data-member name="childN">
           <type>proto_child<replaceable>N</replaceable></type>
           <purpose>For each <replaceable>N</replaceable> in <replaceable>[0,max(Arity,1))</replaceable>.</purpose>
+        </data-member>
+
+        <data-member name="proto_arity_c" specifiers="static">
+          <type>const long</type>
+          <purpose>
+            <computeroutput>= Arity;</computeroutput>
+          </purpose>
         </data-member>
 
       </struct>
