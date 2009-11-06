@@ -35,17 +35,17 @@
             <purpose>For exposition only</purpose>
             <type>typename Expr::tag_type</type>
           </typedef>
-          <data-member name="s_expr">
+          <data-member name="s_expr" specifiers="static">
             <purpose>For exposition only</purpose>
-            <type>static Expr</type>
+            <type>Expr</type>
           </data-member>
-          <data-member name="s_state">
+          <data-member name="s_state" specifiers="static">
             <purpose>For exposition only</purpose>
-            <type>static State</type>
+            <type>State</type>
           </data-member>
-          <data-member name="s_data">
+          <data-member name="s_data" specifiers="static">
             <purpose>For exposition only</purpose>
-            <type>static Data</type>
+            <type>Data</type>
           </data-member>
           <typedef name="result_type">
             <type><emphasis>see-below</emphasis></type>

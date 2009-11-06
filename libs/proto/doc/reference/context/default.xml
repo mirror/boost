@@ -32,13 +32,13 @@
             <purpose>For exposition only</purpose>
             <type>typename Expr::tag_type</type>
           </typedef>
-          <data-member name="s_expr">
+          <data-member name="s_expr" specifiers="static">
             <purpose>For exposition only</purpose>
-            <type>static Expr &amp;</type>
+            <type>Expr &amp;</type>
           </data-member>
-          <data-member name="s_context">
+          <data-member name="s_context" specifiers="static">
             <purpose>For exposition only</purpose>
-            <type>static Context &amp;</type>
+            <type>Context &amp;</type>
           </data-member>
           <typedef name="result_type">
             <type><emphasis>see-below</emphasis></type>

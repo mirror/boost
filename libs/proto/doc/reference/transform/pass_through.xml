@@ -20,11 +20,11 @@
             Given a Grammar such as <computeroutput><classname>proto::plus</classname>&lt;T0, T1&gt;</computeroutput>,
             an expression type that matches the grammar such as
             <computeroutput><classname>proto::plus</classname>&lt;E0, E1&gt;::type</computeroutput>, a state
-            <computeroutput>S</computeroutput> and a data <computeroutput>V</computeroutput>, the result of applying
-            the <computeroutput>proto::pass_through&lt;plus&lt;T0, T1&gt; &gt;</computeroutput> transform is:
-            <programlisting>plus&lt;
-  boost::result_of&lt;T0(E0, S, V)&gt;::type,
-  boost::result_of&lt;T1(E1, S, V)&gt;::type
+            <computeroutput>S</computeroutput> and a data <computeroutput>D</computeroutput>, the result of applying
+            the <computeroutput>proto::pass_through&lt;<classname>proto::plus</classname>&lt;T0, T1&gt; &gt;</computeroutput>
+            transform is: <programlisting><classname>proto::plus</classname>&lt;
+  boost::result_of&lt;T0(E0, S, D)&gt;::type,
+  boost::result_of&lt;T1(E1, S, D)&gt;::type
 &gt;::type</programlisting>
           </para>
           <para>
