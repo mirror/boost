@@ -9,6 +9,10 @@
 =============================================================================*/
 
 #define BOOST_WAVE_SOURCE 1
+
+// disable stupid compiler warnings
+#include <boost/config/warning_disable.hpp>
+
 #include <cstdlib>
 #include <cstring>
 

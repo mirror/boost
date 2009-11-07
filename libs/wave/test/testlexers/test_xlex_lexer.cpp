@@ -7,6 +7,9 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
+// disable stupid compiler warnings
+#include <boost/config/warning_disable.hpp>
+
 //  system headers
 #include <string>
 #include <iostream>

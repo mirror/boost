@@ -7,10 +7,14 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
+// disable stupid compiler warnings
+#include <boost/config/warning_disable.hpp>
+
 // system headers
 #include <string>
 #include <iostream>
 #include <vector>
+#include <ctime>
 
 // include boost
 #include <boost/config.hpp>
@@ -34,6 +38,14 @@
 #include "cmd_line_utils.hpp"
 #include "testwave_app.hpp"
 #include "collect_hooks_information.hpp"
+
+# ifdef BOOST_NO_STDC_NAMESPACE
+namespace std 
+{ 
+    using ::asctime; using ::gmtime; using ::localtime;
+    using ::difftime; using ::time; using ::tm; using ::mktime; using ::system; 
+}
+# endif
 
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
