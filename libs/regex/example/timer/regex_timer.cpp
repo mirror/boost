@@ -9,6 +9,10 @@
  *
  */
 
+#ifdef _MSC_VER
+#pragma warning(disable: 4996 4127)
+#endif
+
 #include <string>
 #include <algorithm>
 #include <deque>
@@ -54,7 +58,7 @@ ostream& operator << (ostream& os, const std::wstring& s)
    j = s.end();
    while(i != j)
    {
-      os.put(*i);
+      os.put(static_cast<char>(*i));
       ++i;
    }
    return os;
@@ -96,15 +100,15 @@ namespace boost{
 istream& getline(istream& is, std::string& s)
 {
    s.erase();
-   char c = is.get();
+   char c = static_cast<char>(is.get());
    while(c != '\n')
    {
       s.append(1, c);
-      c = is.get();
+      c = static_cast<char>(is.get());
    }
    return is;
 }
-#elif defined(__CYGWIN__)
+#else
 istream& getline(istream& is, std::string& s)
 {
    std::getline(is, s);
@@ -112,8 +116,6 @@ istream& getline(istream& is, std::string& s)
       s.erase(s.size() - 1);
    return is;
 }
-#else
-using std::getline;
 #endif
 }
 
@@ -148,8 +150,8 @@ int main(int argc, char**argv)
    std::size_t nsubs;
    boost::timer t;
    double tim;
-   bool result;
-   int iters = 100;
+   int result = 0;
+   unsigned iters = 100;
    double wait_time = (std::min)(t.elapsed_min() * 1000, 1.0);
 
    while(true)
@@ -202,7 +204,7 @@ int main(int argc, char**argv)
          ds.erase(ds.begin(), ds.end());
          std::copy(s2.begin(), s2.end(), std::back_inserter(ds));
 
-         int i;
+         unsigned i;
          iters = 10;
          tim = 1.1;
 
@@ -217,7 +219,7 @@ int main(int argc, char**argv)
 
          // measure time interval for basic_regex<char>
          do{
-            iters *= (tim > 0.001) ? (1.1/tim) : 100;
+            iters *= static_cast<unsigned>((tim > 0.001) ? (1.1/tim) : 100);
             t.restart();
             for(i =0; i < iters; ++i)
             {
@@ -251,7 +253,7 @@ int main(int argc, char**argv)
          // cache load:
          regex_search(ws2, wsm, wex);
          do{
-            iters *= (tim > 0.001) ? (1.1/tim) : 100;
+            iters *= static_cast<unsigned>((tim > 0.001) ? (1.1/tim) : 100);
             t.restart();
             for(i = 0; i < iters; ++i)
             {
@@ -289,7 +291,7 @@ int main(int argc, char**argv)
          // cache load:
          regex_search(ds.begin(), ds.end(), dm, ex);
          do{
-            iters *= (tim > 0.001) ? (1.1/tim) : 100;
+            iters *= static_cast<unsigned>((tim > 0.001) ? (1.1/tim) : 100);
             t.restart();
             for(i = 0; i < iters; ++i)
             {
@@ -326,7 +328,7 @@ int main(int argc, char**argv)
          // cache load:
          regexecA(&r, s2.c_str(), nsubs, matches.get(), 0);
          do{
-            iters *= (tim > 0.001) ? (1.1/tim) : 100;
+            iters *= static_cast<unsigned>((tim > 0.001) ? (1.1/tim) : 100);
             t.restart();
             for(i = 0; i < iters; ++i)
             {
@@ -357,7 +359,7 @@ int main(int argc, char**argv)
             ts.erase();
             ts.assign(s2.begin() + matches[0].rm_eo, s2.end());
             cout << ts;
-            cout << "\" (matched=" << (matches[0].rm_eo != s2.size()) << ")" << endl << endl;
+            cout << "\" (matched=" << (matches[0].rm_eo != (int)s2.size()) << ")" << endl << endl;
          }
       }
       regfreeA(&r);

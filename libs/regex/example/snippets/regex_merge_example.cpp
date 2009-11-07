@@ -86,8 +86,8 @@ int main(int argc, const char** argv)
    return 0;
 }
 
-extern const char* pre_expression = "(<)|(>)|\\r";
-extern const char* pre_format = "(?1&lt;)(?2&gt;)";
+const char* pre_expression = "(<)|(>)|\\r";
+const char* pre_format = "(?1&lt;)(?2&gt;)";
 
 
 const char* expression_text = // preprocessor directives: index 1

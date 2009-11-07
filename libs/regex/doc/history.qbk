@@ -11,6 +11,7 @@
 [h4 Boost 1.42]
 
 * Added support for Functors rather than strings as format expressions.
+* Improved error reporting when throwing exceptions to include better more relevant information.
 * Fixed tickets
 [@https://svn.boost.org/trac/boost/ticket/2802 #2802],
 [@https://svn.boost.org/trac/boost/ticket/2802 #3425],

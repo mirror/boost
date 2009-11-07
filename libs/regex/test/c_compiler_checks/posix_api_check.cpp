@@ -34,13 +34,13 @@ int flags = REG_EXTENDED | REG_BASIC | REG_NOSPEC | REG_ICASE | REG_NOSUB |
 int main()
 {
    regex_tA re;
-   int result;
+   unsigned int result;
    result = regcompA(&re, expression, REG_AWK);
    if(result > REG_NOERROR)
    {
       char buf[256];
       regerrorA(result, &re, buf, sizeof(buf));
-      printf(buf);
+      printf("%s", buf);
       return result;
    }
    BOOST_TEST(re.re_nsub == 0);
@@ -51,11 +51,11 @@ int main()
    {
       char buf[256];
       regerrorA(result, &re, buf, sizeof(buf));
-      printf(buf);
+      printf("%s", buf);
       regfreeA(&re);
       return result;
    }
-   BOOST_TEST(matches[0].rm_so == matches[0].rm_eo == 1);
+   BOOST_TEST(matches[0].rm_so == matches[0].rm_eo);
    regfreeA(&re);
    printf("no errors found\n");
    return boost::report_errors();

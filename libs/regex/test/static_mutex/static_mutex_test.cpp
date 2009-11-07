@@ -161,7 +161,7 @@ startup1 up1;
 
 int main()
 {
-   BOOST_TEST(0 != &up1);
+   (void)up1;
    
    std::list<boost::shared_ptr<boost::thread> > threads;
    for(int i = 0; i < 2; ++i)

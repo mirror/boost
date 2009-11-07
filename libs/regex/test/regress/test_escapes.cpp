@@ -12,7 +12,7 @@
 #include "test.hpp"
 
 #ifdef BOOST_MSVC
-#pragma warning(disable:4127)
+#pragma warning(disable:4127 4428)
 #endif
 
 void test_character_escapes()

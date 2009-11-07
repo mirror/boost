@@ -752,7 +752,7 @@ template <class M>
 struct functor1
 {
    typedef typename M::char_type char_type;
-   const char_type* operator()(const M& m)
+   const char_type* operator()(const M&)
    {
       static const char_type c = static_cast<char_type>(0);
       return &c;
@@ -762,7 +762,7 @@ template <class M>
 struct functor1b
 {
    typedef typename M::char_type char_type;
-   std::vector<char_type> operator()(const M& m)
+   std::vector<char_type> operator()(const M&)
    {
       static const std::vector<char_type> c;
       return c;

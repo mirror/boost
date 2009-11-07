@@ -40,7 +40,7 @@ int flags = REG_EXTENDED | REG_BASIC | REG_NOSPEC | REG_ICASE | REG_NOSUB |
 int main()
 {
    regex_t re;
-   int result;
+   unsigned result;
    result = regcomp(&re, expression, REG_AWK);
    if(result > REG_NOERROR)
    {
@@ -48,8 +48,8 @@ int main()
       regerror(result, &re, buf, sizeof(buf));
       char nbuf[256];
       for(int i = 0; i < 256; ++i)
-         nbuf[i] = buf[i];
-      printf(nbuf);
+         nbuf[i] = static_cast<char>(buf[i]);
+      printf("%s", nbuf);
       return result;
    }
    if(re.re_nsub != 0)
@@ -66,8 +66,8 @@ int main()
       regerror(result, &re, buf, sizeof(buf));
       char nbuf[256];
       for(int i = 0; i < 256; ++i)
-         nbuf[i] = buf[i];
-      printf(nbuf);
+         nbuf[i] = static_cast<char>(buf[i]);
+      printf("%s", nbuf);
       regfree(&re);
       return result;
    }
@@ -77,7 +77,7 @@ int main()
       exit(-1);
    }
    regfree(&re);
-   printf("no errors found\n");
+   printf("%s", "no errors found\n");
    return 0;
 }
 

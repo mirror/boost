@@ -831,7 +831,7 @@ OutputIterator regex_format_imp(OutputIterator out,
 
 #ifndef BOOST_NO_SFINAE
 
-BOOST_MPL_HAS_XXX_TRAIT_DEF(const_iterator);
+BOOST_MPL_HAS_XXX_TRAIT_DEF(const_iterator)
 
 struct any_type { any_type(...); };
 typedef char no_type;
@@ -972,6 +972,8 @@ struct format_functor3
    }
 private:
    Base func;
+   format_functor3(const format_functor3&);
+   format_functor3& operator=(const format_functor3&);
 };
 
 template <class Base, class Match>
@@ -990,6 +992,8 @@ struct format_functor2
    }
 private:
    Base func;
+   format_functor2(const format_functor2&);
+   format_functor2& operator=(const format_functor2&);
 };
 
 template <class Base, class Match>
@@ -1025,6 +1029,8 @@ struct format_functor1
    }
 private:
    Base func;
+   format_functor1(const format_functor1&);
+   format_functor1& operator=(const format_functor1&);
 };
 
 template <class charT, class Match, class Traits>
@@ -1042,6 +1048,8 @@ struct format_functor_c_string
    }
 private:
    const charT* func;
+   format_functor_c_string(const format_functor_c_string&);
+   format_functor_c_string& operator=(const format_functor_c_string&);
 };
 
 template <class Container, class Match, class Traits>
@@ -1057,6 +1065,8 @@ struct format_functor_container
    }
 private:
    const Container& func;
+   format_functor_container(const format_functor_container&);
+   format_functor_container& operator=(const format_functor_container&);
 };
 
 template <class Func, class Match, class OutputIterator, class Traits = re_detail::trivial_format_traits<typename Match::char_type> >
