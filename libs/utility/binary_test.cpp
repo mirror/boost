@@ -11,6 +11,10 @@
 #include <algorithm>
 #include <cstddef>
 
+#ifdef BOOST_MSVC
+#pragma warning(disable:4996) // warning C4996: 'std::equal': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
+#endif
+
 /*
 Note: This file tests every single valid bit-grouping on its own, and some
       random combinations of bit-groupings.

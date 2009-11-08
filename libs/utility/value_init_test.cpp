@@ -29,9 +29,9 @@
 //
 struct POD
 {
-  POD () : c(0), i(0), f(0) {}
+  POD () : f(0), c(0), i(0){}
 
-  POD ( char c_, int i_, float f_ ) : c(c_), i(i_), f(f_) {}
+  POD ( char c_, int i_, float f_ ) : f(f_), c(c_), i(i_) {}
 
   friend std::ostream& operator << ( std::ostream& os, POD const& pod )
     { return os << '(' << pod.c << ',' << pod.i << ',' << pod.f << ')' ; }
@@ -291,7 +291,7 @@ int test_main(int, char **)
 {
   BOOST_CHECK ( test( 0,1234 ) ) ;
   BOOST_CHECK ( test( 0.0,12.34 ) ) ;
-  BOOST_CHECK ( test( POD(0,0,0.0), POD('a',1234,56.78) ) ) ;
+  BOOST_CHECK ( test( POD(0,0,0.0), POD('a',1234,56.78f) ) ) ;
   BOOST_CHECK ( test( NonPOD( std::string() ), NonPOD( std::string("something") ) ) ) ;
 
   NonPOD NonPOD_object( std::string("NonPOD_object") );

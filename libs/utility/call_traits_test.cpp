@@ -21,6 +21,10 @@
 #include <libs/type_traits/test/test.hpp>
 #include <libs/type_traits/test/check_type.hpp>
 
+#ifdef BOOST_MSVC
+#pragma warning(disable:4181) // : warning C4181: qualifier applied to reference type; ignored
+#endif
+
 // a way prevent warnings for unused variables
 template<class T> inline void unused_variable(const T&) {}
 
@@ -52,7 +56,8 @@ struct contained
    const_reference const_get()const { return v_; }
    // pass value:
    void call(param_type){}
-
+private:
+   contained& operator=(const contained&);
 };
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -77,6 +82,8 @@ struct contained<T[N]>
    reference get() { return v_; }
    const_reference const_get()const { return v_; }
    void call(param_type){}
+private:
+   contained& operator=(const contained&);
 };
 #endif
 
@@ -197,7 +204,7 @@ struct comparible_UDT
    bool operator == (const comparible_UDT& v){ return v.i_ == i_; }
 };
 
-int main(int argc, char *argv[ ])
+int main()
 {
    call_traits_checker<comparible_UDT> c1;
    comparible_UDT u;
