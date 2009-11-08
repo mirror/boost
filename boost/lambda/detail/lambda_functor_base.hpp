@@ -40,7 +40,7 @@ public:
   explicit identity(par_t t) : elem(t) {}
 
   template <typename SigArgs> 
-  struct sig { typedef element_t type; };
+  struct sig { typedef typename boost::remove_const<element_t>::type type; };
 
   template<class RET, CALL_TEMPLATE_ARGS>
   RET call(CALL_FORMAL_ARGS) const { CALL_USE_ARGS; return elem; }
