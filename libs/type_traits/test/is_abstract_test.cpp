@@ -13,6 +13,10 @@
 #  include <boost/type_traits/is_abstract.hpp>
 #endif
 
+#ifdef BOOST_MSVC
+#pragma warning(disable: 4505)
+#endif
+
 
 struct TestA {};
 struct TestB { virtual void foo(void) = 0; };
