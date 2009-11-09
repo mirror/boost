@@ -53,11 +53,6 @@ protected:
 
 private:
 
-    mutable weak_ptr<void> weak_this_;
-    mutable shared_ptr<void> shared_this_;
-
-private:
-
     void init_weak_once() const
     {
         if( weak_this_.expired() )
@@ -111,6 +106,10 @@ private:
             shared_this_.reset();
         }
     }
+
+    mutable weak_ptr<void> weak_this_;
+private:
+    mutable shared_ptr<void> shared_this_;
 };
 
 template<typename T>
