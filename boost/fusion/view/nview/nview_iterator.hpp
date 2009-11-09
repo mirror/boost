@@ -45,6 +45,10 @@ namespace boost { namespace fusion
           : seq(seq) {}
 
         Sequence& seq;
+
+    private:
+        // silence MSVC warning C4512: assignment operator could not be generated
+        nview_iterator& operator= (nview_iterator const&);
     };
 
 }}
