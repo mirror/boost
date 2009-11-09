@@ -11,6 +11,13 @@
 //
 // Note: The unit test no longer compile on MSVC 6, but lexical_cast itself works for it.
 
+//
+// We need this #define before any #includes: otherwise msvc will emit warnings
+// deep within std::string, resulting from our (perfectly legal) use of basic_string
+// with a custom traits class:
+//
+#define _SCL_SECURE_NO_WARNINGS
+
 #include <boost/config.hpp>
 
 #if defined(__INTEL_COMPILER)

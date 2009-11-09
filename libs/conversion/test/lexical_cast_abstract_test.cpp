@@ -51,7 +51,7 @@ std::ostream &operator<<(std::ostream &O, const A &a)
 {
     a.out(O);
     return O;
-};
+}
 
 void test_abstract()
 {
