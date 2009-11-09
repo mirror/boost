@@ -36,8 +36,8 @@ if [ mpi.configured ]
     # # Intel compiler ICEs if we turn optimization on
     <toolset>intel-vc71-win-9.1:<optimization>off
     # Without these flags, MSVC 7.1 and 8.0 crash
+    # User reports that VC++ 8 no longer has this problem
     <toolset>msvc-7.1:<cxxflags>-GR-
-    <toolset>msvc-8.0:<cxxflags>-GR-
     ;
 
 }
