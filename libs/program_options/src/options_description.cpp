@@ -410,8 +410,8 @@ namespace boost { namespace program_options {
                         {                 
                             // is last_space within the second half ot the 
                             // current line
-                            if ((unsigned)distance(last_space, line_end) < 
-                                (line_length - indent) / 2)
+                            if (static_cast<unsigned>(distance(last_space, line_end)) < 
+                                (line_length / 2))
                             {
                                 line_end = last_space;
                             }

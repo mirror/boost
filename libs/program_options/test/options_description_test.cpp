@@ -128,11 +128,39 @@ void test_long_default_value()
    );
 }
 
+void test_word_wrapping()
+{
+   options_description desc("Supported options");
+   desc.add_options()
+      ("help",    "this is a sufficiently long text to require word-wrapping")
+      ("prefix", value<string>()->default_value("/h/proj/tmp/dispatch"), "root path of the dispatch installation")
+      ("opt1",    "this_is_a_sufficiently_long_text_to_require_word-wrapping_but_cannot_be_wrapped")
+      ("opt2",    "this_is_a_sufficiently long_text_to_require_word-wrapping")
+      ("opt3",    "this_is_a sufficiently_long_text_to_require_word-wrapping_but_will_not_be_wrapped")
+      ;
+    stringstream ss;
+    ss << desc;    
+    BOOST_CHECK_EQUAL(ss.str(),
+"Supported options:\n"
+"  --help                               this is a sufficiently long text to \n"
+"                                       require word-wrapping\n"
+"  --prefix arg (=/h/proj/tmp/dispatch) root path of the dispatch installation\n"
+"  --opt1                               this_is_a_sufficiently_long_text_to_requ\n"
+"                                       ire_word-wrapping_but_cannot_be_wrapped\n"
+"  --opt2                               this_is_a_sufficiently \n"
+"                                       long_text_to_require_word-wrapping\n"
+"  --opt3                               this_is_a sufficiently_long_text_to_requ\n"
+"                                       ire_word-wrapping_but_will_not_be_wrappe\n"
+"                                       d\n"
+   );
+}
+
 int main(int, char* [])
 {
     test_type();
     test_approximation();
     test_formatting();
     test_long_default_value();
+    test_word_wrapping();
     return 0;
 }
