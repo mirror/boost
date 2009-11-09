@@ -169,15 +169,7 @@ namespace boost { namespace program_options {
     void validate(any& v, const vector<string>& xs, std::string*, int)
     {
         check_first_occurrence(v);
-        string s(get_single_string(xs));
-        if (!s.empty() && (
-                (*s.begin() == '\'' && *s.rbegin() == '\'') ||
-                (*s.begin() == '"' && *s.rbegin() == '"')))
-        {
-            v = any(s.substr(1, s.size()-2));
-        }
-        else
-            v = any(s);
+        v = any(get_single_string(xs));
     }
 
 #if !defined(BOOST_NO_STD_WSTRING)
@@ -185,13 +177,7 @@ namespace boost { namespace program_options {
     void validate(any& v, const vector<wstring>& xs, std::string*, int)
     {
         check_first_occurrence(v);
-        wstring s(get_single_string(xs));
-        if (!s.empty() && (
-                (*s.begin() == L'\'' && *s.rbegin() == L'\'') ||
-                (*s.begin() == L'"' && *s.rbegin() == L'"')))
-            v = any(s.substr(1, s.size()-2));
-        else
-            v = any(s);
+        v = any(get_single_string(xs));
     }
 #endif
 
