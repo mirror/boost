@@ -15,29 +15,18 @@ local optional_sources ;
 local optional_reqs ;
 
 if [ mpi.configured ]
-{
-  alias pbgl
-      : mpi_process_group.cpp tag_allocator.cpp
-      : # requirements
-        <library>../../mpi/build//boost_mpi
-        <library>/mpi//mpi [ mpi.extra-requirements ]
-      : # default built
-      : # usage requirements
-        <library>../../mpi/build//boost_mpi
-        <library>/mpi//mpi [ mpi.extra-requirements ]
-      ;
-    
+{    
   lib boost_graph_parallel
-    :
-    pbgl
-    :
-    <define>BOOST_GRAPH_NO_LIB=1
-    <link>shared:<define>BOOST_GRAPH_DYN_LINK=1
-    # # Intel compiler ICEs if we turn optimization on
-    <toolset>intel-vc71-win-9.1:<optimization>off
-    # Without these flags, MSVC 7.1 and 8.0 crash
-    # User reports that VC++ 8 no longer has this problem
-    <toolset>msvc-7.1:<cxxflags>-GR-
+    : mpi_process_group.cpp tag_allocator.cpp
+    : <library>../../mpi/build//boost_mpi
+      <library>/mpi//mpi [ mpi.extra-requirements ]
+      <define>BOOST_GRAPH_NO_LIB=1
+      <link>shared:<define>BOOST_GRAPH_DYN_LINK=1
+      # # Intel compiler ICEs if we turn optimization on
+      <toolset>intel-vc71-win-9.1:<optimization>off
+      # Without these flags, MSVC 7.1 crash
+      # User reports that VC++ 8 no longer has this problem
+      <toolset>msvc-7.1:<cxxflags>-GR-
     ;
 
 }
