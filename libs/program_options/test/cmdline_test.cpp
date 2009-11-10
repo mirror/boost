@@ -183,7 +183,7 @@ void test_long_options()
         {"--bar", s_missing_parameter, ""},
 
         {"--bar=123", s_success, "bar:123"},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline("foo bar=", style, test_cases1);
 
@@ -198,7 +198,7 @@ void test_long_options()
         // considered a value, even though it looks like
         // an option.
         {"--bar --foo", s_success, "bar:--foo"},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline("foo bar=", style, test_cases2);
     style = cmdline::style_t(
@@ -208,7 +208,7 @@ void test_long_options()
     test_case test_cases3[] = {
         {"--bar=10", s_success, "bar:10"},
         {"--bar 11", s_success, "bar:11"},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline("foo bar=", style, test_cases3);
 
@@ -226,7 +226,7 @@ void test_long_options()
         {"--bar=Ab", s_success, "bar:Ab"},
         {"--Bar=ab", s_success, "bar:ab"},
         {"--giz", s_success, "Giz:"},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline("foo bar= baz? Giz", style, test_cases4);
 #endif
@@ -249,7 +249,7 @@ void test_short_options()
         {"-f14", s_success, "-f:14"},
         {"-g -f1", s_success, "-g: -f:1"},
         {"-f", s_missing_parameter, ""},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline(",d ,f= ,g", style, test_cases1);
 
@@ -263,7 +263,7 @@ void test_short_options()
         {"-f", s_missing_parameter, ""},
         {"-f /foo", s_success, "-f:/foo"},
         {"-f -d", s_success, "-f:-d"},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline(",d ,f=", style, test_cases2);
 
@@ -275,7 +275,7 @@ void test_short_options()
         {"-f10", s_success, "-f:10"},
         {"-f 10", s_success, "-f:10"},
         {"-f -d", s_success, "-f:-d"},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline(",d ,f=", style, test_cases3);
 
@@ -291,7 +291,7 @@ void test_short_options()
         //{"-d12", s_extra_parameter, ""},
         {"-f12", s_success, "-f:12"},
         {"-fe", s_success, "-f:e"},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline(",d ,f= ,e", style, test_cases4);
 
@@ -313,7 +313,7 @@ void test_dos_options()
         {"/d13", s_extra_parameter, ""},
         {"/f14", s_success, "-f:14"},
         {"/f", s_missing_parameter, ""},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline(",d ,f=", style, test_cases1);
 
@@ -325,7 +325,7 @@ void test_dos_options()
     test_case test_cases2[] = {
         {"/de", s_extra_parameter, ""},
         {"/fe", s_success, "-f:e"},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline(",d ,f= ,e", style, test_cases2);
 
@@ -347,7 +347,7 @@ void test_disguised_long()
         {"-foo -f", s_success, "foo: foo:"},
         {"-goo=x -gy", s_success, "goo:x goo:y"},
         {"-bee=x -by", s_success, "bee:x bee:y"},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline("foo,f goo,g= bee,b?", style, test_cases1);
 
@@ -355,7 +355,7 @@ void test_disguised_long()
     test_case test_cases2[] = {
         {"/foo -f", s_success, "foo: foo:"},
         {"/goo=x", s_success, "goo:x"},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline("foo,f goo,g= bee,b?", style, test_cases2);
 }
@@ -376,7 +376,7 @@ void test_guessing()
         {"--opt", s_ambiguous_option, ""},
         {"--f=1", s_success, "foo:1"},
         {"-far", s_success, "foo:ar"},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline("opt123 opt56 foo,f=", style, test_cases1);
 }
@@ -394,7 +394,7 @@ void test_arguments()
     test_case test_cases1[] = {
         {"-f file -gx file2", s_success, "-f: file -g:x file2"},
         {"-f - -gx - -- -e", s_success, "-f: - -g:x - -e"},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline(",f ,g= ,e", style, test_cases1);
 
@@ -407,7 +407,7 @@ void test_arguments()
 
     test_case test_cases2[] = {
         {"-f - -gx - -- -e", s_success, "-f: - -g:x - -e"},
-        {0}
+        {0, 0, 0}
     };
     test_cmdline(",f ,g= ,e", style, test_cases2);
 }
@@ -425,7 +425,7 @@ void test_prefix()
 
     test_case test_cases1[] = {
         {"--foo.bar=12", s_success, "foo.bar:12"},
-        {0}
+        {0, 0, 0}
     };
 
     test_cmdline("foo*=", style, test_cases1);
@@ -599,7 +599,7 @@ void test_unregistered()
     // It's not clear yet, so I'm leaving the decision till later.
 }
 
-int main(int ac, char* av[])
+int main(int /*ac*/, char** /*av*/)
 {
     test_long_options();
     test_short_options();

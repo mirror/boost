@@ -57,7 +57,7 @@ void check_value(const option& option, const char* name, const char* value)
     BOOST_CHECK(option.value.front() == value);
 }
 
-vector<string> sv(char* array[], unsigned size)
+vector<string> sv(const char* array[], unsigned size)
 {
     vector<string> r;
     for (unsigned i = 0; i < size; ++i)
@@ -113,10 +113,10 @@ void test_command_line()
         ("baz", new untyped_value())
         ("plug*", new untyped_value())
         ;
-    char* cmdline3_[] = { "--foo=12", "-f4", "--bar=11", "-b4",
+    const char* cmdline3_[] = { "--foo=12", "-f4", "--bar=11", "-b4",
                           "--plug3=10"};
     vector<string> cmdline3 = sv(cmdline3_,
-                                 sizeof(cmdline3_)/sizeof(cmdline3_[0]));
+                                 sizeof(cmdline3_)/sizeof(const char*));
     vector<option> a3 = 
         command_line_parser(cmdline3).options(desc).run().options;
                        
@@ -131,22 +131,23 @@ void test_command_line()
     // Regression test: check that '0' as style is interpreted as 
     // 'default_style'
     vector<option> a4 = 
-        parse_command_line(5, cmdline3_, desc, 0, additional_parser).options;
+        parse_command_line(sizeof(cmdline3_)/sizeof(const char*), const_cast<char**>(cmdline3_), 
+                                                               desc, 0, additional_parser).options;
 
     BOOST_CHECK_EQUAL(a4.size(), 4u);
     check_value(a4[0], "foo", "4");
     check_value(a4[1], "bar", "11");
 
     // Check that we don't crash on empty values of type 'string'
-    char* cmdline4[] = {"", "--open", ""};
+    const char* cmdline4[] = {"", "--open", ""};
     options_description desc2;
     desc2.add_options()
         ("open", po::value<string>())
         ;
     variables_map vm;
-    po::store(po::parse_command_line(3, cmdline4, desc2), vm);
+    po::store(po::parse_command_line(sizeof(cmdline4)/sizeof(const char*), const_cast<char**>(cmdline4), desc2), vm);
 
-    char* cmdline5[] = {"", "-p7", "-o", "1", "2", "3", "-x8"};
+    const char* cmdline5[] = {"", "-p7", "-o", "1", "2", "3", "-x8"};
     options_description desc3;
     desc3.add_options()
         (",p", po::value<string>())
@@ -154,7 +155,8 @@ void test_command_line()
         (",x", po::value<string>())
         ;
     vector<option> a5 = 
-        parse_command_line(7, cmdline5, desc3, 0, additional_parser).options;
+        parse_command_line(sizeof(cmdline5)/sizeof(const char*), const_cast<char**>(cmdline5), 
+                                                                     desc3, 0, additional_parser).options;
     BOOST_CHECK_EQUAL(a5.size(), 3u);
     check_value(a5[0], "-p", "7");
     BOOST_REQUIRE(a5[1].value.size() == 3);
@@ -180,9 +182,9 @@ void test_command_line()
     po::positional_options_description p;
     p.add( "file", 1 );
 
-    char* cmdline6[] = {"", "-m", "token1", "token2", "--", "some_file"};
+    const char* cmdline6[] = {"", "-m", "token1", "token2", "--", "some_file"};
     vector<option> a6 = 
-        command_line_parser(6, cmdline6).options(desc4).positional(p)
+        command_line_parser(sizeof(cmdline6)/sizeof(const char*), const_cast<char**>(cmdline6)).options(desc4).positional(p)
         .run().options;
     BOOST_CHECK_EQUAL(a6.size(), 2u);
     BOOST_REQUIRE(a6[0].value.size() == 2);
@@ -238,7 +240,7 @@ void test_environment()
 #if defined(_WIN32) && ! defined(__BORLANDC__)
     _putenv("PO_TEST_FOO=1");
 #else
-    putenv("PO_TEST_FOO=1");
+    putenv(const_cast<char*>("PO_TEST_FOO=1"));
 #endif
     parsed_options p = parse_environment(desc, "PO_TEST_");
 
@@ -255,9 +257,9 @@ void test_unregistered()
 {
     options_description desc;
 
-    char* cmdline1_[] = { "--foo=12", "--bar", "1"};
+    const char* cmdline1_[] = { "--foo=12", "--bar", "1"};
     vector<string> cmdline1 = sv(cmdline1_,
-                                 sizeof(cmdline1_)/sizeof(cmdline1_[0]));
+                                 sizeof(cmdline1_)/sizeof(const char*));
     vector<option> a1 = 
         command_line_parser(cmdline1).options(desc).allow_unregistered().run()
         .options;
