@@ -21,6 +21,8 @@ namespace test
         operator value_type const&() const { return v_; }
         
         value_type v_;
+    private:
+        proxy& operator=(proxy const&);
     };
 
     template <class Iterator>

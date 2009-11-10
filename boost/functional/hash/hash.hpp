@@ -197,6 +197,15 @@ namespace boost
         return x + (x >> 3);
     }
 
+#if defined(BOOST_MSVC)
+#pragma warning(push)
+#if BOOST_MSVC == 1400
+#pragma warning(disable:4267) // 'argument' : conversion from 'size_t' to 'unsigned int',
+                              // possible loss of data
+                              // A misguided attempt to detect 64-bit incompatability.
+#endif
+#endif
+
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     template <class T>
     inline void hash_combine(std::size_t& seed, T& v)
@@ -208,6 +217,10 @@ namespace boost
         boost::hash<T> hasher;
         seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
     }
+
+#if defined(BOOST_MSVC)
+#pragma warning(pop)
+#endif
 
     template <class It>
     inline std::size_t hash_range(It first, It last)

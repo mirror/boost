@@ -7,6 +7,10 @@
 #include "../helpers/random_values.hpp"
 #include "../helpers/invariants.hpp"
 
+#if defined(BOOST_MSVC)
+#pragma warning(disable:4512) // assignment operator could not be generated
+#endif
+
 test::seed_t seed(9387);
 
 template <class T>

@@ -31,7 +31,7 @@ namespace test
 
         void test(X const& x, unsigned int allocations = 0) const {
             if(!(x.size() == values_.size() &&
-                    std::equal(x.cbegin(), x.cend(), values_.begin(),
+                    test::equal(x.cbegin(), x.cend(), values_.begin(),
                         test::equivalent)))
                 BOOST_ERROR("Strong exception safety failure.");
             if(allocations != allocations_)

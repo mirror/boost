@@ -143,6 +143,9 @@ namespace test {
     class test_runner
     {
         Test const& test_;
+
+        test_runner(test_runner const&);
+        test_runner& operator=(test_runner const&);
     public:
         test_runner(Test const& t) : test_(t) {}
         void operator()() const {

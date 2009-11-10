@@ -65,7 +65,7 @@ void erase_tests1(Container*, test::random_generator generator = test::default_g
         while(size > 0 && !x.empty())
         {
             using namespace std;
-            int index = rand() % x.size();
+            int index = rand() % (int) x.size();
             BOOST_DEDUCED_TYPENAME Container::const_iterator prev, pos, next;
             if(index == 0) {
                 prev = pos = x.begin();

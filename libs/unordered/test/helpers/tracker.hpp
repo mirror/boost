@@ -50,7 +50,7 @@ namespace test
         values1.sort();
         values2.sort();
         BOOST_TEST(values1.size() == values2.size() &&
-                std::equal(values1.begin(), values1.end(), values2.begin(),
+                test::equal(values1.begin(), values1.end(), values2.begin(),
                     test::equivalent));
     }
 
@@ -62,7 +62,7 @@ namespace test
         values1.sort();
         values2.sort();
         BOOST_TEST(values1.size() == values2.size() &&
-                std::equal(values1.begin(), values1.end(), values2.begin(), test::equivalent));
+                test::equal(values1.begin(), values1.end(), values2.begin(), test::equivalent));
     }
 
     template <class X>

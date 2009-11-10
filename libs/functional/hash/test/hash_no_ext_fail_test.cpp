@@ -12,8 +12,11 @@
 #include <boost/functional/hash.hpp>
 #include <boost/functional/hash.hpp>
 
+template <class T> void ignore(T const&) {}
+
 int main()
 {
     HASH_NAMESPACE::hash< int[10] > hasher;
+    ignore(hasher);
     return 0;
 }
