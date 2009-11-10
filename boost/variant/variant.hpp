@@ -293,7 +293,8 @@ public: // visitor interfaces
     {
         operand.~T();
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551)) || \
+    BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
         operand; // suppresses warnings
 #endif
 
@@ -532,6 +533,11 @@ public: // visitor interface
 
 #endif // MSVC6 workaround
 
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
+private:
+    // silence MSVC warning C4512: assignment operator could not be generated
+    direct_assigner& operator= (direct_assigner const&);
+#endif
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -650,6 +656,11 @@ public: // visitor interface
         BOOST_VARIANT_AUX_RETURN_VOID;
     }
 
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
+private:
+    // silence MSVC warning C4512: assignment operator could not be generated
+    backup_assigner& operator= (backup_assigner const&);
+#endif
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -899,6 +910,11 @@ public: // internal visitor interfaces, cont.
         return internal_visit( operand.get(), 1L );
     }
 
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
+private:
+    // silence MSVC warning C4512: assignment operator could not be generated
+    invoke_visitor& operator= (invoke_visitor const&);
+#endif
 };
 
 }} // namespace detail::variant
@@ -1549,6 +1565,11 @@ private: // helpers, for modifiers (below)
             BOOST_VARIANT_AUX_RETURN_VOID;
         }
 
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
+    private:
+        // silence MSVC warning C4512: assignment operator could not be generated
+        assigner& operator= (assigner const&);
+#endif
     };
 
     friend class assigner;
