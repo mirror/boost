@@ -12,7 +12,6 @@
 #define BOOST_UNORDERED_DETAIL_FWD_HPP_INCLUDED
 
 #include <boost/config.hpp>
-#include <boost/assert.hpp>
 #include <boost/iterator.hpp>
 #include <boost/compressed_pair.hpp>
 #include <boost/type_traits/aligned_storage.hpp>
@@ -106,13 +105,6 @@ namespace boost { namespace unordered_detail {
         node_ptr next_;
 
         hash_bucket() : next_() {}
-        
-        // Only copy construct when allocating.
-        hash_bucket(hash_bucket const& x)
-          : next_()
-        {
-            BOOST_ASSERT(!x.next_);
-        }
     };
 
     template <class A>
