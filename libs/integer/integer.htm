@@ -21,9 +21,8 @@ is particularly useful for solving generic programming problems.</p>
 <ul>
 	<li><a href="#contents">Contents</a></li>
 	<li><a href="#synopsis">Synopsis</a></li>
-	<li><a href="#easy">Processor-Optimized Types</a></li>
+	<li><a href="#easy">Easiest-to-Manipulate Types</a></li>
 	<li><a href="#sized">Sized Types</a></li>
-	<li><a href="#mpl">MPL-Compatible Variants</a></li>
 	<li><a href="#example">Example</a></li>
 	<li><a href="#demo">Demonstration Program</a></li>
 	<li><a href="#rationale">Rationale</a></li>
@@ -33,145 +32,67 @@ is particularly useful for solving generic programming problems.</p>
 
 <h2><a name="synopsis">Synopsis</a></h2>
 
-<blockquote><pre>
-#include &lt;<a href="../../boost/integer_fwd.hpp">boost/integer_fwd.hpp</a>&gt;  // forwarding header
-#include &lt;<a href="cstdint.htm">boost/cstdint.hpp</a>&gt;      // for boost::uintmax_t, intmax_t
-
-namespace boost
+<blockquote><pre>namespace boost
 {
   //  fast integers from least integers
-  template&lt; typename BaseInt &gt;
-  struct fast_integral
-  {
-      typedef <em>implementation_supplied</em>  type;
-  };
-
   template&lt; typename LeastInt &gt;
   struct int_fast_t
   {
-      typedef typename fast_integral&lt;LeastInt&gt;::type  fast;
-  };
-
-  //  MPL-compatible
-  template&lt; int Bits, typename Signedness &gt;
-  struct sized_integral
-  {
-      static  bool const  is_specialized = <em>implementation_supplied</em>;
-      static  bool const  is_signed = <em>implementation_supplied</em>;
-      static  int const   bit_count = Bits;
-
-      typedef <em>implementation_supplied</em>  type;
-  };
-
-  template&lt; int Bits, typename Signedness &gt;
-  struct exact_integral
-  {
-      static  bool const  is_specialized = <em>implementation_supplied</em>;
-      static  bool const  is_signed = <em>implementation_supplied</em>;
-      static  int const   bit_count = Bits;
-
-      typedef <em>implementation_supplied</em>  type;
-  };
-
-  template&lt; intmax_t MaxValue &gt;
-  struct maximum_signed_integral
-  {
-      static  bool const      is_specialized = <em>implementation_supplied</em>;
-      static  bool const      is_signed = true;
-      static  intmax_t const  bound = MaxValue;
-
-      typedef <em>implementation_supplied</em>  type;
-  };
-
-  template&lt; intmax_t MinValue &gt;
-  struct minimum_signed_integral
-  {
-      static  bool const      is_specialized = <em>implementation_supplied</em>;
-      static  bool const      is_signed = true;
-      static  intmax_t const  bound = MinValue;
-
-      typedef <em>implementation_supplied</em>  type;
-  };
-
-  template&lt; uintmax_t Value &gt;
-  struct maximum_unsigned_integral
-  {
-      static  bool const       is_specialized = <em>implementation_supplied</em>;
-      static  bool const       is_signed = false;
-      static  uintmax_t const  bound = Value;
-
-      typedef <em>implementation_supplied</em>  type;
+      typedef <em>implementation_supplied</em>  fast;
   };
 
   //  signed
   template&lt; int Bits &gt;
   struct int_t 
   {
-      typedef typename sized_integral&lt;Bits, signed&gt;::type  least;
-      typedef int_fast_t&lt;least&gt;::fast                      fast;
-  };
-
-  template&lt; int Bits &gt;
-  struct int_exact_t
-  {
-      typedef typename exact_integral&lt;Bits, signed&gt;::type  exact;
+      typedef <em>implementation_supplied</em>  least;
+      typedef int_fast_t&lt;least&gt;::fast  fast;
   };
 
   //  unsigned
   template&lt; int Bits &gt;
   struct uint_t 
   {
-      typedef typename sized_integral&lt;Bits, unsigned&gt;::type  least;
-      typedef int_fast_t&lt;least&gt;::fast                        fast;
-  };
-
-  template&lt; int Bits &gt;
-  struct uint_exact_t
-  {
-      typedef typename exact_integral&lt;Bits, unsigned&gt;::type  exact;
+      typedef <em>implementation_supplied</em>  least;
+      typedef int_fast_t&lt;least&gt;::fast  fast;
   };
 
   //  signed
-  template&lt; intmax_t MaxValue &gt;
+  template&lt; long MaxValue &gt;
   struct int_max_value_t 
   {
-      typedef typename maximum_signed_integral&lt;MaxValue&gt;::type  least;
-      typedef int_fast_t&lt;least&gt;::fast                           fast;
+      typedef <em>implementation_supplied</em>  least;
+      typedef int_fast_t&lt;least&gt;::fast  fast;
   };
 
-  template&lt; intmax_t MinValue &gt;
+  template&lt; long MinValue &gt;
   struct int_min_value_t 
   {
-      typedef typename minimum_signed_integral&lt;MinValue&gt;::type  least;
-      typedef int_fast_t&lt;least&gt;::fast                           fast;
+      typedef <em>implementation_supplied</em>  least;
+      typedef int_fast_t&lt;least&gt;::fast  fast;
   };
 
   //  unsigned
-  template&lt; uintmax_t Value &gt;
+  template&lt; unsigned long Value &gt;
   struct uint_value_t 
   {
-      typedef typename maximum_unsigned_integral&lt;Value&gt;::type  least;
-      typedef int_fast_t&lt;least&gt;::fast                          fast;
+      typedef <em>implementation_supplied</em>  least;
+      typedef int_fast_t&lt;least&gt;::fast  fast;
   };
 } // namespace boost
 </pre></blockquote>
 
-<h2><a name="easy">Processor-Optimized Types</a></h2>
+<h2><a name="easy">Easiest-to-Manipulate Types</a></h2>
 
-<p>The <code>fast_integral</code> class template maps its input type to the
+<p>The <code>int_fast_t</code> class template maps its input type to the
 next-largest type that the processor can manipulate the easiest, or to
 itself if the input type is already an easy-to-manipulate type.  For
 instance, processing a bunch of <code>char</code> objects may go faster
 if they were converted to <code>int</code> objects before processing. 
-The input type, passed as the only template parameter, can be any built-in
-integral type besides <code>bool</code>.  The output type is given as the class
-member <code>type</code>.</p>
-
-<p>The <code>int_fast_t</code> class template is the classic meta-function for
-this operation.  Despite the name, it works for unsigned integral types just
-like it works for the signed integral types.  The output type is given as the
-class member <code>fast</code>, defined to be the same as the corresponding
-result from the <code>fast_integral</code> meta-function.</p>
+The input type, passed as the only template parameter, must be a
+built-in integral type, except <code>bool</code>.  Unsigned integral
+types can be used, as well as signed integral types, despite the name. 
+The output type is given as the class member <code>fast</code>.</p>
 
 <p><strong>Implementation Notes</strong><br>
 By default, the output type is identical to the input type.  Eventually,
@@ -183,286 +104,72 @@ type.</p>
 
 <h2><a name="sized">Sized Types</a></h2>
 
-<p>The <code>int_t</code>, <code>int_exact_t</code>, <code>uint_t</code>,
-<code>uint_exact_t</code>, <code>int_max_value_t</code>,
-<code>int_min_value_t</code>, and <code>uint_value_t</code> class templates find
-the most appropriate built-in integral type for the given template parameter.
-This type is given by the class member <code>least</code> or <code>exact</code>.
-For the non-exact class templates, the easiest-to-manipulate version of that
-type is given by the class member <code>fast</code>.  The following table
-describes each template's criteria.</p>
+<p>The <code>int_t</code>, <code>uint_t</code>,
+<code>int_max_value_t</code>, <code>int_min_value_t</code>, and
+<code>uint_value_t</code> class templates find the most appropiate
+built-in integral type for the given template parameter.  This type is
+given by the class member <code>least</code>.  The easiest-to-manipulate
+version of that type is given by the class member <code>fast</code>. 
+The following table describes each template's criteria.</p>
 
-<table border="2" cellpadding="5">
+<table border="1" cellpadding="5">
 	<caption>Criteria for the Sized Type Class Templates</caption>
 	<tr>
-		<th>Class Template (all in name-space <code>boost</code>)</th>
+		<th>Class Template</th>
 		<th>Template Parameter Mapping</th>
 	</tr>
 	<tr>
-		<td><code>int_t</code></td>
+		<td><code>boost::int_t</code></td>
 		<td>The smallest built-in signed integral type with at least the
 			given number of bits, including the sign bit.  The parameter
-			<em>must</em> be a positive number.  A compile-time error results if
+			should be a positive number.  A compile-time error results if
 			the parameter is larger than the number of bits in a
-			<code>boost::intmax_t</code>.</td>
+			<code>long</code>.</td>
 	</tr>
 	<tr>
-		<td><code>int_exact_t</code></td>
-		<td>The smallest built-in signed integral type with exactly the
-			given number of bits, including the sign bit.  A compile-time error
-			results if no qualifying type exists.</td>
-	</tr>
-	<tr>
-		<td><code>uint_t</code></td>
+		<td><code>boost::uint_t</code></td>
 		<td>The smallest built-in unsigned integral type with at least
-			the given number of bits.  The parameter <em>must</em> be a
-			non-negative number.  A compile-time error results if the parameter
-			is larger than the number of bits in a
-			<code>boost::uintmax_t</code>.</td>
+			the given number of bits.  The parameter should be a positive
+			number.  A compile-time error results if the parameter is
+			larger than the number of bits in an <code>unsigned
+			long</code>.</td>
 	</tr>
 	<tr>
-		<td><code>uint_exact_t</code></td>
-		<td>The smallest built-in unsigned integral type with exactly the given
-			number of bits.  A compile-time error results if no qualifying type
-			exists.</td>
-	</tr>
-	<tr>
-		<td><code>int_max_value_t</code></td>
+		<td><code>boost::int_max_value_t</code></td>
 		<td>The smallest built-in signed integral type that supports the
-			given value as a maximum.  The parameter <em>must</em> be a
+			given value as a maximum.  The parameter should be a
 			positive number.</td>
 	</tr>
 	<tr>
-		<td><code>int_min_value_t</code></td>
+		<td><code>boost::int_min_value_t</code></td>
 		<td>The smallest built-in signed integral type that supports the
-			given value as a minimum.  The parameter <em>must</em> be a
+			given value as a minimum.  The parameter should be a
 			negative number.</td>
 	</tr>
 	<tr>
-		<td><code>uint_value_t</code></td>
+		<td><code>boost::uint_value_t</code></td>
 		<td>The smallest built-in unsigned integral type that supports
 			the given value as a maximum.  The parameter should be a
 			positive number.</td>
 	</tr>
 </table>
 
-<h2><a name="mpl">MPL-Compatible Variants</a></h2>
-
-<p>The bit-length sized-type class templates have several drawbacks:</p>
-
-<ul>
-	<li>You must know the valid bit-lengths in advance.</li>
-	<li>There is no way to inspect the parameter used after a size-type template
-	    class is aliased.</li>
-	<li>Using an inappropriate parameter value results in a compiler
-	    diagnostic.</li>
-	<li>The type names used are inconsistent with other transformations in
-	    Boost, like in <a href="../mpl/">MPL</a>.</li>
-	<li>The above two facts make use of the size-type class templates
-	    incompatible with template meta-programming techniques.</li>
-</ul>
-
-<p>The <code>sized_integral</code>, <code>exact_integral</code>,
-<code>maximum_signed_integral</code>, <code>minimum_signed_integral</code>, and
-<code>maximum_unsigned_integral</code> class templates provide MPL-compatible
-alternatives.  These alternatives generally have the form:</p>
-
-<blockquote><pre>
-template&lt; <var>SwitchType</var> <var>SwitchValue</var>, typename Signedness &gt;
-struct <var>name</var>
-{
-    static  bool const         is_specialized = <em>implementation_supplied</em>;
-    static  bool const         is_signed = <em>implementation_supplied</em>;
-    static  <var>SwitchType</var> const   <var>switch_id</var> = <var>SwitchValue</var>;
-
-    typedef <em>implementation_supplied</em>  type;
-};
-</pre></blockquote>
-
-<p>Each member, if present, is defined by:</p>
-
-<table border="2" cellpadding="5">
-	<caption>Members in MPL-Compatible Class Templates</caption>
-	<tr>
-		<th>Class Template Member</th>
-		<th>When Defined</th>
-		<th>Meaning</th>
-	</tr>
-	<tr>
-		<td><code>is_specialized</code></td>
-		<td>Always</td>
-		<td>Flag indicating when a particular template class instantiation is a
-		    valid meta-function (<code>true</code>) or not (<code>false</code>).</td>
-	</tr>
-	<tr>
-		<td><code>is_signed</code></td>
-		<td><code>is_specialized == true</code></td>
-		<td>Flag indicating whether the signed-variant (<code>true</code>) or
-		    the unsigned-variant (<code>false</code>) of the meta-function is
-		    used.  This is controlled by the <code>Signedness</code> template
-		    parameter:
-		    <table border="1" cellpadding="3" align="center">
-		    	<caption>Effect of <code>Signedness</code> Setting</caption>
-		    	<tr>
-		    		<th><code>Signedness</code> Type</th>
-		    		<th><code>is_signed</code></th>
-		    	</tr>
-		    	<tr>
-		    		<td><code>signed</code></td>
-		    		<td><code>true</code></td>
-		    	</tr>
-		    	<tr>
-		    		<td><code>unsigned</code></td>
-		    		<td><code>false</code></td>
-		    	</tr>
-		    	<tr>
-		    		<td>anything else</td>
-		    		<td><em>not defined</em></td>
-		    	</tr>
-		    </table>
-		    The type used is a programmer mnemonic; the compiler cannot prevent
-		    someone from using <code>int</code> or <code>signed int</code>
-		    instead of <code>signed</code>, or <code>unsigned int</code> instead
-		    of <code>unsigned</code>.</td>
-	</tr>
-	<tr>
-		<td><code><var>switch_id</var></code> (Actual name is template-specific.)</td>
-		<td>Always</td>
-		<td>The value of the main control parameter, accessible even if the
-			template class instantiation is aliased.</td>
-	</tr>
-	<tr>
-		<td><code>type</code></td>
-		<td><code>is_specialized == true</code></td>
-		<td>The meta-function's result.  It appears only if the input parameters
-			satisfy the template's requirements.  Its presence, or lack thereof,
-			enables &quot;Substitution Failure Is Not An Error&quot; (SFINAE)
-			techniques, instead of a hard compiler diagnostic.</td>
-	</tr>
-</table>
-
-<p>The exceptions are the extreme-value class templates
-(<code>maximum_signed_integral</code>, <code>minimum_signed_integral</code>, and
-<code>maximum_unsigned_integral</code>), which do not take a <var>Signedness</var>
-template parameter because the meta-functions already inherently have signedness.
-
-<p>The following table describes each template's criteria.  The classic signed
-and unsigned equivalents are the sized-type class templates that each
-MPL-compatible class template emulates.  (The setting of <var>Signedness</var>
-controls the appropriate emulation.)</p>
-
-<table border="2" cellpadding="5">
-	<caption>Criteria for the MPL-Compatible Class Templates</caption>
-	<tr>
-		<th rowspan="2">Class Template (all in name-space <code>boost</code>)</th>
-		<th rowspan="2">Parameter Type (in name-space <code>boost</code> as needed)</th>
-		<th rowspan="2">Parameter Member ID</th>
-		<th colspan="2">Classic Equivalent</th>
-		<th rowspan="2" colspan="2">Template Parameter Mapping (when <code>type</code> is defined)</th>
-	</tr>
-	<tr>
-		<th>Signed</th>
-		<th>Unsigned</th>
-	</tr>
-	<tr>
-		<td><code>sized_integral</code></td>
-		<td><code>int</code></td>
-		<td><code>bit_count</code></td>
-		<td><code>int_t</code></td>
-		<td><code>uint_t</code></td>
-		<td colspan="2">The smallest built-in integral type with at least
-			<code>bit_count</code> bits (including the sign bit when
-			<var>Signedness</var> is <code>signed</code>).  Not present if no
-			type qualifies.</td>
-	</tr>
-	<tr>
-		<td><code>exact_integral</code></td>
-		<td><code>int</code></td>
-		<td><code>bit_count</code></td>
-		<td><code>int_exact_t</code></td>
-		<td><code>uint_exact_t</code></td>
-		<td colspan="2">The smallest built-in integral type with exactly
-			<code>bit_count</code> bits (including the sign bit when
-			<var>Signedness</var> is <code>signed</code>).  Not present if no
-			type qualifies.</td>
-	</tr>
-	<tr>
-		<td><code>maximum_signed_integral</code></td>
-		<td><code>intmax_t</code></td>
-		<td><code>bound</code></td>
-		<td colspan="2"><code>int_max_value_t</code></td>
-		<td>The smallest built-in integral type that can perserve the value in
-			<code>bound</code>.  Not present if <code>bound</code> is non-positive.</td>
-		<td rowspan="3">It is possible for a <code>type</code> to be absent if
-			a platform supports really-extended integral types (beyond <code>long
-			long</code> or <code>__int64</code>), support for those types goes
-			into &lt;<a href="../../boost/cstdint.hpp">boost/cstdint.hpp</a>&gt;,
-			but said support hadn't yet been added to &lt;<a
-			href="../../boost/integer.hpp">boost/integer.hpp</a>&gt;</td>
-	</tr>
-	<tr>
-		<td><code>minimum_signed_integral</code></td>
-		<td><code>intmax_t</code></td>
-		<td><code>bound</code></td>
-		<td colspan="2"><code>int_min_value_t</code></td>
-		<td>The smallest built-in integral type that can perserve the value in
-			<code>bound</code>.  Not present if <code>bound</code> is non-negative.</td>
-	</tr>
-	<tr>
-		<td><code>maximum_unsigned_integral</code></td>
-		<td><code>uintmax_t</code></td>
-		<td><code>bound</code></td>
-		<td colspan="2"><code>uint_value_t</code></td>
-		<td>The smallest built-in integral type that can perserve the value in
-			<code>bound</code>.  Should always be present.</td>
-	</tr>
-</table>
-
 <h2><a name="example">Example</a></h2>
 
-<blockquote><pre>
-#include &lt;<a href="../../boost/integer.hpp">boost/integer.hpp</a>&gt;
-#include &lt;<a href="../../boost/mpl/int.hpp">boost/mpl/int.hpp</a>&gt;
-#include &lt;iostream&gt;
-#include &lt;ostream&gt;
-
-//...
-
-template &lt; int Bits &gt;
-bool
-fit_exactly( boost::mpl::int_&lt;Bits&gt; const &amp;x,
- typename boost::exact_integral&lt;Bits, signed&gt;::type *unused = 0 )
-{
-    return true;
-}
-
-template &lt; typename T &gt;
-bool
-fit_exactly( T const &amp;x )
-{
-    return false;
-}
+<blockquote><pre>#include &lt;boost/integer.hpp&gt;
 
 //...
 
 int main()
 {
-    typedef boost::mpl::int_&lt;24&gt;  twenty_four;
-
-    boost::int_t&lt;twenty_four::value&gt;::least my_var;
-
-    //...
-
-    std::cout &lt;&lt; &quot;my_var &quot; &lt;&lt; ( fit_exactly(twenty_four()) ? &quot;does&quot; :
-     &quot;does not&quot; ) &lt;&lt; &quot; fit its type exactly.&quot; &lt;&lt; std::endl;
-
+    boost::int_t&lt;24&gt;::least my_var;
     //...
 }
 </pre></blockquote>
 
 <h2><a name="demo">Demonstration Program</a></h2>
 
-<p>The program <a href="test/integer_test.cpp">integer_test.cpp</a> is a
+<p>The program <a href="integer_test.cpp">integer_test.cpp</a> is a
 simplistic demonstration of the results from instantiating various
 examples of the sized type class templates.</p>
 
@@ -491,11 +198,11 @@ to Valentin Bonnard and
 <a href="http://www.boost.org/people/kevlin_henney.htm"> Kevlin Henney</a> for sharing
 their designs for similar templates.  <a
 href="http://www.boost.org/people/daryle_walker.html">Daryle Walker</a> designed the
-exact and value-based sized templates, and the MPL-compatible templates.</p>
+value-based sized templates.</p>
 
 <hr>
 
-<p>Revised July 16, 2008</p>
+<p>Revised May 20, 2001</p>
 
 <p>&copy; Copyright Beman Dawes 1999.  Use, modification, and distribution are
 subject to the Boost Software License, Version 1.0.  (See accompanying file <a

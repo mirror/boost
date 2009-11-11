@@ -8,149 +8,103 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
-//  29 Jul 2008  Added MPL-compatible variants of the integer-mask templates.
-//               (Daryle Walker)
-//  27 Jul 2008  Changed tests to use the unit-test system; added
-//               extended-integer support. (Daryle Walker)
 //  23 Sep 2001  Initial version (Daryle Walker)
 
-#define BOOST_TEST_MODULE  "Integer mask tests"
-#include <boost/test/unit_test.hpp>  // unit testing framework
+#include <boost/test/minimal.hpp>  // for main
 
-#include <boost/cstdint.hpp>               // for boost::uintmax_t
+#include <boost/cstdlib.hpp>               // for boost::exit_success
 #include <boost/integer/integer_mask.hpp>  // for boost::high_bit_mask_t, etc.
-#include <boost/limits.hpp>                // for std::numeric_limits
-#include <boost/mpl/assert.hpp>            // for BOOST_MPL_ASSERT_RELATION,etc.
-#include <boost/mpl/bool.hpp>              // for boost::mpl::bool_
-#include <boost/mpl/bitwise.hpp>           // for boost::mpl::bitor_, shift_left
-#include <boost/mpl/equal_to.hpp>          // for boost::mpl::equal_to
-#include <boost/mpl/int.hpp>               // for boost::mpl::int_
-#include <boost/mpl/integral_c.hpp>        // for boost::mpl::integral_c
-#include <boost/mpl/next_prior.hpp>        // for boost::mpl::prior
-#include <boost/mpl/range_c.hpp>           // for boost::mpl::range_c
 
-#include <cstddef>   // for std::size_t
-#include <ios>       // for std::hex
+#include <iostream>  // for std::cout (std::endl indirectly)
 
 
-// Custom types/templates, helper functions, and objects
-namespace
+#define PRIVATE_HIGH_BIT_SLOW_TEST(v)  BOOST_CHECK( ::boost::high_bit_mask_t< \
+ (v) >::high_bit == (1ul << (v)) );
+#define PRIVATE_HIGH_BIT_FAST_TEST(v)  BOOST_CHECK( ::boost::high_bit_mask_t< \
+ (v) >::high_bit_fast == (1ul << (v)) );
+#define PRIVATE_HIGH_BIT_TEST(v)  do { PRIVATE_HIGH_BIT_SLOW_TEST(v); \
+ PRIVATE_HIGH_BIT_FAST_TEST(v); } while (false)
+
+#define PRIVATE_LOW_BITS_SLOW_TEST(v)  BOOST_CHECK( ::boost::low_bits_mask_t< \
+ (v) >::sig_bits == ((1ul << (v)) - 1) );
+#define PRIVATE_LOW_BITS_FAST_TEST(v)  BOOST_CHECK( ::boost::low_bits_mask_t< \
+ (v) >::sig_bits_fast == ((1ul << (v)) - 1) );
+#define PRIVATE_LOW_BITS_TEST(v)  do { PRIVATE_LOW_BITS_SLOW_TEST(v); \
+ PRIVATE_LOW_BITS_FAST_TEST(v); } while (false)
+
+
+int test_main( int, char*[] )
 {
+    using std::cout;
+    using std::endl;
 
-// List the ranges of template parameters tests (ranges are half-open)
-int const  max_offset = std::numeric_limits<boost::uintmax_t>::digits;
+    cout << "Doing high_bit_mask_t tests." << endl;
+    PRIVATE_HIGH_BIT_TEST( 31 );
+    PRIVATE_HIGH_BIT_TEST( 30 );
+    PRIVATE_HIGH_BIT_TEST( 29 );
+    PRIVATE_HIGH_BIT_TEST( 28 );
+    PRIVATE_HIGH_BIT_TEST( 27 );
+    PRIVATE_HIGH_BIT_TEST( 26 );
+    PRIVATE_HIGH_BIT_TEST( 25 );
+    PRIVATE_HIGH_BIT_TEST( 24 );
+    PRIVATE_HIGH_BIT_TEST( 23 );
+    PRIVATE_HIGH_BIT_TEST( 22 );
+    PRIVATE_HIGH_BIT_TEST( 21 );
+    PRIVATE_HIGH_BIT_TEST( 20 );
+    PRIVATE_HIGH_BIT_TEST( 19 );
+    PRIVATE_HIGH_BIT_TEST( 18 );
+    PRIVATE_HIGH_BIT_TEST( 17 );
+    PRIVATE_HIGH_BIT_TEST( 16 );
+    PRIVATE_HIGH_BIT_TEST( 15 );
+    PRIVATE_HIGH_BIT_TEST( 14 );
+    PRIVATE_HIGH_BIT_TEST( 13 );
+    PRIVATE_HIGH_BIT_TEST( 12 );
+    PRIVATE_HIGH_BIT_TEST( 11 );
+    PRIVATE_HIGH_BIT_TEST( 10 );
+    PRIVATE_HIGH_BIT_TEST(  9 );
+    PRIVATE_HIGH_BIT_TEST(  8 );
+    PRIVATE_HIGH_BIT_TEST(  7 );
+    PRIVATE_HIGH_BIT_TEST(  6 );
+    PRIVATE_HIGH_BIT_TEST(  5 );
+    PRIVATE_HIGH_BIT_TEST(  4 );
+    PRIVATE_HIGH_BIT_TEST(  3 );
+    PRIVATE_HIGH_BIT_TEST(  2 );
+    PRIVATE_HIGH_BIT_TEST(  1 );
+    PRIVATE_HIGH_BIT_TEST(  0 );
 
-typedef boost::mpl::range_c<int, 0, max_offset>             high_bit_offsets;
-typedef boost::mpl::range_c<int, 0, max_offset + 1>          low_bit_lengths;
-typedef boost::mpl::range_c<int, 1, max_offset + 1>  special_low_bit_lengths;
+    cout << "Doing low_bits_mask_t tests." << endl;
+    PRIVATE_LOW_BITS_TEST( 32 );  // Undefined behavior?  Whoops!
+    PRIVATE_LOW_BITS_TEST( 31 );
+    PRIVATE_LOW_BITS_TEST( 30 );
+    PRIVATE_LOW_BITS_TEST( 29 );
+    PRIVATE_LOW_BITS_TEST( 28 );
+    PRIVATE_LOW_BITS_TEST( 27 );
+    PRIVATE_LOW_BITS_TEST( 26 );
+    PRIVATE_LOW_BITS_TEST( 25 );
+    PRIVATE_LOW_BITS_TEST( 24 );
+    PRIVATE_LOW_BITS_TEST( 23 );
+    PRIVATE_LOW_BITS_TEST( 22 );
+    PRIVATE_LOW_BITS_TEST( 21 );
+    PRIVATE_LOW_BITS_TEST( 20 );
+    PRIVATE_LOW_BITS_TEST( 19 );
+    PRIVATE_LOW_BITS_TEST( 18 );
+    PRIVATE_LOW_BITS_TEST( 17 );
+    PRIVATE_LOW_BITS_TEST( 16 );
+    PRIVATE_LOW_BITS_TEST( 15 );
+    PRIVATE_LOW_BITS_TEST( 14 );
+    PRIVATE_LOW_BITS_TEST( 13 );
+    PRIVATE_LOW_BITS_TEST( 12 );
+    PRIVATE_LOW_BITS_TEST( 11 );
+    PRIVATE_LOW_BITS_TEST( 10 );
+    PRIVATE_LOW_BITS_TEST(  9 );
+    PRIVATE_LOW_BITS_TEST(  8 );
+    PRIVATE_LOW_BITS_TEST(  7 );
+    PRIVATE_LOW_BITS_TEST(  6 );
+    PRIVATE_LOW_BITS_TEST(  5 );
+    PRIVATE_LOW_BITS_TEST(  4 );
+    PRIVATE_LOW_BITS_TEST(  3 );
+    PRIVATE_LOW_BITS_TEST(  2 );
+    PRIVATE_LOW_BITS_TEST(  1 );
 
-// List a range with out-of-service values
-typedef boost::mpl::range_c<int, -10, max_offset + 11>  wild_bit_lengths;
-
-// Use SFINAE to check if a particular parameter is supported
-template < typename ValueT, template<ValueT> class Tmpl, ValueT Value >
-bool
-print_out_template( Tmpl<Value> const &, ValueT setting, char const
- *template_name, typename Tmpl<Value>::type *unused = 0 )
-{
-    // Too bad the type-id expression couldn't use the compact form "*unused",
-    // but type-ids of dereferenced null pointers throw by order of C++ 2003,
-    // sect. 5.2.8, para. 2 (although the result is not conceptually needed).
-    BOOST_TEST_MESSAGE( "There is an " << template_name << "<" << setting <<
-     "> specialization with type '" << typeid(typename
-     Tmpl<Value>::value_type).name() << "' and value '" << std::hex <<
-     Tmpl<Value>::value << "'." );
-    return true;
+    return boost::exit_success;
 }
-
-template < typename ValueT, typename T >
-bool
-print_out_template( T const &, ValueT setting, char const *template_name )
-{
-    BOOST_TEST_MESSAGE( "There is no " << template_name << "<" << setting <<
-     "> specialization." );
-    return false;
-}
-
-}  // unnamed namespace
-
-
-// Check the various integer-valued bit-masks
-BOOST_AUTO_TEST_SUITE( integer_mask_tests )
-
-// Check the bit-masks of one offset bit
-BOOST_AUTO_TEST_CASE_TEMPLATE( high_bit_mask_test, T, high_bit_offsets )
-{
-    typedef boost::mpl::integral_c<typename
-     boost::high_bit_mask_t<T::value>::least, 1u>   one_type;
-    typedef boost::mpl::shift_left<one_type, T>  result_type;
-
-    BOOST_MPL_ASSERT_RELATION( boost::high_bit_mask_t<T::value>::high_bit, ==,
-     result_type::value );
-    BOOST_MPL_ASSERT_RELATION( boost::high_bit_mask_t<T::value>::high_bit_fast,
-     ==, result_type::value );
-}
-
-// Check the bit-masks of a block of low-valued bits, non-zero block-lengths
-BOOST_AUTO_TEST_CASE_TEMPLATE( low_bits_mask_test, T, special_low_bit_lengths )
-{
-    // One can express (2^x - 1) in two ways
-    // 1. (1 << x) - 1
-    // 2. (1 << (x-1)) | ((1 << (x-1)) - 1)
-    // Since unsigneds have modulo arithmetic, [1] gives the right answer even
-    // when x is the number of bits in the register.  However, that last case
-    // gives warnings about the sole bit flowing past the register.  Applying
-    // distributive property backwards gives [2], which works without overflow.
-    typedef typename boost::mpl::prior<T>::type                  shift_type;
-    typedef boost::mpl::integral_c<typename
-     boost::low_bits_mask_t<T::value>::least, 1u>                  one_type;
-    typedef boost::mpl::shift_left<one_type, shift_type>      high_bit_type;
-    typedef typename boost::mpl::prior<high_bit_type>::type   low_bits_type;
-    typedef boost::mpl::bitor_<high_bit_type, low_bits_type>    result_type;
-
-    BOOST_MPL_ASSERT_RELATION( boost::low_bits_mask_t<T::value>::sig_bits, ==,
-     result_type::value );
-    BOOST_MPL_ASSERT_RELATION( boost::low_bits_mask_t<T::value>::sig_bits_fast,
-     ==, result_type::value );
-}
-
-// Check the bit-masks of a block of low-valued bits, zero block-length
-BOOST_AUTO_TEST_CASE( special_low_bits_mask_test )
-{
-    // Just like "low_bits_mask_test" above, except that the shifts are negative
-    // when the bit-count is zero.  That causes a lot of warnings and errors, so
-    // special-case that bit-count.
-    BOOST_MPL_ASSERT_RELATION( boost::low_bits_mask_t<0u>::sig_bits, ==, 0 );
-    BOOST_MPL_ASSERT_RELATION(boost::low_bits_mask_t<0u>::sig_bits_fast, ==, 0);
-}
-
-// Check the specialization type status of given bit-offsets/lengths
-BOOST_AUTO_TEST_CASE_TEMPLATE( confirm_bounds_test, T, wild_bit_lengths )
-{
-    typedef boost::integer_hi_mask<T::value>                    hi_type;
-    typedef boost::mpl::int_<hi_type::bit_offset>        hi_offset_type;
-    typedef boost::mpl::bool_<hi_type::is_specialized>  special_hi_type;
-
-    BOOST_MPL_ASSERT( (boost::mpl::equal_to< hi_offset_type, T >) );
-    BOOST_MPL_ASSERT( (boost::mpl::equal_to< special_hi_type,
-     boost::mpl::bool_<(T::value >= 0) && (T::value < max_offset)> >) );
-    BOOST_CHECK_EQUAL( print_out_template(hi_type(), hi_offset_type::value,
-     "integer_hi_mask"), special_hi_type::value );
-
-    typedef boost::integer_lo_mask<T::value>                    lo_type;
-    typedef boost::mpl::int_<lo_type::bit_count>         lo_length_type;
-    typedef boost::mpl::bool_<lo_type::is_specialized>  special_lo_type;
-
-    BOOST_MPL_ASSERT( (boost::mpl::equal_to< lo_length_type, T >) );
-    BOOST_MPL_ASSERT( (boost::mpl::equal_to< special_lo_type,
-     boost::mpl::bool_<(T::value >= 0) && (T::value <= max_offset)> >) );
-    BOOST_CHECK_EQUAL( print_out_template(lo_type(), lo_length_type::value,
-     "integer_lo_mask"), special_lo_type::value );
-}
-
-BOOST_AUTO_TEST_SUITE_END()
-
-// Verification of bugs and their fixes
-BOOST_AUTO_TEST_SUITE( bug_fix_tests )
-
-BOOST_AUTO_TEST_SUITE_END()
