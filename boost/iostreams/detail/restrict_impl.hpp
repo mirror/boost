@@ -160,7 +160,7 @@ public:
         if (!open_)
             open(snk, BOOST_IOS::out);
         if (end_ != -1 && pos_ + n >= end_)
-            bad_write();
+            throw bad_write();
         std::streamsize result = 
             iostreams::write(this->component(), snk, s, n);
         pos_ += result;
@@ -181,11 +181,11 @@ public:
             // Restriction is half-open; seek relative to the actual end.
             pos_ = this->component().seek(dev, off, BOOST_IOS::end);
             if (pos_ < beg_)
-                bad_seek();
+                throw bad_seek();
             return offset_to_position(pos_ - beg_);
         }
         if (next < beg_ || (end_ != -1 && next >= end_))
-            bad_seek();
+            throw bad_seek();
         pos_ = this->component().seek(dev, next, BOOST_IOS::cur);
         return offset_to_position(pos_ - beg_);
     }
@@ -272,7 +272,7 @@ inline std::streamsize restricted_indirect_device<Device>::write
     (const char_type* s, std::streamsize n)
 {
     if (end_ != -1 && pos_ + n >= end_)
-        bad_write();
+        throw bad_write();
     std::streamsize result = iostreams::write(this->component(), s, n);
     pos_ += result;
     return result;
@@ -293,11 +293,11 @@ std::streampos restricted_indirect_device<Device>::seek
         // Restriction is half-open; seek relative to the actual end.
         pos_ = iostreams::seek(this->component(), off, BOOST_IOS::end);
         if (pos_ < beg_)
-            bad_seek();
+            throw bad_seek();
         return offset_to_position(pos_ - beg_);
     }
     if (next < beg_ || (end_ != -1 && next >= end_))
-        bad_seek();
+        throw bad_seek();
     pos_ = iostreams::seek(this->component(), next - pos_, BOOST_IOS::cur);
     return offset_to_position(pos_ - beg_);
 }

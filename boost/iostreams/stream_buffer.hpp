@@ -99,7 +99,7 @@ private:
     void open_impl(const T& t BOOST_IOSTREAMS_PUSH_PARAMS())
         {   // Used for forwarding.
             if (this->is_open())
-                BOOST_IOSTREAMS_FAILURE("already open");
+                throw BOOST_IOSTREAMS_FAILURE("already open");
             base_type::open(t BOOST_IOSTREAMS_PUSH_ARGS());
         }
 };
