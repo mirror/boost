@@ -119,6 +119,11 @@ struct core_access
     {
         what.set_base_(base);
     }
+
+    static BidiIter get_base(match_results<BidiIter> &what)
+    {
+        return *what.base_;
+    }
 };
 
 }}} // namespace boost::xpressive::detail
