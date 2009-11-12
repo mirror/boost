@@ -152,7 +152,7 @@ indirect_streambuf<T, Tr, Alloc, Mode>::indirect_streambuf()
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
 void indirect_streambuf<T, Tr, Alloc, Mode>::open
-    (const T& t, int buffer_size, int pback_size)
+    (const T& t, std::streamsize buffer_size, std::streamsize pback_size)
 {
     using namespace std;
 

@@ -56,7 +56,8 @@ private:
                 char_type, traits_type
             )                                             streambuf_type;
 public: // stream needs access.
-    void open(const T& t, int buffer_size, int pback_size);
+    void open(const T& t, std::streamsize buffer_size, 
+              std::streamsize pback_size);
     bool is_open() const;
     void close();
     bool auto_close() const { return auto_close_; }
@@ -112,7 +113,8 @@ direct_streambuf<T, Tr>::direct_streambuf()
 { this->set_true_eof(true); }
 
 template<typename T, typename Tr>
-void direct_streambuf<T, Tr>::open(const T& t, int, int)
+void direct_streambuf<T, Tr>::open
+    (const T& t, std::streamsize, std::streamsize)
 {
     storage_.reset(t);
     init_input(category());
