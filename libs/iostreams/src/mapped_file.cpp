@@ -380,9 +380,9 @@ void mapped_file_impl::cleanup_and_throw(const char* msg)
 {
 #ifdef BOOST_IOSTREAMS_WINDOWS
     DWORD error = GetLastError();
-    if (mapped_handle_ != INVALID_HANDLE_VALUE)
+    if (mapped_handle_ != NULL)
         ::CloseHandle(mapped_handle_);
-    if (handle_ != NULL)
+    if (handle_ != INVALID_HANDLE_VALUE)
         ::CloseHandle(handle_);
     SetLastError(error);
 #else
