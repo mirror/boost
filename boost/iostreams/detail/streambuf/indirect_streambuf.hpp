@@ -35,6 +35,7 @@
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
 // Must come last.
@@ -274,7 +275,7 @@ indirect_streambuf<T, Tr, Alloc, Mode>::pbackfail(int_type c)
             *gptr() = traits_type::to_char_type(c);
         return traits_type::not_eof(c);
     } else {
-        throw bad_putback();
+        boost::throw_exception(bad_putback());
     }
 }
 

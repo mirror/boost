@@ -14,6 +14,7 @@
 // than using it (possibly importing code).
 #define BOOST_IOSTREAMS_SOURCE 
 
+#include <boost/throw_exception.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/filter/bzip2.hpp> 
 #include "bzlib.h"  // Julian Seward's "bzip.h" header.
@@ -65,9 +66,9 @@ void bzip2_error::check(int error)
     case BZ_STREAM_END:
         return;
     case BZ_MEM_ERROR: 
-        throw std::bad_alloc();
+        boost::throw_exception(std::bad_alloc());
     default:
-        throw bzip2_error(error);
+        boost::throw_exception(bzip2_error(error));
     }
 }
 

@@ -25,6 +25,7 @@
 #include <boost/iostreams/positioning.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_same.hpp>
 
 // Must come last.
@@ -393,10 +394,10 @@ void mapped_file_source::open(const basic_mapped_file_params<Path>& p)
     param_type params(p);
     if (params.flags) {
         if (params.flags != mapped_file::readonly)
-            throw BOOST_IOSTREAMS_FAILURE("invalid flags");
+            boost::throw_exception(BOOST_IOSTREAMS_FAILURE("invalid flags"));
     } else {
         if (params.mode & BOOST_IOS::out)
-            throw BOOST_IOSTREAMS_FAILURE("invalid mode");
+            boost::throw_exception(BOOST_IOSTREAMS_FAILURE("invalid mode"));
         params.mode |= BOOST_IOS::in;
     }
     open_impl(params);
@@ -479,10 +480,10 @@ void mapped_file_sink::open(const basic_mapped_file_params<Path>& p)
     param_type params(p);
     if (params.flags) {
         if (params.flags & mapped_file::readonly)
-            throw BOOST_IOSTREAMS_FAILURE("invalid flags");
+            boost::throw_exception(BOOST_IOSTREAMS_FAILURE("invalid flags"));
     } else {
         if (params.mode & BOOST_IOS::in)
-            throw BOOST_IOSTREAMS_FAILURE("invalid mode");
+            boost::throw_exception(BOOST_IOSTREAMS_FAILURE("invalid mode"));
         params.mode |= BOOST_IOS::out;
     }
     mapped_file::open(params);

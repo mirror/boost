@@ -36,6 +36,7 @@
 #include <boost/next_prior.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type.hpp>
 #include <boost/iostreams/detail/execute.hpp>   // VC6.5 requires this
@@ -172,7 +173,7 @@ public:
     const std::type_info& component_type(int n) const
     {
         if (static_cast<size_type>(n) >= size())
-            throw std::out_of_range("bad chain offset");
+            boost::throw_exception(std::out_of_range("bad chain offset"));
         return (*boost::next(list().begin(), n))->component_type();
     }
 
@@ -196,7 +197,7 @@ public:
     T* component(int n, boost::type<T>) const
     {
         if (static_cast<size_type>(n) >= size())
-            throw std::out_of_range("bad chain offset");
+            boost::throw_exception(std::out_of_range("bad chain offset"));
         streambuf_type* link = *boost::next(list().begin(), n);
         if (BOOST_IOSTREAMS_COMPARE_TYPE_ID(link->component_type(), typeid(T)))
             return static_cast<T*>(link->component_impl());
@@ -238,7 +239,7 @@ private:
         typedef typename list_type::iterator              iterator;
         BOOST_STATIC_ASSERT((is_convertible<category, Mode>::value));
         if (is_complete())
-            throw std::logic_error("chain complete");
+            boost::throw_exception(std::logic_error("chain complete"));
         streambuf_type* prev = !empty() ? list().back() : 0;
         buffer_size =
             buffer_size != -1 ?
