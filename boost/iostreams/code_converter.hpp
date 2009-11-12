@@ -153,7 +153,8 @@ struct code_converter_impl {
         } catch (...) { /* */ } 
     }
 
-    void open(const Device& dev, int buffer_size)
+    template <class T>
+    void open(const T& dev, int buffer_size)
     {
         if (flags_ & f_open)
             boost::throw_exception(BOOST_IOSTREAMS_FAILURE("already open"));
