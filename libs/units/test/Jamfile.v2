@@ -22,6 +22,8 @@ project boost/units/test :
         $(warning-compilers):$(warning-options)
         # This warning comes from the test library.
         <toolset>msvc:<cxxflags>"/wd4701"
+        # The comes from the exception library
+        <toolset>msvc,<toolset-msvc:version>7.1:<cxxflags>"/wd4800"
 ;
 
 alias test_framework : /boost//unit_test_framework/<warnings-as-errors>off ;
