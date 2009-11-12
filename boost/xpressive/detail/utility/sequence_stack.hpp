@@ -35,12 +35,11 @@ private:
     static T *allocate(std::size_t size, T const &t)
     {
         std::size_t i = 0;
-        T *p = (T *)std::malloc(size * sizeof(T));
-        if(!p) throw std::bad_alloc();
+        T *p = (T *)::operator new(size * sizeof(T));
         try
         {
             for(; i < size; ++i)
-                new((void *)(p+i)) T(t);
+                ::new((void *)(p+i)) T(t);
         }
         catch(...)
         {
@@ -54,7 +53,7 @@ private:
     {
         while(i-- > 0)
             (p+i)->~T();
-        std::free(p);
+        ::operator delete(p);
     }
 
     struct chunk

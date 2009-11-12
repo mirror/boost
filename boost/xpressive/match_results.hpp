@@ -493,11 +493,11 @@ public:
 
     /// Returns a reference to the sub_match object representing the character sequence from
     /// the start of the string being matched/searched, to the start of the match found.
-	///
+    ///
     /// \pre (*this)[0].matched is true
     const_reference prefix() const
     {
-		return this->prefix_ ? *this->prefix_ : this->sub_matches_[this->sub_matches_.size()];
+        return this->prefix_ ? *this->prefix_ : this->sub_matches_[this->sub_matches_.size()];
     }
 
     /// Returns a reference to the sub_match object representing the character sequence from
@@ -506,7 +506,7 @@ public:
     /// \pre (*this)[0].matched is true
     const_reference suffix() const
     {
-		return this->suffix_ ? *this->suffix_ : this->sub_matches_[this->sub_matches_.size()];
+        return this->suffix_ ? *this->suffix_ : this->sub_matches_[this->sub_matches_.size()];
     }
 
     /// Returns a starting iterator that enumerates over all the marked sub-expression matches
@@ -1332,9 +1332,9 @@ private:
 
     regex_id_type regex_id_;
     detail::sub_match_vector<BidiIter> sub_matches_;
-	boost::optional<BidiIter> base_;
-	boost::optional<sub_match<BidiIter> > prefix_;
-	boost::optional<sub_match<BidiIter> > suffix_;
+    boost::optional<BidiIter> base_;
+    boost::optional<sub_match<BidiIter> > prefix_;
+    boost::optional<sub_match<BidiIter> > suffix_;
     nested_results_type nested_results_;
     intrusive_ptr<extras_type> extras_ptr_;
     intrusive_ptr<detail::traits<char_type> const> traits_;
