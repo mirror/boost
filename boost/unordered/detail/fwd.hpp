@@ -179,6 +179,8 @@ namespace boost { namespace unordered_detail {
         value_type& value() {
             return *(ValueType*) this;
         }
+    private:
+        value_base& operator=(value_base const&);
     };
 
     // Node
@@ -195,6 +197,8 @@ namespace boost { namespace unordered_detail {
         static value_type& get_value(node_ptr p) {
             return static_cast<hash_node&>(*p).value();
         }
+    private:
+        hash_node& operator=(hash_node const&);
     };
 
     // Iterator Base
