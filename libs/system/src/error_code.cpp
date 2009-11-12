@@ -193,7 +193,7 @@ namespace
     case EIO: return make_error_condition( io_error );
     case EISCONN: return make_error_condition( already_connected );
     case EISDIR: return make_error_condition( is_a_directory );
-    case ELOOP: return make_error_condition( too_many_synbolic_link_levels );
+    case ELOOP: return make_error_condition( too_many_symbolic_link_levels );
     case EMFILE: return make_error_condition( too_many_files_open );
     case EMLINK: return make_error_condition( too_many_links );
     case EMSGSIZE: return make_error_condition( message_size );
