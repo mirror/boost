@@ -20,6 +20,7 @@
 #include <memory>            // allocator, bad_alloc.
 #include <new>          
 #include <boost/config.hpp>  // MSVC, STATIC_CONSTANT, DEDUCED_TYPENAME, DINKUM.
+#include <boost/cstdint.hpp> // uint*_t
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/constants.hpp>   // buffer size.
 #include <boost/iostreams/detail/config/auto_link.hpp>
@@ -43,9 +44,9 @@ namespace boost { namespace iostreams {
 namespace zlib {
                     // Typedefs
 
-typedef unsigned int uint;
-typedef unsigned char byte;
-typedef unsigned long ulong;
+typedef uint32_t uint;
+typedef uint8_t byte;
+typedef uint32_t ulong;
 
 // Prefix 'x' prevents symbols from being redefined when Z_PREFIX is defined
 typedef void* (*xalloc_func)(void*, zlib::uint, zlib::uint);
