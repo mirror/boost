@@ -393,10 +393,10 @@ void mapped_file_source::open(const basic_mapped_file_params<Path>& p)
     param_type params(p);
     if (params.flags) {
         if (params.flags != mapped_file::readonly)
-            throw new BOOST_IOSTREAMS_FAILURE("invalid flags");
+            throw BOOST_IOSTREAMS_FAILURE("invalid flags");
     } else {
         if (params.mode & BOOST_IOS::out)
-            throw new BOOST_IOSTREAMS_FAILURE("invalid mode");
+            throw BOOST_IOSTREAMS_FAILURE("invalid mode");
         params.mode |= BOOST_IOS::in;
     }
     open_impl(params);
@@ -479,10 +479,10 @@ void mapped_file_sink::open(const basic_mapped_file_params<Path>& p)
     param_type params(p);
     if (params.flags) {
         if (params.flags & mapped_file::readonly)
-            throw new BOOST_IOSTREAMS_FAILURE("invalid flags");
+            throw BOOST_IOSTREAMS_FAILURE("invalid flags");
     } else {
         if (params.mode & BOOST_IOS::in)
-            throw new BOOST_IOSTREAMS_FAILURE("invalid mode");
+            throw BOOST_IOSTREAMS_FAILURE("invalid mode");
         params.mode |= BOOST_IOS::out;
     }
     mapped_file::open(params);
