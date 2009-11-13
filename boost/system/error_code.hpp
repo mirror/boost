@@ -129,7 +129,7 @@ namespace boost
         too_many_files_open_in_system = ENFILE,
         too_many_files_open = EMFILE,
         too_many_links = EMLINK,
-        too_many_synbolic_link_levels = ELOOP,
+        too_many_symbolic_link_levels = ELOOP,
         value_too_large = EOVERFLOW,
         wrong_protocol_type = EPROTOTYPE
       };
