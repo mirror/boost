@@ -11,6 +11,11 @@
 #  provided the above notices are retained, and a notice that the code was
 #  modified is included with the above copyright notice.
 #
+project
+    : requirements
+        #<dependency>/boost/test//minimal
+        <toolset>msvc:<asynch-exceptions>on
+    ;
     
 test-suite variant
      : 
@@ -28,3 +33,5 @@ test-suite variant
     [ run variant_comparison_test.cpp ]
     [ run variant_visit_test.cpp ]
    ; 
+
+

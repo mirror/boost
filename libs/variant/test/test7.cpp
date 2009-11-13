@@ -197,6 +197,9 @@ public:
 
    ValueType& expected_;
 
+private:
+   compare_helper& operator=(const compare_helper&);
+
 };
 
 template<typename VariantType, typename ExpectedType>

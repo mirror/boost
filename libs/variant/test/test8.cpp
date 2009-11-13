@@ -63,6 +63,7 @@ void check_fail(Variant& v)
     try
     {
         T& r = get<T>(v);
+        (void)r; // suppress warning about r not being used
         BOOST_CHECK(false && &r); // should never reach
     }
     catch(boost::bad_get&)
@@ -110,3 +111,4 @@ int test_main(int , char* [])
 
    return boost::exit_success;
 }
+
