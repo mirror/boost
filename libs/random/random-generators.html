@@ -495,13 +495,20 @@ explicit linear_congruential(IntType x0 = 1)
 </pre>
 
   <p><strong>Effects:</strong> Constructs a <code>linear_congruential</code>
-  generator with x(0) := <code>x0</code>.</p>
+  generator, seeding it with <code>x0</code>.</p>
+
   <pre>
 void seed(IntType x0)
 </pre>
 
-  <p><strong>Effects:</strong> Changes the current value x(n) of the
-  generator to <code>x0</code>.</p>
+
+  <p><strong>Effects:</strong> If <code>c</code> mod <code>m</code> is zero
+  and <code>x0</code> mod <code>m</code> is zero, changes the current value of
+  the generator to 1.  Otherwise, changes it to <code>x0</code> mod
+  <code>m</code>.  If <code>c</code> is zero, distinct seeds in the range
+  [1,m) will leave the generator in distinct states.  If <code>c</code>
+  is not zero, the range is [0,m).
+  </p>
 
   <h3><a name="minstd_rand" id="minstd_rand">Specializations</a></h3>
 
@@ -605,8 +612,13 @@ public:
   static const result_type min_value = 1;
   static const result_type max_value = MLCG1::max_value-1;
   additive_combine();
+  additive_combine(typename MLCG1::result_type seed);
   additive_combine(typename MLCG1::result_type seed1, 
                    typename MLCG2::result_type seed2);
+  void seed();
+  void seed(typename MLCG1::result_type seed);
+  void seed(typename MLCG1::result_type seed1, 
+            typename MLCG2::result_type seed2);
   result_type operator()();
   bool validation(result_type x) const;
 };
@@ -645,6 +657,15 @@ additive_combine()
 
   <p><strong>Effects:</strong> Constructs an <code>additive_combine</code>
   generator using the default constructors of the two base generators.</p>
+
+  <pre>
+additive_combine(typename MLCG1::result_type seed)
+</pre>
+
+  <p><strong>Effects:</strong> Constructs an <code>additive_combine</code>
+  generator, using <code>seed</code> as the constructor argument for
+  both base generators.</p>
+
   <pre>
 additive_combine(typename MLCG1::result_type seed1, 
                  typename MLCG2::result_type seed2)
@@ -654,6 +675,30 @@ additive_combine(typename MLCG1::result_type seed1,
   generator, using <code>seed1</code> and <code>seed2</code> as the
   constructor argument to the first and second base generator,
   respectively.</p>
+
+  <pre>
+void seed()
+</pre>
+
+  <p><strong>Effects:</strong> Seeds an <code>additive_combine</code>
+  generator using the default seeds of the two base generators.</p>
+
+  <pre>
+void seed(typename MLCG1::result_type seed)
+</pre>
+
+  <p><strong>Effects:</strong> Seeds an <code>additive_combine</code>
+  generator, using <code>seed</code> as the seed for both base
+  generators.</p>
+
+  <pre>
+void seed(typename MLCG1::result_type seed1, 
+          typename MLCG2::result_type seed2)
+</pre>
+
+  <p><strong>Effects:</strong> Seeds an <code>additive_combine</code>
+  generator, using <code>seed1</code> and <code>seed2</code> as the
+  seeds to the first and second base generator, respectively.</p>
 
   <h3><a name="ecuyer1988" id="ecuyer1988">Specialization</a></h3>
 
@@ -997,7 +1042,7 @@ typedef random::lagged_fibonacci_01&lt;double, 48, 44497, 21034&gt; lagged_fibon
 
   <h3>Description</h3>
 
-  <p>Instantiations of class template <code>lagged_fibonacci</code> model a
+  <p>Instantiations of class template <code>lagged_fibonacci_01</code> model a
   <a href="random-concepts.html#pseudo-rng">pseudo-random number
   generator</a>. It uses a lagged Fibonacci algorithm with two lags p and q,
   evaluated in floating-point arithmetic: x(i) = x(i-p) + x(i-q) (mod 1) with
@@ -1050,7 +1095,10 @@ void seed(uint32_t value)
 
   <p><strong>Effects:</strong> Constructs a <code>minstd_rand0</code>
   generator with the constructor parameter <code>value</code> and calls
-  <code>seed</code> with it.</p>
+  <code>seed</code> with it.  Distinct seeds in the range [1, 2147483647)
+  will produce generators with different states.  Other seeds will be
+  equivalent to some seed within this range.  See
+  <a href="#linear_congruential">linear_congruential</a> for details.</p>
   <pre>
 template&lt;class Generator&gt; void seed(Generator &amp; gen)
 </pre>

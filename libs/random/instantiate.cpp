@@ -133,53 +133,63 @@ void instantiate_real_dist(URNG& urng, RealType /* ignored */)
                    boost::gamma_distribution<RealType>(1));
 }
 
-template<class URNG, class T>
-void test_seed(URNG & urng, const T & t) {
-    URNG urng2(t);
-    BOOST_CHECK(urng == urng2);
-    urng2.seed(t);
-    BOOST_CHECK(urng == urng2);
+template<class URNG, class T, class Converted>
+void test_seed_conversion(URNG & urng, const T & t, const Converted &) {
+    Converted c = static_cast<Converted>(t);
+    if(static_cast<T>(c) == t) {
+        URNG urng2(c);
+        BOOST_CHECK_MESSAGE(urng == urng2, std::string("Testing seed constructor: ") + typeid(Converted).name());
+        urng2.seed(c);
+        BOOST_CHECK(urng == urng2);
+    }
 }
 
 // rand48 uses non-standard seeding
-template<class T>
-void test_seed(boost::rand48 & urng, const T & t) {
+template<class T, class Converted>
+void test_seed_conversion(boost::rand48 & urng, const T & t, const Converted &) {
     boost::rand48 urng2(t);
     urng2.seed(t);
 }
 
 template<class URNG, class ResultType>
-void instantiate_seed(const URNG &, const ResultType &) {
+void test_seed(const URNG &, const ResultType & v) {
+    typename URNG::result_type value = static_cast<typename URNG::result_type>(v);
+
+    URNG urng(value);
+
+    // integral types
+    test_seed_conversion(urng, value, static_cast<char>(0));
+    test_seed_conversion(urng, value, static_cast<signed char>(0));
+    test_seed_conversion(urng, value, static_cast<unsigned char>(0));
+    test_seed_conversion(urng, value, static_cast<short>(0));
+    test_seed_conversion(urng, value, static_cast<unsigned short>(0));
+    test_seed_conversion(urng, value, static_cast<int>(0));
+    test_seed_conversion(urng, value, static_cast<unsigned int>(0));
+    test_seed_conversion(urng, value, static_cast<long>(0));
+    test_seed_conversion(urng, value, static_cast<unsigned long>(0));
+#if !defined(BOOST_NO_INT64_T)
+    test_seed_conversion(urng, value, static_cast<boost::int64_t>(0));
+    test_seed_conversion(urng, value, static_cast<boost::uint64_t>(0));
+#endif
+
+    // floating point types
+    test_seed_conversion(urng, value, static_cast<float>(0));
+    test_seed_conversion(urng, value, static_cast<double>(0));
+    test_seed_conversion(urng, value, static_cast<long double>(0));
+}
+
+template<class URNG, class ResultType>
+void instantiate_seed(const URNG & urng, const ResultType &) {
     {
         URNG urng;
         URNG urng2;
         urng2.seed();
         BOOST_CHECK(urng == urng2);
     }
-    {
-        int value = 127;
-        URNG urng(value);
-
-        // integral types
-        test_seed(urng, static_cast<char>(value));
-        test_seed(urng, static_cast<signed char>(value));
-        test_seed(urng, static_cast<unsigned char>(value));
-        test_seed(urng, static_cast<short>(value));
-        test_seed(urng, static_cast<unsigned short>(value));
-        test_seed(urng, static_cast<int>(value));
-        test_seed(urng, static_cast<unsigned int>(value));
-        test_seed(urng, static_cast<long>(value));
-        test_seed(urng, static_cast<unsigned long>(value));
-#if !defined(BOOST_NO_INT64_T)
-        test_seed(urng, static_cast<boost::int64_t>(value));
-        test_seed(urng, static_cast<boost::uint64_t>(value));
-#endif
-
-        // floating point types
-        test_seed(urng, static_cast<float>(value));
-        test_seed(urng, static_cast<double>(value));
-        test_seed(urng, static_cast<long double>(value));
-    }
+    test_seed(urng, 0);
+    test_seed(urng, 127);
+    test_seed(urng, 539157235);
+    test_seed(urng, ~0u);
 }
 
 template<class URNG, class ResultType>
