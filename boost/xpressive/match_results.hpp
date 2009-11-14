@@ -653,11 +653,12 @@ public:
     /// \throw nothrow
     void swap(match_results<BidiIter> &that) // throw()
     {
-        std::swap(this->regex_id_, that.regex_id_);
+        using std::swap;
+        swap(this->regex_id_, that.regex_id_);
         this->sub_matches_.swap(that.sub_matches_);
-        std::swap(this->base_, that.base_);
-        std::swap(this->prefix_, that.prefix_);
-        std::swap(this->suffix_, that.suffix_);
+        this->base_.swap(that.base_);
+        this->prefix_.swap(that.prefix_);
+        this->suffix_.swap(that.suffix_);
         this->nested_results_.swap(that.nested_results_);
         this->extras_ptr_.swap(that.extras_ptr_);
         this->traits_.swap(that.traits_);
