@@ -68,6 +68,19 @@ namespace boost {
             { return io::detail::feed<CharT, Tr, Alloc, T&>(*this,x); }
 #endif
 
+#ifdef __GNUC__
+        // GCC can't handle anonymous enums without some help
+        // ** arguments passing ** //
+        basic_format&   operator%(const int& x)
+            { return io::detail::feed<CharT, Tr, Alloc, const int&>(*this,x); }
+
+#ifndef BOOST_NO_OVERLOAD_FOR_NON_CONST
+        basic_format&   operator%(int& x)
+            { return io::detail::feed<CharT, Tr, Alloc, int&>(*this,x); }
+#endif
+#endif
+
+
         // ** object modifying **//
         template<class T>
         basic_format&  bind_arg(int argN, const T& val) 
