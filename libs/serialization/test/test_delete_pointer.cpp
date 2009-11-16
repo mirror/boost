@@ -87,7 +87,7 @@ test_main( int /* argc */, char* /* argv */[] )
         vec.push_back(a);
     }
 
-    const char * testfile = boost::archive::tmpnam(0);
+    const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
     //output the vector

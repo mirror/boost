@@ -36,7 +36,7 @@
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
-				WarningLevel="4"
+				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"
 				CompileAs="0"/>
@@ -662,9 +662,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\codecvt_null.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\serialization\collection_size_type.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\config.hpp">

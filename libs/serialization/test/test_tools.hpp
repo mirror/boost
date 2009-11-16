@@ -17,7 +17,6 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cstdio> // remove, tmpnam
-#include <cstddef> // size_t
 #ifndef BOOST_NO_EXCEPTION_STD_NAMESPACE
     #include <exception>
 #endif
@@ -75,7 +74,7 @@ namespace boost {
 namespace archive {
     const char * test_filename(const char * dir = NULL, char *fname = NULL){
         static char ibuffer [512];
-        std::size_t i;
+        int i;
         ibuffer[0] = '\0';
         if(NULL == dir){
             dir = boost::archive::tmpdir();

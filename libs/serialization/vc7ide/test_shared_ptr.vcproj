@@ -18,7 +18,6 @@
 			ConfigurationType="1">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/wd4512 /wd4511"
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
@@ -30,7 +29,7 @@
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
-				WarningLevel="4"
+				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="1"
 				CompileAs="0"/>

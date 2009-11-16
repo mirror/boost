@@ -86,8 +86,8 @@ public:
 };
 
 B::B() :
-    s(static_cast<signed char>(std::rand())),
-    t(static_cast<unsigned char>(std::rand())),
+    s(std::rand()),
+    t(std::rand()),
     u(std::rand()),
     v(std::rand()),
     w((float)std::rand() / std::rand()),

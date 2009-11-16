@@ -24,7 +24,7 @@ class V {
     {}
     ~V(){}
     template<class Archive>
-    void serialize(Archive& ar, unsigned /*version*/)
+    void serialize(Archive& ar, unsigned version)
     {
         ar & m_i;
     }

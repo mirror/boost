@@ -8,7 +8,7 @@
 
 // should pass compilation and execution
 
-#include <cstdlib> // for rand(), NULL, size_t
+#include <cstdlib> // for rand(), NULL
 
 #include <fstream>
 #include <boost/config.hpp>
@@ -48,7 +48,7 @@ public:
 A::A(){
     int i = sizeof(data);
     while(i-- > 0)
-        data[i] = static_cast<char>(0xff & std::rand());
+        data[i] = 0xff & std::rand();
 }
 
 bool A::operator==(const A & rhs) const {

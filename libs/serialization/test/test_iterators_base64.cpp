@@ -42,7 +42,7 @@ void test_base64(){
     std::size_t size = sizeof(rawdata) / sizeof(CharType);
     CharType * rptr;
     for(rptr = rawdata + size; rptr-- > rawdata;)
-        *rptr = static_cast<CharType>(std::rand());
+        *rptr = std::rand();
 
     // convert to base64
     typedef std::list<CharType> text_base64_type;
@@ -90,7 +90,7 @@ void test_base64(){
 }
 
 int
-test_main( int /*argc*/, char* /*argv*/[] )
+test_main( int argc, char* argv[] )
 {
     test_base64<char>();
     #ifndef BOOST_NO_CWCHAR
