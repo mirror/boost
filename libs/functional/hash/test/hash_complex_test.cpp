@@ -80,13 +80,17 @@ void complex_integral_tests(Integer*)
 
 int main()
 {
+    // I've comments out the short and unsigned short tests
+    // as they cause warnings and don't really test
+    // anything that the other tests already deal with.
+
     complex_float_tests((float*) 0);
     complex_float_tests((double*) 0);
     complex_float_tests((long double*) 0);
-    complex_integral_tests((short*) 0);
+    //complex_integral_tests((short*) 0);
     complex_integral_tests((int*) 0);
     complex_integral_tests((long*) 0);
-    complex_integral_tests((unsigned short*) 0);
+    //complex_integral_tests((unsigned short*) 0);
     complex_integral_tests((unsigned int*) 0);
     complex_integral_tests((unsigned long*) 0);
 
