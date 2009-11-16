@@ -86,8 +86,8 @@ public:
     if(increment == 0 && _x == 0) {
       _x = 1;
     }
-    assert(_x >= min());
-    assert(_x <= max());
+    assert(_x >= (min)());
+    assert(_x <= (max)());
   }
 
   template<class It>
