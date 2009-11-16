@@ -168,7 +168,7 @@ void indirect_streambuf<T, Tr, Alloc, Mode>::open
 
     // Construct input buffer.
     if (can_read()) {
-        pback_size_ = (std::max)(2, pback_size); // STLPort needs 2.
+        pback_size_ = (std::max)(std::streamsize(2), pback_size); // STLPort needs 2.
         std::streamsize size =
             pback_size_ +
             ( buffer_size ? buffer_size: 1 );
