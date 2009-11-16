@@ -74,9 +74,7 @@ namespace boost { namespace unordered_detail {
 
 #if defined(BOOST_MSVC)
 #pragma warning(push)
-#if BOOST_MSVC >= 1400
 #pragma warning(disable:4100) // unreferenced formal parameter
-#endif
 #endif
 
     template <class T>
