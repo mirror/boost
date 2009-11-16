@@ -21,20 +21,11 @@ namespace boost {
 namespace archive {
 namespace detail {
 
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable : 4511 4512)
-#endif
-
 namespace { // anon
     template<class Archive>
     class map : public basic_serializer_map 
     {};
 }
-
-#ifdef BOOST_MSVC
-#  pragma warning(pop)
-#endif
 
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(bool)

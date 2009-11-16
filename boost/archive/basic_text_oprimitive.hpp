@@ -29,7 +29,6 @@
 #include <boost/config/no_tr1/cmath.hpp> // isnan
 #include <cassert>
 #include <cstddef> // size_t
-#include <boost/serialization/collection_size_type.hpp>
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
@@ -137,22 +136,6 @@ public:
         os << static_cast<int>(t);
     }
     #endif
-    void save(const std::size_t t)
-    {
-        if(os.fail())
-            boost::serialization::throw_exception(
-                archive_exception(archive_exception::stream_error)
-            );
-        os << static_cast<std::streamsize>(t);
-    }
-    void save(const boost::serialization::collection_size_type t)
-    {
-        if(os.fail())
-            boost::serialization::throw_exception(
-                archive_exception(archive_exception::stream_error)
-            );
-        os << static_cast<std::streamsize>(t);
-    }
     void save(const float t)
     {
         // must be a user mistake - can't serialize un-initialized data
@@ -179,7 +162,7 @@ public:
     ~basic_text_oprimitive();
 public:
     // unformatted append of one character
-    void put(BOOST_DEDUCED_TYPENAME OStream::char_type c){
+    void put(int c){
         if(os.fail())
             boost::serialization::throw_exception(
                 archive_exception(archive_exception::stream_error)

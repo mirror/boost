@@ -27,6 +27,7 @@ namespace std{
 } // namespace std
 #endif
 
+#include <boost/noncopyable.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/archive/polymorphic_iarchive.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
@@ -41,17 +42,13 @@ namespace detail{
 class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_iserializer;
 class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_iserializer;
 
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable : 4511 4512)
-#endif
-
 template<class ArchiveImplementation>
 class polymorphic_iarchive_route :
     public polymorphic_iarchive,
     // note: gcc dynamic cross cast fails if the the derivation below is
     // not public.  I think this is a mistake.
-    public /*protected*/ ArchiveImplementation
+    public /*protected*/ ArchiveImplementation,
+    private boost::noncopyable
 {
 private:
     // these are used by the serialization library.
@@ -190,10 +187,6 @@ public:
 } // namespace detail
 } // namespace archive
 } // namespace boost
-
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 

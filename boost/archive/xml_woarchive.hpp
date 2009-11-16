@@ -37,11 +37,6 @@ namespace std{
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable : 4511 4512)
-#endif
-
 namespace boost {
 namespace archive {
 
@@ -128,10 +123,6 @@ typedef xml_woarchive naked_xml_woarchive;
 
 // required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::xml_woarchive)
-
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 

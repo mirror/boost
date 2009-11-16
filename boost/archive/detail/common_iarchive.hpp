@@ -16,18 +16,11 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <boost/config.hpp>
-
 #include <boost/archive/detail/basic_iarchive.hpp>
 #include <boost/archive/detail/basic_pointer_iserializer.hpp>
 #include <boost/archive/detail/interface_iarchive.hpp>
 #include <boost/archive/detail/archive_serializer_map.hpp>
 #include <boost/serialization/singleton.hpp>
-
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable : 4511 4512)
-#endif
 
 namespace boost {
 namespace archive {
@@ -88,10 +81,6 @@ public:
 } // namespace detail
 } // namespace archive
 } // namespace boost
-
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
 
 #endif // BOOST_ARCHIVE_DETAIL_COMMON_IARCHIVE_HPP
 

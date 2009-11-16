@@ -16,10 +16,8 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <cstddef> // NULL
 #include <boost/config.hpp>
-#include <boost/noncopyable.hpp>
-
+#include <cstddef> // NULL
 #include <boost/type_traits/broken_compiler_spec.hpp>
 
 // can't use this - much as I'd like to as borland doesn't support it
@@ -43,8 +41,7 @@ class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oserializer;
 class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_oserializer;
 //////////////////////////////////////////////////////////////////////
 // class basic_oarchive - write serialized objects to an output stream
-class BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oarchive :
-    private boost::noncopyable
+class BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oarchive
 {
     friend class basic_oarchive_impl;
     // hide implementation of this class to minimize header conclusion

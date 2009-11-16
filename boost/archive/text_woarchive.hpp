@@ -38,11 +38,6 @@ namespace std{
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable : 4511 4512)
-#endif
-
 namespace boost { 
 namespace archive {
 
@@ -88,7 +83,7 @@ protected:
     }
 public:
     void save_binary(const void *address, std::size_t count){
-        put(static_cast<wchar_t>('\n'));
+        put(L'\n');
         this->end_preamble();
         #if ! defined(__MWERKS__)
         this->basic_text_oprimitive<std::wostream>::save_binary(
@@ -98,7 +93,7 @@ public:
             address, 
             count
         );
-        put(static_cast<wchar_t>('\n'));
+        put(L'\n');
         this->delimiter = this->none;
     }
 
@@ -127,10 +122,6 @@ typedef text_woarchive naked_text_woarchive;
 
 // required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::text_woarchive)
-
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 

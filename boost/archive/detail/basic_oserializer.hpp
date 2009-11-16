@@ -18,19 +18,14 @@
 
 #include <cstddef> // NULL
 #include <boost/config.hpp>
-#include <boost/noncopyable.hpp>
 
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/detail/basic_serializer.hpp>
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable : 4511 4512)
-#endif
-
 namespace boost {
+
 namespace serialization {
     class extended_type_info;
 } // namespace serialization
@@ -82,10 +77,6 @@ public:
 } // namespace detail
 } // namespace serialization
 } // namespace boost
-
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 

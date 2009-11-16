@@ -20,8 +20,6 @@
 // #include <boost/scoped_ptr.hpp>
 
 #include <boost/config.hpp>
-#include <boost/noncopyable.hpp>
-
 #include <boost/type_traits/broken_compiler_spec.hpp>
 #include <boost/serialization/tracking_enum.hpp>
 #include <boost/archive/basic_archive.hpp>
@@ -41,8 +39,7 @@ class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_iserializer;
 class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_iserializer;
 //////////////////////////////////////////////////////////////////////
 // class basic_iarchive - read serialized objects from a input stream
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_iarchive :
-    private boost::noncopyable
+class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_iarchive 
 {
     friend class basic_iarchive_impl;
     // hide implementation of this class to minimize header conclusion

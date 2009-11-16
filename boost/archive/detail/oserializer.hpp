@@ -91,11 +91,6 @@ public:
 
 namespace detail {
 
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable : 4511 4512)
-#endif
-
 template<class Archive, class T>
 class oserializer : public basic_oserializer
 {
@@ -133,10 +128,6 @@ public:
     virtual ~oserializer(){}
 };
 
-#ifdef BOOST_MSVC
-#  pragma warning(pop)
-#endif
-
 template<class Archive, class T>
 BOOST_DLLEXPORT void oserializer<Archive, T>::save_object_data(
     basic_oarchive & ar,    
@@ -151,11 +142,6 @@ BOOST_DLLEXPORT void oserializer<Archive, T>::save_object_data(
         version()
     );
 }
-
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable : 4511 4512)
-#endif
 
 template<class Archive, class T>
 class pointer_oserializer :
@@ -176,10 +162,6 @@ public:
     pointer_oserializer();
     ~pointer_oserializer();
 };
-
-#ifdef BOOST_MSVC
-#  pragma warning(pop)
-#endif
 
 template<class Archive, class T>
 BOOST_DLLEXPORT void pointer_oserializer<Archive, T>::save_object_ptr(
@@ -306,13 +288,13 @@ struct save_non_pointer_type {
             > > >::type typex; 
         check_object_versioning<T>();
         typex::invoke(ar, t);
-    }
+    };
     template<class T>
     static void invoke(Archive & ar, T & t){
         check_object_level<T>();
         check_object_tracking<T>();
         invoke(ar, const_cast<const T &>(t));
-    }
+    };
 };
 
 template<class Archive>
@@ -471,7 +453,7 @@ struct save_pointer_type {
             return;
         }
         save(ar, * t);
-    }
+    };
 };
 
 template<class Archive>

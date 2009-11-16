@@ -35,13 +35,6 @@
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/collection_size_type.hpp>
 
-#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
-
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable : 4511 4512)
-#endif
-
 namespace boost {
 namespace archive {
 
@@ -93,7 +86,7 @@ public:
     void save_override(const class_id_reference_type & t, int){
         // upto 32K classes
         assert(t.t <= boost::integer_traits<boost::int_least16_t>::const_max);
-        const boost::int_least16_t x = t.t;
+        const boost::uint_least16_t x = t.t;
         * this->This() << x;
     }
     void save_override(const object_id_type & t, int){
@@ -135,11 +128,5 @@ public:
 
 } // namespace archive
 } // namespace boost
-
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-
-#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_ARCHIVE_BASIC_BINARY_OARCHIVE_HPP
