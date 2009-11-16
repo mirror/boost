@@ -30,7 +30,7 @@ namespace std{
 class ANew : public A {
     friend class boost::serialization::access;
     template<class Archive>
-    void serialize(Archive & ar, const unsigned file_version){
+    void serialize(Archive & ar, const unsigned /*file_version*/){
         ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(A);
     }
 public:
@@ -43,7 +43,7 @@ public:
         ++m_new_calls;
         return  ::operator new(s);
     }
-    static void operator delete(void *p, std::size_t s){
+    static void operator delete(void *p, std::size_t /*s*/){
         ++m_delete_calls;
         ::operator delete(p);
     }

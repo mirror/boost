@@ -60,8 +60,10 @@ void load(const char *testfile)
     test_istream is(testfile, TEST_STREAM_FLAGS);
     test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
 
-    polymorphic_base *rb1 = (polymorphic_base *)0xfffffff;
-    polymorphic_derived1 *rd1 = (polymorphic_derived1 *)0xffffffff;
+    polymorphic_derived1 dummy;
+
+    polymorphic_base *rb1 = & dummy;
+    polymorphic_derived1 *rd1 = & dummy;
 
     ia >> BOOST_SERIALIZATION_NVP(rb1);
     BOOST_CHECK_MESSAGE(NULL == rb1, "Null pointer not restored");

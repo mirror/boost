@@ -74,6 +74,11 @@ A::operator std::size_t () const {
     return retval;
 }
 
+#if defined(_MSC_VER)
+#pragma warning(push) // Save warning settings.
+#pragma warning(disable : 4244) // Disable possible loss of data warning
+
+#endif 
 A::A() :
     b(true),
     #ifndef BOOST_NO_INT64_T
@@ -90,8 +95,8 @@ A::A() :
     r(std::rand()),
     #endif
     c(0xff & std::rand()),
-    s(std::rand()),
-    t(std::rand()),
+    s(0xff & std::rand()),
+    t(0xff & std::rand()),
     u(std::rand()),
     v(std::rand()),
     w((float)std::rand()),
@@ -102,6 +107,10 @@ A::A() :
     randomize(z);
     #endif
 }
+
+#if defined(_MSC_VER)
+#pragma warning(pop) // Restore warnings to previous state.
+#endif 
 
 bool A::operator==(const A &rhs) const
 {

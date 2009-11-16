@@ -25,10 +25,19 @@ class Base2
     int b;
 };
 
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4511 4512)
+#endif
+
 class Derived : public Base1, public Base2
 {
     long c;
 };
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(Base1)
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(Base2)
@@ -112,7 +121,6 @@ void test_static_pointer_cast(){
     );
 }
 
-
 class VBase1 : public boost::noncopyable
 {
     char a;
@@ -127,12 +135,21 @@ public:
     virtual ~VBase2(){};
 };
 
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4511 4512)
+#endif
+
 class VDerived : public VBase1, public VBase2
 {
     long c;
 public:
     virtual ~VDerived(){};
 };
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(VBase1)
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(VBase2)

@@ -63,7 +63,7 @@ class B {
     friend class boost::serialization::access;
     int m_i;
     template<class Archive>
-    void serialize(Archive &ar, const unsigned int file_version){
+    void serialize(Archive &ar, const unsigned int /*file_version*/){
         ar & m_i;
     }
 public:
@@ -108,7 +108,7 @@ void test2(){
 class D {
     friend class boost::serialization::access;
     template<class Archive>
-    void serialize(Archive &ar, const unsigned int file_version){
+    void serialize(Archive &ar, const unsigned int /*file_version*/){
         ar & m_b;
     }
 public:
@@ -149,7 +149,7 @@ class E {
     int m_i;
     friend class boost::serialization::access;
     template<class Archive>
-    void serialize(Archive &ar, const unsigned int file_version){
+    void serialize(Archive &ar, const unsigned int /*file_version*/){
         ar & m_i;
     }
 public:
@@ -170,7 +170,7 @@ class F {
     friend class boost::serialization::access;
     E * m_eptr;
     template<class Archive>
-    void serialize(Archive &ar, const unsigned int file_version){
+    void serialize(Archive &ar, const unsigned int /*file_version*/){
         ar & m_eptr;
     }
 public:
@@ -219,13 +219,13 @@ class G {
     A m_a2;
     A *m_pa2;
     template<class Archive>
-    void save(Archive &ar, const unsigned int file_version) const {
+    void save(Archive &ar, const unsigned int /*file_version*/) const {
         ar << m_a1;
         ar << m_a2;
         ar << m_pa2;
     }
     template<class Archive>
-    void load(Archive &ar, const unsigned int file_version){
+    void load(Archive &ar, const unsigned int /*file_version*/){
         A a; // temporary A
         ar >> a;
         m_a1 = a;

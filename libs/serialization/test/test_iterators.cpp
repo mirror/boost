@@ -105,7 +105,7 @@ void test_transform_width(unsigned int size){
     
     char * rptr;
     for(rptr = rawdata + 6; rptr-- > rawdata;)
-        *rptr = std::rand();
+        *rptr = static_cast<char>(0xff & std::rand());
 
     // convert 8 to 6 bit characters
     typedef boost::archive::iterators::transform_width<
