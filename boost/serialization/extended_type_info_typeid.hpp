@@ -35,9 +35,10 @@
 #include <boost/mpl/if.hpp>
 
 #include <boost/config/abi_prefix.hpp> // must be the last header
+
 #ifdef BOOST_MSVC
 #  pragma warning(push)
-#  pragma warning(disable : 4251 4231 4660 4275)
+#  pragma warning(disable : 4251 4231 4660 4275 4511 4512)
 #endif
 
 namespace boost {
@@ -48,6 +49,8 @@ class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info_typeid_0 :
     public extended_type_info
 {
     virtual const char * get_debug_info() const {
+        if(static_cast<const std::type_info *>(0) == m_ti)
+            return static_cast<const char *>(0);
         return m_ti->name();
     }
 protected:

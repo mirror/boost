@@ -110,6 +110,11 @@ public:
 
 namespace detail {
 
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4511 4512)
+#endif
+
 template<class Archive, class T>
 class iserializer : public basic_iserializer
 {
@@ -153,6 +158,10 @@ public:
     virtual ~iserializer(){};
 };
 
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
+
 template<class Archive, class T>
 BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
     basic_iarchive & ar,
@@ -177,6 +186,11 @@ BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
     );
 }
 
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4511 4512)
+#endif
+
 template<class Archive, class T>
 class pointer_iserializer :
     public basic_pointer_iserializer
@@ -197,6 +211,10 @@ protected:
     pointer_iserializer();
     ~pointer_iserializer();
 };
+
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 
 // note trick to be sure that operator new is using class specific
 // version if such exists. Due to Peter Dimov.
@@ -471,7 +489,7 @@ struct load_pointer_type {
     }
 
     template<class T>
-    static void load(Archive &ar, T & t){
+    static void load(Archive & /* ar */ , T & /* t */){
         check_pointer_level<T>();
         check_pointer_tracking<T>();
     }
