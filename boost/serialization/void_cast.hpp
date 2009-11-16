@@ -143,11 +143,6 @@ public:
     virtual ~void_caster(){}
 };
 
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable : 4251 4231 4660 4275 4511 4512)
-#endif
-
 template <class Derived, class Base>
 class void_caster_primitive : 
     public void_caster
@@ -215,10 +210,6 @@ public:
     void_caster_virtual_base();
     ~void_caster_virtual_base();
 };
-
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
 
 template <class Derived, class Base>
 void_caster_virtual_base<Derived,Base>::void_caster_virtual_base() :

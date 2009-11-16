@@ -35,10 +35,9 @@
 #include <boost/mpl/if.hpp>
 
 #include <boost/config/abi_prefix.hpp> // must be the last header
-
 #ifdef BOOST_MSVC
 #  pragma warning(push)
-#  pragma warning(disable : 4251 4231 4660 4275 4511 4512)
+#  pragma warning(disable : 4251 4231 4660 4275)
 #endif
 
 namespace boost {

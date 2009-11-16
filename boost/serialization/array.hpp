@@ -6,16 +6,6 @@
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <iostream>
-#include <cstddef> // std::size_t
-#include <cstddef>
-#include <boost/config.hpp> // msvc 6.0 needs this for warning suppression
-#if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::size_t; 
-} // namespace std
-#endif
-
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/wrapper.hpp>
@@ -24,6 +14,16 @@ namespace std{
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/array.hpp>
+#include <iostream>
+
+#include <cstddef> // std::size_t
+#include <cstddef>
+#include <boost/config.hpp> // msvc 6.0 needs this for warning suppression
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
 
 namespace boost { namespace serialization {
 
@@ -42,8 +42,8 @@ struct use_array_optimization : boost::mpl::always<boost::mpl::false_> {};
 #endif
 
 template<class T>
-class array :
-    public wrapper_traits<const array<T> >
+class array
+ : public wrapper_traits<const array<T> >
 {
 public:    
     typedef T value_type;
@@ -52,15 +52,7 @@ public:
         m_t(t),
         m_element_count(s)
     {}
-    array(const array & rhs) :
-        m_t(rhs.m_t),
-        m_element_count(rhs.m_element_count)
-    {}
-    array & operator=(const array & rhs){
-        m_t = rhs.m_t;
-        m_element_count = rhs.m_element_count;
-    }
-
+    
     // default implementation
     template<class Archive>
     void serialize_optimized(Archive &ar, const unsigned int, mpl::false_ ) const
@@ -116,7 +108,7 @@ public:
     
 private:
     value_type* m_t;
-    std::size_t m_element_count;
+    std::size_t const m_element_count;
 };
 
 template<class T>
