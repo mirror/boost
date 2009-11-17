@@ -80,6 +80,18 @@ namespace boost {
 #endif
 #endif
 
+        // The total number of arguments expected to be passed to the format objectt
+        int expected_args() const
+            { return num_args_; }
+        // The number of arguments currently bound (see bind_arg(..) )
+        int bound_args() const;
+        // The number of arguments currently fed to the format object
+        int fed_args() const;
+        // The index (1-based) of the current argument (i.e. next to be formatted)
+        int cur_arg() const;
+        // The number of arguments still required to be fed
+        int remaining_args() const; // same as expected_args() - bound_args() - fed_args()
+
 
         // ** object modifying **//
         template<class T>
