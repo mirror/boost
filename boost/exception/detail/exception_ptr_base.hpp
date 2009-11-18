@@ -19,6 +19,13 @@ boost
 
                         virtual void _rethrow() const=0;
                         virtual bool _empty() const=0;
+
+                        protected:
+
+                        virtual
+                        ~exception_ptr_base() throw()
+                            {
+                            }
                         };
                 }
     }
