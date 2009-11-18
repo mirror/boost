@@ -80,6 +80,16 @@ namespace boost { namespace program_options {
                 e.set_option_name(name);
                 throw;
             }
+            catch(multiple_occurrences& e)
+            {
+                e.set_option_name(name);
+                throw;
+            }
+            catch(multiple_values& e) 
+            {
+                e.set_option_name(name);
+                throw;
+            }
 #endif
             v.m_value_semantic = d.semantic();
             

@@ -42,8 +42,20 @@ namespace boost { namespace program_options {
     class BOOST_PROGRAM_OPTIONS_DECL unknown_option : public error {
     public:
         unknown_option(const std::string& name)
-        : error(std::string("unknown option ").append(name)) 
+        : error(std::string("unknown option ").append(name)), 
+          m_option_name(name)
         {}
+
+        // gcc says that throw specification on dtor is loosened
+        // without this line
+        ~unknown_option() throw() {}
+        
+        const std::string& get_option_name() const throw()
+        { 
+           return m_option_name; 
+        }
+    private:
+       std::string m_option_name;
     };
 
     /** Class thrown when there's ambiguity amoung several possible options. */
@@ -65,7 +77,19 @@ namespace boost { namespace program_options {
         user called a method which cannot return them all. */
     class BOOST_PROGRAM_OPTIONS_DECL multiple_values : public error {
     public:
-        multiple_values(const std::string& what) : error(what) {}
+        multiple_values(const std::string& what) 
+         : error(what), m_option_name() {}
+        ~multiple_values() throw() {}
+        
+        void set_option_name(const std::string& option);
+        
+        const std::string& get_option_name() const throw()
+        {
+           return m_option_name;
+        }
+    private:
+        std::string m_option_name; // The name of the option which
+                                   // caused the exception.        
     };
 
     /** Class thrown when there are several occurrences of an
@@ -73,7 +97,20 @@ namespace boost { namespace program_options {
         them all. */
     class BOOST_PROGRAM_OPTIONS_DECL multiple_occurrences : public error {
     public:
-        multiple_occurrences(const std::string& what) : error(what) {}
+        multiple_occurrences(const std::string& what) 
+         : error(what), m_option_name() {}
+        ~multiple_occurrences() throw() {}
+        
+        void set_option_name(const std::string& option);
+        
+        const std::string& get_option_name() const throw()
+        {
+           return m_option_name;
+        }
+
+    private:        
+        std::string m_option_name; // The name of the option which
+                                   // caused the exception.
     };
 
     /** Class thrown when value of option is incorrect. */
@@ -82,7 +119,12 @@ namespace boost { namespace program_options {
         validation_error(const std::string& what) : error(what) {}
         ~validation_error() throw() {}
         void set_option_name(const std::string& option);
-
+        
+        const std::string& get_option_name() const throw()
+        {
+           return m_option_name;
+        }
+        
         const char* what() const throw();
     private:
         mutable std::string m_message; // For on-demand formatting in 'what'

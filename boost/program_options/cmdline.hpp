@@ -26,7 +26,7 @@ namespace boost { namespace program_options { namespace command_line_style {
     enum style_t {
         /// Allow "--long_name" style
         allow_long = 1,
-        /// Alow "-<single character" style
+        /// Allow "-<single character" style
         allow_short = allow_long << 1,
         /// Allow "-" in short options
         allow_dash_for_short = allow_short << 1,

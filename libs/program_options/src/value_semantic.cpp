@@ -220,9 +220,17 @@ namespace boost { namespace program_options {
                        .append(convert_value(bad_value))
                        .append("'"))
     {}
-#endif                       
+#endif
 
+    void multiple_values::set_option_name(const std::string& option_name)
+    {
+        m_option_name = option_name;
+    }
 
+    void multiple_occurrences::set_option_name(const std::string& option_name)
+    {
+        m_option_name = option_name;
+    }
 
     void validation_error::set_option_name(const std::string& option_name)
     {

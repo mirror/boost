@@ -27,6 +27,7 @@ test-suite program_options :
     [ po-test positional_options_test.cpp ]
     [ po-test unicode_test.cpp ] 
     [ po-test winmain.cpp ] 
+    [ po-test exception_test.cpp ]
     ;
         
 exe test_convert : test_convert.cpp ;   
