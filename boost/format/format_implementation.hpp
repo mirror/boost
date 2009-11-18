@@ -194,7 +194,7 @@ namespace boost {
     template< class Ch, class Tr, class Alloc>
     int basic_format<Ch,Tr, Alloc>::
     cur_arg() const {
-    { return cur_arg_+1; }
+      return cur_arg_+1; }
 
     template< class Ch, class Tr, class Alloc>
     int basic_format<Ch,Tr, Alloc>::
