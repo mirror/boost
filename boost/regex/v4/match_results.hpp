@@ -348,6 +348,8 @@ public:
    {
       std::swap(m_subs, that.m_subs);
       std::swap(m_base, that.m_base);
+      std::swap(m_named_subs, that.m_named_subs);
+      std::swap(m_last_closed_paren, that.m_last_closed_paren);
    }
    bool operator==(const match_results& that)const
    {

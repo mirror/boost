@@ -564,7 +564,7 @@ void test_icu(const wchar_t&, const test_regex_replace_tag&)
          //
          // Now with UnicodeString:
          //
-         UnicodeString expression16u, text16u, format16u, result16u, found16u;
+         U_NAMESPACE_QUALIFIER UnicodeString expression16u, text16u, format16u, result16u, found16u;
          if(expression16.size())
             expression16u.setTo(&*expression16.begin(), expression16.size());
          if(text16.size())
