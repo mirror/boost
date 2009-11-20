@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>unconstrained_set_of Reference</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
-<link rel="start" href="../../index.html" title="Chapter 1. Boost.Bimap">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="../../index.html" title="Chapter 1. Boost.Bimap">
 <link rel="up" href="../reference.html" title="Reference">
 <link rel="prev" href="vector_of_reference.html" title="vector_of Reference">
 <link rel="next" href="../compiler_specifics.html" title="Compiler specifics">
@@ -14,15 +14,15 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
 <a accesskey="p" href="vector_of_reference.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../reference.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="../compiler_specifics.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section" title="unconstrained_set_of Reference">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_bimap.reference.unconstrained_set_of_reference"></a><a class="link" href="unconstrained_set_of_reference.html" title="unconstrained_set_of Reference">unconstrained_set_of
       Reference</a>
@@ -38,13 +38,12 @@
 <dt><span class="section"><a href="unconstrained_set_of_reference.html#boost_bimap.reference.unconstrained_set_of_reference.unconstrained_set_of_views.serialization">Serialization</a></span></dt>
 </dl></dd>
 </dl></div>
-<div class="section" lang="en">
+<div class="section" title='Header "boost/bimap/unconstrained_set_of.hpp" synopsis'>
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_bimap.reference.unconstrained_set_of_reference.header__boost_bimap_unconstrained_set_of_hpp__synopsis"></a><a class="link" href="unconstrained_set_of_reference.html#boost_bimap.reference.unconstrained_set_of_reference.header__boost_bimap_unconstrained_set_of_hpp__synopsis" title='Header "boost/bimap/unconstrained_set_of.hpp" synopsis'>Header
         "boost/bimap/unconstrained_set_of.hpp" synopsis</a>
 </h4></div></div></div>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
 <span class="keyword">namespace</span> <span class="identifier">bimaps</span> <span class="special">{</span>
 
 
@@ -58,7 +57,7 @@
 </span><span class="special">}</span> <span class="comment">// namespace boost
 </span></pre>
 </div>
-<div class="section" lang="en">
+<div class="section" title="unconstrained_set_of Views">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_bimap.reference.unconstrained_set_of_reference.unconstrained_set_of_views"></a><a class="link" href="unconstrained_set_of_reference.html#boost_bimap.reference.unconstrained_set_of_reference.unconstrained_set_of_views" title="unconstrained_set_of Views">unconstrained_set_of
         Views</a>
@@ -73,8 +72,7 @@
           of these kind of view boost the bimap performance but the view can not
           be accessed. An unconstrained view is an empty class.
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
 <span class="keyword">namespace</span> <span class="identifier">bimaps</span> <span class="special">{</span>
 <span class="keyword">namespace</span> <span class="identifier">views</span> <span class="special">{</span>
 
@@ -94,15 +92,13 @@
 <p>
           In the set view:
         </p>
-<pre class="programlisting">
-<span class="keyword">typedef</span> <span class="identifier">signature</span><span class="special">-</span><span class="identifier">compatible</span> <span class="identifier">with</span> <span class="identifier">relation</span><span class="special">&lt;</span> <span class="identifier">Left</span><span class="special">,</span> <span class="special">...</span> <span class="special">&gt;</span> <span class="identifier">key_type</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">signature</span><span class="special">-</span><span class="identifier">compatible</span> <span class="identifier">with</span> <span class="identifier">relation</span><span class="special">&lt;</span> <span class="identifier">Left</span><span class="special">,</span> <span class="special">...</span> <span class="special">&gt;</span> <span class="identifier">key_type</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">signature</span><span class="special">-</span><span class="identifier">compatible</span> <span class="identifier">with</span> <span class="identifier">relation</span><span class="special">&lt;</span> <span class="identifier">Left</span><span class="special">,</span> <span class="special">...</span> <span class="special">&gt;</span> <span class="identifier">value_type</span><span class="special">;</span>
 </pre>
 <p>
           In the left map view:
         </p>
-<pre class="programlisting">
-<span class="keyword">typedef</span>  <span class="identifier">Left</span>  <span class="identifier">key_type</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">typedef</span>  <span class="identifier">Left</span>  <span class="identifier">key_type</span><span class="special">;</span>
 <span class="keyword">typedef</span>  <span class="special">...</span>   <span class="identifier">data_type</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">signature</span><span class="special">-</span><span class="identifier">compatible</span> <span class="identifier">with</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span> <span class="identifier">Left</span><span class="special">,</span> <span class="special">...</span> <span class="special">&gt;</span> <span class="identifier">value_type</span><span class="special">;</span>
@@ -110,15 +106,14 @@
 <p>
           In the right map view:
         </p>
-<pre class="programlisting">
-<span class="keyword">typedef</span>  <span class="special">...</span>  <span class="identifier">key_type</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">typedef</span>  <span class="special">...</span>  <span class="identifier">key_type</span><span class="special">;</span>
 <span class="keyword">typedef</span>  <span class="identifier">Left</span> <span class="identifier">data_type</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">signature</span><span class="special">-</span><span class="identifier">compatible</span> <span class="identifier">with</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span> <span class="special">...</span> <span class="special">,</span> <span class="identifier">Left</span> <span class="special">&gt;</span> <span class="identifier">value_type</span><span class="special">;</span>
 </pre>
 <a name="unconstrained_set_of_complexity_signature"></a><p>
         </p>
-<div class="section" lang="en">
+<div class="section" title="Complexity signature">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="boost_bimap.reference.unconstrained_set_of_reference.unconstrained_set_of_views.complexity_signature"></a><a class="link" href="unconstrained_set_of_reference.html#boost_bimap.reference.unconstrained_set_of_reference.unconstrained_set_of_views.complexity_signature" title="Complexity signature">Complexity
           signature</a>
@@ -129,28 +124,28 @@
             the user, but the formulas to find the order of an operation for a bimap
             hold with the following definitions. The complexity signature of a <code class="computeroutput"><span class="identifier">unconstrained_set_of</span></code> view is:
           </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
               copying: <code class="computeroutput"><span class="identifier">c</span><span class="special">(</span><span class="identifier">n</span><span class="special">)</span> <span class="special">=</span> <span class="number">0</span></code>
 </li>
-<li>
+<li class="listitem">
               insertion: <code class="computeroutput"><span class="identifier">i</span><span class="special">(</span><span class="identifier">n</span><span class="special">)</span> <span class="special">=</span> <span class="number">0</span></code>
 </li>
-<li>
+<li class="listitem">
               hinted insertion: <code class="computeroutput"><span class="identifier">h</span><span class="special">(</span><span class="identifier">n</span><span class="special">)</span> <span class="special">=</span> <span class="number">0</span></code>
 </li>
-<li>
+<li class="listitem">
               deletion: <code class="computeroutput"><span class="identifier">d</span><span class="special">(</span><span class="identifier">n</span><span class="special">)</span> <span class="special">=</span> <span class="number">0</span></code>
 </li>
-<li>
+<li class="listitem">
               replacement: <code class="computeroutput"><span class="identifier">r</span><span class="special">(</span><span class="identifier">n</span><span class="special">)</span> <span class="special">=</span> <span class="number">0</span></code>
 </li>
-<li>
+<li class="listitem">
               modifying: <code class="computeroutput"><span class="identifier">m</span><span class="special">(</span><span class="identifier">n</span><span class="special">)</span> <span class="special">=</span> <span class="number">0</span></code>
 </li>
 </ul></div>
 </div>
-<div class="section" lang="en">
+<div class="section" title="Serialization">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="boost_bimap.reference.unconstrained_set_of_reference.unconstrained_set_of_views.serialization"></a><a class="link" href="unconstrained_set_of_reference.html#boost_bimap.reference.unconstrained_set_of_reference.unconstrained_set_of_views.serialization" title="Serialization">Serialization</a>
 </h5></div></div></div>
@@ -169,7 +164,7 @@
             ar.
           </p>
 </div>
-<div class="itemizedlist"><ul type="disc"><li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
 <span class="bold"><strong>Requires:</strong></span> No additional requirements
               to those imposed by the container.
             </li></ul></div>
@@ -180,7 +175,7 @@
             archive) ar.
           </p>
 </div>
-<div class="itemizedlist"><ul type="disc"><li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
 <span class="bold"><strong>Requires:</strong></span> No additional requirements
               to those imposed by the container.
             </li></ul></div>
