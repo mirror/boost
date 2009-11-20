@@ -70,7 +70,8 @@ int main(int ac, char* av[])
             ss << ifs.rdbuf();
             // Split the file content
             char_separator<char> sep(" \n\r");
-            tokenizer<char_separator<char> > tok(ss.str(), sep);
+            string sstr = ss.str();
+            tokenizer<char_separator<char> > tok(sstr, sep);
             vector<string> args;
             copy(tok.begin(), tok.end(), back_inserter(args));
             // Parse the file and store the options
@@ -87,7 +88,7 @@ int main(int ac, char* av[])
             cout << "Magic value: " << vm["magic"].as<int>() << "\n";
         }
     }
-    catch(exception& e) {
+    catch (std::exception& e) {
         cout << e.what() << "\n";
     }
 }
