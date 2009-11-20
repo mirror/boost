@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Exception Safety Guarantees</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
-<link rel="start" href="../index.html" title="Chapter 1. Boost.Optional">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="../index.html" title="Chapter 1. Boost.Optional">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.Optional">
 <link rel="prev" href="a_note_about_optional_bool_.html" title="A note about optional&lt;bool&gt;">
 <link rel="next" href="type_requirements.html" title="Type requirements">
@@ -22,30 +22,30 @@
 <div class="spirit-nav">
 <a accesskey="p" href="a_note_about_optional_bool_.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="type_requirements.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section" title="Exception Safety Guarantees">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_optional.exception_safety_guarantees"></a><a class="link" href="exception_safety_guarantees.html" title="Exception Safety Guarantees">Exception Safety
     Guarantees</a>
 </h2></div></div></div>
 <p>
-      Because of the current implementation (see <a class="link" href="../index.html#optional_implementation_notes">Implementation
+      Because of the current implementation (see <a class="link" href="implementation_notes.html" title="Implementation Notes">Implementation
       Notes</a>), all of the assignment methods:
     </p>
-<div class="itemizedlist"><ul type="disc">
-<li><code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="special">)</span></code></li>
-<li><code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code></li>
-<li><code class="computeroutput"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">U</span><span class="special">&gt;</span>
+<li class="listitem"><code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code></li>
+<li class="listitem"><code class="computeroutput"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">U</span><span class="special">&gt;</span>
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="special">)</span></code></li>
-<li><code class="computeroutput"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">InPlaceFactory</span><span class="special">&gt;</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">InPlaceFactory</span>
+<li class="listitem"><code class="computeroutput"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">InPlaceFactory</span><span class="special">&gt;</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">InPlaceFactory</span>
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="special">)</span></code></li>
-<li><code class="computeroutput"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">TypedInPlaceFactory</span><span class="special">&gt;</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">TypedInPlaceFactory</span>
+<li class="listitem"><code class="computeroutput"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">TypedInPlaceFactory</span><span class="special">&gt;</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">TypedInPlaceFactory</span>
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="special">)</span> </code></li>
-<li><code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;:::</span><span class="identifier">reset</span> <span class="special">(</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;)</span></code></li>
+<li class="listitem"><code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;:::</span><span class="identifier">reset</span> <span class="special">(</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;)</span></code></li>
 </ul></div>
 <p>
       Can only <span class="emphasis"><em>guarantee</em></span> the <span class="underline">basic
@@ -56,9 +56,9 @@
 <p>
       On the other hand, the <span class="emphasis"><em>uninitializing</em></span> methods:
     </p>
-<div class="itemizedlist"><ul type="disc">
-<li><code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">none_t</span> <span class="special">)</span></code></li>
-<li><code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">reset</span><span class="special">()</span></code></li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">none_t</span> <span class="special">)</span></code></li>
+<li class="listitem"><code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">reset</span><span class="special">()</span></code></li>
 </ul></div>
 <p>
       Provide the no-throw guarantee (assuming a no-throw <code class="computeroutput"><span class="identifier">T</span><span class="special">::~</span><span class="identifier">T</span><span class="special">()</span></code>)
@@ -112,7 +112,7 @@
 <span class="special">}</span>
 </pre>
 <a name="boost_optional.exception_safety_guarantees.swap"></a><h4>
-<a name="id2864737"></a>
+<a name="id583497"></a>
       <a class="link" href="exception_safety_guarantees.html#boost_optional.exception_safety_guarantees.swap">Swap</a>
     </h4>
 <p>

@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Detailed Semantics</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
-<link rel="start" href="../index.html" title="Chapter 1. Boost.Optional">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="../index.html" title="Chapter 1. Boost.Optional">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.Optional">
 <link rel="prev" href="synopsis.html" title="Synopsis">
 <link rel="next" href="examples.html" title="Examples">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="synopsis.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="examples.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section" title="Detailed Semantics">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_optional.detailed_semantics"></a><a class="link" href="detailed_semantics.html" title="Detailed Semantics">Detailed Semantics</a>
 </h2></div></div></div>
@@ -31,24 +31,24 @@
       type, in the sequel, those entries whose semantic depends on <code class="computeroutput"><span class="identifier">T</span></code> being of reference type or not will be
       distinguished using the following convention:
     </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
         If the entry reads: <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span></code><span class="emphasis"><em>(not
         a ref)</em></span><code class="computeroutput"><span class="special">&gt;</span></code>, the description
         corresponds only to the case where <code class="computeroutput"><span class="identifier">T</span></code>
         is not of reference type.
       </li>
-<li>
+<li class="listitem">
         If the entry reads: <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span></code>,
         the description corresponds only to the case where <code class="computeroutput"><span class="identifier">T</span></code>
         is of reference type.
       </li>
-<li>
+<li class="listitem">
         If the entry reads: <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span></code>,
         the description is the same for both cases.
       </li>
 </ul></div>
-<div class="note"><table border="0" summary="Note">
+<div class="note" title="Note"><table border="0" summary="Note">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
@@ -64,7 +64,7 @@
       <span class="inlinemediaobject"><img src="../images/space.png" alt="space"></span>
     </p>
 <a name="boost_optional.detailed_semantics.optional_class_member_functions"></a><h4>
-<a name="id2841077"></a>
+<a name="id560085"></a>
       <a class="link" href="detailed_semantics.html#boost_optional.detailed_semantics.optional_class_member_functions">optional
       class member functions</a>
     </h4>
@@ -82,21 +82,21 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> Default-Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions:</strong></span><code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is <span class="underline">uninitialized</span>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
         Notes: T's default constructor <span class="underline">is not</span>
         called.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">def</span> <span class="special">)</span> <span class="special">;</span>
 </pre>
@@ -116,23 +116,23 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>
         uninitialized.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions:</strong></span><code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is <span class="underline">uninitialized</span>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span><code class="computeroutput"><span class="identifier">T</span></code>'s
         default constructor <span class="underline">is not</span> called.
         The expression <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">none</span></code> denotes an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">none_t</span></code> that can be used as the parameter.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">none</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">n</span><span class="special">(</span><span class="identifier">none</span><span class="special">)</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">n</span> <span class="special">)</span> <span class="special">;</span>
@@ -153,31 +153,31 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> Directly-Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions:</strong></span><code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is <span class="underline">initialized</span>
         and its value is a<span class="emphasis"><em>copy</em></span> of <code class="computeroutput"><span class="identifier">v</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Whatever <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span><span class="special">(</span>
         <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code> throws.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes: </strong></span><code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span><span class="special">(</span>
         <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code> is
         called.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Exception Safety:</strong></span> Exceptions can only be
         thrown during <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span><span class="special">(</span> <span class="identifier">T</span>
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="special">);</span></code> in that case, this constructor
         has no effect.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">opt</span> <span class="special">==</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
@@ -196,19 +196,19 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> Directly-Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions:</strong></span><code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is <span class="underline">initialized</span>
         and its value is an instance of an internal type wrapping the reference
         <code class="computeroutput"><span class="identifier">ref</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">vref</span> <span class="special">=</span> <span class="identifier">v</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">vref</span><span class="special">);</span>
@@ -246,7 +246,7 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc"><li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
         If condition is true, same as:
       </li></ul></div>
 <div class="blockquote"><blockquote class="blockquote">
@@ -269,14 +269,14 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc"><li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
         otherwise, same as:
       </li></ul></div>
 <div class="blockquote"><blockquote class="blockquote">
 <p>
         </p>
 <p>
-          <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span> <span class="special">[</span>#<span class="special">(</span><span class="keyword">not</span> <span class="identifier">a</span>
+          <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span> <span class="special">[</span><span class="error">'</span><span class="special">(</span><span class="keyword">not</span> <span class="identifier">a</span>
           <span class="identifier">ref</span><span class="special">)]&gt;::</span><span class="identifier">optional</span><span class="special">()</span></code>
         </p>
 <p>
@@ -308,32 +308,32 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> Copy-Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions:</strong></span> If rhs is initialized,
         <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>
         is initialized and its value is a <span class="emphasis"><em>copy</em></span> of the value
         of <code class="computeroutput"><span class="identifier">rhs</span></code>; else <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is uninitialized.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Whatever <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span><span class="special">(</span>
         <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code> throws.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> If rhs is initialized, <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code> is
         called.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Exception Safety:</strong></span> Exceptions can only be
         thrown during <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span><span class="special">(</span> <span class="identifier">T</span>
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="special">);</span></code> in that case, this constructor
         has no effect.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">uninit</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(!</span><span class="identifier">uninit</span><span class="special">);</span>
 
@@ -360,11 +360,11 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> Copy-Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions:</strong></span> If <code class="computeroutput"><span class="identifier">rhs</span></code>
         is initialized, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>
         is initialized and its value is another reference to the same object referenced
@@ -372,16 +372,16 @@
         else <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>
         is uninitialized.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> If <code class="computeroutput"><span class="identifier">rhs</span></code>
         is initialized, both <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>
         and <code class="computeroutput"><span class="special">*</span><span class="identifier">rhs</span></code>
         will reefer to the same object (they alias).
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="identifier">uninit</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(!</span><span class="identifier">uninit</span><span class="special">);</span>
 
@@ -417,11 +417,11 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> Copy-Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions:</strong></span> If <code class="computeroutput"><span class="identifier">rhs</span></code>
         is initialized, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>
         is initialized and its value is a <span class="emphasis"><em>copy</em></span> of the value
@@ -429,25 +429,25 @@
         else <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>
         is uninitialized.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Whatever <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span><span class="special">(</span>
         <span class="identifier">U</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code> throws.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes: </strong></span><code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span><span class="special">(</span>
         <span class="identifier">U</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code> is
         called if <code class="computeroutput"><span class="identifier">rhs</span></code> is initialized,
         which requires a valid conversion from <code class="computeroutput"><span class="identifier">U</span></code>
         to <code class="computeroutput"><span class="identifier">T</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Exception Safety:</strong></span> Exceptions can only be
         thrown during <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span><span class="special">(</span> <span class="identifier">U</span>
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="special">);</span></code> in that case, this constructor
         has no effect.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">x</span><span class="special">(</span><span class="number">123.4</span><span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">x</span> <span class="special">==</span> <span class="number">123.4</span> <span class="special">)</span> <span class="special">;</span>
 
@@ -483,31 +483,31 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>
         with a value of <code class="computeroutput"><span class="identifier">T</span></code> obtained
         from the factory.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions: </strong></span><code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is <span class="underline">initialized</span>
         and its value is <span class="emphasis"><em>directly given</em></span> from the factory <code class="computeroutput"><span class="identifier">f</span></code> (i.e., the value <span class="underline">is
         not copied</span>).
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Whatever the <code class="computeroutput"><span class="identifier">T</span></code>
         constructor called by the factory throws.
       </li>
-<li>
-<span class="bold"><strong>Notes:</strong></span> See <a class="link" href="../index.html#optional_in_place_factories">In-Place
+<li class="listitem">
+<span class="bold"><strong>Notes:</strong></span> See <a class="link" href="in_place_factories.html" title="In-Place Factories">In-Place
         Factories</a>
 </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Exception Safety:</strong></span> Exceptions can only be
         thrown during the call to the <code class="computeroutput"><span class="identifier">T</span></code>
         constructor used by the factory; in that case, this constructor has no effect.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="keyword">class</span> <span class="identifier">C</span> <span class="special">{</span> <span class="identifier">C</span> <span class="special">(</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">)</span> <span class="special">;</span> <span class="special">}</span> <span class="special">;</span>
 
 <span class="identifier">C</span> <span class="identifier">v</span><span class="special">(</span><span class="char">'A'</span><span class="special">,</span><span class="number">123.4</span><span class="special">,</span><span class="string">"hello"</span><span class="special">);</span>
@@ -538,25 +538,25 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> Assigns the value <code class="computeroutput"><span class="identifier">rhs</span></code> to an <code class="computeroutput"><span class="identifier">optional</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions: </strong></span><code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initialized and its value is a <span class="emphasis"><em>copy</em></span>
         of <code class="computeroutput"><span class="identifier">rhs</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Whatever <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="keyword">operator</span><span class="special">=(</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code> or
         <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span><span class="special">(</span><span class="identifier">T</span>
         <span class="keyword">const</span><span class="special">&amp;)</span></code>
         throws.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> was initialized, <code class="computeroutput"><span class="identifier">T</span></code>'s
         assignment operator is used, otherwise, its copy-constructor is used.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Exception Safety:</strong></span> In the event of an exception,
         the initialization state of <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is unchanged and its value unspecified
         as far as <code class="computeroutput"><span class="identifier">optional</span></code> is concerned
@@ -565,7 +565,7 @@
         is initially uninitialized and <code class="computeroutput"><span class="identifier">T</span></code>'s
         <span class="emphasis"><em>copy constructor</em></span> fails, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is left properly uninitialized.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">x</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">;</span>
@@ -594,20 +594,20 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> (Re)binds thee wrapped reference.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions: </strong></span><code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initialized and it references the
         same object referenced by <code class="computeroutput"><span class="identifier">rhs</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> was initialized, is is <span class="emphasis"><em>rebound</em></span>
-        to the new object. See <a class="link" href="../index.html#optional_refassign">here</a> for
-        details on this behavior.
+        to the new object. See <a class="link" href="rebinding_semantics_for_assignment_of_optional_references.html" title="Rebinding semantics for assignment of optional references">here</a>
+        for details on this behavior.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="keyword">int</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
 <span class="keyword">int</span> <span class="identifier">b</span> <span class="special">=</span> <span class="number">2</span> <span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">ra</span> <span class="special">=</span> <span class="identifier">a</span> <span class="special">;</span>
@@ -645,29 +645,29 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> Assigns another <code class="computeroutput"><span class="identifier">optional</span></code>
         to an <code class="computeroutput"><span class="identifier">optional</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions:</strong></span> If <code class="computeroutput"><span class="identifier">rhs</span></code>
         is initialized, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>
         is initialized and its value is a <span class="emphasis"><em>copy</em></span> of the value
         of <code class="computeroutput"><span class="identifier">rhs</span></code>; else <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is uninitialized.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Whatever <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="keyword">operator</span><span class="special">(</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;)</span></code> or <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span><span class="special">(</span>
         <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code> throws.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> If both <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> and <code class="computeroutput"><span class="identifier">rhs</span></code>
         are initially initialized, <code class="computeroutput"><span class="identifier">T</span></code>'s
         <span class="emphasis"><em>assignment operator</em></span> is used. If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initially initialized but <code class="computeroutput"><span class="identifier">rhs</span></code> is uninitialized, <code class="computeroutput"><span class="identifier">T</span></code>'s
         [destructor] is called. If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initially uninitialized but <code class="computeroutput"><span class="identifier">rhs</span></code> is initialized, <code class="computeroutput"><span class="identifier">T</span></code>'s
         <span class="emphasis"><em>copy constructor</em></span> is called.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Exception Safety:</strong></span> In the event of an exception,
         the initialization state of <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is unchanged and its value unspecified
         as far as optional is concerned (it is up to <code class="computeroutput"><span class="identifier">T</span></code>'s
@@ -676,7 +676,7 @@
         is initially uninitialized and <code class="computeroutput"><span class="identifier">T</span></code>'s
         <span class="emphasis"><em>copy constructor</em></span> fails, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is left properly uninitialized.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
@@ -700,20 +700,20 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> (Re)binds thee wrapped reference.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions:</strong></span> If <code class="computeroutput"><span class="special">*</span><span class="identifier">rhs</span></code> is initialized, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initialized and it references the
         same object referenced by <code class="computeroutput"><span class="special">*</span><span class="identifier">rhs</span></code>; otherwise, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is uninitialized (and references no object).
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> was initialized and so is *rhs, this
-        is is <span class="emphasis"><em>rebound</em></span> to the new object. See <a class="link" href="../index.html#optional_refassign">here</a>
+        is is <span class="emphasis"><em>rebound</em></span> to the new object. See <a class="link" href="rebinding_semantics_for_assignment_of_optional_references.html" title="Rebinding semantics for assignment of optional references">here</a>
         for details on this behavior.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="keyword">int</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
 <span class="keyword">int</span> <span class="identifier">b</span> <span class="special">=</span> <span class="number">2</span> <span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">ra</span> <span class="special">=</span> <span class="identifier">a</span> <span class="special">;</span>
@@ -750,25 +750,25 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> Assigns another convertible optional
         to an optional.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions:</strong></span> If <code class="computeroutput"><span class="identifier">rhs</span></code>
         is initialized, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>
         is initialized and its value is a <span class="emphasis"><em>copy</em></span> of the value
         of <code class="computeroutput"><span class="identifier">rhs</span></code><span class="emphasis"><em>converted</em></span>
         to type <code class="computeroutput"><span class="identifier">T</span></code>; else <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is uninitialized.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Whatever <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="keyword">operator</span><span class="special">=(</span> <span class="identifier">U</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code> or
         <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span><span class="special">(</span> <span class="identifier">U</span>
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="special">)</span></code> throws.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> If both <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> and rhs are initially initialized, <code class="computeroutput"><span class="identifier">T</span></code>'s <span class="emphasis"><em>assignment operator</em></span>
         (from <code class="computeroutput"><span class="identifier">U</span></code>) is used. If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initially
         initialized but <code class="computeroutput"><span class="identifier">rhs</span></code> is uninitialized,
@@ -778,7 +778,7 @@
         <span class="emphasis"><em>converting constructor</em></span> (from <code class="computeroutput"><span class="identifier">U</span></code>)
         is called.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Exception Safety:</strong></span> In the event of an exception,
         the initialization state of <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is unchanged and its value unspecified
         as far as optional is concerned (it is up to <code class="computeroutput"><span class="identifier">T</span></code>'s
@@ -787,7 +787,7 @@
         is initially uninitialized and <code class="computeroutput"><span class="identifier">T</span></code>'s
         converting constructor fails, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is left properly uninitialized.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt0</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">U</span><span class="special">&gt;</span> <span class="identifier">opt1</span><span class="special">;</span>
@@ -812,7 +812,7 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc"><li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
 <span class="bold"><strong>Deprecated:</strong></span> same as <code class="computeroutput"><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">T</span>
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="identifier">v</span><span class="special">)</span> <span class="special">;</span></code>
@@ -831,7 +831,7 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc"><li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
 <span class="bold"><strong>Deprecated:</strong></span> Same as <code class="computeroutput"><span class="keyword">operator</span><span class="special">=(</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">none_t</span> <span class="special">);</span></code>
 </li></ul></div>
 <p>
@@ -902,21 +902,21 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Requirements:</strong></span><code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initialized
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Returns:</strong></span> A reference to the contained value
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> The requirement is asserted via
         <code class="computeroutput"><span class="identifier">BOOST_ASSERT</span><span class="special">()</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
 <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">u</span> <span class="special">=</span> <span class="special">*</span><span class="identifier">opt</span><span class="special">;</span>
@@ -982,15 +982,15 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Returns:</strong></span> A reference to the contained value,
         if any, or <code class="computeroutput"><span class="keyword">default</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">z</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span><span class="special">;</span>
 <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">def</span><span class="special">.</span><span class="identifier">get_value_or</span><span class="special">(</span><span class="identifier">z</span><span class="special">);</span>
@@ -1068,22 +1068,22 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Requirements: </strong></span><code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initialized
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Returns:</strong></span><span class="underline">The</span>
         reference contained.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> The requirement is asserted via
         <code class="computeroutput"><span class="identifier">BOOST_ASSERT</span><span class="special">()</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span> <span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">vref</span> <span class="special">=</span> <span class="identifier">v</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="identifier">opt</span> <span class="special">(</span> <span class="identifier">vref</span> <span class="special">);</span>
@@ -1143,20 +1143,20 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Returns:</strong></span> If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initialized, a pointer to the contained
         value; else <code class="computeroutput"><span class="number">0</span></code> (<span class="emphasis"><em>null</em></span>).
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> The contained value is permanently
         stored within <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>,
         so you should not hold nor delete this pointer
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="identifier">copt</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
@@ -1194,21 +1194,21 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Requirements: </strong></span><code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initialized.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Returns:</strong></span> A pointer to the contained value.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> The requirement is asserted via
         <code class="computeroutput"><span class="identifier">BOOST_ASSERT</span><span class="special">()</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">X</span> <span class="special">{</span> <span class="keyword">int</span> <span class="identifier">mdata</span> <span class="special">;</span> <span class="special">}</span> <span class="special">;</span>
 <span class="identifier">X</span> <span class="identifier">x</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
@@ -1230,15 +1230,15 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Returns:</strong></span> An unspecified value which if used
         on a boolean context is equivalent to (<code class="computeroutput"><span class="identifier">get</span><span class="special">()</span> <span class="special">!=</span> <span class="number">0</span></code>)
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">def</span> <span class="special">==</span> <span class="number">0</span> <span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">(</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
@@ -1261,20 +1261,20 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Returns:</strong></span> If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is uninitialized, <code class="computeroutput"><span class="keyword">true</span></code>;
         else <code class="computeroutput"><span class="keyword">false</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> This operator is provided for those
         compilers which can't use the <span class="emphasis"><em>unspecified-bool-type operator</em></span>
         in certain boolean contexts.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">opt</span> <span class="special">);</span>
 <span class="special">*</span><span class="identifier">opt</span> <span class="special">=</span> <span class="identifier">some_T</span> <span class="special">;</span>
@@ -1298,16 +1298,16 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Returns: </strong></span><code class="computeroutput"><span class="keyword">true</span></code>
         if the <code class="computeroutput"><span class="identifier">optional</span></code> is initialized,
         <code class="computeroutput"><span class="keyword">false</span></code> otherwise.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">def</span><span class="special">.</span><span class="identifier">is_initialized</span><span class="special">()</span> <span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">(</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
@@ -1319,7 +1319,7 @@
       <span class="inlinemediaobject"><img src="../images/space.png" alt="space"></span>
     </p>
 <a name="boost_optional.detailed_semantics.free_functions"></a><h4>
-<a name="id2853708"></a>
+<a name="id572503"></a>
       <a class="link" href="detailed_semantics.html#boost_optional.detailed_semantics.free_functions">Free functions</a>
     </h4>
 <p>
@@ -1336,13 +1336,13 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Returns: </strong></span><code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span></code> for
         the <span class="emphasis"><em>deduced</em></span> type <code class="computeroutput"><span class="identifier">T</span></code>
         of <code class="computeroutput"><span class="identifier">v</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="identifier">foo</span> <span class="special">(</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">opt</span> <span class="special">)</span> <span class="special">;</span>
 
 <span class="identifier">foo</span> <span class="special">(</span> <span class="identifier">make_optional</span><span class="special">(</span><span class="number">1</span><span class="special">+</span><span class="number">1</span><span class="special">)</span> <span class="special">)</span> <span class="special">;</span> <span class="comment">// Creates an optional&lt;int&gt;
@@ -1364,13 +1364,13 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Returns: </strong></span><code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">condition</span><span class="special">,</span><span class="identifier">v</span><span class="special">)</span></code> for
         the <span class="emphasis"><em>deduced</em></span> type <code class="computeroutput"><span class="identifier">T</span></code>
         of <code class="computeroutput"><span class="identifier">v</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">calculate_foo</span><span class="special">()</span>
 <span class="special">{</span>
   <span class="keyword">double</span> <span class="identifier">val</span> <span class="special">=</span> <span class="identifier">compute_foo</span><span class="special">();</span>
@@ -1398,17 +1398,17 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Returns:</strong></span> If both <code class="computeroutput"><span class="identifier">x</span></code>
         and <code class="computeroutput"><span class="identifier">y</span></code> are initialized, <code class="computeroutput"><span class="special">(*</span><span class="identifier">x</span> <span class="special">==</span>
         <span class="special">*</span><span class="identifier">y</span><span class="special">)</span></code>. If only <code class="computeroutput"><span class="identifier">x</span></code>
         or <code class="computeroutput"><span class="identifier">y</span></code> is initialized, <code class="computeroutput"><span class="keyword">false</span></code>. If both are uninitialized, <code class="computeroutput"><span class="keyword">true</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> Pointers have shallow relational
         operators while <code class="computeroutput"><span class="identifier">optional</span></code>
         has deep relational operators. Do not use <code class="computeroutput"><span class="keyword">operator</span>
@@ -1417,7 +1417,7 @@
         or a pointer; use <a href="../../../../utility/OptionalPointee.html#equal" target="_top"><code class="computeroutput"><span class="identifier">equal_pointees</span><span class="special">()</span></code></a>
         instead
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">x</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
 <span class="identifier">T</span> <span class="identifier">y</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
 <span class="identifier">T</span> <span class="identifier">z</span><span class="special">(</span><span class="number">21</span><span class="special">);</span>
@@ -1459,17 +1459,17 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Returns:</strong></span> If <code class="computeroutput"><span class="identifier">y</span></code>
         is not initialized, <code class="computeroutput"><span class="keyword">false</span></code>. If
         <code class="computeroutput"><span class="identifier">y</span></code> is initialized and <code class="computeroutput"><span class="identifier">x</span></code> is not initialized, <code class="computeroutput"><span class="keyword">true</span></code>.
         If both <code class="computeroutput"><span class="identifier">x</span></code> and <code class="computeroutput"><span class="identifier">y</span></code> are initialized, <code class="computeroutput"><span class="special">(*</span><span class="identifier">x</span> <span class="special">&lt;</span> <span class="special">*</span><span class="identifier">y</span><span class="special">)</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> Pointers have shallow relational
         operators while <code class="computeroutput"><span class="identifier">optional</span></code>
         has deep relational operators. Do not use <code class="computeroutput"><span class="keyword">operator</span>
@@ -1478,7 +1478,7 @@
         or a pointer; use <a href="../../../../utility/OptionalPointee.html#less" target="_top"><code class="computeroutput"><span class="identifier">less_pointees</span><span class="special">()</span></code></a>
         instead.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">x</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
 <span class="identifier">T</span> <span class="identifier">y</span><span class="special">(</span><span class="number">34</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
@@ -1516,13 +1516,13 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Returns: </strong></span><code class="computeroutput"><span class="special">!(</span>
         <span class="identifier">x</span> <span class="special">==</span>
         <span class="identifier">y</span> <span class="special">);</span></code>
 </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
 </ul></div>
@@ -1542,13 +1542,13 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Returns: </strong></span><code class="computeroutput"><span class="special">(</span>
         <span class="identifier">y</span> <span class="special">&lt;</span>
         <span class="identifier">x</span> <span class="special">);</span></code>
 </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
 </ul></div>
@@ -1568,12 +1568,12 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Returns: </strong></span><code class="computeroutput"><span class="special">!(</span>
         <span class="identifier">y</span><span class="special">&lt;</span><span class="identifier">x</span> <span class="special">);</span></code>
 </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
 </ul></div>
@@ -1593,12 +1593,12 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Returns: </strong></span><code class="computeroutput"><span class="special">!(</span>
         <span class="identifier">x</span><span class="special">&lt;</span><span class="identifier">y</span> <span class="special">);</span></code>
 </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> Nothing.
       </li>
 </ul></div>
@@ -1618,37 +1618,37 @@
 <p>
       </p>
 </blockquote></div>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>Effect:</strong></span> If both <code class="computeroutput"><span class="identifier">x</span></code>
         and <code class="computeroutput"><span class="identifier">y</span></code> are initialized, calls
         <code class="computeroutput"><span class="identifier">swap</span><span class="special">(*</span><span class="identifier">x</span><span class="special">,*</span><span class="identifier">y</span><span class="special">)</span></code> using <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">swap</span></code>.
         If only one is initialized, say <code class="computeroutput"><span class="identifier">x</span></code>,
         calls: <code class="computeroutput"><span class="identifier">y</span><span class="special">.</span><span class="identifier">reset</span><span class="special">(*</span><span class="identifier">x</span><span class="special">);</span> <span class="identifier">x</span><span class="special">.</span><span class="identifier">reset</span><span class="special">();</span></code> If none is initialized, does nothing.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Postconditions:</strong></span> The states of <code class="computeroutput"><span class="identifier">x</span></code> and <code class="computeroutput"><span class="identifier">y</span></code>
         interchanged.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Throws:</strong></span> If both are initialized, whatever
         <code class="computeroutput"><span class="identifier">swap</span><span class="special">(</span><span class="identifier">T</span><span class="special">&amp;,</span><span class="identifier">T</span><span class="special">&amp;)</span></code>
         throws. If only one is initialized, whatever <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span> <span class="special">(</span>
         <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code> throws.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Notes:</strong></span> If both are initialized, <code class="computeroutput"><span class="identifier">swap</span><span class="special">(</span><span class="identifier">T</span><span class="special">&amp;,</span><span class="identifier">T</span><span class="special">&amp;)</span></code> is used unqualified but with <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">swap</span></code>
         introduced in scope. If only one is initialized, <code class="computeroutput"><span class="identifier">T</span><span class="special">::~</span><span class="identifier">T</span><span class="special">()</span></code>
         and <code class="computeroutput"><span class="identifier">T</span><span class="special">::</span><span class="identifier">T</span><span class="special">(</span> <span class="identifier">T</span>
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="special">)</span></code> is called.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Exception Safety:</strong></span> If both are initialized,
         this operation has the exception safety guarantees of <code class="computeroutput"><span class="identifier">swap</span><span class="special">(</span><span class="identifier">T</span><span class="special">&amp;,</span><span class="identifier">T</span><span class="special">&amp;)</span></code>.
         If only one is initialized, it has the same basic guarantee as <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">reset</span><span class="special">(</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code>.
       </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>Example:</strong></span><pre class="programlisting"><span class="identifier">T</span> <span class="identifier">x</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
 <span class="identifier">T</span> <span class="identifier">y</span><span class="special">(</span><span class="number">21</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def0</span> <span class="special">;</span>
