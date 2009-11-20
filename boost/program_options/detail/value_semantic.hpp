@@ -33,7 +33,7 @@ namespace boost { namespace program_options {
     void 
     typed_value<T, charT>::notify(const boost::any& value_store) const
     {
-        const T* value = boost::any_cast<const T>(&value_store);
+        const T* value = boost::any_cast<T>(&value_store);
         if (m_store_to) {
             *m_store_to = *value;
         }
