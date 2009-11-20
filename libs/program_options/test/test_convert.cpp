@@ -39,8 +39,7 @@ std::wstring from_8_bit_2(const std::string& s,
     std::wstring result;
 
 
-    std::mbstate_t state;
-    memset(&state, 0, sizeof(std::mbstate_t));
+    std::mbstate_t state = std::mbstate_t();
     
     const char* from = s.data();
     const char* from_end = s.data() + s.size();

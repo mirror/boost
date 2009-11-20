@@ -43,7 +43,7 @@ namespace boost { namespace detail {
     {
         std::basic_string<ToChar> result;
         
-        std::mbstate_t state = {0};
+        std::mbstate_t state = std::mbstate_t();
 
         const FromChar* from = s.data();
         const FromChar* from_end = s.data() + s.size();
