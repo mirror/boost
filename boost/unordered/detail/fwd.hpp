@@ -29,7 +29,7 @@
 // P = Predicate
 // A = Value Allocator
 // G = Grouped/Ungrouped
-// K = Key Extractor
+// E = Key Extractor
 
 #if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
 #   if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
@@ -424,7 +424,7 @@ namespace boost { namespace unordered_detail {
         }
     };
 
-    template <class H, class P, class A, class G, class K>
+    template <class H, class P, class A, class G, class E>
     class hash_table :
         public hash_buckets<A, G>,
         public hash_buffered_functions<H, P>
@@ -434,7 +434,7 @@ namespace boost { namespace unordered_detail {
         typedef H hasher;
         typedef P key_equal;
         typedef A value_allocator;
-        typedef K key_extractor;
+        typedef E key_extractor;
         typedef hash_buffered_functions<H, P> base;
         typedef hash_buckets<A, G> buckets;
         
@@ -563,18 +563,18 @@ namespace boost { namespace unordered_detail {
             node_constructor&, std::size_t);
     };
 
-    template <class H, class P, class A, class K>
+    template <class H, class P, class A, class E>
     class hash_unique_table :
-        public hash_table<H, P, A, ungrouped, K>
+        public hash_table<H, P, A, ungrouped, E>
         
     {
     public:
         typedef H hasher;
         typedef P key_equal;
         typedef A value_allocator;
-        typedef K key_extractor;
+        typedef E key_extractor;
 
-        typedef hash_table<H, P, A, ungrouped, K> table;
+        typedef hash_table<H, P, A, ungrouped, E> table;
         typedef hash_node_constructor<A, ungrouped> node_constructor;
 
         typedef BOOST_DEDUCED_TYPENAME table::key_type key_type;
@@ -657,18 +657,18 @@ namespace boost { namespace unordered_detail {
         void insert_range_impl(no_key, InputIt i, InputIt j);
     };
 
-    template <class H, class P, class A, class K>
+    template <class H, class P, class A, class E>
     class hash_equivalent_table :
-        public hash_table<H, P, A, grouped, K>
+        public hash_table<H, P, A, grouped, E>
         
     {
     public:
         typedef H hasher;
         typedef P key_equal;
         typedef A value_allocator;
-        typedef K key_extractor;
+        typedef E key_extractor;
 
-        typedef hash_table<H, P, A, grouped, K> table;
+        typedef hash_table<H, P, A, grouped, E> table;
         typedef hash_node_constructor<A, grouped> node_constructor;
         typedef hash_iterator_base<A, grouped> iterator_base;
 
