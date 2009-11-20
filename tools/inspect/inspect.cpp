@@ -38,6 +38,7 @@
 #include "path_name_check.hpp"
 #include "tab_check.hpp"
 #include "ascii_check.hpp"
+#include "apple_macro_check.hpp"
 #include "minmax_check.hpp"
 #include "unnamed_namespace_check.hpp"
 
@@ -529,6 +530,7 @@ namespace
          "  -path_name\n"
          "  -tab\n"
          "  -ascii\n"
+         "  -apple_macro\n"
          "  -minmax\n"
          "  -unnamed\n"
          " default is all checks on; otherwise options specify desired checks"
@@ -699,6 +701,7 @@ int cpp_main( int argc_param, char * argv_param[] )
   bool path_name_ck = true;
   bool tab_ck = true;
   bool ascii_ck = true;
+  bool apple_ok = true;
   bool minmax_ck = true;
   bool unnamed_ck = true;
   bool cvs = false;
@@ -731,6 +734,7 @@ int cpp_main( int argc_param, char * argv_param[] )
     path_name_ck = false;
     tab_ck = false;
     ascii_ck = false;
+    apple_ok = false;
     minmax_ck = false;
     unnamed_ck = false;
   }
@@ -754,6 +758,8 @@ int cpp_main( int argc_param, char * argv_param[] )
       tab_ck = true;
     else if ( std::strcmp( argv[1], "-ascii" ) == 0 )
       ascii_ck = true;
+    else if ( std::strcmp( argv[1], "-apple_macro" ) == 0 )
+      apple_ok = true;
     else if ( std::strcmp( argv[1], "-minmax" ) == 0 )
         minmax_ck = true;
     else if ( std::strcmp( argv[1], "-unnamed" ) == 0 )
@@ -797,6 +803,8 @@ int cpp_main( int argc_param, char * argv_param[] )
       inspectors.push_back( inspector_element( new boost::inspect::tab_check ) );
   if ( ascii_ck )
       inspectors.push_back( inspector_element( new boost::inspect::ascii_check ) );
+  if ( apple_ok )
+      inspectors.push_back( inspector_element( new boost::inspect::apple_macro_check ) );
   if ( minmax_ck )
       inspectors.push_back( inspector_element( new boost::inspect::minmax_check ) );
   if ( unnamed_ck )
