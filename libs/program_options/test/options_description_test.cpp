@@ -155,6 +155,21 @@ void test_word_wrapping()
    );
 }
 
+void test_default_values()
+{
+   options_description desc("Supported options");
+   desc.add_options()
+      ("maxlength", value<double>()->default_value(.1, "0.1"), "Maximum edge length to keep.")
+      ;
+   stringstream ss;
+   ss << desc;    
+   BOOST_CHECK_EQUAL(ss.str(),
+"Supported options:\n"
+"  --maxlength arg (=0.1) Maximum edge length to keep.\n"
+   );   
+}
+
+
 int main(int, char* [])
 {
     test_type();
@@ -162,5 +177,7 @@ int main(int, char* [])
     test_formatting();
     test_long_default_value();
     test_word_wrapping();
+    test_default_values();
     return 0;
 }
+
