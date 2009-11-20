@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Type Requirements and User-defined-types support</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../index.html" title="Chapter 1. Boost.NumericConversion">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.NumericConversion">
 <link rel="prev" href="converter___function_object.html" title="converter&lt;&gt; function object">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="converter___function_object.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="bounds___traits_class.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section" title="Type Requirements and User-defined-types support">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_numericconversion.type_requirements_and_user_defined_types_support"></a><a class="link" href="type_requirements_and_user_defined_types_support.html" title="Type Requirements and User-defined-types support">Type
     Requirements and User-defined-types support</a>
@@ -35,7 +35,7 @@
 <dt><span class="section"><a href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.special_policies">Special
       Policies</a></span></dt>
 </dl></div>
-<div class="section" lang="en">
+<div class="section" title="Type Requirements">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_numericconversion.type_requirements_and_user_defined_types_support.type_requirements"></a><a class="link" href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.type_requirements" title="Type Requirements">Type
       Requirements</a>
@@ -73,13 +73,13 @@
         user defined types require a visible <code class="computeroutput"><span class="keyword">operator</span><span class="special">&lt;</span></code> in order to use the <code class="computeroutput"><span class="identifier">Trunc</span><span class="special">&lt;&gt;</span></code> policy (the default).
       </p>
 </div>
-<div class="section" lang="en">
+<div class="section" title="UDT's special semantics">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics"></a><a class="link" href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics" title="UDT's special semantics">UDT's
       special semantics</a>
 </h3></div></div></div>
 <a name="boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics.conversion_traits"></a><h5>
-<a name="id669324"></a>
+<a name="id564459"></a>
         <a class="link" href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics.conversion_traits">Conversion
         Traits</a>
       </h5>
@@ -91,29 +91,29 @@
         members are hardwired regardless of the reality. The following table summarizes
         this:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <code class="computeroutput"><span class="identifier">Target</span><span class="special">=</span></code><span class="emphasis"><em>UDT</em></span>
-          and <code class="computeroutput"><span class="identifier">Source</span><span class="special">=</span></code><span class="emphasis"><em>built-in</em></span><div class="itemizedlist"><ul type="circle">
-<li><code class="computeroutput"><span class="identifier">subranged</span><span class="special">=</span><span class="keyword">false</span></code></li>
-<li><code class="computeroutput"><span class="identifier">supertype</span><span class="special">=</span><span class="identifier">Target</span></code></li>
-<li><code class="computeroutput"><span class="identifier">subtype</span><span class="special">=</span><span class="identifier">Source</span></code></li>
+          and <code class="computeroutput"><span class="identifier">Source</span><span class="special">=</span></code><span class="emphasis"><em>built-in</em></span><div class="itemizedlist"><ul class="itemizedlist" type="circle">
+<li class="listitem"><code class="computeroutput"><span class="identifier">subranged</span><span class="special">=</span><span class="keyword">false</span></code></li>
+<li class="listitem"><code class="computeroutput"><span class="identifier">supertype</span><span class="special">=</span><span class="identifier">Target</span></code></li>
+<li class="listitem"><code class="computeroutput"><span class="identifier">subtype</span><span class="special">=</span><span class="identifier">Source</span></code></li>
 </ul></div>
 </li>
-<li>
+<li class="listitem">
 <code class="computeroutput"><span class="identifier">Target</span><span class="special">=</span></code><span class="emphasis"><em>built-in</em></span>
-          and <code class="computeroutput"><span class="identifier">Source</span><span class="special">=</span></code><span class="emphasis"><em>UDT</em></span><div class="itemizedlist"><ul type="circle">
-<li><code class="computeroutput"><span class="identifier">subranged</span><span class="special">=</span><span class="keyword">true</span></code></li>
-<li><code class="computeroutput"><span class="identifier">supertype</span><span class="special">=</span><span class="identifier">Source</span></code></li>
-<li><code class="computeroutput"><span class="identifier">subtype</span><span class="special">=</span><span class="identifier">Target</span></code></li>
+          and <code class="computeroutput"><span class="identifier">Source</span><span class="special">=</span></code><span class="emphasis"><em>UDT</em></span><div class="itemizedlist"><ul class="itemizedlist" type="circle">
+<li class="listitem"><code class="computeroutput"><span class="identifier">subranged</span><span class="special">=</span><span class="keyword">true</span></code></li>
+<li class="listitem"><code class="computeroutput"><span class="identifier">supertype</span><span class="special">=</span><span class="identifier">Source</span></code></li>
+<li class="listitem"><code class="computeroutput"><span class="identifier">subtype</span><span class="special">=</span><span class="identifier">Target</span></code></li>
 </ul></div>
 </li>
-<li>
+<li class="listitem">
 <code class="computeroutput"><span class="identifier">Target</span><span class="special">=</span></code><span class="emphasis"><em>UDT</em></span>
-          and <code class="computeroutput"><span class="identifier">Source</span><span class="special">=</span></code><span class="emphasis"><em>UDT</em></span><div class="itemizedlist"><ul type="circle">
-<li><code class="computeroutput"><span class="identifier">subranged</span><span class="special">=</span><span class="keyword">false</span></code></li>
-<li><code class="computeroutput"><span class="identifier">supertype</span><span class="special">=</span><span class="identifier">Target</span></code></li>
-<li><code class="computeroutput"><span class="identifier">subtype</span><span class="special">=</span><span class="identifier">Source</span></code></li>
+          and <code class="computeroutput"><span class="identifier">Source</span><span class="special">=</span></code><span class="emphasis"><em>UDT</em></span><div class="itemizedlist"><ul class="itemizedlist" type="circle">
+<li class="listitem"><code class="computeroutput"><span class="identifier">subranged</span><span class="special">=</span><span class="keyword">false</span></code></li>
+<li class="listitem"><code class="computeroutput"><span class="identifier">supertype</span><span class="special">=</span><span class="identifier">Target</span></code></li>
+<li class="listitem"><code class="computeroutput"><span class="identifier">subtype</span><span class="special">=</span><span class="identifier">Source</span></code></li>
 </ul></div>
 </li>
 </ul></div>
@@ -123,7 +123,7 @@
         above.
       </p>
 <a name="boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics.range_checking"></a><h5>
-<a name="id669645"></a>
+<a name="id564867"></a>
         <a class="link" href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.udt_s_special_semantics.range_checking">Range
         Checking</a>
       </h5>
@@ -138,7 +138,7 @@
         Policies</a>
       </p>
 </div>
-<div class="section" lang="en">
+<div class="section" title="Special Policies">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_numericconversion.type_requirements_and_user_defined_types_support.special_policies"></a><a class="link" href="type_requirements_and_user_defined_types_support.html#boost_numericconversion.type_requirements_and_user_defined_types_support.special_policies" title="Special Policies">Special
       Policies</a>

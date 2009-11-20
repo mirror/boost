@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Definitions</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../index.html" title="Chapter 1. Boost.NumericConversion">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.NumericConversion">
 <link rel="prev" href="../index.html" title="Chapter 1. Boost.NumericConversion">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="../index.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="converter___function_object.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section" title="Definitions">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_numericconversion.definitions"></a><a class="link" href="definitions.html" title="Definitions">Definitions</a>
 </h2></div></div></div>
@@ -43,7 +43,7 @@
 <dt><span class="section"><a href="definitions.html#boost_numericconversion.definitions.subranged_conversion_direction__subtype_and_supertype">Subranged
       Conversion Direction, Subtype and Supertype</a></span></dt>
 </dl></div>
-<div class="section" lang="en">
+<div class="section" title="Introduction">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_numericconversion.definitions.introduction"></a><a class="link" href="definitions.html#boost_numericconversion.definitions.introduction" title="Introduction">Introduction</a>
 </h3></div></div></div>
@@ -63,7 +63,7 @@
       </p>
 </div>
 </div>
-<div class="section" lang="en">
+<div class="section" title="Types and Values">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_numericconversion.definitions.types_and_values"></a><a class="link" href="definitions.html#boost_numericconversion.definitions.types_and_values" title="Types and Values">Types
       and Values</a>
@@ -160,7 +160,7 @@
         of this document.
       </p>
 </div>
-<div class="section" lang="en">
+<div class="section" title="C++ Arithmetic Types">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_numericconversion.definitions.c___arithmetic_types"></a><a class="link" href="definitions.html#boost_numericconversion.definitions.c___arithmetic_types" title="C++ Arithmetic Types">C++
       Arithmetic Types</a>
@@ -234,7 +234,7 @@
         Another consequence of this is that the range for signed X is always a smaller
         subset of the range of unsigned X, as required by §3.9.1/3.
       </p>
-<div class="note"><table border="0" summary="Note">
+<div class="note" title="Note"><table border="0" summary="Note">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
@@ -257,7 +257,7 @@
 </td></tr>
 </table></div>
 </div>
-<div class="section" lang="en">
+<div class="section" title="Numeric Types">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_numericconversion.definitions.numeric_types"></a><a class="link" href="definitions.html#boost_numericconversion.definitions.numeric_types" title="Numeric Types">Numeric
       Types</a>
@@ -275,26 +275,26 @@
 <p>
         A type is <span class="bold"><strong>numeric</strong></span> if:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           It is an arithmetic type, or,
         </li>
-<li>
+<li class="listitem">
           It is a user-defined type which
-          <div class="itemizedlist"><ul type="circle">
-<li>
+          <div class="itemizedlist"><ul class="itemizedlist" type="circle">
+<li class="listitem">
               Represents numeric abstract values (i.e. numbers).
             </li>
-<li>
+<li class="listitem">
               Can be converted (either implicitly or explicitly) to/from at least
               one arithmetic type.
             </li>
-<li>
+<li class="listitem">
               Has <a class="link" href="definitions.html#boost_numericconversion.definitions.range_and_precision" title="Range and Precision">range</a>
               (possibly unbounded) and <a class="link" href="definitions.html#boost_numericconversion.definitions.range_and_precision" title="Range and Precision">precision</a>
               (possibly dynamic or unlimited).
             </li>
-<li>
+<li class="listitem">
               Provides an specialization of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span></code>.
             </li>
 </ul></div>
@@ -363,7 +363,7 @@
 </span><span class="identifier">MyInt</span> <span class="identifier">i</span><span class="special">(</span><span class="number">1234</span><span class="special">);</span>
 </pre>
 </div>
-<div class="section" lang="en">
+<div class="section" title="Range and Precision">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_numericconversion.definitions.range_and_precision"></a><a class="link" href="definitions.html#boost_numericconversion.definitions.range_and_precision" title="Range and Precision">Range
       and Precision</a>
@@ -482,12 +482,12 @@
 <p>
         This definition was chosen because:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <span class="bold"><strong>(a)</strong></span> The discrete set of numeric values
           is already given by the numeric set.
         </li>
-<li>
+<li class="listitem">
 <span class="bold"><strong>(b)</strong></span> Abstract intervals are easier to compare
           and overlap since only boundary values need to be considered.
         </li>
@@ -523,7 +523,7 @@
         of mantissa bits, the higher the precision.
       </p>
 </div>
-<div class="section" lang="en">
+<div class="section" title="Exact, Correctly Rounded and Out-Of-Range Representations">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_numericconversion.definitions.exact__correctly_rounded_and_out_of_range_representations"></a><a class="link" href="definitions.html#boost_numericconversion.definitions.exact__correctly_rounded_and_out_of_range_representations" title="Exact, Correctly Rounded and Out-Of-Range Representations">Exact,
       Correctly Rounded and Out-Of-Range Representations</a>
@@ -542,13 +542,13 @@
         or, equivalently, it's representation in the type <code class="computeroutput"><span class="identifier">T</span></code>
         is <span class="bold"><strong>out of range</strong></span>, or <span class="bold"><strong>overflows</strong></span>.
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           If <code class="computeroutput"><span class="identifier">V</span> <span class="special">&lt;</span>
           <span class="identifier">abt</span><span class="special">(</span><span class="identifier">l</span><span class="special">)</span></code>, the
           <span class="bold"><strong>overflow is negative</strong></span>.
         </li>
-<li>
+<li class="listitem">
           If <code class="computeroutput"><span class="identifier">V</span> <span class="special">&gt;</span>
           <span class="identifier">abt</span><span class="special">(</span><span class="identifier">h</span><span class="special">)</span></code>, the
           <span class="bold"><strong>overflow is positive</strong></span>.
@@ -583,13 +583,13 @@
         the roundoff error corresponds to the representation operation and not to
         the numeric value itself (i.e. numeric values do not have any error themselves)
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           If the roundoff is 0, the representation is <span class="bold"><strong>exact</strong></span>,
           and <code class="computeroutput"><span class="identifier">V</span></code> is exactly representable
           in the type <code class="computeroutput"><span class="identifier">T</span></code>.
         </li>
-<li>
+<li class="listitem">
           If the roundoff is not 0, the representation is <span class="bold"><strong>inexact</strong></span>,
           and <code class="computeroutput"><span class="identifier">V</span></code> is inexactly representable
           in the type <code class="computeroutput"><span class="identifier">T</span></code>.
@@ -623,24 +623,24 @@
 <p>
         The following examples summarize the given definitions. Consider:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           A numeric type <code class="computeroutput"><span class="identifier">Int</span></code> representing
           integer numbers with a <span class="emphasis"><em>numeric set</em></span>: <code class="computeroutput"><span class="special">{-</span><span class="number">2</span><span class="special">,-</span><span class="number">1</span><span class="special">,</span><span class="number">0</span><span class="special">,</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">}</span></code> and <span class="emphasis"><em>range</em></span>:
           <code class="computeroutput"><span class="special">[-</span><span class="number">2</span><span class="special">,</span><span class="number">2</span><span class="special">]</span></code>
 </li>
-<li>
+<li class="listitem">
           A numeric type <code class="computeroutput"><span class="identifier">Cardinal</span></code>
           representing integer numbers with a <span class="emphasis"><em>numeric set</em></span>:
           <code class="computeroutput"><span class="special">{</span><span class="number">0</span><span class="special">,</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">,</span><span class="number">6</span><span class="special">,</span><span class="number">7</span><span class="special">,</span><span class="number">8</span><span class="special">,</span><span class="number">9</span><span class="special">}</span></code> and <span class="emphasis"><em>range</em></span>: <code class="computeroutput"><span class="special">[</span><span class="number">0</span><span class="special">,</span><span class="number">9</span><span class="special">]</span></code> (no modulo-arithmetic
           here)
         </li>
-<li>
+<li class="listitem">
           A numeric type <code class="computeroutput"><span class="identifier">Real</span></code> representing
           real numbers with a <span class="emphasis"><em>numeric set</em></span>: <code class="computeroutput"><span class="special">{-</span><span class="number">2.0</span><span class="special">,-</span><span class="number">1.5</span><span class="special">,-</span><span class="number">1.0</span><span class="special">,-</span><span class="number">0.5</span><span class="special">,-</span><span class="number">0.0</span><span class="special">,+</span><span class="number">0.0</span><span class="special">,+</span><span class="number">0.5</span><span class="special">,+</span><span class="number">1.0</span><span class="special">,+</span><span class="number">1.5</span><span class="special">,+</span><span class="number">2.0</span><span class="special">}</span></code> and
           <span class="emphasis"><em>range</em></span>: <code class="computeroutput"><span class="special">[-</span><span class="number">2.0</span><span class="special">,+</span><span class="number">2.0</span><span class="special">]</span></code>
 </li>
-<li>
+<li class="listitem">
           A numeric type <code class="computeroutput"><span class="identifier">Whole</span></code> representing
           real numbers with a <span class="emphasis"><em>numeric set</em></span>: <code class="computeroutput"><span class="special">{-</span><span class="number">2.0</span><span class="special">,-</span><span class="number">1.0</span><span class="special">,</span><span class="number">0.0</span><span class="special">,+</span><span class="number">1.0</span><span class="special">,+</span><span class="number">2.0</span><span class="special">}</span></code> and <span class="emphasis"><em>range</em></span>: <code class="computeroutput"><span class="special">[-</span><span class="number">2.0</span><span class="special">,+</span><span class="number">2.0</span><span class="special">]</span></code>
 </li>
@@ -650,35 +650,35 @@
         and <code class="computeroutput"><span class="identifier">Whole</span></code> both represent
         real numbers, have the same range, but different precision.
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           The integer number <code class="computeroutput"><span class="number">1</span></code> (an abstract
           value) can be exactly represented in any of these types.
         </li>
-<li>
+<li class="listitem">
           The integer number <code class="computeroutput"><span class="special">-</span><span class="number">1</span></code>
           can be exactly represented in <code class="computeroutput"><span class="identifier">Int</span></code>,
           <code class="computeroutput"><span class="identifier">Real</span></code> and <code class="computeroutput"><span class="identifier">Whole</span></code>, but cannot be represented in
           <code class="computeroutput"><span class="identifier">Cardinal</span></code>, yielding negative
           overflow.
         </li>
-<li>
+<li class="listitem">
           The real number <code class="computeroutput"><span class="number">1.5</span></code> can be
           exactly represented in <code class="computeroutput"><span class="identifier">Real</span></code>,
           and inexactly represented in the other types.
         </li>
-<li>
+<li class="listitem">
           If <code class="computeroutput"><span class="number">1.5</span></code> is represented as either
           <code class="computeroutput"><span class="number">1</span></code> or <code class="computeroutput"><span class="number">2</span></code>
           in any of the types (except <code class="computeroutput"><span class="identifier">Real</span></code>),
           the representation is correctly rounded.
         </li>
-<li>
+<li class="listitem">
           If <code class="computeroutput"><span class="number">0.5</span></code> is represented as <code class="computeroutput"><span class="special">+</span><span class="number">1.5</span></code> in the
           type <code class="computeroutput"><span class="identifier">Real</span></code>, it is incorrectly
           rounded.
         </li>
-<li>
+<li class="listitem">
 <code class="computeroutput"><span class="special">(-</span><span class="number">2.0</span><span class="special">,-</span><span class="number">1.5</span><span class="special">)</span></code>
           are the <code class="computeroutput"><span class="identifier">Real</span></code> adjacents
           of any real number in the interval <code class="computeroutput"><span class="special">[-</span><span class="number">2.0</span><span class="special">,-</span><span class="number">1.5</span><span class="special">]</span></code>, yet there are no <code class="computeroutput"><span class="identifier">Real</span></code>
@@ -689,7 +689,7 @@
         </li>
 </ul></div>
 </div>
-<div class="section" lang="en">
+<div class="section" title="Standard (numeric) Conversions">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_numericconversion.definitions.standard__numeric__conversions"></a><a class="link" href="definitions.html#boost_numericconversion.definitions.standard__numeric__conversions" title="Standard (numeric) Conversions">Standard
       (numeric) Conversions</a>
@@ -721,8 +721,8 @@
 <p>
         Integer to integer conversions are always defined:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           If <code class="computeroutput"><span class="identifier">T</span></code> is unsigned, the abstract
           value which is effectively represented is not <code class="computeroutput"><span class="identifier">N</span></code>
           but <code class="computeroutput"><span class="identifier">M</span><span class="special">=[</span>
@@ -732,7 +732,7 @@
           <code class="computeroutput"><span class="identifier">h</span></code> is the highest unsigned
           typed value of type <code class="computeroutput"><span class="identifier">T</span></code>.
         </li>
-<li>
+<li class="listitem">
           If <code class="computeroutput"><span class="identifier">T</span></code> is signed and <code class="computeroutput"><span class="identifier">N</span></code> is not directly representable, the
           result <code class="computeroutput"><span class="identifier">t</span></code> is <span class="underline">implementation-defined</span>,
           which means that the C++ implementation is required to produce a value
@@ -745,13 +745,13 @@
         is representable; if it is not, the conversion has <span class="underline">undefined
         behavior</span>.
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           If <code class="computeroutput"><span class="identifier">N</span></code> is exactly representable,
           <code class="computeroutput"><span class="identifier">t</span></code> is required to be the
           exact representation.
         </li>
-<li>
+<li class="listitem">
           If <code class="computeroutput"><span class="identifier">N</span></code> is inexactly representable,
           <code class="computeroutput"><span class="identifier">t</span></code> is required to be one
           of the two adjacents, with an implementation-defined choice of rounding
@@ -764,7 +764,7 @@
         <code class="computeroutput"><span class="identifier">trunc</span><span class="special">()</span></code>
         is to truncate: i.e. to remove the fractional part, if any.
       </p>
-<div class="itemizedlist"><ul type="disc"><li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
           If <code class="computeroutput"><span class="identifier">M</span></code> is not representable
           in <code class="computeroutput"><span class="identifier">T</span></code>, the conversion has
           <span class="underline">undefined behavior</span> (unless <code class="computeroutput"><span class="identifier">T</span></code> is <code class="computeroutput"><span class="keyword">bool</span></code>,
@@ -773,13 +773,13 @@
 <p>
         Integer to Floating conversions are always defined.
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           If <code class="computeroutput"><span class="identifier">N</span></code> is exactly representable,
           <code class="computeroutput"><span class="identifier">t</span></code> is required to be the
           exact representation.
         </li>
-<li>
+<li class="listitem">
           If <code class="computeroutput"><span class="identifier">N</span></code> is inexactly representable,
           <code class="computeroutput"><span class="identifier">t</span></code> is required to be one
           of the two adjacents, with an implementation-defined choice of rounding
@@ -787,7 +787,7 @@
         </li>
 </ul></div>
 </div>
-<div class="section" lang="en">
+<div class="section" title="Subranged Conversion Direction, Subtype and Supertype">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_numericconversion.definitions.subranged_conversion_direction__subtype_and_supertype"></a><a class="link" href="definitions.html#boost_numericconversion.definitions.subranged_conversion_direction__subtype_and_supertype" title="Subranged Conversion Direction, Subtype and Supertype">Subranged
       Conversion Direction, Subtype and Supertype</a>
@@ -835,15 +835,15 @@
 <p>
         Given the following numeric types all representing real numbers:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <code class="computeroutput"><span class="identifier">X</span></code> with numeric set <code class="computeroutput"><span class="special">{-</span><span class="number">2.0</span><span class="special">,-</span><span class="number">1.0</span><span class="special">,</span><span class="number">0.0</span><span class="special">,+</span><span class="number">1.0</span><span class="special">,+</span><span class="number">2.0</span><span class="special">}</span></code> and
           range <code class="computeroutput"><span class="special">[-</span><span class="number">2.0</span><span class="special">,+</span><span class="number">2.0</span><span class="special">]</span></code>
 </li>
-<li>
+<li class="listitem">
 <code class="computeroutput"><span class="identifier">Y</span></code> with numeric set <code class="computeroutput"><span class="special">{-</span><span class="number">2.0</span><span class="special">,-</span><span class="number">1.5</span><span class="special">,-</span><span class="number">1.0</span><span class="special">,-</span><span class="number">0.5</span><span class="special">,</span><span class="number">0.0</span><span class="special">,+</span><span class="number">0.5</span><span class="special">,+</span><span class="number">1.0</span><span class="special">,+</span><span class="number">1.5</span><span class="special">,+</span><span class="number">2.0</span><span class="special">}</span></code> and range <code class="computeroutput"><span class="special">[-</span><span class="number">2.0</span><span class="special">,+</span><span class="number">2.0</span><span class="special">]</span></code>
 </li>
-<li>
+<li class="listitem">
 <code class="computeroutput"><span class="identifier">Z</span></code> with numeric set <code class="computeroutput"><span class="special">{-</span><span class="number">1.0</span><span class="special">,</span><span class="number">0.0</span><span class="special">,+</span><span class="number">1.0</span><span class="special">}</span></code> and range <code class="computeroutput"><span class="special">[-</span><span class="number">1.0</span><span class="special">,+</span><span class="number">1.0</span><span class="special">]</span></code>
 </li>
 </ul></div>
@@ -917,12 +917,12 @@
         If <code class="computeroutput"><span class="identifier">FLT_MAX</span> <span class="special">&lt;</span>
         <span class="identifier">DBL_MAX</span></code>:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
 <code class="computeroutput"><span class="keyword">double</span><span class="special">-&gt;</span><span class="keyword">float</span></code> is subranged and <code class="computeroutput"><span class="identifier">supertype</span><span class="special">=</span><span class="keyword">double</span></code>,
           <code class="computeroutput"><span class="identifier">subtype</span><span class="special">=</span><span class="keyword">float</span></code>.
         </li>
-<li>
+<li class="listitem">
 <code class="computeroutput"><span class="keyword">float</span><span class="special">-&gt;</span><span class="keyword">double</span></code> is not subranged and <code class="computeroutput"><span class="identifier">supertype</span><span class="special">=</span><span class="keyword">double</span></code>, <code class="computeroutput"><span class="identifier">subtype</span><span class="special">=</span><span class="keyword">float</span></code>.
         </li>
 </ul></div>
@@ -948,12 +948,12 @@
         <span class="special">&gt;</span> <span class="identifier">INT_MAX</span></code>
         (§3.9/3), so:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
           'int-&gt;unsigned' is subranged (negative values fall out of range) and
           <code class="computeroutput"><span class="identifier">supertype</span><span class="special">=</span><span class="keyword">int</span></code>, <code class="computeroutput"><span class="identifier">subtype</span><span class="special">=</span><span class="keyword">unsigned</span></code>.
         </li>
-<li>
+<li class="listitem">
           'unsigned-&gt;int' is <span class="emphasis"><em>also</em></span> subranged (high positive
           values fall out of range) and <code class="computeroutput"><span class="identifier">supertype</span><span class="special">=</span><span class="keyword">unsigned</span></code>,
           <code class="computeroutput"><span class="identifier">subtype</span><span class="special">=</span><span class="keyword">int</span></code>.
