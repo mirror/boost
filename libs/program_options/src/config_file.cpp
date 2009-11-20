@@ -105,10 +105,10 @@ namespace boost { namespace program_options { namespace detail {
                     bool registered = allowed_option(name);
                     if (!registered && !m_allow_unregistered)
                         boost::throw_exception(unknown_option(name));
-                                        
-                    if (value.empty())
-                        boost::throw_exception(invalid_syntax(s, "no value given"));
-                    
+                               
+                    if (value.empty()) 
+                       continue;
+
                     found = true;
                     this->value().string_key = name;
                     this->value().value.clear();

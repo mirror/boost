@@ -202,6 +202,7 @@ void test_config_file()
     desc.add_options()
         ("gv1", new untyped_value)
         ("gv2", new untyped_value)
+        ("empty_value", new untyped_value)
         ("plug*", new untyped_value)
         ("m1.v1", new untyped_value)
         ("m1.v2", new untyped_value)
@@ -210,6 +211,7 @@ void test_config_file()
 
     const char content1[] =
     " gv1 = 0#asd\n"
+    "empty_value = \n"
     "plug3 = 7\n"
     "b = true\n"
     "[m1]\n"
