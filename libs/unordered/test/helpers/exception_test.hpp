@@ -110,7 +110,7 @@ namespace test {
             template <class T> void test(T const&) const {}
         };
         data_type init() const { return data_type(); }
-        void check() const {}
+        void check BOOST_PREVENT_MACRO_SUBSTITUTION() const {}
     };
 
     template <class T, class P1, class P2, class T2>

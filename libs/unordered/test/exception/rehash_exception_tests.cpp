@@ -28,7 +28,9 @@ struct rehash_test_base : public test::exception_base
         return x;
     }
 
-    void check(T const& x, strong_type const& strong) const {
+    void check BOOST_PREVENT_MACRO_SUBSTITUTION(T const& x,
+        strong_type const& strong) const
+    {
         std::string scope(test::scope);
 
         if(scope.find("hash::operator()") == std::string::npos &&

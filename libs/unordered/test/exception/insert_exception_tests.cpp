@@ -27,7 +27,7 @@ struct insert_test_base : public test::exception_base
         return T();
     }
 
-    void check(T const& x, strong_type const& strong) const {
+    void check BOOST_PREVENT_MACRO_SUBSTITUTION(T const& x, strong_type const& strong) const {
         std::string scope(test::scope);
 
         if(scope.find("hash::operator()") == std::string::npos)
@@ -92,7 +92,7 @@ struct insert_test3 : public insert_test_base<T>
         x.insert(this->values.begin(), this->values.end());
     }
 
-    void check(T const& x) const {
+    void check BOOST_PREVENT_MACRO_SUBSTITUTION(T const& x) const {
         test::check_equivalent_keys(x);
     }
 };
@@ -215,7 +215,7 @@ struct insert_test_rehash3 : public insert_test_base<T>
         BOOST_TEST(x.bucket_count() != bucket_count);
     }
 
-    void check(T const& x) const {
+    void check BOOST_PREVENT_MACRO_SUBSTITUTION(T const& x) const {
         if(x.size() < rehash_bucket_count) {
             //BOOST_TEST(x.bucket_count() == original_bucket_count);
         }

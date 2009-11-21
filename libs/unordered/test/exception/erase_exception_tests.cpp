@@ -22,7 +22,7 @@ struct erase_test_base : public test::exception_base
         return T(values.begin(), values.end());
     }
 
-    void check(T const& x) const {
+    void check BOOST_PREVENT_MACRO_SUBSTITUTION(T const& x) const {
         std::string scope(test::scope);
 
         BOOST_TEST(scope.find("hash::") != std::string::npos ||

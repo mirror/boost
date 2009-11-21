@@ -22,7 +22,7 @@ struct self_swap_base : public test::exception_base
     typedef T data_type;
     T init() const { return T(values.begin(), values.end()); }
     void run(T& x) const { x.swap(x); }
-    void check(T const& x) const {
+    void check BOOST_PREVENT_MACRO_SUBSTITUTION(T const& x) const {
         std::string scope(test::scope);
 
 #if BOOST_UNORDERED_SWAP_METHOD != 2
@@ -77,7 +77,7 @@ struct swap_base : public test::exception_base
             d.x.swap(d.y);
         } catch (std::runtime_error) {}
     }
-    void check(data_type const& d) const {
+    void check BOOST_PREVENT_MACRO_SUBSTITUTION(data_type const& d) const {
         std::string scope(test::scope);
 
 #if BOOST_UNORDERED_SWAP_METHOD != 2
