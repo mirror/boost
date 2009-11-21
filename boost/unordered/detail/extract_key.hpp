@@ -75,7 +75,7 @@ namespace unordered_detail {
     struct map_extractor
     {
         typedef ValueType value_type;
-        typedef Key key_type;
+        typedef BOOST_DEDUCED_TYPENAME boost::remove_const<Key>::type key_type;
 
         static key_type const& extract(value_type const& v)
         {
