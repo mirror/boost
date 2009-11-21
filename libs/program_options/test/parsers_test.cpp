@@ -222,12 +222,13 @@ void test_config_file()
 
     stringstream ss(content1);
     vector<option> a1 = parse_config_file(ss, desc).options;
-    BOOST_REQUIRE(a1.size() == 5);
+    BOOST_REQUIRE(a1.size() == 6);
     check_value(a1[0], "gv1", "0");
-    check_value(a1[1], "plug3", "7");
-    check_value(a1[2], "b", "true");
-    check_value(a1[3], "m1.v1", "1");
-    check_value(a1[4], "m1.v2", "2");
+    check_value(a1[1], "empty_value", "");
+    check_value(a1[2], "plug3", "7");
+    check_value(a1[3], "b", "true");
+    check_value(a1[4], "m1.v1", "1");
+    check_value(a1[5], "m1.v2", "2");
 
 }
 
