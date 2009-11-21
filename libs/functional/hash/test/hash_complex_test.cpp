@@ -19,19 +19,17 @@ int main() {}
 
 #include <boost/detail/lightweight_test.hpp>
 
-#include <complex>
-#include <sstream>
-#include <boost/limits.hpp>
-
 #if defined(BOOST_MSVC)
-#pragma warning(push)
 #pragma warning(disable:4244) // conversion from 'unsigned long' to 'unsigned short', possible loss of data
+#pragma warning(disable:4245) // conversion from 'int' to  'const unsigned short', signed/unsigned mismatch
+#pragma warning(disable:4305) // truncation from 'double' to 'const std::complex<float>::_Ty'
+#pragma warning(disable:4309) // truncation of constant value
 #pragma warning(disable:4512) // assignment operator could not be generated
 #endif
 
-#if defined(BOOST_MSVC)
-#pragma warning(pop)
-#endif
+#include <complex>
+#include <sstream>
+#include <boost/limits.hpp>
 
 template <class T>
 void generic_complex_tests(std::complex<T> v)
