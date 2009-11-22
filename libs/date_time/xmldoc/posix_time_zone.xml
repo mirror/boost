@@ -42,7 +42,7 @@
       <listitem>An exception will be thrown for an invalid date spec (see <link linkend="date_time.gregorian.date_class">date class</link>).</listitem>
       <listitem>A boost::local_time::bad_offset exception will be thrown for:</listitem>
       <listitem>A DST start or end offset that is negative or more than 24 hours.</listitem>
-      <listitem>A UTC zone that is greater than +12 or less than -12 hours.</listitem>
+      <listitem>A UTC zone that is greater than +14 or less than -12 hours.</listitem>
       <listitem>A boost::local_time::bad_adjustment exception will be thrown for a DST adjustment that is 24 hours or more (positive or negative)</listitem>
     </itemizedlist>
   </para>
