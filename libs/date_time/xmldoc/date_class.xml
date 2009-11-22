@@ -341,7 +341,7 @@ d3.is_special(); // --> false</screen></entry>
 	</row>
 	<row>
 	  <entry><screen>date d(2000,Feb,1);
-//gets Feb 28 -- 2000 was leap year
+//gets Feb 29 -- 2000 was leap year
 date eom = d.end_of_month_day();</screen></entry>
 	</row>
       </tbody>
