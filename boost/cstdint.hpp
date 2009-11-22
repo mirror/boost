@@ -220,6 +220,15 @@ namespace boost
      typedef unsigned short  uint_least16_t;
      typedef unsigned short  uint_fast16_t;
 #  endif
+# elif (USHRT_MAX == 0xffffffff) && defined(__MTA__) 
+      // On MTA / XMT short is 32 bits unless the -short16 compiler flag is specified 
+      // MTA / XMT does support the following non-standard integer types 
+      typedef __short16           int16_t; 
+      typedef __short16           int_least16_t; 
+      typedef __short16           int_fast16_t; 
+      typedef unsigned __short16  uint16_t; 
+      typedef unsigned __short16  uint_least16_t; 
+      typedef unsigned __short16  uint_fast16_t; 
 # elif (USHRT_MAX == 0xffffffff) && defined(CRAY)
      // no 16-bit types on Cray:
      typedef short           int_least16_t;
@@ -246,6 +255,14 @@ namespace boost
      typedef unsigned int    uint32_t;
      typedef unsigned int    uint_least32_t;
      typedef unsigned int    uint_fast32_t;
+# elif (UINT_MAX == 0xffffffffffffffff) && defined(__MTA__) 
+      // Integers are 64 bits on the MTA / XMT 
+      typedef __int32           int32_t; 
+      typedef __int32           int_least32_t; 
+      typedef __int32           int_fast32_t; 
+      typedef unsigned __int32  uint32_t; 
+      typedef unsigned __int32  uint_least32_t; 
+      typedef unsigned __int32  uint_fast32_t; 
 # else
 #    error defaults not correct; you must hand modify boost/cstdint.hpp
 # endif
