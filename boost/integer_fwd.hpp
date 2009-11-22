@@ -65,7 +65,7 @@ template <  >
 template <  >
     class integer_traits< unsigned long >;
 
-#ifdef ULLONG_MAX
+#if !defined(BOOST_NO_INTEGRAL_INT64_T) && !defined(BOOST_NO_INT64_T) && defined(BOOST_HAS_LONG_LONG)
 template <  >
     class integer_traits<  ::boost::long_long_type>;
 
