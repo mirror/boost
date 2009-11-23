@@ -19,6 +19,7 @@
 
 #include <boost/integer_traits.hpp>  // for boost::integer_traits
 #include <boost/limits.hpp>          // for std::numeric_limits
+#include <boost/cstdint.hpp>         // for boost::int64_t and BOOST_NO_INTEGRAL_INT64_T
 
 namespace boost
 {
@@ -36,14 +37,20 @@ namespace boost
   //  specializatons: 1=long, 2=int, 3=short, 4=signed char,
   //     6=unsigned long, 7=unsigned int, 8=unsigned short, 9=unsigned char
   //  no specializations for 0 and 5: requests for a type > long are in error
-  template<> struct int_least_helper<1> { typedef long least; };
-  template<> struct int_least_helper<2> { typedef int least; };
-  template<> struct int_least_helper<3> { typedef short least; };
-  template<> struct int_least_helper<4> { typedef signed char least; };
-  template<> struct int_least_helper<6> { typedef unsigned long least; };
-  template<> struct int_least_helper<7> { typedef unsigned int least; };
-  template<> struct int_least_helper<8> { typedef unsigned short least; };
-  template<> struct int_least_helper<9> { typedef unsigned char least; };
+#ifdef BOOST_HAS_LONG_LONG
+  template<> struct int_least_helper<1> { typedef boost::long_long_type least; };
+#endif
+  template<> struct int_least_helper<2> { typedef long least; };
+  template<> struct int_least_helper<3> { typedef int least; };
+  template<> struct int_least_helper<4> { typedef short least; };
+  template<> struct int_least_helper<5> { typedef signed char least; };
+#ifdef BOOST_HAS_LONG_LONG
+  template<> struct int_least_helper<6> { typedef boost::ulong_long_type least; };
+#endif
+  template<> struct int_least_helper<7> { typedef unsigned long least; };
+  template<> struct int_least_helper<8> { typedef unsigned int least; };
+  template<> struct int_least_helper<9> { typedef unsigned short least; };
+  template<> struct int_least_helper<10> { typedef unsigned char least; };
 
   //  integer templates specifying number of bits  ---------------------------//
 
@@ -53,6 +60,11 @@ namespace boost
   {
       typedef typename int_least_helper
         <
+#ifdef BOOST_HAS_LONG_LONG
+          (Bits-1 <= (int)(sizeof(boost::long_long_type) * CHAR_BIT)) +
+#else
+           1 +
+#endif
           (Bits-1 <= std::numeric_limits<long>::digits) +
           (Bits-1 <= std::numeric_limits<int>::digits) +
           (Bits-1 <= std::numeric_limits<short>::digits) +
@@ -68,6 +80,11 @@ namespace boost
       typedef typename int_least_helper
         < 
           5 +
+#ifdef BOOST_HAS_LONG_LONG
+          (Bits-1 <= (int)(sizeof(boost::long_long_type) * CHAR_BIT)) +
+#else
+           1 +
+#endif
           (Bits <= std::numeric_limits<unsigned long>::digits) +
           (Bits <= std::numeric_limits<unsigned int>::digits) +
           (Bits <= std::numeric_limits<unsigned short>::digits) +
@@ -80,11 +97,20 @@ namespace boost
   //  integer templates specifying extreme value  ----------------------------//
 
   //  signed
+#if !defined(BOOST_NO_INTEGRAL_INT64_T) && defined(BOOST_HAS_LONG_LONG)
+  template< boost::long_long_type MaxValue >   // maximum value to require support
+#else
   template< long MaxValue >   // maximum value to require support
+#endif
   struct int_max_value_t 
   {
       typedef typename int_least_helper
         <
+#ifdef BOOST_HAS_LONG_LONG
+          (MaxValue <= integer_traits<boost::long_long_type>::const_max) +
+#else
+           1 +
+#endif
           (MaxValue <= integer_traits<long>::const_max) +
           (MaxValue <= integer_traits<int>::const_max) +
           (MaxValue <= integer_traits<short>::const_max) +
@@ -93,11 +119,20 @@ namespace boost
       typedef typename int_fast_t<least>::fast  fast;
   };
 
+#if !defined(BOOST_NO_INTEGRAL_INT64_T) && defined(BOOST_HAS_LONG_LONG)
+  template< boost::long_long_type MinValue >   // minimum value to require support
+#else
   template< long MinValue >   // minimum value to require support
+#endif
   struct int_min_value_t 
   {
       typedef typename int_least_helper
         <
+#ifdef BOOST_HAS_LONG_LONG
+          (MinValue >= integer_traits<boost::long_long_type>::const_min) +
+#else
+           1 +
+#endif
           (MinValue >= integer_traits<long>::const_min) +
           (MinValue >= integer_traits<int>::const_min) +
           (MinValue >= integer_traits<short>::const_min) +
@@ -107,16 +142,25 @@ namespace boost
   };
 
   //  unsigned
-  template< unsigned long Value >   // maximum value to require support
+#if !defined(BOOST_NO_INTEGRAL_INT64_T) && defined(BOOST_HAS_LONG_LONG)
+  template< boost::ulong_long_type MaxValue >   // minimum value to require support
+#else
+  template< long MaxValue >   // minimum value to require support
+#endif
   struct uint_value_t 
   {
       typedef typename int_least_helper
         < 
           5 +
-          (Value <= integer_traits<unsigned long>::const_max) +
-          (Value <= integer_traits<unsigned int>::const_max) +
-          (Value <= integer_traits<unsigned short>::const_max) +
-          (Value <= integer_traits<unsigned char>::const_max)
+#ifdef BOOST_HAS_LONG_LONG
+          (MaxValue <= integer_traits<boost::ulong_long_type>::const_max) +
+#else
+           1 +
+#endif
+          (MaxValue <= integer_traits<unsigned long>::const_max) +
+          (MaxValue <= integer_traits<unsigned int>::const_max) +
+          (MaxValue <= integer_traits<unsigned short>::const_max) +
+          (MaxValue <= integer_traits<unsigned char>::const_max)
         >::least  least;
       typedef typename int_fast_t<least>::fast  fast;
   };

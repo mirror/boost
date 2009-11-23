@@ -85,13 +85,25 @@ template< int Bits >
 template< int Bits >
     struct uint_t;
 
-template< long MaxValue >
+#if !defined(BOOST_NO_INTEGRAL_INT64_T) && defined(BOOST_HAS_LONG_LONG)
+    template< boost::long_long_type MaxValue >   // maximum value to require support
+#else
+  template< long MaxValue >   // maximum value to require support
+#endif
     struct int_max_value_t;
 
-template< long MinValue >
+#if !defined(BOOST_NO_INTEGRAL_INT64_T) && defined(BOOST_HAS_LONG_LONG)
+  template< boost::long_long_type MinValue >   // minimum value to require support
+#else
+  template< long MinValue >   // minimum value to require support
+#endif
     struct int_min_value_t;
 
-template< unsigned long Value >
+#if !defined(BOOST_NO_INTEGRAL_INT64_T) && defined(BOOST_HAS_LONG_LONG)
+  template< boost::ulong_long_type MaxValue >   // maximum value to require support
+#else
+  template< long MaxValue >   // maximum value to require support
+#endif
     struct uint_value_t;
 
 

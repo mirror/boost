@@ -134,7 +134,7 @@ namespace boost
 // Test if a constant can fit within a certain type
 #define PRIVATE_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK( Template < Number > :: Type ( Value ) == Value )
 
-#if ULONG_MAX > 0xFFFFFFFFL
+#if (ULONG_MAX > 0xFFFFFFFFL) || !defined(BOOST_NO_INTEGRAL_INT64_T)
 #define PRIVATE_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
  PRIVATE_FIT_TEST(Template, 64, Type, v); v >>= 1; \
  PRIVATE_FIT_TEST(Template, 63, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 62, Type, v); v >>= 1; \
