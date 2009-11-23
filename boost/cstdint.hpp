@@ -25,8 +25,13 @@
 
 #include <boost/config.hpp>
 
-
-#ifdef BOOST_HAS_STDINT_H
+//
+// Note that GLIBC is a bit inconsistent about whether int64_t is defined or not
+// depending upon what headers happen to have been included first...
+// so we disable use of stdint.h when GLIBC does not define __GLIBC_HAVE_LONG_LONG.
+// See https://svn.boost.org/trac/boost/ticket/3548 and http://sources.redhat.com/bugzilla/show_bug.cgi?id=10990
+//
+#if defined(BOOST_HAS_STDINT_H) && (!defined(__GLIBC__) || defined(__GLIBC_HAVE_LONG_LONG))
 
 // The following #include is an implementation artifact; not part of interface.
 # ifdef __hpux
