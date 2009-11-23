@@ -17,7 +17,6 @@
 // use int64_t instead of long long for better portability
 #include <boost/cstdint.hpp>
 
-#define BOOST_INCLUDE_MAIN
 #include <boost/test/test_tools.hpp>
 
 /*

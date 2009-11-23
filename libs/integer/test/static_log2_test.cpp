@@ -10,7 +10,6 @@
 //  Revision History
 //  01 Oct 2001  Initial version (Daryle Walker)
 
-#define  BOOST_INCLUDE_MAIN
 #include <boost/test/test_tools.hpp>  // for main
 
 #include <boost/cstdlib.hpp>              // for boost::exit_success
