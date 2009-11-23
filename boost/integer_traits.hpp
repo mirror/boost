@@ -27,6 +27,17 @@
 #include <wchar.h>
 #endif
 
+//
+// We simply cannot include this header on gcc without getting copious warnings of the kind:
+//
+// ../../../boost/integer_traits.hpp:164:66: warning: use of C99 long long integer constant
+//
+// And yet there is no other reasonable implementation, so we declare this a system header
+// to suppress these warnings.
+//
+#if defined(__GNUC__) && (__GNUC__ >= 4)
+#pragma GCC system_header
+#endif
 
 namespace boost {
 template<class T>

@@ -22,6 +22,10 @@
 #include <iostream>  // for std::cout (std::endl indirectly)
 #include <typeinfo>  // for std::type_info
 
+#ifdef BOOST_MSVC
+#pragma warning(disable:4127) // conditional expression is constant
+#endif
+
 
 // Control if the names of the types for each version
 // of the integer templates will be printed.

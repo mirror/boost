@@ -17,6 +17,9 @@
 
 #include <iostream>  // for std::cout (std::endl indirectly)
 
+#ifdef BOOST_MSVC
+#pragma warning(disable:4127) // conditional expression is constant
+#endif
 
 #define PRIVATE_HIGH_BIT_SLOW_TEST(v)  BOOST_CHECK( ::boost::high_bit_mask_t< \
  (v) >::high_bit == (1ul << (v)) );
@@ -25,10 +28,20 @@
 #define PRIVATE_HIGH_BIT_TEST(v)  do { PRIVATE_HIGH_BIT_SLOW_TEST(v); \
  PRIVATE_HIGH_BIT_FAST_TEST(v); } while (false)
 
-#define PRIVATE_LOW_BITS_SLOW_TEST(v)  BOOST_CHECK( ::boost::low_bits_mask_t< \
- (v) >::sig_bits == ((1ul << (v)) - 1) );
-#define PRIVATE_LOW_BITS_FAST_TEST(v)  BOOST_CHECK( ::boost::low_bits_mask_t< \
- (v) >::sig_bits_fast == ((1ul << (v)) - 1) );
+#define PRIVATE_LOW_BITS_SLOW_TEST(v)  \
+   do{ \
+      unsigned long mask = 0;\
+      if(v > 0)\
+         { mask = ((1ul << (v-1)) - 1); mask <<= 1; mask |= 1; }\
+      BOOST_CHECK( ::boost::low_bits_mask_t< (v) >::sig_bits ==  mask); \
+   }while(false);
+#define PRIVATE_LOW_BITS_FAST_TEST(v)  \
+   do{ \
+      unsigned long mask = 0;\
+      if(v > 0)\
+         { mask = ((1ul << (v-1)) - 1); mask <<= 1; mask |= 1; }\
+      BOOST_CHECK( ::boost::low_bits_mask_t< (v) >::sig_bits_fast == mask);\
+   }while(false);
 #define PRIVATE_LOW_BITS_TEST(v)  do { PRIVATE_LOW_BITS_SLOW_TEST(v); \
  PRIVATE_LOW_BITS_FAST_TEST(v); } while (false)
 
@@ -73,7 +86,7 @@ int test_main( int, char*[] )
     PRIVATE_HIGH_BIT_TEST(  0 );
 
     cout << "Doing low_bits_mask_t tests." << endl;
-    PRIVATE_LOW_BITS_TEST( 32 );  // Undefined behavior?  Whoops!
+    PRIVATE_LOW_BITS_TEST( 32 );
     PRIVATE_LOW_BITS_TEST( 31 );
     PRIVATE_LOW_BITS_TEST( 30 );
     PRIVATE_LOW_BITS_TEST( 29 );
