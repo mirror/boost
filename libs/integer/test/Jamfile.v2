@@ -16,5 +16,4 @@ test-suite integer
             /boost/test//boost_test_exec_monitor ]
         [ run static_min_max_test.cpp
             /boost/test//boost_test_exec_monitor ]
-#        [ compile issue_2134.cpp ]
     ;
