@@ -187,6 +187,7 @@ struct cpp_regex_traits_base
 #ifndef BOOST_NO_STD_MESSAGES
          if(m_pmessages == b.m_pmessages)
          {
+            return m_pcollate < b.m_pcollate;
          }
          return m_pmessages < b.m_pmessages;
 #else
@@ -212,7 +213,7 @@ std::locale cpp_regex_traits_base<charT>::imbue(const std::locale& l)
    m_locale = l;
    m_pctype = &BOOST_USE_FACET(std::ctype<charT>, l);
 #ifndef BOOST_NO_STD_MESSAGES
-   m_pmessages = &BOOST_USE_FACET(std::messages<charT>, l);
+   m_pmessages = BOOST_HAS_FACET(std::messages<charT>, l) ? &BOOST_USE_FACET(std::messages<charT>, l) : 0;
 #endif
    m_pcollate = &BOOST_USE_FACET(std::collate<charT>, l);
    return result;
@@ -276,7 +277,7 @@ void cpp_regex_traits_char_layer<charT>::init()
    typename std::messages<charT>::catalog cat = reinterpret_cast<std::messages<char>::catalog>(-1);
 #endif
    std::string cat_name(cpp_regex_traits<charT>::get_catalog_name());
-   if(cat_name.size())
+   if(cat_name.size() && (this->m_pmessages != 0))
    {
       cat = this->m_pmessages->open(
          cat_name, 
@@ -309,7 +310,8 @@ void cpp_regex_traits_char_layer<charT>::init()
       }
       catch(...)
       {
-         this->m_pmessages->close(cat);
+         if(this->m_pmessages)
+            this->m_pmessages->close(cat);
          throw;
       }
 #endif
@@ -653,7 +655,7 @@ void cpp_regex_traits_implementation<charT>::init()
    typename std::messages<charT>::catalog cat = reinterpret_cast<std::messages<char>::catalog>(-1);
 #endif
    std::string cat_name(cpp_regex_traits<charT>::get_catalog_name());
-   if(cat_name.size())
+   if(cat_name.size() && (this->m_pmessages != 0))
    {
       cat = this->m_pmessages->open(
          cat_name, 

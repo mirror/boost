@@ -29,12 +29,17 @@
 struct test_regex_search_tag{};
 
 template <class BidirectionalIterator>
-void test_sub_match(const boost::sub_match<BidirectionalIterator>& sub, BidirectionalIterator base, const int* answer_table, int i)
+void test_sub_match(const boost::sub_match<BidirectionalIterator>& sub, BidirectionalIterator base, const int* answer_table, int i, bool recurse = true)
 {
 #ifdef BOOST_MSVC
 #pragma warning(push)
 #pragma warning(disable:4244)
 #endif
+   if(recurse)
+   {
+      boost::sub_match<BidirectionalIterator> copy(sub);
+      test_sub_match(copy, base, answer_table, i, false);
+   }
    typedef typename boost::sub_match<BidirectionalIterator>::value_type charT;
    if((sub.matched == 0) 
       && 
@@ -71,8 +76,19 @@ void test_sub_match(const boost::sub_match<BidirectionalIterator>& sub, Bidirect
 }
 
 template <class BidirectionalIterator, class Allocator>
-void test_result(const boost::match_results<BidirectionalIterator, Allocator>& what, BidirectionalIterator base, const int* answer_table)
+void test_result(const boost::match_results<BidirectionalIterator, Allocator>& what, BidirectionalIterator base, const int* answer_table, bool recurse = true)
 {
+   if(recurse)
+   {
+      boost::match_results<BidirectionalIterator, Allocator> copy(what);
+      test_result(copy, base, answer_table, false);
+      boost::match_results<BidirectionalIterator, Allocator> s;
+      s.swap(copy);
+      test_result(s, base, answer_table, false);
+      boost::match_results<BidirectionalIterator, Allocator> s2;
+      s2 = what;
+      test_result(s2, base, answer_table, false);
+   }
    for(unsigned i = 0; i < what.size(); ++i)
    {
       test_sub_match(what[i], base, answer_table, i);
