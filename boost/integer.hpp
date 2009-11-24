@@ -17,8 +17,8 @@
 
 #include <boost/integer_fwd.hpp>  // self include
 
-#include <boost/integer_traits.hpp>  // for boost::integer_traits
-#include <boost/limits.hpp>          // for std::numeric_limits
+#include <boost/::boost::integer_traits.hpp>  // for boost::::boost::integer_traits
+#include <boost/limits.hpp>          // for ::std::numeric_limits
 #include <boost/cstdint.hpp>         // for boost::int64_t and BOOST_NO_INTEGRAL_INT64_T
 
 namespace boost
@@ -30,6 +30,8 @@ namespace boost
   //  int_fast_t<> works correctly for unsigned too, in spite of the name.
   template< typename LeastInt >
   struct int_fast_t { typedef LeastInt fast; }; // imps may specialize
+
+  namespace detail{
 
   //  convert category to type 
   template< int Category > struct int_least_helper {}; // default is empty
@@ -52,23 +54,25 @@ namespace boost
   template<> struct int_least_helper<9> { typedef unsigned short least; };
   template<> struct int_least_helper<10> { typedef unsigned char least; };
 
+  } // namespace detail
+
   //  integer templates specifying number of bits  ---------------------------//
 
   //  signed
   template< int Bits >   // bits (including sign) required
   struct int_t 
   {
-      typedef typename int_least_helper
+      typedef typename detail::int_least_helper
         <
 #ifdef BOOST_HAS_LONG_LONG
           (Bits-1 <= (int)(sizeof(boost::long_long_type) * CHAR_BIT)) +
 #else
            1 +
 #endif
-          (Bits-1 <= std::numeric_limits<long>::digits) +
-          (Bits-1 <= std::numeric_limits<int>::digits) +
-          (Bits-1 <= std::numeric_limits<short>::digits) +
-          (Bits-1 <= std::numeric_limits<signed char>::digits)
+          (Bits-1 <= ::std::numeric_limits<long>::digits) +
+          (Bits-1 <= ::std::numeric_limits<int>::digits) +
+          (Bits-1 <= ::std::numeric_limits<short>::digits) +
+          (Bits-1 <= ::std::numeric_limits<signed char>::digits)
         >::least  least;
       typedef typename int_fast_t<least>::fast  fast;
   };
@@ -77,7 +81,7 @@ namespace boost
   template< int Bits >   // bits required
   struct uint_t 
   {
-      typedef typename int_least_helper
+      typedef typename detail::int_least_helper
         < 
           5 +
 #ifdef BOOST_HAS_LONG_LONG
@@ -85,10 +89,10 @@ namespace boost
 #else
            1 +
 #endif
-          (Bits <= std::numeric_limits<unsigned long>::digits) +
-          (Bits <= std::numeric_limits<unsigned int>::digits) +
-          (Bits <= std::numeric_limits<unsigned short>::digits) +
-          (Bits <= std::numeric_limits<unsigned char>::digits)
+          (Bits <= ::std::numeric_limits<unsigned long>::digits) +
+          (Bits <= ::std::numeric_limits<unsigned int>::digits) +
+          (Bits <= ::std::numeric_limits<unsigned short>::digits) +
+          (Bits <= ::std::numeric_limits<unsigned char>::digits)
         >::least  least;
       typedef typename int_fast_t<least>::fast  fast;
       // int_fast_t<> works correctly for unsigned too, in spite of the name.
@@ -104,17 +108,17 @@ namespace boost
 #endif
   struct int_max_value_t 
   {
-      typedef typename int_least_helper
+      typedef typename detail::int_least_helper
         <
 #ifdef BOOST_HAS_LONG_LONG
-          (MaxValue <= integer_traits<boost::long_long_type>::const_max) +
+          (MaxValue <= ::boost::integer_traits<boost::long_long_type>::const_max) +
 #else
            1 +
 #endif
-          (MaxValue <= integer_traits<long>::const_max) +
-          (MaxValue <= integer_traits<int>::const_max) +
-          (MaxValue <= integer_traits<short>::const_max) +
-          (MaxValue <= integer_traits<signed char>::const_max)
+          (MaxValue <= ::boost::integer_traits<long>::const_max) +
+          (MaxValue <= ::boost::integer_traits<int>::const_max) +
+          (MaxValue <= ::boost::integer_traits<short>::const_max) +
+          (MaxValue <= ::boost::integer_traits<signed char>::const_max)
         >::least  least;
       typedef typename int_fast_t<least>::fast  fast;
   };
@@ -126,17 +130,17 @@ namespace boost
 #endif
   struct int_min_value_t 
   {
-      typedef typename int_least_helper
+      typedef typename detail::int_least_helper
         <
 #ifdef BOOST_HAS_LONG_LONG
-          (MinValue >= integer_traits<boost::long_long_type>::const_min) +
+          (MinValue >= ::boost::integer_traits<boost::long_long_type>::const_min) +
 #else
            1 +
 #endif
-          (MinValue >= integer_traits<long>::const_min) +
-          (MinValue >= integer_traits<int>::const_min) +
-          (MinValue >= integer_traits<short>::const_min) +
-          (MinValue >= integer_traits<signed char>::const_min)
+          (MinValue >= ::boost::integer_traits<long>::const_min) +
+          (MinValue >= ::boost::integer_traits<int>::const_min) +
+          (MinValue >= ::boost::integer_traits<short>::const_min) +
+          (MinValue >= ::boost::integer_traits<signed char>::const_min)
         >::least  least;
       typedef typename int_fast_t<least>::fast  fast;
   };
@@ -149,18 +153,18 @@ namespace boost
 #endif
   struct uint_value_t 
   {
-      typedef typename int_least_helper
+      typedef typename detail::int_least_helper
         < 
           5 +
 #ifdef BOOST_HAS_LONG_LONG
-          (MaxValue <= integer_traits<boost::ulong_long_type>::const_max) +
+          (MaxValue <= ::boost::integer_traits<boost::ulong_long_type>::const_max) +
 #else
            1 +
 #endif
-          (MaxValue <= integer_traits<unsigned long>::const_max) +
-          (MaxValue <= integer_traits<unsigned int>::const_max) +
-          (MaxValue <= integer_traits<unsigned short>::const_max) +
-          (MaxValue <= integer_traits<unsigned char>::const_max)
+          (MaxValue <= ::boost::integer_traits<unsigned long>::const_max) +
+          (MaxValue <= ::boost::integer_traits<unsigned int>::const_max) +
+          (MaxValue <= ::boost::integer_traits<unsigned short>::const_max) +
+          (MaxValue <= ::boost::integer_traits<unsigned char>::const_max)
         >::least  least;
       typedef typename int_fast_t<least>::fast  fast;
   };
