@@ -58,14 +58,14 @@ is particularly useful for solving generic programming problems.</p>
   };
 
   //  signed
-  template&lt; long MaxValue &gt;
+  template&lt; long long MaxValue &gt;
   struct int_max_value_t 
   {
       typedef <em>implementation_supplied</em>  least;
       typedef int_fast_t&lt;least&gt;::fast  fast;
   };
 
-  template&lt; long MinValue &gt;
+  template&lt; long long MinValue &gt;
   struct int_min_value_t 
   {
       typedef <em>implementation_supplied</em>  least;
@@ -73,7 +73,7 @@ is particularly useful for solving generic programming problems.</p>
   };
 
   //  unsigned
-  template&lt; unsigned long Value &gt;
+  template&lt; unsigned long long Value &gt;
   struct uint_value_t 
   {
       typedef <em>implementation_supplied</em>  least;
