@@ -32,8 +32,9 @@ int main() {
     test::set s1;
     test::multiset s2;
     
-    m1[test::value()] = test::value();
-    m2.insert(std::make_pair(test::value(), test::value()));
-    s1.insert(test::value());
-    s2.insert(test::value());
+    test::value x;
+    m1[x] = x;
+    m2.insert(std::make_pair(x, x));
+    s1.insert(x);
+    s2.insert(x);
 }
