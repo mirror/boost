@@ -6,6 +6,8 @@
 #if defined(BOOST_MSVC)
 #pragma warning(push)
 #pragma warning(disable:4100) // unreferenced formal parameter
+#pragma warning(disable:4610) // class can never be instantiated
+#pragma warning(disable:4510) // default constructor could not be generated
 #endif
 
 #include <boost/concept_check.hpp>

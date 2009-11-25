@@ -15,6 +15,11 @@
 #include <boost/next_prior.hpp>
 #include "../objects/test.hpp"
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#pragma warning(disable:4267) // conversion from 'size_t' to 'unsigned int',
+                              // possible loss of data.
+#endif
+
 struct write_pair_type
 {
     template <class X1, class X2>
