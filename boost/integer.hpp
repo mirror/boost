@@ -17,7 +17,7 @@
 
 #include <boost/integer_fwd.hpp>  // self include
 
-#include <boost/integer_traits.hpp>  // for ::boost::integer_traits
+#include <boost/integer_traits.hpp>  // for boost::::boost::integer_traits
 #include <boost/limits.hpp>          // for ::std::numeric_limits
 #include <boost/cstdint.hpp>         // for boost::int64_t and BOOST_NO_INTEGRAL_INT64_T
 
