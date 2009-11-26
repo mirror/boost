@@ -8,6 +8,8 @@
 // It probably should be in boost/functional/hash/detail, but since it isn't it
 // should work.
 
+#include "./config.hpp"
+
 #include <boost/functional/hash/extensions.hpp>
 
 int main() {

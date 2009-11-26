@@ -6,6 +6,8 @@
 // The code for erasing elements from containers with equivalent keys is very
 // hairy with several tricky edge cases - so explicitly test each one.
 
+#include "../helpers/prefix.hpp"
+
 #include <boost/unordered_map.hpp>
 #include "../helpers/test.hpp"
 #include "../helpers/list.hpp"

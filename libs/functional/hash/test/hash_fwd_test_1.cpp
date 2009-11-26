@@ -5,6 +5,8 @@
 
 // This checks that template code implemented using hash_fwd will work.
 
+#include "./config.hpp"
+
 #include "./hash_fwd_test.hpp"
 
 #include <boost/detail/lightweight_test.hpp>

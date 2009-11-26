@@ -3,6 +3,8 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include "./config.hpp"
+
 #define HASH_NAMESPACE boost
 #define BOOST_HASH_NO_EXTENSIONS
 #include <boost/functional/hash.hpp>

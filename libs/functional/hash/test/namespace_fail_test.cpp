@@ -6,6 +6,8 @@
 // Check that I haven't inadvertantly pulled namespace std into the global
 // namespace.
 
+#include "./config.hpp"
+
 #include <list>
 #include <boost/functional/hash.hpp>
 
