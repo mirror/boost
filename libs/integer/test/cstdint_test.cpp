@@ -15,8 +15,7 @@
 #define __STDC_CONSTANT_MACROS
 #include <iostream>
 #include <boost/cstdint.hpp>
-#include <boost/test/minimal.hpp>
-
+#include <boost/detail/lightweight_test.hpp>
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 //
@@ -55,24 +54,24 @@ struct integral_constant_checker
 
 void integral_constant_checker::check()
 {
-  BOOST_CHECK( int8 == -127 );
-  BOOST_CHECK( int_least8 == -127 );
-  BOOST_CHECK( int_fast8 == -127 );
-  BOOST_CHECK( uint8 == 255u );
-  BOOST_CHECK( uint_least8 == 255u );
-  BOOST_CHECK( uint_fast8 == 255u );
-  BOOST_CHECK( int16 == -32767 );
-  BOOST_CHECK( int_least16 == -32767 );
-  BOOST_CHECK( int_fast16 == -32767 );
-  BOOST_CHECK( uint16 == 65535u );
-  BOOST_CHECK( uint_least16 == 65535u );
-  BOOST_CHECK( uint_fast16 == 65535u );
-  BOOST_CHECK( int32 == -2147483647 );
-  BOOST_CHECK( int_least32 == -2147483647 );
-  BOOST_CHECK( int_fast32 == -2147483647 );
-  BOOST_CHECK( uint32 == 4294967295u );
-  BOOST_CHECK( uint_least32 == 4294967295u );
-  BOOST_CHECK( uint_fast32 == 4294967295u );
+  BOOST_TEST( int8 == -127 );
+  BOOST_TEST( int_least8 == -127 );
+  BOOST_TEST( int_fast8 == -127 );
+  BOOST_TEST( uint8 == 255u );
+  BOOST_TEST( uint_least8 == 255u );
+  BOOST_TEST( uint_fast8 == 255u );
+  BOOST_TEST( int16 == -32767 );
+  BOOST_TEST( int_least16 == -32767 );
+  BOOST_TEST( int_fast16 == -32767 );
+  BOOST_TEST( uint16 == 65535u );
+  BOOST_TEST( uint_least16 == 65535u );
+  BOOST_TEST( uint_fast16 == 65535u );
+  BOOST_TEST( int32 == -2147483647 );
+  BOOST_TEST( int_least32 == -2147483647 );
+  BOOST_TEST( int_fast32 == -2147483647 );
+  BOOST_TEST( uint32 == 4294967295u );
+  BOOST_TEST( uint_least32 == 4294967295u );
+  BOOST_TEST( uint_fast32 == 4294967295u );
 }
 #endif // BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 
@@ -101,10 +100,10 @@ void integral_constant_type_check(T1, T2)
    // if we have a native stdint.h
    // then the INTXX_C macros may define
    // a type that's wider than required:
-   BOOST_CHECK(sizeof(T1) <= sizeof(T2));
+   BOOST_TEST(sizeof(T1) <= sizeof(T2));
 #else
-   BOOST_CHECK(sizeof(T1) == sizeof(T2));
-   BOOST_CHECK(t1 == t2);
+   BOOST_TEST(sizeof(T1) == sizeof(T2));
+   BOOST_TEST(t1 == t2);
 #endif
 #if defined(BOOST_HAS_STDINT_H)
    // native headers are permitted to promote small
@@ -112,22 +111,22 @@ void integral_constant_type_check(T1, T2)
    if(sizeof(T1) >= sizeof(int))
    {
       if(t1 > 0)
-        BOOST_CHECK(t2 > 0);
+        BOOST_TEST(t2 > 0);
       else
-        BOOST_CHECK(!(t2 > 0));
+        BOOST_TEST(!(t2 > 0));
    }
    else if(t1 < 0)
-      BOOST_CHECK(!(t2 > 0));
+      BOOST_TEST(!(t2 > 0));
 #else
    if(t1 > 0)
-     BOOST_CHECK(t2 > 0);
+     BOOST_TEST(t2 > 0);
    else
-     BOOST_CHECK(!(t2 > 0));
+     BOOST_TEST(!(t2 > 0));
 #endif
 }
 
 
-int test_main(int, char*[])
+int main(int, char*[])
 {
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
   integral_constant_checker::check();
@@ -186,37 +185,37 @@ int test_main(int, char*[])
   boost::uintmax_t       uintmax       = UINTMAX_C(4294967295);
 #endif
 
-  BOOST_CHECK( int8 == -127 );
-  BOOST_CHECK( int_least8 == -127 );
-  BOOST_CHECK( int_fast8 == -127 );
-  BOOST_CHECK( uint8 == 255u );
-  BOOST_CHECK( uint_least8 == 255u );
-  BOOST_CHECK( uint_fast8 == 255u );
-  BOOST_CHECK( int16 == -32767 );
-  BOOST_CHECK( int_least16 == -32767 );
-  BOOST_CHECK( int_fast16 == -32767 );
-  BOOST_CHECK( uint16 == 65535u );
-  BOOST_CHECK( uint_least16 == 65535u );
-  BOOST_CHECK( uint_fast16 == 65535u );
-  BOOST_CHECK( int32 == -2147483647 );
-  BOOST_CHECK( int_least32 == -2147483647 );
-  BOOST_CHECK( int_fast32 == -2147483647 );
-  BOOST_CHECK( uint32 == 4294967295u );
-  BOOST_CHECK( uint_least32 == 4294967295u );
-  BOOST_CHECK( uint_fast32 == 4294967295u );
+  BOOST_TEST( int8 == -127 );
+  BOOST_TEST( int_least8 == -127 );
+  BOOST_TEST( int_fast8 == -127 );
+  BOOST_TEST( uint8 == 255u );
+  BOOST_TEST( uint_least8 == 255u );
+  BOOST_TEST( uint_fast8 == 255u );
+  BOOST_TEST( int16 == -32767 );
+  BOOST_TEST( int_least16 == -32767 );
+  BOOST_TEST( int_fast16 == -32767 );
+  BOOST_TEST( uint16 == 65535u );
+  BOOST_TEST( uint_least16 == 65535u );
+  BOOST_TEST( uint_fast16 == 65535u );
+  BOOST_TEST( int32 == -2147483647 );
+  BOOST_TEST( int_least32 == -2147483647 );
+  BOOST_TEST( int_fast32 == -2147483647 );
+  BOOST_TEST( uint32 == 4294967295u );
+  BOOST_TEST( uint_least32 == 4294967295u );
+  BOOST_TEST( uint_fast32 == 4294967295u );
 
 #ifndef BOOST_NO_INT64_T
-  BOOST_CHECK( int64 == INT64_C(-9223372036854775807) );
-  BOOST_CHECK( int_least64 == INT64_C(-9223372036854775807) );
-  BOOST_CHECK( int_fast64 == INT64_C(-9223372036854775807) );
-  BOOST_CHECK( uint64 == UINT64_C(18446744073709551615) );
-  BOOST_CHECK( uint_least64 == UINT64_C(18446744073709551615) );
-  BOOST_CHECK( uint_fast64 == UINT64_C(18446744073709551615) );
-  BOOST_CHECK( intmax == INT64_C(-9223372036854775807) );
-  BOOST_CHECK( uintmax == UINT64_C(18446744073709551615) );
+  BOOST_TEST( int64 == INT64_C(-9223372036854775807) );
+  BOOST_TEST( int_least64 == INT64_C(-9223372036854775807) );
+  BOOST_TEST( int_fast64 == INT64_C(-9223372036854775807) );
+  BOOST_TEST( uint64 == UINT64_C(18446744073709551615) );
+  BOOST_TEST( uint_least64 == UINT64_C(18446744073709551615) );
+  BOOST_TEST( uint_fast64 == UINT64_C(18446744073709551615) );
+  BOOST_TEST( intmax == INT64_C(-9223372036854775807) );
+  BOOST_TEST( uintmax == UINT64_C(18446744073709551615) );
 #else
-  BOOST_CHECK( intmax == -2147483647 );
-  BOOST_CHECK( uintmax == 4294967295u );
+  BOOST_TEST( intmax == -2147483647 );
+  BOOST_TEST( uintmax == 4294967295u );
 #endif
 
 

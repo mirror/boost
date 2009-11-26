@@ -5,15 +5,10 @@
 import testing ;
 
 test-suite integer
-    :   [ run cstdint_test.cpp /boost/test//minimal ]
-        [ run integer_traits_test.cpp
-            /boost/test//boost_test_exec_monitor ]
-        [ run integer_test.cpp 
-            /boost/test//minimal ]
-        [ run integer_mask_test.cpp
-            /boost/test//minimal ]
-        [ run static_log2_test.cpp
-            /boost/test//boost_test_exec_monitor ]
-        [ run static_min_max_test.cpp
-            /boost/test//boost_test_exec_monitor ]
+    :   [ run cstdint_test.cpp ]
+        [ run integer_traits_test.cpp ]
+        [ run integer_test.cpp ]
+        [ run integer_mask_test.cpp ]
+        [ run static_log2_test.cpp ]
+        [ run static_min_max_test.cpp ]
     ;

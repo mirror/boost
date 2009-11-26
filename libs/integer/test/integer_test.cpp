@@ -15,7 +15,7 @@
 //   10 Mar 01  Boost Test Library now used for tests (Beman Dawes)
 //   31 Aug 99  Initial version
 
-#include <boost/test/minimal.hpp>  // for main, BOOST_CHECK
+#include <boost/detail/lightweight_test.hpp>  // for main, BOOST_TEST
 #include <boost/integer.hpp>  // for boost::int_t, boost::uint_t
 #include <boost/type_traits/is_same.hpp>
 
@@ -26,11 +26,15 @@
 #ifdef BOOST_MSVC
 #pragma warning(disable:4127) // conditional expression is constant
 #endif
+#if defined( __BORLANDC__ )
+# pragma option -w-8008 -w-8066 // condition is always true
+#endif
+
 //
 // Keep track of error count, so we can print out detailed
 // info only if we need it:
 //
-unsigned last_error_count = 0;
+int last_error_count = 0;
 //
 // Helpers to print out the name of a type,
 // we use these as typeid(X).name() doesn't always
@@ -59,8 +63,8 @@ void do_test_exact(boost::mpl::true_ const&)
    typedef typename boost::int_t<Bits>::least least_int;
    typedef typename boost::uint_t<Bits>::least least_uint;
 
-   BOOST_CHECK((boost::is_same<int_exact, least_int>::value));
-   BOOST_CHECK((boost::is_same<uint_exact, least_uint>::value));
+   BOOST_TEST((boost::is_same<int_exact, least_int>::value));
+   BOOST_TEST((boost::is_same<uint_exact, least_uint>::value));
 }
 template <int Bits>
 void do_test_exact(boost::mpl::false_ const&)
@@ -98,31 +102,31 @@ void do_test_bits()
 
    if(std::numeric_limits<least_int>::is_specialized)
    {
-      BOOST_CHECK(std::numeric_limits<least_int>::digits + 1 >= Bits);
+      BOOST_TEST(std::numeric_limits<least_int>::digits + 1 >= Bits);
    }
    if(std::numeric_limits<least_uint>::is_specialized)
    {
-      BOOST_CHECK(std::numeric_limits<least_uint>::digits >= Bits);
+      BOOST_TEST(std::numeric_limits<least_uint>::digits >= Bits);
    }
-   BOOST_CHECK(sizeof(least_int) * CHAR_BIT >= Bits);
-   BOOST_CHECK(sizeof(least_uint) * CHAR_BIT >= Bits);
-   BOOST_CHECK(sizeof(fast_int) >= sizeof(least_int));
-   BOOST_CHECK(sizeof(fast_uint) >= sizeof(least_uint));
+   BOOST_TEST(sizeof(least_int) * CHAR_BIT >= Bits);
+   BOOST_TEST(sizeof(least_uint) * CHAR_BIT >= Bits);
+   BOOST_TEST(sizeof(fast_int) >= sizeof(least_int));
+   BOOST_TEST(sizeof(fast_uint) >= sizeof(least_uint));
    //
    // There should be no type smaller than least_* that also has enough bits:
    //
    if(!boost::is_same<signed char, least_int>::value)
    {
-      BOOST_CHECK(std::numeric_limits<signed char>::digits < Bits);
+      BOOST_TEST(std::numeric_limits<signed char>::digits < Bits);
       if(!boost::is_same<short, least_int>::value)
       {
-         BOOST_CHECK(std::numeric_limits<short>::digits < Bits);
+         BOOST_TEST(std::numeric_limits<short>::digits < Bits);
          if(!boost::is_same<int, least_int>::value)
          {
-            BOOST_CHECK(std::numeric_limits<int>::digits < Bits);
+            BOOST_TEST(std::numeric_limits<int>::digits < Bits);
             if(!boost::is_same<long, least_int>::value)
             {
-               BOOST_CHECK(std::numeric_limits<long>::digits < Bits);
+               BOOST_TEST(std::numeric_limits<long>::digits < Bits);
             }
          }
       }
@@ -130,24 +134,24 @@ void do_test_bits()
    // And again, but unsigned:
    if(!boost::is_same<unsigned char, least_uint>::value)
    {
-      BOOST_CHECK(std::numeric_limits<unsigned char>::digits < Bits);
+      BOOST_TEST(std::numeric_limits<unsigned char>::digits < Bits);
       if(!boost::is_same<unsigned short, least_uint>::value)
       {
-         BOOST_CHECK(std::numeric_limits<unsigned short>::digits < Bits);
+         BOOST_TEST(std::numeric_limits<unsigned short>::digits < Bits);
          if(!boost::is_same<unsigned int, least_uint>::value)
          {
-            BOOST_CHECK(std::numeric_limits<unsigned int>::digits < Bits);
+            BOOST_TEST(std::numeric_limits<unsigned int>::digits < Bits);
             if(!boost::is_same<unsigned long, least_uint>::value)
             {
-               BOOST_CHECK(std::numeric_limits<unsigned long>::digits < Bits);
+               BOOST_TEST(std::numeric_limits<unsigned long>::digits < Bits);
             }
          }
       }
    }
 
-   if(boost::minimal_test::errors_counter() != last_error_count)
+   if(boost::detail::test_errors() != last_error_count)
    {
-      last_error_count = boost::minimal_test::errors_counter();
+      last_error_count = boost::detail::test_errors();
       std::cout << "Errors occured while testing with bit count = " << Bits << std::endl;
       std::cout << "Type int_t<" << Bits << ">::least was " << get_name_of_type(least_int(0)) << std::endl;
       std::cout << "Type int_t<" << Bits << ">::fast was " << get_name_of_type(fast_int(0)) << std::endl;
@@ -166,14 +170,14 @@ void test_min_max_type(Expected val)
 {
    typedef typename Traits::least least_type;
    typedef typename Traits::fast  fast_type;
-   BOOST_CHECK((boost::is_same<least_type, Expected>::value));
-   BOOST_CHECK(sizeof(fast_type) >= sizeof(least_type));
-   BOOST_CHECK((std::numeric_limits<least_type>::min)() <= val);
-   BOOST_CHECK((std::numeric_limits<least_type>::max)() >= val);
+   BOOST_TEST((boost::is_same<least_type, Expected>::value));
+   BOOST_TEST(sizeof(fast_type) >= sizeof(least_type));
+   BOOST_TEST((std::numeric_limits<least_type>::min)() <= val);
+   BOOST_TEST((std::numeric_limits<least_type>::max)() >= val);
 }
 
 // Test program
-int test_main(int, char*[])
+int main(int, char*[])
 {
    // Test int_t and unint_t first:
    if(std::numeric_limits<boost::intmax_t>::is_specialized)

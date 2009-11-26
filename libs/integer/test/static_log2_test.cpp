@@ -10,7 +10,7 @@
 //  Revision History
 //  01 Oct 2001  Initial version (Daryle Walker)
 
-#include <boost/test/test_tools.hpp>  // for main
+#include <boost/detail/lightweight_test.hpp>  // for main
 
 #include <boost/cstdlib.hpp>              // for boost::exit_success
 #include <boost/integer/static_log2.hpp>  // for boost::static_log2
@@ -19,7 +19,7 @@
 
 
 // Macros to compact code
-#define PRIVATE_LB_TEST( v, e )  BOOST_CHECK( ::boost::static_log2<v>::value == e )
+#define PRIVATE_LB_TEST( v, e )  BOOST_TEST( ::boost::static_log2<v>::value == e )
 
 #define PRIVATE_PRINT_LB( v )    ::std::cout << "boost::static_log2<" << (v) \
  << "> = " << ::boost::static_log2< (v) >::value << '.' << ::std::endl
@@ -34,7 +34,7 @@
 
 // Main testing function
 int
-test_main
+main
 (
     int         ,   // "argc" is unused
     char *      []  // "argv" is unused
