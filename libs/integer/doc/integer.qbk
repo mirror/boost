@@ -399,7 +399,7 @@ The following table describes each template's criteria.
        boost::int_max_value_t<1000>::least my1000 = 1000;
        //...
        // This one is guarenteed not to be truncated, and as fast
-       // to manipulate as possible, it's size may be greater than
+       // to manipulate as possible, its size may be greater than
        // that of my1000:
        boost::int_max_value_t<1000>::fast my_fast1000 = 1000;
    }
@@ -568,9 +568,9 @@ results from instantiating various examples of the bit mask class templates.
 [section Rationale]
 
 The class templates in this header are an extension of the [link boost_integer.integer integer type selection class templates]. 
-The new class templates provide the same sized types, but also convienent masks to use when extracting the 
+The new class templates provide the same sized types, but also convenient masks to use when extracting the 
 highest or all the significant bits when the containing built-in type contains more bits. 
-This prevents contaimination of values by the higher, unused bits.
+This prevents contamination of values by the higher, unused bits.
 
 [endsect] 
 
