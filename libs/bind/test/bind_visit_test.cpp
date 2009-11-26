@@ -5,6 +5,7 @@
 # pragma warning(disable: 4710)  // function not inlined
 # pragma warning(disable: 4711)  // function selected for automatic inline expansion
 # pragma warning(disable: 4514)  // unreferenced inline removed
+# pragma warning(disable: 4100)  // unreferenced formal parameter (it is referenced!)
 #endif
 
 // Copyright (c) 2006 Douglas Gregor <doug.gregor@gmail.com>

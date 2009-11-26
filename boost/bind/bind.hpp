@@ -207,6 +207,13 @@ public:
     }
 };
 
+#ifdef BOOST_MSVC
+// MSVC is bright enough to realise that the parameter rhs 
+// in operator==may be unused for some template argument types:
+#pragma warning(push)
+#pragma warning(disable:4100)
+#endif
+
 template< class A1 > class list1: private storage1< A1 >
 {
 private:
@@ -845,6 +852,10 @@ public:
             ref_compare( base_type::a9_, rhs.a9_, 0 );
     }
 };
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 // bind_t
 
@@ -1654,7 +1665,14 @@ template< class M, class T > struct add_cref< M T::*, 0 >
 
 template< class M, class T > struct add_cref< M T::*, 1 >
 {
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4180)
+#endif
     typedef M const & type;
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 };
 
 template< class R, class T > struct add_cref< R (T::*) (), 1 >
