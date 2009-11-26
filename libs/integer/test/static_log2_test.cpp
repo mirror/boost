@@ -145,5 +145,5 @@ main
     PRIVATE_LB_TEST( 65536, 16 );
     PRIVATE_LB_TEST( 65537, 16 );
 
-    return boost::exit_success;
+    return boost::report_errors();
 }

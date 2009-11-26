@@ -220,5 +220,5 @@ int main(int, char*[])
 
 
   std::cout << "OK\n";
-  return 0;
+  return boost::report_errors();
 }

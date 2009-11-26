@@ -119,5 +119,5 @@ int main( int, char*[] )
     PRIVATE_LOW_BITS_TEST(  2 );
     PRIVATE_LOW_BITS_TEST(  1 );
 
-    return boost::exit_success;
+    return boost::report_errors();
 }

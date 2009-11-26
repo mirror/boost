@@ -96,6 +96,6 @@ int main(int, char*[])
 #endif
   // Some compilers don't pay attention to std:3.6.1/5 and issue a
   // warning here if "return 0;" is omitted.
-  return 0;
+  return boost::report_errors();
 }
 

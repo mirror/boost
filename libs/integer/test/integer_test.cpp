@@ -247,5 +247,5 @@ int main(int, char*[])
       test_min_max_type<boost::int_min_value_t<_LLONG_MIN>, long long>(_LLONG_MIN);
       test_min_max_type<boost::uint_value_t<_ULLONG_MAX>, unsigned long long>(_ULLONG_MAX);
 #endif
-      return 0;
+      return boost::report_errors();
 }

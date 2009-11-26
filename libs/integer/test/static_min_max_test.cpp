@@ -88,5 +88,5 @@ main
     BOOST_TEST( (static_signed_min< -101, -101>::value) == -101 );
     BOOST_TEST( (static_signed_max< -101, -101>::value) == -101 );
 
-    return boost::exit_success;
+    return boost::report_errors();
 }
