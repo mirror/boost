@@ -15,7 +15,7 @@
 #include <boost/next_prior.hpp>
 #include "../objects/test.hpp"
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1400)
 #pragma warning(disable:4267) // conversion from 'size_t' to 'unsigned int',
                               // possible loss of data.
 #endif
