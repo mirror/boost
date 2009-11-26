@@ -61,6 +61,8 @@
 </span>  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">Bits</span><span class="special">&gt;</span>
   <span class="keyword">struct</span> <span class="identifier">int_t</span> 
   <span class="special">{</span>
+      <span class="comment">/* Member exact may or may not be defined depending upon Bits */</span>
+      <span class="keyword">typedef</span> <span class="emphasis"><em>implementation-defined-type</em></span>  <span class="identifier">exact</span><span class="special">;</span>
       <span class="keyword">typedef</span> <span class="emphasis"><em>implementation-defined-type</em></span>  <span class="identifier">least</span><span class="special">;</span>
       <span class="keyword">typedef</span> <span class="identifier">int_fast_t</span><span class="special">&lt;</span><span class="identifier">least</span><span class="special">&gt;::</span><span class="identifier">fast</span>      <span class="identifier">fast</span><span class="special">;</span>
   <span class="special">};</span>
@@ -69,6 +71,8 @@
 </span>  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">Bits</span><span class="special">&gt;</span>
   <span class="keyword">struct</span> <span class="identifier">uint_t</span> 
   <span class="special">{</span>
+      <span class="comment">/* Member exact may or may not be defined depending upon Bits */</span>
+      <span class="keyword">typedef</span> <span class="emphasis"><em>implementation-defined-type</em></span>  <span class="identifier">exact</span><span class="special">;</span>
       <span class="keyword">typedef</span> <span class="emphasis"><em>implementation-defined-type</em></span>  <span class="identifier">least</span><span class="special">;</span>
       <span class="keyword">typedef</span> <span class="identifier">int_fast_t</span><span class="special">&lt;</span><span class="identifier">least</span><span class="special">&gt;::</span><span class="identifier">fast</span>      <span class="identifier">fast</span><span class="special">;</span>
   <span class="special">};</span>
@@ -136,7 +140,7 @@
         <code class="literal">fast</code>. The following table describes each template's criteria.
       </p>
 <div class="table">
-<a name="id673121"></a><p class="title"><b>Table 1. Criteria for the Sized Type Class Templates</b></p>
+<a name="id781298"></a><p class="title"><b>Table 1. Criteria for the Sized Type Class Templates</b></p>
 <div class="table-contents"><table class="table" summary="Criteria for the Sized Type Class Templates">
 <colgroup>
 <col>
@@ -166,7 +170,9 @@
               The smallest built-in signed integral type with at least <span class="emphasis"><em>N</em></span>
               bits, including the sign bit. The parameter should be a positive number.
               A compile-time error results if the parameter is larger than the number
-              of bits in the largest integer type.
+              of bits in the largest integer type. Note that the member <span class="emphasis"><em>exact</em></span>
+              is defined <span class="bold"><strong>only</strong></span> if there is a type
+              with exactly N bits.
             </p>
             </td>
 </tr>
@@ -181,7 +187,9 @@
               The smallest built-in unsigned integral type with at least <span class="emphasis"><em>N</em></span>
               bits. The parameter should be a positive number. A compile-time error
               results if the parameter is larger than the number of bits in the largest
-              integer type.
+              integer type. Note that the member <span class="emphasis"><em>exact</em></span> is defined
+              <span class="bold"><strong>only</strong></span> if there is a type with exactly
+              N bits.
             </p>
             </td>
 </tr>

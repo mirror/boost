@@ -21,6 +21,18 @@
 #include <boost/limits.hpp>          // for ::std::numeric_limits
 #include <boost/cstdint.hpp>         // for boost::int64_t and BOOST_NO_INTEGRAL_INT64_T
 
+//
+// We simply cannot include this header on gcc without getting copious warnings of the kind:
+//
+// boost/integer.hpp:77:30: warning: use of C99 long long integer constant
+//
+// And yet there is no other reasonable implementation, so we declare this a system header
+// to suppress these warnings.
+//
+#if defined(__GNUC__) && (__GNUC__ >= 4)
+#pragma GCC system_header
+#endif
+
 namespace boost
 {
 
@@ -54,13 +66,42 @@ namespace boost
   template<> struct int_least_helper<9> { typedef unsigned short least; };
   template<> struct int_least_helper<10> { typedef unsigned char least; };
 
+  template <int Bits>
+  struct exact_signed_base_helper{};
+  template <int Bits>
+  struct exact_unsigned_base_helper{};
+
+  template <> struct exact_signed_base_helper<sizeof(signed char)* CHAR_BIT> { typedef signed char exact; };
+  template <> struct exact_unsigned_base_helper<sizeof(unsigned char)* CHAR_BIT> { typedef unsigned char exact; };
+#if USHRT_MAX != UCHAR_MAX
+  template <> struct exact_signed_base_helper<sizeof(short)* CHAR_BIT> { typedef short exact; };
+  template <> struct exact_unsigned_base_helper<sizeof(unsigned short)* CHAR_BIT> { typedef unsigned short exact; };
+#endif
+#if UINT_MAX != USHRT_MAX
+  template <> struct exact_signed_base_helper<sizeof(int)* CHAR_BIT> { typedef int exact; };
+  template <> struct exact_unsigned_base_helper<sizeof(unsigned int)* CHAR_BIT> { typedef unsigned int exact; };
+#endif
+#if ULONG_MAX != UINT_MAX
+  template <> struct exact_signed_base_helper<sizeof(long)* CHAR_BIT> { typedef long exact; };
+  template <> struct exact_unsigned_base_helper<sizeof(unsigned long)* CHAR_BIT> { typedef unsigned long exact; };
+#endif
+#if defined(BOOST_HAS_LONG_LONG) &&\
+   ((defined(ULLONG_MAX) && (ULLONG_MAX != ULONG_MAX)) ||\
+    (defined(ULONG_LONG_MAX) && (ULONG_LONG_MAX != ULONG_MAX)) ||\
+    (defined(ULONGLONG_MAX) && (ULONGLONG_MAX != ULONG_MAX)) ||\
+    (defined(_ULLONG_MAX) && (_ULLONG_MAX != ULONG_MAX)))
+  template <> struct exact_signed_base_helper<sizeof(long long)* CHAR_BIT> { typedef long long exact; };
+  template <> struct exact_unsigned_base_helper<sizeof(unsigned long long)* CHAR_BIT> { typedef unsigned long long exact; };
+#endif
+
+
   } // namespace detail
 
   //  integer templates specifying number of bits  ---------------------------//
 
   //  signed
   template< int Bits >   // bits (including sign) required
-  struct int_t 
+  struct int_t : public detail::exact_signed_base_helper<Bits>
   {
       typedef typename detail::int_least_helper
         <
@@ -79,7 +120,7 @@ namespace boost
 
   //  unsigned
   template< int Bits >   // bits required
-  struct uint_t 
+  struct uint_t : public detail::exact_unsigned_base_helper<Bits>
   {
       typedef typename detail::int_least_helper
         < 

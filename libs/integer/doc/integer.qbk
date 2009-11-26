@@ -282,6 +282,8 @@ This facility is particularly useful for solving generic programming problems.
      template<int Bits>
      struct int_t 
      {
+         /* Member exact may or may not be defined depending upon Bits */
+         typedef ``['implementation-defined-type]``  exact;
          typedef ``['implementation-defined-type]``  least;
          typedef int_fast_t<least>::fast      fast;
      };
@@ -290,6 +292,8 @@ This facility is particularly useful for solving generic programming problems.
      template<int Bits>
      struct uint_t 
      {
+         /* Member exact may or may not be defined depending upon Bits */
+         typedef ``['implementation-defined-type]``  exact;
          typedef ``['implementation-defined-type]``  least;
          typedef int_fast_t<least>::fast      fast;
      };
@@ -351,13 +355,16 @@ The following table describes each template's criteria.
       [[^boost::int_t<N>]]
       [The smallest built-in signed integral type with at least /N/ bits, including the sign bit. 
       The parameter should be a positive number. A compile-time error results if the parameter is 
-      larger than the number of bits in the largest integer type.]
+      larger than the number of bits in the largest integer type.  Note that the member /exact/ is defined
+      [*only] if there is a type with exactly N bits.]
    ]
    [
       [[^boost::uint_t<N>]]
       [The smallest built-in unsigned integral type with at least /N/ bits. 
       The parameter should be a positive number. A compile-time error results if the 
-      parameter is larger than the number of bits in the largest integer type.]
+      parameter is larger than the number of bits in the largest integer type.  
+      Note that the member /exact/ is defined
+      [*only] if there is a type with exactly N bits.]
    ]
    [
       [[^boost::int_max_value_t<V>]]
