@@ -29,20 +29,24 @@
 			and <STRONG>shared_ptr&lt;T const&gt;</STRONG>, depending on constness, to <STRONG>this</STRONG>.</P>
 		<h3><a name="Example">Example</a></h3>
 		<pre>
-class Y: public enable_shared_from_this&lt;Y&gt;
+#include &lt;boost/enable_shared_from_this.hpp&gt;
+#include &lt;boost/shared_ptr.hpp&gt;
+#include &lt;cassert&gt;
+
+class Y: public boost::enable_shared_from_this&lt;Y&gt;
 {
 public:
 
-    shared_ptr&lt;Y&gt; f()
+    boost::shared_ptr&lt;Y&gt; f()
     {
         return shared_from_this();
     }
-}
+};
 
 int main()
 {
-    shared_ptr&lt;Y&gt; p(new Y);
-    shared_ptr&lt;Y&gt; q = p-&gt;f();
+    boost::shared_ptr&lt;Y&gt; p(new Y);
+    boost::shared_ptr&lt;Y&gt; q = p-&gt;f();
     assert(p == q);
     assert(!(p &lt; q || q &lt; p)); // p and q must share ownership
 }
