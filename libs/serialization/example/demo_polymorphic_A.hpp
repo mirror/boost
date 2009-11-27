@@ -20,8 +20,13 @@ class polymorphic_oarchive;
 
 struct A {
     // class a contains a pointer to a "hidden" declaration
-    void serialize(boost::archive::polymorphic_iarchive & ar, const unsigned int file_version);
-    void serialize(boost::archive::polymorphic_oarchive & ar, const unsigned int file_version);
+    template<class Archive>
+    void serialize(
+        Archive & ar, 
+        const unsigned int file_version
+    ){
+        ar & data;
+    }
     int data;
     bool operator==(const A & rhs) const {
         return data == rhs.data;

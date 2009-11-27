@@ -130,6 +130,9 @@
 			RelativePath="..\example\demo_polymorphic.cpp">
 		</File>
 		<File
+			RelativePath="..\example\demo_polymorphic_A.cpp">
+		</File>
+		<File
 			RelativePath="..\example\demo_polymorphic_A.hpp">
 		</File>
 	</Files>
