@@ -98,17 +98,18 @@ public:
 
     // returns pointer to object and an indicator whether this is a
     // new entry (true) or a previous one (false)
-    BOOST_ARCHIVE_DECL(result_type) get_od(
-            void * od,
-            const boost::serialization::extended_type_info * true_type, 
-            const boost::serialization::extended_type_info * this_type
+    BOOST_ARCHIVE_DECL(result_type) 
+    get_od(
+        void * od,
+        const boost::serialization::extended_type_info * true_type, 
+        const boost::serialization::extended_type_info * this_type
     );
 
     template<class T>
     struct non_polymorphic {
         static const boost::serialization::extended_type_info * 
         get_object_identifier(T & t){
-            return boost::serialization::singleton<
+            return & boost::serialization::singleton<
                 BOOST_DEDUCED_TYPENAME 
                 boost::serialization::type_info_implementation<T>::type
             >::get_const_instance();
@@ -157,7 +158,7 @@ public:
             );
         result_type r =
             get_od(
-                t, 
+                static_cast<void *>(t), 
                 true_type,
                 this_type
             );

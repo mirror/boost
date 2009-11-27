@@ -20,6 +20,7 @@
 #include <boost/config.hpp>
 #include <boost/noncopyable.hpp>
 
+#include <boost/archive/basic_archive.hpp>
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/detail/basic_serializer.hpp>
 
@@ -74,7 +75,7 @@ public:
     // returns true if objects should be tracked
     virtual bool tracking(const unsigned int flags) const = 0;
     // returns class version
-    virtual unsigned int version() const = 0;
+    virtual version_type version() const = 0;
     // returns true if this class is polymorphic
     virtual bool is_polymorphic() const = 0;
 };

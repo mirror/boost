@@ -141,7 +141,7 @@ protected:
     virtual ~polymorphic_iarchive_impl(){};
 public:
     // utility function implemented by all legal archives
-    virtual void set_library_version(unsigned int archive_library_version) = 0;
+    virtual void set_library_version(version_type archive_library_version) = 0;
     virtual unsigned int get_library_version() const = 0;
     virtual unsigned int get_flags() const = 0;
     virtual void delete_created_pointers() = 0;

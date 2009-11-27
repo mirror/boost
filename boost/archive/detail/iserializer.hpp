@@ -149,8 +149,8 @@ public:
                 == boost::serialization::track_selectively
                 && serialized_as_pointer());
     }
-    virtual unsigned int version() const {
-        return ::boost::serialization::version<T>::value;
+    virtual version_type version() const {
+        return version_type(::boost::serialization::version<T>::value);
     }
     virtual bool is_polymorphic() const {
         return boost::is_polymorphic<T>::value;
@@ -169,7 +169,7 @@ BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
     const unsigned int file_version
 ) const {
     // trap case where the program cannot handle the current version
-    if(file_version > version())
+    if(file_version > static_cast<const unsigned int>(version()))
         boost::serialization::throw_exception(
             archive::archive_exception(
                 boost::archive::archive_exception::unsupported_class_version,

@@ -124,8 +124,8 @@ public:
             || (boost::serialization::tracking_level<T>::value == boost::serialization::track_selectively
                 && serialized_as_pointer());
     }
-    virtual unsigned int version() const {
-        return ::boost::serialization::version<T>::value;
+    virtual version_type version() const {
+        return version_type(::boost::serialization::version<T>::value);
     }
     virtual bool is_polymorphic() const {
         return boost::is_polymorphic<T>::value;

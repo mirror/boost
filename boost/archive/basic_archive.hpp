@@ -19,20 +19,33 @@
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/integer_traits.hpp>
 #include <boost/serialization/strong_typedef.hpp>
 
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
+#define BOOST_ARCHIVE_STRONG_TYPEDEF(T, D)        \
+namespace boost {                                 \
+namespace archive {                               \
+BOOST_STRONG_TYPEDEF(T, D)                        \
+} /* archive */                                   \
+template<>                                        \
+class integer_traits<boost::archive::D>  :        \
+    public integer_traits<boost::T>               \
+{};                                               \
+} /* boost */                                     \
+/**/
+
+BOOST_ARCHIVE_STRONG_TYPEDEF(uint_least16_t, version_type)
+BOOST_ARCHIVE_STRONG_TYPEDEF(int_least16_t, class_id_type)
+BOOST_ARCHIVE_STRONG_TYPEDEF(int_least16_t, class_id_optional_type)
+BOOST_ARCHIVE_STRONG_TYPEDEF(int_least16_t, class_id_reference_type)
+BOOST_ARCHIVE_STRONG_TYPEDEF(uint_least32_t, object_id_type)
+BOOST_ARCHIVE_STRONG_TYPEDEF(uint_least32_t, object_reference_type)
+
 namespace boost {
 namespace archive {
-
-BOOST_STRONG_TYPEDEF(boost::int_least16_t, version_type)
-BOOST_STRONG_TYPEDEF(boost::int_least16_t, class_id_type)
-BOOST_STRONG_TYPEDEF(boost::int_least16_t, class_id_optional_type)
-BOOST_STRONG_TYPEDEF(boost::int_least16_t, class_id_reference_type)
-BOOST_STRONG_TYPEDEF(boost::uint_least32_t, object_id_type)
-BOOST_STRONG_TYPEDEF(boost::uint_least32_t, object_reference_type)
 
 struct tracking_type {
 //    typedef bool value_type;
@@ -98,7 +111,7 @@ enum archive_flags {
 BOOST_ARCHIVE_DECL(const char *)
 BOOST_ARCHIVE_SIGNATURE();
 
-BOOST_ARCHIVE_DECL(unsigned char)
+BOOST_ARCHIVE_DECL(version_type)
 BOOST_ARCHIVE_VERSION();
 
 }// namespace archive

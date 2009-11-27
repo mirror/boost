@@ -49,6 +49,7 @@ namespace std{
 
 #include <boost/serialization/throw_exception.hpp>
 #include <boost/archive/archive_exception.hpp>
+#include <boost/archive/basic_streambuf_locale_saver.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
@@ -70,8 +71,9 @@ public:
 
     #ifndef BOOST_NO_STD_LOCALE
     boost::scoped_ptr<std::locale> archive_locale;
-    io::basic_ios_locale_saver<
-        BOOST_DEDUCED_TYPENAME IStream::char_type, BOOST_DEDUCED_TYPENAME IStream::traits_type
+    basic_streambuf_locale_saver<
+        BOOST_DEDUCED_TYPENAME IStream::char_type, 
+        BOOST_DEDUCED_TYPENAME IStream::traits_type
     > locale_saver;
     #endif
 
