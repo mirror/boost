@@ -67,6 +67,11 @@ struct void_caster_compare {
 typedef std::set<const void_caster *, void_caster_compare> set_type;
 typedef boost::serialization::singleton<set_type> void_caster_registry;
 
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4511 4512)
+#endif
+
 // implementation of shortcut void caster
 class void_caster_shortcut : public void_caster
 {
@@ -112,6 +117,10 @@ public:
         recursive_unregister();
     }
 };
+
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 
 void const * 
 void_caster_shortcut::vbc_downcast(
@@ -165,16 +174,21 @@ void_caster_shortcut::vbc_upcast(
     return NULL;
 }
 
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4511 4512)
+#endif
+
 // just used as a search key
 class void_caster_argument : public void_caster
 {
     virtual void const *
-    upcast(void const * const t) const {
+    upcast(void const * const /*t*/) const {
         assert(false);
         return NULL;
     }
     virtual void const *
-    downcast( void const * const t) const {
+    downcast( void const * const /*t*/) const {
         assert(false);
         return NULL;
     }
@@ -187,6 +201,10 @@ public:
     {}
     ~void_caster_argument(){};
 };
+
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 
 // implementation of void caster base class
 BOOST_SERIALIZATION_DECL(void)

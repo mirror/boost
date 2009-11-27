@@ -51,9 +51,9 @@ extended_type_info_typeid_0::is_less_than(
     // shortcut for common case
     if(this == & rhs)
         return false;
-    return static_cast<bool>(m_ti->before(
+    return 0 != m_ti->before(
         *(static_cast<const extended_type_info_typeid_0 &>(rhs).m_ti)
-    ));
+    );
 }
 
 BOOST_SERIALIZATION_DECL(bool) 
@@ -63,10 +63,14 @@ extended_type_info_typeid_0::is_equal(
     // shortcut for common case
     if(this == & rhs)
         return true;
-    return static_cast<bool>(
+    return 
+        // note: std::type_info == operator returns an int !!!
+        // the following permits conversion to bool without a warning.
+        ! (
         * m_ti 
-        == *(static_cast<const extended_type_info_typeid_0 &>(rhs).m_ti)
-    );
+        != *(static_cast<const extended_type_info_typeid_0 &>(rhs).m_ti)
+        )
+    ;
 }
 
 BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())
@@ -109,6 +113,11 @@ extended_type_info_typeid_0::type_unregister()
     m_ti = NULL;
 }
 
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4511 4512)
+#endif
+
 // this derivation is used for creating search arguments
 class extended_type_info_typeid_arg : 
     public extended_type_info_typeid_0
@@ -126,6 +135,10 @@ public:
         m_ti = NULL;
     }
 };
+
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 
 BOOST_SERIALIZATION_DECL(const extended_type_info *)
 extended_type_info_typeid_0::get_extended_type_info(

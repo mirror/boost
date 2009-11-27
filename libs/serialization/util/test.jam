@@ -42,7 +42,7 @@ rule run-template ( test-name : sources * : requirements * ) {
             <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
             <toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS
             <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
-            <toolset>msvc-8.0:<cxxflags>"-wd4996"
+            <toolset>msvc:<cxxflags>"-wd4996"
             # toolset optimizations
             <toolset>gcc:<cxxflags>"-ftemplate-depth-255"
             <toolset>msvc:<cxxflags>"-Gy"
