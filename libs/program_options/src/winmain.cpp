@@ -21,7 +21,7 @@ namespace boost { namespace program_options {
     {
         std::vector<std::string> result;
 
-        string::const_iterator i = input.begin(), e = input.end();
+        std::string::const_iterator i = input.begin(), e = input.end();
         for(;i != e; ++i)
             if (!isspace((unsigned char)*i))
                 break;
