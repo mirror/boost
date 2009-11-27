@@ -199,7 +199,7 @@ namespace boost
 
 #if defined(BOOST_MSVC)
 #pragma warning(push)
-#if BOOST_MSVC == 1400
+#if BOOST_MSVC <= 1400
 #pragma warning(disable:4267) // 'argument' : conversion from 'size_t' to 'unsigned int',
                               // possible loss of data
                               // A misguided attempt to detect 64-bit incompatability.
