@@ -6,7 +6,7 @@ project boost/program_options
 SOURCES =
     cmdline config_file options_description parsers variables_map 
     value_semantic positional_options utf8_codecvt_facet
-    convert winmain
+    convert winmain split
     ;
 
 lib boost_program_options

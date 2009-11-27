@@ -202,6 +202,20 @@ namespace boost { namespace program_options {
     BOOST_PROGRAM_OPTIONS_DECL parsed_options
     parse_environment(const options_description&, const char* prefix);
 
+    /** Splits a given string to a collection of single strings which
+        can be passed to command_line_parser. The second parameter is
+        used to specify a collection of possible seperator chars used
+        for splitting. The seperator is defaulted to space " ".
+    */
+    BOOST_PROGRAM_OPTIONS_DECL std::vector<std::string>
+    split(const std::string& cmdline, const std::string& sep = " ");
+    
+#ifndef BOOST_NO_STD_WSTRING
+    /** @overload */
+    BOOST_PROGRAM_OPTIONS_DECL std::vector<std::wstring>
+    split(const std::wstring& cmdline, const std::wstring& sep = L" ");
+#endif
+
     #ifdef _WIN32
     /** Parses the char* string which is passed to WinMain function on
         windows. This function is provided for convenience, and because it's
