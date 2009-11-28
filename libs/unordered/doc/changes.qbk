@@ -102,5 +102,10 @@ First official release.
 
 * Buckets are allocated lazily which means that constructing an empty container
   will not allocate any memory.
+  
+[h2 Boost 1.42.0]
+
+* Support instantiating the containers with incomplete value types.
+* Reduced the number of warnings (mostly in tests).
 
 [endsect]
