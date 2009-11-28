@@ -41,7 +41,7 @@ struct nil_generator {
     
     uuid operator()() const {
         // initialize to all zeros
-        uuid u = {0};
+        uuid u = {{0}};
         return u;
     }
 };
@@ -79,12 +79,12 @@ struct string_generator {
     template <typename CharIterator>
     uuid operator()(CharIterator begin, CharIterator end) const
     {
-        typedef std::iterator_traits<typename CharIterator>::value_type ch;
+        typedef typename std::iterator_traits<typename CharIterator>::value_type char_type;
 
         // check open brace
-        ch c = get_next_char(begin, end);
+        char_type c = get_next_char(begin, end);
         bool has_open_brace = is_open_brace(c);
-        ch open_brace_char = c;
+        char_type open_brace_char = c;
         if (has_open_brace) {
             c = get_next_char(begin, end);
         }

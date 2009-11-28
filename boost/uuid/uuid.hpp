@@ -25,6 +25,7 @@
 //  12 Nov 2007 - moved serialize code to uuid_serialize.hpp file
 //  25 Feb 2008 - moved to namespace boost::uuids
 //  19 Mar 2009 - changed to a POD, reorganized files
+//  28 Nov 2009 - disabled deprecated warnings for MSVC
 
 #ifndef BOOST_UUID_HPP
 #define BOOST_UUID_HPP
@@ -36,6 +37,11 @@
 
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/is_pod.hpp>
+
+#if defined(_MSC_VER)
+#pragma warning(push) // Save warning settings.
+#pragma warning(disable : 4996) // Disable deprecated std::swap_ranges, std::equal
+#endif
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std {
@@ -195,5 +201,9 @@ struct is_pod<uuids::uuid> : mpl::true_
 {};
 
 } // namespace boost
+
+#if defined(_MSC_VER)
+#pragma warning(pop) // Restore warnings to previous state.
+#endif
 
 #endif // BOOST_UUID_HPP

@@ -7,6 +7,7 @@
 
 // Revision History
 //  20 Mar 2009 - Initial Revision
+//  28 Nov 2009 - disabled deprecated warnings for MSVC
 
 #ifndef BOOST_UUID_IO_HPP
 #define BOOST_UUID_IO_HPP
@@ -18,6 +19,11 @@
 #include <boost/io/ios_state.hpp>
 #include <locale>
 #include <algorithm>
+
+#if defined(_MSC_VER)
+#pragma warning(push) // Save warning settings.
+#pragma warning(disable : 4996) // Disable deprecated std::ctype<char>::widen, std::copy
+#endif
 
 namespace boost {
 namespace uuids {
@@ -58,7 +64,7 @@ template <typename ch, typename char_traits>
 
         ch xdigits[16];
         {
-            char szdigits[17] = "0123456789ABCDEF";
+            char szdigits[] = "0123456789ABCDEF";
             ctype.widen(szdigits, szdigits+16, xdigits);
         }
         ch*const xdigits_end = xdigits+16;
@@ -105,5 +111,9 @@ template <typename ch, typename char_traits>
 }
 
 }} //namespace boost::uuids
+
+#if defined(_MSC_VER)
+#pragma warning(pop) // Restore warnings to previous state.
+#endif
 
 #endif // BOOST_UUID_IO_HPP
