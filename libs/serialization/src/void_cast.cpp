@@ -113,7 +113,7 @@ public:
     {
         recursive_register(includes_virtual_base);
     }
-    ~void_caster_shortcut(){
+    virtual ~void_caster_shortcut(){
         recursive_unregister();
     }
 };
@@ -199,7 +199,7 @@ public:
     ) :
         void_caster(derived, base)
     {}
-    ~void_caster_argument(){};
+    virtual ~void_caster_argument(){};
 };
 
 #ifdef BOOST_MSVC
@@ -220,27 +220,47 @@ void_caster::recursive_register(bool includes_virtual_base) const {
     std::clog << "\n";
     #endif
 
-    s.insert(this);
+    std::pair<void_cast_detail::set_type::const_iterator, bool> result;
+    result = s.insert(this);
+    assert(result.second);
 
     // generate all implied void_casts.
     void_cast_detail::set_type::const_iterator it;
     for(it = s.begin(); it != s.end(); ++it){
-        if(* m_derived == * (*it)->m_base)
-            new void_caster_shortcut(
+        if(* m_derived == * (*it)->m_base){
+            const void_caster_argument vca(
                 (*it)->m_derived, 
-                m_base,
-                m_difference + (*it)->m_difference,
-                includes_virtual_base,
-                this
+                m_base
             );
-        if(* (*it)->m_derived == * m_base)
-            new void_caster_shortcut(
-                m_derived, 
-                (*it)->m_base, 
-                m_difference + (*it)->m_difference,
-                includes_virtual_base,
-                this
+            void_cast_detail::set_type::const_iterator i;
+            i = s.find(& vca);
+            if(i == s.end()){
+                new void_caster_shortcut(
+                    (*it)->m_derived, 
+                    m_base,
+                    m_difference + (*it)->m_difference,
+                    includes_virtual_base,
+                    this
+                );
+            }
+        }
+        if(* (*it)->m_derived == * m_base){
+            const void_caster_argument vca(
+                (*it)->m_derived, 
+                m_base
             );
+            void_cast_detail::set_type::const_iterator i;
+            i = s.find(& vca);
+            if(i == s.end()){
+                new void_caster_shortcut(
+                    m_derived, 
+                    (*it)->m_base, 
+                    m_difference + (*it)->m_difference,
+                    includes_virtual_base,
+                    this
+                );
+            }
+        }
     }
 }
 
@@ -249,25 +269,23 @@ void_caster::recursive_unregister() const {
     if(void_caster_registry::is_destroyed())
         return;
 
+    #ifdef BOOST_SERIALIZATION_LOG
+    std::clog << "recursive_unregister\n";
+    std::clog << m_derived->get_debug_info();
+    std::clog << "<-";
+    std::clog << m_base->get_debug_info();
+    std::clog << "\n";
+    #endif
+
     void_cast_detail::set_type & s 
         = void_caster_registry::get_mutable_instance();
 
     // delete all shortcuts which use this primitive
     void_cast_detail::set_type::iterator it;
     for(it = s.begin(); it != s.end();){
-        if(
-            m_base == (*it)->m_base
-        &&  m_derived == (*it)->m_derived
-        ){
-            s.erase(it++);
-        }
-        else
-        if( (*it)->m_parent == this ){
-            // since recursion could invalidate it
-            // save pointer to set member
-            const void_caster * vc = *it;
-            // and erase first
-            s.erase(it++);
+        const void_caster * vc = *it;
+        if(vc->m_parent == this){
+            s.erase(it);
             delete vc;
             it = s.begin();
         }
