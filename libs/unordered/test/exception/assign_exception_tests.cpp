@@ -3,9 +3,15 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include "../helpers/prefix.hpp"
+
 #include "./containers.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/invariants.hpp"
+
+#if defined(BOOST_MSVC)
+#pragma warning(disable:4512) // assignment operator could not be generated
+#endif
 
 test::seed_t seed(12847);
 
@@ -18,7 +24,8 @@ struct self_assign_base : public test::exception_base
     typedef T data_type;
     T init() const { return T(values.begin(), values.end()); }
     void run(T& x) const { x = x; }
-    void check(T const& x) const { test::check_equivalent_keys(x); }
+    void check BOOST_PREVENT_MACRO_SUBSTITUTION(T const& x) const
+        { test::check_equivalent_keys(x); }
 };
 
 template <class T>
@@ -48,7 +55,8 @@ struct assign_base : public test::exception_base
     typedef T data_type;
     T init() const { return T(x); }
     void run(T& x1) const { x1 = y; }
-    void check(T const& x1) const { test::check_equivalent_keys(x1); }
+    void check BOOST_PREVENT_MACRO_SUBSTITUTION(T const& x1) const
+        { test::check_equivalent_keys(x1); }
 };
 
 template <class T>

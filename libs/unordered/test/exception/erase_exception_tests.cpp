@@ -3,6 +3,8 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include "../helpers/prefix.hpp"
+
 #include "./containers.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/invariants.hpp"
@@ -22,7 +24,7 @@ struct erase_test_base : public test::exception_base
         return T(values.begin(), values.end());
     }
 
-    void check(T const& x) const {
+    void check BOOST_PREVENT_MACRO_SUBSTITUTION(T const& x) const {
         std::string scope(test::scope);
 
         BOOST_TEST(scope.find("hash::") != std::string::npos ||

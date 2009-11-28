@@ -9,9 +9,13 @@ project unordered-test/unordered
     : requirements
         <warnings>all
         <toolset>intel:<warnings>on
-        <toolset>intel:<cxxflags>-strict-ansi
-        <toolset>msvc:<cxxflags>/W4
-        <toolset>gcc:<cxxflags>"-Wsign-promo -Wunused-parameter -pedantic"
+        <toolset>gcc:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter"
+        <toolset>darwin:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter"
+        <toolset>gcc:<define>_GLIBCXX_DEBUG
+        <toolset>darwin:<define>_GLIBCXX_DEBUG
+        <toolset>msvc:<warnings-as-errors>on
+        <toolset>gcc:<warnings-as-errors>on
+        <toolset>darwin:<warnings-as-errors>on
     ;
 
 test-suite unordered
@@ -21,6 +25,7 @@ test-suite unordered
         [ run compile_set.cpp ]
         [ run compile_map.cpp ]
         [ run link_test_1.cpp link_test_2.cpp ]
+        [ run incomplete_test.cpp ]
         [ run simple_tests.cpp ]
         [ run equivalent_keys_tests.cpp ]
         [ run constructor_tests.cpp ]

@@ -3,6 +3,8 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or move at http://www.boost.org/LICENSE_1_0.txt)
 
+#include "../helpers/prefix.hpp"
+
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
 #include "../helpers/test.hpp"
@@ -64,7 +66,9 @@ namespace move_tests
             test::random_values<T> v(1000, generator);
             test::object_count count;
             T y(create(v, count));
+#if defined(BOOST_HAS_NRVO)
             BOOST_TEST(count == test::global_object_count);
+#endif
             test::check_container(y, v);
             test::check_equivalent_keys(y);
         }
@@ -78,7 +82,9 @@ namespace move_tests
             test::object_count count;
             T y;
             y = create(v, count);
+#if defined(BOOST_HAS_NRVO)
             BOOST_TEST(count == test::global_object_count);
+#endif
             test::check_container(y, v);
             test::check_equivalent_keys(y);
         }
@@ -98,7 +104,9 @@ namespace move_tests
         {
             test::random_values<T> v(500, generator);
             T y(create(v, count, hf, eq, al, 0.5));
+#if defined(BOOST_HAS_NRVO)
             BOOST_TEST(count == test::global_object_count);
+#endif
             test::check_container(y, v);
             BOOST_TEST(test::equivalent(y.hash_function(), hf));
             BOOST_TEST(test::equivalent(y.key_eq(), eq));

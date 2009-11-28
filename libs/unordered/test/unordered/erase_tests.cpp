@@ -3,6 +3,8 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include "../helpers/prefix.hpp"
+
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
 #include "../helpers/test.hpp"
@@ -65,7 +67,7 @@ void erase_tests1(Container*, test::random_generator generator = test::default_g
         while(size > 0 && !x.empty())
         {
             using namespace std;
-            int index = rand() % x.size();
+            int index = rand() % (int) x.size();
             BOOST_DEDUCED_TYPENAME Container::const_iterator prev, pos, next;
             if(index == 0) {
                 prev = pos = x.begin();

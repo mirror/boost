@@ -58,10 +58,11 @@ namespace boost
                 allocator_type, value_type>::type
             value_allocator;
 
-        typedef boost::unordered_detail::hash_unique_table<Hash, Pred,
-            value_allocator, boost::unordered_detail::map_extractor> table;
+        typedef boost::unordered_detail::map<Key, Hash, Pred,
+            value_allocator> types;
+        typedef BOOST_DEDUCED_TYPENAME types::impl table;
 
-        typedef BOOST_DEDUCED_TYPENAME table::iterator_base iterator_base;
+        typedef BOOST_DEDUCED_TYPENAME types::iterator_base iterator_base;
 
     public:
 
@@ -96,7 +97,7 @@ namespace boost
 
         table table_;
         
-        BOOST_DEDUCED_TYPENAME table::iterator_base const&
+        BOOST_DEDUCED_TYPENAME types::iterator_base const&
             get(const_iterator const& it)
         {
             return boost::unordered_detail::iterator_access::get(it);
@@ -553,14 +554,17 @@ namespace boost
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
     private:
 #endif
+
         typedef BOOST_DEDUCED_TYPENAME
             boost::unordered_detail::rebind_wrap<
                 allocator_type, value_type>::type
             value_allocator;
 
-        typedef boost::unordered_detail::hash_equivalent_table<Hash, Pred,
-            value_allocator, boost::unordered_detail::map_extractor> table;
-        typedef BOOST_DEDUCED_TYPENAME table::iterator_base iterator_base;
+        typedef boost::unordered_detail::multimap<Key, Hash, Pred,
+            value_allocator> types;
+        typedef BOOST_DEDUCED_TYPENAME types::impl table;
+
+        typedef BOOST_DEDUCED_TYPENAME types::iterator_base iterator_base;
 
     public:
 
@@ -595,7 +599,7 @@ namespace boost
 
         table table_;
         
-        BOOST_DEDUCED_TYPENAME table::iterator_base const&
+        BOOST_DEDUCED_TYPENAME types::iterator_base const&
             get(const_iterator const& it)
         {
             return boost::unordered_detail::iterator_access::get(it);

@@ -6,6 +6,8 @@
 // The code for erasing elements from containers with equivalent keys is very
 // hairy with several tricky edge cases - so explicitly test each one.
 
+#include "../helpers/prefix.hpp"
+
 #include <boost/unordered_map.hpp>
 #include "../helpers/test.hpp"
 #include "../helpers/list.hpp"
@@ -14,6 +16,11 @@
 #include <iterator>
 #include <boost/next_prior.hpp>
 #include "../objects/test.hpp"
+
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1400)
+#pragma warning(disable:4267) // conversion from 'size_t' to 'unsigned int',
+                              // possible loss of data.
+#endif
 
 struct write_pair_type
 {

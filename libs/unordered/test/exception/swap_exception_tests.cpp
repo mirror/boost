@@ -3,9 +3,15 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include "../helpers/prefix.hpp"
+
 #include "./containers.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/invariants.hpp"
+
+#if defined(BOOST_MSVC)
+#pragma warning(disable:4512) // assignment operator could not be generated
+#endif
 
 test::seed_t seed(9387);
 
@@ -18,7 +24,7 @@ struct self_swap_base : public test::exception_base
     typedef T data_type;
     T init() const { return T(values.begin(), values.end()); }
     void run(T& x) const { x.swap(x); }
-    void check(T const& x) const {
+    void check BOOST_PREVENT_MACRO_SUBSTITUTION(T const& x) const {
         std::string scope(test::scope);
 
 #if BOOST_UNORDERED_SWAP_METHOD != 2
@@ -73,7 +79,7 @@ struct swap_base : public test::exception_base
             d.x.swap(d.y);
         } catch (std::runtime_error) {}
     }
-    void check(data_type const& d) const {
+    void check BOOST_PREVENT_MACRO_SUBSTITUTION(data_type const& d) const {
         std::string scope(test::scope);
 
 #if BOOST_UNORDERED_SWAP_METHOD != 2

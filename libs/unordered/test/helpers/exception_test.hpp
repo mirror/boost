@@ -110,7 +110,7 @@ namespace test {
             template <class T> void test(T const&) const {}
         };
         data_type init() const { return data_type(); }
-        void check() const {}
+        void check BOOST_PREVENT_MACRO_SUBSTITUTION() const {}
     };
 
     template <class T, class P1, class P2, class T2>
@@ -143,6 +143,9 @@ namespace test {
     class test_runner
     {
         Test const& test_;
+
+        test_runner(test_runner const&);
+        test_runner& operator=(test_runner const&);
     public:
         test_runner(Test const& t) : test_(t) {}
         void operator()() const {

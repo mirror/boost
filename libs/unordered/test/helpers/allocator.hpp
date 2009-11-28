@@ -58,8 +58,8 @@ namespace test
             return (std::numeric_limits<size_type>::max)();
         }
 
-        bool operator==(malloc_allocator const& x) const { return true; }
-        bool operator!=(malloc_allocator const& x) const { return false; }
+        bool operator==(malloc_allocator const&) const { return true; }
+        bool operator!=(malloc_allocator const&) const { return false; }
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         template <class T> void deallocate(T* p, size_type) {

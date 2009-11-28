@@ -6,6 +6,8 @@
 // This test creates the containers with members that meet their minimum
 // requirements. Makes sure everything compiles and is defined correctly.
 
+#include "../helpers/prefix.hpp"
+
 #include <boost/unordered_map.hpp>
 
 #include <iostream>
