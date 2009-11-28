@@ -5,6 +5,8 @@
 # bring in rules for testing
 import testing ;
 
+project : requirements <toolset>msvc:<asynch-exceptions>on ;
+
 test-suite "foreach"
     : [ run stl_byval.cpp ]
       [ run stl_byref.cpp ]
