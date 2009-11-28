@@ -452,7 +452,7 @@ namespace boost {
 #define BOOST_TRIBOOL_THIRD_STATE(Name)                                 \
 inline bool                                                             \
 Name(boost::logic::tribool x,                                           \
-     boost::logic::detail::indeterminate_t dummy =                      \
+     boost::logic::detail::indeterminate_t =                            \
        boost::logic::detail::indeterminate_t())                         \
 { return x.value == boost::logic::tribool::indeterminate_value; }
 
