@@ -40,7 +40,7 @@
 <div><p class="copyright">Copyright &#169; 2001 -2009 Beman Dawes, Daryle Walker, Gennaro Prota,
       John Maddock</p></div>
 <div><div class="legalnotice">
-<a name="id758110"></a><p>
+<a name="id753741"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -56,7 +56,7 @@
 <dt><span class="section"><a href="boost_integer/traits.html"> Integer Traits</a></span></dt>
 <dt><span class="section"><a href="boost_integer/integer.html"> Integer Type Selection</a></span></dt>
 <dt><span class="section"><a href="boost_integer/mask.html"> Integer Masks</a></span></dt>
-<dt><span class="section"><a href="boost_integer/log2.html"> Compile time log2 Calculation</a></span></dt>
+<dt><span class="section"><a href="boost_integer/log2.html"> Compile Time log2 Calculation</a></span></dt>
 <dt><span class="section"><a href="boost_integer/minmax.html"> Compile time min/max calculation</a></span></dt>
 <dt><span class="section"><a href="boost_integer/history.html"> History</a></span></dt>
 </dl>
@@ -66,7 +66,15 @@
 <a name="boost_integer.overview"></a><a class="link" href="index.html#boost_integer.overview" title="Overview"> Overview</a>
 </h2></div></div></div>
 <p>
-      Boost.Integer consists of the following components:
+      Boost.Integer provides integer type support, particularly helpful in generic
+      programming. It provides standard C99 integer types, such as might be found
+      in &lt;stdint.h&gt;, without requiring that header. It provides the means to
+      select an integer type based upon its properties, like the number of bits or
+      the maximum supported value, as well as compile-time bit mask selection. There
+      is a derivative of std::numeric_limits that provides integral constant expressions
+      for <code class="computeroutput"><span class="identifier">min</span></code> and <code class="computeroutput"><span class="identifier">max</span></code>.
+      Finally, it provides two compile-time algorithms: determining the highest power
+      of two in a compile-time value; and computing min and max of constant expressions.
     </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -191,7 +199,7 @@
 <tr>
 <td>
             <p>
-              <a class="link" href="boost_integer/log2.html" title="Compile time log2 Calculation">Compile time log2 Calculation</a>.
+              <a class="link" href="boost_integer/log2.html" title="Compile Time log2 Calculation">Compile time log2 Calculation</a>.
             </p>
             </td>
 <td>
@@ -229,7 +237,7 @@
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: November 27, 2009 at 11:11:24 GMT</small></p></td>
+<td align="left"><p><small>Last revised: November 28, 2009 at 17:06:38 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>

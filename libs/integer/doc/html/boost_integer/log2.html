@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Compile time log2 Calculation</title>
+<title>Compile Time log2 Calculation</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../index.html" title="Boost.Integer">
@@ -24,12 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_integer.log2"></a><a class="link" href="log2.html" title="Compile time log2 Calculation"> Compile time log2 Calculation</a>
+<a name="boost_integer.log2"></a><a class="link" href="log2.html" title="Compile Time log2 Calculation"> Compile Time log2 Calculation</a>
 </h2></div></div></div>
 <div class="toc"><dl>
 <dt><span class="section"><a href="log2.html#boost_integer.log2.synopsis">Synopsis</a></span></dt>
 <dt><span class="section"><a href="log2.html#boost_integer.log2.usage">Usage</a></span></dt>
-<dt><span class="section"><a href="log2.html#boost_integer.log2.example">Example</a></span></dt>
 <dt><span class="section"><a href="log2.html#boost_integer.log2.demonstration_program">Demonstration
       Program</a></span></dt>
 <dt><span class="section"><a href="log2.html#boost_integer.log2.rationale">Rationale</a></span></dt>
@@ -75,7 +74,7 @@
         The <code class="literal">boost::static_log2</code> class template takes one template
         parameter, a value of type <code class="literal">static_log2_argument_type</code>.
         The template only defines one member, <code class="literal">value</code>, which gives
-        the truncated base-two logarithm of the template argument.
+        the truncated, base-two logarithm of the template argument.
       </p>
 <p>
         Since the logarithm of zero, for any base, is undefined, there is a specialization
@@ -99,38 +98,6 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_integer.log2.example"></a><a class="link" href="log2.html#boost_integer.log2.example" title="Example">Example</a>
-</h3></div></div></div>
-<pre class="programlisting"><span class="preprocessor">#include</span> <span class="string">"boost/integer/static_log2.hpp"</span>
-
-
-<span class="keyword">template</span> <span class="special">&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">static_log2_argument_type</span> <span class="identifier">value</span> <span class="special">&gt;</span>
-<span class="keyword">bool</span> <span class="identifier">is_it_what</span><span class="special">()</span>
-<span class="special">{</span>
-    <span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">static_log2</span><span class="special">&lt;</span><span class="identifier">value</span><span class="special">&gt;</span>  <span class="identifier">lb_type</span><span class="special">;</span>
-
-    <span class="keyword">int</span>  <span class="identifier">temp</span> <span class="special">=</span> <span class="identifier">lb_type</span><span class="special">::</span><span class="identifier">value</span><span class="special">;</span>
-    <span class="comment">//...
-</span>    <span class="keyword">return</span> <span class="special">(</span><span class="identifier">temp</span> <span class="special">%</span> <span class="number">2</span><span class="special">)</span> <span class="special">!=</span> <span class="number">0</span><span class="special">;</span>
-<span class="special">}</span>
-
-<span class="comment">//...
-</span>
-<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
-<span class="special">{</span>
-    <span class="keyword">bool</span>  <span class="identifier">temp</span> <span class="special">=</span> <span class="identifier">is_it_what</span><span class="special">&lt;</span><span class="number">2000</span><span class="special">&gt;();</span>
-    <span class="comment">//...
-</span><span class="preprocessor"># if</span> <span class="number">0</span>
-    <span class="identifier">temp</span> <span class="special">=</span> <span class="identifier">is_it_what</span><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;();</span>  <span class="comment">// would give an error
-</span><span class="preprocessor"># endif</span>
-    <span class="comment">//...
-</span>    <span class="identifier">temp</span> <span class="special">=</span> <span class="identifier">is_it_what</span><span class="special">&lt;</span><span class="number">24</span><span class="special">&gt;();</span>
-    <span class="comment">//...
-</span><span class="special">}</span>
-</pre>
-</div>
-<div class="section" lang="en">
-<div class="titlepage"><div><div><h3 class="title">
 <a name="boost_integer.log2.demonstration_program"></a><a class="link" href="log2.html#boost_integer.log2.demonstration_program" title="Demonstration Program">Demonstration
       Program</a>
 </h3></div></div></div>
@@ -150,7 +117,7 @@
         can be considered the highest power-of-two in a value, which corresponds
         to the value's highest set bit (for binary integers). Sometimes the highest-bit
         position could be used in generic programming, which requires the position
-        to be statically (<span class="emphasis"><em>i.e.</em></span> at compile-time) available.
+        to be available statically (<span class="emphasis"><em>i.e.</em></span> at compile-time).
       </p>
 </div>
 <div class="section" lang="en">

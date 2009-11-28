@@ -70,6 +70,7 @@
   <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
   <span class="keyword">class</span> <span class="identifier">integer_traits</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>
   <span class="special">{</span>
+  <span class="keyword">public</span><span class="special">:</span>
      <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">bool</span> <span class="identifier">is_integral</span> <span class="special">=</span> <span class="keyword">false</span><span class="special">;</span>
      <span class="comment">//
 </span>     <span class="comment">// These members are defined only if T is a built-in
@@ -87,9 +88,9 @@
 </h3></div></div></div>
 <p>
         Template class <code class="literal">integer_traits</code> is derived from <code class="literal">std::numeric_limits</code>.
-        In general, it adds the single <code class="literal">bool</code> member <code class="literal">is_integral</code>
-        with the compile-time constant value <code class="literal">false</code>. However, for
-        all integral types <code class="literal">T</code> (std::3.9.1/7 [basic.fundamental]),
+        The primary specialization adds the single <code class="literal">bool</code> member
+        <code class="literal">is_integral</code> with the compile-time constant value <code class="literal">false</code>.
+        However, for all integral types <code class="literal">T</code> (std::3.9.1/7 [basic.fundamental]),
         there are specializations provided with the following compile-time constants
         defined:
       </p>
@@ -171,11 +172,11 @@
 </tbody>
 </table></div>
 <p>
-        Note: A flag <code class="literal">is_integral</code> is provided, because a user-defined
+        Note: The <span class="emphasis"><em>is_integral</em></span> flag is provided, because a user-defined
         integer class should specialize <code class="literal">std::numeric_limits&lt;&gt;::is_integer
-        = true</code>, nonetheless compile-time constants <code class="literal">const_min</code>
-        and <code class="literal">const_max</code> cannot be provided for that user-defined
-        class.
+        = true</code>, while compile-time constants <code class="literal">const_min</code>
+        and <code class="literal">const_max</code> are not provided for that user-defined class,
+        unless boost::integer_traits is also specialized.
       </p>
 </div>
 <div class="section" lang="en">

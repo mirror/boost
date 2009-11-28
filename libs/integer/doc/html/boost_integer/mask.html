@@ -7,7 +7,7 @@
 <link rel="home" href="../index.html" title="Boost.Integer">
 <link rel="up" href="../index.html" title="Boost.Integer">
 <link rel="prev" href="integer.html" title="Integer Type Selection">
-<link rel="next" href="log2.html" title="Compile time log2 Calculation">
+<link rel="next" href="log2.html" title="Compile Time log2 Calculation">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -105,7 +105,7 @@
         of <code class="literal">high_bit_mask_t</code>.
       </p>
 <div class="table">
-<a name="id769480"></a><p class="title"><b>Table&#160;2.&#160;Members of the `boost::high_bit_mask_t` Class Template</b></p>
+<a name="id765275"></a><p class="title"><b>Table&#160;2.&#160;Members of the `boost::high_bit_mask_t` Class Template</b></p>
 <div class="table-contents"><table class="table" summary="Members of the `boost::high_bit_mask_t` Class Template">
 <colgroup>
 <col>
@@ -132,7 +132,7 @@
             </td>
 <td>
             <p>
-              The smallest unsigned built-in type that supports the given bit position.
+              The smallest, unsigned, built-in type that supports the given bit position.
             </p>
             </td>
 </tr>
@@ -144,7 +144,7 @@
             </td>
 <td>
             <p>
-              The quick-to-manipulate analog of <code class="literal">least</code>.
+              The easiest-to-manipulate analog of <code class="literal">least</code>.
             </p>
             </td>
 </tr>
@@ -156,7 +156,7 @@
             </td>
 <td>
             <p>
-              A <code class="literal">least</code> constant of the desired bit-masking value.
+              A <code class="literal">least</code> constant of the value 2<sup>Bit</sup>.
             </p>
             </td>
 </tr>
@@ -197,15 +197,14 @@
 </h3></div></div></div>
 <p>
         The <code class="literal">boost::low_bits_mask_t</code> class template provides constants
-        for bit masks representing the lowest bits of a certain amount. The masks
-        are equivalent to the value (2<sup>Bits</sup> - 1), where <code class="literal">Bits</code> is
-        the template parameter. The bit amount must be a nonnegative number from
-        zero to <span class="emphasis"><em>Max</em></span>, where Max is the number of bits supported
-        by the largest unsigned built-in integral type. The following table describes
-        the members of an instantiation of <code class="literal">low_bits_mask_t</code>.
+        for bit masks equivalent to the value (2<sup>Bits</sup> - 1), where <code class="literal">Bits</code>
+        is the template parameter. The parameter <code class="literal">Bits</code> must be
+        a non-negative integer from zero to <span class="emphasis"><em>Max</em></span>, where Max is
+        the number of bits supported by the largest, unsigned, built-in integral
+        type. The following table describes the members of <code class="literal">low_bits_mask_t</code>.
       </p>
 <div class="table">
-<a name="id769682"></a><p class="title"><b>Table&#160;3.&#160;Members of the [^boost::low_bits_mask_t] Class Template</b></p>
+<a name="id765484"></a><p class="title"><b>Table&#160;3.&#160;Members of the [^boost::low_bits_mask_t] Class Template</b></p>
 <div class="table-contents"><table class="table" summary="Members of the [^boost::low_bits_mask_t] Class Template">
 <colgroup>
 <col>
@@ -232,7 +231,7 @@
             </td>
 <td>
             <p>
-              The smallest unsigned built-in type that supports the given bit count.
+              The smallest, unsigned built-in type that supports the given bit count.
             </p>
             </td>
 </tr>
@@ -244,7 +243,7 @@
             </td>
 <td>
             <p>
-              The quick-to-manipulate analog of <code class="literal">least</code>.
+              The easiest-to-manipulate analog of <code class="literal">least</code>.
             </p>
             </td>
 </tr>

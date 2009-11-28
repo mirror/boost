@@ -54,7 +54,7 @@
 </span>  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">LeastInt</span><span class="special">&gt;</span>
   <span class="keyword">struct</span> <span class="identifier">int_fast_t</span>
   <span class="special">{</span>
-      <span class="keyword">typedef</span> <span class="emphasis"><em>implementation-defined-type</em></span>  <span class="identifier">fast</span><span class="special">;</span>
+      <span class="keyword">typedef</span> <span class="emphasis"><em>implementation-defined-type</em></span>  <span class="identifier">type</span><span class="special">;</span>
   <span class="special">};</span>
 
   <span class="comment">//  signed
@@ -115,13 +115,12 @@
         to <code class="literal">int</code> objects before processing. The input type, passed
         as the only template parameter, must be a built-in integral type, except
         <code class="literal">bool</code>. Unsigned integral types can be used, as well as
-        signed integral types, despite the name. The output type is given as the
-        class member <code class="literal">fast</code>.
+        signed integral types. The output type is given as the nested type <code class="literal">fast</code>.
       </p>
 <p>
         <span class="bold"><strong>Implementation Notes:</strong></span> By default, the output
         type is identical to the input type. Eventually, this code's implementation
-        should be conditionalized for each platform to give accurate mappings between
+        should be customized for each platform to give accurate mappings between
         the built-in types and the easiest-to-manipulate built-in types. Also, there
         is no guarantee that the output type actually is easier to manipulate than
         the input type.
@@ -135,12 +134,12 @@
         The <code class="literal">int_t</code>, <code class="literal">uint_t</code>, <code class="literal">int_max_value_t</code>,
         <code class="literal">int_min_value_t</code>, and <code class="literal">uint_value_t</code> class
         templates find the most appropiate built-in integral type for the given template
-        parameter. This type is given by the class member <code class="literal">least</code>.
-        The easiest-to-manipulate version of that type is given by the class member
+        parameter. This type is given by the nested type <code class="literal">least</code>.
+        The easiest-to-manipulate version of that type is given by the nested type
         <code class="literal">fast</code>. The following table describes each template's criteria.
       </p>
 <div class="table">
-<a name="id768468"></a><p class="title"><b>Table&#160;1.&#160;Criteria for the Sized Type Class Templates</b></p>
+<a name="id764075"></a><p class="title"><b>Table&#160;1.&#160;Criteria for the Sized Type Class Templates</b></p>
 <div class="table-contents"><table class="table" summary="Criteria for the Sized Type Class Templates">
 <colgroup>
 <col>
@@ -162,33 +161,91 @@
 <tr>
 <td>
             <p>
-              <code class="literal">boost::int_t&lt;N&gt;</code>
+              <code class="literal">boost::int_t&lt;N&gt;::least</code>
             </p>
             </td>
 <td>
             <p>
-              The smallest built-in signed integral type with at least <span class="emphasis"><em>N</em></span>
+              The smallest, built-in, signed integral type with at least <span class="emphasis"><em>N</em></span>
               bits, including the sign bit. The parameter should be a positive number.
               A compile-time error results if the parameter is larger than the number
-              of bits in the largest integer type. Note that the member <span class="emphasis"><em>exact</em></span>
-              is defined <span class="bold"><strong>only</strong></span> if there is a type
-              with exactly N bits.
+              of bits in the largest integer type.
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <code class="literal">boost::uint_t&lt;N&gt;</code>
+              <code class="literal">boost::int_t&lt;N&gt;::fast</code>
             </p>
             </td>
 <td>
             <p>
-              The smallest built-in unsigned integral type with at least <span class="emphasis"><em>N</em></span>
+              The easiest-to-manipulate, built-in, signed integral type with at least
+              <span class="emphasis"><em>N</em></span> bits, including the sign bit. The parameter
+              should be a positive number. A compile-time error results if the parameter
+              is larger than the number of bits in the largest integer type.
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <code class="literal">boost::int_t&lt;N&gt;::exact</code>
+            </p>
+            </td>
+<td>
+            <p>
+              A built-in, signed integral type with exactly <span class="emphasis"><em>N</em></span>
+              bits, including the sign bit. The parameter should be a positive number.
+              Note that the member <span class="emphasis"><em>exact</em></span> is defined <span class="bold"><strong>only</strong></span> if there exists a type with exactly <span class="emphasis"><em>N</em></span>
+              bits.
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <code class="literal">boost::uint_t&lt;N&gt;::least</code>
+            </p>
+            </td>
+<td>
+            <p>
+              The smallest, built-in, unsigned integral type with at least <span class="emphasis"><em>N</em></span>
+              bits. The parameter should be a positive number. A compile-time error
+              results if the parameter is larger than the number of bits in the largest
+              integer type.
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <code class="literal">boost::uint_t&lt;N&gt;::fast</code>
+            </p>
+            </td>
+<td>
+            <p>
+              The easiest-to-manipulate, built-in, unsigned integral type with at
+              least <span class="emphasis"><em>N</em></span> bits. The parameter should be a positive
+              number. A compile-time error results if the parameter is larger than
+              the number of bits in the largest integer type.
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <code class="literal">boost::uint_t&lt;N&gt;::exact</code>
+            </p>
+            </td>
+<td>
+            <p>
+              A built-in, unsigned integral type with exactly <span class="emphasis"><em>N</em></span>
               bits. The parameter should be a positive number. A compile-time error
               results if the parameter is larger than the number of bits in the largest
               integer type. Note that the member <span class="emphasis"><em>exact</em></span> is defined
-              <span class="bold"><strong>only</strong></span> if there is a type with exactly
+              <span class="bold"><strong>only</strong></span> if there exists a type with exactly
               N bits.
             </p>
             </td>
@@ -196,42 +253,84 @@
 <tr>
 <td>
             <p>
-              <code class="literal">boost::int_max_value_t&lt;V&gt;</code>
+              <code class="literal">boost::int_max_value_t&lt;V&gt;::last</code>
             </p>
             </td>
 <td>
             <p>
-              The smallest built-in signed integral type that can hold all the values
-              in the inclusive range <span class="emphasis"><em>0 - V</em></span>. The parameter should
-              be a positive number.
-            </p>
-            </td>
-</tr>
-<tr>
-<td>
-            <p>
-              <code class="literal">boost::int_min_value_t&lt;V&gt;</code>
-            </p>
-            </td>
-<td>
-            <p>
-              The smallest built-in signed integral type that can hold all the values
-              in the inclusive range <span class="emphasis"><em>V-0</em></span>. The parameter should
-              be a negative number.
+              The smallest, built-in, signed integral type that can hold all the
+              values in the inclusive range <span class="emphasis"><em>0 - V</em></span>. The parameter
+              should be a positive number.
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <code class="literal">boost::uint_value_t&lt;V&gt;</code>
+              <code class="literal">boost::int_max_value_t&lt;V&gt;::fast</code>
             </p>
             </td>
 <td>
             <p>
-              The smallest built-in unsigned integral type that can hold all positive
+              The easiest-to-manipulate, built-in, signed integral type that can
+              hold all the values in the inclusive range <span class="emphasis"><em>0 - V</em></span>.
+              The parameter should be a positive number.
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <code class="literal">boost::int_min_value_t&lt;V&gt;::least</code>
+            </p>
+            </td>
+<td>
+            <p>
+              The smallest, built-in, signed integral type that can hold all the
+              values in the inclusive range <span class="emphasis"><em>V - 0</em></span>. The parameter
+              should be a negative number.
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <code class="literal">boost::int_min_value_t&lt;V&gt;::fast</code>
+            </p>
+            </td>
+<td>
+            <p>
+              The easiest-to-manipulate, built-in, signed integral type that can
+              hold all the values in the inclusive range <span class="emphasis"><em>V - 0</em></span>.
+              The parameter should be a negative number.
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <code class="literal">boost::uint_value_t&lt;V&gt;::least</code>
+            </p>
+            </td>
+<td>
+            <p>
+              The smallest, built-in, unsigned integral type that can hold all positive
               values up to and including <span class="emphasis"><em>V</em></span>. The parameter should
               be a positive number.
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <code class="literal">boost::uint_value_t&lt;V&gt;::fast</code>
+            </p>
+            </td>
+<td>
+            <p>
+              The easiest-to-manipulate, built-in, unsigned integral type that can
+              hold all positive values up to and including <span class="emphasis"><em>V</em></span>.
+              The parameter should be a positive number.
             </p>
             </td>
 </tr>

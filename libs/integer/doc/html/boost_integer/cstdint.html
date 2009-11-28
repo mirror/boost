@@ -49,10 +49,11 @@
         integer widths. All typedef's are in namespace boost.
       </p>
 <p>
-        The specifications are based on the ISO/IEC 9899:1999 C Language standard
-        header &lt;stdint.h&gt;. The 64-bit types required by the C standard are
-        not required in the boost header, and may not be supplied in all implementations,
-        because <code class="literal">long long</code> is not [yet] included in the C++ standard.
+        The specifications for these types are based on the ISO/IEC 9899:1999 C Language
+        standard header &lt;stdint.h&gt;. The 64-bit types required by the C standard
+        are <span class="emphasis"><em>not required</em></span> in the boost header, and may not be
+        supplied for all platforms/compilers, because <code class="literal">long long</code>
+        is not [yet] included in the C++ standard.
       </p>
 <p>
         See <a href="../../../test/cstdint_test.cpp" target="_top">cstdint_test.cpp</a> for
@@ -66,13 +67,13 @@
 <p>
         The organization of the Boost.Integer headers and classes is designed to
         take advantage of &lt;stdint.h&gt; types from the 1999 C standard without
-        resorting to undefined behavior in terms of the 1998 C++ standard. The header
+        causing undefined behavior in terms of the 1998 C++ standard. The header
         &lt;boost/cstdint.hpp&gt; makes the standard integer types safely available
         in namespace <code class="literal">boost</code> without placing any names in namespace
-        <code class="literal">std</code>. As always, the intension is to complement rather
-        than compete with the C++ Standard Library. Should some future C++ standard
-        include &lt;stdint.h&gt; and &lt;cstdint&gt;, then &lt;boost/cstdint.hpp&gt;
-        will continue to function, but will become redundant and may be safely deprecated.
+        <code class="literal">std</code>. The intension is to complement rather than compete
+        with the C++ Standard Library. Should some future C++ standard include &lt;stdint.h&gt;
+        and &lt;cstdint&gt;, then &lt;boost/cstdint.hpp&gt; will continue to function,
+        but will become redundant and may be safely deprecated.
       </p>
 <p>
         Because these are boost headers, their names conform to boost header naming
@@ -108,9 +109,9 @@
         designates an unsigned integer type of exactly # bits.
       </p>
 <p>
-        These types are optional. However, if an implementation provides integer
-        types with widths of 8, 16, 32, or 64 bits, it shall define the corresponding
-        typedef names.
+        These types are optional. However, if a platform supports integer types with
+        widths of 8, 16, 32, 64, or any combination thereof, then &lt;boost/cstdint.hpp&gt;
+        does provide the corresponding typedefs.
       </p>
 <p>
         The absence of int64_t and uint64_t is indicated by the macro <code class="computeroutput"><span class="identifier">BOOST_NO_INT64_T</span></code>.
@@ -125,14 +126,14 @@
         The typedef <code class="literal">int_least#_t</code>, with # replaced by the width,
         designates a signed integer type with a width of at least # bits, such that
         no signed integer type with lesser size has at least the specified width.
-        Thus, <code class="literal">int_least32_t</code> denotes a signed integer type with
-        a width of at least 32 bits. Similarly, the typedef name <code class="literal">uint_least#_t</code>
+        Thus, <code class="literal">int_least32_t</code> denotes the smallest signed integer
+        type with a width of at least 32 bits. Similarly, the typedef name <code class="literal">uint_least#_t</code>
         designates an unsigned integer type with a width of at least # bits, such
         that no unsigned integer type with lesser size has at least the specified
         width.
       </p>
 <p>
-        Required minimum-width integer types:
+        The following minimum-width integer types are provided for all platforms:
       </p>
 <div class="itemizedlist"><ul type="disc">
 <li><code class="literal">int_least8_t</code></li>
@@ -143,17 +144,13 @@
 <li><code class="literal">uint_least32_t</code></li>
 </ul></div>
 <p>
-        The types:
+        The following types are available only if, after including &lt;boost/cstdint.hpp&gt;,
+        the macro BOOST_NO_INT64_T is not defined:
       </p>
 <div class="itemizedlist"><ul type="disc">
 <li><code class="literal">int_least64_t</code></li>
 <li><code class="literal">uint_least64_t</code></li>
 </ul></div>
-<p>
-        Are available only if, after inclusion of <code class="literal">&lt;boost/cstdint.hpp&gt;</code>
-        the macro <code class="computeroutput"><span class="identifier">BOOST_NO_INT64_T</span></code>
-        is <span class="emphasis"><em><span class="bold"><strong>not defined</strong></span></em></span>.
-      </p>
 <p>
         All other minimum-width integer types are optional.
       </p>
@@ -174,7 +171,7 @@
         case, however, they satisfy the signedness and width requirements.
       </p>
 <p>
-        Required fastest minimum-width integer types:
+        The following fastest minimum-width integer types are provided for all platforms:
       </p>
 <div class="itemizedlist"><ul type="disc">
 <li><code class="literal">int_fast8_t</code></li>
@@ -185,17 +182,13 @@
 <li><code class="literal">uint_fast32_t</code></li>
 </ul></div>
 <p>
-        The types:
+        The following types are available only if, after including &lt;boost/cstdint.hpp&gt;,
+        the macro BOOST_NO_INT64_T is not defined:
       </p>
 <div class="itemizedlist"><ul type="disc">
 <li><code class="literal">int_fast64_t</code></li>
 <li><code class="literal">uint_fast64_t</code></li>
 </ul></div>
-<p>
-        Are available only if, after inclusion of <code class="literal">&lt;boost/cstdint.hpp&gt;</code>
-        the macro <code class="computeroutput"><span class="identifier">BOOST_NO_INT64_T</span></code>
-        is <span class="emphasis"><em><span class="bold"><strong>not defined</strong></span></em></span>.
-      </p>
 <p>
         All other fastest minimum-width integer types are optional.
       </p>
@@ -214,7 +207,7 @@
         capable of representing any value of any unsigned integer type.
       </p>
 <p>
-        These types are required.
+        These types are provided for all platforms.
       </p>
 </div>
 </div>
