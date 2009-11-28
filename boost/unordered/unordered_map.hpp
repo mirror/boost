@@ -284,6 +284,7 @@ namespace boost
         }
 #else
 
+        #if !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x5100))
         std::pair<iterator, bool> emplace(value_type const& v = value_type())
         {
             return boost::unordered_detail::pair_cast<iterator, bool>(
@@ -294,6 +295,7 @@ namespace boost
         {
             return iterator(table_.emplace(v).first);
         }
+        #endif
 
 #define BOOST_UNORDERED_EMPLACE(z, n, _)                                       \
             template <                                                         \
@@ -786,6 +788,7 @@ namespace boost
         }
 #else
 
+        #if !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x5100))
         iterator emplace(value_type const& v = value_type())
         {
             return iterator(table_.emplace(v));
@@ -796,7 +799,7 @@ namespace boost
         {
             return iterator(table_.emplace(v));
         }
-
+        #endif
 
 #define BOOST_UNORDERED_EMPLACE(z, n, _)                                       \
             template <                                                         \
