@@ -41,7 +41,7 @@ namespace example
         class inner_class {
         public:
             int x;
-        }
+        };
 
         enum class_enum { enumerator };
         
