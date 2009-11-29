@@ -41,7 +41,11 @@ namespace boost
   //  fast integers from least integers
   //  int_fast_t<> works correctly for unsigned too, in spite of the name.
   template< typename LeastInt >
-  struct int_fast_t { typedef LeastInt fast; }; // imps may specialize
+  struct int_fast_t 
+  { 
+     typedef LeastInt fast; 
+     typedef fast     type;
+  }; // imps may specialize
 
   namespace detail{
 
@@ -115,7 +119,7 @@ namespace boost
           (Bits-1 <= ::std::numeric_limits<short>::digits) +
           (Bits-1 <= ::std::numeric_limits<signed char>::digits)
         >::least  least;
-      typedef typename int_fast_t<least>::fast  fast;
+      typedef typename int_fast_t<least>::type  fast;
   };
 
   //  unsigned
@@ -135,7 +139,7 @@ namespace boost
           (Bits <= ::std::numeric_limits<unsigned short>::digits) +
           (Bits <= ::std::numeric_limits<unsigned char>::digits)
         >::least  least;
-      typedef typename int_fast_t<least>::fast  fast;
+      typedef typename int_fast_t<least>::type  fast;
       // int_fast_t<> works correctly for unsigned too, in spite of the name.
   };
 
@@ -161,7 +165,7 @@ namespace boost
           (MaxValue <= ::boost::integer_traits<short>::const_max) +
           (MaxValue <= ::boost::integer_traits<signed char>::const_max)
         >::least  least;
-      typedef typename int_fast_t<least>::fast  fast;
+      typedef typename int_fast_t<least>::type  fast;
   };
 
 #if !defined(BOOST_NO_INTEGRAL_INT64_T) && defined(BOOST_HAS_LONG_LONG)
@@ -183,7 +187,7 @@ namespace boost
           (MinValue >= ::boost::integer_traits<short>::const_min) +
           (MinValue >= ::boost::integer_traits<signed char>::const_min)
         >::least  least;
-      typedef typename int_fast_t<least>::fast  fast;
+      typedef typename int_fast_t<least>::type  fast;
   };
 
   //  unsigned
@@ -207,7 +211,7 @@ namespace boost
           (MaxValue <= ::boost::integer_traits<unsigned short>::const_max) +
           (MaxValue <= ::boost::integer_traits<unsigned char>::const_max)
         >::least  least;
-      typedef typename int_fast_t<least>::fast  fast;
+      typedef typename int_fast_t<least>::type  fast;
   };
 
 

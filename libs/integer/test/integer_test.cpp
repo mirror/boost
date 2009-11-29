@@ -50,8 +50,8 @@ const char* get_name_of_type(unsigned int){ return "unsigned int"; }
 const char* get_name_of_type(long){ return "long"; }
 const char* get_name_of_type(unsigned long){ return "unsigned long"; }
 #ifdef BOOST_HAS_LONG_LONG
-const char* get_name_of_type(long long){ return "long long"; }
-const char* get_name_of_type(unsigned long long){ return "unsigned long long"; }
+const char* get_name_of_type(boost::long_long_type){ return "boost::long_long_type"; }
+const char* get_name_of_type(boost::ulong_long_type){ return "boost::ulong_long_type"; }
 #endif
 
 template <int Bits>
@@ -89,7 +89,7 @@ void do_test_bits()
       || (sizeof(unsigned int) * CHAR_BIT == Bits)
       || (sizeof(unsigned long) * CHAR_BIT == Bits)
 #ifdef BOOST_HAS_LONG_LONG
-      || (sizeof(unsigned long long) * CHAR_BIT == Bits)
+      || (sizeof(boost::ulong_long_type) * CHAR_BIT == Bits)
 #endif
       >());
    //
@@ -165,8 +165,8 @@ void do_test_bits<-1>()
    // Nothing to do here!!
 }
 
-template <class Traits, class Expected>
-void test_min_max_type(Expected val)
+template <class Traits, class Expected, class Value>
+void test_min_max_type(Value val)
 {
    typedef typename Traits::least least_type;
    typedef typename Traits::fast  fast_type;
@@ -174,6 +174,16 @@ void test_min_max_type(Expected val)
    BOOST_TEST(sizeof(fast_type) >= sizeof(least_type));
    BOOST_TEST((std::numeric_limits<least_type>::min)() <= val);
    BOOST_TEST((std::numeric_limits<least_type>::max)() >= val);
+
+   if(boost::detail::test_errors() != last_error_count)
+   {
+      last_error_count = boost::detail::test_errors();
+      std::cout << "Traits type is: " << typeid(Traits).name() << std::endl;
+      std::cout << "Least type is: " << get_name_of_type(least_type(0)) << std::endl;
+      std::cout << "Fast type is: " << get_name_of_type(fast_type(0)) << std::endl;
+      std::cout << "Expected type is: " << get_name_of_type(Expected(0)) << std::endl;
+      std::cout << "Required value is: " << val << std::endl;
+   }
 }
 
 // Test program
@@ -216,36 +226,36 @@ int main(int, char*[])
       test_min_max_type<boost::uint_value_t<ULONG_MAX>, unsigned long>(ULONG_MAX);
 #endif
 #if defined(BOOST_HAS_LONG_LONG) && (defined(ULLONG_MAX) && (ULLONG_MAX != ULONG_MAX))
-      test_min_max_type<boost::int_max_value_t<LONG_MAX+1LL>, long long>(LONG_MAX+1LL);
-      test_min_max_type<boost::int_min_value_t<LONG_MIN-1LL>, long long>(LONG_MIN-1LL);
-      test_min_max_type<boost::uint_value_t<ULONG_MAX+1uLL>, unsigned long long>(ULONG_MAX+1uLL);
-      test_min_max_type<boost::int_max_value_t<LLONG_MAX>, long long>(LLONG_MAX);
-      test_min_max_type<boost::int_min_value_t<LLONG_MIN>, long long>(LLONG_MIN);
-      test_min_max_type<boost::uint_value_t<ULLONG_MAX>, unsigned long long>(ULLONG_MAX);
+      test_min_max_type<boost::int_max_value_t<LONG_MAX+1LL>, boost::long_long_type>(LONG_MAX+1LL);
+      test_min_max_type<boost::int_min_value_t<LONG_MIN-1LL>, boost::long_long_type>(LONG_MIN-1LL);
+      test_min_max_type<boost::uint_value_t<ULONG_MAX+1uLL>, boost::ulong_long_type>(ULONG_MAX+1uLL);
+      test_min_max_type<boost::int_max_value_t<LLONG_MAX>, boost::long_long_type>(LLONG_MAX);
+      test_min_max_type<boost::int_min_value_t<LLONG_MIN>, boost::long_long_type>(LLONG_MIN);
+      test_min_max_type<boost::uint_value_t<ULLONG_MAX>, boost::ulong_long_type>(ULLONG_MAX);
 #endif
 #if defined(BOOST_HAS_LONG_LONG) && (defined(ULONG_LONG_MAX) && (ULONG_LONG_MAX != ULONG_MAX))
-      test_min_max_type<boost::int_max_value_t<LONG_MAX+1LL>, long long>(LONG_MAX+1LL);
-      test_min_max_type<boost::int_min_value_t<LONG_MIN-1LL>, long long>(LONG_MIN-1LL);
-      test_min_max_type<boost::uint_value_t<ULONG_MAX+1uLL>, unsigned long long>(ULONG_MAX+1uLL);
-      test_min_max_type<boost::int_max_value_t<LONG_LONG_MAX>, long long>(LONG_LONG_MAX);
-      test_min_max_type<boost::int_min_value_t<LONG_LONG_MIN>, long long>(LONG_LONG_MIN);
-      test_min_max_type<boost::uint_value_t<ULONG_LONG_MAX>, unsigned long long>(ULONG_LONG_MAX);
+      test_min_max_type<boost::int_max_value_t<LONG_MAX+1LL>, boost::long_long_type>(LONG_MAX+1LL);
+      test_min_max_type<boost::int_min_value_t<LONG_MIN-1LL>, boost::long_long_type>(LONG_MIN-1LL);
+      test_min_max_type<boost::uint_value_t<ULONG_MAX+1uLL>, boost::ulong_long_type>(ULONG_MAX+1uLL);
+      test_min_max_type<boost::int_max_value_t<LONG_LONG_MAX>, boost::long_long_type>(LONG_LONG_MAX);
+      test_min_max_type<boost::int_min_value_t<LONG_LONG_MIN>, boost::long_long_type>(LONG_LONG_MIN);
+      test_min_max_type<boost::uint_value_t<ULONG_LONG_MAX>, boost::ulong_long_type>(ULONG_LONG_MAX);
 #endif
 #if defined(BOOST_HAS_LONG_LONG) && (defined(ULONGLONG_MAX) && (ULONGLONG_MAX != ULONG_MAX))
-      test_min_max_type<boost::int_max_value_t<LONG_MAX+1LL>, long long>(LONG_MAX+1LL);
-      test_min_max_type<boost::int_min_value_t<LONG_MIN-1LL>, long long>(LONG_MIN-1LL);
-      test_min_max_type<boost::uint_value_t<ULONG_MAX+1uLL>, unsigned long long>(ULONG_MAX+1uLL);
-      test_min_max_type<boost::int_max_value_t<LONGLONG_MAX>, long long>(LONGLONG_MAX);
-      test_min_max_type<boost::int_min_value_t<LONGLONG_MIN>, long long>(LONGLONG_MAX);
-      test_min_max_type<boost::uint_value_t<ULONGLONG_MAX>, unsigned long long>(ULONGLONG_MAX);
+      test_min_max_type<boost::int_max_value_t<LONG_MAX+1LL>, boost::long_long_type>(LONG_MAX+1LL);
+      test_min_max_type<boost::int_min_value_t<LONG_MIN-1LL>, boost::long_long_type>(LONG_MIN-1LL);
+      test_min_max_type<boost::uint_value_t<ULONG_MAX+1uLL>, boost::ulong_long_type>(ULONG_MAX+1uLL);
+      test_min_max_type<boost::int_max_value_t<LONGLONG_MAX>, boost::long_long_type>(LONGLONG_MAX);
+      test_min_max_type<boost::int_min_value_t<LONGLONG_MIN>, boost::long_long_type>(LONGLONG_MAX);
+      test_min_max_type<boost::uint_value_t<ULONGLONG_MAX>, boost::ulong_long_type>(ULONGLONG_MAX);
 #endif
 #if defined(BOOST_HAS_LONG_LONG) && (defined(_ULLONG_MAX) && defined(_LLONG_MIN) && (_ULLONG_MAX != ULONG_MAX))
-      test_min_max_type<boost::int_max_value_t<LONG_MAX+1LL>, long long>(LONG_MAX+1LL);
-      test_min_max_type<boost::int_min_value_t<LONG_MIN-1LL>, long long>(LONG_MIN-1LL);
-      test_min_max_type<boost::uint_value_t<ULONG_MAX+1uLL>, unsigned long long>(ULONG_MAX+1uLL);
-      test_min_max_type<boost::int_max_value_t<_LLONG_MAX>, long long>(_LLONG_MAX);
-      test_min_max_type<boost::int_min_value_t<_LLONG_MIN>, long long>(_LLONG_MIN);
-      test_min_max_type<boost::uint_value_t<_ULLONG_MAX>, unsigned long long>(_ULLONG_MAX);
+      test_min_max_type<boost::int_max_value_t<LONG_MAX+1LL>, boost::long_long_type>(LONG_MAX+1LL);
+      test_min_max_type<boost::int_min_value_t<LONG_MIN-1LL>, boost::long_long_type>(LONG_MIN-1LL);
+      test_min_max_type<boost::uint_value_t<ULONG_MAX+1uLL>, boost::ulong_long_type>(ULONG_MAX+1uLL);
+      test_min_max_type<boost::int_max_value_t<_LLONG_MAX>, boost::long_long_type>(_LLONG_MAX);
+      test_min_max_type<boost::int_min_value_t<_LLONG_MIN>, boost::long_long_type>(_LLONG_MIN);
+      test_min_max_type<boost::uint_value_t<_ULLONG_MAX>, boost::ulong_long_type>(_ULLONG_MAX);
 #endif
       return boost::report_errors();
 }
