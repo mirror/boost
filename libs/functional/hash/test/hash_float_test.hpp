@@ -23,6 +23,10 @@
 #if defined(BOOST_MSVC)
 #pragma warning(push)
 #pragma warning(disable:4127) // conditional expression is constant
+#pragma warning(disable:4723) // conditional expression is constant
+#if BOOST_MSVC < 1400
+#pragma warning(disable:4267) // conversion from 'size_t' to 'unsigned int', possible loss of data
+#endif
 #endif
 
 char const* float_type(float*) { return "float"; }

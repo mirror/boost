@@ -6,6 +6,8 @@
 // This test demonstrates an ADL bug in Borland 5.5 where ADL isn't performed
 // in the global namespace.
 
+#include "./config.hpp"
+
 #include <boost/config.hpp>
 #include <cstddef>
 

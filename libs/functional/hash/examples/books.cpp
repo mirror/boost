@@ -20,6 +20,7 @@ int main()
 
     boost::hash<library::book> book_hasher;
     std::size_t knife_hash_value = book_hasher(knife);
+    (void)knife_hash_value; // suppress unused variable warning
 
     // If std::unordered_set was available:
     //

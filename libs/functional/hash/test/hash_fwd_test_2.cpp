@@ -6,6 +6,8 @@
 // This test just makes sure a header which uses hash_fwd can compile without
 // the main hash headers.
 
+#include "./config.hpp"
+
 #if !defined(TEST_EXTENSIONS) || defined(TEST_STD_INCLUDES)
 
 int main() {}

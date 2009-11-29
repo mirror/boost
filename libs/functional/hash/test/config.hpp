@@ -12,3 +12,9 @@
 #    define TEST_EXTENSIONS
 #  endif
 #endif
+
+#if defined(_WIN32_WCE)
+// The standard windows mobile headers trigger this warning so I disable it
+// before doing anything else.
+#pragma warning(disable:4201) // nonstandard extension used : nameless struct/union
+#endif
