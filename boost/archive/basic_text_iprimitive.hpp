@@ -47,6 +47,7 @@ namespace std{
 #include <boost/io/ios_state.hpp>
 #include <boost/scoped_ptr.hpp>
 
+#include <boost/serialization/collection_size_type.hpp>
 #include <boost/serialization/throw_exception.hpp>
 #include <boost/archive/archive_exception.hpp>
 #include <boost/archive/basic_streambuf_locale_saver.hpp>

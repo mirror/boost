@@ -168,7 +168,7 @@ class void_caster_primitive :
     }
 public:
     void_caster_primitive();
-    ~void_caster_primitive();
+    virtual ~void_caster_primitive();
 };
 
 template <class Derived, class Base>
@@ -213,7 +213,7 @@ public:
         return b;
     }
     void_caster_virtual_base();
-    ~void_caster_virtual_base();
+    virtual ~void_caster_virtual_base();
 };
 
 #ifdef BOOST_MSVC
