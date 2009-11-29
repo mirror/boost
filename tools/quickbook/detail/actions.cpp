@@ -1212,6 +1212,7 @@ namespace quickbook
 
                   snippet += "'''<para>'''";
                   snippet += callouts[i];
+                  snippet += "\n";
                   snippet += "'''</para>'''";
                   snippet += "'''</callout>'''";
               }
