@@ -30,7 +30,7 @@ int main()
    check<unsigned int>();
    check<signed long>();
    check<unsigned long>();
-#ifdef BOOST_HAS_LONG_LONG
+#if !defined(BOOST_NO_INTEGRAL_INT64_T) && defined(BOOST_HAS_LONG_LONG)
    check<boost::long_long_type>();
    check<boost::ulong_long_type>();
 #endif

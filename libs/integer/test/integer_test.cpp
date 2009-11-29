@@ -225,6 +225,7 @@ int main(int, char*[])
       test_min_max_type<boost::int_min_value_t<LONG_MIN>, long>(LONG_MIN);
       test_min_max_type<boost::uint_value_t<ULONG_MAX>, unsigned long>(ULONG_MAX);
 #endif
+#ifndef BOOST_NO_INTEGRAL_INT64_T
 #if defined(BOOST_HAS_LONG_LONG) && (defined(ULLONG_MAX) && (ULLONG_MAX != ULONG_MAX))
       test_min_max_type<boost::int_max_value_t<LONG_MAX+1LL>, boost::long_long_type>(LONG_MAX+1LL);
       test_min_max_type<boost::int_min_value_t<LONG_MIN-1LL>, boost::long_long_type>(LONG_MIN-1LL);
@@ -256,6 +257,7 @@ int main(int, char*[])
       test_min_max_type<boost::int_max_value_t<_LLONG_MAX>, boost::long_long_type>(_LLONG_MAX);
       test_min_max_type<boost::int_min_value_t<_LLONG_MIN>, boost::long_long_type>(_LLONG_MIN);
       test_min_max_type<boost::uint_value_t<_ULLONG_MAX>, boost::ulong_long_type>(_ULLONG_MAX);
-#endif
+#endif // BOOST_HAS_LONG_LONG
+#endif // BOOST_NO_INTEGRAL_INT64_T
       return boost::report_errors();
 }
