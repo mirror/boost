@@ -246,8 +246,8 @@ void_caster::recursive_register(bool includes_virtual_base) const {
         }
         if(* (*it)->m_derived == * m_base){
             const void_caster_argument vca(
-                (*it)->m_derived, 
-                m_base
+                m_derived, 
+                (*it)->m_base
             );
             void_cast_detail::set_type::const_iterator i;
             i = s.find(& vca);
