@@ -79,7 +79,7 @@ struct string_generator {
     template <typename CharIterator>
     uuid operator()(CharIterator begin, CharIterator end) const
     {
-        typedef typename std::iterator_traits<typename CharIterator>::value_type char_type;
+        typedef typename std::iterator_traits<CharIterator>::value_type char_type;
 
         // check open brace
         char_type c = get_next_char(begin, end);
@@ -268,7 +268,7 @@ template <typename UniformRandomNumberGenerator>
 class basic_random_generator {
 private:
     typedef uniform_int<unsigned long> distribution_type;
-    typedef variate_generator<typename UniformRandomNumberGenerator*, distribution_type> generator_type;
+    typedef variate_generator<UniformRandomNumberGenerator*, distribution_type> generator_type;
 
     struct null_deleter
     {

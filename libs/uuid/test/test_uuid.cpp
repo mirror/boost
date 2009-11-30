@@ -27,19 +27,19 @@ int test_main(int, char*[])
     BOOST_CHECK_EQUAL(uuid::static_size, 16U);
 
     { // uuid::operator=()
-        uuid u1 = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+        uuid u1 = {{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}};
         uuid u2 = u1;
         BOOST_CHECK_EQUAL(u2, u1);
     }
 
     { // uuid::begin(), end()
-        uuid u = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+        uuid u = {{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}};
         unsigned char values[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
         BOOST_CHECK_EQUAL_COLLECTIONS(u.begin(), u.end(), values, values+16);
     }
 
     { // uuid::begin() const, end() const
-        const uuid u = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+        const uuid u = {{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}};
         unsigned char values[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
         BOOST_CHECK_EQUAL_COLLECTIONS(u.begin(), u.end(), values, values+16);
     }
@@ -50,10 +50,10 @@ int test_main(int, char*[])
     }
 
     { // uuid::is_nil()
-        uuid u1 = {0};
+        uuid u1 = {{0}};
         BOOST_CHECK_EQUAL(u1.is_nil(), true);
 
-        uuid u2 = {1,0};
+        uuid u2 = {{1,0}};
         BOOST_CHECK_EQUAL(u2.is_nil(), false);
     }
     
@@ -120,8 +120,8 @@ int test_main(int, char*[])
     }
 
     { // uuid::swap(), swap()
-        uuid u1 = {0};
-        uuid u2 = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+        uuid u1 = {{0}};
+        uuid u2 = {{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}};
         u1.swap(u2);
         
         unsigned char values1[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -135,9 +135,9 @@ int test_main(int, char*[])
     }
 
     { // test comparsion
-        uuid u1 = {0};
-        uuid u2 = {1,0};
-        uuid u3 = {255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255};
+        uuid u1 = {{0}};
+        uuid u2 = {{1,0}};
+        uuid u3 = {{255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255}};
 
         BOOST_CHECK_EQUAL(u1, u1);
 
@@ -159,9 +159,9 @@ int test_main(int, char*[])
     }
     
     { // test hash
-        uuid u1 = {0};
-        uuid u2 = {1,0};
-        uuid u3 = {255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255};
+        uuid u1 = {{0}};
+        uuid u2 = {{1,0}};
+        uuid u3 = {{255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255}};
 
         boost::hash<uuid> uuid_hasher;
 
