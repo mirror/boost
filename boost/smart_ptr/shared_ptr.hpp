@@ -368,14 +368,14 @@ public:
 
     shared_ptr & operator=( shared_ptr && r ) // never throws
     {
-        this_type( std::move( r ) ).swap( *this );
+        this_type( static_cast< shared_ptr && >( r ) ).swap( *this );
         return *this;
     }
 
     template<class Y>
     shared_ptr & operator=( shared_ptr<Y> && r ) // never throws
     {
-        this_type( std::move( r ) ).swap( *this );
+        this_type( static_cast< shared_ptr<Y> && >( r ) ).swap( *this );
         return *this;
     }
 

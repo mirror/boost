@@ -122,7 +122,7 @@ public:
 
     intrusive_ptr & operator=(intrusive_ptr && rhs)
     {
-        this_type(std::move(rhs)).swap(*this);
+        this_type( static_cast< intrusive_ptr && >( rhs ) ).swap(*this);
         return *this;
     }
 
