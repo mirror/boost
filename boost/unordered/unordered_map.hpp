@@ -38,16 +38,16 @@
 
 namespace boost
 {
-    template <class Key, class T, class Hash, class Pred, class Alloc>
+    template <class K, class T, class H, class P, class A>
     class unordered_map
     {
     public:
-        typedef Key key_type;
-        typedef std::pair<const Key, T> value_type;
+        typedef K key_type;
+        typedef std::pair<const K, T> value_type;
         typedef T mapped_type;
-        typedef Hash hasher;
-        typedef Pred key_equal;
-        typedef Alloc allocator_type;
+        typedef H hasher;
+        typedef P key_equal;
+        typedef A allocator_type;
 
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
     private:
@@ -58,7 +58,7 @@ namespace boost
                 allocator_type, value_type>::type
             value_allocator;
 
-        typedef boost::unordered_detail::map<Key, Hash, Pred,
+        typedef boost::unordered_detail::map<K, H, P,
             value_allocator> types;
         typedef BOOST_DEDUCED_TYPENAME types::impl table;
 
@@ -177,7 +177,7 @@ namespace boost
         }
 #else
         unordered_map(boost::unordered_detail::move_from<
-                unordered_map<Key, T, Hash, Pred, Alloc>
+                unordered_map<K, T, H, P, A>
             > other)
           : table_(other.source.table_, boost::unordered_detail::move_tag())
         {
@@ -513,9 +513,9 @@ namespace boost
         }
         
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
-        friend bool operator==<Key, T, Hash, Pred, Alloc>(
+        friend bool operator==<K, T, H, P, A>(
             unordered_map const&, unordered_map const&);
-        friend bool operator!=<Key, T, Hash, Pred, Alloc>(
+        friend bool operator!=<K, T, H, P, A>(
             unordered_map const&, unordered_map const&);
 #endif
     }; // class template unordered_map
@@ -541,17 +541,17 @@ namespace boost
         m1.swap(m2);
     }
 
-    template <class Key, class T, class Hash, class Pred, class Alloc>
+    template <class K, class T, class H, class P, class A>
     class unordered_multimap
     {
     public:
 
-        typedef Key key_type;
-        typedef std::pair<const Key, T> value_type;
+        typedef K key_type;
+        typedef std::pair<const K, T> value_type;
         typedef T mapped_type;
-        typedef Hash hasher;
-        typedef Pred key_equal;
-        typedef Alloc allocator_type;
+        typedef H hasher;
+        typedef P key_equal;
+        typedef A allocator_type;
 
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
     private:
@@ -562,7 +562,7 @@ namespace boost
                 allocator_type, value_type>::type
             value_allocator;
 
-        typedef boost::unordered_detail::multimap<Key, Hash, Pred,
+        typedef boost::unordered_detail::multimap<K, H, P,
             value_allocator> types;
         typedef BOOST_DEDUCED_TYPENAME types::impl table;
 
@@ -682,7 +682,7 @@ namespace boost
         }
 #else
         unordered_multimap(boost::unordered_detail::move_from<
-                unordered_multimap<Key, T, Hash, Pred, Alloc>
+                unordered_multimap<K, T, H, P, A>
             > other)
           : table_(other.source.table_, boost::unordered_detail::move_tag())
         {
@@ -1002,9 +1002,9 @@ namespace boost
         }
 
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
-        friend bool operator==<Key, T, Hash, Pred, Alloc>(
+        friend bool operator==<K, T, H, P, A>(
             unordered_multimap const&, unordered_multimap const&);
-        friend bool operator!=<Key, T, Hash, Pred, Alloc>(
+        friend bool operator!=<K, T, H, P, A>(
             unordered_multimap const&, unordered_multimap const&);
 #endif
     }; // class template unordered_multimap
