@@ -114,7 +114,7 @@ template< int Bits >
 #if !defined(BOOST_NO_INTEGRAL_INT64_T) && defined(BOOST_HAS_LONG_LONG)
   template< boost::ulong_long_type MaxValue >   // maximum value to require support
 #else
-  template< long MaxValue >   // maximum value to require support
+  template< unsigned long MaxValue >   // maximum value to require support
 #endif
     struct uint_value_t;
 

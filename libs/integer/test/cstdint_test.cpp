@@ -12,6 +12,12 @@
 //   12 Nov 00  Adapted to merged <boost/cstdint.hpp>
 //   23 Sep 00  Added INTXX_C constant macro support + int64_t support (John Maddock).
 //   28 Jun 00  Initial version
+
+#if defined(__GNUC__) && (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 4))
+// We can't suppress this warning on the command line as not all GCC versions support -Wno-type-limits :
+#pragma GCC diagnostic ignored "-Wtype-limits"
+#endif
+
 #define __STDC_CONSTANT_MACROS
 #include <iostream>
 #include <boost/cstdint.hpp>

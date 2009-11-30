@@ -165,8 +165,8 @@ void do_test_bits<-1>()
    // Nothing to do here!!
 }
 
-template <class Traits, class Expected, class Value>
-void test_min_max_type(Value val)
+template <class Traits, class Expected>
+void test_min_max_type(Expected val)
 {
    typedef typename Traits::least least_type;
    typedef typename Traits::fast  fast_type;

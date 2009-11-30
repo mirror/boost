@@ -94,8 +94,8 @@ namespace boost
     (defined(ULONG_LONG_MAX) && (ULONG_LONG_MAX != ULONG_MAX)) ||\
     (defined(ULONGLONG_MAX) && (ULONGLONG_MAX != ULONG_MAX)) ||\
     (defined(_ULLONG_MAX) && (_ULLONG_MAX != ULONG_MAX)))
-  template <> struct exact_signed_base_helper<sizeof(long long)* CHAR_BIT> { typedef long long exact; };
-  template <> struct exact_unsigned_base_helper<sizeof(unsigned long long)* CHAR_BIT> { typedef unsigned long long exact; };
+  template <> struct exact_signed_base_helper<sizeof(boost::long_long_type)* CHAR_BIT> { typedef boost::long_long_type exact; };
+  template <> struct exact_unsigned_base_helper<sizeof(boost::ulong_long_type)* CHAR_BIT> { typedef boost::ulong_long_type exact; };
 #endif
 
 
@@ -194,10 +194,20 @@ namespace boost
 #if !defined(BOOST_NO_INTEGRAL_INT64_T) && defined(BOOST_HAS_LONG_LONG)
   template< boost::ulong_long_type MaxValue >   // minimum value to require support
 #else
-  template< long MaxValue >   // minimum value to require support
+  template< unsigned long MaxValue >   // minimum value to require support
 #endif
   struct uint_value_t 
   {
+#if (defined(__BORLANDC__) || defined(__CODEGEAR__)) && defined(BOOST_NO_INTEGRAL_INT64_T)
+     // It's really not clear why this workaround should be needed... shrug I guess!  JM
+      BOOST_STATIC_CONSTANT(unsigned, which = 
+           6 +
+          (MaxValue <= ::boost::integer_traits<unsigned long>::const_max) +
+          (MaxValue <= ::boost::integer_traits<unsigned int>::const_max) +
+          (MaxValue <= ::boost::integer_traits<unsigned short>::const_max) +
+          (MaxValue <= ::boost::integer_traits<unsigned char>::const_max));
+      typedef typename detail::int_least_helper< ::boost::uint_value_t<MaxValue>::which>::least least;
+#else
       typedef typename detail::int_least_helper
         < 
           5 +
@@ -211,6 +221,7 @@ namespace boost
           (MaxValue <= ::boost::integer_traits<unsigned short>::const_max) +
           (MaxValue <= ::boost::integer_traits<unsigned char>::const_max)
         >::least  least;
+#endif
       typedef typename int_fast_t<least>::type  fast;
   };
 
