@@ -72,7 +72,7 @@ void test_formatting()
         "foo foo foo foo foo foo foo foo foo foo foo foo foo foo"
         "foo foo foo foo foo foo foo foo foo foo foo foo foo foo")
       ("list", new untyped_value(),
-         "a list:\n  \t"
+         "a list:\n      \t"
              "item1, item2, item3, item4, item5, item6, item7, item8, item9, "
              "item10, item11, item12, item13, item14, item15, item16, item17, item18")
       ("well_formated", new untyped_value(), 
@@ -93,9 +93,9 @@ void test_formatting()
 "                        foofoo foo foo foo foo foo foo foo foo foo foo foo foo \n"
 "                        foo\n"
 "  --list arg            a list:\n"
-"                          item1, item2, item3, item4, item5, item6, item7, \n"
-"                          item8, item9, item10, item11, item12, item13, item14, \n"
-"                          item15, item16, item17, item18\n"
+"                              item1, item2, item3, item4, item5, item6, item7, \n"
+"                              item8, item9, item10, item11, item12, item13, \n"
+"                              item14, item15, item16, item17, item18\n"
 "  --well_formated arg   As you can see this is a very well formatted option \n"
 "                        description.\n"
 "                        You can do this for example:\n"

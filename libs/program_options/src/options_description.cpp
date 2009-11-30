@@ -424,6 +424,7 @@ namespace boost { namespace program_options {
                     if (first_line)
                     {
                         indent += par_indent;
+                        line_length -= par_indent; // there's less to work with now
                         first_line = false;
                     }
 
