@@ -5,59 +5,54 @@
 
 import testing ;
 
-project
-    : requirements 
-      <include>../../..
-    ;
-
-test-suite "uuid"
-    : # make sure uuid.hpp is self-contained
+{
+  test-suite uuid :
+      # make sure uuid.hpp is self-contained
       [ compile compile_uuid_h.cpp ]
-      
+
       # make sure uuid_io.hpp is self-contained
       [ compile compile_uuid_io_h.cpp ]
-      
+
       # make sure uuid_serialize.hpp is self-contained
       [ compile compile_uuid_serialize_h.cpp ]
-      
+
       # make sure uuid_generators.hpp is self-contained
       [ compile compile_uuid_generators_h.cpp ]
-                                                    
+
       # I want to look for issues when multiple translation units include
       # uuid header files. For example missing inline on non-template functions
       #[ link test_uuid.cpp compile_uuid_h.cpp : : multiple_translation_units ]
 
       # main test - added compile_uuid_header.cpp in lue of above test
-      [ unit-test test_uuid : test_uuid.cpp compile_uuid_h.cpp ]
+      [ run test_uuid.cpp compile_uuid_h.cpp ]
 
       # test inclucing all .hpp files in 2 translations units
       # to make sure a inline state is not missing
-      [ unit-test test_inline : test_include1.cpp test_include2.cpp ]
+      [ run test_include1.cpp test_include2.cpp ]
 
       # test uuid_io.hpp
-      [ unit-test test_io : test_io.cpp ]
-      
+      [ run test_io.cpp ]
+
       # test uuid_generators.hpp
-      [ unit-test test_generators : test_generators.cpp ]
-      
+      [ run test_generators.cpp ]
+
       # test tagging an object
-      [ unit-test test_tagging : test_tagging.cpp ]
-      
+      [ run test_tagging.cpp ]
+
       # test uuid class
-      [ unit-test test_uuid_class : test_uuid_class.cpp ]
+      [ run test_uuid_class.cpp ]
 
       # test serializing uuids
-      [ unit-test test_serialization
-        : test_serialization.cpp ../../serialization/build//boost_serialization
+      [ run test_serialization.cpp ../../serialization/build//boost_serialization
       ]
       # TODO - This test fails to like with boost_wserialization
-      #[ unit-test test_wserialization
-      #  : test_wserialization.cpp
+      #[ run test_wserialization.cpp
       #    ../../serialization/build//boost_serialization
       #    ../../serialization/build//boost_wserialization
-      #  : <dependency>../../config/test/all//BOOST_NO_STD_WSTREAMBUF
+      #    : : : <dependency>../../config/test/all//BOOST_NO_STD_WSTREAMBUF
       #]
-      
+
       # test sha1 hash function
-      [ unit-test test_sha1 : test_sha1.cpp ]
-    ;
+      [ run test_sha1.cpp ]
+      ;
+}

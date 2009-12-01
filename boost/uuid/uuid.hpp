@@ -26,6 +26,7 @@
 //  25 Feb 2008 - moved to namespace boost::uuids
 //  19 Mar 2009 - changed to a POD, reorganized files
 //  28 Nov 2009 - disabled deprecated warnings for MSVC
+//  30 Nov 2009 - used BOOST_STATIC_CONSTANT
 
 #ifndef BOOST_UUID_HPP
 #define BOOST_UUID_HPP
@@ -34,7 +35,7 @@
 #include <stddef.h>
 #include <boost/cstdint.hpp>
 #include <algorithm>
-
+#include <boost/config.hpp> // for static assert
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/is_pod.hpp>
 
@@ -64,7 +65,7 @@ public:
     typedef std::size_t size_type;
     typedef std::ptrdiff_t difference_type;
 
-    enum { static_size = 16 };
+    BOOST_STATIC_CONSTANT(size_type, static_size = 16);
 
 public:
     iterator begin() { return data; } /* throw() */

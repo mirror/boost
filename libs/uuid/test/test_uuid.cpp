@@ -80,7 +80,7 @@ int test_main(int, char*[])
             , { 0xe0, boost::uuids::uuid::variant_future }
             , { 0xf0, boost::uuids::uuid::variant_future }
             };
-        for (int i=0; i<sizeof(tests)/sizeof(Test); i++) {
+        for (size_t i=0; i<sizeof(tests)/sizeof(Test); i++) {
             uuid u = {};
             u.data[8] = tests[i].octet7; // note that octet7 is array index 8
             
@@ -111,8 +111,8 @@ int test_main(int, char*[])
             , { 0xe0, boost::uuids::uuid::version_unknown }
             , { 0xf0, boost::uuids::uuid::version_unknown }
             };
-        for (int i=0; i<sizeof(tests)/sizeof(Test); i++) {
-            uuid u = {};
+        for (size_t i=0; i<sizeof(tests)/sizeof(Test); i++) {
+            uuid u = {{0}};
             u.data[6] = tests[i].octet9; // note that octet9 is array index 8
             
             BOOST_CHECK_EQUAL(u.version(), tests[i].version);
