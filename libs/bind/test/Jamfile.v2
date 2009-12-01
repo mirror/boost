@@ -43,4 +43,5 @@ test-suite "bind"
       [ run bind_ref_test.cpp ]
       [ run bind_eq3_test.cpp ]
       [ run protect_test.cpp ]
+      [ run mem_fn_unary_addr_test.cpp ]
     ;
