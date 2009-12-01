@@ -133,6 +133,15 @@ boost
     template <class E,class Tag,class T>
     E const & operator<<( E const &, error_info<Tag,T> const & );
 
+    template <class E>
+    E const & operator<<( E const &, throw_function const & );
+
+    template <class E>
+    E const & operator<<( E const &, throw_file const & );
+
+    template <class E>
+    E const & operator<<( E const &, throw_line const & );
+
     class exception;
 
     template <class>
@@ -205,34 +214,19 @@ boost
 #endif
             ;
 
+#if defined(__MWERKS__) && __MWERKS__<=0x3207
+        public:
+#else
         private:
 
         template <class E>
-        friend
-        E const &
-        operator<<( E const & x, throw_function const & y )
-            {
-            x.throw_function_=y.v_;
-            return x;
-            }
+        friend E const & operator<<( E const &, throw_function const & );
 
         template <class E>
-        friend
-        E const &
-        operator<<( E const & x, throw_file const & y )
-            {
-            x.throw_file_=y.v_;
-            return x;
-            }
+        friend E const & operator<<( E const &, throw_file const & );
 
         template <class E>
-        friend
-        E const &
-        operator<<( E const & x, throw_line const & y )
-            {
-            x.throw_line_=y.v_;
-            return x;
-            }
+        friend E const & operator<<( E const &, throw_line const & );
 
         friend char const * exception_detail::get_diagnostic_information( exception const &, char const * );
 
@@ -244,7 +238,7 @@ boost
         friend struct exception_detail::get_info<throw_function>;
         friend struct exception_detail::get_info<throw_file>;
         friend struct exception_detail::get_info<throw_line>;
-
+#endif
         mutable exception_detail::refcount_ptr<exception_detail::error_info_container> data_;
         mutable char const * throw_function_;
         mutable char const * throw_file_;
@@ -255,6 +249,30 @@ boost
     exception::
     ~exception() throw()
         {
+        }
+
+    template <class E>
+    E const &
+    operator<<( E const & x, throw_function const & y )
+        {
+        x.throw_function_=y.v_;
+        return x;
+        }
+
+    template <class E>
+    E const &
+    operator<<( E const & x, throw_file const & y )
+        {
+        x.throw_file_=y.v_;
+        return x;
+        }
+
+    template <class E>
+    E const &
+    operator<<( E const & x, throw_line const & y )
+        {
+        x.throw_line_=y.v_;
+        return x;
         }
 
     ////////////////////////////////////////////////////////////////////////
