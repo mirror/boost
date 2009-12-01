@@ -6,6 +6,10 @@
 #ifndef UUID_7E83C166200811DE885E826156D89593
 #define UUID_7E83C166200811DE885E826156D89593
 
+#if defined(__GNUC__) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma GCC system_header
+#endif
+
 namespace
 boost
     {

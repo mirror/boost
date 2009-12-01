@@ -6,6 +6,10 @@
 #ifndef UUID_6F463AC838DF11DDA3E6909F56D89593
 #define UUID_6F463AC838DF11DDA3E6909F56D89593
 
+#if defined(__GNUC__) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma GCC system_header
+#endif
+
 #include <boost/exception/detail/type_info.hpp>
 #include <iomanip>
 #include <ios>

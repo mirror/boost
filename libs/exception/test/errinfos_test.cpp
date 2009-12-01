@@ -17,6 +17,11 @@
 #include <boost/detail/lightweight_test.hpp>
 #include <exception>
 
+#include <boost/config.hpp>
+#ifdef BOOST_MSVC 
+#pragma warning(disable:4702) //unreachable code
+#endif 
+
 struct
 test_exception:
     virtual boost::exception,
@@ -43,7 +48,7 @@ main()
 #else
         BOOST_THROW_EXCEPTION(e<<errinfo_type_info_name(typeid(int).name()));
 #endif
-        BOOST_TEST(false);
+        BOOST_ERROR("BOOST_THROW_EXCEPTION failed to throw.");
         }
     catch(
     boost::exception & e )

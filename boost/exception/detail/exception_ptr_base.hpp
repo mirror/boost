@@ -6,6 +6,10 @@
 #ifndef UUID_DC4208C6417811DEBF11E1EC55D89593
 #define UUID_DC4208C6417811DEBF11E1EC55D89593
 
+#if defined(__GNUC__) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma GCC system_header
+#endif
+
 namespace
 boost
     {
@@ -22,7 +26,6 @@ boost
 
                         protected:
 
-                        virtual
                         ~exception_ptr_base() throw()
                             {
                             }

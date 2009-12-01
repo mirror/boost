@@ -10,9 +10,10 @@
 #include <boost/detail/workaround.hpp>
 #include <string>
 
-#if BOOST_WORKAROUND(__CODEGEARC__, BOOST_TESTED_AT(0x610))
-struct my_tag {};
-#endif
+#include <boost/config.hpp>
+#ifdef BOOST_MSVC 
+#pragma warning(disable:4512) //assignment operator could not be generated
+#endif 
 
 typedef boost::error_info<struct my_tag,int> my_info;
 
@@ -556,7 +557,7 @@ main()
             }
         try
             {
-			throw boost::enable_current_exception(derives_std_boost_exception("what2") << boost::errinfo_nested_exception(p) );
+            throw boost::enable_current_exception(derives_std_boost_exception("what2") << boost::errinfo_nested_exception(p) );
             }
         catch(
         ... )

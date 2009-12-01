@@ -6,6 +6,10 @@
 #ifndef UUID_7E48761AD92811DC9011477D56D89593
 #define UUID_7E48761AD92811DC9011477D56D89593
 
+#if defined(__GNUC__) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma GCC system_header
+#endif
+
 #include <boost/utility/enable_if.hpp>
 #include <boost/exception/detail/is_output_streamable.hpp>
 #include <sstream>

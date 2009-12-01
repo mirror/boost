@@ -9,10 +9,6 @@
 #include <boost/detail/workaround.hpp>
 #include <errno.h>
 
-#if BOOST_WORKAROUND(__CODEGEARC__, BOOST_TESTED_AT(0x610))
-struct tag_errno {};
-#endif
-
 typedef boost::error_info<struct tag_errno,int> info_errno;
 
 class
@@ -28,7 +24,6 @@ main()
         {
         errno=1;
         throw my_exception() << info_errno(errno);
-        BOOST_TEST(false);
         }
     catch(
     my_exception & x )

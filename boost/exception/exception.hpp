@@ -6,6 +6,10 @@
 #ifndef UUID_274DA366004E11DCB1DDFE2E56D89593
 #define UUID_274DA366004E11DCB1DDFE2E56D89593
 
+#if defined(__GNUC__) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma GCC system_header
+#endif
+
 namespace
 boost
     {
@@ -151,7 +155,6 @@ boost
 
             protected:
 
-            virtual
             ~error_info_container() throw()
                 {
                 }
@@ -349,6 +352,10 @@ boost
             {
             }
 
+#ifdef _MSC_VER 
+#pragma warning(push)
+#pragma warning(disable:4512) //assignment operator could not be generated
+#endif 
         template <class T>
         class
         clone_impl:
@@ -382,6 +389,9 @@ boost
                 throw*this;
                 }
             };
+#ifdef _MSC_VER 
+#pragma warning(pop)
+#endif 
         }
 
     template <class T>

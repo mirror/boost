@@ -6,8 +6,13 @@
 #ifndef UUID_C3E1741C754311DDB2834CCA55D89593
 #define UUID_C3E1741C754311DDB2834CCA55D89593
 
+#if defined(__GNUC__) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma GCC system_header
+#endif
+
 #include <boost/detail/sp_typeinfo.hpp>
 #include <boost/current_function.hpp>
+#include <boost/config.hpp>
 
 namespace
 boost
