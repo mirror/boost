@@ -1,4 +1,5 @@
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 
 #if defined(BOOST_MSVC)
 #pragma warning(disable: 4786)  // identifier truncated in debug info
@@ -82,10 +83,19 @@ public:
     }
 };
 
+#if defined( __BORLANDC__ ) && BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x620 ) )
+namespace boost
+{
+#endif
+
 template<class T> T * get_pointer( Y< T > const & y )
 {
     return y.get();
 }
+
+#if defined( __BORLANDC__ ) && BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x620 ) )
+} // namespace boost
+#endif
 
 int detect_errors(bool x)
 {
