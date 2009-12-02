@@ -24,7 +24,7 @@ int test_main(int, char*[])
     using boost::test_tools::output_test_stream;
 
     // uuid::static_size
-    BOOST_CHECK_EQUAL(uuid::static_size, 16U);
+    BOOST_CHECK_EQUAL(uuid::static_size(), 16U);
 
     { // uuid::operator=()
         uuid u1 = {{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}};

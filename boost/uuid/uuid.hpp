@@ -27,6 +27,7 @@
 //  19 Mar 2009 - changed to a POD, reorganized files
 //  28 Nov 2009 - disabled deprecated warnings for MSVC
 //  30 Nov 2009 - used BOOST_STATIC_CONSTANT
+//  02 Dec 2009 - removed BOOST_STATIC_CONSTANT - not all compilers like it
 
 #ifndef BOOST_UUID_HPP
 #define BOOST_UUID_HPP
@@ -65,7 +66,11 @@ public:
     typedef std::size_t size_type;
     typedef std::ptrdiff_t difference_type;
 
-    BOOST_STATIC_CONSTANT(size_type, static_size = 16);
+    // This does not work on some compilers
+    // They seem to want the variable definec in 
+    // a cpp file
+    //BOOST_STATIC_CONSTANT(size_type, static_size = 16);
+    static size_type static_size() { return 16; }
 
 public:
     iterator begin() { return data; } /* throw() */
@@ -73,13 +78,13 @@ public:
     iterator end() { return data+size(); } /* throw() */
     const_iterator end() const { return data+size(); } /* throw() */
 
-    size_type size() const { return static_size; } /* throw() */
+    size_type size() const { return static_size(); } /* throw() */
 
     bool is_nil() const /* throw() */
     {
         // could be more efficient by stopping at the firt
         // non zero
-        return (std::count(begin(), end(), 0) == static_size);
+        return (std::count(begin(), end(), 0) == static_size());
     }
 
     enum variant_type
@@ -143,7 +148,7 @@ public:
 
 public:
     // or should it be array<uint8_t, 16>
-    uint8_t data[static_size];
+    uint8_t data[16];
 };
 
 inline bool operator==(uuid const& lhs, uuid const& rhs) /* throw() */
