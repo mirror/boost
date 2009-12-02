@@ -111,6 +111,54 @@ void test_formatting()
    );
 }
 
+void test_formatting_description_length()
+{
+    {
+        options_description desc("",
+                                 options_description::m_default_line_length,
+                                 options_description::m_default_line_length / 2U);
+        desc.add_options()
+            ("an-option-that-sets-the-max", new untyped_value(), // > 40 available for desc
+            "this description sits on the same line, but wrapping should still work correctly")
+            ("a-long-option-that-would-leave-very-little-space-for-description", new untyped_value(),
+            "the description of the long opt, but placed on the next line\n"
+            "    \talso ensure that the tabulation works correctly when a"
+            " description size has been set");
+
+        stringstream ss;
+        ss << desc;
+        BOOST_CHECK_EQUAL(ss.str(),
+        "  --an-option-that-sets-the-max arg     this description sits on the same line,\n"
+        "                                        but wrapping should still work \n"
+        "                                        correctly\n"
+        "  --a-long-option-that-would-leave-very-little-space-for-description arg\n"
+        "                                        the description of the long opt, but \n"
+        "                                        placed on the next line\n"
+        "                                            also ensure that the tabulation \n"
+        "                                            works correctly when a description \n"
+        "                                            size has been set\n");
+    }
+    {
+        // the default behaviour reserves 23 (+1 space) characters for the
+        // option column; this shows that the min_description_length does not
+        // breach that.
+        options_description desc("",
+                                 options_description::m_default_line_length,
+                                 options_description::m_default_line_length - 10U); // leaves < 23 (default option space)
+        desc.add_options()
+            ("an-option-that-encroaches-description", new untyped_value(),
+            "this description should always be placed on the next line, and wrapping should continue as normal");
+
+        stringstream ss;
+        ss << desc;
+        BOOST_CHECK_EQUAL(ss.str(),
+        "  --an-option-that-encroaches-description arg\n"
+       //123456789_123456789_
+        "          this description should always be placed on the next line, and \n"
+        "          wrapping should continue as normal\n");
+    }
+}
+
 void test_long_default_value()
 {
     options_description desc;
@@ -175,6 +223,7 @@ int main(int, char* [])
     test_type();
     test_approximation();
     test_formatting();
+    test_formatting_description_length();
     test_long_default_value();
     test_word_wrapping();
     test_default_values();

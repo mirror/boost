@@ -158,12 +158,18 @@ namespace program_options {
         static const unsigned m_default_line_length;
         
         /** Creates the instance. */
-        options_description(unsigned line_length = m_default_line_length);
+        options_description(unsigned line_length = m_default_line_length,
+                            unsigned description_length = m_default_line_length / 2);
         /** Creates the instance. The 'caption' parameter gives the name of
             this 'options_description' instance. Primarily useful for output.
+            The 'description_length' specifies the number of columns that
+            should be reserved for the description text; if the option text
+            encroaches into this, then the description will start on the next
+            line.
         */
         options_description(const std::string& caption,
-                            unsigned line_length = m_default_line_length);
+                            unsigned line_length = m_default_line_length,
+                            unsigned description_length = m_default_line_length / 2);
         /** Adds new variable description. Throws duplicate_variable_error if
             either short or long name matches that of already present one. 
         */
@@ -213,6 +219,8 @@ namespace program_options {
 
         std::string m_caption;
         const unsigned m_line_length;
+        const unsigned m_description_length;
+        
         // Data organization is chosen because:
         // - there could be two names for one option
         // - option_add_proxy needs to know the last added option
