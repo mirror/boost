@@ -81,25 +81,22 @@ Example
 
 .. parsed-literal::
     
-    FIXME
-    
     struct f
     {
         template< typename T1, typename T2 > struct apply
         {
-            // |...|
+            typedef T2 type;
         };
     };
-    
-    typedef bind<_1, protect< bind<f,_1,_2> > >
-    
-    typedef apply_wrap0< f0 >::type r1;
-    typedef apply_wrap0< g0 >::type r2;
-    typedef apply_wrap2< f2,int,char >::type r3;
-
+     
+    typedef bind< quote\ ``3``\<if\_>,_1,_2,bind<f,_1,_2> > b1;
+    typedef bind< quote\ ``3``\<if\_>,_1,_2,protect< bind<f,_1,_2> > > b2;
+     
+    typedef apply_wrap\ ``2``\< b1,false\_,char >::type r1;
+    typedef apply_wrap\ ``2``\< b2,false\_,char >::type r2;
+     
     BOOST_MPL_ASSERT(( is_same<r1,char> ));
-    BOOST_MPL_ASSERT(( is_same<r2,char> ));
-    BOOST_MPL_ASSERT(( is_same<r3,char> ));
+    BOOST_MPL_ASSERT(( is_same<r2,protect< bind<f,_1,_2> > > ));
 
 
 See also
