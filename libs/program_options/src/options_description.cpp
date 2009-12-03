@@ -206,23 +206,23 @@ namespace boost { namespace program_options {
     const unsigned options_description::m_default_line_length = 80;
 
     options_description::options_description(unsigned line_length,
-                                             unsigned description_length)
+                                             unsigned min_description_length)
     : m_line_length(line_length)
-    , m_description_length(description_length)
+    , m_min_description_length(min_description_length)
     {
         // we require a space between the option and description parts, so add 1.
-        assert(m_description_length < m_line_length - 1);    
+        assert(m_min_description_length < m_line_length - 1);    
     }
 
     options_description::options_description(const std::string& caption,
                                              unsigned line_length,
-                                             unsigned description_length)
+                                             unsigned min_description_length)
     : m_caption(caption)
     , m_line_length(line_length)
-    , m_description_length(description_length)
+    , m_min_description_length(min_description_length)
     {
         // we require a space between the option and description parts, so add 1.
-        assert(m_description_length < m_line_length - 1);
+        assert(m_min_description_length < m_line_length - 1);
     }
     
     void
@@ -554,7 +554,7 @@ namespace boost { namespace program_options {
         }
         /* this is the column were description should start, if first
            column is longer, we go to a new line */
-        const unsigned start_of_description_column = m_line_length - m_description_length;
+        const unsigned start_of_description_column = m_line_length - m_min_description_length;
 
         width = (min)(width, start_of_description_column-1);
         
