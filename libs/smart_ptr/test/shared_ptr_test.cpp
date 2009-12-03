@@ -2462,6 +2462,8 @@ void test()
 
 } // namespace n_const_cast
 
+#if !defined( BOOST_NO_RTTI )
+
 namespace n_dynamic_cast
 {
 
@@ -2526,6 +2528,8 @@ void test()
 }
 
 } // namespace n_dynamic_cast
+
+#endif
 
 namespace n_map
 {
@@ -3200,10 +3204,12 @@ void test()
     BOOST_TEST(px.get() != 0);
     BOOST_TEST(py.use_count() == 2);
 
+#if !defined( BOOST_NO_RTTI )
     boost::shared_ptr<Y> py2 = boost::dynamic_pointer_cast<Y>(px);
     BOOST_TEST(py.get() == py2.get());
     BOOST_TEST(!(py < py2 || py2 < py));
     BOOST_TEST(py.use_count() == 3);
+#endif
 }
 
 } // namespace n_spt_shared_from_this
@@ -3229,7 +3235,9 @@ int main()
     n_comparison::test();
     n_static_cast::test();
     n_const_cast::test();
+#if !defined( BOOST_NO_RTTI )
     n_dynamic_cast::test();
+#endif
 
     n_map::test();
 

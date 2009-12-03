@@ -63,10 +63,12 @@ void test()
 
         px->f();
 
+#if !defined( BOOST_NO_RTTI )
         boost::shared_ptr<Y> py2 = boost::dynamic_pointer_cast<Y>(px);
         BOOST_TEST(py.get() == py2.get());
         BOOST_TEST(!(py < py2 || py2 < py));
         BOOST_TEST(py.use_count() == 3);
+#endif
     }
     catch( boost::bad_weak_ptr const& )
     {
