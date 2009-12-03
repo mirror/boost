@@ -126,6 +126,16 @@ namespace boost
   template< int Bits >   // bits required
   struct uint_t : public detail::exact_unsigned_base_helper<Bits>
   {
+#if (defined(__BORLANDC__) || defined(__CODEGEAR__)) && defined(BOOST_NO_INTEGRAL_INT64_T)
+     // It's really not clear why this workaround should be needed... shrug I guess!  JM
+     BOOST_STATIC_CONSTANT(int, s = 
+           6 +
+          (Bits <= ::std::numeric_limits<unsigned long>::digits) +
+          (Bits <= ::std::numeric_limits<unsigned int>::digits) +
+          (Bits <= ::std::numeric_limits<unsigned short>::digits) +
+          (Bits <= ::std::numeric_limits<unsigned char>::digits));
+     typedef typename detail::int_least_helper< ::boost::uint_t<Bits>::s>::least least;
+#else
       typedef typename detail::int_least_helper
         < 
           5 +
@@ -139,6 +149,7 @@ namespace boost
           (Bits <= ::std::numeric_limits<unsigned short>::digits) +
           (Bits <= ::std::numeric_limits<unsigned char>::digits)
         >::least  least;
+#endif
       typedef typename int_fast_t<least>::type  fast;
       // int_fast_t<> works correctly for unsigned too, in spite of the name.
   };
