@@ -48,12 +48,12 @@ boost
         struct
         type_info_
             {
-            detail::sp_typeinfo type_;
+            detail::sp_typeinfo const * type_;
             char const * name_;
 
             explicit
-            type_info_( detail::sp_typeinfo type, char const * name ):
-                type_(type),
+            type_info_( detail::sp_typeinfo const & type, char const * name ):
+                type_(&type),
                 name_(name)
                 {
                 }
@@ -62,14 +62,14 @@ boost
             bool
             operator==( type_info_ const & a, type_info_ const & b )
                 {
-                return a.type_==b.type_;
+                return (*a.type_)==(*b.type_);
                 }
 
             friend
             bool
             operator<( type_info_ const & a, type_info_ const & b )
                 {
-                return a.type_<b.type_;
+                return 0!=(a.type_->before(*b.type_));
                 }
 
             char const *

@@ -63,5 +63,6 @@ import testing ;
           [ run enable_shared_from_raw_test.cpp ]
           [ compile-fail auto_ptr_lv_fail.cpp ]
           [ run atomic_count_test2.cpp ]
+          [ run sp_typeinfo_test.cpp ]
         ;
 }
