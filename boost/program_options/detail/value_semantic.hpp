@@ -55,11 +55,11 @@ namespace boost { namespace program_options {
         {
             static std::basic_string<charT> empty;
             if (v.size() > 1)
-                boost::throw_exception(validation_error("multiple values not allowed"));
+                boost::throw_exception(validation_error(validation_error::multiple_values_not_allowed));
             else if (v.size() == 1)
                 return v.front();
             else if (!allow_empty)
-              boost::throw_exception(validation_error("at least one value required"));
+                boost::throw_exception(validation_error(validation_error::at_least_one_value_required));
             return empty;
         }
 

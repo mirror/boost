@@ -114,7 +114,7 @@ namespace boost { namespace program_options { namespace detail {
                     break;
 
                 } else {
-                    boost::throw_exception(invalid_syntax(s, "unrecognized line"));
+                    boost::throw_exception(invalid_syntax(s, invalid_syntax::unrecognized_line));
                 }
             }
         }

@@ -92,7 +92,7 @@ void test_multiple_occurrences()
    catch (multiple_occurrences& e)
    {
       BOOST_CHECK_EQUAL(e.get_option_name(), "cfgfile");      
-      BOOST_CHECK_EQUAL(string(e.what()), "multiple_occurrences");
+      BOOST_CHECK_EQUAL(string(e.what()), "multiple occurrences");
    }
 }
 

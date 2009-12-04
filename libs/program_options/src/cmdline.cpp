@@ -34,13 +34,15 @@ namespace boost { namespace program_options {
     using namespace std;
     using namespace boost::program_options::command_line_style;
     
-    invalid_command_line_syntax::
-    invalid_command_line_syntax(const std::string& tokens, kind_t kind)
-    : invalid_syntax(tokens, error_message(kind)), m_kind(kind)
+    invalid_syntax::
+    invalid_syntax(const std::string& tokens, kind_t kind)
+     : error(error_message(kind).append(" in '").append(tokens).append("'"))
+     , m_tokens(tokens)
+     , m_kind(kind)                       
     {}
-
+    
     std::string 
-    invalid_command_line_syntax::error_message(kind_t kind)
+    invalid_syntax::error_message(kind_t kind)
     {
         // Initially, store the message in 'const char*' variable,
         // to avoid conversion to std::string in all cases.
@@ -65,18 +67,25 @@ namespace boost { namespace program_options {
         case extra_parameter:
             msg = "extra parameter";
             break;
+        case unrecognized_line:
+            msg = "unrecognized line";
+            break;
         default:
             msg = "unknown error";
         }
         return msg;
     }
 
-    invalid_command_line_syntax::kind_t 
-    invalid_command_line_syntax::kind() const
+    invalid_syntax::kind_t 
+    invalid_syntax::kind() const
     {
         return m_kind;
     }
 
+    invalid_command_line_syntax::
+    invalid_command_line_syntax(const std::string& tokens, kind_t kind)
+    : invalid_syntax(tokens, kind)
+    {}
 
 }}
 
@@ -326,8 +335,7 @@ namespace boost { namespace program_options { namespace detail {
                 if (opt.position_key != -1) {
                     if (position >= m_positional->max_total_count())
                     {
-                        boost::throw_exception(too_many_positional_options_error(
-                                               "too many positional options"));
+                        boost::throw_exception(too_many_positional_options_error());
                     }
                     opt.string_key = m_positional->name_for_position(position);
                     ++position;
