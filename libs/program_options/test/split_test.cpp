@@ -148,6 +148,26 @@ void split_single_quote(const options_description& description)
    notify(vm);
 }
 
+void split_defaults(const options_description& description)
+{
+   const char* cmdline = "prg --input \t \'input file.txt\' \t   --optimization 4 --opt \\\"option1\\ option2\\\"";
+   
+   vector< string > tokens =  split_unix(cmdline);
+  
+   BOOST_REQUIRE(tokens.size() == 7);
+   check_value(tokens[0], "prg");
+   check_value(tokens[1], "--input");
+   check_value(tokens[2], "input file.txt");
+   check_value(tokens[3], "--optimization");
+   check_value(tokens[4], "4");
+   check_value(tokens[5], "--opt");
+   check_value(tokens[6], "\"option1 option2\"");
+
+   variables_map vm;  
+   store(command_line_parser(tokens).options(description).run(), vm);
+   notify(vm);
+}
+
 int main(int /*ac*/, char** /*av*/)
 {
    options_description desc;
@@ -163,6 +183,7 @@ int main(int /*ac*/, char** /*av*/)
    split_quotes(desc);
    split_escape(desc);
    split_single_quote(desc);
+   split_defaults(desc);
    
    return 0;
 }

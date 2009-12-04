@@ -210,14 +210,14 @@ namespace boost { namespace program_options {
         and escape characters '\'
     */
     BOOST_PROGRAM_OPTIONS_DECL std::vector<std::string>
-    split_unix(const std::string& cmdline, const std::string& seperator = " ", 
-         const std::string& quote = "\"", const std::string& escape = "\\");
+    split_unix(const std::string& cmdline, const std::string& seperator = " \t", 
+         const std::string& quote = "'\"", const std::string& escape = "\\");
          
 #ifndef BOOST_NO_STD_WSTRING
     /** @overload */
     BOOST_PROGRAM_OPTIONS_DECL std::vector<std::wstring>
-    split_unix(const std::wstring& cmdline, const std::wstring& seperator = L" ", 
-         const std::wstring& quote = L"\"", const std::wstring& escape = L"\\");
+    split_unix(const std::wstring& cmdline, const std::wstring& seperator = L" \t", 
+         const std::wstring& quote = L"'\"", const std::wstring& escape = L"\\");
 #endif
 
     #ifdef _WIN32
