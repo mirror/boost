@@ -10,11 +10,6 @@
 #include <boost/detail/workaround.hpp>
 #include <string>
 
-#include <boost/config.hpp>
-#ifdef BOOST_MSVC 
-#pragma warning(disable:4512) //assignment operator could not be generated
-#endif 
-
 typedef boost::error_info<struct my_tag,int> my_info;
 
 template <class T>

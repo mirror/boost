@@ -8,12 +8,6 @@
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/detail/workaround.hpp>
 
-#include <boost/config.hpp>
-#ifdef BOOST_MSVC 
-#pragma warning(disable:4702) //unreachable code
-#pragma warning(disable:4512) //assignment operator could not be generated
-#endif 
-
 struct throws_on_copy;
 struct non_printable { };
 

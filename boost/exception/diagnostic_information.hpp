@@ -5,9 +5,11 @@
 
 #ifndef UUID_0552D49838DD11DD90146B8956D89593
 #define UUID_0552D49838DD11DD90146B8956D89593
-
 #if defined(__GNUC__) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
 #pragma GCC system_header
+#endif
+#if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma warning(push,1)
 #endif
 
 #include <boost/config.hpp>
@@ -49,27 +51,33 @@ boost
     namespace
     exception_detail
         {
-        template <class T>
-        struct
-        is_convertible_to_boost_exception
+        inline
+        exception const *
+        get_boost_exception( exception const * e )
             {
-            struct yes { char q[100]; };
-            typedef char no;
-            static yes check(exception const *);
-            static no check(...);
-            enum e { value=sizeof(check((T*)0))==sizeof(yes) };
-            };
+            return e;
+            }
 
-        template <class T>
-        struct
-        is_convertible_to_std_exception
+        inline
+        exception const *
+        get_boost_exception( ... )
             {
-            struct yes { char q[100]; };
-            typedef char no;
-            static yes check(std::exception const *);
-            static no check(...);
-            enum e { value = sizeof(check((T*)0))==sizeof(yes) };
-            };
+            return 0;
+            }
+
+        inline
+        std::exception const *
+        get_std_exception( std::exception const * e )
+            {
+            return e;
+            }
+
+        inline
+        std::exception const *
+        get_std_exception( ... )
+            {
+            return 0;
+            }
 
         inline
         char const *
@@ -127,7 +135,7 @@ boost
                 }
 #ifndef BOOST_NO_RTTI
             tmp << std::string("Dynamic exception type: ") <<
-                (be?BOOST_EXCEPTION_DYNAMIC_TYPEID(*be):BOOST_EXCEPTION_DYNAMIC_TYPEID(*se)).name() << '\n';
+                (be?BOOST_EXCEPTION_DYNAMIC_TYPEID(*be):BOOST_EXCEPTION_DYNAMIC_TYPEID(*se)).type_.name() << '\n';
 #endif
             if( with_what && se )
                 tmp << "std::exception::what: " << wh << '\n';
@@ -143,9 +151,7 @@ boost
     std::string
     diagnostic_information( T const & e )
         {
-        boost::exception const * be=exception_detail::is_convertible_to_boost_exception<T>::value?((boost::exception const *)&e):0;
-        std::exception const * se=exception_detail::is_convertible_to_std_exception<T>::value?((std::exception const *)&e):0;
-        return exception_detail::diagnostic_information_impl(be,se,true);
+        return exception_detail::diagnostic_information_impl(exception_detail::get_boost_exception(&e),exception_detail::get_std_exception(&e),true);
         }
 
     inline
@@ -170,4 +176,7 @@ boost
         }
     }
 
+#if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma warning(pop)
+#endif
 #endif

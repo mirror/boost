@@ -7,9 +7,6 @@
 #include <boost/detail/lightweight_test.hpp>
 
 #include <boost/config.hpp>
-#ifdef BOOST_MSVC 
-#pragma warning(disable:4702) //unreachable code
-#endif 
 
 class my_exception: public std::exception { };
 

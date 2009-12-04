@@ -5,9 +5,11 @@
 
 #ifndef UUID_8D22C4CA9CC811DCAA9133D256D89593
 #define UUID_8D22C4CA9CC811DCAA9133D256D89593
-
 #if defined(__GNUC__) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
 #pragma GCC system_header
+#endif
+#if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma warning(push,1)
 #endif
 
 #include <boost/exception/exception.hpp>
@@ -95,7 +97,7 @@ boost
                     {
                     shared_ptr<error_info_base> const & p = i->second;
 #ifndef BOOST_NO_RTTI
-                    BOOST_ASSERT( BOOST_EXCEPTION_DYNAMIC_TYPEID(*p)==ti );
+                    BOOST_ASSERT( BOOST_EXCEPTION_DYNAMIC_TYPEID(*p).type_==ti.type_ );
 #endif
                     return p;
                     }
@@ -159,4 +161,7 @@ boost
         }
     }
 
+#if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma warning(pop)
+#endif
 #endif

@@ -5,19 +5,16 @@
 
 #ifndef UUID_F0EE17BE6C1211DE87FF459155D89593
 #define UUID_F0EE17BE6C1211DE87FF459155D89593
-
 #if defined(__GNUC__) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
 #pragma GCC system_header
+#endif
+#if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma warning(push,1)
 #endif
 
 #include "boost/exception/info.hpp"
 #include <errno.h>
 #include <string.h>
-
-#ifdef _MSC_VER
-#pragma warning(push) 
-#pragma warning(disable:4996) //'strerror': This function or variable may be unsafe
-#endif
 
 namespace
 boost
@@ -41,8 +38,7 @@ boost
         }
     }
 
-#ifdef _MSC_VER
-#pragma warning(pop) 
+#if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma warning(pop)
 #endif
-
 #endif

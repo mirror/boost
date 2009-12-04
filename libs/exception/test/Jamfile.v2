@@ -7,11 +7,7 @@
 
 import testing ;
 
-project
-    : requirements
-        <exception-handling>on
-        <warnings>all
-    ;
+project : requirements <exception-handling>on ;
 
 #to_string
 
