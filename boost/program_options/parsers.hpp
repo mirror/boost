@@ -206,14 +206,18 @@ namespace boost { namespace program_options {
         can be passed to command_line_parser. The second parameter is
         used to specify a collection of possible seperator chars used
         for splitting. The seperator is defaulted to space " ".
+        Splitting is done in a unix style way, with respect to quotes '"'
+        and escape characters '\'
     */
     BOOST_PROGRAM_OPTIONS_DECL std::vector<std::string>
-    split(const std::string& cmdline, const std::string& sep = " ");
-    
+    split_unix(const std::string& cmdline, const std::string& seperator = " ", 
+         const std::string& quote = "\"", const std::string& escape = "\\");
+         
 #ifndef BOOST_NO_STD_WSTRING
     /** @overload */
     BOOST_PROGRAM_OPTIONS_DECL std::vector<std::wstring>
-    split(const std::wstring& cmdline, const std::wstring& sep = L" ");
+    split_unix(const std::wstring& cmdline, const std::wstring& seperator = L" ", 
+         const std::wstring& quote = L"\"", const std::wstring& escape = L"\\");
 #endif
 
     #ifdef _WIN32
