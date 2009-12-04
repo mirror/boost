@@ -11,7 +11,18 @@
 #include <boost/detail/lightweight_test.hpp>
 #include <stdlib.h>
 
-struct my_exception: boost::exception, std::exception { };
+struct
+my_exception:
+    boost::exception,
+    std::exception
+    {
+    char const *
+    what() const throw()
+        {
+        return "my_exception";
+        }
+    };
+
 typedef boost::error_info<struct my_tag,int> my_int;
 
 bool called=false;

@@ -12,12 +12,36 @@
 
 #include <boost/config.hpp>
 #include <boost/exception/get_error_info.hpp>
-#include <boost/exception/detail/exception_ptr_base.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/config.hpp>
 #include <exception>
 #include <sstream>
 #include <string>
+
+#ifndef BOOST_NO_EXCEPTIONS
+#include <boost/exception/current_exception_cast.hpp>
+namespace
+boost
+    {
+    namespace
+    exception_detail
+        {
+        std::string diagnostic_information_impl( boost::exception const *, std::exception const *, bool );
+        }
+
+    inline
+    std::string
+    current_exception_diagnostic_information()
+        {
+        boost::exception const * be=current_exception_cast<boost::exception const>();
+        std::exception const * se=current_exception_cast<std::exception const>();
+        if( be || se )
+            return exception_detail::diagnostic_information_impl(be,se,true);
+        else
+            return "No diagnostic information available.";
+        }
+    }
+#endif
 
 namespace
 boost
@@ -27,7 +51,7 @@ boost
         {
         template <class T>
         struct
-        enable_boost_exception_overload
+        is_convertible_to_boost_exception
             {
             struct yes { char q[100]; };
             typedef char no;
@@ -38,13 +62,13 @@ boost
 
         template <class T>
         struct
-        enable_std_exception_overload
+        is_convertible_to_std_exception
             {
             struct yes { char q[100]; };
             typedef char no;
             static yes check(std::exception const *);
             static no check(...);
-            enum e { value = !enable_boost_exception_overload<T>::value && sizeof(check((T*)0))==sizeof(yes) };
+            enum e { value = sizeof(check((T*)0))==sizeof(yes) };
             };
 
         inline
@@ -70,12 +94,13 @@ boost
         std::string
         diagnostic_information_impl( boost::exception const * be, std::exception const * se, bool with_what )
             {
-            BOOST_ASSERT(be||se);
+            if( !be && !se )
+                return "Unknown exception.";
 #ifndef BOOST_NO_RTTI
-            if( !se )
-                se = dynamic_cast<std::exception const *>(be);
             if( !be )
-                be = dynamic_cast<boost::exception const *>(se);
+                be=dynamic_cast<boost::exception const *>(se);
+            if( !se )
+                se=dynamic_cast<std::exception const *>(be);
 #endif
             char const * wh=0;
             if( with_what && se )
@@ -115,19 +140,12 @@ boost
         }
 
     template <class T>
-    inline
-    typename enable_if<exception_detail::enable_boost_exception_overload<T>,std::string>::type
+    std::string
     diagnostic_information( T const & e )
         {
-        return exception_detail::diagnostic_information_impl(&e,0,true);
-        }
-
-    template <class T>
-    inline
-    typename enable_if<exception_detail::enable_std_exception_overload<T>,std::string>::type
-    diagnostic_information( T const & e )
-        {
-        return exception_detail::diagnostic_information_impl(0,&e,true);
+        boost::exception const * be=exception_detail::is_convertible_to_boost_exception<T>::value?((boost::exception const *)&e):0;
+        std::exception const * se=exception_detail::is_convertible_to_std_exception<T>::value?((std::exception const *)&e):0;
+        return exception_detail::diagnostic_information_impl(be,se,true);
         }
 
     inline
@@ -151,41 +169,5 @@ boost
         return w;
         }
     }
-
-#ifndef BOOST_NO_EXCEPTIONS
-#include <boost/exception/current_exception_cast.hpp>
-namespace
-boost
-    {
-    inline
-    std::string
-    current_exception_diagnostic_information()
-        {
-        boost::exception const * be=current_exception_cast<boost::exception const>();
-        std::exception const * se=current_exception_cast<std::exception const>();
-        if( be || se )
-            return exception_detail::diagnostic_information_impl(be,se,true);
-        else
-            return "No diagnostic information available.";
-        }
-
-    inline
-    std::string
-    diagnostic_information( exception_detail::exception_ptr_base const & p )
-        {
-        if( !p._empty() )
-            try
-                {
-                p._rethrow();
-                }
-            catch(
-            ... )
-                {
-                return current_exception_diagnostic_information();
-                }
-        return "<empty>";
-        }
-    }
-#endif
 
 #endif

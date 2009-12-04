@@ -42,8 +42,7 @@ boost
     void rethrow_exception( exception_ptr const & );
 
     class
-    exception_ptr:
-        public exception_detail::exception_ptr_base
+    exception_ptr
         {
         typedef bool exception_ptr::*unspecified_bool_type;
         friend exception_ptr current_exception();
@@ -72,7 +71,7 @@ boost
             }
 
         void
-        _rethrow() const
+        rethrow() const
             {
             BOOST_ASSERT(*this);
             if( bad_alloc_ )
@@ -82,7 +81,7 @@ boost
             }
 
         bool
-        _empty() const
+        empty() const
             {
             return !bad_alloc_ && !c_;
             }
@@ -100,7 +99,7 @@ boost
 
         operator unspecified_bool_type() const
             {
-            return _empty() ? 0 : &exception_ptr::bad_alloc_;
+            return empty() ? 0 : &exception_ptr::bad_alloc_;
             }
 
         friend
@@ -443,7 +442,24 @@ boost
     void
     rethrow_exception( exception_ptr const & p )
         {
-        p._rethrow();
+        p.rethrow();
+        }
+
+    inline
+    std::string
+    diagnostic_information( exception_ptr const & p )
+        {
+        if( p )
+            try
+                {
+                rethrow_exception(p);
+                }
+            catch(
+            ... )
+                {
+                return current_exception_diagnostic_information();
+                }
+        return "<empty>";
         }
 
     inline
