@@ -126,8 +126,9 @@ struct input_range_construct_test : public range<T>, objects
     input_range_construct_test() : range<T>(60) {}
 
     void run() const {
-        T x(test::input_iterator(this->values.begin()),
-                test::input_iterator(this->values.end()),
+        BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
+            begin = this->values.begin(), end = this->values.end();
+        T x(test::input_iterator(begin), test::input_iterator(end),
                 0, hash, equal_to, allocator);
     }
 };
