@@ -1006,7 +1006,7 @@ bool basic_regex_parser<charT, traits>::parse_repeat(std::size_t low, std::size_
       re_brace* pb = static_cast<re_brace*>(this->insert_state(insert_point, syntax_element_startmark, sizeof(re_brace)));
       pb->index = -3;
       pb->icase = this->flags() & regbase::icase;
-      re_jump* jmp = static_cast<re_jump*>(this->insert_state(insert_point + sizeof(re_brace), syntax_element_jump, sizeof(re_jump)));
+      jmp = static_cast<re_jump*>(this->insert_state(insert_point + sizeof(re_brace), syntax_element_jump, sizeof(re_jump)));
       this->m_pdata->m_data.align();
       jmp->alt.i = this->m_pdata->m_data.size() - this->getoffset(jmp);
       pb = static_cast<re_brace*>(this->append_state(syntax_element_endmark, sizeof(re_brace)));
@@ -2049,7 +2049,7 @@ insert_recursion:
          fail(regex_constants::error_perl_extension, m_position - m_base);
          return false;
       }
-      int v = this->m_traits.toi(m_position, m_end, 10);
+      v = this->m_traits.toi(m_position, m_end, 10);
       if(*m_position == charT('R'))
       {
          if(++m_position == m_end)

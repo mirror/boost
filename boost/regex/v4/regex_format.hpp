@@ -630,7 +630,7 @@ void basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::format
       {
          // octal ecape sequence:
          --m_position;
-         std::ptrdiff_t len = ::boost::re_detail::distance(m_position, m_end);
+         len = ::boost::re_detail::distance(m_position, m_end);
          len = (std::min)(static_cast<std::ptrdiff_t>(4), len);
          v = this->toi(m_position, m_position + len, 8);
          BOOST_ASSERT(v >= 0);

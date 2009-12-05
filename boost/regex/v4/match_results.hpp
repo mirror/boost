@@ -123,18 +123,18 @@ public:
    {
       if(m_is_singular)
          raise_logic_error();
-      const char_type* end = sub;
-      while(*end) ++end;
-      return length(named_subexpression_index(sub, end));
+      const char_type* sub_end = sub;
+      while(*sub_end) ++sub_end;
+      return length(named_subexpression_index(sub, sub_end));
    }
    template <class charT>
    difference_type length(const charT* sub) const
    {
       if(m_is_singular)
          raise_logic_error();
-      const charT* end = sub;
-      while(*end) ++end;
-      return length(named_subexpression_index(sub, end));
+      const charT* sub_end = sub;
+      while(*sub_end) ++sub_end;
+      return length(named_subexpression_index(sub, sub_end));
    }
    template <class charT, class Traits, class A>
    difference_type length(const std::basic_string<charT, Traits, A>& sub) const
@@ -158,16 +158,16 @@ public:
    }
    difference_type position(const char_type* sub) const
    {
-      const char_type* end = sub;
-      while(*end) ++end;
-      return position(named_subexpression_index(sub, end));
+      const char_type* sub_end = sub;
+      while(*sub_end) ++sub_end;
+      return position(named_subexpression_index(sub, sub_end));
    }
    template <class charT>
    difference_type position(const charT* sub) const
    {
-      const charT* end = sub;
-      while(*end) ++end;
-      return position(named_subexpression_index(sub, end));
+      const charT* sub_end = sub;
+      while(*sub_end) ++sub_end;
+      return position(named_subexpression_index(sub, sub_end));
    }
    template <class charT, class Traits, class A>
    difference_type position(const std::basic_string<charT, Traits, A>& sub) const

@@ -524,13 +524,13 @@ void test(boost::basic_regex<charT, traits>& r, const test_regex_search_tag&)
    {
       BOOST_REGEX_TEST_ERROR("Expression did not compile when it should have done: " << e.what(), charT);
    }
-   catch(const std::runtime_error& r)
+   catch(const std::runtime_error& e)
    {
-      BOOST_REGEX_TEST_ERROR("Received an unexpected std::runtime_error: " << r.what(), charT);
+      BOOST_REGEX_TEST_ERROR("Received an unexpected std::runtime_error: " << e.what(), charT);
    }
-   catch(const std::exception& r)
+   catch(const std::exception& e)
    {
-      BOOST_REGEX_TEST_ERROR("Received an unexpected std::exception: " << r.what(), charT);
+      BOOST_REGEX_TEST_ERROR("Received an unexpected std::exception: " << e.what(), charT);
    }
    catch(...)
    {
