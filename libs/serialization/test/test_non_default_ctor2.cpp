@@ -99,14 +99,17 @@ template <class ArchiveT>
 void save_construct_data(
     ArchiveT& archive, 
     const A* p, 
-    const BOOST_PFTO unsigned int version
+    const BOOST_PFTO unsigned int /*version*/
 ){
     archive & boost::serialization::make_nvp("initialValue", p->value);
 }
 
 template <class ArchiveT>
-void load_construct_data(ArchiveT& archive, A* p, const unsigned int version)
-{
+void load_construct_data(
+    ArchiveT& archive, 
+    A* p, 
+    const unsigned int /*version*/
+){
     IntValueHolder initialValue;
     archive & boost::serialization::make_nvp("initialValue", initialValue);
 

@@ -12,16 +12,15 @@
 
 #include "demo_polymorphic_A.hpp"
 
-// now we can define the serialization for class A
-void A::serialize(
-    boost::archive::polymorphic_iarchive & ar, 
-    const unsigned int file_version
-){
-    ar & data;
-}
-void A::serialize(
-    boost::archive::polymorphic_oarchive & ar, 
-    const unsigned int file_version
-){
-    ar & data;
-}
+// explicitly instantiate templates for polymorphic archives
+// used by this demo.
+template
+void A::serialize<boost::archive::polymorphic_iarchive>(
+    boost::archive::polymorphic_iarchive &, 
+    const unsigned int
+);
+template
+void A::serialize<boost::archive::polymorphic_oarchive>(
+    boost::archive::polymorphic_oarchive &, 
+    const unsigned int
+);

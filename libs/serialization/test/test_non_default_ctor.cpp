@@ -63,6 +63,8 @@ class A
         ar & BOOST_SERIALIZATION_NVP(w);
         ar & BOOST_SERIALIZATION_NVP(x);
     }
+    A(const A & rhs);
+    A & operator=(const A & rhs);
 public:
     static int count;
     const int & get_i() const {
@@ -76,8 +78,8 @@ int A::count = 0;
 
 A::A(int i_) : 
     i(i_),
-    s(std::rand()),
-    t(std::rand()),
+    s(static_cast<signed char>(0xff & std::rand())),
+    t(static_cast<signed char>(0xff & std::rand())),
     u(std::rand()),
     v(std::rand()),
     w((float)std::rand() / std::rand()),
@@ -104,13 +106,13 @@ bool A::operator==(const A &rhs) const
 
 bool A::operator<(const A &rhs) const
 {
-    if(! s == rhs.s )
+    if(! (s == rhs.s) )
         return s < rhs.s;
-    if(! t == rhs.t )
+    if(! (t == rhs.t) )
         return t < rhs.t;
-    if(! u == rhs.u )
+    if(! (u == rhs.u) )
         return t < rhs.u; 
-    if(! v == rhs.v )
+    if(! (v == rhs.v) )
         return t < rhs.v;
     if(! (std::fabs(w - rhs.w) < std::numeric_limits<float>::round_error() ) )
         return t < rhs.w; 

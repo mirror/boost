@@ -26,7 +26,8 @@ namespace std{
 #include "B.hpp"
 #include "A.ipp"
 
-int test_main( int argc, char* argv[] )
+int
+test_main( int /* argc */, char* /* argv */[] )
 {
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
