@@ -78,17 +78,19 @@ namespace boost { namespace program_options {
         ambiguous_option(const std::string& name, 
                          const std::vector<std::string>& alternatives)
         : error(std::string("ambiguous option ").append(name))
-        , alternatives(alternatives)
+        , m_alternatives(alternatives)
         , m_option_name(name)
         {}
 
         ~ambiguous_option() throw() {}
         
         const std::string& get_option_name() const throw();
+        
+        const std::vector<std::string>& alternatives() const throw();
 
     private:
         // TODO: copy ctor might throw
-        std::vector<std::string> alternatives;
+        std::vector<std::string> m_alternatives;
         std::string m_option_name;
     };
 

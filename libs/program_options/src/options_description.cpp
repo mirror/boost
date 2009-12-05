@@ -273,6 +273,8 @@ namespace boost { namespace program_options {
     {
         shared_ptr<option_description> found;
         vector<string> approximate_matches;
+        vector<string> full_matches;
+        
         // We use linear search because matching specified option
         // name with the declared option name need to take care about
         // case sensitivity and trailing '*' and so we can't use simple map.
@@ -284,26 +286,29 @@ namespace boost { namespace program_options {
             if (r == option_description::no_match)
                 continue;
 
-            // If we have a full patch, and an approximate match,
-            // ignore approximate match instead of reporting error.
-            // Say, if we have options "all" and "all-chroots", then
-            // "--all" on the command line should select the first one,
-            // without ambiguity.
-            //
-            // For now, we don't check the situation when there are 
-            // two full matches. 
-
             if (r == option_description::full_match)
-            {
-                return m_options[i].get();
+            {                
+                full_matches.push_back(m_options[i]->key(name));
+            } 
+            else 
+            {                        
+                // FIXME: the use of 'key' here might not
+                // be the best approach.
+                approximate_matches.push_back(m_options[i]->key(name));
             }
 
             found = m_options[i];
-            // FIXME: the use of 'key' here might not
-            // be the best approach.
-            approximate_matches.push_back(m_options[i]->key(name));
         }
-        if (approximate_matches.size() > 1)
+        if (full_matches.size() > 1) 
+            boost::throw_exception(
+                ambiguous_option(name, full_matches));
+        
+        // If we have a full match, and an approximate match,
+        // ignore approximate match instead of reporting error.
+        // Say, if we have options "all" and "all-chroots", then
+        // "--all" on the command line should select the first one,
+        // without ambiguity.
+        if (full_matches.empty() && approximate_matches.size() > 1)
             boost::throw_exception(
                 ambiguous_option(name, approximate_matches));
 

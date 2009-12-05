@@ -227,6 +227,12 @@ namespace boost { namespace program_options {
     { 
         return m_option_name; 
     }
+ 
+    const std::vector<std::string>& 
+    ambiguous_option::alternatives() const throw()
+    {
+        return m_alternatives;
+    }
 
     void 
     multiple_values::set_option_name(const std::string& option_name)

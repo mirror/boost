@@ -19,6 +19,30 @@ using namespace std;
 #include "minitest.hpp"
 
 
+void test_ambiguous() 
+{
+    options_description desc; 
+    desc.add_options()
+        ("cfgfile,c", value<string>()->multitoken(), "the config file") 
+        ("output,c", value<string>(), "the output file") 
+        ("output,o", value<string>(), "the output file")
+    ;
+
+    const char* cmdline[] = {"program", "-c", "file", "-o", "anotherfile"};
+
+    variables_map vm;
+    try {
+       store(parse_command_line(sizeof(cmdline)/sizeof(const char*), 
+                                    const_cast<char**>(cmdline), desc), vm);
+    }
+    catch (ambiguous_option& e)
+    {
+        BOOST_CHECK_EQUAL(e.alternatives().size(), 2);
+        BOOST_CHECK_EQUAL(e.get_option_name(), "-c");      
+        BOOST_CHECK_EQUAL(e.alternatives()[0], "cfgfile");
+        BOOST_CHECK_EQUAL(e.alternatives()[1], "output");
+    }
+}
 
 void test_unknown_option() 
 {
@@ -101,27 +125,11 @@ void test_multiple_occurrences()
 
 int main(int /*ac*/, char** /*av*/)
 {
+   test_ambiguous();
    test_unknown_option();
    test_multiple_values();
    test_multiple_occurrences();
 
-   bool helpflag = false;
-
-   options_description desc;
-   desc.add_options()
-        ("cfgfile,c", value<string>(), "the configfile")
-        ("help,h", value<bool>(&helpflag)->implicit_value(true), "help")
-      ;
-
-   const char* cmdline[] = {"program", "--cfgfile", "hugo", "-h", "yes"  };
-   
-   variables_map vm;
-      store(parse_command_line(sizeof(cmdline)/sizeof(const char*), 
-                                    const_cast<char**>(cmdline), desc), vm);
-      notify(vm);
-
-   cout << " help: " << (helpflag ? "true" : "false") << endl;
-
-
    return 0;
 }
+
