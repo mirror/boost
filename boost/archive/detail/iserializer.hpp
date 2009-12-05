@@ -110,6 +110,11 @@ public:
 
 namespace detail {
 
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4511 4512)
+#endif
+
 template<class Archive, class T>
 class iserializer : public basic_iserializer
 {
@@ -144,14 +149,18 @@ public:
                 == boost::serialization::track_selectively
                 && serialized_as_pointer());
     }
-    virtual unsigned int version() const {
-        return ::boost::serialization::version<T>::value;
+    virtual version_type version() const {
+        return version_type(::boost::serialization::version<T>::value);
     }
     virtual bool is_polymorphic() const {
         return boost::is_polymorphic<T>::value;
     }
     virtual ~iserializer(){};
 };
+
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 
 template<class Archive, class T>
 BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
@@ -160,7 +169,7 @@ BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
     const unsigned int file_version
 ) const {
     // trap case where the program cannot handle the current version
-    if(file_version > version())
+    if(file_version > static_cast<const unsigned int>(version()))
         boost::serialization::throw_exception(
             archive::archive_exception(
                 boost::archive::archive_exception::unsupported_class_version,
@@ -176,6 +185,11 @@ BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
         file_version
     );
 }
+
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4511 4512)
+#endif
 
 template<class Archive, class T>
 class pointer_iserializer :
@@ -197,6 +211,10 @@ protected:
     pointer_iserializer();
     ~pointer_iserializer();
 };
+
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 
 // note trick to be sure that operator new is using class specific
 // version if such exists. Due to Peter Dimov.
@@ -471,7 +489,7 @@ struct load_pointer_type {
     }
 
     template<class T>
-    static void load(Archive &ar, T & t){
+    static void load(Archive & /* ar */ , T & /* t */){
         check_pointer_level<T>();
         check_pointer_tracking<T>();
     }
