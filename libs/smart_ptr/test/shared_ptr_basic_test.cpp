@@ -188,6 +188,7 @@ int main()
             test_eq(p, q);
         }
 
+#if !defined( BOOST_NO_RTTI )
         shared_ptr<Y> p3 = dynamic_pointer_cast<Y>(p);
         shared_ptr<Y> p4 = dynamic_pointer_cast<Y>(p2);
 
@@ -201,6 +202,7 @@ int main()
         test_is_Y(p3);
         test_eq2(p, p3);
         test_ne2(p2, p4);
+#endif
 
         shared_ptr<void> p5(p);
 
@@ -214,13 +216,17 @@ int main()
 
         p.reset();
         p2.reset();
+#if !defined( BOOST_NO_RTTI )
         p3.reset();
         p4.reset();
+#endif
 
         test_is_zero(p);
         test_is_zero(p2);
+#if !defined( BOOST_NO_RTTI )
         test_is_zero(p3);
         test_is_zero(p4);
+#endif
 
         BOOST_TEST(p5.use_count() == 1);
 
@@ -250,6 +256,7 @@ int main()
             test_is_nonzero(wp2.lock());
         }
 
+#if !defined( BOOST_NO_RTTI )
         weak_ptr<Y> wp3 = dynamic_pointer_cast<Y>(wp2.lock());
 
         BOOST_TEST(wp3.use_count() == 1);
@@ -259,12 +266,15 @@ int main()
 
         BOOST_TEST(wp4.use_count() == 1);
         test_shared(wp2, wp4);
+#endif
 
         wp1 = p2;
         test_is_zero(wp1.lock());
 
+#if !defined( BOOST_NO_RTTI )
         wp1 = p4;
         wp1 = wp3;
+#endif
         wp1 = wp2;
 
         BOOST_TEST(wp1.use_count() == 1);
@@ -279,7 +289,9 @@ int main()
 
         BOOST_TEST(wp1.use_count() == 0);
         BOOST_TEST(wp2.use_count() == 0);
+#if !defined( BOOST_NO_RTTI )
         BOOST_TEST(wp3.use_count() == 0);
+#endif
 
         // Test operator< stability for std::set< weak_ptr<> >
         // Thanks to Joe Gottman for pointing this out

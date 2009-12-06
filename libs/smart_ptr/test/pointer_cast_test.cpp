@@ -9,6 +9,8 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
+#include <boost/config.hpp>
+
 #include <boost/pointer_cast.hpp>
 
 #include <boost/shared_ptr.hpp>
@@ -58,6 +60,8 @@ class derived_derived
 
 // And now some simple check functions
 
+#if !defined( BOOST_NO_RTTI )
+
 template <class BasePtr>
 bool check_dynamic_pointer_cast(const BasePtr &ptr)
 {
@@ -73,6 +77,8 @@ bool check_dynamic_pointer_cast(const BasePtr &ptr)
       //Incorrect cast with dynamic_cast
       dynamic_cast<derived_derived*>(boost::get_pointer(ptr));
 }
+
+#endif
 
 template <class BasePtr>
 bool check_static_pointer_cast(const BasePtr &ptr)
@@ -107,7 +113,9 @@ int main()
 
         boost::shared_ptr<base> ptr(new derived);
 
+#if !defined( BOOST_NO_RTTI )
         BOOST_TEST( check_dynamic_pointer_cast( ptr ) );
+#endif
         BOOST_TEST( check_static_pointer_cast( ptr ) );
         BOOST_TEST( check_const_pointer_cast( ptr ) );
     }
@@ -117,7 +125,9 @@ int main()
 
         boost::scoped_ptr<base> ptr(new derived);
 
+#if !defined( BOOST_NO_RTTI )
         BOOST_TEST( check_dynamic_pointer_cast( ptr.get() ) );
+#endif
         BOOST_TEST( check_static_pointer_cast( ptr.get() ) );
         BOOST_TEST( check_const_pointer_cast( ptr.get() ) );
     }
