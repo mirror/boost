@@ -44,6 +44,8 @@ void test_ambiguous()
     }
 }
 
+
+
 void test_unknown_option() 
 {
    options_description desc;
@@ -98,6 +100,7 @@ void test_multiple_values()
 }
 
 
+
 void test_multiple_occurrences()
 {
    options_description desc;
@@ -122,6 +125,31 @@ void test_multiple_occurrences()
 
 
 
+void test_missing_value()
+{
+    options_description desc;
+    desc.add_options()
+        ("cfgfile,c", value<string>()->multitoken(), "the config file") 
+        ("output,o", value<string>(), "the output file")
+    ;
+    // missing value for option '-c'
+    const char* cmdline[] = { "program", "-c", "-c", "output.txt"};
+    
+    variables_map vm;
+    
+    try {
+      store(parse_command_line(sizeof(cmdline)/sizeof(const char*), 
+                                       const_cast<char**>(cmdline), desc), vm);
+      notify(vm);
+   } 
+   catch (invalid_command_line_syntax& e)
+   {
+      BOOST_CHECK_EQUAL(e.kind(), invalid_syntax::missing_parameter);
+      BOOST_CHECK_EQUAL(e.tokens(), "cfgfile");
+   }
+}
+
+
 
 int main(int /*ac*/, char** /*av*/)
 {
@@ -129,6 +157,7 @@ int main(int /*ac*/, char** /*av*/)
    test_unknown_option();
    test_multiple_values();
    test_multiple_occurrences();
+   test_missing_value();
 
    return 0;
 }

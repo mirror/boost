@@ -114,7 +114,8 @@ namespace boost { namespace program_options { namespace detail {
 
         void
         finish_option(option& opt,
-                      std::vector<std::string>& other_tokens);
+                      std::vector<std::string>& other_tokens,
+                      const std::vector<style_parser>& style_parsers);
 
         // Copies of input.
         std::vector<std::string> args;

@@ -43,6 +43,8 @@ namespace boost { namespace program_options {
         
         kind_t kind() const;
         
+        const std::string& tokens() const;
+        
     protected:
         /** Used to convert kind_t to a related error text */
         static std::string error_message(kind_t kind);

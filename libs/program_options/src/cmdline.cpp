@@ -81,6 +81,12 @@ namespace boost { namespace program_options {
     {
         return m_kind;
     }
+    
+    const string& 
+    invalid_syntax::tokens() const
+    {
+        return m_tokens;
+    }
 
     invalid_command_line_syntax::
     invalid_command_line_syntax(const std::string& tokens, kind_t kind)
@@ -239,12 +245,12 @@ namespace boost { namespace program_options { namespace detail {
                 {
                     vector<string> e;
                     for(unsigned k = 0; k < next.size()-1; ++k) {
-                        finish_option(next[k], e);
+                        finish_option(next[k], e, style_parsers);
                     }
                     // For the last option, pass the unparsed tokens
                     // so that they can be added to next.back()'s values
                     // if appropriate.
-                    finish_option(next.back(), args);
+                    finish_option(next.back(), args, style_parsers);
                     for (unsigned j = 0; j < next.size(); ++j)
                         result.push_back(next[j]);                    
                 }
@@ -348,8 +354,9 @@ namespace boost { namespace program_options { namespace detail {
 
     void
     cmdline::finish_option(option& opt,
-                           vector<string>& other_tokens)
-    {                                    
+                           vector<string>& other_tokens,
+                           const vector<style_parser>& style_parsers)
+    {          
         if (opt.string_key.empty())
             return;
 
@@ -387,16 +394,16 @@ namespace boost { namespace program_options { namespace detail {
         
         if (present_tokens >= min_tokens)
         {
-            if (!opt.value.empty() && max_tokens == 0) {
+            if (!opt.value.empty() && max_tokens == 0) 
+            {
                 boost::throw_exception(invalid_command_line_syntax(opt.string_key,
                                              invalid_command_line_syntax::extra_parameter));
             }
             
-            // If an option wants, at minimum, N tokens, we grab them
-            // there and don't care if they look syntactically like an
-            // option.
-
-            if (opt.value.size() <= min_tokens)
+            // If an option wants, at minimum, N tokens, we grab them there,
+            // when adding these tokens as values to current option we check
+            // if they look like options
+            if (opt.value.size() <= min_tokens) 
             {
                 min_tokens -= opt.value.size();
             }
@@ -406,7 +413,25 @@ namespace boost { namespace program_options { namespace detail {
             }
 
             // Everything's OK, move the values to the result.            
-            for(;!other_tokens.empty() && min_tokens--; ) {
+            for(;!other_tokens.empty() && min_tokens--; ) 
+            {
+                // check if extra parameter looks like a known option
+                // we use style parsers to check if it is syntactically an option, 
+                // additionally we check if an option_description exists
+                vector<option> followed_option;  
+                vector<string> next_token(1, other_tokens[0]);      
+                for (unsigned i = 0; followed_option.empty() && i < style_parsers.size(); ++i)
+                {
+                    followed_option = style_parsers[i](next_token);
+                }
+                if (!followed_option.empty()) 
+                {
+                    const option_description* od = m_desc->find_nothrow(other_tokens[0], 
+                              (m_style & allow_guessing) ? true : false);
+                    if (od) 
+                        boost::throw_exception(invalid_command_line_syntax(opt.string_key,
+                                                    invalid_command_line_syntax::missing_parameter));
+                }
                 opt.value.push_back(other_tokens[0]);
                 opt.original_tokens.push_back(other_tokens[0]);
                 other_tokens.erase(other_tokens.begin());

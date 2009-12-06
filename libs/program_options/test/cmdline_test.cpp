@@ -30,6 +30,7 @@ const int s_short_adjacent_not_allowed = 5;
 const int s_empty_adjacent_parameter = 6;
 const int s_missing_parameter = 7;
 const int s_extra_parameter = 8;
+const int s_unrecognized_line = 9;
 
 int translate_syntax_error_kind(invalid_command_line_syntax::kind_t k)
 {
@@ -40,6 +41,7 @@ int translate_syntax_error_kind(invalid_command_line_syntax::kind_t k)
         invalid_command_line_syntax::empty_adjacent_parameter,
         invalid_command_line_syntax::missing_parameter,
         invalid_command_line_syntax::extra_parameter,
+        invalid_command_line_syntax::unrecognized_line 
     };
     invalid_command_line_syntax::kind_t *b, *e, *i;
     b = table;
@@ -262,7 +264,7 @@ void test_short_options()
         {"-f -13", s_success, "-f:-13"},
         {"-f", s_missing_parameter, ""},
         {"-f /foo", s_success, "-f:/foo"},
-        {"-f -d", s_success, "-f:-d"},
+        {"-f -d", s_missing_parameter, ""},
         {0, 0, 0}
     };
     test_cmdline(",d ,f=", style, test_cases2);
@@ -274,7 +276,7 @@ void test_short_options()
     test_case test_cases3[] = {
         {"-f10", s_success, "-f:10"},
         {"-f 10", s_success, "-f:10"},
-        {"-f -d", s_success, "-f:-d"},
+        {"-f -d", s_missing_parameter, ""},
         {0, 0, 0}
     };
     test_cmdline(",d ,f=", style, test_cases3);
