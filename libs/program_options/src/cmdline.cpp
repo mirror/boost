@@ -35,17 +35,17 @@ namespace boost { namespace program_options {
     using namespace boost::program_options::command_line_style;
     
     invalid_syntax::
-    invalid_syntax(const std::string& tokens, kind_t kind)
+    invalid_syntax(const string& tokens, kind_t kind)
      : error(error_message(kind).append(" in '").append(tokens).append("'"))
      , m_tokens(tokens)
      , m_kind(kind)                       
     {}
     
-    std::string 
+    string 
     invalid_syntax::error_message(kind_t kind)
     {
         // Initially, store the message in 'const char*' variable,
-        // to avoid conversion to std::string in all cases.
+        // to avoid conversion to string in all cases.
         const char* msg;
         switch(kind)
         {
@@ -89,7 +89,7 @@ namespace boost { namespace program_options {
     }
 
     invalid_command_line_syntax::
-    invalid_command_line_syntax(const std::string& tokens, kind_t kind)
+    invalid_command_line_syntax(const string& tokens, kind_t kind)
     : invalid_syntax(tokens, kind)
     {}
 
@@ -105,7 +105,7 @@ namespace boost { namespace program_options { namespace detail {
 #endif
 
 
-    cmdline::cmdline(const std::vector<std::string>& args)
+    cmdline::cmdline(const vector<string>& args)
     {
         init(args);
     }
@@ -122,7 +122,7 @@ namespace boost { namespace program_options { namespace detail {
     }
 
     void
-    cmdline::init(const std::vector<std::string>& args)
+    cmdline::init(const vector<string>& args)
     {
         this->args = args;        
         m_style = command_line_style::default_style;
@@ -445,11 +445,11 @@ namespace boost { namespace program_options { namespace detail {
         }
     }
 
-    std::vector<option> 
-    cmdline::parse_long_option(std::vector<string>& args)
+    vector<option> 
+    cmdline::parse_long_option(vector<string>& args)
     {
         vector<option> result;
-        const std::string& tok = args[0];
+        const string& tok = args[0];
         if (tok.size() >= 3 && tok[0] == '-' && tok[1] == '-')
         {   
             string name, adjacent;
@@ -479,10 +479,10 @@ namespace boost { namespace program_options { namespace detail {
     }
 
 
-    std::vector<option> 
-    cmdline::parse_short_option(std::vector<string>& args)
+    vector<option> 
+    cmdline::parse_short_option(vector<string>& args)
     {
-        const std::string& tok = args[0];
+        const string& tok = args[0];
         if (tok.size() >= 2 && tok[0] == '-' && tok[1] != '-')
         {   
             vector<option> result;
@@ -530,14 +530,14 @@ namespace boost { namespace program_options { namespace detail {
             }
             return result;
         }
-        return std::vector<option>();
+        return vector<option>();
     }
 
-    std::vector<option> 
-    cmdline::parse_dos_option(std::vector<string>& args)
+    vector<option> 
+    cmdline::parse_dos_option(vector<string>& args)
     {
         vector<option> result;
-        const std::string& tok = args[0];
+        const string& tok = args[0];
         if (tok.size() >= 2 && tok[0] == '/')
         {   
             string name = "-" + tok.substr(1,1);
@@ -554,10 +554,10 @@ namespace boost { namespace program_options { namespace detail {
         return result;
     }
 
-    std::vector<option> 
-    cmdline::parse_disguised_long_option(std::vector<string>& args)
+    vector<option> 
+    cmdline::parse_disguised_long_option(vector<string>& args)
     {
-        const std::string& tok = args[0];
+        const string& tok = args[0];
         if (tok.size() >= 2 && 
             ((tok[0] == '-' && tok[1] != '-') ||
              ((m_style & allow_slash_for_short) && tok[0] == '/')))            
@@ -574,11 +574,11 @@ namespace boost { namespace program_options { namespace detail {
         return vector<option>();
     }
 
-    std::vector<option> 
-    cmdline::parse_terminator(std::vector<std::string>& args)
+    vector<option> 
+    cmdline::parse_terminator(vector<string>& args)
     {
         vector<option> result;
-        const std::string& tok = args[0];
+        const string& tok = args[0];
         if (tok == "--")
         {
             for(unsigned i = 1; i < args.size(); ++i)
@@ -594,8 +594,8 @@ namespace boost { namespace program_options { namespace detail {
         return result;
     }
 
-    std::vector<option> 
-    cmdline::handle_additional_parser(std::vector<std::string>& args)
+    vector<option> 
+    cmdline::handle_additional_parser(vector<string>& args)
     {
         vector<option> result;
         pair<string, string> r = m_additional_parser(args[0]);
