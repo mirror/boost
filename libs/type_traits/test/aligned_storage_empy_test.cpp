@@ -22,7 +22,7 @@ namespace
     struct alignment_implementation1
     {
         boost::detail::aligned_storage::aligned_storage_imp<N,Alignment> type;
-        const void* address() const { return this; }
+        const void* address() const { return type.address(); }
     };
     
     template< unsigned N, unsigned Alignment >
@@ -39,24 +39,24 @@ namespace
     };
     
     template< unsigned N, class T >
-    const void* get_address1()
+    std::ptrdiff_t get_address1()
     {
-        alignment_implementation1<N*sizeof(T), tt::alignment_of<T>::value> imp1;
-        return imp1.address();
+        static alignment_implementation1<N*sizeof(T), tt::alignment_of<T>::value> imp1;
+        return static_cast<const char*>(imp1.address()) - reinterpret_cast<const char*>(&imp1);
     }
 
     template< unsigned N, class T >
-    const void* get_address2()
+    std::ptrdiff_t get_address2()
     {
-        alignment_implementation2<N*sizeof(T), tt::alignment_of<T>::value> imp2;
-        return imp2.address();
+        static alignment_implementation2<N*sizeof(T), tt::alignment_of<T>::value> imp2;
+        return static_cast<const char*>(imp2.address()) - reinterpret_cast<const char*>(&imp2);
     }
 
     template< class T >
     void check()
     {
-        const void* addr1 = get_address1<0,T>();
-        const void* addr2 = get_address2<0,T>();
+        std::ptrdiff_t addr1 = get_address1<0,T>();
+        std::ptrdiff_t addr2 = get_address2<0,T>();
         //
         // @remark: only the empty case differs
         //
@@ -100,6 +100,9 @@ check<long double>();
 
 #ifdef BOOST_HAS_MS_INT64
 check<__int64>();
+#endif
+#ifdef BOOST_HAS_LONG_LONG
+check<long long>();
 #endif
 
 check<int(*)(int)>();
