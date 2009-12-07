@@ -160,8 +160,12 @@ public:
     {
         if (!open_)
             open(snk, BOOST_IOS::out);
-        if (end_ != -1 && pos_ + n >= end_)
+        if (end_ != -1 && pos_ + n >= end_) {
+            if(pos_ < end_)
+                pos_ += iostreams::write(this->component(),
+                    snk, s, end_ - pos_);
             boost::throw_exception(bad_write());
+        }
         std::streamsize result = 
             iostreams::write(this->component(), snk, s, n);
         pos_ += result;
@@ -272,8 +276,11 @@ template<typename Device>
 inline std::streamsize restricted_indirect_device<Device>::write
     (const char_type* s, std::streamsize n)
 {
-    if (end_ != -1 && pos_ + n >= end_)
+    if (end_ != -1 && pos_ + n >= end_) {
+        if(pos_ < end_)
+            pos_ += iostreams::write(this->component(), s, end_ - pos_);
         boost::throw_exception(bad_write());
+    }
     std::streamsize result = iostreams::write(this->component(), s, n);
     pos_ += result;
     return result;
