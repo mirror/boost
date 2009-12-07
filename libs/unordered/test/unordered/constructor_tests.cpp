@@ -245,8 +245,12 @@ void constructor_tests2(T*, test::random_generator const& generator = test::defa
     std::cerr<<"Construct 8 - from input iterator\n";
     {
         test::random_values<T> v(100, generator);
-        T x(test::input_iterator(v.begin()), test::input_iterator(v.end()), 0, hf1, eq1);
-        T y(test::input_iterator(x.begin()), test::input_iterator(x.end()), 0, hf2, eq2);
+        BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
+            v_begin = v.begin(), v_end = v.end();
+        T x(test::input_iterator(v_begin), test::input_iterator(v_end), 0, hf1, eq1);
+        BOOST_DEDUCED_TYPENAME T::const_iterator
+            x_begin = x.begin(), x_end = x.end();
+        T y(test::input_iterator(x_begin), test::input_iterator(x_end), 0, hf2, eq2);
         test::check_container(x, v);
         test::check_container(y, x);
         test::check_equivalent_keys(x);

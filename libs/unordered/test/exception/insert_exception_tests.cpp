@@ -10,7 +10,6 @@
 #include "../helpers/random_values.hpp"
 #include "../helpers/invariants.hpp"
 #include "../helpers/strong.hpp"
-#include "../helpers/input_iterator.hpp"
 #include <boost/utility.hpp>
 #include <cmath>
 

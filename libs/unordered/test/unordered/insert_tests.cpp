@@ -213,7 +213,9 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
         X x;
 
         test::random_values<X> v(1000, generator);
-        x.insert(test::input_iterator(v.begin()), test::input_iterator(v.end()));
+        BOOST_DEDUCED_TYPENAME test::random_values<X>::const_iterator
+            begin = v.begin(), end = v.end();
+        x.insert(test::input_iterator(begin), test::input_iterator(end));
         test::check_container(x, v);
 
         test::check_equivalent_keys(x);

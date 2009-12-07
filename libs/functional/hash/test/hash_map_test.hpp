@@ -11,6 +11,7 @@
 
 #if defined(BOOST_MSVC)
 #pragma warning(push)
+#pragma warning(disable:4244) // conversion from 'int' to 'float'
 #pragma warning(disable:4245) // signed/unsigned mismatch
 #endif
 
