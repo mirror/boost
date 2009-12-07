@@ -13,6 +13,5 @@
  * Tests the overloaded function template boost::iostreams::slice.
  */
 
-#define BOOST_RESTRICT slice
-#define BOOST_RESTRICT_HEADER <boost/iostreams/slice.hpp>
+#define BOOST_RESTRICT_USE_SLICE
 #include "restrict_test.cpp"
