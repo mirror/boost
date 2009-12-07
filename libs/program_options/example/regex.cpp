@@ -61,7 +61,7 @@ void validate(boost::any& v,
     if (regex_match(s, match, r)) {
         v = any(magic_number(lexical_cast<int>(match[1])));
     } else {
-        throw validation_error("invalid value");
+        throw validation_error(validation_error::invalid_option_value);
     }        
 }
 
