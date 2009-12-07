@@ -407,6 +407,10 @@ struct wrap
 {
    T t;
    int j;
+protected:
+   wrap();
+   wrap(const wrap&);
+   wrap& operator=(const wrap&);
 };
 
 
