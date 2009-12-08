@@ -121,9 +121,7 @@ namespace boost { namespace program_options {
         std::string name(_name);
         string::size_type n = name.find(',');
         if (n != string::npos) {
-            // this potentially fails on VC++ when compiled
-            // with /MDd (?), See Ticket #773
-            assert(n == name.size() - 2*sizeof(string::value_type));
+            assert(n == name.size()-2);
             m_long_name = name.substr(0, n);
             m_short_name = '-' + name.substr(n+1,1);
         } else {
