@@ -27,8 +27,8 @@
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std {
-    using ::strlen
-    using ::wcslen
+    using ::strlen;
+    using ::wcslen;
 } //namespace std
 #endif //BOOST_NO_STDC_NAMESPACE
 
@@ -224,7 +224,7 @@ public:
     uuid operator()(const wchar_t* name) const {
         return operator()(name, std::wcslen(name)*sizeof(wchar_t));
     }
-    
+
     template <typename ch, typename char_traits, typename alloc>
     uuid operator()(std::basic_string<ch, char_traits, alloc> const& name) const {
         return operator()(name.c_str(), name.length()*sizeof(ch));

@@ -164,10 +164,10 @@ int test_main(int, char*[])
         uuid u3 = {{255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255}};
 
         boost::hash<uuid> uuid_hasher;
-
-        BOOST_CHECK_EQUAL(uuid_hasher(u1), 3565488559U);
-        BOOST_CHECK_EQUAL(uuid_hasher(u2), 1668670635U);
-        BOOST_CHECK_EQUAL(uuid_hasher(u3), 223353791U);
+        
+        BOOST_CHECK_EQUAL(uuid_hasher(u1), boost::hash_range(u1.begin(), u1.end()));
+        BOOST_CHECK_EQUAL(uuid_hasher(u2), boost::hash_range(u2.begin(), u2.end()));
+        BOOST_CHECK_EQUAL(uuid_hasher(u3), boost::hash_range(u3.begin(), u3.end()));
     }
     
     { // test is_pod
