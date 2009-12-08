@@ -111,6 +111,9 @@ namespace boost { namespace program_options { namespace detail {
                     this->value().value.clear();
                     this->value().value.push_back(value);
                     this->value().unregistered = !registered;
+                    this->value().original_tokens.clear();
+                    this->value().original_tokens.push_back(name);
+                    this->value().original_tokens.push_back(value);
                     break;
 
                 } else {

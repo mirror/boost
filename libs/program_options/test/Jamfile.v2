@@ -29,6 +29,7 @@ test-suite program_options :
     [ po-test winmain.cpp ] 
     [ po-test exception_test.cpp ]
     [ po-test split_test.cpp ]
+    [ po-test unrecognized_test.cpp ]
     ;
         
 exe test_convert : test_convert.cpp ;   
