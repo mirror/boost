@@ -192,11 +192,19 @@ if [ check-icu-config ]
 if $(gHAS_ICU)
 {
    BOOST_REGEX_ICU_OPTS = "<target-os>freebsd:<include>/usr/local/include" ;
-   ICU_SEARCH_OPTS = "<target-os>freebsd:<search>/$(ICU_PATH)/lib" ; 
+   ICU_SEARCH_OPTS = "<target-os>freebsd:<search>$(ICU_PATH)/lib" ; 
    BOOST_REGEX_ICU_OPTS += "<define>BOOST_HAS_ICU=1" ;
+   BOOST_REGEX_ICU_OPTS += "$(gICU_LIBS)" ;
    
    if $(ICU_PATH)
    {
+      # If ICU_PATH is specified on the command line, then it's
+      # relative to the current directory, while paths specified
+      # in a Jamfile are relative to that Jamfile. So, to
+      # avoid confusing the user if he's not running from
+      # libs/regex/build, explicitly root this.
+      ICU_PATH = [ path.native 
+          [ path.root [ path.make $(ICU_PATH) ] [ path.pwd ] ] ] ;
       if $(ICU_PATH) != "/usr" && $(ICU_PATH) != "/usr/local"
       {
          BOOST_REGEX_ICU_OPTS += "<include>$(ICU_PATH)/include" ;

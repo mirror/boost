@@ -1,6 +1,6 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>regex_format (Deprecated)</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
@@ -34,7 +34,7 @@
           previous version of Boost.Regex and will not be further updated:
         </p>
 <a name="boost_regex.ref.deprecated_interfaces.regex_format.algorithm_regex_format"></a><h5>
-<a name="id783339"></a>
+<a name="id882577"></a>
           <a class="link" href="regex_format.html#boost_regex.ref.deprecated_interfaces.regex_format.algorithm_regex_format">Algorithm
           regex_format</a>
         </h5>
@@ -46,15 +46,10 @@
           string, <code class="computeroutput"><span class="identifier">regex_format</span></code> can
           be used for search and replace operations:
         </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">iterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">iterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
 <span class="identifier">OutputIterator</span> <span class="identifier">regex_format</span><span class="special">(</span><span class="identifier">OutputIterator</span> <span class="identifier">out</span><span class="special">,</span>
                            <span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span><span class="special">,</span>
-                           <span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">fmt</span><span class="special">,</span>
-                           <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">iterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
-<span class="identifier">OutputIterator</span> <span class="identifier">regex_format</span><span class="special">(</span><span class="identifier">OutputIterator</span> <span class="identifier">out</span><span class="special">,</span>
-                           <span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span><span class="special">,</span>
-                           <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
+                           <span class="identifier">Formatter</span> <span class="identifier">fmt</span><span class="special">,</span>
                            <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>
 </pre>
 <p>
@@ -71,16 +66,10 @@
             form, depending upon your compilers capabilities
           </p></td></tr>
 </table></div>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">iterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">iterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Formatter</span><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="identifier">regex_format</span>
                                  <span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span><span class="special">,</span> 
-                                 <span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">fmt</span><span class="special">,</span>
-                                 <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>
-
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">iterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="identifier">regex_format</span>
-                                 <span class="special">(</span><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span><span class="special">,</span> 
-                                 <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
+                                 <span class="identifier">Formatter</span> <span class="identifier">fmt</span><span class="special">,</span>
                                  <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>
 </pre>
 <p>
@@ -133,13 +122,14 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">fmt</span></code>
+                  <code class="computeroutput"><span class="identifier">Formatter</span> <span class="identifier">fmt</span></code>
                 </p>
                 </td>
 <td>
                 <p>
-                  A format string that determines how the match is transformed into
-                  the new string.
+                  Either a format string that determines how the match is transformed
+                  into the new string, or a functor that computes the new string
+                  from <span class="emphasis"><em>m</em></span> - see <a class="link" href="../match_results.html#boost_regex.match_results_format"><code class="computeroutput"><span class="identifier">match_results</span><span class="special">&lt;&gt;::</span><span class="identifier">format</span></code></a>.
                 </p>
                 </td>
 </tr>
@@ -167,7 +157,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 1998 -2007 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 1998 -2007 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

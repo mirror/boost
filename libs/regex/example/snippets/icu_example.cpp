@@ -28,7 +28,7 @@
 // Find out if *password* meets our password requirements,
 // as defined by the regular expression *requirements*.
 //
-bool is_valid_password(const UnicodeString& password, const UnicodeString& requirements)
+bool is_valid_password(const U_NAMESPACE_QUALIFIER UnicodeString& password, const U_NAMESPACE_QUALIFIER UnicodeString& requirements)
 {
    return boost::u32regex_match(password, boost::make_u32regex(requirements));
 }
@@ -52,7 +52,7 @@ std::string get_filename(const std::string& path)
    }
 }
 
-UnicodeString extract_greek(const UnicodeString& text)
+U_NAMESPACE_QUALIFIER UnicodeString extract_greek(const U_NAMESPACE_QUALIFIER UnicodeString& text)
 {
    // searches through some UTF-16 encoded text for a block encoded in Greek,
    // this expression is imperfect, but the best we can do for now - searching
@@ -62,7 +62,7 @@ UnicodeString extract_greek(const UnicodeString& text)
    if(boost::u32regex_search(text, what, r))
    {
       // extract $0 as a UnicodeString:
-      return UnicodeString(what[0].first, what.length(0));
+      return U_NAMESPACE_QUALIFIER UnicodeString(what[0].first, what.length(0));
    }
    else
    {
@@ -127,7 +127,7 @@ void enumerate_currencies2(const std::string& text)
 const boost::u32regex e = boost::make_u32regex("\\A(\\d{3,4})[- ]?(\\d{4})[- ]?(\\d{4})[- ]?(\\d{4})\\z");
 const char* human_format = "$1-$2-$3-$4";
 
-UnicodeString human_readable_card_number(const UnicodeString& s)
+U_NAMESPACE_QUALIFIER UnicodeString human_readable_card_number(const U_NAMESPACE_QUALIFIER UnicodeString& s)
 {
    return boost::u32regex_replace(s, e, human_format);
 }
@@ -136,8 +136,8 @@ UnicodeString human_readable_card_number(const UnicodeString& s)
 int main()
 {
    // password checks using u32regex_match:
-   UnicodeString pwd = "abcDEF---";
-   UnicodeString pwd_check = "(?=.*[[:lower:]])(?=.*[[:upper:]])(?=.*[[:punct:]]).{6,}";
+   U_NAMESPACE_QUALIFIER UnicodeString pwd = "abcDEF---";
+   U_NAMESPACE_QUALIFIER UnicodeString pwd_check = "(?=.*[[:lower:]])(?=.*[[:upper:]])(?=.*[[:punct:]]).{6,}";
    bool b = is_valid_password(pwd, pwd_check);
    assert(b);
    pwd = "abcD-";
@@ -152,8 +152,8 @@ int main()
    assert(file == "d.h");
 
    // Greek text extraction with u32regex_search:
-   UnicodeString text = L"Some where in \x0391\x039D\x0395\x0398\x0391 2004";
-   UnicodeString greek = extract_greek(text);
+   U_NAMESPACE_QUALIFIER UnicodeString text = L"Some where in \x0391\x039D\x0395\x0398\x0391 2004";
+   U_NAMESPACE_QUALIFIER UnicodeString greek = extract_greek(text);
    assert(greek == L"\x0391\x039D\x0395\x0398\x0391 2004");
 
    // extract currency symbols with associated value, use iterator interface:
@@ -161,7 +161,7 @@ int main()
    enumerate_currencies(text2);
    enumerate_currencies2(text2);
 
-   UnicodeString credit_card_number = "1234567887654321";
+   U_NAMESPACE_QUALIFIER UnicodeString credit_card_number = "1234567887654321";
    credit_card_number = human_readable_card_number(credit_card_number);
    assert(credit_card_number == "1234-5678-8765-4321");
    return 0;

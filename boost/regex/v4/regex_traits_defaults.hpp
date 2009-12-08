@@ -322,7 +322,7 @@ inline const charT* get_escape_R_string()
 {
 #ifdef BOOST_MSVC
 #  pragma warning(push)
-#  pragma warning(disable:4309)
+#  pragma warning(disable:4309 4245)
 #endif
    static const charT e1[] = { '(', '?', '>', '\x0D', '\x0A', '?', 
       '|', '[', '\x0A', '\x0B', '\x0C', '\x85', '\\', 'x', '{', '2', '0', '2', '8', '}', 

@@ -29,11 +29,11 @@ using namespace std;
 istream& getline(istream& is, std::string& s)
 {
    s.erase();
-   char c = is.get();
+   char c = static_cast<char>(is.get());
    while(c != '\n')
    {
       s.append(1, c);
-      c = is.get();
+      c = static_cast<char>(is.get());
    }
    return is;
 }

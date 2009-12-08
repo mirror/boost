@@ -67,6 +67,8 @@ public:
                what[5].first - base;
       return true;
    }
+private:
+   IndexClassesPred& operator=(const IndexClassesPred&);
 };
 
 void IndexClasses(map_type& m, const std::string& file)

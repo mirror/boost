@@ -48,6 +48,7 @@ exe regex_comparison :
     ;
 
 
+install . : regex_comparison ;
 
 
 

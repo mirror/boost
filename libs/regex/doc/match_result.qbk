@@ -105,11 +105,12 @@ Class template `match_results` is most commonly used as one of the typedefs
       const_iterator ``[link boost_regex.match_results.begin begin]``() const;
       const_iterator ``[link boost_regex.match_results.end end]``() const;
       // format:
-      template <class OutputIterator>
+      template <class OutputIterator, class Formatter>
       OutputIterator ``[link boost_regex.match_results.format format]``(OutputIterator out,
-                           const string_type& fmt,
+                           Formatter fmt,
                            match_flag_type flags = format_default) const;
-      string_type ``[link boost_regex.match_results.format2 format]``(const string_type& fmt,
+      template <class Formatter>
+      string_type ``[link boost_regex.match_results.format2 format]``(Formatter fmt,
                         match_flag_type flags = format_default) const;
 
       allocator_type ``[link boost_regex.match_results.get_allocator get_allocator]``() const;
@@ -352,15 +353,25 @@ marked sub-expression matches stored in *this.
 [#boost_regex.match_results_format]
 [#boost_regex.match_results.format]
 
-   template <class OutputIterator>
+   template <class OutputIterator, class Formatter>
    OutputIterator format(OutputIterator out,
-                        const string_type& fmt,
-                        match_flag_type flags = format_default);
+                         Formatter fmt,
+                         match_flag_type flags = format_default);
 
 [*Requires]: The type `OutputIterator` conforms to the Output Iterator requirements 
 (C++ std 24.1.2).
 
-[*Effects]: Copies the character sequence `[fmt.begin(), fmt.end())` to 
+The type `Formatter` must be either a pointer to a null-terminated string
+of type `char_type[]`, or be a container of `char_type`'s (for example
+`std::basic_string<char_type>`) or be a unary, binary or ternary functor
+that computes the replacement string from a function call: either 
+`fmt(*this)` which must return a container of `char_type`'s to be used as the
+replacement text, or either `fmt(*this, out)` or `fmt(*this, out, flags)`, both of
+which write the replacement text to `*out`, and then return the new
+OutputIterator position.
+
+[*Effects]: If `fmt` is either a null-terminated string, or a 
+container of `char_type`'s, then copies the character sequence `[fmt.begin(), fmt.end())` to 
 `OutputIterator` /out/. For each format specifier or escape sequence in 
 /fmt/, replace that sequence with either the character(s) it represents, 
 or the sequence of characters within `*this` to which it refers. 
@@ -369,6 +380,16 @@ escape sequences are recognized, by default this is the format used by
 ECMA-262, ECMAScript Language Specification, Chapter 15 part 
 5.4.11 String.prototype.replace.
 
+If `fmt` is a function object, then depending on the number of arguments
+the function object accepts, it will either:
+
+* Call `fmt(*this)` and copy the result to `OutputIterator`
+/out/.
+* Call `fmt(*this, out)`.
+* Call `fmt(*this, out, flags)`.
+
+In all cases the new position of the `OutputIterator` is returned.
+
 See the [link boost_regex.format format syntax guide for more information].
 
 [*Returns]: out.
@@ -376,16 +397,38 @@ See the [link boost_regex.format format syntax guide for more information].
 
 [#boost_regex.match_results.format2]
 
-   string_type format(const string_type& fmt,
-                     match_flag_type flags = format_default);
+   template <class Formatter>
+   string_type format(Formatter fmt,
+                      match_flag_type flags = format_default);
 
-[*Effects]: Returns a copy of the string /fmt/. For each format specifier or 
+[*Requires]
+The type `Formatter` must be either a pointer to a null-terminated string
+of type `char_type[]`, or be a container of `char_type`'s (for example
+`std::basic_string<char_type>`) or be a unary, binary or ternary functor
+that computes the replacement string from a function call: either 
+`fmt(*this)` which must return a container of `char_type`'s to be used as the
+replacement text, or either `fmt(*this, out)` or `fmt(*this, out, flags)`, both of
+which write the replacement text to `*out`, and then return the new
+OutputIterator position.
+
+[*Effects]: 
+If `fmt` is either a null-terminated string, or a 
+container of `char_type`'s, then copies the string /fmt/: For each format specifier or 
 escape sequence in /fmt/, replace that sequence with either the 
 character(s) it represents, or the sequence of characters within `*this` to 
 which it refers. The bitmasks specified in flags determines what format 
 specifiers or escape sequences are recognized, by default this is the format 
 used by ECMA-262, ECMAScript Language Specification, Chapter 15 part 
 5.4.11 String.prototype.replace.
+
+If `fmt` is a function object, then depending on the number of arguments
+the function object accepts, it will either:
+
+* Call `fmt(*this)` and return the result.
+* Call `fmt(*this, unspecified-output-iterator)`, where `unspecified-output-iterator`
+is an unspecified OutputIterator type used to copy the output to the string result.
+* Call `fmt(*this, unspecified-output-iterator, flags)`, where `unspecified-output-iterator`
+is an unspecified OutputIterator type used to copy the output to the string result.
 
 See the [link boost_regex.format format syntax guide for more information].
 

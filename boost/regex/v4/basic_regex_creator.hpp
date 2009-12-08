@@ -787,7 +787,7 @@ void basic_regex_creator<charT, traits>::fixup_recursions(re_syntax_base* state)
                      //
                      if(0 == (this->flags() & regex_constants::no_except))
                      {
-                        std::string message = this->m_pdata->m_ptraits->error_string(boost::regex_constants::error_bad_pattern);
+                        std::string message = "Encountered a forward reference to a marked sub-expression that does not exist.";
                         boost::regex_error e(message, boost::regex_constants::error_bad_pattern, 0);
                         e.raise();
                      }
@@ -828,7 +828,7 @@ void basic_regex_creator<charT, traits>::fixup_recursions(re_syntax_base* state)
                //
                if(0 == (this->flags() & regex_constants::no_except))
                {
-                  std::string message = this->m_pdata->m_ptraits->error_string(boost::regex_constants::error_bad_pattern);
+                  std::string message = "Encountered a forward reference to a recursive sub-expression that does not exist.";
                   boost::regex_error e(message, boost::regex_constants::error_bad_pattern, 0);
                   e.raise();
                }
@@ -893,7 +893,7 @@ void basic_regex_creator<charT, traits>::create_startmaps(re_syntax_base* state)
             //
             if(0 == (this->flags() & regex_constants::no_except))
             {
-               std::string message = this->m_pdata->m_ptraits->error_string(boost::regex_constants::error_bad_pattern);
+               std::string message = "Invalid lookbehind assertion encountered in the regular expression.";
                boost::regex_error e(message, boost::regex_constants::error_bad_pattern, 0);
                e.raise();
             }

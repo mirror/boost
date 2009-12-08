@@ -8,6 +8,13 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
+
+// 
+// This define keep ICU in it's own namespace: helps us to track bugs that would 
+// otherwise go unnoticed:
+//
+#define U_USING_ICU_NAMESPACE 0
+
 #include <boost/regex/config.hpp>
 
 #if defined(BOOST_MSVC)
@@ -66,7 +73,7 @@ int main()
    boost::regex_constants::match_flag_type flgs = boost::regex_constants::match_default;
    std::string s1;
    std::wstring s2;
-   UnicodeString us;
+   U_NAMESPACE_QUALIFIER UnicodeString us;
    b = boost::u32regex_match(utf8_arch1(), utf8_arch1(), m1, e1, flgs);
    b = boost::u32regex_match(utf8_arch1(), utf8_arch1(), m1, e1);
    b = boost::u32regex_match(utf8_arch2(), utf8_arch2(), m2, e1, flgs);

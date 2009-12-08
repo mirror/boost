@@ -86,15 +86,15 @@ void test(boost::basic_regex<charT, traits>& r, const test_invalid_regex_tag&)
       have_catch = true;
       test_empty(r);
    }
-   catch(const std::runtime_error& r)
+   catch(const std::runtime_error& e)
    {
       have_catch = true;
-      BOOST_REGEX_TEST_ERROR("Expected a bad_expression exception, but a std::runtime_error instead: " << r.what(), charT);
+      BOOST_REGEX_TEST_ERROR("Expected a bad_expression exception, but a std::runtime_error instead: " << e.what(), charT);
    }
-   catch(const std::exception& r)
+   catch(const std::exception& e)
    {
       have_catch = true;
-      BOOST_REGEX_TEST_ERROR("Expected a bad_expression exception, but a std::exception instead: " << r.what(), charT);
+      BOOST_REGEX_TEST_ERROR("Expected a bad_expression exception, but a std::exception instead: " << e.what(), charT);
    }
    catch(...)
    {

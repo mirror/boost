@@ -8,6 +8,27 @@
 
 [section:history History]
 
+New issues should be submitted at [@http:svn.boost.org svn.boost.org] - don't forget to include your
+email address in the ticket!
+
+Currently open issues can be viewed [@https://svn.boost.org/trac/boost/query?status=assigned&status=new&status=reopened&component=regex&order=priority&col=id&col=summary&col=status&col=type&col=milestone&col=component here].
+
+All issues including closed ones can be viewed [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=regex&order=priority&col=id&col=summary&col=status&col=type&col=milestone&col=component here].
+
+[h4 Boost 1.42]
+
+* Added support for Functors rather than strings as format expressions.
+* Improved error reporting when throwing exceptions to include better more relevant information.
+* Fixed tickets
+[@https://svn.boost.org/trac/boost/ticket/2802 #2802],
+[@https://svn.boost.org/trac/boost/ticket/3425 #3425],
+[@https://svn.boost.org/trac/boost/ticket/3507 #3507],
+[@https://svn.boost.org/trac/boost/ticket/3546 #3546],
+[@https://svn.boost.org/trac/boost/ticket/3631 #3631],
+[@https://svn.boost.org/trac/boost/ticket/3632 #3632],
+[@https://svn.boost.org/trac/boost/ticket/3715 #3715],
+[@https://svn.boost.org/trac/boost/ticket/3718 #3718]
+
 [h4 Boost 1.40]
 
 * Added support for many Perl 5.10 syntax elements including named

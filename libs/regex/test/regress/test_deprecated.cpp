@@ -137,7 +137,7 @@ void test_deprecated(const char&, const test_regex_search_tag&)
    if(test_info<char>::syntax_options() & ~boost::regex::icase)
       return;
    try{
-      boost::RegEx e(expression, test_info<char>::syntax_options() & boost::regex::icase);
+      boost::RegEx e(expression, (test_info<char>::syntax_options() & boost::regex::icase) != 0);
       if(e.error_code())
       {
          BOOST_REGEX_TEST_ERROR("Expression did not compile when it should have done, error code = " << e.error_code(), char);
@@ -303,7 +303,7 @@ void test_deprecated(const char&, const test_invalid_regex_tag&)
       return;
    bool have_catch = false;
    try{
-      boost::RegEx e(expression, test_info<char>::syntax_options() & boost::regex::icase);
+      boost::RegEx e(expression, (test_info<char>::syntax_options() & boost::regex::icase) != 0);
       if(e.error_code())
          have_catch = true;
    }
