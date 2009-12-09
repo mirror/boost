@@ -147,6 +147,8 @@ namespace boost { namespace program_options {
                        = ext_parser());
 
     /** Parse a config file. 
+    
+        Read from given stream.
     */
     template<class charT>
 #if ! BOOST_WORKAROUND(__ICL, BOOST_TESTED_AT(700))
@@ -154,6 +156,19 @@ namespace boost { namespace program_options {
 #endif
     basic_parsed_options<charT>
     parse_config_file(std::basic_istream<charT>&, const options_description&,
+                      bool allow_unregistered = false);
+
+    /** Parse a config file. 
+    
+        Read from file with the given name. The character type is
+        passed to the file stream. 
+    */
+    template<class charT>
+#if ! BOOST_WORKAROUND(__ICL, BOOST_TESTED_AT(700))
+    BOOST_PROGRAM_OPTIONS_DECL
+#endif
+    basic_parsed_options<charT>
+    parse_config_file(const char* filename, const options_description&,
                       bool allow_unregistered = false);
 
     /** Controls if the 'collect_unregistered' function should

@@ -206,6 +206,13 @@ namespace boost { namespace program_options {
         {}
     };
 
+    /** Class thrown if config file can not be read */
+    class BOOST_PROGRAM_OPTIONS_DECL reading_file : public error {
+    public:
+        reading_file(const char* filename)
+         : error(std::string("can not read file ").append(filename))
+        {}
+    };
 }}
 
 
