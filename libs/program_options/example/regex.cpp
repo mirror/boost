@@ -43,7 +43,7 @@ public:
 */
 void validate(boost::any& v, 
               const std::vector<std::string>& values,
-              magic_number* target_type, int)
+              magic_number*, int)
 {
     static regex r("\\d\\d\\d-(\\d\\d\\d)");
 
