@@ -26,6 +26,31 @@ namespace boost { namespace proto
 {
     namespace detail
     {
+        template<typename Domain1, typename Domain2>
+        struct choose_domain2
+        {
+            BOOST_MPL_ASSERT((boost::is_same<Domain1, Domain2>));
+            typedef Domain1 type;
+        };
+
+        template<typename Domain1>
+        struct choose_domain2<Domain1, proto::default_domain>
+        {
+            typedef Domain1 type;
+        };
+
+        template<typename Domain2>
+        struct choose_domain2<proto::default_domain, Domain2>
+        {
+            typedef Domain2 type;
+        };
+
+        template<>
+        struct choose_domain2<proto::default_domain, proto::default_domain>
+        {
+            typedef proto::default_domain type;
+        };
+
         template<typename Domain, typename Expr, typename EnableIf = void>
         struct generate_if
           : lazy_enable_if_c<
@@ -131,13 +156,12 @@ namespace boost { namespace proto
         template<typename Tag, typename Left, typename Right>
         struct as_expr_if<Tag, Left, Right, typename Left::proto_is_expr_, typename Right::proto_is_expr_>
           : generate_if<
-                typename Left::proto_domain
+                typename choose_domain2<typename Left::proto_domain, typename Right::proto_domain>::type
               , proto::expr<Tag, list2<Left &, Right &>, 2>
             >
         {
             typedef proto::expr<Tag, list2<Left &, Right &>, 2> expr_type;
-            typedef typename Left::proto_domain proto_domain;
-            BOOST_MPL_ASSERT((is_same<proto_domain, typename Right::proto_domain>));
+            typedef typename choose_domain2<typename Left::proto_domain, typename Right::proto_domain>::type proto_domain;
 
             static typename proto_domain::template result<proto_domain(expr_type)>::type
             make(Left &left, Right &right)
