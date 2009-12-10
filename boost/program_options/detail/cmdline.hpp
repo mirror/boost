@@ -108,7 +108,8 @@ namespace boost { namespace program_options { namespace detail {
         void extra_style_parser(style_parser s);
 
         void check_style(int style) const;
-
+        
+        bool is_style_active(style_t style) const;
 
         void init(const std::vector<std::string>& args);
 
