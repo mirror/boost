@@ -494,13 +494,21 @@ struct load_pointer_type {
         check_pointer_tracking<T>();
     }
 
+    static const basic_pointer_iserializer *
+        find(const boost::serialization::extended_type_info & type){
+        return static_cast<const basic_pointer_iserializer *>(
+            archive_serializer_map<Archive>::find(type)
+        );
+    }
+
     template<class Tptr>
     static void invoke(Archive & ar, Tptr & t){
         load(ar, *t);
         const basic_pointer_iserializer * bpis_ptr = register_type(ar, *t);
         const basic_pointer_iserializer * newbpis_ptr = ar.load_pointer(
             * reinterpret_cast<void **>(&t),
-            bpis_ptr
+            bpis_ptr,
+            find
         );
         // if the pointer isn't that of the base class
         if(newbpis_ptr != bpis_ptr){

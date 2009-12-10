@@ -76,13 +76,6 @@ protected:
         basic_iarchive(flags),
         interface_iarchive<Archive>()
     {}
-public:
-    virtual const basic_pointer_iserializer * 
-    find(const boost::serialization::extended_type_info & eti) const {
-    	return static_cast<const basic_pointer_iserializer *>(
-            archive_serializer_map<Archive>::find(eti)
-        );
-    }
 };
 
 } // namespace detail
