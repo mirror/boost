@@ -28,6 +28,22 @@ using namespace std;
 
 namespace boost { namespace program_options {
 
+   namespace {
+
+       template< class charT >
+       std::basic_string< charT >  tolower_(const std::basic_string< charT >& str)
+       {
+           std::basic_string< charT > result;
+           for (typename std::basic_string< charT >::size_type i = 0; i < str.size(); ++i)
+           {
+               result.append(1, static_cast< charT >(std::tolower(str[i])));
+           }   
+           return result;
+       }
+
+    }  // unnamed namespace
+
+
     option_description::option_description()
     {
     }
@@ -55,39 +71,51 @@ namespace boost { namespace program_options {
     }
 
     option_description::match_result
-    option_description::match(const std::string& option, bool approx) const
+    option_description::match(const std::string& option, 
+                              bool approx, 
+                              bool long_ignore_case,
+                              bool short_ignore_case) const
     {
-        match_result result = no_match;
-        if (!m_long_name.empty()) {
+        match_result result = no_match;        
+        
+        std::string local_long_name((long_ignore_case ? tolower_(m_long_name) : m_long_name));
+        
+        if (!local_long_name.empty()) {
+        
+            std::string local_option = (long_ignore_case ? tolower_(option) : option);
 
-            if (*m_long_name.rbegin() == '*')
+            if (*local_long_name.rbegin() == '*')
             {
                 // The name ends with '*'. Any specified name with the given
                 // prefix is OK.
-                if (option.find(m_long_name.substr(0, m_long_name.length()-1))
+                if (local_option.find(local_long_name.substr(0, local_long_name.length()-1))
                     == 0)
                     result = approximate_match;
             }
 
-            if (approx)
+            if (local_long_name == local_option)
             {
-                if (m_long_name.find(option) == 0)
-                {
-                    if (m_long_name == option)
-                        result = full_match;
-                    else
-                        result = approximate_match;
-                }
+                result = full_match;
             }
-            else
+            else if (approx)
             {
-                if (m_long_name == option)
-                    result = full_match;
+                if (local_long_name.find(local_option) == 0)
+                {
+                    result = approximate_match;
+                }
             }
         }
          
-        if (m_short_name == option)
-            result = full_match;
+        if (result != full_match)
+        {
+            std::string local_option(short_ignore_case ? tolower_(option) : option);
+            std::string local_short_name(short_ignore_case ? tolower_(m_short_name) : m_short_name);
+
+            if (local_short_name == local_option)
+            {
+                result = full_match;
+            }
+        }
 
         return result;        
     }
@@ -253,9 +281,13 @@ namespace boost { namespace program_options {
     }
 
     const option_description&
-    options_description::find(const std::string& name, bool approx) const
+    options_description::find(const std::string& name, 
+                              bool approx,
+                              bool long_ignore_case,
+                              bool short_ignore_case) const
     {
-        const option_description* d = find_nothrow(name, approx);
+        const option_description* d = find_nothrow(name, approx, 
+                                       long_ignore_case, short_ignore_case);
         if (!d)
             boost::throw_exception(unknown_option(name));
         return *d;
@@ -269,7 +301,9 @@ namespace boost { namespace program_options {
 
     const option_description*
     options_description::find_nothrow(const std::string& name, 
-                                      bool approx) const
+                                      bool approx,
+                                      bool long_ignore_case,
+                                      bool short_ignore_case) const
     {
         shared_ptr<option_description> found;
         vector<string> approximate_matches;
@@ -281,7 +315,7 @@ namespace boost { namespace program_options {
         for(unsigned i = 0; i < m_options.size(); ++i)
         {
             option_description::match_result r = 
-                m_options[i]->match(name, approx);
+                m_options[i]->match(name, approx, long_ignore_case, short_ignore_case);
 
             if (r == option_description::no_match)
                 continue;

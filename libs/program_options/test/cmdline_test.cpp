@@ -218,8 +218,6 @@ void test_long_options()
         allow_long | long_allow_adjacent
         | long_allow_next | case_insensitive);
 
-// FIXME: restore
-#if 0
     // Test case insensitive style.
     // Note that option names are normalized to lower case.
     test_case test_cases4[] = {
@@ -231,7 +229,6 @@ void test_long_options()
         {0, 0, 0}
     };
     test_cmdline("foo bar= baz? Giz", style, test_cases4);
-#endif
 }
 
 void test_short_options()

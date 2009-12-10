@@ -172,6 +172,12 @@ namespace boost { namespace program_options { namespace detail {
         // Need to check that if guessing and long disguise are enabled
         // -f will mean the same as -foo
     }
+    
+    bool 
+    cmdline::is_style_active(style_t style) const
+    {
+        return ((m_style & style) ? true : false);
+    }    
 
     void 
     cmdline::set_options_description(const options_description& desc)
@@ -284,7 +290,9 @@ namespace boost { namespace program_options { namespace detail {
 
             const option_description* xd = 
                 m_desc->find_nothrow(opt.string_key, 
-                                     (m_style & allow_guessing));
+                                        is_style_active(allow_guessing),
+                                        is_style_active(long_case_insensitive),
+                                        is_style_active(short_case_insensitive));
             if (!xd)
                 continue;
 
@@ -348,6 +356,21 @@ namespace boost { namespace program_options { namespace detail {
                 }
             }
         }
+        
+        // set case sensitive flag
+        for (unsigned i = 0; i < result.size(); ++i) {
+            if (result[i].string_key.size() > 2 ||
+                        (result[i].string_key.size() > 1 && result[i].string_key[0] != '-'))
+            {
+                // it is a long option
+                result[i].case_insensitive = is_style_active(long_case_insensitive);
+            }
+            else
+            {
+                // it is a short option
+                result[i].case_insensitive = is_style_active(short_case_insensitive);
+            }
+        }
 
         return result;
     }
@@ -361,9 +384,10 @@ namespace boost { namespace program_options { namespace detail {
             return;
 
         // First check that the option is valid, and get its description.
-        // TODO: case-sensitivity.
         const option_description* xd = m_desc->find_nothrow(opt.string_key, 
-                (m_style & allow_guessing) ? true : false);
+                is_style_active(allow_guessing),
+                is_style_active(long_case_insensitive),
+                is_style_active(short_case_insensitive));
 
         if (!xd)
         {
@@ -427,7 +451,9 @@ namespace boost { namespace program_options { namespace detail {
                 if (!followed_option.empty()) 
                 {
                     const option_description* od = m_desc->find_nothrow(other_tokens[0], 
-                              (m_style & allow_guessing) ? true : false);
+                              is_style_active(allow_guessing),
+                              is_style_active(long_case_insensitive),
+                              is_style_active(short_case_insensitive));
                     if (od) 
                         boost::throw_exception(invalid_command_line_syntax(opt.string_key,
                                                     invalid_command_line_syntax::missing_parameter));
@@ -461,7 +487,7 @@ namespace boost { namespace program_options { namespace detail {
                 adjacent = tok.substr(p+1);
                 if (adjacent.empty())
                     boost::throw_exception( invalid_command_line_syntax(name,
-                                                      invalid_command_line_syntax::empty_adjacent_parameter));
+                                                      invalid_command_line_syntax::empty_adjacent_parameter) );
             }
             else
             {
@@ -498,7 +524,8 @@ namespace boost { namespace program_options { namespace detail {
             // option.
             for(;;) {
                 const option_description* d 
-                    = m_desc->find_nothrow(name, false);
+                    = m_desc->find_nothrow(name, false, false,
+                            is_style_active(short_case_insensitive));
 
                 // FIXME: check for 'allow_sticky'.
                 if (d && (m_style & allow_sticky) &&
@@ -563,7 +590,9 @@ namespace boost { namespace program_options { namespace detail {
              ((m_style & allow_slash_for_short) && tok[0] == '/')))            
         {
             if (m_desc->find_nothrow(tok.substr(1, tok.find('=')-1), 
-                                     (m_style & allow_guessing) ? true : false)) 
+                                     is_style_active(allow_guessing),
+                                     is_style_active(long_case_insensitive),
+                                     is_style_active(short_case_insensitive)))
             {
                 args[0].insert(0, "-");
                 if (args[0][1] == '/')

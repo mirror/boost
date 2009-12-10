@@ -83,7 +83,8 @@ namespace program_options {
         /** Given 'option', specified in the input source,
             return 'true' is 'option' specifies *this.
         */
-        match_result match(const std::string& option, bool approx) const;
+        match_result match(const std::string& option, bool approx,
+                           bool long_ignore_case, bool short_ignore_case) const;
 
         /** Return the key that should identify the option, in
             particular in the variables_map class.
@@ -191,11 +192,15 @@ namespace program_options {
         */
         options_description_easy_init add_options();
 
-        const option_description& find(const std::string& name, bool approx) 
-            const;
+        const option_description& find(const std::string& name, 
+                                       bool approx, 
+                                       bool long_ignore_case = false,
+                                       bool short_ignore_case = false) const;
 
         const option_description* find_nothrow(const std::string& name, 
-                                               bool approx) const;
+                                               bool approx,
+                                               bool long_ignore_case = false,
+                                               bool short_ignore_case = false) const;
 
 
         const std::vector< shared_ptr<option_description> >& options() const;

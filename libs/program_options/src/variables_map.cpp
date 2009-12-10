@@ -58,12 +58,8 @@ namespace boost { namespace program_options {
             if (xm.m_final.count(name))
                 continue;
 
-            // Ignore options which are not described
-            //TODO: consider this.
-            //if (desc.count(name) == 0)
-            //    continue;
-
-            const option_description& d = desc.find(name, false);
+            const option_description& d = desc.find(name, false, 
+                                                      false, false);
 
             variable_value& v = m[name];            
             if (v.defaulted()) {
