@@ -88,6 +88,13 @@ class extended_type_info_arg : public extended_type_info
     virtual const char * get_debug_info() const {
         return get_key();
     }
+    virtual void * construct(unsigned int /*count*/, ...) const{
+        assert(false);
+        return NULL;
+    }
+    virtual void destroy(void const * const /*p*/) const {
+        assert(false);
+    }
 public:
     extended_type_info_arg(const char * key) :
         extended_type_info(0, key)

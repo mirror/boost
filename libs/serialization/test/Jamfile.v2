@@ -106,6 +106,7 @@ test-suite "serialization" :
      [ test-bsl-run_files test_shared_ptr_multi_base ]
      [ test-bsl-run_files test_shared_ptr_132 ]
      [ test-bsl-run_polymorphic_archive test_polymorphic : test_polymorphic_A A ]
+     [ test-bsl-run_polymorphic_archive test_polymorphic2 : test_polymorphic2imp ]
     ;
 
 if ! $(BOOST_ARCHIVE_LIST) {
