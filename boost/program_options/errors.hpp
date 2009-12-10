@@ -213,6 +213,23 @@ namespace boost { namespace program_options {
          : error(std::string("can not read file ").append(filename))
         {}
     };
+    
+     /** Class thrown when a required/mandatory option is missing */
+     class BOOST_PROGRAM_OPTIONS_DECL required_option : public error {
+     public:
+        required_option(const std::string& name)
+        : error(std::string("missing required option ").append(name))
+        , m_option_name(name)
+        {}
+ 
+        ~required_option() throw() {}
+
+        const std::string& get_option_name() const throw();
+        
+     private:
+        std::string m_option_name; // The name of the option which
+                                   // caused the exception.
+     };
 }}
 
 

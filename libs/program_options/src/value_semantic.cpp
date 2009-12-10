@@ -325,5 +325,11 @@ namespace boost { namespace program_options {
         }
         return m_message.c_str();
     }
+    
+    const std::string& 
+    required_option::get_option_name() const throw()
+    {
+        return m_option_name;
+    }
 
 }}
