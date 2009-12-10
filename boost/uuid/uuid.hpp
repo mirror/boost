@@ -82,9 +82,12 @@ public:
 
     bool is_nil() const /* throw() */
     {
-        // could be more efficient by stopping at the firt
-        // non zero
-        return (std::count(begin(), end(), 0) == static_size());
+        for(size_t i=0; i<static_size(); i++) {
+            if (data[i] != 0U) {
+                return false;
+            }
+        }
+        return true;
     }
 
     enum variant_type
