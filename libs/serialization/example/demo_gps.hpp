@@ -20,6 +20,7 @@
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/version.hpp>
+#include <boost/serialization/assume_abstract.hpp>
 
 // This illustration models the bus system of a small city.
 // This includes, multiple bus stops,  bus routes and schedules.
