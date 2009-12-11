@@ -188,6 +188,26 @@ The typedef [^uintmax_t] designates an unsigned integer type capable of represen
 These types are provided for all platforms.
 
 [endsect]
+
+[section Integer Constant Macros]
+
+The following macros are always defined after inclusion of this header, these allow
+integer constants of at least the specified width to be declared:  
+INT8_C, UINT8_C, INT16_C, UINT16_C, INT32_C, UINT32_C, INTMAX_C, UINTMAX_C.
+
+The macros INT64_C and UINT64_C are also defined if the the macro BOOST_NO_INT64_T is not defined.
+
+The C99 macro __STDC_CONSTANT_MACROS is also defined as an artifact of the implementation.
+
+For example:
+
+   #include <boost/cstdint.hpp>
+   
+   // Here the constant 0x1FFFFFFFF has the correct suffix applied:
+   static const boost::uint64_t c = INT64_C(0x1FFFFFFFF); 
+
+[endsect]
+
 [endsect]
 
 [section:traits Integer Traits]

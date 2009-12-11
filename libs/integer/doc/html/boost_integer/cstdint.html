@@ -38,6 +38,8 @@
       minimum-width integer types</a></span></dt>
 <dt><span class="section"><a href="cstdint.html#boost_integer.cstdint.greatest_width_integer_types">Greatest-width
       integer types</a></span></dt>
+<dt><span class="section"><a href="cstdint.html#boost_integer.cstdint.integer_constant_macros">Integer
+      Constant Macros</a></span></dt>
 </dl></div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
@@ -209,6 +211,33 @@
 <p>
         These types are provided for all platforms.
       </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_integer.cstdint.integer_constant_macros"></a><a class="link" href="cstdint.html#boost_integer.cstdint.integer_constant_macros" title="Integer Constant Macros">Integer
+      Constant Macros</a>
+</h3></div></div></div>
+<p>
+        The following macros are always defined after inclusion of this header, these
+        allow integer constants of at least the specified width to be declared: INT8_C,
+        UINT8_C, INT16_C, UINT16_C, INT32_C, UINT32_C, INTMAX_C, UINTMAX_C.
+      </p>
+<p>
+        The macros INT64_C and UINT64_C are also defined if the the macro BOOST_NO_INT64_T
+        is not defined.
+      </p>
+<p>
+        The C99 macro __STDC_CONSTANT_MACROS is also defined as an artifact of the
+        implementation.
+      </p>
+<p>
+        For example:
+      </p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdint</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="comment">// Here the constant 0x1FFFFFFFF has the correct suffix applied:
+</span><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uint64_t</span> <span class="identifier">c</span> <span class="special">=</span> <span class="identifier">INT64_C</span><span class="special">(</span><span class="number">0</span><span class="identifier">x1FFFFFFFF</span><span class="special">);</span> 
+</pre>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
