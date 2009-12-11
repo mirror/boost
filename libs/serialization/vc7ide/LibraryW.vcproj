@@ -73,7 +73,7 @@
 			Name="Release runtime-dynamic|Win32"
 			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/release/threading-multi&quot;"
 			IntermediateDirectory="$(OutDir)"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -86,7 +86,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;BOOST_TEST_NO_AUTO_LINK=1 "
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBRARYTEST_EXPORTS;BOOST_LIB_DIAGNOSTIC=1"
 				StringPooling="FALSE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
@@ -97,12 +97,12 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="3"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)"/>
+				Name="VCLinkerTool"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -117,6 +117,8 @@
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
 			<Tool
 				Name="VCManagedWrapperGeneratorTool"/>
 			<Tool
