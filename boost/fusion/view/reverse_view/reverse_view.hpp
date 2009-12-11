@@ -13,6 +13,8 @@
 #include <boost/fusion/view/reverse_view/reverse_view_iterator.hpp>
 #include <boost/fusion/view/reverse_view/detail/begin_impl.hpp>
 #include <boost/fusion/view/reverse_view/detail/end_impl.hpp>
+#include <boost/fusion/view/reverse_view/detail/at_impl.hpp>
+#include <boost/fusion/view/reverse_view/detail/value_at_impl.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
@@ -28,7 +30,6 @@ namespace boost { namespace fusion
 {
     struct reverse_view_tag;
     struct fusion_sequence_tag;
-    struct bidirectional_traversal_tag;
 
     template <typename Sequence>
     struct reverse_view : sequence_base<reverse_view<Sequence> >
@@ -37,13 +38,8 @@ namespace boost { namespace fusion
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::true_ is_view;
 
-        typedef typename
-            mpl::eval_if<
-                traits::is_associative<Sequence>
-              , mpl::inherit2<bidirectional_traversal_tag,associative_tag>
-              , mpl::identity<bidirectional_traversal_tag>
-            >::type
-        category;
+        typedef Sequence seq_type;
+        typedef typename traits::category_of<Sequence>::type category;
         typedef typename result_of::begin<Sequence>::type first_type;
         typedef typename result_of::end<Sequence>::type last_type;
         typedef typename result_of::size<Sequence>::type size;

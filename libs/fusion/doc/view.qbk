@@ -446,7 +446,8 @@ element will be its last and the last element will be its first.
 
 [heading Model of]
 
-* __bidirectional_sequence__
+* A model of __bidirectional_sequence__ if `Sequence` is a __bidirectional_sequence__
+else, __random_access_sequence__ if `Sequence` is a __random_access_sequence__.
 * __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [variablelist Notation

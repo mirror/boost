@@ -191,7 +191,7 @@ are not defined in __forward_sequence__.
 * __reverse_view__
 * __iterator_range__ (where adapted sequence is a Bidirectional Sequence)
 * __transform_view__ (where adapted sequence is a Bidirectional Sequence)
-* __zip_view__       (where adapted sequences are models Bidirectional Sequence)
+* __zip_view__       (where adapted sequences are models of Bidirectional Sequence)
 
 [endsect]
 
@@ -266,7 +266,7 @@ are not defined in __bidirectional_sequence__.
 * __reverse_view__
 * __iterator_range__ (where adapted sequence is a Random Access Sequence)
 * __transform_view__ (where adapted sequence is a Random Access Sequence)
-* __zip_view__       (where adapted sequences are models Random Access Sequence)
+* __zip_view__       (where adapted sequences are models of Random Access Sequence)
 
 [endsect]
 
@@ -334,6 +334,10 @@ you can use `__result_of_value_at_key__<S, N>`.]
 
 * __set__
 * __map__
+* __filter_view__    (where adapted sequence is an __associative_sequence__ and a __forward_sequence__)
+* __iterator_range__ (where adapted iterators are __associative_iterator__\ s)
+* __joint_view__     (where adapted sequences are __associative_sequence__\ s and __forward_sequence__\ s)
+* __reverse_view__   (where adapted sequence is an __associative_sequence__ and a __bidirectional_sequence__)
 
 [endsect]
 

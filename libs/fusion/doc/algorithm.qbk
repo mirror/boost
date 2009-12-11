@@ -1319,7 +1319,8 @@ Returns a new sequence with the elements of the original in reverse order.
 
 [*Return type]:
 
-* A model of __bidirectional_sequence__.
+* A model of __bidirectional_sequence__ if `seq` is a __bidirectional_sequence__
+else, __random_access_sequence__ if `seq` is a __random_access_sequence__.
 * A model of __associative_sequence__ if `seq` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a new sequence containing all the elements of `seq` in reverse order.
@@ -2159,7 +2160,8 @@ Returns the result type of __reverse__, given the input sequence type.
 
 [*Return type]:
 
-* A model of __bidirectional_sequence__.
+* A model of __bidirectional_sequence__ if `Sequence` is a __bidirectional_sequence__
+else, __random_access_sequence__ if `Sequence` is a __random_access_sequence__.
 * A model of __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [*Semantics]: Returns a sequence with the elements in the reverse order to `Sequence`.
