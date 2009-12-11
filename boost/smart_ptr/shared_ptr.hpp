@@ -222,7 +222,7 @@ public:
     template<class Y>
 #if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
 
-    shared_ptr( shared_ptr<Y> const & r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
+    shared_ptr( shared_ptr<Y> const & r, typename boost::detail::sp_enable_if_convertible<Y,T>::type = boost::detail::sp_empty() )
 
 #else
 
@@ -347,7 +347,7 @@ public:
     template<class Y>
 #if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
 
-    shared_ptr( shared_ptr<Y> && r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
+    shared_ptr( shared_ptr<Y> && r, typename boost::detail::sp_enable_if_convertible<Y,T>::type = boost::detail::sp_empty() )
 
 #else
 
@@ -442,7 +442,7 @@ public:
         return pn < rhs.pn;
     }
 
-    void * _internal_get_deleter( detail::sp_typeinfo const & ti ) const
+    void * _internal_get_deleter( boost::detail::sp_typeinfo const & ti ) const
     {
         return pn.get_deleter( ti );
     }
@@ -639,10 +639,10 @@ public:
 
 template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
 {
-    D *del = detail::basic_get_deleter<D>(p);
+    D *del = boost::detail::basic_get_deleter<D>(p);
     if(del == 0)
     {
-        detail::esft2_deleter_wrapper *del_wrapper = detail::basic_get_deleter<detail::esft2_deleter_wrapper>(p);
+        boost::detail::esft2_deleter_wrapper *del_wrapper = boost::detail::basic_get_deleter<boost::detail::esft2_deleter_wrapper>(p);
 // The following get_deleter method call is fully qualified because
 // older versions of gcc (2.95, 3.2.3) fail to compile it when written del_wrapper->get_deleter<D>()
         if(del_wrapper) del = del_wrapper->::boost::detail::esft2_deleter_wrapper::get_deleter<D>();
