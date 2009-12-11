@@ -209,8 +209,9 @@ namespace boost
 #endif
   struct uint_value_t 
   {
-#if (defined(__BORLANDC__) || defined(__CODEGEAR__)) && defined(BOOST_NO_INTEGRAL_INT64_T)
+#if (defined(__BORLANDC__) || defined(__CODEGEAR__))
      // It's really not clear why this workaround should be needed... shrug I guess!  JM
+#if defined(BOOST_NO_INTEGRAL_INT64_T)
       BOOST_STATIC_CONSTANT(unsigned, which = 
            6 +
           (MaxValue <= ::boost::integer_traits<unsigned long>::const_max) +
@@ -218,12 +219,21 @@ namespace boost
           (MaxValue <= ::boost::integer_traits<unsigned short>::const_max) +
           (MaxValue <= ::boost::integer_traits<unsigned char>::const_max));
       typedef typename detail::int_least_helper< ::boost::uint_value_t<MaxValue>::which>::least least;
+#else // BOOST_NO_INTEGRAL_INT64_T
+      BOOST_STATIC_CONSTANT(unsigned, which = 
+           5 +
+          (MaxValue <= ::boost::integer_traits<boost::ulong_long_type>::const_max) +
+          (MaxValue <= ::boost::integer_traits<unsigned long>::const_max) +
+          (MaxValue <= ::boost::integer_traits<unsigned int>::const_max) +
+          (MaxValue <= ::boost::integer_traits<unsigned short>::const_max) +
+          (MaxValue <= ::boost::integer_traits<unsigned char>::const_max));
+      typedef typename detail::int_least_helper< ::boost::uint_value_t<MaxValue>::which>::least least;
+#endif // BOOST_NO_INTEGRAL_INT64_T
 #else
       typedef typename detail::int_least_helper
         < 
           5 +
 #if !defined(BOOST_NO_INTEGRAL_INT64_T) && defined(BOOST_HAS_LONG_LONG)
-          (MaxValue <= ::boost::integer_traits<boost::ulong_long_type>::const_max) +
 #else
            1 +
 #endif
