@@ -52,14 +52,14 @@ void test_bidirectional_graph()
   Vertex w = *vi++;
   BOOST_CHECK(vi == vertices(g).second);
   
-  BOOST_CHECK(process_id(g.process_group()) == 0 && out_degree(u, g) == 1
-             || process_id(g.process_group()) == 1 && in_degree(u, g) == 1);
+  BOOST_CHECK((process_id(g.process_group()) == 0 && out_degree(u, g) == 1)
+             || (process_id(g.process_group()) == 1 && in_degree(u, g) == 1));
   
-  BOOST_CHECK(process_id(g.process_group()) == 0 && out_degree(v, g) == 1
-             || process_id(g.process_group()) == 1 && in_degree(v, g) == 1);
+  BOOST_CHECK((process_id(g.process_group()) == 0 && out_degree(v, g) == 1)
+             || (process_id(g.process_group()) == 1 && in_degree(v, g) == 1));
 
-  BOOST_CHECK(process_id(g.process_group()) == 0 && out_degree(w, g) == 1
-             || process_id(g.process_group()) == 1 && in_degree(w, g) == 1);
+  BOOST_CHECK((process_id(g.process_group()) == 0 && out_degree(w, g) == 1)
+             || (process_id(g.process_group()) == 1 && in_degree(w, g) == 1));
 
   // Remove edges
   if (process_id(g.process_group()) == 0) {
