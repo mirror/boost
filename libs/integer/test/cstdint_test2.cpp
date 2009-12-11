@@ -19,12 +19,22 @@
 // In version two we include stdint.h with __STDC_CONSTANT_MACROS *NOT* defined first,
 // and check that we still end up with compatible definitions for the INT#_C macros.
 //
-// This is version 1.
+// This is version 2.
 //
 
 #if defined(__GNUC__) && (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 4))
 // We can't suppress this warning on the command line as not all GCC versions support -Wno-type-limits :
 #pragma GCC diagnostic ignored "-Wtype-limits"
+#endif
+
+#include <boost/config.hpp>
+
+#ifdef BOOST_HAS_STDINT_H
+#ifdef __hpux
+#  include <inttypes.h>
+#else
+#  include <stdint.h>
+#endif
 #endif
 
 #include <boost/cstdint.hpp>

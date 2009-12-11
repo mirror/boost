@@ -23,6 +23,16 @@
 #ifndef BOOST_CSTDINT_HPP
 #define BOOST_CSTDINT_HPP
 
+//
+// Since we always define the INT#_C macros as per C++0x, 
+// define __STDC_CONSTANT_MACROS so that <stdint.h> does the right
+// thing if possible, and so that the user knows that the macros 
+// are actually defined as per C99.
+//
+#ifndef __STDC_CONSTANT_MACROS
+#  define __STDC_CONSTANT_MACROS
+#endif
+
 #include <boost/config.hpp>
 
 //
@@ -348,19 +358,16 @@ namespace boost
 
 Macro definition section:
 
-Define various INTXX_C macros only if
-__STDC_CONSTANT_MACROS is defined.
-
-Undefine the macros if __STDC_CONSTANT_MACROS is
-not defined and the macros are (cf <cassert>).
-
 Added 23rd September 2000 (John Maddock).
 Modified 11th September 2001 to be excluded when
 BOOST_HAS_STDINT_H is defined (John Maddock).
+Modified 11th Dec 2009 to always define the
+INT#_C macros if they're not already defined (John Maddock).
 
 ******************************************************/
 
-#if defined(__STDC_CONSTANT_MACROS) && !defined(BOOST__STDC_CONSTANT_MACROS_DEFINED) && !defined(BOOST_HAS_STDINT_H)
+#if !defined(BOOST__STDC_CONSTANT_MACROS_DEFINED) && !defined(INT8_C)
+#include <limits.h>
 # define BOOST__STDC_CONSTANT_MACROS_DEFINED
 # if defined(BOOST_HAS_MS_INT64)
 //
@@ -412,27 +419,40 @@ BOOST_HAS_STDINT_H is defined (John Maddock).
 //  64-bit types + intmax_t and uintmax_t  ----------------------------------//
 
 #  if defined(BOOST_HAS_LONG_LONG) && \
-    (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX))
+    (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX) || defined(_LLONG_MAX))
 
 #    if defined(__hpux)
-     // HP-UX's value of ULONG_LONG_MAX is unusable in preprocessor expressions
-#    elif (defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615U) ||  \
-        (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615U) ||  \
-        (defined(ULONGLONG_MAX) && ULONGLONG_MAX == 18446744073709551615U)
+        // HP-UX's value of ULONG_LONG_MAX is unusable in preprocessor expressions
+#       define INT64_C(value) value##LL
+#       define UINT64_C(value) value##uLL
+#    elif (defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615ULL) ||  \
+        (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615ULL) ||  \
+        (defined(ULONGLONG_MAX) && ULONGLONG_MAX == 18446744073709551615ULL) || \
+        (defined(_LLONG_MAX) && _LLONG_MAX == 18446744073709551615ULL)
 
+#       define INT64_C(value) value##LL
+#       define UINT64_C(value) value##uLL
 #    else
 #       error defaults not correct; you must hand modify boost/cstdint.hpp
 #    endif
-#    define INT64_C(value) value##LL
-#    define UINT64_C(value) value##uLL
 #  elif ULONG_MAX != 0xffffffff
 
-#    if ULONG_MAX == 18446744073709551615 // 2**64 - 1
+#    if ULONG_MAX == 18446744073709551615U // 2**64 - 1
 #       define INT64_C(value) value##L
 #       define UINT64_C(value) value##uL
 #    else
 #       error defaults not correct; you must hand modify boost/cstdint.hpp
 #    endif
+#  elif defined(BOOST_HAS_LONG_LONG)
+     // Usual macros not defined, work things out for ourselves:
+#    if(~0uLL == 18446744073709551615ULL)
+#       define INT64_C(value) value##LL
+#       define UINT64_C(value) value##uLL
+#    else
+#       error defaults not correct; you must hand modify boost/cstdint.hpp
+#    endif
+#  else
+#    error defaults not correct; you must hand modify boost/cstdint.hpp
 #  endif
 
 #  ifdef BOOST_NO_INT64_T
@@ -445,23 +465,7 @@ BOOST_HAS_STDINT_H is defined (John Maddock).
 
 # endif // Borland/Microsoft specific width suffixes
 
-
-#elif defined(BOOST__STDC_CONSTANT_MACROS_DEFINED) && !defined(__STDC_CONSTANT_MACROS) && !defined(BOOST_HAS_STDINT_H)
-//
-// undef all the macros:
-//
-# undef INT8_C
-# undef INT16_C
-# undef INT32_C
-# undef INT64_C
-# undef UINT8_C
-# undef UINT16_C
-# undef UINT32_C
-# undef UINT64_C
-# undef INTMAX_C
-# undef UINTMAX_C
-
-#endif // __STDC_CONSTANT_MACROS_DEFINED etc.
+#endif // INT#_C macros.
 
 
 

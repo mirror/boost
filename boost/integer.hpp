@@ -234,6 +234,7 @@ namespace boost
         < 
           5 +
 #if !defined(BOOST_NO_INTEGRAL_INT64_T) && defined(BOOST_HAS_LONG_LONG)
+          (MaxValue <= ::boost::integer_traits<boost::ulong_long_type>::const_max) +
 #else
            1 +
 #endif
