@@ -17,6 +17,9 @@
 
 #include <boost/config.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/proto/traits.hpp>
+#include <boost/proto/domain.hpp>
+#include <boost/proto/generate.hpp>
 #include <boost/xpressive/xpressive_fwd.hpp>
 #include <boost/xpressive/regex_constants.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
@@ -42,6 +45,10 @@ namespace detail
     {
         BOOST_XPR_ENSURE_(!stack_error, regex_constants::error_stack, "Regex stack space exhausted");
     }
+
+    struct basic_regex_domain
+      : proto::domain<proto::default_generator, proto::not_<proto::address_of<proto::_> > >
+    {};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,11 +60,12 @@ struct basic_regex
   : proto::extends<
         typename proto::terminal<detail::tracking_ptr<detail::regex_impl<BidiIter> > >::type
       , basic_regex<BidiIter>
+      , detail::basic_regex_domain
     >
 {
 private:
     typedef typename proto::terminal<detail::tracking_ptr<detail::regex_impl<BidiIter> > >::type pimpl_type;
-    typedef proto::extends<pimpl_type, basic_regex<BidiIter> > base_type;
+    typedef proto::extends<pimpl_type, basic_regex<BidiIter>, detail::basic_regex_domain > base_type;
 
 public:
     typedef BidiIter iterator_type;
