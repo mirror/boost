@@ -28,96 +28,95 @@
     {
         namespace detail
         {
-          /// INTERNAL ONLY
-          template<typename Expr>
-          struct expr_traits
-          {
-              typedef Expr value_type;
-              typedef Expr &reference;
-              typedef Expr const &const_reference;
-          };
+            /// INTERNAL ONLY
+            template<typename Expr>
+            struct expr_traits
+            {
+                typedef Expr value_type;
+                typedef Expr &reference;
+                typedef Expr const &const_reference;
+            };
 
-          /// INTERNAL ONLY
-          template<typename Expr>
-          struct expr_traits<Expr &>
-          {
-              typedef Expr value_type;
-              typedef Expr &reference;
-              typedef Expr &const_reference;
-          };
+            /// INTERNAL ONLY
+            template<typename Expr>
+            struct expr_traits<Expr &>
+            {
+                typedef Expr value_type;
+                typedef Expr &reference;
+                typedef Expr &const_reference;
+            };
 
-          /// INTERNAL ONLY
-          template<typename Expr>
-          struct expr_traits<Expr const &>
-          {
-              typedef Expr value_type;
-              typedef Expr const &reference;
-              typedef Expr const &const_reference;
-          };
+            /// INTERNAL ONLY
+            template<typename Expr>
+            struct expr_traits<Expr const &>
+            {
+                typedef Expr value_type;
+                typedef Expr const &reference;
+                typedef Expr const &const_reference;
+            };
 
-          /// INTERNAL ONLY
-          template<typename T>
-          struct term_traits
-          {
-              typedef T value_type;
-              typedef T &reference;
-              typedef T const &const_reference;
-          };
+            /// INTERNAL ONLY
+            template<typename T>
+            struct term_traits
+            {
+                typedef T value_type;
+                typedef T &reference;
+                typedef T const &const_reference;
+            };
 
-          /// INTERNAL ONLY
-          template<typename T>
-          struct term_traits<T &>
-          {
-              typedef typename mpl::if_c<is_function<T>::value, T &, T>::type value_type;
-              typedef T &reference;
-              typedef T &const_reference;
-          };
+            /// INTERNAL ONLY
+            template<typename T>
+            struct term_traits<T &>
+            {
+                typedef typename mpl::if_c<is_function<T>::value, T &, T>::type value_type;
+                typedef T &reference;
+                typedef T &const_reference;
+            };
 
-          /// INTERNAL ONLY
-          template<typename T>
-          struct term_traits<T const &>
-          {
-              typedef T value_type;
-              typedef T const &reference;
-              typedef T const &const_reference;
-          };
+            /// INTERNAL ONLY
+            template<typename T>
+            struct term_traits<T const &>
+            {
+                typedef T value_type;
+                typedef T const &reference;
+                typedef T const &const_reference;
+            };
 
-          /// INTERNAL ONLY
-          template<typename T, std::size_t N>
-          struct term_traits<T (&)[N]>
-          {
-              typedef T value_type[N];
-              typedef T (&reference)[N];
-              typedef T (&const_reference)[N];
-          };
+            /// INTERNAL ONLY
+            template<typename T, std::size_t N>
+            struct term_traits<T (&)[N]>
+            {
+                typedef T value_type[N];
+                typedef T (&reference)[N];
+                typedef T (&const_reference)[N];
+            };
 
-          /// INTERNAL ONLY
-          template<typename T, std::size_t N>
-          struct term_traits<T const (&)[N]>
-          {
-              typedef T value_type[N];
-              typedef T const (&reference)[N];
-              typedef T const (&const_reference)[N];
-          };
+            /// INTERNAL ONLY
+            template<typename T, std::size_t N>
+            struct term_traits<T const (&)[N]>
+            {
+                typedef T value_type[N];
+                typedef T const (&reference)[N];
+                typedef T const (&const_reference)[N];
+            };
 
-          /// INTERNAL ONLY
-          template<typename T, std::size_t N>
-          struct term_traits<T[N]>
-          {
-              typedef T value_type[N];
-              typedef T (&reference)[N];
-              typedef T const (&const_reference)[N];
-          };
+            /// INTERNAL ONLY
+            template<typename T, std::size_t N>
+            struct term_traits<T[N]>
+            {
+                typedef T value_type[N];
+                typedef T (&reference)[N];
+                typedef T const (&const_reference)[N];
+            };
 
-          /// INTERNAL ONLY
-          template<typename T, std::size_t N>
-          struct term_traits<T const[N]>
-          {
-              typedef T value_type[N];
-              typedef T const (&reference)[N];
-              typedef T const (&const_reference)[N];
-          };
-
+            /// INTERNAL ONLY
+            template<typename T, std::size_t N>
+            struct term_traits<T const[N]>
+            {
+                typedef T value_type[N];
+                typedef T const (&reference)[N];
+                typedef T const (&const_reference)[N];
+            };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,8 +157,6 @@
 
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
-
-        using namespace argsns_;
     }}
     #endif
 

@@ -14,7 +14,9 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/arithmetic/inc.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>
+#include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
@@ -139,6 +141,24 @@ namespace boost { namespace proto
     }
 
     typedef detail::ignore const ignore;
+
+    namespace argsns_
+    {
+        template<typename Arg0>
+        struct term;
+
+        #define M0(Z, N, DATA)                                                                      \
+        template<BOOST_PP_ENUM_PARAMS_Z(Z, N, typename Arg)> struct BOOST_PP_CAT(list, N);          \
+        /**/
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), M0, ~)
+        #undef M0
+    }
+
+    using argsns_::term;
+
+    #define M0(Z, N, DATA) using argsns_::BOOST_PP_CAT(list, N);
+    BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), M0, ~)
+    #undef M0
 
     ///////////////////////////////////////////////////////////////////////////////
     // Operator tags
