@@ -23,7 +23,7 @@
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std {
   using ::strlen;
-  using ::size_t
+  using ::size_t;
 } //namespace std
 #endif
 

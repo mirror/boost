@@ -40,6 +40,7 @@ public:
     object& operator=(object const& rhs) {
         tag = rhs.tag;
         state = rhs.state;
+        return *this;
     }
     
     int get_state() const { return state; }

@@ -150,7 +150,7 @@ private:
 
         char const* d = std::find(&digits[0], digits_end, c);
         if (d == digits_end) {
-            return -1;
+            return static_cast<unsigned char>(-1);
         }
 
         return values[std::distance(digits, d)];
@@ -164,7 +164,7 @@ private:
 
         wchar_t const* d = std::find(digits, digits_end, c);
         if (d == digits_end) {
-            return -1;
+            return static_cast<unsigned char>(-1);
         }
 
         return values[std::distance(digits, d)];
@@ -263,7 +263,7 @@ private:
     }
     
     template<>
-    void process_characters(char const*const characters, size_t count) {
+    void process_characters<char>(char const*const characters, size_t count) {
         sha.process_bytes(characters, count);
     }
 
