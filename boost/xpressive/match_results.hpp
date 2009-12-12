@@ -58,8 +58,12 @@
 #include <boost/xpressive/detail/utility/literals.hpp>
 #include <boost/xpressive/detail/utility/algorithm.hpp>
 #include <boost/xpressive/detail/utility/counted_base.hpp>
-#include <boost/proto/proto_fwd.hpp>
-#include <boost/proto/eval.hpp>
+// Doxygen can't handle proto :-(
+#ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+# include <boost/proto/proto_fwd.hpp>
+# include <boost/proto/traits.hpp>
+# include <boost/proto/eval.hpp>
+#endif
 
 namespace boost { namespace xpressive { namespace detail
 {
