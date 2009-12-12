@@ -33,7 +33,6 @@
 #  define BOOST_NO_INTEGRAL_INT64_T
 #  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
 #  define BOOST_NO_PRIVATE_IN_AGGREGATE
-#  define BOOST_NO_TWO_PHASE_NAME_LOOKUP
 #  define BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
    // we shouldn't really need this - but too many things choke
    // without it, this needs more investigation:
@@ -48,6 +47,7 @@
 #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #  define BOOST_NO_NESTED_FRIENDSHIP     // TC1 gives nested classes access rights as any other member
 #  define BOOST_NO_USING_TEMPLATE
+#  define BOOST_NO_TWO_PHASE_NAME_LOOKUP
 // Temporary hack, until specific MPL preprocessed headers are generated
 #  define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
 
