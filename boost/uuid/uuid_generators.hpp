@@ -262,8 +262,7 @@ private:
         }
     }
     
-    template<>
-    void process_characters<char>(char const*const characters, size_t count) {
+    void process_characters(char const*const characters, size_t count) {
         sha.process_bytes(characters, count);
     }
 
