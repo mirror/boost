@@ -6,15 +6,10 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <sstream>
-#include <boost/version.hpp>
 #include <boost/proto/core.hpp>
 #include <boost/proto/transform.hpp>
 #include <boost/utility/addressof.hpp>
-#if BOOST_VERSION >= 103500
 #include <boost/fusion/tuple.hpp>
-#else
-#include <boost/spirit/fusion/sequence/make_tuple.hpp>
-#endif
 #include <boost/test/unit_test.hpp>
 
 using namespace boost;

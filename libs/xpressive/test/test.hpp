@@ -105,7 +105,7 @@ struct xpr_test_case
 
             for(std::size_t i = 0; i < what.size() && i < this->brs_.size(); ++i)
             {
-                BOOST_XPR_CHECK(!what[i].matched && this->brs_[i] == empty || this->brs_[i] == what[i].str());
+                BOOST_XPR_CHECK((!what[i].matched && this->brs_[i] == empty) || this->brs_[i] == what[i].str());
             }
         }
         else

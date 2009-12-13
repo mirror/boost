@@ -17,17 +17,10 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/proto/core.hpp>
 #include <boost/proto/transform.hpp>
-#if BOOST_VERSION < 103500
-# include <boost/spirit/fusion/algorithm/for_each.hpp>
-# include <boost/spirit/fusion/algorithm/fold.hpp>
-# include <boost/spirit/fusion/algorithm/any.hpp>
-# include <boost/spirit/fusion/sequence/cons.hpp>
-#else
-# include <boost/fusion/include/for_each.hpp>
-# include <boost/fusion/include/fold.hpp>
-# include <boost/fusion/include/cons.hpp>
-# include <boost/fusion/include/any.hpp>
-#endif
+#include <boost/fusion/include/for_each.hpp>
+#include <boost/fusion/include/fold.hpp>
+#include <boost/fusion/include/cons.hpp>
+#include <boost/fusion/include/any.hpp>
 #include <boost/test/unit_test.hpp>
 
 namespace boost
@@ -291,21 +284,21 @@ namespace boost { namespace spirit2
           : parse(p)
         {}
 
-        #if BOOST_VERSION < 103500
-        template<typename, typename>
-        struct apply
-        {
-            typedef bool type;
-        };
-        #else
         typedef bool result_type;
-        #endif
 
+        #if 0 //BOOST_VERSION >= 104200
+        template<typename T>
+        bool operator ()(bool success, T const &t) const
+        {
+            return success && this->parse(t);
+        }
+        #else
         template<typename T>
         bool operator ()(T const &t, bool success) const
         {
             return success && this->parse(t);
         }
+        #endif
     };
 
     template<typename Iterator>

@@ -10,7 +10,6 @@
     #ifndef BOOST_PROTO_TRANSFORM_WHEN_HPP_EAN_10_29_2007
     #define BOOST_PROTO_TRANSFORM_WHEN_HPP_EAN_10_29_2007
 
-    #include <boost/proto/detail/prefix.hpp>
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/repetition/enum_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
@@ -21,7 +20,6 @@
     #include <boost/proto/transform/call.hpp>
     #include <boost/proto/transform/make.hpp>
     #include <boost/proto/transform/impl.hpp>
-    #include <boost/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto
     {
@@ -53,7 +51,7 @@
         ///
         /// <tt>when\<G,T\>()(e,s,v)</tt> is the same as
         /// <tt>T()(e,s,v)</tt>.
-        template<typename Grammar, typename PrimitiveTransform BOOST_PROTO_WHEN_BUILDING_DOCS(= Grammar)>
+        template<typename Grammar, typename PrimitiveTransform /*= Grammar*/>
         struct when
           : PrimitiveTransform
         {
