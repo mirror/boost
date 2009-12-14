@@ -22,11 +22,12 @@
 #define BOOST_UUID_SEED_RNG_HPP
 
 #include <boost/config.hpp>
-#include <cstring>
+#include <cstring> // for memcpy
 #include <limits>
 #include <memory.h>
-#include <ctime>
-#include <cstdlib>
+#include <ctime> // for time_t, time, clock_t, clock
+#include <cstdlib> // for rand
+#include <cstdio> // for FILE, fopen, fread, fclose
 #include <boost/uuid/sha1.hpp>
 //#include <boost/nondet_random.hpp> //forward declare boost::random_device
 

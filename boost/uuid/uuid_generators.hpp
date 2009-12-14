@@ -19,6 +19,7 @@
 #include <limits>
 #include <cstring>
 #include <cwchar>
+#include <iterator> // for distance
 #include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
 #include <boost/shared_ptr.hpp>
