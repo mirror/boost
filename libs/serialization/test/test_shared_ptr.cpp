@@ -38,6 +38,8 @@ private:
     void serialize(Archive & ar, const unsigned int /* file_version */){
         ar & BOOST_SERIALIZATION_NVP(x);
     }
+    A(A const & rhs);
+    A& operator=(A const & rhs);
 public:
     static int count;
     bool operator==(const A & rhs) const {
@@ -250,39 +252,50 @@ void save_and_load4(boost::shared_ptr<C>& spc)
 // This does the tests
 int test_main(int /* argc */, char * /* argv */[])
 {
-    // These are our shared_ptrs
-    boost::shared_ptr<A> spa;
+    {
+        boost::shared_ptr<A> spa;
+        // These are our shared_ptrs
+        spa = boost::shared_ptr<A>(new A);
+        boost::shared_ptr<A> spa1 = spa;
+        spa1 = spa;
+    }
+    {
+        // These are our shared_ptrs
+        boost::shared_ptr<A> spa;
 
-    // trivial test 1
-    save_and_load(spa);
-
-    //trivival test 2
-    spa = boost::shared_ptr<A>(new A);
-    save_and_load(spa);
-
-    // Try to save and load pointers to As
-    spa = boost::shared_ptr<A>(new A);
-    boost::shared_ptr<A> spa1 = spa;
-    save_and_load2(spa, spa1);
-
-    // test a weak pointer
-    spa = boost::shared_ptr<A>(new A);
-    spa1 = spa;
-    boost::weak_ptr<A> wp = spa;
-    save_and_load3(spa, spa1, wp);
+        // trivial test 1
+        save_and_load(spa);
     
-    // Try to save and load pointers to Bs
-    spa = boost::shared_ptr<A>(new B);
-    spa1 = spa;
-    save_and_load2(spa, spa1);
+        //trivival test 2
+        spa = boost::shared_ptr<A>(new A);
+        save_and_load(spa);
 
-    // obj of type B gets destroyed
-    // as smart_ptr goes out of scope
+        // Try to save and load pointers to As
+        spa = boost::shared_ptr<A>(new A);
+        boost::shared_ptr<A> spa1 = spa;
+        save_and_load2(spa, spa1);
 
-    // Try to save and load pointers to Bs
-    boost::shared_ptr<C> spc;
-    spc = boost::shared_ptr<C>(new C);
-    save_and_load4(spc);
+        // Try to save and load pointers to Bs
+        spa = boost::shared_ptr<A>(new B);
+        spa1 = spa;
+        save_and_load2(spa, spa1);
 
+        // test a weak pointer
+        spa = boost::shared_ptr<A>(new A);
+        spa1 = spa;
+        boost::weak_ptr<A> wp = spa;
+        save_and_load3(spa, spa1, wp);
+        
+        // obj of type B gets destroyed
+        // as smart_ptr goes out of scope
+    }
+    BOOST_CHECK(A::count == 0);
+    {
+        // Try to save and load pointers to Cs
+        boost::shared_ptr<C> spc;
+        spc = boost::shared_ptr<C>(new C);
+        save_and_load4(spc);
+    }
+    BOOST_CHECK(C::count == 0);
     return EXIT_SUCCESS;
 }

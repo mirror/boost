@@ -60,9 +60,6 @@ BOOST_SERIALIZATION_DECL(bool)
 extended_type_info_typeid_0::is_equal(
     const boost::serialization::extended_type_info & rhs
 ) const {
-    // shortcut for common case
-    if(this == & rhs)
-        return true;
     return 
         // note: std::type_info == operator returns an int !!!
         // the following permits conversion to bool without a warning.
@@ -122,6 +119,13 @@ extended_type_info_typeid_0::type_unregister()
 class extended_type_info_typeid_arg : 
     public extended_type_info_typeid_0
 {
+    virtual void * construct(unsigned int /*count*/, ...) const{
+        assert(false);
+        return NULL;
+    }
+    virtual void destroy(void const * const /*p*/) const {
+        assert(false);
+    }
 public:
     extended_type_info_typeid_arg(const std::type_info & ti) :
         extended_type_info_typeid_0(NULL)

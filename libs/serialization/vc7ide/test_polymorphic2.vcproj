@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="test_registered"
+	Name="test_polymorphic2"
 	ProjectGUID="{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
-	RootNamespace="test_registered"
+	RootNamespace="test_polymorphic2"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -79,7 +79,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_LIB_DIAGNOSTIC=1;BOOST_ALL_DYN_LINK=1"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_LIB_DIAGNOSTIC=1;BOOST_ALL_DYN_LINK=1;BOOST_ARCHIVE_TEST=polymorphic_text_archive.hpp"
 				SmallerTypeCheck="TRUE"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
@@ -182,10 +182,19 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{30E10563-960A-11D7-9FE9-525400E2CF85}"
+			Name="Library"/>
 	</References>
 	<Files>
 		<File
-			RelativePath="..\test\test_registered.cpp">
+			RelativePath="..\test\test_polymorphic2.cpp">
+		</File>
+		<File
+			RelativePath="..\test\test_polymorphic2.hpp">
+		</File>
+		<File
+			RelativePath="..\test\test_polymorphic2imp.cpp">
 		</File>
 	</Files>
 	<Globals>

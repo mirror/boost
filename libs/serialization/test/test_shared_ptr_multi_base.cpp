@@ -30,7 +30,8 @@ namespace std{
 struct Base1 {
     Base1() {}
     Base1(int x) : m_x(1 + x) {}
-    virtual ~Base1() {}
+    virtual ~Base1(){
+    }
     int m_x;
     // serialize
     friend class boost::serialization::access;
@@ -40,14 +41,13 @@ struct Base1 {
         ar & BOOST_SERIALIZATION_NVP(m_x);
     }
 };
-
-BOOST_SERIALIZATION_SHARED_PTR(Base1)
 
 struct Base2 {
     Base2() {}
     Base2(int x) : m_x(2 + x) {}
     int m_x;
-    virtual ~Base2() {}
+    virtual ~Base2(){
+    }
     // serialize
     friend class boost::serialization::access;
     template<class Archive>
@@ -57,12 +57,11 @@ struct Base2 {
     }
 };
 
-BOOST_SERIALIZATION_SHARED_PTR(Base2)
-
 struct Base3 {
     Base3() {}
     Base3(int x) : m_x(3 + x) {}
-    virtual ~Base3() {}
+    virtual ~Base3(){
+    }
     int m_x;
     // serialize
     friend class boost::serialization::access;
@@ -73,17 +72,28 @@ struct Base3 {
     }
 };
 
-BOOST_SERIALIZATION_SHARED_PTR(Base3)
-
 // Sub is a subclass of Base1, Base1 and Base3.
 struct Sub:public Base1, public Base2, public Base3 {
-    Sub() {}
+    static int count;
+    Sub() {
+        ++count;
+    }
     Sub(int x) :
         Base1(x),
         Base2(x),
         m_x(x)
-    {}
-    virtual ~Sub() {}
+    {   
+        ++count;
+    }
+    Sub(const Sub & rhs) :
+        m_x(rhs.m_x)
+    {
+        ++count;
+    }
+    virtual ~Sub() {
+        assert(0 < count);
+        --count;
+    }
     int m_x;
     // serialize
     friend class boost::serialization::access;
@@ -100,6 +110,8 @@ struct Sub:public Base1, public Base2, public Base3 {
 // Sub needs to be exported because its serialized via a base class pointer
 BOOST_CLASS_EXPORT(Sub)
 BOOST_SERIALIZATION_SHARED_PTR(Sub)
+
+int Sub::count = 0;
 
 template <class FIRST, class SECOND>
 void save2(
@@ -155,6 +167,7 @@ void shared_weak(
     // Check pointer to vtable
     BOOST_CHECK(boost::dynamic_pointer_cast<Sub>(first));
     BOOST_CHECK(boost::dynamic_pointer_cast<Sub>(second.lock()));
+
     std::remove(testfile);
 }
 
@@ -184,35 +197,45 @@ void weak_shared(
     // Check pointer to vtable
     BOOST_CHECK(boost::dynamic_pointer_cast<Sub>(first.lock()));
     BOOST_CHECK(boost::dynamic_pointer_cast<Sub>(second));
+
     std::remove(testfile);
 }
 
 // This does the tests
 int test_main(int /* argc */, char * /* argv */[])
 {
+
     // Both Sub
     boost::shared_ptr<Sub> tc1_sp(new Sub(10));
     boost::weak_ptr<Sub> tc1_wp(tc1_sp);
     shared_weak(tc1_sp, tc1_wp);
     weak_shared(tc1_wp, tc1_sp);
+    tc1_sp.reset();
+    BOOST_CHECK(0 == Sub::count);
 
     // Sub and Base1
     boost::shared_ptr<Sub> tc2_sp(new Sub(10));
     boost::weak_ptr<Base1> tc2_wp(tc2_sp);
     shared_weak(tc2_sp, tc2_wp);
     weak_shared(tc2_wp, tc2_sp);
+    tc2_sp.reset();
+    BOOST_CHECK(0 == Sub::count);
 
     // Sub and Base2
     boost::shared_ptr<Sub> tc3_sp(new Sub(10));
     boost::weak_ptr<Base2> tc3_wp(tc3_sp);
     shared_weak(tc3_sp, tc3_wp);
     weak_shared(tc3_wp, tc3_sp);
+    tc3_sp.reset();
+    BOOST_CHECK(0 == Sub::count);
 
     // Sub and Base3
     boost::shared_ptr<Sub> tc4_sp(new Sub(10));
     boost::weak_ptr<Base3> tc4_wp(tc4_sp);
     shared_weak(tc4_sp, tc4_wp);
     weak_shared(tc4_wp, tc4_sp);
+    tc4_sp.reset();
+    BOOST_CHECK(0 == Sub::count);
 
     // Base1 and Base2
     boost::shared_ptr<Sub> tc5_sp_tmp(new Sub(10));
@@ -221,6 +244,8 @@ int test_main(int /* argc */, char * /* argv */[])
     tc5_sp_tmp.reset();
     shared_weak(tc5_sp, tc5_wp);
     weak_shared(tc5_wp, tc5_sp);
+    tc5_sp.reset();
+    BOOST_CHECK(0 == Sub::count);
 
     // Base2 and Base3
     boost::shared_ptr<Sub> tc6_sp_tmp(new Sub(10));
@@ -229,6 +254,8 @@ int test_main(int /* argc */, char * /* argv */[])
     tc6_sp_tmp.reset();
     shared_weak(tc6_sp, tc6_wp);
     weak_shared(tc6_wp, tc6_sp);
+    tc6_sp.reset();
+    BOOST_CHECK(0 == Sub::count);
 
     // Base3 and Base1
     boost::shared_ptr<Sub> tc7_sp_tmp(new Sub(10));
@@ -237,6 +264,8 @@ int test_main(int /* argc */, char * /* argv */[])
     tc7_sp_tmp.reset();
     shared_weak(tc7_sp, tc7_wp);
     weak_shared(tc7_wp, tc7_sp);
+    tc7_sp.reset();
+    BOOST_CHECK(0 == Sub::count);
 
     return EXIT_SUCCESS;
 }
