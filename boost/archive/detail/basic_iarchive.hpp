@@ -56,9 +56,6 @@ class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_iarchive :
     virtual void vload(class_id_optional_type &t) = 0;
     virtual void vload(class_name_type &t) = 0;
     virtual void vload(tracking_type &t) = 0;
-
-    virtual const basic_pointer_iserializer * 
-    find(const boost::serialization::extended_type_info & eti) const = 0;
 protected:
     basic_iarchive(unsigned int flags);
     // account for bogus gcc warning
@@ -79,7 +76,11 @@ public:
     const basic_pointer_iserializer * 
     load_pointer(
         void * & t, 
-        const basic_pointer_iserializer * bpis_ptr
+        const basic_pointer_iserializer * bpis_ptr,
+        const basic_pointer_iserializer * (*finder)(
+            const boost::serialization::extended_type_info & eti
+        )
+
     );
     // real public API starts here
     void 

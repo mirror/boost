@@ -160,7 +160,7 @@ basic_binary_oprimitive<Archive, Elem, Tr>::save_binary(
     // figure number of elements to output - round up
     count = ( count + sizeof(Elem) - 1) 
         / sizeof(Elem);
-    assert(count <= boost::integer_traits<std::streamsize>::const_max);
+    assert(count <= std::size_t(boost::integer_traits<std::streamsize>::const_max));
     std::streamsize scount = m_sb.sputn(
         static_cast<const Elem *>(address), 
         static_cast<std::streamsize>(count)

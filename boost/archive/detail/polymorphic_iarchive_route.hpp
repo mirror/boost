@@ -63,9 +63,12 @@ private:
     }
     virtual const basic_pointer_iserializer * load_pointer(
         void * & t,
-        const basic_pointer_iserializer * bpis_ptr
+        const basic_pointer_iserializer * bpis_ptr,
+        const basic_pointer_iserializer * (*finder)(
+            const boost::serialization::extended_type_info & type
+        )
     ){
-        return ArchiveImplementation::load_pointer(t, bpis_ptr);
+        return ArchiveImplementation::load_pointer(t, bpis_ptr, finder);
     }
     virtual void set_library_version(version_type archive_library_version){
         ArchiveImplementation::set_library_version(archive_library_version);

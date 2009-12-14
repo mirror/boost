@@ -151,7 +151,10 @@ basic_binary_iprimitive<Archive, Elem, Tr>::load_binary(
     std::size_t count
 ){
     // note: an optimizer should eliminate the following for char files
-    assert(count / sizeof(Elem) <= boost::integer_traits<std::streamsize>::const_max);
+    assert(
+        static_cast<std::streamsize>(count / sizeof(Elem)) 
+        <= boost::integer_traits<std::streamsize>::const_max
+    );
     std::streamsize s = static_cast<std::streamsize>(count / sizeof(Elem));
     std::streamsize scount = m_sb.sgetn(
         static_cast<Elem *>(address), 
