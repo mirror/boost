@@ -31,6 +31,9 @@
 #include <boost/serialization/factory.hpp>
 #include <boost/serialization/throw_exception.hpp>
 
+// hijack serialization access
+#include <boost/serialization/access.hpp>
+
 #include <boost/config/abi_prefix.hpp> // must be the last header
 #ifdef BOOST_MSVC
 #  pragma warning(push)
@@ -141,7 +144,10 @@ public:
         }
     }
     virtual void destroy(void const * const p) const{
-        delete static_cast<T const *>(p) ;
+        boost::serialization::access::destroy(
+            static_cast<T const * const>(p)
+        );
+        //delete static_cast<T const * const>(p) ;
     }
 };
 
