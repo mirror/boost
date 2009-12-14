@@ -43,8 +43,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="boost_serialization-vc71-mt-gd-1_41.lib"
-				OutputFile="$(ConfigurationName)\boost_wserialization-vc71-mt-gd-1_41.dll"
+				AdditionalDependencies="boost_serialization-vc71-mt-gd-1_42.lib"
+				OutputFile="$(ConfigurationName)\boost_wserialization-vc71-mt-gd-1_42.dll"
 				AdditionalLibraryDirectories="$(ConfigurationName)"
 				GenerateDebugInformation="TRUE"
 				SupportUnloadOfDelayLoadedDLL="FALSE"/>
