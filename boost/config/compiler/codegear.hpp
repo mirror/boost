@@ -19,8 +19,8 @@
 #endif
 //
 // versions check:
-// last known and checked version is 0x610
-#if (__CODEGEARC__ > 0x613)
+// last known and checked version is 0x620
+#if (__CODEGEARC__ > 0x620)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
