@@ -29,8 +29,8 @@
             template<typename Transform, typename Data>
             struct as_callable
             {
-                as_callable(Data v)
-                  : v_(v)
+                as_callable(Data d)
+                  : d_(d)
                 {}
 
                 template<typename Sig>
@@ -48,11 +48,11 @@
                 typename when<_, Transform>::template impl<Expr &, State const &, Data>::result_type
                 operator ()(State const &s, Expr &e) const
                 {
-                    return typename when<_, Transform>::template impl<Expr &, State const &, Data>()(e, s, this->v_);
+                    return typename when<_, Transform>::template impl<Expr &, State const &, Data>()(e, s, this->d_);
                 }
 
             private:
-                Data v_;
+                Data d_;
             };
 
             template<
@@ -168,7 +168,7 @@
                     >::type
                 state0;
 
-                /// \brief <tt>fun(v)(e,s) == when\<_,Fun\>()(e,s,v)</tt>
+                /// \brief <tt>fun(d)(e,s) == when\<_,Fun\>()(e,s,d)</tt>
                 typedef
                     detail::as_callable<Fun, Data>
                 fun;

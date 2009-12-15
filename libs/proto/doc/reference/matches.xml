@@ -287,8 +287,8 @@ struct IsIntegral2 :
             When applying
             <computeroutput>proto::or_&lt;G<subscript>0</subscript>,G<subscript>1</subscript>,...G<subscript>n</subscript>&gt;</computeroutput>
             as a transform with an expression <computeroutput>e</computeroutput> of type <computeroutput>E</computeroutput>,
-            state <computeroutput>s</computeroutput> and data <computeroutput>v</computeroutput>, it is equivalent to
-            <computeroutput>G<subscript>x</subscript>()(e, s, v)</computeroutput>, where
+            state <computeroutput>s</computeroutput> and data <computeroutput>d</computeroutput>, it is equivalent to
+            <computeroutput>G<subscript>x</subscript>()(e, s, d)</computeroutput>, where
             <computeroutput>x</computeroutput> is the lowest number such that
             <computeroutput><classname>proto::matches</classname>&lt;E, G<subscript>x</subscript>&gt;::value</computeroutput>
             is <computeroutput>true</computeroutput>.
@@ -370,8 +370,8 @@ struct IsIntegral2 :
             When applying
             <computeroutput>proto::and_&lt;G<subscript>0</subscript>,G<subscript>1</subscript>,...G<subscript>n</subscript>&gt;</computeroutput>
             as a transform with an expression <computeroutput>e</computeroutput>, state
-            <computeroutput>s</computeroutput> and data <computeroutput>v</computeroutput>, it is equivalent
-            to <computeroutput>G<subscript>n</subscript>()(e, s, v)</computeroutput>.
+            <computeroutput>s</computeroutput> and data <computeroutput>d</computeroutput>, it is equivalent
+            to <computeroutput>G<subscript>n</subscript>()(e, s, d)</computeroutput>.
           </para>
           <para>
             The maximun number of template arguments <computeroutput>proto::and_&lt;&gt;</computeroutput> accepts
@@ -444,8 +444,8 @@ struct IsIntegral2 :
             When applying <computeroutput>proto::switch_&lt;C&gt;</computeroutput> as a transform
             with an expression <computeroutput>e</computeroutput> of type
             <computeroutput>E</computeroutput>, state <computeroutput>s</computeroutput> and
-            data <computeroutput>v</computeroutput>, it is equivalent to
-            <computeroutput>C::case_&lt;E::proto_tag&gt;()(e, s, v)</computeroutput>.
+            data <computeroutput>d</computeroutput>, it is equivalent to
+            <computeroutput>C::case_&lt;E::proto_tag&gt;()(e, s, d)</computeroutput>.
           </para>
         </description>
         <struct name="impl">
@@ -517,7 +517,7 @@ struct IsIntegral2 :
           </para>
           <para>For example:</para>
           <para>
-            <programlisting>// Match any function call expression, irregardless
+            <programlisting>// Match any function call expression, regardless
 // of the number of function arguments:
 struct Function :
   <classname>proto::function</classname>&lt; proto::vararg&lt;proto::_&gt; &gt;

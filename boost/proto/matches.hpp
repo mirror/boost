@@ -725,8 +725,8 @@
             /// matches any \c Bx for \c x in <tt>[0,n)</tt>.
             ///
             /// When applying <tt>or_\<B0,B1,...Bn\></tt> as a transform with an
-            /// expression \c e of type \c E, state \c s and data \c v, it is
-            /// equivalent to <tt>Bx()(e, s, v)</tt>, where \c x is the lowest
+            /// expression \c e of type \c E, state \c s and data \c d, it is
+            /// equivalent to <tt>Bx()(e, s, d)</tt>, where \c x is the lowest
             /// number such that <tt>matches\<E,Bx\>::::value</tt> is \c true.
             template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
             struct or_ : transform<or_<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, G)> >
@@ -761,8 +761,8 @@
             /// matches all \c Bx for \c x in <tt>[0,n)</tt>.
             ///
             /// When applying <tt>and_\<B0,B1,...Bn\></tt> as a transform with an
-            /// expression \c e, state \c s and data \c v, it is
-            /// equivalent to <tt>Bn()(e, s, v)</tt>.
+            /// expression \c e, state \c s and data \c d, it is
+            /// equivalent to <tt>Bn()(e, s, d)</tt>.
             template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
             struct and_ : transform<and_<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, G)> >
             {
@@ -795,8 +795,8 @@
             /// matches <tt>C::case_\<E::proto_tag\></tt>.
             ///
             /// When applying <tt>switch_\<C\></tt> as a transform with an
-            /// expression \c e of type \c E, state \c s and data \c v, it is
-            /// equivalent to <tt>C::case_\<E::proto_tag\>()(e, s, v)</tt>.
+            /// expression \c e of type \c E, state \c s and data \c d, it is
+            /// equivalent to <tt>C::case_\<E::proto_tag\>()(e, s, d)</tt>.
             template<typename Cases>
             struct switch_ : transform<switch_<Cases> >
             {
