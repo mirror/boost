@@ -422,6 +422,26 @@ namespace boost
             return const_iterator(table_.find(k));
         }
 
+        template <class CompatibleKey, class CompatibleHash,
+            class CompatiblePredicate>
+        iterator find(
+            CompatibleKey const& k,
+            CompatibleHash const& hash,
+            CompatiblePredicate const& eq)
+        {
+            return iterator(table_.find(k, hash, eq));
+        }
+
+        template <class CompatibleKey, class CompatibleHash,
+            class CompatiblePredicate>
+        const_iterator find(
+            CompatibleKey const& k,
+            CompatibleHash const& hash,
+            CompatiblePredicate const& eq) const
+        {
+            return iterator(table_.find(k, hash, eq));
+        }
+
         size_type count(const key_type& k) const
         {
             return table_.count(k);
@@ -923,6 +943,26 @@ namespace boost
         const_iterator find(const key_type& k) const
         {
             return const_iterator(table_.find(k));
+        }
+
+        template <class CompatibleKey, class CompatibleHash,
+            class CompatiblePredicate>
+        iterator find(
+            CompatibleKey const& k,
+            CompatibleHash const& hash,
+            CompatiblePredicate const& eq)
+        {
+            return iterator(table_.find(k, hash, eq));
+        }
+
+        template <class CompatibleKey, class CompatibleHash,
+            class CompatiblePredicate>
+        const_iterator find(
+            CompatibleKey const& k,
+            CompatibleHash const& hash,
+            CompatiblePredicate const& eq) const
+        {
+            return iterator(table_.find(k, hash, eq));
         }
 
         size_type count(const key_type& k) const

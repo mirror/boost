@@ -576,6 +576,40 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 </parameter>
                 <type>const_iterator</type>
               </signature>
+              <signature>
+                <template>
+                  <template-type-parameter name="CompatibleKey"/>
+                  <template-type-parameter name="CompatibleHash"/>
+                  <template-type-parameter name="CompatiblePredicate"/>
+                </template>
+                <parameter name="k">
+                  <paramtype>CompatibleKey const&amp;</paramtype>
+                </parameter>
+                <parameter name="hash">
+                  <paramtype>CompatibleHash const&amp;</paramtype>
+                </parameter>
+                <parameter name="eq">
+                  <paramtype>CompatiblePredicate const&amp;</paramtype>
+                </parameter>
+                <type>iterator</type>
+              </signature>
+              <signature cv="const">
+                <template>
+                  <template-type-parameter name="CompatibleKey"/>
+                  <template-type-parameter name="CompatibleHash"/>
+                  <template-type-parameter name="CompatiblePredicate"/>
+                </template>
+                <parameter name="k">
+                  <paramtype>CompatibleKey const&amp;</paramtype>
+                </parameter>
+                <parameter name="hash">
+                  <paramtype>CompatibleHash const&amp;</paramtype>
+                </parameter>
+                <parameter name="eq">
+                  <paramtype>CompatiblePredicate const&amp;</paramtype>
+                </parameter>
+                <type>const_iterator</type>
+              </signature>
               <returns>
                 <para>An iterator pointing to an element with key equivalent to <code>k</code>, or <code>b.end()</code> if no such element exists.</para>
               </returns>
@@ -1396,6 +1430,40 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <signature cv="const">
                 <parameter name="k">
                   <paramtype>key_type const&amp;</paramtype>
+                </parameter>
+                <type>const_iterator</type>
+              </signature>
+              <signature>
+                <template>
+                  <template-type-parameter name="CompatibleKey"/>
+                  <template-type-parameter name="CompatibleHash"/>
+                  <template-type-parameter name="CompatiblePredicate"/>
+                </template>
+                <parameter name="k">
+                  <paramtype>CompatibleKey const&amp;</paramtype>
+                </parameter>
+                <parameter name="hash">
+                  <paramtype>CompatibleHash const&amp;</paramtype>
+                </parameter>
+                <parameter name="eq">
+                  <paramtype>CompatiblePredicate const&amp;</paramtype>
+                </parameter>
+                <type>iterator</type>
+              </signature>
+              <signature cv="const">
+                <template>
+                  <template-type-parameter name="CompatibleKey"/>
+                  <template-type-parameter name="CompatibleHash"/>
+                  <template-type-parameter name="CompatiblePredicate"/>
+                </template>
+                <parameter name="k">
+                  <paramtype>CompatibleKey const&amp;</paramtype>
+                </parameter>
+                <parameter name="hash">
+                  <paramtype>CompatibleHash const&amp;</paramtype>
+                </parameter>
+                <parameter name="eq">
+                  <paramtype>CompatiblePredicate const&amp;</paramtype>
                 </parameter>
                 <type>const_iterator</type>
               </signature>
@@ -2233,6 +2301,40 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <signature cv="const">
                 <parameter name="k">
                   <paramtype>key_type const&amp;</paramtype>
+                </parameter>
+                <type>const_iterator</type>
+              </signature>
+              <signature>
+                <template>
+                  <template-type-parameter name="CompatibleKey"/>
+                  <template-type-parameter name="CompatibleHash"/>
+                  <template-type-parameter name="CompatiblePredicate"/>
+                </template>
+                <parameter name="k">
+                  <paramtype>CompatibleKey const&amp;</paramtype>
+                </parameter>
+                <parameter name="hash">
+                  <paramtype>CompatibleHash const&amp;</paramtype>
+                </parameter>
+                <parameter name="eq">
+                  <paramtype>CompatiblePredicate const&amp;</paramtype>
+                </parameter>
+                <type>iterator</type>
+              </signature>
+              <signature cv="const">
+                <template>
+                  <template-type-parameter name="CompatibleKey"/>
+                  <template-type-parameter name="CompatibleHash"/>
+                  <template-type-parameter name="CompatiblePredicate"/>
+                </template>
+                <parameter name="k">
+                  <paramtype>CompatibleKey const&amp;</paramtype>
+                </parameter>
+                <parameter name="hash">
+                  <paramtype>CompatibleHash const&amp;</paramtype>
+                </parameter>
+                <parameter name="eq">
+                  <paramtype>CompatiblePredicate const&amp;</paramtype>
                 </parameter>
                 <type>const_iterator</type>
               </signature>
@@ -3105,6 +3207,40 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <signature cv="const">
                 <parameter name="k">
                   <paramtype>key_type const&amp;</paramtype>
+                </parameter>
+                <type>const_iterator</type>
+              </signature>
+              <signature>
+                <template>
+                  <template-type-parameter name="CompatibleKey"/>
+                  <template-type-parameter name="CompatibleHash"/>
+                  <template-type-parameter name="CompatiblePredicate"/>
+                </template>
+                <parameter name="k">
+                  <paramtype>CompatibleKey const&amp;</paramtype>
+                </parameter>
+                <parameter name="hash">
+                  <paramtype>CompatibleHash const&amp;</paramtype>
+                </parameter>
+                <parameter name="eq">
+                  <paramtype>CompatiblePredicate const&amp;</paramtype>
+                </parameter>
+                <type>iterator</type>
+              </signature>
+              <signature cv="const">
+                <template>
+                  <template-type-parameter name="CompatibleKey"/>
+                  <template-type-parameter name="CompatibleHash"/>
+                  <template-type-parameter name="CompatiblePredicate"/>
+                </template>
+                <parameter name="k">
+                  <paramtype>CompatibleKey const&amp;</paramtype>
+                </parameter>
+                <parameter name="hash">
+                  <paramtype>CompatibleHash const&amp;</paramtype>
+                </parameter>
+                <parameter name="eq">
+                  <paramtype>CompatiblePredicate const&amp;</paramtype>
                 </parameter>
                 <type>const_iterator</type>
               </signature>
