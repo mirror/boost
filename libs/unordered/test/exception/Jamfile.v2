@@ -17,8 +17,8 @@ project unordered-test/exception-tests
         <toolset>gcc:<define>_GLIBCXX_DEBUG
         <toolset>darwin:<define>_GLIBCXX_DEBUG
         <toolset>msvc:<warnings-as-errors>on
-        <toolset>gcc:<warnings-as-errors>on
-        <toolset>darwin:<warnings-as-errors>on
+        #<toolset>gcc:<warnings-as-errors>on
+        #<toolset>darwin:<warnings-as-errors>on
     ;
 
 test-suite unordered-exception
