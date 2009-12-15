@@ -107,6 +107,10 @@ First official release.
 
 * Support instantiating the containers with incomplete value types.
 * Reduced the number of warnings (mostly in tests).
+* [@http://svn.boost.org/trac/boost/ticket/3693 Ticket 3693]:
+  Add `erase_return_void` as a temporary workaround for the current
+  `erase` which can be inefficient because it has to find the next
+  element to return an iterator.
 * [@http://svn.boost.org/trac/boost/ticket/3773 Ticket 3773]:
   Add missing `std` qualifier to `ptrdiff_t`.
 

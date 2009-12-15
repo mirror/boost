@@ -112,6 +112,55 @@ void erase_tests1(Container*, test::random_generator generator = test::default_g
         BOOST_TEST(x.erase(x.begin(), x.end()) == x.begin());
     }
 
+    std::cerr<<"erase_return_void(begin()).\n";
+    {
+        test::random_values<Container> v(1000, generator);
+        Container x(v.begin(), v.end());
+        std::size_t size = x.size();
+        while(size > 0 && !x.empty())
+        {
+            BOOST_DEDUCED_TYPENAME Container::key_type key = test::get_key<Container>(*x.begin());
+            std::size_t count = x.count(key);
+            x.erase_return_void(x.begin());
+            --size;
+            BOOST_TEST(x.count(key) == count - 1);
+            BOOST_TEST(x.size() == size);
+        }
+        BOOST_TEST(x.empty());
+    }
+
+    std::cerr<<"erase_return_void(random position).\n";
+    {
+        test::random_values<Container> v(1000, generator);
+        Container x(v.begin(), v.end());
+        std::size_t size = x.size();
+        while(size > 0 && !x.empty())
+        {
+            using namespace std;
+            int index = rand() % (int) x.size();
+            BOOST_DEDUCED_TYPENAME Container::const_iterator prev, pos, next;
+            if(index == 0) {
+                prev = pos = x.begin();
+            }
+            else {
+                prev = boost::next(x.begin(), index - 1);
+                pos = boost::next(prev);
+            }
+            next = boost::next(pos);
+            BOOST_DEDUCED_TYPENAME Container::key_type key = test::get_key<Container>(*pos);
+            std::size_t count = x.count(key);
+            x.erase_return_void(pos);
+            --size;
+            if(size > 0)
+                BOOST_TEST(index == 0 ? next == x.begin() :
+                        next == boost::next(prev));
+            BOOST_TEST(x.count(key) == count - 1);
+            BOOST_TEST(x.size() == size);
+        }
+        BOOST_TEST(x.empty());
+    }
+
+
     std::cerr<<"clear().\n";
     {
         test::random_values<Container> v(500, generator);

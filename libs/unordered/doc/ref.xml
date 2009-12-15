@@ -459,6 +459,15 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>Only throws an exception if it is thrown by <code>hasher</code> or <code>key_equal</code>.</para>
                 <para>In this implementation, this overload doesn't call either function object's methods so it is no throw, but this might not be true in other implementations.</para>
               </throws>
+              <notes>
+                <para>
+                  When the number of elements is a lot smaller than the number of buckets
+                  this function can be very inefficient as it has to search through empty
+                  buckets for the next element, in order to return the iterator.
+                  As a temporary workaround, the container has the method
+                  <methodname>erase_return_void</methodname> which will be faster.
+                </para>
+              </notes>
             </method>
             <method name="erase">
               <parameter name="k">
@@ -493,6 +502,27 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>Only throws an exception if it is thrown by <code>hasher</code> or <code>key_equal</code>.</para>
                 <para>In this implementation, this overload doesn't call either function object's methods so it is no throw, but this might not be true in other implementations.</para>
               </throws>
+            </method>
+            <method name="erase_return_void">
+              <parameter name="position">
+                <paramtype>const_iterator</paramtype>
+              </parameter>
+              <type>iterator</type>
+              <description>
+                <para>Erase the element pointed to by <code>position</code>.</para>
+              </description>
+              <throws>
+                <para>Only throws an exception if it is thrown by <code>hasher</code> or <code>key_equal</code>.</para>
+                <para>In this implementation, this overload doesn't call either function object's methods so it is no throw, but this might not be true in other implementations.</para>
+              </throws>
+              <notes>
+                <para>
+                  This is a temporary workaround for the inefficient
+                  <methodname>erase</methodname> method. Hopefully, in a future
+                  version the signature of <methodname>erase</methodname> will
+                  be changed and this will be deprecated.
+                </para>
+              </notes>
             </method>
             <method name="clear">
               <type>void</type>
@@ -1252,6 +1282,15 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>Only throws an exception if it is thrown by <code>hasher</code> or <code>key_equal</code>.</para>
                 <para>In this implementation, this overload doesn't call either function object's methods so it is no throw, but this might not be true in other implementations.</para>
               </throws>
+              <notes>
+                <para>
+                  When the number of elements is a lot smaller than the number of buckets
+                  this function can be very inefficient as it has to search through empty
+                  buckets for the next element, in order to return the iterator.
+                  As a temporary workaround, the container has the method
+                  <methodname>erase_return_void</methodname> which will be faster.
+                </para>
+              </notes>
             </method>
             <method name="erase">
               <parameter name="k">
@@ -1286,6 +1325,27 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>Only throws an exception if it is thrown by <code>hasher</code> or <code>key_equal</code>.</para>
                 <para>In this implementation, this overload doesn't call either function object's methods so it is no throw, but this might not be true in other implementations.</para>
               </throws>
+            </method>
+            <method name="erase_return_void">
+              <parameter name="position">
+                <paramtype>const_iterator</paramtype>
+              </parameter>
+              <type>iterator</type>
+              <description>
+                <para>Erase the element pointed to by <code>position</code>.</para>
+              </description>
+              <throws>
+                <para>Only throws an exception if it is thrown by <code>hasher</code> or <code>key_equal</code>.</para>
+                <para>In this implementation, this overload doesn't call either function object's methods so it is no throw, but this might not be true in other implementations.</para>
+              </throws>
+              <notes>
+                <para>
+                  This is a temporary workaround for the inefficient
+                  <methodname>erase</methodname> method. Hopefully, in a future
+                  version the signature of <methodname>erase</methodname> will
+                  be changed and this will be deprecated.
+                </para>
+              </notes>
             </method>
             <method name="clear">
               <type>void</type>
@@ -2059,6 +2119,15 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>Only throws an exception if it is thrown by <code>hasher</code> or <code>key_equal</code>.</para>
                 <para>In this implementation, this overload doesn't call either function object's methods so it is no throw, but this might not be true in other implementations.</para>
               </throws>
+              <notes>
+                <para>
+                  When the number of elements is a lot smaller than the number of buckets
+                  this function can be very inefficient as it has to search through empty
+                  buckets for the next element, in order to return the iterator.
+                  As a temporary workaround, the container has the method
+                  <methodname>erase_return_void</methodname> which will be faster.
+                </para>
+              </notes>
             </method>
             <method name="erase">
               <parameter name="k">
@@ -2093,6 +2162,27 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>Only throws an exception if it is thrown by <code>hasher</code> or <code>key_equal</code>.</para>
                 <para>In this implementation, this overload doesn't call either function object's methods so it is no throw, but this might not be true in other implementations.</para>
               </throws>
+            </method>
+            <method name="erase_return_void">
+              <parameter name="position">
+                <paramtype>const_iterator</paramtype>
+              </parameter>
+              <type>iterator</type>
+              <description>
+                <para>Erase the element pointed to by <code>position</code>.</para>
+              </description>
+              <throws>
+                <para>Only throws an exception if it is thrown by <code>hasher</code> or <code>key_equal</code>.</para>
+                <para>In this implementation, this overload doesn't call either function object's methods so it is no throw, but this might not be true in other implementations.</para>
+              </throws>
+              <notes>
+                <para>
+                  This is a temporary workaround for the inefficient
+                  <methodname>erase</methodname> method. Hopefully, in a future
+                  version the signature of <methodname>erase</methodname> will
+                  be changed and this will be deprecated.
+                </para>
+              </notes>
             </method>
             <method name="clear">
               <type>void</type>
@@ -2901,6 +2991,15 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>Only throws an exception if it is thrown by <code>hasher</code> or <code>key_equal</code>.</para>
                 <para>In this implementation, this overload doesn't call either function object's methods so it is no throw, but this might not be true in other implementations.</para>
               </throws>
+              <notes>
+                <para>
+                  When the number of elements is a lot smaller than the number of buckets
+                  this function can be very inefficient as it has to search through empty
+                  buckets for the next element, in order to return the iterator.
+                  As a temporary workaround, the container has the method
+                  <methodname>erase_return_void</methodname> which will be faster.
+                </para>
+              </notes>
             </method>
             <method name="erase">
               <parameter name="k">
@@ -2935,6 +3034,27 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>Only throws an exception if it is thrown by <code>hasher</code> or <code>key_equal</code>.</para>
                 <para>In this implementation, this overload doesn't call either function object's methods so it is no throw, but this might not be true in other implementations.</para>
               </throws>
+            </method>
+            <method name="erase_return_void">
+              <parameter name="position">
+                <paramtype>const_iterator</paramtype>
+              </parameter>
+              <type>iterator</type>
+              <description>
+                <para>Erase the element pointed to by <code>position</code>.</para>
+              </description>
+              <throws>
+                <para>Only throws an exception if it is thrown by <code>hasher</code> or <code>key_equal</code>.</para>
+                <para>In this implementation, this overload doesn't call either function object's methods so it is no throw, but this might not be true in other implementations.</para>
+              </throws>
+              <notes>
+                <para>
+                  This is a temporary workaround for the inefficient
+                  <methodname>erase</methodname> method. Hopefully, in a future
+                  version the signature of <methodname>erase</methodname> will
+                  be changed and this will be deprecated.
+                </para>
+              </notes>
             </method>
             <method name="clear">
               <type>void</type>

@@ -348,7 +348,7 @@ namespace boost
 
         iterator erase(const_iterator position)
         {
-            return iterator(table_.erase(get(position)));
+            return iterator(table_.erase_return_iterator(get(position)));
         }
 
         size_type erase(const key_type& k)
@@ -359,6 +359,11 @@ namespace boost
         iterator erase(const_iterator first, const_iterator last)
         {
             return iterator(table_.erase_range(get(first), get(last)));
+        }
+
+        void erase_return_void(const_iterator position)
+        {
+            table_.erase(get(position));
         }
 
         void clear()
@@ -822,7 +827,7 @@ namespace boost
 
         iterator erase(const_iterator position)
         {
-            return iterator(table_.erase(get(position)));
+            return iterator(table_.erase_return_iterator(get(position)));
         }
 
         size_type erase(const key_type& k)
@@ -833,6 +838,11 @@ namespace boost
         iterator erase(const_iterator first, const_iterator last)
         {
             return iterator(table_.erase_range(get(first), get(last)));
+        }
+
+        void erase_return_void(const_iterator position)
+        {
+            table_.erase(get(position));
         }
 
         void clear()

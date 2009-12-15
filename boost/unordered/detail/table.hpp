@@ -652,10 +652,20 @@ namespace boost { namespace unordered_detail {
         return *it ? this->erase_group(it, bucket) : 0;
     }
 
+    template <class T>
+    void hash_table<T>::erase(iterator_base r)
+    {
+        BOOST_ASSERT(r.node_);
+        --this->size_;
+        node::unlink_node(*r.bucket_, r.node_);
+        this->delete_node(r.node_);
+        // r has been invalidated but its bucket is still valid
+        this->recompute_begin_bucket(r.bucket_);
+    }
 
     template <class T>
     BOOST_DEDUCED_TYPENAME T::iterator_base
-        hash_table<T>::erase(iterator_base r)
+        hash_table<T>::erase_return_iterator(iterator_base r)
     {
         BOOST_ASSERT(r.node_);
         iterator_base next = r;

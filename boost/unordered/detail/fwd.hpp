@@ -532,7 +532,8 @@ namespace boost { namespace unordered_detail {
 
         void clear();
         std::size_t erase_key(key_type const& k);
-        iterator_base erase(iterator_base r);
+        iterator_base erase_return_iterator(iterator_base r);
+        void erase(iterator_base r);
         std::size_t erase_group(node_ptr* it, bucket_ptr bucket);
         iterator_base erase_range(iterator_base r1, iterator_base r2);
 
