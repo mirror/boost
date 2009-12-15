@@ -146,16 +146,12 @@
             template<typename Expr, typename State, typename Data>
             struct impl : transform_impl<Expr, State, Data>
             {
-                typedef call<R(BOOST_PP_ENUM_PARAMS(N, A))> call_;
-                typedef make<R(BOOST_PP_ENUM_PARAMS(N, A))> make_;
-
+                // OK to evaluate is_callable<R> here. R should be compete by now.
                 typedef
                     typename mpl::if_c<
-                        // OK to evaluate is_callable<R> here.
-                        // R should be compete by now.
                         is_callable<R>::value
-                      , call_                       // "R" is a function to call
-                      , make_                       // "R" is an object to construct
+                      , call<R(BOOST_PP_ENUM_PARAMS(N, A))> // "R" is a function to call
+                      , make<R(BOOST_PP_ENUM_PARAMS(N, A))> // "R" is an object to construct
                     >::type
                 which;
 

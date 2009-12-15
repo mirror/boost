@@ -930,8 +930,7 @@
             type;
             #else
             #define M0(N, F) char (&F)[BOOST_PP_INC(N)]
-            static M0(BOOST_PROTO_MAX_ARITY, deducer(
-                BOOST_PP_ENUM_PARAMS(N, dont_care BOOST_PP_INTERCEPT)));
+            static M0(BOOST_PROTO_MAX_ARITY, deducer(...));
             #define M1(Z, X, DATA)                                                                  \
             typedef typename domain_of<BOOST_PP_CAT(A, X)>::type BOOST_PP_CAT(D, X);                \
             static BOOST_PP_CAT(D, X) &BOOST_PP_CAT(d, X);                                          \

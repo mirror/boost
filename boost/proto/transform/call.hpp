@@ -23,7 +23,6 @@
     #include <boost/proto/proto_fwd.hpp>
     #include <boost/proto/traits.hpp>
     #include <boost/proto/transform/impl.hpp>
-    #include <boost/proto/detail/dont_care.hpp>
     #include <boost/proto/detail/as_lvalue.hpp>
     #include <boost/proto/detail/poly_function.hpp>
 
