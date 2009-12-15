@@ -574,7 +574,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <parameter name="k">
                   <paramtype>key_type const&amp;</paramtype>
                 </parameter>
-                <type>iterator</type>
+                <type>const_iterator</type>
               </signature>
               <returns>
                 <para>An iterator pointing to an element with key equivalent to <code>k</code>, or <code>b.end()</code> if no such element exists.</para>
@@ -1397,7 +1397,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <parameter name="k">
                   <paramtype>key_type const&amp;</paramtype>
                 </parameter>
-                <type>iterator</type>
+                <type>const_iterator</type>
               </signature>
               <returns>
                 <para>An iterator pointing to an element with key equivalent to <code>k</code>, or <code>b.end()</code> if no such element exists.</para>
@@ -2234,7 +2234,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <parameter name="k">
                   <paramtype>key_type const&amp;</paramtype>
                 </parameter>
-                <type>iterator</type>
+                <type>const_iterator</type>
               </signature>
               <returns>
                 <para>An iterator pointing to an element with key equivalent to <code>k</code>, or <code>b.end()</code> if no such element exists.</para>
@@ -3106,7 +3106,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <parameter name="k">
                   <paramtype>key_type const&amp;</paramtype>
                 </parameter>
-                <type>iterator</type>
+                <type>const_iterator</type>
               </signature>
               <returns>
                 <para>An iterator pointing to an element with key equivalent to <code>k</code>, or <code>b.end()</code> if no such element exists.</para>
