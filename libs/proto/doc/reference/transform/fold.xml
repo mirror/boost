@@ -52,7 +52,7 @@
             <type>typename boost::result_of&lt;Y(Expr, State, Data)&gt;::type</type>
           </typedef>
           <typedef name="fun">
-            <purpose><computeroutput>fun(v)(e,s) == when&lt;_,Fun&gt;()(e,s,v)</computeroutput></purpose>
+            <purpose><computeroutput>fun(d)(s,e) == when&lt;_,Fun&gt;()(e,s,d)</computeroutput></purpose>
             <type><emphasis>unspecified</emphasis></type>
           </typedef>
           <typedef name="result_type">
@@ -86,7 +86,7 @@
                   let <computeroutput>state0</computeroutput> be
                   <computeroutput><classname>when</classname>&lt;<classname>_</classname>, State0&gt;()(expr, state, data)</computeroutput>,
                   and let <computeroutput>fun(data)</computeroutput> be an object such that
-                  <computeroutput>fun(data)(expr, state)</computeroutput> is equivalent to
+                  <computeroutput>fun(data)(state, expr)</computeroutput> is equivalent to
                   <computeroutput><classname>when</classname>&lt;<classname>_</classname>, Fun&gt;()(expr, state, data)</computeroutput>. Then,
                   this function returns <computeroutput>fusion::fold(seq, state0, fun(data))</computeroutput>.
                 </para>

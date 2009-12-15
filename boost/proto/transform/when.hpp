@@ -49,8 +49,8 @@
         /// <tt>boost::result_of\<when\<G,T\>(E,S,V)\>::::type</tt> is the same as
         /// <tt>boost::result_of\<T(E,S,V)\>::::type</tt>.
         ///
-        /// <tt>when\<G,T\>()(e,s,v)</tt> is the same as
-        /// <tt>T()(e,s,v)</tt>.
+        /// <tt>when\<G,T\>()(e,s,d)</tt> is the same as
+        /// <tt>T()(e,s,d)</tt>.
         template<typename Grammar, typename PrimitiveTransform /*= Grammar*/>
         struct when
           : PrimitiveTransform

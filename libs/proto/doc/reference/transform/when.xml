@@ -48,8 +48,8 @@ struct CountLeaves :
             </listitem>
             <listitem>
               <para>
-                <computeroutput>proto::when&lt;G,T&gt;()(e,s,v)</computeroutput> is the same as
-                <computeroutput>T()(e,s,v)</computeroutput>.
+                <computeroutput>proto::when&lt;G,T&gt;()(e,s,d)</computeroutput> is the same as
+                <computeroutput>T()(e,s,d)</computeroutput>.
               </para>
             </listitem>
           </itemizedlist>
