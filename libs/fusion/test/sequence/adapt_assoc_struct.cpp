@@ -14,6 +14,7 @@
 #include <boost/fusion/sequence/intrinsic/back.hpp>
 #include <boost/fusion/sequence/intrinsic/has_key.hpp>
 #include <boost/fusion/sequence/intrinsic/at_key.hpp>
+#include <boost/fusion/sequence/intrinsic/value_at.hpp>
 #include <boost/fusion/sequence/intrinsic/value_at_key.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
@@ -26,7 +27,10 @@
 #include <boost/fusion/sequence/comparison/less_equal.hpp>
 #include <boost/fusion/sequence/comparison/greater.hpp>
 #include <boost/fusion/sequence/comparison/greater_equal.hpp>
+#include <boost/fusion/mpl.hpp>
 #include <boost/fusion/support/is_view.hpp>
+#include <boost/mpl/front.hpp>
+#include <boost/mpl/is_sequence.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -124,6 +128,13 @@ main()
         
         BOOST_TEST(at_key<ns::x_member>(p) == 5);
         BOOST_TEST(at_key<ns::y_member>(p) == 3);
+    }
+
+    {
+        BOOST_MPL_ASSERT((mpl::is_sequence<ns::point>));
+        BOOST_MPL_ASSERT((boost::is_same<
+            fusion::result_of::value_at_c<ns::point,0>::type
+          , mpl::front<ns::point>::type>));
     }
 
     return boost::report_errors();

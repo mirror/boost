@@ -10,46 +10,51 @@
 
 #include <boost/type_traits/add_const.hpp>
 
-namespace boost { namespace fusion { namespace extension
+namespace boost { namespace fusion
 {
-    template <typename Class, int N>
-    struct class_member;
+    struct fusion_sequence_tag;
 
-    template <typename Class>
-    struct class_size;
-
-    template <typename Class, int N>
-    struct class_member<Class const, N> : class_member<Class, N> {};
-
-    template <typename Class>
-    struct class_size<Class const>
-        : class_size<Class>
-    {};
-
-    struct no_such_member;
-
-    template<typename Class, typename Key>
-    struct class_assoc_member
+    namespace extension
     {
-        typedef no_such_member type;
-    };
+        template <typename Class, int N>
+        struct class_member;
 
-    template<typename Class, typename Key>
-    struct class_assoc_member<Class const, Key>
-    {
-        typedef typename
-            add_const<typename class_assoc_member<Class, Key>::type>::type
-        type;
+        template <typename Class>
+        struct class_size;
 
-        static type&
-        call(Class const& class_)
+        template <typename Class, int N>
+        struct class_member<Class const, N> : class_member<Class, N> {};
+
+        template <typename Class>
+        struct class_size<Class const>
+            : class_size<Class>
+        {};
+
+        struct no_such_member;
+
+        template<typename Class, typename Key>
+        struct class_assoc_member
         {
-            return class_assoc_member<Class, Key>::call(
-                const_cast<Class&>(class_));
-        }
-    };
+            typedef no_such_member type;
+        };
 
-}}}
+        template<typename Class, typename Key>
+        struct class_assoc_member<Class const, Key>
+        {
+            typedef typename
+                add_const<typename class_assoc_member<Class, Key>::type>::type
+            type;
+
+            static type&
+            call(Class const& class_)
+            {
+                return class_assoc_member<Class, Key>::call(
+                    const_cast<Class&>(class_));
+            }
+        };
+
+    }
+}}
 
 #endif
 

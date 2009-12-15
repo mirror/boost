@@ -22,7 +22,10 @@
 #include <boost/fusion/sequence/comparison/less_equal.hpp>
 #include <boost/fusion/sequence/comparison/greater.hpp>
 #include <boost/fusion/sequence/comparison/greater_equal.hpp>
+#include <boost/fusion/mpl.hpp>
 #include <boost/fusion/support/is_view.hpp>
+#include <boost/mpl/is_sequence.hpp>
+#include <boost/mpl/front.hpp>
 #include <boost/mpl/assert.hpp>
 #include <iostream>
 #include <string>
@@ -84,6 +87,12 @@ main()
         // conversion from pair to list
         fusion::list<int, std::string> l(std::make_pair(123, "Hola!!!"));
         l = std::make_pair(123, "Hola!!!");
+    }
+
+    {
+        typedef std::pair<int, std::string> pair_type;
+        BOOST_MPL_ASSERT((mpl::is_sequence<pair_type>));
+        BOOST_MPL_ASSERT((boost::is_same<int, mpl::front<pair_type>::type>));
     }
 
     return boost::report_errors();
