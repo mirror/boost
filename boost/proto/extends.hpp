@@ -147,7 +147,8 @@ namespace boost { namespace proto
     #define BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, Domain)                                       \
         Expr proto_expr_;                                                                           \
                                                                                                     \
-        typedef typename Expr::proto_base_expr proto_base_expr;                                     \
+        typedef Expr proto_base_expr_; /**< INTERNAL ONLY */                                        \
+        typedef typename proto_base_expr_::proto_base_expr proto_base_expr;                         \
         typedef Domain proto_domain;                                                                \
         typedef Derived proto_derived_expr;                                                         \
         typedef typename proto_base_expr::proto_tag proto_tag;                                      \
@@ -156,7 +157,7 @@ namespace boost { namespace proto
         typedef typename proto_base_expr::address_of_hack_type_ proto_address_of_hack_type_;        \
         typedef void proto_is_expr_; /**< INTERNAL ONLY */                                          \
         BOOST_STATIC_CONSTANT(long, proto_arity_c = proto_base_expr::proto_arity_c);                \
-        typedef boost::proto::tag::proto_expr fusion_tag;                                \
+        typedef boost::proto::tag::proto_expr fusion_tag;                                           \
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXTENDS_CHILD, ~)                        \
                                                                                                     \
         static proto_derived_expr const make(Expr const &e)                                         \
