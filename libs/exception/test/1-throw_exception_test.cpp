@@ -6,6 +6,8 @@
 #include <boost/throw_exception.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
+#include <boost/config.hpp>
+
 class my_exception: public std::exception { };
 
 int

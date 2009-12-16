@@ -30,7 +30,7 @@ boost_throw_exception_test()
     try
         {
         BOOST_THROW_EXCEPTION(exception1());
-        BOOST_TEST(false);
+        BOOST_ERROR("BOOST_THROW_EXCEPTION failed to throw.");
         }
     catch(
     boost::exception & x )
@@ -50,7 +50,7 @@ boost_throw_exception_test()
     try
         {
         BOOST_THROW_EXCEPTION(exception2() << test_data(42));
-        BOOST_TEST(false);
+        BOOST_ERROR("BOOST_THROW_EXCEPTION failed to throw.");
         }
     catch(
     boost::exception & x )

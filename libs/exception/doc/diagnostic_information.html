@@ -21,7 +21,7 @@
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>diagnostic_information</h3>
 </div>
-<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span>&gt;<span class="RenoBR">&nbsp;</span><br/></p>
+<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span>&gt;<span class="RenoBR">&nbsp;</span><br/><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="boost_exception_ptr_hpp.html">boost/exception_ptr.hpp</a></span>&gt;<span class="RenoBR">&nbsp;</span><br/></p>
 <pre>namespace
 boost
     {
@@ -33,7 +33,7 @@ boost
 </div><h4>Returns:</h4>
 <p>A string value that contains varying amount of implementation-specific diagnostic information about the passed object:</p>
 <div><ul><li>If E can be statically converted to boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, the returned value contains the string representations of all <span class="RenoLink"><a href="error_info.html">error_info</a></span> objects stored in the boost::<span class="RenoLink"><a href="exception.html">exception</a></span> through <span class="RenoLink"><a href="exception_operator_shl.html">operator&lt;&lt;</a></span>, along with other diagnostic information relevant to the exception. If e can be dynamically converted to std::exception, the returned value also contains the what() string.</li>
-<li>Otherwise, if E can be statically converted std::exception:<div><ul><li>if e can be dynamically converted to boost::exception, the returned value is the same as if E could be statically converted to boost::<span class="RenoLink"><a href="exception.html">exception</a></span>;</li>
+<li>Otherwise, if E can be statically converted to std::exception:<div><ul><li>if e can be dynamically converted to boost::exception, the returned value is the same as if E could be statically converted to boost::<span class="RenoLink"><a href="exception.html">exception</a></span>;</li>
 <li>otherwise the returned value contains the what() string.</li>
 </ul></div>
 </li>

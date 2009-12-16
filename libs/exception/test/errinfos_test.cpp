@@ -43,7 +43,7 @@ main()
 #else
         BOOST_THROW_EXCEPTION(e<<errinfo_type_info_name(typeid(int).name()));
 #endif
-        BOOST_TEST(false);
+        BOOST_ERROR("BOOST_THROW_EXCEPTION failed to throw.");
         }
     catch(
     boost::exception & e )
