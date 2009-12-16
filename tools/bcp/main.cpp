@@ -64,6 +64,7 @@ int cpp_main(int argc, char* argv[])
    //
    if(argc < 2)
    {
+      std::cout << "Error: insufficient arguments, don't know what to do." << std::endl;
       show_usage();
       return 0;
    }
@@ -136,6 +137,7 @@ int cpp_main(int argc, char* argv[])
       }
       else if(argv[i][0] == '-')
       {
+         std::cout << "Error: Unknown argument " << argv[i] << std::endl;
          show_usage();
          return 1;
       }

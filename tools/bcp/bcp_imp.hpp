@@ -44,6 +44,8 @@ class bcp_implementation
 public:
    bcp_implementation();
    ~bcp_implementation();
+   static bool is_source_file(const fs::path& p);
+   static bool is_html_file(const fs::path& p);
 private:
    //
    // the following are the overridden virtuals from the base class:
@@ -62,8 +64,9 @@ private:
    void add_module(const char* p);
 
    virtual int run();
-private:
+
    // internal helper functions:
+   bool is_binary_file(const fs::path& p);
    void scan_cvs_path(const fs::path& p);
    void scan_svn_path(const fs::path& p);
    void add_path(const fs::path& p);
@@ -71,10 +74,7 @@ private:
    void add_file(const fs::path& p);
    void copy_path(const fs::path& p);
    void add_file_dependencies(const fs::path& p, bool scanfile);
-   bool is_source_file(const fs::path& p);
-   bool is_html_file(const fs::path& p);
-   bool is_binary_file(const fs::path& p);
-   void add_dependent_lib(const std::string& libname, const fs::path& p);
+   void add_dependent_lib(const std::string& libname, const fs::path& p, const fileview& view);
    void create_path(const fs::path& p);
    // license code:
    void scan_license(const fs::path& p, const fileview& v);
