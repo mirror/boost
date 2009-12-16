@@ -184,6 +184,16 @@ static const std::pair<fs::path, fs::path>
       std::pair<fs::path, fs::path>("libs/graph/src/python/visitor.hpp", "libs/graph/src/python"),
       std::pair<fs::path, fs::path>("boost/test/detail/config.hpp", "libs/test/src"),
       std::pair<fs::path, fs::path>("boost/test/detail/config.hpp", "libs/test/build"),
+      std::pair<fs::path, fs::path>("boost/typeof.hpp", "boost/typeof/incr_registration_group.hpp"),
+      std::pair<fs::path, fs::path>("boost/function_types/detail/pp_loop.hpp", "boost/function_types/detail/pp_cc_loop"),
+      std::pair<fs::path, fs::path>("boost/function_types/components.hpp", "boost/function_types/detail/components_impl"),
+      std::pair<fs::path, fs::path>("boost/function_types/detail/pp_loop.hpp", "boost/function_types/detail"),
+      std::pair<fs::path, fs::path>("boost/math/tools/rational.hpp", "boost/math/tools/detail"),
+      std::pair<fs::path, fs::path>("boost/proto/repeat.hpp", "boost/proto/detail/local.hpp"),
+      std::pair<fs::path, fs::path>("boost/signals/signal_template.hpp", "boost/function"),
+      std::pair<fs::path, fs::path>("boost/preprocessor/slot/counter.hpp", "boost/preprocessor/slot/detail/counter.hpp"),
+      std::pair<fs::path, fs::path>("boost/graph/distributed/detail/tag_allocator.hpp", "libs/graph_parallel"),
+      std::pair<fs::path, fs::path>("boost/graph/distributed/mpi_process_group.hpp", "libs/graph_parallel"),
    };
 
    for(unsigned int n = 0; n < (sizeof(specials)/sizeof(specials[0])); ++n)
@@ -321,6 +331,8 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
    // we know about and are correctly handled as special cases:
    //
    static const std::string known_macros[] = {
+      "AUX778076_INCLUDE_STRING",
+      "BOOST_PP_STRINGIZE(boost/mpl/aux_/preprocessed/AUX778076_PREPROCESSED_HEADER)",
       "BOOST_USER_CONFIG",
       "BOOST_COMPILER_CONFIG",
       "BOOST_STDLIB_CONFIG",
@@ -363,7 +375,40 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
       "BOOST_PP_STRINGIZE(boost/mpl/vector/AUX778076_VECTOR_C_HEADER)",
       "BOOST_REGEX_USER_CONFIG",
       "BGL_PYTHON_EVENTS_HEADER",
-   };
+      "B1",
+      "B2",
+      "BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()",
+      "BOOST_SLIST_HEADER",
+      "BOOST_HASH_SET_HEADER",
+      "BOOST_HASH_MAP_HEADER",
+      "BOOST_INTRUSIVE_INVARIANT_ASSERT_INCLUDE",
+      "BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT_INCLUDE",
+      "BOOST_INTRUSIVE_SAFE_HOOK_DESTRUCTOR_ASSERT_INCLUDE",
+      "BOOST_FT_loop",
+      "BOOST_FT_AL_PREPROCESSED",
+      "BOOST_FT_AL_INCLUDE_FILE",
+      "__FILE__",
+      "BOOST_FT_cc_file",
+      "BOOST_FT_variate_file",
+      "BOOST_USER_CONFIG",
+      "BOOST_HEADER()",
+      "BOOST_TR1_STD_HEADER(utility)",
+      "BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(tuple))",
+      "BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(random))",
+      "BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(array))",
+      "BOOST_TR1_HEADER(cmath)",
+      "BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(complex))",
+      "BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(functional))",
+      "BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(memory))",
+      "BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(regex))",
+      "BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(type_traits))",
+      "BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(unordered_map))",
+      "BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(unordered_set))",
+      "BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(utility))",
+      "BOOST_PROTO_LOCAL_ITERATE()",
+      "BOOST_SIGNAL_FUNCTION_N_HEADER",
+      "BOOST_PP_UPDATE_COUNTER()",
+  };
 
    boost::regex indirect_includes("^[[:blank:]]*#[[:blank:]]*include[[:blank:]]+([^\"<][^\n]*?)[[:blank:]]*$");
    i = boost::regex_token_iterator<const char*>(view.begin(), view.end(), indirect_includes, 1);
@@ -372,7 +417,7 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
       const std::string* known_macros_end = known_macros + sizeof(known_macros)/sizeof(known_macros[0]);
       if(known_macros_end == std::find(known_macros, known_macros_end, i->str()))
       {
-         std::cerr << "CAUTION: don't know how to trace depenencies through macro: " << *i << " in file: " << p.string() << std::endl;
+         std::cerr << "CAUTION: don't know how to trace depenencies through macro: \"" << *i << "\" in file: " << p.string() << std::endl;
       }
       ++i;
    }
