@@ -68,7 +68,7 @@
                 typename when<_, Transform>::template impl<Expr &, State const &, Data>::result_type
                 operator ()(Expr &e, State const &s) const
                 {
-                    return typename when<_, Transform>::template impl<Expr &, State const &, Data>()(e, s, this->v_);
+                    return typename when<_, Transform>::template impl<Expr &, State const &, Data>()(e, s, this->d_);
                 }
 
                 #endif
