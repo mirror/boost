@@ -508,7 +508,8 @@ the index belongs if
     <code>multi_index_container</code>.</li>
 </ul>
 <code>position</code> is used as a hint to improve the efficiency of the
-operation.<br>
+operation. If succesful, insertion happens as close as possible to the
+location just prior to <code>position</code>.<br>
 <b>Returns:</b> On successful insertion, an iterator to the newly inserted
 element. Otherwise, an iterator to an element that caused the insertion to be
 banned. Note that more than one element can be causing insertion not to be
@@ -1023,7 +1024,7 @@ Hashed indices
 
 <br>
 
-<p>Revised July 21st 2009</p>
+<p>Revised December 21st 2009</p>
 
 <p>&copy; Copyright 2003-2009 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
