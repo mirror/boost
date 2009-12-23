@@ -145,7 +145,7 @@ if ! $(BOOST_ARCHIVE_LIST) {
         [ compile-fail test_check.cpp ]
 
         # should compile with a warning message
-        [  test_static_warning.cpp ]
+        [ compile test_static_warning.cpp ]
         [ compile test_const_save_warn1.cpp ]
         [ compile test_const_save_warn2.cpp ]
         [ compile test_const_save_warn3.cpp ]
