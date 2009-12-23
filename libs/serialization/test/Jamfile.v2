@@ -53,7 +53,6 @@ lib dll_derived2_lib
 lib dll_polymorphic_derived2_lib
     :
         polymorphic_derived2.cpp 
-        polymorphic_base.cpp
         ../build//boost_serialization
     : 
         <link>shared
@@ -111,10 +110,10 @@ test-suite "serialization" :
 
 if ! $(BOOST_ARCHIVE_LIST) {
     test-suite "serialization2" : 
-        [ test-bsl-run test_dll_exported : polymorphic_base : dll_polymorphic_derived2_lib : <runtime-link>shared ]
-#       [ test-bsl-run test_dll_plugin : : dll_base_lib dll_derived2_lib : <runtime-link>shared ]
+        [ test-bsl-run test_dll_exported : : dll_polymorphic_derived2_lib : <runtime-link>shared ]
+#        [ test-bsl-run test_dll_plugin : : dll_polymorphic_derived2_lib : <runtime-link>shared ]
+        [ compile test_dll_plugin.cpp ]
         [ test-bsl-run test_dll_simple : : dll_a_lib : <runtime-link>shared ]
-
         [ test-bsl-run test_private_ctor ]
         [ test-bsl-run test_reset_object_address : A ]
         [ test-bsl-run test_void_cast ]
@@ -146,7 +145,7 @@ if ! $(BOOST_ARCHIVE_LIST) {
         [ compile-fail test_check.cpp ]
 
         # should compile with a warning message
-        [ compile test_static_warning.cpp ]
+        [  test_static_warning.cpp ]
         [ compile test_const_save_warn1.cpp ]
         [ compile test_const_save_warn2.cpp ]
         [ compile test_const_save_warn3.cpp ]
