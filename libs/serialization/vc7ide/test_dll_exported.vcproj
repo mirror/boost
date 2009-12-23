@@ -189,9 +189,6 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\test\polymorphic_base.cpp">
-		</File>
-		<File
 			RelativePath="..\test\polymorphic_base.hpp">
 		</File>
 		<File
