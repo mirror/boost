@@ -29,11 +29,7 @@ namespace std{
 #include <boost/archive/archive_exception.hpp>
 
 // for now, only test with simple text and polymorphic archive
-#define BOOST_ARCHIVE_TEST polymorphic_text_archive.hpp
 #include "test_tools.hpp"
-
-#include <boost/archive/polymorphic_text_oarchive.hpp>
-#include <boost/archive/polymorphic_text_iarchive.hpp>
 
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
@@ -52,10 +48,19 @@ class polymorphic_derived1 : public polymorphic_base
     void serialize(Archive &ar, const unsigned int /* file_version */){
         ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
     }
+    const char * get_key() const{
+        return
+            boost::serialization::type_info_implementation<
+                polymorphic_derived1
+            >::type::get_const_instance().get_key();
+    }
 public:
     virtual ~polymorphic_derived1(){}
 };
 
+// This class is derived from polymorphic_base which uses the no_rtti system
+// rather than the typeid system.  This system uses the exported name as the
+// type identifier key.  This MUST be exported!!!
 BOOST_CLASS_EXPORT(polymorphic_derived1)
 
 // MWerks users can do this to make their code work
@@ -101,6 +106,7 @@ void save_exported(const char *testfile)
     // don't need these any more - don't leak memory
     delete rb1;
     // note delete original handle - not runtime cast one !!!
+    //delete rb2;
     d2_eti->destroy(rd2);
 }
 
@@ -146,6 +152,8 @@ void load_exported(const char *testfile)
     delete rb2;
 }
 
+#ifdef BOOST_WINDOWS
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
@@ -157,7 +165,10 @@ test_main( int /* argc */, char* /* argv */[] )
 
     HINSTANCE hDLL;               // Handle to DLL
     hDLL = LoadLibrary("dll_polymorphic_derived2.dll");
-    assert(0 != hDLL);
+    BOOST_CHECK_MESSAGE((0 != hDLL), "Failed to find/load dll_polymorphic_derived2" );
+    if(0 == hDLL)
+        return EXIT_FAILURE;
+
     save_exported(testfile);
     load_exported(testfile);
     FreeLibrary(hDLL);
@@ -165,5 +176,31 @@ test_main( int /* argc */, char* /* argv */[] )
     std::remove(testfile);
     return EXIT_SUCCESS;
 }
+
+#else // presume *nix
+
+#include <dlfcn.h>
+
+int
+test_main( int /* argc */, char* /* argv */[] )
+{
+    const char * testfile = boost::archive::tmpnam(NULL);
+    BOOST_REQUIRE(NULL != testfile);
+
+    void * hDLL;               // Handle to DLL
+    hDLL = dlopen("dll_polymorphic_derived2.so", RTLD_NOW | RTLD_GLOBAL);
+    BOOST_CHECK_MESSAGE((0 != hDLL), "Failed to find/load dll_polymorphic_derived2" );
+    if(0 == hDLL)
+        return EXIT_FAILURE;
+
+    save_exported(testfile);
+    load_exported(testfile);
+    dlclose(hDLL);
+
+    std::remove(testfile);
+    return EXIT_SUCCESS;
+}
+
+#endif
 
 // EOF
