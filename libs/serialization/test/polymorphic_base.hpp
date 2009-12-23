@@ -34,7 +34,7 @@ public:
     // note that since this class uses the "no_rtti"
     // extended_type_info implementation, it MUST
     // implement this function
-    virtual const char * get_key() const;
+    virtual const char * get_key() const = 0;
     virtual ~polymorphic_base(){};
 };
 
