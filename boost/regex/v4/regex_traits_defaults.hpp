@@ -84,7 +84,7 @@ inline bool is_combining<unsigned char>(unsigned char)
 {
    return false;
 }
-#ifndef __hpux // can't use WCHAR_MAX/MIN in pp-directives
+#if !defined(__hpux) && !defined(__WINSCW__) // can't use WCHAR_MAX/MIN in pp-directives
 #ifdef _MSC_VER 
 template<>
 inline bool is_combining<wchar_t>(wchar_t c)

@@ -195,8 +195,8 @@ void basic_regex_parser<charT, traits>::fail(regex_constants::error_type error_c
    // Augment error message with the regular expression text:
    //
    if(start_pos == position)
-      start_pos = (std::max)(static_cast<std::ptrdiff_t>(0), position - 10);
-   std::ptrdiff_t end_pos = (std::min)(position + 10, m_end - m_base);
+      start_pos = (std::max)(static_cast<std::ptrdiff_t>(0), position - static_cast<std::ptrdiff_t>(10));
+   std::ptrdiff_t end_pos = (std::min)(position + static_cast<std::ptrdiff_t>(10), static_cast<std::ptrdiff_t>(m_end - m_base));
    if(error_code != regex_constants::error_empty)
    {
       if((start_pos != 0) || (end_pos != (m_end - m_base)))
@@ -1683,7 +1683,7 @@ charT basic_regex_parser<charT, traits>::unescape_character()
       }
       else
       {
-         std::ptrdiff_t len = (std::min)(static_cast<std::ptrdiff_t>(2), m_end - m_position);
+         std::ptrdiff_t len = (std::min)(static_cast<std::ptrdiff_t>(2), static_cast<std::ptrdiff_t>(m_end - m_position));
          int i = this->m_traits.toi(m_position, m_position + len, 16);
          if((i < 0)
             || !valid_value(charT(0), i))
