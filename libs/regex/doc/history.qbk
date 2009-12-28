@@ -19,6 +19,7 @@ All issues including closed ones can be viewed [@https://svn.boost.org/trac/boos
 
 * Added support for Functors rather than strings as format expressions.
 * Improved error reporting when throwing exceptions to include better more relevant information.
+* Improved performance and reduced stack usage of recursive expressions.
 * Fixed tickets
 [@https://svn.boost.org/trac/boost/ticket/2802 #2802],
 [@https://svn.boost.org/trac/boost/ticket/3425 #3425],
@@ -27,7 +28,9 @@ All issues including closed ones can be viewed [@https://svn.boost.org/trac/boos
 [@https://svn.boost.org/trac/boost/ticket/3631 #3631],
 [@https://svn.boost.org/trac/boost/ticket/3632 #3632],
 [@https://svn.boost.org/trac/boost/ticket/3715 #3715],
-[@https://svn.boost.org/trac/boost/ticket/3718 #3718]
+[@https://svn.boost.org/trac/boost/ticket/3718 #3718],
+[@https://svn.boost.org/trac/boost/ticket/3763 #3763],
+[@https://svn.boost.org/trac/boost/ticket/3764 #3764]
 
 [h4 Boost 1.40]
 
