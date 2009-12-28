@@ -145,15 +145,15 @@ our iterator's tag type.
 The implementation itself is pretty simple, it just uses 2 partial specializations to
 provide the type of the 2 different members of `example_struct`, based on the index of the iterator.
 
-To understand how `value_of_impl` is used by the library we will look at the implementation of __value_of__:
+To understand how `value_of_impl` is used by the library we will look at the implementation of __result_of_value_of__:
 
     template <typename Iterator>
-    struct __value_of__
+    struct value_of
         : extension::value_of_impl<typename detail::tag_of<Iterator>::type>::
             template apply<Iterator>
     {};
 
-So __value_of__ uses __tag_dispatching__ to select an __mpl_metafunction_class__
+So __result_of_value_of__ uses __tag_dispatching__ to select an __mpl_metafunction_class__
 to provide its functionality. You will notice this pattern throughout the
 implementation of Fusion.
 
@@ -216,7 +216,7 @@ To see how `deref_impl` is used, lets have a look at the implementation of __der
     }
 
 So again __result_of_deref__ uses __tag_dispatching__ in exactly the
-same way as the __value_of__ implementation. The runtime functionality used
+same way as the __result_of_value_of__ implementation. The runtime functionality used
 by __deref__ is provided by the `call` static function of the selected
 __mpl_metafunction_class__.
 
@@ -227,14 +227,14 @@ bit of metaprogramming to return `const` references if the underlying sequence
 is const.
 
 [note Although there is a fair amount of left to do to produce a fully fledged
-Fusion sequence, __value_of__ and __deref__ illustrate all the signficant concepts
+Fusion sequence, __result_of_value_of__ and __deref__ illustrate all the signficant concepts
 required. The remainder of the process is very repetitive, simply requiring
 implementation of a suitable `xxxx_impl` for each feature `xxxx`.
 ]
 
 [heading Implementing the remaining iterator functionality]
 
-Ok, now we have seen the way __value_of__ and __deref__ work, everything else will work
+Ok, now we have seen the way __result_of_value_of__ and __deref__ work, everything else will work
  in pretty much the same way. Lets start with forward iteration,
 by providing a `next_impl`:
 
@@ -317,14 +317,15 @@ is provided in the example code.
 For our __random_access_sequence__ we will also need to implement `size_impl`,
 `value_at_impl` and `at_impl`.
 
-[heading Enabling our type as an associative container]
+[heading Enabling our type as an associative sequence]
 
-In order for `example_struct` to serve as an associative container,
-we need to enable 3 lookup features, __at_key__, __value_at_key__ and __has_key__.
-We also need to provide an implementation of the `is_associative` trait
-so that our sequence can be correctly identified as an associative container.
+In order for `example_struct` to serve as an associative forward sequence,
+we need to adapt the traversal category of our sequence and our iterator
+accordingly and enable 3 intrinsic sequence lookup features, __at_key__,
+__value_at_key__ and __has_key__. We also need to enable 3 iterator lookup
+features, __result_of_key_of__, __result_of_value_of_data__ and __deref_data__.
 
-To implement `at_key_impl` we need to associate the `fields::age` and `fields::age`
+To implement `at_key_impl` we need to associate the `fields::name` and `fields::age`
 types described in the __quick_start__ guide with the appropriate members of `example_struct`.
 Our implementation is as follows:
 
@@ -369,15 +370,14 @@ Its all very similar to the implementations we've seen previously,
 such as `deref_impl` and `value_of_impl`. Instead of identifying
 the members by index or position, we are now selecting them using
 the types `fields::name` and `fields::age`. The implementations of
-`value_at_key_impl` and `has_key_impl` are equally straightforward,
-and are provided in the example code, along with an implementation
-of `is_associative_impl`.
+the other functions are equally straightforward, and are provided in
+the example code.
 
 [heading Summary]
 
 We've now worked through the entire process for adding a new random
 access sequence and we've also enabled our type to serve as an associative
-container. The implementation was slightly longwinded, but followed
+sequence. The implementation was slightly longwinded, but followed
 a simple repeating pattern.
 
 The support for `std::pair`, __mpl__ sequences, and `boost::array` all
@@ -467,6 +467,10 @@ The user must the implement the key expressions required by their iterator type.
 [[`iterator::template distance<It1, It2>::call(it1, it2)`][The distance between iterator `it1` and `it2`][None]]
 [[`iterator::template equal_to<It1, It2>::type`][The distance between iterators of type `It1` and `It2`][`boost::same_type<It1, It2>::type`]]
 [[`iterator::template equal_to<It1, It2>::call(it1, it2)`][The distance between iterators `it1` and `it2`][`boost::same_type<It1, It2>::type()`]]
+[[`iterator::template key_of<It>::type`][The key type associated with the element from `It`][None]]
+[[`iterator::template value_of_data<It>::type`][The type of the data property associated with the element from `It`][None]]
+[[`iterator::template deref_data<It>::type`][The type that will be returned by dereferencing the data property of the element from `It`][None]]
+[[`iterator::template deref_data<It>::call(it)`][Deferences the data property associated with the element referenced by `it`][None]]
 ]
 
 [heading Header]

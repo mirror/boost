@@ -27,7 +27,7 @@
 <a name="fusion.extension.iterator_facade"></a><a class="link" href="iterator_facade.html" title="Iterator Facade">Iterator Facade</a>
 </h3></div></div></div>
 <a name="fusion.extension.iterator_facade.description"></a><h5>
-<a name="id838019"></a>
+<a name="id826688"></a>
         <a class="link" href="iterator_facade.html#fusion.extension.iterator_facade.description">Description</a>
       </h5>
 <p>
@@ -36,14 +36,14 @@
         iterator.
       </p>
 <a name="fusion.extension.iterator_facade.synopsis"></a><h5>
-<a name="id838045"></a>
+<a name="id826715"></a>
         <a class="link" href="iterator_facade.html#fusion.extension.iterator_facade.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Derived</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">TravesalTag</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">iterator_facade</span><span class="special">;</span>
 </pre>
 <a name="fusion.extension.iterator_facade.usage"></a><h5>
-<a name="id838109"></a>
+<a name="id826778"></a>
         <a class="link" href="iterator_facade.html#fusion.extension.iterator_facade.usage">Usage</a>
       </h5>
 <p>
@@ -57,7 +57,7 @@
         type.
       </p>
 <div class="table">
-<a name="id838126"></a><p class="title"><b>Table&#160;1.97.&#160;Parameters</b></p>
+<a name="id826795"></a><p class="title"><b>Table&#160;1.97.&#160;Parameters</b></p>
 <div class="table-contents"><table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -106,7 +106,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id838247"></a><p class="title"><b>Table&#160;1.98.&#160;Key Expressions</b></p>
+<a name="id826916"></a><p class="title"><b>Table&#160;1.98.&#160;Key Expressions</b></p>
 <div class="table-contents"><table class="table" summary="Key Expressions">
 <colgroup>
 <col>
@@ -361,18 +361,88 @@
             </p>
             </td>
 </tr>
+<tr>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">key_of</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              The key type associated with the element from <code class="computeroutput"><span class="identifier">It</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              None
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">value_of_data</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              The type of the data property associated with the element from <code class="computeroutput"><span class="identifier">It</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              None
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">deref_data</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              The type that will be returned by dereferencing the data property of
+              the element from <code class="computeroutput"><span class="identifier">It</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              None
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">deref_data</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it</span><span class="special">)</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              Deferences the data property associated with the element referenced
+              by <code class="computeroutput"><span class="identifier">it</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              None
+            </p>
+            </td>
+</tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><a name="fusion.extension.iterator_facade.header"></a><h5>
-<a name="id840091"></a>
+<a name="id828890"></a>
         <a class="link" href="iterator_facade.html#fusion.extension.iterator_facade.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">iterator_facade</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">iterator_facade</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.extension.iterator_facade.example"></a><h5>
-<a name="id840199"></a>
+<a name="id828998"></a>
         <a class="link" href="iterator_facade.html#fusion.extension.iterator_facade.example">Example</a>
       </h5>
 <p>

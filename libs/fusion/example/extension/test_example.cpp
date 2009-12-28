@@ -56,6 +56,9 @@ int main()
     BOOST_MPL_ASSERT((boost::is_same<result_of::value_at_key<example::example_struct, fields::name>::type, std::string>));
     BOOST_MPL_ASSERT((boost::is_same<result_of::value_at_key<example::example_struct, fields::age>::type, int>));
 
+    BOOST_TEST(deref_data(begin(bert)) == "bert");
+    BOOST_TEST(deref_data(next(begin(bert))) == 99);
+
     BOOST_TEST(size(bert) == 2);
 
     return boost::report_errors();
