@@ -18,7 +18,9 @@
 #include <string>
 
 bcp_implementation::bcp_implementation()
-  : m_list_mode(false), m_list_summary_mode(false), m_license_mode(false), m_cvs_mode(false), m_svn_mode(false), m_unix_lines(false), m_scan_mode(false), m_bsl_convert_mode(false), m_bsl_summary_mode(false)
+  : m_list_mode(false), m_list_summary_mode(false), m_license_mode(false), m_cvs_mode(false), 
+  m_svn_mode(false), m_unix_lines(false), m_scan_mode(false), m_bsl_convert_mode(false), 
+  m_bsl_summary_mode(false), m_namespace_alias(false)
 {
 }
 
@@ -100,6 +102,16 @@ void bcp_implementation::add_module(const char* p)
    m_module_list.push_back(p);
 }
 
+void bcp_implementation::set_namespace(const char* name)
+{
+   m_namespace_name = name;
+}
+
+void bcp_implementation::set_namespace_alias(bool b)
+{
+   m_namespace_alias = b;
+}
+
 fs::path get_short_path(const fs::path& p)
 {
    // truncate path no more than "x/y":
@@ -152,7 +164,7 @@ int bcp_implementation::run()
      fs::ifstream in(blanket_permission);
      std::string line;
      while (std::getline(in, line)) {
-       boost::regex e("([^(]+)\\(");
+       static const boost::regex e("([^(]+)\\(");
        boost::smatch result;
        if (boost::regex_search(line, result, e))
          m_bsl_authors.insert(format_authors_name(result[1]));

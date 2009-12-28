@@ -23,7 +23,7 @@
 void bcp_implementation::add_path(const fs::path& p)
 {
    fs::path normalized_path = p;
-   normalized_path.normalize();
+    normalized_path.normalize();
    if(fs::exists(m_boost_path / normalized_path))
    {
       if(fs::is_directory(m_boost_path / normalized_path))
@@ -34,6 +34,7 @@ void bcp_implementation::add_path(const fs::path& p)
    else
    {
       std::cerr << "CAUTION: dependent file " << p.string() << " does not exist." << std::endl;
+      std::cerr << "   Found while scanning file " << m_dependencies[p].string() << std::endl;
    }
 }
 
@@ -102,6 +103,37 @@ void bcp_implementation::add_file(const fs::path& p)
    {
       add_file_dependencies(p, false);
    }
+   if(is_jam_file(p) && m_namespace_name.size() && ((std::distance(p.begin(), p.end()) < 3) || (*p.begin() != "tools") || (*++p.begin() != "build")))
+   {
+      //
+      // We're doing a rename of namespaces and library names
+      // so scan for names of libraries:
+      //
+      static const boost::regex e(
+         "\\<lib\\s+(boost\\w+)\\s+[:;]"
+         );
+
+      fileview view(m_boost_path / p);
+      boost::regex_token_iterator<const char*> i(view.begin(), view.end(), e, 1);
+      boost::regex_token_iterator<const char*> j;
+      while(i != j)
+      {
+         m_lib_names.insert(*i);
+         ++i;
+      }
+      static const std::pair<fs::path, std::string> specials_library_names[] = {
+            std::pair<fs::path, std::string>("libs/python/build/Jamfile.v2", "boost_python"),
+            std::pair<fs::path, std::string>("libs/python/build/Jamfile.v2", "boost_python3"),
+      };
+
+      for(unsigned int n = 0; n < (sizeof(specials_library_names)/sizeof(specials_library_names[0])); ++n)
+      {
+         if(0 == compare_paths(specials_library_names[n].first, p))
+         {
+            m_lib_names.insert(specials_library_names[n].second);
+         }
+      }
+   }
    //
    // if this is a html file, scan for dependencies:
    //
@@ -126,6 +158,14 @@ void bcp_implementation::add_file(const fs::path& p)
             assert(s.size() > 2);
             s.erase(0, 1);
             s.erase(s.size() - 1);
+         }
+         //
+         // Remove any target suffix:
+         //
+         std::string::size_type n = s.find('#');
+         if(n != std::string::npos)
+         {
+            s.erase(n);
          }
          //
          // if the name starts with ./ remove it
@@ -280,7 +320,7 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
    // Now we need to scan for Boost.Preprocessor includes that
    // are included via preprocessor iteration:
    //
-   boost::regex ppfiles("^[[:blank:]]*#[[:blank:]]*define[[:blank:]]+(?:BOOST_PP_FILENAME|BOOST_PP_ITERATION_PARAMS|BOOST_PP_INDIRECT_SELF)[^\\n]+?[\"<]([^\">]+)[\">]");
+   static const boost::regex ppfiles("^[[:blank:]]*#[[:blank:]]*define[[:blank:]]+(?:BOOST_PP_FILENAME|BOOST_PP_ITERATION_PARAMS|BOOST_PP_INDIRECT_SELF)[^\\n]+?[\"<]([^\">]+)[\">]");
    i = boost::regex_token_iterator<const char*>(view.begin(), view.end(), ppfiles, 1);
    while(i != j)
    {
@@ -410,7 +450,7 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
       "BOOST_PP_UPDATE_COUNTER()",
   };
 
-   boost::regex indirect_includes("^[[:blank:]]*#[[:blank:]]*include[[:blank:]]+([^\"<][^\n]*?)[[:blank:]]*$");
+   static const boost::regex indirect_includes("^[[:blank:]]*#[[:blank:]]*include[[:blank:]]+([^\"<][^\n]*?)[[:blank:]]*$");
    i = boost::regex_token_iterator<const char*>(view.begin(), view.end(), indirect_includes, 1);
    while(i != j)
    {
