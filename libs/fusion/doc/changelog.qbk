@@ -12,7 +12,7 @@ This section summarizes significant changes to the Fusion library.
 * Sep 27, 2006: Added `boost::tuple` support. (Joel de Guzman)
 * Nov 17, 2006: Added `boost::variant` support. (Joel de Guzman)
 * Feb 15, 2007: Added functional module. (Tobias Schwinger)
-* APRIL 2, 2007: Added struct adapter. (Joel de Guzman)
+* April 2, 2007: Added struct adapter. (Joel de Guzman)
 * May 8, 2007: Added associative struct adapter. (Dan Marsden)
 * Dec 20, 2007: Removed `boost::variant` support. After thorough
   investigation, I think now that the move to make variant a
@@ -21,5 +21,9 @@ This section summarizes significant changes to the Fusion library.
   and there's no way to know at compile time what it contains.
   Iterating over its types is simply wrong. All these imply that
   the variant is *not* a fusion sequence. (Joel de Guzman)
+* Oct 12, 2009: The accumulator is the first argument to the functor of
+  __fold__ and __accumulate__. (Christopher Schmidt)
+* Oct 30, 2009: Added support for associative iterators and views. (Christopher
+  Schmidt)
 
 [endsect]
