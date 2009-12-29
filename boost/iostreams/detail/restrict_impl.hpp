@@ -304,7 +304,7 @@ std::streampos restricted_indirect_device<Device>::seek
             boost::throw_exception(bad_seek());
         return offset_to_position(pos_ - beg_);
     }
-    if (next < beg_ || (end_ != -1 && next >= end_))
+    if (next < beg_ || (end_ != -1 && next > end_))
         boost::throw_exception(bad_seek());
     pos_ = iostreams::seek(this->component(), next - pos_, BOOST_IOS::cur);
     return offset_to_position(pos_ - beg_);
