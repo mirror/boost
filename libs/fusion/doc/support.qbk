@@ -206,10 +206,10 @@ The return type is derived from one of:
 
         namespace boost { namespace fusion
         {
-            struct incrementable_sequence_tag {};
+            struct incrementable_traversal_tag {};
 
-            struct single_pass_sequence_tag
-                : incrementable_sequence_tag {};
+            struct single_pass_traversal_tag
+                : incrementable_traversal_tag {};
 
             struct forward_traversal_tag
                 : single_pass_sequence_tag {};
