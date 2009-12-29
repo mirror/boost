@@ -152,9 +152,7 @@ void test_seed_conversion(boost::rand48 & urng, const T & t, const Converted &) 
 }
 
 template<class URNG, class ResultType>
-void test_seed(const URNG &, const ResultType & v) {
-    typename URNG::result_type value = static_cast<typename URNG::result_type>(v);
-
+void test_seed(const URNG &, const ResultType & value) {
     URNG urng(value);
 
     // integral types
@@ -186,16 +184,53 @@ void instantiate_seed(const URNG & urng, const ResultType &) {
         urng2.seed();
         BOOST_CHECK(urng == urng2);
     }
-    test_seed(urng, 0);
-    test_seed(urng, 127);
-    test_seed(urng, 539157235);
-    test_seed(urng, ~0u);
+    test_seed(urng, static_cast<ResultType>(0));
+    test_seed(urng, static_cast<ResultType>(127));
+    test_seed(urng, static_cast<ResultType>(539157235));
+    test_seed(urng, static_cast<ResultType>(~0u));
 }
+
+// ranlux uses int32_t for seeding instead of result_type
+template<class ResultType>
+void instantiate_seed(const boost::ranlux3 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux3, boost::int32_t>(urng, ResultType());
+}
+template<class ResultType>
+void instantiate_seed(const boost::ranlux4 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux4, boost::int32_t>(urng, ResultType());
+}
+template<class ResultType>
+void instantiate_seed(const boost::ranlux3_01 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux3_01, boost::int32_t>(urng, ResultType());
+}
+template<class ResultType>
+void instantiate_seed(const boost::ranlux4_01 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux4_01, boost::int32_t>(urng, ResultType());
+}
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
+template<class ResultType>
+void instantiate_seed(const boost::ranlux64_3 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux64_3, boost::int32_t>(urng, ResultType());
+}
+template<class ResultType>
+void instantiate_seed(const boost::ranlux64_4 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux64_3, boost::int32_t>(urng, ResultType());
+}
+#endif
+template<class ResultType>
+void instantiate_seed(const boost::ranlux64_3_01 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux64_3_01, boost::int32_t>(urng, ResultType());
+}
+template<class ResultType>
+void instantiate_seed(const boost::ranlux64_4_01 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux64_4_01, boost::int32_t>(urng, ResultType());
+}
+
 
 template<class URNG, class ResultType>
 void instantiate_urng(const std::string & s, const URNG & u, const ResultType & r)
 {
-  std::cout << "Basic tests for " << s;
+  std::cout << "Basic tests for " << s << std::endl;
   URNG urng;
   instantiate_seed(u, r);                       // seed() member function
   int a[URNG::has_fixed_range ? 5 : 10];        // compile-time constant
