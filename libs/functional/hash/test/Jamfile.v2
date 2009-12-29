@@ -43,7 +43,10 @@ test-suite functional/hash
         [ run link_ext_test.cpp link_no_ext_test.cpp ]
         [ run extensions_hpp_test.cpp ]
         [ run container_fwd_test.cpp ]
-        [ run container_fwd_test.cpp : : : <define>_GLIBCXX_DEBUG : container_fwd_gcc_debug ]
+        [ run container_fwd_test.cpp : :
+            :   <toolset>gcc:<define>_GLIBCXX_DEBUG
+                <toolset>darwin:<define>_GLIBCXX_DEBUG
+            :   container_fwd_gcc_debug ]
         [ compile-fail hash_no_ext_fail_test.cpp ]
         [ compile-fail namespace_fail_test.cpp ]
         [ run hash_no_ext_macro_1.cpp ]
