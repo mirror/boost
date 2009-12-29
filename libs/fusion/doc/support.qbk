@@ -212,7 +212,7 @@ The return type is derived from one of:
                 : incrementable_traversal_tag {};
 
             struct forward_traversal_tag
-                : single_pass_sequence_tag {};
+                : single_pass_traversal_tag {};
 
             struct bidirectional_traversal_tag
                 : forward_traversal_tag {};
