@@ -286,11 +286,8 @@ namespace quickbook
         collector& out;
     };
 
-    namespace
-    {
-        char const* quickbook_get_date = "__quickbook_get_date__";
-        char const* quickbook_get_time = "__quickbook_get_time__";
-    }
+    extern char const* quickbook_get_date;
+    extern char const* quickbook_get_time;
 
     struct do_macro_action
     {

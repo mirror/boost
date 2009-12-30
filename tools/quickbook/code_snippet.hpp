@@ -11,7 +11,9 @@
 
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_actor.hpp>
+#include <boost/bind.hpp>
 #include "./detail/template_stack.hpp"
+#include "./detail/actions.hpp"
 
 namespace quickbook
 {
