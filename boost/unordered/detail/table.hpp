@@ -30,6 +30,23 @@ namespace boost { namespace unordered_detail {
 
     // strong exception safety, no side effects
     template <class T>
+    template <class Key, class Pred>
+    inline BOOST_DEDUCED_TYPENAME T::node_ptr
+        hash_table<T>::find_iterator(bucket_ptr bucket, Key const& k,
+            Pred const& eq) const
+    {
+        node_ptr it = bucket->next_;
+        while (BOOST_UNORDERED_BORLAND_BOOL(it) &&
+            !eq(k, get_key(node::get_value(it))))
+        {
+            it = node::next_group(it);
+        }
+
+        return it;
+    }
+
+    // strong exception safety, no side effects
+    template <class T>
     inline BOOST_DEDUCED_TYPENAME T::node_ptr
         hash_table<T>::find_iterator(
             bucket_ptr bucket, key_type const& k) const
@@ -571,6 +588,22 @@ namespace boost { namespace unordered_detail {
     }
 
     template <class T>
+    template <class Key, class Hash, class Pred>
+    BOOST_DEDUCED_TYPENAME T::iterator_base hash_table<T>::find(Key const& k,
+        Hash const& h, Pred const& eq) const
+    {
+        if(!this->size_) return this->end();
+
+        bucket_ptr bucket = this->get_bucket(h(k) % this->bucket_count_);
+        node_ptr it = find_iterator(bucket, k, eq);
+
+        if (BOOST_UNORDERED_BORLAND_BOOL(it))
+            return iterator_base(bucket, it);
+        else
+            return this->end();
+    }
+
+    template <class T>
     BOOST_DEDUCED_TYPENAME T::value_type&
         hash_table<T>::at(key_type const& k) const
     {
@@ -652,10 +685,20 @@ namespace boost { namespace unordered_detail {
         return *it ? this->erase_group(it, bucket) : 0;
     }
 
+    template <class T>
+    void hash_table<T>::erase(iterator_base r)
+    {
+        BOOST_ASSERT(r.node_);
+        --this->size_;
+        node::unlink_node(*r.bucket_, r.node_);
+        this->delete_node(r.node_);
+        // r has been invalidated but its bucket is still valid
+        this->recompute_begin_bucket(r.bucket_);
+    }
 
     template <class T>
     BOOST_DEDUCED_TYPENAME T::iterator_base
-        hash_table<T>::erase(iterator_base r)
+        hash_table<T>::erase_return_iterator(iterator_base r)
     {
         BOOST_ASSERT(r.node_);
         iterator_base next = r;

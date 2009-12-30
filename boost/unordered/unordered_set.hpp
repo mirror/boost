@@ -348,7 +348,7 @@ namespace boost
 
         iterator erase(const_iterator position)
         {
-            return iterator(table_.erase(get(position)));
+            return iterator(table_.erase_return_iterator(get(position)));
         }
 
         size_type erase(const key_type& k)
@@ -359,6 +359,11 @@ namespace boost
         iterator erase(const_iterator first, const_iterator last)
         {
             return iterator(table_.erase_range(get(first), get(last)));
+        }
+
+        void erase_return_void(const_iterator position)
+        {
+            table_.erase(get(position));
         }
 
         void clear()
@@ -390,6 +395,15 @@ namespace boost
             return const_iterator(table_.find(k));
         }
 
+        template <class CompatibleKey, class CompatibleHash,
+            class CompatiblePredicate>
+        const_iterator find(
+            CompatibleKey const& k,
+            CompatibleHash const& hash,
+            CompatiblePredicate const& eq) const
+        {
+            return iterator(table_.find(k, hash, eq));
+        }
         size_type count(const key_type& k) const
         {
             return table_.count(k);
@@ -822,7 +836,7 @@ namespace boost
 
         iterator erase(const_iterator position)
         {
-            return iterator(table_.erase(get(position)));
+            return iterator(table_.erase_return_iterator(get(position)));
         }
 
         size_type erase(const key_type& k)
@@ -833,6 +847,11 @@ namespace boost
         iterator erase(const_iterator first, const_iterator last)
         {
             return iterator(table_.erase_range(get(first), get(last)));
+        }
+
+        void erase_return_void(const_iterator position)
+        {
+            table_.erase(get(position));
         }
 
         void clear()
@@ -862,6 +881,16 @@ namespace boost
         const_iterator find(const key_type& k) const
         {
             return const_iterator(table_.find(k));
+        }
+
+        template <class CompatibleKey, class CompatibleHash,
+            class CompatiblePredicate>
+        const_iterator find(
+            CompatibleKey const& k,
+            CompatibleHash const& hash,
+            CompatiblePredicate const& eq) const
+        {
+            return iterator(table_.find(k, hash, eq));
         }
 
         size_type count(const key_type& k) const
