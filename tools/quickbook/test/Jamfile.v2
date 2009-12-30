@@ -30,6 +30,7 @@ test-suite quickbook.test :
     [ quickbook-test heading ]
     [ quickbook-test table_1_5 ]
     [ quickbook-test image_1_5 ]
+    [ quickbook-test callouts ]
     [ quickbook-fail-test fail-include ]
     [ quickbook-fail-test fail-import ]
     [ quickbook-fail-test fail-template-arguments1 ]

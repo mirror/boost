@@ -1513,8 +1513,8 @@ will generate:
 [table:id A Simple Table
     [[Heading 1] [Heading 2] [Heading 3]]
     [[R0-C0]     [R0-C1]     [R0-C2]]
+    [[R1-C0]     [R1-C1]     [R1-C2]]
     [[R2-C0]     [R2-C1]     [R2-C2]]
-    [[R3-C0]     [R3-C1]     [R3-C2]]
 ]
 
 The table title is optional. The first row of the table is automatically
