@@ -138,9 +138,11 @@ void test_seed_conversion(URNG & urng, const T & t, const Converted &) {
     Converted c = static_cast<Converted>(t);
     if(static_cast<T>(c) == t) {
         URNG urng2(c);
-        BOOST_CHECK_MESSAGE(urng == urng2, std::string("Testing seed constructor: ") + typeid(Converted).name());
+        std::ostringstream msg;
+        msg << "Testing seed: type " << typeid(Converted).name() << ", value " << c;
+        BOOST_CHECK_MESSAGE(urng == urng2, msg.str());
         urng2.seed(c);
-        BOOST_CHECK(urng == urng2);
+        BOOST_CHECK_MESSAGE(urng == urng2, msg.str());
     }
 }
 
