@@ -196,7 +196,7 @@ void test_command_line()
     BOOST_CHECK_EQUAL(a6[1].value[0], "some_file");
 }
 
-void test_config_file()
+void test_config_file(const char* config_file)
 {
     options_description desc;
     desc.add_options()
@@ -231,7 +231,7 @@ void test_config_file()
     check_value(a1[5], "m1.v2", "2");
     
     // same test, but now options come from file 
-    vector<option> a2 = parse_config_file<char>("config_test.cfg", desc).options;
+    vector<option> a2 = parse_config_file<char>(config_file, desc).options;
     BOOST_REQUIRE(a2.size() == 6);
     check_value(a2[0], "gv1", "0");
     check_value(a2[1], "empty_value", "");
@@ -316,10 +316,10 @@ void test_unregistered()
     check_value(a3[1], "m1.v1", "1");
 }
 
-int main(int, char* [])
+int main(int, char* av[])
 {
     test_command_line();
-    test_config_file();
+    test_config_file(av[1]);
     test_environment();
     test_unregistered();
     return 0;

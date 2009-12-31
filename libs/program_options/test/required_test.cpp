@@ -16,7 +16,7 @@ using namespace std;
 
 void required_throw_test()
 {
-   options_description		opts;
+   options_description          opts;
    opts.add_options()
      ("cfgfile,c", value<string>()->required(), "the configfile")
      ("fritz,f",   value<string>()->required(), "the output file")
@@ -57,9 +57,9 @@ void required_throw_test()
 
 
 
-void simple_required_test()
+void simple_required_test(const char* config_file)
 {
-   options_description		opts;
+   options_description          opts;
    opts.add_options()
      ("cfgfile,c", value<string>()->required(), "the configfile")
      ("fritz,f",   value<string>()->required(), "the output file")
@@ -75,7 +75,7 @@ void simple_required_test()
       try {
          // options coming from different sources
          store(command_line_parser(tokens).options(opts).run(), vm);
-         store(parse_config_file<char>("required_test.cfg", opts), vm);
+         store(parse_config_file<char>(config_file, opts), vm);
          notify(vm);    
       } 
       catch (required_option& e) {
@@ -87,10 +87,10 @@ void simple_required_test()
 
 
 
-int main(int /*argc*/, char** /*argv*/)
+int main(int /*argc*/, char* av[])
 {  
    required_throw_test();
-   simple_required_test();
+   simple_required_test(av[1]);
    
    return 0;
 }
