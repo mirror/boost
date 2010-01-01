@@ -394,7 +394,7 @@ public:
              Does not invalidate any iterators.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
-        \sa <code>operator[]</code>
+        \sa <code>\link operator[](size_type) operator[] \endlink</code>
     */
     reference at(size_type index) {
         check_position(index);
@@ -1166,7 +1166,7 @@ public:
              Invalidates all iterators pointing to the <code>circular_buffer</code> (including iterators equal to
              <code>end()</code>).
         \par Complexity
-             Linear (in the size of the <code>circular_buffer</code>).
+             Constant (in the size of the <code>circular_buffer</code>) for scalar types; linear for other types.
         \sa <code>clear()</code>
     */
     ~circular_buffer() {
@@ -1232,7 +1232,8 @@ public:
              <code>end()</code>).
         \par Complexity
              Linear (in the <code>n</code>).
-        \sa <code>operator=</code>, <code>\link assign(capacity_type, size_type, param_value_type)
+        \sa <code>\link operator=(const circular_buffer&) operator=\endlink</code>,
+            <code>\link assign(capacity_type, size_type, param_value_type)
             assign(capacity_type, size_type, const_reference)\endlink</code>,
             <code>assign(InputIterator, InputIterator)</code>,
             <code>assign(capacity_type, InputIterator, InputIterator)</code>
@@ -1261,8 +1262,9 @@ public:
              <code>end()</code>).
         \par Complexity
              Linear (in the <code>n</code>).
-        \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
-            assign(size_type, const_reference)\endlink</code>, <code>assign(InputIterator, InputIterator)</code>,
+        \sa <code>\link operator=(const circular_buffer&) operator=\endlink</code>,
+            <code>\link assign(size_type, param_value_type) assign(size_type, const_reference)\endlink</code>,
+            <code>assign(InputIterator, InputIterator)</code>,
             <code>assign(capacity_type, InputIterator, InputIterator)</code>
     */
     void assign(capacity_type buffer_capacity, size_type n, param_value_type item) {
@@ -1292,8 +1294,8 @@ public:
              <code>end()</code>).
         \par Complexity
              Linear (in the <code>std::distance(first, last)</code>).
-        \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
-            assign(size_type, const_reference)\endlink</code>,
+        \sa <code>\link operator=(const circular_buffer&) operator=\endlink</code>,
+            <code>\link assign(size_type, param_value_type) assign(size_type, const_reference)\endlink</code>,
             <code>\link assign(capacity_type, size_type, param_value_type)
             assign(capacity_type, size_type, const_reference)\endlink</code>,
             <code>assign(capacity_type, InputIterator, InputIterator)</code>
@@ -1331,8 +1333,8 @@ public:
              Linear (in <code>std::distance(first, last)</code>; in
              <code>min[capacity, std::distance(first, last)]</code> if the <code>InputIterator</code> is a
              <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
-        \sa <code>operator=</code>, <code>\link assign(size_type, param_value_type)
-            assign(size_type, const_reference)\endlink</code>,
+        \sa <code>\link operator=(const circular_buffer&) operator=\endlink</code>,
+            <code>\link assign(size_type, param_value_type) assign(size_type, const_reference)\endlink</code>,
             <code>\link assign(capacity_type, size_type, param_value_type)
             assign(capacity_type, size_type, const_reference)\endlink</code>,
             <code>assign(InputIterator, InputIterator)</code>
@@ -2024,7 +2026,7 @@ public:
              Invalidates all iterators pointing to the <code>circular_buffer</code> (except iterators equal to
              <code>end()</code>).
         \par Complexity
-             Linear (in the size of the <code>circular_buffer</code>).
+             Constant (in the size of the <code>circular_buffer</code>) for scalar types; linear for other types.
         \sa <code>~circular_buffer()</code>, <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
             <code>rerase(iterator)</code>, <code>rerase(iterator, iterator)</code>,
             <code>erase_begin(size_type)</code>, <code>erase_end(size_type)</code>
@@ -2134,6 +2136,20 @@ private:
 
     //! Destroy the whole content of the circular buffer.
     void destroy_content() {
+#if BOOST_CB_ENABLE_DEBUG
+        destroy_content(false_type());
+#else
+        destroy_content(is_scalar<value_type>());
+#endif
+    }
+
+    //! Specialized destroy_content method.
+    void destroy_content(const true_type&) {
+        m_first = add(m_first, size());
+    }
+
+    //! Specialized destroy_content method.
+    void destroy_content(const false_type&) {
         for (size_type ii = 0; ii < size(); ++ii, increment(m_first))
             destroy_item(m_first);
     }
