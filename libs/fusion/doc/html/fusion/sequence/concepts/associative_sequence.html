@@ -4,7 +4,11 @@
 <title>Associative
         Sequence</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
+<<<<<<< .working
 <meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+=======
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+>>>>>>> .merge-right.r57125
 <link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
 <link rel="previous" href="random_access_sequence.html" title="Random
@@ -30,6 +34,7 @@
 <a name="fusion.sequence.concepts.associative_sequence"></a><a href="associative_sequence.html" title="Associative
         Sequence">Associative
         Sequence</a>
+<<<<<<< .working
 </h4></div></div>
 <div></div>
 </div>
@@ -37,17 +42,19 @@
 <a name="id447542"></a>
           <a href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.description">Description</a>
         </h5>
+=======
+</h4></div></div></div>
+<a name="fusion.sequence.concepts.associative_sequence.description"></a><h6>
+<a name="id651268"></a>
+          <a class="link" href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.description">Description</a>
+        </h6>
+>>>>>>> .merge-right.r57125
 <p>
           An Associative Sequence allows efficient retrieval of elements based on
           keys. Like associative sequences in <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a>,
           and unlike associative containers in <a href="http://en.wikipedia.org/wiki/Standard_Template_Library" target="_top">STL</a>,
           Fusion associative sequences have no implied ordering relation. Instead,
-          type identity is used to impose an equivalence relation on keys, and the
-          order in which sequence elements are traversed during iteration is left
-          unspecified. In addition, unlike <a href="http://en.wikipedia.org/wiki/Standard_Template_Library" target="_top">STL</a>,
-          Associative Sequences have mutable iterators. This is due to the fact that
-          there is no associated ordering relation and the runtime value of the keys
-          themselves do not have any effect on the associativity of the sequence.
+          type identity is used to impose an equivalence relation on keys.
         </p>
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
@@ -74,9 +81,15 @@
             </p></dd>
 </dl>
 </div>
+<<<<<<< .working
 <a name="fusion.sequence.concepts.associative_sequence.valid_expressions"></a><h5>
 <a name="id447735"></a>
           <a href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.valid_expressions">Valid
+=======
+<a name="fusion.sequence.concepts.associative_sequence.valid_expressions"></a><h6>
+<a name="id651402"></a>
+          <a class="link" href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.valid_expressions">Valid
+>>>>>>> .merge-right.r57125
           Expressions</a>
         </h5>
 <p>
@@ -151,9 +164,15 @@
 </tr>
 </tbody>
 </table></div>
+<<<<<<< .working
 <a name="fusion.sequence.concepts.associative_sequence.result_type_expressions"></a><h5>
 <a name="id448116"></a>
           <a href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.result_type_expressions">Result
+=======
+<a name="fusion.sequence.concepts.associative_sequence.result_type_expressions"></a><h6>
+<a name="id651688"></a>
+          <a class="link" href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.result_type_expressions">Result
+>>>>>>> .merge-right.r57125
           Type Expressions</a>
         </h5>
 <div class="informaltable"><table class="table">
@@ -205,11 +224,20 @@
           most cases, this is a reference. Hence, there is no way to know the exact
           element type using <tt class="computeroutput"><a href="../intrinsic/metafunctions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">K</span><span class="special">&gt;</span></tt>.The element at <tt class="computeroutput"><span class="identifier">K</span></tt>
           may actually be a reference to begin with. For this purpose, you can use
+<<<<<<< .working
           <tt class="computeroutput"><a href="../intrinsic/metafunctions/value_at_key.html" title="value_at_key"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span></tt>.
         </p></div>
 <a name="fusion.sequence.concepts.associative_sequence.expression_semantics"></a><h5>
 <a name="id448687"></a>
           <a href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.expression_semantics">Expression
+=======
+          <code class="computeroutput"><a class="link" href="../intrinsic/metafunctions/value_at_key.html" title="value_at_key"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at_key</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span></code>.
+        </p>
+</div>
+<a name="fusion.sequence.concepts.associative_sequence.expression_semantics"></a><h6>
+<a name="id652092"></a>
+          <a class="link" href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.expression_semantics">Expression
+>>>>>>> .merge-right.r57125
           Semantics</a>
         </h5>
 <div class="informaltable"><table class="table">
@@ -250,6 +278,7 @@
 </tr>
 </tbody>
 </table></div>
+<<<<<<< .working
 <a name="fusion.sequence.concepts.associative_sequence.models"></a><h5>
 <a name="id449008"></a>
           <a href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.models">Models</a>
@@ -257,6 +286,15 @@
 <div class="itemizedlist"><ul type="disc">
 <li><a href="../../container/set.html" title="set"><tt class="computeroutput"><span class="identifier">set</span></tt></a></li>
 <li><a href="../../container/map.html" title="map"><tt class="computeroutput"><span class="identifier">map</span></tt></a></li>
+=======
+<a name="fusion.sequence.concepts.associative_sequence.models"></a><h6>
+<a name="id652312"></a>
+          <a class="link" href="associative_sequence.html#fusion.sequence.concepts.associative_sequence.models">Models</a>
+        </h6>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><a class="link" href="../../container/set.html" title="set"><code class="computeroutput"><span class="identifier">set</span></code></a></li>
+<li class="listitem"><a class="link" href="../../container/map.html" title="map"><code class="computeroutput"><span class="identifier">map</span></code></a></li>
+>>>>>>> .merge-right.r57125
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

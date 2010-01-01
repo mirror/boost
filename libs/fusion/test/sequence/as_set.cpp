@@ -33,7 +33,7 @@ main()
         std::cout << as_set(make_list(1, 1.23, "harru")) << std::endl;
         std::cout << as_set(push_back(empty, 999)) << std::endl;
         
-        BOOST_TEST(as_list(as_set(make_list(1, 1.23, "harru"))) 
+        BOOST_TEST(as_list(as_set(make_list(1, 1.23, "harru")))
             == make_list(1, 1.23, std::string("harru")));
         BOOST_TEST(as_list(as_set(push_back(empty, 999)))
             == push_back(empty, 999));

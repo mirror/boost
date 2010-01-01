@@ -13,6 +13,12 @@
 #include <boost/fusion/view/filter_view/filter_view.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
+#include <boost/fusion/container/map.hpp>
+#include <boost/fusion/sequence/intrinsic/has_key.hpp>
+#include <boost/fusion/sequence/intrinsic/begin.hpp>
+#include <boost/fusion/iterator/key_of.hpp>
+#include <boost/fusion/iterator/value_of_data.hpp>
+#include <boost/fusion/iterator/deref_data.hpp>
 #include <boost/type_traits/is_class.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/arg.hpp>
@@ -62,22 +68,6 @@ main()
     std::cout << tuple_close(']');
     std::cout << tuple_delimiter(", ");
 
-    { // Testing the static find_if (internal function)
-
-        typedef vector<int, char, long, X> vector_type;
-
-        vector_type v(1, 'x', 987654, X());
-        typedef vector_iterator<vector_type, 0> begin;
-        typedef vector_iterator<vector_type, 4> end;
-        typedef detail::static_find_if<begin, end, is_same<_, long> > filter;
-        typedef filter::type type;
-
-        BOOST_TEST(*type(v) == 987654);
-        std::cout << *type(v) << std::endl;
-        std::cout << *filter::call(begin(v)) << std::endl;
-        BOOST_TEST(*type(v) == *filter::call(begin(v)));
-    }
-
     {
         typedef vector<Y, char, long, X, bool, double> vector_type;
 
@@ -113,6 +103,23 @@ main()
         typedef filter_view<vec, reject_all> filter_view_type;
 
         BOOST_MPL_ASSERT((result_of::equal_to<result_of::begin<filter_view_type>::type, result_of::end<filter_view_type>::type>));
+    }
+
+    {
+        typedef map<pair<void, int>, pair<double, std::string> > map_type;
+        map_type m(make_pair<void>(0), make_pair<double>("Bond"));
+
+        typedef filter_view<map_type const, is_same<_, pair<double, std::string> > > filter_view_type;
+        filter_view_type f(m);
+
+        BOOST_MPL_ASSERT((result_of::has_key<filter_view_type, double>::type));
+        BOOST_MPL_ASSERT_NOT((result_of::has_key<filter_view_type, void>::type));
+
+        BOOST_MPL_ASSERT((is_same<result_of::key_of<result_of::begin<filter_view_type>::type>::type, double>));
+        BOOST_MPL_ASSERT((is_same<result_of::value_of_data<result_of::begin<filter_view_type>::type>::type, std::string>));
+
+        std::cout << deref_data(begin(f)) << std::endl;
+        BOOST_TEST((deref_data(begin(f)) == "Bond"));
     }
 
     return boost::report_errors();

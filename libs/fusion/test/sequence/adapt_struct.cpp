@@ -11,6 +11,7 @@
 #include <boost/fusion/sequence/intrinsic/empty.hpp>
 #include <boost/fusion/sequence/intrinsic/front.hpp>
 #include <boost/fusion/sequence/intrinsic/back.hpp>
+#include <boost/fusion/sequence/intrinsic/value_at.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/container/list/list.hpp>
@@ -22,7 +23,10 @@
 #include <boost/fusion/sequence/comparison/less_equal.hpp>
 #include <boost/fusion/sequence/comparison/greater.hpp>
 #include <boost/fusion/sequence/comparison/greater_equal.hpp>
+#include <boost/fusion/mpl.hpp>
 #include <boost/fusion/support/is_view.hpp>
+#include <boost/mpl/front.hpp>
+#include <boost/mpl/is_sequence.hpp>
 #include <boost/mpl/assert.hpp>
 #include <iostream>
 #include <string>
@@ -112,6 +116,14 @@ main()
         typedef result_of::end<s>::type e;
         // this fails
         BOOST_MPL_ASSERT((is_same<result_of::next<b>::type, e>));
+    }
+
+
+    {
+        BOOST_MPL_ASSERT((mpl::is_sequence<ns::point>));
+        BOOST_MPL_ASSERT((boost::is_same<
+            fusion::result_of::value_at_c<ns::point,0>::type
+          , mpl::front<ns::point>::type>));
     }
 
     return boost::report_errors();

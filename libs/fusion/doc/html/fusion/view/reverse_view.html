@@ -3,7 +3,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>reverse_view</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
+<<<<<<< .working
 <meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+=======
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+>>>>>>> .merge-right.r57125
 <link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../view.html" title="View">
 <link rel="previous" href="transform_view.html" title="transform_view">
@@ -34,24 +38,45 @@
         view of underlying sequence. The first element will be its last and the last
         element will be its first.
       </p>
+<<<<<<< .working
 <a name="fusion.view.reverse_view.header"></a><h4>
 <a name="id527152"></a>
         <a href="reverse_view.html#fusion.view.reverse_view.header">Header</a>
       </h4>
+=======
+<a name="fusion.view.reverse_view.header"></a><h5>
+<a name="id734258"></a>
+        <a class="link" href="reverse_view.html#fusion.view.reverse_view.header">Header</a>
+      </h5>
+>>>>>>> .merge-right.r57125
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">reverse_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">reverse_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
+<<<<<<< .working
 <a name="fusion.view.reverse_view.synopsis"></a><h4>
 <a name="id527307"></a>
         <a href="reverse_view.html#fusion.view.reverse_view.synopsis">Synopsis</a>
       </h4>
+=======
+<a name="fusion.view.reverse_view.synopsis"></a><h5>
+<a name="id734366"></a>
+        <a class="link" href="reverse_view.html#fusion.view.reverse_view.synopsis">Synopsis</a>
+      </h5>
+>>>>>>> .merge-right.r57125
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">reverse_view</span><span class="special">;</span>
 </pre>
+<<<<<<< .working
 <a name="fusion.view.reverse_view.template_parameters"></a><h4>
 <a name="id527385"></a>
         <a href="reverse_view.html#fusion.view.reverse_view.template_parameters">Template parameters</a>
       </h4>
+=======
+<a name="fusion.view.reverse_view.template_parameters"></a><h5>
+<a name="id734418"></a>
+        <a class="link" href="reverse_view.html#fusion.view.reverse_view.template_parameters">Template parameters</a>
+      </h5>
+>>>>>>> .merge-right.r57125
 <div class="informaltable"><table class="table">
 <colgroup>
 <col>
@@ -82,13 +107,40 @@
               </p></td>
 </tr></tbody>
 </table></div>
+<<<<<<< .working
 <a name="fusion.view.reverse_view.model_of"></a><h4>
 <a name="id527497"></a>
         <a href="reverse_view.html#fusion.view.reverse_view.model_of">Model of</a>
       </h4>
 <div class="itemizedlist"><ul type="disc"><li><a href="../sequence/concepts/bidirectional_sequence.html" title="Bidirectional
         Sequence">Bidirectional
+=======
+<a name="fusion.view.reverse_view.model_of"></a><h5>
+<a name="id734506"></a>
+        <a class="link" href="reverse_view.html#fusion.view.reverse_view.model_of">Model of</a>
+      </h5>
+<<<<<<< .working
+<<<<<<< .working
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><a class="link" href="../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
+>>>>>>> .merge-right.r57125
           Sequence</a></li></ul></div>
+=======
+<p>
+        A model of the same sequence concept as <code class="computeroutput"><span class="identifier">Sequence</span></code>.
+      </p>
+=======
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><a class="link" href="../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
+          Sequence</a></li>
+<li class="listitem">
+<a class="link" href="../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+          Sequence</a> if <code class="computeroutput"><span class="identifier">Sequence</span></code>
+          implements the <a class="link" href="../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+          Sequence</a> model.
+        </li>
+</ul></div>
+>>>>>>> .merge-right.r57337
+>>>>>>> .merge-right.r57242
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
@@ -107,16 +159,26 @@
           </p></dd>
 </dl>
 </div>
+<<<<<<< .working
 <a name="fusion.view.reverse_view.expression_semantics"></a><h4>
 <a name="id527661"></a>
         <a href="reverse_view.html#fusion.view.reverse_view.expression_semantics">Expression
+=======
+<a name="fusion.view.reverse_view.expression_semantics"></a><h5>
+<a name="id734641"></a>
+        <a class="link" href="reverse_view.html#fusion.view.reverse_view.expression_semantics">Expression
+>>>>>>> .merge-right.r57125
         Semantics</a>
       </h4>
 <p>
         Semantics of an expression is defined only where it differs from, or is not
+<<<<<<< .working
         defined in <a href="../sequence/concepts/bidirectional_sequence.html" title="Bidirectional
         Sequence">Bidirectional
         Sequence</a>.
+=======
+        defined in the implemented models.
+>>>>>>> .merge-right.r57242
       </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -164,11 +226,19 @@
 </tr>
 </tbody>
 </table></div>
+<<<<<<< .working
 <a name="fusion.view.reverse_view.example"></a><h4>
 <a name="id527974"></a>
         <a href="reverse_view.html#fusion.view.reverse_view.example">Example</a>
       </h4>
 <pre class="programlisting"><span class="keyword">typedef</span> <a href="../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">short</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">vector_type</span><span class="special">;</span>
+=======
+<a name="fusion.view.reverse_view.example"></a><h5>
+<a name="id734860"></a>
+        <a class="link" href="reverse_view.html#fusion.view.reverse_view.example">Example</a>
+      </h5>
+<pre class="programlisting"><span class="keyword">typedef</span> <a class="link" href="../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">short</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">vector_type</span><span class="special">;</span>
+>>>>>>> .merge-right.r57125
 <span class="identifier">vector_type</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">5</span><span class="special">,</span> <span class="number">3.3</span><span class="special">);</span>
 
 <span class="identifier">reverse_view</span><span class="special">&lt;</span><span class="identifier">vector_type</span><span class="special">&gt;</span> <span class="identifier">reverse</span><span class="special">(</span><span class="identifier">vec</span><span class="special">);</span>

@@ -5,13 +5,22 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
+#include <boost/fusion/container/map.hpp>
+#include <boost/fusion/container/set.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/view/joint_view/joint_view.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
-#include <boost/mpl/vector_c.hpp>
+#include <boost/fusion/sequence/intrinsic/has_key.hpp>
+#include <boost/fusion/sequence/intrinsic/begin.hpp>
+#include <boost/fusion/iterator/next.hpp>
+#include <boost/fusion/iterator/key_of.hpp>
+#include <boost/fusion/iterator/value_of.hpp>
+#include <boost/fusion/iterator/deref_data.hpp>
+#include <boost/mpl/assert.hpp>
+#include <string>
 
 struct X
 {
@@ -137,6 +146,40 @@ main()
             std::cout << jt << std::endl;
             BOOST_TEST(jt == make_vector());
         }
+    }
+
+    {
+        typedef map<pair<void,int> > map_type;
+        map_type m(make_pair<void>(0));
+
+        typedef set<std::string, float> set_type;
+        set_type s("foo", 1.3f);
+
+        typedef joint_view<map_type, set_type> joint_view_type;
+        joint_view_type j(m,s);
+
+        BOOST_MPL_ASSERT((result_of::has_key<joint_view_type, void>::type));
+        BOOST_MPL_ASSERT((result_of::has_key<joint_view_type, std::string>::type));
+        BOOST_MPL_ASSERT((result_of::has_key<joint_view_type, float>::type));
+
+        BOOST_MPL_ASSERT((boost::is_same<result_of::key_of<result_of::begin<joint_view_type>::type>::type, void>));
+        BOOST_MPL_ASSERT((boost::is_same<result_of::key_of<result_of::next<result_of::begin<joint_view_type>::type>::type>::type, std::string>));
+        BOOST_MPL_ASSERT((boost::is_same<
+                result_of::key_of<result_of::next<result_of::next<result_of::begin<joint_view_type>::type>::type>::type>::type
+              , float>));
+
+        BOOST_MPL_ASSERT((boost::is_same<result_of::value_of_data<result_of::begin<joint_view_type>::type>::type, int>));
+        BOOST_MPL_ASSERT((boost::is_same<result_of::value_of_data<result_of::next<result_of::begin<joint_view_type>::type>::type>::type, std::string>));
+        BOOST_MPL_ASSERT((boost::is_same<
+                result_of::value_of_data<result_of::next<result_of::next<result_of::begin<joint_view_type>::type>::type>::type>::type
+              , float>));
+
+        std::cout << deref_data(begin(j)) << std::endl;
+        std::cout << deref_data(boost::fusion::next(begin(j))) << std::endl;
+        std::cout << deref_data(next(boost::fusion::next(begin(j)))) << std::endl;
+        BOOST_TEST((deref_data(begin(j)) == 0));
+        BOOST_TEST((deref_data(boost::fusion::next(begin(j))) == "foo"));
+        BOOST_TEST((deref_data(next(boost::fusion::next(begin(j)))) == 1.3f));
     }
 
     return boost::report_errors();

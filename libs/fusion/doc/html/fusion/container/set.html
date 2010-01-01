@@ -3,7 +3,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>set</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
+<<<<<<< .working
 <meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+=======
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+>>>>>>> .merge-right.r57125
 <link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../container.html" title="Container">
 <link rel="previous" href="list.html" title="list">
@@ -22,6 +26,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="list.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../container.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="map.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
+<<<<<<< .working
 <div class="section" lang="en">
 <div class="titlepage">
 <div><div><h3 class="title">
@@ -33,6 +38,16 @@
 <a name="id485216"></a>
         <a href="set.html#fusion.container.set.description">Description</a>
       </h4>
+=======
+<div class="section" title="set">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="fusion.container.set"></a><a class="link" href="set.html" title="set">set</a>
+</h3></div></div></div>
+<a name="fusion.container.set.description"></a><h5>
+<a name="id691394"></a>
+        <a class="link" href="set.html#fusion.container.set.description">Description</a>
+      </h5>
+>>>>>>> .merge-right.r57125
 <p>
         set is an <a href="../sequence/concepts/associative_sequence.html" title="Associative
         Sequence">Associative
@@ -42,19 +57,33 @@
         element key lookup has constant runtime complexity (see <a href="../notes.html#fusion.notes.overloaded_functions">Overloaded
         Functions</a>).
       </p>
+<<<<<<< .working
 <a name="fusion.container.set.header"></a><h4>
 <a name="id485264"></a>
         <a href="set.html#fusion.container.set.header">Header</a>
       </h4>
+=======
+<a name="fusion.container.set.header"></a><h5>
+<a name="id691421"></a>
+        <a class="link" href="set.html#fusion.container.set.header">Header</a>
+      </h5>
+>>>>>>> .merge-right.r57125
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">set</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">set</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">set_fwd</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">set_fwd</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
+<<<<<<< .working
 <a name="fusion.container.set.synopsis"></a><h4>
 <a name="id485545"></a>
         <a href="set.html#fusion.container.set.synopsis">Synopsis</a>
       </h4>
+=======
+<a name="fusion.container.set.synopsis"></a><h5>
+<a name="id691620"></a>
+        <a class="link" href="set.html#fusion.container.set.synopsis">Synopsis</a>
+      </h5>
+>>>>>>> .merge-right.r57125
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">T0</span> <span class="special">=</span> <span class="emphasis"><em>unspecified</em></span>
   <span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T1</span> <span class="special">=</span> <span class="emphasis"><em>unspecified</em></span>
@@ -79,10 +108,17 @@
       </p>
 <pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_SET_SIZE</span> <span class="number">20</span>
 </pre>
+<<<<<<< .working
 <a name="fusion.container.set.template_parameters"></a><h4>
 <a name="id485872"></a>
         <a href="set.html#fusion.container.set.template_parameters">Template parameters</a>
       </h4>
+=======
+<a name="fusion.container.set.template_parameters"></a><h5>
+<a name="id691853"></a>
+        <a class="link" href="set.html#fusion.container.set.template_parameters">Template parameters</a>
+      </h5>
+>>>>>>> .merge-right.r57125
 <div class="informaltable"><table class="table">
 <colgroup>
 <col>
@@ -112,6 +148,7 @@
               </p></td>
 </tr></tbody>
 </table></div>
+<<<<<<< .working
 <a name="fusion.container.set.model_of"></a><h4>
 <a name="id485989"></a>
         <a href="set.html#fusion.container.set.model_of">Model of</a>
@@ -119,6 +156,14 @@
 <div class="itemizedlist"><ul type="disc">
 <li><a href="../sequence/concepts/associative_sequence.html" title="Associative
         Sequence">Associative
+=======
+<a name="fusion.container.set.model_of"></a><h5>
+<a name="id691946"></a>
+        <a class="link" href="set.html#fusion.container.set.model_of">Model of</a>
+      </h5>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><a class="link" href="../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+>>>>>>> .merge-right.r57125
           Sequence</a></li>
 <li><a href="../sequence/concepts/forward_sequence.html" title="Forward
         Sequence">Forward Sequence</a></li>
@@ -145,10 +190,17 @@
           </p></dd>
 </dl>
 </div>
+<<<<<<< .working
 <a name="fusion.container.set.expression_semantics"></a><h4>
 <a name="id486183"></a>
         <a href="set.html#fusion.container.set.expression_semantics">Expression Semantics</a>
       </h4>
+=======
+<a name="fusion.container.set.expression_semantics"></a><h5>
+<a name="id692086"></a>
+        <a class="link" href="set.html#fusion.container.set.expression_semantics">Expression Semantics</a>
+      </h5>
+>>>>>>> .merge-right.r57125
 <p>
         Semantics of an expression is defined only where it differs from, or is not
         defined in <a href="../sequence/concepts/random_access_sequence.html" title="Random
@@ -212,10 +264,17 @@
 </tr>
 </tbody>
 </table></div>
+<<<<<<< .working
 <a name="fusion.container.set.example"></a><h4>
 <a name="id486530"></a>
         <a href="set.html#fusion.container.set.example">Example</a>
       </h4>
+=======
+<a name="fusion.container.set.example"></a><h5>
+<a name="id692339"></a>
+        <a class="link" href="set.html#fusion.container.set.example">Example</a>
+      </h5>
+>>>>>>> .merge-right.r57125
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">set</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">S</span><span class="special">;</span>
 <span class="identifier">S</span> <span class="identifier">s</span><span class="special">(</span><span class="number">12</span><span class="special">,</span> <span class="number">5.5f</span><span class="special">);</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/functions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>

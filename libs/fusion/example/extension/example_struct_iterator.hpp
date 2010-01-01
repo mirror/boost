@@ -9,6 +9,7 @@
 #define BOOST_FUSION_EXAMPLE_STRUCT_ITERATOR
 
 #include <boost/fusion/support/iterator_base.hpp>
+#include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/support/tag_of_fwd.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/type_traits/add_const.hpp>
@@ -21,6 +22,9 @@
 #include "./detail/distance_impl.hpp"
 #include "./detail/value_of_impl.hpp"
 #include "./detail/equal_to_impl.hpp"
+#include "./detail/key_of_impl.hpp"
+#include "./detail/value_of_data_impl.hpp"
+#include "./detail/deref_data_impl.hpp"
 
 namespace example
 {
@@ -31,8 +35,6 @@ namespace example
 }
 
 namespace boost { namespace fusion {
-
-    struct random_access_traversal_tag;
 
     namespace traits
     {
@@ -52,7 +54,11 @@ namespace example {
         BOOST_STATIC_ASSERT(Pos >=0 && Pos < 3);
         typedef Struct struct_type;
         typedef boost::mpl::int_<Pos> index;
-        typedef boost::fusion::random_access_traversal_tag category;
+
+        struct category
+          : boost::fusion::random_access_traversal_tag
+          , boost::fusion::associative_tag
+        {};
 
         example_struct_iterator(Struct& str)
             : struct_(str) {}

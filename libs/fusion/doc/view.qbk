@@ -101,6 +101,7 @@ presents only those elements for which its predicate evaluates to
 [heading Model of]
 
 * __forward_sequence__
+* __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [variablelist Notation
     [[`F`]              [A `filter_view` type]]
@@ -111,7 +112,7 @@ presents only those elements for which its predicate evaluates to
 [heading Expression Semantics]
 
 Semantics of an expression is defined only where it differs from, or is not
-defined in __forward_sequence__.
+defined in the implemented models.
 
 [table
     [[Expression]           [Semantics]]
@@ -164,6 +165,7 @@ by a pair of iterators.
 * __forward_sequence__, __bidirectional_sequence__ or
 __random_access_sequence__ depending on the traversal characteristics (see
 __traversal_concept__) of its underlying sequence.
+* __associative_sequence__ if `First` and `Last` implement the __associative_iterator__ model.
 
 [variablelist Notation
     [[`IR`]             [An `iterator_range` type]]
@@ -175,7 +177,7 @@ __traversal_concept__) of its underlying sequence.
 [heading Expression Semantics]
 
 Semantics of an expression is defined only where it differs from, or is not
-defined in __forward_sequence__.
+defined in the implemented models.
 
 [table
     [[Expression]           [Semantics]]
@@ -230,6 +232,7 @@ defined in __forward_sequence__.
 [heading Model of]
 
 * __forward_sequence__
+* __associative_sequence__ if `Sequence1` and `Sequence2` implement the __associative_sequence__ model.
 
 [variablelist Notation
     [[`JV`]             [A `joint_view` type]]
@@ -241,7 +244,7 @@ defined in __forward_sequence__.
 [heading Expression Semantics]
 
 Semantics of an expression is defined only where it differs from, or is not
-defined in __forward_sequence__.
+defined in the implemented models.
 
 [table
     [[Expression]           [Semantics]]
@@ -443,7 +446,9 @@ element will be its last and the last element will be its first.
 
 [heading Model of]
 
-* __bidirectional_sequence__
+* A model of __bidirectional_sequence__ if `Sequence` is a __bidirectional_sequence__
+else, __random_access_sequence__ if `Sequence` is a __random_access_sequence__.
+* __associative_sequence__ if `Sequence` implements the __associative_sequence__ model.
 
 [variablelist Notation
     [[`RV`]             [A `reverse_view` type]]
@@ -454,7 +459,7 @@ element will be its last and the last element will be its first.
 [heading Expression Semantics]
 
 Semantics of an expression is defined only where it differs from, or is not
-defined in __bidirectional_sequence__.
+defined in the implemented models.
 
 [table
     [[Expression]           [Semantics]]

@@ -67,7 +67,7 @@ struct test_func
         typedef long result_type;
 
         template <typename T>
-        long operator()(T & elem, long value) const
+        long operator()(long value, T & elem) const
         {
           elem += sizeof(T);
           return value + elem;

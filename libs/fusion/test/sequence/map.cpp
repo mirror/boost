@@ -10,7 +10,12 @@
 #include <boost/fusion/sequence/intrinsic/at_key.hpp>
 #include <boost/fusion/sequence/intrinsic/value_at_key.hpp>
 #include <boost/fusion/sequence/intrinsic/has_key.hpp>
+#include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
+#include <boost/fusion/iterator/key_of.hpp>
+#include <boost/fusion/iterator/deref_data.hpp>
+#include <boost/fusion/iterator/value_of_data.hpp>
+#include <boost/fusion/iterator/next.hpp>
 #include <boost/fusion/support/pair.hpp>
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/static_assert.hpp>
@@ -59,6 +64,17 @@ main()
         BOOST_STATIC_ASSERT((result_of::has_key<map_type, int>::value));
         BOOST_STATIC_ASSERT((result_of::has_key<map_type, double>::value));
         BOOST_STATIC_ASSERT((!result_of::has_key<map_type, std::string>::value));
+
+        std::cout << deref_data(begin(m)) << std::endl;
+        std::cout << deref_data(next(begin(m))) << std::endl;
+
+        BOOST_TEST(deref_data(begin(m)) == 'X');
+        BOOST_TEST(deref_data(next(begin(m))) == "Men");
+
+        BOOST_STATIC_ASSERT((is_same<result_of::key_of<result_of::begin<map_type>::type>::type, int>::value));
+        BOOST_STATIC_ASSERT((is_same<result_of::key_of<result_of::next<result_of::begin<map_type>::type>::type>::type, double>::value));
+        BOOST_STATIC_ASSERT((is_same<result_of::value_of_data<result_of::begin<map_type>::type>::type, char>::value));
+        BOOST_STATIC_ASSERT((is_same<result_of::value_of_data<result_of::next<result_of::begin<map_type>::type>::type>::type, std::string>::value));
     }
     
     {

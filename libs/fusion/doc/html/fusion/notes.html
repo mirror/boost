@@ -1,11 +1,20 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Notes</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
+<<<<<<< .working
 <meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+=======
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<<<<<<< .working
+>>>>>>> .merge-right.r57125
 <link rel="home" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter 1. Fusion 2.0">
+=======
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
+>>>>>>> .merge-right.r58299
 <link rel="previous" href="functional/generation/metafunctions/mk_unfused.html" title="
           make_unfused">
 <link rel="next" href="change_log.html" title="Change log">
@@ -23,6 +32,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="functional/generation/metafunctions/mk_unfused.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="change_log.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
+<<<<<<< .working
 <div class="section" lang="en">
 <div class="titlepage">
 <div><div><h2 class="title" style="clear: both">
@@ -33,6 +43,15 @@
 <a name="fusion.notes.recursive_inlined_functions"></a><h3>
 <a name="id633847"></a>
       <a href="notes.html#fusion.notes.recursive_inlined_functions">Recursive Inlined
+=======
+<div class="section" title="Notes">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="fusion.notes"></a><a class="link" href="notes.html" title="Notes">Notes</a>
+</h2></div></div></div>
+<a name="fusion.notes.recursive_inlined_functions"></a><h4>
+<a name="id850093"></a>
+      <a class="link" href="notes.html#fusion.notes.recursive_inlined_functions">Recursive Inlined
+>>>>>>> .merge-right.r57125
       Functions</a>
     </h3>
 <p>
@@ -44,20 +63,34 @@
       deeply recursive (up to a certain compiler limit of course). Compile time complexity
       remains linear.
     </p>
+<<<<<<< .working
 <a name="fusion.notes.overloaded_functions"></a><h3>
 <a name="id633922"></a>
       <a href="notes.html#fusion.notes.overloaded_functions">Overloaded Functions</a>
     </h3>
+=======
+<a name="fusion.notes.overloaded_functions"></a><h4>
+<a name="id850133"></a>
+      <a class="link" href="notes.html#fusion.notes.overloaded_functions">Overloaded Functions</a>
+    </h4>
+>>>>>>> .merge-right.r57125
 <p>
       Associative sequences use function overloading to implement membership testing
       and type associated key lookup. This amounts to constant runtime and amortized
       constant compile time complexities. There is an overloaded function, <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">k</span><span class="special">)</span></tt>, for each key <span class="emphasis"><em>type</em></span> <tt class="computeroutput"><span class="identifier">k</span></tt>. The compiler chooses the appropriate function
       given a key, <tt class="computeroutput"><span class="identifier">k</span></tt>.
     </p>
+<<<<<<< .working
 <a name="fusion.notes.tag_dispatching"></a><h3>
 <a name="id634005"></a>
       <a href="notes.html#fusion.notes.tag_dispatching">Tag Dispatching</a>
     </h3>
+=======
+<a name="fusion.notes.tag_dispatching"></a><h4>
+<a name="id850186"></a>
+      <a class="link" href="notes.html#fusion.notes.tag_dispatching">Tag Dispatching</a>
+    </h4>
+>>>>>>> .merge-right.r57125
 <p>
       Tag dispatching is a generic programming technique for selecting template specializations.
       There are typically 3 components involved in the tag dispatching mechanism:
@@ -105,10 +138,17 @@
         to provide an implementation for each tag type
       </li>
 </ol></div>
+<<<<<<< .working
 <a name="fusion.notes.extensibility"></a><h3>
 <a name="id634386"></a>
       <a href="notes.html#fusion.notes.extensibility">Extensibility</a>
     </h3>
+=======
+<a name="fusion.notes.extensibility"></a><h4>
+<a name="id850454"></a>
+      <a class="link" href="notes.html#fusion.notes.extensibility">Extensibility</a>
+    </h4>
+>>>>>>> .merge-right.r57125
 <p>
       Unlike <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a>, there
       is no extensibe sequence concept in fusion. This does not mean that Fusion
@@ -140,10 +180,17 @@
       holds a reference to the original sequence plus the appended data --making
       it very cheap to pass around.
     </p>
+<<<<<<< .working
 <a name="fusion.notes.element_conversion"></a><h3>
 <a name="id634704"></a>
       <a href="notes.html#fusion.notes.element_conversion">Element Conversion</a>
     </h3>
+=======
+<a name="fusion.notes.element_conversion"></a><h4>
+<a name="id850636"></a>
+      <a class="link" href="notes.html#fusion.notes.element_conversion">Element Conversion</a>
+    </h4>
+>>>>>>> .merge-right.r57125
 <p>
       Functions that take in elemental values to form sequences (e.g. <a href="container/generation/functions/make_list.html" title="make_list"><tt class="computeroutput"><span class="identifier">make_list</span></tt></a>) convert their arguments
       to something suitable to be stored as a sequence element. In general, the element
@@ -163,7 +210,31 @@
     </p>
 <p>
       Array arguments are deduced to reference to const types. For example
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
       <sup>[<a name="id634862" href="#ftn.id634862">10</a>]</sup>
+=======
+      <sup>[<a name="id886385" href="#ftn.id886385" class="footnote">10</a>]</sup>
+=======
+      <sup>[<a name="id851663" href="#ftn.id851663" class="footnote">10</a>]</sup>
+=======
+      <sup>[<a name="id844039" href="#ftn.id844039" class="footnote">10</a>]</sup>
+=======
+      <sup>[<a name="id866857" href="#ftn.id866857" class="footnote">10</a>]</sup>
+=======
+      <sup>[<a name="id854017" href="#ftn.id854017" class="footnote">10</a>]</sup>
+=======
+      <sup>[<a name="id850741" href="#ftn.id850741" class="footnote">10</a>]</sup>
+>>>>>>> .merge-right.r58559
+>>>>>>> .merge-right.r58549
+>>>>>>> .merge-right.r58299
+>>>>>>> .merge-right.r57337
+>>>>>>> .merge-right.r57242
+>>>>>>> .merge-right.r57125
       :
     </p>
 <pre class="programlisting"><a href="container/generation/functions/make_list.html" title="make_list"><tt class="computeroutput"><span class="identifier">make_list</span></tt></a><span class="special">(</span><span class="string">"Donald"</span><span class="special">,</span> <span class="string">"Daisy"</span><span class="special">)</span>
@@ -191,10 +262,17 @@
     </p>
 <pre class="programlisting"><a href="container/list.html" title="list"><tt class="computeroutput"><span class="identifier">list</span></tt></a><span class="special">&lt;</span><span class="keyword">void</span> <span class="special">(*)(</span><span class="keyword">int</span><span class="special">)&gt;</span>
 </pre>
+<<<<<<< .working
 <a name="fusion.notes.boost__ref"></a><h3>
 <a name="id635292"></a>
       <a href="notes.html#fusion.notes.boost__ref">boost::ref</a>
     </h3>
+=======
+<a name="fusion.notes.boost__ref"></a><h4>
+<a name="id851027"></a>
+      <a class="link" href="notes.html#fusion.notes.boost__ref">boost::ref</a>
+    </h4>
+>>>>>>> .merge-right.r57125
 <p>
       Fusion's generation functions (e.g. <a href="container/generation/functions/make_list.html" title="make_list"><tt class="computeroutput"><span class="identifier">make_list</span></tt></a>) by default stores the element
       types as plain non-reference types. Example:
@@ -232,7 +310,31 @@
     </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
 <div class="footnote"><p><sup>[<a name="ftn.id634862" href="#id634862">10</a>] </sup>
+=======
+<div class="footnote"><p><sup>[<a name="ftn.id886385" href="#id886385" class="para">10</a>] </sup>
+=======
+<div class="footnote"><p><sup>[<a name="ftn.id851663" href="#id851663" class="para">10</a>] </sup>
+=======
+<div class="footnote"><p><sup>[<a name="ftn.id844039" href="#id844039" class="para">10</a>] </sup>
+=======
+<div class="footnote"><p><sup>[<a name="ftn.id866857" href="#id866857" class="para">10</a>] </sup>
+=======
+<div class="footnote"><p><sup>[<a name="ftn.id854017" href="#id854017" class="para">10</a>] </sup>
+=======
+<div class="footnote"><p><sup>[<a name="ftn.id850741" href="#id850741" class="para">10</a>] </sup>
+>>>>>>> .merge-right.r58559
+>>>>>>> .merge-right.r58549
+>>>>>>> .merge-right.r58299
+>>>>>>> .merge-right.r57337
+>>>>>>> .merge-right.r57242
+>>>>>>> .merge-right.r57125
           Note that the type of a string literal is an array of const characters,
           not <tt class="computeroutput"><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span></tt>. To get <a href="container/generation/functions/make_list.html" title="make_list"><tt class="computeroutput"><span class="identifier">make_list</span></tt></a> to create a <a href="container/list.html" title="list"><tt class="computeroutput"><span class="identifier">list</span></tt></a> with an element of a non-const
           array type one must use the <tt class="computeroutput"><span class="identifier">ref</span></tt>
@@ -242,7 +344,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2007 Joel de Guzman, Dan Marsden, Tobias
       Schwinger<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)

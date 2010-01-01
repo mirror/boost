@@ -5,15 +5,23 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
+#include <boost/fusion/container/map.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/view/iterator_range/iterator_range.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
+#include <boost/fusion/sequence/intrinsic/begin.hpp>
+#include <boost/fusion/sequence/intrinsic/has_key.hpp>
+#include <boost/fusion/iterator/advance.hpp>
+#include <boost/fusion/iterator/key_of.hpp>
+#include <boost/fusion/iterator/value_of_data.hpp>
+#include <boost/fusion/iterator/deref_data.hpp>
 #include <boost/mpl/vector_c.hpp>
 #include <boost/mpl/begin.hpp>
 #include <boost/mpl/next.hpp>
+#include <boost/mpl/assert.hpp>
 #include <boost/static_assert.hpp>
 
 int
@@ -74,6 +82,31 @@ main()
         std::cout << slice << std::endl;
         BOOST_TEST((slice == make_vector(3, 4)));
         BOOST_STATIC_ASSERT(result_of::size<slice_t>::value == 2);
+    }
+
+    {
+        typedef map<pair<void,std::string>, pair<double,char>,pair<void*, int> > map_type;
+        map_type m(make_pair<void>("foo"), make_pair<double>('x'), make_pair<void*>(2));
+
+        typedef iterator_range<
+            result_of::begin<map_type>::type
+          , result_of::advance_c<result_of::begin<map_type>::type,2>::type
+        > range_type;
+        range_type r(begin(m), advance_c<2>(begin(m)));
+
+        BOOST_MPL_ASSERT((result_of::has_key<range_type, void>::type));
+        BOOST_MPL_ASSERT((result_of::has_key<range_type, double>::type));
+
+        BOOST_MPL_ASSERT((boost::is_same<result_of::key_of<result_of::begin<range_type>::type>::type, void>));
+        BOOST_MPL_ASSERT((boost::is_same<result_of::key_of<result_of::next<result_of::begin<range_type>::type>::type>::type, double>));
+
+        BOOST_MPL_ASSERT((boost::is_same<result_of::value_of_data<result_of::begin<range_type>::type>::type, std::string>));
+        BOOST_MPL_ASSERT((boost::is_same<result_of::value_of_data<result_of::next<result_of::begin<range_type>::type>::type>::type, char>));
+
+        std::cout << deref_data(begin(r)) << std::endl;
+        std::cout << deref_data(next(begin(r))) << std::endl;
+        BOOST_TEST((deref_data(begin(r)) == "foo"));
+        BOOST_TEST((deref_data(next(begin(r))) == 'x'));
     }
 
     return boost::report_errors();

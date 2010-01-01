@@ -1,10 +1,18 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>accumulate</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
+<<<<<<< .working
 <meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+=======
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<<<<<<< .working
+>>>>>>> .merge-right.r57125
 <link rel="home" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
+=======
+<link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
+>>>>>>> .merge-right.r58299
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="previous" href="fold.html" title="fold">
 <link rel="next" href="for_each.html" title="for_each">
@@ -30,19 +38,80 @@
 <div></div>
 </div>
 <a name="fusion.algorithm.iteration.functions.accumulate.description"></a><h6>
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
 <a name="id537581"></a>
             <a href="accumulate.html#fusion.algorithm.iteration.functions.accumulate.description">Description</a>
+=======
+<a name="id789366"></a>
+=======
+<a name="id751900"></a>
+=======
+<a name="id744276"></a>
+=======
+<a name="id767092"></a>
+=======
+<a name="id755686"></a>
+=======
+<a name="id752410"></a>
+>>>>>>> .merge-right.r58559
+>>>>>>> .merge-right.r58549
+>>>>>>> .merge-right.r58299
+>>>>>>> .merge-right.r57337
+>>>>>>> .merge-right.r57242
+            <a class="link" href="accumulate.html#fusion.algorithm.iteration.functions.accumulate.description">Description</a>
+>>>>>>> .merge-right.r57125
           </h6>
 <p>
+<<<<<<< .working
             For a sequence <tt class="computeroutput"><span class="identifier">Seq</span></tt>, initial
             state, and binary function object or function pointer <tt class="computeroutput"><span class="identifier">f</span></tt>,
             accumulate repeatedly applies binary <tt class="computeroutput"><span class="identifier">f</span></tt>
             to each element of <tt class="computeroutput"><span class="identifier">Seq</span></tt>
             and the previous state.
+=======
+            For a sequence <code class="computeroutput"><span class="identifier">seq</span></code>, initial
+            state <code class="computeroutput"><span class="identifier">initial_state</span></code>,
+            and binary function object or function pointer <code class="computeroutput"><span class="identifier">f</span></code>,
+            accumulate returns the result of the repeated application of binary
+            <code class="computeroutput"><span class="identifier">f</span></code> to the result of the
+            previous <code class="computeroutput"><span class="identifier">f</span></code> invocation
+            (<code class="computeroutput"><span class="identifier">inital_state</span></code> if it is
+            the first call) and each element of <code class="computeroutput"><span class="identifier">seq</span></code>.
+>>>>>>> .merge-right.r57125
           </p>
 <a name="fusion.algorithm.iteration.functions.accumulate.synopsis"></a><h6>
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
 <a name="id537658"></a>
             <a href="accumulate.html#fusion.algorithm.iteration.functions.accumulate.synopsis">Synopsis</a>
+=======
+<a name="id789441"></a>
+=======
+<a name="id751975"></a>
+=======
+<a name="id744350"></a>
+=======
+<a name="id767166"></a>
+=======
+<a name="id755761"></a>
+=======
+<a name="id752484"></a>
+>>>>>>> .merge-right.r58559
+>>>>>>> .merge-right.r58549
+>>>>>>> .merge-right.r58299
+>>>>>>> .merge-right.r57337
+>>>>>>> .merge-right.r57242
+            <a class="link" href="accumulate.html#fusion.algorithm.iteration.functions.accumulate.synopsis">Synopsis</a>
+>>>>>>> .merge-right.r57125
           </h6>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span>
@@ -53,8 +122,33 @@
     <span class="identifier">Sequence</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">State</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">initial_state</span><span class="special">,</span> <span class="identifier">F</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <div class="table">
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
 <a name="id537917"></a><p class="title"><b>Table 1.34. Parameters</b></p>
 <table class="table" summary="Parameters">
+=======
+<a name="id789627"></a><p class="title"><b>Table 1.34. Parameters</b></p>
+=======
+<a name="id752184"></a><p class="title"><b>Table 1.38. Parameters</b></p>
+=======
+<a name="id744560"></a><p class="title"><b>Table 1.38. Parameters</b></p>
+=======
+<a name="id767352"></a><p class="title"><b>Table&#160;1.38.&#160;Parameters</b></p>
+=======
+<a name="id755947"></a><p class="title"><b>Table&#160;1.38.&#160;Parameters</b></p>
+=======
+<a name="id752670"></a><p class="title"><b>Table&#160;1.38.&#160;Parameters</b></p>
+>>>>>>> .merge-right.r58559
+>>>>>>> .merge-right.r58549
+>>>>>>> .merge-right.r58299
+>>>>>>> .merge-right.r57337
+>>>>>>> .merge-right.r57242
+<div class="table-contents"><table class="table" summary="Parameters">
+>>>>>>> .merge-right.r57125
 <colgroup>
 <col>
 <col>
@@ -73,6 +167,7 @@
 </tr></thead>
 <tbody>
 <tr>
+<<<<<<< .working
 <td><p>
                   <tt class="computeroutput"><span class="identifier">seq</span></tt>
                 </p></td>
@@ -85,6 +180,24 @@
                   to <tt class="computeroutput"><span class="identifier">eN</span></tt> in <tt class="computeroutput"><span class="identifier">seq</span></tt>
                 </p></td>
 <td><p>
+=======
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">seq</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+                  Sequence</a>, <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span><span class="identifier">e</span><span class="special">)</span></code> must be a valid expression for
+                  current state <code class="computeroutput"><span class="identifier">s</span></code>,
+                  and each element <code class="computeroutput"><span class="identifier">e</span></code>
+                  in <code class="computeroutput"><span class="identifier">seq</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+>>>>>>> .merge-right.r57125
                   Operation's argument
                 </p></td>
 </tr>
@@ -100,6 +213,7 @@
                 </p></td>
 </tr>
 <tr>
+<<<<<<< .working
 <td><p>
                   <tt class="computeroutput"><span class="identifier">f</span></tt>
                 </p></td>
@@ -109,15 +223,39 @@
                   of type <tt class="computeroutput"><span class="identifier">E</span></tt> in <tt class="computeroutput"><span class="identifier">seq</span></tt>, and current state <tt class="computeroutput"><span class="identifier">s</span></tt> of type <tt class="computeroutput"><span class="identifier">S</span></tt>
                 </p></td>
 <td><p>
+=======
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">f</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  <code class="computeroutput"><a href="http://www.boost.org/libs/utility/utility.htm#result_of" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">result_of</span></code></a><span class="special">&lt;</span><span class="identifier">F</span><span class="special">(</span><span class="identifier">S</span><span class="special">,</span><span class="identifier">E</span><span class="special">)&gt;::</span><span class="identifier">type</span></code> is the return type of <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span><span class="identifier">e</span><span class="special">)</span></code>
+                  current state <code class="computeroutput"><span class="identifier">s</span></code>
+                  of type <code class="computeroutput"><span class="identifier">S</span></code>, and
+                  for each element <code class="computeroutput"><span class="identifier">e</span></code>
+                  of type <code class="computeroutput"><span class="identifier">E</span></code> in <code class="computeroutput"><span class="identifier">seq</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+>>>>>>> .merge-right.r57125
                   Operation's argument
                 </p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<<<<<<< .working
 <a name="fusion.algorithm.iteration.functions.accumulate.expression_semantics"></a><h6>
 <a name="id538367"></a>
             <a href="accumulate.html#fusion.algorithm.iteration.functions.accumulate.expression_semantics">Expression
+=======
+<br class="table-break"><a name="fusion.algorithm.iteration.functions.accumulate.expression_semantics"></a><h6>
+<a name="id752970"></a>
+            <a class="link" href="accumulate.html#fusion.algorithm.iteration.functions.accumulate.expression_semantics">Expression
+>>>>>>> .merge-right.r57125
             Semantics</a>
           </h6>
 <pre class="programlisting"><span class="identifier">accumulate</span><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">initial_state</span><span class="special">,</span> <span class="identifier">f</span><span class="special">);</span>
@@ -126,33 +264,114 @@
             <span class="bold"><b>Return type</b></span>: Any type
           </p>
 <p>
+<<<<<<< .working
             <span class="bold"><b>Semantics</b></span>: Equivalent to <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">eN</span> <span class="special">....</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">e2</span><span class="special">,</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">e1</span><span class="special">,</span><span class="identifier">initial_state</span><span class="special">)))</span></tt>
             where <tt class="computeroutput"><span class="identifier">e1</span> <span class="special">...</span><span class="identifier">eN</span></tt> are the elements of <tt class="computeroutput"><span class="identifier">seq</span></tt>.
+=======
+            <span class="bold"><strong>Semantics</strong></span>: Equivalent to <code class="computeroutput"><span class="identifier">f</span><span class="special">(...</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">initial_state</span><span class="special">,</span><span class="identifier">e1</span><span class="special">),</span><span class="identifier">e2</span><span class="special">)</span> <span class="special">...</span><span class="identifier">eN</span><span class="special">)</span></code> where <code class="computeroutput"><span class="identifier">e1</span>
+            <span class="special">...</span><span class="identifier">eN</span></code>
+            are the elements of <code class="computeroutput"><span class="identifier">seq</span></code>.
+>>>>>>> .merge-right.r57125
           </p>
 <a name="fusion.algorithm.iteration.functions.accumulate.complexity"></a><h6>
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
 <a name="id538575"></a>
             <a href="accumulate.html#fusion.algorithm.iteration.functions.accumulate.complexity">Complexity</a>
+=======
+<a name="id790624"></a>
+=======
+<a name="id752635"></a>
+=======
+<a name="id745011"></a>
+=======
+<a name="id767803"></a>
+=======
+<a name="id756398"></a>
+=======
+<a name="id753121"></a>
+>>>>>>> .merge-right.r58559
+>>>>>>> .merge-right.r58549
+>>>>>>> .merge-right.r58299
+>>>>>>> .merge-right.r57337
+>>>>>>> .merge-right.r57242
+            <a class="link" href="accumulate.html#fusion.algorithm.iteration.functions.accumulate.complexity">Complexity</a>
+>>>>>>> .merge-right.r57125
           </h6>
 <p>
             Linear, exactly <tt class="computeroutput"><a href="../../../sequence/intrinsic/metafunctions/size.html" title="size"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">size</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">value</span></tt> applications of <tt class="computeroutput"><span class="identifier">f</span></tt>.
           </p>
 <a name="fusion.algorithm.iteration.functions.accumulate.header"></a><h6>
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
 <a name="id538669"></a>
             <a href="accumulate.html#fusion.algorithm.iteration.functions.accumulate.header">Header</a>
+=======
+<a name="id790684"></a>
+=======
+<a name="id752695"></a>
+=======
+<a name="id745071"></a>
+=======
+<a name="id767863"></a>
+=======
+<a name="id756458"></a>
+=======
+<a name="id753181"></a>
+>>>>>>> .merge-right.r58559
+>>>>>>> .merge-right.r58549
+>>>>>>> .merge-right.r58299
+>>>>>>> .merge-right.r57337
+>>>>>>> .merge-right.r57242
+            <a class="link" href="accumulate.html#fusion.algorithm.iteration.functions.accumulate.header">Header</a>
+>>>>>>> .merge-right.r57125
           </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">iteration</span><span class="special">/</span><span class="identifier">accumulate</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">accumulate</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithm.iteration.functions.accumulate.example"></a><h6>
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
+<<<<<<< .working
 <a name="id538836"></a>
             <a href="accumulate.html#fusion.algorithm.iteration.functions.accumulate.example">Example</a>
+=======
+<a name="id790800"></a>
+=======
+<a name="id752811"></a>
+=======
+<a name="id745186"></a>
+=======
+<a name="id767978"></a>
+=======
+<a name="id756573"></a>
+=======
+<a name="id753296"></a>
+>>>>>>> .merge-right.r58559
+>>>>>>> .merge-right.r58549
+>>>>>>> .merge-right.r58299
+>>>>>>> .merge-right.r57337
+>>>>>>> .merge-right.r57242
+            <a class="link" href="accumulate.html#fusion.algorithm.iteration.functions.accumulate.example">Example</a>
+>>>>>>> .merge-right.r57125
           </h6>
 <pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">make_string</span>
 <span class="special">{</span>
     <span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">result_type</span><span class="special">;</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
-    <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="keyword">operator</span><span class="special">()(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">str</span><span class="special">)</span> <span class="keyword">const</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="keyword">operator</span><span class="special">()(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">str</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">t</span><span class="special">)</span> <span class="keyword">const</span>
     <span class="special">{</span>
         <span class="keyword">return</span> <span class="identifier">str</span> <span class="special">+</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">lexical_cast</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;(</span><span class="identifier">t</span><span class="special">);</span>
     <span class="special">}</span>
@@ -164,7 +383,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2007 Joel de Guzman, Dan Marsden, Tobias
       Schwinger<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)

@@ -23,8 +23,11 @@
 #include <boost/fusion/sequence/comparison/less_equal.hpp>
 #include <boost/fusion/sequence/comparison/greater.hpp>
 #include <boost/fusion/sequence/comparison/greater_equal.hpp>
+#include <boost/fusion/mpl.hpp>
 #include <boost/fusion/support/is_view.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <boost/mpl/is_sequence.hpp>
+#include <boost/mpl/front.hpp>
 #include <boost/mpl/assert.hpp>
 #include <iostream>
 #include <string>
@@ -95,6 +98,12 @@ main()
         BOOST_TEST(1u == fusion::distance(fusion::begin(t), fusion::next(fusion::begin(t)))); 
         BOOST_TEST(2u == fusion::distance(fusion::begin(t), fusion::end(t))); 
     } 
+
+    {
+        typedef boost::tuple<int, std::string> tuple_type;
+        BOOST_MPL_ASSERT((mpl::is_sequence<tuple_type>));
+        BOOST_MPL_ASSERT((boost::is_same<int, mpl::front<tuple_type>::type>));
+    }
 
     return boost::report_errors();
 }

@@ -79,6 +79,7 @@
 [def __forward_iterator__       [link fusion.iterator.concepts.forward_iterator Forward Iterator]]
 [def __bidirectional_iterator__ [link fusion.iterator.concepts.bidirectional_iterator Bidirectional Iterator]]
 [def __random_access_iterator__ [link fusion.iterator.concepts.random_access_iterator Random Access Iterator]]
+[def __associative_iterator__   [link fusion.iterator.concepts.associative_iterator Associative Iterator]]
 
 [def __next__                   [link fusion.iterator.functions.next `next`]]
 [def __prior__                  [link fusion.iterator.functions.prior `prior`]]
@@ -86,6 +87,7 @@
 [def __advance_c__              [link fusion.iterator.functions.advance_c `advance_c`]]
 [def __distance__               [link fusion.iterator.functions.distance `distance`]]
 [def __deref__                  [link fusion.iterator.functions.deref `deref`]]
+[def __deref_data__             [link fusion.iterator.functions.deref_data `deref_data`]]
 
 [def __result_of_next__         [link fusion.iterator.metafunctions.next `result_of::next`]]
 [def __result_of_prior__        [link fusion.iterator.metafunctions.prior `result_of::prior`]]
@@ -95,7 +97,9 @@
 [def __result_of_distance__     [link fusion.iterator.metafunctions.distance `result_of::distance`]]
 [def __result_of_deref__        [link fusion.iterator.metafunctions.deref `result_of::deref`]]
 [def __result_of_value_of__     [link fusion.iterator.metafunctions.value_of `result_of::value_of`]]
-[def __value_of__               [link fusion.iterator.metafunctions.value_of `value_of`]]
+[def __result_of_key_of__       [link fusion.iterator.metafunctions.key_of `result_of::key_of`]]
+[def __result_of_value_of_data__ [link fusion.iterator.metafunctions.value_of_data `result_of::value_of_data`]]
+[def __result_of_deref_data__   [link fusion.iterator.metafunctions.deref_data `result_of::deref_data`]]
 
 [def __sequence__               [link fusion.sequence Sequence]]
 [def __sequence_concepts__      [link fusion.sequence.concepts Sequence Concepts]]

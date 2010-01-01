@@ -1,10 +1,18 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title> The Full Extension Mechanism</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
+<<<<<<< .working
 <meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
+=======
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<<<<<<< .working
+>>>>>>> .merge-right.r57125
 <link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
+=======
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
+>>>>>>> .merge-right.r58299
 <link rel="up" href="../extension.html" title="Extension">
 <link rel="previous" href="../extension.html" title="Extension">
 <link rel="next" href="sequence_facade.html" title="Sequence Facade">
@@ -51,10 +59,17 @@
           sequence
         </li>
 </ol></div>
+<<<<<<< .working
 <a name="fusion.extension.ext_full.our_example"></a><h4>
 <a name="id599358"></a>
         <a href="ext_full.html#fusion.extension.ext_full.our_example">Our example</a>
       </h4>
+=======
+<a name="fusion.extension.ext_full.our_example"></a><h5>
+<a name="id831346"></a>
+        <a class="link" href="ext_full.html#fusion.extension.ext_full.our_example">Our example</a>
+      </h5>
+>>>>>>> .merge-right.r57125
 <p>
         In order to illustrate enabling a new sequence type for use with Fusion,
         we are going to use the type:
@@ -82,9 +97,15 @@
         Sequence</a> as described in the <a href="../quick_start.html" title="Quick Start">Quick
         Start</a> guide.
       </p>
+<<<<<<< .working
 <a name="fusion.extension.ext_full.enabling_tag_dispatching"></a><h4>
 <a name="id599647"></a>
         <a href="ext_full.html#fusion.extension.ext_full.enabling_tag_dispatching">Enabling
+=======
+<a name="fusion.extension.ext_full.enabling_tag_dispatching"></a><h5>
+<a name="id831550"></a>
+        <a class="link" href="ext_full.html#fusion.extension.ext_full.enabling_tag_dispatching">Enabling
+>>>>>>> .merge-right.r57125
         Tag Dispatching</a>
       </h4>
 <p>
@@ -123,9 +144,15 @@
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="identifier">array</span><span class="special">/</span><span class="identifier">tag_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">tag_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
+<<<<<<< .working
 <a name="fusion.extension.ext_full.designing_a_suitable_iterator"></a><h4>
 <a name="id600268"></a>
         <a href="ext_full.html#fusion.extension.ext_full.designing_a_suitable_iterator">Designing
+=======
+<a name="fusion.extension.ext_full.designing_a_suitable_iterator"></a><h5>
+<a name="id831986"></a>
+        <a class="link" href="ext_full.html#fusion.extension.ext_full.designing_a_suitable_iterator">Designing
+>>>>>>> .merge-right.r57125
         a suitable iterator</a>
       </h4>
 <p>
@@ -185,9 +212,15 @@
         In isolation, the iterator implementation is pretty dry. Things should become
         clearer as we add features to our implementation.
       </p>
+<<<<<<< .working
 <a name="fusion.extension.ext_full.a_first_couple_of_instructive_features"></a><h4>
 <a name="id600925"></a>
         <a href="ext_full.html#fusion.extension.ext_full.a_first_couple_of_instructive_features">A
+=======
+<a name="fusion.extension.ext_full.a_first_couple_of_instructive_features"></a><h5>
+<a name="id832444"></a>
+        <a class="link" href="ext_full.html#fusion.extension.ext_full.a_first_couple_of_instructive_features">A
+>>>>>>> .merge-right.r57125
         first couple of instructive features</a>
       </h4>
 <p>
@@ -220,19 +253,33 @@
         based on the index of the iterator.
       </p>
 <p>
+<<<<<<< .working
         To understand how <tt class="computeroutput"><span class="identifier">value_of_impl</span></tt>
         is used by the library we will look at the implementation of <a href="../iterator/metafunctions/value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">value_of</span></tt></a>:
+=======
+        To understand how <code class="computeroutput"><span class="identifier">value_of_impl</span></code>
+        is used by the library we will look at the implementation of __value<span class="underline">of</span>_:
+>>>>>>> .merge-right.r57242
       </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
+<<<<<<< .working
 <span class="keyword">struct</span> <a href="../iterator/metafunctions/value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">value_of</span></tt></a>
+=======
+<span class="keyword">struct</span> <span class="identifier">__value_of__</span>
+>>>>>>> .merge-right.r57242
     <span class="special">:</span> <span class="identifier">extension</span><span class="special">::</span><span class="identifier">value_of_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">tag_of</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span>
         <span class="keyword">template</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;</span>
 <span class="special">{};</span>
 </pre>
 <p>
+<<<<<<< .working
         So <a href="../iterator/metafunctions/value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">value_of</span></tt></a>
         uses <a href="../notes.html#fusion.notes.tag_dispatching"><span class="emphasis"><em>tag dispatching</em></span></a>
         to select an <a href="http://www.boost.org/libs/mpl/doc/refmanual/metafunction-class.html" target="_top">MPL
+=======
+        So __value<span class="underline">of</span>_ uses <a class="link" href="../notes.html#fusion.notes.tag_dispatching"><span class="emphasis"><em>tag
+        dispatching</em></span></a> to select an <a href="http://www.boost.org/libs/mpl/doc/refmanual/metafunction-class.html" target="_top">MPL
+>>>>>>> .merge-right.r57242
         Metafunction Class</a> to provide its functionality. You will notice
         this pattern throughout the implementation of Fusion.
       </p>
@@ -299,9 +346,17 @@
 <span class="special">}</span>
 </pre>
 <p>
+<<<<<<< .working
         So again <a href="../iterator/metafunctions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a> uses <a href="../notes.html#fusion.notes.tag_dispatching"><span class="emphasis"><em>tag
         dispatching</em></span></a> in exactly the same way as the <a href="../iterator/metafunctions/value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">value_of</span></tt></a> implementation. The runtime
         functionality used by <a href="../iterator/functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a> is provided by the <tt class="computeroutput"><span class="identifier">call</span></tt> static function of the selected <a href="http://www.boost.org/libs/mpl/doc/refmanual/metafunction-class.html" target="_top">MPL
+=======
+        So again <a class="link" href="../iterator/metafunctions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></code></a> uses <a class="link" href="../notes.html#fusion.notes.tag_dispatching"><span class="emphasis"><em>tag
+        dispatching</em></span></a> in exactly the same way as the __value<span class="underline">of</span>_ implementation. The runtime functionality
+        used by <a class="link" href="../iterator/functions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a>
+        is provided by the <code class="computeroutput"><span class="identifier">call</span></code> static
+        function of the selected <a href="http://www.boost.org/libs/mpl/doc/refmanual/metafunction-class.html" target="_top">MPL
+>>>>>>> .merge-right.r57242
         Metafunction Class</a>.
       </p>
 <p>
@@ -319,21 +374,41 @@
 </tr>
 <tr><td colspan="2" align="left" valign="top"><p>
           Although there is a fair amount of left to do to produce a fully fledged
+<<<<<<< .working
           Fusion sequence, <a href="../iterator/metafunctions/value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">value_of</span></tt></a> and <a href="../iterator/functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a> illustrate all the signficant
           concepts required. The remainder of the process is very repetitive, simply
           requiring implementation of a suitable <tt class="computeroutput"><span class="identifier">xxxx_impl</span></tt>
           for each feature <tt class="computeroutput"><span class="identifier">xxxx</span></tt>.
+=======
+          Fusion sequence, __value<span class="underline">of</span>_ and
+          <a class="link" href="../iterator/functions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a>
+          illustrate all the signficant concepts required. The remainder of the process
+          is very repetitive, simply requiring implementation of a suitable <code class="computeroutput"><span class="identifier">xxxx_impl</span></code> for each feature <code class="computeroutput"><span class="identifier">xxxx</span></code>.
+>>>>>>> .merge-right.r57242
         </p></td></tr>
 </table></div>
+<<<<<<< .working
 <a name="fusion.extension.ext_full.implementing_the_remaining_iterator_functionality"></a><h4>
 <a name="id603230"></a>
         <a href="ext_full.html#fusion.extension.ext_full.implementing_the_remaining_iterator_functionality">Implementing
+=======
+<a name="fusion.extension.ext_full.implementing_the_remaining_iterator_functionality"></a><h5>
+<a name="id834035"></a>
+        <a class="link" href="ext_full.html#fusion.extension.ext_full.implementing_the_remaining_iterator_functionality">Implementing
+>>>>>>> .merge-right.r57125
         the remaining iterator functionality</a>
       </h4>
 <p>
+<<<<<<< .working
         Ok, now we have seen the way <a href="../iterator/metafunctions/value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">value_of</span></tt></a> and <a href="../iterator/functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a> work, everything else will
         work in pretty much the same way. Lets start with forward iteration, by providing
         a <tt class="computeroutput"><span class="identifier">next_impl</span></tt>:
+=======
+        Ok, now we have seen the way __value<span class="underline">of</span>_
+        and <a class="link" href="../iterator/functions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a>
+        work, everything else will work in pretty much the same way. Lets start with
+        forward iteration, by providing a <code class="computeroutput"><span class="identifier">next_impl</span></code>:
+>>>>>>> .merge-right.r57242
       </p>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">next_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator_tag</span><span class="special">&gt;</span>
@@ -379,9 +454,15 @@
         <tt class="computeroutput"><span class="identifier">advance_impl</span></tt>, <tt class="computeroutput"><span class="identifier">distance_impl</span></tt> and <tt class="computeroutput"><span class="identifier">equal_to_impl</span></tt>
         are provided in the example code.
       </p>
+<<<<<<< .working
 <a name="fusion.extension.ext_full.implementing_the_intrinsic_functions_of_the_sequence"></a><h4>
 <a name="id603878"></a>
         <a href="ext_full.html#fusion.extension.ext_full.implementing_the_intrinsic_functions_of_the_sequence">Implementing
+=======
+<a name="fusion.extension.ext_full.implementing_the_intrinsic_functions_of_the_sequence"></a><h5>
+<a name="id834467"></a>
+        <a class="link" href="ext_full.html#fusion.extension.ext_full.implementing_the_intrinsic_functions_of_the_sequence">Implementing
+>>>>>>> .merge-right.r57125
         the intrinsic functions of the sequence</a>
       </h4>
 <p>
@@ -436,9 +517,15 @@
         Access Sequence</a> we will also need to implement <tt class="computeroutput"><span class="identifier">size_impl</span></tt>,
         <tt class="computeroutput"><span class="identifier">value_at_impl</span></tt> and <tt class="computeroutput"><span class="identifier">at_impl</span></tt>.
       </p>
+<<<<<<< .working
 <a name="fusion.extension.ext_full.enabling_our_type_as_an_associative_container"></a><h4>
 <a name="id604481"></a>
         <a href="ext_full.html#fusion.extension.ext_full.enabling_our_type_as_an_associative_container">Enabling
+=======
+<a name="fusion.extension.ext_full.enabling_our_type_as_an_associative_container"></a><h5>
+<a name="id834878"></a>
+        <a class="link" href="ext_full.html#fusion.extension.ext_full.enabling_our_type_as_an_associative_container">Enabling
+>>>>>>> .merge-right.r57125
         our type as an associative container</a>
       </h4>
 <p>
@@ -503,10 +590,17 @@
         straightforward, and are provided in the example code, along with an implementation
         of <tt class="computeroutput"><span class="identifier">is_associative_impl</span></tt>.
       </p>
+<<<<<<< .working
 <a name="fusion.extension.ext_full.summary"></a><h4>
 <a name="id605488"></a>
         <a href="ext_full.html#fusion.extension.ext_full.summary">Summary</a>
       </h4>
+=======
+<a name="fusion.extension.ext_full.summary"></a><h5>
+<a name="id836875"></a>
+        <a class="link" href="ext_full.html#fusion.extension.ext_full.summary">Summary</a>
+      </h5>
+>>>>>>> .merge-right.r57125
 <p>
         We've now worked through the entire process for adding a new random access
         sequence and we've also enabled our type to serve as an associative container.
@@ -521,7 +615,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2007 Joel de Guzman, Dan Marsden, Tobias
       Schwinger<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
