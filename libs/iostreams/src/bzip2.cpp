@@ -56,7 +56,7 @@ bzip2_error::bzip2_error(int error)
     : BOOST_IOSTREAMS_FAILURE("bzip2 error"), error_(error) 
     { }
 
-void bzip2_error::check(int error)
+void bzip2_error::check BOOST_PREVENT_MACRO_SUBSTITUTION(int error)
 {
     switch (error) {
     case BZ_OK: 
@@ -103,7 +103,7 @@ void bzip2_base::end(bool compress)
 {
     ready_ = false;
     bz_stream* s = static_cast<bz_stream*>(stream_);
-    bzip2_error::check(
+    bzip2_error::check BOOST_PREVENT_MACRO_SUBSTITUTION(
         compress ?
             BZ2_bzCompressEnd(s) : 
             BZ2_bzDecompressEnd(s)
@@ -140,7 +140,7 @@ void bzip2_base::do_init
         s->bzfree = 0;
     //#endif
     s->opaque = derived;
-    bzip2_error::check( 
+    bzip2_error::check BOOST_PREVENT_MACRO_SUBSTITUTION( 
         compress ?
             BZ2_bzCompressInit( s,
                                 params_.block_size, 
