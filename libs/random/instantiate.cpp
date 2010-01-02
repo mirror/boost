@@ -195,37 +195,37 @@ void instantiate_seed(const URNG & urng, const ResultType &) {
 // ranlux uses int32_t for seeding instead of result_type
 template<class ResultType>
 void instantiate_seed(const boost::ranlux3 & urng, const ResultType &) {
-    instantiate_seed<boost::ranlux3, boost::int32_t>(urng, ResultType());
+    instantiate_seed<boost::ranlux3, boost::uint32_t>(urng, ResultType());
 }
 template<class ResultType>
 void instantiate_seed(const boost::ranlux4 & urng, const ResultType &) {
-    instantiate_seed<boost::ranlux4, boost::int32_t>(urng, ResultType());
+    instantiate_seed<boost::ranlux4, boost::uint32_t>(urng, ResultType());
 }
 template<class ResultType>
 void instantiate_seed(const boost::ranlux3_01 & urng, const ResultType &) {
-    instantiate_seed<boost::ranlux3_01, boost::int32_t>(urng, ResultType());
+    instantiate_seed<boost::ranlux3_01, boost::uint32_t>(urng, ResultType());
 }
 template<class ResultType>
 void instantiate_seed(const boost::ranlux4_01 & urng, const ResultType &) {
-    instantiate_seed<boost::ranlux4_01, boost::int32_t>(urng, ResultType());
+    instantiate_seed<boost::ranlux4_01, boost::uint32_t>(urng, ResultType());
 }
 #if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
 template<class ResultType>
 void instantiate_seed(const boost::ranlux64_3 & urng, const ResultType &) {
-    instantiate_seed<boost::ranlux64_3, boost::int32_t>(urng, ResultType());
+    instantiate_seed<boost::ranlux64_3, boost::uint32_t>(urng, ResultType());
 }
 template<class ResultType>
 void instantiate_seed(const boost::ranlux64_4 & urng, const ResultType &) {
-    instantiate_seed<boost::ranlux64_3, boost::int32_t>(urng, ResultType());
+    instantiate_seed<boost::ranlux64_3, boost::uint32_t>(urng, ResultType());
 }
 #endif
 template<class ResultType>
 void instantiate_seed(const boost::ranlux64_3_01 & urng, const ResultType &) {
-    instantiate_seed<boost::ranlux64_3_01, boost::int32_t>(urng, ResultType());
+    instantiate_seed<boost::ranlux64_3_01, boost::uint32_t>(urng, ResultType());
 }
 template<class ResultType>
 void instantiate_seed(const boost::ranlux64_4_01 & urng, const ResultType &) {
-    instantiate_seed<boost::ranlux64_4_01, boost::int32_t>(urng, ResultType());
+    instantiate_seed<boost::ranlux64_4_01, boost::uint32_t>(urng, ResultType());
 }
 
 
