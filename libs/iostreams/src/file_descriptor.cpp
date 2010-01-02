@@ -22,6 +22,7 @@
 #include <boost/iostreams/detail/ios.hpp>         // openmodes, failure.
 #include <boost/iostreams/device/file_descriptor.hpp>
 #include <boost/integer_traits.hpp>
+#include <boost/throw_exception.hpp>
 
     // OS-specific headers for low-level i/o.
 
@@ -108,7 +109,7 @@ void file_descriptor_impl::open(const detail::path& p, BOOST_IOS::openmode mode)
          (BOOST_IOS::in | BOOST_IOS::out) )
     {
         if (mode & BOOST_IOS::app)
-            throw BOOST_IOSTREAMS_FAILURE("bad open mode");
+            boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad open mode"));
         dwDesiredAccess = GENERIC_READ | GENERIC_WRITE;
         dwCreationDisposition =
             (mode & BOOST_IOS::trunc) ?
@@ -116,7 +117,7 @@ void file_descriptor_impl::open(const detail::path& p, BOOST_IOS::openmode mode)
                 OPEN_EXISTING;
     } else if (mode & BOOST_IOS::in) {
         if (mode & (BOOST_IOS::app |BOOST_IOS::trunc))
-            throw BOOST_IOSTREAMS_FAILURE("bad open mode");
+            boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad open mode"));
         dwDesiredAccess = GENERIC_READ;
         dwCreationDisposition = OPEN_EXISTING;
     } else if (mode & BOOST_IOS::out) {
@@ -125,7 +126,7 @@ void file_descriptor_impl::open(const detail::path& p, BOOST_IOS::openmode mode)
         if (mode & BOOST_IOS::app)
             flags_ |= append;
     } else {
-        throw BOOST_IOSTREAMS_FAILURE("bad open mode");
+        boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad open mode"));
     }
 
     HANDLE handle = p.is_wide() ?
@@ -186,7 +187,7 @@ void file_descriptor_impl::open(const detail::path& p, BOOST_IOS::openmode mode)
 
     int fd = BOOST_IOSTREAMS_FD_OPEN(p.c_str(), oflag, pmode);
     if (fd == -1) {
-        throw system_failure("failed opening file");
+        boost::throw_exception(system_failure("failed opening file"));
     } else {
         handle_ = fd;
         flags_ = close_on_exit;
@@ -271,7 +272,7 @@ std::streampos file_descriptor_impl::seek
     if ( dwResultLow == INVALID_SET_FILE_POINTER &&
          ::GetLastError() != NO_ERROR )
     {
-        throw system_failure("failed seeking");
+        boost::throw_exception(system_failure("failed seeking"));
     } else {
        return offset_to_position(
                   (stream_offset(lDistanceToMoveHigh) << 32) + dwResultLow
@@ -281,7 +282,7 @@ std::streampos file_descriptor_impl::seek
     if ( off > integer_traits<BOOST_IOSTREAMS_FD_OFFSET>::const_max ||
          off < integer_traits<BOOST_IOSTREAMS_FD_OFFSET>::const_min )
     {
-        throw BOOST_IOSTREAMS_FAILURE("bad offset");
+        boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad offset"));
     }
     stream_offset result =
         BOOST_IOSTREAMS_FD_SEEK(
@@ -294,7 +295,7 @@ std::streampos file_descriptor_impl::seek
                       SEEK_END ) 
         );
     if (result == -1)
-        throw system_failure("failed seeking");
+        boost::throw_exception(system_failure("failed seeking"));
     return offset_to_position(result);
 #endif // #ifdef BOOST_IOSTREAMS_WINDOWS
 }
@@ -431,7 +432,7 @@ void file_descriptor_source::open(
     const detail::path& path, BOOST_IOS::openmode mode)
 { 
     if (mode & (BOOST_IOS::out | BOOST_IOS::app | BOOST_IOS::trunc))
-        throw BOOST_IOSTREAMS_FAILURE("invalid mode");
+        boost::throw_exception(BOOST_IOSTREAMS_FAILURE("invalid mode"));
     file_descriptor::open(path, mode, BOOST_IOS::in); 
 }
                     
@@ -482,7 +483,7 @@ void file_descriptor_sink::open(
     const detail::path& path, BOOST_IOS::openmode mode)
 { 
     if (mode & BOOST_IOS::in)
-        throw BOOST_IOSTREAMS_FAILURE("invalid mode");
+        boost::throw_exception(BOOST_IOSTREAMS_FAILURE("invalid mode"));
     file_descriptor::open(path, mode, BOOST_IOS::out); 
 }
 

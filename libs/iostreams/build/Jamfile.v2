@@ -150,7 +150,12 @@ if $(bz2)
     sources += boost_bzip2 bzip2.cpp ;
 }
 
-lib boost_iostreams : $(sources) : <link>shared:<define>BOOST_IOSTREAMS_DYN_LINK=1 ;
+lib boost_iostreams 
+    : $(sources) 
+    : <link>shared:<define>BOOST_IOSTREAMS_DYN_LINK=1 
+    :
+    : <link>shared:<define>BOOST_IOSTREAMS_DYN_LINK=1
+    ;
 
 boost-install boost_iostreams ;
 

@@ -9,11 +9,15 @@
 // replace BOOST_RESTRICT with BOOST_IOSTREAMS_RESTRICT here, since that
 // would interfere with the oepration of the header 
 // <boost/iostreams/restrict.hpp>
-#ifndef BOOST_RESTRICT
-# define BOOST_RESTRICT restrict
-# define BOOST_RESTRICT_HEADER <boost/iostreams/restrict.hpp>
+#include <iostream>
+
+#if defined(BOOST_RESTRICT_USE_SLICE)
+#  include <boost/iostreams/slice.hpp>
+#  define BOOST_RESTRICT slice
+#else
+#  include <boost/iostreams/restrict.hpp>
+#  define BOOST_RESTRICT restrict
 #endif
-#include BOOST_RESTRICT_HEADER
 
 #include <algorithm>         // equal.
 #include <cctype>
