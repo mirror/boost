@@ -133,59 +133,106 @@ void instantiate_real_dist(URNG& urng, RealType /* ignored */)
                    boost::gamma_distribution<RealType>(1));
 }
 
-template<class URNG, class T>
-void test_seed(URNG & urng, const T & t) {
-    URNG urng2(t);
-    BOOST_CHECK(urng == urng2);
-    urng2.seed(t);
-    BOOST_CHECK(urng == urng2);
+template<class URNG, class T, class Converted>
+void test_seed_conversion(URNG & urng, const T & t, const Converted &) {
+    Converted c = static_cast<Converted>(t);
+    if(static_cast<T>(c) == t) {
+        URNG urng2(c);
+        std::ostringstream msg;
+        msg << "Testing seed: type " << typeid(Converted).name() << ", value " << c;
+        BOOST_CHECK_MESSAGE(urng == urng2, msg.str());
+        urng2.seed(c);
+        BOOST_CHECK_MESSAGE(urng == urng2, msg.str());
+    }
 }
 
 // rand48 uses non-standard seeding
-template<class T>
-void test_seed(boost::rand48 & urng, const T & t) {
+template<class T, class Converted>
+void test_seed_conversion(boost::rand48 & urng, const T & t, const Converted &) {
     boost::rand48 urng2(t);
     urng2.seed(t);
 }
 
 template<class URNG, class ResultType>
-void instantiate_seed(const URNG &, const ResultType &) {
+void test_seed(const URNG &, const ResultType & value) {
+    URNG urng(value);
+
+    // integral types
+    test_seed_conversion(urng, value, static_cast<char>(0));
+    test_seed_conversion(urng, value, static_cast<signed char>(0));
+    test_seed_conversion(urng, value, static_cast<unsigned char>(0));
+    test_seed_conversion(urng, value, static_cast<short>(0));
+    test_seed_conversion(urng, value, static_cast<unsigned short>(0));
+    test_seed_conversion(urng, value, static_cast<int>(0));
+    test_seed_conversion(urng, value, static_cast<unsigned int>(0));
+    test_seed_conversion(urng, value, static_cast<long>(0));
+    test_seed_conversion(urng, value, static_cast<unsigned long>(0));
+#if !defined(BOOST_NO_INT64_T)
+    test_seed_conversion(urng, value, static_cast<boost::int64_t>(0));
+    test_seed_conversion(urng, value, static_cast<boost::uint64_t>(0));
+#endif
+
+    // floating point types
+    test_seed_conversion(urng, value, static_cast<float>(0));
+    test_seed_conversion(urng, value, static_cast<double>(0));
+    test_seed_conversion(urng, value, static_cast<long double>(0));
+}
+
+template<class URNG, class ResultType>
+void instantiate_seed(const URNG & urng, const ResultType &) {
     {
         URNG urng;
         URNG urng2;
         urng2.seed();
         BOOST_CHECK(urng == urng2);
     }
-    {
-        int value = 127;
-        URNG urng(value);
-
-        // integral types
-        test_seed(urng, static_cast<char>(value));
-        test_seed(urng, static_cast<signed char>(value));
-        test_seed(urng, static_cast<unsigned char>(value));
-        test_seed(urng, static_cast<short>(value));
-        test_seed(urng, static_cast<unsigned short>(value));
-        test_seed(urng, static_cast<int>(value));
-        test_seed(urng, static_cast<unsigned int>(value));
-        test_seed(urng, static_cast<long>(value));
-        test_seed(urng, static_cast<unsigned long>(value));
-#if !defined(BOOST_NO_INT64_T)
-        test_seed(urng, static_cast<boost::int64_t>(value));
-        test_seed(urng, static_cast<boost::uint64_t>(value));
-#endif
-
-        // floating point types
-        test_seed(urng, static_cast<float>(value));
-        test_seed(urng, static_cast<double>(value));
-        test_seed(urng, static_cast<long double>(value));
-    }
+    test_seed(urng, static_cast<ResultType>(0));
+    test_seed(urng, static_cast<ResultType>(127));
+    test_seed(urng, static_cast<ResultType>(539157235));
+    test_seed(urng, static_cast<ResultType>(~0u));
 }
+
+// ranlux uses int32_t for seeding instead of result_type
+template<class ResultType>
+void instantiate_seed(const boost::ranlux3 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux3, boost::uint32_t>(urng, ResultType());
+}
+template<class ResultType>
+void instantiate_seed(const boost::ranlux4 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux4, boost::uint32_t>(urng, ResultType());
+}
+template<class ResultType>
+void instantiate_seed(const boost::ranlux3_01 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux3_01, boost::uint32_t>(urng, ResultType());
+}
+template<class ResultType>
+void instantiate_seed(const boost::ranlux4_01 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux4_01, boost::uint32_t>(urng, ResultType());
+}
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
+template<class ResultType>
+void instantiate_seed(const boost::ranlux64_3 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux64_3, boost::uint32_t>(urng, ResultType());
+}
+template<class ResultType>
+void instantiate_seed(const boost::ranlux64_4 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux64_3, boost::uint32_t>(urng, ResultType());
+}
+#endif
+template<class ResultType>
+void instantiate_seed(const boost::ranlux64_3_01 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux64_3_01, boost::uint32_t>(urng, ResultType());
+}
+template<class ResultType>
+void instantiate_seed(const boost::ranlux64_4_01 & urng, const ResultType &) {
+    instantiate_seed<boost::ranlux64_4_01, boost::uint32_t>(urng, ResultType());
+}
+
 
 template<class URNG, class ResultType>
 void instantiate_urng(const std::string & s, const URNG & u, const ResultType & r)
 {
-  std::cout << "Basic tests for " << s;
+  std::cout << "Basic tests for " << s << std::endl;
   URNG urng;
   instantiate_seed(u, r);                       // seed() member function
   int a[URNG::has_fixed_range ? 5 : 10];        // compile-time constant

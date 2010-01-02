@@ -22,6 +22,8 @@
 #include <boost/integer_traits.hpp>
 #include <boost/detail/workaround.hpp>
 
+#include <boost/random/detail/disable_warnings.hpp>
+
 namespace boost {
 namespace random {
 
@@ -355,5 +357,7 @@ private:
 
 } // namespace random
 } // namespace boost
+
+#include <boost/random/detail/enable_warnings.hpp>
 
 #endif // BOOST_RANDOM_CONST_MOD_HPP

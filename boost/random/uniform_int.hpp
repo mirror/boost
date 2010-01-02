@@ -94,7 +94,7 @@ public:
 
 private:
   template<class Engine>
-  static result_type generate(Engine& eng, result_type min_value, result_type max_value, range_type range)
+  static result_type generate(Engine& eng, result_type min_value, result_type /*max_value*/, range_type range)
   {
     typedef typename Engine::result_type base_result;
     // ranges are always unsigned

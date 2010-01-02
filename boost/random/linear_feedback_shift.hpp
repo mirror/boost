@@ -77,7 +77,12 @@ public:
     seed(first, last);
   }
 
-  void seed(UIntType s0 = 341) { assert(s0 >= (1 << (w-k))); value = s0; }
+  void seed(UIntType s0 = 341) {
+      if(s0 < (1 << (w-k))) {
+          s0 += 1 << (w-k);
+      }
+      value = s0;
+  }
   template<class It> void seed(It& first, It last)
   {
     if(first == last)
