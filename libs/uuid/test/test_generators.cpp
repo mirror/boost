@@ -110,22 +110,25 @@ int test_main(int, char*[])
     }
 
     { // test random_generator
+        // default random number generator
         random_generator uuid_gen1;
         check_random_generator(uuid_gen1);
         
+        // specific random number generator
         basic_random_generator<boost::rand48> uuid_gen2;
         check_random_generator(uuid_gen2);
         
-        boost::rand48 rand48_gen;
-        basic_random_generator<boost::rand48> uuid_gen3(rand48_gen);
+        // pass by reference
+        boost::ecuyer1988 ecuyer1988_gen;
+        basic_random_generator<boost::ecuyer1988> uuid_gen3(ecuyer1988_gen);
         check_random_generator(uuid_gen3);
         
-        basic_random_generator<boost::rand48> uuid_gen4(&rand48_gen);
+        // pass by pointer
+        boost::lagged_fibonacci607 lagged_fibonacci607_gen;
+        basic_random_generator<boost::lagged_fibonacci607> uuid_gen4(&lagged_fibonacci607_gen);
         check_random_generator(uuid_gen4);
-        
-        basic_random_generator<boost::lagged_fibonacci44497> uuid_gen5;
-        check_random_generator(uuid_gen5);
 
+        // random device
         //basic_random_generator<boost::random_device> uuid_gen5;
         //check_random_generator(uuid_gen5);
     }

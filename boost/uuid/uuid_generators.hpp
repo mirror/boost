@@ -144,33 +144,29 @@ private:
     }
 
     unsigned char get_value(char c) const {
-        static char const digits[23] = "0123456789abcdefABCDEF";
-        static char const*const digits_end = digits+23;
-        
-        unsigned char const values[23] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,10,11,12,13,14,15 };
+        static char const*const digits_begin = "0123456789abcdefABCDEF";
+        static char const*const digits_end = digits_begin + 22;
 
-        char const* d = std::find(&digits[0], digits_end, c);
-        if (d == digits_end) {
-            return static_cast<unsigned char>(-1);
-        }
+        static unsigned char const values[] =
+            { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,10,11,12,13,14,15
+            , static_cast<unsigned char>(-1) };
 
-        return values[std::distance(digits, d)];
+        char const* d = std::find(digits_begin, digits_end, c);
+        return values[std::distance(digits_begin, d)];
     }
 
     unsigned char get_value(wchar_t c) const {
-        static wchar_t const digits[23] = L"0123456789abcdefABCDEF";
-        static wchar_t const*const digits_end = digits+23;
+        static wchar_t const*const digits_begin = L"0123456789abcdefABCDEF";
+        static wchar_t const*const digits_end = digits_begin + 22;
         
-        unsigned char const values[23] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,10,11,12,13,14,15 };
+        static unsigned char const values[] =
+            { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,10,11,12,13,14,15
+            , static_cast<unsigned char>(-1) };
 
-        wchar_t const* d = std::find(digits, digits_end, c);
-        if (d == digits_end) {
-            return static_cast<unsigned char>(-1);
-        }
-
-        return values[std::distance(digits, d)];
+        wchar_t const* d = std::find(digits_begin, digits_end, c);
+        return values[std::distance(digits_begin, d)];
     }
-    
+
     bool is_dash(char c) const {
         return c == '-';
     }

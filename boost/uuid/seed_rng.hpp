@@ -77,7 +77,15 @@ public:
 public:
     seed_rng()
         : rd_index_(5)
+        , random_(std::fopen( "/dev/urandom", "rb" ))
     {}
+    
+    ~seed_rng()
+    {
+        if (random_) {
+            std::fclose(random_);
+        }
+    }
 
     result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const
     {
@@ -137,10 +145,9 @@ private:
         {
             unsigned char buffer[ 20 ];
 
-            if( std::FILE * f = std::fopen( "/dev/urandom", "rb" ) )
+            if(random_)
             {
-                std::fread( buffer, 1, 20, f );
-                std::fclose( f );
+                std::fread( buffer, 1, 20, random_ );
             }
 
             // using an uninitialized buffer[] if fopen fails
@@ -173,6 +180,11 @@ private:
 private:
     unsigned int rd_[5];
     int rd_index_;
+    std::FILE * random_;
+    
+private: // make seed_rng noncopyable
+    seed_rng(seed_rng const&);
+    seed_rng& operator=(seed_rng const&);
 };
 
 // almost a copy of boost::generator_iterator
