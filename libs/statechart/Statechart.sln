@@ -94,6 +94,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		doc\uml_mapping.html = doc\uml_mapping.html
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TriggeringEventTest", "test\TriggeringEventTest.vcproj", "{DFE5C3C2-0CF9-4709-8393-96201E9A8181}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -318,6 +320,12 @@ Global
 		{045411F0-A746-4DB3-85B9-C9AEDE6D5CBA}.Release|Win32.ActiveCfg = Release|Win32
 		{045411F0-A746-4DB3-85B9-C9AEDE6D5CBA}.Release|Win32.Build.0 = Release|Win32
 		{045411F0-A746-4DB3-85B9-C9AEDE6D5CBA}.ReleaseFail|Win32.ActiveCfg = Release|Win32
+		{DFE5C3C2-0CF9-4709-8393-96201E9A8181}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DFE5C3C2-0CF9-4709-8393-96201E9A8181}.Debug|Win32.Build.0 = Debug|Win32
+		{DFE5C3C2-0CF9-4709-8393-96201E9A8181}.DebugFail|Win32.ActiveCfg = Debug|Win32
+		{DFE5C3C2-0CF9-4709-8393-96201E9A8181}.Release|Win32.ActiveCfg = Release|Win32
+		{DFE5C3C2-0CF9-4709-8393-96201E9A8181}.Release|Win32.Build.0 = Release|Win32
+		{DFE5C3C2-0CF9-4709-8393-96201E9A8181}.ReleaseFail|Win32.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
