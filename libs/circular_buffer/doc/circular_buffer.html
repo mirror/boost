@@ -7358,11 +7358,12 @@ template &lt;class T, class Alloc&gt;
       <dd>
         <ul>
           <li>Added methods <code>erase_begin(size_type)</code> and <code>erase_end(size_type)</code> with constant
-          complexity for such types of stored elements which do not need an explicit destruction.
+          complexity for such types of stored elements which do not need an explicit destruction e.g. <code>int</code>
+          or <code>double</code>.
           </li>
-          <li>Changed implementation of <code>clear()</code> method and the destructor so their complexity is now
-          constant for such types of stored elements which do not require an explicit destruction (the complexity for
-          other types remains linear).
+          <li>Similarly changed implementation of the <code>clear()</code> method and the destructor so their
+          complexity is now constant for such types of stored elements which do not require an explicit destruction
+          (the complexity for other types remains linear).
           </li>
         </ul>
       </dd>
