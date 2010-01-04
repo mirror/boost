@@ -20,7 +20,8 @@ namespace copy_tests
 {
 
 template <class T>
-void copy_construct_tests1(T*, test::random_generator const& generator = test::default_generator)
+void copy_construct_tests1(T*,
+    test::random_generator const& generator = test::default_generator)
 {
     BOOST_DEDUCED_TYPENAME T::hasher hf;
     BOOST_DEDUCED_TYPENAME T::key_equal eq;
@@ -65,7 +66,8 @@ void copy_construct_tests1(T*, test::random_generator const& generator = test::d
 }
 
 template <class T>
-void copy_construct_tests2(T* ptr, test::random_generator const& generator = test::default_generator)
+void copy_construct_tests2(T* ptr,
+    test::random_generator const& generator = test::default_generator)
 {
     copy_construct_tests1(ptr);
 
@@ -119,10 +121,18 @@ void copy_construct_tests2(T* ptr, test::random_generator const& generator = tes
     }
 }
 
-boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
-boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
-boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
-boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
+boost::unordered_set<test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_set;
+boost::unordered_multiset<test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_map;
+boost::unordered_multimap<test::object, test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_multimap;
 
 using test::default_generator;
 using test::generate_collisions;

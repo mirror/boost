@@ -67,25 +67,33 @@ namespace unnecessary_copy_tests
     }
 }
 
-#define COPY_COUNT(n) \
-    if(count_copies::copies != n) { \
-        BOOST_ERROR("Wrong number of copies."); \
-        std::cerr<<"Number of copies: "<<count_copies::copies<<" expecting: "<<n<<std::endl; \
+#define COPY_COUNT(n)                                                       \
+    if(count_copies::copies != n) {                                         \
+        BOOST_ERROR("Wrong number of copies.");                             \
+        std::cerr                                                           \
+            << "Number of copies: " << count_copies::copies                 \
+            << " expecting: " << n << std::endl;                            \
     }
-#define MOVE_COUNT(n) \
-    if(count_copies::moves != n) { \
-        BOOST_ERROR("Wrong number of moves."); \
-        std::cerr<<"Number of moves: "<<count_copies::moves<<" expecting: "<<n<<std::endl; \
+#define MOVE_COUNT(n)                                                       \
+    if(count_copies::moves != n) {                                          \
+        BOOST_ERROR("Wrong number of moves.");                              \
+        std::cerr                                                           \
+            << "Number of moves: " << count_copies::moves                   \
+            << " expecting: " <<n << std::endl;                             \
     }
-#define COPY_COUNT_RANGE(a, b) \
-    if(count_copies::copies < a || count_copies::copies > b) { \
-        BOOST_ERROR("Wrong number of copies."); \
-        std::cerr<<"Number of copies: "<<count_copies::copies<<" expecting: ["<<a<<", "<<b<<"]"<<std::endl; \
+#define COPY_COUNT_RANGE(a, b)                                              \
+    if(count_copies::copies < a || count_copies::copies > b) {              \
+        BOOST_ERROR("Wrong number of copies.");                             \
+        std::cerr                                                           \
+            << "Number of copies: " << count_copies::copies                 \
+            << " expecting: [" << a << ", " << b << "]" << std::endl;       \
     }
-#define MOVE_COUNT_RANGE(a, b) \
-    if(count_copies::moves < a || count_copies::moves > b) { \
-        BOOST_ERROR("Wrong number of moves."); \
-        std::cerr<<"Number of moves: "<<count_copies::copies<<" expecting: ["<<a<<", "<<b<<"]"<<std::endl; \
+#define MOVE_COUNT_RANGE(a, b)                                              \
+    if(count_copies::moves < a || count_copies::moves > b) {                \
+        BOOST_ERROR("Wrong number of moves.");                              \
+        std::cerr                                                           \
+            << "Number of moves: " << count_copies::copies                  \
+            << " expecting: [" << a << ", " << b << "]" << std::endl;       \
     }
 
 namespace unnecessary_copy_tests

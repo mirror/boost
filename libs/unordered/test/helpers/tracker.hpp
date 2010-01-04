@@ -27,7 +27,8 @@ namespace test
 {
     template <class X>
     struct equals_to_compare2
-        : public boost::mpl::identity<std::less<BOOST_DEDUCED_TYPENAME X::first_argument_type> >
+        : public boost::mpl::identity<
+            std::less<BOOST_DEDUCED_TYPENAME X::first_argument_type> >
     {
     };
 
@@ -62,37 +63,55 @@ namespace test
         values1.sort();
         values2.sort();
         BOOST_TEST(values1.size() == values2.size() &&
-                test::equal(values1.begin(), values1.end(), values2.begin(), test::equivalent));
+                test::equal(values1.begin(), values1.end(),
+                    values2.begin(), test::equivalent));
     }
 
     template <class X>
-    struct ordered_set
-        : public boost::mpl::if_<
+    struct ordered_set : public
+        boost::mpl::if_<
             test::has_unique_keys<X>,
-            std::set<BOOST_DEDUCED_TYPENAME X::value_type,
-                BOOST_DEDUCED_TYPENAME equals_to_compare<BOOST_DEDUCED_TYPENAME X::key_equal>::type>,
-            std::multiset<BOOST_DEDUCED_TYPENAME X::value_type,
-                BOOST_DEDUCED_TYPENAME equals_to_compare<BOOST_DEDUCED_TYPENAME X::key_equal>::type>
-            > {};
+            std::set<
+                BOOST_DEDUCED_TYPENAME X::value_type,
+                BOOST_DEDUCED_TYPENAME equals_to_compare<
+                    BOOST_DEDUCED_TYPENAME X::key_equal
+                >::type
+            >,
+            std::multiset<
+                BOOST_DEDUCED_TYPENAME X::value_type,
+                BOOST_DEDUCED_TYPENAME equals_to_compare<
+                    BOOST_DEDUCED_TYPENAME X::key_equal
+                >::type
+            >
+        > {};
 
     template <class X>
-    struct ordered_map
-        : public boost::mpl::if_<
+    struct ordered_map : public
+        boost::mpl::if_<
             test::has_unique_keys<X>,
-            std::map<BOOST_DEDUCED_TYPENAME X::key_type, BOOST_DEDUCED_TYPENAME X::mapped_type,
-                BOOST_DEDUCED_TYPENAME equals_to_compare<BOOST_DEDUCED_TYPENAME X::key_equal>::type>,
-            std::multimap<BOOST_DEDUCED_TYPENAME X::key_type, BOOST_DEDUCED_TYPENAME X::mapped_type,
-                BOOST_DEDUCED_TYPENAME equals_to_compare<BOOST_DEDUCED_TYPENAME X::key_equal>::type>
-            > {};
+            std::map<
+                BOOST_DEDUCED_TYPENAME X::key_type,
+                BOOST_DEDUCED_TYPENAME X::mapped_type,
+                BOOST_DEDUCED_TYPENAME equals_to_compare<
+                    BOOST_DEDUCED_TYPENAME X::key_equal
+                >::type
+            >,
+            std::multimap<
+                BOOST_DEDUCED_TYPENAME X::key_type,
+                BOOST_DEDUCED_TYPENAME X::mapped_type,
+                BOOST_DEDUCED_TYPENAME equals_to_compare<
+                    BOOST_DEDUCED_TYPENAME X::key_equal
+                >::type
+            >
+        > {};
 
     template <class X>
-    struct ordered_base
-        : public boost::mpl::eval_if<
+    struct ordered_base : public
+        boost::mpl::eval_if<
             test::is_set<X>,
             test::ordered_set<X>,
-            test::ordered_map<X> >
-    {
-    };
+            test::ordered_map<X>
+        > {};
 
     template <class X>
     class ordered : public ordered_base<X>::type
@@ -114,7 +133,8 @@ namespace test
             compare_range(x, *this);
         }
 
-        void compare_key(X const& x, BOOST_DEDUCED_TYPENAME X::value_type const& val)
+        void compare_key(X const& x,
+            BOOST_DEDUCED_TYPENAME X::value_type const& val)
         {
             compare_pairs(
                 x.equal_range(get_key<X>(val)),
@@ -132,7 +152,8 @@ namespace test
     };
 
     template <class Equals>
-    BOOST_DEDUCED_TYPENAME equals_to_compare<Equals>::type create_compare(Equals const&)
+    BOOST_DEDUCED_TYPENAME
+        equals_to_compare<Equals>::type create_compare(Equals const&)
     {
         BOOST_DEDUCED_TYPENAME equals_to_compare<Equals>::type x;
         return x;

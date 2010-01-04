@@ -44,17 +44,20 @@ UNORDERED_AUTO_TEST(set_tests)
         {986, 25, 986}
     };
 
-    test_equal_insertion<boost::unordered_set<int> >(values[0], values[0] + 1);
-    test_equal_insertion<boost::unordered_set<int> >(values[1], values[1] + 2);
-    test_equal_insertion<boost::unordered_set<int> >(values[2], values[2] + 2);
-    test_equal_insertion<boost::unordered_set<int> >(values[3], values[3] + 2);
-    test_equal_insertion<boost::unordered_set<int> >(values[4], values[4] + 3);
+    typedef boost::unordered_set<int> set;
+    typedef boost::unordered_multiset<int> multiset;
 
-    test_equal_insertion<boost::unordered_multiset<int> >(values[0], values[0] + 1);
-    test_equal_insertion<boost::unordered_multiset<int> >(values[1], values[1] + 2);
-    test_equal_insertion<boost::unordered_multiset<int> >(values[2], values[2] + 2);
-    test_equal_insertion<boost::unordered_multiset<int> >(values[3], values[3] + 2);
-    test_equal_insertion<boost::unordered_multiset<int> >(values[4], values[4] + 3);
+    test_equal_insertion<set>(values[0], values[0] + 1);
+    test_equal_insertion<set>(values[1], values[1] + 2);
+    test_equal_insertion<set>(values[2], values[2] + 2);
+    test_equal_insertion<set>(values[3], values[3] + 2);
+    test_equal_insertion<set>(values[4], values[4] + 3);
+
+    test_equal_insertion<multiset>(values[0], values[0] + 1);
+    test_equal_insertion<multiset>(values[1], values[1] + 2);
+    test_equal_insertion<multiset>(values[2], values[2] + 2);
+    test_equal_insertion<multiset>(values[3], values[3] + 2);
+    test_equal_insertion<multiset>(values[4], values[4] + 3);
 }
 
 UNORDERED_AUTO_TEST(map_tests)

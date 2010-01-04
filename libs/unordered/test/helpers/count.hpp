@@ -39,8 +39,15 @@ namespace test {
             return !(*this == x);
         }
         
-        friend std::ostream& operator<<(std::ostream& out, object_count const& c) {
-            out<<"[instances: "<<c.instances<<", constructions: "<<c.constructions<<"]";
+        friend std::ostream& operator<<(std::ostream& out,
+            object_count const& c)
+        {
+            out
+                << "[instances: "
+                << c.instances
+                << ", constructions: "
+                << c.constructions
+                << "]";
             return out;
         }
     };

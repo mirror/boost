@@ -70,10 +70,12 @@ void hash_range_tests()
     BOOST_TEST(HASH_NAMESPACE::hash_range(values3.begin(), values3.end())
         == HASH_NAMESPACE::hash_range(x.begin(), x.end()));
 
-    std::size_t seed = HASH_NAMESPACE::hash_range(values3.begin(), values3.end());
+    std::size_t seed =
+        HASH_NAMESPACE::hash_range(values3.begin(), values3.end());
     HASH_NAMESPACE::hash_range(seed, values4.begin(), values4.end());
     HASH_NAMESPACE::hash_range(seed, x.begin(), x.end());
-    BOOST_TEST(seed == HASH_NAMESPACE::hash_range(values5.begin(), values5.end()));
+    BOOST_TEST(seed ==
+        HASH_NAMESPACE::hash_range(values5.begin(), values5.end()));
 }
 
 int main()

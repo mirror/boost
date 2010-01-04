@@ -270,7 +270,8 @@ namespace boost { namespace unordered_detail {
         typedef BOOST_DEDUCED_TYPENAME A::value_type value_type;
         typedef BOOST_DEDUCED_TYPENAME iterator_base::node node;
 
-        typedef BOOST_DEDUCED_TYPENAME bucket::bucket_allocator bucket_allocator;
+        typedef BOOST_DEDUCED_TYPENAME bucket::bucket_allocator
+            bucket_allocator;
         typedef BOOST_DEDUCED_TYPENAME bucket::bucket_ptr bucket_ptr;
         typedef BOOST_DEDUCED_TYPENAME bucket::node_ptr node_ptr;
 
@@ -973,7 +974,8 @@ namespace boost { namespace unordered_detail {
         typedef E extractor;
         typedef G group_type;
         
-        typedef hash_node_constructor<value_allocator, group_type> node_constructor;
+        typedef hash_node_constructor<value_allocator, group_type>
+            node_constructor;
         typedef hash_buckets<value_allocator, group_type> buckets;
         typedef hash_buffered_functions<hasher, key_equal> buffered_functions;
 

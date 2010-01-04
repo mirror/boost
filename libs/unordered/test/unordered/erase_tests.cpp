@@ -23,14 +23,15 @@ namespace erase_tests
 test::seed_t seed(85638);
 
 template <class Container>
-void erase_tests1(Container*, test::random_generator generator = test::default_generator)
+void erase_tests1(Container*,
+    test::random_generator generator = test::default_generator)
 {
     std::cerr<<"Erase by key.\n";
     {
         test::random_values<Container> v(1000, generator);
         Container x(v.begin(), v.end());
-        for(BOOST_DEDUCED_TYPENAME test::random_values<Container>::iterator it = v.begin();
-            it != v.end(); ++it)
+        for(BOOST_DEDUCED_TYPENAME test::random_values<Container>::iterator
+            it = v.begin(); it != v.end(); ++it)
         {
             std::size_t count = x.count(test::get_key<Container>(*it));
             std::size_t old_size = x.size();
@@ -48,9 +49,11 @@ void erase_tests1(Container*, test::random_generator generator = test::default_g
         std::size_t size = x.size();
         while(size > 0 && !x.empty())
         {
-            BOOST_DEDUCED_TYPENAME Container::key_type key = test::get_key<Container>(*x.begin());
+            BOOST_DEDUCED_TYPENAME Container::key_type
+                key = test::get_key<Container>(*x.begin());
             std::size_t count = x.count(key);
-            BOOST_DEDUCED_TYPENAME Container::iterator pos = x.erase(x.begin());
+            BOOST_DEDUCED_TYPENAME Container::iterator
+                pos = x.erase(x.begin());
             --size;
             BOOST_TEST(pos == x.begin());
             BOOST_TEST(x.count(key) == count - 1);
@@ -77,7 +80,8 @@ void erase_tests1(Container*, test::random_generator generator = test::default_g
                 pos = boost::next(prev);
             }
             next = boost::next(pos);
-            BOOST_DEDUCED_TYPENAME Container::key_type key = test::get_key<Container>(*pos);
+            BOOST_DEDUCED_TYPENAME Container::key_type
+                key = test::get_key<Container>(*pos);
             std::size_t count = x.count(key);
             BOOST_TEST(next == x.erase(pos));
             --size;
@@ -119,7 +123,8 @@ void erase_tests1(Container*, test::random_generator generator = test::default_g
         std::size_t size = x.size();
         while(size > 0 && !x.empty())
         {
-            BOOST_DEDUCED_TYPENAME Container::key_type key = test::get_key<Container>(*x.begin());
+            BOOST_DEDUCED_TYPENAME Container::key_type
+                key = test::get_key<Container>(*x.begin());
             std::size_t count = x.count(key);
             x.erase_return_void(x.begin());
             --size;
@@ -147,7 +152,8 @@ void erase_tests1(Container*, test::random_generator generator = test::default_g
                 pos = boost::next(prev);
             }
             next = boost::next(pos);
-            BOOST_DEDUCED_TYPENAME Container::key_type key = test::get_key<Container>(*pos);
+            BOOST_DEDUCED_TYPENAME Container::key_type
+                key = test::get_key<Container>(*pos);
             std::size_t count = x.count(key);
             x.erase_return_void(pos);
             --size;
@@ -173,10 +179,18 @@ void erase_tests1(Container*, test::random_generator generator = test::default_g
     std::cerr<<"\n";
 }
 
-boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
-boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
-boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
-boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
+boost::unordered_set<test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_set;
+boost::unordered_multiset<test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_map;
+boost::unordered_multimap<test::object, test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_multimap;
 
 using test::default_generator;
 using test::generate_collisions;

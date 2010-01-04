@@ -84,8 +84,8 @@ void custom_tests()
     HASH_NAMESPACE::hash_combine(seed2, 250u);
     HASH_NAMESPACE::hash_combine(seed2, 350u);
 
-    BOOST_TEST(seed ==
-            HASH_NAMESPACE::hash_range(custom_vector.begin(), custom_vector.end()));
+    BOOST_TEST(seed == HASH_NAMESPACE::hash_range(
+        custom_vector.begin(), custom_vector.end()));
     BOOST_TEST(seed == seed2);
 }
 

@@ -21,12 +21,16 @@ namespace test
     }
 
     template <class T>
-    bool equivalent_impl(boost::hash<T> const&, boost::hash<T> const&, derived_type) {
+    bool equivalent_impl(boost::hash<T> const&, boost::hash<T> const&,
+        derived_type)
+    {
         return true;
     }
 
     template <class T>
-    bool equivalent_impl(std::equal_to<T> const&, std::equal_to<T> const&, derived_type) {
+    bool equivalent_impl(std::equal_to<T> const&, std::equal_to<T> const&,
+        derived_type)
+    {
         return true;
     }
 

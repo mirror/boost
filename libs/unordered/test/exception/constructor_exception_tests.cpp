@@ -116,7 +116,8 @@ struct range_construct_test5 : public range<T>, objects
     range_construct_test5() : range<T>(60) {}
 
     void run() const {
-        T x(this->values.begin(), this->values.end(), 0, hash, equal_to, allocator);
+        T x(this->values.begin(), this->values.end(), 0,
+            hash, equal_to, allocator);
     }
 };
 
@@ -134,7 +135,16 @@ struct input_range_construct_test : public range<T>, objects
 };
 
 RUN_EXCEPTION_TESTS(
-    (construct_test1)(construct_test2)(construct_test3)(construct_test4)(construct_test5)(construct_test6)
-    (range_construct_test1)(range_construct_test2)(range_construct_test3)(range_construct_test4)(range_construct_test5)
+    (construct_test1)
+    (construct_test2)
+    (construct_test3)
+    (construct_test4)
+    (construct_test5)
+    (construct_test6)
+    (range_construct_test1)
+    (range_construct_test2)
+    (range_construct_test3)
+    (range_construct_test4)
+    (range_construct_test5)
     (input_range_construct_test),
     CONTAINER_SEQ)

@@ -62,7 +62,8 @@ namespace test
 #if defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
         template <>
         struct allocator_memory_type_gen<int> {
-            typedef std::map<memory_area, memory_track, memory_area_compare> type;
+            typedef std::map<memory_area, memory_track, memory_area_compare>
+                type;
         };
 #endif
 
@@ -73,7 +74,8 @@ namespace test
                     std::pair<memory_area const, memory_track> >::type
                 allocator_type;
 
-            typedef BOOST_DEDUCED_TYPENAME allocator_memory_type_gen<allocator_type>::type
+            typedef BOOST_DEDUCED_TYPENAME
+                allocator_memory_type_gen<allocator_type>::type
                 allocated_memory_type;
 
             allocated_memory_type allocated_memory;
@@ -106,7 +108,8 @@ namespace test
                         bool no_constructions_left = (count_constructions == 0);
                         bool allocated_memory_empty = allocated_memory.empty();
 
-                        // Clearing the data before the checks terminate the tests.
+                        // Clearing the data before the checks terminate the
+                        // tests.
                         count_allocations = 0;
                         count_constructions = 0;
                         allocated_memory.clear();
@@ -118,7 +121,8 @@ namespace test
                 }
             }
 
-            void track_allocate(void *ptr, std::size_t n, std::size_t size, int tag)
+            void track_allocate(void *ptr, std::size_t n, std::size_t size,
+                int tag)
             {
                 if(n == 0) {
                     BOOST_ERROR("Allocating 0 length array.");
@@ -132,10 +136,12 @@ namespace test
                 }
             }
 
-            void track_deallocate(void* ptr, std::size_t n, std::size_t size, int tag)
+            void track_deallocate(void* ptr, std::size_t n, std::size_t size,
+                int tag)
             {
-                BOOST_DEDUCED_TYPENAME allocated_memory_type::iterator pos
-                    = allocated_memory.find(memory_area(ptr, (char*) ptr + n * size));
+                BOOST_DEDUCED_TYPENAME allocated_memory_type::iterator pos =
+                    allocated_memory.find(
+                        memory_area(ptr, (char*) ptr + n * size));
                 if(pos == allocated_memory.end()) {
                     BOOST_ERROR("Deallocating unknown pointer.");
                 } else {
@@ -148,12 +154,14 @@ namespace test
                 if(count_allocations > 0) --count_allocations;
             }
 
-            void track_construct(void* /*ptr*/, std::size_t /*size*/, int /*tag*/)
+            void track_construct(void* /*ptr*/, std::size_t /*size*/,
+                int /*tag*/)
             {
                 ++count_constructions;
             }
 
-            void track_destroy(void* /*ptr*/, std::size_t /*size*/, int /*tag*/)
+            void track_destroy(void* /*ptr*/, std::size_t /*size*/,
+                int /*tag*/)
             {
                 BOOST_TEST(count_constructions > 0);
                 if(count_constructions > 0) --count_constructions;

@@ -291,7 +291,8 @@ namespace boost
                 table_.emplace(v));
         }
 
-        iterator emplace_hint(const_iterator, value_type const& v = value_type())
+        iterator emplace_hint(const_iterator,
+            value_type const& v = value_type())
         {
             return iterator(table_.emplace(v).first);
         }

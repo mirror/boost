@@ -71,7 +71,9 @@ namespace test
                     type_ == generate_collisions ?
                     generate(int_ptr) % 10 : 1;
                     count; --count) {
-                    x.push_back(std::pair<key_type const, mapped_type>(key, generate(mapped_ptr)));
+                    x.push_back(
+                        std::pair<key_type const, mapped_type>(
+                            key, generate(mapped_ptr)));
                 }
             }
         }

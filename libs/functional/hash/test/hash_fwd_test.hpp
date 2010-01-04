@@ -60,7 +60,8 @@ namespace test {
     template <class T>
     std::size_t hash_value(test_type3<T> const& x)
     {
-        std::size_t seed = HASH_NAMESPACE::hash_range(x.values.begin(), x.values.end());
+        std::size_t seed =
+            HASH_NAMESPACE::hash_range(x.values.begin(), x.values.end());
         HASH_NAMESPACE::hash_range(seed, x.values.begin(), x.values.end());
         return seed;
     }
@@ -91,7 +92,8 @@ namespace boost
     template <class T>
     std::size_t hash_value(test::test_type3<T> const& x)
     {
-        std::size_t seed = HASH_NAMESPACE::hash_range(x.values.begin(), x.values.end());
+        std::size_t seed =
+            HASH_NAMESPACE::hash_range(x.values.begin(), x.values.end());
         HASH_NAMESPACE::hash_range(seed, x.values.begin(), x.values.end());
         return seed;
     }

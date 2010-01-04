@@ -28,7 +28,9 @@ struct insert_test_base : public test::exception_base
         return T();
     }
 
-    void check BOOST_PREVENT_MACRO_SUBSTITUTION(T const& x, strong_type const& strong) const {
+    void check BOOST_PREVENT_MACRO_SUBSTITUTION(
+        T const& x, strong_type const& strong) const
+    {
         std::string scope(test::scope);
 
         if(scope.find("hash::operator()") == std::string::npos)
@@ -46,7 +48,8 @@ struct emplace_test1 : public insert_test_base<T>
 
     void run(T& x, strong_type& strong) const {
         for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
-                it = this->values.begin(), end = this->values.end(); it != end; ++it)
+            it = this->values.begin(), end = this->values.end();
+            it != end; ++it)
         {
             strong.store(x, test::exception::detail::tracker.count_allocations);
             x.emplace(*it);
@@ -63,7 +66,8 @@ struct insert_test1 : public insert_test_base<T>
 
     void run(T& x, strong_type& strong) const {
         for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
-                it = this->values.begin(), end = this->values.end(); it != end; ++it)
+            it = this->values.begin(), end = this->values.end();
+            it != end; ++it)
         {
             strong.store(x, test::exception::detail::tracker.count_allocations);
             x.insert(*it);
@@ -78,7 +82,8 @@ struct insert_test2 : public insert_test_base<T>
 
     void run(T& x, strong_type& strong) const {
         for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
-                it = this->values.begin(), end = this->values.end(); it != end; ++it)
+            it = this->values.begin(), end = this->values.end();
+            it != end; ++it)
         {
             strong.store(x, test::exception::detail::tracker.count_allocations);
             x.insert(x.begin(), *it);
@@ -105,7 +110,8 @@ struct insert_test4 : public insert_test_base<T>
 
     void run(T& x, strong_type& strong) const {
         for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
-                it = this->values.begin(), end = this->values.end(); it != end; ++it)
+            it = this->values.begin(), end = this->values.end();
+            it != end; ++it)
         {
             strong.store(x, test::exception::detail::tracker.count_allocations);
             x.insert(it, boost::next(it));
@@ -142,7 +148,8 @@ struct insert_test_rehash1 : public insert_test_base<T>
         BOOST_DEDUCED_TYPENAME T::const_iterator pos = x.cbegin();
 
         for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
-            it = boost::next(this->values.begin(), x.size()), end = this->values.end();
+            it = boost::next(this->values.begin(), x.size()),
+                end = this->values.end();
             it != end && count < 10; ++it, ++count)
         {
             strong.store(x, test::exception::detail::tracker.count_allocations);
@@ -165,7 +172,8 @@ struct insert_test_rehash2 : public insert_test_rehash1<T>
         int count = 0;
 
         for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
-            it = boost::next(this->values.begin(), x.size()), end = this->values.end();
+            it = boost::next(this->values.begin(), x.size()),
+                end = this->values.end();
             it != end && count < 10; ++it, ++count)
         {
             strong.store(x, test::exception::detail::tracker.count_allocations);
@@ -181,7 +189,8 @@ struct insert_test_rehash2 : public insert_test_rehash1<T>
 template <class T>
 struct insert_test_rehash3 : public insert_test_base<T>
 {
-    BOOST_DEDUCED_TYPENAME T::size_type mutable rehash_bucket_count, original_bucket_count;
+    BOOST_DEDUCED_TYPENAME T::size_type mutable
+        rehash_bucket_count, original_bucket_count;
 
     insert_test_rehash3() : insert_test_base<T>(1000) {}
 
@@ -196,7 +205,8 @@ struct insert_test_rehash3 : public insert_test_base<T>
         rehash_bucket_count = static_cast<size_type>(
             ceil(original_bucket_count * (double) x.max_load_factor())) - 1;
 
-        size_type initial_elements = rehash_bucket_count > 5 ? rehash_bucket_count - 5 : 1;
+        size_type initial_elements =
+            rehash_bucket_count > 5 ? rehash_bucket_count - 5 : 1;
 
         BOOST_TEST(initial_elements < this->values.size());
         x.insert(this->values.begin(),

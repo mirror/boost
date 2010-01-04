@@ -126,12 +126,29 @@ namespace test
 
             T const& operator*() const { return ptr_->value_; }
             T const* operator->() const { return &ptr_->value_; }
-            list_const_iterator& operator++() {
-                ptr_ = ptr_->next_; return *this; }
-            list_const_iterator operator++(int) {
-                list_const_iterator tmp = *this; ptr_ = ptr_->next_; return tmp; }
-            bool operator==(const_iterator y) const { return ptr_ == y.ptr_; }
-            bool operator!=(const_iterator y) const { return ptr_ != y.ptr_; }
+
+            list_const_iterator& operator++()
+            {
+                ptr_ = ptr_->next_;
+                return *this;
+            }
+
+            list_const_iterator operator++(int)
+            {
+                list_const_iterator tmp = *this;
+                ptr_ = ptr_->next_;
+                return tmp;
+            }
+
+            bool operator==(const_iterator y) const
+            {
+                return ptr_ == y.ptr_;
+            }
+
+            bool operator!=(const_iterator y) const
+            {
+                return ptr_ != y.ptr_;
+            }
         };
     }
 

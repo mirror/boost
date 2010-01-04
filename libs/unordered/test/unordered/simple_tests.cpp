@@ -72,7 +72,8 @@ void simple_test(X const& a)
 
     {
         BOOST_TEST(a.size() ==
-                (BOOST_DEDUCED_TYPENAME X::size_type) std::distance(a.begin(), a.end()));
+            static_cast<BOOST_DEDUCED_TYPENAME X::size_type>(
+                std::distance(a.begin(), a.end())));
     }
 
     {

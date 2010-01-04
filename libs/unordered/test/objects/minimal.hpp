@@ -46,31 +46,61 @@ namespace minimal
     class copy_constructible_equality_comparable
     {
     public:
-        static copy_constructible_equality_comparable create() { return copy_constructible_equality_comparable(); }
-        copy_constructible_equality_comparable(copy_constructible_equality_comparable const&) {}
-        ~copy_constructible_equality_comparable() {}
+        static copy_constructible_equality_comparable create() {
+            return copy_constructible_equality_comparable();
+        }
+
+        copy_constructible_equality_comparable(
+            copy_constructible_equality_comparable const&)
+        {
+        }
+
+        ~copy_constructible_equality_comparable()
+        {
+        }
+
     private:
-        copy_constructible_equality_comparable& operator=(copy_constructible_equality_comparable const&);
+        copy_constructible_equality_comparable& operator=(
+            copy_constructible_equality_comparable const&);
         copy_constructible_equality_comparable() {}
     };
 
-    bool operator==(copy_constructible_equality_comparable, copy_constructible_equality_comparable) {
+    bool operator==(
+        copy_constructible_equality_comparable,
+        copy_constructible_equality_comparable)
+    {
         return true;
     }
 
-    bool operator!=(copy_constructible_equality_comparable, copy_constructible_equality_comparable) {
+    bool operator!=(
+        copy_constructible_equality_comparable,
+        copy_constructible_equality_comparable)
+    {
         return false;
     }
 
     class default_copy_constructible
     {
     public:
-        static default_copy_constructible create() { return default_copy_constructible(); }
-        default_copy_constructible() {}
-        default_copy_constructible(default_copy_constructible const&) {}
-        ~default_copy_constructible() {}
+        static default_copy_constructible create()
+        {
+            return default_copy_constructible();
+        }
+
+        default_copy_constructible()
+        {
+        }
+
+        default_copy_constructible(default_copy_constructible const&)
+        {
+        }
+
+        ~default_copy_constructible()
+        {
+        }
     private:
-        default_copy_constructible& operator=(default_copy_constructible const&);
+        default_copy_constructible& operator=(
+            default_copy_constructible const&);
     };
 
     class assignable
@@ -130,7 +160,8 @@ namespace minimal
         ptr& operator++() { ++ptr_; return *this; }
         ptr operator++(int) { ptr tmp(*this); ++ptr_; return tmp; }
         ptr operator+(std::ptrdiff_t s) const { return ptr<T>(ptr_ + s); }
-        friend ptr operator+(std::ptrdiff_t s, ptr p) { return ptr<T>(s + p.ptr_); }
+        friend ptr operator+(std::ptrdiff_t s, ptr p)
+            { return ptr<T>(s + p.ptr_); }
         T& operator[](std::ptrdiff_t s) const { return ptr_[s]; }
         bool operator!() const { return !ptr_; }
         
@@ -169,8 +200,10 @@ namespace minimal
         T const* operator->() const { return ptr_; }
         const_ptr& operator++() { ++ptr_; return *this; }
         const_ptr operator++(int) { const_ptr tmp(*this); ++ptr_; return tmp; }
-        const_ptr operator+(std::ptrdiff_t s) const { return const_ptr(ptr_ + s); }
-        friend const_ptr operator+(std::ptrdiff_t s, const_ptr p) { return ptr<T>(s + p.ptr_); }
+        const_ptr operator+(std::ptrdiff_t s) const
+            { return const_ptr(ptr_ + s); }
+        friend const_ptr operator+(std::ptrdiff_t s, const_ptr p)
+            { return ptr<T>(s + p.ptr_); }
         T const& operator[](int s) const { return ptr_[s]; }
         bool operator!() const { return !ptr_; }
         operator bool() const { return !!ptr_; }
@@ -272,7 +305,9 @@ namespace boost {
 namespace test {
 namespace minimal {
 #endif
-    std::size_t hash_value(test::minimal::copy_constructible_equality_comparable) {
+    std::size_t hash_value(
+        test::minimal::copy_constructible_equality_comparable)
+    {
         return 1;
     }
 #if !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)

@@ -190,13 +190,37 @@ namespace test
 
         template <class U> struct rebind { typedef allocator<U> other; };
 
-        explicit allocator(int t = 0) : tag_(t) { detail::tracker.allocator_ref(); }
-        template <class Y> allocator(allocator<Y> const& x) : tag_(x.tag_) { detail::tracker.allocator_ref(); }
-        allocator(allocator const& x) : tag_(x.tag_) { detail::tracker.allocator_ref(); }
-        ~allocator() { detail::tracker.allocator_unref(); }
+        explicit allocator(int t = 0) : tag_(t)
+        {
+            detail::tracker.allocator_ref();
+        }
+        
+        template <class Y> allocator(allocator<Y> const& x)
+            : tag_(x.tag_)
+        {
+            detail::tracker.allocator_ref();
+        }
 
-        pointer address(reference r) { return pointer(&r); }
-        const_pointer address(const_reference r) { return const_pointer(&r); }
+        allocator(allocator const& x)
+            : tag_(x.tag_)
+        {
+            detail::tracker.allocator_ref();
+        }
+
+        ~allocator()
+        {
+            detail::tracker.allocator_unref();
+        }
+
+        pointer address(reference r)
+        {
+            return pointer(&r);
+        }
+
+        const_pointer address(const_reference r)
+        {
+            return const_pointer(&r);
+        }
 
         pointer allocate(size_type n) {
             pointer ptr(static_cast<T*>(::operator new(n * sizeof(T))));
@@ -250,7 +274,9 @@ namespace test
     };
 
     template <class T>
-    bool equivalent_impl(allocator<T> const& x, allocator<T> const& y, test::derived_type) {
+    bool equivalent_impl(allocator<T> const& x, allocator<T> const& y,
+        test::derived_type)
+    {
         return x == y;
     }
 

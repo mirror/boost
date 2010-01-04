@@ -19,13 +19,15 @@ namespace test
         }
 
         template <class T>
-        static key_type const& get_key(std::pair<key_type, T> const& x, char = 0)
+        static key_type const& get_key(
+            std::pair<key_type, T> const& x, char = 0)
         {
             return x.first;
         }
 
         template <class T>
-        static key_type const& get_key(std::pair<key_type const, T> const& x, unsigned char = 0)
+        static key_type const& get_key(std::pair<key_type const, T> const& x,
+            unsigned char = 0)
         {
             return x.first;
         }
