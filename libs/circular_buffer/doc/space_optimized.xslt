@@ -68,7 +68,7 @@ http://www.boost.org/LICENSE_1_0.txt)
         </xsl:apply-templates>
       </xsl:if>
     </xsl:for-each>
-    <xsl:for-each select="$current[string-length(normalize-space(briefdescription)) &gt; 0]">
+    <xsl:for-each select="$current[string-length(normalize-space(briefdescription)) &gt; 0 and normalize-space(briefdescription) != 'no-comment']">
       <xsl:apply-templates select="." mode="synopsis"/>
     </xsl:for-each>
   </xsl:template>
@@ -96,7 +96,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   </xsl:template>
 
   <xsl:template name="member-functions-details">
-    <xsl:for-each select="sectiondef[@kind='public-func']/memberdef[type != '' and string-length(normalize-space(briefdescription)) &gt; 0]">
+    <xsl:for-each select="sectiondef[@kind='public-func']/memberdef[type != '' and string-length(normalize-space(briefdescription)) &gt; 0 and normalize-space(briefdescription) != 'no-comment']">
       <xsl:apply-templates select="." mode="description"/>
     </xsl:for-each>
   </xsl:template>
