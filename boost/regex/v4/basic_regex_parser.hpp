@@ -1939,7 +1939,9 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
       }
 insert_recursion:
       pb->index = markid = 0;
-      static_cast<re_jump*>(this->append_state(syntax_element_recurse, sizeof(re_jump)))->alt.i = v;
+      re_recurse* pr = static_cast<re_recurse*>(this->append_state(syntax_element_recurse, sizeof(re_recurse)));
+      pr->alt.i = v;
+      pr->state_id = 0;
       static_cast<re_case*>(
             this->append_state(syntax_element_toggle_case, sizeof(re_case))
             )->icase = this->flags() & regbase::icase;

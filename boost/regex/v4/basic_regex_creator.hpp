@@ -811,8 +811,43 @@ void basic_regex_creator<charT, traits>::fixup_recursions(re_syntax_base* state)
             {
                if((p->type == syntax_element_startmark) && (static_cast<re_brace*>(p)->index == id))
                {
+                  //
+                  // We've found the target of the recursion, set the jump target:
+                  //
                   static_cast<re_jump*>(state)->alt.p = p;
                   ok = true;
+                  // 
+                  // Now scan the target for nested repeats:
+                  //
+                  p = p->next.p;
+                  int next_rep_id = 0;
+                  while(p)
+                  {
+                     switch(p->type)
+                     {
+                     case syntax_element_rep:
+                     case syntax_element_dot_rep:
+                     case syntax_element_char_rep:
+                     case syntax_element_short_set_rep:
+                     case syntax_element_long_set_rep:
+                        next_rep_id = static_cast<re_repeat*>(p)->state_id;
+                        break;
+                     case syntax_element_endmark:
+                        if(static_cast<const re_brace*>(p)->index == id)
+                           next_rep_id = -1;
+                        break;
+                     default: 
+                        break;
+                     }
+                     if(next_rep_id)
+                        break;
+                     p = p->next.p;
+                  }
+                  if(next_rep_id > 0)
+                  {
+                     static_cast<re_recurse*>(state)->state_id = next_rep_id - 1;
+                  }
+
                   break;
                }
                p = p->next.p;

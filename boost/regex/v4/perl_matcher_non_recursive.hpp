@@ -904,10 +904,15 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_recursion()
    }
    recursion_stack[recursion_stack_position].preturn_address = pstate->next.p;
    recursion_stack[recursion_stack_position].results = *m_presult;
+   if(static_cast<const re_recurse*>(pstate)->state_id > 0)
+   {
+      push_repeater_count(static_cast<const re_recurse*>(pstate)->state_id, &next_count);
+   }
    pstate = static_cast<const re_jump*>(pstate)->alt.p;
    recursion_stack[recursion_stack_position].id = static_cast<const re_brace*>(pstate)->index;
    ++recursion_stack_position;
    //BOOST_ASSERT(recursion_stack[recursion_stack_position-1].id);
+
    return true;
 }
 

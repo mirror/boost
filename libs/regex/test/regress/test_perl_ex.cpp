@@ -892,5 +892,9 @@ void test_recursion()
    TEST_REGEX_SEARCH("\\b(?&byte)(\\.(?&byte)){3}(?(DEFINE)(?<byte>2[0-4]\\d|25[0-5]|1\\d\\d|[1-9]?\\d))", perl|mod_x, "10.0.0.0", match_default, make_array(0, 8, 6, 8, -1, -1, -2, -2));
    TEST_REGEX_SEARCH("\\b(?&byte)(\\.(?&byte)){3}(?(DEFINE)(?<byte>2[0-4]\\d|25[0-5]|1\\d\\d|[1-9]?\\d))", perl|mod_x, "10.6", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("\\b(?&byte)(\\.(?&byte)){3}(?(DEFINE)(?<byte>2[0-4]\\d|25[0-5]|1\\d\\d|[1-9]?\\d))", perl|mod_x, "455.3.4.5", match_default, make_array(-2, -2));
+
+   // Bugs:
+   TEST_REGEX_SEARCH("namespace\\s+(\\w+)\\s+(\\{(?:[^{}]*(?:(?2)[^{}]*)*)?\\})", perl, "namespace one { namespace two { int foo(); } }", match_default, make_array(0, 46, 10, 13, 14, 46, -2, -2));
+   TEST_REGEX_SEARCH("namespace\\s+(\\w+)\\s+(\\{(?:[^{}]*(?:(?2)[^{}]*)*)?\\})", perl, "namespace one { namespace two { int foo(){} } { {{{ }  } } } {}}", match_default, make_array(0, 64, 10, 13, 14, 64, -2, -2));
 }
 
