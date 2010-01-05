@@ -36,13 +36,21 @@
     {
         namespace detail
         {
+            template<typename Context>
+            struct callable_context_wrapper
+              : remove_cv<Context>::type
+            {
+                callable_context_wrapper();
+                typedef private_type_ fun_type(...);
+                operator fun_type *() const;
+            private:
+                callable_context_wrapper &operator =(callable_context_wrapper const &);
+            };
+
             template<typename T>
             yes_type check_is_expr_handled(T const &);
 
             no_type check_is_expr_handled(private_type_ const &);
-
-            template<typename Context, long Arity>
-            struct callable_context_wrapper;
 
             template<typename Expr, typename Context, long Arity = Expr::proto_arity_c>
             struct is_expr_handled;
@@ -50,7 +58,7 @@
             template<typename Expr, typename Context>
             struct is_expr_handled<Expr, Context, 0>
             {
-                static callable_context_wrapper<Context, 1> &sctx_;
+                static callable_context_wrapper<Context> &sctx_;
                 static Expr &sexpr_;
                 static typename Expr::proto_tag &stag_;
 
@@ -243,28 +251,10 @@
 
         namespace detail
         {
-            template<typename Context>
-            struct callable_context_wrapper<Context, N>
-              : remove_cv<Context>::type
-            {
-                callable_context_wrapper();
-                typedef
-                    private_type_ const &fun_type(
-                        BOOST_PP_ENUM_PARAMS(
-                            BOOST_PP_INC(N)
-                          , detail::dont_care BOOST_PP_INTERCEPT
-                        )
-                    );
-                operator fun_type *() const;
-
-            private:
-                callable_context_wrapper &operator =(callable_context_wrapper const &);
-            };
-
             template<typename Expr, typename Context>
             struct is_expr_handled<Expr, Context, N>
             {
-                static callable_context_wrapper<Context, N> &sctx_;
+                static callable_context_wrapper<Context> &sctx_;
                 static Expr &sexpr_;
                 static typename Expr::proto_tag &stag_;
 
