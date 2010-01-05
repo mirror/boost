@@ -1,7 +1,7 @@
 Boost.Wave: A Standard compliant C++ preprocessor library
 http://www.boost.org/
 
-Copyright (c) 2001-2009 Hartmut Kaiser. Distributed under the Boost
+Copyright (c) 2001-2010 Hartmut Kaiser. Distributed under the Boost
 Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 -------------------------------------------------------------------------------
@@ -19,6 +19,10 @@ TODO (known issues):
 -------------------------------------------------------------------------------
 
 CHANGELOG
+
+Boost V1.42.0
+- V2.0.4
+- Fixed Wave for latest changes in multi_pass iterator.
 
 Boost V1.41.0
 - V2.0.3
