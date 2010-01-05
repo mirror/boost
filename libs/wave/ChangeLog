@@ -21,6 +21,7 @@ TODO (known issues):
 CHANGELOG
 
 Boost V1.42.0
+- V2.0.4
 - Fixed Wave for latest changes in multi_pass iterator.
 
 Boost V1.41.0
