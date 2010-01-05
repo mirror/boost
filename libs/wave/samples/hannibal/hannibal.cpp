@@ -2,7 +2,7 @@
 //  Copyright (c) 2005-2006 Danny Havenith
 // 
 //  Boost.Wave: A Standard compliant C++ preprocessor
-//  Copyright (c) 2001-2009 Hartmut Kaiser
+//  Copyright (c) 2001-2010 Hartmut Kaiser
 // 
 //  http://www.boost.org/
 //
