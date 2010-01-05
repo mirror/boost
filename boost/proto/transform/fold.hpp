@@ -37,7 +37,7 @@
                 template<typename Sig>
                 struct result;
 
-                #if 0 //BOOST_VERSION >= 104200
+                #if BOOST_VERSION >= 104200
 
                 template<typename This, typename State, typename Expr>
                 struct result<This(State, Expr)>
