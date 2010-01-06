@@ -496,4 +496,23 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
          add_dependent_lib(swhat.str(1), p, view);
       }
    }
+   if(m_list_namespaces)
+   {
+      //
+      // scan for top level namespaces and add to our list:
+      //
+      static const boost::regex namespace_scanner(
+         "^(?<!\\\\\\n)[[:blank:]]*+namespace\\s++(\\w++)\\s++(\\{[^{}]*(?:(?2)[^{}]*)*\\})"
+         );
+      i = boost::regex_token_iterator<const char*>(view.begin(), view.end(), namespace_scanner, 1);
+      while(i != j)
+      {
+         if(m_top_namespaces.count(*i) == 0)
+         {
+            //std::cout << *i << " (Found in " << p << ")" << std::endl;
+            m_top_namespaces[*i] = p;
+         }
+         ++i;
+      }
+   }
 }

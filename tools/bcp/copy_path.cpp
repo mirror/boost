@@ -106,13 +106,21 @@ void bcp_implementation::copy_path(const fs::path& p)
 
       static const boost::regex namespace_matcher(
          "(?|"
-            "(namespace\\s+)boost\\>()"
+            "(namespace\\s+)boost(_\\w+)?"
          "|"
-            "()boost(\\s*(?:::|,|\\)))"
+            "(namespace\\s+)(adstl|phoenix|rapidxml)\\>"
          "|"
-            "(namespace\\s+\\w+\\s*=\\s*(?:::\\s*)?)boost\\>()"
+            "()boost((?:_\\w+)?\\s*(?:::|,|\\)))"
          "|"
-            "(^\\s*#\\s*define[^\\n]+)boost(\\s*)$"
+            "()((?:adstl|phoenix|rapidxml)\\s*(?:::|,|\\)))"
+         "|"
+            "(namespace\\s+\\w+\\s*=\\s*(?:::\\s*)?)boost(_\\w+)?"
+         "|"
+            "(namespace\\s+\\w+\\s*=\\s*(?:::\\s*)?)(adstl|phoenix|rapidxml)\\>"
+         "|"
+            "(^\\s*#\\s*define[^\\n]+)boost((?:_\\w+)?\\s*)$"
+         "|"
+            "(^\\s*#\\s*define[^\\n]+)((?:adstl|phoenix|rapidxml)\\s*)$"
          ")"
          );
 

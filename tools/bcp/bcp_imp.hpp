@@ -65,6 +65,7 @@ private:
    void add_module(const char* p);
    void set_namespace(const char* name);
    void set_namespace_alias(bool);
+   void set_namespace_list(bool);
 
    virtual int run();
 
@@ -94,6 +95,7 @@ private:
    bool m_bsl_convert_mode;              // try to convert to the BSL
    bool m_bsl_summary_mode;              // summarise BSL issues only
    bool m_namespace_alias;               // make "boost" a namespace alias when doing a namespace rename.
+   bool m_list_namespaces;               // list all the top level namespaces found.
    fs::path m_boost_path;                // the path to the boost root
    fs::path m_dest_path;                 // the path to copy to
    std::map<fs::path, bool, path_less>                   m_cvs_paths;                  // valid files under cvs control
@@ -111,4 +113,6 @@ private:
    std::map<fs::path, fs::path, path_less>               m_dependencies;               // dependency information
    std::string                                           m_namespace_name;             // namespace rename.
    std::set<std::string>                                 m_lib_names;                  // List of library binary names
+   std::map<std::string, fs::path>                       m_top_namespaces;             // List of top level namespace names
 };
+

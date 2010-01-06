@@ -31,6 +31,7 @@ public:
    virtual void add_module(const char* p) = 0;
    virtual void set_namespace(const char* name) = 0;
    virtual void set_namespace_alias(bool) = 0;
+   virtual void set_namespace_list(bool) = 0;
 
    virtual int run() = 0;
 

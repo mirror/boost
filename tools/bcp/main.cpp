@@ -145,6 +145,11 @@ int cpp_main(int argc, char* argv[])
       {
          papp->set_namespace_alias(true);
       }
+      else if(0 == std::strncmp("--list-namespaces", argv[i], 17))
+      {
+         list_mode = true;
+         papp->set_namespace_list(true);
+      }
       else if(argv[i][0] == '-')
       {
          std::cout << "Error: Unknown argument " << argv[i] << std::endl;
