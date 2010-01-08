@@ -115,5 +115,6 @@ First official release.
 * Add templated find overload for compatible keys.
 * [@http://svn.boost.org/trac/boost/ticket/3773 Ticket 3773]:
   Add missing `std` qualifier to `ptrdiff_t`.
+* Some code formatting changes to fit almost all lines into 80 characters.
 
 [endsect]
