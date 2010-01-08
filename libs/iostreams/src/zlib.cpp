@@ -71,7 +71,7 @@ zlib_error::zlib_error(int error)
     : BOOST_IOSTREAMS_FAILURE("zlib error"), error_(error) 
     { }
 
-void zlib_error::check(int error)
+void zlib_error::check BOOST_PREVENT_MACRO_SUBSTITUTION(int error)
 {
     switch (error) {
     case Z_OK: 
@@ -144,7 +144,7 @@ void zlib_base::reset(bool compress, bool realloc)
     z_stream* s = static_cast<z_stream*>(stream_);
     // Undiagnosed bug:
     // deflateReset(), etc., return Z_DATA_ERROR
-    //zlib_error::check(
+    //zlib_error::check BOOST_PREVENT_MACRO_SUBSTITUTION(
         realloc ?
             (compress ? deflateReset(s) : inflateReset(s)) :
             (compress ? deflateEnd(s) : inflateEnd(s))
@@ -173,7 +173,7 @@ void zlib_base::do_init
     //#endif
     s->opaque = derived;
     int window_bits = p.noheader? -p.window_bits : p.window_bits;
-    zlib_error::check(
+    zlib_error::check BOOST_PREVENT_MACRO_SUBSTITUTION(
         compress ?
             deflateInit2( s, 
                           p.level,

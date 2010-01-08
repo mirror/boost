@@ -27,6 +27,15 @@
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
+// If Boost.Exception has BOOST_ATTRIBUTE_NORETURN
+#if defined(_MSC_VER) || defined(__GNUC__)
+#define BOOST_IOSTREAMS_UNREACHABLE_RETURN(x) \
+    BOOST_UNREACHABLE_RETURN(x)
+#else
+#define BOOST_IOSTREAMS_UNREACHABLE_RETURN(x) \
+    return x;
+#endif
+
 namespace boost { namespace iostreams { namespace detail {
 
 template<typename Category> struct device_wrapper_impl;
@@ -139,6 +148,7 @@ struct device_wrapper_impl<any_tag> {
           BOOST_IOS::openmode, any_tag )
     { 
         boost::throw_exception(cant_seek());
+        BOOST_IOSTREAMS_UNREACHABLE_RETURN(0)
     }
 
     template<typename Device>
@@ -172,7 +182,8 @@ struct device_wrapper_impl<input> : device_wrapper_impl<any_tag>  {
     static std::streamsize 
     write( Device&, Dummy*, const typename char_type_of<Device>::type*,
            std::streamsize )
-    { boost::throw_exception(cant_write()); }
+    { boost::throw_exception(cant_write());
+      BOOST_IOSTREAMS_UNREACHABLE_RETURN(0) }
 };
 
 template<>
@@ -180,7 +191,8 @@ struct device_wrapper_impl<output> {
     template<typename Device, typename Dummy>
     static std::streamsize
     read(Device&, Dummy*, typename char_type_of<Device>::type*, std::streamsize)
-    { boost::throw_exception(cant_read()); }
+    { boost::throw_exception(cant_read());
+      BOOST_IOSTREAMS_UNREACHABLE_RETURN(0) }
 
     template<typename Device, typename Dummy>
     static std::streamsize 
@@ -206,7 +218,8 @@ struct flt_wrapper_impl<any_tag> {
     static std::streampos
     seek( Filter&, Device*, stream_offset,
           BOOST_IOS::seekdir, BOOST_IOS::openmode, any_tag )
-    { boost::throw_exception(cant_seek()); }
+    { boost::throw_exception(cant_seek());
+      BOOST_IOSTREAMS_UNREACHABLE_RETURN(0) }
 
     template<typename Filter, typename Device>
     static std::streampos
@@ -253,7 +266,8 @@ struct flt_wrapper_impl<input> {
     static std::streamsize 
     write( Filter&, Sink*, const typename char_type_of<Filter>::type*, 
            std::streamsize )
-    { boost::throw_exception(cant_write()); }
+    { boost::throw_exception(cant_write());
+      BOOST_IOSTREAMS_UNREACHABLE_RETURN(0) }
 };
 
 template<>
@@ -261,7 +275,8 @@ struct flt_wrapper_impl<output> {
     template<typename Filter, typename Source>
     static std::streamsize
     read(Filter&, Source*, typename char_type_of<Filter>::type*,std::streamsize)
-    { boost::throw_exception(cant_read()); }
+    { boost::throw_exception(cant_read());
+      BOOST_IOSTREAMS_UNREACHABLE_RETURN(0) }
 
     template<typename Filter, typename Sink>
     static std::streamsize 
