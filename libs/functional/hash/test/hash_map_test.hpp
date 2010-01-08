@@ -22,19 +22,21 @@ namespace BOOST_PP_CAT(CONTAINER_TYPE, _tests)
     {
         const int number_of_containers = 10;
         T containers[number_of_containers];
-        typedef typename T::value_type pair;
+        typedef BOOST_DEDUCED_TYPENAME T::value_type pair;
+        typedef BOOST_DEDUCED_TYPENAME T::key_type key;
+        typedef BOOST_DEDUCED_TYPENAME T::mapped_type value;
 
         for(int i = 0; i < 5; ++i) {
             for(int j = 0; j < i; ++j)
-                containers[i].insert(pair(0, 0));
+                containers[i].insert(pair(key(0), value(0)));
         }
 
-        containers[6].insert(pair(1,0));
-        containers[7].insert(pair(1,0));
-        containers[7].insert(pair(1,0));
-        containers[8].insert(pair(-1,1));
-        containers[9].insert(pair(-1,3));
-        containers[9].insert(pair(-1,3));
+        containers[6].insert(pair(key(1),value(0)));
+        containers[7].insert(pair(key(1),value(0)));
+        containers[7].insert(pair(key(1),value(0)));
+        containers[8].insert(pair(key(-1),value(1)));
+        containers[9].insert(pair(key(-1),value(3)));
+        containers[9].insert(pair(key(-1),value(3)));
 
         HASH_NAMESPACE::hash<T> hasher;
 

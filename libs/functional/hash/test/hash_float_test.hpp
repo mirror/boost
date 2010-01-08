@@ -22,10 +22,11 @@
 
 #if defined(BOOST_MSVC)
 #pragma warning(push)
-#pragma warning(disable:4127) // conditional expression is constant
-#pragma warning(disable:4723) // conditional expression is constant
+#pragma warning(disable:4127)   // conditional expression is constant
+#pragma warning(disable:4723)   // conditional expression is constant
 #if BOOST_MSVC < 1400
-#pragma warning(disable:4267) // conversion from 'size_t' to 'unsigned int', possible loss of data
+#pragma warning(disable:4267)   // conversion from 'size_t' to 'unsigned int',
+                                // possible loss of data
 #endif
 #endif
 
@@ -36,23 +37,33 @@ char const* float_type(long double*) { return "long double"; }
 template <class T>
 void float_tests(char const* name, T* = 0)
 {
-    std::cerr<<"\n"
-        <<"Testing " BOOST_STRINGIZE(HASH_NAMESPACE) "::hash<"<<name<<">\n"
-        <<"\n"
-        <<"boost::hash_detail::limits<T>::digits = "
-            <<boost::hash_detail::limits<T>::digits<<"\n"
-        <<"boost::hash_detail::limits<int>::digits = "
-            <<boost::hash_detail::limits<int>::digits<<"\n"
-        <<"boost::hash_detail::limits<std::size_t>::digits = "
-            <<boost::hash_detail::limits<std::size_t>::digits<<"\n"
-        <<"\n"
-        <<"boost::hash_detail::call_ldexp<T>::float_type = "
-            <<float_type((BOOST_DEDUCED_TYPENAME boost::hash_detail::call_ldexp<T>::float_type*)0)<<"\n"
-        <<"boost::hash_detail::call_frexp<T>::float_type = "
-            <<float_type((BOOST_DEDUCED_TYPENAME boost::hash_detail::call_frexp<T>::float_type*)0)<<"\n"
-        <<"boost::hash_detail::select_hash_type<T>::type = "
-            <<float_type((BOOST_DEDUCED_TYPENAME boost::hash_detail::select_hash_type<T>::type*)0)<<"\n"
-        <<"\n"
+    std::cerr
+        <<  "\n"
+        <<  "Testing " BOOST_STRINGIZE(HASH_NAMESPACE) "::hash<"
+        <<  name
+        <<  ">\n"
+        <<  "\n"
+        <<  "boost::hash_detail::limits<T>::digits = "
+        <<  boost::hash_detail::limits<T>::digits<< "\n"
+        <<  "boost::hash_detail::limits<int>::digits = "
+        <<  boost::hash_detail::limits<int>::digits<< "\n"
+        <<  "boost::hash_detail::limits<std::size_t>::digits = "
+        <<  boost::hash_detail::limits<std::size_t>::digits
+        <<  "\n"
+        <<  "\n"
+        <<  "boost::hash_detail::call_ldexp<T>::float_type = "
+        <<  float_type(static_cast<BOOST_DEDUCED_TYPENAME
+                boost::hash_detail::call_ldexp<T>::float_type*>(0))
+        <<  "\n"
+        <<  "boost::hash_detail::call_frexp<T>::float_type = "
+        <<  float_type(static_cast<BOOST_DEDUCED_TYPENAME
+                boost::hash_detail::call_frexp<T>::float_type*>(0))
+        <<  "\n"
+        <<  "boost::hash_detail::select_hash_type<T>::type = "
+        <<  float_type(static_cast<BOOST_DEDUCED_TYPENAME
+                boost::hash_detail::select_hash_type<T>::type*>(0))
+        <<  "\n"
+        <<  "\n"
         ;
 
     HASH_NAMESPACE::hash<T> x1;
@@ -72,7 +83,9 @@ void float_tests(char const* name, T* = 0)
 
 // Doing anything with infinity causes borland to crash.
 #if defined(__BORLANDC__)
-    std::cerr<<"Not running infinity checks on Borland, as it causes it to crash.\n";
+    std::cerr
+        <<  "Not running infinity checks on Borland, as it causes it to crash."
+            "\n";
 #else
     if(boost::hash_detail::limits<T>::has_infinity) {
         T infinity = -log(zero);
@@ -111,19 +124,40 @@ void float_tests(char const* name, T* = 0)
         // This should really be 'has_denorm == denorm_present' but some
         // compilers don't have 'denorm_present'. See also a later use.
         if(boost::hash_detail::limits<T>::has_denorm) {
-            if(x1(boost::hash_detail::limits<T>::denorm_min()) == x1(infinity)) {
-                std::cerr<<"x1(denorm_min) == x1(infinity) == "<<x1(infinity)<<"\n";
+            if(x1(boost::hash_detail::limits<T>::denorm_min()) == x1(infinity))
+            {
+                std::cerr
+                    <<  "x1(denorm_min) == x1(infinity) == "
+                    <<  x1(infinity)
+                    <<  "\n";
             }
-            if(x1(boost::hash_detail::limits<T>::denorm_min()) == x1(minus_infinity)) {
-                std::cerr<<"x1(denorm_min) == x1(-infinity) == "<<x1(minus_infinity)<<"\n";
+
+            if(x1(boost::hash_detail::limits<T>::denorm_min()) ==
+                x1(minus_infinity))
+            {
+                std::cerr
+                    <<  "x1(denorm_min) == x1(-infinity) == "
+                    <<  x1(minus_infinity)
+                    <<  "\n";
             }
         }
+
         if(boost::hash_detail::limits<T>::has_quiet_NaN) {
-            if(x1(boost::hash_detail::limits<T>::quiet_NaN()) == x1(infinity)) {
-                std::cerr<<"x1(quiet_NaN) == x1(infinity) == "<<x1(infinity)<<"\n";
+            if(x1(boost::hash_detail::limits<T>::quiet_NaN()) == x1(infinity))
+            {
+                std::cerr
+                    <<  "x1(quiet_NaN) == x1(infinity) == "
+                    <<  x1(infinity)
+                    <<  "\n";
             }
-            if(x1(boost::hash_detail::limits<T>::quiet_NaN()) == x1(minus_infinity)) {
-                std::cerr<<"x1(quiet_NaN) == x1(-infinity) == "<<x1(minus_infinity)<<"\n";
+
+            if(x1(boost::hash_detail::limits<T>::quiet_NaN()) ==
+                x1(minus_infinity))
+            {
+                std::cerr
+                    <<  "x1(quiet_NaN) == x1(-infinity) == "
+                    <<  x1(minus_infinity)
+                    <<  "\n";
             }
         }
     }
@@ -146,10 +180,12 @@ void float_tests(char const* name, T* = 0)
     BOOST_TEST(x1(max) == HASH_NAMESPACE::hash_value(max));
     BOOST_TEST(x1(half_max) == HASH_NAMESPACE::hash_value(half_max));
     BOOST_TEST(x1(quarter_max) == HASH_NAMESPACE::hash_value(quarter_max));
-    BOOST_TEST(x1(three_quarter_max) == HASH_NAMESPACE::hash_value(three_quarter_max));
+    BOOST_TEST(x1(three_quarter_max) ==
+        HASH_NAMESPACE::hash_value(three_quarter_max));
 #endif
 
-    // The '!=' tests could legitimately fail, but with my hash it indicates a bug.
+    // The '!=' tests could legitimately fail, but with my hash it indicates a
+    // bug.
     BOOST_TEST(x1(max) == x1(max));
     BOOST_TEST(x1(max) != x1(quarter_max));
     BOOST_TEST(x1(max) != x1(half_max));
@@ -179,7 +215,8 @@ void float_tests(char const* name, T* = 0)
 
 #if defined(TEST_EXTENSIONS)
     BOOST_TEST(x1(boost::hash_detail::limits<T>::epsilon()) ==
-            HASH_NAMESPACE::hash_value(boost::hash_detail::limits<T>::epsilon()));
+            HASH_NAMESPACE::hash_value(
+                boost::hash_detail::limits<T>::epsilon()));
 #endif
 
     BOOST_TEST(boost::hash_detail::limits<T>::epsilon() != (T) 0);
@@ -216,14 +253,19 @@ void float_tests(char const* name, T* = 0)
         // specialization of boost::hash_detail::limits::denorm_min() for long
         // doubles which causes this test to fail.
         if(x1(boost::hash_detail::limits<T>::denorm_min()) !=
-            HASH_NAMESPACE::hash_value(boost::hash_detail::limits<T>::denorm_min()))
+            HASH_NAMESPACE::hash_value(
+                boost::hash_detail::limits<T>::denorm_min()))
         {
-            std::cerr<<"x1(boost::hash_detail::limits<T>::denorm_min()) = "
-                << x1(boost::hash_detail::limits<T>::denorm_min())
-                << "\nhash_value(boost::hash_detail::limits<T>::denorm_min()) = "
-                << HASH_NAMESPACE::hash_value(
+            std::cerr
+                <<  "x1(boost::hash_detail::limits<T>::denorm_min()) = "
+                <<  x1(boost::hash_detail::limits<T>::denorm_min())
+                <<  "\nhash_value(boost::hash_detail::limits<T>::denorm_min())"
+                    " = "
+                <<  HASH_NAMESPACE::hash_value(
                         boost::hash_detail::limits<T>::denorm_min())
-                << "\nx1(0) = "<<x1(0)<<"\n";
+                <<  "\nx1(0) = "
+                <<  x1(0)
+                <<  "\n";
         }
 #endif
     }
@@ -235,7 +277,8 @@ void float_tests(char const* name, T* = 0)
             std::cerr<<"x1(quiet_NaN) == x1(1.0) == "<<x1(1.0)<<"\n";
         }
         BOOST_TEST(x1(boost::hash_detail::limits<T>::quiet_NaN()) ==
-            HASH_NAMESPACE::hash_value(boost::hash_detail::limits<T>::quiet_NaN()));
+            HASH_NAMESPACE::hash_value(
+                boost::hash_detail::limits<T>::quiet_NaN()));
     }
 #endif
 }
