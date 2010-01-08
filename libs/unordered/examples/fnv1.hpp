@@ -55,11 +55,14 @@ namespace hash
 
     // For 128 bit machines:
     // const std::size_t fnv_prime = 309485009821345068724781401u;
-    // const std::size_t fnv_offset_basis = 275519064689413815358837431229664493455u;
+    // const std::size_t fnv_offset_basis =
+    //     275519064689413815358837431229664493455u;
 
     // For 256 bit machines:
-    // const std::size_t fnv_prime = 374144419156711147060143317175368453031918731002211u;
-    // const std::size_t fnv_offset_basis = 100029257958052580907070968620625704837092796014241193945225284501741471925557u;
+    // const std::size_t fnv_prime =
+    //     374144419156711147060143317175368453031918731002211u;
+    // const std::size_t fnv_offset_basis =
+    //     100029257958052580907070968620625704837092796014241193945225284501741471925557u;
 
     typedef basic_fnv_1<fnv_prime, fnv_offset_basis> fnv_1;
     typedef basic_fnv_1a<fnv_prime, fnv_offset_basis> fnv_1a;

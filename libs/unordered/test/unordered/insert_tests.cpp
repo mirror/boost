@@ -23,7 +23,8 @@ namespace insert_tests {
 test::seed_t seed(243432);
 
 template <class X>
-void unique_insert_tests1(X*, test::random_generator generator = test::default_generator)
+void unique_insert_tests1(X*,
+    test::random_generator generator = test::default_generator)
 {
     typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
     typedef test::ordered<X> ordered;
@@ -43,7 +44,8 @@ void unique_insert_tests1(X*, test::random_generator generator = test::default_g
         float b = x.max_load_factor();
 
         std::pair<iterator, bool> r1 = x.insert(*it);
-        std::pair<BOOST_DEDUCED_TYPENAME ordered::iterator, bool> r2 = tracker.insert(*it);
+        std::pair<BOOST_DEDUCED_TYPENAME ordered::iterator, bool>
+            r2 = tracker.insert(*it);
 
         BOOST_TEST(r1.second == r2.second);
         BOOST_TEST(*r1.first == *r2.first);
@@ -58,7 +60,8 @@ void unique_insert_tests1(X*, test::random_generator generator = test::default_g
 }
 
 template <class X>
-void equivalent_insert_tests1(X*, test::random_generator generator = test::default_generator)
+void equivalent_insert_tests1(X*,
+    test::random_generator generator = test::default_generator)
 {
     std::cerr<<"insert(value) tests for containers with equivalent keys.\n";
 
@@ -73,7 +76,8 @@ void equivalent_insert_tests1(X*, test::random_generator generator = test::defau
         float b = x.max_load_factor();
 
         BOOST_DEDUCED_TYPENAME X::iterator r1 = x.insert(*it);
-        BOOST_DEDUCED_TYPENAME test::ordered<X>::iterator r2 = tracker.insert(*it);
+        BOOST_DEDUCED_TYPENAME test::ordered<X>::iterator r2
+            = tracker.insert(*it);
 
         BOOST_TEST(*r1 == *r2);
 
@@ -87,7 +91,8 @@ void equivalent_insert_tests1(X*, test::random_generator generator = test::defau
 }
 
 template <class X>
-void insert_tests2(X*, test::random_generator generator = test::default_generator)
+void insert_tests2(X*,
+    test::random_generator generator = test::default_generator)
 {
     typedef BOOST_DEDUCED_TYPENAME test::ordered<X> tracker_type;
     typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
@@ -101,10 +106,11 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
         tracker_type tracker = test::create_ordered(x);
 
         test::random_values<X> v(1000, generator);
-        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
-                it != v.end(); ++it)
+        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator
+            it = v.begin(); it != v.end(); ++it)
         {
-            BOOST_DEDUCED_TYPENAME X::size_type old_bucket_count = x.bucket_count();
+            BOOST_DEDUCED_TYPENAME X::size_type
+                old_bucket_count = x.bucket_count();
             float b = x.max_load_factor();
 
             iterator r1 = x.insert(x.begin(), *it);
@@ -127,10 +133,11 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
         tracker_type tracker = test::create_ordered(x);
 
         test::random_values<X> v(100, generator);
-        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
-                it != v.end(); ++it)
+        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator
+            it = v.begin(); it != v.end(); ++it)
         {
-            BOOST_DEDUCED_TYPENAME X::size_type old_bucket_count = x.bucket_count();
+            BOOST_DEDUCED_TYPENAME X::size_type
+                old_bucket_count = x.bucket_count();
             float b = x.max_load_factor();
 
             const_iterator r1 = x.insert(x_const.end(), *it);
@@ -153,10 +160,11 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
         tracker_type tracker = test::create_ordered(x);
 
         test::random_values<X> v(1000, generator);
-        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
-                it != v.end(); ++it)
+        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator
+            it = v.begin(); it != v.end(); ++it)
         {
-            BOOST_DEDUCED_TYPENAME X::size_type old_bucket_count = x.bucket_count();
+            BOOST_DEDUCED_TYPENAME X::size_type
+                old_bucket_count = x.bucket_count();
             float b = x.max_load_factor();
 
             pos = x.insert(pos, *it);
@@ -178,10 +186,11 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
         tracker_type tracker = test::create_ordered(x);
 
         test::random_values<X> v(1000, generator);
-        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
-                it != v.end(); ++it)
+        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator
+            it = v.begin(); it != v.end(); ++it)
         {
-            BOOST_DEDUCED_TYPENAME X::size_type old_bucket_count = x.bucket_count();
+            BOOST_DEDUCED_TYPENAME X::size_type
+                old_bucket_count = x.bucket_count();
             float b = x.max_load_factor();
 
             x.insert(it, boost::next(it));
@@ -225,7 +234,8 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
 #if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
 
 template <class X>
-void unique_emplace_tests1(X*, test::random_generator generator = test::default_generator)
+void unique_emplace_tests1(X*,
+    test::random_generator generator = test::default_generator)
 {
     typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
     typedef test::ordered<X> ordered;
@@ -245,7 +255,8 @@ void unique_emplace_tests1(X*, test::random_generator generator = test::default_
         float b = x.max_load_factor();
 
         std::pair<iterator, bool> r1 = x.emplace(*it);
-        std::pair<BOOST_DEDUCED_TYPENAME ordered::iterator, bool> r2 = tracker.insert(*it);
+        std::pair<BOOST_DEDUCED_TYPENAME ordered::iterator, bool>
+            r2 = tracker.insert(*it);
 
         BOOST_TEST(r1.second == r2.second);
         BOOST_TEST(*r1.first == *r2.first);
@@ -260,7 +271,8 @@ void unique_emplace_tests1(X*, test::random_generator generator = test::default_
 }
 
 template <class X>
-void equivalent_emplace_tests1(X*, test::random_generator generator = test::default_generator)
+void equivalent_emplace_tests1(X*,
+    test::random_generator generator = test::default_generator)
 {
     std::cerr<<"emplace(value) tests for containers with equivalent keys.\n";
 
@@ -275,7 +287,8 @@ void equivalent_emplace_tests1(X*, test::random_generator generator = test::defa
         float b = x.max_load_factor();
 
         BOOST_DEDUCED_TYPENAME X::iterator r1 = x.emplace(*it);
-        BOOST_DEDUCED_TYPENAME test::ordered<X>::iterator r2 = tracker.insert(*it);
+        BOOST_DEDUCED_TYPENAME test::ordered<X>::iterator
+            r2 = tracker.insert(*it);
 
         BOOST_TEST(*r1 == *r2);
 
@@ -317,14 +330,21 @@ void map_tests(X*, test::random_generator generator = test::default_generator)
     test::check_equivalent_keys(x);   
 }
 
-// Some tests for when the range's value type doesn't match the container's value type.
+// Some tests for when the range's value type doesn't match the container's
+// value type.
 
 template <class X>
-void map_insert_range_test1(X*, test::random_generator generator = test::default_generator)
+void map_insert_range_test1(X*,
+    test::random_generator generator = test::default_generator)
 {
     std::cerr<<"map_insert_range_test1\n";
 
-    typedef test::list<std::pair<BOOST_DEDUCED_TYPENAME X::key_type, BOOST_DEDUCED_TYPENAME X::mapped_type> > list;
+    typedef test::list<
+        std::pair<
+            BOOST_DEDUCED_TYPENAME X::key_type,
+            BOOST_DEDUCED_TYPENAME X::mapped_type
+        >
+    > list;
     test::random_values<X> v(1000, generator);
     list l(v.begin(), v.end());
 
@@ -334,12 +354,17 @@ void map_insert_range_test1(X*, test::random_generator generator = test::default
 }
 
 template <class X>
-void map_insert_range_test2(X*, test::random_generator generator = test::default_generator)
+void map_insert_range_test2(X*,
+    test::random_generator generator = test::default_generator)
 {
     std::cerr<<"map_insert_range_test2\n";
 
-    typedef test::list<std::pair<BOOST_DEDUCED_TYPENAME X::key_type const, int> > list;
-    test::random_values<boost::unordered_map<BOOST_DEDUCED_TYPENAME X::key_type, int> > v(1000, generator);
+    typedef test::list<
+        std::pair<BOOST_DEDUCED_TYPENAME X::key_type const, int>
+    > list;
+    test::random_values<
+        boost::unordered_map<BOOST_DEDUCED_TYPENAME X::key_type, int>
+    > v(1000, generator);
     list l(v.begin(), v.end());
 
     X x; x.insert(l.begin(), l.end());
@@ -347,10 +372,18 @@ void map_insert_range_test2(X*, test::random_generator generator = test::default
     test::check_equivalent_keys(x);
 }
 
-boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
-boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
-boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
-boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
+boost::unordered_set<test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_set;
+boost::unordered_multiset<test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_map;
+boost::unordered_multimap<test::object, test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_multimap;
 
 using test::default_generator;
 using test::generate_collisions;

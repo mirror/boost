@@ -35,7 +35,8 @@ void find_tests1(X*, test::random_generator generator = test::default_generator)
         {
             BOOST_DEDUCED_TYPENAME X::key_type key = test::get_key<X>(*it1);
             iterator pos = x.find(key);
-            BOOST_DEDUCED_TYPENAME X::const_iterator const_pos = x_const.find(key);
+            BOOST_DEDUCED_TYPENAME X::const_iterator
+                const_pos = x_const.find(key);
             BOOST_TEST(pos != x.end() &&
                     x.key_eq()(key, test::get_key<X>(*pos)));
             BOOST_TEST(const_pos != x_const.end() &&
@@ -109,10 +110,12 @@ struct compatible_predicate
 };
 
 template <class X>
-void find_compatible_keys_test(X*, test::random_generator generator = test::default_generator)
+void find_compatible_keys_test(X*,
+    test::random_generator generator = test::default_generator)
 {
     typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
-    typedef BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator value_iterator;
+    typedef BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator
+        value_iterator;
     test::random_values<X> v(500, generator);
     X x(v.begin(), v.end());
     
@@ -132,10 +135,18 @@ void find_compatible_keys_test(X*, test::random_generator generator = test::defa
     }
 }
 
-boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
-boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
-boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
-boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
+boost::unordered_set<test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_set;
+boost::unordered_multiset<test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_map;
+boost::unordered_multimap<test::object, test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_multimap;
 
 using test::default_generator;
 using test::generate_collisions;

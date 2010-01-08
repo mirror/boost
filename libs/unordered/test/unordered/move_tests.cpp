@@ -46,7 +46,8 @@ namespace move_tests
     }
 
     template <class T>
-    void move_construct_tests1(T* ptr, test::random_generator const& generator = test::default_generator)
+    void move_construct_tests1(T* ptr,
+        test::random_generator const& generator = test::default_generator)
     {
         BOOST_DEDUCED_TYPENAME T::hasher hf;
         BOOST_DEDUCED_TYPENAME T::key_equal eq;
@@ -75,7 +76,8 @@ namespace move_tests
     }
 
     template <class T>
-    void move_assign_tests1(T*, test::random_generator const& generator = test::default_generator)
+    void move_assign_tests1(T*,
+        test::random_generator const& generator = test::default_generator)
     {
         {
             test::random_values<T> v(500, generator);
@@ -116,7 +118,8 @@ namespace move_tests
         }
 
         {
-            // TODO: To do this correctly requires the fancy new allocator stuff.
+            // TODO: To do this correctly requires the fancy new allocator
+            // stuff.
             test::random_values<T> v(500, generator);
             T y(create(v, count, hf, eq, al, 2.0), al2);
             BOOST_TEST(count != test::global_object_count);
@@ -134,7 +137,8 @@ namespace move_tests
 #if defined(BOOST_HAS_RVALUE_REFS)
             BOOST_TEST(count == test::global_object_count);
 #else
-            BOOST_TEST(test::global_object_count.constructions - count.constructions <=
+            BOOST_TEST(
+                test::global_object_count.constructions - count.constructions <=
                 (test::is_map<T>::value ? 50 : 25));
             BOOST_TEST(count.instances == test::global_object_count.instances);
 #endif
@@ -147,10 +151,18 @@ namespace move_tests
         }
 */    }
 
-    boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
-    boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
-    boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
-    boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
+    boost::unordered_set<test::object,
+        test::hash, test::equal_to,
+        test::allocator<test::object> >* test_set;
+    boost::unordered_multiset<test::object,
+        test::hash, test::equal_to,
+        test::allocator<test::object> >* test_multiset;
+    boost::unordered_map<test::object, test::object,
+        test::hash, test::equal_to,
+        test::allocator<test::object> >* test_map;
+    boost::unordered_multimap<test::object, test::object,
+        test::hash, test::equal_to,
+        test::allocator<test::object> >* test_multimap;
 
     using test::default_generator;
     using test::generate_collisions;

@@ -323,8 +323,8 @@ namespace boost { namespace unordered_detail {
 
         do {
             // No side effects in this initial code
-            // Note: can't use get_key as '*i' might not be value_type - it could
-            // be a pair with first_types as key_type without const or a
+            // Note: can't use get_key as '*i' might not be value_type - it
+            // could be a pair with first_types as key_type without const or a
             // different second_type.
             key_type const& k = extractor::extract(*i);
             std::size_t hash_value = this->hash_function()(k);

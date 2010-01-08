@@ -25,10 +25,14 @@ namespace test
 
     // Declare some instances
     
-    typedef boost::unordered_map<value, value, hash, equals, malloc_allocator<std::pair<value const, value> > > map;
-    typedef boost::unordered_multimap<value, value, hash, equals, malloc_allocator<std::pair<value const, value> > > multimap;
-    typedef boost::unordered_set<value, hash, equals, malloc_allocator<value> > set;
-    typedef boost::unordered_multiset<value, hash, equals, malloc_allocator<value> > multiset;
+    typedef boost::unordered_map<value, value, hash, equals,
+        malloc_allocator<std::pair<value const, value> > > map;
+    typedef boost::unordered_multimap<value, value, hash, equals,
+        malloc_allocator<std::pair<value const, value> > > multimap;
+    typedef boost::unordered_set<value, hash, equals,
+        malloc_allocator<value> > set;
+    typedef boost::unordered_multiset<value, hash, equals,
+        malloc_allocator<value> > multiset;
     
     // Now define the types which are stored as members, as they are needed for
     // declaring struct members.
@@ -51,19 +55,24 @@ namespace test
 {
     // Declare some members of a structs.
     //
-    // Incomplete hash, equals and allocator aren't here supported at the moment.
+    // Incomplete hash, equals and allocator aren't here supported at the
+    // moment.
     
     struct struct1 {
-        boost::unordered_map<struct1, struct1, hash, equals, malloc_allocator<std::pair<struct1 const, struct1> > > x;
+        boost::unordered_map<struct1, struct1, hash, equals,
+            malloc_allocator<std::pair<struct1 const, struct1> > > x;
     };
     struct struct2 {
-        boost::unordered_multimap<struct2, struct2, hash, equals, malloc_allocator<std::pair<struct2 const, struct2> > > x;
+        boost::unordered_multimap<struct2, struct2, hash, equals,
+            malloc_allocator<std::pair<struct2 const, struct2> > > x;
     };
     struct struct3 {
-        boost::unordered_set<struct3, hash, equals, malloc_allocator<struct3> > x;
+        boost::unordered_set<struct3, hash, equals,
+            malloc_allocator<struct3> > x;
     };
     struct struct4 {
-        boost::unordered_multiset<struct4, hash, equals, malloc_allocator<struct4> > x;
+        boost::unordered_multiset<struct4, hash, equals,
+            malloc_allocator<struct4> > x;
     };
     
     // Now define the value type.
@@ -81,7 +90,9 @@ namespace test
     test::struct2 c2;
     test::struct3 c3;
     test::struct4 c4;
-    // Now declare, but don't define, the operators required for comparing elements.
+
+    // Now declare, but don't define, the operators required for comparing
+    // elements.
 
     std::size_t hash_value(value const&);
     bool operator==(value const&, value const&);

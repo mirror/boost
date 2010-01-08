@@ -36,7 +36,8 @@ void set_load_factor_tests(X* = 0)
 }
 
 template <class X>
-void insert_test(X*, float mlf, test::random_generator generator = test::default_generator)
+void insert_test(X*, float mlf,
+    test::random_generator generator = test::default_generator)
 {
     X x;
     x.max_load_factor(mlf);

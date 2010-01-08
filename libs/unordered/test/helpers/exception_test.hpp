@@ -12,44 +12,50 @@
 #include <boost/preprocessor/seq/elem.hpp>
 #include <boost/preprocessor/cat.hpp>
 
-#   define UNORDERED_EXCEPTION_TEST_CASE(name, test_func, type) \
-        UNORDERED_AUTO_TEST(name) \
-        { \
-            test_func< type > fixture; \
-            ::test::lightweight::exception_safety(fixture, BOOST_STRINGIZE(test_func<type>)); \
-        }
+#   define UNORDERED_EXCEPTION_TEST_CASE(name, test_func, type)             \
+        UNORDERED_AUTO_TEST(name)                                           \
+        {                                                                   \
+            test_func< type > fixture;                                      \
+            ::test::lightweight::exception_safety(                          \
+                fixture, BOOST_STRINGIZE(test_func<type>));                 \
+        }                                                                   \
+
 #    define UNORDERED_EPOINT_IMPL ::test::lightweight::epoint
 
 #define UNORDERED_EXCEPTION_TEST_POSTFIX RUN_TESTS()
 
-#define RUN_EXCEPTION_TESTS(test_seq, param_seq) \
-    BOOST_PP_SEQ_FOR_EACH_PRODUCT(RUN_EXCEPTION_TESTS_OP, (test_seq)(param_seq)) \
-    RUN_TESTS()
+#define RUN_EXCEPTION_TESTS(test_seq, param_seq)                            \
+    BOOST_PP_SEQ_FOR_EACH_PRODUCT(RUN_EXCEPTION_TESTS_OP,                   \
+        (test_seq)(param_seq))                                              \
+    RUN_TESTS()                                                             \
 
-#define RUN_EXCEPTION_TESTS_OP(r, product) \
-    UNORDERED_EXCEPTION_TEST_CASE( \
-        BOOST_PP_CAT(BOOST_PP_SEQ_ELEM(0, product), \
-            BOOST_PP_CAT(_, BOOST_PP_SEQ_ELEM(1, product)) \
-        ), \
-        BOOST_PP_SEQ_ELEM(0, product), \
-        BOOST_PP_SEQ_ELEM(1, product) \
-    )
+#define RUN_EXCEPTION_TESTS_OP(r, product)                                  \
+    UNORDERED_EXCEPTION_TEST_CASE(                                          \
+        BOOST_PP_CAT(BOOST_PP_SEQ_ELEM(0, product),                         \
+            BOOST_PP_CAT(_, BOOST_PP_SEQ_ELEM(1, product))                  \
+        ),                                                                  \
+        BOOST_PP_SEQ_ELEM(0, product),                                      \
+        BOOST_PP_SEQ_ELEM(1, product)                                       \
+    )                                                                       \
 
-#define UNORDERED_SCOPE(scope_name) \
-    for(::test::scope_guard unordered_test_guard( \
-            BOOST_STRINGIZE(scope_name)); \
-        !unordered_test_guard.dismissed(); \
-        unordered_test_guard.dismiss())
+#define UNORDERED_SCOPE(scope_name)                                         \
+    for(::test::scope_guard unordered_test_guard(                           \
+            BOOST_STRINGIZE(scope_name));                                   \
+        !unordered_test_guard.dismissed();                                  \
+        unordered_test_guard.dismiss())                                     \
 
-#define UNORDERED_EPOINT(name) \
-    if(::test::exceptions_enabled) { \
-        UNORDERED_EPOINT_IMPL(name); \
-    }
+#define UNORDERED_EPOINT(name)                                              \
+    if(::test::exceptions_enabled) {                                        \
+        UNORDERED_EPOINT_IMPL(name);                                        \
+    }                                                                       \
 
-#define ENABLE_EXCEPTIONS \
-    ::test::exceptions_enable BOOST_PP_CAT(ENABLE_EXCEPTIONS_, __LINE__)(true)
-#define DISABLE_EXCEPTIONS \
-    ::test::exceptions_enable BOOST_PP_CAT(ENABLE_EXCEPTIONS_, __LINE__)(false)
+#define ENABLE_EXCEPTIONS                                                   \
+    ::test::exceptions_enable BOOST_PP_CAT(                                 \
+        ENABLE_EXCEPTIONS_, __LINE__)(true)                                 \
+
+#define DISABLE_EXCEPTIONS                                                  \
+    ::test::exceptions_enable BOOST_PP_CAT(                                 \
+        ENABLE_EXCEPTIONS_, __LINE__)(false)                                \
 
 namespace test {
     static char const* scope = "";
@@ -114,21 +120,24 @@ namespace test {
     };
 
     template <class T, class P1, class P2, class T2>
-    inline void call_ignore_extra_parameters(void (T::*fn)() const, T2 const& obj,
+    inline void call_ignore_extra_parameters(
+            void (T::*fn)() const, T2 const& obj,
             P1&, P2&)
     {
         (obj.*fn)();
     }
 
     template <class T, class P1, class P2, class T2>
-    inline void call_ignore_extra_parameters(void (T::*fn)(P1&) const, T2 const& obj,
+    inline void call_ignore_extra_parameters(
+            void (T::*fn)(P1&) const, T2 const& obj,
             P1& p1, P2&)
     {
         (obj.*fn)(p1);
     }
 
     template <class T, class P1, class P2, class T2>
-    inline void call_ignore_extra_parameters(void (T::*fn)(P1&, P2&) const, T2 const& obj,
+    inline void call_ignore_extra_parameters(
+            void (T::*fn)(P1&, P2&) const, T2 const& obj,
             P1& p1, P2& p2)
     {
         (obj.*fn)(p1, p2);
@@ -156,11 +165,18 @@ namespace test {
             strong.store(x);
             try {
                 ENABLE_EXCEPTIONS;
-                call_ignore_extra_parameters<Test, BOOST_DEDUCED_TYPENAME Test::data_type, BOOST_DEDUCED_TYPENAME Test::strong_type>(&Test::run, test_, x, strong);
+                call_ignore_extra_parameters<
+                    Test,
+                    BOOST_DEDUCED_TYPENAME Test::data_type,
+                    BOOST_DEDUCED_TYPENAME Test::strong_type
+                >(&Test::run, test_, x, strong);
             }
             catch(...) {
-                call_ignore_extra_parameters<Test, BOOST_DEDUCED_TYPENAME Test::data_type const, BOOST_DEDUCED_TYPENAME Test::strong_type const>(&Test::check, test_,
-                        constant(x), constant(strong));
+                call_ignore_extra_parameters<
+                    Test,
+                    BOOST_DEDUCED_TYPENAME Test::data_type const,
+                    BOOST_DEDUCED_TYPENAME Test::strong_type const
+                >(&Test::check, test_, constant(x), constant(strong));
                 throw;
             }
         }

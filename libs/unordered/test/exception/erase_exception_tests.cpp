@@ -40,7 +40,8 @@ struct erase_by_key_test1 : public erase_test_base<T>
 {
     void run(T& x) const
     {
-        typedef BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator iterator;
+        typedef BOOST_DEDUCED_TYPENAME
+            test::random_values<T>::const_iterator iterator;
 
         for(iterator it = this->values.begin(), end = this->values.end();
                 it != end; ++it)

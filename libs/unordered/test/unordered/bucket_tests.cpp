@@ -43,24 +43,40 @@ void tests(X* = 0, test::random_generator generator = test::default_generator)
         if(bucket < x.max_bucket_count()) {
             // lit? lend?? I need a new naming scheme.
             const_local_iterator lit = x.begin(bucket), lend = x.end(bucket);
-            while(lit != lend && test::get_key<X>(*it) != test::get_key<X>(*lit)) ++lit;
+            while(lit != lend
+                && test::get_key<X>(*it) != test::get_key<X>(*lit))
+            {
+                ++lit;
+            }
             BOOST_TEST(lit != lend);
         }
     }
 
     for(size_type i = 0; i < x.bucket_count(); ++i) {
-        BOOST_TEST(x.bucket_size(i) == (size_type) std::distance(x.begin(i), x.end(i)));
-        BOOST_TEST(x.bucket_size(i) == (size_type) std::distance(x.cbegin(i), x.cend(i)));
+        BOOST_TEST(x.bucket_size(i) == static_cast<size_type>(
+                std::distance(x.begin(i), x.end(i))));
+        BOOST_TEST(x.bucket_size(i) == static_cast<size_type>(
+                std::distance(x.cbegin(i), x.cend(i))));
         X const& x_ref = x;
-        BOOST_TEST(x.bucket_size(i) == (size_type) std::distance(x_ref.begin(i), x_ref.end(i)));
-        BOOST_TEST(x.bucket_size(i) == (size_type) std::distance(x_ref.cbegin(i), x_ref.cend(i)));
+        BOOST_TEST(x.bucket_size(i) == static_cast<size_type>(
+                std::distance(x_ref.begin(i), x_ref.end(i))));
+        BOOST_TEST(x.bucket_size(i) == static_cast<size_type>(
+                std::distance(x_ref.cbegin(i), x_ref.cend(i))));
     }
 }
 
-boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
-boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
-boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
-boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
+boost::unordered_set<test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_set;
+boost::unordered_multiset<test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_map;
+boost::unordered_multimap<test::object, test::object,
+    test::hash, test::equal_to,
+    test::allocator<test::object> >* test_multimap;
 
 UNORDERED_TEST(tests, ((test_set)(test_multiset)(test_map)(test_multimap)))
 

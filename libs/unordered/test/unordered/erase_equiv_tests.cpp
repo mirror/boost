@@ -135,7 +135,8 @@ template <class Container>
 void erase_subrange_tests(Container const& x)
 {
     for(std::size_t length = 0; length < x.size(); ++length) {
-        for(std::size_t position = 0; position < x.size() - length; ++position) {
+        for(std::size_t position = 0; position < x.size() - length; ++position)
+        {
             Container y(x);
             collide_list init(y.begin(), y.end());
             if(!general_erase_range_test(y, position, position + length)) {

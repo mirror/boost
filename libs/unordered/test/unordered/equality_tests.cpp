@@ -30,36 +30,39 @@ namespace equality_tests
         }
     };
 
-#define UNORDERED_EQUALITY_SET_TEST(seq1, op, seq2) \
-    { \
-        boost::unordered_set<int, mod_compare, mod_compare> set1, set2; \
-        BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set1, seq1) \
-        BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set2, seq2) \
-        BOOST_TEST(set1 op set2); \
+#define UNORDERED_EQUALITY_SET_TEST(seq1, op, seq2)                         \
+    {                                                                       \
+        boost::unordered_set<int, mod_compare, mod_compare> set1, set2;     \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set1, seq1)             \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set2, seq2)             \
+        BOOST_TEST(set1 op set2);                                           \
     }
 
-#define UNORDERED_EQUALITY_MULTISET_TEST(seq1, op, seq2) \
-    { \
-        boost::unordered_multiset<int, mod_compare, mod_compare> set1, set2; \
-        BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set1, seq1) \
-        BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set2, seq2) \
-        BOOST_TEST(set1 op set2); \
+#define UNORDERED_EQUALITY_MULTISET_TEST(seq1, op, seq2)                    \
+    {                                                                       \
+        boost::unordered_multiset<int, mod_compare, mod_compare>            \
+            set1, set2;                                                     \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set1, seq1)             \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set2, seq2)             \
+        BOOST_TEST(set1 op set2);                                           \
     }
 
-#define UNORDERED_EQUALITY_MAP_TEST(seq1, op, seq2) \
-    { \
-        boost::unordered_map<int, int, mod_compare, mod_compare> map1, map2; \
-        BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map1, seq1) \
-        BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map2, seq2) \
-        BOOST_TEST(map1 op map2); \
+#define UNORDERED_EQUALITY_MAP_TEST(seq1, op, seq2)                         \
+    {                                                                       \
+        boost::unordered_map<int, int, mod_compare, mod_compare>            \
+            map1, map2;                                                     \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map1, seq1)             \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map2, seq2)             \
+        BOOST_TEST(map1 op map2);                                           \
     }
 
-#define UNORDERED_EQUALITY_MULTIMAP_TEST(seq1, op, seq2) \
-    { \
-        boost::unordered_multimap<int, int, mod_compare, mod_compare> map1, map2; \
-        BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map1, seq1) \
-        BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map2, seq2) \
-        BOOST_TEST(map1 op map2); \
+#define UNORDERED_EQUALITY_MULTIMAP_TEST(seq1, op, seq2)                    \
+    {                                                                       \
+        boost::unordered_multimap<int, int, mod_compare, mod_compare>       \
+            map1, map2;                                                     \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map1, seq1)             \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map2, seq2)             \
+        BOOST_TEST(map1 op map2);                                           \
     }
 
 #define UNORDERED_SET_INSERT(r, set, item) set.insert(item);
