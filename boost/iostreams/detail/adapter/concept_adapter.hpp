@@ -17,6 +17,7 @@
 #include <boost/iostreams/detail/dispatch.hpp>
 #include <boost/iostreams/detail/error.hpp>
 #include <boost/iostreams/detail/streambuf.hpp>        // pubsync.
+#include <boost/iostreams/detail/config/unreachable_return.hpp>
 #include <boost/iostreams/device/null.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>
@@ -27,14 +28,6 @@
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
-// If Boost.Exception has BOOST_ATTRIBUTE_NORETURN
-#if defined(_MSC_VER) || defined(__GNUC__)
-#define BOOST_IOSTREAMS_UNREACHABLE_RETURN(x) \
-    BOOST_UNREACHABLE_RETURN(x)
-#else
-#define BOOST_IOSTREAMS_UNREACHABLE_RETURN(x) \
-    return x;
-#endif
 
 namespace boost { namespace iostreams { namespace detail {
 
