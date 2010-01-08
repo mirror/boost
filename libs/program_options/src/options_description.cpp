@@ -8,7 +8,7 @@
 #define BOOST_PROGRAM_OPTIONS_SOURCE
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/options_description.hpp>
-// FIXME: this is only to get multiple_occureces class
+// FIXME: this is only to get multiple_occurences class
 // should move that to a separate headers.
 #include <boost/program_options/parsers.hpp>
 
@@ -27,6 +27,22 @@
 using namespace std;
 
 namespace boost { namespace program_options {
+
+   namespace {
+
+       template< class charT >
+       std::basic_string< charT >  tolower_(const std::basic_string< charT >& str)
+       {
+           std::basic_string< charT > result;
+           for (typename std::basic_string< charT >::size_type i = 0; i < str.size(); ++i)
+           {
+               result.append(1, static_cast< charT >(std::tolower(str[i])));
+           }   
+           return result;
+       }
+
+    }  // unnamed namespace
+
 
     option_description::option_description()
     {
@@ -55,37 +71,51 @@ namespace boost { namespace program_options {
     }
 
     option_description::match_result
-    option_description::match(const std::string& option, bool approx) const
+    option_description::match(const std::string& option, 
+                              bool approx, 
+                              bool long_ignore_case,
+                              bool short_ignore_case) const
     {
-        match_result result = no_match;
-        if (!m_long_name.empty()) {
+        match_result result = no_match;        
+        
+        std::string local_long_name((long_ignore_case ? tolower_(m_long_name) : m_long_name));
+        
+        if (!local_long_name.empty()) {
+        
+            std::string local_option = (long_ignore_case ? tolower_(option) : option);
 
-            if (*m_long_name.rbegin() == '*')
+            if (*local_long_name.rbegin() == '*')
             {
                 // The name ends with '*'. Any specified name with the given
                 // prefix is OK.
-                if (option.find(m_long_name.substr(0, m_long_name.length()-1))
+                if (local_option.find(local_long_name.substr(0, local_long_name.length()-1))
                     == 0)
                     result = approximate_match;
             }
 
-            if (approx)
+            if (local_long_name == local_option)
             {
-                if (m_long_name.find(option) == 0)
-                    if (m_long_name == option)
-                        result = full_match;
-                    else
-                        result = approximate_match;
+                result = full_match;
             }
-            else
+            else if (approx)
             {
-                if (m_long_name == option)
-                    result = full_match;
+                if (local_long_name.find(local_option) == 0)
+                {
+                    result = approximate_match;
+                }
             }
         }
          
-        if (m_short_name == option)
-            result = full_match;
+        if (result != full_match)
+        {
+            std::string local_option(short_ignore_case ? tolower_(option) : option);
+            std::string local_short_name(short_ignore_case ? tolower_(m_short_name) : m_short_name);
+
+            if (local_short_name == local_option)
+            {
+                result = full_match;
+            }
+        }
 
         return result;        
     }
@@ -203,15 +233,26 @@ namespace boost { namespace program_options {
 
     const unsigned options_description::m_default_line_length = 80;
 
-    options_description::options_description(unsigned line_length)
+    options_description::options_description(unsigned line_length,
+                                             unsigned min_description_length)
     : m_line_length(line_length)
-    {}
+    , m_min_description_length(min_description_length)
+    {
+        // we require a space between the option and description parts, so add 1.
+        assert(m_min_description_length < m_line_length - 1);    
+    }
 
-    options_description::options_description(const string& caption,
-                                             unsigned line_length)
-    : m_caption(caption), m_line_length(line_length)
-    {}
-
+    options_description::options_description(const std::string& caption,
+                                             unsigned line_length,
+                                             unsigned min_description_length)
+    : m_caption(caption)
+    , m_line_length(line_length)
+    , m_min_description_length(min_description_length)
+    {
+        // we require a space between the option and description parts, so add 1.
+        assert(m_min_description_length < m_line_length - 1);
+    }
+    
     void
     options_description::add(shared_ptr<option_description> desc)
     {
@@ -240,9 +281,13 @@ namespace boost { namespace program_options {
     }
 
     const option_description&
-    options_description::find(const std::string& name, bool approx) const
+    options_description::find(const std::string& name, 
+                              bool approx,
+                              bool long_ignore_case,
+                              bool short_ignore_case) const
     {
-        const option_description* d = find_nothrow(name, approx);
+        const option_description* d = find_nothrow(name, approx, 
+                                       long_ignore_case, short_ignore_case);
         if (!d)
             boost::throw_exception(unknown_option(name));
         return *d;
@@ -256,41 +301,48 @@ namespace boost { namespace program_options {
 
     const option_description*
     options_description::find_nothrow(const std::string& name, 
-                                      bool approx) const
+                                      bool approx,
+                                      bool long_ignore_case,
+                                      bool short_ignore_case) const
     {
         shared_ptr<option_description> found;
         vector<string> approximate_matches;
+        vector<string> full_matches;
+        
         // We use linear search because matching specified option
         // name with the declared option name need to take care about
         // case sensitivity and trailing '*' and so we can't use simple map.
         for(unsigned i = 0; i < m_options.size(); ++i)
         {
             option_description::match_result r = 
-                m_options[i]->match(name, approx);
+                m_options[i]->match(name, approx, long_ignore_case, short_ignore_case);
 
             if (r == option_description::no_match)
                 continue;
 
-            // If we have a full patch, and an approximate match,
-            // ignore approximate match instead of reporting error.
-            // Say, if we have options "all" and "all-chroots", then
-            // "--all" on the command line should select the first one,
-            // without ambiguity.
-            //
-            // For now, we don't check the situation when there are 
-            // two full matches. 
-
             if (r == option_description::full_match)
-            {
-                return m_options[i].get();
+            {                
+                full_matches.push_back(m_options[i]->key(name));
+            } 
+            else 
+            {                        
+                // FIXME: the use of 'key' here might not
+                // be the best approach.
+                approximate_matches.push_back(m_options[i]->key(name));
             }
 
             found = m_options[i];
-            // FIXME: the use of 'key' here might not
-            // be the best approach.
-            approximate_matches.push_back(m_options[i]->key(name));
         }
-        if (approximate_matches.size() > 1)
+        if (full_matches.size() > 1) 
+            boost::throw_exception(
+                ambiguous_option(name, full_matches));
+        
+        // If we have a full match, and an approximate match,
+        // ignore approximate match instead of reporting error.
+        // Say, if we have options "all" and "all-chroots", then
+        // "--all" on the command line should select the first one,
+        // without ambiguity.
+        if (full_matches.empty() && approximate_matches.size() > 1)
             boost::throw_exception(
                 ambiguous_option(name, approximate_matches));
 
@@ -408,8 +460,8 @@ namespace boost { namespace program_options {
                         {                 
                             // is last_space within the second half ot the 
                             // current line
-                            if ((unsigned)distance(last_space, line_end) < 
-                                (line_length - indent) / 2)
+                            if (static_cast<unsigned>(distance(last_space, line_end)) < 
+                                (line_length / 2))
                             {
                                 line_end = last_space;
                             }
@@ -422,6 +474,7 @@ namespace boost { namespace program_options {
                     if (first_line)
                     {
                         indent += par_indent;
+                        line_length -= par_indent; // there's less to work with now
                         first_line = false;
                     }
 
@@ -502,11 +555,18 @@ namespace boost { namespace program_options {
 
             if (!opt.description().empty())
             {
-                for(unsigned pad = first_column_width - ss.str().size(); 
-                    pad > 0; 
-                    --pad)
+                if (ss.str().size() >= first_column_width)
                 {
-                    os.put(' ');
+                   os.put('\n'); // first column is too long, lets put description in new line
+                   for (unsigned pad = first_column_width; pad > 0; --pad)
+                   {
+                      os.put(' ');
+                   }
+                } else {
+                   for(unsigned pad = first_column_width - ss.str().size(); pad > 0; --pad)
+                   {
+                      os.put(' ');
+                   }
                 }
             
                 format_description(os, opt.description(),
@@ -531,6 +591,11 @@ namespace boost { namespace program_options {
             ss << "  " << opt.format_name() << ' ' << opt.format_parameter();
             width = (max)(width, static_cast<unsigned>(ss.str().size()));            
         }
+        /* this is the column were description should start, if first
+           column is longer, we go to a new line */
+        const unsigned start_of_description_column = m_line_length - m_min_description_length;
+
+        width = (min)(width, start_of_description_column-1);
         
         /* add an additional space to improve readability */
         ++width;

@@ -88,8 +88,7 @@ void test_native_to_unicode()
     BOOST_CHECK(vm["foo"].as<wstring>() == L"\x044F");    
 }
 
-
-vector<wstring> sv(wchar_t* array[], unsigned size)
+vector<wstring> sv(const wchar_t* array[], unsigned size)
 {
     vector<wstring> r;
     for (unsigned i = 0; i < size; ++i)
@@ -115,7 +114,7 @@ void test_command_line()
         ("plug*", new untyped_value())
         ;
 
-    wchar_t* cmdline4_[] = { L"--foo=1\u0FF52", L"-f4", L"--bar=11",
+    const wchar_t* cmdline4_[] = { L"--foo=1\u0FF52", L"-f4", L"--bar=11",
                              L"-b4", L"--plug3=10"};
     vector<wstring> cmdline4 = sv(cmdline4_,
                                   sizeof(cmdline4_)/sizeof(cmdline4_[0]));

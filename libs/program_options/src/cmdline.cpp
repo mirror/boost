@@ -34,16 +34,18 @@ namespace boost { namespace program_options {
     using namespace std;
     using namespace boost::program_options::command_line_style;
     
-    invalid_command_line_syntax::
-    invalid_command_line_syntax(const std::string& tokens, kind_t kind)
-    : invalid_syntax(tokens, error_message(kind)), m_kind(kind)
+    invalid_syntax::
+    invalid_syntax(const string& tokens, kind_t kind)
+     : error(error_message(kind).append(" in '").append(tokens).append("'"))
+     , m_tokens(tokens)
+     , m_kind(kind)                       
     {}
-
-    std::string 
-    invalid_command_line_syntax::error_message(kind_t kind)
+    
+    string 
+    invalid_syntax::error_message(kind_t kind)
     {
         // Initially, store the message in 'const char*' variable,
-        // to avoid conversion to std::string in all cases.
+        // to avoid conversion to string in all cases.
         const char* msg;
         switch(kind)
         {
@@ -65,18 +67,31 @@ namespace boost { namespace program_options {
         case extra_parameter:
             msg = "extra parameter";
             break;
+        case unrecognized_line:
+            msg = "unrecognized line";
+            break;
         default:
             msg = "unknown error";
         }
         return msg;
     }
 
-    invalid_command_line_syntax::kind_t 
-    invalid_command_line_syntax::kind() const
+    invalid_syntax::kind_t 
+    invalid_syntax::kind() const
     {
         return m_kind;
     }
+    
+    const string& 
+    invalid_syntax::tokens() const
+    {
+        return m_tokens;
+    }
 
+    invalid_command_line_syntax::
+    invalid_command_line_syntax(const string& tokens, kind_t kind)
+    : invalid_syntax(tokens, kind)
+    {}
 
 }}
 
@@ -90,7 +105,7 @@ namespace boost { namespace program_options { namespace detail {
 #endif
 
 
-    cmdline::cmdline(const std::vector<std::string>& args)
+    cmdline::cmdline(const vector<string>& args)
     {
         init(args);
     }
@@ -107,7 +122,7 @@ namespace boost { namespace program_options { namespace detail {
     }
 
     void
-    cmdline::init(const std::vector<std::string>& args)
+    cmdline::init(const vector<string>& args)
     {
         this->args = args;        
         m_style = command_line_style::default_style;
@@ -157,6 +172,12 @@ namespace boost { namespace program_options { namespace detail {
         // Need to check that if guessing and long disguise are enabled
         // -f will mean the same as -foo
     }
+    
+    bool 
+    cmdline::is_style_active(style_t style) const
+    {
+        return ((m_style & style) ? true : false);
+    }    
 
     void 
     cmdline::set_options_description(const options_description& desc)
@@ -230,12 +251,12 @@ namespace boost { namespace program_options { namespace detail {
                 {
                     vector<string> e;
                     for(unsigned k = 0; k < next.size()-1; ++k) {
-                        finish_option(next[k], e);
+                        finish_option(next[k], e, style_parsers);
                     }
                     // For the last option, pass the unparsed tokens
                     // so that they can be added to next.back()'s values
                     // if appropriate.
-                    finish_option(next.back(), args);
+                    finish_option(next.back(), args, style_parsers);
                     for (unsigned j = 0; j < next.size(); ++j)
                         result.push_back(next[j]);                    
                 }
@@ -269,7 +290,9 @@ namespace boost { namespace program_options { namespace detail {
 
             const option_description* xd = 
                 m_desc->find_nothrow(opt.string_key, 
-                                     (m_style & allow_guessing));
+                                        is_style_active(allow_guessing),
+                                        is_style_active(long_case_insensitive),
+                                        is_style_active(short_case_insensitive));
             if (!xd)
                 continue;
 
@@ -326,12 +349,26 @@ namespace boost { namespace program_options { namespace detail {
                 if (opt.position_key != -1) {
                     if (position >= m_positional->max_total_count())
                     {
-                        boost::throw_exception(too_many_positional_options_error(
-                                               "too many positional options"));
+                        boost::throw_exception(too_many_positional_options_error());
                     }
                     opt.string_key = m_positional->name_for_position(position);
                     ++position;
                 }
+            }
+        }
+        
+        // set case sensitive flag
+        for (unsigned i = 0; i < result.size(); ++i) {
+            if (result[i].string_key.size() > 2 ||
+                        (result[i].string_key.size() > 1 && result[i].string_key[0] != '-'))
+            {
+                // it is a long option
+                result[i].case_insensitive = is_style_active(long_case_insensitive);
+            }
+            else
+            {
+                // it is a short option
+                result[i].case_insensitive = is_style_active(short_case_insensitive);
             }
         }
 
@@ -340,15 +377,17 @@ namespace boost { namespace program_options { namespace detail {
 
     void
     cmdline::finish_option(option& opt,
-                           vector<string>& other_tokens)
-    {                                    
+                           vector<string>& other_tokens,
+                           const vector<style_parser>& style_parsers)
+    {          
         if (opt.string_key.empty())
             return;
 
         // First check that the option is valid, and get its description.
-        // TODO: case-sensitivity.
         const option_description* xd = m_desc->find_nothrow(opt.string_key, 
-                (m_style & allow_guessing) ? true : false);
+                is_style_active(allow_guessing),
+                is_style_active(long_case_insensitive),
+                is_style_active(short_case_insensitive));
 
         if (!xd)
         {
@@ -379,16 +418,16 @@ namespace boost { namespace program_options { namespace detail {
         
         if (present_tokens >= min_tokens)
         {
-            if (!opt.value.empty() && max_tokens == 0) {
+            if (!opt.value.empty() && max_tokens == 0) 
+            {
                 boost::throw_exception(invalid_command_line_syntax(opt.string_key,
                                              invalid_command_line_syntax::extra_parameter));
             }
             
-            // If an option wants, at minimum, N tokens, we grab them
-            // there and don't care if they look syntactically like an
-            // option.
-
-            if (opt.value.size() <= min_tokens)
+            // If an option wants, at minimum, N tokens, we grab them there,
+            // when adding these tokens as values to current option we check
+            // if they look like options
+            if (opt.value.size() <= min_tokens) 
             {
                 min_tokens -= opt.value.size();
             }
@@ -398,7 +437,27 @@ namespace boost { namespace program_options { namespace detail {
             }
 
             // Everything's OK, move the values to the result.            
-            for(;!other_tokens.empty() && min_tokens--; ) {
+            for(;!other_tokens.empty() && min_tokens--; ) 
+            {
+                // check if extra parameter looks like a known option
+                // we use style parsers to check if it is syntactically an option, 
+                // additionally we check if an option_description exists
+                vector<option> followed_option;  
+                vector<string> next_token(1, other_tokens[0]);      
+                for (unsigned i = 0; followed_option.empty() && i < style_parsers.size(); ++i)
+                {
+                    followed_option = style_parsers[i](next_token);
+                }
+                if (!followed_option.empty()) 
+                {
+                    const option_description* od = m_desc->find_nothrow(other_tokens[0], 
+                              is_style_active(allow_guessing),
+                              is_style_active(long_case_insensitive),
+                              is_style_active(short_case_insensitive));
+                    if (od) 
+                        boost::throw_exception(invalid_command_line_syntax(opt.string_key,
+                                                    invalid_command_line_syntax::missing_parameter));
+                }
                 opt.value.push_back(other_tokens[0]);
                 opt.original_tokens.push_back(other_tokens[0]);
                 other_tokens.erase(other_tokens.begin());
@@ -412,11 +471,11 @@ namespace boost { namespace program_options { namespace detail {
         }
     }
 
-    std::vector<option> 
-    cmdline::parse_long_option(std::vector<string>& args)
+    vector<option> 
+    cmdline::parse_long_option(vector<string>& args)
     {
         vector<option> result;
-        const std::string& tok = args[0];
+        const string& tok = args[0];
         if (tok.size() >= 3 && tok[0] == '-' && tok[1] == '-')
         {   
             string name, adjacent;
@@ -428,7 +487,7 @@ namespace boost { namespace program_options { namespace detail {
                 adjacent = tok.substr(p+1);
                 if (adjacent.empty())
                     boost::throw_exception( invalid_command_line_syntax(name,
-                                                      invalid_command_line_syntax::empty_adjacent_parameter));
+                                                      invalid_command_line_syntax::empty_adjacent_parameter) );
             }
             else
             {
@@ -446,10 +505,10 @@ namespace boost { namespace program_options { namespace detail {
     }
 
 
-    std::vector<option> 
-    cmdline::parse_short_option(std::vector<string>& args)
+    vector<option> 
+    cmdline::parse_short_option(vector<string>& args)
     {
-        const std::string& tok = args[0];
+        const string& tok = args[0];
         if (tok.size() >= 2 && tok[0] == '-' && tok[1] != '-')
         {   
             vector<option> result;
@@ -465,7 +524,8 @@ namespace boost { namespace program_options { namespace detail {
             // option.
             for(;;) {
                 const option_description* d 
-                    = m_desc->find_nothrow(name, false);
+                    = m_desc->find_nothrow(name, false, false,
+                            is_style_active(short_case_insensitive));
 
                 // FIXME: check for 'allow_sticky'.
                 if (d && (m_style & allow_sticky) &&
@@ -497,14 +557,14 @@ namespace boost { namespace program_options { namespace detail {
             }
             return result;
         }
-        return std::vector<option>();
+        return vector<option>();
     }
 
-    std::vector<option> 
-    cmdline::parse_dos_option(std::vector<string>& args)
+    vector<option> 
+    cmdline::parse_dos_option(vector<string>& args)
     {
         vector<option> result;
-        const std::string& tok = args[0];
+        const string& tok = args[0];
         if (tok.size() >= 2 && tok[0] == '/')
         {   
             string name = "-" + tok.substr(1,1);
@@ -521,16 +581,18 @@ namespace boost { namespace program_options { namespace detail {
         return result;
     }
 
-    std::vector<option> 
-    cmdline::parse_disguised_long_option(std::vector<string>& args)
+    vector<option> 
+    cmdline::parse_disguised_long_option(vector<string>& args)
     {
-        const std::string& tok = args[0];
+        const string& tok = args[0];
         if (tok.size() >= 2 && 
             ((tok[0] == '-' && tok[1] != '-') ||
              ((m_style & allow_slash_for_short) && tok[0] == '/')))            
         {
             if (m_desc->find_nothrow(tok.substr(1, tok.find('=')-1), 
-                                     (m_style & allow_guessing) ? true : false)) 
+                                     is_style_active(allow_guessing),
+                                     is_style_active(long_case_insensitive),
+                                     is_style_active(short_case_insensitive)))
             {
                 args[0].insert(0, "-");
                 if (args[0][1] == '/')
@@ -541,11 +603,11 @@ namespace boost { namespace program_options { namespace detail {
         return vector<option>();
     }
 
-    std::vector<option> 
-    cmdline::parse_terminator(std::vector<std::string>& args)
+    vector<option> 
+    cmdline::parse_terminator(vector<string>& args)
     {
         vector<option> result;
-        const std::string& tok = args[0];
+        const string& tok = args[0];
         if (tok == "--")
         {
             for(unsigned i = 1; i < args.size(); ++i)
@@ -561,8 +623,8 @@ namespace boost { namespace program_options { namespace detail {
         return result;
     }
 
-    std::vector<option> 
-    cmdline::handle_additional_parser(std::vector<std::string>& args)
+    vector<option> 
+    cmdline::handle_additional_parser(vector<string>& args)
     {
         vector<option> result;
         pair<string, string> r = m_additional_parser(args[0]);

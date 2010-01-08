@@ -43,7 +43,7 @@ public:
 */
 void validate(boost::any& v, 
               const std::vector<std::string>& values,
-              magic_number* target_type, int)
+              magic_number*, int)
 {
     static regex r("\\d\\d\\d-(\\d\\d\\d)");
 
@@ -61,7 +61,7 @@ void validate(boost::any& v,
     if (regex_match(s, match, r)) {
         v = any(magic_number(lexical_cast<int>(match[1])));
     } else {
-        throw validation_error("invalid value");
+        throw validation_error(validation_error::invalid_option_value);
     }        
 }
 

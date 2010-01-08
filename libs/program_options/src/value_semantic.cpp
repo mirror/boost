@@ -97,9 +97,9 @@ namespace boost { namespace program_options {
     {
         if (!value_store.empty()) 
             boost::throw_exception(
-                multiple_occurrences("multiple_occurrences"));
+                multiple_occurrences());
         if (new_tokens.size() > 1)
-            boost::throw_exception(multiple_values("multiple_values"));
+            boost::throw_exception(multiple_values());
         value_store = new_tokens.empty() ? std::string("") : new_tokens.front();
     }
 
@@ -139,8 +139,7 @@ namespace boost { namespace program_options {
         else if (s == "off" || s == "no" || s == "0" || s == "false")
             v = any(false);
         else
-            boost::throw_exception(validation_error(
-                                "'" + s + "' doesn't look like a bool value."));
+            boost::throw_exception(validation_error(validation_error::invalid_bool_value, s));
     }
 
     // This is blatant copy-paste. However, templating this will cause a problem,
@@ -162,22 +161,14 @@ namespace boost { namespace program_options {
         else if (s == L"off" || s == L"no" || s == L"0" || s == L"false")
             v = any(false);
         else
-            boost::throw_exception(validation_error("invalid bool value"));
+            boost::throw_exception(validation_error(validation_error::invalid_bool_value));
     }
 #endif
     BOOST_PROGRAM_OPTIONS_DECL 
     void validate(any& v, const vector<string>& xs, std::string*, int)
     {
         check_first_occurrence(v);
-        string s(get_single_string(xs));
-        if (!s.empty() && (
-                (*s.begin() == '\'' && *s.rbegin() == '\'' ||
-                 *s.begin() == '"' && *s.rbegin() == '"')))
-        {
-            v = any(s.substr(1, s.size()-2));
-        }
-        else
-            v = any(s);
+        v = any(get_single_string(xs));
     }
 
 #if !defined(BOOST_NO_STD_WSTRING)
@@ -185,12 +176,7 @@ namespace boost { namespace program_options {
     void validate(any& v, const vector<wstring>& xs, std::string*, int)
     {
         check_first_occurrence(v);
-        wstring s(get_single_string(xs));
-        if (*s.begin() == L'\'' && *s.rbegin() == L'\'' ||
-            *s.begin() == L'"' && *s.rbegin() == L'"')
-            v = any(s.substr(1, s.size()-2));
-        else
-            v = any(s);
+        v = any(get_single_string(xs));
     }
 #endif
 
@@ -201,19 +187,17 @@ namespace boost { namespace program_options {
         {
             if (!value.empty())
                 boost::throw_exception(
-                    multiple_occurrences("multiple_occurrences"));
+                    multiple_occurrences());
         }
     }
 
 
     invalid_option_value::
     invalid_option_value(const std::string& bad_value)
-    : validation_error(string("invalid option value '")
-                       .append(bad_value).append("'"))
+    : validation_error(validation_error::invalid_option_value, bad_value)
     {}
 
 #ifndef BOOST_NO_STD_WSTRING
-
     namespace
     {
         std::string convert_value(const std::wstring& s)
@@ -229,35 +213,123 @@ namespace boost { namespace program_options {
 
     invalid_option_value::
     invalid_option_value(const std::wstring& bad_value)
-    : validation_error(string("invalid option value '")
-                       .append(convert_value(bad_value))
-                       .append("'"))
+    : validation_error(validation_error::invalid_option_value, convert_value(bad_value))
     {}
-#endif                       
+#endif
+    const std::string& 
+    unknown_option::get_option_name() const throw()
+    { 
+        return m_option_name; 
+    }
 
+    const std::string& 
+    ambiguous_option::get_option_name() const throw()
+    { 
+        return m_option_name; 
+    }
+ 
+    const std::vector<std::string>& 
+    ambiguous_option::alternatives() const throw()
+    {
+        return m_alternatives;
+    }
 
-
-    void validation_error::set_option_name(const std::string& option_name)
+    void 
+    multiple_values::set_option_name(const std::string& option_name)
     {
         m_option_name = option_name;
     }
 
-    const char* validation_error::what() const throw()
+    const std::string& 
+    multiple_values::get_option_name() const throw()
+    {
+        return m_option_name;
+    }
+    
+    void 
+    multiple_occurrences::set_option_name(const std::string& option_name)
+    {
+        m_option_name = option_name;
+    }
+
+    const std::string& 
+    multiple_occurrences::get_option_name() const throw()
+    {
+        return m_option_name;
+    }
+        
+    validation_error::    
+    validation_error(kind_t kind, 
+                     const std::string& option_value, 
+                     const std::string& option_name)
+     : error("")
+     , m_kind(kind) 
+     , m_option_name(option_name)
+     , m_option_value(option_value)
+     , m_message(error_message(kind))
+    {
+       if (!option_value.empty())
+       {
+          m_message.append(std::string("'") + option_value + std::string("'"));
+       }
+    }
+
+    void 
+    validation_error::set_option_name(const std::string& option_name)
+    {
+        m_option_name = option_name;
+    }
+
+    const std::string& 
+    validation_error::get_option_name() const throw()
+    {
+        return m_option_name;
+    }
+
+    std::string 
+    validation_error::error_message(kind_t kind)
+    {
+        // Initially, store the message in 'const char*' variable,
+        // to avoid conversion to std::string in all cases.
+        const char* msg;
+        switch(kind)
+        {
+        case multiple_values_not_allowed:
+            msg = "multiple values not allowed";
+            break;
+        case at_least_one_value_required:
+            msg = "at least one value required";
+            break;
+        case invalid_bool_value:
+            msg = "invalid bool value";
+            break;
+        case invalid_option_value:
+            msg = "invalid option value";
+            break;
+        case invalid_option:
+            msg = "invalid option";
+            break;
+        default:
+            msg = "unknown error";
+        }
+        return msg;
+    }
+
+    const char* 
+    validation_error::what() const throw()
     {
         if (!m_option_name.empty())
         {
             m_message = "in option '" + m_option_name + "': " 
-                + logic_error::what();
-            return m_message.c_str();
-
+                + error_message(m_kind);
         }
-        else
-        {
-            return logic_error::what();
-        }
+        return m_message.c_str();
     }
-
-
-
+    
+    const std::string& 
+    required_option::get_option_name() const throw()
+    {
+        return m_option_name;
+    }
 
 }}

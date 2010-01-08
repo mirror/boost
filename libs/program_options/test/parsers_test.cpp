@@ -57,7 +57,7 @@ void check_value(const option& option, const char* name, const char* value)
     BOOST_CHECK(option.value.front() == value);
 }
 
-vector<string> sv(char* array[], unsigned size)
+vector<string> sv(const char* array[], unsigned size)
 {
     vector<string> r;
     for (unsigned i = 0; i < size; ++i)
@@ -113,10 +113,10 @@ void test_command_line()
         ("baz", new untyped_value())
         ("plug*", new untyped_value())
         ;
-    char* cmdline3_[] = { "--foo=12", "-f4", "--bar=11", "-b4",
+    const char* cmdline3_[] = { "--foo=12", "-f4", "--bar=11", "-b4",
                           "--plug3=10"};
     vector<string> cmdline3 = sv(cmdline3_,
-                                 sizeof(cmdline3_)/sizeof(cmdline3_[0]));
+                                 sizeof(cmdline3_)/sizeof(const char*));
     vector<option> a3 = 
         command_line_parser(cmdline3).options(desc).run().options;
                        
@@ -131,22 +131,23 @@ void test_command_line()
     // Regression test: check that '0' as style is interpreted as 
     // 'default_style'
     vector<option> a4 = 
-        parse_command_line(5, cmdline3_, desc, 0, additional_parser).options;
+        parse_command_line(sizeof(cmdline3_)/sizeof(const char*), const_cast<char**>(cmdline3_), 
+                                                               desc, 0, additional_parser).options;
 
     BOOST_CHECK_EQUAL(a4.size(), 4u);
     check_value(a4[0], "foo", "4");
     check_value(a4[1], "bar", "11");
 
     // Check that we don't crash on empty values of type 'string'
-    char* cmdline4[] = {"", "--open", ""};
+    const char* cmdline4[] = {"", "--open", ""};
     options_description desc2;
     desc2.add_options()
         ("open", po::value<string>())
         ;
     variables_map vm;
-    po::store(po::parse_command_line(3, cmdline4, desc2), vm);
+    po::store(po::parse_command_line(sizeof(cmdline4)/sizeof(const char*), const_cast<char**>(cmdline4), desc2), vm);
 
-    char* cmdline5[] = {"", "-p7", "-o", "1", "2", "3", "-x8"};
+    const char* cmdline5[] = {"", "-p7", "-o", "1", "2", "3", "-x8"};
     options_description desc3;
     desc3.add_options()
         (",p", po::value<string>())
@@ -154,7 +155,8 @@ void test_command_line()
         (",x", po::value<string>())
         ;
     vector<option> a5 = 
-        parse_command_line(7, cmdline5, desc3, 0, additional_parser).options;
+        parse_command_line(sizeof(cmdline5)/sizeof(const char*), const_cast<char**>(cmdline5), 
+                                                                     desc3, 0, additional_parser).options;
     BOOST_CHECK_EQUAL(a5.size(), 3u);
     check_value(a5[0], "-p", "7");
     BOOST_REQUIRE(a5[1].value.size() == 3);
@@ -180,9 +182,9 @@ void test_command_line()
     po::positional_options_description p;
     p.add( "file", 1 );
 
-    char* cmdline6[] = {"", "-m", "token1", "token2", "--", "some_file"};
+    const char* cmdline6[] = {"", "-m", "token1", "token2", "--", "some_file"};
     vector<option> a6 = 
-        command_line_parser(6, cmdline6).options(desc4).positional(p)
+        command_line_parser(sizeof(cmdline6)/sizeof(const char*), const_cast<char**>(cmdline6)).options(desc4).positional(p)
         .run().options;
     BOOST_CHECK_EQUAL(a6.size(), 2u);
     BOOST_REQUIRE(a6[0].value.size() == 2);
@@ -194,12 +196,13 @@ void test_command_line()
     BOOST_CHECK_EQUAL(a6[1].value[0], "some_file");
 }
 
-void test_config_file()
+void test_config_file(const char* config_file)
 {
     options_description desc;
     desc.add_options()
         ("gv1", new untyped_value)
         ("gv2", new untyped_value)
+        ("empty_value", new untyped_value)
         ("plug*", new untyped_value)
         ("m1.v1", new untyped_value)
         ("m1.v2", new untyped_value)
@@ -208,6 +211,7 @@ void test_config_file()
 
     const char content1[] =
     " gv1 = 0#asd\n"
+    "empty_value = \n"
     "plug3 = 7\n"
     "b = true\n"
     "[m1]\n"
@@ -218,13 +222,23 @@ void test_config_file()
 
     stringstream ss(content1);
     vector<option> a1 = parse_config_file(ss, desc).options;
-    BOOST_REQUIRE(a1.size() == 5);
+    BOOST_REQUIRE(a1.size() == 6);
     check_value(a1[0], "gv1", "0");
-    check_value(a1[1], "plug3", "7");
-    check_value(a1[2], "b", "true");
-    check_value(a1[3], "m1.v1", "1");
-    check_value(a1[4], "m1.v2", "2");
-
+    check_value(a1[1], "empty_value", "");
+    check_value(a1[2], "plug3", "7");
+    check_value(a1[3], "b", "true");
+    check_value(a1[4], "m1.v1", "1");
+    check_value(a1[5], "m1.v2", "2");
+    
+    // same test, but now options come from file 
+    vector<option> a2 = parse_config_file<char>(config_file, desc).options;
+    BOOST_REQUIRE(a2.size() == 6);
+    check_value(a2[0], "gv1", "0");
+    check_value(a2[1], "empty_value", "");
+    check_value(a2[2], "plug3", "7");
+    check_value(a2[3], "b", "true");
+    check_value(a2[4], "m1.v1", "1");
+    check_value(a2[5], "m1.v2", "2");
 }
 
 void test_environment()
@@ -238,7 +252,7 @@ void test_environment()
 #if defined(_WIN32) && ! defined(__BORLANDC__)
     _putenv("PO_TEST_FOO=1");
 #else
-    putenv("PO_TEST_FOO=1");
+    putenv(const_cast<char*>("PO_TEST_FOO=1"));
 #endif
     parsed_options p = parse_environment(desc, "PO_TEST_");
 
@@ -255,9 +269,9 @@ void test_unregistered()
 {
     options_description desc;
 
-    char* cmdline1_[] = { "--foo=12", "--bar", "1"};
+    const char* cmdline1_[] = { "--foo=12", "--bar", "1"};
     vector<string> cmdline1 = sv(cmdline1_,
-                                 sizeof(cmdline1_)/sizeof(cmdline1_[0]));
+                                 sizeof(cmdline1_)/sizeof(const char*));
     vector<option> a1 = 
         command_line_parser(cmdline1).options(desc).allow_unregistered().run()
         .options;
@@ -302,10 +316,10 @@ void test_unregistered()
     check_value(a3[1], "m1.v1", "1");
 }
 
-int main(int, char* [])
+int main(int, char* av[])
 {
     test_command_line();
-    test_config_file();
+    test_config_file(av[1]);
     test_environment();
     test_unregistered();
     return 0;

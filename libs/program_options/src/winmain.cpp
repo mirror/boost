@@ -10,8 +10,6 @@
 #ifdef _WIN32
 namespace boost { namespace program_options {
 
-    using namespace std;
-
     // Take a command line string and splits in into tokens, according
     // to the rules windows command line processor uses.
     // 
@@ -23,7 +21,7 @@ namespace boost { namespace program_options {
     {
         std::vector<std::string> result;
 
-        string::const_iterator i = input.begin(), e = input.end();
+        std::string::const_iterator i = input.begin(), e = input.end();
         for(;i != e; ++i)
             if (!isspace((unsigned char)*i))
                 break;
@@ -86,8 +84,8 @@ namespace boost { namespace program_options {
     BOOST_PROGRAM_OPTIONS_DECL std::vector<std::wstring>
     split_winmain(const std::wstring& cmdline)
     {
-        vector<wstring> result;
-        vector<string> aux = split_winmain(to_internal(cmdline));
+        std::vector<std::wstring> result;
+        std::vector<std::string> aux = split_winmain(to_internal(cmdline));
         for (unsigned i = 0, e = aux.size(); i < e; ++i)
             result.push_back(from_utf8(aux[i]));
         return result;        

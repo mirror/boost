@@ -3,6 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <cstring>
 #include <cassert>
 #include <string>
 #include <fstream>
@@ -38,8 +39,8 @@ std::wstring from_8_bit_2(const std::string& s,
     std::wstring result;
 
 
-    std::mbstate_t state = {0};
-
+    std::mbstate_t state = std::mbstate_t();
+    
     const char* from = s.data();
     const char* from_end = s.data() + s.size();
     // The interace of cvt is not really iterator-like, and it's

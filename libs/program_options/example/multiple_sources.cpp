@@ -27,13 +27,16 @@ int main(int ac, char* av[])
 {
     try {
         int opt;
+        string config_file;
     
         // Declare a group of options that will be 
         // allowed only on command line
         po::options_description generic("Generic options");
         generic.add_options()
             ("version,v", "print version string")
-            ("help", "produce help message")    
+            ("help", "produce help message")
+            ("config,c", po::value<string>(&config_file)->default_value("multiple_sources.cfg"),
+                  "name of a file of a configuration.")
             ;
     
         // Declare a group of options that will be 
@@ -71,10 +74,19 @@ int main(int ac, char* av[])
         po::variables_map vm;
         store(po::command_line_parser(ac, av).
               options(cmdline_options).positional(p).run(), vm);
-
-        ifstream ifs("multiple_sources.cfg");
-        store(parse_config_file(ifs, config_file_options), vm);
         notify(vm);
+        
+        ifstream ifs(config_file.c_str());
+        if (!ifs)
+        {
+			   cout << "can not open config file: " << config_file << "\n";
+            return 0;
+        }
+        else
+        {
+            store(parse_config_file(ifs, config_file_options), vm);
+            notify(vm);
+        }
     
         if (vm.count("help")) {
             cout << visible << "\n";

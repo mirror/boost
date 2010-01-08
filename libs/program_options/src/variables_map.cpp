@@ -58,12 +58,8 @@ namespace boost { namespace program_options {
             if (xm.m_final.count(name))
                 continue;
 
-            // Ignore options which are not described
-            //TODO: consider this.
-            //if (desc.count(name) == 0)
-            //    continue;
-
-            const option_description& d = desc.find(name, false);
+            const option_description& d = desc.find(name, false, 
+                                                      false, false);
 
             variable_value& v = m[name];            
             if (v.defaulted()) {
@@ -76,6 +72,16 @@ namespace boost { namespace program_options {
             }
 #ifndef BOOST_NO_EXCEPTIONS
             catch(validation_error& e)
+            {
+                e.set_option_name(name);
+                throw;
+            }
+            catch(multiple_occurrences& e)
+            {
+                e.set_option_name(name);
+                throw;
+            }
+            catch(multiple_values& e) 
             {
                 e.set_option_name(name);
                 throw;
@@ -95,7 +101,7 @@ namespace boost { namespace program_options {
 
         
         
-        // Second, apply default values.
+        // Second, apply default values and store required options.
         const vector<shared_ptr<option_description> >& all = desc.options();
         for(i = 0; i < all.size(); ++i)
         {
@@ -117,7 +123,12 @@ namespace boost { namespace program_options {
                     m[key] = variable_value(def, true);
                     m[key].m_value_semantic = d.semantic();
                 }
-            }        
+            }  
+
+            // add empty value if this is an required option
+            if (d.semantic()->is_required()) {
+               xm.m_required.insert(key);
+            }
         }
     }
 
@@ -130,22 +141,7 @@ namespace boost { namespace program_options {
     BOOST_PROGRAM_OPTIONS_DECL 
     void notify(variables_map& vm)
     {        
-        // Lastly, run notify actions.
-        for (map<string, variable_value>::iterator k = vm.begin(); 
-             k != vm.end(); 
-             ++k) 
-        {
-            /* Users might wish to use variables_map to store their own values
-               that are not parsed, and therefore will not have value_semantics
-               defined. Do no crash on such values. In multi-module programs,
-               one module might add custom values, and the 'notify' function
-               will be called after that, so we check that value_sematics is 
-               not NULL. See:
-                   https://svn.boost.org/trac/boost/ticket/2782
-            */
-            if (k->second.m_value_semantic)
-                k->second.m_value_semantic->notify(k->second.value());
-        }               
+        vm.notify();               
     }
 
     abstract_variables_map::abstract_variables_map()
@@ -196,4 +192,40 @@ namespace boost { namespace program_options {
         else
             return i->second;
     }
+    
+    void
+    variables_map::notify()
+    {
+        // This checks if all required options occur
+        for (set<string>::const_iterator r = m_required.begin();
+             r != m_required.end();
+             ++r)
+        {
+            const string& opt = *r;
+            map<string, variable_value>::const_iterator iter = find(opt);
+            if (iter == end() || iter->second.empty()) 
+            {
+                boost::throw_exception(required_option(opt));
+            
+            }
+        }
+
+        // Lastly, run notify actions.
+        for (map<string, variable_value>::iterator k = begin(); 
+             k != end(); 
+             ++k) 
+        {
+            /* Users might wish to use variables_map to store their own values
+               that are not parsed, and therefore will not have value_semantics
+               defined. Do no crash on such values. In multi-module programs,
+               one module might add custom values, and the 'notify' function
+               will be called after that, so we check that value_sematics is 
+               not NULL. See:
+                   https://svn.boost.org/trac/boost/ticket/2782
+            */
+            if (k->second.m_value_semantic)
+                k->second.m_value_semantic->notify(k->second.value());
+        }               
+    }
+    
 }}

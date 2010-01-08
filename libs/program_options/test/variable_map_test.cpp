@@ -20,7 +20,7 @@ using namespace std;
 
 #include "minitest.hpp"
 
-vector<string> sv(char* array[], unsigned size)
+vector<string> sv(const char* array[], unsigned size)
 {
     vector<string> r;
     for (unsigned i = 0; i < size; ++i)
@@ -38,9 +38,9 @@ void test_variable_map()
         ("baz", new untyped_value())
         ("output,o", new untyped_value(), "")
         ;
-    char* cmdline3_[] = { "--foo='12'", "--bar=11", "-z3", "-ofoo" };
+    const char* cmdline3_[] = { "--foo='12'", "--bar=11", "-z3", "-ofoo" };
     vector<string> cmdline3 = sv(cmdline3_,
-                                 sizeof(cmdline3_)/sizeof(cmdline3_[0]));
+                                 sizeof(cmdline3_)/sizeof(const char*));
     parsed_options a3 = command_line_parser(cmdline3).options(desc).run();
     variables_map vm;
     store(a3, vm);
@@ -58,9 +58,9 @@ void test_variable_map()
     ("zak", po::value<int>(&i), "")
     ("opt", bool_switch(), "");
 
-    char* cmdline4_[] = { "--zee", "--zak=13" };
+    const char* cmdline4_[] = { "--zee", "--zak=13" };
     vector<string> cmdline4 = sv(cmdline4_,
-                                 sizeof(cmdline4_)/sizeof(cmdline4_[0]));
+                                 sizeof(cmdline4_)/sizeof(const char*));
     parsed_options a4 = command_line_parser(cmdline4).options(desc).run();
 
     variables_map vm2;
@@ -78,9 +78,9 @@ void test_variable_map()
     ("voo", po::value<string>())
     ("iii", po::value<int>()->default_value(123))
     ;
-    char* cmdline5_[] = {  "--voo=1" };
+    const char* cmdline5_[] = { "--voo=1" };
     vector<string> cmdline5 = sv(cmdline5_,
-                                 sizeof(cmdline5_)/sizeof(cmdline5_[0]));
+                                 sizeof(cmdline5_)/sizeof(const char*));
     parsed_options a5 = command_line_parser(cmdline5).options(desc2).run();
 
     variables_map vm3;
@@ -100,9 +100,9 @@ void test_variable_map()
     ;
     /* The -m option is implicit. It does not have value in inside the token,
        and we should not grab the next token.  */
-    char* cmdline6_[] = {  "--imp=1", "-m", "--foo=1" };
+    const char* cmdline6_[] = {  "--imp=1", "-m", "--foo=1" };
     vector<string> cmdline6 = sv(cmdline6_,
-                                 sizeof(cmdline6_)/sizeof(cmdline6_[0]));
+                                 sizeof(cmdline6_)/sizeof(const char*));
     parsed_options a6 = command_line_parser(cmdline6).options(desc3).run();
 
     variables_map vm4;
@@ -194,15 +194,15 @@ void test_priority()
     ("include", po::value< vector<int> >()->composing())
     ;
 
-    char* cmdline1_[] = { "--first=1", "--aux=10", "--first=3", "--include=1" };
+    const char* cmdline1_[] = { "--first=1", "--aux=10", "--first=3", "--include=1" };
     vector<string> cmdline1 = sv(cmdline1_, 
-                                 sizeof(cmdline1_)/sizeof(cmdline1_[0]));
+                                 sizeof(cmdline1_)/sizeof(const char*));
 
     parsed_options p1 = command_line_parser(cmdline1).options(desc).run();
 
-    char* cmdline2_[] = { "--first=12", "--second=7", "--include=7" };
+    const char* cmdline2_[] = { "--first=12", "--second=7", "--include=7" };
     vector<string> cmdline2 = sv(cmdline2_, 
-                                 sizeof(cmdline2_)/sizeof(cmdline2_[0]));
+                                 sizeof(cmdline2_)/sizeof(const char*));
 
     parsed_options p2 = command_line_parser(cmdline2).options(desc).run();
 
