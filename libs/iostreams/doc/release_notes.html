@@ -14,6 +14,89 @@
 
 <!-- End Banner -->
 
+<h4>1.42</h4>
+
+<p>
+Fixed many outstanding issues. Thanks to Richard Smith for mworking on a lot
+of these changes.
+</p>
+
+<ul> 
+  <li> 
+    Allocate exceptions on the stack, not the heap (<a href="https://svn.boost.org/trac/boost/ticket/3612">#3612</a>).
+  </li> 
+  <li> 
+    Fix unthrown exceptions. (<a href="https://svn.boost.org/trac/boost/ticket/3311">#3311</a>).
+  </li> 
+  <li> 
+    Use <code>boost::throw_exception</code> to throw exceptions
+    (<a href="https://svn.boost.org/trac/boost/ticket/2094">#2094</a>).
+  </li> 
+  <li> 
+    Add missing include guard (<a href="https://svn.boost.org/trac/boost/ticket/3010">#3010</a>).
+  </li> 
+  <li> 
+    Use the correct type for buffer_size and pback_size parameters (<a href="https://svn.boost.org/trac/boost/ticket/2894">#2894</a>).
+  </li> 
+  <li> 
+    Support <code>boost::ref(std::istream)</code> in code_converter (<a href="https://svn.boost.org/trac/boost/ticket/3011">#3011</a>).
+  </li> 
+  <li> 
+    Fix CRC on x64 during gzip decompression (<a href="https://svn.boost.org/trac/boost/ticket/3352">#3352</a>).
+  </li> 
+  <li> 
+    Fix mapped file errors in windows (<a href="https://svn.boost.org/trac/boost/ticket/3505">#3505</a>).
+  </li> 
+  <li> 
+    Improved support for Visual C++ 2010.
+  </li> 
+  <li> 
+    Fix usage requirements in boost build.
+  </li> 
+  <li> 
+    Fix some boundary checks in <code>restrict</code> and <code>slice</code>.
+  </li> 
+  <li> 
+    Some minor documentation fixes.
+  </li> 
+  <li> 
+    Avoid Apple macro substitutions for <code>check</code>.
+  </li> 
+</ul>
+
+<h4>1.41</h4>
+
+<p>
+Some old unreleased developments. There are still several open issues that
+should be fixed in the next version.
+</p>
+<ul> 
+  <li> 
+    Add a grep filter (<a href="https://svn.boost.org/trac/boost/ticket/1627">#1627</a>).
+  </li> 
+  <li> 
+    Support archives with multiple members (<a href="https://svn.boost.org/trac/boost/ticket/1896">#1896</a>).
+  </li> 
+  <li> 
+    Make <code><span class="identifier">tee</span></code> work with input
+    streams (<a href="https://svn.boost.org/trac/boost/ticket/791">#791</a>).
+  </li> 
+  <li> 
+    Improved filesystem interoperability.
+  </li> 
+  <li> 
+    Several warnings fixed or suppressed (including
+    <a href="https://svn.boost.org/trac/boost/ticket/1618">#1618</a>,
+    <a href="https://svn.boost.org/trac/boost/ticket/1875">#1875</a>,
+    <a href="https://svn.boost.org/trac/boost/ticket/2779">#2779</a>).
+  </li> 
+  <li> 
+    Various other fixes (including
+    <a href="https://svn.boost.org/trac/boost/ticket/1580">#1580</a>,
+    <a href="https://svn.boost.org/trac/boost/ticket/1671">#1671</a>).
+  </li> 
+</ul>
+
 <h3>1.35</h3>
 
 <P>1. The semantics of <A HREF="functions/close.html"><CODE>close</CODE></A> has been modified:</P>
@@ -25,7 +108,7 @@
 <LI><A HREF="guide/generic_streams.html">Generic streams and stream buffers</A> and <A HREF="guide/filtering_streams.html">filtering streams and stream buffers</A> are now <A HREF="concepts/closable.html">Closable</A>. For filtering streams and stream buffers, <CODE>close</CODE> calls <A HREF="classes/filtering_stream.html#pop"><CODE>pop</CODE></A>.
 </UL>
 
-<P><I>These changes will break some existing code</I>. They were necessary to resolve inconsistencies in the prior specification that resulted in a number of reported bugs.</P>
+<P><EM>These changes will break some existing code</EM>. They were necessary to resolve inconsistencies in the prior specification that resulted in a number of reported bugs.</P>
 
 <P>2. The function template <a href="functions/slice.html"><code>slice</code></a> has been introduced as an alias of <a href="functions/restrict.html"><code>restrict</code></a>, for platforms that treat <code>restrict</code> as a keyword.</P>
 
