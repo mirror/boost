@@ -124,7 +124,7 @@ void scoped_static_mutex_lock::unlock()
 boost::recursive_mutex* static_mutex::m_pmutex = 0;
 boost::once_flag static_mutex::m_once = BOOST_ONCE_INIT;
 
-extern "C" BOOST_REGEX_DECL void free_static_mutex()
+extern "C" BOOST_REGEX_DECL void boost_regex_free_static_mutex()
 {
    delete static_mutex::m_pmutex;
    static_mutex::m_pmutex = 0;
@@ -133,7 +133,7 @@ extern "C" BOOST_REGEX_DECL void free_static_mutex()
 void static_mutex::init()
 {
    m_pmutex = new boost::recursive_mutex();
-   int r = atexit(free_static_mutex);
+   int r = atexit(boost_regex_free_static_mutex);
    BOOST_ASSERT(0 == r);
 }
 
