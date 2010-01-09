@@ -42,7 +42,7 @@ int main()
 
     sregex rel = ( (s1= +_w) >> " <--> " >> (s2= +_d) )
     [
-        xp::ref(bm)->*insert( construct<bm_type::value_type>(s1, as<int>(s2)) )
+        xp::ref(bm)->*insert( xp::construct<bm_type::value_type>(s1, as<int>(s2)) )
     ];
 
     sregex relations = rel >> *(+_s >> rel);
