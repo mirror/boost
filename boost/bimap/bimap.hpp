@@ -196,19 +196,24 @@ class bimap
 
     typedef BOOST_DEDUCED_TYPENAME base_::relation::info_type info_type;
 
+    typedef BOOST_DEDUCED_TYPENAME base_::core_type::allocator_type allocator_type; 
+    
     /// Left map view
     left_map  left;
 
     /// Right map view
     right_map right;
 
-    bimap() :
-
+    bimap(const allocator_type& al = allocator_type()) :
+        
         base_::relation_set(
             ::boost::multi_index::get<
                 BOOST_DEDUCED_TYPENAME base_::logic_relation_set_tag 
             >(core) 
         ),
+
+        core(al),
+
         left (
             ::boost::multi_index::get<
                 BOOST_DEDUCED_TYPENAME base_::logic_left_tag
@@ -223,7 +228,7 @@ class bimap
     {}
 
     template< class InputIterator >
-    bimap(InputIterator first,InputIterator last) :
+    bimap(InputIterator first,InputIterator last,const allocator_type& al = allocator_type()) :
 
         base_::relation_set(
             ::boost::multi_index::get<
@@ -231,7 +236,7 @@ class bimap
             >(core) 
         ),
 
-        core(first,last),
+        core(first,last,BOOST_DEDUCED_TYPENAME base_::core_type::ctor_args_list(),al),
 
         left (
             ::boost::multi_index::get<
