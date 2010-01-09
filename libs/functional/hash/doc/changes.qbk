@@ -90,4 +90,10 @@
   instead of trying to configure every possibility manually.
 * Workaround for when STLport doesn't support long double.
 
+[h2 Boost 1.42.0]
+
+* Reduce the number of warnings for Visual C++ warning level 4.
+* Some code formatting changes to fit lines into 80 characters.
+* Rename an internal namespace.
+
 [endsect]

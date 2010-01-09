@@ -507,7 +507,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <parameter name="position">
                 <paramtype>const_iterator</paramtype>
               </parameter>
-              <type>iterator</type>
+              <type>void</type>
               <description>
                 <para>Erase the element pointed to by <code>position</code>.</para>
               </description>
@@ -613,6 +613,12 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <returns>
                 <para>An iterator pointing to an element with key equivalent to <code>k</code>, or <code>b.end()</code> if no such element exists.</para>
               </returns>
+              <notes><para>
+                The templated overloads are a non-standard extensions which
+                allows you to use a compatible hash function and equality
+                predicate for a key of a different type in order to avoid
+                an expensive type cast. In general, its use is not encouraged.
+              </para></notes>
             </overloaded-method>
             <method name="count" cv="const">
               <parameter name="k">
@@ -1364,7 +1370,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <parameter name="position">
                 <paramtype>const_iterator</paramtype>
               </parameter>
-              <type>iterator</type>
+              <type>void</type>
               <description>
                 <para>Erase the element pointed to by <code>position</code>.</para>
               </description>
@@ -1470,6 +1476,12 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <returns>
                 <para>An iterator pointing to an element with key equivalent to <code>k</code>, or <code>b.end()</code> if no such element exists.</para>
               </returns>
+              <notes><para>
+                The templated overloads are a non-standard extensions which
+                allows you to use a compatible hash function and equality
+                predicate for a key of a different type in order to avoid
+                an expensive type cast. In general, its use is not encouraged.
+              </para></notes>
             </overloaded-method>
             <method name="count" cv="const">
               <parameter name="k">
@@ -2235,7 +2247,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <parameter name="position">
                 <paramtype>const_iterator</paramtype>
               </parameter>
-              <type>iterator</type>
+              <type>void</type>
               <description>
                 <para>Erase the element pointed to by <code>position</code>.</para>
               </description>
@@ -2341,6 +2353,12 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <returns>
                 <para>An iterator pointing to an element with key equivalent to <code>k</code>, or <code>b.end()</code> if no such element exists.</para>
               </returns>
+              <notes><para>
+                The templated overloads are a non-standard extensions which
+                allows you to use a compatible hash function and equality
+                predicate for a key of a different type in order to avoid
+                an expensive type cast. In general, its use is not encouraged.
+              </para></notes>
             </overloaded-method>
             <method name="count" cv="const">
               <parameter name="k">
@@ -3141,7 +3159,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <parameter name="position">
                 <paramtype>const_iterator</paramtype>
               </parameter>
-              <type>iterator</type>
+              <type>void</type>
               <description>
                 <para>Erase the element pointed to by <code>position</code>.</para>
               </description>
@@ -3247,6 +3265,12 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <returns>
                 <para>An iterator pointing to an element with key equivalent to <code>k</code>, or <code>b.end()</code> if no such element exists.</para>
               </returns>
+              <notes><para>
+                The templated overloads are a non-standard extensions which
+                allows you to use a compatible hash function and equality
+                predicate for a key of a different type in order to avoid
+                an expensive type cast. In general, its use is not encouraged.
+              </para></notes>
             </overloaded-method>
             <method name="count" cv="const">
               <parameter name="k">
