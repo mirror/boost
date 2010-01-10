@@ -18,6 +18,7 @@
 
 
 #include <boost/config.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/property_map/property_map.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/any.hpp>
@@ -165,7 +166,7 @@ class dynamic_property_map_adaptor : public dynamic_property_map
 
   void do_put(const any&, const any&, mpl::bool_<false>)
   {
-    throw dynamic_const_put_error();
+    BOOST_THROW_EXCEPTION(dynamic_const_put_error());
   }
 
 public:
@@ -281,7 +282,7 @@ public:
   generate(const std::string& name, const Key& key, const Value& value)
   {
     if(!generate_fn) {
-      throw property_not_found(name);
+      BOOST_THROW_EXCEPTION(property_not_found(name));
     } else {
       return generate_fn(name,key,value);
     }
@@ -326,7 +327,7 @@ get(const std::string& name, const dynamic_properties& dp, const Key& key)
       return any_cast<Value>(i->second->get(key));
   }
 
-  throw dynamic_get_failure(name);
+  BOOST_THROW_EXCEPTION(dynamic_get_failure(name));
 }
 #endif
 
@@ -340,7 +341,7 @@ get(const std::string& name, const dynamic_properties& dp, const Key& key, type<
       return any_cast<Value>(i->second->get(key));
   }
 
-  throw dynamic_get_failure(name);
+  BOOST_THROW_EXCEPTION(dynamic_get_failure(name));
 }
 
 template<typename Key>
@@ -353,7 +354,7 @@ get(const std::string& name, const dynamic_properties& dp, const Key& key)
       return i->second->get_string(key);
   }
 
-  throw dynamic_get_failure(name);
+  BOOST_THROW_EXCEPTION(dynamic_get_failure(name));
 }
 
 // The easy way to ignore properties.
