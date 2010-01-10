@@ -723,11 +723,26 @@
         </xsl:if>
         <xsl:apply-templates/>
       </xsl:when>
+      <xsl:when test="@kind='friend'">
+        <xsl:if test="./memberdef/detaileddescription/para or ./memberdef/briefdescription/para">
+          <method-group name="friend functions">
+            <xsl:apply-templates>
+              <xsl:with-param name="in-section" select="true()"/>
+            </xsl:apply-templates>
+          </method-group>
+        </xsl:if>
+      </xsl:when>
       <xsl:when test="@kind='public-static-attrib' or @kind='public-attrib'">
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="@kind='public-type'">
         <xsl:apply-templates/>
+      </xsl:when>
+      <xsl:when test="@kind='private-type'">
+        <!--skip private members-->
+      </xsl:when>
+      <xsl:when test="@kind='private-static-attrib' or @kind='private-attrib'">
+        <!--skip private members-->
       </xsl:when>
       <xsl:when test="@kind='func'">
         <xsl:apply-templates>
@@ -832,6 +847,11 @@
             </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
+      </xsl:when>
+      <xsl:when test="@kind='friend'">
+        <xsl:if test="./detaileddescription/para or ./briefdescription/para">
+          <xsl:call-template name="method"/>
+        </xsl:if>
       </xsl:when>
       <xsl:when test="@kind='enum'">
         <xsl:call-template name="enum">
@@ -1204,6 +1224,9 @@
     <para>
       <xsl:apply-templates mode="passthrough"/>
     </para>
+  </xsl:template>
+  <xsl:template match="copydoc" mode="passthrough">
+    <xsl:apply-templates mode="passthrough"/>
   </xsl:template>
 
   <xsl:template match="para/simplesect" mode="passthrough">
