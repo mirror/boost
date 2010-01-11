@@ -63,6 +63,9 @@ TT_TEST_BEGIN(is_class)
           ::tt::decay<char[2]>::type,char*>::value),
                                  true );
    BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_same< 
+          ::tt::decay<char[2][3]>::type,char(*)[3]>::value),
+                                 true );
+   BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_same< 
           ::tt::decay<const char[2]>::type,const char*>::value),
                                   true );
    BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_same< 

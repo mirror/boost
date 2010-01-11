@@ -14,7 +14,7 @@
    };
   
 __type Let `U` be the result of `remove_reference<T>::type`, then if `U` is
-an array type, the result is `remove_extent<U>*`, otherwise if `U` is a 
+an array type, the result is `remove_extent<U>::type*`, otherwise if `U` is a 
 function type then the result is `U*`, otherwise the result is `U`.
 
 __std_ref 3.9.1.
@@ -25,7 +25,7 @@ __header ` #include <boost/type_traits/decay.hpp>` or ` #include <boost/type_tra
 
 [ [Expression] [Result Type]]
 
-[[`decay<int[2][3]>::type`][`int[2]*`]]
+[[`decay<int[2][3]>::type`][`int[3]*`]]
 
 [[`decay<int(&)[2]>::type`] [`int*`]]
 
