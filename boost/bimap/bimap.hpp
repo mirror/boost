@@ -204,75 +204,71 @@ class bimap
     /// Right map view
     right_map right;
 
-    bimap(const allocator_type& al = allocator_type()) :
-        
-        base_::relation_set(
-            ::boost::multi_index::get<
-                BOOST_DEDUCED_TYPENAME base_::logic_relation_set_tag 
-            >(core) 
-        ),
+    typedef BOOST_DEDUCED_TYPENAME base_::logic_relation_set_tag 
+                                          logic_relation_set_tag;
+    typedef BOOST_DEDUCED_TYPENAME base_::logic_left_tag logic_left_tag;
+    typedef BOOST_DEDUCED_TYPENAME base_::logic_right_tag logic_right_tag;
+    typedef BOOST_DEDUCED_TYPENAME base_::core_type::ctor_args_list 
+                                                     ctor_args_list;
 
-        core(al),
+   bimap(const allocator_type& al = allocator_type()) :
 
-        left (
-            ::boost::multi_index::get<
-                BOOST_DEDUCED_TYPENAME base_::logic_left_tag
-            >(core)
-        ),
-        right (
-            ::boost::multi_index::get<
-                BOOST_DEDUCED_TYPENAME base_::logic_right_tag 
-            >(core)
-        )
+       base_::relation_set(
+           ::boost::multi_index::get<
+               logic_relation_set_tag
+           >(core)
+       ),
 
-    {}
+       core(al),
 
-    template< class InputIterator >
-    bimap(InputIterator first,InputIterator last,const allocator_type& al = allocator_type()) :
+       left (
+           ::boost::multi_index::get<
+               logic_left_tag
+           >(core)
+       ),
+       right (
+           ::boost::multi_index::get<
+               logic_right_tag
+           >(core)
+       )
 
-        base_::relation_set(
-            ::boost::multi_index::get<
-                BOOST_DEDUCED_TYPENAME base_::logic_relation_set_tag
-            >(core) 
-        ),
+   {}
 
-        core(first,last,BOOST_DEDUCED_TYPENAME base_::core_type::ctor_args_list(),al),
+   template< class InputIterator >
+   bimap(InputIterator first,InputIterator last,
+         const allocator_type& al = allocator_type()) :
 
-        left (
-            ::boost::multi_index::get<
-                BOOST_DEDUCED_TYPENAME base_::logic_left_tag
-            >(core)
-        ),
-        right (
-            ::boost::multi_index::get<
-                BOOST_DEDUCED_TYPENAME base_::logic_right_tag
-            >(core)
-        )
+       base_::relation_set(
+           ::boost::multi_index::get<logic_relation_set_tag>(core)
+       ),
 
-    {}
+       core(first,last,ctor_args_list(),al),
 
-    bimap(const bimap& x) :
+       left (
+           ::boost::multi_index::get<logic_left_tag>(core)
+       ),
+       right (
+           ::boost::multi_index::get<logic_right_tag>(core)
+       )
 
-        base_::relation_set(
-            ::boost::multi_index::get<
-                BOOST_DEDUCED_TYPENAME base_::logic_relation_set_tag
-            >(core) 
-        ),
+   {}
 
-        core(x.core),
+   bimap(const bimap& x) :
 
-        left (
-            ::boost::multi_index::get<
-                BOOST_DEDUCED_TYPENAME base_::logic_left_tag
-            >(core)
-        ),
-        right (
-            ::boost::multi_index::get<
-                BOOST_DEDUCED_TYPENAME base_::logic_right_tag
-            >(core)
-        )
+       base_::relation_set(
+           ::boost::multi_index::get<logic_relation_set_tag>(core)
+       ),
 
-    {}
+       core(x.core),
+
+       left (
+           ::boost::multi_index::get<logic_left_tag>(core)
+       ),
+       right (
+           ::boost::multi_index::get<logic_right_tag>(core)
+       )
+
+   {}
 
     bimap& operator=(const bimap& x)
     {
