@@ -1,0 +1,16 @@
+[/ 
+  Copyright 2009 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:history History]
+
+[h4 Boost 1.42.0]
+
+* Fixed issue [@https://svn.boost.org/trac/boost/ticket/3704 #3704].
+
+
+[endsect]
+
