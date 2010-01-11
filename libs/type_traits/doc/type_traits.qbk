@@ -245,6 +245,7 @@ See __has_trivial_constructor.
 
 [endsect]
 
+[include history.qbk]
 [include credits.qbk]
 
 

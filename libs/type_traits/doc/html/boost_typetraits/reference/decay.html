@@ -35,7 +35,7 @@
 <p>
         <span class="bold"><strong>type:</strong></span> Let <code class="computeroutput"><span class="identifier">U</span></code>
         be the result of <code class="computeroutput"><span class="identifier">remove_reference</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span></code>, then if <code class="computeroutput"><span class="identifier">U</span></code>
-        is an array type, the result is <code class="computeroutput"><span class="identifier">remove_extent</span><span class="special">&lt;</span><span class="identifier">U</span><span class="special">&gt;*</span></code>,
+        is an array type, the result is <code class="computeroutput"><span class="identifier">remove_extent</span><span class="special">&lt;</span><span class="identifier">U</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">*</span></code>,
         otherwise if <code class="computeroutput"><span class="identifier">U</span></code> is a function
         type then the result is <code class="computeroutput"><span class="identifier">U</span><span class="special">*</span></code>, otherwise the result is <code class="computeroutput"><span class="identifier">U</span></code>.
       </p>
@@ -48,7 +48,7 @@
         or <code class="computeroutput"> <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
       </p>
 <div class="table">
-<a name="id794462"></a><p class="title"><b>Table&#160;1.10.&#160;Examples</b></p>
+<a name="id776993"></a><p class="title"><b>Table&#160;1.10.&#160;Examples</b></p>
 <div class="table-contents"><table class="table" summary="Examples">
 <colgroup>
 <col>
@@ -75,7 +75,7 @@
             </td>
 <td>
             <p>
-              <code class="computeroutput"><span class="keyword">int</span><span class="special">[</span><span class="number">2</span><span class="special">]*</span></code>
+              <code class="computeroutput"><span class="keyword">int</span><span class="special">[</span><span class="number">3</span><span class="special">]*</span></code>
             </p>
             </td>
 </tr>
