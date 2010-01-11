@@ -277,10 +277,15 @@ public:
       else
       {
          repeater_count* p = next;
-         while(p->state_id != state_id)
+         while(p && (p->state_id != state_id))
             p = p->next;
-         count = p->count;
-         start_pos = p->start_pos;
+         if(p)
+         {
+            count = p->count;
+            start_pos = p->start_pos;
+         }
+         else
+            count = 0;
       }
    }
    ~repeater_count()

@@ -103,6 +103,7 @@ istream& getline(istream& is, std::string& s)
    char c = static_cast<char>(is.get());
    while(c != '\n')
    {
+      BOOST_ASSERT(is.good());
       s.append(1, c);
       c = static_cast<char>(is.get());
    }
@@ -123,16 +124,17 @@ istream& getline(istream& is, std::string& s)
 int main(int argc, char**argv)
 {
    ifstream ifs;
-   streambuf* pbuf = 0;
+   std::istream* p_in = &std::cin;
    if(argc == 2)
    {
       ifs.open(argv[1]);
-      if(ifs.bad())
+      ifs.peek();
+      if(!ifs.good())
       {
          cout << "Bad filename: " << argv[1] << endl;
          return -1;
       }
-      pbuf = cin.rdbuf(ifs.rdbuf());
+      p_in = &ifs;
    }
    
    boost::regex ex;
@@ -152,12 +154,12 @@ int main(int argc, char**argv)
    double tim;
    int result = 0;
    unsigned iters = 100;
-   double wait_time = (std::min)(t.elapsed_min() * 1000, 1.0);
+   double wait_time = (std::min)(t.elapsed_min() * 1000, 0.5);
 
    while(true)
    {
       cout << "Enter expression (or \"quit\" to exit): ";
-      boost::getline(cin, s1);
+      boost::getline(*p_in, s1);
       if(argc == 2)
          cout << endl << s1 << endl;
       if(s1 == "quit")
@@ -191,7 +193,7 @@ int main(int argc, char**argv)
       while(true)
       {
          cout << "Enter string to search (or \"quit\" to exit): ";
-         boost::getline(cin, s2);
+         boost::getline(*p_in, s2);
          if(argc == 2)
             cout << endl << s2 << endl;
          if(s2 == "quit")
@@ -363,12 +365,6 @@ int main(int argc, char**argv)
          }
       }
       regfreeA(&r);
-   }
-
-   if(pbuf)
-   {
-      cin.rdbuf(pbuf);
-      ifs.close();
    }
 
    return 0;
