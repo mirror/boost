@@ -110,7 +110,7 @@ And you can now use [classref boost::hash] with book:
     assert(books.find(dandelion) == books.end());
 
 The full example can be found in:
-[@boost:/libs/functional/hash/examples/books.cpp /libs/functional/hash/examples/books.hpp]
+[@boost:/libs/functional/hash/examples/books.hpp /libs/functional/hash/examples/books.hpp]
 and
 [@boost:/libs/functional/hash/examples/books.cpp /libs/functional/hash/examples/books.cpp].
 
