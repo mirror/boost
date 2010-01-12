@@ -390,6 +390,16 @@ INT#_C macros if they're not already defined (John Maddock).
 #  define UINTMAX_C(value)  value##ui64
 
 # else
+// For the following code we get several warnings along the lines of:
+//
+// boost/cstdint.hpp:428:35: error: use of C99 long long integer constant
+//
+// So we declare this a system header to suppress these warnings.
+
+#if defined(__GNUC__) && (__GNUC__ >= 4)
+#pragma GCC system_header
+#endif
+
 //  do it the old fashioned way:
 
 //  8-bit types  ------------------------------------------------------------//
