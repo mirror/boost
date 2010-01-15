@@ -3,18 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>make_vector</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<<<<<<< .working
-<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
-=======
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
-<<<<<<< .working
->>>>>>> .merge-right.r57125
-<link rel="home" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
-=======
 <link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
->>>>>>> .merge-right.r58299
 <link rel="up" href="../metafunctions.html" title="MetaFunctions">
-<link rel="previous" href="make_cons.html" title="make_cons">
+<link rel="prev" href="make_cons.html" title="make_cons">
 <link rel="next" href="make_set.html" title="make_set">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -30,115 +22,37 @@
 <div class="spirit-nav">
 <a accesskey="p" href="make_cons.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../metafunctions.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="make_set.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
-<div class="titlepage">
-<div><div><h5 class="title">
-<a name="fusion.container.generation.metafunctions.make_vector"></a><a href="make_vector.html" title="make_vector">make_vector</a>
-</h5></div></div>
-<div></div>
-</div>
+<div class="section" title="make_vector">
+<div class="titlepage"><div><div><h5 class="title">
+<a name="fusion.container.generation.metafunctions.make_vector"></a><a class="link" href="make_vector.html" title="make_vector">make_vector</a>
+</h5></div></div></div>
 <a name="fusion.container.generation.metafunctions.make_vector.description"></a><h6>
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<a name="id501039"></a>
-            <a href="make_vector.html#fusion.container.generation.metafunctions.make_vector.description">Description</a>
-=======
-<a name="id752874"></a>
-=======
-<a name="id719281"></a>
-=======
-<a name="id711635"></a>
-=======
-<a name="id733950"></a>
-=======
-<a name="id722684"></a>
-=======
-<a name="id719408"></a>
->>>>>>> .merge-right.r58559
->>>>>>> .merge-right.r58549
->>>>>>> .merge-right.r58299
->>>>>>> .merge-right.r57337
->>>>>>> .merge-right.r57242
+<a name="id712854"></a>
             <a class="link" href="make_vector.html#fusion.container.generation.metafunctions.make_vector.description">Description</a>
->>>>>>> .merge-right.r57125
           </h6>
 <p>
-            Returns the result type of <a href="../functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a>.
+            Returns the result type of <a class="link" href="../functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a>.
           </p>
 <a name="fusion.container.generation.metafunctions.make_vector.synopsis"></a><h6>
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<a name="id501087"></a>
-            <a href="make_vector.html#fusion.container.generation.metafunctions.make_vector.synopsis">Synopsis</a>
-=======
-<a name="id752903"></a>
-=======
-<a name="id719310"></a>
-=======
-<a name="id711664"></a>
-=======
-<a name="id733979"></a>
-=======
-<a name="id722713"></a>
-=======
-<a name="id719436"></a>
->>>>>>> .merge-right.r58559
->>>>>>> .merge-right.r58549
->>>>>>> .merge-right.r58299
->>>>>>> .merge-right.r57337
->>>>>>> .merge-right.r57242
+<a name="id712883"></a>
             <a class="link" href="make_vector.html#fusion.container.generation.metafunctions.make_vector.synopsis">Synopsis</a>
->>>>>>> .merge-right.r57125
           </h6>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T0</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="keyword">typename</span> <span class="identifier">TN</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">make_vector</span><span class="special">;</span>
 </pre>
 <p>
-            The variadic function accepts <tt class="computeroutput"><span class="number">0</span></tt>
-            to <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
-            elements, where <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
-            is a user definable predefined maximum that defaults to <tt class="computeroutput"><span class="number">10</span></tt>. You may define the preprocessor constant
-            <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
+            The variadic function accepts <code class="computeroutput"><span class="number">0</span></code>
+            to <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
+            elements, where <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
+            is a user definable predefined maximum that defaults to <code class="computeroutput"><span class="number">10</span></code>. You may define the preprocessor constant
+            <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
             before including any Fusion header to change the default. Example:
           </p>
 <pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_VECTOR_SIZE</span> <span class="number">20</span>
 </pre>
 <a name="fusion.container.generation.metafunctions.make_vector.parameters"></a><h6>
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<a name="id501291"></a>
-            <a href="make_vector.html#fusion.container.generation.metafunctions.make_vector.parameters">Parameters</a>
-=======
-<a name="id753041"></a>
-=======
-<a name="id719448"></a>
-=======
-<a name="id711802"></a>
-=======
-<a name="id734117"></a>
-=======
-<a name="id722851"></a>
-=======
-<a name="id719574"></a>
->>>>>>> .merge-right.r58559
->>>>>>> .merge-right.r58549
->>>>>>> .merge-right.r58299
->>>>>>> .merge-right.r57337
->>>>>>> .merge-right.r57242
+<a name="id713021"></a>
             <a class="link" href="make_vector.html#fusion.container.generation.metafunctions.make_vector.parameters">Parameters</a>
->>>>>>> .merge-right.r57125
           </h6>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -147,130 +61,67 @@
 <col>
 </colgroup>
 <thead><tr>
-<th><p>
+<th>
+                  <p>
                     Parameter
-                  </p></th>
-<th><p>
+                  </p>
+                  </th>
+<th>
+                  <p>
                     Requirement
-                  </p></th>
-<th><p>
+                  </p>
+                  </th>
+<th>
+                  <p>
                     Description
-                  </p></th>
+                  </p>
+                  </th>
 </tr></thead>
 <tbody><tr>
-<td><p>
-                    <tt class="computeroutput"><span class="identifier">T0</span><span class="special">,</span>
+<td>
+                  <p>
+                    <code class="computeroutput"><span class="identifier">T0</span><span class="special">,</span>
                     <span class="identifier">T1</span><span class="special">,...</span>
-                    <span class="identifier">TN</span></tt>
-                  </p></td>
-<td><p>
+                    <span class="identifier">TN</span></code>
+                  </p>
+                  </td>
+<td>
+                  <p>
                     Any type
-                  </p></td>
-<td><p>
-                    Template arguments to <tt class="computeroutput"><span class="identifier">make_vector</span></tt>
-                  </p></td>
+                  </p>
+                  </td>
+<td>
+                  <p>
+                    Template arguments to <code class="computeroutput"><span class="identifier">make_vector</span></code>
+                  </p>
+                  </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.container.generation.metafunctions.make_vector.expression_semantics"></a><h6>
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<a name="id501431"></a>
-            <a href="make_vector.html#fusion.container.generation.metafunctions.make_vector.expression_semantics">Expression
-=======
-<a name="id753147"></a>
-=======
-<a name="id719555"></a>
-=======
-<a name="id711909"></a>
-=======
-<a name="id734224"></a>
-=======
-<a name="id722958"></a>
-=======
-<a name="id719681"></a>
->>>>>>> .merge-right.r58559
->>>>>>> .merge-right.r58549
->>>>>>> .merge-right.r58299
->>>>>>> .merge-right.r57337
->>>>>>> .merge-right.r57242
+<a name="id713128"></a>
             <a class="link" href="make_vector.html#fusion.container.generation.metafunctions.make_vector.expression_semantics">Expression
->>>>>>> .merge-right.r57125
             Semantics</a>
           </h6>
 <pre class="programlisting"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">make_vector</span><span class="special">&lt;</span><span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: A <a href="../../vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a> with elements of types
-            converted following the rules for <a href="../../../notes.html#fusion.notes.element_conversion"><span class="emphasis"><em>element
+            <span class="bold"><strong>Return type</strong></span>: A <a class="link" href="../../vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a> with elements of types
+            converted following the rules for <a class="link" href="../../../notes.html#fusion.notes.element_conversion"><span class="emphasis"><em>element
             conversion</em></span></a>.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Create a <a href="../../vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a> from <tt class="computeroutput"><span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span></tt>.
+            <span class="bold"><strong>Semantics</strong></span>: Create a <a class="link" href="../../vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a> from <code class="computeroutput"><span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span></code>.
           </p>
 <a name="fusion.container.generation.metafunctions.make_vector.header"></a><h6>
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<a name="id505889"></a>
-            <a href="make_vector.html#fusion.container.generation.metafunctions.make_vector.header">Header</a>
-=======
-<a name="id753276"></a>
-=======
-<a name="id719683"></a>
-=======
-<a name="id712037"></a>
-=======
-<a name="id734352"></a>
-=======
-<a name="id723086"></a>
-=======
-<a name="id719810"></a>
->>>>>>> .merge-right.r58559
->>>>>>> .merge-right.r58549
->>>>>>> .merge-right.r58299
->>>>>>> .merge-right.r57337
->>>>>>> .merge-right.r57242
+<a name="id713256"></a>
             <a class="link" href="make_vector.html#fusion.container.generation.metafunctions.make_vector.header">Header</a>
->>>>>>> .merge-right.r57125
           </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_list</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">make_list</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.container.generation.metafunctions.make_vector.example"></a><h6>
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<a name="id506056"></a>
-            <a href="make_vector.html#fusion.container.generation.metafunctions.make_vector.example">Example</a>
-=======
-<a name="id753396"></a>
-=======
-<a name="id719803"></a>
-=======
-<a name="id712157"></a>
-=======
-<a name="id734472"></a>
-=======
-<a name="id723206"></a>
-=======
-<a name="id719930"></a>
->>>>>>> .merge-right.r58559
->>>>>>> .merge-right.r58549
->>>>>>> .merge-right.r58299
->>>>>>> .merge-right.r57337
->>>>>>> .merge-right.r57242
+<a name="id713376"></a>
             <a class="link" href="make_vector.html#fusion.container.generation.metafunctions.make_vector.example">Example</a>
->>>>>>> .merge-right.r57125
           </h6>
 <pre class="programlisting"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">make_vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">(&amp;)[</span><span class="number">7</span><span class="special">],</span> <span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>

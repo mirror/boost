@@ -1,20 +1,13 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Deferred
-        Callable Object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Deferred Callable Object</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<<<<<<< .working
-<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
-=======
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
->>>>>>> .merge-right.r57125
-<link rel="home" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<link rel="home" href="../../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
-<link rel="previous" href="reg_callable.html" title=" Regular Callable
-        Object">
-<link rel="next" href="poly.html" title=" Polymorphic Function
-        Object">
+<link rel="prev" href="reg_callable.html" title="Regular Callable Object">
+<link rel="next" href="poly.html" title="Polymorphic Function Object">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -29,150 +22,118 @@
 <div class="spirit-nav">
 <a accesskey="p" href="reg_callable.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="poly.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
-<div class="titlepage">
-<div><div><h4 class="title">
-<a name="fusion.functional.concepts.def_callable"></a><a href="def_callable.html" title=" Deferred
-        Callable Object"> Deferred
+<div class="section" title="Deferred Callable Object">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="fusion.functional.concepts.def_callable"></a><a class="link" href="def_callable.html" title="Deferred Callable Object"> Deferred
         Callable Object</a>
-<<<<<<< .working
-</h4></div></div>
-<div></div>
-</div>
-<a name="fusion.functional.concepts.def_callable.description"></a><h5>
-<a name="id610834"></a>
-          <a href="def_callable.html#fusion.functional.concepts.def_callable.description">Description</a>
-        </h5>
-=======
 </h4></div></div></div>
 <a name="fusion.functional.concepts.def_callable.description"></a><h6>
-<a name="id817426"></a>
+<a name="id820334"></a>
           <a class="link" href="def_callable.html#fusion.functional.concepts.def_callable.description">Description</a>
         </h6>
->>>>>>> .merge-right.r57125
 <p>
-          <a href="callable.html" title=" Callable Object">Callable Object</a>
+          <a class="link" href="callable.html" title="Callable Object">Callable Object</a>
           types that work with <a href="http://www.boost.org/libs/utility/utility.htm#result_of" target="_top">Boost.ResultOf</a>
           to determine the result of a call.
         </p>
-<<<<<<< .working
-<a name="fusion.functional.concepts.def_callable.refinement_of"></a><h5>
-<a name="id610880"></a>
-          <a href="def_callable.html#fusion.functional.concepts.def_callable.refinement_of">Refinement
-=======
 <a name="fusion.functional.concepts.def_callable.refinement_of"></a><h6>
-<a name="id817452"></a>
+<a name="id820360"></a>
           <a class="link" href="def_callable.html#fusion.functional.concepts.def_callable.refinement_of">Refinement
->>>>>>> .merge-right.r57125
           of</a>
-        </h5>
-<div class="itemizedlist"><ul type="disc"><li><a href="callable.html" title=" Callable Object">Callable Object</a></li></ul></div>
-<div class="sidebar"><p>
-          note Once C++ supports the <tt class="literal">decltype</tt> keyword, all models
-          of <a href="callable.html" title=" Callable Object">Callable Object</a>
-          will also be models of <a href="def_callable.html" title=" Deferred
-        Callable Object">Deferred
+        </h6>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><a class="link" href="callable.html" title="Callable Object">Callable Object</a></li></ul></div>
+<div class="sidebar">
+<p class="title"><b></b></p>
+<p>
+          note Once C++ supports the <code class="literal">decltype</code> keyword, all models
+          of <a class="link" href="callable.html" title="Callable Object">Callable Object</a>
+          will also be models of <a class="link" href="def_callable.html" title="Deferred Callable Object">Deferred
           Callable Object</a>, because function objects won't need client-side
-          support for <tt class="computeroutput"><span class="identifier">result_of</span></tt>.
-        </p></div>
-<div class="variablelist">
+          support for <code class="computeroutput"><span class="identifier">result_of</span></code>.
+        </p>
+</div>
+<div class="variablelist" title="Notation">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">F</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">F</span></code></span></dt>
 <dd><p>
               A possibly const qualified Deferred Callable Object type
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">A1</span>
-          <span class="special">...</span><span class="identifier">AN</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">A1</span>
+          <span class="special">...</span><span class="identifier">AN</span></code></span></dt>
 <dd><p>
               Argument types
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">a1</span>
-          <span class="special">...</span><span class="identifier">aN</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">a1</span>
+          <span class="special">...</span><span class="identifier">aN</span></code></span></dt>
 <dd><p>
-              Objects or references to objects with types <tt class="computeroutput"><span class="identifier">A1</span>
-              <span class="special">...</span><span class="identifier">AN</span></tt>
+              Objects or references to objects with types <code class="computeroutput"><span class="identifier">A1</span>
+              <span class="special">...</span><span class="identifier">AN</span></code>
             </p></dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">T1</span>
-          <span class="special">...</span><span class="identifier">TN</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">T1</span>
+          <span class="special">...</span><span class="identifier">TN</span></code></span></dt>
 <dd><p>
-              <tt class="computeroutput"><span class="identifier">T</span></tt>i is <tt class="computeroutput"><span class="identifier">A</span></tt>i <tt class="computeroutput"><span class="special">&amp;</span></tt>
-              if <tt class="computeroutput"><span class="identifier">a</span></tt>i is an LValue,
-              same as <tt class="computeroutput"><span class="identifier">A</span></tt>i, otherwise
+              <code class="computeroutput"><span class="identifier">T</span></code>i is <code class="computeroutput"><span class="identifier">A</span></code>i <code class="computeroutput"><span class="special">&amp;</span></code>
+              if <code class="computeroutput"><span class="identifier">a</span></code>i is an LValue,
+              same as <code class="computeroutput"><span class="identifier">A</span></code>i, otherwise
             </p></dd>
 </dl>
 </div>
-<<<<<<< .working
-<a name="fusion.functional.concepts.def_callable.expression_requirements"></a><h5>
-<a name="id611182"></a>
-          <a href="def_callable.html#fusion.functional.concepts.def_callable.expression_requirements">Expression
-=======
 <a name="fusion.functional.concepts.def_callable.expression_requirements"></a><h6>
-<a name="id817667"></a>
+<a name="id820575"></a>
           <a class="link" href="def_callable.html#fusion.functional.concepts.def_callable.expression_requirements">Expression
->>>>>>> .merge-right.r57125
           requirements</a>
-        </h5>
+        </h6>
 <div class="informaltable"><table class="table">
 <colgroup>
 <col>
 <col>
 </colgroup>
 <thead><tr>
-<th><p>
+<th>
+                <p>
                   Expression
-                </p></th>
-<th><p>
+                </p>
+                </th>
+<th>
+                <p>
                   Type
-                </p></th>
+                </p>
+                </th>
 </tr></thead>
 <tbody><tr>
-<td><p>
-                  <a href="http://www.boost.org/libs/utility/utility.htm#result_of" target="_top"><tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">result_of</span></tt></a><tt class="computeroutput"><span class="special">&lt;</span> <span class="identifier">F</span><span class="special">(</span><span class="identifier">T1</span>
-                  <span class="special">...</span><span class="identifier">TN</span><span class="special">)</span> <span class="special">&gt;::</span><span class="identifier">type</span></tt>
-                </p></td>
-<td><p>
-                  Result of a call with <tt class="computeroutput"><span class="identifier">A1</span>
-                  <span class="special">...</span><span class="identifier">AN</span></tt>-typed
+<td>
+                <p>
+                  <a href="http://www.boost.org/libs/utility/utility.htm#result_of" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">result_of</span></code></a><code class="computeroutput"><span class="special">&lt;</span> <span class="identifier">F</span><span class="special">(</span><span class="identifier">T1</span>
+                  <span class="special">...</span><span class="identifier">TN</span><span class="special">)</span> <span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Result of a call with <code class="computeroutput"><span class="identifier">A1</span>
+                  <span class="special">...</span><span class="identifier">AN</span></code>-typed
                   arguments
-                </p></td>
+                </p>
+                </td>
 </tr></tbody>
 </table></div>
-<<<<<<< .working
-<a name="fusion.functional.concepts.def_callable.models"></a><h5>
-<a name="id611364"></a>
-          <a href="def_callable.html#fusion.functional.concepts.def_callable.models">Models</a>
-        </h5>
-<div class="itemizedlist"><ul type="disc">
-<li>
-<a href="poly.html" title=" Polymorphic Function
-        Object">Polymorphic Function
-=======
 <a name="fusion.functional.concepts.def_callable.models"></a><h6>
-<a name="id820004"></a>
+<a name="id820712"></a>
           <a class="link" href="def_callable.html#fusion.functional.concepts.def_callable.models">Models</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
 <a class="link" href="poly.html" title="Polymorphic Function Object">Polymorphic Function
->>>>>>> .merge-right.r57125
             Object</a> types
           </li>
-<li>
+<li class="listitem">
             member (function or data) pointer types
           </li>
 </ul></div>
-<<<<<<< .working
-<a name="fusion.functional.concepts.def_callable.examples"></a><h5>
-<a name="id611409"></a>
-          <a href="def_callable.html#fusion.functional.concepts.def_callable.examples">Examples</a>
-        </h5>
-=======
 <a name="fusion.functional.concepts.def_callable.examples"></a><h6>
-<a name="id820034"></a>
+<a name="id820742"></a>
           <a class="link" href="def_callable.html#fusion.functional.concepts.def_callable.examples">Examples</a>
         </h6>
->>>>>>> .merge-right.r57125
 <pre class="programlisting"><span class="special">&amp;</span> <span class="identifier">a_free_function</span>
 <span class="special">&amp;</span> <span class="identifier">a_class</span><span class="special">::</span><span class="identifier">a_static_member_function</span>
 <span class="special">&amp;</span> <span class="identifier">a_class</span><span class="special">::</span><span class="identifier">a_nonstatic_data_member</span>
@@ -181,13 +142,12 @@
 <span class="comment">// using namespace boost;
 </span><span class="identifier">bind</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(),</span> <span class="identifier">_1</span><span class="special">,</span> <span class="number">5</span><span class="special">)</span>
 <span class="comment">// Note: Boost.Lambda expressions don't work with __boost_result_of__
-</span><span class="identifier">fusion</span><span class="special">::</span><a href="../generation/functions/mk_fused_fobj.html" title="
-          make_fused_function_object"><tt class="computeroutput"><span class="identifier">make_fused_function_object</span></tt></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;())</span>
+</span><span class="identifier">fusion</span><span class="special">::</span><a class="link" href="../generation/functions/mk_fused_fobj.html" title="make_fused_function_object"><code class="computeroutput"><span class="identifier">make_fused_function_object</span></code></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">less</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;())</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2007 Joel de Guzman, Dan Marsden, Tobias
       Schwinger<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)

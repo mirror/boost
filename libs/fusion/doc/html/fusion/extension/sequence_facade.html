@@ -3,18 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Sequence Facade</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<<<<<<< .working
-<meta name="generator" content="DocBook XSL Stylesheets V1.65.1">
-=======
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
-<<<<<<< .working
->>>>>>> .merge-right.r57125
-<link rel="home" href="../../index.html" title="Chapter 1. Fusion 2.0">
-=======
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
->>>>>>> .merge-right.r58299
 <link rel="up" href="../extension.html" title="Extension">
-<link rel="previous" href="ext_full.html" title=" The Full Extension Mechanism">
+<link rel="prev" href="ext_full.html" title="The Full Extension Mechanism">
 <link rel="next" href="iterator_facade.html" title="Iterator Facade">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -30,64 +22,36 @@
 <div class="spirit-nav">
 <a accesskey="p" href="ext_full.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../extension.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="iterator_facade.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
-<<<<<<< .working
-<div class="section" lang="en">
-<div class="titlepage">
-<div><div><h3 class="title">
-<a name="fusion.extension.sequence_facade"></a><a href="sequence_facade.html" title="Sequence Facade">Sequence Facade</a>
-</h3></div></div>
-<div></div>
-</div>
-<a name="fusion.extension.sequence_facade.description"></a><h4>
-<a name="id605596"></a>
-        <a href="sequence_facade.html#fusion.extension.sequence_facade.description">Description</a>
-      </h4>
-=======
 <div class="section" title="Sequence Facade">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="fusion.extension.sequence_facade"></a><a class="link" href="sequence_facade.html" title="Sequence Facade">Sequence Facade</a>
 </h3></div></div></div>
 <a name="fusion.extension.sequence_facade.description"></a><h5>
-<a name="id822333"></a>
+<a name="id815779"></a>
         <a class="link" href="sequence_facade.html#fusion.extension.sequence_facade.description">Description</a>
       </h5>
->>>>>>> .merge-right.r57125
 <p>
-        The <a href="sequence_facade.html" title="Sequence Facade"><tt class="computeroutput"><span class="identifier">sequence_facade</span></tt></a>
+        The <a class="link" href="sequence_facade.html" title="Sequence Facade"><code class="computeroutput"><span class="identifier">sequence_facade</span></code></a>
         template provides an intrusive mechanism for producing a conforming Fusion
         iterator.
       </p>
-<<<<<<< .working
-<a name="fusion.extension.sequence_facade.synopsis"></a><h4>
-<a name="id605644"></a>
-        <a href="sequence_facade.html#fusion.extension.sequence_facade.synopsis">Synopsis</a>
-      </h4>
-=======
 <a name="fusion.extension.sequence_facade.synopsis"></a><h5>
-<a name="id822359"></a>
+<a name="id815805"></a>
         <a class="link" href="sequence_facade.html#fusion.extension.sequence_facade.synopsis">Synopsis</a>
       </h5>
->>>>>>> .merge-right.r57125
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Derived</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">TravesalTag</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">IsView</span> <span class="special">=</span> <span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">sequence_facade</span><span class="special">;</span>
 </pre>
-<<<<<<< .working
-<a name="fusion.extension.sequence_facade.usage"></a><h4>
-<a name="id605777"></a>
-        <a href="sequence_facade.html#fusion.extension.sequence_facade.usage">Usage</a>
-      </h4>
-=======
 <a name="fusion.extension.sequence_facade.usage"></a><h5>
-<a name="id822453"></a>
+<a name="id815899"></a>
         <a class="link" href="sequence_facade.html#fusion.extension.sequence_facade.usage">Usage</a>
       </h5>
->>>>>>> .merge-right.r57125
 <p>
-        The user of <a href="sequence_facade.html" title="Sequence Facade"><tt class="computeroutput"><span class="identifier">sequence_facade</span></tt></a> derives his sequence
-        type from a specialization of <a href="sequence_facade.html" title="Sequence Facade"><tt class="computeroutput"><span class="identifier">sequence_facade</span></tt></a> and passes the derived
+        The user of <a class="link" href="sequence_facade.html" title="Sequence Facade"><code class="computeroutput"><span class="identifier">sequence_facade</span></code></a> derives his sequence
+        type from a specialization of <a class="link" href="sequence_facade.html" title="Sequence Facade"><code class="computeroutput"><span class="identifier">sequence_facade</span></code></a> and passes the derived
         sequence type as the first template parameter. The second template parameter
         should be the traversal category of the sequence being implemented. The 3rd
-        parameter should be set to <tt class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></tt>
+        parameter should be set to <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></code>
         if the sequence is a view.
       </p>
 <p>
@@ -95,195 +59,202 @@
         type.
       </p>
 <div class="table">
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<<<<<<< .working
-<a name="id605864"></a><p class="title"><b>Table 1.91. Parameters</b></p>
-<table class="table" summary="Parameters">
-=======
-<a name="id857300"></a><p class="title"><b>Table 1.91. Parameters</b></p>
-=======
-<a name="id820939"></a><p class="title"><b>Table 1.95. Parameters</b></p>
-=======
-<a name="id813315"></a><p class="title"><b>Table 1.95. Parameters</b></p>
-=======
-<a name="id837112"></a><p class="title"><b>Table&#160;1.95.&#160;Parameters</b></p>
-=======
-<a name="id825781"></a><p class="title"><b>Table&#160;1.95.&#160;Parameters</b></p>
-=======
-<a name="id822504"></a><p class="title"><b>Table&#160;1.95.&#160;Parameters</b></p>
->>>>>>> .merge-right.r58559
->>>>>>> .merge-right.r58549
->>>>>>> .merge-right.r58299
->>>>>>> .merge-right.r57337
->>>>>>> .merge-right.r57242
+<a name="id815951"></a><p class="title"><b>Table&#160;1.95.&#160;Parameters</b></p>
 <div class="table-contents"><table class="table" summary="Parameters">
->>>>>>> .merge-right.r57125
 <colgroup>
 <col>
 <col>
 </colgroup>
 <thead><tr>
-<th><p>
+<th>
+            <p>
               Name
-            </p></th>
-<th><p>
+            </p>
+            </th>
+<th>
+            <p>
               Description
-            </p></th>
+            </p>
+            </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><p>
-              <tt class="computeroutput"><span class="identifier">sequence</span></tt>, <tt class="computeroutput"><span class="identifier">Seq</span></tt>
-            </p></td>
-<td><p>
-              A type derived from <a href="sequence_facade.html" title="Sequence Facade"><tt class="computeroutput"><span class="identifier">sequence_facade</span></tt></a>
-            </p></td>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">sequence</span></code>, <code class="computeroutput"><span class="identifier">Seq</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              A type derived from <a class="link" href="sequence_facade.html" title="Sequence Facade"><code class="computeroutput"><span class="identifier">sequence_facade</span></code></a>
+            </p>
+            </td>
 </tr>
 <tr>
-<td><p>
-              <tt class="computeroutput"><span class="identifier">N</span></tt>
-            </p></td>
-<td><p>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">N</span></code>
+            </p>
+            </td>
+<td>
+            <p>
               An <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
               Integral Constant</a>
-            </p></td>
+            </p>
+            </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<<<<<<< .working
-<div class="table">
-<a name="id605998"></a><p class="title"><b>Table 1.92. Key Expressions</b></p>
-<table class="table" summary="Key Expressions">
-=======
 <br class="table-break"><div class="table">
-<a name="id822611"></a><p class="title"><b>Table&#160;1.96.&#160;Key Expressions</b></p>
+<a name="id816057"></a><p class="title"><b>Table&#160;1.96.&#160;Key Expressions</b></p>
 <div class="table-contents"><table class="table" summary="Key Expressions">
->>>>>>> .merge-right.r57125
 <colgroup>
 <col>
 <col>
 </colgroup>
 <thead><tr>
-<th><p>
+<th>
+            <p>
               Expression
-            </p></th>
-<th><p>
+            </p>
+            </th>
+<th>
+            <p>
               Result
-            </p></th>
+            </p>
+            </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><p>
-              <tt class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">begin</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-            </p></td>
-<td><p>
-              The type of an iterator to the beginning of a sequence of type <tt class="computeroutput"><span class="identifier">Seq</span></tt>
-            </p></td>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">begin</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              The type of an iterator to the beginning of a sequence of type <code class="computeroutput"><span class="identifier">Seq</span></code>
+            </p>
+            </td>
 </tr>
 <tr>
-<td><p>
-              <tt class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">begin</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">seq</span><span class="special">)</span></tt>
-            </p></td>
-<td><p>
-              An iterator to the beginning of sequence <tt class="computeroutput"><span class="identifier">seq</span></tt>
-            </p></td>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">begin</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">seq</span><span class="special">)</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              An iterator to the beginning of sequence <code class="computeroutput"><span class="identifier">seq</span></code>
+            </p>
+            </td>
 </tr>
 <tr>
-<td><p>
-              <tt class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">end</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-            </p></td>
-<td><p>
-              The type of an iterator to the end of a sequence of type <tt class="computeroutput"><span class="identifier">Seq</span></tt>
-            </p></td>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">end</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              The type of an iterator to the end of a sequence of type <code class="computeroutput"><span class="identifier">Seq</span></code>
+            </p>
+            </td>
 </tr>
 <tr>
-<td><p>
-              <tt class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">end</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">seq</span><span class="special">)</span></tt>
-            </p></td>
-<td><p>
-              An iterator to the end of sequence <tt class="computeroutput"><span class="identifier">seq</span></tt>
-            </p></td>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">end</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">seq</span><span class="special">)</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              An iterator to the end of sequence <code class="computeroutput"><span class="identifier">seq</span></code>
+            </p>
+            </td>
 </tr>
 <tr>
-<td><p>
-              <tt class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">size</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-            </p></td>
-<td><p>
-              The size of a sequence of type <tt class="computeroutput"><span class="identifier">Seq</span></tt>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">size</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              The size of a sequence of type <code class="computeroutput"><span class="identifier">Seq</span></code>
               as an <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
               Integral Constant</a>
-            </p></td>
+            </p>
+            </td>
 </tr>
 <tr>
-<td><p>
-              <tt class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">size</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">seq</span><span class="special">)</span></tt>
-            </p></td>
-<td><p>
-              The size of sequence <tt class="computeroutput"><span class="identifier">seq</span></tt>
-            </p></td>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">size</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">seq</span><span class="special">)</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              The size of sequence <code class="computeroutput"><span class="identifier">seq</span></code>
+            </p>
+            </td>
 </tr>
 <tr>
-<td><p>
-              <tt class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">at</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-            </p></td>
-<td><p>
-              The type of element <tt class="computeroutput"><span class="identifier">N</span></tt>
-              in a sequence of type <tt class="computeroutput"><span class="identifier">Seq</span></tt>
-            </p></td>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">at</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              The type of element <code class="computeroutput"><span class="identifier">N</span></code>
+              in a sequence of type <code class="computeroutput"><span class="identifier">Seq</span></code>
+            </p>
+            </td>
 </tr>
 <tr>
-<td><p>
-              <tt class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">at</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">seq</span><span class="special">)</span></tt>
-            </p></td>
-<td><p>
-              Element <tt class="computeroutput"><span class="identifier">N</span></tt> in sequence
-              <tt class="computeroutput"><span class="identifier">seq</span></tt>
-            </p></td>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">at</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">seq</span><span class="special">)</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              Element <code class="computeroutput"><span class="identifier">N</span></code> in sequence
+              <code class="computeroutput"><span class="identifier">seq</span></code>
+            </p>
+            </td>
 </tr>
 <tr>
-<td><p>
-              <tt class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">value_at</span><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
-            </p></td>
-<td><p>
-              The type of the <tt class="computeroutput"><span class="identifier">N</span></tt>th
-              element in a sequence of type <tt class="computeroutput"><span class="identifier">Seq</span></tt>
-            </p></td>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">sequence</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">value_at</span><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              The type of the <code class="computeroutput"><span class="identifier">N</span></code>th
+              element in a sequence of type <code class="computeroutput"><span class="identifier">Seq</span></code>
+            </p>
+            </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<<<<<<< .working
-<a name="fusion.extension.sequence_facade.include"></a><h4>
-<a name="id606877"></a>
-        <a href="sequence_facade.html#fusion.extension.sequence_facade.include">Include</a>
-      </h4>
-=======
 <br class="table-break"><a name="fusion.extension.sequence_facade.include"></a><h5>
-<a name="id823266"></a>
+<a name="id816713"></a>
         <a class="link" href="sequence_facade.html#fusion.extension.sequence_facade.include">Include</a>
       </h5>
->>>>>>> .merge-right.r57125
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">sequence_facade</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">sequence_facade</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
-<<<<<<< .working
-<a name="fusion.extension.sequence_facade.example"></a><h4>
-<a name="id607033"></a>
-        <a href="sequence_facade.html#fusion.extension.sequence_facade.example">Example</a>
-      </h4>
-=======
 <a name="fusion.extension.sequence_facade.example"></a><h5>
-<a name="id823374"></a>
+<a name="id816821"></a>
         <a class="link" href="sequence_facade.html#fusion.extension.sequence_facade.example">Example</a>
       </h5>
->>>>>>> .merge-right.r57125
 <p>
-        A full working example using <a href="sequence_facade.html" title="Sequence Facade"><tt class="computeroutput"><span class="identifier">sequence_facade</span></tt></a> is provided in triple.cpp
+        A full working example using <a class="link" href="sequence_facade.html" title="Sequence Facade"><code class="computeroutput"><span class="identifier">sequence_facade</span></code></a> is provided in triple.cpp
         in the extension examples.
       </p>
 </div>
