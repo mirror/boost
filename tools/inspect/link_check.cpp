@@ -11,11 +11,17 @@
 #include "boost/filesystem/operations.hpp"
 #include <boost/algorithm/string/case_conv.hpp>
 #include <cstdlib>
+#include <set>
+
+// #include <iostream>
 
 namespace fs = boost::filesystem;
 
 namespace
 {
+  boost::regex html_bookmark_regex(
+    "<([^\\s<>]*)\\s*[^<>]*\\s+(?:NAME|ID)\\s*=\\s*(['\"])(.*?)\\2",
+    boost::regbase::normal | boost::regbase::icase);
   boost::regex html_url_regex(
     "<([^\\s<>]*)\\s*[^<>]*\\s+(?:HREF|SRC)" // HREF or SRC
     "\\s*=\\s*(['\"])(.*?)\\2",
@@ -29,6 +35,10 @@ namespace
   boost::regex url_decompose_regex(
     "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$",
     boost::regbase::normal);
+
+    typedef std::set<std::string> bookmark_set;
+    bookmark_set bookmarks;
+    bookmark_set bookmarks_lowercase; // duplicate check needs case insensitive
 
   // Decode html escapsed ampersands, returns an empty string if there's an error.
   std::string decode_ampersands(std::string const& url_path) {
@@ -95,7 +105,7 @@ namespace boost
 
    link_check::link_check()
      : m_broken_errors(0), m_unlinked_errors(0), m_invalid_errors(0),
-       m_bookmark_errors(0)
+       m_bookmark_errors(0), m_duplicate_bookmark_errors(0)
    {
        // HTML signatures are already registered by the base class,
        // 'hypertext_inspector' 
@@ -126,6 +136,53 @@ namespace boost
       bool no_link_errors =
           (contents.find( "boostinspect:" "nolink" ) != string::npos);
 
+      // build bookmarks databases
+      bookmarks.clear();
+      bookmarks_lowercase.clear();
+      string::const_iterator a_start( contents.begin() );
+      string::const_iterator a_end( contents.end() );
+      boost::match_results< string::const_iterator > a_what;
+      boost::match_flag_type a_flags = boost::match_default;
+
+      if(!is_css(full_path))
+      {
+        while( boost::regex_search( a_start, a_end, a_what, html_bookmark_regex, a_flags) )
+        {
+          // what[0] contains the whole string iterators.
+          // what[1] contains the tag iterators.
+          // what[3] contains the bookmark iterators.
+
+          string tag( a_what[1].first, a_what[1].second );
+          boost::algorithm::to_lower(tag);
+
+          if ( tag != "meta" )
+          {
+            string bookmark( a_what[3].first, a_what[3].second );
+            bookmarks.insert( bookmark );
+//            std::cout << "******************* " << bookmark << '\n';
+
+            // w3.org recommends case-insensitive checking for duplicate bookmarks
+            // since some browsers do a case-insensitive match.
+            string bookmark_lowercase( bookmark );
+            boost::algorithm::to_lower(bookmark_lowercase);
+
+            std::pair<bookmark_set::iterator, bool> result
+              = bookmarks_lowercase.insert( bookmark_lowercase );
+            if (!result.second)
+            {
+              ++m_duplicate_bookmark_errors;
+              error( library_name, full_path, string(name()) +
+                " duplicate bookmark: " + bookmark );
+            }
+          }
+
+          a_start = a_what[0].second; // update search position
+          a_flags |= boost::match_prev_avail; // update flags
+          a_flags |= boost::match_not_bob;
+        }
+      }
+
+      // process urls
       string::const_iterator start( contents.begin() );
       string::const_iterator end( contents.end() );
       boost::match_results< string::const_iterator > what;
@@ -274,6 +331,14 @@ namespace boost
           {
             ++m_bookmark_errors;
             error( library_name, source_path, string(name()) + " invalid bookmark: " + decoded_url );
+          }
+          if ( !no_link_errors && url_path.empty()
+            // w3.org recommends case-sensitive broken bookmark checking
+            // since some browsers do a case-sensitive match.
+            && bookmarks.find(fragment) == bookmarks.end() )
+          {
+            ++m_bookmark_errors;
+            error( library_name, source_path, string(name()) + " unknown bookmark: " + decoded_url );
           }
         }
 
