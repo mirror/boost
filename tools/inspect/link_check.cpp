@@ -332,10 +332,10 @@ namespace boost
             ++m_bookmark_errors;
             error( library_name, source_path, string(name()) + " invalid bookmark: " + decoded_url );
           }
-          if ( !no_link_errors && url_path.empty()
+          else if ( !no_link_errors && url_path.empty() && !fragment.empty()
             // w3.org recommends case-sensitive broken bookmark checking
             // since some browsers do a case-sensitive match.
-            && bookmarks.find(fragment) == bookmarks.end() )
+            && bookmarks.find(decode_percents(fragment)) == bookmarks.end() )
           {
             ++m_bookmark_errors;
             error( library_name, source_path, string(name()) + " unknown bookmark: " + decoded_url );
@@ -361,7 +361,7 @@ namespace boost
         }
       }
 
-      // Decode percent and ampersand encoded characters.
+      // Decode percent encoded characters.
       string decoded_path = decode_percents(url_path);
       if(decoded_path.empty()) {
         if(!no_link_errors) {
