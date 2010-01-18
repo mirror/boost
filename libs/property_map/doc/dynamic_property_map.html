@@ -18,7 +18,7 @@
 <div class="document" id="logo-dynamic-property-maps">
 <h1 class="title"><a class="reference" href="../../../index.htm"><img align="middle" alt="Boost" src="../../../boost.png" /></a> Dynamic Property Maps</h1>
 <div class="section" id="summary">
-<h1><a class="toc-backref" href="#id2" name="summary">Summary</a></h1>
+<h1><a class="toc-backref" href="#id2">Summary</a></h1>
 <p>The dynamic property map interfaces provides access to a collection of
 property maps through a dynamically-typed interface. An algorithm can
 use it to manipulate property maps without knowing their key or
@@ -26,7 +26,7 @@ value types at compile-time. Type-safe codes can use dynamic property
 maps to interface more easily and completely with scripting languages
 and other text-based representations of key-value data.</p>
 <div class="contents topic" id="contents">
-<p class="topic-title first"><a name="contents">Contents</a></p>
+<p class="topic-title first">Contents</a></p>
 <ul class="simple">
 <li><a class="reference" href="#summary" id="id2" name="id2">Summary</a></li>
 <li><a class="reference" href="#introduction" id="id3" name="id3">Introduction</a><ul>
@@ -43,7 +43,7 @@ and other text-based representations of key-value data.</p>
 </div>
 </div>
 <div class="section" id="introduction">
-<h1><a class="toc-backref" href="#id3" name="introduction">Introduction</a></h1>
+<h1><a class="toc-backref" href="#id3">Introduction</a></h1>
 <p>The Boost Property Map library specifies statically type-safe
 interfaces through which key-value pairs can be manipulated by 
 generic algorithms. Typically, an algorithm that uses property maps is
@@ -115,7 +115,7 @@ Internally, the dynamic property map converts key and value pairs to
 meet the requirements of the underlying property map or signals a
 runtime exception if it cannot.</p>
 <div class="section" id="fred-s-info-revisited">
-<h2><a class="toc-backref" href="#id4" name="fred-s-info-revisited">&quot;Fred's Info&quot; Revisited</a></h2>
+<h2><a class="toc-backref" href="#id4">&quot;Fred's Info&quot; Revisited</a></h2>
 <p>Here's what the example above looks like using the
 <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> interface:</p>
 <pre class="literal-block">
@@ -189,7 +189,7 @@ typing of property map uses elsewhere in an application.</p>
 </div>
 </div>
 <div class="section" id="reference">
-<h1><a class="toc-backref" href="#id5" name="reference">Reference</a></h1>
+<h1><a class="toc-backref" href="#id5">Reference</a></h1>
 <pre class="literal-block">
 class dynamic_properties
 </pre>
@@ -198,7 +198,7 @@ a set of property maps. To use it, one must populate
 an object of this class with property maps using the <tt class="docutils literal"><span class="pre">property</span></tt> member
 function.</p>
 <div class="section" id="member-functions">
-<h2><a class="toc-backref" href="#id6" name="member-functions">Member Functions</a></h2>
+<h2><a class="toc-backref" href="#id6">Member Functions</a></h2>
 <pre class="literal-block">
 dynamic_properties()
 dynamic_properties(
@@ -254,7 +254,7 @@ Bear in mind that multiple property maps may have the same
 property map that has name for its <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> key.</p>
 </div>
 <div class="section" id="free-functions">
-<h2><a class="toc-backref" href="#id7" name="free-functions">Free functions</a></h2>
+<h2><a class="toc-backref" href="#id7">Free functions</a></h2>
 <pre class="literal-block">
 std::auto_ptr&lt;boost::dynamic_property_map&gt; 
 ignore_other_properties(const std::string&amp;,
@@ -341,7 +341,7 @@ const std::type_info&amp; value() const
 <p>Returns a <tt class="docutils literal"><span class="pre">type_info</span></tt> object that represents the property map's value type.</p>
 </div>
 <div class="section" id="exceptions">
-<h2><a class="toc-backref" href="#id8" name="exceptions">Exceptions</a></h2>
+<h2><a class="toc-backref" href="#id8">Exceptions</a></h2>
 <pre class="literal-block">
 struct dynamic_property_exception : public std::exception {
   virtual ~dynamic_property_exception() throw() {}
