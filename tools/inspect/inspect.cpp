@@ -420,14 +420,16 @@ namespace
         {
           std::cout << "\n";
           std::cout << itr->rel_path;
-          sep = ": ";
+//          sep = ": ";
+          sep = ":<br>&nbsp;&nbsp;&nbsp; ";
         }
         if ( current.library != itr->library
           || current.rel_path != itr->rel_path
           || current.msg != itr->msg )
         {
           std::cout << sep << itr->msg;
-          sep = ", ";
+//          sep = ", ";
+          sep = "<br>&nbsp;&nbsp;&nbsp; ";
         }
         current.library = itr->library;
         current.rel_path = itr->rel_path;
