@@ -22,6 +22,7 @@
 #include <cstring>
 
 #include "boost/shared_ptr.hpp"
+#include "boost/lexical_cast.hpp"
 #include "boost/filesystem/operations.hpp"
 #include "boost/filesystem/fstream.hpp"
 
@@ -76,6 +77,7 @@ namespace
     string library;
     string rel_path;
     string msg;
+    int    line_number;
 
     bool operator<( const error_msg & rhs ) const
     {
@@ -83,6 +85,8 @@ namespace
       if ( library > rhs.library ) return false;
       if ( rel_path < rhs.rel_path ) return true;
       if ( rel_path > rhs.rel_path ) return false;
+      if ( line_number < rhs.line_number ) return true;
+      if ( line_number > rhs.line_number ) return false;
       return msg < rhs.msg;
     }
   };
@@ -400,11 +404,11 @@ namespace
       }
       std::cout << "\n";
     }
-    else
+    else  // html
     {
       // display error messages with group indication
       error_msg current;
-      string sep;
+      bool first_sep = true;
       bool first = true;
       for ( error_msg_vector::iterator itr ( msgs.begin() );
         itr != msgs.end(); ++itr )
@@ -420,16 +424,26 @@ namespace
         {
           std::cout << "\n";
           std::cout << itr->rel_path;
-//          sep = ": ";
-          sep = ":<br>&nbsp;&nbsp;&nbsp; ";
+          first_sep = true;
         }
         if ( current.library != itr->library
           || current.rel_path != itr->rel_path
           || current.msg != itr->msg )
         {
-          std::cout << sep << itr->msg;
-//          sep = ", ";
-          sep = "<br>&nbsp;&nbsp;&nbsp; ";
+          std::string sep;
+          if (first_sep)
+            if (itr->line_number) sep = ":<br>&nbsp;&nbsp;&nbsp; ";
+            else sep = ": ";
+          else
+            if (itr->line_number) sep = "<br>&nbsp;&nbsp;&nbsp; ";
+            else sep = ", ";
+
+          // print the message
+          if (itr->line_number)
+            std::cout << sep << "(line " << itr->line_number << ") " << itr->msg;
+          else std::cout << sep << itr->msg;
+
+          first_sep = false;
         }
         current.library = itr->library;
         current.rel_path = itr->rel_path;
@@ -583,13 +597,14 @@ namespace boost
 //  error  -------------------------------------------------------------------//
 
     void inspector::error( const string & library_name,
-      const path & full_path, const string & msg )
+      const path & full_path, const string & msg, int line_number )
     {
       ++error_count;
       error_msg err_msg;
       err_msg.library = library_name;
       err_msg.rel_path = relative_to( full_path, fs::initial_path() );
       err_msg.msg = msg;
+      err_msg.line_number = line_number;
       msgs.push_back( err_msg );
 
 //     std::cout << library_name << ": "

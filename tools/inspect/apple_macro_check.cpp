@@ -80,9 +80,9 @@ namespace boost
           }
 
           ++m_files_with_errors;
-          error( library_name, full_path, string(name())
-              + " violation of Boost apple-macro guidelines on line "
-              + boost::lexical_cast<string>( line_number ) );
+          error( library_name, full_path, 
+            "Apple macro clash: " + std::string((*cur)[0].first, (*cur)[0].second-1),
+            line_number );
         }
       }
     }

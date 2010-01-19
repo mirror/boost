@@ -64,7 +64,8 @@ namespace boost
       void error(
         const string & library_name,
         const path & full_path,
-        const string & msg );
+        const string & msg,
+        int line_number =0 );  // 0 if not available or not applicable
 
     private:
       string_set m_signatures;

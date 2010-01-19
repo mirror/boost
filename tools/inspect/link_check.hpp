@@ -34,7 +34,8 @@ namespace boost
 
       void do_url( const string & url, const string & library_name,
         const path & full_source_path, bool no_link_errors,
-        bool allow_external_links );
+        bool allow_external_links,
+        std::string::const_iterator contents_begin, std::string::const_iterator url_start);
     public:
 
       link_check();
