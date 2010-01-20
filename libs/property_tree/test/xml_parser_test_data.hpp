@@ -760,4 +760,8 @@ const char *error_data_2 =
     "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"    
     "<start>";      // XML tag not closed
 
+const char *bug_data_pr2855 =
+    "<?xml version=\"1.0\" encoding\"utf-8\"?>\n"
+    "<start> notrim</start>";
+
 #endif

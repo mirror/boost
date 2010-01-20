@@ -2177,7 +2177,8 @@ namespace rapidxml
             {
                 // Skip whitespace between > and node contents
                 Ch *contents_start = text;      // Store start of node contents before whitespace is skipped
-                skip<whitespace_pred, Flags>(text);
+                if (Flags & parse_trim_whitespace)
+                    skip<whitespace_pred, Flags>(text);
                 Ch next_char = *text;
 
             // After data nodes, instead of continuing the loop, control jumps here.

@@ -1,5 +1,6 @@
 // ----------------------------------------------------------------------------
 // Copyright (C) 2002-2006 Marcin Kalicinski
+// Copyright (C) 2009-2010 Sebastian Redl
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -19,10 +20,10 @@
 int test_main(int argc, char *argv[])
 {
     using namespace boost::property_tree;
-    using std::locale;
     test_xml_parser<ptree>();
     test_xml_parser<iptree>();
 #ifndef BOOST_NO_CWCHAR
+    using std::locale;
     // We need a UTF-8-aware global locale now.
     locale loc(locale(), new utf8_codecvt_facet);
     locale::global(loc);
