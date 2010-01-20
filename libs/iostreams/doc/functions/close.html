@@ -107,10 +107,10 @@
 <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">T</A>&gt;     
 <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close_convenience">close</A>(T& t);
               
-<SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">T</A>&gt;     
+<SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params_devices">T</A>&gt;     
 <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close_device">close</A>(T& t, std::ios_base::openmode which);
 
-<SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">T</A>, <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">Device</A>&gt;
+<SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params_filters">T</A>, <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params_filters">Device</A>&gt;
 <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close_filter">close</A>(T& t, Device& next, std::ios_base::openmode which);
 
 } } <SPAN CLASS="comment">// End namespace boost::io</SPAN></PRE>
@@ -140,7 +140,7 @@
 <A NAME="close_device"></A>
 <H3>Function Template <CODE>close</CODE> &#8212; Closure Notification for Devices</H3>
 
-<A NAME="template_params"></A>
+<A NAME="template_params_devices"></A>
 <H4>Template Parameters</H4>
 
 <TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2>
@@ -210,7 +210,7 @@ instead of
 <A NAME="close_filter"></A>
 <H3>Function Template <CODE>close</CODE> &#8212; Closure Notification for Filters</H3>
 
-<A NAME="template_params"></A>
+<A NAME="template_params_filters"></A>
 <H4>Template Parameters</H4>
 
 <TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2>

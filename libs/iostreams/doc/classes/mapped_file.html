@@ -439,7 +439,7 @@ The memory-mapped file Devices are based on the work of Craig Henderson (<A CLAS
     <SPAN CLASS='keyword'>void</SPAN> <A CLASS='documented' HREF='#mapped_file_close'>close</A>();
     size_type <A CLASS='documented' HREF='#mapped_file_size'>size</A>() <SPAN CLASS='keyword'>const</SPAN>;
     <SPAN CLASS='keyword'>char</SPAN>* <A CLASS='documented' HREF='#mapped_file_data'>data</A>() <SPAN CLASS='keyword'>const</SPAN>;
-    <SPAN CLASS='keyword'>const</SPAN> <SPAN CLASS='keyword'>char</SPAN>* <A CLASS='documented' HREF='#mapped_file_data'>const_data</A>() <SPAN CLASS='keyword'>const</SPAN>;
+    <SPAN CLASS='keyword'>const</SPAN> <SPAN CLASS='keyword'>char</SPAN>* <A CLASS='documented' HREF='#mapped_file_const_data'>const_data</A>() <SPAN CLASS='keyword'>const</SPAN>;
     <SPAN CLASS='keyword'>static</SPAN> <SPAN CLASS='keyword'>int</SPAN> <A CLASS='documented' HREF='#mapped_file_alignment'>alignment</A>();
 };
 
@@ -550,8 +550,8 @@ The memory-mapped file Devices are based on the work of Craig Henderson (<A CLAS
     
 <P>Returns a pointer to the first byte of data in the mapping associated with this <CODE>mapped_file</CODE>, if it was opened with write-access, and a null pointer otherwise.</P>
 
-<A NAME="mapped_file_data"></A>
-<H4><CODE>mapped_file::data</CODE></H4>
+<A NAME="mapped_file_const_data"></A>
+<H4><CODE>mapped_file::const_data</CODE></H4>
 
 <PRE CLASS="broken_ie">    <SPAN CLASS='keyword'>const</SPAN> <SPAN CLASS='keyword'>char</SPAN>* const_data() <SPAN CLASS='keyword'>const</SPAN>;</PRE>
     
