@@ -112,8 +112,8 @@ filename limit though. You will also need to provide a function prototype
 "`int test()`" that is declared in a namespace with the same name as the macro,
 but in all lower case, and which returns zero on success:
 
-    namespace boost_no_foo {
 
+    namespace boost_no_foo {
     int test()
     {
         // test code goes here:
@@ -126,14 +126,18 @@ but in all lower case, and which returns zero on success:
 Once the test code is in place in libs/config/test, updating the configuration
 test system proceeds as:
 
-* cd into `libs/config/tools` and run `bjam` : this generates the `.cpp`
+* cd into `libs/config/tools` and run `bjam`. This generates the `.cpp`
 file test cases from the `.ipp` file, updates the 
-libs/config/test/all/Jamfile.v2, `config_test.cpp` and `config_info.cpp`.
-* cd into `libs/config/test/all` and run `bjam `['MACRONAME` compiler-list`] : where
+libs/config/test/all/Jamfile.v2, `config_test.cpp` and `config_info.cpp`.[br][br]
+
+* cd into `libs/config/test/all` and run `bjam `['MACRONAME` compiler-list`], where
 ['MACRONAME] is the name of the new macro, and ['`compiler-list`] is a space separated list of
-compilers to test with.  You should see the tests pass with those compilers
-that don't have the defect, and fail with those that do.
-* cd into `libs/config/test` and run `bjam config_info config_test `['`compiler-list`] :
+compilers to test with.[br][br]
+The xxx_pass_test and the xxx_fail_test [*should both report `**passed**`].[br][br]
+If ['MACRONAME] is not defined when it should be defined, xxx_pass_test will not report `**passed**`.
+If ['MACRONAME] is defined when it should not be defined, xxx_fail_test will not report `**passed**`.[br][br] 
+
+* cd into `libs/config/test` and run `bjam config_info config_test `['`compiler-list`].
 `config_info` should build and run cleanly for all the compilers in ['`compiler-list`]
 while `config_test` should fail for those that have the defect, and pass for those
 that do not.
