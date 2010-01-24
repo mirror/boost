@@ -25,7 +25,6 @@
 
 <!-- End Nav -->
 
-<A NAME="overview"></A>
 <H2>3.3 Generic Streams and Stream Buffers</H2>
 
 <DL class="page-index">
@@ -141,19 +140,19 @@
 <TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2>
 <TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>T</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>T</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>A <A HREF="../../../../doc/html/CopyConstructible.html" TARGET="_top">CopyConstructible</A> model of one of the <A HREF="concepts.html#device_concepts">Device</A> concepts.</TD>
     </TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>Tr</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>Tr</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>A C++ standard library charatcer traits type (<A CLASS="bib_ref" href="../bibliography.html#iso">[ISO]</A>, 21.1.1) with <CODE>char_type</CODE> equal to the <A HREF="traits.html#char_type">character type</A> <CODE>Ch</CODE> of T. Defaults to <CODE>std::char_traits&lt;Ch&gt;</CODE>.</TD>
     </TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>Alloc</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>Alloc</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>A C++ standard library allocator type (<A CLASS="bib_ref" href="../bibliography.html#iso">[ISO]</A>, 20.1.5), used to allocate any required character buffers. Defaults to <CODE>std::allocator&lt;Ch&gt;</CODE>, where <CODE>Ch</CODE> is the <A HREF="traits.html#char_type">character type</A> of T.</TD>
     </TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>Mode</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>Mode</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>A mode tag <I>convertible to the <A HREF="modes.html">mode</A> of T</I>. This parameter is principally for internal use. Specifying a <A HREF="modes.html#mode_tags">mode tag</A> properly refined by the mode of T can prevent an unneeded buffer from being allocated in some cases. Defaults to the mode of T.</TD>
     </TR>
 </TABLE>
@@ -180,15 +179,15 @@
 <TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2>
 <TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>t</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>t</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>An instance of T</TD>
     </TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>buffer_size</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>buffer_size</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>The size of any buffers that need to be allocated</TD>
     </TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>pback_size</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>pback_size</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>The size of the putback buffer, relevant only if <CODE>Mode</CODE> is a refinement of <A HREF="modes.html#input"><CODE>input</CODE></TD>
     </TR>
 </TABLE>
@@ -353,19 +352,19 @@
 <TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2>
 <TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>T</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>T</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>A <A HREF="../../../../doc/html/CopyConstructible.html" TARGET="_top">CopyConstructible</A> model of one of the <A HREF="concepts.html#device_concepts">Device</A> concepts.</TD>
     </TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>Tr</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>Tr</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>A C++ standard library charatcer traits type (<A CLASS="bib_ref" href="../bibliography.html#iso">[ISO]</A>, 21.1.1) with <CODE>char_type</CODE> equal to the <A HREF="traits.html#char_type">character type</A> <CODE>Ch</CODE> of T. Defaults to <CODE>std::char_traits&lt;Ch&gt;</CODE>.</TD>
     </TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>Alloc</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>Alloc</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>A C++ standard library allocator type (<A CLASS="bib_ref" href="../bibliography.html#iso">[ISO]</A>, 20.1.5), used to allocate any required character buffers. Defaults to <CODE>std::allocator&lt;Ch&gt;</CODE>, where <CODE>Ch</CODE> is the <A HREF="traits.html#char_type">character type</A> of T.</TD>
     </TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>Mode</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>Mode</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>A mode tag <I>convertible to the <A HREF="modes.html">mode</A> of T</I>. This parameter is principally for internal use. Specifying a <A HREF="modes.html#mode_tags">mode tag</A> properly refined by the mode of T can prevent an unneeded buffer from being allocated in some cases. Defaults to the mode of T.</TD>
     </TR>
 </TABLE>
@@ -392,15 +391,15 @@
 <TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2>
 <TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>t</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>t</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>An instance of T</TD>
     </TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>buffer_size</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>buffer_size</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>The size of any buffers that need to be allocated</TD>
     </TR>
     <TR>
-        <TD VALIGN="top"><A NAME="level"></A><I>pback_size</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD VALIGN="top"><I>pback_size</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>The size of the putback buffer, relevant only if <CODE>Mode</CODE> is a refinement of <A HREF="modes.html#input"><CODE>input</CODE></TD>
     </TR>
 </TABLE>

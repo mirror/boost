@@ -117,7 +117,6 @@
 <A NAME="file_descriptor_source_ctor"></A>
 <H4><CODE>file_descriptor_source::file_descriptor_source</CODE></H4>
 
-<A NAME="file_descriptor_source_ctor"></A>
 <PRE CLASS="broken_ie">    file_descriptor_source( <SPAN CLASS="keyword">const</SPAN> std::string& pathname, 
                             std::ios_base::open_mode mode = 
                                 std::ios_base::in );
@@ -185,7 +184,7 @@
     file_descriptor_sink( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );</PRE>
     
 <P>
-    The first member constructs a <CODE>file_descriptor_sink</CODE> to access the file with the given pathname. The parameter <CODE>mode</CODE> has the same interpretation as <CODE>(mode | std::ios_base::out)</CODE> in <CODE>std::basic_filebuf::open</CODE>.<A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1"><SUP>[1]</SUP></A>
+    The first member constructs a <CODE>file_descriptor_sink</CODE> to access the file with the given pathname. The parameter <CODE>mode</CODE> has the same interpretation as <CODE>(mode | std::ios_base::out)</CODE> in <CODE>std::basic_filebuf::open</CODE>.<A CLASS="footnote_ref" NAME="note_1_ref2" HREF="#note_1"><SUP>[1]</SUP></A>
 </P>
 
 <P>
@@ -243,7 +242,7 @@
     file_descriptor( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );</PRE>
 
 <P>
-    The first member constructs a <CODE>file_descriptor</CODE> to access the file with the given pathname. The parameter <CODE>mode</CODE> has the same interpretation as in <CODE>std::basic_filebuf::open</CODE>.<A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1"><SUP>[1]</SUP></A>
+    The first member constructs a <CODE>file_descriptor</CODE> to access the file with the given pathname. The parameter <CODE>mode</CODE> has the same interpretation as in <CODE>std::basic_filebuf::open</CODE>.<A CLASS="footnote_ref" NAME="note_1_ref3" HREF="#note_1"><SUP>[1]</SUP></A>
 </P>
 
 <P>

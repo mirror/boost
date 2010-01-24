@@ -1239,6 +1239,10 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="simplesectsep" mode="passthrough">
+    <xsl:apply-templates mode="passthrough"/>
+  </xsl:template>
+
   <xsl:template match="*" mode="passthrough">
     <xsl:copy>
       <xsl:copy-of select="@*"/>
