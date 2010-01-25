@@ -390,16 +390,6 @@ INT#_C macros if they're not already defined (John Maddock).
 #  define UINTMAX_C(value)  value##ui64
 
 # else
-// For the following code we get several warnings along the lines of:
-//
-// boost/cstdint.hpp:428:35: error: use of C99 long long integer constant
-//
-// So we declare this a system header to suppress these warnings.
-
-#if defined(__GNUC__) && (__GNUC__ >= 4)
-#pragma GCC system_header
-#endif
-
 //  do it the old fashioned way:
 
 //  8-bit types  ------------------------------------------------------------//
@@ -431,7 +421,7 @@ INT#_C macros if they're not already defined (John Maddock).
 #  if defined(BOOST_HAS_LONG_LONG) && \
     (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX) || defined(_LLONG_MAX))
 
-#    if defined(__hpux)
+#    if defined(__hpux) || defined(__APPLE__)
         // HP-UX's value of ULONG_LONG_MAX is unusable in preprocessor expressions
 #       define INT64_C(value) value##LL
 #       define UINT64_C(value) value##uLL
