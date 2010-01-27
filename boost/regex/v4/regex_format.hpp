@@ -334,7 +334,7 @@ void basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::format
             m_position = --base;
          }
       }
-      put((this->m_results)[this->m_results.size() > 1 ? this->m_results.size() - 1 : 1]);
+      put((this->m_results)[this->m_results.size() > 1 ? static_cast<int>(this->m_results.size() - 1) : 1]);
       break;
    case '{':
       have_brace = true;
@@ -384,7 +384,7 @@ bool basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::handle
    if(have_brace && (*m_position == '^'))
       ++m_position;
 
-   int max_len = m_end - m_position;
+   std::ptrdiff_t max_len = m_end - m_position;
 
    if((max_len >= 5) && std::equal(m_position, m_position + 5, MATCH))
    {
@@ -447,7 +447,7 @@ bool basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::handle
             return false;
          }
       }
-      put((this->m_results)[this->m_results.size() > 1 ? this->m_results.size() - 1 : 1]);
+      put((this->m_results)[this->m_results.size() > 1 ? static_cast<int>(this->m_results.size() - 1) : 1]);
       return true;
    }
    if((max_len >= 20) && std::equal(m_position, m_position + 20, LAST_SUBMATCH_RESULT))

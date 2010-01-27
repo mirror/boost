@@ -457,7 +457,7 @@ public:
    void BOOST_REGEX_CALL set_second(BidiIterator i, size_type pos, bool m = true, bool escape_k = false)
    {
       if(pos)
-         m_last_closed_paren = pos;
+         m_last_closed_paren = static_cast<int>(pos);
       pos += 2;
       BOOST_ASSERT(m_subs.size() > pos);
       m_subs[pos].second = i;

@@ -804,7 +804,7 @@ void basic_regex_creator<charT, traits>::fixup_recursions(re_syntax_base* state)
          {
             bool ok = false;
             re_syntax_base* p = base;
-            int id = static_cast<re_jump*>(state)->alt.i;
+            std::ptrdiff_t id = static_cast<re_jump*>(state)->alt.i;
             if(id > 10000)
                id = m_pdata->get_id(id);
             while(p)
