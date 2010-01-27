@@ -57,6 +57,13 @@ namespace boost { namespace fusion
             {
                 return x;
             }
+
+            template <typename T>
+            typename boost::result_of<addconstref(T)>::type 
+            operator()(T const& x) const
+            {
+                return x;
+            }
         };
     }
 
