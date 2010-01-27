@@ -47,6 +47,7 @@ test-suite functional/hash
             :   <toolset>gcc:<define>_GLIBCXX_DEBUG
                 <toolset>darwin:<define>_GLIBCXX_DEBUG
             :   container_fwd_gcc_debug ]
+        [ run container_no_fwd_test.cpp ]
         [ compile-fail hash_no_ext_fail_test.cpp ]
         [ compile-fail namespace_fail_test.cpp ]
         [ run hash_no_ext_macro_1.cpp ]
