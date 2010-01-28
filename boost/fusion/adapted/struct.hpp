@@ -10,6 +10,7 @@
 
 #include <boost/fusion/adapted/struct/extension.hpp>
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
+#include <boost/fusion/adapted/struct/adapt_named_struct.hpp>
 #include <boost/fusion/adapted/struct/adapt_assoc_struct.hpp>
 #include <boost/fusion/adapted/struct/struct_iterator.hpp>
 
