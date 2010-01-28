@@ -25,7 +25,6 @@ test-suite utility
         [ run ../iterators_test.cpp ../../test/build//boost_test_exec_monitor/<link>static ]
         [ run next_prior_test.cpp ../../test/build//boost_test_exec_monitor/<link>static ]
         [ compile-fail ../noncopyable_test.cpp ]
-        [ run noncopyable_adl_barrier.cpp ]
         [ run ../numeric_traits_test.cpp ]
         [ run ../operators_test.cpp ../../test/build//boost_test_exec_monitor/<link>static ]
         [ compile ../ref_ct_test.cpp  ]
