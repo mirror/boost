@@ -1,11 +1,11 @@
 /*=============================================================================
-    Copyright (c) 2001-2007 Joel de Guzman
+    Copyright (c) 2001-2009 Joel de Guzman
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/fusion/adapted/struct/adapt_struct_named.hpp>
+#include <boost/fusion/adapted/class/adapt_class_named.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/intrinsic/empty.hpp>
@@ -33,23 +33,31 @@
 
 namespace ns
 {
-    struct point
+    class point
     {
+    public:
+    
+        point() : x(0), y(0) {}
+        point(int x, int y) : x(x), y(y) {}
+            
+        int get_x() const { return x; }
+        int get_y() const { return y; }
+        void set_x(int x_) { x = x_; }
+        void set_y(int y_) { y = y_; }
+        
+    private:
+        
         int x;
         int y;
     };
 }
 
 // this creates a fusion view: boost::fusion::adapted::point
-BOOST_FUSION_ADAPT_STRUCT_NAMED(
+BOOST_FUSION_ADAPT_CLASS_NAMED(
     ns::point, point,
-    (int, x)
-    (int, y)
+    (int, int, obj.get_x(), obj.set_x(val))
+    (int, int, obj.get_y(), obj.set_y(val))
 )
-
-// this creates a fusion view: ns1::s1
-struct s { int m; };
-BOOST_FUSION_ADAPT_STRUCT_NAMED_NS(s, (ns1), s1, (int, m))
 
 int
 main()
@@ -64,7 +72,7 @@ main()
 
     {
         BOOST_MPL_ASSERT_NOT((traits::is_view<adapted::point>));
-        ns::point basep = {123, 456};
+        ns::point basep(123, 456);
         adapted::point p(basep);
 
         std::cout << at_c<0>(p) << std::endl;
@@ -85,8 +93,8 @@ main()
 
     {
         fusion::vector<int, float> v1(4, 2);
-        ns::point p = {5, 3};
-        adapted::point v2(p);
+        ns::point basep(5, 3);
+        adapted::point v2(basep);
 
         fusion::vector<long, double> v3(5, 4);
         BOOST_TEST(v1 < v2);
@@ -100,31 +108,22 @@ main()
     }
 
     {
-        // conversion from adapted::point to vector
-        ns::point basep = {5, 3};
+        // conversion from ns::point to vector
+        ns::point basep(5, 3);
         adapted::point p(basep);
+
         fusion::vector<int, short> v(p);
         v = p;
     }
 
     {
-        // conversion from adapted::point to list
-        ns::point basep = {5, 3};
+        // conversion from ns::point to list
+        ns::point basep(5, 3);
         adapted::point p(basep);
+
         fusion::list<int, short> l(p);
         l = p;
     }
-
-    { // begin/end
-        using namespace boost::fusion;
-        using boost::is_same;
-
-        typedef result_of::begin<ns1::s1>::type b;
-        typedef result_of::end<ns1::s1>::type e;
-        // this fails
-        BOOST_MPL_ASSERT((is_same<result_of::next<b>::type, e>));
-    }
-
 
     {
         BOOST_MPL_ASSERT((mpl::is_sequence<adapted::point>));
