@@ -55,8 +55,8 @@ namespace ns
 // this creates a fusion view: boost::fusion::adapted::point
 BOOST_FUSION_ADAPT_CLASS_NAMED(
     ns::point, point,
-    (int, int, obj.get_x(), obj.set_x(val))
-    (int, int, obj.get_y(), obj.set_y(val))
+    (int, int, obj.obj.get_x(), obj.obj.set_x(val))
+    (int, int, obj.obj.get_y(), obj.obj.set_y(val))
 )
 
 int
