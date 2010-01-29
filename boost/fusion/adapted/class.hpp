@@ -9,8 +9,9 @@
 #define BOOST_FUSION_CLASS_OCTOBER_4_2009_839PM
 
 #include <boost/fusion/adapted/class/extension.hpp>
-#include <boost/fusion/adapted/class/adapt_struct.hpp>
-#include <boost/fusion/adapted/class/adapt_assoc_struct.hpp>
+#include <boost/fusion/adapted/class/adapt_class.hpp>
+#include <boost/fusion/adapted/class/adapt_class_named.hpp>
+#include <boost/fusion/adapted/class/adapt_assoc_class.hpp>
 #include <boost/fusion/adapted/class/class_iterator.hpp>
 
 #include <boost/fusion/adapted/class/detail/at_impl.hpp>
