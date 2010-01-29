@@ -109,6 +109,7 @@ import testing ;
     [ run sequence/deduce_sequence.cpp : : : : ]
     [ run sequence/adapt_struct.cpp : : : : ]
     [ run sequence/adapt_assoc_struct.cpp : : : : ]
+    [ run sequence/adapt_struct_named.cpp : : : : ]
 
     [ run functional/fused.cpp : : : : ]
     [ run functional/fused_function_object.cpp : : : : ]
