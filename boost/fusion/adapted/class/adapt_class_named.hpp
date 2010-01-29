@@ -124,13 +124,13 @@
                                                                                 \
         class_member_proxy& operator=(cref_type val)                            \
         {                                                                       \
-            obj.BOOST_PP_TUPLE_ELEM(4, 3, xy);                                  \
+            BOOST_PP_TUPLE_ELEM(4, 3, xy);                                      \
             return *this;                                                       \
         }                                                                       \
                                                                                 \
         operator lvalue()                                                       \
         {                                                                       \
-            return obj.BOOST_PP_TUPLE_ELEM(4, 2, xy);                           \
+            return BOOST_PP_TUPLE_ELEM(4, 2, xy);                               \
         }                                                                       \
     };                                                                          \
                                                                                 \
@@ -143,7 +143,7 @@
                                                                                 \
         static get_type call(fullname const& obj)                               \
         {                                                                       \
-            return obj.BOOST_PP_TUPLE_ELEM(4, 2, xy);                           \
+            return BOOST_PP_TUPLE_ELEM(4, 2, xy);                               \
         }                                                                       \
                                                                                 \
         static proxy call(fullname& obj)                                        \
