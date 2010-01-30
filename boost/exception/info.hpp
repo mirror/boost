@@ -131,6 +131,9 @@ boost
             mutable std::string diagnostic_info_str_;
             mutable int count_;
 
+            error_info_container_impl( error_info_container_impl const & );
+            error_info_container_impl & operator=( error_info_container const & );
+
             void
             add_ref() const
                 {
@@ -144,12 +147,14 @@ boost
                     delete this;
                 }
 
-            refcount_ptr<exception_detail::error_info_container>
+            refcount_ptr<error_info_container>
             clone() const
                 {
-                refcount_ptr<exception_detail::error_info_container> c;
-                c.adopt(new exception_detail::error_info_container_impl(*this));
-                return c;
+                refcount_ptr<error_info_container> p;
+                error_info_container_impl * c=new error_info_container_impl;
+                p.adopt(c);
+                c->info_ = info_;
+                return p;
                 }
             };
         }
