@@ -18,91 +18,91 @@ void join( thread_handle & t );
 
 class
 thread_handle
-	{
-	thread_handle( thread_handle const & );
-	thread_handle & operator=( thread_handle const & );
+    {
+    thread_handle( thread_handle const & );
+    thread_handle & operator=( thread_handle const & );
 
-	boost::exception_ptr err_;
-	boost::thread t_;
+    boost::exception_ptr err_;
+    boost::thread t_;
 
-	static
-	void
-	thread_wrapper( boost::function<void()> const & f, boost::exception_ptr & ep )
-		{
-		BOOST_ASSERT(!ep);
-		try
-			{
-			f();
-			}
-		catch(...)
-			{
-			ep = boost::current_exception();
-			}
-		}
+    static
+    void
+    thread_wrapper( boost::function<void()> const & f, boost::exception_ptr & ep )
+        {
+        BOOST_ASSERT(!ep);
+        try
+            {
+            f();
+            }
+        catch(...)
+            {
+            ep = boost::current_exception();
+            }
+        }
 
-	explicit
-	thread_handle( boost::function<void()> const & f ):
-		t_(boost::bind(thread_wrapper,f,err_))
-		{
-		}
+    explicit
+    thread_handle( boost::function<void()> const & f ):
+        t_(boost::bind(thread_wrapper,f,err_))
+        {
+        }
 
-	friend boost::shared_ptr<thread_handle> create_thread( boost::function<void()> const & f );
-	friend void join( thread_handle & t );
-	};
+    friend boost::shared_ptr<thread_handle> create_thread( boost::function<void()> const & f );
+    friend void join( thread_handle & t );
+    };
 
 boost::shared_ptr<thread_handle>
 create_thread( boost::function<void()> const & f )
-	{
-	boost::shared_ptr<thread_handle> t( new thread_handle(f) );
-	return t;
-	}
+    {
+    boost::shared_ptr<thread_handle> t( new thread_handle(f) );
+    return t;
+    }
 
 void
 join( thread_handle & t )
-	{
-	t.t_.join();
-	if( t.err_ )
-		rethrow_exception(t.err_);
-	}
+    {
+    t.t_.join();
+    if( t.err_ )
+        rethrow_exception(t.err_);
+    }
 
 struct exc: boost::exception, std::exception { };
 typedef boost::error_info<struct answer_,int> answer;
 
 void
 thread_func()
-	{
-	BOOST_THROW_EXCEPTION(exc() << answer(42));
-	}
+    {
+    BOOST_THROW_EXCEPTION(exc() << answer(42));
+    }
 
 void
 check( boost::shared_ptr<thread_handle> const & t )
-	{
-	try
-		{
-		join(*t);
-		}
-	catch(
-	exc & e )
-		{
-		int const * a = boost::get_error_info<answer>(e);
-		BOOST_TEST(a && *a==42);
-		}
-	}
+    {
+    try
+        {
+        join(*t);
+        }
+    catch(
+    exc & e )
+        {
+        int const * a = boost::get_error_info<answer>(e);
+        BOOST_TEST(a && *a==42);
+        }
+    }
 
 int
 main()
     {
-	try
-		{
-		std::vector< boost::shared_ptr<thread_handle> > threads;
-		std::generate_n(std::inserter(threads,threads.end()),256,boost::bind(create_thread,thread_func));
-		std::for_each(threads.begin(),threads.end(),check);
-		return boost::report_errors();
-		}
-	catch(
-	... )
-		{
-		BOOST_ERROR(boost::current_exception_diagnostic_information().c_str());
-		return 42;
-		}
+    try
+        {
+        std::vector< boost::shared_ptr<thread_handle> > threads;
+        std::generate_n(std::inserter(threads,threads.end()),256,boost::bind(create_thread,thread_func));
+        std::for_each(threads.begin(),threads.end(),check);
+        return boost::report_errors();
+        }
+    catch(
+    ... )
+        {
+        BOOST_ERROR(boost::current_exception_diagnostic_information().c_str());
+        return 42;
+        }
     }

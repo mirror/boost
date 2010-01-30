@@ -143,6 +143,14 @@ boost
                 if( !--count_ )
                     delete this;
                 }
+
+            refcount_ptr<exception_detail::error_info_container>
+            clone() const
+                {
+                refcount_ptr<exception_detail::error_info_container> c;
+                c.adopt(new exception_detail::error_info_container_impl(*this));
+                return c;
+                }
             };
         }
 

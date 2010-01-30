@@ -24,7 +24,7 @@ run 2-throw_exception_no_exceptions_test.cpp ;
 run 3-throw_exception_no_integration_test.cpp ;
 run 4-throw_exception_no_both_test.cpp ;
 run cloning_test.cpp ;
-run copy_exception_test.cpp ;
+run copy_exception_test.cpp /boost//thread : : : <threading>multi ;
 run unknown_exception_test.cpp ;
 run exception_test.cpp ;
 run enable_error_info_test.cpp helper1.cpp ;

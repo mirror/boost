@@ -163,6 +163,7 @@ boost
             virtual void set( shared_ptr<error_info_base> const &, type_info_ const & ) = 0;
             virtual void add_ref() const = 0;
             virtual void release() const = 0;
+            virtual refcount_ptr<exception_detail::error_info_container> clone() const = 0;
 
             protected:
 
@@ -184,6 +185,8 @@ boost
         struct get_info<throw_line>;
 
         char const * get_diagnostic_information( exception const &, char const * );
+
+        void copy_boost_exception( exception *, exception const * );
         }
 
     class
@@ -240,6 +243,7 @@ boost
         friend struct exception_detail::get_info<throw_function>;
         friend struct exception_detail::get_info<throw_file>;
         friend struct exception_detail::get_info<throw_line>;
+        friend void exception_detail::copy_boost_exception( exception *, exception const * );
 #endif
         mutable exception_detail::refcount_ptr<exception_detail::error_info_container> data_;
         mutable char const * throw_function_;
@@ -363,7 +367,13 @@ boost
         void
         copy_boost_exception( exception * a, exception const * b )
             {
-            *a = *b;
+            refcount_ptr<error_info_container> data;
+            if( error_info_container * d=b->data_.get() )
+                data = d->clone();
+            a->throw_file_ = b->throw_file_;
+            a->throw_line_ = b->throw_line_;
+            a->throw_function_ = b->throw_function_;
+            a->data_ = data;
             }
 
         inline
