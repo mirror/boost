@@ -13,7 +13,7 @@ FOP_VERSION=0.94
 FOP_JDK_VERSION=1.4
 FOP_MIRROR=http://mirrors.ibiblio.org/pub/mirrors/apache/xmlgraphics/fop/binaries
 SOURCEFORGE_MIRROR=http://dl.sourceforge.net
-HTTP_GET_CMD="curl -O"
+HTTP_GET_CMD="curl -O -L"
 
 # No user configuration below this point-------------------------------------
 
