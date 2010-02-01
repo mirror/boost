@@ -735,7 +735,7 @@ inline bool perl_matcher<BidiIterator, Allocator, traits>::match_assert_backref(
       int id = -index-1;
       if(id >= 10000)
          id = re.get_data().get_id(id);
-      result = recursion_stack_position && ((recursion_stack[recursion_stack_position-1].id == id) || (index == 0));
+      result = !recursion_stack.empty() && ((recursion_stack.back().id == id) || (index == 0));
       pstate = pstate->next.p;
    }
    return result;

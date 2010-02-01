@@ -101,6 +101,9 @@ int handle_argument(const std::string& what)
 #ifdef BOOST_HAS_PCRE
       time_pcre = true;
 #endif
+#ifdef BOOST_HAS_XPRESSIVE
+      time_xpressive = true;
+#endif
    }
    else if(what == "-test-matches")
       test_matches = true;
