@@ -911,8 +911,6 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_recursion()
    }
    pstate = static_cast<const re_jump*>(pstate)->alt.p;
    recursion_stack.back().id = static_cast<const re_brace*>(pstate)->index;
-   //++recursion_stack_position;
-   //BOOST_ASSERT(recursion_stack[recursion_stack_position-1].id);
 
    return true;
 }
@@ -932,7 +930,6 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_endmark()
       {
          if(index == recursion_stack.back().id)
          {
-            //--recursion_stack_position;
             pstate = recursion_stack.back().preturn_address;
             *m_presult = recursion_stack.back().results;
             push_recursion(recursion_stack.back().id, recursion_stack.back().preturn_address, &recursion_stack.back().results);
@@ -956,7 +953,6 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_match()
    if(!recursion_stack.empty())
    {
       BOOST_ASSERT(0 == recursion_stack.back().id);
-      //--recursion_stack_position;
       pstate = recursion_stack.back().preturn_address;
       *m_presult = recursion_stack.back().results;
       push_recursion(recursion_stack.back().id, recursion_stack.back().preturn_address, &recursion_stack.back().results);
@@ -1530,7 +1526,6 @@ bool perl_matcher<BidiIterator, Allocator, traits>::unwind_recursion(bool r)
       recursion_stack.back().id = pmp->recursion_id;
       recursion_stack.back().preturn_address = pmp->preturn_address;
       recursion_stack.back().results = pmp->results;
-      //++recursion_stack_position;
    }
    boost::re_detail::inplace_destroy(pmp++);
    m_backup_state = pmp;

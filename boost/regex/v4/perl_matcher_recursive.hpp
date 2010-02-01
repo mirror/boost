@@ -867,7 +867,6 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_recursion()
    recursion_stack.back().repeater_stack = next_count;
    pstate = static_cast<const re_jump*>(pstate)->alt.p;
    recursion_stack.back().id = static_cast<const re_brace*>(pstate)->index;
-   //++recursion_stack_position;
 
    repeater_count<BidiIterator>* saved = next_count;
    repeater_count<BidiIterator> r(&next_count); // resets all repeat counts since we're recursing and starting fresh on those
@@ -877,7 +876,6 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_recursion()
 
    if(!result)
    {
-      //--recursion_stack_position;
       next_count = recursion_stack.back().repeater_stack;
       *m_presult = recursion_stack.back().results;
       recursion_stack.pop_back();
@@ -901,7 +899,6 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_endmark()
       {
          if(index == recursion_stack.back().id)
          {
-            //--recursion_stack_position;
             recursion_info<results_type> saved = recursion_stack.back();
             recursion_stack.pop_back();
             const re_syntax_base* saved_state = pstate = saved.preturn_address;
@@ -911,7 +908,6 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_endmark()
             if(!match_all_states())
             {
                recursion_stack.push_back(saved);
-               //++recursion_stack_position;
                next_count = saved_count;
                return false;
             }
@@ -934,7 +930,6 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_match()
    if(!recursion_stack.empty())
    {
       BOOST_ASSERT(0 == recursion_stack.back().id);
-      //--recursion_stack_position;
       const re_syntax_base* saved_state = pstate = recursion_stack.back().preturn_address;
       *m_presult = recursion_stack.back().results;
       recursion_stack.pop_back();
@@ -943,7 +938,6 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_match()
          recursion_stack.push_back(recursion_info<results_type>());
          recursion_stack.back().preturn_address = saved_state;
          recursion_stack.back().results = *m_presult;
-         //++recursion_stack_position;
          return false;
       }
       return true;

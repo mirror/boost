@@ -366,7 +366,7 @@ public:
       BidiIterator l_base)
       :  m_result(what), base(first), last(end), 
          position(first), backstop(l_base), re(e), traits_inst(e.get_traits()), 
-         m_independent(false), next_count(&rep_obj), rep_obj(&next_count)/*, recursion_stack_position(0)*/
+         m_independent(false), next_count(&rep_obj), rep_obj(&next_count)
    {
       construct_init(e, f);
    }
@@ -489,7 +489,6 @@ private:
    unsigned char match_any_mask;
    // recursion information:
    std::vector<recursion_info<results_type> > recursion_stack;
-   //unsigned recursion_stack_position;
 
 #ifdef BOOST_REGEX_NON_RECURSIVE
    //
