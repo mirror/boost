@@ -1,4 +1,4 @@
-//Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc.
+//Copyright (c) 2006-2010 Emil Dotchevski and Reverge Studios, Inc.
 
 //Distributed under the Boost Software License, Version 1.0. (See accompanying
 //file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -47,7 +47,7 @@ boost
 
     template <class Tag,class T>
     inline
-    char const *
+	std::string
     error_info<Tag,T>::
     tag_typeid_name() const
         {
