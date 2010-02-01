@@ -11,6 +11,7 @@
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include <boost/detail/lightweight_test.hpp>
+#include <iostream>
 
 class thread_handle;
 boost::shared_ptr<thread_handle> create_thread( boost::function<void()> const & f );
@@ -102,7 +103,10 @@ main()
     catch(
     ... )
         {
-        BOOST_ERROR(boost::current_exception_diagnostic_information().c_str());
+        std::cerr <<
+            "Caught unexpected exception.\n"
+            "Output from current_exception_diagnostic_information:\n" <<
+            boost::current_exception_diagnostic_information() << std::endl;
         return 42;
         }
     }
