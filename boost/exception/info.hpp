@@ -47,7 +47,7 @@ boost
 
     template <class Tag,class T>
     inline
-	std::string
+    std::string
     error_info<Tag,T>::
     tag_typeid_name() const
         {

@@ -30,6 +30,9 @@ boost
     {
     typedef shared_ptr<exception_detail::clone_base const> exception_ptr;
 
+    template <class T>
+    exception_ptr copy_exception( T const & );
+
 #ifndef BOOST_NO_RTTI
     typedef error_info<struct tag_original_exception_type,std::type_info const *> original_exception_type;
 
@@ -44,37 +47,42 @@ boost
     namespace
     exception_detail
         {
-        inline
-        static
-        exception_ptr
-        exception_ptr_bad_alloc()
-            {
-            static
-            struct
-            bad_alloc_:
-                std::bad_alloc,
-                exception_detail::clone_base
+        struct
+        bad_alloc_:
+            boost::exception,
+            std::bad_alloc
                 {
-                clone_base const *
-                clone() const
-                    {
-                    return new bad_alloc_(*this);
-                    }
-                void
-                rethrow() const
-                    {
-                    throw*this;
-                    }
-                } e;
-            return exception_ptr(exception_ptr(),&e);
+                };
+
+        template <int Line>
+        exception_ptr
+        get_bad_alloc()
+            {
+            static exception_ptr e = copy_exception(
+                bad_alloc_() <<
+                throw_function("boost::current_exception()") <<
+                throw_file(__FILE__) <<
+                throw_line(Line) );
+            return e;
             }
+
+        template <int Line>
+        struct
+        exception_ptr_bad_alloc
+            {
+            static exception_ptr const e;
+            };
+
+        template <int Line>
+        exception_ptr const
+        exception_ptr_bad_alloc<Line>::
+        e = get_bad_alloc<Line>();
         }
 
     class
     unknown_exception:
-        public exception,
-        public std::exception,
-        public exception_detail::clone_base
+        public boost::exception,
+        public std::exception
         {
         public:
 
@@ -101,18 +109,6 @@ boost
 
         private:
 
-        exception_detail::clone_base const *
-        clone() const
-            {
-            return new unknown_exception(*this);
-            }
-
-        void
-        rethrow() const
-            {
-            throw*this;
-            }
-
         template <class E>
         void
         add_original_type( E const & e )
@@ -130,8 +126,7 @@ boost
         class
         current_exception_std_exception_wrapper:
             public T,
-            public boost::exception,
-            public clone_base
+            public boost::exception
             {
             public:
 
@@ -155,18 +150,6 @@ boost
 
             private:
 
-            clone_base const *
-            clone() const
-                {
-                return new current_exception_std_exception_wrapper(*this);
-                }
-
-            void
-            rethrow() const
-                {
-                throw *this;
-                }
-
             template <class E>
             void
             add_original_type( E const & e )
@@ -179,7 +162,7 @@ boost
 
 #ifdef BOOST_NO_RTTI
         template <class T>
-        exception const *
+        boost::exception const *
         get_boost_exception( T const * )
             {
             try
@@ -187,7 +170,7 @@ boost
                 throw;
                 }
             catch(
-            exception & x )
+            boost::exception & x )
                 {
                 return &x;
                 }
@@ -198,10 +181,10 @@ boost
             }
 #else
         template <class T>
-        exception const *
+        boost::exception const *
         get_boost_exception( T const * x )
             {
-            return dynamic_cast<exception const *>(x);
+            return dynamic_cast<boost::exception const *>(x);
             }
 #endif
 
@@ -211,23 +194,23 @@ boost
         current_exception_std_exception( T const & e1 )
             {
             if( boost::exception const * e2 = get_boost_exception(&e1) )
-                return shared_ptr<current_exception_std_exception_wrapper<T> const>(new current_exception_std_exception_wrapper<T>(e1,*e2));
+                return copy_exception(current_exception_std_exception_wrapper<T>(e1,*e2));
             else
-                return shared_ptr<current_exception_std_exception_wrapper<T> const>(new current_exception_std_exception_wrapper<T>(e1));
+                return copy_exception(current_exception_std_exception_wrapper<T>(e1));
             }
 
         inline
         exception_ptr
         current_exception_unknown_exception()
             {
-            return shared_ptr<unknown_exception const>(new unknown_exception());
+            return copy_exception(unknown_exception());
             }
 
         inline
         exception_ptr
         current_exception_unknown_boost_exception( boost::exception const & e )
             {
-            return shared_ptr<unknown_exception const>(new unknown_exception(e));
+            return copy_exception(unknown_exception(e));
             }
 
         inline
@@ -237,7 +220,7 @@ boost
             if( boost::exception const * be = get_boost_exception(&e) )
                 return current_exception_unknown_boost_exception(*be);
             else
-                return shared_ptr<unknown_exception const>(new unknown_exception(e));
+                return copy_exception(unknown_exception(e));
             }
 
         inline
@@ -356,7 +339,7 @@ boost
         catch(
         std::bad_alloc & )
             {
-            ret=exception_detail::exception_ptr_bad_alloc();
+            ret=exception_detail::exception_ptr_bad_alloc<__LINE__>::e;
             }
         catch(
         ... )
@@ -368,7 +351,7 @@ boost
             catch(
             std::bad_alloc & )
                 {
-                ret=exception_detail::exception_ptr_bad_alloc();
+                ret=exception_detail::exception_ptr_bad_alloc<__LINE__>::e;
                 }
             catch(
             ... )
