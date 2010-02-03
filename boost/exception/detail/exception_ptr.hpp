@@ -30,8 +30,23 @@ boost
     {
     typedef shared_ptr<exception_detail::clone_base const> exception_ptr;
 
+    exception_ptr current_exception();
+
     template <class T>
-    exception_ptr copy_exception( T const & );
+    inline
+    exception_ptr
+    copy_exception( T const & e )
+        {
+        try
+            {
+            throw enable_current_exception(e);
+            }
+        catch(
+        ... )
+            {
+            return current_exception();
+            }
+        }
 
 #ifndef BOOST_NO_RTTI
     typedef error_info<struct tag_original_exception_type,std::type_info const *> original_exception_type;
@@ -361,22 +376,6 @@ boost
             }
         BOOST_ASSERT(ret);
         return ret;
-        }
-
-    template <class T>
-    inline
-    exception_ptr
-    copy_exception( T const & e )
-        {
-        try
-            {
-            throw enable_current_exception(e);
-            }
-        catch(
-        ... )
-            {
-            return current_exception();
-            }
         }
 
     inline
