@@ -5,6 +5,11 @@
  * http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#ifndef _SCL_SECURE_NO_WARNINGS
+// Suppress warnings from the std lib:
+#  define _SCL_SECURE_NO_WARNINGS
+#endif
+
 #include <algorithm>
 #include <functional>
 #include <boost/array.hpp>
