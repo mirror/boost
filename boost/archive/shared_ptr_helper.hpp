@@ -109,7 +109,7 @@ public:
     // new system which is disjoint from this set.  This is implemented
     // by a change in load_construct_data below.  It makes this file suitable
     // only for loading pointers into a 1.33 or later boost system.
-    std::list<boost_132::shared_ptr<void> > * m_pointers_132;
+    std::list<boost_132::shared_ptr<const void> > * m_pointers_132;
 //  #endif
 
     // returns pointer to object and an indicator whether this is a
@@ -191,7 +191,7 @@ public:
 
 //  #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
     BOOST_ARCHIVE_DECL(void)
-    append(const boost_132::shared_ptr<void> & t);
+    append(const boost_132::shared_ptr<const void> & t);
 //  #endif
 public:
     BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
