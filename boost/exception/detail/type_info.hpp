@@ -37,13 +37,13 @@ boost
 
     template <class T>
     inline
-    char const *
+    std::string
     type_name()
         {
 #ifdef BOOST_NO_TYPEID
         return BOOST_CURRENT_FUNCTION;
 #else
-        return typeid(T).name();
+        return units::detail::demangle(typeid(T).name());
 #endif
         }
 
