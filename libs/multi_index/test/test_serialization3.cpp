@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for serialization, part 3.
  *
- * Copyright 2003-2009 Joaquin M Lopez Munoz.
+ * Copyright 2003-2010 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -33,21 +33,30 @@ namespace serialization{
 
 template<class Archive>
 void save_construct_data(
-  Archive& ar,const non_default_ctble* p,const unsigned int)
+  Archive& ar,const non_default_ctble* p,const unsigned int version)
 {
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+  if(version<3)return;
+#endif
+
   ar<<boost::serialization::make_nvp("n",p->n);
 }
 
 template<class Archive>
-void load_construct_data(Archive& ar,non_default_ctble* p,const unsigned int)
+void load_construct_data(
+  Archive& ar,non_default_ctble* p,const unsigned int version)
 {
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+  if(version<3)return;
+#endif
+
   int n=0;
   ar>>boost::serialization::make_nvp("n",n);
   ::new(p)non_default_ctble(n);
 }
 
 template<class Archive>
-void serialize(Archive& ar,non_default_ctble& x,const unsigned int)
+void serialize(Archive&,non_default_ctble&,const unsigned int)
 {
 }
 
@@ -55,6 +64,15 @@ void serialize(Archive& ar,non_default_ctble& x,const unsigned int)
 } /* namespace serialization */
 } /* namespace boost*/
 #endif
+
+namespace boost{
+namespace serialization{
+template<> struct version<non_default_ctble>
+{
+  BOOST_STATIC_CONSTANT(unsigned int,value=3);
+};
+} /* namespace serialization */
+} /* namespace boost*/
 
 using namespace boost::multi_index;
 
