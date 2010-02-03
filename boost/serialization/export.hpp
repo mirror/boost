@@ -115,6 +115,10 @@ ptr_serialization_support<Archive,Serializable>::instantiate()
     );
 }
 
+// Note INTENTIONAL usage of anonymous namespace in header.
+// This was made this way so that export.hpp could be included
+// in other headers.  This is still under study.
+
 namespace {
 
 template<class T>
