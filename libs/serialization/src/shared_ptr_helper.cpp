@@ -94,9 +94,9 @@ shared_ptr_helper::get_od(
 
 //  #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
 BOOST_ARCHIVE_DECL(void)
-shared_ptr_helper::append(const boost_132::shared_ptr<void> & t){
+shared_ptr_helper::append(const boost_132::shared_ptr<const void> & t){
     if(NULL == m_pointers_132)
-        m_pointers_132 = new std::list<boost_132::shared_ptr<void> >;
+        m_pointers_132 = new std::list<boost_132::shared_ptr<const void> >;
     m_pointers_132->push_back(t);
 }
 //  #endif
