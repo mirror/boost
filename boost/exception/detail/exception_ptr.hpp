@@ -73,7 +73,7 @@ boost
         exception_ptr
         get_bad_alloc()
             {
-            static exception_ptr e = copy_exception(
+            static exception_ptr e = boost::copy_exception(
                 bad_alloc_() <<
                 throw_function("boost::current_exception()") <<
                 throw_file(__FILE__) <<
@@ -209,23 +209,23 @@ boost
         current_exception_std_exception( T const & e1 )
             {
             if( boost::exception const * e2 = get_boost_exception(&e1) )
-                return copy_exception(current_exception_std_exception_wrapper<T>(e1,*e2));
+                return boost::copy_exception(current_exception_std_exception_wrapper<T>(e1,*e2));
             else
-                return copy_exception(current_exception_std_exception_wrapper<T>(e1));
+                return boost::copy_exception(current_exception_std_exception_wrapper<T>(e1));
             }
 
         inline
         exception_ptr
         current_exception_unknown_exception()
             {
-            return copy_exception(unknown_exception());
+            return boost::copy_exception(unknown_exception());
             }
 
         inline
         exception_ptr
         current_exception_unknown_boost_exception( boost::exception const & e )
             {
-            return copy_exception(unknown_exception(e));
+            return boost::copy_exception(unknown_exception(e));
             }
 
         inline
@@ -235,7 +235,7 @@ boost
             if( boost::exception const * be = get_boost_exception(&e) )
                 return current_exception_unknown_boost_exception(*be);
             else
-                return copy_exception(unknown_exception(e));
+                return boost::copy_exception(unknown_exception(e));
             }
 
         inline
