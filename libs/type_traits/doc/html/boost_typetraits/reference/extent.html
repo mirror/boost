@@ -33,11 +33,11 @@
         <span class="bold"><strong>Inherits:</strong></span> Class template extent inherits
         from <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">EXTENT</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">N</span><span class="special">)&gt;</span></code>,
         where <code class="computeroutput"><span class="identifier">EXTENT</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">N</span><span class="special">)</span></code> is the number of elements in the N'th array
-        dimention of type <code class="computeroutput"><span class="identifier">T</span></code>.
+        dimension of type <code class="computeroutput"><span class="identifier">T</span></code>.
       </p>
 <p>
-        If <code class="computeroutput"><span class="identifier">T</span></code> is not an array type,
-        or if <code class="computeroutput"><span class="identifier">N</span> <span class="special">&gt;</span>
+        If <code class="computeroutput"><span class="identifier">T</span></code> is not a (built-in)
+        array type, or if <code class="computeroutput"><span class="identifier">N</span> <span class="special">&gt;</span>
         <a class="link" href="rank.html" title="rank">rank</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span></code>, or if the N'th array bound is incomplete,
         then <code class="computeroutput"><span class="identifier">EXTENT</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">N</span><span class="special">)</span></code> is zero.
       </p>
@@ -63,7 +63,27 @@
           </p>
 <p>
             <code class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">[</span><span class="number">2</span><span class="special">][</span><span class="number">3</span><span class="special">][</span><span class="number">4</span><span class="special">],</span>
+            <span class="number">0</span><span class="special">&gt;::</span><span class="identifier">type</span></code> is the type <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="number">2</span><span class="special">&gt;</span></code>.
+          </p>
+<p>
+        </p>
+</blockquote></div>
+<div class="blockquote"><blockquote class="blockquote">
+<p>
+          </p>
+<p>
+            <code class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">[</span><span class="number">2</span><span class="special">][</span><span class="number">3</span><span class="special">][</span><span class="number">4</span><span class="special">],</span>
             <span class="number">1</span><span class="special">&gt;::</span><span class="identifier">type</span></code> is the type <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;</span></code>.
+          </p>
+<p>
+        </p>
+</blockquote></div>
+<div class="blockquote"><blockquote class="blockquote">
+<p>
+          </p>
+<p>
+            <code class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">[</span><span class="number">2</span><span class="special">][</span><span class="number">3</span><span class="special">][</span><span class="number">4</span><span class="special">],</span>
+            <span class="number">3</span><span class="special">&gt;::</span><span class="identifier">type</span></code> is the type <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="number">4</span><span class="special">&gt;</span></code>.
           </p>
 <p>
         </p>
@@ -104,6 +124,17 @@
 <p>
             <code class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">*&gt;::</span><span class="identifier">value</span></code> is an integral constant expression
             that evaluates to <span class="emphasis"><em>0</em></span>.
+          </p>
+<p>
+        </p>
+</blockquote></div>
+<div class="blockquote"><blockquote class="blockquote">
+<p>
+          </p>
+<p>
+            <code class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">value</span></code>
+            is an integral constant expression that evaluates to <span class="emphasis"><em>0</em></span>:
+            <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code> is a class type and <span class="bold"><strong>not an array type</strong></span>!
           </p>
 <p>
         </p>

@@ -12,7 +12,7 @@
 __inherit Class template rank inherits from `__integral_constant<std::size_t, RANK(T)>`, 
 where `RANK(T)` is the number of array dimensions in type `T`.
 
-If `T` is not an array type, then `RANK(T)` is zero.
+If `T` is not a (built-in) array type, then `RANK(T)` is zero.
 
 __header ` #include <boost/type_traits/rank.hpp>` or ` #include <boost/type_traits.hpp>`
 
@@ -30,6 +30,9 @@ expression that evaluates to /2/.]
 
 [:`rank<int*>::value` is an integral constant 
 expression that evaluates to /0/.]
+
+[:`rank<boost::array<int, 3> >::value` is an integral constant 
+expression that evaluates to /0/: `boost::array` is a class type and [*not an array type]!]
 
 [:`rank<T>::value_type` is the type `std::size_t`.]
 
