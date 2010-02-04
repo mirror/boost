@@ -13,7 +13,8 @@
       typedef __below type;
    };
   
-__type The same type as `T`, but with any pointer modifier removed.
+__type The same type as `T`, but with any pointer modifier removed.  Note that pointers to members are left unchanged: 
+removing the pointer decoration would result in an invalid type.
 
 __std_ref 8.3.1.
 
