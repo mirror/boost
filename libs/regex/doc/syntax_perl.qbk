@@ -376,12 +376,13 @@ context is the whole of the input text that is being matched against
 
 \\' 	Matches at the end of a buffer only.
 
-\\A 	Matches at the start of a buffer only (the same as \\\`).
+\\A 	Matches at the start of a buffer only (the same as =\\\`=).
 
-\\z 	Matches at the end of a buffer only (the same as \\').
+\\z 	Matches at the end of a buffer only (the same as =\\'=).
 
-\\Z 	Matches an optional sequence of newlines at the end of a buffer: 
-equivalent to the regular expression =\n*\z=
+\\Z 	Matches a zero-width assertion consisting of an optional sequence of newlines at the end of a buffer: 
+equivalent to the regular expression [^(?=\\v*\\z)].  Note that this is subtly different from Perl which
+behaves as if matching [^(?=\\n?\\z)].
 
 [h5 Continuation Escape]
 
