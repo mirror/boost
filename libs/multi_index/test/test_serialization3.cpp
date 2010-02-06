@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for serialization, part 3.
  *
- * Copyright 2003-2008 Joaquin M Lopez Munoz.
+ * Copyright 2003-2010 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -13,8 +13,66 @@
 
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
+#include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/key_extractors.hpp>
 #include "non_std_allocator.hpp"
+
+struct non_default_ctble
+{
+  non_default_ctble(int n_):n(n_){}
+
+  bool operator==(const non_default_ctble& x)const{return n==x.n;}
+
+  int n;
+};
+
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+namespace boost{
+namespace serialization{
+#endif
+
+template<class Archive>
+void save_construct_data(
+  Archive& ar,const non_default_ctble* p,const unsigned int version)
+{
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+  if(version<3)return;
+#endif
+
+  ar<<boost::serialization::make_nvp("n",p->n);
+}
+
+template<class Archive>
+void load_construct_data(
+  Archive& ar,non_default_ctble* p,const unsigned int version)
+{
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+  if(version<3)return;
+#endif
+
+  int n=0;
+  ar>>boost::serialization::make_nvp("n",n);
+  ::new(p)non_default_ctble(n);
+}
+
+template<class Archive>
+void serialize(Archive&,non_default_ctble&,const unsigned int)
+{
+}
+
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+} /* namespace serialization */
+} /* namespace boost*/
+#endif
+
+namespace boost{
+namespace serialization{
+template<> struct version<non_default_ctble>
+{
+  BOOST_STATIC_CONSTANT(unsigned int,value=3);
+};
+} /* namespace serialization */
+} /* namespace boost*/
 
 using namespace boost::multi_index;
 
@@ -95,5 +153,20 @@ void test_serialization3()
     local_iterator it2;
     ia>>it2;
     BOOST_CHECK(it2==hs2.end(buc));
+  }
+
+  {
+    typedef multi_index_container<
+      non_default_ctble,
+      indexed_by<
+        ordered_unique<
+          BOOST_MULTI_INDEX_MEMBER(non_default_ctble,int,n)
+        >
+      >
+    > multi_index_t;
+
+    multi_index_t m;
+    for(int i=0;i<100;++i)m.insert(non_default_ctble(i));
+    test_serialization(m);
   }
 }
