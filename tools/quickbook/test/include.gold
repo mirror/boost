@@ -5,8 +5,8 @@
   <title>Include Test</title>
   <articleinfo>
   </articleinfo>
-  <section id="include_test.test">
-    <title><link linkend="include_test.test"> Test</link></title>
+  <section id="include_test_sub_document.test">
+    <title><link linkend="include_test_sub_document.test"> Test</link></title>
     <para>
       Just testing.
     </para>

@@ -4,3 +4,4 @@
 ]
 
 [include include-sub.quickbook]
+[include include-sub2.quickbook]

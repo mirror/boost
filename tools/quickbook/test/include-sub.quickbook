@@ -1,5 +1,6 @@
-[section:test Test]
+[article Include Test Sub Document
+    [quickbook 1.5]
+    [id include-sub]
+]
 
-Just testing.
-
-[endsect]
+[/ Empty. Shouldn't really need this comment.]
