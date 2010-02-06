@@ -17,3 +17,4 @@ build-project hannibal/build ;
 build-project real_positions/build ;
 build-project token_statistics/build ;
 build-project preprocess_pragma_output/build ;
+build-project custom_directives/build ;
