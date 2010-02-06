@@ -5,54 +5,51 @@
 
 import testing ;
 
-{
-  test-suite uuid :
-      # make sure uuid.hpp is self-contained
-      [ compile compile_uuid_h.cpp ]
+test-suite uuid :
+    # make sure each header file is self-contained
+    [ compile compile_uuid.cpp ]
+    [ compile compile_uuid_io.cpp ]
+    [ compile compile_uuid_serialize.cpp ]
+    [ compile compile_uuid_generators.cpp ]
+    [ compile compile_nil_generator.cpp ]
+    [ compile compile_name_generator.cpp ]
+    [ compile compile_string_generator.cpp ]
+    [ compile compile_random_generator.cpp ]
+    
+    # test inclucing all .hpp files in 2 translations units
+    # to look for issues when using multiple translation units
+    # eg. missing inline on a global functionstate is not missing
+    [ run test_include1.cpp test_include2.cpp ]
 
-      # make sure uuid_io.hpp is self-contained
-      [ compile compile_uuid_io_h.cpp ]
+    # main test
+    [ run test_uuid.cpp ]
 
-      # make sure uuid_serialize.hpp is self-contained
-      [ compile compile_uuid_serialize_h.cpp ]
+    # test uuid_io.hpp
+    [ run test_io.cpp ]
 
-      # make sure uuid_generators.hpp is self-contained
-      [ compile compile_uuid_generators_h.cpp ]
+    # test generators
+    [ run test_nil_generator.cpp ]
+    [ run test_name_generator.cpp ]
+    [ run test_string_generator.cpp ]
+    [ run test_random_generator.cpp ]
 
-      # I want to look for issues when multiple translation units include
-      # uuid header files. For example missing inline on non-template functions
-      #[ link test_uuid.cpp compile_uuid_h.cpp : : multiple_translation_units ]
+    # test tagging an object
+    [ run test_tagging.cpp ]
 
-      # main test - added compile_uuid_header.cpp in lue of above test
-      [ run test_uuid.cpp compile_uuid_h.cpp ]
+    # test uuid class
+    [ run test_uuid_class.cpp ]
 
-      # test inclucing all .hpp files in 2 translations units
-      # to make sure a inline state is not missing
-      [ run test_include1.cpp test_include2.cpp ]
+    # test serializing uuids
+    [ run test_serialization.cpp ../../serialization/build//boost_serialization
+    ]
+    # TODO - This test fails to like with boost_wserialization
+    #[ run test_wserialization.cpp
+    #    ../../serialization/build//boost_serialization
+    #    ../../serialization/build//boost_wserialization
+    #    : : : <dependency>../../config/test/all//BOOST_NO_STD_WSTREAMBUF
+    #]
 
-      # test uuid_io.hpp
-      [ run test_io.cpp ]
+    # test sha1 hash function
+    [ run test_sha1.cpp ]
+    ;
 
-      # test uuid_generators.hpp
-      [ run test_generators.cpp ]
-
-      # test tagging an object
-      [ run test_tagging.cpp ]
-
-      # test uuid class
-      [ run test_uuid_class.cpp ]
-
-      # test serializing uuids
-      [ run test_serialization.cpp ../../serialization/build//boost_serialization
-      ]
-      # TODO - This test fails to like with boost_wserialization
-      #[ run test_wserialization.cpp
-      #    ../../serialization/build//boost_serialization
-      #    ../../serialization/build//boost_wserialization
-      #    : : : <dependency>../../config/test/all//BOOST_NO_STD_WSTREAMBUF
-      #]
-
-      # test sha1 hash function
-      [ run test_sha1.cpp ]
-      ;
-}

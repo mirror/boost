@@ -10,51 +10,70 @@
 //  libs/uuid/test/test_uuid.cpp  -------------------------------//
 
 #include <boost/uuid/uuid.hpp>
-
-#include <boost/test/included/test_exec_monitor.hpp>
-#include <boost/test/test_tools.hpp>
-
-#include <boost/functional/hash.hpp>
-
 #include <boost/uuid/uuid_io.hpp>
+#include <boost/detail/lightweight_test.hpp>
+#include "lightweight_test_ex.hpp"
+#include <boost/functional/hash.hpp>
+#include <boost/current_function.hpp>
 
-int test_main(int, char*[])
+void test_uuid_equal_array(char const * file, int line, char const * function,
+                           boost::uuids::uuid const& lhs, const unsigned char (&rhs)[16])
+{
+    for (size_t i=0; i<16; i++) {
+        if ( *(lhs.begin()+i) != rhs[i]) {
+            std::cerr << file << "(" << line << "): uuid " << lhs << " not equal " << "{";
+            for (size_t j=0; j<16; j++) {
+                if (j != 0) {
+                    std::cerr << " ";
+                }
+                std::cerr << std::hex << (int)rhs[j];
+            }
+            std::cerr << "} in function '" << function << "'" << std::endl;
+            ++boost::detail::test_errors();
+            return;
+        }
+    }
+}
+
+
+#define BOOST_TEST_UUID(lhs, rhs) ( test_uuid_equal_array(__FILE__, __LINE__, BOOST_CURRENT_FUNCTION, lhs, rhs) )
+
+int main(int, char*[])
 {
     using namespace boost::uuids;
-    using boost::test_tools::output_test_stream;
 
     // uuid::static_size
-    BOOST_CHECK_EQUAL(uuid::static_size(), 16U);
+    BOOST_TEST_EQ(uuid::static_size(), 16U);
 
     { // uuid::operator=()
         uuid u1 = {{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}};
         uuid u2 = u1;
-        BOOST_CHECK_EQUAL(u2, u1);
+        BOOST_TEST_EQ(u2, u1);
     }
 
     { // uuid::begin(), end()
         uuid u = {{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}};
         unsigned char values[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
-        BOOST_CHECK_EQUAL_COLLECTIONS(u.begin(), u.end(), values, values+16);
+        BOOST_TEST_UUID(u, values);
     }
 
     { // uuid::begin() const, end() const
         const uuid u = {{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}};
         unsigned char values[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
-        BOOST_CHECK_EQUAL_COLLECTIONS(u.begin(), u.end(), values, values+16);
+        BOOST_TEST_UUID(u, values);
     }
     
      { // uuid::size()
         uuid u; // uninitialized
-        BOOST_CHECK_EQUAL(u.size(), 16U);
+        BOOST_TEST_EQ(u.size(), 16U);
     }
 
     { // uuid::is_nil()
         uuid u1 = {{0}};
-        BOOST_CHECK_EQUAL(u1.is_nil(), true);
+        BOOST_TEST_EQ(u1.is_nil(), true);
 
         uuid u2 = {{1,0}};
-        BOOST_CHECK_EQUAL(u2.is_nil(), false);
+        BOOST_TEST_EQ(u2.is_nil(), false);
     }
     
     { // uuid::variant()
@@ -84,7 +103,7 @@ int test_main(int, char*[])
             uuid u = {};
             u.data[8] = tests[i].octet7; // note that octet7 is array index 8
             
-            BOOST_CHECK_EQUAL(u.variant(), tests[i].variant);
+            BOOST_TEST_EQ(u.variant(), tests[i].variant);
         }
     }
     
@@ -115,7 +134,7 @@ int test_main(int, char*[])
             uuid u = {{0}};
             u.data[6] = tests[i].octet9; // note that octet9 is array index 8
             
-            BOOST_CHECK_EQUAL(u.version(), tests[i].version);
+            BOOST_TEST_EQ(u.version(), tests[i].version);
         }
     }
 
@@ -126,12 +145,12 @@ int test_main(int, char*[])
         
         unsigned char values1[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
         unsigned char values2[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
-        BOOST_CHECK_EQUAL_COLLECTIONS(u1.begin(), u1.end(), values2, values2+16);
-        BOOST_CHECK_EQUAL_COLLECTIONS(u2.begin(), u2.end(), values1, values1+16);
+        BOOST_TEST_UUID(u1, values2);
+        BOOST_TEST_UUID(u2, values1);
 
         swap(u1, u2);
-        BOOST_CHECK_EQUAL_COLLECTIONS(u1.begin(), u1.end(), values1, values1+16);
-        BOOST_CHECK_EQUAL_COLLECTIONS(u2.begin(), u2.end(), values2, values2+16);
+        BOOST_TEST_UUID(u1, values1);
+        BOOST_TEST_UUID(u2, values2);
     }
 
     { // test comparsion
@@ -139,25 +158,25 @@ int test_main(int, char*[])
         uuid u2 = {{1,0}};
         uuid u3 = {{255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255}};
 
-        BOOST_CHECK_EQUAL(u1, u1);
+        BOOST_TEST_EQ(u1, u1);
 
-        BOOST_CHECK_NE(u1, u2);
+        BOOST_TEST_NE(u1, u2);
    
-        BOOST_CHECK_LT(u1, u2);
-        BOOST_CHECK_LT(u2, u3);
+        BOOST_TEST(u1 < u2);
+        BOOST_TEST(u2 < u3);
 
-        BOOST_CHECK_LE(u1, u1);
-        BOOST_CHECK_LE(u1, u2);
-        BOOST_CHECK_LE(u2, u3);
+        BOOST_TEST(u1 <= u1);
+        BOOST_TEST(u1 <= u2);
+        BOOST_TEST(u2 <= u3);
 
-        BOOST_CHECK_GT(u2, u1);
-        BOOST_CHECK_GT(u3, u1);
+        BOOST_TEST(u2 >= u1);
+        BOOST_TEST(u3 >= u1);
 
-        BOOST_CHECK_GE(u3, u3);
-        BOOST_CHECK_GE(u2, u1);
-        BOOST_CHECK_GE(u3, u1);
+        BOOST_TEST(u3 >= u3);
+        BOOST_TEST(u2 >= u1);
+        BOOST_TEST(u3 >= u1);
     }
-    
+
     { // test hash
         uuid u1 = {{0}};
         uuid u2 = {{1,0}};
@@ -165,14 +184,14 @@ int test_main(int, char*[])
 
         boost::hash<uuid> uuid_hasher;
         
-        BOOST_CHECK_EQUAL(uuid_hasher(u1), boost::hash_range(u1.begin(), u1.end()));
-        BOOST_CHECK_EQUAL(uuid_hasher(u2), boost::hash_range(u2.begin(), u2.end()));
-        BOOST_CHECK_EQUAL(uuid_hasher(u3), boost::hash_range(u3.begin(), u3.end()));
+        BOOST_TEST_EQ(uuid_hasher(u1), boost::hash_range(u1.begin(), u1.end()));
+        BOOST_TEST_EQ(uuid_hasher(u2), boost::hash_range(u2.begin(), u2.end()));
+        BOOST_TEST_EQ(uuid_hasher(u3), boost::hash_range(u3.begin(), u3.end()));
     }
     
     { // test is_pod
-        BOOST_CHECK_EQUAL(boost::is_pod<uuid>::value, true);
+        BOOST_TEST_EQ(boost::is_pod<uuid>::value, true);
     }
 
-    return 0;
+    return boost::report_errors();
 }

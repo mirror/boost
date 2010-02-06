@@ -9,8 +9,7 @@
 
 // Purpose to test serializing uuids with wide stream archives
 
-#include <boost/test/included/test_exec_monitor.hpp>
-#include <boost/test/test_tools.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <sstream>
 #include <iostream>
 
@@ -56,7 +55,7 @@ void test_archive()
         ia >> BOOST_SERIALIZATION_NVP(u2);
     }
     
-    BOOST_CHECK_EQUAL(u1, u2);
+    BOOST_TEST_EQ(u1, u2);
 }
 
 int test_main( int /* argc */, char* /* argv */[] )
@@ -68,5 +67,5 @@ int test_main( int /* argc */, char* /* argv */[] )
     test_archive<xml_woarchive, xml_wiarchive, wostringstream, wistringstream>();
     test_archive<binary_woarchive, binary_wiarchive, wostringstream, wistringstream>();
 
-    return 0;
+    return report_errors();
 }

@@ -10,15 +10,11 @@
 //  libs/uuid/test/test_sha1.cpp  -------------------------------//
 
 #include <boost/uuid/sha1.hpp>
+#include <boost/detail/lightweight_test.hpp>
+#include "lightweight_test_ex.hpp"
 #include <algorithm>
 #include <cstring>
 #include <cstddef>
-
-#define BOOST_TEST_MAIN
-#include <boost/test/included/unit_test.hpp>
-
-#define BOOST_AUTO_TEST_MAIN
-#include <boost/test/auto_unit_test.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std {
@@ -27,18 +23,49 @@ namespace std {
 } //namespace std
 #endif
 
+// this is to just make using BOOST_TEST_EQ easier
+struct digest_type {
+    digest_type() {}
+    digest_type(const unsigned int (d)[5]) {
+        for (size_t i=0; i<5; ++i) {
+            digest[i] = d[i];
+        }
+    }
+    unsigned int digest[5];
+};
+bool operator==(digest_type const& lhs, digest_type const& rhs)
+{
+    for (size_t i=0; i<5; ++i) {
+        if (lhs.digest[i] != rhs.digest[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+template <typename ch, typename char_traits>
+std::basic_ostream<ch, char_traits>& operator<<(std::basic_ostream<ch, char_traits> &os, digest_type const& d)
+{
+    os << "{";
+    for (size_t i=0; i<5; ++i) {
+        os.setf(std::ios_base::hex);
+        os << d.digest[i];
+    }
+    os << "}";
+    return os;
+}
+
 void test_sha1(char const*const message, unsigned int length, const unsigned int (&correct_digest)[5])
 {
     boost::uuids::detail::sha1 sha;
     sha.process_bytes(message, length);
 
-    unsigned int digest[5];
-    sha.get_digest(digest);
+    digest_type digest;
+    sha.get_digest(digest.digest);
 
-    BOOST_CHECK_EQUAL_COLLECTIONS(digest, digest+5, correct_digest, correct_digest+5);
+    BOOST_TEST_EQ(digest, digest_type(correct_digest));
 }
 
-BOOST_AUTO_TEST_CASE(test_quick)
+void test_quick()
 {
     struct test_case
     {
@@ -64,7 +91,7 @@ BOOST_AUTO_TEST_CASE(test_quick)
 //http://csrc.nist.gov/cryptval/shs.htm
 //http://csrc.nist.gov/cryptval/shs/shabytetestvectors.zip
 //values from SHA1ShortMsg.txt
-BOOST_AUTO_TEST_CASE(test_short_messages)
+void test_short_messages()
 {
     struct test_case
     {
@@ -212,18 +239,18 @@ BOOST_AUTO_TEST_CASE(test_short_messages)
 
         boost::uuids::detail::sha1 sha;
         std::size_t message_length = std::strlen(tc.message);
-        BOOST_CHECK_EQUAL(message_length%2, 0u);
+        BOOST_TEST_EQ(message_length%2, 0u);
 
         for (std::size_t b=0; b!=message_length; b+=2) {
             char c = tc.message[b];
             char const* f = std::find(xdigits, xdigits_end, c);
-            BOOST_CHECK(f != xdigits_end);
+            BOOST_TEST_NE(f, xdigits_end);
             
             unsigned char byte = static_cast<unsigned char>(std::distance(&xdigits[0], f));
 
             c = tc.message[b+1];
             f = std::find(xdigits, xdigits_end, c);
-            BOOST_CHECK(f != xdigits_end);
+            BOOST_TEST_NE(f, xdigits_end);
 
             byte <<= 4;
             byte |= static_cast<unsigned char>(std::distance(&xdigits[0], f));
@@ -231,9 +258,17 @@ BOOST_AUTO_TEST_CASE(test_short_messages)
             sha.process_byte(byte);
         }
 
-        unsigned int digest[5];
-        sha.get_digest(digest);
+        digest_type digest;
+        sha.get_digest(digest.digest);
 
-        BOOST_CHECK_EQUAL_COLLECTIONS(digest, digest+5, tc.digest, tc.digest+5);
+        BOOST_TEST_EQ(digest, digest_type(tc.digest));
     }
+}
+
+int main(int, char*[])
+{
+    test_quick();
+    test_short_messages();
+    
+    return boost::report_errors();
 }

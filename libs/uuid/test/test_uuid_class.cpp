@@ -13,8 +13,8 @@
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
-#include <boost/test/included/test_exec_monitor.hpp>
-#include <boost/test/test_tools.hpp>
+#include <boost/detail/lightweight_test.hpp>
+#include "lightweight_test_ex.hpp"
 
 class uuid_class : public boost::uuids::uuid
 {
@@ -28,16 +28,16 @@ public:
     {}
 };
 
-int test_main(int, char*[])
+int main(int, char*[])
 {
     uuid_class u1;
     uuid_class u2;
-    BOOST_CHECK_NE(u1, u2);
-    BOOST_CHECK_EQUAL(u1.is_nil(), false);
-    BOOST_CHECK_EQUAL(u2.is_nil(), false);
+    BOOST_TEST_NE(u1, u2);
+    BOOST_TEST_EQ(u1.is_nil(), false);
+    BOOST_TEST_EQ(u2.is_nil(), false);
 
     u2 = u1;
-    BOOST_CHECK_EQUAL(u1, u2);
+    BOOST_TEST_EQ(u1, u2);
 
-    return 0;
+    return boost::report_errors();
 }
