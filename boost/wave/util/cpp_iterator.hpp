@@ -1255,7 +1255,28 @@ lexer_type it = iter_ctx->first;
             }
             else if (ctx.get_if_block_status()) {
             // report invalid pp directive
-                on_illformed((*it).get_value());  
+                impl::skip_to_eol(ctx, it, iter_ctx->last);
+                seen_newline = true;
+
+                string_type str(boost::wave::util::impl::as_string<string_type>(
+                    iter_ctx->first, it));
+
+            token_sequence_type faulty_line;
+
+                for (/**/; iter_ctx->first != it; ++iter_ctx->first)
+                    faulty_line.push_back(*iter_ctx->first);
+
+                token_sequence_type pending;
+                if (ctx.get_hooks().found_unknown_directive(ctx, faulty_line, pending))
+                {
+                // if there is some replacement text, insert it into the pending queue
+                    if (!pending.empty())
+                        pending_queue.splice(pending_queue.begin(), pending);
+                    return true;
+                }
+
+                // default behavior is to throw an exception
+                on_illformed(str);
             }
         }
 
@@ -2399,7 +2420,7 @@ const_tree_iterator_t last = make_ref_transform_iterator(end, get_value);
     token_sequence_type pending;
     if (interpret_pragma(expanded, pending)) {
     // if there is some replacement text, insert it into the pending queue
-        if (pending.size() > 0)
+        if (!pending.empty())
             pending_queue.splice(pending_queue.begin(), pending);
         return true;        // this #pragma was successfully recognized
     }

@@ -477,6 +477,37 @@ struct default_preprocessing_hooks
 
     ///////////////////////////////////////////////////////////////////////////
     //
+    //  The function 'found_unknown_directive' is called, whenever an unknown 
+    //  preprocessor directive was encountered.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 'directive' is a reference to the token holding the 
+    //  preprocessing directive.
+    //
+    //  The parameter 'line' holds the entire source line containing the
+    //  unknown directive.
+    //
+    //  The parameter 'pending' may be used to push tokens back into the input 
+    //  stream, which are to be used as the replacement text for the whole 
+    //  line containing the unknown directive.
+    //
+    //  The return value defines, whether the given expression has been 
+    //  properly interpreted by the hook function or not. If this function 
+    //  returns 'false', the library will raise an 'ill_formed_directive' 
+    //  preprocess_exception. Otherwise the tokens pushed back into 'pending'
+    //  are passed on to the user program.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContextT, typename ContainerT>
+    bool
+    found_unknown_directive(ContextT const& ctx, ContainerT const& line, 
+        ContainerT& pending)
+    { return false; }   // by default we never interpret unknown directives
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
     //  The function 'evaluated_conditional_expression' is called, whenever a 
     //  conditional preprocessing expression was evaluated (the expression
     //  given to a #if, #elif, #ifdef or #ifndef directive)
