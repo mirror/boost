@@ -11,4 +11,10 @@
       Just testing.
     </para>
   </section>
+  <section id="foo.test">
+    <title><link linkend="foo.test"> Test</link></title>
+    <para>
+      Just testing.
+    </para>
+  </section>
 </article>
