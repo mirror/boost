@@ -12,7 +12,7 @@
 
 namespace boost { namespace fusion { 
 
-    struct array_tag;
+    struct boost_array_tag;
     struct random_access_traversal_tag;
 
     namespace extension
@@ -21,7 +21,7 @@ namespace boost { namespace fusion {
         struct category_of_impl;
 
         template<>
-        struct category_of_impl<array_tag>
+        struct category_of_impl<boost_array_tag>
         {
             template<typename T>
             struct apply

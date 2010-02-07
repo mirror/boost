@@ -12,7 +12,7 @@
 
 namespace boost { namespace fusion 
 {
-    struct array_tag;
+    struct boost_array_tag;
 
     namespace extension
     {
@@ -20,7 +20,7 @@ namespace boost { namespace fusion
         struct is_view_impl;
 
         template<>
-        struct is_view_impl<array_tag>
+        struct is_view_impl<boost_array_tag>
         {
             template<typename T>
             struct apply : mpl::false_

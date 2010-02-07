@@ -20,7 +20,7 @@ namespace boost
 
 namespace boost { namespace fusion 
 {
-    struct array_tag;
+    struct boost_array_tag;
     struct fusion_sequence_tag;
 
     namespace traits
@@ -32,7 +32,7 @@ namespace boost { namespace fusion
         struct tag_of<boost::array<T,N> >
 #endif
         {
-            typedef array_tag type;
+            typedef boost_array_tag type;
         };
     }
 }}

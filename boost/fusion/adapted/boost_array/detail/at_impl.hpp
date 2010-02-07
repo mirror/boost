@@ -14,7 +14,7 @@
 
 namespace boost { namespace fusion {
     
-    struct array_tag;
+    struct boost_array_tag;
 
     namespace extension
     {
@@ -22,7 +22,7 @@ namespace boost { namespace fusion {
         struct at_impl;
 
         template<>
-        struct at_impl<array_tag>
+        struct at_impl<boost_array_tag>
         {
             template<typename Sequence, typename N>
             struct apply

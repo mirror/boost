@@ -8,11 +8,11 @@
 #if !defined(BOOST_FUSION_END_IMPL_27122005_1120)
 #define BOOST_FUSION_END_IMPL_27122005_1120
 
-#include <boost/fusion/adapted/array/array_iterator.hpp>
+#include <boost/fusion/adapted/boost_array/array_iterator.hpp>
 
 namespace boost { namespace fusion {
 
-    struct array_tag;
+    struct boost_array_tag;
 
     namespace extension
     {
@@ -20,7 +20,7 @@ namespace boost { namespace fusion {
         struct end_impl;
 
         template <>
-        struct end_impl<array_tag>
+        struct end_impl<boost_array_tag>
         {
             template <typename Sequence>
             struct apply 

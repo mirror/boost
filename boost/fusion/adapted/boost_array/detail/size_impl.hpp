@@ -10,7 +10,7 @@
 
 namespace boost { namespace fusion {
 
-    struct array_tag;
+    struct boost_array_tag;
 
     namespace extension
     {
@@ -18,7 +18,7 @@ namespace boost { namespace fusion {
         struct size_impl;
 
         template<>
-        struct size_impl<array_tag>
+        struct size_impl<boost_array_tag>
         {
             template<typename Sequence>
             struct apply : mpl::int_<Sequence::static_size> {};
