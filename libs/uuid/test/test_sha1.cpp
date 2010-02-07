@@ -23,46 +23,45 @@ namespace std {
 } //namespace std
 #endif
 
-// this is to just make using BOOST_TEST_EQ easier
-struct digest_type {
-    digest_type() {}
-    digest_type(const unsigned int (d)[5]) {
-        for (size_t i=0; i<5; ++i) {
-            digest[i] = d[i];
+void test_sha1_digest_equal_array(char const * file, int line, char const * function,
+                          const unsigned int (&lhs)[5], const unsigned int (&rhs)[5])
+{
+    for (size_t i=0; i<5; i++) {
+        if ( lhs[i] != rhs[i]) {
+            std::cerr << file << "(" << line << "): sha1 digest [";
+            for (size_t l=0; l<5; l++) {
+                if (l != 0) {
+                    std::cerr << " ";
+                }
+                std::cerr << std::hex << (int)lhs[l];
+            }
+
+            std::cerr << "] not equal [";
+            for (size_t r=0; r<5; r++) {
+                if (r != 0) {
+                    std::cerr << " ";
+                }
+                std::cerr << std::hex << (int)rhs[r];
+            }
+            std::cerr << "] in function '" << function << "'" << std::endl;
+            ++boost::detail::test_errors();
+            return;
         }
     }
-    unsigned int digest[5];
-};
-bool operator==(digest_type const& lhs, digest_type const& rhs)
-{
-    for (size_t i=0; i<5; ++i) {
-        if (lhs.digest[i] != rhs.digest[i]) {
-            return false;
-        }
-    }
-    return true;
 }
-template <typename ch, typename char_traits>
-std::basic_ostream<ch, char_traits>& operator<<(std::basic_ostream<ch, char_traits> &os, digest_type const& d)
-{
-    os << "{";
-    for (size_t i=0; i<5; ++i) {
-        os.setf(std::ios_base::hex);
-        os << d.digest[i];
-    }
-    os << "}";
-    return os;
-}
+
+
+#define BOOST_TEST_SHA1_DEGEST(lhs, rhs) ( test_sha1_digest_equal_array(__FILE__, __LINE__, BOOST_CURRENT_FUNCTION, lhs, rhs) )
 
 void test_sha1(char const*const message, unsigned int length, const unsigned int (&correct_digest)[5])
 {
     boost::uuids::detail::sha1 sha;
     sha.process_bytes(message, length);
 
-    digest_type digest;
-    sha.get_digest(digest.digest);
+    unsigned int digest[5];
+    sha.get_digest(digest);
 
-    BOOST_TEST_EQ(digest, digest_type(correct_digest));
+    BOOST_TEST_SHA1_DEGEST(digest, correct_digest);
 }
 
 void test_quick()
@@ -99,7 +98,7 @@ void test_short_messages()
         unsigned int digest[5];
     };
     test_case cases[] =
-    { { "", 
+    { { "",
          { 0xda39a3ee, 0x5e6b4b0d, 0x3255bfef, 0x95601890, 0xafd80709 } }
     , { "a8", 
          { 0x99f2aa95, 0xe36f95c2, 0xacb0eaf2, 0x3998f030, 0x638f3f15 } }
@@ -203,7 +202,7 @@ void test_short_messages()
          { 0xb0732181, 0x568543ba, 0x85f2b6da, 0x602b4b06, 0x5d9931aa } }
     , { "235ea9c2ba7af25400f2e98a47a291b0bccdaad63faa2475721fda5510cc7dad814bce8dabb611790a6abe56030b798b75c944", 
          { 0x9c22674c, 0xf3222c3b, 0xa9216726, 0x94aafee4, 0xce67b96b } }
-    , { "07e3e29fed63104b8410f323b975fd9fba53f636af8c4e68a53fb202ca35dd9ee07cb169ec5186292e44c27e5696a967f5e67709", 
+    , { "07e3e29fed63104b8410f323b975fd9fba53f636af8c4e68a53fb202ca35dd9ee07cb169ec5186292e44c27e5696a967f5e67709",
          { 0xd128335f, 0x4cecca90, 0x66cdae08, 0x958ce656, 0xff0b4cfc } }
     , { "65d2a1dd60a517eb27bfbf530cf6a5458f9d5f4730058bd9814379547f34241822bf67e6335a6d8b5ed06abf8841884c636a25733f", 
          { 0x0b67c57a, 0xc578de88, 0xa2ae055c, 0xaeaec8bb, 0x9b0085a0 } }
@@ -239,9 +238,9 @@ void test_short_messages()
 
         boost::uuids::detail::sha1 sha;
         std::size_t message_length = std::strlen(tc.message);
-        BOOST_TEST_EQ(message_length%2, 0u);
+        BOOST_TEST_EQ(message_length % 2, 0u);
 
-        for (std::size_t b=0; b!=message_length; b+=2) {
+        for (std::size_t b=0; b<message_length; b+=2) {
             char c = tc.message[b];
             char const* f = std::find(xdigits, xdigits_end, c);
             BOOST_TEST_NE(f, xdigits_end);
@@ -258,10 +257,10 @@ void test_short_messages()
             sha.process_byte(byte);
         }
 
-        digest_type digest;
-        sha.get_digest(digest.digest);
+        unsigned int digest[5];
+        sha.get_digest(digest);
 
-        BOOST_TEST_EQ(digest, digest_type(tc.digest));
+        BOOST_TEST_SHA1_DEGEST(digest, tc.digest);
     }
 }
 
