@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for standard list operations.
  *
- * Copyright 2003-2009 Joaquin M Lopez Munoz.
+ * Copyright 2003-2010 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -19,17 +19,15 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
+#include <boost/preprocessor/seq/enum.hpp>
 #include <boost/test/test_tools.hpp>
 
 using namespace boost::multi_index;
 
-#undef _
-#define _ ,
-
 #undef CHECK_EQUAL
-#define CHECK_EQUAL(p,check_range) \
+#define CHECK_EQUAL(p,check_seq) \
 {\
-  int v[]=check_range;\
+  int v[]={BOOST_PP_SEQ_ENUM(check_seq)};\
   std::size_t size_v=sizeof(v)/sizeof(int);\
   BOOST_CHECK(std::size_t(std::distance((p).begin(),(p).end()))==size_v);\
   BOOST_CHECK(std::equal((p).begin(),(p).end(),&v[0]));\
@@ -92,37 +90,37 @@ static void test_list_ops_unique_seq(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
   si.insert(project<1>(ss,ss.find(2)),8); /* 34082561 */
   si2=si;
 
-  CHECK_EQUAL(si,{3 _ 4 _ 0 _ 8 _ 2 _ 5 _ 6 _ 1});
+  CHECK_EQUAL(si,(3)(4)(0)(8)(2)(5)(6)(1));
 
   si.remove(8);
-  CHECK_EQUAL(si,{3 _ 4 _ 0 _ 2 _ 5 _ 6 _ 1});
+  CHECK_EQUAL(si,(3)(4)(0)(2)(5)(6)(1));
 
   si.remove_if(is_even());
 
-  CHECK_EQUAL(si,{3 _ 5 _ 1});
+  CHECK_EQUAL(si,(3)(5)(1));
 
   si.splice(si.end(),si2);
-  CHECK_EQUAL(si,{3 _ 5 _ 1 _ 4 _ 0 _ 8 _ 2 _ 6});
-  CHECK_EQUAL(si2,{3 _ 5 _ 1});
+  CHECK_EQUAL(si,(3)(5)(1)(4)(0)(8)(2)(6));
+  CHECK_EQUAL(si2,(3)(5)(1));
 
   si.splice(project<1>(ss,ss.find(4)),si,project<1>(ss,ss.find(8)));
-  CHECK_EQUAL(si,{3 _ 5 _ 1 _ 8 _ 4 _ 0 _ 2 _ 6});
+  CHECK_EQUAL(si,(3)(5)(1)(8)(4)(0)(2)(6));
   si2.clear();
   si2.splice(si2.begin(),si,si.begin());
 
   si.splice(si.end(),si2,si2.begin());
-  CHECK_EQUAL(si,{5 _ 1 _ 8 _ 4 _ 0 _ 2 _ 6 _ 3});
+  CHECK_EQUAL(si,(5)(1)(8)(4)(0)(2)(6)(3));
   BOOST_CHECK(si2.empty());
 
   si2.splice(si2.end(),si,project<1>(ss,ss.find(0)),project<1>(ss,ss.find(6)));
-  CHECK_EQUAL(si,{5 _ 1 _ 8 _ 4 _ 6 _ 3});
-  CHECK_EQUAL(si2,{0 _ 2});
+  CHECK_EQUAL(si,(5)(1)(8)(4)(6)(3));
+  CHECK_EQUAL(si2,(0)(2));
 
   si.splice(si.begin(),si,si.begin(),si.begin());
-  CHECK_EQUAL(si,{5 _ 1 _ 8 _ 4 _ 6 _ 3});
+  CHECK_EQUAL(si,(5)(1)(8)(4)(6)(3));
 
   si.splice(project<1>(ss,ss.find(8)),si,project<1>(ss,ss.find(4)),si.end());
-  CHECK_EQUAL(si,{5 _ 1 _ 4 _ 6 _ 3 _ 8});
+  CHECK_EQUAL(si,(5)(1)(4)(6)(3)(8));
 
   si.sort();
   si2.sort();
@@ -143,7 +141,7 @@ static void test_list_ops_unique_seq(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
   }
 
   si2.splice(si2.end(),si,project<1>(ss,ss.find(6)),project<1>(ss,ss.find(3)));
-  CHECK_EQUAL(si2,{6 _ 5 _ 4});
+  CHECK_EQUAL(si2,(6)(5)(4));
 
   si.merge(si2,std::greater<int>());
   BOOST_CHECK(is_sorted(si,std::greater<int>()));
@@ -176,8 +174,8 @@ static void test_list_ops_non_unique_seq(
   ss.unique();
   CHECK_EQUAL(
     ss,
-    {9 _ 8 _ 7 _ 6 _ 5 _ 4 _ 3 _ 2 _ 1 _ 0 _
-     1 _ 2 _ 3 _ 4 _ 5 _ 6 _ 7 _ 8 _ 9});
+    (9)(8)(7)(6)(5)(4)(3)(2)(1)(0)
+    (1)(2)(3)(4)(5)(6)(7)(8)(9));
 
   iterator it=ss.begin();
   for(int j=0;j<9;++j,++it){} /* it points to o */
@@ -188,14 +186,14 @@ static void test_list_ops_non_unique_seq(
   ss.merge(ss2);
   CHECK_EQUAL(
     ss,
-    {0 _ 1 _ 1 _ 2 _ 2 _ 3 _ 3 _ 4 _ 4 _ 5 _ 5 _
-     6 _ 6 _ 7 _ 7 _ 8 _ 8 _ 9 _ 9});
+    (0)(1)(1)(2)(2)(3)(3)(4)(4)(5)(5)
+    (6)(6)(7)(7)(8)(8)(9)(9));
 
   ss.unique(same_integral_div<3>());
-  CHECK_EQUAL(ss,{0 _ 3 _ 6 _ 9});
+  CHECK_EQUAL(ss,(0)(3)(6)(9));
 
   ss.unique(same_integral_div<1>());
-  CHECK_EQUAL(ss,{0 _ 3 _ 6 _ 9});
+  CHECK_EQUAL(ss,(0)(3)(6)(9));
 
   /* testcases for bugs reported at
    * http://lists.boost.org/boost-users/2006/09/22604.php
@@ -205,7 +203,7 @@ static void test_list_ops_non_unique_seq(
     ss.push_back(0);
     ss2.push_back(0);
     ss.splice(ss.end(),ss2,ss2.begin());
-    CHECK_EQUAL(ss,{0 _ 0});
+    CHECK_EQUAL(ss,(0)(0));
     BOOST_CHECK(ss2.empty());
 
     ss.clear();
@@ -213,7 +211,7 @@ static void test_list_ops_non_unique_seq(
     ss.push_back(0);
     ss2.push_back(0);
     ss.splice(ss.end(),ss2,ss2.begin(),ss2.end());
-    CHECK_EQUAL(ss,{0 _ 0});
+    CHECK_EQUAL(ss,(0)(0));
     BOOST_CHECK(ss2.empty());
 
     ss.clear();
@@ -221,7 +219,7 @@ static void test_list_ops_non_unique_seq(
     ss.push_back(0);
     ss2.push_back(0);
     ss.merge(ss2);
-    CHECK_EQUAL(ss,{0 _ 0});
+    CHECK_EQUAL(ss,(0)(0));
     BOOST_CHECK(ss2.empty());
 
     typedef typename Sequence::value_type value_type;
@@ -230,7 +228,7 @@ static void test_list_ops_non_unique_seq(
     ss.push_back(0);
     ss2.push_back(0);
     ss.merge(ss2,std::less<value_type>());
-    CHECK_EQUAL(ss,{0 _ 0});
+    CHECK_EQUAL(ss,(0)(0));
     BOOST_CHECK(ss2.empty());
   }
 }
