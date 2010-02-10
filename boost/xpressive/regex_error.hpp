@@ -17,6 +17,7 @@
 #include <string>
 #include <stdexcept>
 #include <boost/throw_exception.hpp>
+#include <boost/current_function.hpp>
 #include <boost/exception/exception.hpp>
 #include <boost/xpressive/regex_constants.hpp>
 
