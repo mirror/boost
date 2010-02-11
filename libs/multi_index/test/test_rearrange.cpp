@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for rearrange operations.
  *
- * Copyright 2003-2008 Joaquin M Lopez Munoz.
+ * Copyright 2003-2010 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -18,19 +18,17 @@
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
 #include <boost/next_prior.hpp>
+#include <boost/preprocessor/seq/enum.hpp>
 #include <boost/ref.hpp>
 #include <boost/test/test_tools.hpp>
 #include <vector>
 
 using namespace boost::multi_index;
 
-#undef _
-#define _ ,
-
 #undef CHECK_EQUAL
-#define CHECK_EQUAL(p,check_range) \
+#define CHECK_EQUAL(p,check_seq) \
 {\
-  int v[]=check_range;\
+  int v[]={BOOST_PP_SEQ_ENUM(check_seq)};\
   std::size_t size_v=sizeof(v)/sizeof(int);\
   BOOST_CHECK(std::size_t(std::distance((p).begin(),(p).end()))==size_v);\
   BOOST_CHECK(std::equal((p).begin(),(p).end(),&v[0]));\
@@ -67,29 +65,29 @@ static void local_test_rearrange(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
   it=sc.begin();
   std::advance(it,3);
   sc.relocate(sc.begin(),it);
-  CHECK_EQUAL(sc,{3 _ 0 _ 1 _ 2 _ 4 _ 5});
+  CHECK_EQUAL(sc,(3)(0)(1)(2)(4)(5));
   BOOST_CHECK(it==sc.begin());
 
   sc.relocate(it,it);
-  CHECK_EQUAL(sc,{3 _ 0 _ 1 _ 2 _ 4 _ 5});
+  CHECK_EQUAL(sc,(3)(0)(1)(2)(4)(5));
 
   std::advance(it,3);
   sc.relocate(sc.end(),it,sc.end());
-  CHECK_EQUAL(sc,{3 _ 0 _ 1 _ 2 _ 4 _ 5});
+  CHECK_EQUAL(sc,(3)(0)(1)(2)(4)(5));
 
   sc.relocate(sc.begin(),it,it);
-  CHECK_EQUAL(sc,{3 _ 0 _ 1 _ 2 _ 4 _ 5});
+  CHECK_EQUAL(sc,(3)(0)(1)(2)(4)(5));
 
   iterator it2;
 
   it2=sc.begin();
   ++it2;
   sc.relocate(it2,it,sc.end());
-  CHECK_EQUAL(sc,{3 _ 2 _ 4 _ 5 _ 0 _ 1});
+  CHECK_EQUAL(sc,(3)(2)(4)(5)(0)(1));
   BOOST_CHECK(std::distance(it,it2)==3);
 
   sc.relocate(boost::prior(sc.end()),it,it2);
-  CHECK_EQUAL(sc,{3 _ 0 _ 2 _ 4 _ 5 _ 1});
+  CHECK_EQUAL(sc,(3)(0)(2)(4)(5)(1));
 
   std::vector<boost::reference_wrapper<const value_type> > v;
   for(iterator it3=sc.begin();it3!=sc.end();++it3){
