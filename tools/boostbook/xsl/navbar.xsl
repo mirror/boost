@@ -13,11 +13,11 @@
 
    <!--
       how to render the Home | Libraries | ... | More contents
-         none       - do not display ("standalone" mode)
-        *horizontal - display in old-Boost style format
+        *none       - do not display ("standalone" mode)
+         horizontal - display in old-Boost style format
          vertical   - like the new Getting Started layout
    -->
-   <xsl:param name = "nav.layout" select = "'horizontal'"/>
+   <xsl:param name = "nav.layout" select = "'none'"/>
 
    <!--
       header border layout
@@ -33,17 +33,44 @@
         *Spirit  - display "mini" navigation on the right
    -->
    <xsl:param name = "nav.flow" select = "'Spirit'"/>
+   
+   <!--
+      boost.image:
+        *none    - do not display a boost logo image, nor link to Boost
+         Boost   - use standard boost logo, and link to Boost
+         custom  - use a custom image and link
+   -->
+   <xsl:param name = "boost.image" select = "'none'"/>
 
    <!-- location of the various Boost elements -->
 
    <xsl:param name = "boost.root"      select = "'../..'"/>
    <xsl:param name = "boost.website"   select = "'http://www.boost.org'"/>
-   <xsl:param name = "boost.image.src" 
-              select = "concat($boost.root, '/boost.png')"/>
-   <xsl:param name = "boost.image.alt" select = "'Boost C++ Libraries'"/>
-   <xsl:param name = "boost.image.w"   select = "277"/>
-   <xsl:param name = "boost.image.h"   select = "86"/>
-   <xsl:param name = "boost.libraries" select = "'libraries.html'"/>
+   <xsl:param name = "boost.image.src">
+      <xsl:if test = "$boost.image = 'Boost'">
+         <xsl:value-of select = "concat($boost.root, '/boost.png')"/>
+      </xsl:if>
+   </xsl:param>
+   <xsl:param name = "boost.image.alt">
+      <xsl:if test = "$boost.image = 'Boost'">
+         <xsl:value-of select = "'Boost C++ Libraries'"/>
+      </xsl:if>
+   </xsl:param>
+   <xsl:param name = "boost.image.w">
+      <xsl:if test = "$boost.image = 'Boost'">
+         <xsl:value-of select = "277"/>
+      </xsl:if>
+   </xsl:param>
+   <xsl:param name = "boost.image.h">
+      <xsl:if test = "$boost.image = 'Boost'">
+         <xsl:value-of select = "86"/>
+      </xsl:if>
+   </xsl:param>
+   <xsl:param name = "boost.libraries">
+      <xsl:if test = "$boost.image = 'Boost'">
+         <xsl:value-of select = "'libraries.html'"/>
+      </xsl:if>
+   </xsl:param>
 
    <!-- header -->
 
@@ -64,13 +91,15 @@
             <xsl:if test = "$nav.border = 'Boost'">
                <xsl:attribute name = "style">background-color: white; width: 50%;</xsl:attribute>
             </xsl:if>
-            <img alt="{$boost.image.alt}" width="{$boost.image.w}" height="{$boost.image.h}">
-                <xsl:attribute name="src">
-                    <xsl:call-template name="href.target.relative">
-                        <xsl:with-param name="target" select="$boost.image.src"/>
-                    </xsl:call-template>
-                </xsl:attribute>
-            </img>
+            <xsl:if test = "$boost.image != 'none'">
+               <img alt="{$boost.image.alt}" width="{$boost.image.w}" height="{$boost.image.h}">
+                   <xsl:attribute name="src">
+                       <xsl:call-template name="href.target.relative">
+                           <xsl:with-param name="target" select="$boost.image.src"/>
+                       </xsl:call-template>
+                   </xsl:attribute>
+               </img>
+            </xsl:if>
          </td><xsl:choose>
             <xsl:when test = "$nav.layout = 'horizontal'">
                <xsl:call-template name = "header.navdata-horiz"/>
