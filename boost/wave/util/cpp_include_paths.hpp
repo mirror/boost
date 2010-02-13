@@ -61,7 +61,7 @@ struct bidirectional_map
 // compilers
 #if defined(BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS) || \
     (defined(BOOST_MSVC) && ((BOOST_MSVC < 1300) || \
-        (_MSC_FULL_VER == 160020506 || _MSC_FULL_VER == 160021003))) || \
+        (_MSC_FULL_VER == 160020506 || _MSC_FULL_VER == 160021003 || _MSC_FULL_VER == 160030128))) || \
     (defined(BOOST_INTEL_CXX_VERSION) && \
         (defined(_MSC_VER) && (BOOST_INTEL_CXX_VERSION <= 700))) 
 
