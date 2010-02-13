@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "error_code_test", "error_code_test\error_code_test.vcproj", "{81960557-E9A9-4E81-AC96-9E11C33CB058}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "system_error_test", "system_error_test\system_error_test.vcproj", "{CBD12E59-99E5-4F35-9B66-0554D0FBDB76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{81960557-E9A9-4E81-AC96-9E11C33CB058}.Debug|Win32.Build.0 = Debug|Win32
 		{81960557-E9A9-4E81-AC96-9E11C33CB058}.Release|Win32.ActiveCfg = Release|Win32
 		{81960557-E9A9-4E81-AC96-9E11C33CB058}.Release|Win32.Build.0 = Release|Win32
+		{CBD12E59-99E5-4F35-9B66-0554D0FBDB76}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CBD12E59-99E5-4F35-9B66-0554D0FBDB76}.Debug|Win32.Build.0 = Debug|Win32
+		{CBD12E59-99E5-4F35-9B66-0554D0FBDB76}.Release|Win32.ActiveCfg = Release|Win32
+		{CBD12E59-99E5-4F35-9B66-0554D0FBDB76}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

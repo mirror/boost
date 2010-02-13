@@ -9,6 +9,7 @@
 		AdditionalIncludeDirectories="../../../../.."
 		PreprocessorDefinitions="BOOST_ALL_NO_LIB"
 		ExceptionHandling="2"
+		WarningLevel="4"
 	/>
 	<Tool
 		Name="VCPostBuildEventTool"
