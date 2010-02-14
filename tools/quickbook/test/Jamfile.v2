@@ -43,7 +43,8 @@ test-suite quickbook.test :
     [ quickbook-fail-test fail-parse-error1 ]
     [ quickbook-fail-test fail-parse-error2 ]
     [ quickbook-fail-test fail-template-lookup1 ]
+    [ quickbook-test utf-8 ]
+    [ quickbook-test utf-8-bom ]
+    [ quickbook-fail-test utf-16be-bom ]
+    [ quickbook-fail-test utf-16le-bom ]
     ;
-
-
-
