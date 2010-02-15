@@ -31,7 +31,7 @@
 // G = Grouped/Ungrouped
 // E = Key Extractor
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
 #   if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
         // STLport doesn't have std::forward.
 #   else
