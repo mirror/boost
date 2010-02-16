@@ -5,10 +5,7 @@
 
 xml hash : hash.qbk ;
 boostbook standalone : hash :
-    <xsl:param>html.stylesheet=../../../../../doc/html/boostbook.css
     <xsl:param>boost.root=../../../../..
-    <xsl:param>boost.libraries=../../../../libraries.htm
-    <xsl:param>navig.graphics=1
 
     <xsl:param>chunk.first.sections=1
     <xsl:param>chunk.section.depth=2
