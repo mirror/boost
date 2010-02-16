@@ -231,7 +231,7 @@ void insert_tests2(X*,
     }
 }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
 
 template <class X>
 void unique_emplace_tests1(X*,
@@ -403,7 +403,7 @@ UNORDERED_TEST(insert_tests2,
     ((default_generator)(generate_collisions))
 )
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
 UNORDERED_TEST(unique_emplace_tests1,
     ((test_set)(test_map))
     ((default_generator)(generate_collisions))

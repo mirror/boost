@@ -39,7 +39,7 @@ struct insert_test_base : public test::exception_base
     }
 };
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
 
 template <class T>
 struct emplace_test1 : public insert_test_base<T>
@@ -238,7 +238,7 @@ struct insert_test_rehash3 : public insert_test_base<T>
     (insert_test1)(insert_test2)(insert_test3)(insert_test4) \
     (insert_test_rehash1)(insert_test_rehash2)(insert_test_rehash3)
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
 #define ALL_TESTS (emplace_test1)BASIC_TESTS
 #else
 #define ALL_TESTS BASIC_TESTS
