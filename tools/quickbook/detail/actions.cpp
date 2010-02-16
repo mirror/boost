@@ -787,6 +787,10 @@ namespace quickbook
         std::string result;
         actions.push(); // scope the actions' states
         {
+            // Store the current section level so that we can ensure that
+            // [section] and [endsect] tags in the template are balanced.
+            actions.min_section_level = actions.section_level;
+
             template_symbol const* symbol =
                 actions.templates.find(actions.template_info[0]);
             BOOST_ASSERT(symbol);
@@ -844,6 +848,17 @@ namespace quickbook
                     << body
                     << "------------------end--------------------" << std::endl
                     << std::endl;
+                actions.pop(); // restore the actions' states
+                --actions.template_depth;
+                ++actions.error_count;
+                return;
+            }
+            
+            if (actions.section_level != actions.min_section_level)
+            {
+                boost::spirit::classic::file_position const pos = first.get_position();
+                detail::outerr(pos.file,pos.line)
+                    << "Mismatched sections in template " << template_info[0] << std::endl;
                 actions.pop(); // restore the actions' states
                 --actions.template_depth;
                 ++actions.error_count;
@@ -1056,19 +1071,19 @@ namespace quickbook
 
     void end_section_action::operator()(iterator first, iterator last) const
     {
-        out << "</section>";
-
-        --section_level;
-        if (section_level < 0)
+        if (section_level <= min_section_level)
         {
             boost::spirit::classic::file_position const pos = first.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Mismatched [endsect] near column " << pos.column << ".\n";
             ++error_count;
             
-            // $$$ TODO: somehow fail parse else BOOST_ASSERT(std::string::npos != n)
-            // $$$ below will assert.
+            return;
         }
+
+        --section_level;
+        out << "</section>";
+
         if (section_level == 0)
         {
             qualified_section_id.clear();
@@ -1077,7 +1092,7 @@ namespace quickbook
         {
             std::string::size_type const n =
                 qualified_section_id.find_last_of('.');
-            BOOST_ASSERT(std::string::npos != n);
+            if(std::string::npos != n);
             qualified_section_id.erase(n, std::string::npos);
         }
     }
