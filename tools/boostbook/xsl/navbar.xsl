@@ -12,13 +12,24 @@
 <xsl:import href="relative-href.xsl"/>
 
    <!--
+      boost.defaults:
+        *custom  - only use explicitly set parameters
+         Boost   - use standard boost settings, can be overridden
+   -->
+   <xsl:param name = "boost.defaults" select = "'none'"/>
+
+   <!--
       how to render the Home | Libraries | ... | More contents
         *none       - do not display ("standalone" mode)
-         horizontal - display in old-Boost style format
+         horizontal - display in old-Boost style format (default for Boost)
          vertical   - like the new Getting Started layout
    -->
-   <xsl:param name = "nav.layout" select = "'none'"/>
-
+   <xsl:param name = "nav.layout">
+      <xsl:choose>
+         <xsl:when test = "$boost.defaults='Boost'">horizontal</xsl:when>
+         <xsl:otherwise>none</xsl:otherwise>
+      </xsl:choose>
+   </xsl:param>
    <!--
       header border layout
          Boost - place the old-Boost border around the header
@@ -34,41 +45,34 @@
    -->
    <xsl:param name = "nav.flow" select = "'Spirit'"/>
    
-   <!--
-      boost.image:
-        *none    - do not display a boost logo image, nor link to Boost
-         Boost   - use standard boost logo, and link to Boost
-         custom  - use a custom image and link
-   -->
-   <xsl:param name = "boost.image" select = "'none'"/>
-
    <!-- location of the various Boost elements -->
 
    <xsl:param name = "boost.root"      select = "'../..'"/>
    <xsl:param name = "boost.website"   select = "'http://www.boost.org'"/>
+   <!-- Logo image location, leave empty for no logo -->
    <xsl:param name = "boost.image.src">
-      <xsl:if test = "$boost.image = 'Boost'">
+      <xsl:if test = "$boost.defaults = 'Boost'">
          <xsl:value-of select = "concat($boost.root, '/boost.png')"/>
       </xsl:if>
    </xsl:param>
    <xsl:param name = "boost.image.alt">
-      <xsl:if test = "$boost.image = 'Boost'">
+      <xsl:if test = "$boost.defaults = 'Boost'">
          <xsl:value-of select = "'Boost C++ Libraries'"/>
       </xsl:if>
    </xsl:param>
    <xsl:param name = "boost.image.w">
-      <xsl:if test = "$boost.image = 'Boost'">
+      <xsl:if test = "$boost.defaults = 'Boost'">
          <xsl:value-of select = "277"/>
       </xsl:if>
    </xsl:param>
    <xsl:param name = "boost.image.h">
-      <xsl:if test = "$boost.image = 'Boost'">
+      <xsl:if test = "$boost.defaults = 'Boost'">
          <xsl:value-of select = "86"/>
       </xsl:if>
    </xsl:param>
    <xsl:param name = "boost.libraries">
-      <xsl:if test = "$boost.image = 'Boost'">
-         <xsl:value-of select = "'libraries.html'"/>
+      <xsl:if test = "$boost.defaults = 'Boost'">
+         <xsl:value-of select = "concat($boost.root, '/libs/libraries.htm')"/>
       </xsl:if>
    </xsl:param>
 
@@ -91,7 +95,7 @@
             <xsl:if test = "$nav.border = 'Boost'">
                <xsl:attribute name = "style">background-color: white; width: 50%;</xsl:attribute>
             </xsl:if>
-            <xsl:if test = "$boost.image != 'none'">
+            <xsl:if test = "boolean($boost.image.src)">
                <img alt="{$boost.image.alt}" width="{$boost.image.w}" height="{$boost.image.h}">
                    <xsl:attribute name="src">
                        <xsl:call-template name="href.target.relative">
@@ -140,9 +144,11 @@
          </xsl:call-template>
       </xsl:variable>
       <xsl:variable name="libraries_link">
-         <xsl:call-template name="href.target.relative">
-            <xsl:with-param name="target" select="$boost.libraries"/>
-         </xsl:call-template>
+         <xsl:if test = "boolean($boost.libraries)">
+            <xsl:call-template name="href.target.relative">
+               <xsl:with-param name="target" select="$boost.libraries"/>
+            </xsl:call-template>
+         </xsl:if>
       </xsl:variable>
       <xsl:variable name="people_link">
          <xsl:call-template name="href.target.relative">
@@ -163,7 +169,9 @@
       <xsl:choose>
          <xsl:when test = "$nav.border = 'Boost'">
             <td align = "center" class = "boost-headtd"><a href = "{$home_link}" class = "boost-headelem">Home</a></td>
-            <td align = "center" class = "boost-headtd"><a href = "{$libraries_link}" class = "boost-headelem">Libraries</a></td>
+            <xsl:if test = "boolean($libraries_link)">
+              <td align = "center" class = "boost-headtd"><a href = "{$libraries_link}" class = "boost-headelem">Libraries</a></td>
+            </xsl:if>
             <td align = "center" class = "boost-headtd"><a href = "{$people_link}" class = "boost-headelem">People</a></td>
             <td align = "center" class = "boost-headtd"><a href = "{$faq_link}" class = "boost-headelem">FAQ</a></td>
             <td align = "center" class = "boost-headtd"><a href = "{$more_link}" class = "boost-headelem">More</a></td>

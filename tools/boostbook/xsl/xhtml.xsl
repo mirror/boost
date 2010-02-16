@@ -24,10 +24,20 @@
   <xsl:import href="relative-href.xsl"/>
   <xsl:import href="callout.xsl"/>
 
+  <xsl:param name="html.stylesheet">
+    <xsl:choose>
+      <xsl:when test = "$boost.defaults = 'Boost'">
+        <xsl:value-of select = "concat($boost.root, '/doc/src/boostbook.css')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        boostbook.css
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
   <xsl:param name="admon.style"/>
   <xsl:param name="admon.graphics">1</xsl:param>
   <xsl:param name="boostbook.verbose" select="0"/>
-  <xsl:param name="html.stylesheet" select="'boostbook.css'"/>
   <xsl:param name="navig.graphics" select="1"/>
   <xsl:param name="navig.graphics.extension" select="'.png'"/>
   <xsl:param name="chapter.autolabel" select="1"/>
