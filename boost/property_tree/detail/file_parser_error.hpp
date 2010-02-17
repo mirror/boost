@@ -45,19 +45,19 @@ namespace boost { namespace property_tree
 
         // Get error message (without line and file - use what() to get
         // full message)
-        std::string message()
+        std::string message() const
         {
             return m_message;
         }
 
         // Get error filename
-        std::string filename()
+        std::string filename() const
         {
             return m_filename;
         }
 
         // Get error line number
-        unsigned long line()
+        unsigned long line() const
         {
             return m_line;
         }
@@ -69,9 +69,9 @@ namespace boost { namespace property_tree
         unsigned long m_line;
 
         // Format error message to be returned by std::runtime_error::what()
-        std::string format_what(const std::string &message,
-                                const std::string &filename,
-                                unsigned long line)
+        static std::string format_what(const std::string &message,
+                                       const std::string &filename,
+                                       unsigned long line)
         {
             std::stringstream stream;
             if (line > 0)
