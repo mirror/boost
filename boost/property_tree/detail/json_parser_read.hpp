@@ -231,8 +231,12 @@ namespace boost { namespace property_tree { namespace json_parser
                         ;
                 
                 number 
-                    =   strict_real_p 
-                        | int_p
+                    =   !ch_p("-") >>
+                        (ch_p("0") | (range_p(Ch('1'), Ch('9')) >> *digit_p)) >>
+                        !(ch_p(".") >> +digit_p) >>
+                        !(chset_p(detail::widen<Ch>("eE").c_str()) >>
+                          !chset_p(detail::widen<Ch>("-+").c_str()) >>
+                          +digit_p)
                         ;
                 
                 string 
