@@ -13,6 +13,7 @@
 
 #include <boost/config.hpp>
 #include <boost/optional/optional_fwd.hpp>
+#include <boost/throw_exception.hpp>
 #include <functional>           // for std::less
 #include <memory>               // for std::allocator
 #include <string>
@@ -136,7 +137,7 @@ namespace boost { namespace property_tree
 
 #if !defined(BOOST_PROPERTY_TREE_DOXYGEN_INVOKED)
     // Throwing macro to avoid no return warnings portably
-#   define BOOST_PROPERTY_TREE_THROW(e) { throw_exception(e); std::exit(1); }
+#   define BOOST_PROPERTY_TREE_THROW(e) BOOST_THROW_EXCEPTION(e)
 #endif
 
 #endif
