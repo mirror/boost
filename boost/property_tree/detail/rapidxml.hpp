@@ -1735,7 +1735,7 @@ namespace rapidxml
                 static_cast<unsigned char>(text[1]) == 0xBB && 
                 static_cast<unsigned char>(text[2]) == 0xBF)
             {
-                text += 3;      // Skup utf-8 bom
+                text += 3;      // Skip utf-8 bom
             }
         }
 
