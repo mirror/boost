@@ -21,37 +21,37 @@ namespace boost { namespace property_tree { namespace json_parser
 
     // Create necessary escape sequences from illegal characters
     template<class Ch>
-    std::basic_string<Ch> create_escapes(const std::basic_string<Ch> &s,
-                                         const std::locale &loc)
+    std::basic_string<Ch> create_escapes(const std::basic_string<Ch> &s)
     {
         std::basic_string<Ch> result;
         typename std::basic_string<Ch>::const_iterator b = s.begin();
         typename std::basic_string<Ch>::const_iterator e = s.end();
         while (b != e)
         {
-            if (*b == Ch('\0')) result += Ch('\\'), result += Ch('0');
+            // This assumes an ASCII superset. But so does everything in PTree.
+            // We escape everything outside ASCII, because this code can't
+            // handle high unicode characters.
+            if (*b == 0x20 || *b == 0x21 ||
+                (*b >= 0x23 && *b <= 0x5B) || (*b >= 0x5D && *b <= 0xFF))
+                result += *b;
             else if (*b == Ch('\b')) result += Ch('\\'), result += Ch('b');
             else if (*b == Ch('\f')) result += Ch('\\'), result += Ch('f');
             else if (*b == Ch('\n')) result += Ch('\\'), result += Ch('n');
             else if (*b == Ch('\r')) result += Ch('\\'), result += Ch('r');
-            else if (*b == Ch('"')) result += Ch('\\'), result += Ch('"');
+            else if (*b == Ch('"'))  result += Ch('\\'), result += Ch('"');
             else if (*b == Ch('\\')) result += Ch('\\'), result += Ch('\\');
             else
             {
-                if (std::isprint(*b, loc))
-                    result += *b;
-                else
-                {   
-                    const char *hexdigits = "0123456789ABCDEF";
-                    unsigned long u = (std::min)(static_cast<unsigned long>(*b), 0xFFFFul);
-                    int d1 = u / 4096; u -= d1 * 4096;
-                    int d2 = u / 256; u -= d2 * 256;
-                    int d3 = u / 16; u -= d3 * 16;
-                    int d4 = u;
-                    result += Ch('\\'); result += Ch('u');
-                    result += Ch(hexdigits[d1]); result += Ch(hexdigits[d2]);
-                    result += Ch(hexdigits[d3]); result += Ch(hexdigits[d4]);
-                }
+                const char *hexdigits = "0123456789ABCDEF";
+                unsigned long u = (std::min)(static_cast<unsigned long>(*b),
+                                             0xFFFFul);
+                int d1 = u / 4096; u -= d1 * 4096;
+                int d2 = u / 256; u -= d2 * 256;
+                int d3 = u / 16; u -= d3 * 16;
+                int d4 = u;
+                result += Ch('\\'); result += Ch('u');
+                result += Ch(hexdigits[d1]); result += Ch(hexdigits[d2]);
+                result += Ch(hexdigits[d3]); result += Ch(hexdigits[d4]);
             }
             ++b;
         }
@@ -72,7 +72,7 @@ namespace boost { namespace property_tree { namespace json_parser
         {
             
             // Write value
-            Str data = create_escapes(pt.template get_value<Str>(), stream.getloc());
+            Str data = create_escapes(pt.template get_value<Str>());
             stream << Ch('"') << data << Ch('"');
 
         }
@@ -102,7 +102,7 @@ namespace boost { namespace property_tree { namespace json_parser
             for (; it != pt.end(); ++it)
             {
                 stream << Str(4 * (indent + 1), Ch(' '));
-                stream << Ch('"') << create_escapes(it->first, stream.getloc()) << Ch('"') << Ch(':');
+                stream << Ch('"') << create_escapes(it->first) << Ch('"') << Ch(':');
                 if (it->second.empty())
                     stream << Ch(' ');
                 else
