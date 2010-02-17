@@ -60,17 +60,16 @@ namespace boost { namespace property_tree { namespace json_parser
 
     template<class Ptree>
     void write_json_helper(std::basic_ostream<typename Ptree::key_type::value_type> &stream, 
-                           const Ptree &pt, 
-                           int indent)
+                           const Ptree &pt,
+                           int indent, bool pretty)
     {
 
         typedef typename Ptree::key_type::value_type Ch;
         typedef typename std::basic_string<Ch> Str;
-        
+
         // Value or object or array
         if (indent > 0 && pt.empty())
         {
-            
             // Write value
             Str data = create_escapes(pt.template get_value<Str>());
             stream << Ch('"') << data << Ch('"');
@@ -78,42 +77,44 @@ namespace boost { namespace property_tree { namespace json_parser
         }
         else if (indent > 0 && pt.count(Str()) == pt.size())
         {
-                
             // Write array
-            stream << Ch('[') << Ch('\n');
+            stream << Ch('[');
+            if (pretty) stream << Ch('\n');
             typename Ptree::const_iterator it = pt.begin();
             for (; it != pt.end(); ++it)
             {
-                stream << Str(4 * (indent + 1), Ch(' '));
-                write_json_helper(stream, it->second, indent + 1);
+                if (pretty) stream << Str(4 * (indent + 1), Ch(' '));
+                write_json_helper(stream, it->second, indent + 1, pretty);
                 if (boost::next(it) != pt.end())
                     stream << Ch(',');
-                stream << Ch('\n');
+                if (pretty) stream << Ch('\n');
             }
             stream << Str(4 * indent, Ch(' ')) << Ch(']');
 
         }
         else
         {
-        
             // Write object
-            stream << Ch('{') << Ch('\n');
+            stream << Ch('{');
+            if (pretty) stream << Ch('\n');
             typename Ptree::const_iterator it = pt.begin();
             for (; it != pt.end(); ++it)
             {
-                stream << Str(4 * (indent + 1), Ch(' '));
+                if (pretty) stream << Str(4 * (indent + 1), Ch(' '));
                 stream << Ch('"') << create_escapes(it->first) << Ch('"') << Ch(':');
-                if (it->second.empty())
-                    stream << Ch(' ');
-                else
-                    stream << Ch('\n') << Str(4 * (indent + 1), Ch(' '));
-                write_json_helper(stream, it->second, indent + 1);
+                if (pretty) {
+                    if (it->second.empty())
+                        stream << Ch(' ');
+                    else
+                        stream << Ch('\n') << Str(4 * (indent + 1), Ch(' '));
+                }
+                write_json_helper(stream, it->second, indent + 1, pretty);
                 if (boost::next(it) != pt.end())
                     stream << Ch(',');
-                stream << Ch('\n');
+                if (pretty) stream << Ch('\n');
             }
-            stream << Str(4 * indent, Ch(' ')) << Ch('}');
-
+            if (pretty) stream << Str(4 * indent, Ch(' '));
+            stream << Ch('}');
         }
 
     }
@@ -149,11 +150,12 @@ namespace boost { namespace property_tree { namespace json_parser
     template<class Ptree>
     void write_json_internal(std::basic_ostream<typename Ptree::key_type::value_type> &stream, 
                              const Ptree &pt,
-                             const std::string &filename)
+                             const std::string &filename,
+                             bool pretty)
     {
         if (!verify_json(pt, 0))
             BOOST_PROPERTY_TREE_THROW(json_parser_error("ptree contains data that cannot be represented in JSON format", filename, 0));
-        write_json_helper(stream, pt, 0);
+        write_json_helper(stream, pt, 0, pretty);
         stream << std::endl;
         if (!stream.good())
             BOOST_PROPERTY_TREE_THROW(json_parser_error("write error", filename, 0));
