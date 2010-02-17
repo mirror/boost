@@ -14,35 +14,28 @@
 // container (instead of std::string that standard ptree has).
 
 #include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/info_parser.hpp>
-#include <boost/property_tree/ini_parser.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/xml_parser.hpp>
 #include <boost/any.hpp>
 #include <list>
 #include <string>
 #include <iostream>
 
 // Custom translator that works with boost::any instead of std::string
-struct my_translator
+template <class Ext, class Int = boost::any>
+struct variant_translator
 {
+    typedef Ext external_type;
+    typedef Int internal_type;
 
-    // Custom extractor - converts data from boost::any to T
-    template<class Ptree, class T> 
-    bool get_value(const Ptree &pt, T &value) const
+    external_type
+    get_value(const internal_type &value) const
     {
-        value = boost::any_cast<T>(pt.data());
-        return true;    // Success
+        return boost::any_cast<external_type>(value);
     }
-
-    // Custom inserter - converts data from T to boost::any
-    template<class Ptree, class T> 
-    bool put_value(Ptree &pt, const T &value) const
+    internal_type
+    put_value(const external_type &value) const
     {
-        pt.data() = value;
-        return true;
+        return value;
     }
-
 };
 
 int main()
@@ -51,30 +44,45 @@ int main()
     using namespace boost::property_tree;
     
     // Property_tree with boost::any as data type
-    // Key comparison:  std::less<std::string>
     // Key type:        std::string
-    // Path type:       path
     // Data type:       boost::any
-    // Translator type: my_translator
-    typedef basic_ptree<std::less<std::string>, std::string, path, boost::any, my_translator> my_ptree;
+    // Key comparison:  default (std::less<std::string>)
+    typedef basic_ptree<std::string, boost::any> my_ptree;
     my_ptree pt;
 
     // Put/get int value
-    pt.put("int value", 3);
-    int int_value = pt.get<int>("int value");
+    typedef variant_translator<int> int_tran;
+    pt.put("int value", 3, int_tran());
+    int int_value = pt.get<int>("int value", int_tran());
     std::cout << "Int value: " << int_value << "\n";
 
     // Put/get string value
-    pt.put<std::string>("string value", "foo bar");
-    std::string string_value = pt.get<std::string>("string value");
+    typedef variant_translator<std::string> string_tran;
+    pt.put<std::string>("string value", "foo bar", string_tran());
+    std::string string_value = pt.get<std::string>(
+        "string value"
+      , string_tran()
+    );
     std::cout << "String value: " << string_value << "\n";
 
     // Put/get list<int> value
+    typedef std::list<int> intlist;
+    typedef variant_translator<intlist> intlist_tran;
     int list_data[] = { 1, 2, 3, 4, 5 };
-    pt.put<std::list<int> >("list value", std::list<int>(list_data, list_data + sizeof(list_data) / sizeof(*list_data)));
-    std::list<int> list_value = pt.get<std::list<int> >("list value");
+    pt.put<intlist>(
+        "list value"
+      , intlist(
+            list_data
+          , list_data + sizeof(list_data) / sizeof(*list_data)
+        )
+      , intlist_tran()
+    );
+    intlist list_value = pt.get<intlist>(
+        "list value"
+      , intlist_tran()
+    );
     std::cout << "List value: ";
-    for (std::list<int>::iterator it = list_value.begin(); it != list_value.end(); ++it)
+    for (intlist::iterator it = list_value.begin(); it != list_value.end(); ++it)
         std::cout << *it << ' ';
     std::cout << '\n';
 }
