@@ -53,6 +53,17 @@ void test_approximation()
     BOOST_CHECK_EQUAL(desc.find("all", true).long_name(), "all");
     BOOST_CHECK_EQUAL(desc.find("all-ch", true).long_name(), "all-chroots");
 
+    options_description desc2;
+    desc2.add_options()
+        ("help", "display this message")
+        ("config", value<string>(), "config file name")
+        ("config-value", value<string>(), "single config value")
+        ;
+
+    BOOST_CHECK_EQUAL(desc2.find("config", true).long_name(), "config");
+    BOOST_CHECK_EQUAL(desc2.find("config-value", true).long_name(), 
+                      "config-value");
+
 
 //    BOOST_CHECK(desc.count_approx("foo") == 1);
 //    set<string> a = desc.approximations("f");
