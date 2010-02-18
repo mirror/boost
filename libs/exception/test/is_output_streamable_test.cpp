@@ -4,7 +4,6 @@
 //file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/exception/detail/is_output_streamable.hpp>
-#include <boost/detail/lightweight_test.hpp>
 
 namespace
 n1
@@ -31,11 +30,20 @@ n2
         }           
     }
 
+template <bool Test>
+struct test;
+
+template <>
+struct
+test<true>
+	{
+	};
+
 int
 main()
     {
-    BOOST_TEST( !boost::is_output_streamable<n1::c1>::value );
-    BOOST_TEST( boost::is_output_streamable<n2::c2>::value );
-    BOOST_TEST( boost::is_output_streamable<int>::value );
-    return boost::report_errors();
+    test<!boost::is_output_streamable<n1::c1>::value>();
+    test<boost::is_output_streamable<n2::c2>::value>();
+    test<boost::is_output_streamable<int>::value>();
+    return 0;
     }

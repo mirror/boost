@@ -157,20 +157,35 @@ boost
                 return p;
                 }
             };
+
+        template <class E,class Tag,class T>
+        inline
+        E const &
+        set_info( E const & x, error_info<Tag,T> const & v )
+            {
+            typedef error_info<Tag,T> error_info_tag_t;
+            shared_ptr<error_info_tag_t> p( new error_info_tag_t(v) );
+            exception_detail::error_info_container * c=x.data_.get();
+            if( !c )
+                x.data_.adopt(c=new exception_detail::error_info_container_impl);
+            c->set(p,BOOST_EXCEPTION_STATIC_TYPEID(error_info_tag_t));
+            return x;
+            }
+
+        template <class T>
+        struct
+        derives_boost_exception
+            {
+            enum e { value = (sizeof(dispatch_boost_exception((T*)0))==sizeof(large_size)) };
+            };
         }
 
     template <class E,class Tag,class T>
     inline
-    E const &
+    typename enable_if<exception_detail::derives_boost_exception<E>,E const &>::type
     operator<<( E const & x, error_info<Tag,T> const & v )
         {
-        typedef error_info<Tag,T> error_info_tag_t;
-        shared_ptr<error_info_tag_t> p( new error_info_tag_t(v) );
-        exception_detail::error_info_container * c=x.data_.get();
-        if( !c )
-            x.data_.adopt(c=new exception_detail::error_info_container_impl);
-        c->set(p,BOOST_EXCEPTION_STATIC_TYPEID(error_info_tag_t));
-        return x;
+        return exception_detail::set_info(x,v);
         }
     }
 

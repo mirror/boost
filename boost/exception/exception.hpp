@@ -132,18 +132,6 @@ boost
             }
         };
 
-    template <class E,class Tag,class T>
-    E const & operator<<( E const &, error_info<Tag,T> const & );
-
-    template <class E>
-    E const & operator<<( E const &, throw_function const & );
-
-    template <class E>
-    E const & operator<<( E const &, throw_file const & );
-
-    template <class E>
-    E const & operator<<( E const &, throw_line const & );
-
     class exception;
 
     template <class>
@@ -187,6 +175,18 @@ boost
         char const * get_diagnostic_information( exception const &, char const * );
 
         void copy_boost_exception( exception *, exception const * );
+
+        template <class E,class Tag,class T>
+        E const & set_info( E const &, error_info<Tag,T> const & );
+
+        template <class E>
+        E const & set_info( E const &, throw_function const & );
+
+        template <class E>
+        E const & set_info( E const &, throw_file const & );
+
+        template <class E>
+        E const & set_info( E const &, throw_line const & );
         }
 
     class
@@ -225,18 +225,18 @@ boost
         private:
 
         template <class E>
-        friend E const & operator<<( E const &, throw_function const & );
+        friend E const & exception_detail::set_info( E const &, throw_function const & );
 
         template <class E>
-        friend E const & operator<<( E const &, throw_file const & );
+        friend E const & exception_detail::set_info( E const &, throw_file const & );
 
         template <class E>
-        friend E const & operator<<( E const &, throw_line const & );
-
-        friend char const * exception_detail::get_diagnostic_information( exception const &, char const * );
+        friend E const & exception_detail::set_info( E const &, throw_line const & );
 
         template <class E,class Tag,class T>
-        friend E const & operator<<( E const &, error_info<Tag,T> const & );
+        friend E const & exception_detail::set_info( E const &, error_info<Tag,T> const & );
+
+        friend char const * exception_detail::get_diagnostic_information( exception const &, char const * );
 
         template <class>
         friend struct exception_detail::get_info;
@@ -257,28 +257,32 @@ boost
         {
         }
 
-    template <class E>
-    E const &
-    operator<<( E const & x, throw_function const & y )
+    namespace
+    exception_detail
         {
-        x.throw_function_=y.v_;
-        return x;
-        }
+        template <class E>
+        E const &
+        set_info( E const & x, throw_function const & y )
+            {
+            x.throw_function_=y.v_;
+            return x;
+            }
 
-    template <class E>
-    E const &
-    operator<<( E const & x, throw_file const & y )
-        {
-        x.throw_file_=y.v_;
-        return x;
-        }
+        template <class E>
+        E const &
+        set_info( E const & x, throw_file const & y )
+            {
+            x.throw_file_=y.v_;
+            return x;
+            }
 
-    template <class E>
-    E const &
-    operator<<( E const & x, throw_line const & y )
-        {
-        x.throw_line_=y.v_;
-        return x;
+        template <class E>
+        E const &
+        set_info( E const & x, throw_line const & y )
+            {
+            x.throw_line_=y.v_;
+            return x;
+            }
         }
 
     ////////////////////////////////////////////////////////////////////////
@@ -304,10 +308,10 @@ boost
             };
 
         struct large_size { char c[256]; };
-        large_size dispatch( exception * );
+        large_size dispatch_boost_exception( exception const * );
 
         struct small_size { };
-        small_size dispatch( void * );
+        small_size dispatch_boost_exception( void const * );
 
         template <class,int>
         struct enable_error_info_helper;
@@ -330,7 +334,7 @@ boost
         struct
         enable_error_info_return_type
             {
-            typedef typename enable_error_info_helper<T,sizeof(exception_detail::dispatch((T*)0))>::type type;
+            typedef typename enable_error_info_helper<T,sizeof(exception_detail::dispatch_boost_exception((T*)0))>::type type;
             };
         }
 
