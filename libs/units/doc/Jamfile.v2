@@ -28,6 +28,7 @@ rule run_doxygen ( target : files * : name )
 
         # Horribly ugly, but then macros usually are :(
         <doxygen:param>"PREDEFINED= \\
+            \"BOOST_MPL_ASSERT(expr)=\" \\
             \"BOOST_UNITS_STATIC_CONSTANT(a,b)=static const b a\" \\
             \"BOOST_UNITS_AUTO_STATIC_CONSTANT(a,b)=static const auto a = b\" \\
             \"BOOST_UNITS_TYPEOF(a)=typeof(a)\" \\
