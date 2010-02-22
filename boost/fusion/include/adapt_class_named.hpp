@@ -5,9 +5,9 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef BOOST_FUSION_INCLUDE_ADAPT_STRUCT_NAMED_HPP
-#define BOOST_FUSION_INCLUDE_ADAPT_STRUCT_NAMED_HPP
+#ifndef BOOST_FUSION_INCLUDE_ADAPT_CLASS_NAMED_HPP
+#define BOOST_FUSION_INCLUDE_ADAPT_CLASS_NAMED_HPP
 
-#include <boost/fusion/adapted/struct/adapt_struct_named.hpp>
+#include <boost/fusion/adapted/class/adapt_class_named.hpp>
 
 #endif

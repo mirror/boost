@@ -1,31 +1,29 @@
 /*=============================================================================
-    Copyright (c) 2001-2009 Joel de Guzman
-    Copyright (c) 2005-2006 Dan Marsden
+    Copyright (c) 2010 Christopher Schmidt
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(BOOST_FUSION_IS_SEQUENCE_IMPL_OCTOBER_4_2009_919PM)
-#define BOOST_FUSION_IS_SEQUENCE_IMPL_OCTOBER_4_2009_919PM
 
-#include <boost/mpl/bool.hpp>
+#ifndef BOOST_FUSION_ADAPTED_DETAIL_CLASS_IS_SEQUENCE_IMPL_HPP
+#define BOOST_FUSION_ADAPTED_DETAIL_CLASS_IS_SEQUENCE_IMPL_HPP
 
-namespace boost { namespace fusion
+#include <boost/fusion/adapted/struct/detail/is_sequence_impl.hpp>
+
+namespace boost { namespace fusion { namespace extension
 {
-    struct class_tag;
+    template<typename>
+    struct is_sequence_impl;
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct is_sequence_impl;
+    template<>
+    struct is_sequence_impl<class_tag>
+      : is_sequence_impl<struct_tag>
+    {};
 
-        template<>
-        struct is_sequence_impl<class_tag>
-        {
-            template<typename Sequence>
-            struct apply : mpl::true_ {};
-        };
-    }
-}}
+    template <>
+    struct is_sequence_impl<assoc_class_tag>
+      : is_sequence_impl<assoc_struct_tag>
+    {};
+}}}
 
 #endif

@@ -5,9 +5,18 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef BOOST_FUSION_INCLUDE_ADAPT_STRUCT_NAMED_HPP
-#define BOOST_FUSION_INCLUDE_ADAPT_STRUCT_NAMED_HPP
+#ifndef BOOST_FUSION_ADAPTED_DETAIL_CLASS_DEREF_DATA_IMPL_HPP
+#define BOOST_FUSION_ADAPTED_DETAIL_CLASS_DEREF_DATA_IMPL_HPP
 
-#include <boost/fusion/adapted/struct/adapt_struct_named.hpp>
+namespace boost { namespace fusion { namespace extension
+{
+    template <typename>
+    struct deref_data_impl;
+
+    template <>
+    struct deref_data_impl<assoc_class_iterator_tag>
+      : deref_impl<assoc_class_iterator_tag>
+    {};
+}}}
 
 #endif

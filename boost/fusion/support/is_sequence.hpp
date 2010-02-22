@@ -56,8 +56,9 @@ namespace boost { namespace fusion
     {
         template <typename T>
         struct is_sequence
-            : extension::is_sequence_impl<typename detail::tag_of<T>::type>::
-                template apply<T>
+          : extension::is_sequence_impl<
+                typename fusion::detail::tag_of<T>::type
+            >::template apply<T>
         {};
     }
 }}

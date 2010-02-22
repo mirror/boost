@@ -5,8 +5,8 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef BOOST_FUSION_ADAPTED_DETAIL_CLASS_AT_IMPL_HPP
-#define BOOST_FUSION_ADAPTED_DETAIL_CLASS_AT_IMPL_HPP
+#ifndef BOOST_FUSION_ADAPTED_DETAIL_CLASS_DEREF_IMPL_HPP
+#define BOOST_FUSION_ADAPTED_DETAIL_CLASS_DEREF_IMPL_HPP
 
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_const.hpp>
@@ -14,41 +14,41 @@
 
 namespace boost { namespace fusion { namespace extension
 {
-    template<typename>
-    struct at_impl;
+    template <typename>
+    struct deref_impl;
 
     template <>
-    struct at_impl<class_tag>
+    struct deref_impl<class_iterator_tag>
     {
-        template<typename Seq, typename N>
+        template <typename It>
         struct apply
         {
             typedef
                 extension::struct_member<
-                    typename remove_const<Seq>::type
-                  , N::value
+                    typename remove_const<typename It::seq_type>::type
+                  , It::index::value
                 >
             member;
 
             typedef typename
                 mpl::if_<
-                    is_const<Seq>
+                    is_const<typename It::seq_type>
                   , typename member::get_type
                   , typename member::proxy
                 >::type
             type;
 
             static type
-            call(Seq& seq)
+            call(It const& it)
             {
-                return member::call(seq);
+                return member::call(*it.seq);
             }
         };
     };
 
     template <>
-    struct at_impl<assoc_class_tag>
-      : at_impl<class_tag>
+    struct deref_impl<assoc_class_iterator_tag>
+       : deref_impl<class_iterator_tag>
     {};
 }}}
 

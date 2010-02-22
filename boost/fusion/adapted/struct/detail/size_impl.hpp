@@ -5,33 +5,30 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(BOOST_FUSION_SIZE_IMPL_24122005_1759)
-#define BOOST_FUSION_SIZE_IMPL_24122005_1759
 
-#include <boost/mpl/int.hpp>
+#ifndef BOOST_FUSION_ADAPTED_DETAIL_STRUCT_SIZE_IMPL_HPP
+#define BOOST_FUSION_ADAPTED_DETAIL_STRUCT_SIZE_IMPL_HPP
 
-namespace boost { namespace fusion
+#include <boost/type_traits/remove_const.hpp>
+
+namespace boost { namespace fusion { namespace extension
 {
-    namespace extension
+    template<typename>
+    struct size_impl;
+
+    template <>
+    struct size_impl<struct_tag>
     {
-        template <typename Struct>
-        struct struct_size;
-    }
+        template <typename Seq>
+        struct apply
+          : struct_size<typename remove_const<Seq>::type>
+        {};
+    };
 
-    struct struct_tag;
-
-    namespace extension
-    {
-        template<typename T>
-        struct size_impl;
-
-        template <>
-        struct size_impl<struct_tag>
-        {
-            template <typename Sequence>
-            struct apply : extension::struct_size<Sequence> {};
-        };
-    }
-}}
+    template <>
+    struct size_impl<assoc_struct_tag>
+      : size_impl<struct_tag>
+    {};
+}}}
 
 #endif

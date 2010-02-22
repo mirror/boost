@@ -1,48 +1,66 @@
 /*=============================================================================
-    Copyright (c) 2001-2009 Joel de Guzman
-    Copyright (c) 2005-2006 Dan Marsden
+    Copyright (c) 2010 Christopher Schmidt
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(BOOST_FUSION_END_IMPL_OCTOBER_4_2009_919PM)
-#define BOOST_FUSION_END_IMPL_OCTOBER_4_2009_919PM
 
-#include <boost/fusion/adapted/class/class_iterator.hpp>
+#ifndef BOOST_FUSION_ADAPTED_DETAIL_CLASS_END_IMPL_HPP
+#define BOOST_FUSION_ADAPTED_DETAIL_CLASS_END_IMPL_HPP
 
-namespace boost { namespace fusion
+#include <boost/fusion/iterator/basic_iterator.hpp>
+#include <boost/type_traits/remove_const.hpp>
+
+namespace boost { namespace fusion { namespace extension
 {
-    struct class_tag;
+    template <typename>
+    struct end_impl;
 
-    namespace extension
+    template <>
+    struct end_impl<class_tag>
     {
-        template <typename Tag>
-        struct end_impl;
-
-        template <typename Class>
-        struct class_size;
-
-        template <>
-        struct end_impl<class_tag>
+        template <typename Seq>
+        struct apply
         {
-            template <typename Sequence>
-            struct apply
-            {
-                typedef
-                    class_iterator<
-                        Sequence
-                      , class_size<Sequence>::value
-                    >
-                type;
+            typedef
+                basic_iterator<
+                    class_iterator_tag
+                  , random_access_traversal_tag
+                  , Seq
+                  , struct_size<typename remove_const<Seq>::type>::value
+                >
+            type;
 
-                static type
-                call(Sequence& v)
-                {
-                    return type(v);
-                }
-            };
+            static type
+            call(Seq& seq)
+            {
+                return type(seq,0);
+            }
         };
-    }
-}}
+    };
+
+    template <>
+    struct end_impl<assoc_class_tag>
+    {
+        template <typename Seq>
+        struct apply
+        {
+            typedef
+                basic_iterator<
+                    assoc_class_iterator_tag
+                  , assoc_class_category
+                  , Seq
+                  , struct_size<typename remove_const<Seq>::type>::value
+                >
+            type;
+
+            static type
+            call(Seq& seq)
+            {
+                return type(seq,0);
+            }
+        };
+    };
+}}}
 
 #endif

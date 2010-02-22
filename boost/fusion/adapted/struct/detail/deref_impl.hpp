@@ -1,14 +1,12 @@
 /*=============================================================================
-    Copyright (c) 2001-2006 Joel de Guzman
-    Copyright (c) 2005-2006 Dan Marsden
     Copyright (c) 2009-2010 Christopher Schmidt
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef BOOST_FUSION_ADAPTED_DETAIL_STRUCT_AT_IMPL_HPP
-#define BOOST_FUSION_ADAPTED_DETAIL_STRUCT_AT_IMPL_HPP
+#ifndef BOOST_FUSION_ADAPTED_DETAIL_STRUCT_DEREF_IMPL_HPP
+#define BOOST_FUSION_ADAPTED_DETAIL_STRUCT_DEREF_IMPL_HPP
 
 #include <boost/fusion/support/detail/access.hpp>
 #include <boost/mpl/eval_if.hpp>
@@ -17,41 +15,41 @@
 
 namespace boost { namespace fusion { namespace extension
 {
-    template<typename>
-    struct at_impl;
+    template <typename>
+    struct deref_impl;
 
     template <>
-    struct at_impl<struct_tag>
+    struct deref_impl<struct_iterator_tag>
     {
-        template <typename Seq, typename N>
+        template <typename It>
         struct apply
         {
             typedef
                 extension::struct_member<
-                    typename remove_const<Seq>::type
-                  , N::value
+                    typename remove_const<typename It::seq_type>::type
+                  , It::index::value
                 >
             member;
 
             typedef typename
                 mpl::eval_if<
-                    is_const<Seq>
+                    is_const<typename It::seq_type>
                   , detail::cref_result<member>
                   , detail::ref_result<member>
                 >::type
             type;
 
             static type
-            call(Seq& seq)
+            call(It const& it)
             {
-                return member::call(seq);
+                return member::call(*it.seq);
             }
         };
     };
 
     template <>
-    struct at_impl<assoc_struct_tag>
-      : at_impl<struct_tag>
+    struct deref_impl<assoc_struct_iterator_tag>
+       : deref_impl<struct_iterator_tag>
     {};
 }}}
 
