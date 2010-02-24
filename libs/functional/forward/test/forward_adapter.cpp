@@ -92,6 +92,7 @@ int main()
         BOOST_TEST(( is_same<
             result_of< f const (int&, int&) >::type, char >::value ));
     }
+
     {
         using boost::noncopyable;
         using boost::forward_adapter;

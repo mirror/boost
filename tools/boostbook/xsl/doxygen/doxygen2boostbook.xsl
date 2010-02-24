@@ -1243,6 +1243,10 @@
     <xsl:apply-templates mode="passthrough"/>
   </xsl:template>
 
+  <xsl:template match="title" mode="passthrough">
+    <xsl:apply-templates mode="passthrough"/>
+  </xsl:template>
+
   <xsl:template match="*" mode="passthrough">
     <xsl:copy>
       <xsl:copy-of select="@*"/>
