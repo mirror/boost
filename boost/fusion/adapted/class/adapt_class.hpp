@@ -1,4 +1,6 @@
 /*=============================================================================
+    Copyright (c) 2001-2009 Joel de Guzman
+    Copyright (c) 2009-2010 Hartmut Kaiser
     Copyright (c) 2010 Christopher Schmidt
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
@@ -10,19 +12,25 @@
 
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/empty.hpp>
+#include <boost/type_traits/add_reference.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/remove_const.hpp>
 
+#include <boost/fusion/adapted/struct/detail/extension.hpp>
+#include <boost/fusion/adapted/struct/detail/adapt_base.hpp>
+#include <boost/fusion/adapted/struct/detail/at_impl.hpp>
+#include <boost/fusion/adapted/struct/detail/is_view_impl.hpp>
+#include <boost/fusion/adapted/struct/detail/is_sequence_impl.hpp>
+#include <boost/fusion/adapted/struct/detail/value_at_impl.hpp>
+#include <boost/fusion/adapted/struct/detail/category_of_impl.hpp>
+#include <boost/fusion/adapted/struct/detail/size_impl.hpp>
+#include <boost/fusion/adapted/struct/detail/begin_impl.hpp>
+#include <boost/fusion/adapted/struct/detail/end_impl.hpp>
+#include <boost/fusion/adapted/struct/detail/value_of_impl.hpp>
+#include <boost/fusion/adapted/struct/detail/deref_impl.hpp>
 #include <boost/fusion/adapted/class/detail/extension.hpp>
 #include <boost/fusion/adapted/class/detail/adapt_base.hpp>
-#include <boost/fusion/adapted/class/detail/at_impl.hpp>
-#include <boost/fusion/adapted/class/detail/is_view_impl.hpp>
-#include <boost/fusion/adapted/class/detail/is_sequence_impl.hpp>
-#include <boost/fusion/adapted/class/detail/value_at_impl.hpp>
-#include <boost/fusion/adapted/class/detail/category_of_impl.hpp>
-#include <boost/fusion/adapted/class/detail/size_impl.hpp>
-#include <boost/fusion/adapted/class/detail/begin_impl.hpp>
-#include <boost/fusion/adapted/class/detail/end_impl.hpp>
-#include <boost/fusion/adapted/class/detail/value_of_impl.hpp>
-#include <boost/fusion/adapted/class/detail/deref_impl.hpp>
 
 #define BOOST_FUSION_ADAPT_CLASS_FILLER_0(A, B, C, D)\
     ((A, B, C, D)) BOOST_FUSION_ADAPT_CLASS_FILLER_1
@@ -39,7 +47,7 @@
     BOOST_FUSION_ADAPT_STRUCT_BASE(                                             \
         (1)TEMPLATE_PARAMS_SEQ,                                                 \
         (1)NAME_SEQ,                                                            \
-        class_tag,                                                              \
+        struct_tag,                                                             \
         BOOST_PP_CAT(BOOST_FUSION_ADAPT_CLASS_FILLER_0 ATTRIBUTES,_END),        \
         BOOST_FUSION_ADAPT_CLASS_C)
 
@@ -47,7 +55,7 @@
     BOOST_FUSION_ADAPT_STRUCT_BASE(                                             \
         (0),                                                                    \
         (0)(NAME),                                                              \
-        class_tag,                                                              \
+        struct_tag,                                                             \
         BOOST_PP_CAT(BOOST_FUSION_ADAPT_CLASS_FILLER_0 ATTRIBUTES,_END),        \
         BOOST_FUSION_ADAPT_CLASS_C)
 

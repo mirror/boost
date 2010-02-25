@@ -7,8 +7,8 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef BOOST_FUSION_ADAPTED_DETAIL_STRUCT_EXTENSION_HPP
-#define BOOST_FUSION_ADAPTED_DETAIL_STRUCT_EXTENSION_HPP
+#ifndef BOOST_FUSION_ADAPTED_STRUCT_DETAIL_EXTENSION_HPP
+#define BOOST_FUSION_ADAPTED_STRUCT_DETAIL_EXTENSION_HPP
 
 #include <boost/fusion/support/category_of.hpp>
 
@@ -17,7 +17,6 @@ namespace boost { namespace fusion
     struct struct_tag;
     struct struct_iterator_tag;
     struct assoc_struct_tag;
-    struct assoc_struct_iterator_tag;
     struct fusion_sequence_tag;
 
     struct assoc_struct_category
@@ -30,6 +29,9 @@ namespace boost { namespace fusion
 
         template<typename Seq, int N>
         struct struct_member;
+
+        template<typename Seq, int N>
+        struct struct_member_name;
 
         template<typename Seq, int N>
         struct struct_assoc_key;

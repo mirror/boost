@@ -7,11 +7,10 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef BOOST_FUSION_ADAPTED_DETAIL_STRUCT_END_IMPL_HPP
-#define BOOST_FUSION_ADAPTED_DETAIL_STRUCT_END_IMPL_HPP
+#ifndef BOOST_FUSION_ADAPTED_STRUCT_DETAIL_END_IMPL_HPP
+#define BOOST_FUSION_ADAPTED_STRUCT_DETAIL_END_IMPL_HPP
 
 #include <boost/fusion/iterator/basic_iterator.hpp>
-#include <boost/type_traits/remove_const.hpp>
 
 namespace boost { namespace fusion { namespace extension
 {
@@ -49,7 +48,7 @@ namespace boost { namespace fusion { namespace extension
         {
             typedef
                 basic_iterator<
-                    assoc_struct_iterator_tag
+                    struct_iterator_tag
                   , assoc_struct_category
                   , Seq
                   , struct_size<typename remove_const<Seq>::type>::value

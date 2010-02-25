@@ -5,8 +5,8 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef BOOST_FUSION_ADAPTED_DETAIL_STRUCT_VALUE_OF_DATA_IMPL_HPP
-#define BOOST_FUSION_ADAPTED_DETAIL_STRUCT_VALUE_OF_DATA_IMPL_HPP
+#ifndef BOOST_FUSION_ADAPTED_STRUCT_DETAIL_VALUE_OF_DATA_IMPL_HPP
+#define BOOST_FUSION_ADAPTED_STRUCT_DETAIL_VALUE_OF_DATA_IMPL_HPP
 
 namespace boost { namespace fusion { namespace extension
 {
@@ -14,8 +14,8 @@ namespace boost { namespace fusion { namespace extension
     struct value_of_data_impl;
 
     template <>
-    struct value_of_data_impl<assoc_struct_iterator_tag>
-      : value_of_impl<assoc_struct_iterator_tag>
+    struct value_of_data_impl<struct_iterator_tag>
+      : value_of_impl<struct_iterator_tag>
     {};
 }}}
 

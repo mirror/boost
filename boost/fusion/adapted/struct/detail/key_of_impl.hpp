@@ -5,10 +5,8 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef BOOST_FUSION_ADAPTED_DETAIL_STRUCT_KEY_OF_IMPL_HPP
-#define BOOST_FUSION_ADAPTED_DETAIL_STRUCT_KEY_OF_IMPL_HPP
-
-#include <boost/type_traits/remove_const.hpp>
+#ifndef BOOST_FUSION_ADAPTED_STRUCT_DETAIL_KEY_OF_IMPL_HPP
+#define BOOST_FUSION_ADAPTED_STRUCT_DETAIL_KEY_OF_IMPL_HPP
 
 namespace boost { namespace fusion { namespace extension
 {
@@ -16,18 +14,15 @@ namespace boost { namespace fusion { namespace extension
     struct key_of_impl;
 
     template <>
-    struct key_of_impl<assoc_struct_iterator_tag>
+    struct key_of_impl<struct_iterator_tag>
     {
         template <typename It>
         struct apply
-        {
-            typedef typename
-                extension::struct_assoc_key<
-                    typename remove_const<typename It::seq_type>::type
-                  , It::index::value
-                >::type
-            type;
-        };
+          : extension::struct_assoc_key<
+                typename remove_const<typename It::seq_type>::type
+              , It::index::value
+            >
+        {};
     };
 }}}
 

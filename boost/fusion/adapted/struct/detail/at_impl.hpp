@@ -7,13 +7,10 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#ifndef BOOST_FUSION_ADAPTED_DETAIL_STRUCT_AT_IMPL_HPP
-#define BOOST_FUSION_ADAPTED_DETAIL_STRUCT_AT_IMPL_HPP
+#ifndef BOOST_FUSION_ADAPTED_STRUCT_DETAIL_AT_IMPL_HPP
+#define BOOST_FUSION_ADAPTED_STRUCT_DETAIL_AT_IMPL_HPP
 
-#include <boost/fusion/support/detail/access.hpp>
-#include <boost/mpl/eval_if.hpp>
-#include <boost/type_traits/remove_const.hpp>
-#include <boost/type_traits/is_const.hpp>
+#include <boost/mpl/int.hpp>
 
 namespace boost { namespace fusion { namespace extension
 {
@@ -25,28 +22,11 @@ namespace boost { namespace fusion { namespace extension
     {
         template <typename Seq, typename N>
         struct apply
-        {
-            typedef
-                extension::struct_member<
-                    typename remove_const<Seq>::type
-                  , N::value
-                >
-            member;
-
-            typedef typename
-                mpl::eval_if<
-                    is_const<Seq>
-                  , detail::cref_result<member>
-                  , detail::ref_result<member>
-                >::type
-            type;
-
-            static type
-            call(Seq& seq)
-            {
-                return member::call(seq);
-            }
-        };
+          : extension::struct_member<
+                typename remove_const<Seq>::type
+              , N::value
+            >::template apply<Seq>
+        {};
     };
 
     template <>
