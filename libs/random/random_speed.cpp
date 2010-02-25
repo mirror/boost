@@ -21,13 +21,16 @@
  */
 
 // define if your C library supports the non-standard drand48 family
-#undef HAVE_DRAND48
+#define HAVE_DRAND48
 
 // define if you have the original mt19937int.c (with commented out main())
 #undef HAVE_MT19937INT_C
 
+// define if you have the original mt19937ar.c (with commented out main())
+#define HAVE_MT19937AR_C
+
 // set to your CPU frequency in MHz
-static const double cpu_frequency = 200 * 1e6;
+static const double cpu_frequency = 3.66 * 1e9;
 
 /*
  * End of Configuration Section
@@ -173,20 +176,33 @@ void timing_sphere(RNG rng, int iter, const std::string & name)
 }
 
 template<class RNG>
-void run(int iter, const std::string & name, const RNG &)
+void run(int iter, const std::string & name, RNG rng)
 {
   std::cout << (RNG::has_fixed_range ? "fixed-range " : "");
   // BCC has trouble with string autoconversion for explicit specializations
-  timing(RNG(), iter, std::string(name));
+  
+  // make sure we're not optimizing too much
+  volatile typename RNG::result_type tmp;
+  boost::timer t;
+  for(int i = 0; i < iter; i++)
+    tmp = rng();
+  show_elapsed(t.elapsed(), iter, name);
 }
 
 #ifdef HAVE_DRAND48
 // requires non-standard C library support for srand48/lrand48
-void run(int iter, const std::string & name, int)
-{
-  std::srand48(1);
-  timing(&std::lrand48, iter, name);
-}
+struct lrand48_ {
+    static const bool has_fixed_range = false;
+    typedef long result_type;
+    lrand48_() {
+        using namespace std;
+        srand48(1);
+    }
+    result_type operator()() {
+        using namespace std;
+        return lrand48();
+    }
+};
 #endif
 
 #ifdef HAVE_MT19937INT_C  // requires the original mt19937int.c
@@ -198,6 +214,23 @@ void run(int iter, const std::string & name, float)
   sgenrand(4357);
   timing(genrand, iter, name, 0u);
 }
+#endif
+
+#ifdef HAVE_MT19937AR_C
+extern "C" {
+void init_genrand(unsigned long s);
+unsigned long genrand_int32(void);
+}
+struct mt19937_c {
+    static const bool has_fixed_range = false;
+    mt19937_c() {
+        init_genrand(5489);
+    }
+    typedef unsigned long result_type;
+    result_type operator()() {
+        return genrand_int32();
+    }
+};
 #endif
 
 template<class PRNG, class Dist>
@@ -329,17 +362,29 @@ int main(int argc, char*argv[])
 
 #ifdef HAVE_DRAND48
   // requires non-standard C library support for srand48/lrand48
-  run(iter, "lrand48", 0);   // coded for lrand48()
+  run(iter, "lrand48", lrand48_());   // coded for lrand48()
 #endif
 
+  run(iter, "minstd_rand0", boost::minstd_rand0());
   run(iter, "minstd_rand", boost::minstd_rand());
   run(iter, "ecuyer combined", boost::ecuyer1988());
   run(iter, "kreutzer1986", boost::kreutzer1986());
+  run(iter, "taus88", boost::taus88());
 
   run(iter, "hellekalek1995 (inversive)", boost::hellekalek1995());
 
   run(iter, "mt11213b", boost::mt11213b());
   run(iter, "mt19937", boost::mt19937());
+
+  run(iter, "lagged_fibonacci607", boost::lagged_fibonacci607());
+  run(iter, "lagged_fibonacci1279", boost::lagged_fibonacci1279());
+  run(iter, "lagged_fibonacci2281", boost::lagged_fibonacci2281());
+  run(iter, "lagged_fibonacci3217", boost::lagged_fibonacci3217());
+  run(iter, "lagged_fibonacci4423", boost::lagged_fibonacci4423());
+  run(iter, "lagged_fibonacci9689", boost::lagged_fibonacci9689());
+  run(iter, "lagged_fibonacci19937", boost::lagged_fibonacci19937());
+  run(iter, "lagged_fibonacci23209", boost::lagged_fibonacci23209());
+  run(iter, "lagged_fibonacci44497", boost::lagged_fibonacci44497());
 
   run(iter, "subtract_with_carry", boost::random::ranlux_base());
   run(iter, "subtract_with_carry_01", boost::random::ranlux_base_01());
@@ -347,11 +392,20 @@ int main(int argc, char*argv[])
   run(iter, "ranlux4", boost::ranlux4());
   run(iter, "ranlux3_01", boost::ranlux3_01());
   run(iter, "ranlux4_01", boost::ranlux4_01());
+  run(iter, "ranlux64_3", boost::ranlux3());
+  run(iter, "ranlux64_4", boost::ranlux4());
+  run(iter, "ranlux64_3_01", boost::ranlux3_01());
+  run(iter, "ranlux64_4_01", boost::ranlux4_01());
+
   run(iter, "counting", counting());
 
 #ifdef HAVE_MT19937INT_C
   // requires the original mt19937int.c
   run<float>(iter, "mt19937 original");   // coded for sgenrand()/genrand()
+#endif
+
+#ifdef HAVE_MT19937AR_C
+  run(iter, "mt19937ar.c", mt19937_c());
 #endif
 
   distrib(iter, "counting", counting());
@@ -362,5 +416,8 @@ int main(int argc, char*argv[])
   distrib(iter, "kreutzer1986", boost::kreutzer1986());
 
   distrib(iter, "mt19937", boost::mt19937());
+  
+  distrib(iter, "lagged_fibonacci607", boost::lagged_fibonacci607());
+
   distrib_runtime(iter, "mt19937", boost::mt19937());
 }

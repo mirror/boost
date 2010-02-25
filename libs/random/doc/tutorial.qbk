@@ -1,0 +1,13 @@
+[section Generating integers in a range]
+
+[import ../example/die.cpp]
+[die]
+
+[endsect]
+
+[section Generating integers with different probabilities]
+
+[import ../example/weighted_die.cpp]
+[weighted_die]
+
+[endsect]
