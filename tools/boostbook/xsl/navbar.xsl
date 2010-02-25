@@ -95,7 +95,7 @@
             <xsl:if test = "$nav.border = 'Boost'">
                <xsl:attribute name = "style">background-color: white; width: 50%;</xsl:attribute>
             </xsl:if>
-            <xsl:if test = "boolean($boost.image.src)">
+            <xsl:if test = "boolean(normalize-space($boost.image.src))">
                <img alt="{$boost.image.alt}" width="{$boost.image.w}" height="{$boost.image.h}">
                    <xsl:attribute name="src">
                        <xsl:call-template name="href.target.relative">
