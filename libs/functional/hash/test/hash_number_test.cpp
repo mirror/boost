@@ -152,7 +152,7 @@ int main()
     NUMERIC_TEST(long, hash_long)
     NUMERIC_TEST(unsigned long, ulong)
 
-#if defined(BOOST_HAS_LONG_LONG)
+#if !defined(BOOST_NO_LONG_LONG)
     NUMERIC_TEST_NO_LIMITS(boost::long_long_type, long_long)
     NUMERIC_TEST_NO_LIMITS(boost::ulong_long_type, ulong_long)
 #endif

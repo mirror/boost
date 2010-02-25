@@ -19,7 +19,7 @@
 #include <boost/unordered/detail/equivalent.hpp>
 #include <boost/unordered/detail/unique.hpp>
 
-#if !defined(BOOST_HAS_RVALUE_REFS)
+#if defined(BOOST_NO_RVALUE_REFERENCES)
 #include <boost/unordered/detail/move.hpp>
 #endif
 
@@ -153,7 +153,7 @@ namespace boost
         
         ~unordered_set() {}
 
-#if defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
         unordered_set(unordered_set&& other)
           : table_(other.table_, boost::unordered_detail::move_tag())
         {
@@ -645,7 +645,7 @@ namespace boost
 
         ~unordered_multiset() {}
 
-#if defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
         unordered_multiset(unordered_multiset&& other)
           : table_(other.table_, boost::unordered_detail::move_tag())
         {

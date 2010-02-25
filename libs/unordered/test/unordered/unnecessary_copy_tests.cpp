@@ -31,7 +31,7 @@ namespace unnecessary_copy_tests
             : tag_(x.tag_) { ++copies; }
 
         count_copies(count_copies const& x) : tag_(x.tag_) { ++copies; }
-#if defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
         count_copies(count_copies&& x) : tag_(x.tag_) {
             x.tag_ = -1; ++moves;
         }
@@ -136,7 +136,7 @@ namespace unnecessary_copy_tests
         reset();
         T x;
         x.emplace(source<BOOST_DEDUCED_TYPENAME T::value_type>());
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
         COPY_COUNT(1);
 #else
         COPY_COUNT(2);
@@ -148,7 +148,7 @@ namespace unnecessary_copy_tests
     UNORDERED_TEST(unnecessary_copy_emplace_rvalue_test,
             ((set)(multiset)(map)(multimap)))
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
     template <class T>
     void unnecessary_copy_emplace_move_test(T*)
     {
@@ -199,7 +199,7 @@ namespace unnecessary_copy_tests
         x.emplace(source<count_copies>());
         COPY_COUNT(1); MOVE_COUNT(0);
 
-#if defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
         // No move should take place.
         reset();
         x.emplace(std::move(a));
@@ -271,7 +271,7 @@ namespace unnecessary_copy_tests
         //x.emplace(a_ref);
         //COPY_COUNT(0); MOVE_COUNT(0);
 
-#if defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
         // No move should take place.
         // (since a is already in the container)
         reset();

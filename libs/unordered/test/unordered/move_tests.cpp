@@ -134,7 +134,7 @@ namespace move_tests
         {
             test::random_values<T> v(25, generator);
             T y(create(v, count, hf, eq, al, 1.0), al);
-#if defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
             BOOST_TEST(count == test::global_object_count);
 #else
             BOOST_TEST(
