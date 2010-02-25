@@ -1239,11 +1239,13 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="simplesectsep" mode="passthrough">
-    <xsl:apply-templates mode="passthrough"/>
+  <xsl:template match="para/simplesect[@kind='par']" mode="passthrough">
+    <formalpara>
+      <xsl:apply-templates mode="passthrough"/>
+    </formalpara>
   </xsl:template>
 
-  <xsl:template match="title" mode="passthrough">
+  <xsl:template match="simplesectsep" mode="passthrough">
     <xsl:apply-templates mode="passthrough"/>
   </xsl:template>
 
