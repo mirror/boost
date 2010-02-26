@@ -265,7 +265,7 @@ public:
     }
     bus_schedule(){}
 };
-BOOST_CLASS_VERSION(bus_schedule, 2)
+BOOST_CLASS_VERSION(bus_schedule::trip_info, 2)
 
 std::ostream & operator<<(std::ostream &os, const bus_schedule::trip_info &ti)
 {

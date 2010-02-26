@@ -245,7 +245,7 @@ object.
 
 </dl>
 
-<h3><a name="requirements">Requirements</a></h3>
+<h3><a name="requirements">Requirements for and Implementation</a></h3>
 In order to be used by the serialization library, an implementation of
 <code style="white-space: normal">extended_type_info</code>, 
 (referred to as ETI here), must be derived from 
@@ -351,8 +351,66 @@ This requires that non-abstract types be exported. It also demonstrates the
 inter-operability with between two different implementations of
 <code style="white-space: normal">extended_type_info</code>.
 
+<h3><a name="type_requirements">Requirements for Each Type</a></h3>
+Each type to be managed by the system must be
+"registered" individually. This is accomplished by instantiating
+templates.  For example, if the type T is to use the type_info system
+one would include the following code:
+
+<code style="white-space: normal"><pre>
+namespace boost {
+namespace serialization {
+template
+struct extended_type_info_typeid&gt;T&gt;;
+template
+struct extended_type_info_typeid&gt;const T&gt;;
+} // serialization
+} // boost
+</pre></code>
+
+For those using the serialization library, this step can be skipped
+as it is done automatically.  The serialization library includes
+the macro:
+
+<code style="white-space: normal"><pre>
+BOOST_CLASS_TYPE_INFO(
+    my_type, 
+    extended_type_info_typeid&gt;my_class&gt;
+)
+</pre></code>
+
+which is used to specify which <code>extended_type_info</code> system is to 
+be used for a given type.
+<p>
+<code>extended_type_info</code> includes a facility for constructing
+instances of types without knowing what the exact types are. This is done
+with the function 
+<code>
+virtual void * extended_type_info::construct(unsigned int count = 0, ...) const;
+</code>
+. For example:
+<br>
+<code><pre>
+struct base {
+...
+};
+struct derived : public base {
+...
+};
+...
+extended_type_info *eti = extended_type_info::find("my_class")
+base * b = eti->construct(...);
+</pre></code>
+<br>
+The <code>construct</code> takes an argument count and up to
+four parameters of any type.  The arguments are passed to the
+constructor of "my_class".
+
+
+A complete example of this can be found
+<a target="test_plugin.cpp" href="test_plugin.cpp">here</a>
 <hr>
-<p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2005. 
+<p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2005-2009. 
 Distributed under the Boost Software License, Version 1.0. (See
 accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 </i></p>

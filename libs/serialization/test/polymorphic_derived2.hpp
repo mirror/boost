@@ -21,6 +21,8 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/extended_type_info_typeid.hpp>
+#include <boost/serialization/factory.hpp>
+
 #include <boost/preprocessor/empty.hpp>
 
 #include "polymorphic_base.hpp"
@@ -63,6 +65,8 @@ BOOST_CLASS_TYPE_INFO(
     polymorphic_derived2,
     boost::serialization::extended_type_info_typeid<polymorphic_derived2>
 )
+
+BOOST_SERIALIZATION_FACTORY_0(polymorphic_derived2)
 
 #undef DLL_DECL
 
