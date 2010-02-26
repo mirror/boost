@@ -267,15 +267,19 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_polymorphic2", "test_p
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo_pretty_print", "demo_pretty_print.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_const", "test_const.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Library", "Library.vcproj", "{30E10563-960A-11D7-9FE9-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo_log", "demo_log.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo", "demo.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -1134,8 +1138,8 @@ Global
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static threading-multi|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
@@ -1242,20 +1246,6 @@ Global
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-dynamic|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-dynamic|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-dynamic|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-dynamic|Win32
 		{30E10563-960A-11D7-9FE9-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static|Win32
 		{30E10563-960A-11D7-9FE9-525400E2CF85}.Debug.Build.0 = Debug runtime-static|Win32
 		{30E10563-960A-11D7-9FE9-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
@@ -1270,6 +1260,34 @@ Global
 		{30E10563-960A-11D7-9FE9-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
 		{30E10563-960A-11D7-9FE9-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static|Win32
 		{30E10563-960A-11D7-9FE9-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-dynamic|Win32
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		..\test\Jamfile.v2 = ..\test\Jamfile.v2

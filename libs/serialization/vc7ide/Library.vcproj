@@ -124,7 +124,7 @@
 				Name="VCManagedWrapperGeneratorTool"/>
 			<Tool
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-		</Configuration>		
+		</Configuration>
 		<Configuration
 			Name="Debug runtime-static|Win32"
 			OutputDirectory="$(ConfigurationName)"
@@ -380,6 +380,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\boost\archive\shared_ptr_helper.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\boost\serialization\detail\stack_constructor.hpp">
 				</File>
 			</Filter>
 		</Filter>
