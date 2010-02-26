@@ -36,8 +36,8 @@ struct test;
 template <>
 struct
 test<true>
-	{
-	};
+    {
+    };
 
 int
 main()
