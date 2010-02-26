@@ -88,6 +88,14 @@ namespace serialization {                                 \
     BOOST_SERIALIZATION_FACTORY(1, T, A0, 0, 0, 0)
 
 #define BOOST_SERIALIZATION_FACTORY_0(T)                 \
-    BOOST_SERIALIZATION_FACTORY(0, T, 0, 0, 0, 0)
+namespace boost {                                        \
+namespace serialization {                                \
+    template<>                                           \
+    T * factory<T, 0>(std::va_list){                     \
+        return new T();                                  \
+    }                                                    \
+}                                                        \
+}                                                        \
+/**/
 
 #endif // BOOST_SERIALIZATION_FACTORY_HPP
