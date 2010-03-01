@@ -14,6 +14,7 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/regex/pending/unicode_iterator.hpp>
 #include "./quickbook.hpp"
 #include "./actions.hpp"
 #include "./utils.hpp"
@@ -413,6 +414,21 @@ namespace quickbook
     void plain_char_action::operator()(iterator first, iterator /*last*/) const
     {
         detail::print_char(*first, phrase.get());
+    }
+
+    void escape_unicode_action::operator()(iterator first, iterator last) const
+    {
+        using namespace std;
+        std::string value(first, last);
+        boost::uint32_t unicode_value = strtol(value.c_str(), 0, 16);
+        if(unicode_value < 128) {
+            detail::print_char(unicode_value, phrase.get());
+        }
+        else {
+            boost::utf8_output_iterator<ostream_iterator<char> > phrase_iter(
+                ostream_iterator<char>(phrase.get()));
+            *phrase_iter++ = unicode_value;
+        }
     }
 
     void attribute_action::operator()(iterator first, iterator last) const

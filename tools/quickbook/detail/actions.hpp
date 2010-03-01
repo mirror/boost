@@ -368,6 +368,14 @@ namespace quickbook
         collector& phrase;
     };
     
+    struct escape_unicode_action
+    {
+    	escape_unicode_action(collector& phrase) : phrase(phrase) {}
+    	void operator()(iterator first, iterator last) const;
+    	
+    	collector& phrase;
+    };
+
     struct attribute_action
     {
         // Handle image attributes

@@ -50,6 +50,7 @@ test-suite quickbook.test :
     [ quickbook-fail-test fail-template-section-3 ]
     [ quickbook-test utf-8 ]
     [ quickbook-test utf-8-bom ]
+    [ quickbook-test unicode-escape ]
     [ quickbook-fail-test utf-16be-bom ]
     [ quickbook-fail-test utf-16le-bom ]
     ;

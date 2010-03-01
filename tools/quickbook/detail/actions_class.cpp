@@ -98,6 +98,7 @@ namespace quickbook
         , tip(out, temp_para, tip_pre, tip_post)
         , plain_char(phrase)
         , raw_char(phrase)
+        , escape_unicode(phrase)
         , attribute(attributes, attribute_name)
         , image(phrase, attributes, image_fileref)
         , cond_phrase_pre(phrase, conditions, macro)
