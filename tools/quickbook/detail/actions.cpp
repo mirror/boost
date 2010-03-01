@@ -14,7 +14,6 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/regex/pending/unicode_iterator.hpp>
 #include "./quickbook.hpp"
 #include "./actions.hpp"
 #include "./utils.hpp"
@@ -418,16 +417,20 @@ namespace quickbook
 
     void escape_unicode_action::operator()(iterator first, iterator last) const
     {
-        using namespace std;
-        std::string value(first, last);
-        boost::uint32_t unicode_value = strtol(value.c_str(), 0, 16);
-        if(unicode_value < 128) {
-            detail::print_char(unicode_value, phrase.get());
+        while(first != last && *first == '0') ++first;
+
+        // Just ignore \u0000
+        // Maybe I should issue a warning?
+        if(first == last) return;
+        
+        std::string hex_digits(first, last);
+        
+        if(hex_digits.size() == 2 && *first > '0' && *first <= '7') {
+            using namespace std;
+            detail::print_char(strtol(hex_digits.c_str(), 0, 16), phrase.get());
         }
         else {
-            boost::utf8_output_iterator<ostream_iterator<char> > phrase_iter(
-                ostream_iterator<char>(phrase.get()));
-            *phrase_iter++ = unicode_value;
+            phrase << "&#x" << hex_digits << ";";
         }
     }
 

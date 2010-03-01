@@ -4,82 +4,82 @@
   <title>UTF-8 test</title>
   <articleinfo>
   </articleinfo>
-  <anchor id="utf_8_test.i__t__rn__ti__n__liz__ti__n"/>
+  <anchor id="utf_8_test.i__xf1_t__xeb_rn__xe2_ti__xf4_n__xe0_liz__xe6_ti__xf8_n"/>
   <bridgehead renderas="sect2">
-    <link linkend="utf_8_test.i__t__rn__ti__n__liz__ti__n">Iñtërnâtiônàlizætiøn</link>
+    <link linkend="utf_8_test.i__xf1_t__xeb_rn__xe2_ti__xf4_n__xe0_liz__xe6_ti__xf8_n">I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n</link>
   </bridgehead>
   <itemizedlist>
     <listitem>
-      Αα Alpha
+      &#x391;&#x3B1; Alpha
     </listitem>
     <listitem>
-      Ββ Beta
+      &#x392;&#x3B2; Beta
     </listitem>
     <listitem>
-      Γγ Gamma
+      &#x393;&#x3B3; Gamma
     </listitem>
     <listitem>
-      Δδ Delta
+      &#x394;&#x3B4; Delta
     </listitem>
     <listitem>
-      Εε Epsilon
+      &#x395;&#x3B5; Epsilon
     </listitem>
     <listitem>
-      Ζζ Zeta
+      &#x396;&#x3B6; Zeta
     </listitem>
     <listitem>
-      Ηη Eta
+      &#x397;&#x3B7; Eta
     </listitem>
     <listitem>
-      Θθ Theta
+      &#x398;&#x3B8; Theta
     </listitem>
     <listitem>
-      Ιι Iota
+      &#x399;&#x3B9; Iota
     </listitem>
     <listitem>
-      Κκ Kappa
+      &#x39A;&#x3BA; Kappa
     </listitem>
     <listitem>
-      Λλ Lambda
+      &#x39B;&#x3BB; Lambda
     </listitem>
     <listitem>
-      Μμ Mu
+      &#x39C;&#x3BC; Mu
     </listitem>
     <listitem>
-      Νν Nu
+      &#x39D;&#x3BD; Nu
     </listitem>
     <listitem>
-      Ξξ Xi
+      &#x39E;&#x3BE; Xi
     </listitem>
     <listitem>
-      Οο Omicron
+      &#x39F;&#x3BF; Omicron
     </listitem>
     <listitem>
-      Ππ Pi
+      &#x3A0;&#x3C0; Pi
     </listitem>
     <listitem>
-      Ρρ Rho
+      &#x3A1;&#x3C1; Rho
     </listitem>
     <listitem>
-      Σσς Sigma
+      &#x3A3;&#x3C3;&#x3C2; Sigma
     </listitem>
     <listitem>
-      Ττ Tau
+      &#x3A4;&#x3C4; Tau
     </listitem>
     <listitem>
-      Υυ Upsilon
+      &#x3A5;&#x3C5; Upsilon
     </listitem>
     <listitem>
-      Φφ Phi
+      &#x3A6;&#x3C6; Phi
     </listitem>
     <listitem>
-      Χχ Chi
+      &#x3A7;&#x3C7; Chi
     </listitem>
     <listitem>
-      Ψψ Psi
+      &#x3A8;&#x3C8; Psi
     </listitem>
     <listitem>
-      Ωω Omega
+      &#x3A9;&#x3C9; Omega
     </listitem>
   </itemizedlist>
 </article>
