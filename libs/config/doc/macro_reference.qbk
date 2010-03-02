@@ -806,7 +806,7 @@ the only boost macros that should be tested in user code.
 [[Macro            ][Header         ][Description               ]]
 
 [[`BOOST_VERSION`][`<boost/version.hpp>`][
-Describes the boost version number in XXYYZZ format such that:
+Describes the boost version number in XYYYZZ format such that:
 `(BOOST_VERSION % 100)` is the sub-minor version, `((BOOST_VERSION / 100) % 1000)`
 is the minor version, and `(BOOST_VERSION / 100000)` is the major version.
 ]]
