@@ -243,7 +243,7 @@ int test_main(int argc, char* argv[])
             make_generator_iterator(gen, uniform_int<int>(0, C)),
             n);
   Digraph g2(SWIter(gen, n, k, prob), SWIter(), n);
-  Digraph g3(RMATIter(gen, n, (n*n*prob), a, b, c, d), RMATIter(), n);
+  Digraph g3(RMATIter(gen, n, size_t(n*n*prob), a, b, c, d), RMATIter(), n);
 
   // Test BFS
   breadth_first_search(g, vertex(0, g), visitor(bfs_visitor<>()));

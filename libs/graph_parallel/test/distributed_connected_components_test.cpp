@@ -98,7 +98,7 @@ test_distributed_connected_components(int n, double _p, bool verify, bool emit_d
 //           erdos_renyi_iterator<minstd_rand, Graph>(),
 //           n, pg, distrib);
 
-  int m = n * n * _p/2;
+  int m = int(n * n * _p/2);
   double a = 0.57, b = 0.19, c = 0.19, d = 0.05;
 
   // Last boolean parameter makes R-MAT bidirectional
