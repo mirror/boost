@@ -13,6 +13,8 @@
 #include <boost/numeric/ublas/matrix_sparse.hpp>
 #include <boost/numeric/ublas/io.hpp>
 
+#include <boost/numeric/ublas/traits/c_array.hpp>
+
 // other boost headers
 
 // headers for testcase
