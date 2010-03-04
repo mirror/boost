@@ -61,6 +61,7 @@
             </returns>
           </method>
         </method-group>
+        <constructor/>
         <constructor>
           <template>
             <template-type-parameter name="U"/>
