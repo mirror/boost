@@ -47,10 +47,12 @@ doxygen_files =
 # temporary hack for local docs
 local BOOST_ROOT = ../../../.. ;
 
+path-constant here : . ;
+
 doxygen reference :
-    ../../../boost/random/$(doxygen_files).hpp
-    ../../../boost/nondet_random.hpp
-    ../../../boost/random.hpp
+    $(here)/../../../boost/random/$(doxygen_files).hpp
+    $(here)/../../../boost/nondet_random.hpp
+    $(here)/../../../boost/random.hpp
   :
     <doxygen:param>EXPAND_ONLY_PREDEF=YES
     <doxygen:param>"ALIASES= \\
@@ -58,7 +60,6 @@ doxygen reference :
         endxmlnote=\"@xmlonly </para></note> @endxmlonly\" \\
         blockquote=\"@xmlonly <blockquote><para> @endxmlonly\" \\
         endblockquote=\"@xmlonly </para></blockquote> @endxmlonly\" \\
-        boost=\"$(BOOST_ROOT)\" \\
         random_distribution=\"@xmlonly <link linkend=\\\"boost_random.reference.concepts.random_distribution\\\">random distribution</link> @endxmlonly\" \\
         pseudo_random_number_generator=\"@xmlonly <link linkend=\\\"boost_random.reference.concepts.pseudo_random_number_generator\\\">pseudo-random number generator</link> @endxmlonly\" \\
         uniform_random_number_generator=\"@xmlonly <link linkend=\\\"boost_random.reference.concepts.uniform_random_number_generator\\\">uniform random number generator</link> @endxmlonly\" \\
@@ -102,7 +103,7 @@ doxygen reference :
     <doxygen:xml-imagedir>images/random
 ;
 
-xml random : random.qbk ;
+xml random : random.qbk : <dependency>reference ;
 
 boostbook standalone :
     random
