@@ -23,6 +23,7 @@
 #include <boost/config.hpp>
 #include <boost/utility.hpp>            // noncopyable
 #include <boost/integer_traits.hpp>     // compile-time integral limits
+#include <boost/random/detail/auto_link.hpp>
 
 namespace boost {
 
@@ -60,6 +61,12 @@ namespace boost {
  * the random numbers. Another option would be to specify the /dev/random
  * pseudo-device, which blocks on reads if the entropy pool has no more
  * random bits available.
+ *
+ * <b>Inplementation Note for Windows</b>
+ *
+ * On the Windows operating system, token is interpreted as the name
+ * of a cryptographic service provider.  By default \random_device uses
+ * MS_DEF_PROV.
  *
  * <b>Performance</b>
  *

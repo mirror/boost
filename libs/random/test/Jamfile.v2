@@ -7,12 +7,10 @@
 # bring in rules for testing
 import testing ;
 
-project
-    : source-location ..
-    ;
+project /boost/random/test ;
 
 run random_test.cpp ;
-run random_demo.cpp ;
+run ../example/random_demo.cpp ;
 run validate.cpp ;
 
 local all-urngs = 

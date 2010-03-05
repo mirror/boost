@@ -1,6 +1,7 @@
 /* boost random_device.cpp implementation
  *
  * Copyright Jens Maurer 2000
+ * Copyright Steven Watanabe 2010
  * Distributed under the Boost Software License, Version 1.0. (See
  * accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -8,6 +9,8 @@
  * $Id$
  *
  */
+
+#define BOOST_RANDOM_SOURCE
 
 #include <boost/nondet_random.hpp>
 #include <string>
@@ -22,7 +25,79 @@ const boost::random_device::result_type boost::random_device::max_value;
 #endif
 
 
-#if defined(__linux__) || defined (__FreeBSD__)
+#if defined(BOOST_WINDOWS)
+
+#include <windows.h>
+#include <wincrypt.h>
+#include <stdexcept>  // std::invalid_argument
+
+const char * const boost::random_device::default_token = "";
+
+class boost::random_device::impl
+{
+public:
+  impl(const std::string & token) : path(token) {
+    std::basic_string<TCHAR> prov_name(token.begin(), token.end());
+    if(prov_name.empty()) prov_name = MS_DEF_PROV;
+
+    TCHAR buffer[80];
+    DWORD type;
+    DWORD len;
+
+    // Find the type of the provider
+    for(DWORD i = 0; ; ++i) {
+      len = sizeof(buffer);
+      if(!CryptEnumProviders(i, NULL, 0, &type, buffer, &len)) {
+        error("Could not find provider");
+      }
+      if(buffer == prov_name) {
+        break;
+      }
+    }
+
+    if(!CryptAcquireContext(&hProv, NULL, prov_name.c_str(), type,
+        CRYPT_VERIFYCONTEXT | CRYPT_SILENT)) {
+      error("Failed to aqcuire CSP context");
+    }
+  }
+
+  ~impl() {
+    if(!CryptReleaseContext(hProv, 0)) error("could not release CSP");
+  }
+
+  unsigned int next() {
+    unsigned int result;
+
+    if(!CryptGenRandom(hProv, sizeof(result),
+        static_cast<BYTE*>(static_cast<void*>(&result)))) {
+      error("error while reading");
+    }
+
+    return result;
+  }
+
+private:
+  void error(const std::string & msg) {
+    DWORD error_code = GetLastError();
+    TCHAR buf[80];
+    DWORD num = FormatMessage(
+      FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+      NULL,
+      GetLastError(),
+      0,
+      buf,
+      sizeof(buf),
+      NULL);
+
+    throw std::invalid_argument("boost::random_device: " + msg + 
+                                " random-number pseudo-device " + path + 
+                                ": " + std::string(&buf[0], &buf[0] + num));
+  }
+  const std::string path;
+  HCRYPTPROV hProv;
+};
+
+#else
 
 // the default is the unlimited capacity device, using some secure hash
 // try "/dev/random" for blocking when the entropy pool has drained
@@ -90,8 +165,7 @@ private:
   int fd;
 };
 
-#endif // __linux__ || __FreeBSD__
-
+#endif // BOOST_WINDOWS
 
 boost::random_device::random_device(const std::string& token)
   : pimpl(new impl(token))
