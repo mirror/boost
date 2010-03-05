@@ -69,7 +69,7 @@ boost
                 {
                 };
 
-        template <int Line>
+        template <int Dummy>
         exception_ptr
         get_bad_alloc()
             {
@@ -77,21 +77,21 @@ boost
                 bad_alloc_() <<
                 throw_function("boost::current_exception()") <<
                 throw_file(__FILE__) <<
-                throw_line(Line) );
+                throw_line(__LINE__) );
             return e;
             }
 
-        template <int Line>
+        template <int Dummy>
         struct
         exception_ptr_bad_alloc
             {
             static exception_ptr const e;
             };
 
-        template <int Line>
+        template <int Dummy>
         exception_ptr const
-        exception_ptr_bad_alloc<Line>::
-        e = get_bad_alloc<Line>();
+        exception_ptr_bad_alloc<Dummy>::
+        e = get_bad_alloc<Dummy>();
         }
 
     class
@@ -354,7 +354,7 @@ boost
         catch(
         std::bad_alloc & )
             {
-            ret=exception_detail::exception_ptr_bad_alloc<__LINE__>::e;
+            ret=exception_detail::exception_ptr_bad_alloc<42>::e;
             }
         catch(
         ... )
@@ -366,7 +366,7 @@ boost
             catch(
             std::bad_alloc & )
                 {
-                ret=exception_detail::exception_ptr_bad_alloc<__LINE__>::e;
+                ret=exception_detail::exception_ptr_bad_alloc<42>::e;
                 }
             catch(
             ... )
