@@ -104,8 +104,8 @@ public:
    * access specification (for example, a URL) to some implementation-defined
    * service for monitoring a stochastic process. 
    */
-  explicit random_device(const std::string& token = default_token);
-  ~random_device();
+  BOOST_RANDOM_DECL explicit random_device(const std::string& token = default_token);
+  BOOST_RANDOM_DECL ~random_device();
   /**
    * Returns: An entropy estimate for the random numbers returned by
    * operator(), in the range min() to log2( max()+1). A deterministic
@@ -114,14 +114,14 @@ public:
    *
    * Throws: Nothing.
    */
-  double entropy() const;
+  BOOST_RANDOM_DECL double entropy() const;
   /**
    * Returns: A random value in the range [min, max]
    */
-  unsigned int operator()();
+  BOOST_RANDOM_DECL unsigned int operator()();
 
 private:
-  static const char * const default_token;
+  BOOST_RANDOM_DECL static const char * const default_token;
 
   /*
    * std:5.3.5/5 [expr.delete]: "If the object being deleted has incomplete

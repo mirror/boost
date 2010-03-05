@@ -31,7 +31,9 @@ const boost::random_device::result_type boost::random_device::max_value;
 #include <wincrypt.h>
 #include <stdexcept>  // std::invalid_argument
 
-const char * const boost::random_device::default_token = MS_DEF_PROV_A;
+#pragma comment(lib, "Advapi32.lib")
+
+BOOST_RANDOM_DECL const char * const boost::random_device::default_token = MS_DEF_PROV_A;
 
 class boost::random_device::impl
 {
@@ -164,25 +166,25 @@ private:
 
 #endif // BOOST_WINDOWS
 
-boost::random_device::random_device(const std::string& token)
+BOOST_RANDOM_DECL boost::random_device::random_device(const std::string& token)
   : pimpl(new impl(token))
 {
   assert((std::numeric_limits<result_type>::max)() == max_value);
 }
 
-boost::random_device::~random_device()
+BOOST_RANDOM_DECL boost::random_device::~random_device()
 {
   // the complete class impl is now visible, so we're safe
   // (see comment in random.hpp)
   delete pimpl;
 }
 
-double boost::random_device::entropy() const
+BOOST_RANDOM_DECL double boost::random_device::entropy() const
 {
   return 10;
 }
 
-unsigned int boost::random_device::operator()()
+BOOST_RANDOM_DECL unsigned int boost::random_device::operator()()
 {
   return pimpl->next();
 }

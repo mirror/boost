@@ -14,7 +14,7 @@
 #include <boost/config.hpp>
 
 #ifdef BOOST_HAS_DECLSPEC
-    #if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_FILESYSTEM_DYN_LINK)
+    #if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_RANDOM_DYN_LINK)
         #if defined(BOOST_RANDOM_SOURCE)
             #define BOOST_RANDOM_DECL __declspec(dllexport)
         #else
