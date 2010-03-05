@@ -31,38 +31,35 @@ const boost::random_device::result_type boost::random_device::max_value;
 #include <wincrypt.h>
 #include <stdexcept>  // std::invalid_argument
 
-const char * const boost::random_device::default_token = "";
+const char * const boost::random_device::default_token = MS_DEF_PROV_A;
 
 class boost::random_device::impl
 {
 public:
-  impl(const std::string & token) : path(token) {
-    std::basic_string<TCHAR> prov_name(token.begin(), token.end());
-    if(prov_name.empty()) prov_name = MS_DEF_PROV;
-
-    TCHAR buffer[80];
+  impl(const std::string & token) : provider(token) {
+    char buffer[80];
     DWORD type;
     DWORD len;
 
     // Find the type of the provider
     for(DWORD i = 0; ; ++i) {
       len = sizeof(buffer);
-      if(!CryptEnumProviders(i, NULL, 0, &type, buffer, &len)) {
-        error("Could not find provider");
+      if(!CryptEnumProvidersA(i, NULL, 0, &type, buffer, &len)) {
+        error("Could not find provider name");
       }
-      if(buffer == prov_name) {
+      if(buffer == provider) {
         break;
       }
     }
 
-    if(!CryptAcquireContext(&hProv, NULL, prov_name.c_str(), type,
+    if(!CryptAcquireContextA(&hProv, NULL, provider.c_str(), type,
         CRYPT_VERIFYCONTEXT | CRYPT_SILENT)) {
-      error("Failed to aqcuire CSP context");
+      error("Could not acquire CSP context");
     }
   }
 
   ~impl() {
-    if(!CryptReleaseContext(hProv, 0)) error("could not release CSP");
+    if(!CryptReleaseContext(hProv, 0)) error("Could not release CSP context");
   }
 
   unsigned int next() {
@@ -79,8 +76,8 @@ public:
 private:
   void error(const std::string & msg) {
     DWORD error_code = GetLastError();
-    TCHAR buf[80];
-    DWORD num = FormatMessage(
+    char buf[80];
+    DWORD num = FormatMessageA(
       FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
       NULL,
       GetLastError(),
@@ -90,10 +87,10 @@ private:
       NULL);
 
     throw std::invalid_argument("boost::random_device: " + msg + 
-                                " random-number pseudo-device " + path + 
+                                " Cryptopraphic Service Provider " + provider + 
                                 ": " + std::string(&buf[0], &buf[0] + num));
   }
-  const std::string path;
+  const std::string provider;
   HCRYPTPROV hProv;
 };
 
