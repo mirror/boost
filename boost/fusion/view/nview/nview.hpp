@@ -36,7 +36,7 @@ namespace boost { namespace fusion
             struct result<addref(U)> : add_reference<U> {};
 
             template <typename T>
-            typename boost::result_of<addref(T)>::type 
+            typename add_reference<T>::type 
             operator()(T& x) const
             {
                 return x;
@@ -54,14 +54,14 @@ namespace boost { namespace fusion
             {};
 
             template <typename T>
-            typename boost::result_of<addconstref(T)>::type 
+            typename add_reference<typename add_const<T>::type>::type 
             operator()(T& x) const
             {
                 return x;
             }
 
             template <typename T>
-            typename boost::result_of<addconstref(T)>::type 
+            typename add_reference<typename add_const<T>::type>::type 
             operator()(T const& x) const
             {
                 return x;
