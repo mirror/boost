@@ -1,4 +1,4 @@
-﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -100,6 +100,7 @@ class singleton : public boost::noncopyable
 public:
     static const T & get_const_instance();
     static T & get_mutable_instance();
+    static bool is_destroyed();
 };
 
 } // namespace serialization 
@@ -109,15 +110,25 @@ public:
 <dl>
 
 <dt><h4><pre><code>
-static const T & get_const_instance();</code></pre></h4></dt>
+static const T & get_const_instance();
+</code></pre></h4></dt>
 <dd>
 Retrieve a constant reference to the singleton for this type.
 </dd>
 
 <dt><h4><pre><code>
-static T & get_mutable_instance();</code></pre></h4></dt>
+static T & get_mutable_instance();
+</code></pre></h4></dt>
 <dd>
 Retrieve a mutable reference to the singleton for this type.
+</dd>
+
+<dt><h4><pre><code>
+static bool is_destroyed();
+</code></pre></h4></dt>
+<dd>
+Return <code>true</code> if the destructor on this singleton has been 
+called.  Otherwise, return <code>false</code>.
 </dd>
 
 </dl>
@@ -214,21 +225,25 @@ This singleton CAN be safely used in multi-threading applications if one
 is careful follow a simple rule:
 <p>
 <b>Do not call get_mutable_instance when more than one thread is running!</b>
-<p>
+<'>
 All singletons used in the serialization library follow this rule.  
 In order to help detect accidental violations of this rule there
 exists an singleton lock/unlock functions.
 <pre><code>
-boost::serialization::global_lock::get_mutable_instance().lock();
-boost::serialization::global_lock::get_mutable_instance().unlock();
+void boost::serialization::singleton_module::lock();
+void boost::serialization::singleton_module::unlock();
+bool boost::serialization::singleton_module::is_locked();
 </code></pre>
 In a program compiled for debug, any invocation of 
 <code style="white-space: normal">get_mutable_instance()</code>
 while the library is in a "locked" state will trap in an assertion.
-The global_lock state is initialized as "unlocked" to permit
+The singleton module lock state is initialized as "unlocked" to permit
 alteration of static variables before 
-<code style="white-space: normal">main</code> is called. All
-serialization tests invoke <code style="white-space: normal">lock()</code>
+<code style="white-space: normal">main</code> is called. 
+The <code style="white-space: normal">lock()</code> and
+<code style="white-space: normal">unlock()</code> are "global"
+in they affect ALL the singletons defined by this template.
+All serialization tests invoke <code style="white-space: normal">lock()</code>
 at the start of the progam.  For programs compiled in release
 mode these functions have no effect.
 
