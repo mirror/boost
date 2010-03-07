@@ -14,6 +14,8 @@
 #include <boost/utility/result_of.hpp>
 
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/add_reference.hpp>
+#include <boost/type_traits/add_const.hpp>
 
 #include <boost/fusion/support/is_view.hpp>
 #include <boost/fusion/support/category_of.hpp>
