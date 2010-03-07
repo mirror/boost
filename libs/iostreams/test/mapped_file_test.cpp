@@ -175,6 +175,23 @@ void mapped_file_test()
         );
     }
 
+    //--------------Writing to a pre-existing file---------------------------//
+    {
+        // Test for Bug #3953 - writing to a pre-existing mapped file.
+        boost::iostreams::test::test_file  first, test;
+
+        mapped_file_params p(first.name());
+        p.new_file_size = boost::iostreams::test::data_reps * boost::iostreams::test::data_length();
+        boost::iostreams::stream<mapped_file_sink> out;
+        out.open(mapped_file_sink(p));
+        boost::iostreams::test::write_data_in_chars(out);
+        out.close();
+        BOOST_CHECK_MESSAGE(
+            boost::iostreams::test::compare_files(first.name(), test.name()),
+            "failed writing to pre-existing mapped file in chars"
+        );
+    }
+    
     //--------------Random access with a mapped_file--------------------------//
 
     {
