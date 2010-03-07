@@ -223,14 +223,16 @@ namespace quickbook
                     |   simple_teletype
                     ;
 
+                simple_phrase_end = '[' | phrase_end;
+
                 simple_markup(simple_bold,
-                    '*', actions.simple_bold, phrase_end);
+                    '*', actions.simple_bold, simple_phrase_end);
                 simple_markup(simple_italic,
-                    '/', actions.simple_italic, phrase_end);
+                    '/', actions.simple_italic, simple_phrase_end);
                 simple_markup(simple_underline,
-                    '_', actions.simple_underline, phrase_end);
+                    '_', actions.simple_underline, simple_phrase_end);
                 simple_markup(simple_teletype,
-                    '=', actions.simple_teletype, phrase_end);
+                    '=', actions.simple_teletype, simple_phrase_end);
 
                 phrase =
                    *(   common
@@ -273,6 +275,10 @@ namespace quickbook
                         str_p("\\n")                    [actions.break_]
                     |   "\\ "                           // ignore an escaped char
                     |   '\\' >> punct_p                 [actions.raw_char]
+                    |   "\\u">> repeat_p(4)
+                        [
+                            chset<>("0-9a-fA-F")
+                        ]                               [actions.escape_unicode]
                     |   (
                             ("'''" >> !eol)             [actions.escape_pre]
                         >>  *(anychar_p - "'''")        [actions.raw_char]
@@ -462,7 +468,7 @@ namespace quickbook
             }
 
             rule<Scanner>   space, blank, comment, phrase, phrase_markup, image,
-                            phrase_end, bold, italic, underline, teletype,
+                            simple_phrase_end, phrase_end, bold, italic, underline, teletype,
                             strikethrough, escape, url, common, funcref, classref,
                             memberref, enumref, macroref, headerref, conceptref, globalref,
                             anchor, link, hard_space, eol, inline_code, simple_format,

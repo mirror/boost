@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<article id="utf_8_test" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>UTF-8 test</title>
+  <articleinfo>
+  </articleinfo>
+  <anchor id="utf_8_test.i__t__rn__ti__n__liz__ti__n"/>
+  <bridgehead renderas="sect2">
+    <link linkend="utf_8_test.i__t__rn__ti__n__liz__ti__n">Iñtërnâtiônàlizætiøn</link>
+  </bridgehead>
+  <itemizedlist>
+    <listitem>
+      Αα Alpha
+    </listitem>
+    <listitem>
+      Ββ Beta
+    </listitem>
+    <listitem>
+      Γγ Gamma
+    </listitem>
+    <listitem>
+      Δδ Delta
+    </listitem>
+    <listitem>
+      Εε Epsilon
+    </listitem>
+    <listitem>
+      Ζζ Zeta
+    </listitem>
+    <listitem>
+      Ηη Eta
+    </listitem>
+    <listitem>
+      Θθ Theta
+    </listitem>
+    <listitem>
+      Ιι Iota
+    </listitem>
+    <listitem>
+      Κκ Kappa
+    </listitem>
+    <listitem>
+      Λλ Lambda
+    </listitem>
+    <listitem>
+      Μμ Mu
+    </listitem>
+    <listitem>
+      Νν Nu
+    </listitem>
+    <listitem>
+      Ξξ Xi
+    </listitem>
+    <listitem>
+      Οο Omicron
+    </listitem>
+    <listitem>
+      Ππ Pi
+    </listitem>
+    <listitem>
+      Ρρ Rho
+    </listitem>
+    <listitem>
+      Σσς Sigma
+    </listitem>
+    <listitem>
+      Ττ Tau
+    </listitem>
+    <listitem>
+      Υυ Upsilon
+    </listitem>
+    <listitem>
+      Φφ Phi
+    </listitem>
+    <listitem>
+      Χχ Chi
+    </listitem>
+    <listitem>
+      Ψψ Psi
+    </listitem>
+    <listitem>
+      Ωω Omega
+    </listitem>
+  </itemizedlist>
+</article>

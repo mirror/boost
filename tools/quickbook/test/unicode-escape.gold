@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<article id="utf_8_test" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>UTF-8 test</title>
+  <articleinfo>
+  </articleinfo>
+  <anchor id="utf_8_test.i__xf1_t__xeb_rn__xe2_ti__xf4_n__xe0_liz__xe6_ti__xf8_n"/>
+  <bridgehead renderas="sect2">
+    <link linkend="utf_8_test.i__xf1_t__xeb_rn__xe2_ti__xf4_n__xe0_liz__xe6_ti__xf8_n">I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n</link>
+  </bridgehead>
+  <itemizedlist>
+    <listitem>
+      &#x391;&#x3B1; Alpha
+    </listitem>
+    <listitem>
+      &#x392;&#x3B2; Beta
+    </listitem>
+    <listitem>
+      &#x393;&#x3B3; Gamma
+    </listitem>
+    <listitem>
+      &#x394;&#x3B4; Delta
+    </listitem>
+    <listitem>
+      &#x395;&#x3B5; Epsilon
+    </listitem>
+    <listitem>
+      &#x396;&#x3B6; Zeta
+    </listitem>
+    <listitem>
+      &#x397;&#x3B7; Eta
+    </listitem>
+    <listitem>
+      &#x398;&#x3B8; Theta
+    </listitem>
+    <listitem>
+      &#x399;&#x3B9; Iota
+    </listitem>
+    <listitem>
+      &#x39A;&#x3BA; Kappa
+    </listitem>
+    <listitem>
+      &#x39B;&#x3BB; Lambda
+    </listitem>
+    <listitem>
+      &#x39C;&#x3BC; Mu
+    </listitem>
+    <listitem>
+      &#x39D;&#x3BD; Nu
+    </listitem>
+    <listitem>
+      &#x39E;&#x3BE; Xi
+    </listitem>
+    <listitem>
+      &#x39F;&#x3BF; Omicron
+    </listitem>
+    <listitem>
+      &#x3A0;&#x3C0; Pi
+    </listitem>
+    <listitem>
+      &#x3A1;&#x3C1; Rho
+    </listitem>
+    <listitem>
+      &#x3A3;&#x3C3;&#x3C2; Sigma
+    </listitem>
+    <listitem>
+      &#x3A4;&#x3C4; Tau
+    </listitem>
+    <listitem>
+      &#x3A5;&#x3C5; Upsilon
+    </listitem>
+    <listitem>
+      &#x3A6;&#x3C6; Phi
+    </listitem>
+    <listitem>
+      &#x3A7;&#x3C7; Chi
+    </listitem>
+    <listitem>
+      &#x3A8;&#x3C8; Psi
+    </listitem>
+    <listitem>
+      &#x3A9;&#x3C9; Omega
+    </listitem>
+  </itemizedlist>
+</article>

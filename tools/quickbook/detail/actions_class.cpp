@@ -47,6 +47,7 @@ namespace quickbook
         , outdir(outdir_)
         , macro()
         , section_level(0)
+        , min_section_level(0)
         , section_id()
         , qualified_section_id()
         , source_mode("c++")
@@ -97,6 +98,7 @@ namespace quickbook
         , tip(out, temp_para, tip_pre, tip_post)
         , plain_char(phrase)
         , raw_char(phrase)
+        , escape_unicode(phrase)
         , attribute(attributes, attribute_name)
         , image(phrase, attributes, image_fileref)
         , cond_phrase_pre(phrase, conditions, macro)
@@ -172,7 +174,7 @@ namespace quickbook
         , anchor(out)
 
         , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id, element_id)
-        , end_section(out, section_level, qualified_section_id, error_count)
+        , end_section(out, section_level, min_section_level, qualified_section_id, error_count)
         , xinclude(out, *this)
         , include(*this)
         , import(out, *this)
@@ -201,6 +203,7 @@ namespace quickbook
               , outdir
               , macro
               , section_level
+              , min_section_level
               , section_id
               , qualified_section_id
               , source_mode
@@ -212,7 +215,7 @@ namespace quickbook
         temp.push();
         temp_para.push();
         list_buffer.push();
-        templates.push();
+        templates.push();        
     }
 
     void actions::pop()
@@ -222,6 +225,7 @@ namespace quickbook
           , outdir
           , macro
           , section_level
+          , min_section_level
           , section_id
           , qualified_section_id
           , source_mode

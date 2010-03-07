@@ -23,14 +23,17 @@ test-suite quickbook.test :
     [ quickbook-test templates ]
     [ quickbook-test templates_1_4 ]
     [ quickbook-test templates_1_5 ]
+    [ quickbook-test template-section ]
     #[ quickbook-test xinclude ]
     [ quickbook-test import ]
+    [ quickbook-test include_1_5 ]
     [ quickbook-test section_1_4 ]
     [ quickbook-test section_1_5 ]
     [ quickbook-test heading ]
     [ quickbook-test table_1_5 ]
     [ quickbook-test image_1_5 ]
     [ quickbook-test callouts ]
+    [ quickbook-test simple_markup ]
     [ quickbook-fail-test fail-include ]
     [ quickbook-fail-test fail-import ]
     [ quickbook-fail-test fail-template-arguments1 ]
@@ -42,7 +45,12 @@ test-suite quickbook.test :
     [ quickbook-fail-test fail-parse-error1 ]
     [ quickbook-fail-test fail-parse-error2 ]
     [ quickbook-fail-test fail-template-lookup1 ]
+    [ quickbook-fail-test fail-template-section-1 ]
+    [ quickbook-fail-test fail-template-section-2 ]
+    [ quickbook-fail-test fail-template-section-3 ]
+    [ quickbook-test utf-8 ]
+    [ quickbook-test utf-8-bom ]
+    [ quickbook-test unicode-escape ]
+    [ quickbook-fail-test utf-16be-bom ]
+    [ quickbook-fail-test utf-16le-bom ]
     ;
-
-
-

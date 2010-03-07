@@ -368,6 +368,14 @@ namespace quickbook
         collector& phrase;
     };
     
+    struct escape_unicode_action
+    {
+    	escape_unicode_action(collector& phrase) : phrase(phrase) {}
+    	void operator()(iterator first, iterator last) const;
+    	
+    	collector& phrase;
+    };
+
     struct attribute_action
     {
         // Handle image attributes
@@ -715,10 +723,12 @@ namespace quickbook
         end_section_action(
             collector& out
           , int& section_level
+          , int& min_section_level
           , std::string& qualified_section_id
           , int& error_count)
         : out(out)
         , section_level(section_level)
+        , min_section_level(min_section_level)
         , qualified_section_id(qualified_section_id)
         , error_count(error_count) {}
 
@@ -726,6 +736,7 @@ namespace quickbook
 
         collector& out;
         int& section_level;
+        int& min_section_level;
         std::string& qualified_section_id;
         int& error_count;
    };

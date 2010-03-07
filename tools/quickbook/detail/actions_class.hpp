@@ -62,6 +62,7 @@ namespace quickbook
         fs::path                outdir;
         string_symbols          macro;
         int                     section_level;
+        int                     min_section_level;
         std::string             section_id;
         std::string             qualified_section_id;
         std::string             source_mode;
@@ -70,6 +71,7 @@ namespace quickbook
             fs::path
           , fs::path
           , string_symbols
+          , int
           , int
           , std::string
           , std::string
@@ -120,6 +122,7 @@ namespace quickbook
         phrase_action           warning, caution, important, note, tip;
         plain_char_action       plain_char;
         raw_char_action         raw_char;
+        escape_unicode_action   escape_unicode;
         attribute_action        attribute;
         image_action            image;
         cond_phrase_action_pre  cond_phrase_pre;
