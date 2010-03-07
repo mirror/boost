@@ -7,7 +7,7 @@
 #  See http://www.boost.org/libs/serialization for the library home page.
 
 project libs/serialization/example
-    : id serialization_test
+    : id serialization_example
     : requirements <library>../build//boost_serialization
     ;
 
@@ -42,15 +42,14 @@ test-suite "demo-suite" :
     # demos
     [ demo_bsl_run demo ]
     [ demo_bsl_run demo_auto_ptr ]
-    [ demo_bsl_run demo_dll ]
     [ demo_bsl_run demo_exception ]
-    [ demo_bsl_run demo_log ]
+    [ demo_bsl_run demo_log : log_archive ]
     [ demo_bsl_run demo_pimpl : demo_pimpl_A ]
     [ demo_bsl_run demo_polymorphic : demo_polymorphic_A ]
     [ demo_bsl_run demo_portable_archive : portable_binary_iarchive portable_binary_oarchive ]
     [ demo_bsl_run demo_shared_ptr ]
     [ demo_bsl_run demo_simple_log ]
-    [ demo_bsl_run demo_trival_archive ]
+    [ demo_bsl_run demo_trivial_archive ]
     [ demo_bsl_run demo_xml ]
     [ demo_bsl_run demo_xml_save ]
     [ demo_bsl_run demo_xml_load : : <dependency>demo_xml_save ]
