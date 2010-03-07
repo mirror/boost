@@ -185,7 +185,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Trmplsyrd"
+			Name="Templates"
 			Filter="">
 			<File
 				RelativePath="..\example\demo_dll_a.ipp">

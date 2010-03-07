@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="demo_portable_archive"
+	Name="demo_simple_log"
 	ProjectGUID="{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
-	RootNamespace="demo_portable_archive"
+	RootNamespace="demo_simple_log"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -151,6 +151,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
+				AdditionalDependencies="Library"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(ConfigurationName)"
@@ -183,32 +184,15 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="Headers"
-			Filter="">
-			<File
-				RelativePath="..\example\portable_binary_archive.hpp">
-			</File>
-			<File
-				RelativePath="..\example\portable_binary_iarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\example\portable_binary_oarchive.hpp">
-			</File>
-		</Filter>
-		<Filter
-			Name="Source"
-			Filter="">
-			<File
-				RelativePath="..\example\demo_portable_archive.cpp">
-			</File>
-			<File
-				RelativePath="..\example\portable_binary_iarchive.cpp">
-			</File>
-			<File
-				RelativePath="..\example\portable_binary_oarchive.cpp">
-			</File>
-		</Filter>
+		<File
+			RelativePath="..\example\demo_gps.hpp">
+		</File>
+		<File
+			RelativePath="..\example\demo_simple_log.cpp">
+		</File>
+		<File
+			RelativePath="..\example\simple_log_archive.hpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
