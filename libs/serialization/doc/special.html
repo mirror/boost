@@ -451,6 +451,48 @@ and
 </a>
 which are similar to the above but include tests of the export
 and no_rtti facilities in the context of DLLS.
+<p>
+For best results, write your code to conform to the following
+guidelines:
+<ul>
+  <li>Don't include <code>inline</code> code in classes used in DLLS.
+This will generate duplicate code in the DLLS and mainline. This
+needlessly duplicates code.  Worse, it makes is possible for 
+different versions of the same code exist simultaneously.  This
+type of error turns out to be excruciatingly difficult to debug.
+Finally, it opens the possibility that module being referred to
+might be explictly unloaded which would (hopefully) result in
+a runtime error. This is another bug that is not always 
+reproducible or easy to find. For class member templates use something like
+
+<pre><code>
+template&lt;class Archive&gt;
+void serialize(Archive & ar, const unsigned int version);
+</code></pre>
+in the header, and
+
+<pre><code>
+template&lt;class Archive&gt;
+void myclass::serialize(Archive & ar, const unsigned int version){
+	...
+}
+
+BOOST_EXPORT_CLASS_IMPLEMENT(my_class)
+
+#include &lt;boost/archive/text_oarchive&gt;
+#include &lt;boost/archive/text_iarchive&lt;
+template myclass::serialize(boost::archive::text_oarchive & ar, const unsigned int version);
+template myclass::serialize(boost::archive::text_iarchive & ar, const unsigned int version);
+... // repeat for each archive class to be used.
+</code></pre>
+in the implementation file.  This will result in generation of all code
+required in only one place.  The library does not detect this type of error for you.
+  <li>If DLLS are to be loaded an unloaded explicitly (e.g. using <code>dlopen</code> in *nix or 
+<code>LoadLibrary</code> in Windows).  Try to arrange that they are unloaded in the reverse
+sequence.  This should guarentee that problems are avoided even if the
+above guidline hasn't been followed.
+
+</ul>
 
 <h3><a name="plugins">Plugins</a></h3>
 In order to implement the library, various facilities for runtime

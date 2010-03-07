@@ -1,7 +1,7 @@
 <!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
-(C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
+(C) Copyright 2002-10 Robert Ramey - http://www.rrsd.com . 
 Use, modification and distribution is subject to the Boost Software
 License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 http://www.boost.org/LICENSE_1_0.txt)
@@ -26,85 +26,96 @@ http://www.boost.org/LICENSE_1_0.txt)
 </table>
 <hr>
 <dl class="page-index">
-  <dt><a href="#implementation">Implementation</a>
+  <dt><a href="#trivial">Trivial Archive</a>
+  <dt><a href="#implementation">More Useful Archive Classes</a>
   <dt><a href="#usage">Usage</a>
   <dt><a href="#testing">Testing</a>
   <dt><a href="#polymorphic">Polymorphic Archives</a>
 </dl>
-<h3><a name="implementation">Implementation</a></h3>
+
+<h3><a name="trivial">Trivial Archive</a></h3>
 The <a href="archives.html"><strong>Archive</strong></a> concept specifies the functions that a
 class must implement to in order to be used to serialize 
 <a href="serialization.html"><strong>Serializable</strong></a> types.
 
- 
-The library implements a family of archives appropriate for different purposes.  
-This section describes how they have been implemented and one way one 
-can implement his own archive class.
+Our discussion will focus on archives used for saving as the hierarchy is exactly analogous
+for archives used for loading data.
 
-Our discussion will focus on archives used for loading as the hierarchy is exactly analogous
-for archives used for saving data.
+<h4>Minimum Requirments</h4>
 
+The simplest class which will model the <a href="archives.html"><strong>Archive</strong></a> concept specifies the functions that a
+class will look like:
+
+<pre><code>
+#include &lt;cstddef&gt; // std::size_t
+//////////////////////////////////////////////////////////////
+// class trivial_oarchive
+class trivial_oarchive {
+public:
+    //////////////////////////////////////////////////////////
+    // public interface used by programs that use the
+    // serialization library
+    typedef boost::mpl::bool_&lt;true&gt; is_saving; 
+    typedef boost::mpl::bool_&lt;false&gt; is_loading;
+    template&lt;class T&gt; register_type(){}
+    template&lt;class T&gt; trivial_oarchive & operator&lt;&lt;(const T & t){
+        return *this;
+    }
+    template&lt;class T&gt; trivial_oarchive & operator&(const T & t){
+        return *this &lt;&lt; t;
+    }
+    void save_binary(void *address, std::size_t count){};
+};
+</code></pre>
+The simplest possible input archive class is analogous to the above.
+In the following discussion, only output archives will be addressed.
+Input archives are exactly symmetrical to output archives.
+<p>
+This archive will compile and execute with any types which implement the
+<a href="serialization.html"><strong>Serializable</strong></a> concept.
+For an example see
+<a href="../example/demo_trivial_archive.cpp" target="demo_trivial_archive">
+<code style="white-space: normal">demo_trivial_archive.cpp</code></a>.
+Of course this program won't produce any output as it is.  But it provides
+the starting point for a simple class which can be used to log formated
+output.  See the implementation of a <a href="simple_log.html">simple
+log archive</a> to how this has been done.
+
+<h3><a name="implementation">More Useful Archive Classes</a></h3>
+The above example is fine as far as it goes.  But it doesn't implement
+useful features such as serialization of pointers, class versioning
+and others. This library implements a family of full featuared archive
+classes appropriate for a variety of purposes.  
 
 <p>
 Our archives have been factored in to a tree of classes in order to minimize
 repetition of code.  This is shown in the accompanying 
 <a target="class_diagram" href="class_diagram.html">class diagram</a>.
 
-Any class which fullfills the following requirements will function as
-a loading archive.
-
-
-<h4>Minimum Requirments</h4>
-The archive class is derived from:
-<pre><code>
-template&lt;class Archive&gt;
-detail::common_iarchive;
-</code></pre>
-An instance of the this template handles all the "bookkeeping" associated
-with serialization. In order to be a functional only the following additional
-functions <strong>must</strong> be declared:
-<dl>
-<dt><h4><code>void load(T &t);</code></h4></dt>
-<dd>
-This function must be implemented for all primitive data types.  This can be
-accomplished through the use of a member template or explicit declarations
-for all primitive types.
-</dd>
-
-<dt><h4><code>void load_binary(void *address, std::size_t size);</code></h4></dt>
-<dd>
-This function should <code style="white-space: normal">size</code> bytes from the archive, and 
-copy them in to memory starting at address <code style="white-space: normal">address</code>.
-</dd>
-
-<dt><h4><code>friend class boost::archive::load_access;</code></h4></dt>
-<dd>
-In addition, such a class <strong>must</strong> provide a the following
-friend declaration grant access to the core serialization library to the functions
-of this class.
-</dd>
-
-</dl>
-
-So, the most trivial implementation of an input archive would look like this:
+Any class which fullfills the following requirements will fit into
+this hierarchy and implement all the features we require.  Deriving from
+the base class <a href="../../../boost/archive/detail/common_oarchive.hpp" target="common_oarchive_hpp">
+common_oarchive.hpp</a> provides all features we desire which
+are missing from trivial_oarchive above.
 
 <pre><code>
-<a href="../../../boost/archive/detail/common_iarchive.hpp" target="common_iarchive_hpp">
-#include &lt;boost/archive/detail/common_iarchive.hpp&gt;
+<a href="../../../boost/archive/detail/common_oarchive.hpp" target="common_oarchive_hpp">
+#include &lt;cstddef&gt; // std::size_t
+#include &lt;boost/archive/detail/common_oarchive.hpp&gt;
 </a>
 /////////////////////////////////////////////////////////////////////////
-// class trivial_iarchive - read serialized objects from a input text stream
-class trivial_iarchive : 
-    public boost::archive::detail::common_iarchive&lt;trivial_iarchive&gt;
+// class complete_oarchive
+class complete_oarchive : 
+    public boost::archive::detail::common_oarchive&lt;complete_oarchive&gt;
 {
     // permit serialization system privileged access to permit
     // implementation of inline templates for maximum speed.
-    friend class boost::archive::load_access;
+    friend class boost::archive::save_access;
 
-    // member template for loading primitive types.
-    // Override for any types/templates that special treatment
+    // member template for saving primitive types.
+    // Specialize for any types/templates that special treatment
     template&lt;class T&gt;
-    void load(T &amp; t);
+    void save(T &amp; t);
 
 public:
     //////////////////////////////////////////////////////////
@@ -112,28 +123,24 @@ public:
     // serialization library
 
     // archives are expected to support this function
-    void load_binary(void *address, std::size_t count);
+    void save_binary(void *address, std::size_t count);
 };
-
 </code></pre>
-The simplest possible output archive class is exactly analogous to the above.
-In the following discussion, only input archives will be addressed.
-Output archives are exactly symmetrical to input archives.
-<p>
-Given a suitable definitions of <code style="white-space: normal">load</code>
-and <code style="white-space: normal">load_binary</code>, 
+
+Given a suitable definitions of <code style="white-space: normal">save</code>
+and <code style="white-space: normal">save_binary</code>, 
 any program using serialization with a conforming C++ compiler should compile 
 and run with this archive class.
 
 <h4>Optional Overrides</h4>
 
-The <code style="white-space: normal">detail::common_iarchive</code> class contains
+The <code style="white-space: normal">detail::common_oarchive</code> class contains
 a number of functions that are used by various parts of the serialization library
 to help render the archive in a particular form.
 
 <dl>
 
-<dt><h4><code>void load_start()</code></h4></dt>
+<dt><h4><code>void save_start()</code></h4></dt>
 <dd>
 <strong>Default</strong>:Does nothing.<br>
 <strong>Purpose</strong>:To inject/retrieve an object name into the archive.  Used
@@ -141,7 +148,7 @@ by XML archive to inject "&lt;name " before data.
 </dd>
 <p>
 
-<dt><h4><code>void load_end()</code></h4></dt>
+<dt><h4><code>void save_end()</code></h4></dt>
 <dd>
 <strong>Default</strong>:Does nothing.<br>
 <strong>Purpose</strong>:To inject/retrieve an object name into the archive. Used
@@ -153,7 +160,7 @@ by XML archive to inject "&lt;/name&gt;" after data.
 <dd>
 <strong>Default</strong>:Does nothing.<br>
 <strong>Purpose</strong>:Called <strong>each time</strong> user data is saved. 
-It's not called when archive book keeping data is saved.  This is used by XML archives 
+It's not called when archive bookkeeping data is saved.  This is used by XML archives 
 to determine  when to inject a "&gt;" character at end of XML header. XML output archives 
 keep their own internal flag indicating that data being written is header data. This
 internal flag is reset when an object start tag is written. When 
@@ -165,12 +172,12 @@ to be optimised away for archive classes that don't use it.
 <p>
 <dt><h4><code>
 template&lt;class T&gt;
-void load_override(T & t, int);
+void save_override(T & t, int);
 </code></h4></dt>
 <dd>
-<strong>Default</strong>:Invokes <code style="white-space: normal">archive::load(Archive & ar, t)</code><br>
+<strong>Default</strong>:Invokes <code style="white-space: normal">archive::save(Archive & ar, t)</code><br>
 This is the main entry into the serialization library.<br>
-<strong>Purpose</strong>:This can be overridden in cases where the data is to be written 
+<strong>Purpose</strong>:This can be specialized in cases where the data is to be written 
 to the archive in some special way.  For example, XML archives implement special handling for
 name-value pairs by overriding this function template for name-value pairs.  
 This replaces the default name-value pair handling, which is just to throw away the name,
@@ -188,14 +195,14 @@ implement partial function template ordering.  For more information see
 The serialization library injects bookkeeping data into the serialization archive.
 This data includes things like object ids, version numbers, class names etc.  Each
 of these objects is included in a wrapper so that the archive class can override the
-implementation of <code style="white-space: normal">void load_override(T & t, int);</code>.
+implementation of <code style="white-space: normal">void save_override(T & t, int);</code>.
 For example, in the XML archive, the override for this type renders an object_id equal to 23 as
 "object_id=_23".  The following table lists the types defined in the 
 <code style="white-space: normal">boost::archive namespace</code>
 used internally by the serialization library:
 <p>
 <table border>
-<tr><th align=left>type</th><th align=left><code style="white-space: normal">default<br>serialed as</code></th>
+<tr><th align=left>type</th><th align=left><code style="white-space: normal">default<br>serialized as</code></th>
 <tr><td><code style="white-space: normal">version_type</code></td><td><code style="white-space: normal">unsigned int</code></td>             
 <tr><td><code style="white-space: normal">object_id_type</code></td><td><code style="white-space: normal">unsigned int</code></td>   
 <tr><td><code style="white-space: normal">object_id_reference_type</code></td><td><code style="white-space: normal">unsigned int</code></td>   
@@ -207,7 +214,7 @@ used internally by the serialization library:
 </table>
 <p>
 All of these are associated with a default serialization defined in terms of primitive types
-so it isn't a requirement to define <code style="white-space: normal">load_override</code> 
+so it isn't a requirement to define <code style="white-space: normal">save_override</code> 
 for these types.
 <p>
 These are defined in

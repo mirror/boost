@@ -29,6 +29,7 @@ http://www.boost.org/LICENSE_1_0.txt)
 </table>
 <hr>
 <dl class="index">
+    <dt><a href="#differences_1_42">Differences from version 1.42</a></dt> 
     <dt><a href="#differences_1_41">Differences from version 1.41</a></dt> 
     <dt><a href="#differences_1_40">Differences from version 1.40</a></dt> 
     <dt><a href="#differences_1_39">Differences from version 1.39</a></dt> 
@@ -42,6 +43,24 @@ http://www.boost.org/LICENSE_1_0.txt)
 As of this writing, there are no known bugs. However, due to compiler/library 
 quirks and or bugs, some tests fail with some combinations of compilers and 
 libraries.
+<h2><a name="differences_1_42"></a>Differences from Boost 1.42</h2>
+<ul>
+    <li>fixed failure of shared_ptr serialization when serializing pointers
+created from enable_shared_from_this.
+    <li>added example for a simple archive which can be used as a debug log.
+This example illustrates the implemenation of the archive concept to aid
+understanding required to create one's own archive classes. The resulting
+archive is useful for debugging in that it only 160 lines of code and is
+header only - that is, it doesn't required linking to the serialization library.
+    <li>replaced example used to show how to derive from an existing archive.
+This example creates an XML archive class which doesn't include serialization
+traits such as class_id, class_version, etc.  It might be useful for exporting
+one's class information to osme XML processor and/or debugging programs.
+    <li>compile time warnings have been implemented to detect practices which
+    though correct, will result in operation or side effects different than
+    a user probably intends.
+    <li>Some memory leaks associated with void_cast have been fixed.
+</ul>
 <h2><a name="differences_1_41"></a>Differences from Boost 1.41</h2>
 <ul>
     <li>adjustments have been made to minimize compile time warnings.
