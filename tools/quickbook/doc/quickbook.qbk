@@ -180,6 +180,16 @@ Features include:
 * Accept a space between `section:` and the section id.
 * Support table ids.
 
+[h3 Version 1.5.1]
+
+* Improve the post processor's list of block elements. `table`, `entry` and
+  `varlistentry` are treated as blocks. `replaceable` is treated as an inline
+  element.
+* Check that `[section]` and `[endsect]` tags are balanced in templates.
+* Add unicode escape characters, eg. `\u03B1` for \u03B1.
+* Support UTF-8 files with a unicode byte order mark.
+* Disallow `[` in simple markup. Fixes some errors with mismatched punctuation.
+
 [endsect]
 
 [section:syntax Syntax Summary]
@@ -620,6 +630,22 @@ and table cells (see __tables__) may now contain paragraphs.]
 
 The escaped space: `\ ` also has a special meaning. The escaped space is removed
 from the output.
+
+[endsect]
+[section Unicode escape]
+
+You can enter any 32-bit unicode character by using `\u` followed by its 4 digit
+hexadecimal code. eg.
+
+[pre'''
+\u03B1 + \u03B2
+''']
+
+will generate:
+
+[:
+\u03B1 + \u03B2
+]
 
 [endsect]
 [section Images]
