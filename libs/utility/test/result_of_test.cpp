@@ -133,7 +133,7 @@ int main()
 
   // Prior to decltype, result_of could not deduce the return type
   // nullary function objects unless they exposed a result_type.
-#if defined(BOOST_HAS_DECLTYPE)
+#if !defined(BOOST_NO_DECLTYPE)
   BOOST_STATIC_ASSERT((is_same<result_of<int_result_of(void)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<volatile int_result_of(void)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<int_result_of_template<void>(void)>::type, int>::value));
@@ -149,7 +149,7 @@ int main()
   // result_type was defined. After decltype, result_of deduces the
   // actual return type of the function object, ignoring both
   // result<> and result_type.
-#if defined(BOOST_HAS_DECLTYPE)
+#if !defined(BOOST_NO_DECLTYPE)
   BOOST_STATIC_ASSERT((is_same<result_of<int_result_type_and_float_result_of_and_char_return(char)>::type, char>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<int_result_type_and_float_result_of_and_char_return_template<void>(char)>::type, char>::value));
 #else
@@ -181,7 +181,7 @@ int main()
   BOOST_STATIC_ASSERT((is_same<result_of<pf_t(int)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<pf_t const(int)>::type,int>::value));
 
-#if defined(BOOST_HAS_DECLTYPE)
+#if !defined(BOOST_NO_DECLTYPE)
   BOOST_STATIC_ASSERT((is_same<result_of<no_result_type_or_result_of(double)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<no_result_type_or_result_of(void)>::type, unsigned int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<const no_result_type_or_result_of(double)>::type, short>::value));
