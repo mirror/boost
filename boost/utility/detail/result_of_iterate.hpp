@@ -49,7 +49,7 @@ public:
 
 } // namespace detail 
 
-#else // defined(BOOST_HAS_DECLTYPE)
+#else // defined(BOOST_NO_DECLTYPE)
 
 // CWPro8 requires an argument in a function type specialization
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3002)) && BOOST_PP_ITERATION() == 0
@@ -76,7 +76,7 @@ struct result_of<F(BOOST_RESULT_OF_ARGS)>
 
 #undef BOOST_RESULT_OF_ARGS
 
-#endif // defined(BOOST_HAS_DECLTYPE)
+#endif // defined(BOOST_NO_DECLTYPE)
 
 #if BOOST_PP_ITERATION() >= 1 
 
