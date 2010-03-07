@@ -126,7 +126,7 @@ public:
         r_base /= 2;
     }
 
-    return ((eng() - (eng.min)()) / _factor) % _range + _min;
+    return static_cast<result_type>(((eng() - (eng.min)()) / _factor) % _range + _min);
   }
 
 #ifndef BOOST_RANDOM_NO_STREAM_OPERATORS

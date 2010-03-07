@@ -10,193 +10,21 @@
  * Revision history
  */
 
-/*
- * NOTE: This is not part of the official boost submission.  It exists
- * only as a collection of ideas.
- */
-
 #include <iostream>
 #include <iomanip>
 #include <string>
 #include <functional>
-#include <math.h>  // lgamma is not in namespace std
 #include <vector>
+#include <set>
 #include <algorithm>
 
 #include <boost/cstdint.hpp>
 #include <boost/random.hpp>
 
+#include <boost/math/special_functions/gamma.hpp>
+
 #include "statistic_tests.hpp"
 #include "integrate.hpp"
-
-
-namespace boost {
-namespace random {
-
-// Wikramaratna 1989  ACORN
-template<class IntType, int k, IntType m, IntType val>
-class additive_congruential
-{
-public:
-  typedef IntType result_type;
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-  static const bool has_fixed_range = true;
-  static const result_type min_value = 0;
-  static const result_type max_value = m-1;
-#else
-  enum {
-    has_fixed_range = true,
-    min_value = 0,
-    max_value = m-1
-  };
-#endif
-  template<class InputIterator>
-  explicit additive_congruential(InputIterator start) { seed(start); }
-  template<class InputIterator>
-  void seed(InputIterator start)
-  {
-    for(int i = 0; i <= k; ++i, ++start)
-      values[i] = *start;
-  }
-  
-  result_type operator()()
-  {
-    for(int i = 1; i <= k; ++i) {
-      IntType tmp = values[i-1] + values[i];
-      if(tmp >= m)
-        tmp -= m;
-      values[i] = tmp;
-    }
-    return values[k];
-  }
-  result_type validation() const { return val; }
-private:
-  IntType values[k+1];
-};
-
-
-template<class IntType, int r, int s, IntType m, IntType val>
-class lagged_fibonacci_int
-{
-public:
-  typedef IntType result_type;
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-  static const bool has_fixed_range = true;
-  static const result_type min_value = 0;
-  static const result_type max_value = m-1;
-#else
-  enum {
-    has_fixed_range = true,
-    min_value = 0,
-    max_value = m-1
-  };
-#endif
-  explicit lagged_fibonacci_int(IntType start) { seed(start); }
-  template<class Generator>
-  explicit lagged_fibonacci_int(Generator & gen) { seed(gen); }
-  void seed(IntType start)
-  {
-    linear_congruential<uint32_t, 299375077, 0, 0, 0> init;
-    seed(init);
-  }
-  template<class Generator>
-  void seed(Generator & gen)
-  {
-    assert(r > s);
-    for(int i = 0; i < 607; ++i)
-      values[i] = gen();
-    current = 0;
-    lag = r-s;
-  }
-  
-  result_type operator()()
-  {
-    result_type tmp = values[current] + values[lag];
-    if(tmp >= m)
-      tmp -= m;
-    values[current] = tmp;
-    ++current;
-    if(current >= r)
-      current = 0;
-    ++lag;
-    if(lag >= r)
-      lag = 0;
-    return tmp;
-  }
-  result_type validation() const { return val; }
-private:
-  result_type values[r];
-  int current, lag;
-};
-
-} // namespace random
-} // namespace boost
-
-// distributions from Haertel's dissertation
-// (additional parameterizations of the basic templates)
-namespace Haertel {
-  typedef boost::random::linear_congruential<boost::uint64_t, 45965, 453816691,
-    (boost::uint64_t(1)<<31), 0> LCG_Af2;
-  typedef boost::random::linear_congruential<boost::uint64_t, 211936855, 0,
-    (boost::uint64_t(1)<<29)-3, 0> LCG_Die1;
-  typedef boost::random::linear_congruential<boost::uint32_t, 2824527309u, 0,
-    0, 0> LCG_Fis;
-  typedef boost::random::linear_congruential<boost::uint64_t, 950706376u, 0,
-    (boost::uint64_t(1)<<31)-1, 0> LCG_FM;
-  typedef boost::random::linear_congruential<boost::int32_t, 51081, 0,
-    2147483647, 0> LCG_Hae;
-  typedef boost::random::linear_congruential<boost::uint32_t, 69069, 1,
-    0, 0> LCG_VAX;
-  typedef boost::random::inversive_congruential<boost::int64_t, 240318, 197, 
-    1000081, 0> NLG_Inv1;
-  typedef boost::random::inversive_congruential<boost::int64_t, 15707262,
-    13262967, (1<<24)-17, 0> NLG_Inv2;
-  typedef boost::random::inversive_congruential<boost::int32_t, 1, 1,
-    2147483647, 0> NLG_Inv4;
-  typedef boost::random::inversive_congruential<boost::int32_t, 1, 2,
-    1<<30, 0> NLG_Inv5;
-  typedef boost::random::additive_congruential<boost::int32_t, 6,
-    (1<<30)-35, 0> MRG_Acorn7;
-  typedef boost::random::lagged_fibonacci_int<boost::uint32_t, 607, 273,
-    0, 0> MRG_Fib2;
-
-  template<class Gen, class T>
-  inline void check_validation(Gen & gen, T value, const std::string & name)
-  {
-    for(int i = 0; i < 100000-1; ++i)
-      gen();
-    if(value != gen())
-      std::cout << name << ": validation failed" << std::endl;
-  }
-
-  // we have validation after 100000 steps with Haertel's generators
-  template<class Gen, class T>
-  void validate(T value, const std::string & name)
-  {
-    Gen gen(1234567);
-    check_validation(gen, value, name);
-  }
-
-  void validate_all()
-  {
-    validate<LCG_Af2>(183269031u, "LCG_Af2");
-    validate<LCG_Die1>(522319944u, "LCG_Die1");
-    validate<LCG_Fis>(-2065162233u, "LCG_Fis");
-    validate<LCG_FM>(581815473u, "LCG_FM");
-    validate<LCG_Hae>(28931709, "LCG_Hae");
-    validate<LCG_VAX>(1508154087u, "LCG_VAX");
-    validate<NLG_Inv2>(6666884, "NLG_Inv2");
-    validate<NLG_Inv4>(1521640076, "NLG_Inv4");
-    validate<NLG_Inv5>(641840839, "NLG_Inv5");
-    static const int acorn7_init[]
-      = { 1234567, 7654321, 246810, 108642, 13579, 97531, 555555 };
-    MRG_Acorn7 acorn7(acorn7_init);
-    check_validation(acorn7, 874294697, "MRG_Acorn7");
-    validate<MRG_Fib2>(1234567u, "MRG_Fib2");
-  }
-} // namespace Haertel
-
-
 
 
 double normal_density(double x)
@@ -205,21 +33,12 @@ double normal_density(double x)
   return 1/std::sqrt(2*pi) * std::exp(-x*x/2);
 }
 
-namespace std {
-#ifdef _CXXRTCF_H__
-  using _CS_swamp::lgamma;
-#elif defined __SGI_STL_PORT
-  using ::lgamma;
-#endif
-}
-
-
 class chi_square_density : public std::unary_function<double, double>
 {
 public:
   chi_square_density(int freedom)
     : _exponent( static_cast<double>(freedom)/2-1 ),
-      _factor(1/(std::pow(2, _exponent+1) * std::exp(lgamma(_exponent+1))))
+      _factor(1/(std::pow(2, _exponent+1) * std::exp(boost::math::lgamma(_exponent+1))))
   { }
 
   double operator()(double x)
@@ -288,7 +107,7 @@ public:
     using namespace boost;
     std::cout << "equidistribution: " << std::flush;
     equidistribution_experiment equi(classes);
-    uniform_smallint<RNG> uint_linear(rng, 0, classes-1);
+    variate_generator<RNG&, uniform_smallint<> > uint_linear(rng, uniform_smallint<>(0, classes-1));
     check(run_experiment(test_distrib_chi_square,
                          experiment_generator(equi, uint_linear, n1), n2));
     check(run_experiment(test_distrib_chi_square, 
@@ -298,7 +117,7 @@ public:
     equidistribution_2d_experiment equi_2d(classes);
     unsigned int root = static_cast<unsigned int>(std::sqrt(double(classes)));
     assert(root * root == classes);
-    uniform_smallint<RNG> uint_square(rng, 0, root-1);
+    variate_generator<RNG&, uniform_smallint<> > uint_square(rng, uniform_smallint<>(0, root-1));
     check(run_experiment(test_distrib_chi_square,
                          experiment_generator(equi_2d, uint_square, n1), n2));
     check(run_experiment(test_distrib_chi_square,
@@ -327,11 +146,12 @@ public:
     // generator_reference_t<RNG> gen_ref(rng);
     RNG& gen_ref(rng);
     kolmogorov_experiment ks(n1);
-    uniform_distribution ud((rng.min)(), (rng.max)());
+    uniform_distribution ud(static_cast<double>((rng.min)()), static_cast<double>((rng.max)()));
     check(run_experiment(test_distrib_chi_square,
                          ks_experiment_generator(ks, gen_ref, ud), n2));
     check(run_experiment(test_distrib_chi_square,
                          ks_experiment_generator(ks, gen_ref, ud), 2*n2));
+    std::cout << std::endl;
   }
 private:
   distribution_experiment test_distrib_chi_square;
@@ -417,7 +237,7 @@ public:
     using namespace boost;
     std::cout << "poker: " << std::flush;
     poker_experiment poker(8, classes);
-    uniform_smallint<RNG> usmall(rng, 0, 7);
+    variate_generator<RNG&, uniform_smallint<> > usmall(rng, uniform_smallint<>(0, 7));
     check(run_experiment(test_distrib_chi_square,
                          experiment_generator(poker, usmall, n1), n2));
     check(run_experiment(test_distrib_chi_square,
@@ -445,7 +265,7 @@ public:
     std::cout << "coupon collector: " << std::flush;
     coupon_collector_experiment coupon(5, classes);
 
-    uniform_smallint<RNG> usmall(rng, 0, 4);
+    variate_generator<RNG&, uniform_smallint<> > usmall(rng, uniform_smallint<>(0, 4));
     check(run_experiment(test_distrib_chi_square,
                          experiment_generator(coupon, usmall, n1), n2));
     check(run_experiment(test_distrib_chi_square,
@@ -513,8 +333,9 @@ private:
 class birthday_test : test_base
 {
 public:
-  birthday_test(test_environment & env)
-    : test_base(env)
+  birthday_test(test_environment & env, unsigned int high_classes)
+    : test_base(env),
+      test_distrib_chi_square(chi_square_probability(4-1), high_classes)
   { }
 
   template<class RNG>
@@ -522,20 +343,21 @@ public:
   {
     using namespace boost;
     std::cout << "birthday spacing: " << std::flush;
-    uniform_int<RNG> uni(rng, 0, (1<<25)-1);
+    boost::variate_generator<RNG&, boost::uniform_int<> > uni(rng, boost::uniform_int<>(0, (1<<25)-1));
     birthday_spacing_experiment bsp(4, 512, (1<<25));
-    std::cout << run_experiment(bsp, uni, n1);
-#if 0
     check(run_experiment(test_distrib_chi_square,
-                         experiment_generator(perm, gen_ref, n1), n2));
+                         experiment_generator(bsp, uni, n1), n2));
     check(run_experiment(test_distrib_chi_square,
-                         experiment_generator(perm, gen_ref, n1), 2*n2));
-#endif
+                         experiment_generator(bsp, uni, n1), 2*n2));
     std::cout << std::endl;
   }
-  
-    
+private:
+  distribution_experiment test_distrib_chi_square;
 };
+
+#ifdef BOOST_MSVC
+#pragma warning(disable:4355)
+#endif
 
 class test_environment
 {
@@ -553,7 +375,7 @@ public:
       cpn_test(*this, 15, classes),
       perm_test(*this, 5, classes),
       max_test(*this, classes),
-      bday_test(*this)
+      bday_test(*this, classes)
   {
     std::cout << "Confidence level: " << confid 
               << "; 1-alpha = " << (1-confid)
@@ -645,20 +467,60 @@ void print_ks_table()
   }
 }
 
-int main()
+class program_args 
 {
-  //  Haertel::validate_all();
+public:
+  program_args(int argc, char** argv)
+  {
+    if(argc > 0) {
+      names.insert(argv + 1, argv + argc);
+    }
+  }
+  bool check(std::string test_name) const
+  {
+    return(names.empty() || names.find(test_name) != names.end());
+  }
+private:
+  std::set<std::string> names;
+};
+
+int main(int argc, char* argv[])
+{
+  program_args args(argc, argv);
   test_environment env(0.99);
-  env.run_test<boost::minstd_rand>("minstd_rand");
-  env.run_test<boost::mt19937>("mt19937");
-  env.run_test<Haertel::LCG_Af2>("LCG_Af2");
-  env.run_test<Haertel::LCG_Die1>("LCG_Die1");
-  env.run_test<Haertel::LCG_Fis>("LCG_Fis");
-  env.run_test<Haertel::LCG_FM>("LCG_FM");
-  env.run_test<Haertel::LCG_Hae>("LCG_Hae");
-  env.run_test<Haertel::LCG_VAX>("LCG_VAX");
-  env.run_test<Haertel::NLG_Inv1>("NLG_Inv1");
-  env.run_test<Haertel::NLG_Inv2>("NLG_Inv2");
-  env.run_test<Haertel::NLG_Inv4>("NLG_Inv4");
-  env.run_test<Haertel::NLG_Inv5>("NLG_Inv5");
+
+#define TEST(name)                      \
+  if(args.check(#name))                 \
+    env.run_test<boost::name>(#name)
+
+  TEST(minstd_rand0);
+  TEST(minstd_rand);
+  TEST(rand48);
+  TEST(ecuyer1988);
+  TEST(kreutzer1986);
+  TEST(taus88);
+  TEST(hellekalek1995);
+  TEST(mt11213b);
+  TEST(mt19937);
+  TEST(lagged_fibonacci607);
+  TEST(lagged_fibonacci1279);
+  TEST(lagged_fibonacci2281);
+  TEST(lagged_fibonacci3217);
+  TEST(lagged_fibonacci4423);
+  TEST(lagged_fibonacci9689);
+  TEST(lagged_fibonacci19937);
+  TEST(lagged_fibonacci23209);
+  TEST(lagged_fibonacci44497);
+  TEST(ranlux3);
+  TEST(ranlux4);
+
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
+  TEST(ranlux64_3);
+  TEST(ranlux64_4);
+#endif
+
+  TEST(ranlux3_01);
+  TEST(ranlux4_01);
+  TEST(ranlux64_3_01);
+  TEST(ranlux64_4_01);
 }

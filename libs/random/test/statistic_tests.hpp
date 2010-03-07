@@ -84,7 +84,7 @@ public:
     : experiment_base(classes) { }
   
   template<class NumberGenerator, class Counter>
-  void run(NumberGenerator f, Counter & count, int n) const
+  void run(NumberGenerator & f, Counter & count, int n) const
   {
     assert((f.min)() == 0 &&
            static_cast<unsigned int>((f.max)()) == classes()-1);
@@ -102,7 +102,7 @@ public:
     : equidistribution_experiment(classes) { }
 
   template<class NumberGenerator, class Counter>
-  void run(NumberGenerator f, Counter & count, int n) const
+  void run(NumberGenerator & f, Counter & count, int n) const
   {
     unsigned int range = (f.max)()+1;
     assert((f.min)() == 0 && range*range == classes());
@@ -137,7 +137,7 @@ public:
   }
 
   template<class NumberGenerator, class Counter>
-  void run(NumberGenerator f, Counter & count, int n) const
+  void run(NumberGenerator & f, Counter & count, int n) const
   {
     for(int i = 0; i < n; ++i) {
       limits_type::const_iterator it =
@@ -158,7 +158,7 @@ public:
   explicit runs_experiment(unsigned int classes) : experiment_base(classes) { }
   
   template<class UniformRandomNumberGenerator, class Counter>
-  void run(UniformRandomNumberGenerator f, Counter & count, int n) const
+  void run(UniformRandomNumberGenerator & f, Counter & count, int n) const
   {
     typedef typename UniformRandomNumberGenerator::result_type result_type;
     result_type init = (up ? (f.min)() : (f.max)());
@@ -194,7 +194,7 @@ public:
     : experiment_base(classes), alpha(alpha), beta(beta) { }
   
   template<class UniformRandomNumberGenerator, class Counter>
-  void run(UniformRandomNumberGenerator f, Counter & count, int n) const
+  void run(UniformRandomNumberGenerator & f, Counter & count, int n) const
   {
     typedef typename UniformRandomNumberGenerator::result_type result_type;
     double range = (f.max)() - (f.min)() + 1.0;
@@ -235,7 +235,7 @@ public:
   }
 
   template<class UniformRandomNumberGenerator, class Counter>
-  void run(UniformRandomNumberGenerator f, Counter & count, int n) const
+  void run(UniformRandomNumberGenerator & f, Counter & count, int n) const
   {
     typedef typename UniformRandomNumberGenerator::result_type result_type;
     assert(std::numeric_limits<result_type>::is_integer);
@@ -282,7 +282,7 @@ public:
   }
 
   template<class UniformRandomNumberGenerator, class Counter>
-  void run(UniformRandomNumberGenerator f, Counter & count, int n) const
+  void run(UniformRandomNumberGenerator & f, Counter & count, int n) const
   {
     typedef typename UniformRandomNumberGenerator::result_type result_type;
     assert(std::numeric_limits<result_type>::is_integer);
@@ -330,12 +330,14 @@ public:
   }
 
   template<class UniformRandomNumberGenerator, class Counter>
-  void run(UniformRandomNumberGenerator f, Counter & count, int n) const
+  void run(UniformRandomNumberGenerator & f, Counter & count, int n) const
   {
     typedef typename UniformRandomNumberGenerator::result_type result_type;
     std::vector<result_type> v(t);
     for(int i = 0; i < n; ++i) {
-      std::generate_n(v.begin(), t, f);
+      for(int j = 0; j < t; ++j) {
+        v[j] = f();
+      }
       int x = 0;
       for(int r = t-1; r > 0; r--) {
         typename std::vector<result_type>::iterator it = 
@@ -360,7 +362,7 @@ public:
   }
 
   template<class UniformRandomNumberGenerator, class Counter>
-  void run(UniformRandomNumberGenerator f, Counter & count, int n_total) const
+  void run(UniformRandomNumberGenerator & f, Counter & count, int n_total) const
   {
     typedef typename UniformRandomNumberGenerator::result_type result_type;
     assert(std::numeric_limits<result_type>::is_integer);
@@ -452,14 +454,14 @@ class kolmogorov_experiment
 public:
   kolmogorov_experiment(int n) : n(n), ksp(n) { }
   template<class NumberGenerator, class Distribution>
-  double run(NumberGenerator gen, Distribution distrib) const
+  double run(NumberGenerator & gen, Distribution distrib) const
   {
     const int m = n;
     typedef std::vector<double> saved_temp;
     saved_temp a(m,1.0), b(m,0);
     std::vector<int> c(m,0);
     for(int i = 0; i < n; ++i) {
-      double val = gen();
+      double val = static_cast<double>(gen());
       double y = distrib(val);
       int k = static_cast<int>(std::floor(m*y));
       if(k >= m)
@@ -509,7 +511,7 @@ public:
 
 private:
   struct generator {
-    generator(base_type & f, int t) : f(f), t(t) { }
+    generator(base_type & f, int t) : f(f, boost::uniform_01<>()), t(t) { }
     double operator()()
     {
       double mx = f();
@@ -518,7 +520,7 @@ private:
       return mx;
     }
   private:
-    boost::uniform_01<base_type> f;
+    boost::variate_generator<base_type&, boost::uniform_01<> > f;
     int t;
   };
   base_type & f;
@@ -579,7 +581,7 @@ private:
 
 // chi_square test
 template<class Experiment, class Generator>
-double run_experiment(const Experiment & experiment, Generator gen, int n)
+double run_experiment(const Experiment & experiment, Generator & gen, int n)
 {
   generic_counter<std::vector<int> > v(experiment.classes());
   experiment.run(gen, v, n);

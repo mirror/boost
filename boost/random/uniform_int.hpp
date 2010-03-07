@@ -115,6 +115,13 @@ public:
 
 private:
 
+#ifdef BOOST_MSVC
+#pragma warning(push)
+// disable division by zero warning, since we can't
+// actually divide by zero.
+#pragma warning(disable:4723)
+#endif
+
   /// \cond hide_private_members
   template<class Engine>
   static result_type generate(Engine& eng, result_type min_value, result_type /*max_value*/, range_type range)
@@ -270,6 +277,10 @@ private:
       }
     }
   }
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
   void init()
   {
