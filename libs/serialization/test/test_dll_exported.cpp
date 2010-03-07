@@ -77,11 +77,13 @@ void save_exported(const char *testfile)
 
     polymorphic_base *rb1 = new polymorphic_derived1;
     polymorphic_base *rb2 = new polymorphic_derived2;
+    polymorphic_derived2 *rd21 = new polymorphic_derived2;
 
     // export will permit correct serialization
     // through a pointer to a base class
     oa << BOOST_SERIALIZATION_NVP(rb1);
     oa << BOOST_SERIALIZATION_NVP(rb2);
+    oa << BOOST_SERIALIZATION_NVP(rd21);
 
     delete rb1;
     delete rb2;
@@ -95,6 +97,7 @@ void load_exported(const char *testfile)
 
     polymorphic_base *rb1 = NULL;
     polymorphic_base *rb2 = NULL;
+    polymorphic_derived2 *rd21 = NULL;
 
     // export will permit correct serialization
     // through a pointer to a base class
@@ -116,8 +119,18 @@ void load_exported(const char *testfile)
             ::type::get_const_instance().get_derived_extended_type_info(*rb2),
         "restored pointer b2 not of correct type"
     );
+    ia >> BOOST_SERIALIZATION_NVP(rd21);
+    BOOST_CHECK_MESSAGE(
+        boost::serialization::type_info_implementation<polymorphic_derived2>
+            ::type::get_const_instance()
+        == 
+        * boost::serialization::type_info_implementation<polymorphic_derived2>
+            ::type::get_const_instance().get_derived_extended_type_info(*rd21),
+        "restored pointer d2 not of correct type"
+    );
     delete rb1;
     delete rb2;
+    delete rd21;
 }
 
 int

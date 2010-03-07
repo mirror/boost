@@ -71,7 +71,7 @@ test-suite "serialization" :
      [ test-bsl-run_files test_derived_class : A ]
      [ test-bsl-run_files test_derived_class_ptr : A ]
      [ test-bsl-run_files test_diamond ]
-     [ test-bsl-run_files test_exported : polymorphic_base ]
+     [ test-bsl-run_files test_exported : polymorphic_base polymorphic_derived2 ]
      [ test-bsl-run_files test_class_info_load ]
      [ test-bsl-run_files test_class_info_save ]
      [ test-bsl-run_files test_object ]
@@ -111,7 +111,7 @@ test-suite "serialization" :
 if ! $(BOOST_ARCHIVE_LIST) {
     test-suite "serialization2" : 
         [ test-bsl-run test_dll_exported : : dll_polymorphic_derived2_lib : <runtime-link>shared ]
-#        [ test-bsl-run test_dll_plugin : : dll_polymorphic_derived2_lib : <runtime-link>shared ]
+        [ test-bsl-run test_dll_plugin : : dll_polymorphic_derived2_lib : <runtime-link>shared ]
         [ compile test_dll_plugin.cpp ]
         [ test-bsl-run test_dll_simple : : dll_a_lib : <runtime-link>shared ]
         [ test-bsl-run test_private_ctor ]
