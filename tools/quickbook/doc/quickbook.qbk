@@ -634,7 +634,7 @@ from the output.
 [endsect]
 [section Unicode escape]
 
-You can enter any 32-bit unicode character by using `\u` followed by its 4 digit
+You can enter any 16-bit unicode character by using `\u` followed by its 4 digit
 hexadecimal code. eg.
 
 [pre'''
