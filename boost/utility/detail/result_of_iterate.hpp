@@ -10,7 +10,7 @@
 # error Boost result_of - do not include this file!
 #endif
 
-#if !defined(BOOST_NO_DECLTYPE)
+#if defined(BOOST_HAS_DECLTYPE)
 
 // As of N2588, C++0x result_of only supports function call
 // expressions of the form f(x). This precludes support for member
