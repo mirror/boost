@@ -226,19 +226,17 @@ public:
 class gap_experiment : public experiment_base
 {
 public:
-  gap_experiment(unsigned int classes, double alpha, double beta)
-    : experiment_base(classes), alpha(alpha), beta(beta) { }
+  template<class Dist>
+  gap_experiment(unsigned int classes, const Dist & dist, double alpha, double beta)
+    : experiment_base(classes), alpha(alpha), beta(beta), low(quantile(dist, alpha)), high(quantile(dist, beta)) {}
   
-  template<class UniformRandomNumberGenerator, class Counter>
-  void run(UniformRandomNumberGenerator & f, Counter & count, int n) const
+  template<class NumberGenerator, class Counter>
+  void run(NumberGenerator & f, Counter & count, int n) const
   {
-    typedef typename UniformRandomNumberGenerator::result_type result_type;
-    double range = (f.max)() - (f.min)() + 1.0;
-    result_type low = static_cast<result_type>(alpha * range);
-    result_type high = static_cast<result_type>(beta * range);
+    typedef typename NumberGenerator::result_type result_type;
     unsigned int length = 0;
     for(int i = 0; i < n; ) {
-      result_type value = f() - (f.min)();
+      result_type value = f();
       if(value < low || value > high)
         ++length;
       else {
@@ -258,6 +256,7 @@ public:
   }
 private:
   double alpha, beta;
+  double low, high;
 };
 
 // poker experiment

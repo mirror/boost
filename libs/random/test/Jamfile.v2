@@ -44,5 +44,8 @@ for urng in $(all-urngs)
 # run random_speed.cpp ;
 # run statistic_tests.cpp ;
 
-exe statistic_tests : statistic_tests.cpp ;
+exe statistic_tests.exe : statistic_tests.cpp ;
 explicit statistics_tests ;
+
+install statistic_tests : statistic_tests.exe : <install-type>EXE <location>. ;
+explicit statistic_tests ;

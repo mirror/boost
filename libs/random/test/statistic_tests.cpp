@@ -129,19 +129,18 @@ public:
     using namespace boost;
     std::cout << "runs: up: " << std::flush;
     runs_experiment<true> r_up(classes);
-    // generator_reference_t<RNG> gen_ref(rng);
-    RNG& gen_ref(rng);
+
     check(run_experiment(test_distrib_chi_square,
-                         experiment_generator(r_up, gen_ref, n1), n2));
+                         experiment_generator(r_up, rng, n1), n2));
     check(run_experiment(test_distrib_chi_square,
-                         experiment_generator(r_up, gen_ref, n1), 2*n2));
+                         experiment_generator(r_up, rng, n1), 2*n2));
 
     std::cout << "  down: " << std::flush;
     runs_experiment<false> r_down(classes);
     check(run_experiment(test_distrib_chi_square,
-                         experiment_generator(r_down, gen_ref, n1), n2));
+                         experiment_generator(r_down, rng, n1), n2));
     check(run_experiment(test_distrib_chi_square,
-                         experiment_generator(r_down, gen_ref, n1), 2*n2));
+                         experiment_generator(r_down, rng, n1), 2*n2));
 
     std::cout << std::endl;
   }
@@ -162,15 +161,24 @@ public:
   template<class RNG>
   void run(RNG & rng, int n1, int n2)
   {
+    boost::math::uniform ud(
+      static_cast<double>((rng.min)()),
+      static_cast<double>((rng.max)()) +
+        (std::numeric_limits<typename RNG::result_type>::is_integer? 0.0 : 1.0));
+    run(rng, ud, n1, n2);
+  }
+
+  template<class RNG, class Dist>
+  void run(RNG & rng, const Dist& dist, int n1, int n2)
+  {
     using namespace boost;
     std::cout << "gaps: " << std::flush;
-    gap_experiment gap(classes, 0.2, 0.8);
-    // generator_reference_t<RNG> gen_ref(rng);
-    RNG& gen_ref(rng);
+    gap_experiment gap(classes, dist, 0.2, 0.8);
+
     check(run_experiment(test_distrib_chi_square,
-                         experiment_generator(gap, gen_ref, n1), n2));
+                         experiment_generator(gap, rng, n1), n2));
     check(run_experiment(test_distrib_chi_square,
-                         experiment_generator(gap, gen_ref, n1), 2*n2));
+                         experiment_generator(gap, rng, n1), 2*n2));
 
     std::cout << std::endl;
   }
@@ -396,6 +404,7 @@ public:
     
     ksdist_test.run(vgen, expected_dist, 5000, 250);
     rns_test.run(vgen, 100000, 250);
+    gp_test.run(vgen, expected_dist, 10000, 250);
     perm_test.run(vgen, 1200, 250);
 
     std::cout << std::endl;
