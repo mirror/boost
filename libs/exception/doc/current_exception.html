@@ -29,6 +29,7 @@ boost
     }</pre>
 </div><h4>Requirements:</h4>
 <p>The <span class="RenoLink">current_exception</span> function must not be called outside of a catch block.</p>
+<p>In addition, to safely copy an exception from one thread to another, if the exception object is copied by <span class="RenoLink">current_exception</span> or <span class="RenoLink"><a href="copy_exception.html">copy_exception</a></span>, the two copies must not have shared state. Exceptions that have value-type semantics (as well as the boost::<span class="RenoLink"><a href="exception.html">exception</a></span> type itself) satisfy this requirement.</p>
 <h4>Returns:</h4>
 <div><ul><li> An <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> that refers to the currently handled exception or a copy of the currently handled exception.</li>
 <li> If the function needs to allocate memory and the attempt fails, it returns an <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> that refers to an instance of std::bad_alloc.</li>
@@ -43,7 +44,7 @@ boost
 </li>
 </ul></div>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
-See also: <span class="RenoPageList"><a href="boost-exception.html">Boost Exception</a>&nbsp;| <a href="boost_exception_ptr_hpp.html">boost/exception_ptr.hpp</a>&nbsp;| <a href="copy_exception.html">copy_exception</a>&nbsp;| <a href="enable_current_exception.html">enable_current_exception</a>&nbsp;| <a href="exception_ptr.html">exception_ptr</a>&nbsp;| <a href="frequently_asked_questions.html">Frequently Asked Questions</a>&nbsp;| <a href="original_exception_type.html">original_exception_type</a>&nbsp;| <a href="unknown_exception.html">unknown_exception</a></span>
+See also: <span class="RenoPageList"><a href="boost-exception.html">Boost Exception</a>&nbsp;| <a href="boost_exception_ptr_hpp.html">boost/exception_ptr.hpp</a>&nbsp;| <a href="copy_exception.html">copy_exception</a>&nbsp;| <a href="enable_current_exception.html">enable_current_exception</a>&nbsp;| <a href="frequently_asked_questions.html">Frequently Asked Questions</a>&nbsp;| <a href="original_exception_type.html">original_exception_type</a>&nbsp;| <a href="unknown_exception.html">unknown_exception</a></span>
 </div>
 <!-- Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->

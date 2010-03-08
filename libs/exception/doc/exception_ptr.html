@@ -31,11 +31,12 @@ boost
 <p>The referenced object remains valid at least as long as there is an <span class="RenoLink">exception_ptr</span> object that refers to it.</p>
 <p>Two instances of <span class="RenoLink">exception_ptr</span> are equivalent and compare equal if and only if they refer to the same exception.</p>
 <p>The default constructor of <span class="RenoLink">exception_ptr</span> produces the null value of the type. The null value is equivalent only to itself.</p>
-<h4>Thread safety</h4>
-<div><ul><li> It is legal for multiple threads to hold <span class="RenoLink">exception_ptr</span> references to the same exception object.</li>
-<li> It is illegal for multiple threads to modify the same <span class="RenoLink">exception_ptr</span> object concurrently.</li>
-<li> While calling <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> makes a copy of the current exception object, it is still possible for the two copies to share internal state. Therefore, in general it is not safe to call <span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span> concurrently to throw the same exception object into multiple threads.</li>
+<h4>Thread safety:</h4>
+<p>The <span class="RenoLink">exception_ptr</span> type is "as thread-safe as built-in types":</p>
+<div><ul><li> An <span class="RenoLink">exception_ptr</span> instance can be "read" simultaneously by multiple threads</li>
+<li> Different <span class="RenoLink">exception_ptr</span> instances can be "written to" simultaneously by multiple threads, even when these instances refer to the same exception object</li>
 </ul></div>
+<p>All other simultaneous accesses result in undefined behavior.</p>
 <h4>Nesting of exceptions:</h4>
 <p>An <span class="RenoLink">exception_ptr</span> can be added as <span class="RenoLink"><a href="error_info.html">error_info</a></span> to any boost::<span class="RenoLink"><a href="exception.html">exception</a></span>. This is a convenient way to nest exceptions. There is no limit on the depth of the nesting, however cyclic references result in undefined behavior.</p>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>

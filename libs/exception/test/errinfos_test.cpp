@@ -34,7 +34,7 @@ main()
         e <<
             errinfo_api_function("failed_api_function") <<
             errinfo_at_line(42) <<
-            errinfo_errno(errno) <<
+            errinfo_errno(0) <<
             errinfo_file_handle(weak_ptr<FILE>()) <<
             errinfo_file_name("filename.txt") <<
             errinfo_file_open_mode("rb");
