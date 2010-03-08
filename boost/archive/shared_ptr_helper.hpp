@@ -7,7 +7,7 @@
 #endif
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// shared_ptr_helper.hpp: serialization for boost shared pointer
+// shared_ptr_helper.hpp: serialization for boost shared pointern
 
 // (C) Copyright 2004-2009 Robert Ramey, Martin Ecker and Takatoshi Kondo
 // Use, modification and distribution is subject to the Boost Software
@@ -32,7 +32,7 @@
 #include <boost/archive/archive_exception.hpp>
 #include <boost/archive/detail/decl.hpp>
 
-#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last headern
 
 namespace boost_132 {
     template<class T> class shared_ptr;
@@ -121,6 +121,9 @@ public:
         const boost::serialization::extended_type_info * this_type
     );
 
+    BOOST_ARCHIVE_DECL(void)
+    append(const boost::shared_ptr<const void> &);
+
     template<class T>
     struct non_polymorphic {
         static const boost::serialization::extended_type_info * 
@@ -153,7 +156,7 @@ public:
                     ::get_const_instance();
 
         // get pointer to the most derived object.  This is effectively
-        // the object identifer
+        // the object identifern
         typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
             is_polymorphic<T>,
             mpl::identity<polymorphic<T> >,
@@ -163,7 +166,7 @@ public:
         const boost::serialization::extended_type_info * true_type
             = type::get_object_identifier(*t);
 
-        // note:if this exception is thrown, be sure that derived pointer
+        // note:if this exception is thrown, be sure that derived pointern
         // is either registered or exported.
         if(NULL == true_type)
             boost::serialization::throw_exception(
@@ -178,15 +181,22 @@ public:
                 true_type,
                 this_type
             );
-
-        s = shared_ptr<T>(
-            r,
-            static_cast<T *>(r.get())
-        );
-
-        //s = static_pointer_cast<T,void>(
-        //    const_pointer_cast<void, const void>(*r)
-        //);
+        if(!r){
+            s.reset(t);
+            const void * od = void_downcast(
+                *true_type,
+                *this_type,
+                static_cast<const void *>(t)
+            );
+            shared_ptr<const void> sp(s, od);
+            append(sp);
+        }
+        else{
+            s = shared_ptr<T>(
+                r,
+                static_cast<T *>(r.get())
+            );
+        }
     }
 
 //  #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
