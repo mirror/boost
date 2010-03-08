@@ -23,63 +23,17 @@
 
 #include <boost/math/special_functions/gamma.hpp>
 
+#include <boost/math/distributions/uniform.hpp>
+#include <boost/math/distributions/chi_squared.hpp>
+#include <boost/math/distributions/normal.hpp>
+#include <boost/math/distributions/triangular.hpp>
+#include <boost/math/distributions/cauchy.hpp>
+#include <boost/math/distributions/gamma.hpp>
+#include <boost/math/distributions/exponential.hpp>
+#include <boost/math/distributions/lognormal.hpp>
+
 #include "statistic_tests.hpp"
 #include "integrate.hpp"
-
-
-double normal_density(double x)
-{
-  const double pi = 3.14159265358979323846;
-  return 1/std::sqrt(2*pi) * std::exp(-x*x/2);
-}
-
-class chi_square_density : public std::unary_function<double, double>
-{
-public:
-  chi_square_density(int freedom)
-    : _exponent( static_cast<double>(freedom)/2-1 ),
-      _factor(1/(std::pow(2, _exponent+1) * std::exp(boost::math::lgamma(_exponent+1))))
-  { }
-
-  double operator()(double x)
-  {
-    return _factor*std::pow(x, _exponent)*std::exp(-x/2);
-  }
-private:
-  double _exponent, _factor;
-};
-
-// computes F(x) or F(y) - F(x)
-class chi_square_probability : public distribution_function<double>
-{
-public:
-  chi_square_probability(int freedom) : dens(freedom) {}
-  double operator()(double x) { return operator()(0, x); }
-  double operator()(double x, double y)
-  { return trapezoid(dens, x, y, 1000); }
-private:
-  chi_square_density dens;
-};
-
-class uniform_distribution : public distribution_function<double>
-{
-public:
-  uniform_distribution(double from, double to) : from(from), to(to) 
-  { assert(from < to); }
-  double operator()(double x) 
-  { 
-    if(x < from) 
-      return 0;
-    else if(x > to)
-      return 1;
-    else
-      return (x-from)/(to-from);
-  }
-  double operator()(double x, double delta)
-  { return operator()(x+delta) - operator()(x); }
-private:
-  double from, to;
-};
 
 class test_environment;
 
@@ -98,7 +52,7 @@ public:
   equidistribution_test(test_environment & env, unsigned int classes, 
                         unsigned int high_classes)
     : test_base(env), classes(classes),
-      test_distrib_chi_square(chi_square_probability(classes-1), high_classes)
+      test_distrib_chi_square(boost::math::chi_squared(classes-1), high_classes)
   { }
 
   template<class RNG>
@@ -129,10 +83,10 @@ private:
   distribution_experiment test_distrib_chi_square;
 };
 
-class ks_equidistribution_test : test_base
+class ks_distribution_test : test_base
 {
 public:
-  ks_equidistribution_test(test_environment & env, unsigned int classes)
+  ks_distribution_test(test_environment & env, unsigned int classes)
     : test_base(env),
       test_distrib_chi_square(kolmogorov_smirnov_probability(5000), 
                               classes)
@@ -141,16 +95,19 @@ public:
   template<class RNG>
   void run(RNG & rng, int n1, int n2)
   {
+    boost::math::uniform ud(static_cast<double>((rng.min)()), static_cast<double>((rng.max)()));
+    run(rng, ud, n1, n2);
+  }
+  template<class RNG, class Dist>
+  void run(RNG & rng, const Dist& dist, int n1, int n2)
+  {
     using namespace boost;
     std::cout << "KS: " << std::flush;
-    // generator_reference_t<RNG> gen_ref(rng);
-    RNG& gen_ref(rng);
     kolmogorov_experiment ks(n1);
-    uniform_distribution ud(static_cast<double>((rng.min)()), static_cast<double>((rng.max)()));
     check(run_experiment(test_distrib_chi_square,
-                         ks_experiment_generator(ks, gen_ref, ud), n2));
+                         ks_experiment_generator(ks, rng, dist), n2));
     check(run_experiment(test_distrib_chi_square,
-                         ks_experiment_generator(ks, gen_ref, ud), 2*n2));
+                         ks_experiment_generator(ks, rng, dist), 2*n2));
     std::cout << std::endl;
   }
 private:
@@ -163,7 +120,7 @@ public:
   runs_test(test_environment & env, unsigned int classes,
             unsigned int high_classes)
     : test_base(env), classes(classes),
-      test_distrib_chi_square(chi_square_probability(classes-1), high_classes)
+      test_distrib_chi_square(boost::math::chi_squared(classes-1), high_classes)
   { }
 
   template<class RNG>
@@ -199,7 +156,7 @@ public:
   gap_test(test_environment & env, unsigned int classes,
             unsigned int high_classes)
     : test_base(env), classes(classes),
-      test_distrib_chi_square(chi_square_probability(classes-1), high_classes)
+      test_distrib_chi_square(boost::math::chi_squared(classes-1), high_classes)
   { }
 
   template<class RNG>
@@ -228,7 +185,7 @@ public:
   poker_test(test_environment & env, unsigned int classes,
              unsigned int high_classes)
     : test_base(env), classes(classes),
-      test_distrib_chi_square(chi_square_probability(classes-1), high_classes)
+      test_distrib_chi_square(boost::math::chi_squared(classes-1), high_classes)
   { }
 
   template<class RNG>
@@ -255,7 +212,7 @@ public:
   coupon_collector_test(test_environment & env, unsigned int classes,
                         unsigned int high_classes)
     : test_base(env), classes(classes),
-      test_distrib_chi_square(chi_square_probability(classes-1), high_classes)
+      test_distrib_chi_square(boost::math::chi_squared(classes-1), high_classes)
   { }
 
   template<class RNG>
@@ -283,7 +240,7 @@ public:
   permutation_test(test_environment & env, unsigned int classes,
                    unsigned int high_classes)
     : test_base(env), classes(classes),
-      test_distrib_chi_square(chi_square_probability(fac<int>(classes)-1), 
+      test_distrib_chi_square(boost::math::chi_squared(fac<int>(classes)-1), 
                               high_classes)
   { }
 
@@ -335,7 +292,7 @@ class birthday_test : test_base
 public:
   birthday_test(test_environment & env, unsigned int high_classes)
     : test_base(env),
-      test_distrib_chi_square(chi_square_probability(4-1), high_classes)
+      test_distrib_chi_square(boost::math::chi_squared(4-1), high_classes)
   { }
 
   template<class RNG>
@@ -365,9 +322,9 @@ public:
   static const int classes = 20;
   explicit test_environment(double confid) 
     : confidence(confid),
-      confidence_chi_square_quantil(quantil(chi_square_density(classes-1), 0, confidence, 1e-4)),
-      test_distrib_chi_square6(chi_square_probability(7-1), classes),
-      ksequi_test(*this, classes),
+    confidence_chi_square_quantil(quantile(boost::math::chi_squared(classes-1), confidence)),
+      test_distrib_chi_square6(boost::math::chi_squared(7-1), classes),
+      ksdist_test(*this, classes),
       equi_test(*this, 100, classes),
       rns_test(*this, 7, classes),
       gp_test(*this, 7, classes),
@@ -382,7 +339,7 @@ public:
               << "; chi_square(" << (classes-1) 
               << ", " << confidence_chi_square_quantil
               << ") = " 
-              << chi_square_probability(classes-1)(0, confidence_chi_square_quantil)
+              << cdf(boost::math::chi_squared(classes-1), confidence_chi_square_quantil)
               << std::endl;
   }
   
@@ -393,7 +350,7 @@ public:
     if(!result) {
       std::cout << "* [";
       double prob = (val > 10*chi_square_conf ? 1 :
-                     chi_square_probability(classes-1)(0, val));
+                     cdf(boost::math::chi_squared(classes-1), val));
       std::cout << (1-prob) << "]";
     }
     std::cout << " " << std::flush;
@@ -413,10 +370,8 @@ public:
     std::cout << "Running tests on " << name << std::endl;
 
     RNG rng(1234567);
-    typedef boost::uniform_01<RNG> UGen;
 
-#if 1
-    ksequi_test.run(rng, 5000, 250);
+    ksdist_test.run(rng, 5000, 250);
     equi_test.run(rng, 5000, 250);
     rns_test.run(rng, 100000, 250);
     gp_test.run(rng, 10000, 250);
@@ -424,8 +379,24 @@ public:
     cpn_test.run(rng, 500, 250);
     perm_test.run(rng, 1200, 250);
     max_test.run(rng, 1000, 250);
-#endif
     bday_test.run(rng, 1000, 150);
+
+    std::cout << std::endl;
+  }
+
+  template<class RNG, class Dist, class ExpectedDist>
+  void run_test(const std::string & name, const Dist & dist, const ExpectedDist & expected_dist)
+  {
+    using namespace boost;
+
+    std::cout << "Running tests on " << name << std::endl;
+
+    RNG rng;
+    variate_generator<RNG&, Dist> vgen(rng, dist);
+    
+    ksdist_test.run(vgen, expected_dist, 5000, 250);
+    rns_test.run(vgen, 100000, 250);
+    perm_test.run(vgen, 1200, 250);
 
     std::cout << std::endl;
   }
@@ -434,7 +405,7 @@ private:
   double confidence;
   double confidence_chi_square_quantil;
   distribution_experiment test_distrib_chi_square6;
-  ks_equidistribution_test ksequi_test;
+  ks_distribution_test ksdist_test;
   equidistribution_test equi_test;
   runs_test rns_test;
   gap_test gp_test;
@@ -450,23 +421,6 @@ void test_base::check(double val) const
   environment.check(val);
 }
 
-void print_ks_table()
-{
-  std::cout.setf(std::ios::fixed);
-  std::cout.precision(5);
-  static const double all_p[] = { 0.01, 0.05, 0.25, 0.5, 0.75, 0.95, 0.99 };
-  for(int n = 0; n <= 10000;  (n < 55 ? ++n : n *= 10)) {
-    std::cout << std::setw(4) << n << " ";
-    for(unsigned int i = 0; i < sizeof(all_p)/sizeof(all_p[0]); ++i) {
-      std::cout << std::setw(8) 
-                << (n == 0 ? all_p[i] : 
-                    invert_monotone_inc(kolmogorov_smirnov_probability(n), all_p[i], 0, 10))
-                << " ";
-    }
-    std::cout << std::endl;
-  }
-}
-
 class program_args 
 {
 public:
@@ -476,7 +430,7 @@ public:
       names.insert(argv + 1, argv + argc);
     }
   }
-  bool check(std::string test_name) const
+  bool check(const std::string & test_name) const
   {
     return(names.empty() || names.find(test_name) != names.end());
   }
@@ -523,4 +477,18 @@ int main(int argc, char* argv[])
   TEST(ranlux4_01);
   TEST(ranlux64_3_01);
   TEST(ranlux64_4_01);
+  
+  if(args.check("normal"))
+    env.run_test<boost::mt19937>("normal", boost::normal_distribution<>(), boost::math::normal());
+  if(args.check("triangle"))
+    env.run_test<boost::mt19937>("triangle", boost::triangle_distribution<>(0, 1, 3), boost::math::triangular(0, 1, 3));
+  if(args.check("cauchy"))
+    env.run_test<boost::mt19937>("cauchy", boost::cauchy_distribution<>(), boost::math::cauchy());
+  if(args.check("gamma"))
+    env.run_test<boost::mt19937>("gamma", boost::gamma_distribution<>(1), boost::math::gamma_distribution<>(1));
+  if(args.check("exponential"))
+    env.run_test<boost::mt19937>("exponential", boost::exponential_distribution<>(), boost::math::exponential());
+  if(args.check("lognormal"))
+    env.run_test<boost::mt19937>("lognormal", boost::lognormal_distribution<>(1, 1),
+      boost::math::lognormal(std::log(1.0/std::sqrt(2.0)), std::sqrt(std::log(2.0))));
 }

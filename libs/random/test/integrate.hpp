@@ -43,11 +43,11 @@ simpson(UnaryFunction f, typename UnaryFunction::argument_type a,
 }
 
 // compute b so that f(b) = y; assume f is monotone increasing
-template<class UnaryFunction>
-inline typename UnaryFunction::argument_type
+template<class UnaryFunction, class T>
+inline T
 invert_monotone_inc(UnaryFunction f, typename UnaryFunction::result_type y,
-                    typename UnaryFunction::argument_type lower = -1,
-                    typename UnaryFunction::argument_type upper = 1)
+                    T lower = -1,
+                    T upper = 1)
 {
   while(upper-lower > 1e-6) {
     double middle = (upper+lower)/2;

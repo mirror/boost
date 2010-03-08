@@ -21,7 +21,9 @@
 
 #include <boost/random.hpp>
 #include <boost/config.hpp>
+#include <boost/bind.hpp>
 
+#include "integrate.hpp"
 
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
 namespace std
@@ -119,12 +121,12 @@ public:
 class distribution_experiment : public equidistribution_experiment
 {
 public:
-  template<class UnaryFunction>
-  distribution_experiment(UnaryFunction probability , unsigned int classes)
+  template<class Distribution>
+  distribution_experiment(Distribution dist , unsigned int classes)
     : equidistribution_experiment(classes), limit(classes)
   {
     for(unsigned int i = 0; i < classes-1; ++i)
-      limit[i] = invert_monotone_inc(probability, (i+1)*0.05, 0, 1000);
+      limit[i] = quantile(dist, (i+1)*0.05);
     limit[classes-1] = std::numeric_limits<double>::infinity();
     if(limit[classes-1] < (std::numeric_limits<double>::max)())
       limit[classes-1] = (std::numeric_limits<double>::max)();
@@ -150,6 +152,36 @@ private:
   limits_type limit;
 };
 
+template<bool up, bool is_float>
+struct runs_direction_helper
+{
+  template<class T>
+  static T init(T)
+  {
+    return (std::numeric_limits<T>::max)();
+  }
+};
+
+template<>
+struct runs_direction_helper<true, true>
+{
+  template<class T>
+  static T init(T)
+  {
+    return -(std::numeric_limits<T>::max)();
+  }
+};
+
+template<>
+struct runs_direction_helper<true, false>
+{
+  template<class T>
+  static T init(T)
+  {
+    return (std::numeric_limits<T>::min)();
+  }
+};
+
 // runs-up/runs-down experiment
 template<bool up>
 class runs_experiment : public experiment_base
@@ -157,11 +189,15 @@ class runs_experiment : public experiment_base
 public:
   explicit runs_experiment(unsigned int classes) : experiment_base(classes) { }
   
-  template<class UniformRandomNumberGenerator, class Counter>
-  void run(UniformRandomNumberGenerator & f, Counter & count, int n) const
+  template<class NumberGenerator, class Counter>
+  void run(NumberGenerator & f, Counter & count, int n) const
   {
-    typedef typename UniformRandomNumberGenerator::result_type result_type;
-    result_type init = (up ? (f.min)() : (f.max)());
+    typedef typename NumberGenerator::result_type result_type;
+    result_type init =
+      runs_direction_helper<
+        up,
+        !std::numeric_limits<result_type>::is_integer
+      >::init(result_type());
     result_type previous = init;
     unsigned int length = 0;
     for(int i = 0; i < n; ++i) {
@@ -423,7 +459,7 @@ public:
       n_n = std::pow(static_cast<double>(n), n);
   }
   
-  double operator()(double t) const
+  double cdf(double t) const
   {
     if(approx) {
       return 1-std::exp(-2*t*t)*(1-2.0/3.0*t/sqrt_n);
@@ -436,8 +472,8 @@ public:
       return 1 - t/n_n * sum;
     }
   }
-  double operator()(double t1, double t2) const
-  { return operator()(t2) - operator()(t1); }
+  //double operator()(double t1, double t2) const
+  //{ return operator()(t2) - operator()(t1); }
 
 private:
   bool approx;
@@ -445,6 +481,16 @@ private:
   double sqrt_n;
   double n_n;
 };
+
+inline double cdf(const kolmogorov_smirnov_probability& dist, double val)
+{
+  return dist.cdf(val);
+}
+
+inline double quantile(const kolmogorov_smirnov_probability& dist, double val)
+{
+    return invert_monotone_inc(boost::bind(&cdf, dist, _1), val, 0.0, 1000.0);
+}
 
 /*
  * Experiments for generators with continuous distribution functions
@@ -462,7 +508,7 @@ public:
     std::vector<int> c(m,0);
     for(int i = 0; i < n; ++i) {
       double val = static_cast<double>(gen());
-      double y = distrib(val);
+      double y = cdf(distrib, val);
       int k = static_cast<int>(std::floor(m*y));
       if(k >= m)
         --k;    // should not happen
@@ -486,12 +532,23 @@ public:
   }
   double probability(double x) const
   {
-    return ksp(x);
+    return cdf(ksp, x);
   }
 private:
   int n;
   kolmogorov_smirnov_probability ksp;
 };
+
+struct power_distribution
+{
+  power_distribution(double t) : t(t) {}
+  double t;
+};
+
+double cdf(const power_distribution& dist, double val)
+{
+  return std::pow(val, dist.t);
+}
 
 // maximum-of-t test (KS-based)
 template<class UniformRandomNumberGenerator>
@@ -504,9 +561,8 @@ public:
 
   double operator()() const
   {
-    double res = ke.run(generator(f, t), 
-                  std::bind2nd(std::ptr_fun(static_cast<double (*)(double, double)>(&std::pow)), t));
-    return res;
+    generator gen(f, t);
+    return ke.run(gen, power_distribution(t));
   }
 
 private:
@@ -590,6 +646,17 @@ double run_experiment(const Experiment & experiment, Generator & gen, int n)
                                        experiment));
 }
 
+// chi_square test
+template<class Experiment, class Generator>
+double run_experiment(const Experiment & experiment, const Generator & gen, int n)
+{
+  generic_counter<std::vector<int> > v(experiment.classes());
+  experiment.run(gen, v, n);
+  return chi_square_value(v.begin(), v.end(),
+                          std::bind1st(std::mem_fun_ref(&Experiment::probability), 
+                                       experiment));
+}
+
 // number generator with experiment results (for nesting)
 template<class Experiment, class Generator>
 class experiment_generator_t
@@ -597,7 +664,7 @@ class experiment_generator_t
 public:
   experiment_generator_t(const Experiment & exper, Generator & gen, int n)
     : experiment(exper), generator(gen), n(n) { }
-  double operator()() { return run_experiment(experiment, generator, n); }
+  double operator()() const { return run_experiment(experiment, generator, n); }
 private:
   const Experiment & experiment;
   Generator & generator;
@@ -619,7 +686,7 @@ public:
   ks_experiment_generator_t(const Experiment & exper, Generator & gen,
                             const Distribution & distrib)
     : experiment(exper), generator(gen), distribution(distrib) { }
-  double operator()() { return experiment.run(generator, distribution); }
+  double operator()() const { return experiment.run(generator, distribution); }
 private:
   const Experiment & experiment;
   Generator & generator;
