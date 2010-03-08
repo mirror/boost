@@ -1,3 +1,11 @@
+[/
+ / Copyright (c) 2009 Steven Watanabe
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See
+ / accompanying file LICENSE_1_0.txt or copy at
+ / http://www.boost.org/LICENSE_1_0.txt)
+]
+
 [table Distributions (Linux)
   [[\[M rn/sec\]][minstd_rand][kreutzer1986][mt19937][lagged_fibonacci607]]
   [[uniform_int][31.25][30.581][11.5607][16.0514]]

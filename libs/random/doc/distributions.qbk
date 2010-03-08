@@ -1,3 +1,11 @@
+[/
+ / Copyright (c) 2009 Steven Watanabe
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See
+ / accompanying file LICENSE_1_0.txt or copy at
+ / http://www.boost.org/LICENSE_1_0.txt)
+]
+
 In addition to the [link boost_random.reference.generators random number generators],
 this library provides distribution functions which map one distribution
 (often a uniform distribution provided by some generator) to another.

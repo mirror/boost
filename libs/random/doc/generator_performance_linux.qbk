@@ -1,3 +1,11 @@
+[/
+ / Copyright (c) 2009 Steven Watanabe
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See
+ / accompanying file LICENSE_1_0.txt or copy at
+ / http://www.boost.org/LICENSE_1_0.txt)
+]
+
 [table Basic Generators (Linux)
   [[generator] [M rn/sec] [time per random number \[nsec\]] [relative speed compared to fastest \[percent\]]]
   [[rand48][312.5][3.2][100%]]

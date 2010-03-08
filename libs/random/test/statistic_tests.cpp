@@ -41,7 +41,7 @@ class test_base
 {
 protected:
   explicit test_base(test_environment & env) : environment(env) { }
-  void check(double val) const; 
+  void check_(double val) const; 
 private:
   test_environment & environment;
 };
@@ -62,9 +62,9 @@ public:
     std::cout << "equidistribution: " << std::flush;
     equidistribution_experiment equi(classes);
     variate_generator<RNG&, uniform_smallint<> > uint_linear(rng, uniform_smallint<>(0, classes-1));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(equi, uint_linear, n1), n2));
-    check(run_experiment(test_distrib_chi_square, 
+    check_(run_experiment(test_distrib_chi_square, 
                          experiment_generator(equi, uint_linear, n1), 2*n2));
 
     std::cout << "  2D: " << std::flush;
@@ -72,9 +72,9 @@ public:
     unsigned int root = static_cast<unsigned int>(std::sqrt(double(classes)));
     assert(root * root == classes);
     variate_generator<RNG&, uniform_smallint<> > uint_square(rng, uniform_smallint<>(0, root-1));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(equi_2d, uint_square, n1), n2));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(equi_2d, uint_square, n1), 2*n2));
     std::cout << std::endl;
   }
@@ -104,9 +104,9 @@ public:
     using namespace boost;
     std::cout << "KS: " << std::flush;
     kolmogorov_experiment ks(n1);
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          ks_experiment_generator(ks, rng, dist), n2));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          ks_experiment_generator(ks, rng, dist), 2*n2));
     std::cout << std::endl;
   }
@@ -130,16 +130,16 @@ public:
     std::cout << "runs: up: " << std::flush;
     runs_experiment<true> r_up(classes);
 
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(r_up, rng, n1), n2));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(r_up, rng, n1), 2*n2));
 
     std::cout << "  down: " << std::flush;
     runs_experiment<false> r_down(classes);
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(r_down, rng, n1), n2));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(r_down, rng, n1), 2*n2));
 
     std::cout << std::endl;
@@ -175,9 +175,9 @@ public:
     std::cout << "gaps: " << std::flush;
     gap_experiment gap(classes, dist, 0.2, 0.8);
 
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(gap, rng, n1), n2));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(gap, rng, n1), 2*n2));
 
     std::cout << std::endl;
@@ -203,9 +203,9 @@ public:
     std::cout << "poker: " << std::flush;
     poker_experiment poker(8, classes);
     variate_generator<RNG&, uniform_smallint<> > usmall(rng, uniform_smallint<>(0, 7));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(poker, usmall, n1), n2));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(poker, usmall, n1), 2*n2));
     std::cout << std::endl;
   }
@@ -231,9 +231,9 @@ public:
     coupon_collector_experiment coupon(5, classes);
 
     variate_generator<RNG&, uniform_smallint<> > usmall(rng, uniform_smallint<>(0, 4));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(coupon, usmall, n1), n2));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(coupon, usmall, n1), 2*n2));
     std::cout << std::endl;
   }
@@ -261,9 +261,9 @@ public:
     
     // generator_reference_t<RNG> gen_ref(rng);
     RNG& gen_ref(rng);
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(perm, gen_ref, n1), n2));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(perm, gen_ref, n1), 2*n2));
     std::cout << std::endl;
   }
@@ -287,8 +287,8 @@ public:
     using namespace boost;
     std::cout << "maximum-of-t: " << std::flush;
     maximum_experiment<RNG> mx(rng, n1, 5);    
-    check(run_experiment(test_distrib_chi_square, mx, n2));
-    check(run_experiment(test_distrib_chi_square, mx, 2*n2));
+    check_(run_experiment(test_distrib_chi_square, mx, n2));
+    check_(run_experiment(test_distrib_chi_square, mx, 2*n2));
     std::cout << std::endl;
   }
 private:
@@ -310,9 +310,9 @@ public:
     std::cout << "birthday spacing: " << std::flush;
     boost::variate_generator<RNG&, boost::uniform_int<> > uni(rng, boost::uniform_int<>(0, (1<<25)-1));
     birthday_spacing_experiment bsp(4, 512, (1<<25));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(bsp, uni, n1), n2));
-    check(run_experiment(test_distrib_chi_square,
+    check_(run_experiment(test_distrib_chi_square,
                          experiment_generator(bsp, uni, n1), 2*n2));
     std::cout << std::endl;
   }
@@ -365,7 +365,7 @@ public:
     return result;
   }
 
-  bool check(double chi_square_value) const
+  bool check_(double chi_square_value) const
   {
     return check_confidence(chi_square_value, confidence_chi_square_quantil);
   }
@@ -425,9 +425,9 @@ private:
   birthday_test bday_test;
 };
 
-void test_base::check(double val) const
+void test_base::check_(double val) const
 { 
-  environment.check(val);
+  environment.check_(val);
 }
 
 class program_args 
@@ -439,7 +439,7 @@ public:
       names.insert(argv + 1, argv + argc);
     }
   }
-  bool check(const std::string & test_name) const
+  bool check_(const std::string & test_name) const
   {
     return(names.empty() || names.find(test_name) != names.end());
   }
@@ -453,7 +453,7 @@ int main(int argc, char* argv[])
   test_environment env(0.99);
 
 #define TEST(name)                      \
-  if(args.check(#name))                 \
+  if(args.check_(#name))                 \
     env.run_test<boost::name>(#name)
 
   TEST(minstd_rand0);
@@ -487,17 +487,17 @@ int main(int argc, char* argv[])
   TEST(ranlux64_3_01);
   TEST(ranlux64_4_01);
   
-  if(args.check("normal"))
+  if(args.check_("normal"))
     env.run_test<boost::mt19937>("normal", boost::normal_distribution<>(), boost::math::normal());
-  if(args.check("triangle"))
+  if(args.check_("triangle"))
     env.run_test<boost::mt19937>("triangle", boost::triangle_distribution<>(0, 1, 3), boost::math::triangular(0, 1, 3));
-  if(args.check("cauchy"))
+  if(args.check_("cauchy"))
     env.run_test<boost::mt19937>("cauchy", boost::cauchy_distribution<>(), boost::math::cauchy());
-  if(args.check("gamma"))
+  if(args.check_("gamma"))
     env.run_test<boost::mt19937>("gamma", boost::gamma_distribution<>(1), boost::math::gamma_distribution<>(1));
-  if(args.check("exponential"))
+  if(args.check_("exponential"))
     env.run_test<boost::mt19937>("exponential", boost::exponential_distribution<>(), boost::math::exponential());
-  if(args.check("lognormal"))
+  if(args.check_("lognormal"))
     env.run_test<boost::mt19937>("lognormal", boost::lognormal_distribution<>(1, 1),
       boost::math::lognormal(std::log(1.0/std::sqrt(2.0)), std::sqrt(std::log(2.0))));
 }
