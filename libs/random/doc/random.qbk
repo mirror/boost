@@ -84,7 +84,7 @@ random numbers having useful properties, such as uniform distribution.
 
 You should read the [concepts concepts documentation] for an introduction and the
 definition of the basic concepts. For a quick start, it may be sufficient
-to have a look at [@boost:/libs/random/random_demo.cpp random_demo.cpp].
+to have a look at [@boost:/libs/random/example/random_demo.cpp random_demo.cpp].
 
 For a very quick start, here's an example:
 

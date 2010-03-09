@@ -70,7 +70,7 @@ namespace boost {
  *
  * <b>Performance</b>
  *
- * The test program <a href="\boost/libs/random/nondet_random_speed.cpp">
+ * The test program <a href="\boost/libs/random/performance/nondet_random_speed.cpp">
  * nondet_random_speed.cpp</a> measures the execution times of the
  * nondet_random.hpp implementation of the above algorithms in a tight
  * loop. The performance has been evaluated on a Pentium Pro 200 MHz
