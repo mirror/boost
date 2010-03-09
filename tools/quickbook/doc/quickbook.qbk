@@ -2134,8 +2134,8 @@ boostbook standalone
     :
         my_doc
     :
-        <xsl:param>boost.image.src=images/my_project_logo.png
-        <xsl:param>boost.image.alt="\\"My Project\\""
+        <xsl:param>boost.image.src\=images/my_project_logo.png
+        <xsl:param>boost.image.alt\="\\"My Project\\""
         <xsl:param>boost.image.w=100
         <xsl:param>boost.image.h=50
         <xsl:param>nav.layout=none
