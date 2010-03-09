@@ -635,6 +635,7 @@ from the output.
 [section Unicode escape]
 
 You can enter any 16-bit unicode character by using `\u` followed by its 4 digit
+hexadecimal code, or a 32-bit character by using `\U` followed by an 8 digit
 hexadecimal code. eg.
 
 [pre'''

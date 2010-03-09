@@ -275,10 +275,10 @@ namespace quickbook
                         str_p("\\n")                    [actions.break_]
                     |   "\\ "                           // ignore an escaped char
                     |   '\\' >> punct_p                 [actions.raw_char]
-                    |   "\\u">> repeat_p(4)
-                        [
-                            chset<>("0-9a-fA-F")
-                        ]                               [actions.escape_unicode]
+                    |   "\\u" >> repeat_p(4) [chset<>("0-9a-fA-F")]
+                                                        [actions.escape_unicode]
+                    |   "\\U" >> repeat_p(8) [chset<>("0-9a-fA-F")]
+                                                        [actions.escape_unicode]
                     |   (
                             ("'''" >> !eol)             [actions.escape_pre]
                         >>  *(anychar_p - "'''")        [actions.raw_char]
