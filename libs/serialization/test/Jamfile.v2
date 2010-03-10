@@ -111,9 +111,8 @@ test-suite "serialization" :
 if ! $(BOOST_ARCHIVE_LIST) {
     test-suite "serialization2" : 
         [ test-bsl-run test_dll_exported : : dll_polymorphic_derived2_lib : <runtime-link>shared ]
-        [ test-bsl-run test_dll_plugin : : dll_polymorphic_derived2_lib : <runtime-link>shared ]
-        [ compile test_dll_plugin.cpp ]
         [ test-bsl-run test_dll_simple : : dll_a_lib : <runtime-link>shared ]
+        [ compile test_dll_plugin.cpp ]
         [ test-bsl-run test_private_ctor ]
         [ test-bsl-run test_reset_object_address : A ]
         [ test-bsl-run test_void_cast ]

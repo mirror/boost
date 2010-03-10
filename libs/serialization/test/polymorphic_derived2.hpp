@@ -7,7 +7,7 @@
 #endif
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// derived1.hpp    simple class test
+// polymorphic_derived2.hpp    simple class test
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
 // Use, modification and distribution is subject to the Boost Software
