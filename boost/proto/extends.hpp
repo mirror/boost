@@ -357,7 +357,7 @@ namespace boost { namespace proto
         };                                                                                          \
         /**/
 
-    #ifdef BOOST_HAS_VARIADIC_TMPL
+    #ifndef BOOST_NO_VARIADIC_TEMPLATES
         #define BOOST_PROTO_EXTENDS_FUNCTION_CONST()                                                \
             BOOST_PROTO_EXTENDS_FUNCTION_()                                                         \
             BOOST_PROTO_DEFINE_FUN_OP_VARIADIC_IMPL_(1)                                             \
@@ -473,7 +473,7 @@ namespace boost { namespace proto
             // the operator() overloads, which is more efficient.
             BOOST_PROTO_EXTENDS_FUNCTION_()
 
-        #ifdef BOOST_HAS_VARIADIC_TMPL
+        #ifndef BOOST_NO_VARIADIC_TEMPLATES
             BOOST_PROTO_DEFINE_FUN_OP_VARIADIC_IMPL_(1)
         #else
             /// INTERNAL ONLY
@@ -516,7 +516,7 @@ namespace boost { namespace proto
             // the operator() overloads, which is more efficient.
             BOOST_PROTO_EXTENDS_FUNCTION_()
 
-        #ifdef BOOST_HAS_VARIADIC_TMPL
+        #ifndef BOOST_NO_VARIADIC_TEMPLATES
             BOOST_PROTO_DEFINE_FUN_OP_VARIADIC_IMPL_(0)
             BOOST_PROTO_DEFINE_FUN_OP_VARIADIC_IMPL_(1)
         #else
