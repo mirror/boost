@@ -23,7 +23,7 @@ public:
   typedef boost::signals2::signal<void ()>  signal_t;
 
 public:
-  document()
+  Document()
   {}
 
   /* connect a slot to the signal which will be emitted whenever
@@ -39,7 +39,7 @@ public:
     m_sig();
   }
 
-  const std::string& gettext() const
+  const std::string& getText() const
   {
     return m_text;
   }
