@@ -168,7 +168,8 @@ namespace boost {
         // check range (may be private because it is static)
         static void rangecheck (size_type i) {
             if (i >= size()) {
-                throw std::out_of_range("array<>: index out of range");
+                std::out_of_range e("array<>: index out of range");
+                boost::throw_exception(e);
             }
         }
 
