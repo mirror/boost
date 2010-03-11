@@ -70,7 +70,6 @@
 		</Configuration>
 		<Configuration
 			Name="Release runtime-dynamic|Win32"
-			AdditionalOptions="/Zm800"
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
@@ -137,7 +136,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;BOOST_TEST_NO_AUTO_LINK=1"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
 				SmallerTypeCheck="FALSE"
@@ -156,7 +155,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(ConfigurationName)\libboost_serialization-vc71-mt-sgd-1_41.lib"/>
+				OutputFile="$(ConfigurationName)\libboost_serialization-vc71-mt-sgd-1_42.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -380,9 +379,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\boost\archive\shared_ptr_helper.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\serialization\detail\stack_constructor.hpp">
 				</File>
 			</Filter>
 		</Filter>

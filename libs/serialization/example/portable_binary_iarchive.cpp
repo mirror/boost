@@ -10,7 +10,6 @@
 
 #include <istream>
 #include <string>
-//#include <cstring> // memcpy
 
 #include <boost/detail/endian.hpp>
 #include <boost/serialization/throw_exception.hpp>

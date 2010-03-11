@@ -190,9 +190,6 @@
 		<File
 			RelativePath="..\example\demo_xml_save.cpp">
 		</File>
-		<File
-			RelativePath="..\examples\pretty_print_archive.hpp">
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

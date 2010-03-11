@@ -1,4 +1,4 @@
-﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
 Use, modification and distribution is subject to the Boost Software
@@ -29,136 +29,136 @@ http://www.boost.org/LICENSE_1_0.txt)
 <pre><code>
 
 
-basic_iarchive <a href="../../../boost/archive/detail/basic_iarchive.hpp">-></a>
+basic_oarchive <a href="../../../boost/archive/detail/basic_oarchive.hpp">-></a>
       |
       |
-      |      interface_iarchive&lt;text_iarchive&gt; <a href="../../../boost/archive/detail/interface_iarchive.hpp">-></a>
+      |      interface_oarchive&lt;text_oarchive&gt; <a href="../../../boost/archive/detail/interface_oarchive.hpp">-></a>
       |                     /
       |                   /
       |        _________/
       |      /
       |    /
       |  /
-common_iarchive&lt;text_iarchive&gt; <a href="../../../boost/archive/detail/common_iarchive.hpp">-></a>
+common_oarchive&lt;text_oarchive&gt; <a href="../../../boost/archive/detail/common_oarchive.hpp">-></a>
       |
       |
-<font color="blue">basic_text_iarchive&lt;text_iarchive&gt;</font> <a href="../../../boost/archive/basic_text_iarchive.hpp">-></a>
+<font color="blue">basic_text_oarchive&lt;text_oarchive&gt;</font> <a href="../../../boost/archive/basic_text_oarchive.hpp">-></a>
       |
       |
-      |     <font color="blue">basic_text_iprimitive&lt;basic_istream&gt;</font> <a href="../../../boost/archive/basic_text_iprimitive.hpp">-></a>
+      |     <font color="blue">basic_text_oprimitive&lt;basic_ostream&gt;</font> <a href="../../../boost/archive/basic_text_oprimitive.hpp">-></a>
       |                    /
       |                  /
-      |       _________/                  interface_iarchive&lt;polymorphic_iarchive&gt; <a href="../../../boost/archive/detail/interface_iarchive.hpp">-></a>
+      |       _________/                  interface_oarchive&lt;polymorphic_oarchive&gt; <a href="../../../boost/archive/detail/interface_oarchive.hpp">-></a>
       |     /                                                |
       |   /                                                  |
       | /                                                    |
-<font color="blue">text_iarchive_impl&lt;text_iarchive&gt;</font> <a href="../../../boost/archive/text_iarchive.hpp">-></a>              polymorphic_iarchive_impl <a href="../../../boost/archive/polymorphic_iarchive.hpp">-></a>
+<font color="blue">text_oarchive_impl&lt;text_oarchive&gt;</font> <a href="../../../boost/archive/text_oarchive.hpp">-></a>              polymorphic_oarchive_impl <a href="../../../boost/archive/polymorphic_oarchive.hpp">-></a>
       | \                                                    |
       |   \                                                  |
-      |     \_____________________________________    <font color="red">polymorphic_iarchive</font> <a href="../../../boost/archive/polymorphic_iarchive.hpp">-></a>
+      |     \_____________________________________    <font color="red">polymorphic_oarchive</font> <a href="../../../boost/archive/polymorphic_oarchive.hpp">-></a>
       |                                           \         /
       |                                             \     /
       |                                               \ /  
-<font color="red">text_iarchive</font> <a href="../../../boost/archive/text_iarchive.hpp">-></a>                 polymorphic_iarchive_route&lt;text_iarchive_impl&lt;text_iarchive&gt; &gt; <a href="../../../boost/archive/detail/polymorphic_iarchive_route.hpp">-></a>
+<font color="red">text_oarchive</font> <a href="../../../boost/archive/text_oarchive.hpp">-></a>                 polymorphic_oarchive_route&lt;text_oarchive_impl&lt;text_oarchive&gt; &gt; <a href="../../../boost/archive/detail/polymorphic_oarchive_route.hpp">-></a>
                                                        |
                                                        |
                                                        |
-                                             <font color="red">polymorphic_text_iarchive</font> <a href="../../../boost/archive/polymorphic_text_iarchive.hpp">-></a>
+                                             <font color="red">polymorphic_text_oarchive</font> <a href="../../../boost/archive/polymorphic_text_oarchive.hpp">-></a>
 
 
 </code></pre>
-This diagram shows the relationship between the various classes that implement loading (input
-serialization) for text files.  The hierachy and organization is similar for saving and for
+This diagram shows the relationship between the various classes that implement saving (output
+serialization) for text archives.  The hierachy and organization is similar for loading and for
 other types of archives as well.  In the diagram, classes written in <font color="blue">blue</font> 
-implement loading for a given archive type. (in this case its text archives).
-Users include classes in <font color="red">red</font> to load their data from a partcular
+implement saving for a given archive type. (in this case its text archives).
+Users include classes in <font color="red">red</font> to save their data from a partcular
 type of archive.  Other classes whose names are in black implement the library and should
 never change.  They are in <code>namespace boost::archive::detail</code>
 <dl>
   <dt><code>
-  <a href="../../../boost/archive/detail/basic_iarchive.hpp">basic_iarchive</a>
+  <a href="../../../boost/archive/detail/basic_oarchive.hpp">basic_oarchive</a>
   </code></dt>
   <dd>
   Implements the core library functions for class export, versioning, and object tracking.  It is compiled
   into the library as it has no template parameters.
   </dd>
   <p><dt><code>
-  <a href="../../../boost/archive/detail/interface_iarchive.hpp">interface_iarchive&lt;text_iarchive&gt;</a>
+  <a href="../../../boost/archive/detail/interface_oarchive.hpp">interface_oarchive&lt;text_oarchive&gt;</a>
   </code></dt>
   <dd>
   A class that declares the standard archive interface.  This has been factored out so that it
-  can be used as a base class for <code style="white-space: normal">polymorphic_iarchive</code>
+  can be used as a base class for <code style="white-space: normal">polymorphic_oarchive</code>
   as well as for archive implementations.
   
   <p><dt><code>
-  <a href="../../../boost/archive/detail/common_iarchive.hpp">common_iarchive&lt;text_iarchive&gt;</a>
+  <a href="../../../boost/archive/detail/common_oarchive.hpp">common_oarchive&lt;text_oarchive&gt;</a>
   </code></dt>
   <dd>
   The function of this class is to make the connection between the virtual function
-  interface used by <code>basic_iarchive</code> and the template interface used by archive
+  interface used by <code>basic_oarchive</code> and the template interface used by archive
   class implementations.
   
   <p><dt><code>
-  <a href="../../../boost/archive/basic_text_iarchive.hpp">basic_text_iarchive&lt;text_iarchive&gt;</a>
+  <a href="../../../boost/archive/basic_text_oarchive.hpp">basic_text_oarchive&lt;text_oarchive&gt;</a>
   </code></dt>
   <dd>
-  Implements the basic functionality for simple text archives.  The primitive load functions have been 
+  Implements the basic functionality for simple text archives.  The primitive save functions have been 
   factored out so it can be used in other text based archives like XML archives.
   
   <p><dt><code>
-  <a href="../../../boost/archive/basic_text_iprimitive.hpp">basic_text_iprimitive&lt;basic_istream&gt;</a>
+  <a href="../../../boost/archive/basic_text_oprimitive.hpp">basic_text_oprimitive&lt;basic_ostream&gt;</a>
   </code></dt>
   <dd>
-  Implements the save overloads for all primitive types.  This is a template with a parameter
+  Implements the save oversaves for all primitive types.  This is a template with a parameter
   which describes the stream.
   
   <p><dt><code>
-  <a href="../../../boost/archive/text_iarchive.hpp">text_iarchive_impl&lt;text_iarchive&gt;</a>                 
+  <a href="../../../boost/archive/text_oarchive.hpp">text_oarchive_impl&lt;text_oarchive&gt;</a>                 
   </code></dt>
   <dd>
   Inherits from the above two classes to implement text archives.
   </dd>
 
   <p><dt><code>
-  <a href="../../../boost/archive/text_iarchive.hpp">text_iarchive</a>
+  <a href="../../../boost/archive/text_oarchive.hpp">text_oarchive</a>
   </code></dt>
   <dd>
-  This is just a short hand for <code style="white-space: normal">text_iarchive_impl&lt;text_iarchive&gt;</code> .
+  This is just a short hand for <code style="white-space: normal">text_oarchive_impl&lt;text_oarchive&gt;</code> .
   We can't use <code style="white-space: normal">typedef</code> because  a 
   <code style="white-space: normal">typedef</code> can't refer to it self in its definition.  
   This is the class name that is used to serialize to a text archive.
   </dd>
 
   <p><dt><code>
-  <a href="../../../boost/archive/detail/interface_iarchive.hpp">interface_iarchive&lt;polymorphic_iarchive&gt;</a>
+  <a href="../../../boost/archive/detail/interface_oarchive.hpp">interface_oarchive&lt;polymorphic_oarchive&gt;</a>
   </code></dt>
   <dd>
   Same template as above.  However, this time the Archive parameter refers to the polymorphic archive
   with a virtual function interface rather than that the template interface that
-  <code style="white-space: normal">common_iarchive</code> uses.
+  <code style="white-space: normal">common_oarchive</code> uses.
   
   <p><dt><code>
-  <a href="../../../boost/archive/polymorphic_iarchive.hpp">polymorphic_iarchive</a>
+  <a href="../../../boost/archive/polymorphic_oarchive.hpp">polymorphic_oarchive</a>
   </code></dt>
   <dd>
-  A class with a list of virtual <code style="white-space: normal">load(T &t)</code>
+  A class with a list of virtual <code style="white-space: normal">save(T &t)</code>
   for all primitive types T. This is the class that is used to do pre-compile serialization of classes
   for all archives present and future.
   
   <p><dt><code>
-  <a href="../../../boost/archive/detail/polymorphic_iarchive_route.hpp">polymorphic_iarchive_route&lt;text_iarchive_impl&lt;text_iarchive&gt; &gt;</a>
+  <a href="../../../boost/archive/detail/polymorphic_oarchive_route.hpp">polymorphic_oarchive_route&lt;text_oarchive_impl&lt;text_oarchive&gt; &gt;</a>
   </code></dt>
   <dd><p>
-  This class implements the <code style="white-space: normal">polymorphic_iarchive</code> in terms of a specific 
+  This class implements the <code style="white-space: normal">polymorphic_oarchive</code> in terms of a specific 
   concrete class.  Virtual function calls are routed to the implementing class.  In this example, 
-  that implementing class would be text_iarchive_impl.
+  that implementing class would be text_oarchive_impl.
   
   <p><dt><code>
-  <a href="../../../boost/archive/polymorphic_text_iarchive.hpp">polymorphic_text_iarchive</a>
+  <a href="../../../boost/archive/polymorphic_text_oarchive.hpp">polymorphic_text_oarchive</a>
   </code></dt>
   <dd>
   this is just a typedef so we can write polymorphic_text_archive rather than
-  <code style="white-space: normal">polymorphic_iarchive_route&lt;text_iarchive_impl&lt;text_iarchive&gt; &gt;</code>
+  <code style="white-space: normal">polymorphic_oarchive_route&lt;text_oarchive_impl&'t;text_oarchive&gt; &gt;</code>
   
 </dl>
 <hr>

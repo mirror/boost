@@ -36,9 +36,9 @@
 				UsePrecompiledHeader="0"
 				ObjectFile="$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/threading-multi"
 				ProgramDataBaseFileName="$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/threading-multivc70.pdb"
-				WarningLevel="4"
+				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="3"/>
+				DebugInformationFormat="1"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool

@@ -8,6 +8,10 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 // should pass compilation and execution
+
+// note:: this example can only be built with the static library
+// (at least with MSVC - due to conflicts related to import of library
+// code and instantiation of templates.
 #include <sstream>
 
 #include "portable_binary_oarchive.hpp"
@@ -44,7 +48,7 @@ public:
         ;
     }
     A() :
-        c(std::rand()),
+        c(0xFF & std::rand()),
         i(std::rand()),
         i2(0x80),
         ui(std::rand()),

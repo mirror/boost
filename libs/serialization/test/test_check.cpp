@@ -106,7 +106,7 @@ int main(int /* argc */, char * /* argv */[]){
         oa << BOOST_SERIALIZATION_NVP(c1_out);
 
         check1 c1_non_const_out;
-        oa << BOOST_SERIALIZATION_NVP(c1_non_const_out; // warn check_object_tracking
+        oa << BOOST_SERIALIZATION_NVP(c1_non_const_out); // warn check_object_tracking
 
         check1 * const c1_ptr_out = 0;
         oa << BOOST_SERIALIZATION_NVP(c1_ptr_out); // warn check_pointer_level

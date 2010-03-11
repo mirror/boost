@@ -44,6 +44,14 @@ namespace std{
 #include "polymorphic_derived1.hpp"
 #include "polymorphic_derived2.hpp"
 
+template<class Archive>
+void polymorphic_derived2::serialize(
+    Archive &ar, 
+    const unsigned int /* file_version */
+){
+    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
+}
+
 template void polymorphic_derived2::serialize(
     test_oarchive & ar,
     const unsigned int version

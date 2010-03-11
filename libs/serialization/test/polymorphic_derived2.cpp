@@ -15,6 +15,14 @@
 #define POLYMORPHIC_DERIVED2_EXPORT
 #include "polymorphic_derived2.hpp"
 
+template<class Archive>
+void polymorphic_derived2::serialize(
+    Archive &ar, 
+    const unsigned int /* file_version */
+){
+    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
+}
+
 // instantiate code for text archives
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -47,7 +55,6 @@ BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derive
 // note: export has to be AFTER #includes for all archive classes
 BOOST_CLASS_EXPORT_IMPLEMENT(polymorphic_derived2)
 
-// export plug-in not yet working !!!
 #if 0
 #include <boost/serialization/factory.hpp>
 BOOST_SERIALIZATION_FACTORY_0(polymorphic_derived2)
