@@ -1,0 +1,141 @@
+<?xml version="1.0" ?>
+<concept name="Expr" category="utility">
+  <!--
+  Copyright 2010 Eric Niebler
+
+  Distributed under the Boost
+  Software License, Version 1.0. (See accompanying
+  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+  -->
+  <param name="Expr" role="expession-type" />
+  <param name="Tag" role="tag-type" />
+  <param name="Domain" role="domain-type" />
+  <param name="N" role="mpl-integral-constant-type" />
+
+  <models-sentence>
+    The type <arg num="1" /> must be a model of <self/>.
+  </models-sentence>
+
+  <models-sentence>
+    The type <arg num="3" /> must be a model of <conceptname>Domain</conceptname>.
+  </models-sentence>
+
+  <models-sentence>
+    The type <arg num="4" /> must be a model of MPL Integral Constant.
+  </models-sentence>
+
+  <description>
+    <para>
+      An Expr represents a tagged node in an expression tree.
+      The children of the Expr must themselves satisfy the
+      Expr concept. The Expr has an arity representing the
+      number of children. If the number of children is zero,
+      the Expr also has a value. An Expr also has an associated
+      <conceptname>Domain</conceptname>.
+    </para>
+  </description>
+
+  <notation variables="e">
+    <sample-value>
+      <type name="Expr" />
+    </sample-value>
+  </notation>
+
+  <associated-type name="proto_tag">
+    <get-member-type name="type">
+      <apply-template name="boost::proto::tag_of">
+        <type name="Expr"/>
+      </apply-template>
+    </get-member-type>
+    <description>
+      <simpara>The tag type of the Expr.</simpara>
+    </description>
+  </associated-type>
+
+  <associated-type name="proto_arity">
+    <get-member-type name="type">
+      <apply-template name="boost::proto::arity_of">
+        <type name="Expr"/>
+      </apply-template>
+    </get-member-type>
+    <description>
+      <simpara>
+        The arity (number of child nodes) of the Expr.
+        <computeroutput>proto_arity</computeroutput> is an MPL Integral Constant.
+      </simpara>
+    </description>
+  </associated-type>
+
+  <associated-type name="proto_domain">
+    <get-member-type name="type">
+      <apply-template name="boost::proto::domain_of">
+        <type name="Expr"/>
+      </apply-template>
+    </get-member-type>
+    <description>
+      <simpara>
+        The Domain of the Expr. <computeroutput>proto_domain</computeroutput>
+        models <conceptname>Domain</conceptname>.
+      </simpara>
+    </description>
+  </associated-type>
+
+  <associated-type name="childN_type">
+    <get-member-type name="type">
+      <apply-template name="boost::proto::result_of::child">
+        <type name="Expr"/>
+        <type name="N"/>
+      </apply-template>
+    </get-member-type>
+    <description>
+      <simpara>The Nth child of Expr.</simpara>
+    </description>
+  </associated-type>
+
+  <associated-type name="value_type">
+    <get-member-type name="type">
+      <apply-template name="boost::proto::result_of::value">
+        <type name="Expr"/>
+      </apply-template>
+    </get-member-type>
+    <description>
+      <simpara>The value of a terminal Expr.
+        Requires <computeroutput>0 == proto_arity::value</computeroutput>.</simpara>
+    </description>
+  </associated-type>
+
+  <valid-expression name="Get N-th Child">
+    <apply-function name="boost::proto::child&lt; N &gt;">
+      <sample-value>
+        <type name="Expr" />
+      </sample-value>
+    </apply-function>
+    <return-type>
+      <require-same-type testable="yes">
+        <type name="childN_type"/>
+      </require-same-type>
+    </return-type>
+    <semantics>Extracts the Nth child from this Expr.
+      Requires <computeroutput>N::value &lt; proto_arity::value</computeroutput>.</semantics>
+  </valid-expression>
+
+  <valid-expression name="Get Terminal Value">
+    <apply-function name="boost::proto::value">
+      <sample-value>
+        <type name="Expr" />
+      </sample-value>
+    </apply-function>
+    <return-type>
+      <require-same-type testable="yes">
+        <type name="value_type"/>
+      </require-same-type>
+    </return-type>
+    <semantics>Extracts the value from a terminal Expr.
+      Requires <computeroutput>0 == proto_arity::value</computeroutput>.</semantics>
+  </valid-expression>
+
+  <example-model>
+    <type name="boost::proto::literal&lt; int &gt;" />
+  </example-model>
+
+</concept>

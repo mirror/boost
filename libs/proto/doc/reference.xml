@@ -1040,11 +1040,12 @@
   <xi:include href="reference/context/null.xml"/>
 
   <!-- concepts -->
-  <!--<xi:include href="reference/concepts/BasicPrimitiveTransform.xml"/>-->
   <xi:include href="reference/concepts/CallableTransform.xml"/>
+  <xi:include href="reference/concepts/Domain.xml"/>
+  <xi:include href="reference/concepts/Expr.xml"/>
   <xi:include href="reference/concepts/ObjectTransform.xml"/>
+  <xi:include href="reference/concepts/PolymorphicFunctionObject.xml"/>
   <xi:include href="reference/concepts/PrimitiveTransform.xml"/>
   <xi:include href="reference/concepts/Transform.xml"/>
-  <xi:include href="reference/concepts/PolymorphicFunctionObject.xml"/>
 
 </library-reference>

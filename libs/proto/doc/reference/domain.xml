@@ -64,6 +64,9 @@
         <typedef name="proto_grammar">
           <type>Grammar</type>
         </typedef>
+        <typedef name="proto_generator">
+          <type>Generator</type>
+        </typedef>
       </struct>
 
       <!-- proto::default_domain -->
