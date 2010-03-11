@@ -164,8 +164,8 @@ test_main( int /* argc */, char* /* argv */[] )
     BOOST_REQUIRE(NULL != testfile);
 
     HINSTANCE hDLL;               // Handle to DLL
-    hDLL = LoadLibrary("dll_polymorphic_derived2.dll");
-    BOOST_CHECK_MESSAGE((0 != hDLL), "Failed to find/load dll_polymorphic_derived2" );
+    hDLL = LoadLibrary("plugin_polymorphic_derived2.dll");
+    BOOST_CHECK_MESSAGE((0 != hDLL), "Failed to find/load plugin_polymorphic_derived2" );
     if(0 == hDLL)
         return EXIT_FAILURE;
 
@@ -188,8 +188,8 @@ test_main( int /* argc */, char* /* argv */[] )
     BOOST_REQUIRE(NULL != testfile);
 
     void * hDLL;               // Handle to DLL
-    hDLL = dlopen("dll_polymorphic_derived2.so", RTLD_NOW | RTLD_GLOBAL);
-    BOOST_CHECK_MESSAGE((0 != hDLL), "Failed to find/load dll_polymorphic_derived2" );
+    hDLL = dlopen("plugin_polymorphic_derived2.so", RTLD_NOW | RTLD_GLOBAL);
+    BOOST_CHECK_MESSAGE((0 != hDLL), "Failed to find/load plugin_polymorphic_derived2" );
     if(0 == hDLL)
         return EXIT_FAILURE;
 
