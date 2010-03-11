@@ -28,10 +28,10 @@ namespace boost {
   //=========================================================================
   // property_traits class
 
-  BOOST_MPL_HAS_XXX_TRAIT_DEF(key_type);
-  BOOST_MPL_HAS_XXX_TRAIT_DEF(value_type);
-  BOOST_MPL_HAS_XXX_TRAIT_DEF(reference);
-  BOOST_MPL_HAS_XXX_TRAIT_DEF(category);
+  BOOST_MPL_HAS_XXX_TRAIT_DEF(key_type)
+  BOOST_MPL_HAS_XXX_TRAIT_DEF(value_type)
+  BOOST_MPL_HAS_XXX_TRAIT_DEF(reference)
+  BOOST_MPL_HAS_XXX_TRAIT_DEF(category)
  
   template<class PA>
   struct is_property_map :
