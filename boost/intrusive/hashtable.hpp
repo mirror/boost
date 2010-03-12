@@ -886,7 +886,7 @@ class hashtable_impl
       }
       else{
          size_type buckets_len = this->priv_buckets_len();
-         const bucket_type *b = detail::get_pointer(this->priv_buckets());
+         const bucket_type *b = detail::boost_intrusive_get_pointer(this->priv_buckets());
          for (size_type n = 0; n < buckets_len; ++n, ++b){
             if(!b->empty()){
                return false;
@@ -909,7 +909,7 @@ class hashtable_impl
       else{
          size_type len = 0;
          size_type buckets_len = this->priv_buckets_len();
-         const bucket_type *b = detail::get_pointer(this->priv_buckets());
+         const bucket_type *b = detail::boost_intrusive_get_pointer(this->priv_buckets());
          for (size_type n = 0; n < buckets_len; ++n, ++b){
             len += b->size();
          }
@@ -1229,8 +1229,8 @@ class hashtable_impl
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased element. No destructors are called.
-   iterator erase(const_iterator i)
-   {  return this->erase_and_dispose(i, detail::null_disposer());  }
+   void erase(const_iterator i)
+   {  this->erase_and_dispose(i, detail::null_disposer());  }
 
    //! <b>Effects</b>: Erases the range pointed to by b end e. 
    //! 
@@ -1241,8 +1241,8 @@ class hashtable_impl
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
-   iterator erase(const_iterator b, const_iterator e)
-   {  return this->erase_and_dispose(b, e, detail::null_disposer());  }
+   void erase(const_iterator b, const_iterator e)
+   {  this->erase_and_dispose(b, e, detail::null_disposer());  }
 
    //! <b>Effects</b>: Erases all the elements with the given value.
    //! 
@@ -1295,18 +1295,15 @@ class hashtable_impl
    //! <b>Note</b>: Invalidates the iterators 
    //!    to the erased elements.
    template<class Disposer>
-   iterator erase_and_dispose(const_iterator i, Disposer disposer
+   void erase_and_dispose(const_iterator i, Disposer disposer
                               /// @cond
                               , typename detail::enable_if_c<!detail::is_convertible<Disposer, const_iterator>::value >::type * = 0
                               /// @endcond
                               )
    {
-      iterator ret(i.unconst());
-      ++ret;
       priv_erase(i, disposer, optimize_multikey_t());
       this->priv_size_traits().decrement();
       priv_erasure_update_cache();
-      return ret;
    }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
@@ -1322,7 +1319,7 @@ class hashtable_impl
    //! <b>Note</b>: Invalidates the iterators
    //!    to the erased elements.
    template<class Disposer>
-   iterator erase_and_dispose(const_iterator b, const_iterator e, Disposer disposer)
+   void erase_and_dispose(const_iterator b, const_iterator e, Disposer disposer)
    {
       if(b != e){
          //Get the bucket number and local iterator for both iterators
@@ -1347,7 +1344,6 @@ class hashtable_impl
          priv_erase_range(before_first_local_it, first_bucket_num, last_local_it, last_bucket_num, disposer);
          priv_erasure_update_cache(first_bucket_num, last_bucket_num);
       }
-      return e.unconst();
    }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
@@ -2139,8 +2135,8 @@ class hashtable_impl
    }
 
    //! <b>Effects</b>: Returns the nearest new bucket count optimized for
-   //!   the container that is bigger than n. This suggestion can be used
-   //!   to create bucket arrays with a size that will usually improve
+   //!   the container that is bigger or equal than n. This suggestion can be
+   //!   used to create bucket arrays with a size that will usually improve
    //!   container's performance. If such value does not exist, the 
    //!   higher possible value is returned.
    //! 
@@ -2153,15 +2149,15 @@ class hashtable_impl
       const std::size_t *primes_end = primes + detail::prime_list_holder<0>::prime_list_size;
       size_type const* bound = std::lower_bound(primes, primes_end, n);
       if(bound == primes_end)
-            bound--;
+         --bound;
       return size_type(*bound);
    }
 
    //! <b>Effects</b>: Returns the nearest new bucket count optimized for
-   //!   the container that is smaller than n. This suggestion can be used
-   //!   to create bucket arrays with a size that will usually improve
+   //!   the container that is smaller or equal than n. This suggestion can be
+   //!   used to create bucket arrays with a size that will usually improve
    //!   container's performance. If such value does not exist, the 
-   //!   lower possible value is returned.
+   //!   lowest possible value is returned.
    //! 
    //! <b>Complexity</b>: Amortized constant time.
    //! 
@@ -2171,8 +2167,8 @@ class hashtable_impl
       const std::size_t *primes     = &detail::prime_list_holder<0>::prime_list[0];
       const std::size_t *primes_end = primes + detail::prime_list_holder<0>::prime_list_size;
       size_type const* bound = std::upper_bound(primes, primes_end, n);
-      if(bound != primes_end)
-            bound--;
+      if(bound != primes)
+         --bound;
       return size_type(*bound);
    }
 
@@ -2240,7 +2236,7 @@ class hashtable_impl
    {  return this->priv_real_bucket_traits().bucket_count();  }
 
    static node_ptr uncast(const_node_ptr ptr)
-   {  return node_ptr(const_cast<node*>(detail::get_pointer(ptr)));  }
+   {  return node_ptr(const_cast<node*>(detail::boost_intrusive_get_pointer(ptr)));  }
 
    node &priv_value_to_node(value_type &v)
    {  return *this->get_real_value_traits().to_node_ptr(v);  }

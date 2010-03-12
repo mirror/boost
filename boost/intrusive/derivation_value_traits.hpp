@@ -44,10 +44,10 @@ struct derivation_value_traits
    { return node_ptr(&value); }
 
    static pointer to_value_ptr(node_ptr n) 
-   {  return pointer(static_cast<T*>(detail::get_pointer(n))); }
+   {  return pointer(static_cast<T*>(detail::boost_intrusive_get_pointer(n))); }
 
    static const_pointer to_value_ptr(const_node_ptr n)
-   {  return const_pointer(static_cast<const T*>(detail::get_pointer(n))); }
+   {  return const_pointer(static_cast<const T*>(detail::boost_intrusive_get_pointer(n))); }
 };
 
 } //namespace intrusive 

@@ -36,6 +36,7 @@ struct prime_list_holder
 
 template<int Dummy>
 const std::size_t prime_list_holder<Dummy>::prime_list[] = {
+   3ul, 7ul, 11ul, 17ul, 29ul, 
    53ul, 97ul, 193ul, 389ul, 769ul,
    1543ul, 3079ul, 6151ul, 12289ul, 24593ul,
    49157ul, 98317ul, 196613ul, 393241ul, 786433ul,
@@ -164,10 +165,10 @@ class hashtable_iterator
    { return *this->operator ->(); }
 
    pointer operator->() const
-   { return detail::get_pointer(this->get_real_value_traits()->to_value_ptr(downcast_bucket(slist_it_.pointed_node()))); }
+   { return detail::boost_intrusive_get_pointer(this->get_real_value_traits()->to_value_ptr(downcast_bucket(slist_it_.pointed_node()))); }
 
    const Container *get_container() const
-   {  return detail::get_pointer(cont_);  }
+   {  return detail::boost_intrusive_get_pointer(cont_);  }
 
    const real_value_traits *get_real_value_traits() const
    {  return &this->get_container()->get_real_value_traits();  }
@@ -175,8 +176,8 @@ class hashtable_iterator
    private:
    void increment()
    {
-      const Container *cont =  detail::get_pointer(cont_);
-      bucket_type* buckets = detail::get_pointer(cont->bucket_pointer());
+      const Container *cont =  detail::boost_intrusive_get_pointer(cont_);
+      bucket_type* buckets = detail::boost_intrusive_get_pointer(cont->bucket_pointer());
       size_type   buckets_len    = cont->bucket_count();
 
       ++slist_it_;

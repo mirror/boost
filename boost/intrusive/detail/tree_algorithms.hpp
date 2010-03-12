@@ -18,6 +18,7 @@
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <cstddef>
 #include <boost/intrusive/detail/utilities.hpp>
+//iG pending #include <boost/pointer_cast.hpp>
 
 namespace boost {
 namespace intrusive {
@@ -140,7 +141,8 @@ class tree_algorithms
 
    static node_ptr uncast(const_node_ptr ptr)
    {
-      return node_ptr(const_cast<node*>(::boost::intrusive::detail::get_pointer(ptr)));
+      return node_ptr(const_cast<node*>(::boost::intrusive::detail::boost_intrusive_get_pointer(ptr)));
+      //iG pending return node_ptr(boost::const_pointer_cast<node>(ptr));
    }
    /// @endcond
 

@@ -122,10 +122,10 @@ struct smart_ptr_type<T*>
    {  return ptr;}
 };
 
-//!Overload for smart pointers to avoid ADL problems with get_pointer
+//!Overload for smart pointers to avoid ADL problems with boost_intrusive_get_pointer
 template<class Ptr>
 inline typename smart_ptr_type<Ptr>::pointer
-get_pointer(const Ptr &ptr)
+boost_intrusive_get_pointer(const Ptr &ptr)
 {  return smart_ptr_type<Ptr>::get(ptr);   }
 
 //This functor compares a stored value
@@ -319,7 +319,7 @@ struct constptr
    {}
 
    const void *get_ptr() const
-   {  return detail::get_pointer(const_void_ptr_);  }
+   {  return detail::boost_intrusive_get_pointer(const_void_ptr_);  }
 
    ConstVoidPtr const_void_ptr_;
 };
@@ -422,13 +422,13 @@ struct member_hook_traits
    static pointer to_value_ptr(node_ptr n)
    {
       return detail::parent_from_member<T, Hook>
-         (static_cast<Hook*>(detail::get_pointer(n)), P);
+         (static_cast<Hook*>(detail::boost_intrusive_get_pointer(n)), P);
    }
 
    static const_pointer to_value_ptr(const_node_ptr n)
    {
       return detail::parent_from_member<T, Hook>
-         (static_cast<const Hook*>(detail::get_pointer(n)), P);
+         (static_cast<const Hook*>(detail::boost_intrusive_get_pointer(n)), P);
    }
 };
 
@@ -632,6 +632,64 @@ struct node_to_value
    {  return *(this->get_real_value_traits()->to_value_ptr(npointer(&arg))); }
 };
 
+//This is not standard, but should work with all compilers
+union max_align
+{
+   char        char_;
+   short       short_;
+   int         int_;
+   long        long_;
+   #ifdef BOOST_HAS_LONG_LONG
+   long long   long_long_;
+   #endif
+   float       float_;
+   double      double_;
+   long double long_double_;
+   void *      void_ptr_;
+};
+
+template<class T, std::size_t N>
+class array_initializer
+{
+   public:
+   template<class CommonInitializer>
+   array_initializer(const CommonInitializer &init)
+   {
+      char *init_buf = (char*)rawbuf;
+      std::size_t i = 0;
+      try{
+         for(; i != N; ++i){
+            new(init_buf)T(init);
+            init_buf += sizeof(T);
+         }
+      }
+      catch(...){
+         while(i--){
+            init_buf -= sizeof(T);
+            ((T*)init_buf)->~T();
+         }
+         throw;
+      }
+   }
+
+   operator T* ()
+   {  return (T*)(rawbuf);  }
+
+   operator const T*() const
+   {  return (const T*)(rawbuf);  }
+
+   ~array_initializer()
+   {
+      char *init_buf = (char*)rawbuf + N*sizeof(T);
+      for(std::size_t i = 0; i != N; ++i){
+         init_buf -= sizeof(T);
+         ((T*)init_buf)->~T();
+      }
+   }
+
+   private:
+   detail::max_align rawbuf[(N*sizeof(T)-1)/sizeof(detail::max_align)+1];
+};
 
 } //namespace detail
 } //namespace intrusive 
