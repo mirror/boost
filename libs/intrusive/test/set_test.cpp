@@ -147,6 +147,7 @@ class test_main_template<VoidPointer, false>
    }
 };
 
+
 int main( int, char* [] ) 
 {
    test_main_template<void*, false>()();

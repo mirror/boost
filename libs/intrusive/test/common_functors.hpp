@@ -29,7 +29,7 @@ class delete_disposer
    {
       typedef typename std::iterator_traits<Pointer>::value_type value_type;
       BOOST_INTRUSIVE_INVARIANT_ASSERT(( detail::is_same<T, value_type>::value ));
-      delete detail::get_pointer(p); 
+      delete detail::boost_intrusive_get_pointer(p); 
    }
 };
 

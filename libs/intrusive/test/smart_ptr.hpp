@@ -303,10 +303,10 @@ inline void swap (smart_ptr<T> &pt,
    pt2 = ptr;
 }
 
-//!detail::get_pointer() enables boost::mem_fn to recognize smart_ptr.
+//!detail::boost_intrusive_get_pointer() enables boost::mem_fn to recognize smart_ptr.
 //!Never throws.
 template<class T>
-inline T* get_pointer(const smart_ptr<T>  & p)
+inline T* boost_intrusive_get_pointer(const smart_ptr<T>  & p)
 {  return p.get();   }
 
 //!Simulation of static_cast between pointers. Never throws.
