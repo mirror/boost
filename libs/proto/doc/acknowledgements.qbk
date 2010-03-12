@@ -12,6 +12,9 @@ chance on using Proto for their work on Spirit-2 and Karma when Proto was
 little more than a vision. Their requirements and feedback have been
 indespensable.
 
+Thanks to Daniel James for providing a patch to remove the dependence on
+deprecated configuration macros for C++0x features.
+
 Thanks also to the developers of _PETE_. I found many good ideas there.
 
 [endsect]
