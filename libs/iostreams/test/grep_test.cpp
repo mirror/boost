@@ -253,7 +253,7 @@ void test_filter( grep_filter grep,
                   const std::string& output )
 {
     // Count lines in output
-    ptrdiff_t count = std::count(output.begin(), output.end(), '\n');
+    std::ptrdiff_t count = std::count(output.begin(), output.end(), '\n');
 
     // Test as input filter
     {
