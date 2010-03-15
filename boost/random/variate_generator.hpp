@@ -198,8 +198,8 @@ public:
 private:
 #if BOOST_WORKAROUND(__BORLANDC__, <= 0x564)
   typedef typename random::detail::engine_helper<
-    boost::is_integral<typename decorated_engine::result_type>::value,
-    boost::is_integral<typename Distribution::input_type>::value
+    ::boost::is_integral<typename decorated_engine::result_type>::value,
+    ::boost::is_integral<typename Distribution::input_type>::value
     >::BOOST_NESTED_TEMPLATE impl<decorated_engine, typename Distribution::input_type>::type internal_engine_type;
 #else
   enum {

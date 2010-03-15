@@ -16,8 +16,8 @@
 #include <boost/config.hpp>
 
 // Sun seems to have trouble with the use of SFINAE for the
-// templated constructor.
-#if !defined(BOOST_NO_SFINAE) && !defined(__SUNPRO_CC)
+// templated constructor.  So does Borland.
+#if !defined(BOOST_NO_SFINAE) && !defined(__SUNPRO_CC) && !defined(__BORLANDC__)
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
