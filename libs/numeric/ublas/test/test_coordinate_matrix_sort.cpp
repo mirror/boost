@@ -1,4 +1,6 @@
-#define BOOST_UBLAS_NO_ELEMENT_PROXIES
+#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
+# define BOOST_UBLAS_NO_ELEMENT_PROXIES
+#endif
 
 #include<boost/numeric/ublas/matrix_sparse.hpp>
 #include<boost/numeric/ublas/io.hpp>
@@ -51,7 +53,7 @@ BOOST_UBLAS_TEST_DEF( test_coordinate_matrix_sort )
     BOOST_UBLAS_TEST_CHECK( matrix_mask(1,1) == 2.1 );
 
     BOOST_UBLAS_DEBUG_TRACE( "Displaying matrix(0,1)" << matrix_mask(0,1) );
-    BOOST_UBLAS_TEST_CHECK( matrix_mask(1,1) == 1.1 );
+    BOOST_UBLAS_TEST_CHECK( matrix_mask(0,1) == 1.1 );
 
 }
 
