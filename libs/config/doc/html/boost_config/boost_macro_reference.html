@@ -1,6 +1,6 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Boost Macro Reference</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
@@ -2851,6 +2851,53 @@
 <tr>
 <td>
               <p>
+                <code class="computeroutput"><span class="identifier">BOOST_WORKAROUND</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                This macro is used where a compiler specific workaround is required
+                that is not otherwise described by one of the other Boost.Config
+                macros. To use the macro you must first 
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">detail</span><span class="special">/</span><span class="identifier">workaround</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+                usage is then: 
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#if</span> <span class="identifier">BOOST_WORKAROUND</span><span class="special">(</span><span class="identifier">MACRONAME</span><span class="special">,</span> <span class="identifier">CONDITION</span><span class="special">)</span>
+   <span class="comment">// workaround code goes here...
+</span><span class="preprocessor">#else</span>
+   <span class="comment">// Standard conforming code goes here...
+</span><span class="preprocessor">#endif</span>
+</pre>
+<p>
+                where <code class="computeroutput"><span class="identifier">MACRONAME</span></code> is
+                a macro that usually describes the version number to be tested against,
+                and <code class="computeroutput"><span class="identifier">CONDITION</span></code> is
+                a comparison operator followed by a value. For example <code class="computeroutput"><span class="identifier">BOOST_WORKAROUND</span><span class="special">(</span><span class="identifier">BOOST_INTEL</span><span class="special">,</span>
+                <span class="special">&lt;=</span> <span class="number">1010</span><span class="special">)</span></code> would evaluate to <code class="computeroutput"><span class="number">1</span></code> for Intel C++ 10.1 and earlier.
+              </p>
+              <p>
+                The macro can also be used with <code class="computeroutput"><span class="identifier">BOOST_TESTED_AT</span></code>
+                if all current compiler versions exhibit the issue, but the issue
+                is expected to be fixed at some later point.
+              </p>
+              <p>
+                For example <code class="computeroutput"><span class="identifier">BOOST_WORKAROUND</span><span class="special">(</span><span class="identifier">__BORLANDC__</span><span class="special">,</span> <span class="identifier">BOOST_TESTED_AT</span><span class="special">(</span><span class="number">0x590</span><span class="special">))</span></code> would normally evaluate to <code class="computeroutput"><span class="number">1</span></code> for all values of <code class="computeroutput"><span class="identifier">__BORLANDC__</span></code>
+                <span class="emphasis"><em>unless</em></span> the macro <code class="computeroutput"><span class="identifier">BOOST_DETECT_OUTDATED_WORKAROUNDS</span></code>
+                is defined, in which case evaluates to <code class="computeroutput"><span class="special">(</span><span class="identifier">__BORLANDC__</span> <span class="special">&lt;=</span>
+                <span class="number">0x590</span><span class="special">)</span></code>.
+              </p>
+              <p>
+                <span class="bold"><strong>Note</strong></span>: the ultimate source of documentation
+                for this macro is in <a href="../../../../../boost/detail/workaround.hpp" target="_top">boost/detail/workaround.hpp</a>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
                 <code class="computeroutput"><span class="identifier">BOOST_DEDUCED_TYPENAME</span></code>
               </p>
               </td>
@@ -3160,7 +3207,7 @@
               </td>
 <td>
               <p>
-                Describes the boost version number in XXYYZZ format such that: <code class="computeroutput"><span class="special">(</span><span class="identifier">BOOST_VERSION</span>
+                Describes the boost version number in XYYYZZ format such that: <code class="computeroutput"><span class="special">(</span><span class="identifier">BOOST_VERSION</span>
                 <span class="special">%</span> <span class="number">100</span><span class="special">)</span></code> is the sub-minor version, <code class="computeroutput"><span class="special">((</span><span class="identifier">BOOST_VERSION</span>
                 <span class="special">/</span> <span class="number">100</span><span class="special">)</span> <span class="special">%</span> <span class="number">1000</span><span class="special">)</span></code>
                 is the minor version, and <code class="computeroutput"><span class="special">(</span><span class="identifier">BOOST_VERSION</span> <span class="special">/</span>
@@ -3534,7 +3581,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2001 -2007 Beman Dawes, Vesa Karvonen, John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001 -2007 Beman Dawes, Vesa Karvonen, John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -43,9 +43,7 @@ __extension__
 
 int test()
 {
-   llt<mask> m;
-   (void)m;
-   return 0;
+   return llt<mask>::value != (1uLL << 50);
 }
 
 }

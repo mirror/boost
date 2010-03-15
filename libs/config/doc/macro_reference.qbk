@@ -633,6 +633,34 @@ workarounds for compiler/standard library defects.
 [table
 [[Macro           ][Description            ]]
 
+[[`BOOST_WORKAROUND`][
+This macro is used where a compiler specific workaround is required that is not otherwise
+described by one of the other Boost.Config macros.  To use the macro you must first
+``
+#include <boost/detail/workaround.hpp>
+``
+usage is then:
+``
+#if BOOST_WORKAROUND(MACRONAME, CONDITION)
+   // workaround code goes here...
+#else
+   // Standard conforming code goes here...
+#endif
+``
+where `MACRONAME` is a macro that usually describes the version number to be tested against, and `CONDITION`
+is a comparison operator followed by a value.  For example `BOOST_WORKAROUND(BOOST_INTEL, <= 1010)` would 
+evaluate to `1` for Intel C++ 10.1 and earlier.  
+
+The macro can also be used with `BOOST_TESTED_AT` if all
+current compiler versions exhibit the issue, but the issue is expected to be fixed at some later point.  
+
+For example
+`BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x590))` would normally evaluate to `1` for all values
+of `__BORLANDC__` /unless/ the macro `BOOST_DETECT_OUTDATED_WORKAROUNDS` is defined, in which case evaluates to
+`(__BORLANDC__ <= 0x590)`.
+
+[*Note]: the ultimate source of documentation for this macro is in [@../../../../boost/detail/workaround.hpp boost/detail/workaround.hpp].
+]]
 [[`BOOST_DEDUCED_TYPENAME`][
 Some compilers don't support the use of typename for dependent types in deduced
 contexts. This macro expands to nothing on those compilers, and typename
@@ -778,7 +806,7 @@ the only boost macros that should be tested in user code.
 [[Macro            ][Header         ][Description               ]]
 
 [[`BOOST_VERSION`][`<boost/version.hpp>`][
-Describes the boost version number in XXYYZZ format such that:
+Describes the boost version number in XYYYZZ format such that:
 `(BOOST_VERSION % 100)` is the sub-minor version, `((BOOST_VERSION / 100) % 1000)`
 is the minor version, and `(BOOST_VERSION / 100000)` is the major version.
 ]]
