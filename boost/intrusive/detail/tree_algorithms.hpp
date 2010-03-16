@@ -1501,7 +1501,7 @@ class tree_algorithms
 
    static node_ptr vine_to_subtree(node_ptr old_root, std::size_t count)
    {
-      std::size_t leaf_nodes = count + 1 - ((size_t) 1 << floor_log2 (count + 1));
+      std::size_t leaf_nodes = count + 1 - ((std::size_t) 1 << floor_log2 (count + 1));
       std::size_t vine_nodes = count - leaf_nodes;
 
       node_ptr new_root = compress_subtree(old_root, leaf_nodes);
