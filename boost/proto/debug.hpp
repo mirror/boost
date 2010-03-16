@@ -14,9 +14,11 @@
 #include <iomanip>
 #include <iostream>
 #include <typeinfo>
+#include <boost/mpl/assert.hpp>
 #include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/expr.hpp>
 #include <boost/proto/traits.hpp>
+#include <boost/proto/matches.hpp>
 #include <boost/proto/detail/dont_care.hpp>
 
 namespace boost { namespace proto
@@ -205,6 +207,46 @@ namespace boost { namespace proto
     {
         functional::display_expr()(expr);
     }
+
+    /// \brief Assert at compile time that a particular expression
+    ///        matches the specified grammar.
+    ///
+    /// \note Equivalent to <tt>BOOST_MPL_ASSERT((proto::matches\<Expr, Grammar\>))</tt>
+    /// \param expr The Proto expression to check againts <tt>Grammar</tt>
+    template<typename Grammar, typename Expr>
+    void assert_matches(Expr const & /*expr*/)
+    {
+        BOOST_MPL_ASSERT((proto::matches<Expr, Grammar>));
+    }
+
+    /// \brief Assert at compile time that a particular expression
+    ///        does not match the specified grammar.
+    ///
+    /// \note Equivalent to <tt>BOOST_MPL_ASSERT_NOT((proto::matches\<Expr, Grammar\>))</tt>
+    /// \param expr The Proto expression to check againts <tt>Grammar</tt>
+    template<typename Grammar, typename Expr>
+    void assert_matches_not(Expr const & /*expr*/)
+    {
+        BOOST_MPL_ASSERT_NOT((proto::matches<Expr, Grammar>));
+    }
+
+    /// \brief Assert at compile time that a particular expression
+    ///        matches the specified grammar.
+    ///
+    /// \note Equivalent to <tt>proto::assert_matches\<Grammar\>(Expr)</tt>
+    /// \param Expr The Proto expression to check againts <tt>Grammar</tt>
+    /// \param Grammar The grammar used to validate Expr.
+    #define BOOST_PROTO_ASSERT_MATCHES(Expr, Grammar)                                               \
+        boost::proto::assert_matches<Grammar>(Expr)
+
+    /// \brief Assert at compile time that a particular expression
+    ///        does not match the specified grammar.
+    ///
+    /// \note Equivalent to <tt>proto::assert_matches_not\<Grammar\>(Expr)</tt>
+    /// \param Expr The Proto expression to check againts <tt>Grammar</tt>
+    /// \param Grammar The grammar used to validate Expr.
+    #define BOOST_PROTO_ASSERT_MATCHES_NOT(Expr, Grammar)                                           \
+        boost::proto::assert_matches_not<Grammar>(Expr)
 
 }}
 
