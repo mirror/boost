@@ -57,8 +57,7 @@ UNORDERED_AUTO_TEST(use_fwd_declared_trait) {
     boost::unordered_set<int> x;
     BOOST_TEST(sizeof(is_unordered_set_impl(&x)) == sizeof(true_type));
 
-    int dummy;
-    BOOST_TEST(sizeof(is_unordered_set_impl(&dummy)) == sizeof(false_type));
+    BOOST_TEST(sizeof(is_unordered_set_impl((int*) 0)) == sizeof(false_type));
 }
 
 UNORDERED_AUTO_TEST(use_set_fwd_declared_function) {
