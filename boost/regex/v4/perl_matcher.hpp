@@ -468,9 +468,9 @@ private:
    // matching flags in use:
    match_flag_type m_match_flags;
    // how many states we have examined so far:
-   boost::uintmax_t state_count;
+   std::ptrdiff_t state_count;
    // max number of states to examine before giving up:
-   boost::uintmax_t max_state_count;
+   std::ptrdiff_t max_state_count;
    // whether we should ignore case or not:
    bool icase;
    // set to true when (position == last), indicates that we may have a partial match:

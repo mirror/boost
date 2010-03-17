@@ -368,7 +368,10 @@ that computes the replacement string from a function call: either
 `fmt(*this)` which must return a container of `char_type`'s to be used as the
 replacement text, or either `fmt(*this, out)` or `fmt(*this, out, flags)`, both of
 which write the replacement text to `*out`, and then return the new
-OutputIterator position.
+OutputIterator position.  Note that if the formatter is a functor, then it is
+['passed by value]: users that want to pass function objects with internal state
+might want to use [@../../../../doc/html/ref.html Boost.Ref] to wrap the object so 
+that it's passed by reference.
 
 [*Effects]: If `fmt` is either a null-terminated string, or a 
 container of `char_type`'s, then copies the character sequence `[fmt.begin(), fmt.end())` to 
@@ -383,7 +386,7 @@ ECMA-262, ECMAScript Language Specification, Chapter 15 part
 If `fmt` is a function object, then depending on the number of arguments
 the function object accepts, it will either:
 
-* Call `fmt(*this)` and copy the result to `OutputIterator`
+* Call `fmt(*this)` and copy the string returned to `OutputIterator`
 /out/.
 * Call `fmt(*this, out)`.
 * Call `fmt(*this, out, flags)`.

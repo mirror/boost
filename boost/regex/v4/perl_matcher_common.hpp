@@ -98,23 +98,23 @@ void perl_matcher<BidiIterator, Allocator, traits>::estimate_max_state_count(std
    //
    // Calculate NS^2 first:
    //
-   static const boost::uintmax_t k = 100000;
-   boost::uintmax_t dist = boost::re_detail::distance(base, last);
+   static const std::ptrdiff_t k = 100000;
+   std::ptrdiff_t dist = boost::re_detail::distance(base, last);
    if(dist == 0)
       dist = 1;
-   boost::uintmax_t states = re.size();
+   std::ptrdiff_t states = re.size();
    if(states == 0)
       states = 1;
    states *= states;
-   if((std::numeric_limits<boost::uintmax_t>::max)() / dist < states)
+   if((std::numeric_limits<std::ptrdiff_t>::max)() / dist < states)
    {
-      max_state_count = (std::numeric_limits<boost::uintmax_t>::max)() - 2;
+      max_state_count = (std::min)((std::ptrdiff_t)BOOST_REGEX_MAX_STATE_COUNT, (std::numeric_limits<std::ptrdiff_t>::max)() - 2);
       return;
    }
    states *= dist;
-   if((std::numeric_limits<boost::uintmax_t>::max)() - k < states)
+   if((std::numeric_limits<std::ptrdiff_t>::max)() - k < states)
    {
-      max_state_count = (std::numeric_limits<boost::uintmax_t>::max)() - 2;
+      max_state_count = (std::min)((std::ptrdiff_t)BOOST_REGEX_MAX_STATE_COUNT, (std::numeric_limits<std::ptrdiff_t>::max)() - 2);
       return;
    }
    states += k;
@@ -125,15 +125,15 @@ void perl_matcher<BidiIterator, Allocator, traits>::estimate_max_state_count(std
    // Now calculate N^2:
    //
    states = dist;
-   if((std::numeric_limits<boost::uintmax_t>::max)() / dist < states)
+   if((std::numeric_limits<std::ptrdiff_t>::max)() / dist < states)
    {
-      max_state_count = (std::numeric_limits<boost::uintmax_t>::max)() - 2;
+      max_state_count = (std::min)((std::ptrdiff_t)BOOST_REGEX_MAX_STATE_COUNT, (std::numeric_limits<std::ptrdiff_t>::max)() - 2);
       return;
    }
    states *= dist;
-   if((std::numeric_limits<boost::uintmax_t>::max)() - k < states)
+   if((std::numeric_limits<std::ptrdiff_t>::max)() - k < states)
    {
-      max_state_count = (std::numeric_limits<boost::uintmax_t>::max)() - 2;
+      max_state_count = (std::min)((std::ptrdiff_t)BOOST_REGEX_MAX_STATE_COUNT, (std::numeric_limits<std::ptrdiff_t>::max)() - 2);
       return;
    }
    states += k;

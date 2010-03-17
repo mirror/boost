@@ -34,6 +34,7 @@
 #ifndef BOOST_NO_SFINAE
 #include <boost/mpl/has_xxx.hpp>
 #endif
+#include <boost/ref.hpp>
 
 namespace boost{
 
@@ -895,7 +896,7 @@ private:
    // F must be a pointer, a function, or a class with a function call operator:
    //
    BOOST_STATIC_ASSERT((::boost::is_pointer<F>::value || ::boost::is_function<F>::value || ::boost::is_class<F>::value));
-   static formatter_wrapper<F> f;
+   static formatter_wrapper<typename unwrap_reference<F>::type> f;
    static M m;
    static O out;
    static boost::regex_constants::match_flag_type flags;
@@ -963,7 +964,7 @@ struct format_functor3
    template <class OutputIter>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f)
    {
-      return func(m, i, f);
+      return unwrap_ref(func)(m, i, f);
    }
    template <class OutputIter, class Traits>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f, const Traits&)
@@ -983,7 +984,7 @@ struct format_functor2
    template <class OutputIter>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type /*f*/)
    {
-      return func(m, i);
+      return unwrap_ref(func)(m, i);
    }
    template <class OutputIter, class Traits>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f, const Traits&)
@@ -1020,7 +1021,7 @@ struct format_functor1
    template <class OutputIter>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type /*f*/)
    {
-      return do_format_string(func(m), i);
+      return do_format_string(unwrap_ref(func)(m), i);
    }
    template <class OutputIter, class Traits>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f, const Traits&)
