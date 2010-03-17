@@ -634,7 +634,8 @@ from the output.
 [endsect]
 [section Unicode escape]
 
-You can enter any 32-bit unicode character by using `\u` followed by its 4 digit
+You can enter any 16-bit unicode character by using `\u` followed by its 4 digit
+hexadecimal code, or a 32-bit character by using `\U` followed by an 8 digit
 hexadecimal code. eg.
 
 [pre'''
@@ -2134,8 +2135,8 @@ boostbook standalone
     :
         my_doc
     :
-        <xsl:param>boost.image.src=images/my_project_logo.png
-        <xsl:param>boost.image.alt="\\"My Project\\""
+        <xsl:param>boost.image.src\=images/my_project_logo.png
+        <xsl:param>boost.image.alt\="\\"My Project\\""
         <xsl:param>boost.image.w=100
         <xsl:param>boost.image.h=50
         <xsl:param>nav.layout=none
