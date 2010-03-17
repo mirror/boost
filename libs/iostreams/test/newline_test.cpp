@@ -163,30 +163,58 @@ void read_newline_filter()
     BOOST_CHECK(test_input_filter(newline_filter(newline::mac), mixed, mac));
 }
 
+// Verify that a filter works as expected with both a non-blocking sink
+// and a normal output stream.
+//
+// test_output_filter only tests for a non-blocking sink.
+// TODO: Other tests should probably test with an output stream.
+
+template<typename Filter>
+bool my_test_output_filter(Filter filter, 
+                         const std::string& input, 
+                         const std::string& output)
+{
+    const std::streamsize default_increment = 5;
+
+    for ( int inc = default_increment;
+          inc < default_increment * 40; 
+          inc += default_increment )
+    {
+        io::array_source src(input.data(), input.data() + input.size());
+
+        std::ostringstream stream;
+        io::copy(src, compose(filter, stream));
+        if (stream.str() != output )
+            return false;
+
+    }
+    return test_output_filter(filter, input, output);
+}
+
 void write_newline_filter()
 {
     using namespace io;
 
         // Test converting to posix format.
 
-    BOOST_CHECK(test_output_filter(newline_filter(newline::posix), posix, posix));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::posix), dos, posix));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::posix), mac, posix));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::posix), mixed, posix));
+    BOOST_CHECK(my_test_output_filter(newline_filter(newline::posix), posix, posix));
+    BOOST_CHECK(my_test_output_filter(newline_filter(newline::posix), dos, posix));
+    BOOST_CHECK(my_test_output_filter(newline_filter(newline::posix), mac, posix));
+    BOOST_CHECK(my_test_output_filter(newline_filter(newline::posix), mixed, posix));
 
         // Test converting to dos format.
 
-    BOOST_CHECK(test_output_filter(newline_filter(newline::dos), posix, dos));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::dos), dos, dos));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::dos), mac, dos));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::dos), mixed, dos));
+    BOOST_CHECK(my_test_output_filter(newline_filter(newline::dos), posix, dos));
+    BOOST_CHECK(my_test_output_filter(newline_filter(newline::dos), dos, dos));
+    BOOST_CHECK(my_test_output_filter(newline_filter(newline::dos), mac, dos));
+    BOOST_CHECK(my_test_output_filter(newline_filter(newline::dos), mixed, dos));
 
         // Test converting to mac format.
 
-    BOOST_CHECK(test_output_filter(newline_filter(newline::mac), posix, mac));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::mac), dos, mac));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::mac), mac, mac));
-    BOOST_CHECK(test_output_filter(newline_filter(newline::mac), mixed, mac));
+    BOOST_CHECK(my_test_output_filter(newline_filter(newline::mac), posix, mac));
+    BOOST_CHECK(my_test_output_filter(newline_filter(newline::mac), dos, mac));
+    BOOST_CHECK(my_test_output_filter(newline_filter(newline::mac), mac, mac));
+    BOOST_CHECK(my_test_output_filter(newline_filter(newline::mac), mixed, mac));
 }
 
 void test_input_against_flags(int flags, const std::string& input, bool read)

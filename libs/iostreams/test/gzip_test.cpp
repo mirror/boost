@@ -83,10 +83,28 @@ void multiple_member_test()
     BOOST_CHECK(std::equal(data.begin(), data.end(), dest.begin() + dest.size() / 2));
 }
 
+void array_source_test()
+{
+    std::string data = "simple test string.";
+    std::string encoded;
+
+    filtering_ostream out;
+    out.push(gzip_compressor());
+    out.push(io::back_inserter(encoded));
+    io::copy(make_iterator_range(data), out);
+
+    std::string res;
+    io::array_source src(encoded.data(),encoded.length());
+    io::copy(io::compose(io::gzip_decompressor(), src), io::back_inserter(res));
+    
+    BOOST_CHECK_EQUAL(data, res);
+}
+
 test_suite* init_unit_test_suite(int, char* []) 
 {
     test_suite* test = BOOST_TEST_SUITE("gzip test");
     test->add(BOOST_TEST_CASE(&compression_test));
     test->add(BOOST_TEST_CASE(&multiple_member_test));
+    test->add(BOOST_TEST_CASE(&array_source_test));
     return test;
 }

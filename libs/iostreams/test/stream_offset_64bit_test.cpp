@@ -56,15 +56,30 @@ void stream_offset_64bit_test()
               << hex
               << static_cast<unsigned int>(off >> 32) 
               << " and (off & 0xFFFFFFFF) == 0x"
-              << static_cast<unsigned int>(off & 0xFFFFFFFF);
+              << static_cast<unsigned int>(off & 0xFFFFFFFF)
+	      << std::endl;
             BOOST_REQUIRE_MESSAGE(0, s.str().c_str());
         }
     }
+}
+
+void stream_offset_64bit_test2()
+{
+    boost::int64_t val = boost::int64_t(1) << 31;
+    std::streampos pos = boost::iostreams::offset_to_position(val);
+    pos -= 2;
+    BOOST_CHECK_EQUAL(val - 2, boost::iostreams::position_to_offset(pos));
+
+    val = -val;
+    pos = boost::iostreams::offset_to_position(val);
+    pos += 2;
+    BOOST_CHECK_EQUAL(val + 2, boost::iostreams::position_to_offset(pos));
 }
 
 test_suite* init_unit_test_suite(int, char* [])
 {
     test_suite* test = BOOST_TEST_SUITE("stream_offset 64-bit test");
     test->add(BOOST_TEST_CASE(&stream_offset_64bit_test));
+    test->add(BOOST_TEST_CASE(&stream_offset_64bit_test2));
     return test;
 }
