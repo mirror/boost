@@ -1,11 +1,5 @@
 #ifndef BOOST_THROW_EXCEPTION_HPP_INCLUDED
 #define BOOST_THROW_EXCEPTION_HPP_INCLUDED
-#if defined(__GNUC__) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
-#pragma GCC system_header
-#endif
-#if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
-#pragma warning(push,1)
-#endif
 
 // MS compatible compilers support #pragma once
 
@@ -26,6 +20,7 @@
 //  http://www.boost.org/libs/utility/throw_exception.html
 //
 
+#include <boost/exception/detail/attribute_noreturn.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/config.hpp>
 #include <exception>
@@ -76,7 +71,7 @@ void throw_exception( std::exception const & e ); // user defined
 
 inline void throw_exception_assert_compatibility( std::exception const & ) { }
 
-template<class E> inline void throw_exception( E const & e )
+template<class E> BOOST_ATTRIBUTE_NORETURN inline void throw_exception( E const & e )
 {
     //All boost exceptions are required to derive from std::exception,
     //to ensure compatibility with BOOST_NO_EXCEPTIONS.
@@ -93,7 +88,4 @@ template<class E> inline void throw_exception( E const & e )
 
 } // namespace boost
 
-#if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
-#pragma warning(pop)
-#endif
 #endif // #ifndef BOOST_THROW_EXCEPTION_HPP_INCLUDED
