@@ -938,6 +938,16 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <functionname alt="boost::proto::assert_matches">proto::assert_matches()</functionname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <functionname alt="boost::proto::assert_matches_not">proto::assert_matches_not()</functionname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <functionname alt="boost::proto::child">proto::child()</functionname>
         </computeroutput>
       </listitem>
