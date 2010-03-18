@@ -66,6 +66,9 @@
         <a href="#debug">Debug Support</a>
       </dt>
       <dt>
+        <a href="#interprocess">Compatibility with Interprocess library</a>
+      </dt>
+      <dt>
         <a href="#examples">More Examples</a>
       </dt>
       <dt>
@@ -594,7 +597,18 @@ template &lt;class T, class Alloc&gt;
     </p>
     <p>
       The debug support is enabled only in the debug mode (when the <code>NDEBUG</code> is not defined). It can also be
-      explicitly disabled by defining <code>BOOST_CB_DISABLE_DEBUG</code> macro.
+      explicitly disabled (only for <code>circular_buffer</code>) by defining <code>BOOST_CB_DISABLE_DEBUG</code>
+      macro.
+    </p>
+    <h2>
+      <a name="intreprocess" id="interprocess">Compatibility with Interprocess library</a>
+    </h2>
+    <p>
+      The <code>circular_buffer</code> is compatible with the <a href="../../../doc/html/interprocess.html">Boost
+      Interprocess</a> library used for interprocess communication. Considering that the <code>circular_buffer</code>'s
+      debug support relies on 'raw' pointers - which is not permited by the Interprocess library - the code has to
+      compiled with <code>-DBOOST_CB_DISABLE_DEBUG</code> or <code>-DNDEBUG</code> (which disables the
+      <a href="#debug">Debug Support</a>). Not doing that will cause the compilation to fail.
     </p>
     <h2>
       <a name="examples" id="examples">More Examples</a>
