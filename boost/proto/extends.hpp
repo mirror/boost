@@ -187,6 +187,37 @@ namespace boost { namespace proto
         typedef void proto_is_aggregate_;                                                           \
         /**< INTERNAL ONLY */
 
+    #define BOOST_PROTO_EXTENDS_ASSIGN_DEFAULT(This)                                                \
+        typename boost::result_of<                                                                  \
+            proto_domain(                                                                           \
+                boost::proto::expr<                                                                 \
+                    boost::proto::tag::assign                                                       \
+                  , boost::proto::list2<                                                            \
+                        This &                                                                      \
+                      , This const &                                                                \
+                    >                                                                               \
+                  , 2                                                                               \
+                >                                                                                   \
+            )                                                                                       \
+        >::type const                                                                               \
+        operator =(This const &a)                                                                   \
+        {                                                                                           \
+            typedef boost::proto::expr<                                                             \
+                boost::proto::tag::assign                                                           \
+              , boost::proto::list2<                                                                \
+                    This &                                                                          \
+                  , This const &                                                                    \
+                >                                                                                   \
+              , 2                                                                                   \
+            > that_type;                                                                            \
+            that_type that = {                                                                      \
+                *this                                                                               \
+              , a                                                                                   \
+            };                                                                                      \
+            return proto_domain()(that);                                                            \
+        }                                                                                           \
+        /**/
+
         /// INTERNAL ONLY
         ///
     #define BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(Const)                                                 \
@@ -251,15 +282,32 @@ namespace boost { namespace proto
         }                                                                                           \
         /**/
 
+    #define BOOST_PROTO_EXTENDS_ASSIGN_CONST_(This)                                                 \
+        BOOST_PROTO_EXTENDS_ASSIGN_DEFAULT(This)                                                    \
+        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(1)                                                         \
+        /**/
+
+    #define BOOST_PROTO_EXTENDS_ASSIGN_NON_CONST_(This)                                             \
+        BOOST_PROTO_EXTENDS_ASSIGN_DEFAULT(This)                                                    \
+        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(0)                                                         \
+        /**/
+
+    #define BOOST_PROTO_EXTENDS_ASSIGN_(This)                                                       \
+        BOOST_PROTO_EXTENDS_ASSIGN_DEFAULT(This)                                                    \
+        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(0)                                                         \
+        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(1)                                                         \
+        /**/
+
     #define BOOST_PROTO_EXTENDS_ASSIGN_CONST()                                                      \
-        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(1)
+        BOOST_PROTO_EXTENDS_ASSIGN_CONST_(proto_derived_expr)                                       \
+        /**/
 
     #define BOOST_PROTO_EXTENDS_ASSIGN_NON_CONST()                                                  \
-        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(0)
+        BOOST_PROTO_EXTENDS_ASSIGN_NON_CONST_(proto_derived_expr)                                   \
+        /**/
 
     #define BOOST_PROTO_EXTENDS_ASSIGN()                                                            \
-        BOOST_PROTO_EXTENDS_ASSIGN_CONST()                                                          \
-        BOOST_PROTO_EXTENDS_ASSIGN_NON_CONST()                                                      \
+        BOOST_PROTO_EXTENDS_ASSIGN_(proto_derived_expr)                                             \
         /**/
 
         /// INTERNAL ONLY
@@ -465,7 +513,7 @@ namespace boost { namespace proto
             {}
 
             BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, Domain)
-            BOOST_PROTO_EXTENDS_ASSIGN_CONST()
+            BOOST_PROTO_EXTENDS_ASSIGN_CONST_(extends)
             BOOST_PROTO_EXTENDS_SUBSCRIPT_CONST()
 
             // Instead of using BOOST_PROTO_EXTENDS_FUNCTION, which uses
@@ -508,7 +556,7 @@ namespace boost { namespace proto
             {}
 
             BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, Domain)
-            BOOST_PROTO_EXTENDS_ASSIGN()
+            BOOST_PROTO_EXTENDS_ASSIGN_(extends)
             BOOST_PROTO_EXTENDS_SUBSCRIPT()
 
             // Instead of using BOOST_PROTO_EXTENDS_FUNCTION, which uses
