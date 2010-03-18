@@ -34,7 +34,9 @@
 </pre>
 <p>
         <span class="bold"><strong>type:</strong></span> The same type as <code class="computeroutput"><span class="identifier">T</span></code>,
-        but with any pointer modifier removed.
+        but with any pointer modifier removed. Note that pointers to members are
+        left unchanged: removing the pointer decoration would result in an invalid
+        type.
       </p>
 <p>
         <span class="bold"><strong>C++ Standard Reference:</strong></span> 8.3.1.
@@ -53,7 +55,7 @@
         or <code class="computeroutput"> <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
       </p>
 <div class="table">
-<a name="id811650"></a><p class="title"><b>Table&#160;1.22.&#160;Examples</b></p>
+<a name="id830292"></a><p class="title"><b>Table&#160;1.22.&#160;Examples</b></p>
 <div class="table-contents"><table class="table" summary="Examples">
 <colgroup>
 <col>

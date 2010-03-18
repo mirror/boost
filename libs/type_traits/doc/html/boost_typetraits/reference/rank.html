@@ -36,8 +36,8 @@
         number of array dimensions in type <code class="computeroutput"><span class="identifier">T</span></code>.
       </p>
 <p>
-        If <code class="computeroutput"><span class="identifier">T</span></code> is not an array type,
-        then <code class="computeroutput"><span class="identifier">RANK</span><span class="special">(</span><span class="identifier">T</span><span class="special">)</span></code> is zero.
+        If <code class="computeroutput"><span class="identifier">T</span></code> is not a (built-in)
+        array type, then <code class="computeroutput"><span class="identifier">RANK</span><span class="special">(</span><span class="identifier">T</span><span class="special">)</span></code> is zero.
       </p>
 <p>
         <span class="bold"><strong>Header:</strong></span> <code class="computeroutput"> <span class="preprocessor">#include</span>
@@ -92,6 +92,17 @@
 <p>
             <code class="computeroutput"><span class="identifier">rank</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">*&gt;::</span><span class="identifier">value</span></code> is an integral constant expression
             that evaluates to <span class="emphasis"><em>0</em></span>.
+          </p>
+<p>
+        </p>
+</blockquote></div>
+<div class="blockquote"><blockquote class="blockquote">
+<p>
+          </p>
+<p>
+            <code class="computeroutput"><span class="identifier">rank</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">value</span></code>
+            is an integral constant expression that evaluates to <span class="emphasis"><em>0</em></span>:
+            <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code> is a class type and <span class="bold"><strong>not an array type</strong></span>!
           </p>
 <p>
         </p>
