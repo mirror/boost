@@ -607,7 +607,7 @@ template &lt;class T, class Alloc&gt;
       The <code>circular_buffer</code> is compatible with the <a href="../../../doc/html/interprocess.html">Boost
       Interprocess</a> library used for interprocess communication. Considering that the <code>circular_buffer</code>'s
       debug support relies on 'raw' pointers - which is not permited by the Interprocess library - the code has to
-      compiled with <code>-DBOOST_CB_DISABLE_DEBUG</code> or </code>-DNDEBUG</code> (which disables the
+      compiled with <code>-DBOOST_CB_DISABLE_DEBUG</code> or <code>-DNDEBUG</code> (which disables the
       <a href="#debug">Debug Support</a>). Not doing that will cause the compilation to fail.
     </p>
     <h2>
