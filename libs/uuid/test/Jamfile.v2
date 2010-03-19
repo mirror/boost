@@ -15,7 +15,7 @@ test-suite uuid :
     [ compile compile_name_generator.cpp ]
     [ compile compile_string_generator.cpp ]
     [ compile compile_random_generator.cpp ]
-    
+
     # test inclucing all .hpp files in 2 translations units
     # to look for issues when using multiple translation units
     # eg. missing inline on a global functionstate is not missing

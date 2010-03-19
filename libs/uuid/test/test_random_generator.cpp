@@ -56,6 +56,17 @@ int main(int, char*[])
     // random device
     //basic_random_generator<boost::random_device> uuid_gen5;
     //check_random_generator(uuid_gen5);
+    
+    // there was a bug in basic_random_generator where it did not
+    // produce very random numbers.  This checks for that bug.
+    uuid u = random_generator()();
+    if ( (u.data[4] == u.data[12]) &&
+         (u.data[5] == u.data[9] && u.data[5] == u.data[13]) &&
+         (u.data[7] == u.data[11] && u.data[7] == u.data[15]) &&
+         (u.data[10] == u.data[14]) )
+    {
+        BOOST_ERROR("basic_random_generator is not producing random uuids");
+    }
 
     return boost::report_errors();
 }

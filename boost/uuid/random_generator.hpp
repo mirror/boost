@@ -87,6 +87,7 @@ public:
         for (uuid::iterator it=u.begin(); it!=u.end(); ++it, ++i) {
             if (i==sizeof(unsigned long)) {
                 random_value = generator();
+                i = 0;
             }
 
             *it = ((random_value >> (i*8)) & 0xFF);
