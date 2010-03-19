@@ -64,7 +64,7 @@ namespace boost { namespace proto
               : base_type(terminal_type::make(u.get()))
             {}
 
-            using base_type::operator =;
+            BOOST_PROTO_EXTENDS_USING_ASSIGN(literal)
 
             reference get()
             {

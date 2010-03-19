@@ -324,7 +324,7 @@ We use this domain type when extending the _expr_ type, which we do with the _ex
 
         // This is usually needed because by default, the compiler-
         // generated assignment operator hides extends<>::operator=
-        using base_type::operator =;
+        BOOST_PROTO_EXTENDS_USING_ASSIGN(calculator)
 
         typedef double result_type;
 
@@ -351,7 +351,7 @@ We want calculator expressions to be function objects, so we have to define an `
 
 You might be thinking that this expression extension business is unnecessarily complicated. After all, isn't this why C++ supports inheritance? Why can't [^calculator<Expr>] just inherit from [^Expr] directly? The reason is because [^Expr], which presumably is an instantiation of _expr_, has expression template-building operator overloads that will be incorrect for derived types. They will store `*this` by reference to `proto::expr<>`, effectively slicing off any derived parts. _extends_ gives your derived types operator overloads that don't slice off your additional members.]
 
-Although not strictly necessary in this case, we bring `extends<>::operator=` into scope with a `using` declaration. This is really only necessary if you want expressions like `_1 = 3` to create a lazily evaluated assignment. _extends_ defines the appropriate `operator=` for you, but the compiler-generated `calculator<>::operator=` will hide it unless you make it available with the `using` declaration.
+Although not strictly necessary in this case, we bring `extends<>::operator=` into scope with the `BOOST_PROTO_EXTENDS_USING_ASSIGN()` macro. This is really only necessary if you want expressions like `_1 = 3` to create a lazily evaluated assignment. _extends_ defines the appropriate `operator=` for you, but the compiler-generated `calculator<>::operator=` will hide it unless you make it available with the macro.
 
 Note that in the implementation of `calculator<>::operator()`, we evaluate the expression with the `calculator_context` we defined earlier. As we saw before, the context is what gives the operators their meaning. In the case of the calculator, the context is also what defines the meaning of the placeholder terminals.
 
