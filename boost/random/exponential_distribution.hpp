@@ -25,7 +25,11 @@
 
 namespace boost {
 
-// exponential distribution: p(x) = lambda * exp(-lambda * x)
+/**
+ * The exponential distribution has a single parameter lambda.
+ *
+ * It has \f$p(x) = \lambda e^{-\lambda x}\f$
+ */
 template<class RealType = double>
 class exponential_distribution
 {

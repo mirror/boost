@@ -50,6 +50,7 @@
 template<class URNG, class Dist>
 void instantiate_dist(URNG& urng, const char * name, const Dist& dist)
 {
+  std::cout << "Testing " << name << std::endl;
   // this makes a copy of urng
   boost::variate_generator<URNG, Dist> gen(urng, dist);
 
@@ -115,6 +116,7 @@ void instantiate_dist(URNG& urng, const char * name, const Dist& dist)
 template<class URNG, class RealType>
 void instantiate_real_dist(URNG& urng, RealType /* ignored */)
 {
+  std::cout << "Testing real distributions with " << typeid(RealType).name() << std::endl;
   instantiate_dist(urng, "uniform_01",
                    boost::uniform_01<RealType>());
   instantiate_dist(urng, "uniform_real",
@@ -277,6 +279,8 @@ void instantiate_urng(const std::string & s, const URNG & u, const ResultType & 
 
 #ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
   // Streamable concept not supported for broken compilers
+
+  std::cout << "Testing stream operators" << std::endl;
 
   // advance a little so that state is relatively arbitrary
   for(int i = 0; i < 9307; ++i)

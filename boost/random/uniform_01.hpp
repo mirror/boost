@@ -27,6 +27,53 @@
 
 namespace boost {
 
+#ifdef BOOST_RANDOM_DOXYGEN
+
+/**
+ * The distribution function uniform_01 models a \random_distribution.
+ * On each invocation, it returns a random floating-point value
+ * uniformly distributed in the range [0..1).
+ *
+ * The template parameter RealType shall denote a float-like value type
+ * with support for binary operators +, -, and /.
+ *
+ * Note: The current implementation is buggy, because it may not fill
+ * all of the mantissa with random bits. I'm unsure how to fill a
+ * (to-be-invented) @c boost::bigfloat class with random bits efficiently.
+ * It's probably time for a traits class.
+ */
+template<class RealType = double>
+class uniform_01
+{
+public:
+  typedef RealType input_type;
+  typedef RealType result_type;
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const;
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const;
+  void reset();
+
+  template<class Engine>
+  result_type operator()(Engine& eng);
+
+#ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const new_uniform_01&)
+  {
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, new_uniform_01&)
+  {
+    return is;
+  }
+#endif
+};
+
+#else
+
 namespace detail {
 
 template<class RealType>
@@ -216,6 +263,8 @@ public:
   }
 #endif
 };
+
+#endif
 
 } // namespace boost
 

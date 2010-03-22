@@ -26,6 +26,15 @@
 namespace boost {
 namespace random {
 
+/**
+ * The class template \discard_block is a model of
+ * \pseudo_random_number_generator.  It modifies
+ * another generator by discarding parts of its output.
+ * Out of every block of @c r results, the first @c p
+ * will be returned and the rest discarded.
+ *
+ * Requires: 0 < p <= r
+ */
 template<class UniformRandomNumberGenerator, unsigned int p, unsigned int r>
 class discard_block
 {
