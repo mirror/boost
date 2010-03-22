@@ -369,6 +369,11 @@ namespace boost
             return iterator(table_.erase_range(get(first), get(last)));
         }
 
+        void quick_erase(const_iterator position)
+        {
+            table_.erase(get(position));
+        }
+
         void erase_return_void(const_iterator position)
         {
             table_.erase(get(position));
@@ -905,6 +910,11 @@ namespace boost
         iterator erase(const_iterator first, const_iterator last)
         {
             return iterator(table_.erase_range(get(first), get(last)));
+        }
+
+        void quick_erase(const_iterator position)
+        {
+            table_.erase(get(position));
         }
 
         void erase_return_void(const_iterator position)
