@@ -10,6 +10,7 @@
 #define BOOST_PROTO_EXTENDS_HPP_EAN_11_1_2006
 
 #include <cstddef> // for offsetof
+#include <boost/preprocessor/facilities/empty.hpp>
 #include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/preprocessor/control/if.hpp>
 #include <boost/preprocessor/arithmetic/inc.hpp>
@@ -29,6 +30,12 @@
 #include <boost/proto/args.hpp>
 #include <boost/proto/traits.hpp>
 #include <boost/proto/generate.hpp>
+
+#ifdef _MSC_VER
+#define BOOST_PROTO_DISABLE_MSVC_C4522 __pragma(warning(disable: 4522))
+#else
+#define BOOST_PROTO_DISABLE_MSVC_C4522 
+#endif
 
 namespace boost { namespace proto
 {
@@ -187,6 +194,68 @@ namespace boost { namespace proto
         typedef void proto_is_aggregate_;                                                           \
         /**< INTERNAL ONLY */
 
+    #define BOOST_PROTO_EXTENDS_COPY_ASSIGN_(This, Typename)                                        \
+        BOOST_PROTO_DISABLE_MSVC_C4522                                                              \
+        Typename() boost::result_of<                                                                \
+            Typename() This::proto_domain(                                                          \
+                boost::proto::expr<                                                                 \
+                    boost::proto::tag::assign                                                       \
+                  , boost::proto::list2<                                                            \
+                        This &                                                                      \
+                      , This &                                                                      \
+                    >                                                                               \
+                  , 2                                                                               \
+                >                                                                                   \
+            )                                                                                       \
+        >::type const                                                                               \
+        operator =(This &a)                                                                         \
+        {                                                                                           \
+            typedef boost::proto::expr<                                                             \
+                boost::proto::tag::assign                                                           \
+              , boost::proto::list2<                                                                \
+                    This &                                                                          \
+                  , This &                                                                          \
+                >                                                                                   \
+              , 2                                                                                   \
+            > that_type;                                                                            \
+            that_type that = {                                                                      \
+                *this                                                                               \
+              , a                                                                                   \
+            };                                                                                      \
+            return Typename() This::proto_domain()(that);                                           \
+        }                                                                                           \
+                                                                                                    \
+        BOOST_PROTO_DISABLE_MSVC_C4522                                                              \
+        Typename() boost::result_of<                                                                \
+            Typename() This::proto_domain(                                                          \
+                boost::proto::expr<                                                                 \
+                    boost::proto::tag::assign                                                       \
+                  , boost::proto::list2<                                                            \
+                        This &                                                                      \
+                      , This const &                                                                \
+                    >                                                                               \
+                  , 2                                                                               \
+                >                                                                                   \
+            )                                                                                       \
+        >::type const                                                                               \
+        operator =(This const &a)                                                                   \
+        {                                                                                           \
+            typedef boost::proto::expr<                                                             \
+                boost::proto::tag::assign                                                           \
+              , boost::proto::list2<                                                                \
+                    This &                                                                          \
+                  , This const &                                                                    \
+                >                                                                                   \
+              , 2                                                                                   \
+            > that_type;                                                                            \
+            that_type that = {                                                                      \
+                *this                                                                               \
+              , a                                                                                   \
+            };                                                                                      \
+            return Typename() This::proto_domain()(that);                                           \
+        }                                                                                           \
+        /**/
+
         /// INTERNAL ONLY
         ///
     #define BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(Const)                                                 \
@@ -251,15 +320,32 @@ namespace boost { namespace proto
         }                                                                                           \
         /**/
 
+    #define BOOST_PROTO_EXTENDS_ASSIGN_CONST_()                                                     \
+        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(1)                                                         \
+        /**/
+
+    #define BOOST_PROTO_EXTENDS_ASSIGN_NON_CONST_()                                                 \
+        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(0)                                                         \
+        /**/
+
+    #define BOOST_PROTO_EXTENDS_ASSIGN_()                                                           \
+        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(0)                                                         \
+        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(1)                                                         \
+        /**/
+
     #define BOOST_PROTO_EXTENDS_ASSIGN_CONST()                                                      \
-        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(1)
+        BOOST_PROTO_EXTENDS_COPY_ASSIGN_(proto_derived_expr, BOOST_PROTO_TYPENAME)                  \
+        BOOST_PROTO_EXTENDS_ASSIGN_CONST_()                                                         \
+        /**/
 
     #define BOOST_PROTO_EXTENDS_ASSIGN_NON_CONST()                                                  \
-        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(0)
+        BOOST_PROTO_EXTENDS_COPY_ASSIGN_(proto_derived_expr, BOOST_PROTO_TYPENAME)                  \
+        BOOST_PROTO_EXTENDS_ASSIGN_NON_CONST_()                                                     \
+        /**/
 
     #define BOOST_PROTO_EXTENDS_ASSIGN()                                                            \
-        BOOST_PROTO_EXTENDS_ASSIGN_CONST()                                                          \
-        BOOST_PROTO_EXTENDS_ASSIGN_NON_CONST()                                                      \
+        BOOST_PROTO_EXTENDS_COPY_ASSIGN_(proto_derived_expr, BOOST_PROTO_TYPENAME)                  \
+        BOOST_PROTO_EXTENDS_ASSIGN_()                                                               \
         /**/
 
         /// INTERNAL ONLY
@@ -412,6 +498,21 @@ namespace boost { namespace proto
         BOOST_PROTO_EXTENDS_FUNCTION()                                                              \
         /**/
 
+    #define BOOST_PROTO_EXTENDS_USING_ASSIGN(Derived)                                               \
+        typedef typename Derived::proto_extends proto_extends;                                      \
+        using proto_extends::operator =;                                                            \
+        BOOST_PROTO_EXTENDS_COPY_ASSIGN_(Derived, BOOST_PROTO_TYPENAME)                             \
+        /**/
+
+    #define BOOST_PROTO_EXTENDS_USING_ASSIGN_NON_DEPENDENT(Derived)                                 \
+        typedef Derived::proto_extends proto_extends;                                               \
+        using proto_extends::operator =;                                                            \
+        BOOST_PROTO_EXTENDS_COPY_ASSIGN_(Derived, BOOST_PP_EMPTY)                                   \
+        /**/
+
+    /// INTERNAL ONLY
+    #define BOOST_PROTO_TYPENAME() typename
+
     namespace exprns_
     {
         /// \brief Empty type to be used as a dummy template parameter of
@@ -464,8 +565,9 @@ namespace boost { namespace proto
               : proto_expr_(expr_)
             {}
 
+            typedef extends proto_extends;
             BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, Domain)
-            BOOST_PROTO_EXTENDS_ASSIGN_CONST()
+            BOOST_PROTO_EXTENDS_ASSIGN_CONST_()
             BOOST_PROTO_EXTENDS_SUBSCRIPT_CONST()
 
             // Instead of using BOOST_PROTO_EXTENDS_FUNCTION, which uses
@@ -507,8 +609,9 @@ namespace boost { namespace proto
               : proto_expr_(expr_)
             {}
 
+            typedef extends proto_extends;
             BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, Domain)
-            BOOST_PROTO_EXTENDS_ASSIGN()
+            BOOST_PROTO_EXTENDS_ASSIGN_()
             BOOST_PROTO_EXTENDS_SUBSCRIPT()
 
             // Instead of using BOOST_PROTO_EXTENDS_FUNCTION, which uses
@@ -555,7 +658,7 @@ namespace boost { namespace proto
             BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXTENDS_CHILD, ~)
             typedef void proto_is_aggregate_; /**< INTERNAL ONLY */
 
-            BOOST_PROTO_EXTENDS_ASSIGN()
+            BOOST_PROTO_EXTENDS_ASSIGN_()
             BOOST_PROTO_EXTENDS_SUBSCRIPT()
             BOOST_PROTO_EXTENDS_FUNCTION()
 

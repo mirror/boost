@@ -1,0 +1,76 @@
+[/
+ / Copyright (c) 2008 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[section:release_notes Appendix A: Release Notes]
+
+[/=================]
+[heading Boost 1.43]
+[/=================]
+
+In Boost 1.43, the recommended usage of _extends_ changed slightly. The new
+usage looks like this:
+
+  // my_expr is an expression extension of the Expr parameter
+  template<typename Expr>
+  struct my_expr
+    : proto::extends<Expr, my_expr<Expr>, my_domain>
+  {
+      my_expr(Expr const &expr = Expr())
+        : proto::extends<Expr, my_expr, my_domain>(expr)
+      {}
+
+      // NEW: use the following macro to bring
+      // proto::extends::operator= into scope.
+      BOOST_PROTO_EXTENDS_USING_ASSIGN(my_expr)
+  };
+
+The new thing is the use of the [^[macroref BOOST_PROTO_EXTENDS_USING_ASSIGN]()] macro.
+To allow assignment operators to build expression trees, _extends_ overloads the
+assignment operator. However, for the `my_expr` template, the compiler generates
+a default copy assignment operator that hides the ones in _extends_. This is often
+not desired (although it depends on the syntax you want to allow).
+
+Previously, the recommended usage was to do this:
+
+  // my_expr is an expression extension of the Expr parameter
+  template<typename Expr>
+  struct my_expr
+    : proto::extends<Expr, my_expr<Expr>, my_domain>
+  {
+      my_expr(Expr const &expr = Expr())
+        : proto::extends<Expr, my_expr, my_domain>(expr)
+      {}
+
+      // OLD: don't do it like this anymore.
+      using proto::extends<Expr, my_expr, my_domain>::operator=;
+  };
+
+While this works in the majority of cases, it still doesn't suppress the
+implicit generation of the default assignment operator. As a result, expressions
+of the form `a = b` could either build an expression template or do a copy
+assignment depending on whether the types of `a` and `b` happen to be the
+same. That can lead to subtle bugs, so the behavior was changed.
+
+The [^[macroref BOOST_PROTO_EXTENDS_USING_ASSIGN]()] brings into scope the
+assignment operators defined in _extends_ as well as suppresses the generation
+of the copy assignment operator.
+
+Also note that the _literal_ class template, which uses _extends_, has been chaged
+to use [^[macroref BOOST_PROTO_EXTENDS_USING_ASSIGN]()]. The implications are
+highlighted in the sample code below:
+
+  proto::literal<int> a(1), b(2); // two non-const proto literals
+  proto::literal<int> const c(3); // a const proto literal
+
+  a = b; // No-op. Builds an expression tree and discards it.
+         // Same behavior in 1.42 and 1.43.
+  
+  a = c; // CHANGE! In 1.42, this performed copy assignment, causing
+         // a's value to change to 3. In 1.43, the behavior is now
+         // the same as above: build and discard an expression tree.
+
+[endsect]

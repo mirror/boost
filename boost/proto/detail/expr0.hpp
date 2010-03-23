@@ -133,6 +133,25 @@
         /// Assignment
         ///
         /// \param a The rhs.
+        /// \return A new \c expr\<\> node representing an assignment of \c that to \c *this.
+        proto::expr<
+            proto::tag::assign
+          , list2<expr &, expr const &>
+          , 2
+        > const
+        operator =(expr const &a)
+        {
+            proto::expr<
+                proto::tag::assign
+              , list2<expr &, expr const &>
+              , 2
+            > that = {*this, a};
+            return that;
+        }
+
+        /// Assignment
+        ///
+        /// \param a The rhs.
         /// \return A new \c expr\<\> node representing an assignment of \c a to \c *this.
         template<typename A>
         proto::expr<
