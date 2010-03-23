@@ -279,6 +279,8 @@ After that, you may be interested in seeing some [link boost_proto.users_guide.e
 [section Appendices]
 [/=================]
 
+[include release_notes.qbk]
+
 [include history.qbk]
 
 [include rationale.qbk]
