@@ -79,6 +79,11 @@ void float_tests(char const* name, T* = 0)
     BOOST_TEST(x1(minus_zero) == HASH_NAMESPACE::hash_value(minus_zero));
 #endif
 
+    BOOST_TEST(x1(zero) != x1(0.5));
+    BOOST_TEST(x1(minus_zero) != x1(0.5));
+    BOOST_TEST(x1(0.5) != x1(-0.5));
+    BOOST_TEST(x1(1) != x1(-1));
+
     using namespace std;
 
 // Doing anything with infinity causes borland to crash.
@@ -176,6 +181,12 @@ void float_tests(char const* name, T* = 0)
     BOOST_TEST(half_max != three_quarter_max);
     BOOST_TEST(quarter_max != three_quarter_max);
 
+    BOOST_TEST(max != -max);
+    BOOST_TEST(half_max != -half_max);
+    BOOST_TEST(quarter_max != -quarter_max);
+    BOOST_TEST(three_quarter_max != -three_quarter_max);
+
+
 #if defined(TEST_EXTENSIONS)
     BOOST_TEST(x1(max) == HASH_NAMESPACE::hash_value(max));
     BOOST_TEST(x1(half_max) == HASH_NAMESPACE::hash_value(half_max));
@@ -196,6 +207,12 @@ void float_tests(char const* name, T* = 0)
     BOOST_TEST(x1(half_max) == x1(half_max));
     BOOST_TEST(x1(half_max) != x1(three_quarter_max));
     BOOST_TEST(x1(three_quarter_max) == x1(three_quarter_max));
+
+    BOOST_TEST(x1(max) != x1(-max));
+    BOOST_TEST(x1(half_max) != x1(-half_max));
+    BOOST_TEST(x1(quarter_max) != x1(-quarter_max));
+    BOOST_TEST(x1(three_quarter_max) != x1(-three_quarter_max));
+
 
 // Intel with gcc stdlib sometimes segfaults on calls to asin and acos.
 #if !((defined(__INTEL_COMPILER) || defined(__ICL) || \
