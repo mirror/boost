@@ -136,6 +136,7 @@ public:
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
       , current_filename(fname)
 #endif 
+      , current_relative_filename(fname)
       , macros(*this_())
       , language(language_support(
                       support_cpp 
@@ -417,6 +418,11 @@ public:
     }
 #endif 
 
+    void set_current_relative_filename(char const *real_name)
+        { current_relative_filename = real_name; }
+    std::string const &get_current_relative_filename() const 
+        { return current_relative_filename; }
+
 #if BOOST_WAVE_SERIALIZATION != 0
 public:
     BOOST_STATIC_CONSTANT(unsigned int, version = 0x10);
@@ -502,6 +508,7 @@ private:
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     std::string current_filename;       // real name of current preprocessed file
 #endif 
+    std::string current_relative_filename;        // real relative name of current preprocessed file
 
     boost::wave::util::if_block_stack ifblocks;   // conditional compilation contexts
     boost::wave::util::include_paths includes;    // lists of include directories to search

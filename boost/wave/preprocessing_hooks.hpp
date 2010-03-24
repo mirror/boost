@@ -374,6 +374,36 @@ struct default_preprocessing_hooks
 
     ///////////////////////////////////////////////////////////////////////////
     //
+    //  The function 'emit_line_directive' is called whenever a #line directive
+    //  has to be emitted into the generated output.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 'pending' may be used to push tokens back into the input 
+    //  stream, which are to be used instead of the default output generated
+    //  for the #line directive.
+    //
+    //  The parameter 'act_token' contains the actual #pragma token, which may 
+    //  be used for error output. The line number stored in this token can be
+    //  used as the line number emitted as part of the #line directive.
+    //
+    //  If the return value is 'false', a default #line directive is emitted
+    //  by the library. A return value of 'true' will inhibit any further 
+    //  actions, the tokens contained in 'pending' will be copied verbatim 
+    //  to the output.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContextT, typename ContainerT>
+    bool 
+    emit_line_directive(ContextT const& ctx, ContainerT &pending, 
+        typename ContextT::token_type const& act_token)
+    {
+        return false;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
     //  The function 'defined_macro' is called, whenever a macro was defined
     //  successfully.
     //
