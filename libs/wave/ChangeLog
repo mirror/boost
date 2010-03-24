@@ -22,6 +22,20 @@ CHANGELOG
 
 Boost V1.43.0
 - V2.0.5
+- Fixed line number counting for lines containing nothing but whitespace 
+  followed by a C++ comment if the next line is a pp directive.
+- Fixed emitting of a #line directive after returned from an include file.
+- A couple of fixes allowing to properly report the current line number in 
+  #line directives for different whitespace preserve modes (see --preserve/-p).
+- Added new preprocessing hook: emit_line_directive, allowing to customize the 
+  format of the generated #line directive.
+- Changed --line/-l command line option of the wave driver application to 
+  accept 0, 1, and 2 as options. The option values 0 and 1 behave as before 
+  (disable/enable the generation of #line directives), while the option value 2
+  will generate the #line directive using the relative filename (instead of the
+  absolute filename emitted from option 1). The default option is value 1.
+- Added new example: emit_custom_line_directives, demonstrating the use of the 
+  new preprocessing hook.
 - Added new preprocessing hook: found_unknown_directive, which is being invoked 
   whenever an unknown preprocessor directive (i.e. '#' followed by some 
   identifier) is detected. IT allows to interprete the directive and to provide 
