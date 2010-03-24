@@ -10,9 +10,7 @@
                 version="1.0">
 
 <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/html/admon.xsl"/>
-
-<!-- Already included in the main style sheet -->
-<!-- <xsl:import href="relative-href.xsl"/> -->
+<xsl:import href="relative-href.xsl"/>
 
 <xsl:template name="admon.graphic">
     <xsl:param name="node" select="."/>

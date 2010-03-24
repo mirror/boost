@@ -13,8 +13,7 @@
 <xsl:import
     href="http://docbook.sourceforge.net/release/xsl/current/html/chunk-common.xsl"/>
 
-<!-- Already included in the main stylesheet -->
-<!-- <xsl:import href="relative-href.xsl"/> -->
+<xsl:import href="relative-href.xsl"/>
 
 <!-- ==================================================================== -->
 
