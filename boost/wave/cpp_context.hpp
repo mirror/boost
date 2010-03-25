@@ -229,9 +229,15 @@ public:
             has_params, is_predefined, pos, parameters, definition); 
     }
     template <typename StringT>
-    bool remove_macro_definition(StringT const &name, 
-            bool even_predefined = false)
+    bool remove_macro_definition(StringT name, bool even_predefined = false)
     { 
+        // strip leading and trailing whitespace
+        typename StringT::size_type pos = name.find_first_not_of(" \t");
+        if (pos != std::string::npos) {
+            typename StringT::size_type endpos = name.find_last_not_of(" \t");
+            name = name.substr(pos, endpos-pos+1);
+        }
+
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
         // ensure this gets removed from the list of include guards as well
         includes.remove_pragma_once_header(
