@@ -37,6 +37,6 @@ EXPAND(#) define later
 //H 19: $B(t_9_016.cpp): inclusion
 //H 10: t_9_016.cpp(13): #   include "t_9_016.hpp"
 //H 04: "t_9_016.hpp"
-//H 05: $B(t_9_016.hpp) ($B(t_9_016.hpp))
+//H 05: t_9_016.hpp ($B(t_9_016.hpp))
 //H 06: 
 //H 10: t_9_016.cpp(14): #else

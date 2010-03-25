@@ -859,6 +859,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm,
             std::cerr << "initialise_options: option: single_line" << std::endl;
         }
         ctx.set_language(boost::wave::enable_single_line(ctx.get_language()));
+        ctx.set_language(boost::wave::enable_emit_line_directives(ctx.get_language(), false));
     }
     
 //  add include directories to the system include search paths
@@ -959,7 +960,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm,
                 std::cerr << "initialise_options: option: -U" << *cit 
                           << std::endl;
             }
-            ctx.remove_macro_definition((*cit).c_str());
+            ctx.remove_macro_definition(*cit);
         }
     }
 

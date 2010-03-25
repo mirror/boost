@@ -24,7 +24,7 @@
 
 //H 10: t_6_067.cpp(20): #include "t_6_067.hpp"
 //H 04: "t_6_067.hpp"
-//H 05: $B(t_6_067.hpp) ($B(t_6_067.hpp))
+//H 05: t_6_067.hpp ($B(t_6_067.hpp))
 //H 18: boost::wave::lexing_exception
 
 /*-
