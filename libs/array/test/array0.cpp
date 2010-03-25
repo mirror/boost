@@ -32,7 +32,7 @@ void    RunTests()
     test_type                   test_case   =   {};
     const boost::array< T, 0 >  const_test_case = test_type();
 
-    test_case.assign( T() );
+    test_case.fill ( T() );
 
     //  front/back and operator[] must compile, but calling them is undefined
     //  Likewise, all tests below should evaluate to false, avoiding undefined behaviour
