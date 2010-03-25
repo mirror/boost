@@ -229,12 +229,13 @@ public:
             has_params, is_predefined, pos, parameters, definition); 
     }
     template <typename StringT>
-    bool remove_macro_definition(StringT name, bool even_predefined = false)
+    bool remove_macro_definition(StringT const& undefname, bool even_predefined = false)
     { 
         // strip leading and trailing whitespace
-        typename StringT::size_type pos = name.find_first_not_of(" \t");
-        if (pos != std::string::npos) {
-            typename StringT::size_type endpos = name.find_last_not_of(" \t");
+        string_type name = undefname;
+        typename string_type::size_type pos = name.find_first_not_of(" \t");
+        if (pos != string_type::npos) {
+            typename string_type::size_type endpos = name.find_last_not_of(" \t");
             name = name.substr(pos, endpos-pos+1);
         }
 
@@ -243,8 +244,7 @@ public:
         includes.remove_pragma_once_header(
             util::to_string<std::string>(name));
 #endif
-        return macros.remove_macro(util::to_string<string_type>(name), 
-            macros.get_main_pos(), even_predefined); 
+        return macros.remove_macro(name, macros.get_main_pos(), even_predefined); 
     }
     void reset_macro_definitions() 
         { macros.reset_macromap(); macros.init_predefined_macros(); }
