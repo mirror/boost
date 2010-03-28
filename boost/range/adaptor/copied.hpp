@@ -18,36 +18,26 @@
 
 namespace boost
 {
-	namespace range_detail
-	{
-		template< class T >
-		struct copy_holder
-			: holder2<std::size_t>
-		{
-			copy_holder( std::size_t t, std::size_t u )
-			    : holder2<std::size_t>(t,u)
-			{ }
-		};
-
-	} // 'range_detail'
-
 	namespace adaptors
 	{
-		template< class CopyableRandomAccessRng, class Int >
+	    struct copied
+	    {
+	        copied(std::size_t t_, std::size_t u_)
+                : t(t_), u(u_) {}
+
+            std::size_t t;
+            std::size_t u;
+	    };
+
+		template< class CopyableRandomAccessRng >
 		inline CopyableRandomAccessRng
-		operator|( const CopyableRandomAccessRng& r, const range_detail::copy_holder<Int>& f )
+		operator|( const CopyableRandomAccessRng& r, const copied& f )
 		{
 			iterator_range<
 				BOOST_DEDUCED_TYPENAME range_iterator<const
 				                               CopyableRandomAccessRng>::type >
-			temp( range_detail::sliced_impl( r, f ) );
+			temp( adaptors::slice( r, f.t, f.u ) );
 			return CopyableRandomAccessRng( temp.begin(), temp.end() );
-		}
-
-		namespace
-		{
-			const range_detail::forwarder2<range_detail::copy_holder>
-  	           copied = range_detail::forwarder2<range_detail::copy_holder>();
 		}
 
 		template<class CopyableRandomAccessRange>

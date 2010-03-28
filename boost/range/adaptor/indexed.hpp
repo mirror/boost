@@ -27,7 +27,15 @@
 
 namespace boost
 {
-	
+    namespace adaptors
+    {
+        struct indexed
+        {
+            explicit indexed(std::size_t x) : val(x) {}
+            std::size_t val;
+        };
+    }
+
 	namespace range_detail
 	{
 		template< class Iter >
@@ -35,16 +43,16 @@ namespace boost
 			: public boost::iterator_adaptor< indexed_iterator<Iter>, Iter >
 		{
 		private:
-			typedef boost::iterator_adaptor< indexed_iterator<Iter>, Iter > 
-				  base;   
+			typedef boost::iterator_adaptor< indexed_iterator<Iter>, Iter >
+				  base;
 
 			typedef BOOST_DEDUCED_TYPENAME base::difference_type index_type;
 
 			index_type index_;
-			
+
 		public:
 			explicit indexed_iterator( Iter i, index_type index )
-			: base(i), index_(index) 
+			: base(i), index_(index)
 			{
 				BOOST_ASSERT( index_ >= 0 && "Indexed Iterator out of bounds" );
 			}
@@ -53,12 +61,12 @@ namespace boost
 			{
 				return index_;
 			}
-            
+
 		 private:
 			friend class boost::iterator_core_access;
-			
-			void increment() 
-			{ 
+
+			void increment()
+			{
                 ++index_;
                 ++(this->base_reference());
 			}
@@ -80,7 +88,7 @@ namespace boost
 		};
 
         template< class Rng >
-        struct indexed_range : 
+        struct indexed_range :
             iterator_range< indexed_iterator<BOOST_DEDUCED_TYPENAME range_iterator<Rng>::type> >
         {
         private:
@@ -90,49 +98,11 @@ namespace boost
                 base;
         public:
             template< class Index >
-            indexed_range( Index i, Rng& r ) 
+            indexed_range( Index i, Rng& r )
               : base( iter_type(boost::begin(r), i), iter_type(boost::end(r),i) )
             { }
         };
 
-
-        template< class T >
-        struct index_holder : holder<T>
-        {
-            index_holder( T r ) : holder<T>(r)
-            { }
-        };
-
-        struct index_forwarder
-        {
-            template< class T >
-            index_holder<T> operator()( T r ) const
-            {
-                return r;
-            }
-            
-            index_holder<int> operator()( int r = 0 ) const
-            {
-                return r;
-            }
-        };
-        
-		template< class SinglePassRange >
-		inline indexed_range<SinglePassRange> 
-		operator|( SinglePassRange& r, 
-				   const index_holder<typename range_difference<SinglePassRange>::type>& f )
-		{
-			return indexed_range<SinglePassRange>( f.val, r ); 
-		}
-	
-		template< class SinglePassRange >
-		inline indexed_range<const SinglePassRange> 
-		operator|( const SinglePassRange& r, 
-				   const index_holder<typename range_difference<SinglePassRange>::type>& f )
-		{
-			return indexed_range<const SinglePassRange>( f.val, r );   
-		}
-		
 	} // 'range_detail'
 
 	// Make this available to users of this library. It will sometimes be
@@ -141,21 +111,30 @@ namespace boost
 	using range_detail::indexed_range;
 
 	namespace adaptors
-	{ 
-		namespace
+	{
+        template< class SinglePassRange >
+		inline indexed_range<SinglePassRange>
+		operator|( SinglePassRange& r,
+				   const indexed& f )
 		{
-			const range_detail::forwarder<range_detail::index_holder> 
-				   indexed = 
-				       range_detail::forwarder<range_detail::index_holder>();
+			return indexed_range<SinglePassRange>( f.val, r );
 		}
-		
+
+		template< class SinglePassRange >
+		inline indexed_range<const SinglePassRange>
+		operator|( const SinglePassRange& r,
+				   const indexed& f )
+		{
+			return indexed_range<const SinglePassRange>( f.val, r );
+		}
+
 		template<class SinglePassRange, class Index>
 		inline indexed_range<SinglePassRange>
 		index(SinglePassRange& rng, Index index)
 		{
 		    return indexed_range<SinglePassRange>(index, rng);
 	    }
-	    
+
 	    template<class SinglePassRange, class Index>
 	    inline indexed_range<const SinglePassRange>
 	    index(const SinglePassRange& rng, Index index)
@@ -163,7 +142,7 @@ namespace boost
 	        return indexed_range<const SinglePassRange>(index, rng);
         }
 	} // 'adaptors'
-	
+
 }
 
 #ifdef BOOST_MSVC

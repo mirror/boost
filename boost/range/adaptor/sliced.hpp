@@ -19,17 +19,25 @@ namespace boost
 {
     namespace adaptors
     {
+        struct sliced
+        {
+            sliced(std::size_t t_, std::size_t u_)
+                : t(t_), u(u_) {}
+            std::size_t t;
+            std::size_t u;
+        };
+
 		template< class RandomAccessRange >
-		inline iterator_range< BOOST_DEDUCED_TYPENAME range_iterator<RandomAccessRange>::type > 
+		inline iterator_range< BOOST_DEDUCED_TYPENAME range_iterator<RandomAccessRange>::type >
 		slice( RandomAccessRange& rng, std::size_t t, std::size_t u )
 		{
 			BOOST_ASSERT( t <= u && "error in slice indices" );
-            BOOST_ASSERT( static_cast<std::size_t>(boost::size(rng)) >= u && 
+            BOOST_ASSERT( static_cast<std::size_t>(boost::size(rng)) >= u &&
 						  "second slice index out of bounds" );
 
-			return make_iterator_range( rng, t, u - boost::size(rng) ); 
+			return boost::make_iterator_range( rng, t, u - boost::size(rng) );
 		}
-		
+
 		template< class RandomAccessRange >
 		inline iterator_range< BOOST_DEDUCED_TYPENAME range_iterator<const RandomAccessRange>::type >
 		slice( const RandomAccessRange& rng, std::size_t t, std::size_t u )
@@ -37,56 +45,27 @@ namespace boost
 		    BOOST_ASSERT( t <= u && "error in slice indices" );
 		    BOOST_ASSERT( static_cast<std::size_t>(boost::size(rng)) >= u &&
 		                  "second slice index out of bounds" );
-		                  
-            return make_iterator_range( rng, t, u - boost::size(rng) );
-		}
-    } // 'adaptors'
-    
-	namespace range_detail
-	{
-		template< class T >
-		struct slice_holder 
-			: holder2<std::size_t> 
-		{
-			slice_holder( std::size_t t, std::size_t u ) 
-			    : holder2<std::size_t>(t,u)
-			{ }
-		};
-		
-		template<class R, class H>
-		inline iterator_range< BOOST_DEDUCED_TYPENAME range_iterator<R>::type >
-		sliced_impl( R& r, const H& f)
-		{
-		    return adaptors::slice(r, f.val1, f.val2);
-		}
-		
-		template< class RandomAccessRange, class Int >
-		inline iterator_range< 
-			     BOOST_DEDUCED_TYPENAME range_iterator<RandomAccessRange>::type > 
-		operator|( RandomAccessRange& r, const slice_holder<Int>& f )
-		{
-			return sliced_impl( r, f );
+
+            return boost::make_iterator_range( rng, t, u - boost::size(rng) );
 		}
 
-		template< class RandomAccessRange, class Int >
-		inline iterator_range< 
-				 BOOST_DEDUCED_TYPENAME range_iterator<const RandomAccessRange>::type > 
-		operator|( const RandomAccessRange& r, const slice_holder<Int>& f )
+		template< class RandomAccessRange >
+		inline iterator_range<
+			     BOOST_DEDUCED_TYPENAME range_iterator<RandomAccessRange>::type >
+		operator|( RandomAccessRange& r, const sliced& f )
 		{
-			return sliced_impl( r, f );
+			return adaptors::slice( r, f.t, f.u );
 		}
 
-	} // 'range_detail'
-
-	namespace adaptors
-	{ 
-		namespace
+		template< class RandomAccessRange >
+		inline iterator_range<
+				 BOOST_DEDUCED_TYPENAME range_iterator<const RandomAccessRange>::type >
+		operator|( const RandomAccessRange& r, const sliced& f )
 		{
-			const range_detail::forwarder2<range_detail::slice_holder> 
-  	           sliced = range_detail::forwarder2<range_detail::slice_holder>();
+			return adaptors::slice( r, f.t, f.u );
 		}
-	}
-	
-}
+
+    } // namespace adaptors
+} // namespace boost
 
 #endif
