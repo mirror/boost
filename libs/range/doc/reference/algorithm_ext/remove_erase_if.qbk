@@ -1,0 +1,32 @@
+[section:remove_erase_if remove_erase_if]
+
+[heading Prototype]
+
+``
+template<
+    class Container,
+    class Pred
+    >
+void remove_erase(Container& target,
+                  Pred pred);
+``
+
+[heading Description]
+
+`remove_erase_if` removes the elements `x` that satisfy `pred(x)` from the container.
+This is in contrast to the `erase` algorithm which merely rearranges elements.
+
+[heading Definition]
+
+Defined in the header file `boost/range/algorithm_ext/erase.hpp`
+
+[heading Requirements]
+
+# `Container` supports erase of an iterator range.
+# `Pred` is a model of the `Predicate` Concept.
+
+[heading Complexity]
+
+Linear. Proportional to `distance(target)`s.
+
+[endsect]

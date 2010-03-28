@@ -1,0 +1,11 @@
+[section Reference]
+
+[include reference/overview.qbk]
+[include reference/synopsis.qbk]
+[include reference/semantics.qbk]
+[include reference/adaptors.qbk]
+[include reference/algorithms.qbk]
+[include reference/ranges.qbk]
+[include reference/extending.qbk]
+
+[endsect]

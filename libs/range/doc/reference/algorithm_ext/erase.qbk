@@ -1,0 +1,30 @@
+[section:erase erase]
+
+[heading Prototype]
+
+``
+template<
+    class Container,
+    class SinglePassRange
+    >
+void erase(Container& target,
+           iterator_range<typename Container::iterator> to_erase);
+``
+
+[heading Description]
+
+`erase` the iterator range `to_erase` from the container `target`.
+
+[heading Definition]
+
+Defined in the header file `boost/range/algorithm_ext/erase.hpp`
+
+[heading Requirements]
+
+# `Container` supports erase of an iterator range.
+
+[heading Complexity]
+
+Linear. Proprotional to `distance(to_erase)`.
+
+[endsect]

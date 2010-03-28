@@ -42,7 +42,7 @@ template< typename C >
 class iterator_of
 {
 public:
-    typedef range_iterator<Container>::BOOST_NESTED_TEMPLATE pts<C>::type type; 
+    typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::BOOST_NESTED_TEMPLATE pts<C>::type type; 
 };
 
 #include <vector>

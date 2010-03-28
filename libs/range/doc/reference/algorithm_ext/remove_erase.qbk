@@ -1,0 +1,31 @@
+[section:remove_erase remove_erase]
+
+[heading Prototype]
+
+``
+template<
+    class Container,
+    class T
+    >
+void remove_erase(Container& target,
+                  const T& val);
+``
+
+[heading Description]
+
+`remove_erase` actually eliminates the elements equal to `val` from the container. This
+is in contrast to the `remove` algorithm which merely rearranges elements.
+
+[heading Definition]
+
+Defined in the header file `boost/range/algorithm_ext/erase.hpp`
+
+[heading Requirements]
+
+# `Container` supports erase of an iterator range.
+
+[heading Complexity]
+
+Linear. Proportional to `distance(target)`s.
+
+[endsect]

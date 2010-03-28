@@ -1,0 +1,43 @@
+[section:uniqued uniqued]
+
+[table
+    [[Syntax] [Code]]
+    [[Pipe] [`rng | boost::adaptors::uniqued`]]
+    [[Function] [`boost::adaptors::unique(rng)`]]
+]
+
+* [*Precondition:] The `value_type` of the range is comparable with `operator==()`.
+* [*Postcondition:] For all adjacent elements `[x,y]` in the returned range, `x==y` is false.
+* [*Range Category:] `ForwardRange`
+
+[section:uniqued_example uniqued example]
+``
+#include <boost/range/adaptor/uniqued.hpp>
+#include <boost/range/algorithm/copy.hpp>
+#include <boost/assign.hpp>
+#include <algorithm>
+#include <iostream>
+#include <vector>
+
+void uniqued_example_test()
+{
+    using namespace boost::assign;
+    using namespace boost::adaptors;
+
+    std::vector<int> input;
+    input += 1,1,2,2,2,3,4,5,6;
+
+    boost::copy(
+        input | uniqued,
+        std::ostream_iterator<int>(std::cout, ","));
+}
+``
+[endsect]
+
+This would produce the output:
+``
+1,2,3,4,5,6
+``
+[endsect]
+
+

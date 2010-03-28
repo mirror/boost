@@ -1,5 +1,6 @@
 // Boost.Range library
 //
+//  Copyright Neil Groves 2009.
 //  Copyright Thorsten Ottosen 2003-2004. Use, modification and
 //  distribution is subject to the Boost Software License, Version
 //  1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -22,6 +23,7 @@
 #include <boost/range/value_type.hpp>
 #include <boost/range/size_type.hpp>
 #include <boost/range/difference_type.hpp>
+#include <boost/range/algorithm/equal.hpp>
 #include <boost/assert.hpp>
 #include <boost/type_traits/is_reference.hpp>
 #include <boost/type_traits/remove_reference.hpp>
@@ -151,14 +153,14 @@ namespace boost
     inline bool operator==( const sub_range<ForwardRange>& l,
                             const sub_range<ForwardRange2>& r )
     {
-        return iterator_range_detail::equal( l, r );
+        return boost::equal( l, r );
     }
 
     template< class ForwardRange, class ForwardRange2 >
     inline bool operator!=( const sub_range<ForwardRange>& l,
                             const sub_range<ForwardRange2>& r )
     {
-        return !iterator_range_detail::equal( l, r );
+        return !boost::equal( l, r );
     }
 
     template< class ForwardRange, class ForwardRange2 >

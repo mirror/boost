@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Boost.Range Range Adaptors </title>
+    <link rel="stylesheet" href="../style.css" type="text/css">
+</head>
+
+    <body>
+
+    <table border="0" >
+        <tr>
+            <td ><img src="../../../boost.png" border="0" /></td>
+            <td ><h1 align="center">Boost.Range </h1></td>
+        </tr>
+    </table>
+
+    <h2> Range Adaptors </h2>
+    
+    <hr />
+    <a name="transformed"></a>
+    <h4><code>transformed</code></h4>
+    <blockquote>
+        <pre>rng | boost::adaptors::transformed( fun )</pre>
+        <pre>boost::make_transformed_range( rng, fun )</pre>
+    </blockquote>
+    <ul>
+        <li>
+            <b>Precondition:</b>
+            The value-type of the range is convertible to the argument type
+            of fun.
+        </li>
+        <li>
+            <b>Postcondition:</b>
+            For all elements <code>x</code> in the returned range, 
+            <code>x</code> is the result of <code>fun(y)</code> where
+            <code>y</code> is the corresponding element in the original range.
+        </li>
+        <li>
+            <b>Throws:</b>
+            Whatever the copy-constructor of <code>fun</code> might throw.
+        </li>
+        <li>
+            <b>Range Category:</b>
+            SinglePassRange
+        </li>
+    </ul>
+    <hr />
+    <h3>Example</h3>
+    <pre>
+        <span class="keyword">#include</span> &lt;boost/range/adaptor/transformed.hpp&gt;
+        <span class="keyword">#include</span> &lt;boost/range/algorithm/copy.hpp&gt;
+        <span class="keyword">#include</span> &lt;boost/range/assign.hpp&gt;
+        <span class="keyword">#include</span> &lt;algorithm&gt;
+        <span class="keyword">#include</span> &lt;iostream&gt;
+        <span class="keyword">#include</span> &lt;vector&gt;
+        
+        <span class="keyword">struct</span> double_int
+        {
+            <span class="keyword">typedef int</span> result_type;
+            <span class="keyword">int operator</span>()(<span class="keyword">int</span> x) <span class="keyword">const</span> { <span class="keyword">return</span> x * 2; }
+        };
+        
+        <span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const char</span>* argv[])
+        {
+            <span class="keyword">using namespace</span> boost::adaptors;
+            <span class="keyword">using namespace</span> boost::assign;
+            
+            std::vector&lt;<span class="keyword">int</span>&gt; input;
+            input += 1,2,3,4,5,6,7,8,9,10;
+            
+            boost::copy(
+                input | transformed(double_int()),
+                std::ostream_iterator&lt;int&gt;(std::cout, ","));
+                
+            <span class="keyword">return</span> 0;
+        }
+    </pre>
+    <p>
+        This produces the output: <br />
+        <code>
+            2,4,6,8,10,12,14,16,18,20
+        </code>
+    </p>
+    
+    <hr />
+    <p>
+    (C) Copyright Neil Groves 2009
+    (C) Copyright Thorsten Ottosen 2003-2004
+    </p>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    </body>
+</html>
+

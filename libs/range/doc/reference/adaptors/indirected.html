@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Boost.Range Range Adaptors </title>
+    <link rel="stylesheet" href="../style.css" type="text/css">
+</head>
+
+    <body>
+
+    <table border="0" >
+        <tr>
+            <td ><img src="../../../boost.png" border="0" /></td>
+            <td ><h1 align="center">Boost.Range </h1></td>
+        </tr>
+    </table>
+
+    <h2> Range Adaptors </h2>
+    
+    <hr />
+    <a name="indirected"></a>
+    <h4><code>indirected</code></h4>
+    <blockquote>
+        <pre>rng | boost::adaptors::indirected</pre>
+        <pre>boost::make_indirected_range( rng )</pre>
+    </blockquote>
+    <ul>
+        <li>
+            <b>Precondition:</b>
+            The value-type of the range defines unary <code>operator*()</code>
+        </li>
+        <li>
+            <b>Postcondition:</b>
+            For all elements <code>x</code> in the returned range,
+            <code>x</code> is the result of <code>*y</code> where
+            <code>y</code> is the corresponding element in the original range.
+        </li>
+        <li>
+            <b>Range Category:</b>
+            SinglePassRange
+        </li>
+    </ul>
+    
+    <hr />
+    <h3>Example</h3>
+    <pre>
+        <span class="keyword">#include</span> &lt;boost/range/adaptor/indirected.hpp&gt;
+        <span class="keyword">#include</span> &lt;boost/range/algorithm/copy.hpp&gt;
+        <span class="keyword">#include</span> &lt;boost/shared_ptr.hpp&gt;
+        <span class="keyword">#include</span> &lt;algorithm&gt;
+        <span class="keyword">#include</span> &lt;iostream&gt;
+        <span class="keyword">#include</span> &lt;vector&gt;
+        
+        <span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const char</span>* argv[])
+        {
+            <span class="keyword">using namespace</span> boost::adaptors;
+            
+            std::vector&lt;boost::shared_ptr&lt;<span class="keyword">int</span>&gt; &gt; input;
+            
+            <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i < 10; ++i)
+                input.push_back(boost::shared_ptr&lt;<span class="keyword">int</span>&gt;(<span class="keyword">new int</span>(i)));
+                
+            boost::copy(
+                input | indirected,
+                std::ostream_iterator&lt;<span class="keyword">int</span>&gt;(std::cout, ","));
+                
+            <span class="keyword">return</span> 0;
+        }
+    </pre>
+    <p>
+        This produces the output: <br />
+        <code>0,1,2,3,4,5,6,7,8,9</code>
+    </p>
+    <hr />
+    <p>
+    (C) Copyright Neil Groves 2009
+    (C) Copyright Thorsten Ottosen 2003-2004
+    </p>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    </body>
+</html>
+

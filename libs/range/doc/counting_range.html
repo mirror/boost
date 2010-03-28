@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <title>Boost.Range Utilities</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+    <body>
+    <table border="0" >
+        <tr>
+            <td ><img src="../../../boost.png" border="0" /></td>
+            <td ><h1 align="center">Boost.Range</h1></td>
+        </tr>
+    </table>
+    <a name="counting_range"></a> <h1>Function <code>counting_range</code></h1>
+    <p>
+    The intention of the <code>counting_range</code> function is to construct
+    a new range with iterators that are wrapped in a
+    <code>counting_iterator</code> (from Boost.Iterator)
+    </p>
+
+    <h3>Synopsis</h3>
+
+    <pre><span class="keyword">namespace </span><span class="identifier">boost</span>
+<span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt; </span><span class="keyword">class </span><span class="identifier">Incrementable</span><span class="identifier"> </span><span class="special">&gt; <span style="color: #0000ff">inline</span>
+    </span><span class="keyword"></span><span class="identifier">range&lt; counting_iterator&lt;Incrementable&gt; &gt;
+    counting_range(Incrementable first, Incrementable last);
+
+    <span class="keyword">template</span><span class="special">&lt; </span><span class="keyword">class </span><span class="identifier">SinglePassRange</span><span class="identifier"> </span><span class="special">&gt; </span><span class="keyword">inline
+    </span><span class="identifier">range&lt; counting_iterator&lt;<span class="keyword">typename</span> range_iterator&lt;SinglePassRange&gt;::type &gt;
+    counting_range(<span class="keyword">const</span> Range&amp; rng);
+
+    </span><span class="keyword">template</span><span class="special">&lt; </span><span class="keyword">class </span><span class="identifier">SinglePassRange</span><span class="identifier"> </span><span class="special">&gt; <span style="color: #0000ff">inline</span></span>
+    <span class="identifier">range&lt; counting_iterator&lt;<span style="color: #0000ff">typename</span> range_iterator&lt;SinglePassRange&gt;::type &gt;
+    counting_range(Range&amp; rng);
+        </span></span><span class="special"></span><span class="special"></span><span class="special">    </span>
+<span class="special">} </span><span class="comment">// namespace 'boost'</span>
+    </pre>
+    
+    <p>
+      &copy; <a name="Copyright" id="Copyright">Copyright</a> Neil Groves 2009.
+</p>
+
+    <p>
+      Distributed under the Boost Software License, Version 1.0. (See
+      accompanying file LICENSE_1_0.txt or copy
+      at <a href=
+      "http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</a>)
+    </p>
+
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  
+    
+    </body>
+</html>
+
