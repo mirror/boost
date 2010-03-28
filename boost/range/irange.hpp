@@ -36,14 +36,16 @@ namespace boost
                         integer_iterator<Integer>,
                         Integer,
                         boost::random_access_traversal_tag,
-                        const Integer&
+                        Integer,
+                        std::ptrdiff_t
                     >
         {
             typedef boost::iterator_facade<
                         integer_iterator<Integer>,
                         Integer,
                         boost::random_access_traversal_tag,
-                        const Integer&
+                        Integer,
+                        std::ptrdiff_t
                     > base_t;
         public:
             typedef typename base_t::value_type value_type;
