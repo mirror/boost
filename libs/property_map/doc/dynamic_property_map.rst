@@ -204,7 +204,7 @@ Member Functions
   dynamic_properties()
   dynamic_properties(
     const boost::function<
-      std::auto_ptr<dynamic_property_map> (
+      boost::shared_ptr<dynamic_property_map> (
 	const std::string&, const boost::any&, const boost::any&)
       >& fn)
 
@@ -233,7 +233,7 @@ Read/Write Property Map.
 
 ::
 
-  void insert(const std::string& name, std::auto_ptr<dynamic_property_map> pm)
+  void insert(const std::string& name, boost::shared_ptr<dynamic_property_map> pm)
 
 This member function directly adds a ``dynamic_property_map``
 to the collection, using ``name`` as its key.
@@ -272,10 +272,10 @@ Free functions
 
 ::
 
-  std::auto_ptr<boost::dynamic_property_map> 
+  boost::shared_ptr<boost::dynamic_property_map> 
   ignore_other_properties(const std::string&,
-                        const boost::any&,
-                        const boost::any&)
+                          const boost::any&,
+                          const boost::any&)
 
 When passed to the ``dynamic_properties`` constructor, this function
 allows the ``dynamic_properties`` object to disregard attempts to put
@@ -293,7 +293,7 @@ behavior depends on the availability of a property map generator.  If
 a property map generator was supplied when the ``dynamic_properties``
 object was constructed, then that function is used to create a new
 property map.  If the generator fails to generate a property map
-(returns a null ``auto_ptr``), then the ``put`` function returns
+(returns a null ``shared_ptr``), then the ``put`` function returns
 ``false``.  If, on the other hand, the ``dynamic_properties`` object
 has no property map generator (meaning it was default-constructed),
 then ``property_not_found`` is thrown. If a candidate property map is
