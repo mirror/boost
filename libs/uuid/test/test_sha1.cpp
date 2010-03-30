@@ -10,15 +10,11 @@
 //  libs/uuid/test/test_sha1.cpp  -------------------------------//
 
 #include <boost/uuid/sha1.hpp>
+#include <boost/detail/lightweight_test.hpp>
+#include "lightweight_test_ex.hpp"
 #include <algorithm>
 #include <cstring>
 #include <cstddef>
-
-#define BOOST_TEST_MAIN
-#include <boost/test/included/unit_test.hpp>
-
-#define BOOST_AUTO_TEST_MAIN
-#include <boost/test/auto_unit_test.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std {
@@ -26,6 +22,36 @@ namespace std {
   using ::size_t;
 } //namespace std
 #endif
+
+void test_sha1_digest_equal_array(char const * file, int line, char const * function,
+                          const unsigned int (&lhs)[5], const unsigned int (&rhs)[5])
+{
+    for (size_t i=0; i<5; i++) {
+        if ( lhs[i] != rhs[i]) {
+            std::cerr << file << "(" << line << "): sha1 digest [";
+            for (size_t l=0; l<5; l++) {
+                if (l != 0) {
+                    std::cerr << " ";
+                }
+                std::cerr << std::hex << (int)lhs[l];
+            }
+
+            std::cerr << "] not equal [";
+            for (size_t r=0; r<5; r++) {
+                if (r != 0) {
+                    std::cerr << " ";
+                }
+                std::cerr << std::hex << (int)rhs[r];
+            }
+            std::cerr << "] in function '" << function << "'" << std::endl;
+            ++boost::detail::test_errors();
+            return;
+        }
+    }
+}
+
+
+#define BOOST_TEST_SHA1_DEGEST(lhs, rhs) ( test_sha1_digest_equal_array(__FILE__, __LINE__, BOOST_CURRENT_FUNCTION, lhs, rhs) )
 
 void test_sha1(char const*const message, unsigned int length, const unsigned int (&correct_digest)[5])
 {
@@ -35,10 +61,10 @@ void test_sha1(char const*const message, unsigned int length, const unsigned int
     unsigned int digest[5];
     sha.get_digest(digest);
 
-    BOOST_CHECK_EQUAL_COLLECTIONS(digest, digest+5, correct_digest, correct_digest+5);
+    BOOST_TEST_SHA1_DEGEST(digest, correct_digest);
 }
 
-BOOST_AUTO_TEST_CASE(test_quick)
+void test_quick()
 {
     struct test_case
     {
@@ -64,7 +90,7 @@ BOOST_AUTO_TEST_CASE(test_quick)
 //http://csrc.nist.gov/cryptval/shs.htm
 //http://csrc.nist.gov/cryptval/shs/shabytetestvectors.zip
 //values from SHA1ShortMsg.txt
-BOOST_AUTO_TEST_CASE(test_short_messages)
+void test_short_messages()
 {
     struct test_case
     {
@@ -72,7 +98,7 @@ BOOST_AUTO_TEST_CASE(test_short_messages)
         unsigned int digest[5];
     };
     test_case cases[] =
-    { { "", 
+    { { "",
          { 0xda39a3ee, 0x5e6b4b0d, 0x3255bfef, 0x95601890, 0xafd80709 } }
     , { "a8", 
          { 0x99f2aa95, 0xe36f95c2, 0xacb0eaf2, 0x3998f030, 0x638f3f15 } }
@@ -176,7 +202,7 @@ BOOST_AUTO_TEST_CASE(test_short_messages)
          { 0xb0732181, 0x568543ba, 0x85f2b6da, 0x602b4b06, 0x5d9931aa } }
     , { "235ea9c2ba7af25400f2e98a47a291b0bccdaad63faa2475721fda5510cc7dad814bce8dabb611790a6abe56030b798b75c944", 
          { 0x9c22674c, 0xf3222c3b, 0xa9216726, 0x94aafee4, 0xce67b96b } }
-    , { "07e3e29fed63104b8410f323b975fd9fba53f636af8c4e68a53fb202ca35dd9ee07cb169ec5186292e44c27e5696a967f5e67709", 
+    , { "07e3e29fed63104b8410f323b975fd9fba53f636af8c4e68a53fb202ca35dd9ee07cb169ec5186292e44c27e5696a967f5e67709",
          { 0xd128335f, 0x4cecca90, 0x66cdae08, 0x958ce656, 0xff0b4cfc } }
     , { "65d2a1dd60a517eb27bfbf530cf6a5458f9d5f4730058bd9814379547f34241822bf67e6335a6d8b5ed06abf8841884c636a25733f", 
          { 0x0b67c57a, 0xc578de88, 0xa2ae055c, 0xaeaec8bb, 0x9b0085a0 } }
@@ -212,18 +238,18 @@ BOOST_AUTO_TEST_CASE(test_short_messages)
 
         boost::uuids::detail::sha1 sha;
         std::size_t message_length = std::strlen(tc.message);
-        BOOST_CHECK_EQUAL(message_length%2, 0u);
+        BOOST_TEST_EQ(message_length % 2, 0u);
 
-        for (std::size_t b=0; b!=message_length; b+=2) {
+        for (std::size_t b=0; b<message_length; b+=2) {
             char c = tc.message[b];
             char const* f = std::find(xdigits, xdigits_end, c);
-            BOOST_CHECK(f != xdigits_end);
+            BOOST_TEST_NE(f, xdigits_end);
             
             unsigned char byte = static_cast<unsigned char>(std::distance(&xdigits[0], f));
 
             c = tc.message[b+1];
             f = std::find(xdigits, xdigits_end, c);
-            BOOST_CHECK(f != xdigits_end);
+            BOOST_TEST_NE(f, xdigits_end);
 
             byte <<= 4;
             byte |= static_cast<unsigned char>(std::distance(&xdigits[0], f));
@@ -234,6 +260,14 @@ BOOST_AUTO_TEST_CASE(test_short_messages)
         unsigned int digest[5];
         sha.get_digest(digest);
 
-        BOOST_CHECK_EQUAL_COLLECTIONS(digest, digest+5, tc.digest, tc.digest+5);
+        BOOST_TEST_SHA1_DEGEST(digest, tc.digest);
     }
+}
+
+int main(int, char*[])
+{
+    test_quick();
+    test_short_messages();
+    
+    return boost::report_errors();
 }

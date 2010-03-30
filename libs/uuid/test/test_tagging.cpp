@@ -11,9 +11,8 @@
 
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
-
-#include <boost/test/included/test_exec_monitor.hpp>
-#include <boost/test/test_tools.hpp>
+#include <boost/detail/lightweight_test.hpp>
+#include "lightweight_test_ex.hpp"
 
 class object
 {
@@ -22,7 +21,7 @@ public:
         : tag(boost::uuids::random_generator()())
         , state(0)
     {}
-    
+
     explicit object(int state)
         : tag(boost::uuids::random_generator()())
         , state(state)
@@ -35,6 +34,9 @@ public:
     
     bool operator==(object const& rhs) const {
         return tag == rhs.tag;
+    }
+    bool operator!=(object const& rhs) const {
+      return !(operator==(rhs));
     }
     
     object& operator=(object const& rhs) {
@@ -59,23 +61,21 @@ std::basic_ostream<elem, traits>& operator<<(std::basic_ostream<elem, traits>& o
     return os;
 }
 
-int test_main(int, char*[])
+int main(int, char*[])
 {
-    //using boost::test_tools::output_test_stream;
-    
     object o1(1);
 
     object o2 = o1;
-    BOOST_CHECK_EQUAL(o1, o2);
+    BOOST_TEST_EQ(o1, o2);
 
     o2.set_state(2);
-    BOOST_CHECK_EQUAL(o1, o2);
+    BOOST_TEST_EQ(o1, o2);
     
     object o3;
     o3.set_state(3);
 
-    BOOST_CHECK_NE(o1, o3);
-    BOOST_CHECK_NE(o2, o3);
+    BOOST_TEST_NE(o1, o3);
+    BOOST_TEST_NE(o2, o3);
     
-    return 0;
+    return boost::report_errors();
 }

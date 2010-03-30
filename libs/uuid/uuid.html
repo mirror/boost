@@ -9,7 +9,7 @@
 <body>
 <h1><img src="../../boost.png" alt="Boost" WIDTH="277" HEIGHT="86">Uuid</h1>
 
-<h2><a name="Contents"></a>Contents</h2>
+<h2><a name="Contents">Contents</a></h2>
 
 <ol>
     <li><a href="#Introduction">Introduction</a></li>
@@ -36,9 +36,25 @@
         <li><a href="#boost/uuid/uuid_generators.hpp">boost/uuid/uuid_generators.hpp</a></li>
         <ul>
             <li><a href="#Synopsis_generators">Synopsis</a></li>
+        </ul>
+        <li><a href="#boost/uuid/nil_generator.hpp">boost/uuid/nil_generator.hpp</a></li>
+        <ul>
+            <li><a href="#Synopsis_nil_generator">Synopsis</a></li>
             <li><a href="#Nil Generator">Nil Generator</a></li>
+        </ul>
+        <li><a href="#boost/uuid/string_generator.hpp">boost/uuid/string_generator.hpp</a></li>
+        <ul>
+            <li><a href="#Synopsis_string_generator">Synopsis</a></li>
             <li><a href="#String Generator">String Generator</a></li>
+        </ul>
+        <li><a href="#boost/uuid/name_generator.hpp">boost/uuid/name_generator.hpp</a></li>
+        <ul>
+            <li><a href="#Synopsis_name_generator">Synopsis</a></li>
             <li><a href="#Name Generator">Name Generator</a></li>
+        </ul>
+        <li><a href="#boost/uuid/random_generator.hpp">boost/uuid/random_generator.hpp</a></li>
+        <ul>
+            <li><a href="#Synopsis_random_generator">Synopsis</a></li>
             <li><a href="#Random Generator">Random Generator</a></li>
         </ul>
         <li><a href="#boost/uuid/uuid_io.hpp">boost/uuid/uuid_io.hpp</a></li>
@@ -56,7 +72,7 @@
     <li><a href="#History and Acknowledgements">History and Acknowledgements</a></li>
 </ol>
 
-<h2><a name="Introduction"></a>Introduction</h2>
+<h2><a name="Introduction">Introduction</a></h2>
 <p>
 A UUID, or Universally unique identifier, is intended to uniquely identify
 information in a distributed environment without significant central
@@ -86,8 +102,8 @@ generated UUIDs (that is, it has never been generated before and it will
 never be generated again), or it is extremely likely to be unique (depending
 on the mechanism).
 
-<h2><a name="Examples"></a>Examples</h2>
-<h3><a name="Tagging"></a>Tagging</h3>
+<h2><a name="Examples">Examples</a></h2>
+<h3><a name="Tagging">Tagging</a></h3>
 <pre>
 // example of tagging an object with a uuid
 // see <a href="./test/test_tagging.cpp"><tt>boost/libs/uuid/test/test_tagging.cpp</tt></a>
@@ -141,7 +157,7 @@ assert(o1 != o3);
 assert(o2 != o3);
 </pre>
 
-<h3><a name="POD Efficiencies"></a>POD Efficiencies</h3>
+<h3><a name="POD Efficiencies">POD Efficiencies</a></h3>
 <p>
 This library implements a UUID as a POD allowing a UUID
 to be used in the most efficient ways, including using memcpy, 
@@ -207,7 +223,7 @@ uuid_class u2;
 assert(u1 != u2);
 </pre>
 
-<h3><a name="Byte Extraction"></a>Byte Extraction</h3>
+<h3><a name="Byte Extraction">Byte Extraction</a></h3>
 <p>It is sometimes useful to get at the 16 bytes of a <b>uuid</b> directly.  
 Typical use is as follows:
 
@@ -219,12 +235,10 @@ std::copy(u.begin(), u.end(), v.begin());
 
 <p>Note: <tt>boost::uuids::uuid::size()</tt> always returns 16.
 
-<h2><a name="Reference"></a>Reference</h2>
-<h3><a name="boost/uuid/uuid.hpp"</a>boost/uuid/uuid.hpp</h3>
-<h4><a name="Synopsis"</a>Synopsis</h4>
+<h2><a name="Reference">Reference</a></h2>
+<h3><a name="boost/uuid/uuid.hpp" href="./../../boost/uuid/uuid.hpp">boost/uuid/uuid.hpp</a></h3>
+<h4><a name="Synopsis">Synopsis</a></h4>
 <pre>
-#include &lt;<a href="./../../boost/uuid/uuid.hpp"><tt>boost/uuid/uuid.hpp</tt></a>&gt;
-
 namespace boost {
 namespace uuids {
 
@@ -289,7 +303,7 @@ std::size_t hash_value(uuid const&amp; u);
 }} // namespace boost::uuids
 </pre>
 
-<h4><a name="Size"</a>Size</h4>
+<h4><a name="Size">Size</a></h4>
 
 <p>The size of a <b>uuid</b> (in bytes) can be obtained either by
 calling the function <tt>boost::uuids::uuid::size()</tt> or by 
@@ -301,7 +315,7 @@ both always return 16.
     assert(16 == boost::uuids::uuid::static_size());
 </pre>
 
-<h4><a name="Iteration"</a>Iteration</h4>
+<h4><a name="Iteration">Iteration</a></h4>
 
 <p>Both iterators and constant iterators are provided.
 <pre>
@@ -314,19 +328,19 @@ both always return 16.
     }
 </pre>
 
-<h4><a name="Nil"></a>Nil uuid</h4>
+<h4><a name="Nil">Nil uuid</a></h4>
 <p>The function, <tt>boost::uuids::uuid::is_null()</tt> returns true if and
 only if the <b>uuid</b> is equal to {00000000-0000-0000-0000-000000000000}.
 </p>
 
-<h4><a name="Variant"></a>Variant</h4>
+<h4><a name="Variant">Variant</a></h4>
 <p>Three bits of a <b>uuid</b> determine the variant.</p>
 <pre>
     boost::uuids::uuid u;
     boost::uuids::uuid::variant_type v = u.variant();
 </pre>
 
-<h4><a name="Version"></a>Version</h4>
+<h4><a name="Version">Version</a></h4>
 <p>Four bits of a <b>uuid</b> determine the variant, that is the mechanism
 used to generate the <b>uuid</b>.
 </p>
@@ -335,7 +349,7 @@ used to generate the <b>uuid</b>.
     boost::uuids::uuid::version_type v = u.version();
 </pre>
 
-<h4><a name="Swap"></a>Swap</h4>
+<h4><a name="Swap">Swap</a></h4>
 <p>Both <tt>boost::uuids::uuid::swap()</tt> and <tt>boost::uuids::swap()</tt> 
 are provided.
 </p>
@@ -345,7 +359,7 @@ are provided.
     swap(u1, u2);
 </pre>
 
-<h4><a name="Operators"></a>Operators</h4>
+<h4><a name="Operators">Operators</a></h4>
 <p>
 All of the standard numeric operators are defined for the <b>uuid</b>
 class. These include:
@@ -358,7 +372,7 @@ class. These include:
     operator&gt;=
 </pre>
 
-<h4><a name="Hash"></a>Hash Function</h4>
+<h4><a name="Hash">Hash Function</a></h4>
 <p>
 This function allows <b>uuid</b>s to be used with 
 <a href="http://www.boost.org/doc/html/hash.html"><b>boost::hash</b></a>
@@ -368,11 +382,19 @@ boost::hash&lt;boost::uuids::uuid&gt; uuid_hasher;
 std::size_t uuid_hash_value = uuid_hasher(boost::uuids::uuid());
 </pre>
 
-<h3><a name="boost/uuid/uuid_generators.hpp"</a>boost/uuid/uuid_generators.hpp</h3>
-<h4><a name="Synopsis_generators"</a>Synopsis</h4>
+<h3><a name="boost/uuid/uuid_generators.hpp" href="./../../boost/uuid/uuid_generators.hpp">boost/uuid/uuid_generators.hpp</a></h3>
+<h4><a name="Synopsis_generators">Synopsis</a></h4>
+This file includes all the <b>uuid</b> generators for convenience.
 <pre>
-#include &lt;<a href="./../../boost/uuid/uuid_generators.hpp"><tt>boost/uuid/uuid_generators.hpp</tt></a>&gt;
+#include &lt;<a href="./../../boost/uuid/nil_generator.hpp"><tt>boost/uuid/nil_generator.hpp</tt></a>&gt;
+#include &lt;<a href="./../../boost/uuid/string_generator.hpp"><tt>boost/uuid/string_generator.hpp</tt></a>&gt;
+#include &lt;<a href="./../../boost/uuid/name_generator.hpp"><tt>boost/uuid/name_generator.hpp</tt></a>&gt;
+#include &lt;<a href="./../../boost/uuid/random_generator.hpp"><tt>boost/uuid/random_generator.hpp</tt></a>&gt;
+</pre>
 
+<h3><a name="boost/uuid/nil_generator.hpp" href="./../../boost/uuid/nil_generator.hpp">boost/uuid/nil_generator.hpp</a></h3>
+<h4><a name="Synopsis_nil_generator">Synopsis</a></h4>
+<pre>
 namespace boost {
 namespace uuids {
 
@@ -383,12 +405,54 @@ struct nil_generator {
 };
 uuid nil_uuid();
 
+}} //namespace boost::uuids
+</pre>
+
+<h4><a name="Nil Generator">Nil Generator</a></h4>
+<p>The <tt>boost::uuids::nil_generator</tt> class always generates a nil <b>uuid</b>.
+<pre>
+boost::uuids::nil_generator gen;
+boost::uuids::uuid u = gen();
+assert(u.is_nil() == true);
+
+// or for convenience
+boost::uuids::uuid u = boost::uuids::nil_uuid();
+assert(u.is_nil() == true);
+</pre>
+
+<h3><a name="boost/uuid/string_generator.hpp" href="./../../boost/uuid/string_generator.hpp">boost/uuid/string_generator.hpp</a></h3>
+<h4><a name="Synopsis_string_generator">Synopsis</a></h4>
+
+<pre>
+namespace boost {
+namespace uuids {
+
 struct string_generator {
     typedef uuid result_type;
 
     template &lt;typename ch, typename char_traits, typename alloc&gt;
         uuid operator()(std::basic_string&lt;ch, char_traits, alloc&gt; const&amp; s) const;
 };
+
+}} //namespace boost::uuids
+</pre>
+
+<h4><a name="String Generator">String Generator</a></h4>
+<p>The <tt>boost::uuids::string_generator</tt> class generates a <b>uuid</b> from a string.
+<pre>
+boost::uuids::string_generator gen;
+boost::uuids::uuid u1 = gen("{01234567-89ab-cdef-0123456789abcdef}");
+boost::uuids::uuid u2 = gen(L"01234567-89ab-cdef-0123456789abcdef");
+boost::uuids::uuid u3 = gen(std::string("0123456789abcdef0123456789abcdef"));
+boost::uuids::uuid u4 = gen(std::wstring(L"01234567-89ab-cdef-0123456789abcdef"));
+</pre>
+
+<h3><a name="boost/uuid/name_generator.hpp" href="./../../boost/uuid/name_generator.hpp">boost/uuid/name_generator.hpp</a></h3>
+<h4><a name="Synopsis_name_generator">Synopsis</a></h4>
+
+<pre>
+namespace boost {
+namespace uuids {
 
 class name_generator {
 public:
@@ -402,6 +466,27 @@ public:
         uuid operator()(std::basic_string&lt;ch, char_traits, alloc&gt; const&amp; name) const;
     uuid operator()(void const* buffer, std::size_t byte_count) const;
 };
+
+}} //namespace boost::uuids
+</pre>
+
+<h4><a name="Name Generator">Name Generator</a></h4>
+<p>
+The <tt>boost::uuids::name_generator</tt> class generates a name based <b>uuid</b> from a
+namespace uuid and a name.
+<pre>
+boost::uuids::uuid dns_namespace_uuid; // initialize to {6ba7b810-9dad-11d1-80b4-00c04fd430c8}
+
+boost::uuids::name_generator gen(dns_namespace_uuid);
+boost::uuids::uuid u = gen("boost.org");
+</pre>
+
+<h3><a name="boost/uuid/random_generator.hpp" href="./../../boost/uuid/random_generator.hpp">boost/uuid/random_generator.hpp</a></h3>
+<h4><a name="Synopsis_random_generator">Synopsis</a></h4>
+
+<pre>
+namespace boost {
+namespace uuids {
 
 template &lt;typename UniformRandomNumberGenerator&gt;
 class basic_random_generator {
@@ -419,40 +504,7 @@ typedef basic_random_generator&lt;mt19937&gt; random_generator;
 }} // namespace boost::uuids
 </pre>
 
-<h4><a name="Nil Generator"</a>Nil Generator</h4>
-<p>The <tt>boost::uuids::nil_generator</tt> class always generates a nil <b>uuid</b>.
-<pre>
-boost::uuids::nil_generator gen;
-boost::uuids::uuid u = gen();
-assert(u.is_nil() == true);
-
-// or for convenience
-boost::uuids::uuid u = boost::uuids::nil_uuid();
-assert(u.is_nil() == true);
-</pre>
-
-<h4><a name="String Generator"</a>String Generator</h4>
-<p>The <tt>boost::uuids::string_generator</tt> class generates a <b>uuid</b> from a string.
-<pre>
-boost::uuids::string_generator gen;
-boost::uuids::uuid u1 = gen("{01234567-89ab-cdef-0123456789abcdef}");
-boost::uuids::uuid u2 = gen(L"01234567-89ab-cdef-0123456789abcdef");
-boost::uuids::uuid u3 = gen(std::string("0123456789abcdef0123456789abcdef"));
-boost::uuids::uuid u4 = gen(std::wstring(L"01234567-89ab-cdef-0123456789abcdef"));
-</pre>
-
-<h4><a name="Name Generator"</a>Name Generator</h4>
-<p>
-The <tt>boost::uuids::name_generator</tt> class generates a name based <b>uuid</b> from a
-namespace uuid and a name.
-<pre>
-boost::uuids::uuid dns_namespace_uuid; // initialize to {6ba7b810-9dad-11d1-80b4-00c04fd430c8}
-
-boost::uuids::name_generator gen(dns_namespace_uuid);
-boost::uuids::uuid u = gen("boost.org");
-</pre>
-
-<h4><a name="Random Generator"</a>Random Generator</h4>
+<h4><a name="Random Generator">Random Generator</a></h4>
 <p>
 The <tt>boost::uuids::basic_random_generator</tt> class generates a random number
 based uuid from a random number generator (one that conforms to the 
@@ -475,11 +527,9 @@ boost::uuids::basic_random_generator&lt;boost::mt19937&gt; gen(&amp;ran);
 boost::uuids::uuid u = gen();
 </pre>
 
-<h3><a name="boost/uuid/uuid_io.hpp"</a>boost/uuid/uuid_io.hpp</h3>
-<h4><a name="Synopsis_io"</a>Synopsis</h4>
+<h3><a name="boost/uuid/uuid_io.hpp" href="./../../boost/uuid/uuid_io.hpp">boost/uuid/uuid_io.hpp</a></h3>
+<h4><a name="Synopsis_io">Synopsis</a></h4>
 <pre>
-#include &lt;<a href="./../../boost/uuid/uuid_io.hpp"><tt>boost/uuid/uuid_io.hpp</tt></a>&gt;
-
 namespace boost {
 namespace uuids {
 
@@ -492,7 +542,7 @@ template &lt;typename ch, typename char_traits&gt;
 }} // namespace boost::uuids
 </pre>
 
-<h4><a name="Input and Output"></a>Input and Output</h4>
+<h4><a name="Input and Output">Input and Output</a></h4>
 <p>
 Input and output stream operators <tt>&lt;&lt;</tt> and <tt>&gt;&gt;</tt>
 are provided by including <a href="../../boost/uuid/uuid_io.hpp"><tt>boost/uuid/uuid_io.hpp</tt></a>. 
@@ -506,11 +556,9 @@ ss &lt;&lt; u;
 ss &gt;&gt; u;
 </pre>
 
-<h3><a name="boost/uuid/uuid_serialize.hpp"</a>boost/uuid/uuid_serialize.hpp</h3>
-<h4><a name="Synopsis_serialize"</a>Synopsis</h4>
+<h3><a name="boost/uuid/uuid_serialize.hpp" href="./../../boost/uuid/uuid_serialize.hpp">boost/uuid/uuid_serialize.hpp</a></h3>
+<h4><a name="Synopsis_serialize">Synopsis</a></h4>
 <pre>
-#include &lt;<a href="./../../boost/uuid/uuid_serialize.hpp"><tt>boost/uuid/uuid_serialize.hpp</tt></a>&gt;
-
 namespace boost {
 namespace uuids {
 
@@ -519,7 +567,7 @@ BOOST_CLASS_IMPLEMENTATION(boost::uuids::uuid, boost::serialization::primitive_t
 }} // namespace boost::uuids
 </pre>
 
-<h4><a name="Serialization"></a>Serialization</h4>
+<h4><a name="Serialization">Serialization</a></h4>
 <p>
 Serialization is accomplished with the <a href="http://www.boost.org/libs/serialization/doc/index.html">
 Boost Serialization</a> library.  A <b>uuid</b> is serialized as a 
@@ -528,7 +576,7 @@ primitive type</a>, thus only the <b>uuid</b> value will be saved to/loaded from
 <p>
 Include <a href="../../boost/uuid/uuid_serialize.hpp"><tt>boost/uuid/uuid_serialize.hpp</tt></a> to enable serialization for <b>uuid</b>s.
 
-<h2><a name="Design notes"></a>Design notes</h2>
+<h2><a name="Design notes">Design notes</a></h2>
 <p>
 The document, <a href="http://www.itu.int/ITU-T/studygroups/com17/oid/X.667-E.pdf">
 http://www.itu.int/ITU-T/studygroups/com17/oid/X.667-E.pdf</a>, was used to design
@@ -545,12 +593,12 @@ compute the <b>uuid</b>.
 <p>All functions are re-entrant.  Classes are as thread-safe as an int.  That is an 
 instance can not be shared between threads without proper synchronization.
 
-<h2><a name="History and Acknowledgements"></a>History and Acknowledgements</h2>
+<h2><a name="History and Acknowledgements">History and Acknowledgements</a></h2>
 <p>
 A number of people on the <a href="http://www.boost.org/">boost.org</a> 
 mailing list provided useful comments and greatly helped to shape the library.
 
-<p>Revised&nbsp; January 1, 2010</p>
+<p>Revised&nbsp; February 6, 2010</p>
 
 <hr>
 <p>© Copyright Andy Tompkins, 2006</p>

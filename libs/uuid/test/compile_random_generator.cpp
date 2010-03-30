@@ -1,4 +1,4 @@
-//  (C) Copyright Andy Tompkins 2008. Permission to copy, use, modify, sell and
+//  (C) Copyright Andy Tompkins 2010. Permission to copy, use, modify, sell and
 //  distribute this software is granted provided this copyright notice appears
 //  in all copies. This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
@@ -7,9 +7,7 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-//  libs/uuid/test/compile_uuid_io_h.cpp  -------------------------------//
-
-// Purpose to make sure that a translation unit consisting of just the contents 
+// Purpose to make sure that a translation unit consisting of just the contents
 // of the header file will compile successfully.
 
-#include <boost/uuid/uuid_io.hpp>
+#include <boost/uuid/random_generator.hpp>
