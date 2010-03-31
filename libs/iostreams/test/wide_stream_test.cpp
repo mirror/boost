@@ -94,7 +94,7 @@ void write_wide_output_test()
         write_data_in_chars(out);
         BOOST_CHECK_MESSAGE(
             first.size() == second.size() && 
-                equal(first.begin(), first.end(), second.begin()),
+                std::equal(first.begin(), first.end(), second.begin()),
             "failed writing to filtering_wostream in chars with no buffer"
         );
     }
@@ -106,7 +106,7 @@ void write_wide_output_test()
         write_data_in_chunks(out);
         BOOST_CHECK_MESSAGE(
             first.size() == second.size() && 
-                equal(first.begin(), first.end(), second.begin()),
+                std::equal(first.begin(), first.end(), second.begin()),
             "failed writing to filtering_wostream in chunks with no buffer"
         );
     }
@@ -118,7 +118,7 @@ void write_wide_output_test()
         write_data_in_chars(out);
         BOOST_CHECK_MESSAGE(
             first.size() == second.size() && 
-                equal(first.begin(), first.end(), second.begin()),
+                std::equal(first.begin(), first.end(), second.begin()),
             "failed writing to filtering_wostream in chars with large buffer"
         );
     }
@@ -130,7 +130,7 @@ void write_wide_output_test()
         write_data_in_chunks(out);
         BOOST_CHECK_MESSAGE(
             first.size() == second.size() && 
-                equal(first.begin(), first.end(), second.begin()),
+                std::equal(first.begin(), first.end(), second.begin()),
             "failed writing to filtering_wostream in chunks with large buffer"
         );
     }
