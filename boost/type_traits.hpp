@@ -16,7 +16,7 @@
 #include "boost/type_traits/add_reference.hpp"
 #include "boost/type_traits/add_volatile.hpp"
 #include "boost/type_traits/alignment_of.hpp"
-#ifndef __BORLANDC__
+#if !defined(__BORLANDC__) && !defined(__CUDACC__)
 #include "boost/type_traits/has_new_operator.hpp"
 #endif
 #include "boost/type_traits/has_nothrow_assign.hpp"
