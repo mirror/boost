@@ -162,12 +162,6 @@ namespace quickbook
                 << "Syntax Error near column " << pos.column << ".\n";
             ++actor.error_count;
         }
-        
-        if(actor.error_count)
-        {
-            detail::outerr(filein_)
-                << "Error count: " << actor.error_count << ".\n";
-        }
 
         return actor.error_count ? 1 : 0;
     }
@@ -182,6 +176,13 @@ namespace quickbook
             detail::outwarn(filein_)
                 << "Warning missing [endsect] detected at end of file."
                 << std::endl;
+
+        if(actor.error_count)
+        {
+            detail::outerr(filein_)
+                << "Error count: " << actor.error_count << ".\n";
+        }
+
         return r;
     }
 
