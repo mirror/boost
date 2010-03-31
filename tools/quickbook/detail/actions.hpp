@@ -43,6 +43,7 @@ namespace quickbook
     extern tm* current_gm_time; // the current UTC time
     extern bool debug_mode;
     extern std::vector<std::string> include_path;
+    extern std::vector<std::string> preset_defines;
 
     // forward declarations
     struct actions;
