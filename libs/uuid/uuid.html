@@ -587,6 +587,19 @@ seeds the random number generator with a SHA-1 hash of a number of different
 values including <tt>std::time(0)</tt>, <tt>std::clock()</tt>, uninitialized
 data, value return from <tt>new unsigned int</tt>, etc..
 
+<p>Using <a href="http://valgrind.org/">Valgrind</a> produces a number of false
+positives with the default constructor of <tt>boost::uuids::basic_random_generator</tt>.  
+One solution is to suppress the errors as described in
+<a href="http://valgrind.org/docs/manual/manual-core.html#manual-core.suppress">Valgrind's documentation</a>.
+Another solution is to use a different constructor of <tt>boost::uuids::basic_random_generator</tt>
+and explicitly pass in a random number generator.
+<pre>
+boost::mt19937 ran;
+ran.seed(time(NULL)); // one should likely seed in a better way
+boost::uuids::basic_random_generator&lt;boost::mt19937&gt; gen(&ran);
+boost::uuids::uuid u = gen();
+</pre>
+
 <p>The <tt>boost::uuids::name_generator</tt> class uses the SHA-1 hash function to
 compute the <b>uuid</b>.
 
