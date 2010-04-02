@@ -18,16 +18,18 @@
 #endif
 
 #include <boost/test/minimal.hpp>
+#include <boost/smart_ptr.hpp>
 #include <boost/property_map/dynamic_property_map.hpp>
 #include <boost/property_map/property_map.hpp>
 #include <map>
 #include <iostream>
 #include <string>
+#include <memory>
 
 // generate a dynamic_property_map that maps strings to strings
 // WARNING: This code leaks memory.  For testing purposes only!
 // WARNING: This code uses library internals. For testing purposes only!
-std::auto_ptr<boost::dynamic_property_map>
+boost::shared_ptr<boost::dynamic_property_map>
 string2string_gen(const std::string& name,
                   const boost::any&,
                   const boost::any&) {
@@ -41,7 +43,7 @@ string2string_gen(const std::string& name,
 
   property_t property_map(*mymap);
 
-  std::auto_ptr<boost::dynamic_property_map> pm(
+  boost::shared_ptr<boost::dynamic_property_map> pm(
     new
     boost::detail::dynamic_property_map_adaptor<property_t>(property_map));
 

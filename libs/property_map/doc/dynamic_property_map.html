@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!-- Copyright 2004-5 The Trustees of Indiana University.
- 
-     Use, modification and distribution is subject to the Boost Software
-     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
-     http://www.boost.org/LICENSE_1_0.txt)
--->
-
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.8: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.6: http://docutils.sourceforge.net/" />
 <title>Boost Dynamic Property Maps</title>
-<link rel="stylesheet" href="../../../boost.css" type="text/css" />
+<link rel="stylesheet" href="../../parameter/doc/html/rst.css" type="text/css" />
 </head>
 <body>
 <div class="document" id="logo-dynamic-property-maps">
-<h1 class="title"><a class="reference" href="../../../index.htm"><img align="middle" alt="Boost" src="../../../boost.png" /></a> Dynamic Property Maps</h1>
+<h1 class="title"><a class="reference external" href="../../../index.htm"><img align="middle" alt="Boost" class="align-middle" src="../../../boost.png" /></a> Dynamic Property Maps</h1>
+
+<!-- Copyright 2004-5 The Trustees of Indiana University.
+
+Use, modification and distribution is subject to the Boost Software
+License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+http://www.boost.org/LICENSE_1_0.txt) -->
 <div class="section" id="summary">
-<h1><a class="toc-backref" href="#id2" name="summary">Summary</a></h1>
+<h1><a class="toc-backref" href="#id2">Summary</a></h1>
 <p>The dynamic property map interfaces provides access to a collection of
 property maps through a dynamically-typed interface. An algorithm can
 use it to manipulate property maps without knowing their key or
@@ -26,26 +25,26 @@ value types at compile-time. Type-safe codes can use dynamic property
 maps to interface more easily and completely with scripting languages
 and other text-based representations of key-value data.</p>
 <div class="contents topic" id="contents">
-<p class="topic-title first"><a name="contents">Contents</a></p>
+<p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference" href="#summary" id="id2" name="id2">Summary</a></li>
-<li><a class="reference" href="#introduction" id="id3" name="id3">Introduction</a><ul>
-<li><a class="reference" href="#fred-s-info-revisited" id="id4" name="id4">&quot;Fred's Info&quot; Revisited</a></li>
+<li><a class="reference internal" href="#summary" id="id2">Summary</a></li>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a><ul>
+<li><a class="reference internal" href="#fred-s-info-revisited" id="id4">&quot;Fred's Info&quot; Revisited</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#reference" id="id5" name="id5">Reference</a><ul>
-<li><a class="reference" href="#member-functions" id="id6" name="id6">Member Functions</a></li>
-<li><a class="reference" href="#free-functions" id="id7" name="id7">Free functions</a></li>
-<li><a class="reference" href="#exceptions" id="id8" name="id8">Exceptions</a></li>
+<li><a class="reference internal" href="#reference" id="id5">Reference</a><ul>
+<li><a class="reference internal" href="#member-functions" id="id6">Member Functions</a></li>
+<li><a class="reference internal" href="#free-functions" id="id7">Free functions</a></li>
+<li><a class="reference internal" href="#exceptions" id="id8">Exceptions</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 <div class="section" id="introduction">
-<h1><a class="toc-backref" href="#id3" name="introduction">Introduction</a></h1>
+<h1><a class="toc-backref" href="#id3">Introduction</a></h1>
 <p>The Boost Property Map library specifies statically type-safe
-interfaces through which key-value pairs can be manipulated by 
+interfaces through which key-value pairs can be manipulated by
 generic algorithms. Typically, an algorithm that uses property maps is
 parameterized on the types of the property maps it uses, and it
 manipulates them using the interfaces specified by the
@@ -53,7 +52,7 @@ Boost Property Map Library.</p>
 <p>The following generic function illustrates property map basics.</p>
 <pre class="literal-block">
 template &lt;typename AgeMap, typename GPAMap&gt;
-void 
+void
 manipulate_freds_info(AgeMap ages, GPAMap gpas) {
 
   typedef typename boost::property_traits&lt;AgeMap&gt;::key_type name_type;
@@ -115,7 +114,7 @@ Internally, the dynamic property map converts key and value pairs to
 meet the requirements of the underlying property map or signals a
 runtime exception if it cannot.</p>
 <div class="section" id="fred-s-info-revisited">
-<h2><a class="toc-backref" href="#id4" name="fred-s-info-revisited">&quot;Fred's Info&quot; Revisited</a></h2>
+<h2><a class="toc-backref" href="#id4">&quot;Fred's Info&quot; Revisited</a></h2>
 <p>Here's what the example above looks like using the
 <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> interface:</p>
 <pre class="literal-block">
@@ -173,7 +172,7 @@ int main()
   manipulate_freds_info(properties);
 
   std::cout &lt;&lt; &quot;Fred's age: &quot; &lt;&lt; get(age_map,fred) &lt;&lt; &quot;\n&quot;
-            &lt;&lt; &quot;Fred's gpa: &quot; &lt;&lt; get(gpa_map,fred) &lt;&lt; &quot;\n&quot;;       
+            &lt;&lt; &quot;Fred's gpa: &quot; &lt;&lt; get(gpa_map,fred) &lt;&lt; &quot;\n&quot;;
 }
 </pre>
 <p>The code first creates two property maps using <tt class="docutils literal"><span class="pre">std::map</span></tt> and the
@@ -189,7 +188,7 @@ typing of property map uses elsewhere in an application.</p>
 </div>
 </div>
 <div class="section" id="reference">
-<h1><a class="toc-backref" href="#id5" name="reference">Reference</a></h1>
+<h1><a class="toc-backref" href="#id5">Reference</a></h1>
 <pre class="literal-block">
 class dynamic_properties
 </pre>
@@ -198,27 +197,27 @@ a set of property maps. To use it, one must populate
 an object of this class with property maps using the <tt class="docutils literal"><span class="pre">property</span></tt> member
 function.</p>
 <div class="section" id="member-functions">
-<h2><a class="toc-backref" href="#id6" name="member-functions">Member Functions</a></h2>
+<h2><a class="toc-backref" href="#id6">Member Functions</a></h2>
 <pre class="literal-block">
 dynamic_properties()
 dynamic_properties(
   const boost::function&lt;
-    std::auto_ptr&lt;dynamic_property_map&gt; (
+    boost::shared_ptr&lt;dynamic_property_map&gt; (
       const std::string&amp;, const boost::any&amp;, const boost::any&amp;)
     &gt;&amp; fn)
 </pre>
 <p>A <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> object can be constructed with a function object
-that, when called, creates a new property map.  The library provides the 
+that, when called, creates a new property map.  The library provides the
 <tt class="docutils literal"><span class="pre">ignore_other_properties</span></tt> function object, which lets the <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> object ignore any properties that it hasn't been prepared to record.
 If an attempt is made
 to <tt class="docutils literal"><span class="pre">put</span></tt> a key-value pair to a nonexistent <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> key,
 then this function is called with the <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> key and the
 intended property key and value .  If <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> is
-default-constructed, such a <tt class="docutils literal"><span class="pre">put</span></tt> attempt throws 
+default-constructed, such a <tt class="docutils literal"><span class="pre">put</span></tt> attempt throws
 <tt class="docutils literal"><span class="pre">property_not_found</span></tt>.</p>
 <pre class="literal-block">
 template&lt;typename PropertyMap&gt;
-dynamic_properties&amp; 
+dynamic_properties&amp;
 property(const std::string&amp; name, PropertyMap property_map)
 </pre>
 <p>This member function adds a property map to the set of maps contained,
@@ -226,7 +225,7 @@ using <tt class="docutils literal"><span class="pre">name</span></tt> as its key
 <p>Requirements: <tt class="docutils literal"><span class="pre">PropertyMap</span></tt> must model Readable Property Map or
 Read/Write Property Map.</p>
 <pre class="literal-block">
-void insert(const std::string&amp; name, std::auto_ptr&lt;dynamic_property_map&gt; pm)
+void insert(const std::string&amp; name, boost::shared_ptr&lt;dynamic_property_map&gt; pm)
 </pre>
 <p>This member function directly adds a <tt class="docutils literal"><span class="pre">dynamic_property_map</span></tt>
 to the collection, using <tt class="docutils literal"><span class="pre">name</span></tt> as its key.</p>
@@ -244,29 +243,29 @@ const_iterator end() const
 dynamic property maps held by the <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> object.  It is used to
 terminate traversals over the set of dynamic property maps</p>
 <pre class="literal-block">
-iterator lower_bound(const std::string&amp; name) 
+iterator lower_bound(const std::string&amp; name)
 </pre>
 <p>This member function returns an iterator that points to the first
-property map whose <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> key is <tt class="docutils literal"><span class="pre">name</span></tt>.  
+property map whose <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> key is <tt class="docutils literal"><span class="pre">name</span></tt>.
 Bear in mind that multiple property maps may have the same
 <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> key, so long as their property map key types differ.</p>
 <p>Invariant: The range [ lower_bound(name), end() ) contains every
 property map that has name for its <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> key.</p>
 </div>
 <div class="section" id="free-functions">
-<h2><a class="toc-backref" href="#id7" name="free-functions">Free functions</a></h2>
+<h2><a class="toc-backref" href="#id7">Free functions</a></h2>
 <pre class="literal-block">
-std::auto_ptr&lt;boost::dynamic_property_map&gt; 
+boost::shared_ptr&lt;boost::dynamic_property_map&gt;
 ignore_other_properties(const std::string&amp;,
-                      const boost::any&amp;,
-                      const boost::any&amp;)
+                        const boost::any&amp;,
+                        const boost::any&amp;)
 </pre>
 <p>When passed to the <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> constructor, this function
 allows the <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> object to disregard attempts to put
 values to unknown keys without signaling an error.</p>
 <pre class="literal-block">
 template&lt;typename Key, typename Value&gt;
-bool put(const std::string&amp; name, dynamic_properties&amp; dp, const Key&amp; key, 
+bool put(const std::string&amp; name, dynamic_properties&amp; dp, const Key&amp; key,
          const Value&amp; value)
 </pre>
 <p>This function adds a key-value pair to the property map with the
@@ -275,7 +274,7 @@ behavior depends on the availability of a property map generator.  If
 a property map generator was supplied when the <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt>
 object was constructed, then that function is used to create a new
 property map.  If the generator fails to generate a property map
-(returns a null <tt class="docutils literal"><span class="pre">auto_ptr</span></tt>), then the <tt class="docutils literal"><span class="pre">put</span></tt> function returns
+(returns a null <tt class="docutils literal"><span class="pre">shared_ptr</span></tt>), then the <tt class="docutils literal"><span class="pre">put</span></tt> function returns
 <tt class="docutils literal"><span class="pre">false</span></tt>.  If, on the other hand, the <tt class="docutils literal"><span class="pre">dynamic_properties</span></tt> object
 has no property map generator (meaning it was default-constructed),
 then <tt class="docutils literal"><span class="pre">property_not_found</span></tt> is thrown. If a candidate property map is
@@ -283,7 +282,7 @@ found but it does not support <tt class="docutils literal"><span class="pre">put
 thrown.</p>
 <pre class="literal-block">
 template&lt;typename Value, typename Key&gt;
-Value get(const std::string&amp; name, const dynamic_properties&amp; dp, 
+Value get(const std::string&amp; name, const dynamic_properties&amp; dp,
           const Key&amp; key)
 </pre>
 <p>This function gets the value from the property-map whose namee is
@@ -308,7 +307,7 @@ map's key type. Details of that conversion are unspecified.
 2) For this expression to be valid, the key must be
 associated with some value, otherwise the result is undefined.</p>
 <pre class="literal-block">
-std::string get_string(const any&amp; key) 
+std::string get_string(const any&amp; key)
 </pre>
 <p>Given a representation of a key, return the string representation
 of the value associated with that key.</p>
@@ -319,7 +318,7 @@ property map's key type. Details of that conversion are unspecified.
 associated with some value, otherwise the result is undefined.
 3) The value type of the property map must model Output Streamable.</p>
 <pre class="literal-block">
-void put(const any&amp; key, const any&amp; value) 
+void put(const any&amp; key, const any&amp; value)
 </pre>
 <p>Given a representation of a key and a representation of a value, the
 key and value are associated in the property map.</p>
@@ -332,16 +331,16 @@ property map's value type. Details of that conversion are unspecified.
 case an error will be signaled.  This is the runtime analogue of the
 Readable Property Map concept.</p>
 <pre class="literal-block">
-const std::type_info&amp; key() const 
+const std::type_info&amp; key() const
 </pre>
 <p>Returns a <tt class="docutils literal"><span class="pre">type_info</span></tt> object that represents the property map's key type.</p>
 <pre class="literal-block">
-const std::type_info&amp; value() const 
+const std::type_info&amp; value() const
 </pre>
 <p>Returns a <tt class="docutils literal"><span class="pre">type_info</span></tt> object that represents the property map's value type.</p>
 </div>
 <div class="section" id="exceptions">
-<h2><a class="toc-backref" href="#id8" name="exceptions">Exceptions</a></h2>
+<h2><a class="toc-backref" href="#id8">Exceptions</a></h2>
 <pre class="literal-block">
 struct dynamic_property_exception : public std::exception {
   virtual ~dynamic_property_exception() throw() {}
@@ -380,9 +379,11 @@ described above.</p>
 </div>
 </div>
 </div>
-<hr class="docutils footer" />
 <div class="footer">
-Generated on: 2007-06-20 16:36 UTC.
+<hr class="footer" />
+Generated on: 2010-03-29 18:04 UTC.
+Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+
 </div>
 </body>
 </html>
