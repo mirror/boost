@@ -7,10 +7,6 @@ template<class SinglePassRange1, class ForwardRange2>
 typename range_iterator<SinglePassRange1>::type
 find_first_of(SinglePassRange1& rng1, const ForwardRange2& rng2);
 
-template<class SinglePassRange1, class ForwardRange2>
-typename range_iterator<const SinglePassRange1>::type
-find_first_of(const SinglePassRange1& rng1, const ForwardRange2& rng2);
-
 template<
     class SinglePassRange1,
     class ForwardRange2,
@@ -18,15 +14,6 @@ template<
     >
 typename range_iterator<SinglePassRange1>::type
 find_first_of(SinglePassRange1& rng1, const ForwardRange2& rng2, BinaryPredicate pred);
-
-template<
-    class SinglePassRange1,
-    class ForwardRange2,
-    class BinaryPredicate
-    >
-typename range_iterator<const SinglePassRange1>::type
-find_first_of(const SinglePassRange1& rng1, const ForwardRange2& rng2, BinaryPredicate pred);
-
 
 template<
     range_return_value re,
@@ -39,28 +26,11 @@ find_first_of(SinglePassRange1& rng1, const ForwardRange2& rng2);
 template<
     range_return_value re,
     class SinglePassRange1,
-    class ForwardRange2
-    >
-typename range_return<const SinglePassRange1, re>::type
-find_first_of(const SinglePassRange1& rng1, const ForwardRange2& rng2);
-
-template<
-    range_return_value re,
-    class SinglePassRange1,
     class ForwardRange2,
     class BinaryPredicate
     >
 typename range_return<SinglePassRange1, re>::type
 find_first_of(SinglePassRange1& rng1, const ForwardRange2& rng2, BinaryPredicate pred);
-
-template<
-    range_return_value re,
-    class SinglePassRange1,
-    class ForwardRange2,
-    class BinaryPredicate
-    >
-typename range_return<const SinglePassRange1, re>::type
-find_first_of(const SinglePassRange1& rng1, const ForwardRange2& rng2, BinaryPredicate pred);
 ``
 
 [heading Description]

@@ -7,10 +7,6 @@ template<class ForwardRange1, class ForwardRange2>
 typename range_iterator<ForwardRange1>::type
 find_end(ForwardRange1& rng1, const ForwardRange2& rng2);
 
-template<class ForwardRange1, class ForwardRange2>
-typename range_iterator<const ForwardRange1>::type
-find_end(const ForwardRange1& rng1, const ForwardRange2& rng2);
-
 template<
     class ForwardRange1,
     class ForwardRange2,
@@ -18,15 +14,6 @@ template<
     >
 typename range_iterator<ForwardRange1>::type
 find_end(ForwardRange1& rng1, const ForwardRange2& rng2, BinaryPredicate pred);
-
-template<
-    class ForwardRange1,
-    class ForwardRange2,
-    class BinaryPredicate
-    >
-typename range_iterator<const ForwardRange1>::type
-find_end(const ForwardRange1& rng1, const ForwardRange2& rng2, BinaryPredicate pred);
-
 
 template<
     range_return_value re,
@@ -39,35 +26,18 @@ find_end(ForwardRange1& rng1, const ForwardRange2& rng2);
 template<
     range_return_value re,
     class ForwardRange1,
-    class ForwardRange2
-    >
-typename range_return<const ForwardRange1, re>::type
-find_end(const ForwardRange1& rng1, const ForwardRange2& rng2);
-
-template<
-    range_return_value re,
-    class ForwardRange1,
     class ForwardRange2,
     class BinaryPredicate
     >
 typename range_return<ForwardRange1, re>::type
 find_end(ForwardRange1& rng1, const ForwardRange2& rng2, BinaryPredicate pred);
-
-template<
-    range_return_value re,
-    class ForwardRange1,
-    class ForwardRange2,
-    class BinaryPredicate
-    >
-typename range_return<const ForwardRange1, re>::type
-find_end(const ForwardRange1& rng1, const ForwardRange2& rng2, BinaryPredicate pred);
 ``
 
 [heading Description]
 
 The versions of `find_end` that return an iterator, return an iterator to the beginning of the last sub-sequence equal to `rng2` within `rng1`.
 Equality is determined by `operator==` for non-predicate versions of `find_end`, and by satisfying `pred` in the predicate versions. The versions of `find_end` that return a `range_return`, defines `found` in the same manner as the returned iterator described above.
- 
+
 [heading Definition]
 
 Defined in the header file `boost/range/algorithm/find_end.hpp`

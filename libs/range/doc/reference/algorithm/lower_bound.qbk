@@ -7,10 +7,6 @@ template<class ForwardRange, class Value>
 typename range_iterator<ForwardRange>::type
 lower_bound(ForwardRange& rng, Value val);
 
-template<class ForwardRange, class Value>
-typename range_iterator<const ForwardRange>::type
-lower_bound(const ForwardRange& rng, Value val);
-
 template<
     range_return_value re,
     class ForwardRange,
@@ -18,14 +14,6 @@ template<
     >
 typename range_return<ForwardRange, re>::type
 lower_bound(ForwardRange& rng, Value val);
-
-template<
-    range_return_value re,
-    class ForwardRange,
-    class Value
-    >
-typename range_return<const ForwardRange, re>::type
-lower_bound(const ForwardRange& rng, Value val);
 ``
 
 [heading Description]

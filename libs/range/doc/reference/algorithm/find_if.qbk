@@ -7,10 +7,6 @@ template<class SinglePassRange, class UnaryPredicate>
 typename range_iterator<SinglePassRange>::type
 find_if(SinglePassRange& rng, UnaryPredicate pred);
 
-template<class SinglePassRange, class UnaryPredicate>
-typename range_iterator<const SinglePassRange>::type
-find_if(const SinglePassRange& rng, UnaryPredicate pred);
-
 template<
     range_return_value re,
     class SinglePassRange,
@@ -18,14 +14,6 @@ template<
     >
 typename range_return<SinglePassRange, re>::type
 find_if(SinglePassRange& rng, UnaryPredicate pred);
-
-template<
-    range_return_value re,
-    class SinglePassRange,
-    class UnaryPredicate
-    >
-typename range_return<const SinglePassRange, re>::type
-find_if(const SinglePassRange& rng, UnaryPredicate pred);
 ``
 
 [heading Description]

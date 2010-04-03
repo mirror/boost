@@ -86,6 +86,10 @@ namespace boost
             test_find_container< const std::vector<int> >();
             test_find_container< const std::list<int> >();
             test_find_container< const std::deque<int> >();
+
+            std::vector<int> vi;
+            const std::vector<int>& cvi = vi;
+            std::vector<int>::const_iterator it = boost::find(vi, 0);
         }
     }
 }
