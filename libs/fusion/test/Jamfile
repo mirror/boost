@@ -120,6 +120,10 @@ import testing ;
     [ run sequence/adapt_struct.cpp : : : : ]
     [ run sequence/adapt_tpl_class.cpp : : : : ]
     [ run sequence/adapt_tpl_struct.cpp : : : : ]
+    [ run sequence/define_struct.cpp : : : : ]
+    [ run sequence/define_assoc_struct.cpp : : : : ]
+    [ run sequence/define_tpl_struct.cpp : : : : ]
+    [ run sequence/define_assoc_tpl_struct.cpp : : : : ]
     
     [ run functional/fused.cpp : : : : ]
     [ run functional/fused_function_object.cpp : : : : ]

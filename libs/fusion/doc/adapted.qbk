@@ -101,8 +101,8 @@ header makes `boost::array` a fully conforming __random_access_sequence__.
 
 [heading Header]
 
-    #include <boost/fusion/adapted/array.hpp>
-    #include <boost/fusion/include/array.hpp>
+    #include <boost/fusion/adapted/boost_array.hpp>
+    #include <boost/fusion/include/boost_array.hpp>
 
 [heading Model of]
 
