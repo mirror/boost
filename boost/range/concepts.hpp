@@ -74,10 +74,10 @@ namespace boost {
         // Ultimately modeling the range concepts using composition
         // with the Boost.Iterator concepts would render the library
         // incompatible with many common Boost.Lambda expressions.
-        template<typename Iterator>
+        template<class Iterator>
         struct IncrementableIteratorConcept : CopyConstructible<Iterator>
         {
-            typedef typename iterator_traversal<Iterator>::type traversal_category;
+            typedef BOOST_DEDUCED_TYPENAME iterator_traversal<Iterator>::type traversal_category;
 
             BOOST_CONCEPT_ASSERT((
                 Convertible<
@@ -94,42 +94,42 @@ namespace boost {
             Iterator i;
         };
 
-        template<typename Iterator>
+        template<class Iterator>
         struct SinglePassIteratorConcept
             : IncrementableIteratorConcept<Iterator>
             , EqualityComparable<Iterator>
         {
             BOOST_CONCEPT_ASSERT((
                 Convertible<
-                    typename SinglePassIteratorConcept::traversal_category,
+                    BOOST_DEDUCED_TYPENAME SinglePassIteratorConcept::traversal_category,
                     single_pass_traversal_tag
                 >));
         };
 
-        template<typename Iterator>
+        template<class Iterator>
         struct ForwardIteratorConcept
             : SinglePassIteratorConcept<Iterator>
             , DefaultConstructible<Iterator>
         {
-            typedef typename boost::detail::iterator_traits<Iterator>::difference_type difference_type;
+            typedef BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::difference_type difference_type;
 
             BOOST_MPL_ASSERT((is_integral<difference_type>));
             BOOST_MPL_ASSERT_RELATION(std::numeric_limits<difference_type>::is_signed, ==, true);
 
             BOOST_CONCEPT_ASSERT((
                 Convertible<
-                    typename ForwardIteratorConcept::traversal_category,
+                    BOOST_DEDUCED_TYPENAME ForwardIteratorConcept::traversal_category,
                     forward_traversal_tag
                 >));
          };
 
-         template<typename Iterator>
+         template<class Iterator>
          struct BidirectionalIteratorConcept
              : ForwardIteratorConcept<Iterator>
          {
              BOOST_CONCEPT_ASSERT((
                  Convertible<
-                     typename BidirectionalIteratorConcept::traversal_category,
+                     BOOST_DEDUCED_TYPENAME BidirectionalIteratorConcept::traversal_category,
                      bidirectional_traversal_tag
                  >));
 
@@ -142,13 +142,13 @@ namespace boost {
              Iterator i;
          };
 
-         template<typename Iterator>
+         template<class Iterator>
          struct RandomAccessIteratorConcept
              : BidirectionalIteratorConcept<Iterator>
          {
              BOOST_CONCEPT_ASSERT((
                  Convertible<
-                     typename RandomAccessIteratorConcept::traversal_category,
+                     BOOST_DEDUCED_TYPENAME RandomAccessIteratorConcept::traversal_category,
                      random_access_traversal_tag
                  >));
 
@@ -162,7 +162,7 @@ namespace boost {
                  n = i - j;
              }
          private:
-             typename RandomAccessIteratorConcept::difference_type n;
+             BOOST_DEDUCED_TYPENAME RandomAccessIteratorConcept::difference_type n;
              Iterator i;
              Iterator j;
          };
@@ -170,11 +170,11 @@ namespace boost {
     } // namespace range_detail
 
     //! Check if a type T models the SinglePassRange range concept.
-    template<typename T>
+    template<class T>
     struct SinglePassRangeConcept
     {
-         typedef typename range_iterator<T const>::type  const_iterator;
-         typedef typename range_iterator<T>::type        iterator;
+         typedef BOOST_DEDUCED_TYPENAME range_iterator<T const>::type  const_iterator;
+         typedef BOOST_DEDUCED_TYPENAME range_iterator<T>::type        iterator;
 
          BOOST_CONCEPT_ASSERT((range_detail::SinglePassIteratorConcept<iterator>));
          BOOST_CONCEPT_ASSERT((range_detail::SinglePassIteratorConcept<const_iterator>));
@@ -211,17 +211,17 @@ namespace boost {
     };
 
     //! Check if a type T models the ForwardRange range concept.
-    template<typename T>
+    template<class T>
     struct ForwardRangeConcept : SinglePassRangeConcept<T>
     {
-        BOOST_CONCEPT_ASSERT((range_detail::ForwardIteratorConcept<typename ForwardRangeConcept::iterator>));
-        BOOST_CONCEPT_ASSERT((range_detail::ForwardIteratorConcept<typename ForwardRangeConcept::const_iterator>));
+        BOOST_CONCEPT_ASSERT((range_detail::ForwardIteratorConcept<BOOST_DEDUCED_TYPENAME ForwardRangeConcept::iterator>));
+        BOOST_CONCEPT_ASSERT((range_detail::ForwardIteratorConcept<BOOST_DEDUCED_TYPENAME ForwardRangeConcept::const_iterator>));
     };
 
-    template<typename Range>
+    template<class Range>
     struct WriteableRangeConcept
     {
-        typedef typename range_iterator<Range>::type iterator;
+        typedef BOOST_DEDUCED_TYPENAME range_iterator<Range>::type iterator;
 
         BOOST_CONCEPT_USAGE(WriteableRangeConcept)
         {
@@ -229,11 +229,11 @@ namespace boost {
         }
     private:
         iterator i;
-        typename range_value<Range>::type v;
+        BOOST_DEDUCED_TYPENAME range_value<Range>::type v;
     };
 
     //! Check if a type T models the WriteableForwardRange range concept.
-    template<typename T>
+    template<class T>
     struct WriteableForwardRangeConcept
         : ForwardRangeConcept<T>
         , WriteableRangeConcept<T>
@@ -241,15 +241,15 @@ namespace boost {
     };
 
     //! Check if a type T models the BidirectionalRange range concept.
-    template<typename T>
+    template<class T>
     struct BidirectionalRangeConcept : ForwardRangeConcept<T>
     {
-        BOOST_CONCEPT_ASSERT((BidirectionalIteratorConcept<typename BidirectionalRangeConcept::iterator>));
-	BOOST_CONCEPT_ASSERT((BidirectionalIteratorConcept<typename BidirectionalRangeConcept::const_iterator>));
+        BOOST_CONCEPT_ASSERT((BidirectionalIteratorConcept<BOOST_DEDUCED_TYPENAME BidirectionalRangeConcept::iterator>));
+        BOOST_CONCEPT_ASSERT((BidirectionalIteratorConcept<BOOST_DEDUCED_TYPENAME BidirectionalRangeConcept::const_iterator>));
     };
 
     //! Check if a type T models the WriteableBidirectionalRange range concept.
-    template<typename T>
+    template<class T>
     struct WriteableBidirectionalRangeConcept
         : BidirectionalRangeConcept<T>
         , WriteableRangeConcept<T>
@@ -257,15 +257,15 @@ namespace boost {
     };
 
     //! Check if a type T models the RandomAccessRange range concept.
-    template<typename T>
+    template<class T>
     struct RandomAccessRangeConcept : BidirectionalRangeConcept<T>
     {
-        BOOST_CONCEPT_ASSERT((RandomAccessIteratorConcept<typename RandomAccessRangeConcept::iterator>));
-        BOOST_CONCEPT_ASSERT((RandomAccessIteratorConcept<typename RandomAccessRangeConcept::const_iterator>));
+        BOOST_CONCEPT_ASSERT((RandomAccessIteratorConcept<BOOST_DEDUCED_TYPENAME RandomAccessRangeConcept::iterator>));
+        BOOST_CONCEPT_ASSERT((RandomAccessIteratorConcept<BOOST_DEDUCED_TYPENAME RandomAccessRangeConcept::const_iterator>));
     };
 
     //! Check if a type T models the WriteableRandomAccessRange range concept.
-    template<typename T>
+    template<class T>
     struct WriteableRandomAccessRangeConcept
         : RandomAccessRangeConcept<T>
         , WriteableRangeConcept<T>

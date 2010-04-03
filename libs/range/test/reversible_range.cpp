@@ -27,44 +27,39 @@
 #include <vector>
 #include <algorithm>
 
-using namespace boost;
-using namespace std;
-
 void check_iterator()
 {
-    typedef vector<int>                           vec_t;
-    typedef vec_t::iterator                       iterator;
-    typedef pair<iterator,iterator>               pair_t;
-    typedef range_reverse_iterator<pair_t>::type  rev_iterator;
-    typedef pair<rev_iterator,rev_iterator>       rev_pair_t;
-    
+    typedef std::vector<int>                            vec_t;
+    typedef vec_t::iterator                             iterator;
+    typedef std::pair<iterator,iterator>                pair_t;
+    typedef boost::range_reverse_iterator<pair_t>::type rev_iterator;
+    typedef std::pair<rev_iterator,rev_iterator>        rev_pair_t;
+
     vec_t                            vec;
-    pair_t                           p    = make_pair( vec.begin(), vec.end() );
-    rev_pair_t                       rp   = make_pair( rbegin( p ), rend( p ) );
+    pair_t                           p    = std::make_pair( vec.begin(), vec.end() );
+    rev_pair_t                       rp   = std::make_pair( boost::rbegin( p ), boost::rend( p ) );
     int                             a[]  = {1,2,3,4,5,6,7,8,9,10};
-    const int                       ca[] = {1,2,3,4,5,6,7,8,9,10,11,12};                        
-    BOOST_CHECK( rbegin( vec ) == range_reverse_iterator<vec_t>::type( vec.end() ) );
-    BOOST_CHECK( rend( vec ) == range_reverse_iterator<vec_t>::type( vec.begin() ) );
-    BOOST_CHECK( std::distance( rbegin( vec ), rend( vec ) ) == std::distance( begin( vec ), end( vec ) ) );
+    const int                       ca[] = {1,2,3,4,5,6,7,8,9,10,11,12};
+    BOOST_CHECK( boost::rbegin( vec ) == boost::range_reverse_iterator<vec_t>::type( vec.end() ) );
+    BOOST_CHECK( boost::rend( vec ) == boost::range_reverse_iterator<vec_t>::type( vec.begin() ) );
+    BOOST_CHECK( std::distance( boost::rbegin( vec ), boost::rend( vec ) ) == std::distance( boost::begin( vec ), boost::end( vec ) ) );
 
-    BOOST_CHECK( rbegin( p ) == begin( rp ) );
-    BOOST_CHECK( rend( p ) == end( rp ) );
-    BOOST_CHECK( std::distance( rbegin( p ), rend( p ) ) == std::distance( begin( rp ), end( rp ) ) );
-    BOOST_CHECK( std::distance( begin( p ), end( p ) ) == std::distance( rbegin( rp ), rend( rp ) ) );
+    BOOST_CHECK( boost::rbegin( p ) == boost::begin( rp ) );
+    BOOST_CHECK( boost::rend( p ) == boost::end( rp ) );
+    BOOST_CHECK( std::distance( boost::rbegin( p ), boost::rend( p ) ) == std::distance( boost::begin( rp ), boost::end( rp ) ) );
+    BOOST_CHECK( std::distance( boost::begin( p ), boost::end( p ) ) == std::distance( boost::rbegin( rp ), boost::rend( rp ) ) );
 
 
-    BOOST_CHECK_EQUAL( &*begin( a ), &*( rend( a ) - 1 ) );
-    BOOST_CHECK_EQUAL( &*( end( a ) - 1 ), &*rbegin( a ) );
-    BOOST_CHECK_EQUAL( &*begin( ca ), &*( rend( ca ) - 1 ) );
-    BOOST_CHECK_EQUAL( &*( end( ca ) - 1 ), &*rbegin( ca ) );
+    BOOST_CHECK_EQUAL( &*boost::begin( a ), &*( boost::rend( a ) - 1 ) );
+    BOOST_CHECK_EQUAL( &*( boost::end( a ) - 1 ), &*boost::rbegin( a ) );
+    BOOST_CHECK_EQUAL( &*boost::begin( ca ), &*( boost::rend( ca ) - 1 ) );
+    BOOST_CHECK_EQUAL( &*( boost::end( ca ) - 1 ), &*boost::rbegin( ca ) );
 }
 
 
-using boost::unit_test::test_suite;
-
-test_suite* init_unit_test_suite( int argc, char* argv[] )
+boost::unit_test::test_suite* init_unit_test_suite( int argc, char* argv[] )
 {
-    test_suite* test = BOOST_TEST_SUITE( "Range Test Suite" );
+    boost::unit_test::test_suite* test = BOOST_TEST_SUITE( "Range Test Suite" );
 
     test->add( BOOST_TEST_CASE( &check_iterator ) );
 

@@ -24,46 +24,43 @@
 #include <boost/test/test_tools.hpp>
 #include <vector>
 
-using namespace boost;
-
 void check_std_container()
 {
     typedef std::vector<int> vec_t;
     vec_t                    vec;
     vec.push_back( 3 ); vec.push_back( 4 );
-    const vec_t              cvec( vec ); 
+    const vec_t              cvec( vec );
 
-    BOOST_STATIC_ASSERT(( is_same< range_value<vec_t>::type, vec_t::value_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_iterator<vec_t>::type, vec_t::iterator >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_iterator<const vec_t>::type, vec_t::const_iterator >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_difference<vec_t>::type, vec_t::difference_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_size<vec_t>::type, vec_t::size_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_iterator<vec_t>::type, vec_t::iterator >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_iterator<const vec_t>::type, vec_t::const_iterator >::value ));
-    
-    BOOST_STATIC_ASSERT(( is_same< range_value<const vec_t>::type, vec_t::value_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_difference<const vec_t>::type, vec_t::difference_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_size<const vec_t>::type, vec_t::size_type >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_value<vec_t>::type, vec_t::value_type >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_iterator<vec_t>::type, vec_t::iterator >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_iterator<const vec_t>::type, vec_t::const_iterator >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_difference<vec_t>::type, vec_t::difference_type >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_size<vec_t>::type, vec_t::size_type >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_iterator<vec_t>::type, vec_t::iterator >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_iterator<const vec_t>::type, vec_t::const_iterator >::value ));
 
-    BOOST_CHECK( begin( vec ) == vec.begin() );
-    BOOST_CHECK( end( vec )   == vec.end() );
-    BOOST_CHECK( empty( vec ) == vec.empty() );
-    BOOST_CHECK( (std::size_t)size( vec ) == vec.size() );
-    
-    BOOST_CHECK( begin( cvec ) == cvec.begin() );
-    BOOST_CHECK( end( cvec )   == cvec.end() );
-    BOOST_CHECK( empty( cvec ) == cvec.empty() );
-    BOOST_CHECK( (std::size_t)size( cvec ) == cvec.size() );
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_value<const vec_t>::type, vec_t::value_type >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_difference<const vec_t>::type, vec_t::difference_type >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_size<const vec_t>::type, vec_t::size_type >::value ));
+
+    BOOST_CHECK( boost::begin( vec ) == vec.begin() );
+    BOOST_CHECK( boost::end( vec )   == vec.end() );
+    BOOST_CHECK( boost::empty( vec ) == vec.empty() );
+    BOOST_CHECK( static_cast<std::size_t>(boost::size( vec )) == vec.size() );
+
+    BOOST_CHECK( boost::begin( cvec ) == cvec.begin() );
+    BOOST_CHECK( boost::end( cvec )   == cvec.end() );
+    BOOST_CHECK( boost::empty( cvec ) == cvec.empty() );
+    BOOST_CHECK( static_cast<std::size_t>(boost::size( cvec )) == cvec.size() );
 
 }
 
 
 #include <boost/test/unit_test.hpp>
-using boost::unit_test::test_suite;
 
-test_suite* init_unit_test_suite( int argc, char* argv[] )
+boost::unit_test::test_suite* init_unit_test_suite( int argc, char* argv[] )
 {
-    test_suite* test = BOOST_TEST_SUITE( "Range Test Suite" );
+    boost::unit_test::test_suite* test = BOOST_TEST_SUITE( "Range Test Suite" );
 
     test->add( BOOST_TEST_CASE( &check_std_container ) );
 
