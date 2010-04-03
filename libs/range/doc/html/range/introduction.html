@@ -36,14 +36,14 @@
       much as possible.
     </p>
 <p>
-      The most common form of ranges we are used to work with is standard library
-      containers. However, one often finds it desirable to extend that code to work
-      with other types that offer enough functionality to satisfy the needs of the
-      generic code <span class="bold"><strong><span class="emphasis"><em>if a suitable layer of indirection
-      is applied</em></span></strong></span> . For example, raw arrays are often suitable
-      for use with generic code that works with containers, provided a suitable adapter
-      is used. Likewise, null terminated strings can be treated as containers of
-      characters, if suitably adapted.
+      The most common form of ranges used throughout the C++ community are standard
+      library containers. When writing algorithms however, one often finds it desirable
+      for the algorithm to accept other types that offer enough functionality to
+      satisfy the needs of the generic code <span class="bold"><strong><span class="emphasis"><em>if a
+      suitable layer of indirection is applied</em></span></strong></span> . For example,
+      raw arrays are often suitable for use with generic code that works with containers,
+      provided a suitable adapter is used. Likewise, null terminated strings can
+      be treated as containers of characters, if suitably adapted.
     </p>
 <p>
       This library therefore provides the means to adapt standard-like containers,
@@ -125,7 +125,7 @@
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">my_generic_replace</span><span class="special">(</span> <span class="identifier">my_view</span><span class="special">,</span> <span class="number">4</span><span class="special">,</span> <span class="number">2</span> <span class="special">);</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">my_generic_replace</span><span class="special">(</span> <span class="identifier">str</span><span class="special">,</span> <span class="char">'a'</span><span class="special">,</span> <span class="char">'b'</span> <span class="special">);</span>
 
-<span class="comment">// prints '3', '5' and '0'     
+<span class="comment">// prints '3', '5' and '0'
 </span></pre>
 <p>
     </p>

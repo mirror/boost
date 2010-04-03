@@ -32,18 +32,18 @@ namespace boost
 			typedef const Value& first_argument_type;
 
 			replace_value(const Value& from, const Value& to)
-				:	_from(from), _to(to)
+				:	m_from(from), m_to(to)
 			{
 			}
 
 			const Value& operator()(const Value& x) const
 			{
-				return (x == _from) ? _to : x;
+				return (x == m_from) ? m_to : x;
 			}
 
 		private:
-			Value _from;
-			Value _to;
+			Value m_from;
+			Value m_to;
 		};
 
 		template< class R >
@@ -109,7 +109,7 @@ namespace boost
 				replaced =
 					range_detail::forwarder2<range_detail::replace_holder>();
 		}
-		
+
 		template<class InputRange>
 		inline replace_range<InputRange>
 		replace(InputRange& rng,
@@ -118,7 +118,7 @@ namespace boost
         {
             return replace_range<InputRange>(rng, from, to);
         }
-        
+
         template<class InputRange>
         inline replace_range<const InputRange>
         replace(const InputRange& rng,
@@ -127,7 +127,7 @@ namespace boost
         {
             return replace_range<const InputRange>(rng, from ,to);
         }
-        
+
 	} // 'adaptors'
 } // 'boost'
 

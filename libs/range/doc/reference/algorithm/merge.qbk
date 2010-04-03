@@ -11,7 +11,7 @@ template<
 OutputIterator merge(const SinglePassRange1& rng1,
                      const SinglePassRange2& rng2,
                      OutputIterator          out);
-                     
+
 template<
     class SinglePassRange1,
     class SinglePassRange2,
@@ -68,8 +68,8 @@ Defined in the header file `boost/range/algorithm/merge.hpp`
 
 [heading For the predicate version:]
 
-* The elements of `rng1` is in ascending order. That is, for each adjacent element pair `[x,y]`, of `rng1`, `pred(y, x) == false`.
-* The elements of `rng2` is in ascending order. That is, for each adjacent element pair `[x,y]`, of `rng2`, `pred(y, x) == false`.
+* The elements of `rng1` are in ascending order. That is, for each adjacent element pair `[x,y]`, of `rng1`, `pred(y, x) == false`.
+* The elements of `rng2` are in ascending order. That is, for each adjacent element pair `[x,y]`, of `rng2`, `pred(y, x) == false`.
 * The ranges `rng1` and `[out, out + distance(rng1) + distance(rng2))` do not overlap.
 * The ranges `rng2` and `[out, out + distance(rng1) + distance(rng2))` do not overlap.
 * `[out, out + distance(rng1) + distance(rng2))` is a valid range.

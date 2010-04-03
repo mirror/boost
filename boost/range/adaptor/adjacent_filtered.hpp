@@ -104,7 +104,7 @@ namespace boost
 
 			typedef BOOST_DEDUCED_TYPENAME range_iterator<R>::type raw_iterator;
 
-			P bi_pred;
+			P m_bi_pred;
 
 			// Get the first element in the half-open range that
 			// passes the filter predicate.
@@ -146,8 +146,8 @@ namespace boost
 			adjacent_filter_range( const P& p, R& r, bool default_pass )
 			: base_range( skip_iter( this, to_valid(boost::begin(r), boost::end(r), p, default_pass)),
 						  skip_iter( this, boost::end(r)   ) ),
-			  bi_pred( p ),
-			  _default_pass(default_pass)
+			  m_bi_pred( p ),
+			  m_default_pass(default_pass)
 			{
 			}
 
@@ -155,11 +155,11 @@ namespace boost
 			{
 				BOOST_ASSERT( current != this->end().base() );
 
-				current = to_valid(next(current), this->end().base(), bi_pred, _default_pass);
+				current = to_valid(next(current), this->end().base(), m_bi_pred, m_default_pass);
 			}
 
 		private:
-			bool _default_pass;
+			bool m_default_pass;
 		};
 
 		template< class T >
@@ -214,7 +214,7 @@ namespace boost
 
 	// Bring adjacent_filter_range into the boost namespace so that users of
 	// this library may specify the return type of the '|' operator and
-	// make_adjacent_filtered_range()
+	// adjacent_filter()
 	using range_detail::adjacent_filter_range;
 
 	namespace adaptors
@@ -222,8 +222,8 @@ namespace boost
 		namespace
 		{
 			const range_detail::forwarder<range_detail::adjacent_holder>
-				    adjacent_filtered =
-				       range_detail::forwarder<range_detail::adjacent_holder>();
+                adjacent_filtered =
+                   range_detail::forwarder<range_detail::adjacent_holder>();
 
 			const range_detail::forwarder<range_detail::adjacent_excl_holder>
 				adjacent_filtered_excl =

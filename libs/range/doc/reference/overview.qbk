@@ -1,6 +1,6 @@
 [section Overview]
 
-Four types of objects are currently supported by the library:
+Three types of objects are currently supported by the library:
 
 * standard-like containers
 * `std::pair<iterator,iterator>`

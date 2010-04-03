@@ -29,6 +29,10 @@ namespace boost
 {
     namespace adaptors
     {
+        // This structure exists to carry the parameters from the '|' operator
+        // to the index adapter. The expression rng | indexed(1) instantiates
+        // this structure and passes it as the right-hand operand to the
+        // '|' operator.
         struct indexed
         {
             explicit indexed(std::size_t x) : val(x) {}
@@ -48,18 +52,18 @@ namespace boost
 
 			typedef BOOST_DEDUCED_TYPENAME base::difference_type index_type;
 
-			index_type index_;
+			index_type m_index;
 
 		public:
 			explicit indexed_iterator( Iter i, index_type index )
-			: base(i), index_(index)
+			: base(i), m_index(index)
 			{
-				BOOST_ASSERT( index_ >= 0 && "Indexed Iterator out of bounds" );
+				BOOST_ASSERT( m_index >= 0 && "Indexed Iterator out of bounds" );
 			}
 
 			index_type index() const
 			{
-				return index_;
+				return m_index;
 			}
 
 		 private:
@@ -67,22 +71,22 @@ namespace boost
 
 			void increment()
 			{
-                ++index_;
+                ++m_index;
                 ++(this->base_reference());
 			}
 
 
 			void decrement()
             {
-                BOOST_ASSERT( index_ > 0 && "Indexed Iterator out of bounds" );
-                --index_;
+                BOOST_ASSERT( m_index > 0 && "Indexed Iterator out of bounds" );
+                --m_index;
                 --(this->base_reference());
             }
 
 			void advance( index_type n )
             {
-                index_ += n;
-                BOOST_ASSERT( index_ >= 0 && "Indexed Iterator out of bounds" );
+                m_index += n;
+                BOOST_ASSERT( m_index >= 0 && "Indexed Iterator out of bounds" );
                 this->base_reference() += n;
             }
 		};
@@ -107,7 +111,7 @@ namespace boost
 
 	// Make this available to users of this library. It will sometimes be
 	// required since it is the return type of operator '|' and
-	// make_indexed_range().
+	// index().
 	using range_detail::indexed_range;
 
 	namespace adaptors
@@ -130,16 +134,16 @@ namespace boost
 
 		template<class SinglePassRange, class Index>
 		inline indexed_range<SinglePassRange>
-		index(SinglePassRange& rng, Index index)
+		index(SinglePassRange& rng, Index index_value)
 		{
-		    return indexed_range<SinglePassRange>(index, rng);
+		    return indexed_range<SinglePassRange>(index_value, rng);
 	    }
 
 	    template<class SinglePassRange, class Index>
 	    inline indexed_range<const SinglePassRange>
-	    index(const SinglePassRange& rng, Index index)
+	    index(const SinglePassRange& rng, Index index_value)
 	    {
-	        return indexed_range<const SinglePassRange>(index, rng);
+	        return indexed_range<const SinglePassRange>(index_value, rng);
         }
 	} // 'adaptors'
 

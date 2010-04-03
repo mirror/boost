@@ -7,7 +7,7 @@ A Range is a [*/concept/] similar to the STL [@http://www.sgi.com/Technology/STL
 The motivation for the Range concept is that there are many useful Container-like types that do not meet the full requirements of Container, and many algorithms that can be written with this reduced set of requirements. In particular, a Range does not necessarily
 
 * own the elements that can be accessed through it,
-* have copy semantics, 
+* have copy semantics,
 
 Because of the second requirement, a Range object must be passed by (const or non-const) reference in generic code.
 
@@ -165,7 +165,7 @@ __forward_range__
   []
   [[Valid reverse range] [For any Bidirectional Range a, `[boost::rbegin(a),boost::rend(a))` is a valid range, that is, `boost::rend(a)` is reachable from `boost::rbegin(a)` in a finite number of increments.]]
 
-  [[Completeness       ] [`An algorithm that iterates through the range `[boost::rbegin(a),boost::rend(a))` will pass through every element of `a`.]]
+  [[Completeness       ] [An algorithm that iterates through the range `[boost::rbegin(a),boost::rend(a))` will pass through every element of `a`.]]
 ]
 
 [heading See also]
@@ -203,7 +203,7 @@ __bidirectional_range__
 
 [heading Complexity guarantees]
 
-`boost::size(a)` is completes in amortized constant time.
+`boost::size(a)` completes in amortized constant time.
 
 [heading Invariants]
 
@@ -222,13 +222,13 @@ Each of the range concepts has a corresponding concept checking class in the fil
 ``
 BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<T> ));
 ``
-    
+
 An additional concept check is required for the value access property of the range based on the range's iterator type. For example to check for a ForwardReadableRange, the following code is required.
 
 ``
 BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<T> ));
 BOOST_CONCEPT_ASSERT(( ReadableIteratorConcept<typename range_iterator<T>::type> ));
-``    
+``
 
 The following range concept checking classes are provided.
 
@@ -245,7 +245,7 @@ __iterator_concepts__
 
 __concept_check__
 
-[endsect] 
+[endsect]
 
 [endsect]
 

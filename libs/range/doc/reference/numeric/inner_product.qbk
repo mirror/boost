@@ -8,7 +8,7 @@ template<class SinglePassRange1,
          class Value>
     Value inner_product( const SinglePassRange1& rng1,
                          const SinglePassRange2& rng2,
-                         Value                   init);
+                         Value                   init );
 
 template<class SinglePassRange1,
          class SinglePassRange2,
@@ -18,7 +18,7 @@ template<class SinglePassRange1,
     Value inner_product( const SinglePassRange1& rng1,
                          const SinglePassRange2& rng2,
                          Value                   init,
-                         BinaryOperation1        op1,
+                         BinaryOperation1        op1 );
 ``
 
 [heading Description]

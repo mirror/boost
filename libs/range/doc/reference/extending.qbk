@@ -64,7 +64,7 @@ A complete example is given here:
         template< class T >
         struct Pair
         {
-            T first, last;	
+            T first, last;
         };
 
     } // namespace 'Foo'
@@ -99,31 +99,31 @@ A complete example is given here:
     {
     	//
     	// The required functions. These should be defined in
-    	// the same namespace as 'Pair', in this case 
+    	// the same namespace as 'Pair', in this case
     	// in namespace 'Foo'.
     	//
-    	
+
     	template< class T >
     	inline T range_begin( Pair<T>& x )
-    	{ 
+    	{
     		return x.first;
     	}
 
     	template< class T >
     	inline T range_begin( const Pair<T>& x )
-    	{ 
+    	{
     		return x.first;
     	}
 
     	template< class T >
     	inline T range_end( Pair<T>& x )
-    	{ 
+    	{
     		return x.last;
     	}
 
     	template< class T >
     	inline T range_end( const Pair<T>& x )
-    	{ 
+    	{
     		return x.last;
     	}
 
@@ -131,14 +131,14 @@ A complete example is given here:
 
     #include <vector>
 
-    int main()
+    int main(int argc, const char* argv[])
     {
     	typedef std::vector<int>::iterator  iter;
     	std::vector<int>                    vec;
     	Foo::Pair<iter>                     pair = { vec.begin(), vec.end() };
-    	const Foo::Pair<iter>&              cpair = pair; 
+    	const Foo::Pair<iter>&              cpair = pair;
     	//
-    	// Notice that we call 'begin' etc with qualification. 
+    	// Notice that we call 'begin' etc with qualification.
     	//
     	iter i = boost::begin( pair );
     	iter e = boost::end( pair );
@@ -149,7 +149,9 @@ A complete example is given here:
     	boost::range_reverse_iterator< const Foo::Pair<iter> >::type
     	ri     = boost::rbegin( cpair ),
     	re     = boost::rend( cpair );
-    }	
+
+    	return 0;
+    }
 ``
 
 [endsect]
@@ -175,11 +177,11 @@ private:
     typedef boost::iterator_range<
         boost::reverse_iterator<
             typename boost::range_iterator<R>::type> > base;
-            
+
 public:
     typedef boost::reverse_iterator<
         typename boost::range_iterator<R>::type > iterator;
-        
+
     reverse_range(R& r)
         : base(iterator(boost::end(r)), iterator(boost::begin(r)))
     { }
@@ -196,17 +198,17 @@ namespace detail {
 # Implement `operator|`
 ``
 template< class BidirectionalRng >
-inline reverse_range<BidirectionalRng> 
+inline reverse_range<BidirectionalRng>
 operator|( BidirectionalRng& r, detail::reverse_forwarder )
 {
-	return reverse_range<BidirectionalRng>( r );   
+	return reverse_range<BidirectionalRng>( r );
 }
 
 template< class BidirectionalRng >
-inline reverse_range<const BidirectionalRng> 
+inline reverse_range<const BidirectionalRng>
 operator|( const BidirectionalRng& r, detail::reverse_forwarder )
 {
-	return reverse_range<const BidirectionalRng>( r );   
+	return reverse_range<const BidirectionalRng>( r );
 }
 ``
 
@@ -226,12 +228,12 @@ class replace_value
 public:
     typedef const Value& result_type;
     typedef const Value& argument_type;
-    
+
     replace_value(const Value& from, const Value& to)
         : m_from(from), m_to(to)
     {
     }
-    
+
     const Value& operator()(const Value& x) const
     {
         return (x == m_from) ? m_to : x;
@@ -254,7 +256,7 @@ private:
     typedef replace_value<value_type> Fn;
     typedef boost::transform_iterator<Fn, iterator_base> replaced_iterator;
     typedef boost::iterator_range<replaced_iterator> base_t;
-    
+
 public:
     replace_range(Range& rng, value_type from, value_type to)
         : base_t(replaced_iterator(boost::begin(rng), Fn(from,to)),
@@ -263,7 +265,7 @@ public:
      }
  };
 ``
- 
+
 # Implement a holder class to hold the arguments required to construct the RangeAdaptor.
 
 The holder combines multiple parameters into one that can be passed as the right operand of `operator|()`.

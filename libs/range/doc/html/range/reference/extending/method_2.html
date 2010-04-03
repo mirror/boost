@@ -159,7 +159,7 @@
 </span>    <span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">T</span> <span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">Pair</span>
     <span class="special">{</span>
-        <span class="identifier">T</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">;</span>	
+        <span class="identifier">T</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">;</span>
     <span class="special">};</span>
 
 <span class="special">}</span> <span class="comment">// namespace 'Foo'
@@ -194,31 +194,31 @@
 <span class="special">{</span>
 	<span class="comment">//
 </span>	<span class="comment">// The required functions. These should be defined in
-</span>	<span class="comment">// the same namespace as 'Pair', in this case 
+</span>	<span class="comment">// the same namespace as 'Pair', in this case
 </span>	<span class="comment">// in namespace 'Foo'.
 </span>	<span class="comment">//
-</span>	
+</span>
 	<span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">T</span> <span class="special">&gt;</span>
 	<span class="keyword">inline</span> <span class="identifier">T</span> <span class="identifier">range_begin</span><span class="special">(</span> <span class="identifier">Pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="identifier">x</span> <span class="special">)</span>
-	<span class="special">{</span> 
+	<span class="special">{</span>
 		<span class="keyword">return</span> <span class="identifier">x</span><span class="special">.</span><span class="identifier">first</span><span class="special">;</span>
 	<span class="special">}</span>
 
 	<span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">T</span> <span class="special">&gt;</span>
 	<span class="keyword">inline</span> <span class="identifier">T</span> <span class="identifier">range_begin</span><span class="special">(</span> <span class="keyword">const</span> <span class="identifier">Pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="identifier">x</span> <span class="special">)</span>
-	<span class="special">{</span> 
+	<span class="special">{</span>
 		<span class="keyword">return</span> <span class="identifier">x</span><span class="special">.</span><span class="identifier">first</span><span class="special">;</span>
 	<span class="special">}</span>
 
 	<span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">T</span> <span class="special">&gt;</span>
 	<span class="keyword">inline</span> <span class="identifier">T</span> <span class="identifier">range_end</span><span class="special">(</span> <span class="identifier">Pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="identifier">x</span> <span class="special">)</span>
-	<span class="special">{</span> 
+	<span class="special">{</span>
 		<span class="keyword">return</span> <span class="identifier">x</span><span class="special">.</span><span class="identifier">last</span><span class="special">;</span>
 	<span class="special">}</span>
 
 	<span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">T</span> <span class="special">&gt;</span>
 	<span class="keyword">inline</span> <span class="identifier">T</span> <span class="identifier">range_end</span><span class="special">(</span> <span class="keyword">const</span> <span class="identifier">Pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="identifier">x</span> <span class="special">)</span>
-	<span class="special">{</span> 
+	<span class="special">{</span>
 		<span class="keyword">return</span> <span class="identifier">x</span><span class="special">.</span><span class="identifier">last</span><span class="special">;</span>
 	<span class="special">}</span>
 
@@ -226,14 +226,14 @@
 </span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">vector</span><span class="special">&gt;</span>
 
-<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">argv</span><span class="special">[])</span>
 <span class="special">{</span>
 	<span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;::</span><span class="identifier">iterator</span>  <span class="identifier">iter</span><span class="special">;</span>
 	<span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span>                    <span class="identifier">vec</span><span class="special">;</span>
 	<span class="identifier">Foo</span><span class="special">::</span><span class="identifier">Pair</span><span class="special">&lt;</span><span class="identifier">iter</span><span class="special">&gt;</span>                     <span class="identifier">pair</span> <span class="special">=</span> <span class="special">{</span> <span class="identifier">vec</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">vec</span><span class="special">.</span><span class="identifier">end</span><span class="special">()</span> <span class="special">};</span>
-	<span class="keyword">const</span> <span class="identifier">Foo</span><span class="special">::</span><span class="identifier">Pair</span><span class="special">&lt;</span><span class="identifier">iter</span><span class="special">&gt;&amp;</span>              <span class="identifier">cpair</span> <span class="special">=</span> <span class="identifier">pair</span><span class="special">;</span> 
+	<span class="keyword">const</span> <span class="identifier">Foo</span><span class="special">::</span><span class="identifier">Pair</span><span class="special">&lt;</span><span class="identifier">iter</span><span class="special">&gt;&amp;</span>              <span class="identifier">cpair</span> <span class="special">=</span> <span class="identifier">pair</span><span class="special">;</span>
 	<span class="comment">//
-</span>	<span class="comment">// Notice that we call 'begin' etc with qualification. 
+</span>	<span class="comment">// Notice that we call 'begin' etc with qualification.
 </span>	<span class="comment">//
 </span>	<span class="identifier">iter</span> <span class="identifier">i</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">begin</span><span class="special">(</span> <span class="identifier">pair</span> <span class="special">);</span>
 	<span class="identifier">iter</span> <span class="identifier">e</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">end</span><span class="special">(</span> <span class="identifier">pair</span> <span class="special">);</span>
@@ -244,7 +244,9 @@
 	<span class="identifier">boost</span><span class="special">::</span><span class="identifier">range_reverse_iterator</span><span class="special">&lt;</span> <span class="keyword">const</span> <span class="identifier">Foo</span><span class="special">::</span><span class="identifier">Pair</span><span class="special">&lt;</span><span class="identifier">iter</span><span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span>
 	<span class="identifier">ri</span>     <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">rbegin</span><span class="special">(</span> <span class="identifier">cpair</span> <span class="special">),</span>
 	<span class="identifier">re</span>     <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">rend</span><span class="special">(</span> <span class="identifier">cpair</span> <span class="special">);</span>
-<span class="special">}</span>	
+
+	<span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">}</span>
 </pre>
 <p>
         </p>

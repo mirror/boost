@@ -21,22 +21,22 @@ namespace boost
 		template< class R >
 		struct indirect_range :
 			public boost::iterator_range<
-			          boost::indirect_iterator<
-			            BOOST_DEDUCED_TYPENAME range_iterator<R>::type
-			                                  >
-			                             >
+                        boost::indirect_iterator<
+                            BOOST_DEDUCED_TYPENAME range_iterator<R>::type
+                        >
+                    >
 		{
 		private:
 			typedef boost::iterator_range<
-			          boost::indirect_iterator<
-			            BOOST_DEDUCED_TYPENAME range_iterator<R>::type
-			                                  >
-			                             >
+                        boost::indirect_iterator<
+                            BOOST_DEDUCED_TYPENAME range_iterator<R>::type
+                        >
+                    >
 				base;
 
 		public:
-			indirect_range( R& r )
-			: base( r )
+			explicit indirect_range( R& r )
+                : base( r )
 			{ }
 		};
 

@@ -30,7 +30,7 @@ stable_partition(const ForwardRange& rng, UnaryPredicate pred);
 
 [heading Description]
 
-`stable_partition` reorders the elements in the range `rng` base on the function object `pred`. Once this function has completed all of the elements that satisfy `pred` appear before all of the elements that fail to satisfy it. `stable_partition` differs from `partition` because it preserves relative order. It is table.
+`stable_partition` reorders the elements in the range `rng` base on the function object `pred`. Once this function has completed all of the elements that satisfy `pred` appear before all of the elements that fail to satisfy it. `stable_partition` differs from `partition` because it preserves relative order. It is stable.
 
 For the versions that return an iterator, the return value is the iterator to the first element that fails to satisfy `pred`.
 
