@@ -17,26 +17,32 @@
 
 namespace boost
 {
-    /// \brief template function for_each
-    ///
-    /// range-based version of the for_each std algorithm
-    ///
-    /// \pre SinglePassRange is a model of the SinglePassRangeConcept
-    /// \pre UnaryFunction is a model of the UnaryFunctionConcept
-    template< class SinglePassRange, class UnaryFunction >
-    inline UnaryFunction for_each(SinglePassRange & rng, UnaryFunction fun)
+    namespace range
     {
-        boost::function_requires< SinglePassRangeConcept< SinglePassRange > >();
-        return std::for_each(boost::begin(rng),boost::end(rng),fun);
-    }
 
-    /// \overload
-    template< class SinglePassRange, class UnaryFunction >
-    inline UnaryFunction for_each(SinglePassRange const & rng, UnaryFunction fun)
-    {
-        boost::function_requires< SinglePassRangeConcept< SinglePassRange > >();
-        return std::for_each(boost::begin(rng),boost::end(rng),fun);
-    }
+/// \brief template function for_each
+///
+/// range-based version of the for_each std algorithm
+///
+/// \pre SinglePassRange is a model of the SinglePassRangeConcept
+/// \pre UnaryFunction is a model of the UnaryFunctionConcept
+template< class SinglePassRange, class UnaryFunction >
+inline UnaryFunction for_each(SinglePassRange & rng, UnaryFunction fun)
+{
+    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
+    return std::for_each(boost::begin(rng),boost::end(rng),fun);
+}
+
+/// \overload
+template< class SinglePassRange, class UnaryFunction >
+inline UnaryFunction for_each(SinglePassRange const & rng, UnaryFunction fun)
+{
+    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
+    return std::for_each(boost::begin(rng),boost::end(rng),fun);
+}
+
+    } // namespace range
+    using range::for_each;
 } // namespace boost
 
 #endif // include guard

@@ -17,49 +17,55 @@
 
 namespace boost
 {
-    /// \brief template function partial_sort
-    ///
-    /// range-based version of the partial_sort std algorithm
-    ///
-    /// \pre RandomAccessRange is a model of the RandomAccessRangeConcept
-    /// \pre BinaryPredicate is a model of the BinaryPredicateConcept
-    template<class RandomAccessRange>
-    inline void partial_sort(RandomAccessRange& rng,
-        BOOST_DEDUCED_TYPENAME range_iterator<RandomAccessRange>::type middle)
+    namespace range
     {
-        boost::function_requires< RandomAccessRangeConcept<RandomAccessRange> >();
-        std::partial_sort(boost::begin(rng), middle, boost::end(rng));
-    }
 
-    /// \overload
-    template<class RandomAccessRange>
-    inline void partial_sort(const RandomAccessRange& rng,
-        BOOST_DEDUCED_TYPENAME range_iterator<const RandomAccessRange>::type middle)
-    {
-        boost::function_requires< RandomAccessRangeConcept<RandomAccessRange> >();
-        std::partial_sort(boost::begin(rng), middle, boost::end(rng));
-    }
-
-    /// \overload
-    template<class RandomAccessRange, class BinaryPredicate>
-    inline void partial_sort(RandomAccessRange& rng,
-        BOOST_DEDUCED_TYPENAME range_iterator<RandomAccessRange>::type middle,
-        BinaryPredicate sort_pred)
-    {
-        boost::function_requires< RandomAccessRangeConcept<RandomAccessRange> >();
-        std::partial_sort(boost::begin(rng), middle, boost::end(rng),
-                            sort_pred);
-    }
-
-    /// \overload
-    template<class RandomAccessRange, class BinaryPredicate>
-    inline void partial_sort(const RandomAccessRange& rng,
-        BOOST_DEDUCED_TYPENAME range_iterator<const RandomAccessRange>::type middle,
-        BinaryPredicate sort_pred)
-    {
-        boost::function_requires< RandomAccessRangeConcept<RandomAccessRange> >();
-        std::partial_sort(boost::begin(rng), middle, boost::end(rng), sort_pred);
-    }
+/// \brief template function partial_sort
+///
+/// range-based version of the partial_sort std algorithm
+///
+/// \pre RandomAccessRange is a model of the RandomAccessRangeConcept
+/// \pre BinaryPredicate is a model of the BinaryPredicateConcept
+template<class RandomAccessRange>
+inline void partial_sort(RandomAccessRange& rng,
+    BOOST_DEDUCED_TYPENAME range_iterator<RandomAccessRange>::type middle)
+{
+    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    std::partial_sort(boost::begin(rng), middle, boost::end(rng));
 }
+
+/// \overload
+template<class RandomAccessRange>
+inline void partial_sort(const RandomAccessRange& rng,
+    BOOST_DEDUCED_TYPENAME range_iterator<const RandomAccessRange>::type middle)
+{
+    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    std::partial_sort(boost::begin(rng), middle, boost::end(rng));
+}
+
+/// \overload
+template<class RandomAccessRange, class BinaryPredicate>
+inline void partial_sort(RandomAccessRange& rng,
+    BOOST_DEDUCED_TYPENAME range_iterator<RandomAccessRange>::type middle,
+    BinaryPredicate sort_pred)
+{
+    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    std::partial_sort(boost::begin(rng), middle, boost::end(rng),
+                        sort_pred);
+}
+
+/// \overload
+template<class RandomAccessRange, class BinaryPredicate>
+inline void partial_sort(const RandomAccessRange& rng,
+    BOOST_DEDUCED_TYPENAME range_iterator<const RandomAccessRange>::type middle,
+    BinaryPredicate sort_pred)
+{
+    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    std::partial_sort(boost::begin(rng), middle, boost::end(rng), sort_pred);
+}
+
+    } // namespace range
+    using range::partial_sort;
+} // namespace boost
 
 #endif // include guard

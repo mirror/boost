@@ -18,18 +18,24 @@
 
 namespace boost
 {
-    /// \brief template function copy
-    ///
-    /// range-based version of the copy std algorithm
-    ///
-    /// \pre SinglePassRange is a model of the SinglePassRangeConcept
-    /// \pre OutputIterator is a model of the OutputIteratorConcept
-    template< class SinglePassRange, class OutputIterator >
-    inline OutputIterator copy(const SinglePassRange& rng, OutputIterator out)
+    namespace range
     {
-        //BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
-        return std::copy(boost::begin(rng),boost::end(rng),out);
-    }
+
+/// \brief template function copy
+///
+/// range-based version of the copy std algorithm
+///
+/// \pre SinglePassRange is a model of the SinglePassRangeConcept
+/// \pre OutputIterator is a model of the OutputIteratorConcept
+template< class SinglePassRange, class OutputIterator >
+inline OutputIterator copy(const SinglePassRange& rng, OutputIterator out)
+{
+    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
+    return std::copy(boost::begin(rng),boost::end(rng),out);
 }
+
+    } // namespace range
+    using range::copy;
+} // namespace boost
 
 #endif // include guard

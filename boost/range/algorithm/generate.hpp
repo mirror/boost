@@ -17,28 +17,33 @@
 
 namespace boost
 {
-    /// \brief template function generate
-    ///
-    /// range-based version of the generate std algorithm
-    ///
-    /// \pre ForwardRange is a model of the ForwardRangeConcept
-    /// \pre Generator is a model of the UnaryFunctionConcept
-    template< class ForwardRange, class Generator >
-    inline ForwardRange& generate( ForwardRange& rng, Generator gen )
+    namespace range
     {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        std::generate(boost::begin(rng), boost::end(rng), gen);
-        return rng;
-    }
-
-    /// \overload
-    template< class ForwardRange, class Generator >
-    inline const ForwardRange& generate(const ForwardRange& rng, Generator gen)
-    {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        std::generate(boost::begin(rng), boost::end(rng), gen);
-        return rng;
-    }
+/// \brief template function generate
+///
+/// range-based version of the generate std algorithm
+///
+/// \pre ForwardRange is a model of the ForwardRangeConcept
+/// \pre Generator is a model of the UnaryFunctionConcept
+template< class ForwardRange, class Generator >
+inline ForwardRange& generate( ForwardRange& rng, Generator gen )
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    std::generate(boost::begin(rng), boost::end(rng), gen);
+    return rng;
 }
+
+/// \overload
+template< class ForwardRange, class Generator >
+inline const ForwardRange& generate(const ForwardRange& rng, Generator gen)
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    std::generate(boost::begin(rng), boost::end(rng), gen);
+    return rng;
+}
+
+    } // namespace range
+    using range::generate;
+} // namespace boost
 
 #endif // include guard

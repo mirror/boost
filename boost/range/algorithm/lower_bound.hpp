@@ -18,82 +18,88 @@
 
 namespace boost
 {
-    /// \brief template function lower_bound
-    ///
-    /// range-based version of the lower_bound std algorithm
-    ///
-    /// \pre ForwardRange is a model of the ForwardRangeConcept
-    template< class ForwardRange, class Value >
-    inline BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type
-    lower_bound( ForwardRange& rng, Value val )
+    namespace range
     {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        return std::lower_bound(boost::begin(rng), boost::end(rng), val);
-    }
-    /// \overload
-    template< class ForwardRange, class Value >
-    inline BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange>::type
-    lower_bound( const ForwardRange& rng, Value val )
-    {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        return std::lower_bound(boost::begin(rng), boost::end(rng), val);
-    }
-    /// \overload
-    template< class ForwardRange, class Value, class SortPredicate >
-    inline BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type
-    lower_bound( ForwardRange& rng, Value val, SortPredicate pred )
-    {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        return std::lower_bound(boost::begin(rng), boost::end(rng), val, pred);
-    }
-    /// \overload
-    template< class ForwardRange, class Value, class SortPredicate >
-    inline BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange>::type
-    lower_bound( const ForwardRange& rng, Value val, SortPredicate pred )
-    {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        return std::lower_bound(boost::begin(rng), boost::end(rng), val, pred);
-    }
-    /// \overload
-    template< range_return_value re, class ForwardRange, class Value >
-    inline BOOST_DEDUCED_TYPENAME range_return<ForwardRange,re>::type
-    lower_bound( ForwardRange& rng, Value val )
-    {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        return range_return<ForwardRange,re>::
-            pack(std::lower_bound(boost::begin(rng), boost::end(rng), val),
-                 rng);
-    }
-    /// \overload
-    template< range_return_value re, class ForwardRange, class Value >
-    inline BOOST_DEDUCED_TYPENAME range_return<const ForwardRange,re>::type
-    lower_bound( const ForwardRange& rng, Value val )
-    {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        return range_return<const ForwardRange,re>::
-            pack(std::lower_bound(boost::begin(rng), boost::end(rng), val),
-                 rng);
-    }
-    /// \overload
-    template< range_return_value re, class ForwardRange, class Value, class SortPredicate >
-    inline BOOST_DEDUCED_TYPENAME range_return<ForwardRange,re>::type
-    lower_bound( ForwardRange& rng, Value val, SortPredicate pred )
-    {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        return range_return<ForwardRange,re>::
-            pack(std::lower_bound(boost::begin(rng), boost::end(rng), val, pred),
-                 rng);
-    }
-    /// \overload
-    template< range_return_value re, class ForwardRange, class Value, class SortPredicate >
-    inline BOOST_DEDUCED_TYPENAME range_return<const ForwardRange,re>::type
-    lower_bound( const ForwardRange& rng, Value val, SortPredicate pred )
-    {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        return range_return<const ForwardRange,re>::
-            pack(std::lower_bound(boost::begin(rng), boost::end(rng), val, pred),
-                 rng);
-    }
+
+/// \brief template function lower_bound
+///
+/// range-based version of the lower_bound std algorithm
+///
+/// \pre ForwardRange is a model of the ForwardRangeConcept
+template< class ForwardRange, class Value >
+inline BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type
+lower_bound( ForwardRange& rng, Value val )
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    return std::lower_bound(boost::begin(rng), boost::end(rng), val);
 }
+/// \overload
+template< class ForwardRange, class Value >
+inline BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange>::type
+lower_bound( const ForwardRange& rng, Value val )
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    return std::lower_bound(boost::begin(rng), boost::end(rng), val);
+}
+/// \overload
+template< class ForwardRange, class Value, class SortPredicate >
+inline BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type
+lower_bound( ForwardRange& rng, Value val, SortPredicate pred )
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    return std::lower_bound(boost::begin(rng), boost::end(rng), val, pred);
+}
+/// \overload
+template< class ForwardRange, class Value, class SortPredicate >
+inline BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange>::type
+lower_bound( const ForwardRange& rng, Value val, SortPredicate pred )
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    return std::lower_bound(boost::begin(rng), boost::end(rng), val, pred);
+}
+/// \overload
+template< range_return_value re, class ForwardRange, class Value >
+inline BOOST_DEDUCED_TYPENAME range_return<ForwardRange,re>::type
+lower_bound( ForwardRange& rng, Value val )
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    return range_return<ForwardRange,re>::
+        pack(std::lower_bound(boost::begin(rng), boost::end(rng), val),
+             rng);
+}
+/// \overload
+template< range_return_value re, class ForwardRange, class Value >
+inline BOOST_DEDUCED_TYPENAME range_return<const ForwardRange,re>::type
+lower_bound( const ForwardRange& rng, Value val )
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    return range_return<const ForwardRange,re>::
+        pack(std::lower_bound(boost::begin(rng), boost::end(rng), val),
+             rng);
+}
+/// \overload
+template< range_return_value re, class ForwardRange, class Value, class SortPredicate >
+inline BOOST_DEDUCED_TYPENAME range_return<ForwardRange,re>::type
+lower_bound( ForwardRange& rng, Value val, SortPredicate pred )
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    return range_return<ForwardRange,re>::
+        pack(std::lower_bound(boost::begin(rng), boost::end(rng), val, pred),
+             rng);
+}
+/// \overload
+template< range_return_value re, class ForwardRange, class Value, class SortPredicate >
+inline BOOST_DEDUCED_TYPENAME range_return<const ForwardRange,re>::type
+lower_bound( const ForwardRange& rng, Value val, SortPredicate pred )
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    return range_return<const ForwardRange,re>::
+        pack(std::lower_bound(boost::begin(rng), boost::end(rng), val, pred),
+             rng);
+}
+
+    } // namespace range
+    using range::lower_bound;
+} // namespace boost
 
 #endif // include guard

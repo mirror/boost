@@ -143,40 +143,46 @@ namespace boost
 
             return equal_impl(first1, last1, first2, last2, pred, tag1, tag2);
         }
- 
-    }
 
-    /// \brief template function equal
-    ///
-    /// range-based version of the equal std algorithm
-    ///
-    /// \pre SinglePassRange1 is a model of the SinglePassRangeConcept
-    /// \pre SinglePassRange2 is a model of the SinglePassRangeConcept
-    /// \pre BinaryPredicate is a model of the BinaryPredicateConcept
-    template< class SinglePassRange1, class SinglePassRange2 >
-    inline bool equal( const SinglePassRange1& rng1, const SinglePassRange2& rng2 )
+    } // namespace range_detail
+
+    namespace range
     {
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange1> >();
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange2> >();
 
-        return range_detail::equal(
-            boost::begin(rng1), boost::end(rng1),
-            boost::begin(rng2), boost::end(rng2) );
-    }
+        /// \brief template function equal
+        ///
+        /// range-based version of the equal std algorithm
+        ///
+        /// \pre SinglePassRange1 is a model of the SinglePassRangeConcept
+        /// \pre SinglePassRange2 is a model of the SinglePassRangeConcept
+        /// \pre BinaryPredicate is a model of the BinaryPredicateConcept
+        template< class SinglePassRange1, class SinglePassRange2 >
+        inline bool equal( const SinglePassRange1& rng1, const SinglePassRange2& rng2 )
+        {
+            BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
+            BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
 
-    /// \overload
-    template< class SinglePassRange1, class SinglePassRange2, class BinaryPredicate >
-    inline bool equal( const SinglePassRange1& rng1, const SinglePassRange2& rng2,
-                       BinaryPredicate pred )
-    {
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange1> >();
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange2> >();
+            return ::boost::range_detail::equal(
+                ::boost::begin(rng1), ::boost::end(rng1),
+                ::boost::begin(rng2), ::boost::end(rng2) );
+        }
 
-        return range_detail::equal(
-            boost::begin(rng1), boost::end(rng1),
-            boost::begin(rng2), boost::end(rng2),
-            pred);
-    }
-}
+        /// \overload
+        template< class SinglePassRange1, class SinglePassRange2, class BinaryPredicate >
+        inline bool equal( const SinglePassRange1& rng1, const SinglePassRange2& rng2,
+                           BinaryPredicate pred )
+        {
+            BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
+            BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
+
+            return ::boost::range_detail::equal(
+                ::boost::begin(rng1), ::boost::end(rng1),
+                ::boost::begin(rng2), ::boost::end(rng2),
+                pred);
+        }
+
+    } // namespace range
+    using range::equal;
+} // namespace boost
 
 #endif // include guard

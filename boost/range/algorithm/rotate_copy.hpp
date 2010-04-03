@@ -18,6 +18,9 @@
 
 namespace boost
 {
+    namespace range
+    {
+
     /// \brief template function rotate
     ///
     /// range-based version of the rotate std algorithm
@@ -30,9 +33,12 @@ namespace boost
         OutputIterator                                      target
         )
     {
-        BOOST_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
+        BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
         return std::rotate_copy(boost::begin(rng), middle, boost::end(rng), target);
     }
-}
+
+    } // namespace range
+    using range::rotate_copy;
+} // namespace boost
 
 #endif // include guard

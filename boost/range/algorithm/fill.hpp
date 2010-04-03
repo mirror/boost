@@ -17,18 +17,24 @@
 
 namespace boost
 {
-    /// \brief template function fill
-    ///
-    /// range-based version of the fill std algorithm
-    ///
-    /// \pre ForwardRange is a model of the ForwardRangeConcept
-    template< class ForwardRange, class Value >
-    inline ForwardRange& fill(ForwardRange& rng, const Value& val)
+    namespace range
     {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        std::fill(boost::begin(rng), boost::end(rng), val);
-        return rng;
-    }
+
+/// \brief template function fill
+///
+/// range-based version of the fill std algorithm
+///
+/// \pre ForwardRange is a model of the ForwardRangeConcept
+template< class ForwardRange, class Value >
+inline ForwardRange& fill(ForwardRange& rng, const Value& val)
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    std::fill(boost::begin(rng), boost::end(rng), val);
+    return rng;
+}
+
+    } // namespace range
+    using range::fill;
 }
 
 #endif // include guard

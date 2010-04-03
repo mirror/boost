@@ -17,27 +17,33 @@
 
 namespace boost
 {
-    /// \brief template function binary_search
-    ///
-    /// range-based version of the binary_search std algorithm
-    ///
-    /// \pre ForwardRange is a model of the ForwardRangeConcept
-    /// \pre BinaryPredicate is a model of the BinaryPredicateConcept
-    template<class ForwardRange, class Value>
-    inline bool binary_search(const ForwardRange& rng, const Value& val)
+    namespace range
     {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        return std::binary_search(boost::begin(rng), boost::end(rng), val);
-    }
 
-    /// \overload
-    template<class ForwardRange, class Value, class BinaryPredicate>
-    inline bool binary_search(const ForwardRange& rng, const Value& val,
-                              BinaryPredicate pred)
-    {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        return std::binary_search(boost::begin(rng), boost::end(rng), val, pred);
-    }
+/// \brief template function binary_search
+///
+/// range-based version of the binary_search std algorithm
+///
+/// \pre ForwardRange is a model of the ForwardRangeConcept
+/// \pre BinaryPredicate is a model of the BinaryPredicateConcept
+template<class ForwardRange, class Value>
+inline bool binary_search(const ForwardRange& rng, const Value& val)
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    return std::binary_search(boost::begin(rng), boost::end(rng), val);
 }
+
+/// \overload
+template<class ForwardRange, class Value, class BinaryPredicate>
+inline bool binary_search(const ForwardRange& rng, const Value& val,
+                          BinaryPredicate pred)
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    return std::binary_search(boost::begin(rng), boost::end(rng), val, pred);
+}
+
+    } // namespace range
+    using range::binary_search;
+} // namespace boost
 
 #endif // include guard

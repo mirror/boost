@@ -17,22 +17,28 @@
 
 namespace boost
 {
-    /// \brief template function remove_copy
-    ///
-    /// range-based version of the remove_copy std algorithm
-    ///
-    /// \pre SinglePassRange is a model of the SinglePassRangeConcept
-    /// \pre OutputIterator is a model of the OutputIteratorConcept
-    /// \pre Value is a model of the EqualityComparableConcept
-    /// \pre Objects of type Value can be compared for equality with objects of
-    /// InputIterator's value type.
-    template< class SinglePassRange, class OutputIterator, class Value >
-    inline OutputIterator
-    remove_copy(SinglePassRange& rng, OutputIterator out_it, const Value& val)
+    namespace range
     {
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange> >();
-		return std::remove_copy(boost::begin(rng), boost::end(rng), out_it, val); 
-    }
+
+/// \brief template function remove_copy
+///
+/// range-based version of the remove_copy std algorithm
+///
+/// \pre SinglePassRange is a model of the SinglePassRangeConcept
+/// \pre OutputIterator is a model of the OutputIteratorConcept
+/// \pre Value is a model of the EqualityComparableConcept
+/// \pre Objects of type Value can be compared for equality with objects of
+/// InputIterator's value type.
+template< class SinglePassRange, class OutputIterator, class Value >
+inline OutputIterator
+remove_copy(SinglePassRange& rng, OutputIterator out_it, const Value& val)
+{
+    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
+    return std::remove_copy(boost::begin(rng), boost::end(rng), out_it, val);
 }
+
+    } // namespace range
+    using range::remove_copy;
+} // namespace boost
 
 #endif // include guard

@@ -18,19 +18,25 @@
 
 namespace boost
 {
-    /// \brief template function fill_n
-    ///
-    /// range-based version of the fill_n std algorithm
-    ///
-    /// \pre ForwardRange is a model of the ForwardRangeConcept
-    template< class ForwardRange, class Size, class Value >
-    inline ForwardRange& fill_n(ForwardRange& rng, Size n, const Value& val)
+    namespace range
     {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        BOOST_ASSERT( static_cast<Size>(std::distance(boost::begin(rng), boost::end(rng))) >= n );
-        std::fill_n(boost::begin(rng), n, val);
-        return rng;
-    }
+
+/// \brief template function fill_n
+///
+/// range-based version of the fill_n std algorithm
+///
+/// \pre ForwardRange is a model of the ForwardRangeConcept
+template< class ForwardRange, class Size, class Value >
+inline ForwardRange& fill_n(ForwardRange& rng, Size n, const Value& val)
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    BOOST_ASSERT( static_cast<Size>(std::distance(boost::begin(rng), boost::end(rng))) >= n );
+    std::fill_n(boost::begin(rng), n, val);
+    return rng;
 }
+
+    } // namespace range
+    using range::fill_n;
+} // namespace boost
 
 #endif // include guard

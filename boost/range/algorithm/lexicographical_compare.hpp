@@ -17,36 +17,42 @@
 
 namespace boost
 {
-    /// \brief template function lexicographic_compare
-    ///
-    /// range-based version of the lexicographic_compare std algorithm
-    ///
-    /// \pre SinglePassRange1 is a model of the SinglePassRangeConcept
-    /// \pre SinglePassRange2 is a model of the SinglePassRangeConcept
-    template<class SinglePassRange1, class SinglePassRange2>
-    inline bool lexicographical_compare(const SinglePassRange1& rng1,
-                                        const SinglePassRange2& rng2)
+    namespace range
     {
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange1> >();
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange2> >();
-        return std::lexicographical_compare(
-            boost::begin(rng1), boost::end(rng1),
-            boost::begin(rng2), boost::end(rng2));
-    }
 
-    /// \overload
-    template<class SinglePassRange1, class SinglePassRange2,
-             class BinaryPredicate>
-    inline bool lexicographical_compare(const SinglePassRange1& rng1,
-                                        const SinglePassRange2& rng2,
-                                        BinaryPredicate pred)
-    {
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange1> >();
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange2> >();
-        return std::lexicographical_compare(
-            boost::begin(rng1), boost::end(rng1),
-            boost::begin(rng2), boost::end(rng2), pred);
-    }
+/// \brief template function lexicographic_compare
+///
+/// range-based version of the lexicographic_compare std algorithm
+///
+/// \pre SinglePassRange1 is a model of the SinglePassRangeConcept
+/// \pre SinglePassRange2 is a model of the SinglePassRangeConcept
+template<class SinglePassRange1, class SinglePassRange2>
+inline bool lexicographical_compare(const SinglePassRange1& rng1,
+                                    const SinglePassRange2& rng2)
+{
+    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
+    return std::lexicographical_compare(
+        boost::begin(rng1), boost::end(rng1),
+        boost::begin(rng2), boost::end(rng2));
 }
+
+/// \overload
+template<class SinglePassRange1, class SinglePassRange2,
+         class BinaryPredicate>
+inline bool lexicographical_compare(const SinglePassRange1& rng1,
+                                    const SinglePassRange2& rng2,
+                                    BinaryPredicate pred)
+{
+    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
+    return std::lexicographical_compare(
+        boost::begin(rng1), boost::end(rng1),
+        boost::begin(rng2), boost::end(rng2), pred);
+}
+
+    } // namespace range
+    using range::lexicographical_compare;
+} // namespace boost
 
 #endif // include guard

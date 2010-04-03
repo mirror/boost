@@ -18,25 +18,31 @@
 
 namespace boost
 {
-    /// \brief template function transform
-    ///
-    /// range-based version of the transform std algorithm
-    ///
-    /// \pre SinglePassRange1 is a model of the SinglePassRangeConcept
-    /// \pre SinglePassRange2 is a model of the SinglePassRangeConcept
-    /// \pre OutputIterator is a model of the OutputIteratorConcept
-    /// \pre UnaryOperation is a model of the UnaryFunctionConcept
-    /// \pre BinaryOperation is a model of the BinaryFunctionConcept
-    template< class SinglePassRange1,
-              class OutputIterator,
-              class UnaryOperation >
-    inline OutputIterator
-    transform(const SinglePassRange1& rng,
-              OutputIterator          out,
-              UnaryOperation          fun)
+    namespace range
     {
-        return std::transform(boost::begin(rng),boost::end(rng),out,fun);
-    }
+
+        /// \brief template function transform
+        ///
+        /// range-based version of the transform std algorithm
+        ///
+        /// \pre SinglePassRange1 is a model of the SinglePassRangeConcept
+        /// \pre SinglePassRange2 is a model of the SinglePassRangeConcept
+        /// \pre OutputIterator is a model of the OutputIteratorConcept
+        /// \pre UnaryOperation is a model of the UnaryFunctionConcept
+        /// \pre BinaryOperation is a model of the BinaryFunctionConcept
+        template< class SinglePassRange1,
+                  class OutputIterator,
+                  class UnaryOperation >
+        inline OutputIterator
+        transform(const SinglePassRange1& rng,
+                  OutputIterator          out,
+                  UnaryOperation          fun)
+        {
+            BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+            return std::transform(boost::begin(rng),boost::end(rng),out,fun);
+        }
+
+    } // namespace range
 
     namespace range_detail
     {
@@ -62,24 +68,30 @@ namespace boost
         }
     }
 
-    /// \overload
-    template< class SinglePassRange1,
-              class SinglePassRange2,
-              class OutputIterator,
-              class BinaryOperation >
-    inline OutputIterator
-    transform(const SinglePassRange1& rng1,
-              const SinglePassRange2& rng2,
-              OutputIterator          out,
-              BinaryOperation         fun)
+    namespace range
     {
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange1> >();
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange2> >();
-        return range_detail::transform_impl(
-                    boost::begin(rng1), boost::end(rng1),
-                    boost::begin(rng2), boost::end(rng2),
-                    out, fun);
-    }
-}
+
+        /// \overload
+        template< class SinglePassRange1,
+                  class SinglePassRange2,
+                  class OutputIterator,
+                  class BinaryOperation >
+        inline OutputIterator
+        transform(const SinglePassRange1& rng1,
+                  const SinglePassRange2& rng2,
+                  OutputIterator          out,
+                  BinaryOperation         fun)
+        {
+            BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+            BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
+            return range_detail::transform_impl(
+                        boost::begin(rng1), boost::end(rng1),
+                        boost::begin(rng2), boost::end(rng2),
+                        out, fun);
+        }
+
+    } // namespace range
+    using range::transform;
+} // namespace boost
 
 #endif // include guard

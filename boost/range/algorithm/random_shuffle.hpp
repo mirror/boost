@@ -17,46 +17,52 @@
 
 namespace boost
 {
-    /// \brief template function random_shuffle
-    ///
-    /// range-based version of the random_shuffle std algorithm
-    ///
-    /// \pre RandomAccessRange is a model of the RandomAccessRangeConcept
-    /// \pre Generator is a model of the UnaryFunctionConcept
-    template<class RandomAccessRange>
-    inline RandomAccessRange& random_shuffle(RandomAccessRange& rng)
+    namespace range
     {
-        boost::function_requires< RandomAccessRangeConcept<RandomAccessRange> >();
-        std::random_shuffle(boost::begin(rng), boost::end(rng));
-        return rng;
-    }
 
-    /// \overload
-    template<class RandomAccessRange>
-    inline const RandomAccessRange& random_shuffle(const RandomAccessRange& rng)
-    {
-        boost::function_requires< RandomAccessRangeConcept<RandomAccessRange> >();
-        std::random_shuffle(boost::begin(rng),boost::end(rng));
-        return rng;
-    }
-
-    /// \overload
-    template<class RandomAccessRange, class Generator>
-    inline RandomAccessRange& random_shuffle(RandomAccessRange& rng, Generator& gen)
-    {
-        boost::function_requires< RandomAccessRangeConcept<RandomAccessRange> >();
-        std::random_shuffle(boost::begin(rng), boost::end(rng), gen);
-        return rng;
-    }
-
-    /// \overload
-    template<class RandomAccessRange, class Generator>
-    inline const RandomAccessRange& random_shuffle(const RandomAccessRange& rng, Generator& gen)
-    {
-        boost::function_requires< RandomAccessRangeConcept<RandomAccessRange> >();
-        std::random_shuffle(boost::begin(rng), boost::end(rng), gen);
-        return rng;
-    }
+/// \brief template function random_shuffle
+///
+/// range-based version of the random_shuffle std algorithm
+///
+/// \pre RandomAccessRange is a model of the RandomAccessRangeConcept
+/// \pre Generator is a model of the UnaryFunctionConcept
+template<class RandomAccessRange>
+inline RandomAccessRange& random_shuffle(RandomAccessRange& rng)
+{
+    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    std::random_shuffle(boost::begin(rng), boost::end(rng));
+    return rng;
 }
+
+/// \overload
+template<class RandomAccessRange>
+inline const RandomAccessRange& random_shuffle(const RandomAccessRange& rng)
+{
+    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    std::random_shuffle(boost::begin(rng),boost::end(rng));
+    return rng;
+}
+
+/// \overload
+template<class RandomAccessRange, class Generator>
+inline RandomAccessRange& random_shuffle(RandomAccessRange& rng, Generator& gen)
+{
+    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    std::random_shuffle(boost::begin(rng), boost::end(rng), gen);
+    return rng;
+}
+
+/// \overload
+template<class RandomAccessRange, class Generator>
+inline const RandomAccessRange& random_shuffle(const RandomAccessRange& rng, Generator& gen)
+{
+    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    std::random_shuffle(boost::begin(rng), boost::end(rng), gen);
+    return rng;
+}
+
+    } // namespace range
+    using range::random_shuffle;
+} // namespace boost
 
 #endif // include guard

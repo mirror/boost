@@ -17,29 +17,35 @@
 
 namespace boost
 {
-    /// \brief template function unique_copy
-    ///
-    /// range-based version of the unique_copy std algorithm
-    ///
-    /// \pre SinglePassRange is a model of the SinglePassRangeConcept
-    /// \pre OutputIterator is a model of the OutputIteratorConcept
-    /// \pre BinaryPredicate is a model of the BinaryPredicateConcept
-	template< class SinglePassRange, class OutputIterator >
-	inline OutputIterator
-    unique_copy( const SinglePassRange& rng, OutputIterator out_it )
-	{
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange> >();
-        return std::unique_copy(boost::begin(rng), boost::end(rng), out_it);
-	}
-    /// \overload
-    template< class SinglePassRange, class OutputIterator, class BinaryPredicate >
-    inline OutputIterator
-    unique_copy( const SinglePassRange& rng, OutputIterator out_it,
-                 BinaryPredicate pred )
+    namespace range
     {
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange> >();
-        return std::unique_copy(boost::begin(rng), boost::end(rng), out_it, pred);
-    }
+
+/// \brief template function unique_copy
+///
+/// range-based version of the unique_copy std algorithm
+///
+/// \pre SinglePassRange is a model of the SinglePassRangeConcept
+/// \pre OutputIterator is a model of the OutputIteratorConcept
+/// \pre BinaryPredicate is a model of the BinaryPredicateConcept
+template< class SinglePassRange, class OutputIterator >
+inline OutputIterator
+unique_copy( const SinglePassRange& rng, OutputIterator out_it )
+{
+    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
+    return std::unique_copy(boost::begin(rng), boost::end(rng), out_it);
 }
+/// \overload
+template< class SinglePassRange, class OutputIterator, class BinaryPredicate >
+inline OutputIterator
+unique_copy( const SinglePassRange& rng, OutputIterator out_it,
+             BinaryPredicate pred )
+{
+    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
+    return std::unique_copy(boost::begin(rng), boost::end(rng), out_it, pred);
+}
+
+    } // namespace range
+    using range::unique_copy;
+} // namespace boost
 
 #endif // include guard

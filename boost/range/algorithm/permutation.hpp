@@ -17,101 +17,92 @@
 
 namespace boost
 {
-    /// \brief template function next_permutation
-    ///
-    /// range-based version of the next_permutation std algorithm
-    ///
-    /// \pre BidirectionalRange is a model of the BidirectionalRangeConcept
-    /// \pre Compare is a model of the BinaryPredicateConcept
-    template<class BidirectionalRange>
-    inline bool next_permutation(BidirectionalRange& rng)
+    namespace range
     {
-        boost::function_requires<
-            BidirectionalRangeConcept<BidirectionalRange> >();
 
-        return std::next_permutation(boost::begin(rng), boost::end(rng));
-    }
-
-    /// \overload
-    template<class BidirectionalRange>
-    inline bool next_permutation(const BidirectionalRange& rng)
-    {
-        boost::function_requires<
-            BidirectionalRangeConcept<BidirectionalRange> >();
-
-        return std::next_permutation(boost::begin(rng), boost::end(rng));
-    }
-
-    /// \overload
-    template<class BidirectionalRange, class Compare>
-    inline bool next_permutation(BidirectionalRange& rng, Compare comp_pred)
-    {
-        boost::function_requires<
-            BidirectionalRangeConcept<BidirectionalRange> >();
-
-        return std::next_permutation(boost::begin(rng), boost::end(rng),
-                                     comp_pred);
-    }
-
-    /// \overload
-    template<class BidirectionalRange, class Compare>
-    inline bool next_permutation(const BidirectionalRange& rng,
-                                 Compare                   comp_pred)
-    {
-        boost::function_requires<
-            BidirectionalRangeConcept<BidirectionalRange> >();
-
-        return std::next_permutation(boost::begin(rng), boost::end(rng),
-                                     comp_pred);
-    }
-
-    /// \brief template function prev_permutation
-    ///
-    /// range-based version of the prev_permutation std algorithm
-    ///
-    /// \pre BidirectionalRange is a model of the BidirectionalRangeConcept
-    /// \pre Compare is a model of the BinaryPredicateConcept
-    template<class BidirectionalRange>
-    inline bool prev_permutation(BidirectionalRange& rng)
-    {
-        boost::function_requires<
-            BidirectionalRangeConcept<BidirectionalRange> >();
-
-        return std::prev_permutation(boost::begin(rng), boost::end(rng));
-    }
-
-    /// \overload
-    template<class BidirectionalRange>
-    inline bool prev_permutation(const BidirectionalRange& rng)
-    {
-        boost::function_requires<
-            BidirectionalRangeConcept<BidirectionalRange> >();
-
-        return std::prev_permutation(boost::begin(rng), boost::end(rng));
-    }
-
-    /// \overload
-    template<class BidirectionalRange, class Compare>
-    inline bool prev_permutation(BidirectionalRange& rng, Compare comp_pred)
-    {
-        boost::function_requires<
-            BidirectionalRangeConcept<BidirectionalRange> >();
-
-        return std::prev_permutation(boost::begin(rng), boost::end(rng),
-                                     comp_pred);
-    }
-
-    /// \overload
-    template<class BidirectionalRange, class Compare>
-    inline bool prev_permutation(const BidirectionalRange& rng,
-                                 Compare                   comp_pred)
-    {
-        boost::function_requires<
-            BidirectionalRangeConcept<BidirectionalRange> >();
-
-        return std::prev_permutation(boost::begin(rng), boost::end(rng),
-                                     comp_pred);
-    }
+/// \brief template function next_permutation
+///
+/// range-based version of the next_permutation std algorithm
+///
+/// \pre BidirectionalRange is a model of the BidirectionalRangeConcept
+/// \pre Compare is a model of the BinaryPredicateConcept
+template<class BidirectionalRange>
+inline bool next_permutation(BidirectionalRange& rng)
+{
+    BOOST_CONCEPT_ASSERT(( BidirectionalRangeConcept<BidirectionalRange> ));
+    return std::next_permutation(boost::begin(rng), boost::end(rng));
 }
+
+/// \overload
+template<class BidirectionalRange>
+inline bool next_permutation(const BidirectionalRange& rng)
+{
+    BOOST_CONCEPT_ASSERT(( BidirectionalRangeConcept<const BidirectionalRange> ));
+    return std::next_permutation(boost::begin(rng), boost::end(rng));
+}
+
+/// \overload
+template<class BidirectionalRange, class Compare>
+inline bool next_permutation(BidirectionalRange& rng, Compare comp_pred)
+{
+    BOOST_CONCEPT_ASSERT(( BidirectionalRangeConcept<BidirectionalRange> ));
+    return std::next_permutation(boost::begin(rng), boost::end(rng),
+                                 comp_pred);
+}
+
+/// \overload
+template<class BidirectionalRange, class Compare>
+inline bool next_permutation(const BidirectionalRange& rng,
+                             Compare                   comp_pred)
+{
+    BOOST_CONCEPT_ASSERT(( BidirectionalRangeConcept<const BidirectionalRange> ));
+    return std::next_permutation(boost::begin(rng), boost::end(rng),
+                                 comp_pred);
+}
+
+/// \brief template function prev_permutation
+///
+/// range-based version of the prev_permutation std algorithm
+///
+/// \pre BidirectionalRange is a model of the BidirectionalRangeConcept
+/// \pre Compare is a model of the BinaryPredicateConcept
+template<class BidirectionalRange>
+inline bool prev_permutation(BidirectionalRange& rng)
+{
+    BOOST_CONCEPT_ASSERT(( BidirectionalRangeConcept<BidirectionalRange> ));
+    return std::prev_permutation(boost::begin(rng), boost::end(rng));
+}
+
+/// \overload
+template<class BidirectionalRange>
+inline bool prev_permutation(const BidirectionalRange& rng)
+{
+    BOOST_CONCEPT_ASSERT(( BidirectionalRangeConcept<const BidirectionalRange> ));
+    return std::prev_permutation(boost::begin(rng), boost::end(rng));
+}
+
+/// \overload
+template<class BidirectionalRange, class Compare>
+inline bool prev_permutation(BidirectionalRange& rng, Compare comp_pred)
+{
+    BOOST_CONCEPT_ASSERT(( BidirectionalRangeConcept<BidirectionalRange> ));
+    return std::prev_permutation(boost::begin(rng), boost::end(rng),
+                                 comp_pred);
+}
+
+/// \overload
+template<class BidirectionalRange, class Compare>
+inline bool prev_permutation(const BidirectionalRange& rng,
+                             Compare                   comp_pred)
+{
+    BOOST_CONCEPT_ASSERT(( BidirectionalRangeConcept<const BidirectionalRange> ));
+    return std::prev_permutation(boost::begin(rng), boost::end(rng),
+                                 comp_pred);
+}
+
+    } // namespace range
+    using range::next_permutation;
+    using range::prev_permutation;
+} // namespace boost
 
 #endif // include guard

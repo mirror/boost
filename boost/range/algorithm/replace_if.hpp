@@ -17,33 +17,38 @@
 
 namespace boost
 {
-    /// \brief template function replace_if
-    ///
-    /// range-based version of the replace_if std algorithm
-    ///
-    /// \pre ForwardRange is a model of the ForwardRangeConcept
-    /// \pre UnaryPredicate is a model of the UnaryPredicateConcept
-    template< class ForwardRange, class UnaryPredicate, class Value >
-    inline ForwardRange&
-        replace_if(ForwardRange& rng, UnaryPredicate pred,
-                   const Value& val)
+    namespace range
     {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        std::replace_if(boost::begin(rng), boost::end(rng), pred, val);
-        return rng;
-    }
 
-    /// \overload
-    template< class ForwardRange, class UnaryPredicate, class Value >
-    inline const ForwardRange&
-        replace_if(const ForwardRange& rng, UnaryPredicate pred,
-                   const Value& val)
-    {
-        boost::function_requires< ForwardRangeConcept<ForwardRange> >();
-        std::replace_if(boost::begin(rng), boost::end(rng), pred, val);
-        return rng;
-    }
-
+/// \brief template function replace_if
+///
+/// range-based version of the replace_if std algorithm
+///
+/// \pre ForwardRange is a model of the ForwardRangeConcept
+/// \pre UnaryPredicate is a model of the UnaryPredicateConcept
+template< class ForwardRange, class UnaryPredicate, class Value >
+inline ForwardRange&
+    replace_if(ForwardRange& rng, UnaryPredicate pred,
+               const Value& val)
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    std::replace_if(boost::begin(rng), boost::end(rng), pred, val);
+    return rng;
 }
+
+/// \overload
+template< class ForwardRange, class UnaryPredicate, class Value >
+inline const ForwardRange&
+    replace_if(const ForwardRange& rng, UnaryPredicate pred,
+               const Value& val)
+{
+    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    std::replace_if(boost::begin(rng), boost::end(rng), pred, val);
+    return rng;
+}
+
+    } // namespace range
+    using range::replace_if;
+} // namespace boost
 
 #endif // include guard
