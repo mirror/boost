@@ -116,7 +116,7 @@ namespace boost
 				{
 					if (default_pass)
 					{
-						raw_iterator nxt = next(it);
+						raw_iterator nxt = ::boost::next(it);
 						while (nxt != last && !bi_pred(*it, *nxt))
 						{
 							++it;
@@ -125,7 +125,7 @@ namespace boost
 					}
 					else
 					{
-						raw_iterator nxt = next(it);
+						raw_iterator nxt = ::boost::next(it);
 						for(; nxt != last; ++it, ++nxt)
 						{
 							if (bi_pred(*it, *nxt))
@@ -155,7 +155,7 @@ namespace boost
 			{
 				BOOST_ASSERT( current != this->end().base() );
 
-				current = to_valid(next(current), this->end().base(), m_bi_pred, m_default_pass);
+				current = to_valid(::boost::next(current), this->end().base(), m_bi_pred, m_default_pass);
 			}
 
 		private:
