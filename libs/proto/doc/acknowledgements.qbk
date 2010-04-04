@@ -15,6 +15,10 @@ indespensable.
 Thanks to Daniel James for providing a patch to remove the dependence on
 deprecated configuration macros for C++0x features.
 
+Thanks to Dave Abrahams for an especially detailed review, and for making a
+VM with msvc-7.1 available so I could track down portability issues on that
+compiler.
+
 Thanks also to the developers of _PETE_. I found many good ideas there.
 
 [endsect]
