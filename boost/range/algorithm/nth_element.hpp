@@ -30,7 +30,7 @@ template<class RandomAccessRange>
 inline void nth_element(RandomAccessRange& rng,
     BOOST_DEDUCED_TYPENAME range_iterator<RandomAccessRange>::type nth)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::nth_element(boost::begin(rng), nth, boost::end(rng));
 }
 
@@ -39,7 +39,7 @@ template<class RandomAccessRange>
 inline void nth_element(const RandomAccessRange& rng,
     BOOST_DEDUCED_TYPENAME range_iterator<const RandomAccessRange>::type nth)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::nth_element(boost::begin(rng),nth,boost::end(rng));
 }
 
@@ -49,7 +49,7 @@ inline void nth_element(RandomAccessRange& rng,
     BOOST_DEDUCED_TYPENAME range_iterator<RandomAccessRange>::type nth,
     BinaryPredicate sort_pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::nth_element(boost::begin(rng), nth, boost::end(rng), sort_pred);
 }
 
@@ -59,7 +59,7 @@ inline void nth_element(const RandomAccessRange& rng,
     BOOST_DEDUCED_TYPENAME range_iterator<const RandomAccessRange>::type nth,
     BinaryPredicate sort_pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::nth_element(boost::begin(rng),nth,boost::end(rng), sort_pred);
 }
 

@@ -29,7 +29,7 @@ namespace boost
 template<class RandomAccessRange>
 inline RandomAccessRange& sort(RandomAccessRange& rng)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::sort(boost::begin(rng), boost::end(rng));
     return rng;
 }
@@ -38,7 +38,7 @@ inline RandomAccessRange& sort(RandomAccessRange& rng)
 template<class RandomAccessRange>
 inline const RandomAccessRange& sort(const RandomAccessRange& rng)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::sort(boost::begin(rng),boost::end(rng));
     return rng;
 }
@@ -47,7 +47,7 @@ inline const RandomAccessRange& sort(const RandomAccessRange& rng)
 template<class RandomAccessRange, class BinaryPredicate>
 inline RandomAccessRange& sort(RandomAccessRange& rng, BinaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::sort(boost::begin(rng), boost::end(rng), pred);
     return rng;
 }
@@ -56,7 +56,7 @@ inline RandomAccessRange& sort(RandomAccessRange& rng, BinaryPredicate pred)
 template<class RandomAccessRange, class BinaryPredicate>
 inline const RandomAccessRange& sort(const RandomAccessRange& rng, BinaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::sort(boost::begin(rng), boost::end(rng), pred);
     return rng;
 }

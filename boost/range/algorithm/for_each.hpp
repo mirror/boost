@@ -29,7 +29,7 @@ namespace boost
 template< class SinglePassRange, class UnaryFunction >
 inline UnaryFunction for_each(SinglePassRange & rng, UnaryFunction fun)
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
     return std::for_each(boost::begin(rng),boost::end(rng),fun);
 }
 
@@ -37,7 +37,7 @@ inline UnaryFunction for_each(SinglePassRange & rng, UnaryFunction fun)
 template< class SinglePassRange, class UnaryFunction >
 inline UnaryFunction for_each(SinglePassRange const & rng, UnaryFunction fun)
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
     return std::for_each(boost::begin(rng),boost::end(rng),fun);
 }
 

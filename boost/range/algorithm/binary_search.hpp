@@ -29,7 +29,7 @@ namespace boost
 template<class ForwardRange, class Value>
 inline bool binary_search(const ForwardRange& rng, const Value& val)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     return std::binary_search(boost::begin(rng), boost::end(rng), val);
 }
 
@@ -38,7 +38,7 @@ template<class ForwardRange, class Value, class BinaryPredicate>
 inline bool binary_search(const ForwardRange& rng, const Value& val,
                           BinaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     return std::binary_search(boost::begin(rng), boost::end(rng), val, pred);
 }
 

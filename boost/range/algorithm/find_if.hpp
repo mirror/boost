@@ -31,7 +31,7 @@ template< class SinglePassRange, class UnaryPredicate >
 inline BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange>::type
 find_if( SinglePassRange& rng, UnaryPredicate pred )
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
     return std::find_if(boost::begin(rng), boost::end(rng), pred);
 }
 
@@ -42,7 +42,7 @@ template< range_return_value re, class SinglePassRange, class UnaryPredicate >
 inline BOOST_DEDUCED_TYPENAME range_return<SinglePassRange,re>::type
 find_if( SinglePassRange& rng, UnaryPredicate pred )
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
     return range_return<SinglePassRange,re>::
         pack(std::find_if(boost::begin(rng), boost::end(rng), pred),
              rng);

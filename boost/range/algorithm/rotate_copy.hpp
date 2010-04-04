@@ -33,7 +33,7 @@ namespace boost
         OutputIterator                                      target
         )
     {
-        BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+        BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
         return std::rotate_copy(boost::begin(rng), middle, boost::end(rng), target);
     }
 

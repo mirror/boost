@@ -31,7 +31,7 @@ template< class SinglePassRange, class OutputIterator >
 inline OutputIterator
 unique_copy( const SinglePassRange& rng, OutputIterator out_it )
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
     return std::unique_copy(boost::begin(rng), boost::end(rng), out_it);
 }
 /// \overload
@@ -40,7 +40,7 @@ inline OutputIterator
 unique_copy( const SinglePassRange& rng, OutputIterator out_it,
              BinaryPredicate pred )
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
     return std::unique_copy(boost::begin(rng), boost::end(rng), out_it, pred);
 }
 

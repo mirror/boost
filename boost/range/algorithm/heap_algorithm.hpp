@@ -29,7 +29,7 @@ namespace boost
 template<class RandomAccessRange>
 inline void push_heap(RandomAccessRange& rng)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::push_heap(boost::begin(rng), boost::end(rng));
 }
 
@@ -37,7 +37,7 @@ inline void push_heap(RandomAccessRange& rng)
 template<class RandomAccessRange>
 inline void push_heap(const RandomAccessRange& rng)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::push_heap(boost::begin(rng), boost::end(rng));
 }
 
@@ -45,7 +45,7 @@ inline void push_heap(const RandomAccessRange& rng)
 template<class RandomAccessRange, class Compare>
 inline void push_heap(RandomAccessRange& rng, Compare comp_pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::push_heap(boost::begin(rng), boost::end(rng), comp_pred);
 }
 
@@ -53,7 +53,7 @@ inline void push_heap(RandomAccessRange& rng, Compare comp_pred)
 template<class RandomAccessRange, class Compare>
 inline void push_heap(const RandomAccessRange& rng, Compare comp_pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::push_heap(boost::begin(rng), boost::end(rng), comp_pred);
 }
 
@@ -66,7 +66,7 @@ inline void push_heap(const RandomAccessRange& rng, Compare comp_pred)
 template<class RandomAccessRange>
 inline void pop_heap(RandomAccessRange& rng)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::pop_heap(boost::begin(rng), boost::end(rng));
 }
 
@@ -74,7 +74,7 @@ inline void pop_heap(RandomAccessRange& rng)
 template<class RandomAccessRange>
 inline void pop_heap(const RandomAccessRange& rng)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::pop_heap(boost::begin(rng),boost::end(rng));
 }
 
@@ -82,7 +82,7 @@ inline void pop_heap(const RandomAccessRange& rng)
 template<class RandomAccessRange, class Compare>
 inline void pop_heap(RandomAccessRange& rng, Compare comp_pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::pop_heap(boost::begin(rng), boost::end(rng), comp_pred);
 }
 
@@ -90,7 +90,7 @@ inline void pop_heap(RandomAccessRange& rng, Compare comp_pred)
 template<class RandomAccessRange, class Compare>
 inline void pop_heap(const RandomAccessRange& rng, Compare comp_pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::pop_heap(boost::begin(rng), boost::end(rng), comp_pred);
 }
 
@@ -103,7 +103,7 @@ inline void pop_heap(const RandomAccessRange& rng, Compare comp_pred)
 template<class RandomAccessRange>
 inline void make_heap(RandomAccessRange& rng)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::make_heap(boost::begin(rng), boost::end(rng));
 }
 
@@ -111,7 +111,7 @@ inline void make_heap(RandomAccessRange& rng)
 template<class RandomAccessRange>
 inline void make_heap(const RandomAccessRange& rng)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::make_heap(boost::begin(rng),boost::end(rng));
 }
 
@@ -119,7 +119,7 @@ inline void make_heap(const RandomAccessRange& rng)
 template<class RandomAccessRange, class Compare>
 inline void make_heap(RandomAccessRange& rng, Compare comp_pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::make_heap(boost::begin(rng), boost::end(rng), comp_pred);
 }
 
@@ -127,7 +127,7 @@ inline void make_heap(RandomAccessRange& rng, Compare comp_pred)
 template<class RandomAccessRange, class Compare>
 inline void make_heap(const RandomAccessRange& rng, Compare comp_pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::make_heap(boost::begin(rng), boost::end(rng), comp_pred);
 }
 
@@ -140,7 +140,7 @@ inline void make_heap(const RandomAccessRange& rng, Compare comp_pred)
 template<class RandomAccessRange>
 inline void sort_heap(RandomAccessRange& rng)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::sort_heap(boost::begin(rng), boost::end(rng));
 }
 
@@ -148,7 +148,7 @@ inline void sort_heap(RandomAccessRange& rng)
 template<class RandomAccessRange>
 inline void sort_heap(const RandomAccessRange& rng)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::sort_heap(boost::begin(rng), boost::end(rng));
 }
 
@@ -156,7 +156,7 @@ inline void sort_heap(const RandomAccessRange& rng)
 template<class RandomAccessRange, class Compare>
 inline void sort_heap(RandomAccessRange& rng, Compare comp_pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::sort_heap(boost::begin(rng), boost::end(rng), comp_pred);
 }
 
@@ -164,7 +164,7 @@ inline void sort_heap(RandomAccessRange& rng, Compare comp_pred)
 template<class RandomAccessRange, class Compare>
 inline void sort_heap(const RandomAccessRange& rng, Compare comp_pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::sort_heap(boost::begin(rng), boost::end(rng), comp_pred);
 }
 

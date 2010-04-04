@@ -32,8 +32,8 @@ template< class SinglePassRange1, class ForwardRange2 >
 inline BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange1>::type
 find_first_of(SinglePassRange1 & rng1, ForwardRange2 const & rng2)
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
 
     return std::find_first_of(boost::begin(rng1),boost::end(rng1),
                               boost::begin(rng2),boost::end(rng2));
@@ -44,8 +44,8 @@ template< class SinglePassRange1, class ForwardRange2, class BinaryPredicate >
 inline BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange1>::type
 find_first_of(SinglePassRange1 & rng1, ForwardRange2 const & rng2, BinaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
 
     return std::find_first_of(boost::begin(rng1),boost::end(rng1),
                               boost::begin(rng2),boost::end(rng2),pred);
@@ -57,8 +57,8 @@ template< range_return_value re, class SinglePassRange1, class ForwardRange2 >
 inline BOOST_DEDUCED_TYPENAME range_return<SinglePassRange1,re>::type
 find_first_of(SinglePassRange1& rng1, const ForwardRange2& rng2)
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
 
     return range_return<SinglePassRange1,re>::
         pack(std::find_first_of(boost::begin(rng1), boost::end(rng1),
@@ -73,8 +73,8 @@ inline BOOST_DEDUCED_TYPENAME range_return<SinglePassRange1,re>::type
 find_first_of(SinglePassRange1 & rng1, const ForwardRange2& rng2,
               BinaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
 
     return range_return<SinglePassRange1,re>::
         pack(std::find_first_of(boost::begin(rng1), boost::end(rng1),

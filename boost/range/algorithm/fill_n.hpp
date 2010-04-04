@@ -29,7 +29,7 @@ namespace boost
 template< class ForwardRange, class Size, class Value >
 inline ForwardRange& fill_n(ForwardRange& rng, Size n, const Value& val)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
     BOOST_ASSERT( static_cast<Size>(std::distance(boost::begin(rng), boost::end(rng))) >= n );
     std::fill_n(boost::begin(rng), n, val);
     return rng;

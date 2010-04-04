@@ -47,8 +47,8 @@ namespace boost
     template<typename SinglePassRange>
     inline bool is_sorted(const SinglePassRange& rng)
     {
-        BOOST_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange>));
-        BOOST_CONCEPT_ASSERT((LessThanComparableConcept<typename range_value<SinglePassRange>::type>));
+        BOOST_RANGE_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange>));
+        BOOST_RANGE_CONCEPT_ASSERT((LessThanComparableConcept<typename range_value<SinglePassRange>::type>));
         return range_detail::is_sorted(boost::begin(rng), boost::end(rng));
     }
 
@@ -56,8 +56,8 @@ namespace boost
     template<typename SinglePassRange, typename BinaryPredicate>
     inline bool is_sorted(const SinglePassRange& rng, BinaryPredicate pred)
     {
-        BOOST_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange>));
-        BOOST_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate, typename range_value<SinglePassRange>::type, typename range_value<SinglePassRange>::type>));
+        BOOST_RANGE_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange>));
+        BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate, typename range_value<SinglePassRange>::type, typename range_value<SinglePassRange>::type>));
         return range_detail::is_sorted(boost::begin(rng), boost::end(rng), pred);
     }
 }

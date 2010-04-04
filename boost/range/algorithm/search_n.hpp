@@ -35,7 +35,7 @@ template< typename ForwardRange, typename Integer, typename Value >
 inline typename range_iterator<ForwardRange>::type
 search_n(ForwardRange& rng, Integer count, const Value& value)
 {
-    BOOST_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
     return std::search_n(boost::begin(rng),boost::end(rng), count, value);
 }
 
@@ -44,7 +44,7 @@ template< typename ForwardRange, typename Integer, typename Value >
 inline typename range_iterator<const ForwardRange>::type
 search_n(const ForwardRange& rng, Integer count, const Value& value)
 {
-    BOOST_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
     return std::search_n(boost::begin(rng), boost::end(rng), count, value);
 }
 
@@ -55,8 +55,8 @@ inline typename range_iterator<ForwardRange>::type
 search_n(ForwardRange& rng, Integer count, const Value& value,
          BinaryPredicate binary_pred)
 {
-    BOOST_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
-    BOOST_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
+    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
         typename range_value<ForwardRange>::type, const Value&>));
     return std::search_n(boost::begin(rng), boost::end(rng),
         count, value, binary_pred);
@@ -69,8 +69,8 @@ inline typename range_iterator<const ForwardRange>::type
 search_n(const ForwardRange& rng, Integer count, const Value& value,
          BinaryPredicate binary_pred)
 {
-    BOOST_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
-    BOOST_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
+    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
         typename range_value<const ForwardRange>::type, const Value&>));
     return std::search_n(boost::begin(rng), boost::end(rng),
         count, value, binary_pred);
@@ -84,7 +84,7 @@ template< range_return_value re, typename ForwardRange, typename Integer,
 inline typename range_return<ForwardRange,re>::type
 search_n(ForwardRange& rng, Integer count, const Value& value)
 {
-    BOOST_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
     return range_return<ForwardRange,re>::
         pack(std::search_n(boost::begin(rng),boost::end(rng),
                            count, value),
@@ -97,7 +97,7 @@ template< range_return_value re, typename ForwardRange, typename Integer,
 inline typename range_return<const ForwardRange,re>::type
 search_n(const ForwardRange& rng, Integer count, const Value& value)
 {
-    BOOST_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
     return range_return<const ForwardRange,re>::
         pack(std::search_n(boost::begin(rng), boost::end(rng),
                            count, value),
@@ -111,8 +111,8 @@ inline typename range_return<ForwardRange,re>::type
 search_n(ForwardRange& rng, Integer count, const Value& value,
          BinaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
-    BOOST_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
+    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
         typename range_value<ForwardRange>::type,
         const Value&>));
     return range_return<ForwardRange,re>::
@@ -128,8 +128,8 @@ inline typename range_return<const ForwardRange,re>::type
 search_n(const ForwardRange& rng, Integer count, const Value& value,
          BinaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
-    BOOST_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
+    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
         typename range_value<const ForwardRange>::type,
         const Value&>));
     return range_return<const ForwardRange,re>::

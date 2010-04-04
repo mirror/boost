@@ -32,8 +32,8 @@ template< class ForwardRange1, class ForwardRange2 >
 inline BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange1>::type
 search(ForwardRange1& rng1, const ForwardRange2& rng2)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange1> ));
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
     return std::search(boost::begin(rng1),boost::end(rng1),
                        boost::begin(rng2),boost::end(rng2));
 }
@@ -43,8 +43,8 @@ template< class ForwardRange1, class ForwardRange2 >
 inline BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange1>::type
 search(const ForwardRange1& rng1, const ForwardRange2& rng2)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange1> ));
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
     return std::search(boost::begin(rng1),boost::end(rng1),
                        boost::begin(rng2),boost::end(rng2));
 }
@@ -54,8 +54,8 @@ template< class ForwardRange1, class ForwardRange2, class BinaryPredicate >
 inline BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange1>::type
 search(ForwardRange1& rng1, const ForwardRange2& rng2, BinaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange1> ));
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
     return std::search(boost::begin(rng1),boost::end(rng1),
                        boost::begin(rng2),boost::end(rng2),pred);
 }
@@ -66,8 +66,8 @@ inline BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange1>::type
 search(const ForwardRange1& rng1, const ForwardRange2& rng2,
         BinaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange1> ));
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
     return std::search(boost::begin(rng1),boost::end(rng1),
                        boost::begin(rng2),boost::end(rng2),pred);
 }
@@ -79,8 +79,8 @@ template< range_return_value re, class ForwardRange1, class ForwardRange2 >
 inline BOOST_DEDUCED_TYPENAME range_return<ForwardRange1,re>::type
 search(ForwardRange1& rng1, const ForwardRange2& rng2)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange1> ));
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
     return range_return<ForwardRange1,re>::
         pack(std::search(boost::begin(rng1),boost::end(rng1),
                          boost::begin(rng2),boost::end(rng2)),
@@ -92,8 +92,8 @@ template< range_return_value re, class ForwardRange1, class ForwardRange2 >
 inline BOOST_DEDUCED_TYPENAME range_return<const ForwardRange1,re>::type
 search(const ForwardRange1& rng1, const ForwardRange2& rng2)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange1> ));
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
     return range_return<const ForwardRange1,re>::
         pack(std::search(boost::begin(rng1),boost::end(rng1),
                          boost::begin(rng2),boost::end(rng2)),
@@ -106,8 +106,8 @@ template< range_return_value re, class ForwardRange1, class ForwardRange2,
 inline BOOST_DEDUCED_TYPENAME range_return<ForwardRange1,re>::type
 search(ForwardRange1& rng1, const ForwardRange2& rng2, BinaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange1> ));
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
     return range_return<ForwardRange1,re>::
         pack(std::search(boost::begin(rng1),boost::end(rng1),
                          boost::begin(rng2),boost::end(rng2),pred),
@@ -121,8 +121,8 @@ inline BOOST_DEDUCED_TYPENAME range_return<const ForwardRange1,re>::type
 search(const ForwardRange1& rng1, const ForwardRange2& rng2,
         BinaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange1> ));
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange2> ));
     return range_return<const ForwardRange1,re>::
         pack(std::search(boost::begin(rng1),boost::end(rng1),
                          boost::begin(rng2),boost::end(rng2),pred),

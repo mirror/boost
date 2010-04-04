@@ -30,7 +30,7 @@ template<class ForwardRange, class UnaryPredicate>
 inline BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type
 partition(ForwardRange& rng, UnaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
     return std::partition(boost::begin(rng),boost::end(rng),pred);
 }
 
@@ -39,7 +39,7 @@ template<class ForwardRange, class UnaryPredicate>
 inline BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange>::type
 partition(const ForwardRange& rng, UnaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     return std::partition(boost::begin(rng),boost::end(rng),pred);
 }
 
@@ -51,7 +51,7 @@ template< range_return_value re, class ForwardRange,
 inline BOOST_DEDUCED_TYPENAME range_return<ForwardRange,re>::type
 partition(ForwardRange& rng, UnaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
     return boost::range_return<ForwardRange,re>::
         pack(std::partition(boost::begin(rng), boost::end(rng), pred), rng);
 }
@@ -62,7 +62,7 @@ template< range_return_value re, class ForwardRange,
 inline BOOST_DEDUCED_TYPENAME range_return<const ForwardRange,re>::type
 partition(const ForwardRange& rng, UnaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     return boost::range_return<const ForwardRange,re>::
         pack(std::partition(boost::begin(rng), boost::end(rng), pred), rng);
 }

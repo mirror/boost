@@ -28,8 +28,8 @@ iterator_range<range_detail::join_iterator<
 >
 join(const SinglePassRange1& r1, const SinglePassRange2& r2)
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
 
 	typedef range_detail::join_iterator<
 				BOOST_DEDUCED_TYPENAME range_iterator<const SinglePassRange1>::type,
@@ -50,8 +50,8 @@ iterator_range<range_detail::join_iterator<
 >
 join(SinglePassRange1& r1, SinglePassRange2& r2)
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
 
 	typedef range_detail::join_iterator<
 		BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange1>::type,

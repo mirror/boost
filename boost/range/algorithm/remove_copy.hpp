@@ -33,7 +33,7 @@ template< class SinglePassRange, class OutputIterator, class Value >
 inline OutputIterator
 remove_copy(SinglePassRange& rng, OutputIterator out_it, const Value& val)
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
     return std::remove_copy(boost::begin(rng), boost::end(rng), out_it, val);
 }
 

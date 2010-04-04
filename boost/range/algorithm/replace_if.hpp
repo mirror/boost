@@ -31,7 +31,7 @@ inline ForwardRange&
     replace_if(ForwardRange& rng, UnaryPredicate pred,
                const Value& val)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
     std::replace_if(boost::begin(rng), boost::end(rng), pred, val);
     return rng;
 }
@@ -42,7 +42,7 @@ inline const ForwardRange&
     replace_if(const ForwardRange& rng, UnaryPredicate pred,
                const Value& val)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     std::replace_if(boost::begin(rng), boost::end(rng), pred, val);
     return rng;
 }

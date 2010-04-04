@@ -30,8 +30,8 @@ template<class SinglePassRange1, class SinglePassRange2>
 inline bool lexicographical_compare(const SinglePassRange1& rng1,
                                     const SinglePassRange2& rng2)
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
     return std::lexicographical_compare(
         boost::begin(rng1), boost::end(rng1),
         boost::begin(rng2), boost::end(rng2));
@@ -44,8 +44,8 @@ inline bool lexicographical_compare(const SinglePassRange1& rng1,
                                     const SinglePassRange2& rng2,
                                     BinaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
     return std::lexicographical_compare(
         boost::begin(rng1), boost::end(rng1),
         boost::begin(rng2), boost::end(rng2), pred);

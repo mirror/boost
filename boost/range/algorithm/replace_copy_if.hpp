@@ -34,7 +34,7 @@ inline OutputIterator
 replace_copy_if(ForwardRange& rng, OutputIterator out_it, Predicate pred,
         const Value& with_what)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
     return std::replace_copy_if(boost::begin(rng), boost::end(rng), out_it,
         pred, with_what);
 }

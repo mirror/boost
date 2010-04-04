@@ -28,7 +28,7 @@ namespace boost
 template< class ForwardRange, class Generator >
 inline ForwardRange& generate( ForwardRange& rng, Generator gen )
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
     std::generate(boost::begin(rng), boost::end(rng), gen);
     return rng;
 }
@@ -37,7 +37,7 @@ inline ForwardRange& generate( ForwardRange& rng, Generator gen )
 template< class ForwardRange, class Generator >
 inline const ForwardRange& generate(const ForwardRange& rng, Generator gen)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     std::generate(boost::begin(rng), boost::end(rng), gen);
     return rng;
 }

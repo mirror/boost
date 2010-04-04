@@ -34,8 +34,8 @@ inline OutputIterator merge(const SinglePassRange1& rng1,
                             const SinglePassRange2& rng2,
                             OutputIterator          out)
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
     return std::merge(boost::begin(rng1), boost::end(rng1),
                       boost::begin(rng2), boost::end(rng2), out);
 }
@@ -48,8 +48,8 @@ inline OutputIterator merge(const SinglePassRange1& rng1,
                             OutputIterator          out,
                             BinaryPredicate         pred)
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
     return std::merge(boost::begin(rng1), boost::end(rng1),
                       boost::begin(rng2), boost::end(rng2), out, pred);
 }

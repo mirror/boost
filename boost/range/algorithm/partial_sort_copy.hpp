@@ -32,10 +32,10 @@ template<typename SinglePassRange, typename RandomAccessRange>
 inline typename range_iterator<RandomAccessRange>::type
 partial_sort_copy(const SinglePassRange& rng1, RandomAccessRange& rng2)
 {
-    BOOST_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange>));
-    BOOST_CONCEPT_ASSERT((WriteableRandomAccessRangeConcept<RandomAccessRange>));
-    BOOST_CONCEPT_ASSERT((range_detail::SameTypeConcept<typename range_value<SinglePassRange>::type, typename range_value<RandomAccessRange>::type>));
-    BOOST_CONCEPT_ASSERT((LessThanComparableConcept<typename range_value<SinglePassRange>::type>));
+    BOOST_RANGE_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((WriteableRandomAccessRangeConcept<RandomAccessRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((range_detail::SameTypeConcept<typename range_value<SinglePassRange>::type, typename range_value<RandomAccessRange>::type>));
+    BOOST_RANGE_CONCEPT_ASSERT((LessThanComparableConcept<typename range_value<SinglePassRange>::type>));
 
     return std::partial_sort_copy(boost::begin(rng1), boost::end(rng1),
         boost::begin(rng2), boost::end(rng2));
@@ -48,10 +48,10 @@ inline typename range_iterator<RandomAccessRange>::type
 partial_sort_copy(const SinglePassRange& rng1, RandomAccessRange& rng2,
     BinaryPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange>));
-    BOOST_CONCEPT_ASSERT((WriteableRandomAccessRangeConcept<RandomAccessRange>));
-    BOOST_CONCEPT_ASSERT((range_detail::SameTypeConcept<typename range_value<SinglePassRange>::type, typename range_value<RandomAccessRange>::type>));
-    BOOST_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate, typename range_value<RandomAccessRange>::type, typename range_value<RandomAccessRange>::type>));
+    BOOST_RANGE_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((WriteableRandomAccessRangeConcept<RandomAccessRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((range_detail::SameTypeConcept<typename range_value<SinglePassRange>::type, typename range_value<RandomAccessRange>::type>));
+    BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate, typename range_value<RandomAccessRange>::type, typename range_value<RandomAccessRange>::type>));
 
     return std::partial_sort_copy(boost::begin(rng1), boost::end(rng1),
         boost::begin(rng2), boost::end(rng2), pred);

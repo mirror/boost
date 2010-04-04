@@ -29,7 +29,7 @@ template<typename ForwardRange>
 inline ForwardRange& rotate(ForwardRange& rng,
     typename range_iterator<ForwardRange>::type middle)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
     std::rotate(boost::begin(rng), middle, boost::end(rng));
     return rng;
 }
@@ -40,7 +40,7 @@ inline const ForwardRange&
     rotate(const ForwardRange& rng,
            typename range_iterator<const ForwardRange>::type middle)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     std::rotate(boost::begin(rng), middle, boost::end(rng));
     return rng;
 }

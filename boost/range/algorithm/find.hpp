@@ -30,7 +30,7 @@ template< class SinglePassRange, class Value >
 inline BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange>::type
 find( SinglePassRange& rng, const Value& val )
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
     return std::find(boost::begin(rng), boost::end(rng), val);
 }
 
@@ -41,7 +41,7 @@ template< range_return_value re, class SinglePassRange, class Value >
 inline BOOST_DEDUCED_TYPENAME range_return<SinglePassRange,re>::type
 find( SinglePassRange& rng, const Value& val )
 {
-    BOOST_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
     return range_return<SinglePassRange,re>::
         pack(std::find(boost::begin(rng), boost::end(rng), val),
              rng);

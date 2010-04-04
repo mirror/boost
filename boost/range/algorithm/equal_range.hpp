@@ -33,7 +33,7 @@ inline std::pair<
        >
 equal_range(ForwardRange& rng, const Value& val)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
     return std::equal_range(boost::begin(rng), boost::end(rng), val);
 }
 
@@ -45,7 +45,7 @@ inline std::pair<
        >
 equal_range(const ForwardRange& rng, const Value& val)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     return std::equal_range(boost::begin(rng), boost::end(rng), val);
 }
 
@@ -57,7 +57,7 @@ inline std::pair<
        >
 equal_range(ForwardRange& rng, const Value& val, SortPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
     return std::equal_range(boost::begin(rng), boost::end(rng), val, pred);
 }
 
@@ -69,7 +69,7 @@ inline std::pair<
        >
 equal_range(const ForwardRange& rng, const Value& val, SortPredicate pred)
 {
-    BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     return std::equal_range(boost::begin(rng), boost::end(rng), val, pred);
 }
 

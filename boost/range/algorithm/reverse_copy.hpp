@@ -29,7 +29,7 @@ namespace boost
 template<typename BidirectionalRange, typename OutputIterator>
 inline OutputIterator reverse_copy(BidirectionalRange& rng, OutputIterator out)
 {
-    BOOST_CONCEPT_ASSERT(( BidirectionalRangeConcept<BidirectionalRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( BidirectionalRangeConcept<BidirectionalRange> ));
     return std::reverse_copy(boost::begin(rng), boost::end(rng), out);
 }
 
@@ -37,7 +37,7 @@ inline OutputIterator reverse_copy(BidirectionalRange& rng, OutputIterator out)
 template<typename BidirectionalRange, typename OutputIterator>
 inline OutputIterator reverse_copy(const BidirectionalRange& rng, OutputIterator out)
 {
-    BOOST_CONCEPT_ASSERT(( BidirectionalRangeConcept<BidirectionalRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( BidirectionalRangeConcept<BidirectionalRange> ));
     return std::reverse_copy(boost::begin(rng), boost::end(rng), out);
 }
 

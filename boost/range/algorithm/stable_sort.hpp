@@ -29,7 +29,7 @@ namespace boost
 template<class RandomAccessRange>
 inline RandomAccessRange& stable_sort(RandomAccessRange& rng)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::stable_sort(boost::begin(rng), boost::end(rng));
     return rng;
 }
@@ -38,7 +38,7 @@ inline RandomAccessRange& stable_sort(RandomAccessRange& rng)
 template<class RandomAccessRange>
 inline const RandomAccessRange& stable_sort(const RandomAccessRange& rng)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::stable_sort(boost::begin(rng), boost::end(rng));
     return rng;
 }
@@ -47,7 +47,7 @@ inline const RandomAccessRange& stable_sort(const RandomAccessRange& rng)
 template<class RandomAccessRange, class BinaryPredicate>
 inline RandomAccessRange& stable_sort(RandomAccessRange& rng, BinaryPredicate sort_pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
     std::stable_sort(boost::begin(rng), boost::end(rng), sort_pred);
     return rng;
 }
@@ -56,7 +56,7 @@ inline RandomAccessRange& stable_sort(RandomAccessRange& rng, BinaryPredicate so
 template<class RandomAccessRange, class BinaryPredicate>
 inline const RandomAccessRange& stable_sort(const RandomAccessRange& rng, BinaryPredicate sort_pred)
 {
-    BOOST_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::stable_sort(boost::begin(rng), boost::end(rng), sort_pred);
     return rng;
 }

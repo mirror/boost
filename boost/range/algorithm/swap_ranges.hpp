@@ -70,8 +70,8 @@ template< typename SinglePassRange1, typename SinglePassRange2 >
 inline SinglePassRange2&
 swap_ranges(SinglePassRange1& range1, SinglePassRange2& range2)
 {
-    BOOST_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange1>));
-    BOOST_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange2>));
+    BOOST_RANGE_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange1>));
+    BOOST_RANGE_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange2>));
 
     boost::range_detail::swap_ranges_impl(
         boost::begin(range1), boost::end(range1),
