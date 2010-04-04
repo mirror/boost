@@ -283,12 +283,12 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
     void post_event( const event_base_ptr_type & pEvent )
     {
-      outermost_context_base().post_event( pEvent );
+      outermost_context_base().post_event_impl( pEvent );
     }
 
     void post_event( const event_base & evt )
     {
-      outermost_context_base().post_event( evt );
+      outermost_context_base().post_event_impl( evt );
     }
 
     result discard_event()
