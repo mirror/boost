@@ -21,27 +21,33 @@
 
 namespace boost
 {
-    /// \brief template function copy
-    ///
-    /// range-based version of the copy std algorithm
-    ///
-    /// \pre SinglePassRange is a model of the SinglePassRangeConcept
-    /// \pre OutputIterator is a model of the OutputIteratorConcept
-    /// \pre 0 <= n < distance(rng)
-    template< class SinglePassRange, class Size, class OutputIterator >
-    inline OutputIterator copy_n(const SinglePassRange& rng, Size n, OutputIterator out)
+    namespace range
     {
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange> >();
-        BOOST_ASSERT( n < static_cast<Size>(boost::distance(rng)) );
-        BOOST_ASSERT( n >= static_cast<Size>(0) );
 
-        BOOST_DEDUCED_TYPENAME range_const_iterator<SinglePassRange>::type source = boost::begin(rng);
+/// \brief template function copy
+///
+/// range-based version of the copy std algorithm
+///
+/// \pre SinglePassRange is a model of the SinglePassRangeConcept
+/// \pre OutputIterator is a model of the OutputIteratorConcept
+/// \pre 0 <= n < distance(rng)
+template< class SinglePassRange, class Size, class OutputIterator >
+inline OutputIterator copy_n(const SinglePassRange& rng, Size n, OutputIterator out)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
+    BOOST_ASSERT( n < static_cast<Size>(boost::distance(rng)) );
+    BOOST_ASSERT( n >= static_cast<Size>(0) );
 
-        for (Size i = 0; i < n; ++i, ++out, ++source)
-            *out = *source;
+    BOOST_DEDUCED_TYPENAME range_iterator<const SinglePassRange>::type source = boost::begin(rng);
 
-        return out;
-    }
+    for (Size i = 0; i < n; ++i, ++out, ++source)
+        *out = *source;
+
+    return out;
 }
+
+    } // namespace range
+    using range::copy_n;
+} // namespace boost
 
 #endif // include guard

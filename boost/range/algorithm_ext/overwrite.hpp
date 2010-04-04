@@ -11,36 +11,47 @@
 #define BOOST_RANGE_ALGORITHM_EXT_OVERWRITE_HPP_INCLUDED
 
 #include <boost/range/config.hpp>
+#include <boost/range/concepts.hpp>
 #include <boost/range/difference_type.hpp>
+#include <boost/range/iterator.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/assert.hpp>
 
 namespace boost
 {
-	template< class SinglePassRange1, class SinglePassRange2 >
-	inline void overwrite( const SinglePassRange1& from, SinglePassRange2& to )
-	{
-		BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange1>::type
-			i = boost::begin(from), e = boost::end(from);
+    namespace range
+    {
 
-		BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange2>::type
-			out = boost::begin(to);
-		
+template< class SinglePassRange1, class SinglePassRange2 >
+inline void overwrite( const SinglePassRange1& from, SinglePassRange2& to )
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
+
+    BOOST_DEDUCED_TYPENAME range_iterator<const SinglePassRange1>::type
+        i = boost::begin(from), e = boost::end(from);
+
+    BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange2>::type
+        out = boost::begin(to);
+
 #ifndef NDEBUG
-        BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange2>::type
-            last_out = boost::end(to);
+    BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange2>::type
+        last_out = boost::end(to);
 #endif
 
-		for( ; i != e; ++out, ++i )
-        {
+    for( ; i != e; ++out, ++i )
+    {
 #ifndef NDEBUG
-            BOOST_ASSERT( out != last_out
-                && "out of bounds in boost::overwrite()" );
+        BOOST_ASSERT( out != last_out
+            && "out of bounds in boost::overwrite()" );
 #endif
-			*out = *i;
-        }
-	}
+        *out = *i;
+    }
 }
+
+    } // namespace range
+    using range::overwrite;
+} // namespace boost
 
 #endif // include guard

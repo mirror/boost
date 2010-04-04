@@ -1,0 +1,28 @@
+[section:for_each for_each]
+
+[heading Prototype]
+
+``
+template<class SinglePassRange, class Value>
+iota(SinglePassRange& rng, Value x);
+``
+
+[heading Description]
+
+`iota` traverses forward through `rng`, each element `y` in `rng` is assigned a value equivalent
+to `x + boost::distance(boost::begin(rng), it)`
+
+[heading Definition]
+
+Defined in the header file `boost/range/algorithm_ext/iota.hpp`
+
+[heading Requirements]
+
+# `SinglePassRange` is a model of the __single_pass_range__ Concept.
+# `Value` is a model of the `Incrementable` Concept.
+
+[heading Complexity]
+
+Linear. Exactly `distance(rng)` assignments into `rng`.
+
+[endsect]

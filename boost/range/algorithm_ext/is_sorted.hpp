@@ -20,7 +20,7 @@ namespace boost
 {
     namespace range_detail
     {
-        template<typename ForwardIterator>
+        template<class ForwardIterator>
         inline bool is_sorted(ForwardIterator first, ForwardIterator last)
         {
             for (ForwardIterator next = first; first != last && ++next != last; ++first)
@@ -29,7 +29,7 @@ namespace boost
             return true;
         }
 
-        template<typename ForwardIterator, typename BinaryPredicate>
+        template<class ForwardIterator, class BinaryPredicate>
         inline bool is_sorted(ForwardIterator first, ForwardIterator last, BinaryPredicate pred)
         {
             for (ForwardIterator next = first; first != last && ++next != last; ++first)
@@ -39,27 +39,33 @@ namespace boost
         }
     }
 
-    /// \brief template function count
-    ///
-    /// range-based version of the count std algorithm
-    ///
-    /// \pre SinglePassRange is a model of the SinglePassRangeConcept
-    template<typename SinglePassRange>
-    inline bool is_sorted(const SinglePassRange& rng)
+    namespace range
     {
-        BOOST_RANGE_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange>));
-        BOOST_RANGE_CONCEPT_ASSERT((LessThanComparableConcept<typename range_value<SinglePassRange>::type>));
-        return range_detail::is_sorted(boost::begin(rng), boost::end(rng));
-    }
 
-    /// \overload
-    template<typename SinglePassRange, typename BinaryPredicate>
-    inline bool is_sorted(const SinglePassRange& rng, BinaryPredicate pred)
-    {
-        BOOST_RANGE_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange>));
-        BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate, typename range_value<SinglePassRange>::type, typename range_value<SinglePassRange>::type>));
-        return range_detail::is_sorted(boost::begin(rng), boost::end(rng), pred);
-    }
+/// \brief template function count
+///
+/// range-based version of the count std algorithm
+///
+/// \pre SinglePassRange is a model of the SinglePassRangeConcept
+template<class SinglePassRange>
+inline bool is_sorted(const SinglePassRange& rng)
+{
+    BOOST_RANGE_CONCEPT_ASSERT((SinglePassRangeConcept<const SinglePassRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((LessThanComparableConcept<BOOST_DEDUCED_TYPENAME range_value<SinglePassRange>::type>));
+    return range_detail::is_sorted(boost::begin(rng), boost::end(rng));
 }
+
+/// \overload
+template<class SinglePassRange, class BinaryPredicate>
+inline bool is_sorted(const SinglePassRange& rng, BinaryPredicate pred)
+{
+    BOOST_RANGE_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate, BOOST_DEDUCED_TYPENAME range_value<SinglePassRange>::type, BOOST_DEDUCED_TYPENAME range_value<SinglePassRange>::type>));
+    return range_detail::is_sorted(boost::begin(rng), boost::end(rng), pred);
+}
+
+    } // namespace range
+    using range::is_sorted;
+} // namespace boost
 
 #endif // include guard

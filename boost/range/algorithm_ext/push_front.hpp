@@ -11,6 +11,7 @@
 #define BOOST_RANGE_ALGORITHM_EXT_PUSH_FRONT_HPP_INCLUDED
 
 #include <boost/range/config.hpp>
+#include <boost/range/concepts.hpp>
 #include <boost/range/difference_type.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
@@ -18,13 +19,21 @@
 
 namespace boost
 {
-	template< class Container, class Range >
-	inline void push_front( Container& on, const Range& from )
-	{
-		BOOST_ASSERT( (void*)&on != (void*)&from && 
-					  "cannot copy from a container to itself" );
-		on.insert( on.begin(), boost::begin(from), boost::end(from) );
-	}
+    namespace range
+    {
+
+template< class Container, class Range >
+inline void push_front( Container& on, const Range& from )
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<Container> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const Range> ));
+    BOOST_ASSERT( (void*)&on != (void*)&from &&
+                  "cannot copy from a container to itself" );
+    on.insert( on.begin(), boost::begin(from), boost::end(from) );
 }
+
+    } // namespace range
+    using range::push_front;
+} // namespace boost
 
 #endif // include guard

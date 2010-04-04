@@ -18,6 +18,7 @@
 #include <boost/range/algorithm_ext/copy_n.hpp>
 #include <boost/range/algorithm_ext/for_each.hpp>
 #include <boost/range/algorithm_ext/is_sorted.hpp>
+#include <boost/range/algorithm_ext/iota.hpp>
 #include <boost/range/algorithm_ext/overwrite.hpp>
 #include <boost/range/algorithm_ext/push_back.hpp>
 #include <boost/range/algorithm_ext/push_front.hpp>
