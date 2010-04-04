@@ -51,19 +51,6 @@
 
     <li>Optimize state-entry and state-exit for speed and code-size</li>
 
-    <li>Implement <code>simple_state::triggering_event()</code>, which
-    returns a pointer to the event that triggered the action currently being
-    executed. This is useful for the rare cases when an entry or exit action
-    needs to access the event that triggered the execution of the action.
-    <code>triggering_event()</code> returns a <code>const event_base *</code>
-    due to the fact that entry and exit actions can be triggered by events of
-    any type or no event at all
-    (<code>state_machine&lt;&gt;::initiate()</code> &amp;
-    <code>state_machine::terminate()</code>). The caller thus needs to make a
-    type check or cast the return value. The use of
-    <code>triggering_event</code>() therefore often indicates a problem in
-    the state machine design and should be avoided whenever possible</li>
-
     <li>Reimplement <code>fifo_scheduler&lt;&gt;::processor_handle</code> so
     that <code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and
     <code>fifo_scheduler&lt;&gt;::destroy_processor()</code> no longer make
@@ -140,6 +127,14 @@
 
   <p>(<font color="#FF0000">red</font> = points raised during formal
   review)</p>
+  <p>1.43.0</p>
+  <ul>
+    <li>Generalized the context() functions so that they can also return a
+    reference to any public base type of a context. This also makes
+    transition&lt;&gt; &amp; in_state_reaction&lt;&gt; more general, reported by Igor R</li>
+    <li>Added triggering_event()</li>
+  </ul>
+
   <p>1.40.0</p>
   <ul>
     <li>Fixed a bug that prevented the use of boost::ref() with
