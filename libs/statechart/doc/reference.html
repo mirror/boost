@@ -759,6 +759,8 @@ namespace statechart
 "#Classevent_base">event_base</a> &gt; &amp; );
       void <a href="#post_event3">post_event</a>( const <a href=
 "#Classevent_base">event_base</a> &amp; );
+
+      const event_base * <a href="#triggering_event1">triggering_event</a>() const;
   };
 }
 }
@@ -1202,6 +1204,15 @@ state_iterator <a name="state_end" id="state_end">state_end</a>() const;
   <b>Note</b>: The position of a given innermost state in the range is
   arbitrary. It may change with each call to a modifier function. Moreover,
   all iterators are invalidated whenever a modifier function is called</p>
+  <pre>
+const event_base * <a name="triggering_event1" id="triggering_event1">triggering_event</a>();
+</pre>
+
+  <p><b>Returns</b>: A pointer to the event that triggered the reaction that is currently
+  being executed. Returns <code>0</code> if no reaction is being executed or if the current
+  reaction was triggered by either <code><a href="#initiate">initiate</a>()</code> or
+  <code><a href="#terminate">terminate</a>()</code>
+  </p>
 
   <h1>Header &lt;boost/statechart/<br>
   <a name="asynchronous_state_machine.hpp" id=
@@ -1934,6 +1945,8 @@ Target <b>state_downcast</b>() const;
 
 state_iterator <b>state_begin</b>() const;
 state_iterator <b>state_end</b>() const;
+
+const event_base * <b>triggering_event</b>() const;
 </pre>
 
   <p>States that need to call any of these member functions from their
@@ -2076,6 +2089,8 @@ namespace statechart
 "#simple_state::state_begin">state_begin</a>() const;
       state_iterator <a href=
 "#simple_state::state_end">state_end</a>() const;
+
+      const event_base * <a href="#triggering_event0">triggering_event</a>() const;
 
       void <a href="#post_event0">post_event</a>(
         const intrusive_ptr&lt; const <a href=
@@ -2552,7 +2567,8 @@ OtherContext &amp; <a name="context" id="context">context</a>();
   direct or indirect subtype with a <code>state_machine&lt;&gt;</code> subtype as
   argument then the <code>state_machine&lt;&gt;</code> subclass portion must still
   exist<br>
-  <b>Returns</b>: A reference to a direct or indirect context</p>
+  <b>Returns</b>: A reference to a direct or indirect context or any public base
+  type of the contexts</p>
   <pre>
 template&lt; class OtherContext &gt;
 const OtherContext &amp; <a name="contextconst" id=
@@ -2565,7 +2581,8 @@ const OtherContext &amp; <a name="contextconst" id=
   direct or indirect subtype with a <code>state_machine&lt;&gt;</code> subtype as
   argument then the <code>state_machine&lt;&gt;</code> subclass portion must still
   exist<br>
-  <b>Returns</b>: A reference to a const direct or indirect context</p>
+  <b>Returns</b>: A reference to a const direct or indirect context or any public
+  base type of the contexts</p>
   <pre>
 template&lt; class Target &gt;
 Target <a name="simple_state::state_cast" id=
@@ -2621,6 +2638,12 @@ state_iterator <a name="simple_state::state_end" id=
   <b>Note</b>: The result is <b>unspecified</b> if these functions are called
   when the machine is <a href=
   "definitions.html#UnstableStateMachine">unstable</a></p>
+  <pre>
+const event_base * <a name="triggering_event0" id="triggering_event0">triggering_event</a>();
+</pre>
+
+  <p><b>Returns</b>: Has exactly the same semantics as
+  <code><a href="#triggering_event1">state_machine&lt;&gt;::triggering_event</a>()</code></p>
 
   <h3>Class template <code>simple_state</code> static functions</h3>
   <pre>
@@ -2701,6 +2724,7 @@ Target <b>state_downcast</b>() const;
 
 state_iterator <b>state_begin</b>() const;
 state_iterator <b>state_end</b>() const;
+const event_base * <b>triggering_event</b>() const;
 </pre>
 
   <p>States that do not need to call any of these member functions from their
@@ -3138,7 +3162,7 @@ static void <a name="event::custom_static_type_ptr1" id=
       <td><code>Destination</code></td>
 
       <td>A model of the <a href="#SimpleState">SimpleState</a>
-      or <a href="#State">State</a> concepts or an instantiation of the
+      or <a href="#State">State</a> concepts, any of their public base types or an instantiation of the
       <code><a href=
       "#ClassTemplateshallow_history">shallow_history</a></code> or
       <code><a href="#ClassTemplatedeep_history">deep_history</a></code>
@@ -3255,8 +3279,8 @@ namespace statechart
     <tr>
       <td><code>ReactionContext</code></td>
 
-      <td>Either the state defining the in-state reaction itself
-      or one of it direct or indirect contexts</td>
+      <td>Either the state defining the in-state reaction itself, one of its direct or indirect contexts 
+          or any of their public base types</td>
 
       <td>The state of which the action is a member</td>
 
