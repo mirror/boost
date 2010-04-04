@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Boost.Range Range Adaptors </title>
+    <link rel="stylesheet" href="../style.css" type="text/css">
+</head>
+
+    <body>
+
+    <table border="0" >
+        <tr>
+            <td ><img src="../../../boost.png" border="0" /></td>
+            <td ><h1 align="center">Boost.Range </h1></td>
+        </tr>
+    </table>
+
+    <h2> Range Adaptors </h2>
+    
+    <hr />
+    <a name="tokenized"></a>
+    <h4><code>tokenized</code></h4>
+    <blockquote>
+        <pre>rng | boost::adaptors::tokenized( regex )</pre>
+        <pre>rng | boost::adaptors::tokenized( regex, i )</pre>
+        <pre>rng | boost::adaptors::tokenized( regex, rndRng )</pre>
+        <pre>rng | boost::adaptors::tokenized( regex, i, flags )</pre>
+        <pre>rng | boost::adaptors::tokenized( regex, rndRng, flags )</pre>
+        <pre>boost::make_tokenized_range( rng, regex, i, flags )</pre>
+        <pre>boost::make_tokenized_range( rng, regex, rngRng, flags )</pre>
+    </blockquote>
+    <ul>
+        <li>
+            <b>Precondition:</b>
+            <ul>
+                <li>
+                    Let <code>T</code> denote
+                    <code>typename range_value< decltype(rng) >::type</code>,
+                    then <code>regex</code> has the type
+                    <code>basic_regex&lt;T&gt;</code> or is
+                    implicitly convertible to one of these types.
+                </li>
+                <li>
+                    <code>i</code> has the type <code>int</code>.
+                </li>
+                <li>
+                    the value-type of <code>rndRng</code> is <code>int</code>.
+                </li>
+                <li>
+                    <code>flags</code> has the type
+                    <code>regex_constants::syntax_option_type</code>.
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>Returns:</b>
+            A range whose iterators behave as if they were the
+            original iterators wrapped in <code>regex_token_iterator</code>.
+            The first iterator in the range would be constructed by
+            forwarding all the arguments of <code>tokenized()</code> to the
+            <code>regex_token_iterator</code> constructor.
+        </li>
+        <li>
+            <b>Throws:</b>
+            Whatever constructing and copying equivalent
+            <code>regex_token_iterator</code>s might throw.
+        </li>
+        <li>
+            <b>Range Category:</b>
+            RandomAccessRange
+        </li>
+    </ul>
+    <hr />
+    <h3>Example</h3>
+    <pre>
+        <span class="keyword">#include</span> &lt;boost/range/adaptor/tokenized.hpp&gt;
+        <span class="keyword">#include</span> &lt;boost/range/algorithm_ext/push_back.hpp&gt;
+        <span class="keyword">#include</span> &lt;boost/assert.hpp&gt;
+        <span class="keyword">#include</span> &lt;algorithm&gt;
+        <span class="keyword">#include</span> &lt;string&gt;
+        <span class="keyword">#include</span> &lt;vector&gt;
+        
+        <span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const char</span>* argv)
+        {
+            <span class="keyword">using namespace</span> boost::adaptors;
+            
+            std::string input = "a b c d e f g hijklmnopqrstuvwxyz";
+            std::vector< boost::sub_match< std::string::iterator > > result;
+            boost::push_back(result, input | tokenized(boost::regex("\\b")));
+            
+            BOOST_ASSERT( boost::size(result) == 16u );
+            
+            <span class="keyword">return</span> 0;
+        }
+    </pre>
+    
+    <hr />
+    <p>
+    (C) Copyright Neil Groves 2009
+    (C) Copyright Thorsten Ottosen 2003-2004
+    </p>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    </body>
+</html>
+

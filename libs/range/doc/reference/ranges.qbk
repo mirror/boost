@@ -1,0 +1,8 @@
+[section:ranges Provided Ranges]
+
+[include ranges/counting_range.qbk]
+[include ranges/istream_range.qbk]
+[include ranges/irange.qbk]
+
+[endsect]
+

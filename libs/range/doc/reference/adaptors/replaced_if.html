@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Boost.Range Range Adaptors </title>
+    <link rel="stylesheet" href="../style.css" type="text/css">
+</head>
+
+    <body>
+
+    <table border="0" >
+        <tr>
+            <td ><img src="../../../boost.png" border="0" /></td>
+            <td ><h1 align="center">Boost.Range </h1></td>
+        </tr>
+    </table>
+
+    <h2> Range Adaptors </h2>
+    
+    <hr />
+    <a name="replaced_if"></a>
+    <h4><code>replaced_if</code></h4>
+    <blockquote>
+        <pre>rng | boost::adaptors::replaced_if( pred, new_value )</pre>
+        <pre>boost::make_replaced_if_range( rng, pred, new_value )</pre>
+    </blockquote>
+    <ul>
+        <li>
+            <b>Precondition:</b>
+            <ul>
+                <li>
+                    The range value-type is convertible to the argument type
+                    of <code>pred</code>.
+                </li>
+                <li>
+                    <code>new_value</code> is convertible to the value-type
+                    of the range.
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>Postconditions:</b>
+            For all elements <code>[x]</code> in the returned range, the value
+            <code>x</code> is equal to the value of
+            <code>pred(y) ? new_value : y</code>
+            where <code>y</code> is the corresponding element in the original
+            range.
+        </li>
+        <li>
+            <b>Range Category:</b>
+            ForwardRange
+        </li>
+    </ul>
+    
+    <hr />
+    <h3>Example</h3>
+    <pre>
+        <span class="keyword">#include</span> &lt;boost/range/adaptor/replaced_if.hpp&gt;
+        <span class="keyword">#include</span> &lt;boost/range/algorithm/copy.hpp&gt;
+        <span class="keyword">#include</span> &lt;boost/assign.hpp&gt;
+        <span class="keyword">#include</span> &lt;algorithm&gt;
+        <span class="keyword">#include</span> &lt;iostream&gt;
+        <span class="keyword">#include</span> &lt;vector&gt;
+        
+        <span class="keyword">struct</span> is_even
+        {
+            <span class="keyword">bool operator</span>()(<span class="keyword">int</span> x) <span class="keyword">const</span> { <span class="keyword">return</span> x % 2 == 0; }
+        };
+        
+        <span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const char</span>* argv[])
+        {
+            <span class="keyword">using namespace</span> boost::adaptors;
+            <span class="keyword">using namespace</span> boost::assign;
+            
+            std::vector&lt;<span class="keyword">int</span>&gt; input;
+            input += 1,2,3,4,5,6,7,8,9;
+            
+            boost::copy(
+                input | replaced_if(is_even(), 10),
+                std::ostream_iterator&lt;<span class="keyword">int</span>&gt;(std::cout, ","));
+                
+            <span class="keyword">return</span> 0;
+        }
+        
+    </pre>
+    <p>
+        This produces the output: <br />
+        <code>
+        1,10,3,10,5,10,7,10,9
+        </code>
+    </p>
+    
+    <hr />
+    <p>
+    (C) Copyright Neil Groves 2009
+    (C) Copyright Thorsten Ottosen 2003-2004
+    </p>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    </body>
+</html>
+

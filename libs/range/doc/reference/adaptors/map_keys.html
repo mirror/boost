@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Boost.Range Range Adaptors </title>
+    <link rel="stylesheet" href="../style.css" type="text/css">
+</head>
+
+    <body>
+
+    <table border="0" >
+        <tr>
+            <td ><img src="../../../boost.png" border="0" /></td>
+            <td ><h1 align="center">Boost.Range </h1></td>
+        </tr>
+    </table>
+
+    <h2> Range Adaptors </h2>
+    
+    <hr />
+    <a name="map_keys"></a>
+    <h4><code>map_keys</code></h4>
+    <blockquote>
+        <pre>rng | boost::adaptors::map_keys</pre>
+        <pre>boost::make_map_key_range( rng )</pre>
+    </blockquote>
+    <ul>
+        <li>
+            <b>Precondition:</b>
+            The value-type of the range is an instantiation of std::pair.
+        </li>
+        <li>
+            <b>Postcondition:</b>
+            For all elements <code>x</code> in the returned range,
+            <code>x</code> is the result of <code>y.first</code> where
+            <code>y</code> is the corresponding element in the original range.
+        </li>
+        <li>
+            <b>Range Category:</b>
+            SinglePassRange
+        </li>
+    </ul>
+    
+    <hr />
+    <h3>Example</h3>
+    <pre>
+        <span class="keyword">#include</span> &lt;boost/range/adaptor/map.hpp&gt;
+        <span class="keyword">#include</span> &lt;boost/range/algorithm/copy.hpp&gt;
+        <span class="keyword">#include</span> &lt;boost/assign.hpp&gt;
+        <span class="keyword">#include</span> &lt;algorithm&gt;
+        <span class="keyword">#include</span> &lt;iostream&gt;
+        <span class="keyword">#include</span> &lt;map&gt;
+        <span class="keyword">#include</span> &lt;vector&gt;
+        
+        <span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const char</span>* argv[])
+        {
+            <span class="keyword">using namespace</span> boost::assign;
+            <span class="keyword">using namespace</span> boost::adaptors;
+            
+            std::map&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt; input;
+            <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i < 10; ++i)
+                input.insert(std::make_pair(i, i * 10));
+                
+            boost::copy(
+                input | map_keys,
+                std::ostream_iterator&lt;<span class="keyword">int</span>&gt;(std::cout, ","));
+                
+            <span class="keyword">return</span> 0;
+        }
+    </pre>
+    <p>
+        This produces the output: <br />
+        <code>
+        0,1,2,3,4,5,6,7,8,9
+        </code>
+    </p>
+    
+    <hr />
+    <p>
+    (C) Copyright Neil Groves 2009
+    (C) Copyright Thorsten Ottosen 2003-2004
+    </p>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    </body>
+</html>
+

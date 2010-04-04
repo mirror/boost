@@ -1,0 +1,73 @@
+[section Introduction]
+
+Generic algorithms have so far been specified in terms of two or more iterators. Two iterators would together form a range of values that the algorithm could work on. This leads to a very general interface, but also to a somewhat clumsy use of the algorithms with redundant specification of container names. Therefore we would like to raise the abstraction level for algorithms so they specify their interface in terms of __ranges__ as much as possible.
+
+The most common form of ranges used throughout the C++ community are standard library containers. When writing algorithms however, one often finds it desirable for the algorithm to accept other types that offer enough functionality to satisfy the needs of the generic code [*/if a suitable layer of indirection is applied/] . For example, raw arrays are often suitable for use with generic code that works with containers, provided a suitable adapter is used. Likewise, null terminated strings can be treated as containers of characters, if suitably adapted.
+
+This library therefore provides the means to adapt standard-like containers, null terminated strings, `std::pairs` of iterators, and raw arrays (and more), such that the same generic code can work with them all. The basic idea is to add another layer of indirection using __metafunctions__ and free-standing functions so syntactic and/or semantic differences can be removed.
+
+The main advantages are
+
+* simpler implementation and specification of generic range algorithms
+* more flexible, compact and maintainable client code
+* safe use of built-in arrays (for legacy code; why else would you use built-in arrays?)
+
+Below are given a small example (the complete example can be found [@http://www.boost.org/libs/range/test/algorithm_example.cpp here] ):
+
+``
+        //
+        // example: extracting bounds in a generic algorithm
+        //
+        template< class ForwardReadableRange, class T >
+        inline typename boost::range_iterator< ForwardReadableRange >::type
+        find( ForwardReadableRange& c, const T& value )
+        {
+           return std::find( boost::begin( c ), boost::end( c ), value );
+        }
+
+        template< class ForwardReadableRange, class T >
+        inline typename boost::range_iterator< const ForwardReadableRange >::type
+        find( const ForwardReadableRange& c, const T& value )
+        {
+           return std::find( boost::begin( c ), boost::end( c ), value );
+        }
+
+        //
+        // replace first value and return its index
+        //
+        template< class ForwardReadableWriteableRange, class T >
+        inline typename boost::range_size< ForwardReadableWriteableRange >::type
+        my_generic_replace( ForwardReadableWriteableRange& c, const T& value, const T& replacement )
+        {
+           typename boost::range_iterator< ForwardReadableWriteableRange >::type found = find( c, value );
+
+           if( found != boost::end( c ) )
+               *found = replacement;
+           return std::distance( boost::begin( c ), found );
+        }
+
+        //
+        // usage
+        //
+        const int N = 5;
+        std::vector<int> my_vector;
+        int values[] = { 1,2,3,4,5,6,7,8,9 };
+
+        my_vector.assign( values, boost::end( values ) );
+        typedef std::vector<int>::iterator iterator;
+        std::pair<iterator,iterator>       my_view( boost::begin( my_vector ),
+                                                    boost::begin( my_vector ) + N );
+        char  str_val[] = "a string";
+        char* str       = str_val;
+
+        std::cout << my_generic_replace( my_vector, 4, 2 );
+        std::cout << my_generic_replace( my_view, 4, 2 );
+        std::cout << my_generic_replace( str, 'a', 'b' );
+
+        // prints '3', '5' and '0'
+``
+
+By using the free-standing functions and __metafunctions__, the code automatically works for all the types supported by this library; now and in the future. Notice that we have to provide two versions of `find()` since we cannot forward a non-const rvalue with reference arguments (see this article about __the_forwarding_problem__ ).
+
+[endsect]
+

@@ -1,0 +1,34 @@
+[section:fill Range Algorithm - fill]
+
+[heading Prototype]
+
+``
+template<class ForwardRange, class Value>
+void fill( ForwardRange& rng, const Value& val );
+
+template<class ForwardRange, class Value>
+void fill( const ForwardRange& rng, const Value& val );
+``
+
+[heading Description]
+
+`fill` assigns the value `val` to every element in the range `rng`.
+
+[heading Definition]
+
+Defined in the header file `boost/range/algorithm/fill.hpp`
+
+[heading Requirements]
+
+* `ForwardRange` is a model of the __forward_range__ Concept.
+* `ForwardRange` is mutable.
+* `Value` is a model of the `AssignableConcept`.
+* `Value` is convertible to `ForwardRange`'s value type.
+
+[heading Complexity]
+
+Linear. Exactly `distance(rng)` assignments are performed.
+
+[endsect]
+
+
