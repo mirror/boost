@@ -101,8 +101,8 @@ header makes `boost::array` a fully conforming __random_access_sequence__.
 
 [heading Header]
 
-    #include <boost/fusion/adapted/array.hpp>
-    #include <boost/fusion/include/array.hpp>
+    #include <boost/fusion/adapted/boost_array.hpp>
+    #include <boost/fusion/include/boost_array.hpp>
 
 [heading Model of]
 
@@ -191,6 +191,68 @@ namespace qualified name of the struct to be converted.
     // demo::employee is now a Fusion sequence
     BOOST_FUSION_ADAPT_STRUCT(
         demo::employee,
+        (std::string, name)
+        (int, age))
+
+[endsect]
+
+[section:adapt_struct_named BOOST_FUSION_ADAPT_STRUCT_NAMED]
+
+[heading Description]
+BOOST_FUSION_ADAPT_STRUCT_NAMED and BOOST_FUSION_ADAPT_STRUCT_NAMED_NS are 
+macros that can be used to generate all the necessary boilerplate to make an 
+arbitrary struct into a __random_access_sequence__. The given struct is 
+adapted using the given name.
+
+[heading Synopsis]
+    BOOST_FUSION_ADAPT_STRUCT_NAMED(
+        struct_name, adapted_name
+        (member_type0, member_name0)
+        (member_type1, member_name1)
+        ...
+        )
+
+    BOOST_FUSION_ADAPT_STRUCT_NAMED_NS(
+        struct_name, namespace_list, adapted_name
+        (member_type0, member_name0)
+        (member_type1, member_name1)
+        ...
+        )
+
+[heading Semantics]
+
+The above macros generate the necessary code to adapt `struct_name`
+as a model of __random_access_sequence__ while using `adapted_name` as the 
+name of the adapted struct. The sequence of `(member_typeN, member_nameN)`
+pairs declare the type and names of each of the struct members that will be
+part of the sequence. The `namespace_list` specifies the C++ namespace of 
+the `adapted_name`. It has the format of `(ns1)(ns2)...`, which results in
+a fully qualified adapted name of `ns1::ns2::adapted_name`. If no namespace list 
+is given (i.e. `BOOST_FUSION_ADAPT_STRUCT_NAMED`), the adapted view is placed in 
+the namespace `boost::fusion::adapted`.
+
+The macro should be used at global scope, and `struct_name` should be the fully
+namespace qualified name of the struct to be converted.
+
+[heading Header]
+
+    #include <boost/fusion/adapted/struct/adapt_struct_named.hpp>
+    #include <boost/fusion/include/adapt_struct_named.hpp>
+
+[heading Example]
+    namespace demo
+    {
+        struct employee
+        {
+            std::string name;
+            int age;
+        };
+    }
+
+    // boost::fusion::adapted::adapted_employee is now a Fusion sequence
+    // referring to demo::employee
+    BOOST_FUSION_ADAPT_STRUCT_NAMED(
+        demo::employee, adapted_employee
         (std::string, name)
         (int, age))
 
