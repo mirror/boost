@@ -22,6 +22,7 @@
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/type_traits/is_abstract.hpp>
+#include <boost/type_traits/is_pointer.hpp>
 #include <boost/range/functions.hpp>
 #include <boost/range/iterator.hpp>
 #include <boost/range/difference_type.hpp>
@@ -289,6 +290,14 @@ namespace boost
                return *--last;
            }
 
+
+#ifdef __SUNPRO_CC
+           reference operator[]( difference_type at ) const
+           {
+               BOOST_ASSERT( at >= 0 && at < size() );
+               return m_Begin[at];
+           }
+#else
            BOOST_DEDUCED_TYPENAME boost::detail::operator_brackets_result<iterator, value_type, reference>::type
            operator[]( difference_type at ) const
            {
@@ -297,6 +306,7 @@ namespace boost
                typedef boost::detail::use_operator_brackets_proxy<value_type,reference> use_proxy;
                return boost::detail::make_operator_brackets_result<iterator>(m_Begin + at, use_proxy());
            }
+#endif
 
            //
            // When storing transform iterators, operator[]()
