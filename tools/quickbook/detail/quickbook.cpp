@@ -43,6 +43,79 @@ namespace quickbook
     unsigned qbk_version_n = 0; // qbk_major_version * 100 + qbk_minor_version
     bool ms_errors = false; // output errors/warnings as if for VS
     std::vector<std::string> include_path;
+    std::vector<std::string> preset_defines;
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  Parse the macros passed as command line parameters
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename Actions>
+    struct command_line_grammar
+        : public grammar<command_line_grammar<Actions> >
+    {
+        command_line_grammar(Actions& actions)
+            : actions(actions) {}
+
+        template <typename Scanner>
+        struct definition
+        {
+            definition(command_line_grammar const& self)
+                : unused(false), common(self.actions, unused)
+            {
+                Actions& actions = self.actions;
+
+                macro =
+                        *space_p
+                    >>  macro_identifier            [actions.macro_identifier]
+                    >>  *space_p
+                    >>  (   '='
+                        >>  *space_p
+                        >>  phrase                  [actions.macro_definition]
+                        >>  *space_p
+                        )
+                    |   eps_p                       [actions.macro_definition]
+                    ;
+
+                macro_identifier =
+                    +(anychar_p - (space_p | ']'))
+                    ;
+
+                phrase =
+                   *(   common
+                    |   (anychar_p - ']')           [actions.plain_char]
+                    )
+                    ;
+            }
+
+            bool unused;
+            rule<Scanner> macro, macro_identifier, phrase;
+            phrase_grammar<Actions> common;
+
+            rule<Scanner> const&
+            start() const { return macro; }
+        };
+
+        Actions& actions;
+    };
+
+    static void set_macros(actions& actor)
+    {
+        quickbook::command_line_grammar<actions> grammar(actor);
+
+        for(std::vector<std::string>::const_iterator
+                it = preset_defines.begin(),
+                end = preset_defines.end();
+                it != end; ++it)
+        {
+            typedef position_iterator<std::string::const_iterator> iterator_type;
+            iterator_type first(it->begin(), it->end(), "command line parameter");
+            iterator_type last(it->end(), it->end());
+
+            parse(first, last, grammar);
+            // TODO: Check result?
+        }
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -89,12 +162,6 @@ namespace quickbook
                 << "Syntax Error near column " << pos.column << ".\n";
             ++actor.error_count;
         }
-        
-        if(actor.error_count)
-        {
-            detail::outerr(filein_)
-                << "Error count: " << actor.error_count << ".\n";
-        }
 
         return actor.error_count ? 1 : 0;
     }
@@ -103,11 +170,19 @@ namespace quickbook
     parse(char const* filein_, fs::path const& outdir, string_stream& out, bool ignore_docinfo = false)
     {
         actions actor(filein_, outdir, out);
+        set_macros(actor);
         bool r = parse(filein_, actor);
         if (actor.section_level != 0)
             detail::outwarn(filein_)
                 << "Warning missing [endsect] detected at end of file."
                 << std::endl;
+
+        if(actor.error_count)
+        {
+            detail::outerr(filein_)
+                << "Error count: " << actor.error_count << ".\n";
+        }
+
         return r;
     }
 
@@ -177,6 +252,7 @@ main(int argc, char* argv[])
             ("debug", "debug mode (for developers)")
             ("ms-errors", "use Microsoft Visual Studio style error & warn message format")
             ("include-path,I", value< std::vector<quickbook::detail::input_path> >(), "include path")
+            ("define,D", value< std::vector<std::string> >(), "define macro")
         ;
 
         positional_options_description p;
@@ -247,6 +323,12 @@ main(int argc, char* argv[])
                 = std::vector<std::string>(paths.begin(), paths.end());
         }
 
+        if (vm.count("define"))
+        {
+            quickbook::preset_defines
+                = vm["define"].as<std::vector<std::string> >();
+        }
+
         if (vm.count("input-file"))
         {
             std::string filein
@@ -274,7 +356,7 @@ main(int argc, char* argv[])
             quickbook::detail::outerr("") << "Error: No filename given\n\n"
                 << desc << std::endl;
             return 1;
-        }
+        }        
     }
 
     catch(std::exception& e)

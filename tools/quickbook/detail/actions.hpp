@@ -43,6 +43,7 @@ namespace quickbook
     extern tm* current_gm_time; // the current UTC time
     extern bool debug_mode;
     extern std::vector<std::string> include_path;
+    extern std::vector<std::string> preset_defines;
 
     // forward declarations
     struct actions;
@@ -370,10 +371,10 @@ namespace quickbook
     
     struct escape_unicode_action
     {
-    	escape_unicode_action(collector& phrase) : phrase(phrase) {}
-    	void operator()(iterator first, iterator last) const;
-    	
-    	collector& phrase;
+        escape_unicode_action(collector& phrase) : phrase(phrase) {}
+        void operator()(iterator first, iterator last) const;
+
+        collector& phrase;
     };
 
     struct attribute_action
