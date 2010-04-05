@@ -43,7 +43,7 @@ compile-time value; and computing min and max of constant expressions.
    ]
    [
       [[link boost_integer.integer Integer Type Selection].]
-      [[^[@../../../../boost/hpp <boost/integer.hpp>]]]
+      [[^[@../../../../boost/integer.hpp <boost/integer.hpp>]]]
       [Templates for integer type selection based on properties such as maximum value or number of bits: 
       Use to select the type of an integer when some property such as maximum value or number of bits is known. 
       Useful for generic programming. ]
