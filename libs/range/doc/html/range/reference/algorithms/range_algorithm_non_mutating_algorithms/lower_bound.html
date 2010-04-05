@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>lower_bound</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Range 2.0">
 <link rel="up" href="../range_algorithm_non_mutating_algorithms.html" title="Non-mutating algorithms">
 <link rel="prev" href="lexicographical_compare.html" title="lexicographical_compare">
@@ -28,7 +28,7 @@
           lower_bound</a>
 </h5></div></div></div>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.lower_bound.prototype"></a><h6>
-<a name="id621021"></a>
+<a name="id2981135"></a>
             <a class="link" href="lower_bound.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.lower_bound.prototype">Prototype</a>
           </h6>
 <p>
@@ -38,6 +38,10 @@
 <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">ForwardRange</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">lower_bound</span><span class="special">(</span><span class="identifier">ForwardRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Value</span> <span class="identifier">val</span><span class="special">);</span>
 
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ForwardRange</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Value</span><span class="special">&gt;</span>
+<span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">ForwardRange</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<span class="identifier">lower_bound</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">ForwardRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Value</span> <span class="identifier">val</span><span class="special">);</span>
+
 <span class="keyword">template</span><span class="special">&lt;</span>
     <span class="identifier">range_return_value</span> <span class="identifier">re</span><span class="special">,</span>
     <span class="keyword">class</span> <span class="identifier">ForwardRange</span><span class="special">,</span>
@@ -45,11 +49,19 @@
     <span class="special">&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">range_return</span><span class="special">&lt;</span><span class="identifier">ForwardRange</span><span class="special">,</span> <span class="identifier">re</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">lower_bound</span><span class="special">(</span><span class="identifier">ForwardRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Value</span> <span class="identifier">val</span><span class="special">);</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span>
+    <span class="identifier">range_return_value</span> <span class="identifier">re</span><span class="special">,</span>
+    <span class="keyword">class</span> <span class="identifier">ForwardRange</span><span class="special">,</span>
+    <span class="keyword">class</span> <span class="identifier">Value</span>
+    <span class="special">&gt;</span>
+<span class="keyword">typename</span> <span class="identifier">range_return</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">ForwardRange</span><span class="special">,</span> <span class="identifier">re</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<span class="identifier">lower_bound</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">ForwardRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Value</span> <span class="identifier">val</span><span class="special">);</span>
 </pre>
 <p>
           </p>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.lower_bound.description"></a><h6>
-<a name="id621308"></a>
+<a name="id2981715"></a>
             <a class="link" href="lower_bound.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.lower_bound.description">Description</a>
           </h6>
 <p>
@@ -72,14 +84,14 @@
             same manner as the returned iterator described above.
           </p>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.lower_bound.definition"></a><h6>
-<a name="id621501"></a>
+<a name="id2981915"></a>
             <a class="link" href="lower_bound.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.lower_bound.definition">Definition</a>
           </h6>
 <p>
             Defined in the header file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">lower_bound</span><span class="special">.</span><span class="identifier">hpp</span></code>
           </p>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.lower_bound.requirements"></a><h6>
-<a name="id621574"></a>
+<a name="id2981990"></a>
             <a class="link" href="lower_bound.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.lower_bound.requirements">Requirements</a>
           </h6>
 <p>
@@ -130,7 +142,7 @@
             </li>
 </ul></div>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.lower_bound.precondition_"></a><h6>
-<a name="id621825"></a>
+<a name="id2982250"></a>
             <a class="link" href="lower_bound.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.lower_bound.precondition_">Precondition:</a>
           </h6>
 <p>
@@ -148,7 +160,7 @@
             order according to <code class="computeroutput"><span class="identifier">pred</span></code>.
           </p>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.lower_bound.complexity"></a><h6>
-<a name="id621922"></a>
+<a name="id2982349"></a>
             <a class="link" href="lower_bound.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.lower_bound.complexity">Complexity</a>
           </h6>
 <p>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>find_if</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Range 2.0">
 <link rel="up" href="../range_algorithm_non_mutating_algorithms.html" title="Non-mutating algorithms">
 <link rel="prev" href="find_first_of.html" title="find_first_of">
@@ -28,7 +28,7 @@
           find_if</a>
 </h5></div></div></div>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_if.prototype"></a><h6>
-<a name="id619269"></a>
+<a name="id2979052"></a>
             <a class="link" href="find_if.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_if.prototype">Prototype</a>
           </h6>
 <p>
@@ -38,6 +38,10 @@
 <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">SinglePassRange</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">find_if</span><span class="special">(</span><span class="identifier">SinglePassRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">UnaryPredicate</span> <span class="identifier">pred</span><span class="special">);</span>
 
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">SinglePassRange</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">UnaryPredicate</span><span class="special">&gt;</span>
+<span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">SinglePassRange</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<span class="identifier">find_if</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">SinglePassRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">UnaryPredicate</span> <span class="identifier">pred</span><span class="special">);</span>
+
 <span class="keyword">template</span><span class="special">&lt;</span>
     <span class="identifier">range_return_value</span> <span class="identifier">re</span><span class="special">,</span>
     <span class="keyword">class</span> <span class="identifier">SinglePassRange</span><span class="special">,</span>
@@ -45,11 +49,19 @@
     <span class="special">&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">range_return</span><span class="special">&lt;</span><span class="identifier">SinglePassRange</span><span class="special">,</span> <span class="identifier">re</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">find_if</span><span class="special">(</span><span class="identifier">SinglePassRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">UnaryPredicate</span> <span class="identifier">pred</span><span class="special">);</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span>
+    <span class="identifier">range_return_value</span> <span class="identifier">re</span><span class="special">,</span>
+    <span class="keyword">class</span> <span class="identifier">SinglePassRange</span><span class="special">,</span>
+    <span class="keyword">class</span> <span class="identifier">UnaryPredicate</span>
+    <span class="special">&gt;</span>
+<span class="keyword">typename</span> <span class="identifier">range_return</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">SinglePassRange</span><span class="special">,</span> <span class="identifier">re</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<span class="identifier">find_if</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">SinglePassRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">UnaryPredicate</span> <span class="identifier">pred</span><span class="special">);</span>
 </pre>
 <p>
           </p>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_if.description"></a><h6>
-<a name="id619556"></a>
+<a name="id2979633"></a>
             <a class="link" href="find_if.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_if.description">Description</a>
           </h6>
 <p>
@@ -64,14 +76,14 @@
             defines found in the same manner as the returned iterator described above.
           </p>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_if.definition"></a><h6>
-<a name="id619688"></a>
+<a name="id2979770"></a>
             <a class="link" href="find_if.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_if.definition">Definition</a>
           </h6>
 <p>
             Defined in the header file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">find_if</span><span class="special">.</span><span class="identifier">hpp</span></code>
           </p>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_if.requirements"></a><h6>
-<a name="id619761"></a>
+<a name="id2979844"></a>
             <a class="link" href="find_if.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_if.requirements">Requirements</a>
           </h6>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
@@ -90,7 +102,7 @@
             </li>
 </ul></div>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_if.precondition_"></a><h6>
-<a name="id619861"></a>
+<a name="id2979947"></a>
             <a class="link" href="find_if.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_if.precondition_">Precondition:</a>
           </h6>
 <p>
@@ -98,7 +110,7 @@
             <code class="computeroutput"><span class="identifier">rng</span></code>, <code class="computeroutput"><span class="special">*</span><span class="identifier">i</span></code> is in the domain of <code class="computeroutput"><span class="identifier">UnaryPredicate</span></code>.
           </p>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_if.complexity"></a><h6>
-<a name="id619934"></a>
+<a name="id2980022"></a>
             <a class="link" href="find_if.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_if.complexity">Complexity</a>
           </h6>
 <p>
