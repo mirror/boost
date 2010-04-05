@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>find_end</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Range 2.0">
 <link rel="up" href="../range_algorithm_non_mutating_algorithms.html" title="Non-mutating algorithms">
 <link rel="prev" href="find.html" title="find">
@@ -28,7 +28,7 @@
           find_end</a>
 </h5></div></div></div>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_end.prototype"></a><h6>
-<a name="id2975092"></a>
+<a name="id616745"></a>
             <a class="link" href="find_end.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_end.prototype">Prototype</a>
           </h6>
 <p>
@@ -38,10 +38,6 @@
 <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">ForwardRange1</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">find_end</span><span class="special">(</span><span class="identifier">ForwardRange1</span><span class="special">&amp;</span> <span class="identifier">rng1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">ForwardRange2</span><span class="special">&amp;</span> <span class="identifier">rng2</span><span class="special">);</span>
 
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ForwardRange1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">ForwardRange2</span><span class="special">&gt;</span>
-<span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">ForwardRange1</span><span class="special">&gt;::</span><span class="identifier">type</span>
-<span class="identifier">find_end</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">ForwardRange1</span><span class="special">&amp;</span> <span class="identifier">rng1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">ForwardRange2</span><span class="special">&amp;</span> <span class="identifier">rng2</span><span class="special">);</span>
-
 <span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">class</span> <span class="identifier">ForwardRange1</span><span class="special">,</span>
     <span class="keyword">class</span> <span class="identifier">ForwardRange2</span><span class="special">,</span>
@@ -49,15 +45,6 @@
     <span class="special">&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">ForwardRange1</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">find_end</span><span class="special">(</span><span class="identifier">ForwardRange1</span><span class="special">&amp;</span> <span class="identifier">rng1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">ForwardRange2</span><span class="special">&amp;</span> <span class="identifier">rng2</span><span class="special">,</span> <span class="identifier">BinaryPredicate</span> <span class="identifier">pred</span><span class="special">);</span>
-
-<span class="keyword">template</span><span class="special">&lt;</span>
-    <span class="keyword">class</span> <span class="identifier">ForwardRange1</span><span class="special">,</span>
-    <span class="keyword">class</span> <span class="identifier">ForwardRange2</span><span class="special">,</span>
-    <span class="keyword">class</span> <span class="identifier">BinaryPredicate</span>
-    <span class="special">&gt;</span>
-<span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">ForwardRange1</span><span class="special">&gt;::</span><span class="identifier">type</span>
-<span class="identifier">find_end</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">ForwardRange1</span><span class="special">&amp;</span> <span class="identifier">rng1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">ForwardRange2</span><span class="special">&amp;</span> <span class="identifier">rng2</span><span class="special">,</span> <span class="identifier">BinaryPredicate</span> <span class="identifier">pred</span><span class="special">);</span>
-
 
 <span class="keyword">template</span><span class="special">&lt;</span>
     <span class="identifier">range_return_value</span> <span class="identifier">re</span><span class="special">,</span>
@@ -70,33 +57,16 @@
 <span class="keyword">template</span><span class="special">&lt;</span>
     <span class="identifier">range_return_value</span> <span class="identifier">re</span><span class="special">,</span>
     <span class="keyword">class</span> <span class="identifier">ForwardRange1</span><span class="special">,</span>
-    <span class="keyword">class</span> <span class="identifier">ForwardRange2</span>
-    <span class="special">&gt;</span>
-<span class="keyword">typename</span> <span class="identifier">range_return</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">ForwardRange1</span><span class="special">,</span> <span class="identifier">re</span><span class="special">&gt;::</span><span class="identifier">type</span>
-<span class="identifier">find_end</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">ForwardRange1</span><span class="special">&amp;</span> <span class="identifier">rng1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">ForwardRange2</span><span class="special">&amp;</span> <span class="identifier">rng2</span><span class="special">);</span>
-
-<span class="keyword">template</span><span class="special">&lt;</span>
-    <span class="identifier">range_return_value</span> <span class="identifier">re</span><span class="special">,</span>
-    <span class="keyword">class</span> <span class="identifier">ForwardRange1</span><span class="special">,</span>
     <span class="keyword">class</span> <span class="identifier">ForwardRange2</span><span class="special">,</span>
     <span class="keyword">class</span> <span class="identifier">BinaryPredicate</span>
     <span class="special">&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">range_return</span><span class="special">&lt;</span><span class="identifier">ForwardRange1</span><span class="special">,</span> <span class="identifier">re</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">find_end</span><span class="special">(</span><span class="identifier">ForwardRange1</span><span class="special">&amp;</span> <span class="identifier">rng1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">ForwardRange2</span><span class="special">&amp;</span> <span class="identifier">rng2</span><span class="special">,</span> <span class="identifier">BinaryPredicate</span> <span class="identifier">pred</span><span class="special">);</span>
-
-<span class="keyword">template</span><span class="special">&lt;</span>
-    <span class="identifier">range_return_value</span> <span class="identifier">re</span><span class="special">,</span>
-    <span class="keyword">class</span> <span class="identifier">ForwardRange1</span><span class="special">,</span>
-    <span class="keyword">class</span> <span class="identifier">ForwardRange2</span><span class="special">,</span>
-    <span class="keyword">class</span> <span class="identifier">BinaryPredicate</span>
-    <span class="special">&gt;</span>
-<span class="keyword">typename</span> <span class="identifier">range_return</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">ForwardRange1</span><span class="special">,</span> <span class="identifier">re</span><span class="special">&gt;::</span><span class="identifier">type</span>
-<span class="identifier">find_end</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">ForwardRange1</span><span class="special">&amp;</span> <span class="identifier">rng1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">ForwardRange2</span><span class="special">&amp;</span> <span class="identifier">rng2</span><span class="special">,</span> <span class="identifier">BinaryPredicate</span> <span class="identifier">pred</span><span class="special">);</span>
 </pre>
 <p>
           </p>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_end.description"></a><h6>
-<a name="id2976440"></a>
+<a name="id617392"></a>
             <a class="link" href="find_end.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_end.description">Description</a>
           </h6>
 <p>
@@ -111,14 +81,14 @@
             same manner as the returned iterator described above.
           </p>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_end.definition"></a><h6>
-<a name="id2976576"></a>
+<a name="id617523"></a>
             <a class="link" href="find_end.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_end.definition">Definition</a>
           </h6>
 <p>
             Defined in the header file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">find_end</span><span class="special">.</span><span class="identifier">hpp</span></code>
           </p>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_end.requirements"></a><h6>
-<a name="id2976650"></a>
+<a name="id617596"></a>
             <a class="link" href="find_end.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_end.requirements">Requirements</a>
           </h6>
 <p>
@@ -178,7 +148,7 @@
             </li>
 </ul></div>
 <a name="range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_end.complexity"></a><h6>
-<a name="id2976949"></a>
+<a name="id617884"></a>
             <a class="link" href="find_end.html#range.reference.algorithms.range_algorithm_non_mutating_algorithms.find_end.complexity">Complexity</a>
           </h6>
 <p>
