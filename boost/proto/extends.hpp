@@ -245,62 +245,32 @@ namespace boost { namespace proto
 
         /// INTERNAL ONLY
         ///
-    #define BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(Const)                                                 \
+    #define BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(ThisConst, ThatConst)                                  \
         template<typename A>                                                                        \
         typename boost::result_of<                                                                  \
             proto_domain(                                                                           \
                 boost::proto::expr<                                                                 \
                     boost::proto::tag::assign                                                       \
                   , boost::proto::list2<                                                            \
-                        proto_derived_expr Const() &                                                \
-                      , typename boost::proto::result_of::as_child<A, proto_domain>::type           \
+                        proto_derived_expr ThisConst() &                                            \
+                      , typename boost::proto::result_of::as_child<A ThatConst(), proto_domain>::type \
                     >                                                                               \
                   , 2                                                                               \
                 >                                                                                   \
             )                                                                                       \
         >::type const                                                                               \
-        operator =(A &a) Const()                                                                    \
+        operator =(A ThatConst() &a) ThisConst()                                                    \
         {                                                                                           \
             typedef boost::proto::expr<                                                             \
                 boost::proto::tag::assign                                                           \
               , boost::proto::list2<                                                                \
-                    proto_derived_expr Const() &                                                    \
-                  , typename boost::proto::result_of::as_child<A, proto_domain>::type               \
+                    proto_derived_expr ThisConst() &                                                \
+                  , typename boost::proto::result_of::as_child<A ThatConst(), proto_domain>::type   \
                 >                                                                                   \
               , 2                                                                                   \
             > that_type;                                                                            \
             that_type that = {                                                                      \
-                *static_cast<proto_derived_expr Const() *>(this)                                    \
-              , boost::proto::as_child<proto_domain>(a)                                             \
-            };                                                                                      \
-            return proto_domain()(that);                                                            \
-        }                                                                                           \
-                                                                                                    \
-        template<typename A>                                                                        \
-        typename boost::result_of<                                                                  \
-            proto_domain(                                                                           \
-                boost::proto::expr<                                                                 \
-                    boost::proto::tag::assign                                                       \
-                  , boost::proto::list2<                                                            \
-                        proto_derived_expr Const() &                                                \
-                      , typename boost::proto::result_of::as_child<A const, proto_domain>::type     \
-                    >                                                                               \
-                  , 2                                                                               \
-                >                                                                                   \
-            )                                                                                       \
-        >::type const                                                                               \
-        operator =(A const &a) Const()                                                              \
-        {                                                                                           \
-            typedef boost::proto::expr<                                                             \
-                boost::proto::tag::assign                                                           \
-              , boost::proto::list2<                                                                \
-                    proto_derived_expr Const() &                                                    \
-                  , typename boost::proto::result_of::as_child<A const, proto_domain>::type         \
-                >                                                                                   \
-              , 2                                                                                   \
-            > that_type;                                                                            \
-            that_type that = {                                                                      \
-                *static_cast<proto_derived_expr Const() *>(this)                                    \
+                *static_cast<proto_derived_expr ThisConst() *>(this)                                \
               , boost::proto::as_child<proto_domain>(a)                                             \
             };                                                                                      \
             return proto_domain()(that);                                                            \
@@ -308,16 +278,18 @@ namespace boost { namespace proto
         /**/
 
     #define BOOST_PROTO_EXTENDS_ASSIGN_CONST_()                                                     \
-        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(BOOST_PROTO_CONST)                                         \
+        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(BOOST_PROTO_CONST, BOOST_PP_EMPTY)                         \
+        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(BOOST_PROTO_CONST, BOOST_PROTO_CONST)                      \
         /**/
 
     #define BOOST_PROTO_EXTENDS_ASSIGN_NON_CONST_()                                                 \
-        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(BOOST_PP_EMPTY)                                            \
+        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(BOOST_PP_EMPTY, BOOST_PP_EMPTY)                            \
+        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(BOOST_PP_EMPTY, BOOST_PROTO_CONST)                         \
         /**/
 
     #define BOOST_PROTO_EXTENDS_ASSIGN_()                                                           \
-        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(BOOST_PP_EMPTY)                                            \
-        BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(BOOST_PROTO_CONST)                                         \
+        BOOST_PROTO_EXTENDS_ASSIGN_CONST_()                                                         \
+        BOOST_PROTO_EXTENDS_ASSIGN_NON_CONST_()                                                     \
         /**/
 
     #define BOOST_PROTO_EXTENDS_ASSIGN_CONST()                                                      \
@@ -337,62 +309,32 @@ namespace boost { namespace proto
 
         /// INTERNAL ONLY
         ///
-    #define BOOST_PROTO_EXTENDS_SUBSCRIPT_IMPL_(Const)                                              \
+    #define BOOST_PROTO_EXTENDS_SUBSCRIPT_IMPL_(ThisConst, ThatConst)                               \
         template<typename A>                                                                        \
         typename boost::result_of<                                                                  \
             proto_domain(                                                                           \
                 boost::proto::expr<                                                                 \
                     boost::proto::tag::subscript                                                    \
                   , boost::proto::list2<                                                            \
-                        proto_derived_expr Const() &                                                \
-                      , typename boost::proto::result_of::as_child<A, proto_domain>::type           \
+                        proto_derived_expr ThisConst() &                                            \
+                      , typename boost::proto::result_of::as_child<A ThatConst(), proto_domain>::type \
                     >                                                                               \
                   , 2                                                                               \
                 >                                                                                   \
             )                                                                                       \
         >::type const                                                                               \
-        operator [](A &a) Const()                                                                   \
+        operator [](A ThatConst() &a) ThisConst()                                                   \
         {                                                                                           \
             typedef boost::proto::expr<                                                             \
                 boost::proto::tag::subscript                                                        \
               , boost::proto::list2<                                                                \
-                    proto_derived_expr Const() &                                                    \
-                  , typename boost::proto::result_of::as_child<A, proto_domain>::type               \
+                    proto_derived_expr ThisConst() &                                                \
+                  , typename boost::proto::result_of::as_child<A ThatConst(), proto_domain>::type   \
                 >                                                                                   \
               , 2                                                                                   \
             > that_type;                                                                            \
             that_type that = {                                                                      \
-                *static_cast<proto_derived_expr Const() *>(this)                                    \
-              , boost::proto::as_child<proto_domain>(a)                                             \
-            };                                                                                      \
-            return proto_domain()(that);                                                            \
-        }                                                                                           \
-                                                                                                    \
-        template<typename A>                                                                        \
-        typename boost::result_of<                                                                  \
-            proto_domain(                                                                           \
-                boost::proto::expr<                                                                 \
-                    boost::proto::tag::subscript                                                    \
-                  , boost::proto::list2<                                                            \
-                        proto_derived_expr Const() &                                                \
-                      , typename boost::proto::result_of::as_child<A const, proto_domain>::type     \
-                    >                                                                               \
-                  , 2                                                                               \
-                >                                                                                   \
-            )                                                                                       \
-        >::type const                                                                               \
-        operator [](A const &a) Const()                                                             \
-        {                                                                                           \
-            typedef boost::proto::expr<                                                             \
-                boost::proto::tag::subscript                                                        \
-              , boost::proto::list2<                                                                \
-                    proto_derived_expr Const() &                                                    \
-                  , typename boost::proto::result_of::as_child<A const, proto_domain>::type         \
-                >                                                                                   \
-              , 2                                                                                   \
-            > that_type;                                                                            \
-            that_type that = {                                                                      \
-                *static_cast<proto_derived_expr Const() *>(this)                                    \
+                *static_cast<proto_derived_expr ThisConst() *>(this)                                \
               , boost::proto::as_child<proto_domain>(a)                                             \
             };                                                                                      \
             return proto_domain()(that);                                                            \
@@ -400,11 +342,13 @@ namespace boost { namespace proto
         /**/
 
     #define BOOST_PROTO_EXTENDS_SUBSCRIPT_CONST()                                                   \
-        BOOST_PROTO_EXTENDS_SUBSCRIPT_IMPL_(BOOST_PROTO_CONST)                                      \
+        BOOST_PROTO_EXTENDS_SUBSCRIPT_IMPL_(BOOST_PROTO_CONST, BOOST_PP_EMPTY)                      \
+        BOOST_PROTO_EXTENDS_SUBSCRIPT_IMPL_(BOOST_PROTO_CONST, BOOST_PROTO_CONST)                   \
         /**/
 
     #define BOOST_PROTO_EXTENDS_SUBSCRIPT_NON_CONST()                                               \
-        BOOST_PROTO_EXTENDS_SUBSCRIPT_IMPL_(BOOST_PP_EMPTY)                                         \
+        BOOST_PROTO_EXTENDS_SUBSCRIPT_IMPL_(BOOST_PP_EMPTY, BOOST_PP_EMPTY)                         \
+        BOOST_PROTO_EXTENDS_SUBSCRIPT_IMPL_(BOOST_PP_EMPTY, BOOST_PROTO_CONST)                      \
         /**/
 
     #define BOOST_PROTO_EXTENDS_SUBSCRIPT()                                                         \
