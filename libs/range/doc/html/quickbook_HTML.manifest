@@ -91,6 +91,7 @@ range/reference/algorithms/range_algorithm_new_algorithms.html
 range/reference/algorithms/range_algorithm_new_algorithms/erase.html
 range/reference/algorithms/range_algorithm_new_algorithms/for_each.html
 range/reference/algorithms/range_algorithm_new_algorithms/insert.html
+range/reference/algorithms/range_algorithm_new_algorithms/iota.html
 range/reference/algorithms/range_algorithm_new_algorithms/overwrite.html
 range/reference/algorithms/range_algorithm_new_algorithms/push_back.html
 range/reference/algorithms/range_algorithm_new_algorithms/push_front.html
