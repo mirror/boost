@@ -38,7 +38,7 @@ namespace boost
 			typedef boost::iterator_adaptor< skip_iterator<Iter,R>, Iter >
 				  base_t;
 
-			R* range;
+			R* m_range;
 
 		public:
 			typedef Iter wrapped_iter_t;
@@ -52,21 +52,21 @@ namespace boost
 			typedef std::input_iterator_tag iterator_category;
 
 			explicit skip_iterator( R* r, Iter i )
-			  : base_t(i), range(r) {}
+			  : base_t(i), m_range(r) {}
 
 			template< class OtherIter, class R2>
 			skip_iterator( const skip_iterator<OtherIter,R2>& other )
-			: base_t( other.base() ) {}
+			: base_t( other.base() ), m_range(other.m_range) {}
 
-			R* get_range() const { return range; }
+			R* get_range() const { return m_range; }
 
 		 private:
 			friend class boost::iterator_core_access;
 
 			void increment()
 			{
-				BOOST_ASSERT( range != 0 );
-				range->increment_impl( this->base_reference() );
+				BOOST_ASSERT( m_range != 0 );
+				m_range->increment_impl( this->base_reference() );
 			}
 
 			//
