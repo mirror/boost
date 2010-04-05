@@ -11,7 +11,7 @@
 #include <boost/range/combine.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
-#include <boost/assign/list_of.hpp>
+#include <boost/tuple/tuple.hpp>
 #include <boost/foreach.hpp>
 #include <vector>
 
@@ -26,23 +26,25 @@ struct add
 };
 
 template< class CombinedRng >
-void apply( const CombinedRng& r ) 
+void apply( const CombinedRng& r )
 {
     std::vector<int> v;
-    for( typename boost::range_iterator<const CombinedRng>::type 
-            i = boost::begin(r),
-            e = boost::end(r);
-         i != e; ++i )
+    typedef BOOST_DEDUCED_TYPENAME boost::range_iterator<const CombinedRng>::type iterator_t;
+
+    iterator_t e = boost::end(r);
+    for (iterator_t i = boost::begin(r); i != e; ++i)
     {
-        
     }
 }
 
 void test_combine()
 {
     std::vector<int> v1, v2, v3;
-    v1 = boost::assign::list_of(1)(2)(3)(4);
-    v2 = boost::assign::list_of(1)(2)(3)(4);
+    for (int i = 1; i <= 4; ++i)
+    {
+        v1.push_back(i);
+        v2.push_back(i);
+    }
 
     int i1, i2;
     BOOST_FOREACH( boost::tie( i1, i2 ), boost::combine(v1,v2) )
