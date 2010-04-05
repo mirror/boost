@@ -57,7 +57,7 @@ void stream_offset_64bit_test()
               << static_cast<unsigned int>(off >> 32) 
               << " and (off & 0xFFFFFFFF) == 0x"
               << static_cast<unsigned int>(off & 0xFFFFFFFF)
-	      << std::endl;
+              << std::endl;
             BOOST_REQUIRE_MESSAGE(0, s.str().c_str());
         }
     }
