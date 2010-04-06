@@ -231,10 +231,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_private_base", "test_p
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_zmisc", "test_zmisc.vcproj", "{FF315430-555F-44D8-9EA0-587AF1479020}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_shared_ptr_multi_base", "test_shared_ptr_multi_base.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -1122,20 +1118,6 @@ Global
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Debug.ActiveCfg = Debug runtime-static|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Debug.Build.0 = Debug runtime-static|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Release.ActiveCfg = Debug runtime-static|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Release.Build.0 = Debug runtime-static|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Release runtime-dynamic.ActiveCfg = Debug runtime-static|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Release runtime-dynamic.Build.0 = Debug runtime-static|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Release runtime-static.ActiveCfg = Release runtime-dynamic|Win32
-		{FF315430-555F-44D8-9EA0-587AF1479020}.Release runtime-static.Build.0 = Release runtime-dynamic|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
