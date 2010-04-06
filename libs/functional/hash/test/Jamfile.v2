@@ -13,8 +13,8 @@ project hash-tests
         <toolset>gcc:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter"
         <toolset>darwin:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter"
         <toolset>msvc:<warnings-as-errors>on
-        <toolset>gcc:<warnings-as-errors>on
-        <toolset>darwin:<warnings-as-errors>on
+        #<toolset>gcc:<warnings-as-errors>on
+        #<toolset>darwin:<warnings-as-errors>on
     ;
 
 test-suite functional/hash
