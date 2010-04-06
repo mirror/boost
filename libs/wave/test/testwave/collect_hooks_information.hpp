@@ -754,6 +754,40 @@ public:
     }
 #endif 
 
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  The function 'found_unknown_directive' is called, whenever an unknown 
+    //  preprocessor directive was encountered.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 'line' holds the tokens of the entire source line
+    //  containing the unknown directive.
+    //
+    //  The parameter 'pending' may be used to push tokens back into the input 
+    //  stream, which are to be used as the replacement text for the whole 
+    //  line containing the unknown directive.
+    //
+    //  The return value defines, whether the given expression has been 
+    //  properly interpreted by the hook function or not. If this function 
+    //  returns 'false', the library will raise an 'ill_formed_directive' 
+    //  preprocess_exception. Otherwise the tokens pushed back into 'pending'
+    //  are passed on to the user program.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContextT, typename ContainerT>
+    bool
+    found_unknown_directive(ContextT const& ctx, ContainerT const& line, 
+        ContainerT& pending)
+    {
+        BOOST_WAVETEST_OSSTREAM strm;
+        strm << "21: " << repr((*line.begin()).get_position()) << ": " 
+             << boost::wave::util::impl::as_string(line) << std::endl;
+        hooks_trace += BOOST_WAVETEST_GETSTRING(strm);
+        return false; 
+    }
+
 private:
     std::string& hooks_trace;
 };

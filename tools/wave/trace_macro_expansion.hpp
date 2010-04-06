@@ -154,7 +154,8 @@ public:
         enable_system_command(enable_system_command_),
         preserve_whitespace(preserve_whitespace_),
         generate_output(generate_output_),
-        default_outfile(default_outfile_)
+        default_outfile(default_outfile_),
+        emit_relative_filenames(false)
     {
         using namespace std;    // some systems have time in namespace std
         time(&started_at);
@@ -170,6 +171,15 @@ public:
     std::map<std::string, std::size_t> const& get_macro_counts() const
     {
         return counts;
+    }
+
+    void enable_relative_names_in_line_directives(bool flag)
+    {
+        emit_relative_filenames = flag;
+    }
+    bool enable_relative_names_in_line_directives() const
+    {
+        return emit_relative_filenames;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -526,6 +536,79 @@ public:
     }
 
     ///////////////////////////////////////////////////////////////////////////
+    //
+    //  The function 'emit_line_directive' is called whenever a #line directive
+    //  has to be emitted into the generated output.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 'pending' may be used to push tokens back into the input 
+    //  stream, which are to be used instead of the default output generated
+    //  for the #line directive.
+    //
+    //  The parameter 'act_token' contains the actual #pragma token, which may 
+    //  be used for error output. The line number stored in this token can be
+    //  used as the line number emitted as part of the #line directive.
+    //
+    //  If the return value is 'false', a default #line directive is emitted
+    //  by the library. A return value of 'true' will inhibit any further 
+    //  actions, the tokens contained in 'pending' will be copied verbatim 
+    //  to the output.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContextT, typename ContainerT>
+    bool 
+    emit_line_directive(ContextT const& ctx, ContainerT &pending, 
+        typename ContextT::token_type const& act_token)
+    {
+        if (!need_emit_line_directives(ctx.get_language()) ||
+            !enable_relative_names_in_line_directives())
+        {
+            return false;
+        }
+
+    // emit a #line directive showing the relative filename instead
+    typename ContextT::position_type pos = act_token.get_position();
+    unsigned int column = 6;
+
+        typedef typename ContextT::token_type result_type;
+        using namespace boost::wave;
+
+        pos.set_column(1);
+        pending.push_back(result_type(T_PP_LINE, "#line", pos));
+
+        pos.set_column(column);      // account for '#line'
+        pending.push_back(result_type(T_SPACE, " ", pos));
+
+    // 21 is the max required size for a 64 bit integer represented as a 
+    // string
+    char buffer[22];
+
+        using namespace std;    // for some systems sprintf is in namespace std
+        sprintf (buffer, "%d", pos.get_line());
+
+        pos.set_column(++column);                 // account for ' '
+        pending.push_back(result_type(T_INTLIT, buffer, pos));
+        pos.set_column(column += (unsigned int)strlen(buffer)); // account for <number>
+        pending.push_back(result_type(T_SPACE, " ", pos));
+        pos.set_column(++column);                 // account for ' '
+
+    std::string file("\"");
+    boost::filesystem::path filename(
+        boost::wave::util::create_path(ctx.get_current_relative_filename().c_str()));
+
+        using boost::wave::util::impl::escape_lit;
+        file += escape_lit(boost::wave::util::native_file_string(filename)) + "\"";
+
+        pending.push_back(result_type(T_STRINGLIT, file.c_str(), pos));
+        pos.set_column(column += (unsigned int)file.size());    // account for filename
+        pending.push_back(result_type(T_GENERATEDNEWLINE, "\n", pos));
+
+        return true;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
     //  
     //  The function 'opened_include_file' is called whenever a file referred 
     //  by an #include directive was successfully located and opened.
@@ -820,7 +903,7 @@ protected:
             // pop output preserve from the internal option stack
                 bool result = interpret_pragma_option_preserve_set(
                     preserve_options.top(), preserve_whitespace, ctx);
-                line_options.pop();
+                preserve_options.pop();
                 return result;
             }
             return false;
@@ -850,7 +933,13 @@ protected:
         if (T_IDENTIFIER == id) {
             if ((*it).get_value() == "push") {
             // push current line option onto the internal option stack
-                line_options.push(need_emit_line_directives(ctx.get_language()));
+                int mode = 0;
+                if (need_emit_line_directives(ctx.get_language())) {
+                    mode = 1;
+                    if (enable_relative_names_in_line_directives())
+                        mode = 2;
+                }
+                line_options.push(mode);
                 return true;
             }
             else if ((*it).get_value() == "pop") {
@@ -863,8 +952,9 @@ protected:
 
             // pop output line from the internal option stack
                 ctx.set_language(
-                    enable_emit_line_directives(ctx.get_language(), line_options.top()),
+                    enable_emit_line_directives(ctx.get_language(), 0 != line_options.top()),
                     false);
+                enable_relative_names_in_line_directives(2 == line_options.top());
                 line_options.pop();
                 return true;
             }
@@ -1255,6 +1345,7 @@ private:
     std::stack<int> preserve_options;   // preserve option stack
 
     std::map<std::string, std::size_t> counts;    // macro invocation counts
+    bool emit_relative_filenames;   // emit relative names in #line directives
 };
 
 #undef BOOST_WAVE_GETSTRING

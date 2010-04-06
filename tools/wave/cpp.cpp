@@ -841,7 +841,7 @@ int error_count = 0;
     // control the generation of #line directives
         if (vm.count("line")) {
             int lineopt = vm["line"].as<int>();
-            if (0 != lineopt && 1 != lineopt) {
+            if (0 != lineopt && 1 != lineopt && 2 != lineopt) {
                 cerr << "wave: bogus value for --line command line option: " 
                     << lineopt << endl;
                 return -1;
@@ -849,6 +849,9 @@ int error_count = 0;
             ctx.set_language(
                 boost::wave::enable_emit_line_directives(ctx.get_language(), 
                     lineopt != 0));
+
+            if (2 == lineopt) 
+                ctx.get_hooks().enable_relative_names_in_line_directives(true);
         }
 
     // control whether whitespace should be inserted to disambiguate output
@@ -1223,7 +1226,9 @@ main (int argc, char *argv[])
             ("line,L", po::value<int>()->default_value(1), 
                 "control the generation of #line directives\n"
                             "0: no #line directives are generated,\n"
-                            "1: #line directives will be emitted (default)")
+                            "1: #line directives will be emitted (default),\n"
+                            "2: #line directives will be emitted using relative\n"
+                            "   filenames")
             ("disambiguate", po::value<int>()->default_value(1), 
                 "control whitespace insertion to disambiguate\n"
                 "consecutive tokens\n"

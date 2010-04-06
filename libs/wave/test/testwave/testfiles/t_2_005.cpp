@@ -10,7 +10,8 @@
 // test the error reporting for unknown directives
 
 //R
-//E t_2_005.cpp(14): error: ill formed preprocessor directive: this_is_a_unknown_pp_directive
+//E t_2_005.cpp(14): error: ill formed preprocessor directive: #this_is_a_unknown_pp_directive with some parameter
 #this_is_a_unknown_pp_directive with some parameter
 
+//H 21: t_2_005.cpp(14): #this_is_a_unknown_pp_directive with some parameter
 //H 18: boost::wave::preprocess_exception
