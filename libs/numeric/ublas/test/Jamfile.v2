@@ -126,4 +126,6 @@ test-suite numeric/uBLAS
       ]
       [ run size.cpp
       ]
+      [ run test_coordinate_matrix_sort.cpp
+      ]
     ;
