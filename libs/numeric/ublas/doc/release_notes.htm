@@ -25,6 +25,15 @@
 <ul>
 <li><a href="https://svn.boost.org/trac/boost/ticket/3968">[3968]</a> fixed coordinate_matrix sort problem on MSVC10
 </li>
+<li><a href="https://svn.boost.org/trac/boost/ticket/3539">[3539]</a>
+	changed computation of <code>norm_inf</code> for complex types to match
+	mathematical definition. <br />
+	<b>Note:</b> This might cause a performance drop
+	because now <code>std::abs(z)</code> is called for each vector element.
+	The old implementation used <code>std::max(std::abs(real(z)),std::abs(imag(z))</code>.
+	Further <code>norm_inf</code> and <code>norm_1</code> will now return
+	the same values for complex vector.
+</li>
 <li><a href="https://svn.boost.org/trac/boost/ticket/3501">[3501]</a> Moved free functions in <code>concepts.hpp</code> into anonymous namespace.
 </li>
 </ul>
