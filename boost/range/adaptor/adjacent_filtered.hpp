@@ -30,94 +30,58 @@ namespace boost
 
 	namespace range_detail
 	{
-		template< class Iter, class R >
+		template< class Iter, class Pred, bool default_pass >
 		class skip_iterator
-		  : public boost::iterator_adaptor< skip_iterator<Iter,R>, Iter >
+		  : public boost::iterator_adaptor<
+                    skip_iterator<Iter,Pred,default_pass>,
+                    Iter,
+                    BOOST_DEDUCED_TYPENAME std::iterator_traits<Iter>::value_type,
+                    boost::forward_traversal_tag,
+                    BOOST_DEDUCED_TYPENAME std::iterator_traits<Iter>::reference,
+                    BOOST_DEDUCED_TYPENAME std::iterator_traits<Iter>::difference_type
+                >
+		  , private Pred
 		{
 		private:
-			typedef boost::iterator_adaptor< skip_iterator<Iter,R>, Iter >
-				  base_t;
-
-			R* range;
+			typedef boost::iterator_adaptor<
+                        skip_iterator<Iter,Pred,default_pass>,
+                        Iter,
+                        BOOST_DEDUCED_TYPENAME std::iterator_traits<Iter>::value_type,
+                        boost::forward_traversal_tag,
+                        BOOST_DEDUCED_TYPENAME std::iterator_traits<Iter>::reference,
+                        BOOST_DEDUCED_TYPENAME std::iterator_traits<Iter>::difference_type
+                    > base_t;
 
 		public:
-			typedef Iter wrapped_iter_t;
+            typedef Pred pred_t;
+			typedef Iter iter_t;
 
-			//
-			// The iterators are bound to the lifetime of the
-			// range and may not exist on their own. Hence it makes no
-			// sense to e.g. wrap them in reverse_iterators
-			// (that can OTOH be done in advance).
-			//
-			typedef std::input_iterator_tag iterator_category;
+            skip_iterator() : m_last() {}
 
-			explicit skip_iterator( R* r, Iter i )
-			  : base_t(i), range(r) {}
-
-			template< class OtherIter, class R2>
-			skip_iterator( const skip_iterator<OtherIter,R2>& other )
-			: base_t( other.base() ) {}
-
-			R* get_range() const { return range; }
-
-		 private:
-			friend class boost::iterator_core_access;
-
-			void increment()
-			{
-				BOOST_ASSERT( range != 0 );
-				range->increment_impl( this->base_reference() );
-			}
-
-			//
-			// Not needed ... just apply a reverse_iterator
-			//
-			void decrement()
+            skip_iterator(iter_t it, iter_t last, const Pred& pred)
+                : base_t(it)
+                , pred_t(pred)
+                , m_last(last)
             {
-                BOOST_ASSERT( false && "you can't decrement an adjacent_filter_iterator" );
+                move_to_next_valid();
             }
 
-			template< class D >
-			void advance( D n )
-            {
-                BOOST_ASSERT( false );
-            }
+			template<class OtherIter>
+			skip_iterator( const skip_iterator<OtherIter, pred_t, default_pass>& other )
+			: base_t(other.base())
+			, pred_t(other)
+			, m_last(other.m_last) {}
 
-		};
-
-		template< class P, class R >
-		struct adjacent_filter_range
-			: iterator_range< skip_iterator<
-			                    BOOST_DEDUCED_TYPENAME range_iterator<R>::type,
-			                    adjacent_filter_range<P,R>
-			                                >
-			                >
-		{
-		private:
-			typedef skip_iterator<
-			                    BOOST_DEDUCED_TYPENAME range_iterator<R>::type,
-			                    adjacent_filter_range<P,R>
-			                     >
-				skip_iter;
-			typedef iterator_range<skip_iter>
-				base_range;
-
-			typedef BOOST_DEDUCED_TYPENAME range_iterator<R>::type raw_iterator;
-
-			P m_bi_pred;
-
-			// Get the first element in the half-open range that
-			// passes the filter predicate.
-			// The adjacent_filter_range must only contain values that pass
-			// through the filter.
-			static raw_iterator to_valid(raw_iterator it, raw_iterator last, const P& bi_pred, bool default_pass)
+            void move_to_next_valid()
 			{
-				if (it != last)
+			    iter_t& it = this->base_reference();
+			    pred_t& bi_pred = *this;
+				if (it != m_last)
 				{
 					if (default_pass)
 					{
-						raw_iterator nxt = ::boost::next(it);
-						while (nxt != last && !bi_pred(*it, *nxt))
+						iter_t nxt = ::boost::next(it);
+						while (nxt != m_last && !bi_pred(*it, *nxt))
 						{
 							++it;
 							++nxt;
@@ -125,41 +89,61 @@ namespace boost
 					}
 					else
 					{
-						raw_iterator nxt = ::boost::next(it);
-						for(; nxt != last; ++it, ++nxt)
+						iter_t nxt = ::boost::next(it);
+						for(; nxt != m_last; ++it, ++nxt)
 						{
 							if (bi_pred(*it, *nxt))
 							{
 								break;
 							}
 						}
-						if (nxt == last)
+						if (nxt == m_last)
 						{
-							it = last;
+							it = m_last;
 						}
 					}
 				}
-				return it;
 			}
+
+			void increment()
+			{
+			    iter_t& it = this->base_reference();
+			    BOOST_ASSERT( it != m_last );
+			    ++it;
+			    move_to_next_valid();
+			}
+
+            iter_t m_last;
+		};
+
+		template< class P, class R, bool default_pass >
+		struct adjacent_filter_range
+			: iterator_range< skip_iterator<
+			                    BOOST_DEDUCED_TYPENAME range_iterator<R>::type,
+			                    P,
+			                    default_pass
+                            >
+                        >
+		{
+		private:
+			typedef skip_iterator<
+                        BOOST_DEDUCED_TYPENAME range_iterator<R>::type,
+                        P,
+                        default_pass
+                     >
+				skip_iter;
+
+			typedef iterator_range<skip_iter>
+				base_range;
+
+			typedef BOOST_DEDUCED_TYPENAME range_iterator<R>::type raw_iterator;
 
 		public:
-			adjacent_filter_range( const P& p, R& r, bool default_pass )
-			: base_range( skip_iter( this, to_valid(boost::begin(r), boost::end(r), p, default_pass)),
-						  skip_iter( this, boost::end(r)   ) ),
-			  m_bi_pred( p ),
-			  m_default_pass(default_pass)
+			adjacent_filter_range( const P& p, R& r )
+			: base_range( skip_iter( boost::begin(r), boost::end(r), p),
+						  skip_iter( boost::end(r), boost::end(r), p) )
 			{
 			}
-
-			void increment_impl( raw_iterator& current )
-			{
-				BOOST_ASSERT( current != this->end().base() );
-
-				current = to_valid(::boost::next(current), this->end().base(), m_bi_pred, m_default_pass);
-			}
-
-		private:
-			bool m_default_pass;
 		};
 
 		template< class T >
@@ -177,37 +161,37 @@ namespace boost
 		};
 
 		template< class ForwardRng, class BinPredicate >
-		inline adjacent_filter_range<BinPredicate, ForwardRng>
+		inline adjacent_filter_range<BinPredicate, ForwardRng, true>
 		operator|( ForwardRng& r,
 				   const adjacent_holder<BinPredicate>& f )
 		{
-			return adjacent_filter_range<BinPredicate, ForwardRng>( f.val, r, true );
+			return adjacent_filter_range<BinPredicate, ForwardRng, true>( f.val, r );
 		}
 
 		template< class ForwardRng, class BinPredicate >
-		inline adjacent_filter_range<BinPredicate, const ForwardRng>
+		inline adjacent_filter_range<BinPredicate, const ForwardRng, true>
 		operator|( const ForwardRng& r,
 				   const adjacent_holder<BinPredicate>& f )
 		{
 			return adjacent_filter_range<BinPredicate,
-				                         const ForwardRng>( f.val, r, true );
+				                         const ForwardRng, true>( f.val, r );
 		}
 
 		template< class ForwardRng, class BinPredicate >
-		inline adjacent_filter_range<BinPredicate, ForwardRng>
+		inline adjacent_filter_range<BinPredicate, ForwardRng, false>
 		operator|( ForwardRng& r,
 				   const adjacent_excl_holder<BinPredicate>& f )
 		{
-			return adjacent_filter_range<BinPredicate, ForwardRng>( f.val, r, false );
+			return adjacent_filter_range<BinPredicate, ForwardRng, false>( f.val, r );
 		}
 
 		template< class ForwardRng, class BinPredicate >
-		inline adjacent_filter_range<BinPredicate, ForwardRng>
+		inline adjacent_filter_range<BinPredicate, ForwardRng, false>
 		operator|( const ForwardRng& r,
 				   const adjacent_excl_holder<BinPredicate>& f )
 		{
 			return adjacent_filter_range<BinPredicate,
-										 const ForwardRng>( f.val, r, false );
+										 const ForwardRng, false>( f.val, r );
 		}
 
 	} // 'range_detail'
@@ -231,17 +215,17 @@ namespace boost
 		}
 
 	    template<class ForwardRng, class BinPredicate>
-	    inline adjacent_filter_range<BinPredicate, ForwardRng>
-	    adjacent_filter(ForwardRng& rng, BinPredicate filter_pred, bool default_pass = true)
+	    inline adjacent_filter_range<BinPredicate, ForwardRng, true>
+	    adjacent_filter(ForwardRng& rng, BinPredicate filter_pred)
 	    {
-	        return adjacent_filter_range<BinPredicate, ForwardRng>(filter_pred, rng, default_pass);
+	        return adjacent_filter_range<BinPredicate, ForwardRng, true>(filter_pred, rng);
 	    }
 
 	    template<class ForwardRng, class BinPredicate>
-	    inline adjacent_filter_range<BinPredicate, const ForwardRng>
-	    adjacent_filter(const ForwardRng& rng, BinPredicate filter_pred, bool default_pass = true)
+	    inline adjacent_filter_range<BinPredicate, const ForwardRng, true>
+	    adjacent_filter(const ForwardRng& rng, BinPredicate filter_pred)
 	    {
-	        return adjacent_filter_range<BinPredicate, const ForwardRng>(filter_pred, rng, default_pass);
+	        return adjacent_filter_range<BinPredicate, const ForwardRng, true>(filter_pred, rng);
 	    }
 
 	} // 'adaptors'
