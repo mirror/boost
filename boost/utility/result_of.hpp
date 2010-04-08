@@ -10,18 +10,13 @@
 #define BOOST_RESULT_OF_HPP
 
 #include <boost/config.hpp>
-#include <boost/preprocessor/iteration/iterate.hpp> 
-#include <boost/preprocessor/punctuation/comma_if.hpp> 
-#include <boost/preprocessor/repetition/enum_params.hpp> 
-#include <boost/preprocessor/repetition/enum_shifted_params.hpp> 
+#include <boost/type_traits/ice.hpp>
+#include <boost/type.hpp>
+#include <boost/preprocessor.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/mpl/has_xxx.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/bool.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-#include <boost/type_traits/is_member_function_pointer.hpp>
-#include <boost/type_traits/remove_cv.hpp>
 
 #ifndef BOOST_RESULT_OF_NUM_ARGS
 #  define BOOST_RESULT_OF_NUM_ARGS 10
@@ -37,7 +32,6 @@ namespace detail {
 BOOST_MPL_HAS_XXX_TRAIT_DEF(result_type)
 
 template<typename F, typename FArgs, bool HasResultType> struct result_of_impl;
-template<typename F> struct result_of_decltype_impl;
 
 template<typename F>
 struct result_of_void_impl
@@ -56,11 +50,6 @@ struct result_of_void_impl<R (&)(void)>
 {
   typedef R type;
 };
-
-// Determine the return type of a function pointer or pointer to member.
-template<typename F, typename FArgs>
-struct result_of_pointer
-  : result_of_impl<typename remove_cv<F>::type, FArgs, false> { };
 
 template<typename F, typename FArgs>
 struct result_of_impl<F, FArgs, true>

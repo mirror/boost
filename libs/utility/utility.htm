@@ -154,13 +154,11 @@ void f() {
                 ...,t<em>N</em>)</code>. The implementation permits
                 the type <code>F</code> to be a function pointer,
                 function reference, member function pointer, or class
-                type.</p> <p>If your compiler does not support
-                <code>decltype</code>, then when <code>F</code> is a
-                class type with a member type <code>result_type</code>,
+                type. When <code>F</code> is a class type with a
+                member type <code>result_type</code>,
                 <code>result_of&lt;F(T1, T2, ...,
                 T<em>N</em>)&gt;</code> is
-                <code>F::result_type</code>. When <code>F</code>
-                does not contain <code>result_type</code>, 
+                <code>F::result_type</code>. Otherwise,
                 <code>result_of&lt;F(T1, T2, ...,
                 T<em>N</em>)&gt;</code> is <code>F::result&lt;F(T1,
                 T2, ..., T<em>N</em>)&gt;::type</code> when
