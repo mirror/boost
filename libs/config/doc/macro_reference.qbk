@@ -49,6 +49,10 @@ Koenig lookup); see std::3.4.2 \[basic.koenig.lookup\]
 [[`BOOST_NO_AUTO_PTR`][Standard library][
 If the compiler / library supplies non-standard or broken `std::auto_ptr`.
 ]]
+[[`BOOST_NO_COMPLETE_VALUE_INITIALIZATION`][Compiler][ 
+Compiler has not completely implemented value-initialization. 
+See also [@../../../utility/value_init.htm#compiler_issues The Utility\/Value Init docs] 
+]] 
 [[`BOOST_NO_CTYPE_FUNCTIONS`][Platform][
 The Platform does not provide functions for the character-classifying
 operations `<ctype.h>` and `<cctype>`, only macros.
@@ -985,3 +989,5 @@ match that used to create the libraries via bjam 's install rules.
 [endsect]
 
 [endsect]
+
+
