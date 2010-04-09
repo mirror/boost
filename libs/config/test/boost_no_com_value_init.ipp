@@ -90,9 +90,7 @@ namespace boost_no_complete_value_initialization
   {
     if ( ! is_value_initializated )
     {
-      std::cout
-        << "Information: " << expression << " evaluated to false.\n" 
-        << std::endl;
+      std::cout << "Note: " << expression << " evaluated to false." << std::endl;
     }
     return is_value_initializated;
   }
@@ -117,6 +115,7 @@ namespace boost_no_complete_value_initialization
     float m_float;  
     double m_double;  
     void* m_ptr;
+    int m_int_array[2];
     pod_struct m_pod;
     pod_struct m_pod_array[2];
     non_pod_class m_non_pod;
@@ -136,6 +135,7 @@ namespace boost_no_complete_value_initialization
     m_float(),
     m_double(),
     m_ptr(),
+    m_int_array(),
     m_pod(),  
     m_pod_array(),
     m_non_pod(),
@@ -158,12 +158,14 @@ namespace boost_no_complete_value_initialization
         (IS_ZERO(m_float) ? 0 : 1) + 
         (IS_ZERO(m_double) ? 0 : 1) + 
         (IS_ZERO(m_ptr) ? 0 : 1) + 
+        (IS_ZERO(m_int_array[0]) ? 0 : 1) + 
+        (IS_ZERO(m_int_array[1]) ? 0 : 1) + 
         (IS_TRUE( is_zero_initialized(m_pod) ) ? 0 : 1) + 
         (IS_TRUE( m_non_pod.is_value_initialized() ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_pod_array[0]) 
-        && is_zero_initialized(m_pod_array[1]) ) ? 0 : 1) + 
-        (IS_TRUE( m_non_pod_array[0].is_value_initialized() 
-        && m_non_pod_array[1].is_value_initialized() ) ? 0 : 1);
+        (IS_TRUE( is_zero_initialized(m_pod_array[0]) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_pod_array[1]) ) ? 0 : 1) + 
+        (IS_TRUE( m_non_pod_array[0].is_value_initialized() ) ? 0 : 1 ) +
+        (IS_TRUE( m_non_pod_array[1].is_value_initialized() ) ? 0 : 1 );
 
     }
   };
@@ -175,6 +177,12 @@ namespace boost_no_complete_value_initialization
     const value_initializer* const ptr = new value_initializer();
     const unsigned num_failures_on_heap = ptr->check();
     delete ptr;
+    if ( num_failures_on_stack > 0 || num_failures_on_heap > 0 )
+    {
+      std::cout << "Number of initialization failures on the stack: " << num_failures_on_stack
+        << "\nNumber of initialization failures on the heap: " << num_failures_on_heap << std::endl;
+    
+    }
     return static_cast<int>(num_failures_on_stack + num_failures_on_heap);
   }
 
