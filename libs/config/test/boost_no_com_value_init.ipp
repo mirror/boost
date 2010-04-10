@@ -59,6 +59,32 @@ namespace boost_no_complete_value_initialization
   }
 
 
+  union pod_struct_and_int_union
+  {
+    pod_struct first;
+    int second;
+  };
+
+  bool is_zero_initialized(const pod_struct_and_int_union& arg)
+  {
+    // When a union is zero-initialized, its first non-static 
+    // named data member is zero-initialized ([dcl.init]).
+    return is_zero_initialized(arg.first);
+  }
+
+
+  union int_and_pod_struct_union
+  {
+    int first;
+    pod_struct second;
+  };
+
+  bool is_zero_initialized(const int_and_pod_struct_union& arg)
+  {
+    return arg.first == 0;
+  }
+
+
   // A class that holds a "magic" enum value.
   // Note: This is not a POD class, because it has a user-defined
   // default constructor.
@@ -214,6 +240,10 @@ namespace boost_no_complete_value_initialization
     virtual_destructor_holder m_virtual_destructor_holder_array[2];
     non_pod_class m_non_pod;
     non_pod_class m_non_pod_array[2];
+    pod_struct_and_int_union m_pod_struct_and_int_union;
+    pod_struct_and_int_union m_pod_struct_and_int_union_array[2];
+    int_and_pod_struct_union m_int_and_pod_struct_union;
+    int_and_pod_struct_union m_int_and_pod_struct_union_array[2];
 
   public:
     value_initializer()
@@ -253,7 +283,11 @@ namespace boost_no_complete_value_initialization
     m_virtual_destructor_holder(),
     m_virtual_destructor_holder_array(),
     m_non_pod(),
-    m_non_pod_array()
+    m_non_pod_array(),
+    m_pod_struct_and_int_union(),
+    m_pod_struct_and_int_union_array(),
+    m_int_and_pod_struct_union(),
+    m_int_and_pod_struct_union_array()
     {
     }
 
@@ -314,7 +348,13 @@ namespace boost_no_complete_value_initialization
         (IS_TRUE( is_value_initialized(m_virtual_destructor_holder_array[1]) ) ? 0 : 1) + 
         (IS_TRUE( m_non_pod.is_value_initialized() ) ? 0 : 1) + 
         (IS_TRUE( m_non_pod_array[0].is_value_initialized() ) ? 0 : 1 ) +
-        (IS_TRUE( m_non_pod_array[1].is_value_initialized() ) ? 0 : 1 );
+        (IS_TRUE( m_non_pod_array[1].is_value_initialized() ) ? 0 : 1 ) +
+        (IS_TRUE( is_zero_initialized(m_pod_struct_and_int_union) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_pod_struct_and_int_union_array[0]) ) ? 0 : 1 ) +
+        (IS_TRUE( is_zero_initialized(m_pod_struct_and_int_union_array[1]) ) ? 0 : 1 ) +
+        (IS_TRUE( is_zero_initialized(m_int_and_pod_struct_union) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_int_and_pod_struct_union_array[0]) ) ? 0 : 1 ) +
+        (IS_TRUE( is_zero_initialized(m_int_and_pod_struct_union_array[1]) ) ? 0 : 1 );
       return num_failures;
     }
   };
@@ -331,7 +371,7 @@ namespace boost_no_complete_value_initialization
     {
       std::cout << "Number of initialization failures on the stack: " << num_failures_on_stack
         << "\nNumber of initialization failures on the heap: " << num_failures_on_heap
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 3."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 4."
         << std::endl;
     }
     return static_cast<int>(num_failures_on_stack + num_failures_on_heap);
