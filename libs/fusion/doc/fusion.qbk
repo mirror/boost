@@ -127,9 +127,16 @@
 [def __reverse_view__           [link fusion.view.reverse_view `reverse_view`]]
 [def __zip_view__               [link fusion.view.zip_view `zip_view`]]
 
+[def __array__                  [link fusion.adapted.array array]]
 [def __std_pair__               [link fusion.adapted.std__pair `std::pair`]]
 [def __boost_array__            [link fusion.adapted.boost__array `boost::array`]]
 [def __mpl_sequence__           [link fusion.adapted.mpl_sequence mpl sequence]]
+[def __adapt_tpl_struct__       [link fusion.adapted.adapt_tpl_struct BOOST_FUSION_ADAPT_TPL_STRUCT]]
+[def __adapt_struct_named__     [link fusion.adapted.adapt_struct_named BOOST_FUSION_ADAPT_STRUCT_NAMED]]
+[def __adapt_struct_named_ns__  [link fusion.adapted.adapt_struct_named BOOST_FUSION_ADAPT_STRUCT_NAMED_NS]]
+[def __adapt_assoc_tpl_struct__ [link fusion.adapted.adapt_assoc_tpl_struct BOOST_FUSION_ADAPT_ASSOC_TPL_STRUCT]]
+[def __adapt_assoc_struct_named__ [link fusion.adapted.adapt_assoc_struct_named BOOST_FUSION_ADAPT_ASSOC_STRUCT_NAMED]]
+[def __adapt_assoc_struct_named_ns__ [link fusion.adapted.adapt_assoc_struct_named BOOST_FUSION_ADAPT_ASSOC_STRUCT_NAMED_NS]]
 
 [def __intrinsic__              [link fusion.sequence.intrinsic Intrinsic]]
 [def __intrinsics__             [link fusion.sequence.intrinsic Intrinsics]]
@@ -297,8 +304,8 @@
 [def __quick_start__            [link fusion.quick_start Quick Start]]
 [def __organization__           [link fusion.organization Orgainization]]
 [def __extension__              [link fusion.extension Extension]]
-[def __sequence_facade__       [link fusion.extension.sequence_facade `sequence_facade`]]
-[def __iterator_facade__       [link fusion.extension.iterator_facade `iterator_facade`]]
+[def __sequence_facade__        [link fusion.extension.sequence_facade `sequence_facade`]]
+[def __iterator_facade__        [link fusion.extension.iterator_facade `iterator_facade`]]
 
 [include preface.qbk]
 [include introduction.qbk]

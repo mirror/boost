@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>iterator_range</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../view.html" title="View">
 <link rel="prev" href="filter_view.html" title="filter_view">
@@ -27,7 +27,7 @@
 <a name="fusion.view.iterator_range"></a><a class="link" href="iterator_range.html" title="iterator_range">iterator_range</a>
 </h3></div></div></div>
 <a name="fusion.view.iterator_range.description"></a><h5>
-<a name="id677114"></a>
+<a name="id777481"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.description">Description</a>
       </h5>
 <p>
@@ -35,21 +35,21 @@
         sub-range of its underlying sequence delimited by a pair of iterators.
       </p>
 <a name="fusion.view.iterator_range.header"></a><h5>
-<a name="id677138"></a>
+<a name="id777505"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">iterator_range</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">iterator_range</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.view.iterator_range.synopsis"></a><h5>
-<a name="id677246"></a>
+<a name="id777613"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Last</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">iterator_range</span><span class="special">;</span>
 </pre>
 <a name="fusion.view.iterator_range.template_parameters"></a><h5>
-<a name="id677310"></a>
+<a name="id777678"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.template_parameters">Template parameters</a>
       </h5>
 <div class="informaltable"><table class="table">
@@ -60,58 +60,58 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Parameter
-              </p>
+                <p>
+                  Parameter
+                </p>
               </th>
 <th>
-              <p>
-                Description
-              </p>
+                <p>
+                  Description
+                </p>
               </th>
 <th>
-              <p>
-                Default
-              </p>
+                <p>
+                  Default
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">First</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">First</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                A fusion <a class="link" href="../iterator.html" title="Iterator">Iterator</a>
-              </p>
+                <p>
+                  A fusion <a class="link" href="../iterator.html" title="Iterator">Iterator</a>
+                </p>
               </td>
 <td>
-              <p>
-              </p>
+                <p>
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">Last</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Last</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                A fusion <a class="link" href="../iterator.html" title="Iterator">Iterator</a>
-              </p>
+                <p>
+                  A fusion <a class="link" href="../iterator.html" title="Iterator">Iterator</a>
+                </p>
               </td>
 <td>
-              <p>
-              </p>
+                <p>
+                </p>
               </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.view.iterator_range.model_of"></a><h5>
-<a name="id677433"></a>
+<a name="id777808"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.model_of">Model of</a>
       </h5>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
@@ -136,25 +136,24 @@
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">IR</span></code></span></dt>
 <dd><p>
-            An <code class="computeroutput"><span class="identifier">iterator_range</span></code> type
-          </p></dd>
+              An <code class="computeroutput"><span class="identifier">iterator_range</span></code> type
+            </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">f</span></code></span></dt>
 <dd><p>
-            An instance of <code class="computeroutput"><span class="identifier">First</span></code>
-          </p></dd>
+              An instance of <code class="computeroutput"><span class="identifier">First</span></code>
+            </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">l</span></code></span></dt>
 <dd><p>
-            An instance of <code class="computeroutput"><span class="identifier">Last</span></code>
-          </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">ir</span></code>,
-        <code class="computeroutput"><span class="identifier">ir2</span></code></span></dt>
+              An instance of <code class="computeroutput"><span class="identifier">Last</span></code>
+            </p></dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">ir</span></code>, <code class="computeroutput"><span class="identifier">ir2</span></code></span></dt>
 <dd><p>
-            Instances of <code class="computeroutput"><span class="identifier">iterator_range</span></code>
-          </p></dd>
+              Instances of <code class="computeroutput"><span class="identifier">iterator_range</span></code>
+            </p></dd>
 </dl>
 </div>
 <a name="fusion.view.iterator_range.expression_semantics"></a><h5>
-<a name="id677616"></a>
+<a name="id777996"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.expression_semantics">Expression
         Semantics</a>
       </h5>
@@ -169,65 +168,66 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Expression
-              </p>
+                <p>
+                  Expression
+                </p>
               </th>
 <th>
-              <p>
-                Semantics
-              </p>
+                <p>
+                  Semantics
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">IR</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">l</span><span class="special">)</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">IR</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span>
+                  <span class="identifier">l</span><span class="special">)</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                Creates an <code class="computeroutput"><span class="identifier">iterator_range</span></code>
-                given iterators, <code class="computeroutput"><span class="identifier">f</span></code>
-                and <code class="computeroutput"><span class="identifier">l</span></code>.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">IR</span><span class="special">(</span><span class="identifier">ir</span><span class="special">)</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                Copy constructs an <code class="computeroutput"><span class="identifier">iterator_range</span></code>
-                from another <code class="computeroutput"><span class="identifier">iterator_range</span></code>,
-                <code class="computeroutput"><span class="identifier">ir</span></code>.
-              </p>
+                <p>
+                  Creates an <code class="computeroutput"><span class="identifier">iterator_range</span></code>
+                  given iterators, <code class="computeroutput"><span class="identifier">f</span></code>
+                  and <code class="computeroutput"><span class="identifier">l</span></code>.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">ir</span> <span class="special">=</span>
-                <span class="identifier">ir2</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">IR</span><span class="special">(</span><span class="identifier">ir</span><span class="special">)</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                Assigns to a <code class="computeroutput"><span class="identifier">iterator_range</span></code>,
-                <code class="computeroutput"><span class="identifier">ir</span></code>, from another
-                <code class="computeroutput"><span class="identifier">iterator_range</span></code>,
-                <code class="computeroutput"><span class="identifier">ir2</span></code>.
-              </p>
+                <p>
+                  Copy constructs an <code class="computeroutput"><span class="identifier">iterator_range</span></code>
+                  from another <code class="computeroutput"><span class="identifier">iterator_range</span></code>,
+                  <code class="computeroutput"><span class="identifier">ir</span></code>.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">ir</span> <span class="special">=</span>
+                  <span class="identifier">ir2</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Assigns to a <code class="computeroutput"><span class="identifier">iterator_range</span></code>,
+                  <code class="computeroutput"><span class="identifier">ir</span></code>, from another
+                  <code class="computeroutput"><span class="identifier">iterator_range</span></code>,
+                  <code class="computeroutput"><span class="identifier">ir2</span></code>.
+                </p>
               </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.view.iterator_range.example"></a><h5>
-<a name="id677850"></a>
+<a name="id778235"></a>
         <a class="link" href="iterator_range.html#fusion.view.iterator_range.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">char</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">s</span> <span class="special">=</span> <span class="string">"Ruby"</span><span class="special">;</span>

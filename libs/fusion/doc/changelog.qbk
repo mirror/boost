@@ -25,5 +25,10 @@ This section summarizes significant changes to the Fusion library.
   __fold__ and __accumulate__. (Christopher Schmidt)
 * Oct 30, 2009: Added support for associative iterators and views. (Christopher
   Schmidt)
+* March 1, 2010: Added __adapt_struct_named__ and __adapt_struct_named_ns__
+  (Hartmut Kaiser)
+* April 4, 2010: Added __array__ support, __adapt_tpl_struct__,
+  __adapt_assoc_tpl_struct__, __adapt_assoc_struct_named__ and
+  __adapt_assoc_struct_named_ns__ (Christopher Schmidt)
 
 [endsect]

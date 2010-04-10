@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>make_cons</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="MetaFunctions">
 <link rel="prev" href="make_list.html" title="make_list">
@@ -27,21 +27,21 @@
 <a name="fusion.container.generation.metafunctions.make_cons"></a><a class="link" href="make_cons.html" title="make_cons">make_cons</a>
 </h5></div></div></div>
 <a name="fusion.container.generation.metafunctions.make_cons.description"></a><h6>
-<a name="id662063"></a>
+<a name="id761473"></a>
             <a class="link" href="make_cons.html#fusion.container.generation.metafunctions.make_cons.description">Description</a>
           </h6>
 <p>
             Returns the result type of <a class="link" href="../functions/make_cons.html" title="make_cons"><code class="computeroutput"><span class="identifier">make_cons</span></code></a>.
           </p>
 <a name="fusion.container.generation.metafunctions.make_cons.synopsis"></a><h6>
-<a name="id662094"></a>
+<a name="id761504"></a>
             <a class="link" href="make_cons.html#fusion.container.generation.metafunctions.make_cons.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Car</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Cdr</span> <span class="special">=</span> <span class="identifier">nil</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">make_cons</span><span class="special">;</span>
 </pre>
 <a name="fusion.container.generation.metafunctions.make_cons.parameters"></a><h6>
-<a name="id662174"></a>
+<a name="id761583"></a>
             <a class="link" href="make_cons.html#fusion.container.generation.metafunctions.make_cons.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -52,60 +52,60 @@
 </colgroup>
 <thead><tr>
 <th>
-                  <p>
-                    Parameter
-                  </p>
+                    <p>
+                      Parameter
+                    </p>
                   </th>
 <th>
-                  <p>
-                    Requirement
-                  </p>
+                    <p>
+                      Requirement
+                    </p>
                   </th>
 <th>
-                  <p>
-                    Description
-                  </p>
+                    <p>
+                      Description
+                    </p>
                   </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                  <p>
-                    <code class="computeroutput"><span class="identifier">Car</span></code>
-                  </p>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">Car</span></code>
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Any type
-                  </p>
+                    <p>
+                      Any type
+                    </p>
                   </td>
 <td>
-                  <p>
-                    The list's head type
-                  </p>
+                    <p>
+                      The list's head type
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    <code class="computeroutput"><span class="identifier">Cdr</span></code>
-                  </p>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">Cdr</span></code>
+                    </p>
                   </td>
 <td>
-                  <p>
-                    A <code class="computeroutput"><span class="identifier">cons</span></code>
-                  </p>
+                    <p>
+                      A <code class="computeroutput"><span class="identifier">cons</span></code>
+                    </p>
                   </td>
 <td>
-                  <p>
-                    The list's tail type (optional)
-                  </p>
+                    <p>
+                      The list's tail type (optional)
+                    </p>
                   </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.container.generation.metafunctions.make_cons.expression_semantics"></a><h6>
-<a name="id662297"></a>
+<a name="id761713"></a>
             <a class="link" href="make_cons.html#fusion.container.generation.metafunctions.make_cons.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -122,14 +122,14 @@
             (<span class="emphasis"><em>tail</em></span>).
           </p>
 <a name="fusion.container.generation.metafunctions.make_cons.header"></a><h6>
-<a name="id662430"></a>
+<a name="id761846"></a>
             <a class="link" href="make_cons.html#fusion.container.generation.metafunctions.make_cons.header">Header</a>
           </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_cons</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">make_cons</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.container.generation.metafunctions.make_cons.example"></a><h6>
-<a name="id662550"></a>
+<a name="id761967"></a>
             <a class="link" href="make_cons.html#fusion.container.generation.metafunctions.make_cons.example">Example</a>
           </h6>
 <pre class="programlisting"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">make_cons</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span> <span class="identifier">result_of</span><span class="special">::</span><span class="identifier">make_cons</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">type</span>

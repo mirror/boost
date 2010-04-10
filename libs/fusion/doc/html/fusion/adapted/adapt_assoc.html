@@ -3,11 +3,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>BOOST_FUSION_ADAPT_ASSOC_STRUCT</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../adapted.html" title="Adapted">
 <link rel="prev" href="adapt_struct_named.html" title="BOOST_FUSION_ADAPT_STRUCT_NAMED">
-<link rel="next" href="../algorithm.html" title="Algorithm">
+<link rel="next" href="adapt_assoc_tpl_struct.html" title="BOOST_FUSION_ADAPT_ASSOC_TPL_STRUCT">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,24 +20,24 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="adapt_struct_named.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapted.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="../algorithm.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="adapt_struct_named.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapted.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="adapt_assoc_tpl_struct.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" title="BOOST_FUSION_ADAPT_ASSOC_STRUCT">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="fusion.adapted.adapt_assoc"></a><a class="link" href="adapt_assoc.html" title="BOOST_FUSION_ADAPT_ASSOC_STRUCT"> BOOST_FUSION_ADAPT_ASSOC_STRUCT</a>
 </h3></div></div></div>
 <a name="fusion.adapted.adapt_assoc.description"></a><h5>
-<a name="id692600"></a>
+<a name="id794797"></a>
         <a class="link" href="adapt_assoc.html#fusion.adapted.adapt_assoc.description">Description</a>
       </h5>
 <p>
         BOOST_FUSION_ADAPT_ASSOC_STRUCT is a macro that can be used to generate all
-        the necessary boilerplate to make an arbitrary struct into a model of <a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random Access Sequence</a>
-        and <a class="link" href="../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+        the necessary boilerplate to make an arbitrary struct a model of <a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
+        Access Sequence</a> and <a class="link" href="../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
         Sequence</a>.
       </p>
 <a name="fusion.adapted.adapt_assoc.synopsis"></a><h5>
-<a name="id692626"></a>
+<a name="id794823"></a>
         <a class="link" href="adapt_assoc.html#fusion.adapted.adapt_assoc.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="identifier">BOOST_FUSION_ADAPT_ASSOC_STRUCT</span><span class="special">(</span>
@@ -48,7 +48,7 @@
     <span class="special">)</span>
 </pre>
 <a name="fusion.adapted.adapt_assoc.semantics"></a><h5>
-<a name="id692727"></a>
+<a name="id794924"></a>
         <a class="link" href="adapt_assoc.html#fusion.adapted.adapt_assoc.semantics">Semantics</a>
       </h5>
 <p>
@@ -58,7 +58,7 @@
         Sequence</a>. The sequence of <code class="computeroutput"><span class="special">(</span><span class="identifier">member_typeN</span><span class="special">,</span>
         <span class="identifier">member_nameN</span><span class="special">,</span>
         <span class="identifier">key_typeN</span><span class="special">)</span></code>
-        triples declare the type, name and key type of each of the struct members
+        triples declares the type, name and key type of each of the struct members
         that will be part of the sequence.
       </p>
 <p>
@@ -66,14 +66,14 @@
         should be the fully namespace qualified name of the struct to be converted.
       </p>
 <a name="fusion.adapted.adapt_assoc.header"></a><h5>
-<a name="id692804"></a>
+<a name="id795001"></a>
         <a class="link" href="adapt_assoc.html#fusion.adapted.adapt_assoc.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="keyword">struct</span><span class="special">/</span><span class="identifier">adapt_assoc_struct</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">adapt_assoc_struct</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.adapted.adapt_assoc.example"></a><h5>
-<a name="id692919"></a>
+<a name="id795116"></a>
         <a class="link" href="adapt_assoc.html#fusion.adapted.adapt_assoc.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">demo</span>
@@ -91,7 +91,7 @@
     <span class="keyword">struct</span> <span class="identifier">age</span><span class="special">;</span>
 <span class="special">}</span>
 
-<span class="comment">// demo::employee is now a Fusion sequence
+<span class="comment">// demo::employee is now a Fusion sequence.
 </span><span class="comment">// It is also an associative sequence with
 </span><span class="comment">// keys keys::name and keys::age present.
 </span><span class="identifier">BOOST_FUSION_ADAPT_ASSOC_STRUCT</span><span class="special">(</span>
@@ -111,7 +111,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="adapt_struct_named.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapted.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="../algorithm.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="adapt_struct_named.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapted.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="adapt_assoc_tpl_struct.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

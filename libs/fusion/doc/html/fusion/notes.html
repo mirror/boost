@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Notes</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="prev" href="functional/generation/metafunctions/mk_unfused.html" title="make_unfused">
@@ -27,7 +27,7 @@
 <a name="fusion.notes"></a><a class="link" href="notes.html" title="Notes">Notes</a>
 </h2></div></div></div>
 <a name="fusion.notes.recursive_inlined_functions"></a><h4>
-<a name="id794234"></a>
+<a name="id899681"></a>
       <a class="link" href="notes.html#fusion.notes.recursive_inlined_functions">Recursive Inlined
       Functions</a>
     </h4>
@@ -40,7 +40,7 @@
       remains linear.
     </p>
 <a name="fusion.notes.overloaded_functions"></a><h4>
-<a name="id794274"></a>
+<a name="id899722"></a>
       <a class="link" href="notes.html#fusion.notes.overloaded_functions">Overloaded Functions</a>
     </h4>
 <p>
@@ -50,7 +50,7 @@
       given a key, <code class="computeroutput"><span class="identifier">k</span></code>.
     </p>
 <a name="fusion.notes.tag_dispatching"></a><h4>
-<a name="id794327"></a>
+<a name="id899775"></a>
       <a class="link" href="notes.html#fusion.notes.tag_dispatching">Tag Dispatching</a>
     </h4>
 <p>
@@ -101,7 +101,7 @@
       </li>
 </ol></div>
 <a name="fusion.notes.extensibility"></a><h4>
-<a name="id794595"></a>
+<a name="id900042"></a>
       <a class="link" href="notes.html#fusion.notes.extensibility">Extensibility</a>
     </h4>
 <p>
@@ -136,7 +136,7 @@
       it very cheap to pass around.
     </p>
 <a name="fusion.notes.element_conversion"></a><h4>
-<a name="id796021"></a>
+<a name="id901622"></a>
       <a class="link" href="notes.html#fusion.notes.element_conversion">Element Conversion</a>
     </h4>
 <p>
@@ -158,7 +158,7 @@
     </p>
 <p>
       Array arguments are deduced to reference to const types. For example
-      <sup>[<a name="id796125" href="#ftn.id796125" class="footnote">10</a>]</sup>
+      <sup>[<a name="id901726" href="#ftn.id901726" class="footnote">10</a>]</sup>
       :
     </p>
 <pre class="programlisting"><a class="link" href="container/generation/functions/make_list.html" title="make_list"><code class="computeroutput"><span class="identifier">make_list</span></code></a><span class="special">(</span><span class="string">"Donald"</span><span class="special">,</span> <span class="string">"Daisy"</span><span class="special">)</span>
@@ -187,7 +187,7 @@
 <pre class="programlisting"><a class="link" href="container/list.html" title="list"><code class="computeroutput"><span class="identifier">list</span></code></a><span class="special">&lt;</span><span class="keyword">void</span> <span class="special">(*)(</span><span class="keyword">int</span><span class="special">)&gt;</span>
 </pre>
 <a name="fusion.notes.boost__ref"></a><h4>
-<a name="id796412"></a>
+<a name="id902013"></a>
       <a class="link" href="notes.html#fusion.notes.boost__ref">boost::ref</a>
     </h4>
 <p>
@@ -227,7 +227,7 @@
     </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id796125" href="#id796125" class="para">10</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id901726" href="#id901726" class="para">10</a>] </sup>
           Note that the type of a string literal is an array of const characters,
           not <code class="computeroutput"><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span></code>. To get <a class="link" href="container/generation/functions/make_list.html" title="make_list"><code class="computeroutput"><span class="identifier">make_list</span></code></a> to create a <a class="link" href="container/list.html" title="list"><code class="computeroutput"><span class="identifier">list</span></code></a> with an element of a non-const
           array type one must use the <code class="computeroutput"><span class="identifier">ref</span></code>

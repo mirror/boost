@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>fused_procedure</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../adapters.html" title="Adapters">
 <link rel="prev" href="fused.html" title="fused">
@@ -27,7 +27,7 @@
 <a name="fusion.functional.adapters.fused_procedure"></a><a class="link" href="fused_procedure.html" title="fused_procedure">fused_procedure</a>
 </h4></div></div></div>
 <a name="fusion.functional.adapters.fused_procedure.description"></a><h6>
-<a name="id778462"></a>
+<a name="id883134"></a>
           <a class="link" href="fused_procedure.html#fusion.functional.adapters.fused_procedure.description">Description</a>
         </h6>
 <p>
@@ -62,20 +62,20 @@
           case is not implemented).
         </p>
 <a name="fusion.functional.adapters.fused_procedure.header"></a><h6>
-<a name="id779645"></a>
+<a name="id883224"></a>
           <a class="link" href="fused_procedure.html#fusion.functional.adapters.fused_procedure.header">Header</a>
         </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">fused_procedure</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.adapters.fused_procedure.synopsis"></a><h6>
-<a name="id779715"></a>
+<a name="id883294"></a>
           <a class="link" href="fused_procedure.html#fusion.functional.adapters.fused_procedure.synopsis">Synopsis</a>
         </h6>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">fused_procedure</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.fused_procedure.template_parameters"></a><h6>
-<a name="id779769"></a>
+<a name="id885123"></a>
           <a class="link" href="fused_procedure.html#fusion.functional.adapters.fused_procedure.template_parameters">Template
           parameters</a>
         </h6>
@@ -87,41 +87,41 @@
 </colgroup>
 <thead><tr>
 <th>
-                <p>
-                  Parameter
-                </p>
+                  <p>
+                    Parameter
+                  </p>
                 </th>
 <th>
-                <p>
-                  Description
-                </p>
+                  <p>
+                    Description
+                  </p>
                 </th>
 <th>
-                <p>
-                  Default
-                </p>
+                  <p>
+                    Default
+                  </p>
                 </th>
 </tr></thead>
 <tbody><tr>
 <td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">Function</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><span class="identifier">Function</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  <a class="link" href="../concepts/callable.html" title="Callable Object">Callable Object</a>
-                  type
-                </p>
+                  <p>
+                    <a class="link" href="../concepts/callable.html" title="Callable Object">Callable
+                    Object</a> type
+                  </p>
                 </td>
 <td>
-                <p>
-                </p>
+                  <p>
+                  </p>
                 </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_procedure.model_of"></a><h6>
-<a name="id779859"></a>
+<a name="id885218"></a>
           <a class="link" href="fused_procedure.html#fusion.functional.adapters.fused_procedure.model_of">Model
           of</a>
         </h6>
@@ -136,26 +136,26 @@
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">R</span></code></span></dt>
 <dd><p>
-              A possibly const qualified <a class="link" href="../concepts/callable.html" title="Callable Object">Callable
-              Object</a> type or reference type thereof
-            </p></dd>
+                A possibly const qualified <a class="link" href="../concepts/callable.html" title="Callable Object">Callable
+                Object</a> type or reference type thereof
+              </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">r</span></code></span></dt>
 <dd><p>
-              An object convertible to <code class="computeroutput"><span class="identifier">R</span></code>
-            </p></dd>
+                An object convertible to <code class="computeroutput"><span class="identifier">R</span></code>
+              </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
 <dd><p>
-              A <a class="link" href="../../sequence.html" title="Sequence">Sequence</a> of arguments that
-              are accepted by <code class="computeroutput"><span class="identifier">r</span></code>
-            </p></dd>
+                A <a class="link" href="../../sequence.html" title="Sequence">Sequence</a> of arguments that
+                are accepted by <code class="computeroutput"><span class="identifier">r</span></code>
+              </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">f</span></code></span></dt>
 <dd><p>
-              An instance of <code class="computeroutput"><span class="identifier">fused</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;</span></code>
-            </p></dd>
+                An instance of <code class="computeroutput"><span class="identifier">fused</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;</span></code>
+              </p></dd>
 </dl>
 </div>
 <a name="fusion.functional.adapters.fused_procedure.expression_semantics"></a><h6>
-<a name="id780016"></a>
+<a name="id885380"></a>
           <a class="link" href="fused_procedure.html#fusion.functional.adapters.fused_procedure.expression_semantics">Expression
           Semantics</a>
         </h6>
@@ -166,60 +166,61 @@
 </colgroup>
 <thead><tr>
 <th>
-                <p>
-                  Expression
-                </p>
+                  <p>
+                    Expression
+                  </p>
                 </th>
 <th>
-                <p>
-                  Semantics
-                </p>
+                  <p>
+                    Semantics
+                  </p>
                 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">fused_procedure</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;(</span><span class="identifier">r</span><span class="special">)</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><span class="identifier">fused_procedure</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;(</span><span class="identifier">r</span><span class="special">)</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  Creates a fused function as described above, initializes the target
-                  function with <code class="computeroutput"><span class="identifier">r</span></code>.
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">fused_procedure</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;()</span></code>
-                </p>
-                </td>
-<td>
-                <p>
-                  Creates a fused function as described above, attempts to use <code class="computeroutput"><span class="identifier">R</span></code>'s default constructor.
-                </p>
+                  <p>
+                    Creates a fused function as described above, initializes the
+                    target function with <code class="computeroutput"><span class="identifier">r</span></code>.
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><span class="identifier">fused_procedure</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;()</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  Calls <code class="computeroutput"><span class="identifier">r</span></code> with the
-                  elements in <code class="computeroutput"><span class="identifier">s</span></code> as
-                  its arguments.
-                </p>
+                  <p>
+                    Creates a fused function as described above, attempts to use
+                    <code class="computeroutput"><span class="identifier">R</span></code>'s default constructor.
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Calls <code class="computeroutput"><span class="identifier">r</span></code> with
+                    the elements in <code class="computeroutput"><span class="identifier">s</span></code>
+                    as its arguments.
+                  </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_procedure.example"></a><h6>
-<a name="id780206"></a>
+<a name="id885576"></a>
           <a class="link" href="fused_procedure.html#fusion.functional.adapters.fused_procedure.example">Example</a>
         </h6>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">SequenceOfSequences</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Func</span><span class="special">&gt;</span>
@@ -239,7 +240,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.fused_procedure.see_also"></a><h6>
-<a name="id780638"></a>
+<a name="id886008"></a>
           <a class="link" href="fused_procedure.html#fusion.functional.adapters.fused_procedure.see_also">See
           also</a>
         </h6>

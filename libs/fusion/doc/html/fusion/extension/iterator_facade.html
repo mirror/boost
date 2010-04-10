@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Iterator Facade</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../extension.html" title="Extension">
 <link rel="prev" href="sequence_facade.html" title="Sequence Facade">
@@ -27,7 +27,7 @@
 <a name="fusion.extension.iterator_facade"></a><a class="link" href="iterator_facade.html" title="Iterator Facade">Iterator Facade</a>
 </h3></div></div></div>
 <a name="fusion.extension.iterator_facade.description"></a><h5>
-<a name="id768121"></a>
+<a name="id870675"></a>
         <a class="link" href="iterator_facade.html#fusion.extension.iterator_facade.description">Description</a>
       </h5>
 <p>
@@ -36,14 +36,14 @@
         iterator.
       </p>
 <a name="fusion.extension.iterator_facade.synopsis"></a><h5>
-<a name="id768148"></a>
+<a name="id870701"></a>
         <a class="link" href="iterator_facade.html#fusion.extension.iterator_facade.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Derived</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">TravesalTag</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">iterator_facade</span><span class="special">;</span>
 </pre>
 <a name="fusion.extension.iterator_facade.usage"></a><h5>
-<a name="id768211"></a>
+<a name="id870765"></a>
         <a class="link" href="iterator_facade.html#fusion.extension.iterator_facade.usage">Usage</a>
       </h5>
 <p>
@@ -57,7 +57,7 @@
         type.
       </p>
 <div class="table">
-<a name="id768228"></a><p class="title"><b>Table&#160;1.97.&#160;Parameters</b></p>
+<a name="id871328"></a><p class="title"><b>Table&#160;1.97.&#160;Parameters</b></p>
 <div class="table-contents"><table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -65,48 +65,48 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Name
-            </p>
-            </th>
+                <p>
+                  Name
+                </p>
+              </th>
 <th>
-            <p>
-              Description
-            </p>
-            </th>
+                <p>
+                  Description
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span></code>, <code class="computeroutput"><span class="identifier">It</span></code>, <code class="computeroutput"><span class="identifier">It1</span></code>,
-              <code class="computeroutput"><span class="identifier">It2</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span></code>, <code class="computeroutput"><span class="identifier">It</span></code>, <code class="computeroutput"><span class="identifier">It1</span></code>,
+                  <code class="computeroutput"><span class="identifier">It2</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              A type derived from <a class="link" href="iterator_facade.html" title="Iterator Facade"><code class="computeroutput"><span class="identifier">iterator_facade</span></code></a>
-            </p>
-            </td>
+                <p>
+                  A type derived from <a class="link" href="iterator_facade.html" title="Iterator Facade"><code class="computeroutput"><span class="identifier">iterator_facade</span></code></a>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">N</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">N</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              An <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
-              Integral Constant</a>
-            </p>
-            </td>
+                <p>
+                  An <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
+                  Integral Constant</a>
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id768349"></a><p class="title"><b>Table&#160;1.98.&#160;Key Expressions</b></p>
+<a name="id871453"></a><p class="title"><b>Table&#160;1.98.&#160;Key Expressions</b></p>
 <div class="table-contents"><table class="table" summary="Key Expressions">
 <colgroup>
 <col>
@@ -115,334 +115,338 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Expression
-            </p>
-            </th>
+                <p>
+                  Expression
+                </p>
+              </th>
 <th>
-            <p>
-              Result
-            </p>
-            </th>
+                <p>
+                  Result
+                </p>
+              </th>
 <th>
-            <p>
-              Default
-            </p>
-            </th>
+                <p>
+                  Default
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">value_of</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">value_of</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The element stored at iterator position <code class="computeroutput"><span class="identifier">It</span></code>
-            </p>
-            </td>
+                <p>
+                  The element stored at iterator position <code class="computeroutput"><span class="identifier">It</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              None
-            </p>
-            </td>
+                <p>
+                  None
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">deref</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">deref</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The type returned when dereferencing an iterator of type <code class="computeroutput"><span class="identifier">It</span></code>
-            </p>
-            </td>
+                <p>
+                  The type returned when dereferencing an iterator of type <code class="computeroutput"><span class="identifier">It</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              None
-            </p>
-            </td>
+                <p>
+                  None
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">deref</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">deref</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it</span><span class="special">)</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              Dereferences iterator <code class="computeroutput"><span class="identifier">it</span></code>
-            </p>
-            </td>
+                <p>
+                  Dereferences iterator <code class="computeroutput"><span class="identifier">it</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              None
-            </p>
-            </td>
+                <p>
+                  None
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">next</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">next</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The type of the next element from <code class="computeroutput"><span class="identifier">It</span></code>
-            </p>
-            </td>
+                <p>
+                  The type of the next element from <code class="computeroutput"><span class="identifier">It</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              None
-            </p>
-            </td>
+                <p>
+                  None
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">next</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">next</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it</span><span class="special">)</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The next iterator after <code class="computeroutput"><span class="identifier">it</span></code>
-            </p>
-            </td>
+                <p>
+                  The next iterator after <code class="computeroutput"><span class="identifier">it</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              None
-            </p>
-            </td>
+                <p>
+                  None
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">prior</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">prior</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The type of the next element from <code class="computeroutput"><span class="identifier">It</span></code>
-            </p>
-            </td>
+                <p>
+                  The type of the next element from <code class="computeroutput"><span class="identifier">It</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              None
-            </p>
-            </td>
+                <p>
+                  None
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">prior</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">prior</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it</span><span class="special">)</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The next iterator after <code class="computeroutput"><span class="identifier">it</span></code>
-            </p>
-            </td>
+                <p>
+                  The next iterator after <code class="computeroutput"><span class="identifier">it</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              None
-            </p>
-            </td>
+                <p>
+                  None
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">advance</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">advance</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The type of an iterator advanced <code class="computeroutput"><span class="identifier">N</span></code>
-              elements from <code class="computeroutput"><span class="identifier">It</span></code>
-            </p>
-            </td>
+                <p>
+                  The type of an iterator advanced <code class="computeroutput"><span class="identifier">N</span></code>
+                  elements from <code class="computeroutput"><span class="identifier">It</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              Implemented in terms of <code class="computeroutput"><span class="identifier">next</span></code>
-              and <code class="computeroutput"><span class="identifier">prior</span></code>
-            </p>
-            </td>
+                <p>
+                  Implemented in terms of <code class="computeroutput"><span class="identifier">next</span></code>
+                  and <code class="computeroutput"><span class="identifier">prior</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">advance</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">advance</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it</span><span class="special">)</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              An iterator advanced <code class="computeroutput"><span class="identifier">N</span></code>
-              elements from <code class="computeroutput"><span class="identifier">it</span></code>
-            </p>
-            </td>
+                <p>
+                  An iterator advanced <code class="computeroutput"><span class="identifier">N</span></code>
+                  elements from <code class="computeroutput"><span class="identifier">it</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              Implemented in terms of <code class="computeroutput"><span class="identifier">next</span></code>
-              and <code class="computeroutput"><span class="identifier">prior</span></code>
-            </p>
-            </td>
+                <p>
+                  Implemented in terms of <code class="computeroutput"><span class="identifier">next</span></code>
+                  and <code class="computeroutput"><span class="identifier">prior</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">distance</span><span class="special">&lt;</span><span class="identifier">It1</span><span class="special">,</span> <span class="identifier">It2</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">distance</span><span class="special">&lt;</span><span class="identifier">It1</span><span class="special">,</span> <span class="identifier">It2</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The distance between iterators of type <code class="computeroutput"><span class="identifier">It1</span></code>
-              and <code class="computeroutput"><span class="identifier">It2</span></code> as an <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
-              Integral Constant</a>
-            </p>
-            </td>
+                <p>
+                  The distance between iterators of type <code class="computeroutput"><span class="identifier">It1</span></code>
+                  and <code class="computeroutput"><span class="identifier">It2</span></code> as an
+                  <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
+                  Integral Constant</a>
+                </p>
+              </td>
 <td>
-            <p>
-              None
-            </p>
-            </td>
+                <p>
+                  None
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">distance</span><span class="special">&lt;</span><span class="identifier">It1</span><span class="special">,</span> <span class="identifier">It2</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it1</span><span class="special">,</span> <span class="identifier">it2</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">distance</span><span class="special">&lt;</span><span class="identifier">It1</span><span class="special">,</span> <span class="identifier">It2</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it1</span><span class="special">,</span> <span class="identifier">it2</span><span class="special">)</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The distance between iterator <code class="computeroutput"><span class="identifier">it1</span></code>
-              and <code class="computeroutput"><span class="identifier">it2</span></code>
-            </p>
-            </td>
+                <p>
+                  The distance between iterator <code class="computeroutput"><span class="identifier">it1</span></code>
+                  and <code class="computeroutput"><span class="identifier">it2</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              None
-            </p>
-            </td>
+                <p>
+                  None
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">equal_to</span><span class="special">&lt;</span><span class="identifier">It1</span><span class="special">,</span> <span class="identifier">It2</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">equal_to</span><span class="special">&lt;</span><span class="identifier">It1</span><span class="special">,</span> <span class="identifier">It2</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The distance between iterators of type <code class="computeroutput"><span class="identifier">It1</span></code>
-              and <code class="computeroutput"><span class="identifier">It2</span></code>
-            </p>
-            </td>
+                <p>
+                  The distance between iterators of type <code class="computeroutput"><span class="identifier">It1</span></code>
+                  and <code class="computeroutput"><span class="identifier">It2</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">same_type</span><span class="special">&lt;</span><span class="identifier">It1</span><span class="special">,</span> <span class="identifier">It2</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">same_type</span><span class="special">&lt;</span><span class="identifier">It1</span><span class="special">,</span>
+                  <span class="identifier">It2</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">equal_to</span><span class="special">&lt;</span><span class="identifier">It1</span><span class="special">,</span> <span class="identifier">It2</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it1</span><span class="special">,</span> <span class="identifier">it2</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">equal_to</span><span class="special">&lt;</span><span class="identifier">It1</span><span class="special">,</span> <span class="identifier">It2</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it1</span><span class="special">,</span> <span class="identifier">it2</span><span class="special">)</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The distance between iterators <code class="computeroutput"><span class="identifier">it1</span></code>
-              and <code class="computeroutput"><span class="identifier">it2</span></code>
-            </p>
-            </td>
+                <p>
+                  The distance between iterators <code class="computeroutput"><span class="identifier">it1</span></code>
+                  and <code class="computeroutput"><span class="identifier">it2</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">same_type</span><span class="special">&lt;</span><span class="identifier">It1</span><span class="special">,</span> <span class="identifier">It2</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">same_type</span><span class="special">&lt;</span><span class="identifier">It1</span><span class="special">,</span>
+                  <span class="identifier">It2</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">key_of</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">key_of</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The key type associated with the element from <code class="computeroutput"><span class="identifier">It</span></code>
-            </p>
-            </td>
+                <p>
+                  The key type associated with the element from <code class="computeroutput"><span class="identifier">It</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              None
-            </p>
-            </td>
+                <p>
+                  None
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">value_of_data</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">value_of_data</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The type of the data property associated with the element from <code class="computeroutput"><span class="identifier">It</span></code>
-            </p>
-            </td>
+                <p>
+                  The type of the data property associated with the element from
+                  <code class="computeroutput"><span class="identifier">It</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              None
-            </p>
-            </td>
+                <p>
+                  None
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">deref_data</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">deref_data</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              The type that will be returned by dereferencing the data property of
-              the element from <code class="computeroutput"><span class="identifier">It</span></code>
-            </p>
-            </td>
+                <p>
+                  The type that will be returned by dereferencing the data property
+                  of the element from <code class="computeroutput"><span class="identifier">It</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              None
-            </p>
-            </td>
+                <p>
+                  None
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">deref_data</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it</span><span class="special">)</span></code>
-            </p>
-            </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">iterator</span><span class="special">::</span><span class="keyword">template</span> <span class="identifier">deref_data</span><span class="special">&lt;</span><span class="identifier">It</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">it</span><span class="special">)</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              Deferences the data property associated with the element referenced
-              by <code class="computeroutput"><span class="identifier">it</span></code>
-            </p>
-            </td>
+                <p>
+                  Deferences the data property associated with the element referenced
+                  by <code class="computeroutput"><span class="identifier">it</span></code>
+                </p>
+              </td>
 <td>
-            <p>
-              None
-            </p>
-            </td>
+                <p>
+                  None
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><a name="fusion.extension.iterator_facade.header"></a><h5>
-<a name="id769776"></a>
+<a name="id872926"></a>
         <a class="link" href="iterator_facade.html#fusion.extension.iterator_facade.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">iterator_facade</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">iterator_facade</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.extension.iterator_facade.example"></a><h5>
-<a name="id769884"></a>
+<a name="id873034"></a>
         <a class="link" href="iterator_facade.html#fusion.extension.iterator_facade.example">Example</a>
       </h5>
 <p>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>map</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../container.html" title="Container">
 <link rel="prev" href="set.html" title="set">
@@ -27,7 +27,7 @@
 <a name="fusion.container.map"></a><a class="link" href="map.html" title="map">map</a>
 </h3></div></div></div>
 <a name="fusion.container.map.description"></a><h5>
-<a name="id646167"></a>
+<a name="id744349"></a>
         <a class="link" href="map.html#fusion.container.map.description">Description</a>
       </h5>
 <p>
@@ -40,7 +40,7 @@
         (see <a class="link" href="../notes.html#fusion.notes.overloaded_functions">Overloaded Functions</a>).
       </p>
 <a name="fusion.container.map.header"></a><h5>
-<a name="id646210"></a>
+<a name="id744392"></a>
         <a class="link" href="map.html#fusion.container.map.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">map</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -49,7 +49,7 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">map_fwd</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.container.map.synopsis"></a><h5>
-<a name="id646409"></a>
+<a name="id744591"></a>
         <a class="link" href="map.html#fusion.container.map.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span>
@@ -77,7 +77,7 @@
 <pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_MAP_SIZE</span> <span class="number">20</span>
 </pre>
 <a name="fusion.container.map.template_parameters"></a><h5>
-<a name="id646708"></a>
+<a name="id744890"></a>
         <a class="link" href="map.html#fusion.container.map.template_parameters">Template parameters</a>
       </h5>
 <div class="informaltable"><table class="table">
@@ -88,41 +88,41 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Parameter
-              </p>
+                <p>
+                  Parameter
+                </p>
               </th>
 <th>
-              <p>
-                Description
-              </p>
+                <p>
+                  Description
+                </p>
               </th>
 <th>
-              <p>
-                Default
-              </p>
+                <p>
+                  Default
+                </p>
               </th>
 </tr></thead>
 <tbody><tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">T0</span></code>...<code class="computeroutput"><span class="identifier">TN</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">T0</span></code>...<code class="computeroutput"><span class="identifier">TN</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                Element types
-              </p>
+                <p>
+                  Element types
+                </p>
               </td>
 <td>
-              <p>
-                <span class="emphasis"><em>unspecified-type</em></span>
-              </p>
+                <p>
+                  <span class="emphasis"><em>unspecified-type</em></span>
+                </p>
               </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.container.map.model_of"></a><h5>
-<a name="id646802"></a>
+<a name="id744988"></a>
         <a class="link" href="map.html#fusion.container.map.model_of">Model of</a>
       </h5>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
@@ -135,24 +135,25 @@
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">M</span></code></span></dt>
 <dd><p>
-            A <code class="computeroutput"><span class="identifier">map</span></code> type
-          </p></dd>
+              A <code class="computeroutput"><span class="identifier">map</span></code> type
+            </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">m</span></code></span></dt>
 <dd><p>
-            An instance of <code class="computeroutput"><span class="identifier">map</span></code>
-          </p></dd>
+              An instance of <code class="computeroutput"><span class="identifier">map</span></code>
+            </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">e0</span></code>...<code class="computeroutput"><span class="identifier">en</span></code></span></dt>
 <dd><p>
-            Heterogeneous key/value pairs (see <a class="link" href="../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></code></a>)
-          </p></dd>
+              Heterogeneous key/value pairs (see <a class="link" href="../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></code></a>)
+            </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
 <dd><p>
-            A <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a>
-          </p></dd>
+              A <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+              Sequence</a>
+            </p></dd>
 </dl>
 </div>
 <a name="fusion.container.map.expression_semantics"></a><h5>
-<a name="id646958"></a>
+<a name="id745149"></a>
         <a class="link" href="map.html#fusion.container.map.expression_semantics">Expression Semantics</a>
       </h5>
 <p>
@@ -168,74 +169,75 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Expression
-              </p>
+                <p>
+                  Expression
+                </p>
               </th>
 <th>
-              <p>
-                Semantics
-              </p>
+                <p>
+                  Semantics
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">M</span><span class="special">()</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">M</span><span class="special">()</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                Creates a map with default constructed elements.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">M</span><span class="special">(</span><span class="identifier">e0</span><span class="special">,</span> <span class="identifier">e1</span><span class="special">,...</span>
-                <span class="identifier">en</span><span class="special">)</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                Creates a map with element pairs <code class="computeroutput"><span class="identifier">e0</span></code>...<code class="computeroutput"><span class="identifier">en</span></code>.
-              </p>
+                <p>
+                  Creates a map with default constructed elements.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">M</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">M</span><span class="special">(</span><span class="identifier">e0</span><span class="special">,</span>
+                  <span class="identifier">e1</span><span class="special">,...</span>
+                  <span class="identifier">en</span><span class="special">)</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                Copy constructs a map from a <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
-                Sequence</a> <code class="computeroutput"><span class="identifier">s</span></code>.
-              </p>
+                <p>
+                  Creates a map with element pairs <code class="computeroutput"><span class="identifier">e0</span></code>...<code class="computeroutput"><span class="identifier">en</span></code>.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span> <span class="special">=</span>
-                <span class="identifier">s</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">M</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                Assigns to a map, <code class="computeroutput"><span class="identifier">m</span></code>,
-                from a <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
-                Sequence</a> <code class="computeroutput"><span class="identifier">s</span></code>.
-              </p>
+                <p>
+                  Copy constructs a map from a <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+                  Sequence</a> <code class="computeroutput"><span class="identifier">s</span></code>.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">m</span> <span class="special">=</span>
+                  <span class="identifier">s</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Assigns to a map, <code class="computeroutput"><span class="identifier">m</span></code>,
+                  from a <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+                  Sequence</a> <code class="computeroutput"><span class="identifier">s</span></code>.
+                </p>
               </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.container.map.example"></a><h5>
-<a name="id647211"></a>
+<a name="id745408"></a>
         <a class="link" href="map.html#fusion.container.map.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">map</span><span class="special">&lt;</span>

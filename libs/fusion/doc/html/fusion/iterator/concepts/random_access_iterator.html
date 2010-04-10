@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Random Access Iterator</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
 <link rel="prev" href="bidirectional_iterator.html" title="Bidirectional Iterator">
@@ -28,7 +28,7 @@
         Access Iterator</a>
 </h4></div></div></div>
 <a name="fusion.iterator.concepts.random_access_iterator.description"></a><h6>
-<a name="id575173"></a>
+<a name="id675495"></a>
           <a class="link" href="random_access_iterator.html#fusion.iterator.concepts.random_access_iterator.description">Description</a>
         </h6>
 <p>
@@ -39,29 +39,27 @@
 <div class="variablelist" title="Notation">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">i</span></code>,
-          <code class="computeroutput"><span class="identifier">j</span></code></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">i</span></code>, <code class="computeroutput"><span class="identifier">j</span></code></span></dt>
 <dd><p>
-              Random Access Iterators
-            </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">I</span></code>,
-          <code class="computeroutput"><span class="identifier">J</span></code></span></dt>
+                Random Access Iterators
+              </p></dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">I</span></code>, <code class="computeroutput"><span class="identifier">J</span></code></span></dt>
 <dd><p>
-              Random Access Iterator types
-            </p></dd>
+                Random Access Iterator types
+              </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">M</span></code></span></dt>
 <dd><p>
-              An <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a>
-              integral constant
-            </p></dd>
+                An <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a>
+                integral constant
+              </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">N</span></code></span></dt>
 <dd><p>
-              An integral constant
-            </p></dd>
+                An integral constant
+              </p></dd>
 </dl>
 </div>
 <a name="fusion.iterator.concepts.random_access_iterator.refinement_of"></a><h6>
-<a name="id577211"></a>
+<a name="id675625"></a>
           <a class="link" href="random_access_iterator.html#fusion.iterator.concepts.random_access_iterator.refinement_of">Refinement
           of</a>
         </h6>
@@ -70,7 +68,7 @@
           Iterator</a>
         </p>
 <a name="fusion.iterator.concepts.random_access_iterator.expression_requirements"></a><h6>
-<a name="id577235"></a>
+<a name="id675649"></a>
           <a class="link" href="random_access_iterator.html#fusion.iterator.concepts.random_access_iterator.expression_requirements">Expression
           requirements</a>
         </h6>
@@ -86,98 +84,98 @@
 </colgroup>
 <thead><tr>
 <th>
-                <p>
-                  Expression
-                </p>
+                  <p>
+                    Expression
+                  </p>
                 </th>
 <th>
-                <p>
-                  Return type
-                </p>
+                  <p>
+                    Return type
+                  </p>
                 </th>
 <th>
-                <p>
-                  Runtime Complexity
-                </p>
+                  <p>
+                    Runtime Complexity
+                  </p>
                 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                <p>
-                  <code class="computeroutput"><a class="link" href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><a class="link" href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  <a class="link" href="random_access_iterator.html" title="Random Access Iterator">Random
-                  Access Iterator</a>
-                </p>
+                  <p>
+                    <a class="link" href="random_access_iterator.html" title="Random Access Iterator">Random
+                    Access Iterator</a>
+                  </p>
                 </td>
 <td>
-                <p>
-                  Constant
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></code>
-                </p>
-                </td>
-<td>
-                <p>
-                  <a class="link" href="random_access_iterator.html" title="Random Access Iterator">Random
-                  Access Iterator</a>
-                </p>
-                </td>
-<td>
-                <p>
-                  Constant
-                </p>
+                  <p>
+                    Constant
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  <code class="computeroutput"><a class="link" href="../functions/advance_c.html" title="advance_c"><code class="computeroutput"><span class="identifier">advance_c</span></code></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  <a class="link" href="random_access_iterator.html" title="Random Access Iterator">Random
-                  Access Iterator</a>
-                </p>
+                  <p>
+                    <a class="link" href="random_access_iterator.html" title="Random Access Iterator">Random
+                    Access Iterator</a>
+                  </p>
                 </td>
 <td>
-                <p>
-                  Constant
-                </p>
+                  <p>
+                    Constant
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  <code class="computeroutput"><a class="link" href="../functions/advance.html" title="advance"><code class="computeroutput"><span class="identifier">advance</span></code></a><span class="special">&lt;</span><span class="identifier">M</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><a class="link" href="../functions/advance_c.html" title="advance_c"><code class="computeroutput"><span class="identifier">advance_c</span></code></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  <a class="link" href="random_access_iterator.html" title="Random Access Iterator">Random
-                  Access Iterator</a>
-                </p>
+                  <p>
+                    <a class="link" href="random_access_iterator.html" title="Random Access Iterator">Random
+                    Access Iterator</a>
+                  </p>
                 </td>
 <td>
-                <p>
-                  Constant
-                </p>
+                  <p>
+                    Constant
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    <code class="computeroutput"><a class="link" href="../functions/advance.html" title="advance"><code class="computeroutput"><span class="identifier">advance</span></code></a><span class="special">&lt;</span><span class="identifier">M</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></code>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <a class="link" href="random_access_iterator.html" title="Random Access Iterator">Random
+                    Access Iterator</a>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Constant
+                  </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.iterator.concepts.random_access_iterator.meta_expressions"></a><h6>
-<a name="id577512"></a>
+<a name="id675940"></a>
           <a class="link" href="random_access_iterator.html#fusion.iterator.concepts.random_access_iterator.meta_expressions">Meta
           Expressions</a>
         </h6>
@@ -188,59 +186,59 @@
 </colgroup>
 <thead><tr>
 <th>
-                <p>
-                  Expression
-                </p>
+                  <p>
+                    Expression
+                  </p>
                 </th>
 <th>
-                <p>
-                  Compile Time Complexity
-                </p>
+                  <p>
+                    Compile Time Complexity
+                  </p>
                 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                <p>
-                  <code class="computeroutput"><a class="link" href="../metafunctions/advance_c.html" title="advance_c"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance_c</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span>
-                  <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><a class="link" href="../metafunctions/advance_c.html" title="advance_c"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance_c</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span>
+                    <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  Amortized constant time
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><a class="link" href="../metafunctions/advance.html" title="advance"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span>
-                  <span class="identifier">M</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-                </p>
-                </td>
-<td>
-                <p>
-                  Amortized constant time
-                </p>
+                  <p>
+                    Amortized constant time
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  <code class="computeroutput"><a class="link" href="../metafunctions/distance.html" title="distance"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">distance</span></code></a><span class="special">&lt;</span><span class="identifier">I</span> <span class="special">,</span><span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><a class="link" href="../metafunctions/advance.html" title="advance"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span>
+                    <span class="identifier">M</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  Amortized constant time
-                </p>
+                  <p>
+                    Amortized constant time
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    <code class="computeroutput"><a class="link" href="../metafunctions/distance.html" title="distance"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">distance</span></code></a><span class="special">&lt;</span><span class="identifier">I</span> <span class="special">,</span><span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Amortized constant time
+                  </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.iterator.concepts.random_access_iterator.models"></a><h6>
-<a name="id577740"></a>
+<a name="id676173"></a>
           <a class="link" href="random_access_iterator.html#fusion.iterator.concepts.random_access_iterator.models">Models</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">

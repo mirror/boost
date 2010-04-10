@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>nview</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../view.html" title="View">
 <link rel="prev" href="reverse_view.html" title="reverse_view">
@@ -27,7 +27,7 @@
 <a name="fusion.view.nview"></a><a class="link" href="nview.html" title="nview">nview</a>
 </h3></div></div></div>
 <a name="fusion.view.nview.description"></a><h5>
-<a name="id687172"></a>
+<a name="id785410"></a>
         <a class="link" href="nview.html#fusion.view.nview.description">Description</a>
       </h5>
 <p>
@@ -38,14 +38,14 @@
         and a list of indicies specifying the elements to iterate over.
       </p>
 <a name="fusion.view.nview.header"></a><h5>
-<a name="id687213"></a>
+<a name="id785451"></a>
         <a class="link" href="nview.html#fusion.view.nview.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">nview</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">nview</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.view.nview.synopsis"></a><h5>
-<a name="id687321"></a>
+<a name="id785559"></a>
         <a class="link" href="nview.html#fusion.view.nview.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Indicies</span><span class="special">&gt;</span>
@@ -56,7 +56,7 @@
 <span class="identifier">as_nview</span><span class="special">(</span><span class="identifier">Sequence</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span>
 </pre>
 <a name="fusion.view.nview.template_parameters"></a><h5>
-<a name="id687529"></a>
+<a name="id785767"></a>
         <a class="link" href="nview.html#fusion.view.nview.template_parameters">Template parameters</a>
       </h5>
 <div class="informaltable"><table class="table">
@@ -67,77 +67,77 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Parameter
-              </p>
+                <p>
+                  Parameter
+                </p>
               </th>
 <th>
-              <p>
-                Description
-              </p>
+                <p>
+                  Description
+                </p>
               </th>
 <th>
-              <p>
-                Default
-              </p>
+                <p>
+                  Default
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">Sequence</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Sequence</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                An arbitrary Fusion <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
-                Sequence</a>
-              </p>
+                <p>
+                  An arbitrary Fusion <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+                  Sequence</a>
+                </p>
               </td>
 <td>
-              <p>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">Indicies</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                A <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">vector_c</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="special">...&gt;</span></code> holding the indicies defining
-                the required iteration order.
-              </p>
-              </td>
-<td>
-              <p>
-              </p>
+                <p>
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">I1</span></code>, <code class="computeroutput"><span class="identifier">I2</span></code>, <code class="computeroutput"><span class="identifier">I3</span></code>...
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Indicies</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                A list of integers specifying the required iteration order.
-              </p>
+                <p>
+                  A <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">vector_c</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="special">...&gt;</span></code> holding the indicies defining
+                  the required iteration order.
+                </p>
               </td>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">INT_MAX</span></code> for <code class="computeroutput"><span class="identifier">I2</span></code>, <code class="computeroutput"><span class="identifier">I3</span></code>...
-              </p>
+                <p>
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">I1</span></code>, <code class="computeroutput"><span class="identifier">I2</span></code>, <code class="computeroutput"><span class="identifier">I3</span></code>...
+                </p>
+              </td>
+<td>
+                <p>
+                  A list of integers specifying the required iteration order.
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">INT_MAX</span></code> for <code class="computeroutput"><span class="identifier">I2</span></code>, <code class="computeroutput"><span class="identifier">I3</span></code>...
+                </p>
               </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.view.nview.model_of"></a><h5>
-<a name="id687742"></a>
+<a name="id785990"></a>
         <a class="link" href="nview.html#fusion.view.nview.model_of">Model of</a>
       </h5>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
@@ -150,21 +150,20 @@
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">NV</span></code></span></dt>
 <dd><p>
-            A <code class="computeroutput"><span class="identifier">nview</span></code> type
-          </p></dd>
+              A <code class="computeroutput"><span class="identifier">nview</span></code> type
+            </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
 <dd><p>
-            An instance of <code class="computeroutput"><span class="identifier">Sequences</span></code>
-          </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">nv1</span></code>,
-        <code class="computeroutput"><span class="identifier">nv2</span></code></span></dt>
+              An instance of <code class="computeroutput"><span class="identifier">Sequences</span></code>
+            </p></dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">nv1</span></code>, <code class="computeroutput"><span class="identifier">nv2</span></code></span></dt>
 <dd><p>
-            Instances of <code class="computeroutput"><span class="identifier">NV</span></code>
-          </p></dd>
+              Instances of <code class="computeroutput"><span class="identifier">NV</span></code>
+            </p></dd>
 </dl>
 </div>
 <a name="fusion.view.nview.expression_semantics"></a><h5>
-<a name="id687862"></a>
+<a name="id786113"></a>
         <a class="link" href="nview.html#fusion.view.nview.expression_semantics">Expression Semantics</a>
       </h5>
 <p>
@@ -179,57 +178,57 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Expression
-              </p>
+                <p>
+                  Expression
+                </p>
               </th>
 <th>
-              <p>
-                Semantics
-              </p>
+                <p>
+                  Semantics
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">NV</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">NV</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                Creates an <code class="computeroutput"><span class="identifier">nview</span></code>
-                given a sequence and a list of indicies.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">NV</span><span class="special">(</span><span class="identifier">nv1</span><span class="special">)</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                Copy constructs an <code class="computeroutput"><span class="identifier">nview</span></code>
-                from another <code class="computeroutput"><span class="identifier">nview</span></code>,
-                <code class="computeroutput"><span class="identifier">nv1</span></code>.
-              </p>
+                <p>
+                  Creates an <code class="computeroutput"><span class="identifier">nview</span></code>
+                  given a sequence and a list of indicies.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">nv1</span> <span class="special">=</span>
-                <span class="identifier">nv2</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">NV</span><span class="special">(</span><span class="identifier">nv1</span><span class="special">)</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                Assigns to an <code class="computeroutput"><span class="identifier">nview</span></code>,
-                <code class="computeroutput"><span class="identifier">nv1</span></code>, from another
-                <code class="computeroutput"><span class="identifier">nview</span></code>, <code class="computeroutput"><span class="identifier">nv2</span></code>.
-              </p>
+                <p>
+                  Copy constructs an <code class="computeroutput"><span class="identifier">nview</span></code>
+                  from another <code class="computeroutput"><span class="identifier">nview</span></code>,
+                  <code class="computeroutput"><span class="identifier">nv1</span></code>.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">nv1</span> <span class="special">=</span>
+                  <span class="identifier">nv2</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Assigns to an <code class="computeroutput"><span class="identifier">nview</span></code>,
+                  <code class="computeroutput"><span class="identifier">nv1</span></code>, from another
+                  <code class="computeroutput"><span class="identifier">nview</span></code>, <code class="computeroutput"><span class="identifier">nv2</span></code>.
+                </p>
               </td>
 </tr>
 </tbody>
@@ -240,7 +239,7 @@
         of references to the elements of the original Fusion <a class="link" href="../sequence.html" title="Sequence">Sequence</a>
       </p>
 <a name="fusion.view.nview.example"></a><h5>
-<a name="id688105"></a>
+<a name="id786361"></a>
         <a class="link" href="nview.html#fusion.view.nview.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">typedef</span> <a class="link" href="../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
