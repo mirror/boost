@@ -32,7 +32,7 @@ namespace boost_no_complete_value_initialization
     void* p;
   };
 
-  bool is_zero_initialized(const pod_struct& arg)
+  bool is_value_initialized(const pod_struct& arg)
   {
     return
       arg.e == 0 &&
@@ -52,10 +52,10 @@ namespace boost_no_complete_value_initialization
     int derived_data;
   };
 
-  bool is_zero_initialized(const derived_pod_struct& arg)
+  bool is_value_initialized(const derived_pod_struct& arg)
   {
     const pod_struct& base_subobject = arg; 
-    return arg.derived_data == 0 && is_zero_initialized(base_subobject);
+    return arg.derived_data == 0 && is_value_initialized(base_subobject);
   }
 
   struct empty_struct
@@ -67,7 +67,7 @@ namespace boost_no_complete_value_initialization
     int data;
   };
 
-  bool is_zero_initialized(const derived_struct& arg)
+  bool is_value_initialized(const derived_struct& arg)
   {
     return arg.data == 0;
   }
@@ -77,11 +77,26 @@ namespace boost_no_complete_value_initialization
     int data;
   };
 
+  bool is_value_initialized(const int_struct& arg)
+  {
+    return arg.data == 0;
+  }
+
+  struct int_struct_holder
+  {
+    int_struct data;
+  };
+
+  bool is_value_initialized(const int_struct_holder& arg)
+  {
+    return is_value_initialized(arg.data);
+  }
+
   struct derived_int_struct: int_struct
   {
   };
 
-  bool is_zero_initialized(const int_struct& arg)
+  bool is_value_initialized(const derived_int_struct& arg)
   {
     return arg.data == 0;
   }
@@ -92,11 +107,11 @@ namespace boost_no_complete_value_initialization
     int second;
   };
 
-  bool is_zero_initialized(const pod_struct_and_int_union& arg)
+  bool is_value_initialized(const pod_struct_and_int_union& arg)
   {
     // When a union is zero-initialized, its first non-static 
     // named data member is zero-initialized ([dcl.init]).
-    return is_zero_initialized(arg.first);
+    return is_value_initialized(arg.first);
   }
 
 
@@ -106,7 +121,7 @@ namespace boost_no_complete_value_initialization
     pod_struct second;
   };
 
-  bool is_zero_initialized(const int_and_pod_struct_union& arg)
+  bool is_value_initialized(const int_and_pod_struct_union& arg)
   {
     return arg.first == 0;
   }
@@ -126,11 +141,16 @@ namespace boost_no_complete_value_initialization
     {
     }
 
-    bool is_default() const
+    bool is_value_initialized() const
     {
       return m_enum == magic_number;
     }
   };
+
+    bool is_value_initialized(const enum_holder& arg)
+    {
+      return arg.is_value_initialized();
+    }
 
 
   // An aggregate struct of a non-POD class and an int.
@@ -142,7 +162,7 @@ namespace boost_no_complete_value_initialization
 
   bool is_value_initialized(const enum_holder_and_int& arg)
   {
-    return arg.e.is_default() && arg.i == 0;
+    return arg.e.is_value_initialized() && arg.i == 0;
   }
 
 
@@ -154,9 +174,9 @@ namespace boost_no_complete_value_initialization
   protected:
     int protected_int;
   public:
-    bool is_value_initialized() const
+    friend bool is_value_initialized(const private_and_protected_int& arg)
     {
-      return private_int == 0 && protected_int == 0;
+      return arg.private_int == 0 && arg.protected_int == 0;
     }
   };
 
@@ -202,27 +222,39 @@ namespace boost_no_complete_value_initialization
 
     virtual bool is_value_initialized() const
     {
-      return m_enum_holder.is_default() && i == 0;
+      return m_enum_holder.is_value_initialized() && i == 0;
     }
 
     virtual ~non_pod_class() {}
   };
 
-
-  // The first argument (is_value_initializated) tells whether value initialization
-  // has succeeded.
-  // The second argument tells what expression was evaluated.
-  bool is_true(bool is_value_initializated, const char *const expression)
+  bool is_value_initialized(const non_pod_class& arg)
   {
-    if ( ! is_value_initializated )
-    {
-      std::cout << "Note: " << expression << " evaluated to false." << std::endl;
-    }
-    return is_value_initializated;
+    return arg.is_value_initialized();
   }
 
-#define IS_TRUE(value) is_true(value, #value)
-#define IS_ZERO(value) is_true(value == 0, #value " == 0")
+
+  // For built-in types and enumerated types.
+  template <typename T>
+  bool is_value_initialized(const T& arg)
+  {
+    return arg == 0;
+  }
+
+
+  // The first argument should specify whether a specific variable is value-initializated.
+  // The second argument should specify the name of the variable.
+  // Passes the information to standard output, if the variable is not value-initializated.
+  bool is_true(bool is_variable_value_initializated, const char *const variable_name)
+  {
+    if ( ! is_variable_value_initializated )
+    {
+      std::cout << "Note: " << variable_name << " is not value-initialized." << std::endl;
+    }
+    return is_variable_value_initializated;
+  }
+
+#define IS_VALUE_INITIALIZED(value) is_true( is_value_initialized(value), #value)
 
   // value_initializer initializes each of its data members by means
   // of an empty set of parentheses, and allows checking whether
@@ -255,6 +287,8 @@ namespace boost_no_complete_value_initialization
     void* m_ptr_array[2];
     int_struct m_int_struct;
     int_struct m_int_struct_array[2];
+    int_struct m_int_struct_holder;
+    int_struct m_int_struct_holder_array[2];
     pod_struct m_pod_struct;
     pod_struct m_pod_struct_array[2];
     derived_pod_struct m_derived_pod;
@@ -305,6 +339,8 @@ namespace boost_no_complete_value_initialization
     m_ptr_array(),
     m_int_struct(),
     m_int_struct_array(),
+    m_int_struct_holder(),
+    m_int_struct_holder_array(),
     m_pod_struct(),
     m_pod_struct_array(),
     m_derived_pod(),
@@ -334,75 +370,78 @@ namespace boost_no_complete_value_initialization
     unsigned check() const
     {
       const unsigned num_failures = 
-        (IS_TRUE( m_enum_holder.is_default() ) ? 0 : 1) +
-        (IS_TRUE( m_enum_holder_array[0].is_default() ) ? 0 : 1) +
-        (IS_TRUE( m_enum_holder_array[1].is_default() ) ? 0 : 1) +
-        (IS_ZERO(m_enum) ? 0 : 1) + 
-        (IS_ZERO(m_enum_array[0]) ? 0 : 1) + 
-        (IS_ZERO(m_enum_array[1]) ? 0 : 1) + 
-        (IS_ZERO(m_char) ? 0 : 1) + 
-        (IS_ZERO(m_char_array[0]) ? 0 : 1) + 
-        (IS_ZERO(m_char_array[1]) ? 0 : 1) + 
-        (IS_ZERO(m_unsigned_char) ? 0 : 1) + 
-        (IS_ZERO(m_unsigned_char_array[0]) ? 0 : 1) + 
-        (IS_ZERO(m_unsigned_char_array[1]) ? 0 : 1) + 
-        (IS_ZERO(m_short) ? 0 : 1) + 
-        (IS_ZERO(m_short_array[0]) ? 0 : 1) + 
-        (IS_ZERO(m_short_array[1]) ? 0 : 1) + 
-        (IS_ZERO(m_int) ? 0 : 1) + 
-        (IS_ZERO(m_int_array[0]) ? 0 : 1) + 
-        (IS_ZERO(m_int_array[1]) ? 0 : 1) + 
-        (IS_ZERO(m_unsigned) ? 0 : 1) + 
-        (IS_ZERO(m_unsigned_array[0]) ? 0 : 1) + 
-        (IS_ZERO(m_unsigned_array[1]) ? 0 : 1) + 
-        (IS_ZERO(m_long) ? 0 : 1) + 
-        (IS_ZERO(m_long_array[0]) ? 0 : 1) + 
-        (IS_ZERO(m_long_array[1]) ? 0 : 1) + 
-        (IS_ZERO(m_float) ? 0 : 1) + 
-        (IS_ZERO(m_float_array[0]) ? 0 : 1) + 
-        (IS_ZERO(m_float_array[1]) ? 0 : 1) + 
-        (IS_ZERO(m_double) ? 0 : 1) + 
-        (IS_ZERO(m_double_array[0]) ? 0 : 1) + 
-        (IS_ZERO(m_double_array[1]) ? 0 : 1) + 
-        (IS_ZERO(m_ptr) ? 0 : 1) + 
-        (IS_ZERO(m_ptr_array[0]) ? 0 : 1) + 
-        (IS_ZERO(m_ptr_array[1]) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_int_struct) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_int_struct_array[0]) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_int_struct_array[1]) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_pod_struct) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_pod_struct_array[0]) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_pod_struct_array[1]) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_derived_pod) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_derived_pod_array[0]) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_derived_pod_array[1]) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_derived_struct) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_derived_struct_array[0]) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_derived_struct_array[1]) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_derived_int_struct) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_derived_int_struct_array[0]) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_derived_int_struct_array[1]) ) ? 0 : 1) + 
-        (IS_TRUE( is_value_initialized(m_enum_holder_and_int) ) ? 0 : 1) + 
-        (IS_TRUE( is_value_initialized(m_enum_holder_and_int_array[0]) )  ? 0 : 1) + 
-        (IS_TRUE( is_value_initialized(m_enum_holder_and_int_array[1]) ) ? 0 : 1) + 
-        (IS_TRUE( m_private_and_protected_int.is_value_initialized() ) ? 0 : 1) + 
-        (IS_TRUE( m_private_and_protected_int_array[0].is_value_initialized() ) ? 0 : 1 ) +
-        (IS_TRUE( m_private_and_protected_int_array[1].is_value_initialized() ) ? 0 : 1 );
-        (IS_TRUE( is_value_initialized(m_user_defined_destructor_holder) ) ? 0 : 1) + 
-        (IS_TRUE( is_value_initialized(m_user_defined_destructor_holder_array[0]) )  ? 0 : 1) + 
-        (IS_TRUE( is_value_initialized(m_user_defined_destructor_holder_array[1]) ) ? 0 : 1) + 
-        (IS_TRUE( is_value_initialized(m_virtual_destructor_holder) ) ? 0 : 1) + 
-        (IS_TRUE( is_value_initialized(m_virtual_destructor_holder_array[0]) )  ? 0 : 1) + 
-        (IS_TRUE( is_value_initialized(m_virtual_destructor_holder_array[1]) ) ? 0 : 1) + 
-        (IS_TRUE( m_non_pod.is_value_initialized() ) ? 0 : 1) + 
-        (IS_TRUE( m_non_pod_array[0].is_value_initialized() ) ? 0 : 1 ) +
-        (IS_TRUE( m_non_pod_array[1].is_value_initialized() ) ? 0 : 1 ) +
-        (IS_TRUE( is_zero_initialized(m_pod_struct_and_int_union) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_pod_struct_and_int_union_array[0]) ) ? 0 : 1 ) +
-        (IS_TRUE( is_zero_initialized(m_pod_struct_and_int_union_array[1]) ) ? 0 : 1 ) +
-        (IS_TRUE( is_zero_initialized(m_int_and_pod_struct_union) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_int_and_pod_struct_union_array[0]) ) ? 0 : 1 ) +
-        (IS_TRUE( is_zero_initialized(m_int_and_pod_struct_union_array[1]) ) ? 0 : 1 );
+        (IS_VALUE_INITIALIZED(m_enum_holder) ? 0 : 1) +
+        (IS_VALUE_INITIALIZED(m_enum_holder_array[0]) ? 0 : 1) +
+        (IS_VALUE_INITIALIZED(m_enum_holder_array[1]) ? 0 : 1) +
+        (IS_VALUE_INITIALIZED(m_enum) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_enum_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_enum_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_char) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_char_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_char_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_unsigned_char) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_unsigned_char_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_unsigned_char_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_short) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_short_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_short_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_int) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_int_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_int_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_unsigned) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_unsigned_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_unsigned_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_long) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_long_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_long_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_float) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_float_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_float_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_double) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_double_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_double_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_ptr) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_ptr_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_ptr_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_int_struct) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_int_struct_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_int_struct_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_int_struct_holder) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_int_struct_holder_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_int_struct_holder_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_pod_struct) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_pod_struct_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_pod_struct_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_derived_pod) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_derived_pod_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_derived_pod_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_derived_struct) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_derived_struct_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_derived_struct_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_derived_int_struct) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_derived_int_struct_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_derived_int_struct_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_enum_holder_and_int) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_enum_holder_and_int_array[0]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_enum_holder_and_int_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_private_and_protected_int) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_private_and_protected_int_array[0]) ? 0 : 1 ) +
+        (IS_VALUE_INITIALIZED(m_private_and_protected_int_array[1]) ? 0 : 1 );
+        (IS_VALUE_INITIALIZED(m_user_defined_destructor_holder) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_user_defined_destructor_holder_array[0])  ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_user_defined_destructor_holder_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_virtual_destructor_holder) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_virtual_destructor_holder_array[0])  ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_virtual_destructor_holder_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_non_pod) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_non_pod_array[0]) ? 0 : 1 ) +
+        (IS_VALUE_INITIALIZED(m_non_pod_array[1]) ? 0 : 1 ) +
+        (IS_VALUE_INITIALIZED(m_pod_struct_and_int_union) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_pod_struct_and_int_union_array[0]) ? 0 : 1 ) +
+        (IS_VALUE_INITIALIZED(m_pod_struct_and_int_union_array[1]) ? 0 : 1 ) +
+        (IS_VALUE_INITIALIZED(m_int_and_pod_struct_union) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_int_and_pod_struct_union_array[0]) ? 0 : 1 ) +
+        (IS_VALUE_INITIALIZED(m_int_and_pod_struct_union_array[1]) ? 0 : 1 );
       return num_failures;
     }
   };
@@ -419,7 +458,7 @@ namespace boost_no_complete_value_initialization
     {
       std::cout << "Number of initialization failures on the stack: " << num_failures_on_stack
         << "\nNumber of initialization failures on the heap: " << num_failures_on_heap
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 5."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 6."
         << std::endl;
     }
     return static_cast<int>(num_failures_on_stack + num_failures_on_heap);
