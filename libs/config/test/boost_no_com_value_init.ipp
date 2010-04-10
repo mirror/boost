@@ -58,6 +58,33 @@ namespace boost_no_complete_value_initialization
     return arg.derived_data == 0 && is_zero_initialized(base_subobject);
   }
 
+  struct empty_struct
+  {
+  };
+
+  struct derived_struct: empty_struct
+  {
+    int data;
+  };
+
+  bool is_zero_initialized(const derived_struct& arg)
+  {
+    return arg.data == 0;
+  }
+
+  struct int_struct
+  {
+    int data;
+  };
+
+  struct derived_int_struct: int_struct
+  {
+  };
+
+  bool is_zero_initialized(const int_struct& arg)
+  {
+    return arg.data == 0;
+  }
 
   union pod_struct_and_int_union
   {
@@ -226,10 +253,16 @@ namespace boost_no_complete_value_initialization
     double m_double_array[2];
     void* m_ptr;
     void* m_ptr_array[2];
-    pod_struct m_pod;
-    pod_struct m_pod_array[2];
+    int_struct m_int_struct;
+    int_struct m_int_struct_array[2];
+    pod_struct m_pod_struct;
+    pod_struct m_pod_struct_array[2];
     derived_pod_struct m_derived_pod;
     derived_pod_struct m_derived_pod_array[2];
+    derived_struct m_derived_struct;
+    derived_struct m_derived_struct_array[2];
+    derived_int_struct m_derived_int_struct;
+    derived_int_struct m_derived_int_struct_array[2];
     enum_holder_and_int m_enum_holder_and_int;
     enum_holder_and_int m_enum_holder_and_int_array[2];
     private_and_protected_int m_private_and_protected_int;
@@ -270,10 +303,16 @@ namespace boost_no_complete_value_initialization
     m_double_array(),
     m_ptr(),
     m_ptr_array(),
-    m_pod(),  
-    m_pod_array(),
+    m_int_struct(),
+    m_int_struct_array(),
+    m_pod_struct(),
+    m_pod_struct_array(),
     m_derived_pod(),
     m_derived_pod_array(),
+    m_derived_struct(),
+    m_derived_struct_array(),
+    m_derived_int_struct(),
+    m_derived_int_struct_array(),
     m_enum_holder_and_int(),
     m_enum_holder_and_int_array(),
     m_private_and_protected_int(),
@@ -328,12 +367,21 @@ namespace boost_no_complete_value_initialization
         (IS_ZERO(m_ptr) ? 0 : 1) + 
         (IS_ZERO(m_ptr_array[0]) ? 0 : 1) + 
         (IS_ZERO(m_ptr_array[1]) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_pod) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_pod_array[0]) ) ? 0 : 1) + 
-        (IS_TRUE( is_zero_initialized(m_pod_array[1]) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_int_struct) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_int_struct_array[0]) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_int_struct_array[1]) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_pod_struct) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_pod_struct_array[0]) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_pod_struct_array[1]) ) ? 0 : 1) + 
         (IS_TRUE( is_zero_initialized(m_derived_pod) ) ? 0 : 1) + 
         (IS_TRUE( is_zero_initialized(m_derived_pod_array[0]) ) ? 0 : 1) + 
         (IS_TRUE( is_zero_initialized(m_derived_pod_array[1]) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_derived_struct) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_derived_struct_array[0]) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_derived_struct_array[1]) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_derived_int_struct) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_derived_int_struct_array[0]) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_derived_int_struct_array[1]) ) ? 0 : 1) + 
         (IS_TRUE( is_value_initialized(m_enum_holder_and_int) ) ? 0 : 1) + 
         (IS_TRUE( is_value_initialized(m_enum_holder_and_int_array[0]) )  ? 0 : 1) + 
         (IS_TRUE( is_value_initialized(m_enum_holder_and_int_array[1]) ) ? 0 : 1) + 
@@ -371,7 +419,7 @@ namespace boost_no_complete_value_initialization
     {
       std::cout << "Number of initialization failures on the stack: " << num_failures_on_stack
         << "\nNumber of initialization failures on the heap: " << num_failures_on_heap
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 4."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 5."
         << std::endl;
     }
     return static_cast<int>(num_failures_on_stack + num_failures_on_heap);
