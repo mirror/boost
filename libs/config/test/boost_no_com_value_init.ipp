@@ -47,7 +47,21 @@ namespace boost_no_complete_value_initialization
       arg.p == 0;
   }
 
+  struct derived_pod_struct: pod_struct
+  {
+    int derived_data;
+  };
+
+  bool is_zero_initialized(const derived_pod_struct& arg)
+  {
+    const pod_struct& base_subobject = arg; 
+    return arg.derived_data == 0 && is_zero_initialized(base_subobject);
+  }
+
+
   // A class that holds a "magic" enum value.
+  // Note: This is not a POD class, because it has a user-defined
+  // default constructor.
   class enum_holder
   {
     enum_type m_enum;
@@ -64,6 +78,64 @@ namespace boost_no_complete_value_initialization
       return m_enum == magic_number;
     }
   };
+
+
+  // An aggregate struct of a non-POD class and an int.
+  struct enum_holder_and_int
+  {
+    enum_holder e;
+    int i;
+  };
+
+  bool is_value_initialized(const enum_holder_and_int& arg)
+  {
+    return arg.e.is_default() && arg.i == 0;
+  }
+
+
+  // An class that has a private and a protected int data member.
+  class private_and_protected_int
+  {
+  private:
+    int private_int;
+  protected:
+    int protected_int;
+  public:
+    bool is_value_initialized() const
+    {
+      return private_int == 0 && protected_int == 0;
+    }
+  };
+
+
+  class user_defined_destructor_holder
+  {
+  public:
+    int i;
+    ~user_defined_destructor_holder()
+    {
+    }
+  };
+
+  bool is_value_initialized(const user_defined_destructor_holder& arg)
+  {
+    return arg.i == 0;
+  }
+
+
+  class virtual_destructor_holder
+  {
+  public:
+    int i;
+    virtual ~virtual_destructor_holder()
+    {
+    }
+  };
+
+  bool is_value_initialized(const virtual_destructor_holder& arg)
+  {
+    return arg.i == 0;
+  }
 
 
   // A class that is not a POD type.
@@ -83,6 +155,7 @@ namespace boost_no_complete_value_initialization
     virtual ~non_pod_class() {}
   };
 
+
   // The first argument (is_value_initializated) tells whether value initialization
   // has succeeded.
   // The second argument tells what expression was evaluated.
@@ -98,26 +171,47 @@ namespace boost_no_complete_value_initialization
 #define IS_TRUE(value) is_true(value, #value)
 #define IS_ZERO(value) is_true(value == 0, #value " == 0")
 
-  // The default constructor of this class initializes each of its 
-  // data members by means of an empty set of parentheses, and checks
-  // whether each of them is value-initialized.
+  // value_initializer initializes each of its data members by means
+  // of an empty set of parentheses, and allows checking whether
+  // each of them is indeed value-initialized, as specified by 
+  // the C++ Standard ([dcl.init]).
   class value_initializer
   {
   private:
     enum_holder m_enum_holder;
+    enum_holder m_enum_holder_array[2];
     enum_type m_enum;
-    char m_char;  
-    unsigned char m_unsigned_char;  
+    enum_type m_enum_array[2];
+    char m_char;
+    char m_char_array[2];
+    unsigned char m_unsigned_char;
+    unsigned char m_unsigned_char_array[2];
     short m_short;
+    short m_short_array[2];
     int m_int;
-    unsigned m_unsigned;
-    long m_long;
-    float m_float;  
-    double m_double;  
-    void* m_ptr;
     int m_int_array[2];
+    unsigned m_unsigned;
+    unsigned m_unsigned_array[2];
+    long m_long;
+    long m_long_array[2];
+    float m_float;
+    float m_float_array[2];
+    double m_double;
+    double m_double_array[2];
+    void* m_ptr;
+    void* m_ptr_array[2];
     pod_struct m_pod;
     pod_struct m_pod_array[2];
+    derived_pod_struct m_derived_pod;
+    derived_pod_struct m_derived_pod_array[2];
+    enum_holder_and_int m_enum_holder_and_int;
+    enum_holder_and_int m_enum_holder_and_int_array[2];
+    private_and_protected_int m_private_and_protected_int;
+    private_and_protected_int m_private_and_protected_int_array[2];
+    user_defined_destructor_holder m_user_defined_destructor_holder;
+    user_defined_destructor_holder m_user_defined_destructor_holder_array[2];
+    virtual_destructor_holder m_virtual_destructor_holder;
+    virtual_destructor_holder m_virtual_destructor_holder_array[2];
     non_pod_class m_non_pod;
     non_pod_class m_non_pod_array[2];
 
@@ -125,19 +219,39 @@ namespace boost_no_complete_value_initialization
     value_initializer()
     :
     m_enum_holder(),
+    m_enum_holder_array(),
     m_enum(),
+    m_enum_array(),
     m_char(),
+    m_char_array(),
     m_unsigned_char(),
+    m_unsigned_char_array(),
     m_short(),
+    m_short_array(),
     m_int(),
-    m_unsigned(),
-    m_long(),
-    m_float(),
-    m_double(),
-    m_ptr(),
     m_int_array(),
+    m_unsigned(),
+    m_unsigned_array(),
+    m_long(),
+    m_long_array(),
+    m_float(),
+    m_float_array(),
+    m_double(),
+    m_double_array(),
+    m_ptr(),
+    m_ptr_array(),
     m_pod(),  
     m_pod_array(),
+    m_derived_pod(),
+    m_derived_pod_array(),
+    m_enum_holder_and_int(),
+    m_enum_holder_and_int_array(),
+    m_private_and_protected_int(),
+    m_private_and_protected_int_array(),
+    m_user_defined_destructor_holder(),
+    m_user_defined_destructor_holder_array(),
+    m_virtual_destructor_holder(),
+    m_virtual_destructor_holder_array(),
     m_non_pod(),
     m_non_pod_array()
     {
@@ -146,29 +260,65 @@ namespace boost_no_complete_value_initialization
     // Returns the number of failures.
     unsigned check() const
     {
-      return 
+      const unsigned num_failures = 
         (IS_TRUE( m_enum_holder.is_default() ) ? 0 : 1) +
+        (IS_TRUE( m_enum_holder_array[0].is_default() ) ? 0 : 1) +
+        (IS_TRUE( m_enum_holder_array[1].is_default() ) ? 0 : 1) +
         (IS_ZERO(m_enum) ? 0 : 1) + 
+        (IS_ZERO(m_enum_array[0]) ? 0 : 1) + 
+        (IS_ZERO(m_enum_array[1]) ? 0 : 1) + 
         (IS_ZERO(m_char) ? 0 : 1) + 
+        (IS_ZERO(m_char_array[0]) ? 0 : 1) + 
+        (IS_ZERO(m_char_array[1]) ? 0 : 1) + 
         (IS_ZERO(m_unsigned_char) ? 0 : 1) + 
+        (IS_ZERO(m_unsigned_char_array[0]) ? 0 : 1) + 
+        (IS_ZERO(m_unsigned_char_array[1]) ? 0 : 1) + 
         (IS_ZERO(m_short) ? 0 : 1) + 
+        (IS_ZERO(m_short_array[0]) ? 0 : 1) + 
+        (IS_ZERO(m_short_array[1]) ? 0 : 1) + 
         (IS_ZERO(m_int) ? 0 : 1) + 
-        (IS_ZERO(m_unsigned) ? 0 : 1) + 
-        (IS_ZERO(m_long) ? 0 : 1) + 
-        (IS_ZERO(m_float) ? 0 : 1) + 
-        (IS_ZERO(m_double) ? 0 : 1) + 
-        (IS_ZERO(m_ptr) ? 0 : 1) + 
         (IS_ZERO(m_int_array[0]) ? 0 : 1) + 
         (IS_ZERO(m_int_array[1]) ? 0 : 1) + 
+        (IS_ZERO(m_unsigned) ? 0 : 1) + 
+        (IS_ZERO(m_unsigned_array[0]) ? 0 : 1) + 
+        (IS_ZERO(m_unsigned_array[1]) ? 0 : 1) + 
+        (IS_ZERO(m_long) ? 0 : 1) + 
+        (IS_ZERO(m_long_array[0]) ? 0 : 1) + 
+        (IS_ZERO(m_long_array[1]) ? 0 : 1) + 
+        (IS_ZERO(m_float) ? 0 : 1) + 
+        (IS_ZERO(m_float_array[0]) ? 0 : 1) + 
+        (IS_ZERO(m_float_array[1]) ? 0 : 1) + 
+        (IS_ZERO(m_double) ? 0 : 1) + 
+        (IS_ZERO(m_double_array[0]) ? 0 : 1) + 
+        (IS_ZERO(m_double_array[1]) ? 0 : 1) + 
+        (IS_ZERO(m_ptr) ? 0 : 1) + 
+        (IS_ZERO(m_ptr_array[0]) ? 0 : 1) + 
+        (IS_ZERO(m_ptr_array[1]) ? 0 : 1) + 
         (IS_TRUE( is_zero_initialized(m_pod) ) ? 0 : 1) + 
-        (IS_TRUE( m_non_pod.is_value_initialized() ) ? 0 : 1) + 
         (IS_TRUE( is_zero_initialized(m_pod_array[0]) ) ? 0 : 1) + 
         (IS_TRUE( is_zero_initialized(m_pod_array[1]) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_derived_pod) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_derived_pod_array[0]) ) ? 0 : 1) + 
+        (IS_TRUE( is_zero_initialized(m_derived_pod_array[1]) ) ? 0 : 1) + 
+        (IS_TRUE( is_value_initialized(m_enum_holder_and_int) ) ? 0 : 1) + 
+        (IS_TRUE( is_value_initialized(m_enum_holder_and_int_array[0]) )  ? 0 : 1) + 
+        (IS_TRUE( is_value_initialized(m_enum_holder_and_int_array[1]) ) ? 0 : 1) + 
+        (IS_TRUE( m_private_and_protected_int.is_value_initialized() ) ? 0 : 1) + 
+        (IS_TRUE( m_private_and_protected_int_array[0].is_value_initialized() ) ? 0 : 1 ) +
+        (IS_TRUE( m_private_and_protected_int_array[1].is_value_initialized() ) ? 0 : 1 );
+        (IS_TRUE( is_value_initialized(m_user_defined_destructor_holder) ) ? 0 : 1) + 
+        (IS_TRUE( is_value_initialized(m_user_defined_destructor_holder_array[0]) )  ? 0 : 1) + 
+        (IS_TRUE( is_value_initialized(m_user_defined_destructor_holder_array[1]) ) ? 0 : 1) + 
+        (IS_TRUE( is_value_initialized(m_virtual_destructor_holder) ) ? 0 : 1) + 
+        (IS_TRUE( is_value_initialized(m_virtual_destructor_holder_array[0]) )  ? 0 : 1) + 
+        (IS_TRUE( is_value_initialized(m_virtual_destructor_holder_array[1]) ) ? 0 : 1) + 
+        (IS_TRUE( m_non_pod.is_value_initialized() ) ? 0 : 1) + 
         (IS_TRUE( m_non_pod_array[0].is_value_initialized() ) ? 0 : 1 ) +
         (IS_TRUE( m_non_pod_array[1].is_value_initialized() ) ? 0 : 1 );
-
+      return num_failures;
     }
   };
+
 
   int test()
   {
@@ -180,11 +330,11 @@ namespace boost_no_complete_value_initialization
     if ( num_failures_on_stack > 0 || num_failures_on_heap > 0 )
     {
       std::cout << "Number of initialization failures on the stack: " << num_failures_on_stack
-        << "\nNumber of initialization failures on the heap: " << num_failures_on_heap << std::endl;
-    
+        << "\nNumber of initialization failures on the heap: " << num_failures_on_heap
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 3."
+        << std::endl;
     }
     return static_cast<int>(num_failures_on_stack + num_failures_on_heap);
   }
 
 }  // End of namespace.
-
