@@ -538,17 +538,38 @@ namespace boost_no_complete_value_initialization
 
   int test()
   {
+    // Check value-initialization of a temporary object, an object on the stack,
+    // and one on the heap:
     dirty_stack();
-    // Check both value-initialization on the stack and on the heap:
-    const unsigned num_failures_on_stack = value_initializer().check();
+    const unsigned num_failures_of_a_temporary = value_initializer().check();
+    if ( num_failures_of_a_temporary > 0 )
+    {
+      std::cout << "  Number of initialization failures of a temporary: "
+        << num_failures_of_a_temporary << std::endl;
+    }
+    dirty_stack();
+    value_initializer object_on_stack;
+    const unsigned num_failures_on_stack = object_on_stack.check();
+    if ( num_failures_of_a_temporary > 0 || num_failures_on_stack > 0 )
+    {
+      std::cout << "  Number of initialization failures on the stack: "
+        << num_failures_on_stack << std::endl;
+    }
     const value_initializer* const ptr = new value_initializer();
     const unsigned num_failures_on_heap = ptr->check();
     delete ptr;
-    if ( num_failures_on_stack > 0 || num_failures_on_heap > 0 )
+
+    const unsigned total_num_failures = num_failures_of_a_temporary + num_failures_on_stack + num_failures_on_heap;
+    if ( total_num_failures > 0 )
     {
-      std::cout << "Number of initialization failures on the stack: " << num_failures_on_stack
-        << "\nNumber of initialization failures on the heap: " << num_failures_on_heap
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 9."
+      std::cout <<  "  Number of initialization failures on the heap: "
+        << num_failures_on_heap
+        << "\n  Total number of initialization failures ("
+        << num_failures_of_a_temporary << '+'
+        << num_failures_on_stack << '+'
+        << num_failures_on_heap << "): "
+        << total_num_failures
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 10."
         << std::endl;
     }
     return static_cast<int>(num_failures_on_stack + num_failures_on_heap);
