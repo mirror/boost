@@ -27,7 +27,7 @@
 <a name="fusion.adapted.adapt_struct"></a><a class="link" href="adapt_struct.html" title="BOOST_FUSION_ADAPT_STRUCT"> BOOST_FUSION_ADAPT_STRUCT</a>
 </h3></div></div></div>
 <a name="fusion.adapted.adapt_struct.description"></a><h5>
-<a name="id791412"></a>
+<a name="id759736"></a>
         <a class="link" href="adapt_struct.html#fusion.adapted.adapt_struct.description">Description</a>
       </h5>
 <p>
@@ -36,7 +36,7 @@
         Access Sequence</a>.
       </p>
 <a name="fusion.adapted.adapt_struct.synopsis"></a><h5>
-<a name="id791433"></a>
+<a name="id759758"></a>
         <a class="link" href="adapt_struct.html#fusion.adapted.adapt_struct.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="identifier">BOOST_FUSION_ADAPT_STRUCT</span><span class="special">(</span>
@@ -47,7 +47,7 @@
     <span class="special">)</span>
 </pre>
 <a name="fusion.adapted.adapt_struct.semantics"></a><h5>
-<a name="id791517"></a>
+<a name="id759842"></a>
         <a class="link" href="adapt_struct.html#fusion.adapted.adapt_struct.semantics">Semantics</a>
       </h5>
 <p>
@@ -55,22 +55,22 @@
         as a model of <a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
         Access Sequence</a>. The sequence of <code class="computeroutput"><span class="special">(</span><span class="identifier">member_typeN</span><span class="special">,</span>
         <span class="identifier">member_nameN</span><span class="special">)</span></code>
-        pairs declares the type and names of each of the struct members that will
-        be part of the sequence.
+        pairs declares the type and names of each of the struct members that are
+        part of the sequence.
       </p>
 <p>
         The macro should be used at global scope, and <code class="computeroutput"><span class="identifier">struct_name</span></code>
-        should be the fully namespace qualified name of the struct to be converted.
+        should be the fully namespace qualified name of the struct to be adapted.
       </p>
 <a name="fusion.adapted.adapt_struct.header"></a><h5>
-<a name="id791581"></a>
+<a name="id759905"></a>
         <a class="link" href="adapt_struct.html#fusion.adapted.adapt_struct.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="keyword">struct</span><span class="special">/</span><span class="identifier">adapt_struct</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">adapt_struct</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.adapted.adapt_struct.example"></a><h5>
-<a name="id791696"></a>
+<a name="id760020"></a>
         <a class="link" href="adapt_struct.html#fusion.adapted.adapt_struct.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">demo</span>

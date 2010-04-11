@@ -30,5 +30,8 @@ This section summarizes significant changes to the Fusion library.
 * April 4, 2010: Added __array__ support, __adapt_tpl_struct__,
   __adapt_assoc_tpl_struct__, __adapt_assoc_struct_named__ and
   __adapt_assoc_struct_named_ns__ (Christopher Schmidt)
+* April 5, 2010: Added __define_struct__, __define_tpl_struct__,
+  __define_assoc_struct__ and __define_assoc_tpl_struct__ (Christopher Schmidt)
+  
 
 [endsect]
