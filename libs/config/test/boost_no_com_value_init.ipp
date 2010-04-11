@@ -301,7 +301,11 @@ namespace boost_no_complete_value_initialization
   // of an empty set of parentheses, and allows checking whether
   // each of them is indeed value-initialized, as specified by 
   // the C++ Standard ([dcl.init]).
-  class value_initializer
+  //
+  // Note: its base class, int_struct, is there to try to reproduce GCC Bug 30111,
+  // "Value-initialization of POD base class doesn't initialize members",
+  // reported by Jonathan Wakely: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30111
+  class value_initializer: int_struct
   {
   private:
     enum_holder m_enum_holder;
@@ -360,6 +364,7 @@ namespace boost_no_complete_value_initialization
   public:
     value_initializer()
     :
+    int_struct(),
     m_enum_holder(),
     m_enum_holder_array(),
     m_enum(),
@@ -419,6 +424,7 @@ namespace boost_no_complete_value_initialization
     unsigned check() const
     {
       const unsigned num_failures = 
+        (IS_VALUE_INITIALIZED(data) ? 0 : 1) +
         (IS_VALUE_INITIALIZED(m_enum_holder) ? 0 : 1) +
         (IS_VALUE_INITIALIZED(m_enum_holder_array[0]) ? 0 : 1) +
         (IS_VALUE_INITIALIZED(m_enum_holder_array[1]) ? 0 : 1) +
@@ -525,7 +531,7 @@ namespace boost_no_complete_value_initialization
     {
       std::cout << "Number of initialization failures on the stack: " << num_failures_on_stack
         << "\nNumber of initialization failures on the heap: " << num_failures_on_heap
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 8."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 9."
         << std::endl;
     }
     return static_cast<int>(num_failures_on_stack + num_failures_on_heap);
