@@ -27,7 +27,7 @@
 <a name="fusion.adapted.adapt_assoc_tpl_struct"></a><a class="link" href="adapt_assoc_tpl_struct.html" title="BOOST_FUSION_ADAPT_ASSOC_TPL_STRUCT"> BOOST_FUSION_ADAPT_ASSOC_TPL_STRUCT</a>
 </h3></div></div></div>
 <a name="fusion.adapted.adapt_assoc_tpl_struct.description"></a><h5>
-<a name="id795375"></a>
+<a name="id763709"></a>
         <a class="link" href="adapt_assoc_tpl_struct.html#fusion.adapted.adapt_assoc_tpl_struct.description">Description</a>
       </h5>
 <p>
@@ -38,7 +38,7 @@
         Sequence</a>.
       </p>
 <a name="fusion.adapted.adapt_assoc_tpl_struct.synopsis"></a><h5>
-<a name="id795401"></a>
+<a name="id763735"></a>
         <a class="link" href="adapt_assoc_tpl_struct.html#fusion.adapted.adapt_assoc_tpl_struct.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="identifier">BOOST_FUSION_ADAPT_ASSOC_TPL_STRUCT</span><span class="special">(</span>
@@ -50,7 +50,7 @@
     <span class="special">)</span>
 </pre>
 <a name="fusion.adapted.adapt_assoc_tpl_struct.semantics"></a><h5>
-<a name="id795544"></a>
+<a name="id763878"></a>
         <a class="link" href="adapt_assoc_tpl_struct.html#fusion.adapted.adapt_assoc_tpl_struct.semantics">Semantics</a>
       </h5>
 <p>
@@ -59,27 +59,27 @@
         as a model of <a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
         Access Sequence</a> and <a class="link" href="../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
         Sequence</a>. The sequence <code class="computeroutput"><span class="special">(</span><span class="identifier">template_param0</span><span class="special">)(</span><span class="identifier">template_param1</span><span class="special">)...</span></code>
-        declares the names of the template type parameter used. The sequence <code class="computeroutput"><span class="special">(</span><span class="identifier">specialization_param0</span><span class="special">)(</span><span class="identifier">specialization_param1</span><span class="special">)...</span></code> declares the template parameters of the
+        declares the names of the template type parameters used. The sequence <code class="computeroutput"><span class="special">(</span><span class="identifier">specialization_param0</span><span class="special">)(</span><span class="identifier">specialization_param1</span><span class="special">)...</span></code> declares the template parameters of the
         actual specialization of <code class="computeroutput"><span class="identifier">struct_name</span></code>
         that is adapted as a fusion sequence. The sequence of <code class="computeroutput"><span class="special">(</span><span class="identifier">member_typeN</span><span class="special">,</span>
         <span class="identifier">member_nameN</span><span class="special">,</span>
         <span class="identifier">key_typeN</span><span class="special">)</span></code>
         triples declares the type, name and key type of each of the struct members
-        that will be part of the sequence.
+        that are part of the sequence.
       </p>
 <p>
         The macro should be used at global scope, and <code class="computeroutput"><span class="identifier">struct_name</span></code>
-        should be the fully namespace qualified name of the struct to be converted.
+        should be the fully namespace qualified name of the struct to be adapted.
       </p>
 <a name="fusion.adapted.adapt_assoc_tpl_struct.header"></a><h5>
-<a name="id795680"></a>
+<a name="id764014"></a>
         <a class="link" href="adapt_assoc_tpl_struct.html#fusion.adapted.adapt_assoc_tpl_struct.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="keyword">struct</span><span class="special">/</span><span class="identifier">adapt_assoc_struct</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">adapt_assoc_struct</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.adapted.adapt_assoc_tpl_struct.example"></a><h5>
-<a name="id795795"></a>
+<a name="id764129"></a>
         <a class="link" href="adapt_assoc_tpl_struct.html#fusion.adapted.adapt_assoc_tpl_struct.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">demo</span>
@@ -102,7 +102,8 @@
 </span><span class="comment">// It is also an associative sequence with
 </span><span class="comment">// keys keys::name and keys::age present.
 </span><span class="identifier">BOOST_FUSION_ADAPT_ASSOC_TPL_STRUCT</span><span class="special">(</span>
-    <span class="special">(</span><span class="identifier">Name</span><span class="special">)(</span><span class="identifier">Age</span><span class="special">),</span> <span class="special">(</span><span class="identifier">demo</span><span class="special">::</span><span class="identifier">employee</span><span class="special">)(</span><span class="identifier">Name</span><span class="special">)(</span><span class="identifier">Age</span><span class="special">),</span>
+    <span class="special">(</span><span class="identifier">Name</span><span class="special">)(</span><span class="identifier">Age</span><span class="special">),</span>
+    <span class="special">(</span><span class="identifier">demo</span><span class="special">::</span><span class="identifier">employee</span><span class="special">)</span> <span class="special">(</span><span class="identifier">Name</span><span class="special">)(</span><span class="identifier">Age</span><span class="special">),</span>
     <span class="special">(</span><span class="identifier">Name</span><span class="special">,</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">keys</span><span class="special">::</span><span class="identifier">name</span><span class="special">)</span>
     <span class="special">(</span><span class="identifier">Age</span><span class="special">,</span> <span class="identifier">age</span><span class="special">,</span> <span class="identifier">keys</span><span class="special">::</span><span class="identifier">age</span><span class="special">))</span>
 </pre>
