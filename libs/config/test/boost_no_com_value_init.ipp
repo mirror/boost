@@ -72,6 +72,10 @@ namespace boost_no_complete_value_initialization
     return arg.data == 0;
   }
 
+  // Equivalent to the struct TData from CodeGear bug report 51854
+  // "Value-initialization: POD struct should be zero-initialized",
+  // reported by me (Niels Dekker, LKEB) in 2007:
+  // http://qc.embarcadero.com/wc/qcmain.aspx?d=51854
   struct int_struct
   {
     int data;
@@ -120,7 +124,7 @@ namespace boost_no_complete_value_initialization
 
 
   // Equivalent to the Stats class from GCC Bug 33916,
-  // "Default constructor fails to initialize array members", reported by
+  // "Default constructor fails to initialize array members", reported in 2007 by
   // Michael Elizabeth Chastain: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=33916
   class int_array_pair
   {
@@ -195,6 +199,10 @@ namespace boost_no_complete_value_initialization
 
 
   // An aggregate struct of a non-POD class and an int.
+  // Similar to struct A from Microsoft Visual C++ bug report 100744,
+  // "Value-initialization in new-expression", reported in 2005 by
+  // Pavel Kuznetsov (MetaCommunications Engineering):
+  // https://connect.microsoft.com/VisualStudio/feedback/details/100744
   struct enum_holder_and_int
   {
     enum_holder e;
@@ -303,8 +311,8 @@ namespace boost_no_complete_value_initialization
   // the C++ Standard ([dcl.init]).
   //
   // Note: its base class, int_struct, is there to try to reproduce GCC Bug 30111,
-  // "Value-initialization of POD base class doesn't initialize members",
-  // reported by Jonathan Wakely: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30111
+  // "Value-initialization of POD base class doesn't initialize members", reported
+  // by Jonathan Wakely in 2006: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30111
   class value_initializer: int_struct
   {
   private:
@@ -508,7 +516,7 @@ namespace boost_no_complete_value_initialization
   };
 
   // Equivalent to the dirty_stack() function from GCC Bug 33916,
-  // "Default constructor fails to initialize array members", reported by
+  // "Default constructor fails to initialize array members", reported in 2007 by
   // Michael Elizabeth Chastain: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=33916
   void dirty_stack()
   {
