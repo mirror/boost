@@ -22,6 +22,8 @@ CHANGELOG
 
 Boost V1.43.0
 - V2.0.5
+- Fixed the wave driver application to strip leading and trailing whitespace
+  from macro names specified on the command line using -U.
 - Fixed line number counting for lines containing nothing but whitespace 
   followed by a C++ comment if the next line is a pp directive.
 - Fixed emitting of a #line directive after returned from an include file.
