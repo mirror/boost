@@ -4,22 +4,26 @@
 
 ``
 template<class RandomAccessRange>
-void partial_sort(RandomAccessRange& rng,
-                  typename range_iterator<RandomAccessRange>::type middle);
-                 
+RandomAccessRange& partial_sort(
+    RandomAccessRange& rng,
+    typename range_iterator<RandomAccessRange>::type middle);
+
 template<class RandomAccessRange>
-void partial_sort(const RandomAccessRange& rng,
-                  typename range_iterator<const RandomAccessRange>::type middle);
-                 
+const RandomAccessRange& partial_sort(
+    const RandomAccessRange& rng,
+    typename range_iterator<const RandomAccessRange>::type middle);
+
 template<class RandomAccessRange>
-void partial_sort(RandomAccessRange& rng,
-                  typename range_iterator<RandomAccessRange>::type middle,
-                  BinaryPredicate sort_pred);
-                 
+RandomAccessRange& partial_sort(
+    RandomAccessRange& rng,
+    typename range_iterator<RandomAccessRange>::type middle,
+    BinaryPredicate sort_pred);
+
 template<class RandomAccessRange>
-void partial_sort(const RandomAccessRange& rng,
-                  typename range_iterator<const RandomAccessRange>::type middle,
-                  BinaryPredicate sort_pred);
+const RandomAccessRange& partial_sort(
+    const RandomAccessRange& rng,
+    typename range_iterator<const RandomAccessRange>::type middle,
+    BinaryPredicate sort_pred);
 ``
 
 [heading Description]

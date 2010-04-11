@@ -4,22 +4,26 @@
 
 ``
 template<class RandomAccessRange>
-void nth_element(RandomAccessRange& rng,
-                 typename range_iterator<RandomAccessRange>::type nth);
-                 
+RandomAccessRange& nth_element(
+    RandomAccessRange& rng,
+    typename range_iterator<RandomAccessRange>::type nth);
+
 template<class RandomAccessRange>
-void nth_element(const RandomAccessRange& rng,
-                 typename range_iterator<const RandomAccessRange>::type nth);
-                 
+const RandomAccessRange& nth_element(
+    const RandomAccessRange& rng,
+    typename range_iterator<const RandomAccessRange>::type nth);
+
 template<class RandomAccessRange>
-void nth_element(RandomAccessRange& rng,
-                 typename range_iterator<RandomAccessRange>::type nth,
-                 BinaryPredicate sort_pred);
-                 
+RandomAccessRange& nth_element(
+    RandomAccessRange& rng,
+    typename range_iterator<RandomAccessRange>::type nth,
+    BinaryPredicate sort_pred);
+
 template<class RandomAccessRange>
-void nth_element(const RandomAccessRange& rng,
-                 typename range_iterator<const RandomAccessRange>::type nth,
-                 BinaryPredicate sort_pred);
+const RandomAccessRange& nth_element(
+    const RandomAccessRange& rng,
+    typename range_iterator<const RandomAccessRange>::type nth,
+    BinaryPredicate sort_pred);
 ``
 
 [heading Description]

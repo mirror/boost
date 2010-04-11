@@ -4,16 +4,16 @@
 
 ``
 template<class RandomAccessRange>
-void pop_heap(RandomAccessRange& rng);
+RandomAccessRange& pop_heap(RandomAccessRange& rng);
 
 template<class RandomAccessRange>
-void pop_heap(const RandomAccessRange& rng);
+const RandomAccessRange& pop_heap(const RandomAccessRange& rng);
 
 template<class RandomAccessRange, class Compare>
-void pop_heap(RandomAccessRange& rng, Compare pred);
+RandomAccessRange& pop_heap(RandomAccessRange& rng, Compare pred);
 
 template<class RandomAccessRange, class Compare>
-void pop_heap(const RandomAccessRange& rng, Compare pred);
+const RandomAccessRange& pop_heap(const RandomAccessRange& rng, Compare pred);
 ``
 
 [heading Description]
@@ -21,7 +21,7 @@ void pop_heap(const RandomAccessRange& rng, Compare pred);
 `pop_heap` removes the largest element from the heap. It is assumed that `begin(rng), prior(end(rng))` is already a heap and that the element to be added is `*prior(end(rng))`.
 
 The ordering relationship is determined by using `operator<` in the non-predicate versions, and by evaluating `pred` in the predicate versions.
- 
+
 [heading Definition]
 
 Defined in the header file `boost/range/algorithm/heap_algorithm.hpp`

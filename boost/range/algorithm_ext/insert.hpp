@@ -23,15 +23,16 @@ namespace boost
     {
 
 template< class Container, class Range >
-inline void insert( Container& on,
-                    BOOST_DEDUCED_TYPENAME Container::iterator before,
-                    const Range& from )
+inline Container& insert( Container& on,
+                          BOOST_DEDUCED_TYPENAME Container::iterator before,
+                          const Range& from )
 {
     BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<Container> ));
     BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<Range> ));
     BOOST_ASSERT( (void*)&on != (void*)&from &&
                   "cannot copy from a container to itself" );
     on.insert( before, boost::begin(from), boost::end(from) );
+    return on;
 }
 
     } // namespace range

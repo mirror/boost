@@ -7,8 +7,8 @@ template<
     class Container,
     class SinglePassRange
     >
-void push_back(Container& target,
-               const SinglePassRange& from);
+Container& push_back(Container& target,
+                     const SinglePassRange& from);
 ``
 
 [heading Description]

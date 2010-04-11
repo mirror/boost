@@ -22,7 +22,7 @@ namespace boost
     {
 
 template< class ForwardRange, class Value >
-inline void iota( ForwardRange& rng, Value x )
+inline ForwardRange& iota( ForwardRange& rng, Value x )
 {
     BOOST_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
     typedef BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type iterator_t;
@@ -30,6 +30,8 @@ inline void iota( ForwardRange& rng, Value x )
     iterator_t last_target = ::boost::end(rng);
     for (iterator_t target = ::boost::begin(rng); target != last_target; ++target, ++x)
         *target = x;
+
+    return rng;
 }
 
     } // namespace range

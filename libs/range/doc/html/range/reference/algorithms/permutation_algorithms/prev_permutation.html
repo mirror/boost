@@ -28,28 +28,28 @@
           prev_permutation</a>
 </h5></div></div></div>
 <a name="range.reference.algorithms.permutation_algorithms.prev_permutation.prototype"></a><h6>
-<a name="id2946733"></a>
+<a name="id3101830"></a>
             <a class="link" href="prev_permutation.html#range.reference.algorithms.permutation_algorithms.prev_permutation.prototype">Prototype</a>
           </h6>
 <p>
             
 </p>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalRange</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">prev_permutation</span><span class="special">(</span><span class="identifier">BidirectionalRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">);</span>
+<span class="keyword">bool</span> <span class="identifier">prev_permutation</span><span class="special">(</span><span class="identifier">BidirectionalRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">);</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalRange</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">prev_permutation</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">BidirectionalRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">);</span>
+<span class="keyword">bool</span> <span class="identifier">prev_permutation</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">BidirectionalRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">);</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalRange</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Compare</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">prev_permutation</span><span class="special">(</span><span class="identifier">BidirectionalRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Compare</span> <span class="identifier">pred</span><span class="special">);</span>
+<span class="keyword">bool</span> <span class="identifier">prev_permutation</span><span class="special">(</span><span class="identifier">BidirectionalRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Compare</span> <span class="identifier">pred</span><span class="special">);</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalRange</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Compare</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">prev_permutation</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">BidirectionalRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Compare</span> <span class="identifier">pred</span><span class="special">);</span>
+<span class="keyword">bool</span> <span class="identifier">prev_permutation</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">BidirectionalRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Compare</span> <span class="identifier">pred</span><span class="special">);</span>
 </pre>
 <p>
           </p>
 <a name="range.reference.algorithms.permutation_algorithms.prev_permutation.description"></a><h6>
-<a name="id2947084"></a>
+<a name="id3102182"></a>
             <a class="link" href="prev_permutation.html#range.reference.algorithms.permutation_algorithms.prev_permutation.description">Description</a>
           </h6>
 <p>
@@ -67,14 +67,14 @@
             the predicate versions.
           </p>
 <a name="range.reference.algorithms.permutation_algorithms.prev_permutation.definition"></a><h6>
-<a name="id2947193"></a>
+<a name="id3102290"></a>
             <a class="link" href="prev_permutation.html#range.reference.algorithms.permutation_algorithms.prev_permutation.definition">Definition</a>
           </h6>
 <p>
             Defined in the header file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">permutation</span><span class="special">.</span><span class="identifier">hpp</span></code>
           </p>
 <a name="range.reference.algorithms.permutation_algorithms.prev_permutation.requirements"></a><h6>
-<a name="id2947267"></a>
+<a name="id3102364"></a>
             <a class="link" href="prev_permutation.html#range.reference.algorithms.permutation_algorithms.prev_permutation.requirements">Requirements</a>
           </h6>
 <p>
@@ -125,7 +125,7 @@
             </li>
 </ul></div>
 <a name="range.reference.algorithms.permutation_algorithms.prev_permutation.complexity"></a><h6>
-<a name="id2947504"></a>
+<a name="id3102600"></a>
             <a class="link" href="prev_permutation.html#range.reference.algorithms.permutation_algorithms.prev_permutation.complexity">Complexity</a>
           </h6>
 <p>

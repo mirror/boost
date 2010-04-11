@@ -26,6 +26,7 @@ namespace boost
 /// range-based version of the fill_n std algorithm
 ///
 /// \pre ForwardRange is a model of the ForwardRangeConcept
+/// \pre n <= std::distance(boost::begin(rng), boost::end(rng))
 template< class ForwardRange, class Size, class Value >
 inline ForwardRange& fill_n(ForwardRange& rng, Size n, const Value& val)
 {

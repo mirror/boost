@@ -3,8 +3,8 @@
 [heading Prototype]
 
 ``
-template<class SinglePassRange, class Value>
-iota(SinglePassRange& rng, Value x);
+template<class ForwardRange, class Value>
+ForwardRange& iota(ForwardRange& rng, Value x);
 ``
 
 [heading Description]
@@ -18,7 +18,7 @@ Defined in the header file `boost/range/algorithm_ext/iota.hpp`
 
 [heading Requirements]
 
-# `SinglePassRange` is a model of the __single_pass_range__ Concept.
+# `ForwardRange` is a model of the __forward_range__ Concept.
 # `Value` is a model of the `Incrementable` Concept.
 
 [heading Complexity]

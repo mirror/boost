@@ -28,34 +28,38 @@
           Range Algorithm - partial_sort</a>
 </h5></div></div></div>
 <a name="range.reference.algorithms.range_algorithm_mutating_algorithms.partial_sort.prototype"></a><h6>
-<a name="id2902028"></a>
+<a name="id3056083"></a>
             <a class="link" href="partial_sort.html#range.reference.algorithms.range_algorithm_mutating_algorithms.partial_sort.prototype">Prototype</a>
           </h6>
 <p>
             
 </p>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">partial_sort</span><span class="special">(</span><span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
-                  <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">middle</span><span class="special">);</span>
-                 
+<span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">partial_sort</span><span class="special">(</span>
+    <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
+    <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">middle</span><span class="special">);</span>
+
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">partial_sort</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
-                  <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">middle</span><span class="special">);</span>
-                 
+<span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">partial_sort</span><span class="special">(</span>
+    <span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
+    <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">middle</span><span class="special">);</span>
+
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">partial_sort</span><span class="special">(</span><span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
-                  <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">middle</span><span class="special">,</span>
-                  <span class="identifier">BinaryPredicate</span> <span class="identifier">sort_pred</span><span class="special">);</span>
-                 
+<span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">partial_sort</span><span class="special">(</span>
+    <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
+    <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">middle</span><span class="special">,</span>
+    <span class="identifier">BinaryPredicate</span> <span class="identifier">sort_pred</span><span class="special">);</span>
+
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">partial_sort</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
-                  <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">middle</span><span class="special">,</span>
-                  <span class="identifier">BinaryPredicate</span> <span class="identifier">sort_pred</span><span class="special">);</span>
+<span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">partial_sort</span><span class="special">(</span>
+    <span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
+    <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">middle</span><span class="special">,</span>
+    <span class="identifier">BinaryPredicate</span> <span class="identifier">sort_pred</span><span class="special">);</span>
 </pre>
 <p>
           </p>
 <a name="range.reference.algorithms.range_algorithm_mutating_algorithms.partial_sort.description"></a><h6>
-<a name="id2902522"></a>
+<a name="id3056612"></a>
             <a class="link" href="partial_sort.html#range.reference.algorithms.range_algorithm_mutating_algorithms.partial_sort.description">Description</a>
           </h6>
 <p>
@@ -71,14 +75,14 @@
             predicate instead.
           </p>
 <a name="range.reference.algorithms.range_algorithm_mutating_algorithms.partial_sort.definition"></a><h6>
-<a name="id2902709"></a>
+<a name="id3056798"></a>
             <a class="link" href="partial_sort.html#range.reference.algorithms.range_algorithm_mutating_algorithms.partial_sort.definition">Definition</a>
           </h6>
 <p>
             Defined in the header file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">partial_sort</span><span class="special">.</span><span class="identifier">hpp</span></code>
           </p>
 <a name="range.reference.algorithms.range_algorithm_mutating_algorithms.partial_sort.requirements"></a><h6>
-<a name="id2902783"></a>
+<a name="id3056873"></a>
             <a class="link" href="partial_sort.html#range.reference.algorithms.range_algorithm_mutating_algorithms.partial_sort.requirements">Requirements</a>
           </h6>
 <p>
@@ -129,7 +133,7 @@
             </li>
 </ul></div>
 <a name="range.reference.algorithms.range_algorithm_mutating_algorithms.partial_sort.complexity"></a><h6>
-<a name="id2903021"></a>
+<a name="id3057110"></a>
             <a class="link" href="partial_sort.html#range.reference.algorithms.range_algorithm_mutating_algorithms.partial_sort.complexity">Complexity</a>
           </h6>
 <p>
