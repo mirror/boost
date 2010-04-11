@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Polymorphic Function Object</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
 <link rel="prev" href="def_callable.html" title="Deferred Callable Object">
@@ -28,7 +28,7 @@
         Object</a>
 </h4></div></div></div>
 <a name="fusion.functional.concepts.poly.description"></a><h6>
-<a name="id771655"></a>
+<a name="id876140"></a>
           <a class="link" href="poly.html#fusion.functional.concepts.poly.description">Description</a>
         </h6>
 <p>
@@ -36,7 +36,7 @@
           Callable Object</a> type.
         </p>
 <a name="fusion.functional.concepts.poly.refinement_of"></a><h6>
-<a name="id771676"></a>
+<a name="id876161"></a>
           <a class="link" href="poly.html#fusion.functional.concepts.poly.refinement_of">Refinement
           of</a>
         </h6>
@@ -51,34 +51,31 @@
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">F</span></code></span></dt>
 <dd><p>
-              A possibly const-qualified Polymorphic Function Object type
-            </p></dd>
+                A possibly const-qualified Polymorphic Function Object type
+              </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">f</span></code></span></dt>
 <dd><p>
-              An object or reference to an object of type F
-            </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">A1</span>
-          <span class="special">...</span><span class="identifier">AN</span></code></span></dt>
+                An object or reference to an object of type F
+              </p></dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">A1</span> <span class="special">...</span><span class="identifier">AN</span></code></span></dt>
 <dd><p>
-              Argument types
-            </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">a1</span>
-          <span class="special">...</span><span class="identifier">aN</span></code></span></dt>
+                Argument types
+              </p></dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">a1</span> <span class="special">...</span><span class="identifier">aN</span></code></span></dt>
 <dd><p>
-              Objects or references to objects with types <code class="computeroutput"><span class="identifier">A1</span>
-              <span class="special">...</span><span class="identifier">AN</span></code>
-            </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">T1</span>
-          <span class="special">...</span><span class="identifier">TN</span></code></span></dt>
+                Objects or references to objects with types <code class="computeroutput"><span class="identifier">A1</span>
+                <span class="special">...</span><span class="identifier">AN</span></code>
+              </p></dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">T1</span> <span class="special">...</span><span class="identifier">TN</span></code></span></dt>
 <dd><p>
-              <code class="computeroutput"><span class="identifier">T</span></code>i is <code class="computeroutput"><span class="identifier">A</span></code>i <code class="computeroutput"><span class="special">&amp;</span></code>
-              if <code class="computeroutput"><span class="identifier">a</span></code>i is an LValue,
-              same as <code class="computeroutput"><span class="identifier">A</span></code>i, otherwise
-            </p></dd>
+                <code class="computeroutput"><span class="identifier">T</span></code>i is <code class="computeroutput"><span class="identifier">A</span></code>i <code class="computeroutput"><span class="special">&amp;</span></code>
+                if <code class="computeroutput"><span class="identifier">a</span></code>i is an LValue,
+                same as <code class="computeroutput"><span class="identifier">A</span></code>i, otherwise
+              </p></dd>
 </dl>
 </div>
 <a name="fusion.functional.concepts.poly.expression_requirements"></a><h6>
-<a name="id771885"></a>
+<a name="id876376"></a>
           <a class="link" href="poly.html#fusion.functional.concepts.poly.expression_requirements">Expression
           requirements</a>
         </h6>
@@ -90,44 +87,44 @@
 </colgroup>
 <thead><tr>
 <th>
-                <p>
-                  Expression
-                </p>
+                  <p>
+                    Expression
+                  </p>
                 </th>
 <th>
-                <p>
-                  Return Type
-                </p>
+                  <p>
+                    Return Type
+                  </p>
                 </th>
 <th>
-                <p>
-                  Runtime Complexity
-                </p>
+                  <p>
+                    Runtime Complexity
+                  </p>
                 </th>
 </tr></thead>
 <tbody><tr>
 <td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">a1</span><span class="special">,</span>
-                  <span class="special">...</span><span class="identifier">aN</span><span class="special">)</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">a1</span><span class="special">,</span>
+                    <span class="special">...</span><span class="identifier">aN</span><span class="special">)</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">result_of</span><span class="special">&lt;</span>
-                  <span class="identifier">F</span><span class="special">(</span><span class="identifier">T1</span><span class="special">,</span>
-                  <span class="special">...</span><span class="identifier">TN</span><span class="special">)</span> <span class="special">&gt;::</span><span class="identifier">type</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><span class="identifier">result_of</span><span class="special">&lt;</span>
+                    <span class="identifier">F</span><span class="special">(</span><span class="identifier">T1</span><span class="special">,</span>
+                    <span class="special">...</span><span class="identifier">TN</span><span class="special">)</span> <span class="special">&gt;::</span><span class="identifier">type</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  Unspecified
-                </p>
+                  <p>
+                    Unspecified
+                  </p>
                 </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.concepts.poly.models"></a><h6>
-<a name="id772038"></a>
+<a name="id876534"></a>
           <a class="link" href="poly.html#fusion.functional.concepts.poly.models">Models</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
@@ -142,7 +139,7 @@
 </li>
 </ul></div>
 <a name="fusion.functional.concepts.poly.examples"></a><h6>
-<a name="id772070"></a>
+<a name="id876567"></a>
           <a class="link" href="poly.html#fusion.functional.concepts.poly.examples">Examples</a>
         </h6>
 <pre class="programlisting"><span class="special">&amp;</span> <span class="identifier">a_free_function</span>

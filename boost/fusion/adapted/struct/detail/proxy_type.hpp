@@ -11,7 +11,7 @@
 
 #include <boost/fusion/adapted/struct/detail/namespace.hpp>
 
-#define BOOST_FUSION_ADAPT_STRUCT_DEFINE_PROXY_TYPE(                            \
+#define BOOST_FUSION_ADAPT_STRUCT_DEFINE_PROXY_TYPE_IMPL(                       \
     WRAPPED_TYPE,NAMESPACE_SEQ,NAME)                                            \
                                                                                 \
     BOOST_FUSION_ADAPT_STRUCT_NAMESPACE_DEFINITION_BEGIN(NAMESPACE_SEQ)         \
@@ -26,5 +26,11 @@
     };                                                                          \
                                                                                 \
     BOOST_FUSION_ADAPT_STRUCT_NAMESPACE_DEFINITION_END(NAMESPACE_SEQ)
+
+#define BOOST_FUSION_ADAPT_STRUCT_DEFINE_PROXY_TYPE(                            \
+    WRAPPED_TYPE, NAMESPACE_SEQ, NAME)                                          \
+                                                                                \
+    BOOST_FUSION_ADAPT_STRUCT_DEFINE_PROXY_TYPE_IMPL(                           \
+        WRAPPED_TYPE, (0)NAMESPACE_SEQ, NAME)
 
 #endif

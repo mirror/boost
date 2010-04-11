@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>zip_view</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../view.html" title="View">
 <link rel="prev" href="joint_view.html" title="joint_view">
@@ -27,7 +27,7 @@
 <a name="fusion.view.zip_view"></a><a class="link" href="zip_view.html" title="zip_view">zip_view</a>
 </h3></div></div></div>
 <a name="fusion.view.zip_view.description"></a><h5>
-<a name="id682651"></a>
+<a name="id779739"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.description">Description</a>
       </h5>
 <p>
@@ -38,21 +38,21 @@
         to the component <span class="underline">_sequence</span>_s.
       </p>
 <a name="fusion.view.zip_view.header"></a><h5>
-<a name="id682698"></a>
+<a name="id779785"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.header">Header</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">zip_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">zip_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.view.zip_view.synopsis"></a><h5>
-<a name="id682806"></a>
+<a name="id782078"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequences</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">zip_view</span><span class="special">;</span>
 </pre>
 <a name="fusion.view.zip_view.template_parameters"></a><h5>
-<a name="id682857"></a>
+<a name="id782130"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.template_parameters">Template parameters</a>
       </h5>
 <div class="informaltable"><table class="table">
@@ -63,41 +63,41 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Parameter
-              </p>
+                <p>
+                  Parameter
+                </p>
               </th>
 <th>
-              <p>
-                Description
-              </p>
+                <p>
+                  Description
+                </p>
               </th>
 <th>
-              <p>
-                Default
-              </p>
+                <p>
+                  Default
+                </p>
               </th>
 </tr></thead>
 <tbody><tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">Sequences</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Sequences</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                A <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
-                Sequence</a> of references to other Fusion <span class="underline">_sequence</span>_s
-              </p>
+                <p>
+                  A <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+                  Sequence</a> of references to other Fusion <span class="underline">_sequence</span>_s
+                </p>
               </td>
 <td>
-              <p>
-              </p>
+                <p>
+                </p>
               </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.view.zip_view.model_of"></a><h5>
-<a name="id682950"></a>
+<a name="id782227"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.model_of">Model of</a>
       </h5>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
@@ -113,21 +113,20 @@
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">ZV</span></code></span></dt>
 <dd><p>
-            A <code class="computeroutput"><span class="identifier">zip_view</span></code> type
-          </p></dd>
+              A <code class="computeroutput"><span class="identifier">zip_view</span></code> type
+            </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
 <dd><p>
-            An instance of <code class="computeroutput"><span class="identifier">Sequences</span></code>
-          </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">zv1</span></code>,
-        <code class="computeroutput"><span class="identifier">zv2</span></code></span></dt>
+              An instance of <code class="computeroutput"><span class="identifier">Sequences</span></code>
+            </p></dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">zv1</span></code>, <code class="computeroutput"><span class="identifier">zv2</span></code></span></dt>
 <dd><p>
-            Instances of <code class="computeroutput"><span class="identifier">ZV</span></code>
-          </p></dd>
+              Instances of <code class="computeroutput"><span class="identifier">ZV</span></code>
+            </p></dd>
 </dl>
 </div>
 <a name="fusion.view.zip_view.expression_semantics"></a><h5>
-<a name="id683080"></a>
+<a name="id782362"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.expression_semantics">Expression Semantics</a>
       </h5>
 <p>
@@ -142,63 +141,63 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Expression
-              </p>
+                <p>
+                  Expression
+                </p>
               </th>
 <th>
-              <p>
-                Semantics
-              </p>
+                <p>
+                  Semantics
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">ZV</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">ZV</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                Creates a <code class="computeroutput"><span class="identifier">zip_view</span></code>
-                given a sequence of references to the component <span class="underline">_sequence</span>_s.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">ZV</span><span class="special">(</span><span class="identifier">zv1</span><span class="special">)</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                Copy constructs a <code class="computeroutput"><span class="identifier">zip_view</span></code>
-                from another <code class="computeroutput"><span class="identifier">zip_view</span></code>,
-                <code class="computeroutput"><span class="identifier">zv</span></code>.
-              </p>
+                <p>
+                  Creates a <code class="computeroutput"><span class="identifier">zip_view</span></code>
+                  given a sequence of references to the component <span class="underline">_sequence</span>_s.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                <code class="computeroutput"><span class="identifier">zv1</span> <span class="special">=</span>
-                <span class="identifier">zv2</span></code>
-              </p>
+                <p>
+                  <code class="computeroutput"><span class="identifier">ZV</span><span class="special">(</span><span class="identifier">zv1</span><span class="special">)</span></code>
+                </p>
               </td>
 <td>
-              <p>
-                Assigns to a <code class="computeroutput"><span class="identifier">zip_view</span></code>,
-                <code class="computeroutput"><span class="identifier">zv</span></code>, from another
-                <code class="computeroutput"><span class="identifier">zip_view</span></code>, <code class="computeroutput"><span class="identifier">zv2</span></code>.
-              </p>
+                <p>
+                  Copy constructs a <code class="computeroutput"><span class="identifier">zip_view</span></code>
+                  from another <code class="computeroutput"><span class="identifier">zip_view</span></code>,
+                  <code class="computeroutput"><span class="identifier">zv</span></code>.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">zv1</span> <span class="special">=</span>
+                  <span class="identifier">zv2</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Assigns to a <code class="computeroutput"><span class="identifier">zip_view</span></code>,
+                  <code class="computeroutput"><span class="identifier">zv</span></code>, from another
+                  <code class="computeroutput"><span class="identifier">zip_view</span></code>, <code class="computeroutput"><span class="identifier">zv2</span></code>.
+                </p>
               </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.view.zip_view.example"></a><h5>
-<a name="id683301"></a>
+<a name="id782587"></a>
         <a class="link" href="zip_view.html#fusion.view.zip_view.example">Example</a>
       </h5>
 <pre class="programlisting"><span class="keyword">typedef</span> <a class="link" href="../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec1</span><span class="special">;</span>

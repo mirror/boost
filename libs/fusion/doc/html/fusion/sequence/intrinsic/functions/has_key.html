@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>has_key</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="at_c.html" title="at_c">
@@ -27,7 +27,7 @@
 <a name="fusion.sequence.intrinsic.functions.has_key"></a><a class="link" href="has_key.html" title="has_key">has_key</a>
 </h5></div></div></div>
 <a name="fusion.sequence.intrinsic.functions.has_key.description"></a><h6>
-<a name="id612790"></a>
+<a name="id710596"></a>
             <a class="link" href="has_key.html#fusion.sequence.intrinsic.functions.has_key.description">Description</a>
           </h6>
 <p>
@@ -37,7 +37,7 @@
             to <code class="computeroutput"><span class="keyword">false</span></code>.
           </p>
 <a name="fusion.sequence.intrinsic.functions.has_key.synopsis"></a><h6>
-<a name="id612829"></a>
+<a name="id710634"></a>
             <a class="link" href="has_key.html#fusion.sequence.intrinsic.functions.has_key.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Key</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
@@ -45,7 +45,7 @@
 <span class="identifier">has_key</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <a name="fusion.sequence.intrinsic.functions.has_key.parameters"></a><h6>
-<a name="id612954"></a>
+<a name="id711989"></a>
             <a class="link" href="has_key.html#fusion.sequence.intrinsic.functions.has_key.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -56,61 +56,61 @@
 </colgroup>
 <thead><tr>
 <th>
-                  <p>
-                    Parameter
-                  </p>
+                    <p>
+                      Parameter
+                    </p>
                   </th>
 <th>
-                  <p>
-                    Requirement
-                  </p>
+                    <p>
+                      Requirement
+                    </p>
                   </th>
 <th>
-                  <p>
-                    Description
-                  </p>
+                    <p>
+                      Description
+                    </p>
                   </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                  <p>
-                    <code class="computeroutput"><span class="identifier">seq</span></code>
-                  </p>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">seq</span></code>
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Model of <a class="link" href="../../concepts/associative_sequence.html" title="Associative Sequence">Associative
-                    Sequence</a>
-                  </p>
+                    <p>
+                      Model of <a class="link" href="../../concepts/associative_sequence.html" title="Associative Sequence">Associative
+                      Sequence</a>
+                    </p>
                   </td>
 <td>
-                  <p>
-                    The sequence we wish to investigate.
-                  </p>
+                    <p>
+                      The sequence we wish to investigate.
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    <code class="computeroutput"><span class="identifier">Key</span></code>
-                  </p>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">Key</span></code>
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Any type
-                  </p>
+                    <p>
+                      Any type
+                    </p>
                   </td>
 <td>
-                  <p>
-                    The queried key.
-                  </p>
+                    <p>
+                      The queried key.
+                    </p>
                   </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequence.intrinsic.functions.has_key.expression_semantics"></a><h6>
-<a name="id613072"></a>
+<a name="id712115"></a>
             <a class="link" href="has_key.html#fusion.sequence.intrinsic.functions.has_key.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -124,14 +124,14 @@
             associated with Key, else, evaluates to <code class="computeroutput"><span class="keyword">false</span></code>.
           </p>
 <a name="fusion.sequence.intrinsic.functions.has_key.header"></a><h6>
-<a name="id613150"></a>
+<a name="id712193"></a>
             <a class="link" href="has_key.html#fusion.sequence.intrinsic.functions.has_key.header">Header</a>
           </h6>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">intrinsic</span><span class="special">/</span><span class="identifier">has_key</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">has_key</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequence.intrinsic.functions.has_key.example"></a><h6>
-<a name="id613266"></a>
+<a name="id712308"></a>
             <a class="link" href="has_key.html#fusion.sequence.intrinsic.functions.has_key.example">Example</a>
           </h6>
 <pre class="programlisting"><a class="link" href="../../../container/set.html" title="set"><code class="computeroutput"><span class="identifier">set</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">s</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'x'</span><span class="special">,</span> <span class="keyword">true</span><span class="special">);</span>

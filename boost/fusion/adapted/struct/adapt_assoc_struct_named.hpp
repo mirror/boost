@@ -20,7 +20,7 @@
 #define BOOST_FUSION_ADAPT_ASSOC_STRUCT_NAMED_NS(                               \
     WRAPPED_TYPE, NAMESPACE_SEQ, NAME, ATTRIBUTES)                              \
                                                                                 \
-    BOOST_FUSION_ADAPT_STRUCT_DEFINE_PROXY_TYPE(                                \
+    BOOST_FUSION_ADAPT_STRUCT_DEFINE_PROXY_TYPE_IMPL(                           \
         WRAPPED_TYPE,(0)NAMESPACE_SEQ,NAME)                                     \
                                                                                 \
     BOOST_FUSION_ADAPT_STRUCT_BASE(                                             \

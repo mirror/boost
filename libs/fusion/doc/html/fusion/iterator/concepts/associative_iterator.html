@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Associative Iterator</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../../index.html" title="Chapter&#160;1.&#160;Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
 <link rel="prev" href="random_access_iterator.html" title="Random Access Iterator">
@@ -28,7 +28,7 @@
         Iterator</a>
 </h4></div></div></div>
 <a name="fusion.iterator.concepts.associative_iterator.description"></a><h6>
-<a name="id577878"></a>
+<a name="id676311"></a>
           <a class="link" href="associative_iterator.html#fusion.iterator.concepts.associative_iterator.description">Description</a>
         </h6>
 <p>
@@ -41,16 +41,16 @@
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">i</span></code></span></dt>
 <dd><p>
-              Associative Iterator
-            </p></dd>
+                Associative Iterator
+              </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">I</span></code></span></dt>
 <dd><p>
-              Associative Iterator type
-            </p></dd>
+                Associative Iterator type
+              </p></dd>
 </dl>
 </div>
 <a name="fusion.iterator.concepts.associative_iterator.refinement_of"></a><h6>
-<a name="id577943"></a>
+<a name="id676379"></a>
           <a class="link" href="associative_iterator.html#fusion.iterator.concepts.associative_iterator.refinement_of">Refinement
           of</a>
         </h6>
@@ -61,7 +61,7 @@
           Access Iterator</a>
         </p>
 <a name="fusion.iterator.concepts.associative_iterator.expression_requirements"></a><h6>
-<a name="id577976"></a>
+<a name="id676413"></a>
           <a class="link" href="associative_iterator.html#fusion.iterator.concepts.associative_iterator.expression_requirements">Expression
           requirements</a>
         </h6>
@@ -79,41 +79,41 @@
 </colgroup>
 <thead><tr>
 <th>
-                <p>
-                  Expression
-                </p>
+                  <p>
+                    Expression
+                  </p>
                 </th>
 <th>
-                <p>
-                  Return type
-                </p>
+                  <p>
+                    Return type
+                  </p>
                 </th>
 <th>
-                <p>
-                  Runtime Complexity
-                </p>
+                  <p>
+                    Runtime Complexity
+                  </p>
                 </th>
 </tr></thead>
 <tbody><tr>
 <td>
-                <p>
-                  <code class="computeroutput"><a class="link" href="../functions/deref_data.html" title="deref_data"><code class="computeroutput"><span class="identifier">deref_data</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><a class="link" href="../functions/deref_data.html" title="deref_data"><code class="computeroutput"><span class="identifier">deref_data</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  <code class="computeroutput"><a class="link" href="../metafunctions/deref_data.html" title="deref_data"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref_data</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><a class="link" href="../metafunctions/deref_data.html" title="deref_data"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref_data</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  Constant
-                </p>
+                  <p>
+                    Constant
+                  </p>
                 </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.iterator.concepts.associative_iterator.meta_expressions"></a><h6>
-<a name="id578129"></a>
+<a name="id676571"></a>
           <a class="link" href="associative_iterator.html#fusion.iterator.concepts.associative_iterator.meta_expressions">Meta
           Expressions</a>
         </h6>
@@ -124,57 +124,57 @@
 </colgroup>
 <thead><tr>
 <th>
-                <p>
-                  Expression
-                </p>
+                  <p>
+                    Expression
+                  </p>
                 </th>
 <th>
-                <p>
-                  Compile Time Complexity
-                </p>
+                  <p>
+                    Compile Time Complexity
+                  </p>
                 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                <p>
-                  <code class="computeroutput"><a class="link" href="../metafunctions/key_of.html" title="key_of"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">key_of</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><a class="link" href="../metafunctions/key_of.html" title="key_of"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">key_of</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  Amortized constant time
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><a class="link" href="../metafunctions/value_of_data.html" title="value_of_data"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_of_data</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-                </p>
-                </td>
-<td>
-                <p>
-                  Amortized constant time
-                </p>
+                  <p>
+                    Amortized constant time
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  <code class="computeroutput"><a class="link" href="../metafunctions/deref_data.html" title="deref_data"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref_data</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-                </p>
+                  <p>
+                    <code class="computeroutput"><a class="link" href="../metafunctions/value_of_data.html" title="value_of_data"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_of_data</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                  </p>
                 </td>
 <td>
-                <p>
-                  Amortized constant time
-                </p>
+                  <p>
+                    Amortized constant time
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    <code class="computeroutput"><a class="link" href="../metafunctions/deref_data.html" title="deref_data"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref_data</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Amortized constant time
+                  </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.iterator.concepts.associative_iterator.models"></a><h6>
-<a name="id578334"></a>
+<a name="id676781"></a>
           <a class="link" href="associative_iterator.html#fusion.iterator.concepts.associative_iterator.models">Models</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
