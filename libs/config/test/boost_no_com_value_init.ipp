@@ -426,7 +426,7 @@ namespace boost_no_complete_value_initialization
         (IS_VALUE_INITIALIZED(m_enum_holder_and_int_array[1]) ? 0 : 1) + 
         (IS_VALUE_INITIALIZED(m_private_and_protected_int) ? 0 : 1) + 
         (IS_VALUE_INITIALIZED(m_private_and_protected_int_array[0]) ? 0 : 1 ) +
-        (IS_VALUE_INITIALIZED(m_private_and_protected_int_array[1]) ? 0 : 1 );
+        (IS_VALUE_INITIALIZED(m_private_and_protected_int_array[1]) ? 0 : 1 ) +
         (IS_VALUE_INITIALIZED(m_user_defined_destructor_holder) ? 0 : 1) + 
         (IS_VALUE_INITIALIZED(m_user_defined_destructor_holder_array[0])  ? 0 : 1) + 
         (IS_VALUE_INITIALIZED(m_user_defined_destructor_holder_array[1]) ? 0 : 1) + 
@@ -458,7 +458,7 @@ namespace boost_no_complete_value_initialization
     {
       std::cout << "Number of initialization failures on the stack: " << num_failures_on_stack
         << "\nNumber of initialization failures on the heap: " << num_failures_on_heap
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 6."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 7."
         << std::endl;
     }
     return static_cast<int>(num_failures_on_stack + num_failures_on_heap);
