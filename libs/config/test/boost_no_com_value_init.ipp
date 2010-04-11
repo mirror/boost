@@ -101,6 +101,47 @@ namespace boost_no_complete_value_initialization
     return arg.data == 0;
   }
 
+  struct char_array_struct
+  {
+    char data[42];
+  };
+
+  bool is_value_initialized(const char_array_struct& arg)
+  {
+    for ( unsigned i = 0; i < sizeof(arg.data); ++i)
+    {
+      if ( arg.data[i] != 0 )
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
+
+  // Equivalent to the Stats class from GCC Bug 33916,
+  // "Default constructor fails to initialize array members", reported by
+  // Michael Elizabeth Chastain: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=33916
+  class int_array_pair
+  {
+    friend bool is_value_initialized(const int_array_pair& arg);
+  private:
+    int first[12];
+    int second[12];
+  };
+
+  bool is_value_initialized(const int_array_pair& arg)
+  {
+    for ( unsigned i = 0; i < 12; ++i)
+    {
+      if ( (arg.first[i] != 0) || (arg.second[i] != 0) )
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
   union pod_struct_and_int_union
   {
     pod_struct first;
@@ -297,6 +338,10 @@ namespace boost_no_complete_value_initialization
     derived_struct m_derived_struct_array[2];
     derived_int_struct m_derived_int_struct;
     derived_int_struct m_derived_int_struct_array[2];
+    char_array_struct m_char_array_struct;
+    char_array_struct m_char_array_struct_array[2];
+    int_array_pair m_int_array_pair;
+    int_array_pair m_int_array_pair_array[2];
     enum_holder_and_int m_enum_holder_and_int;
     enum_holder_and_int m_enum_holder_and_int_array[2];
     private_and_protected_int m_private_and_protected_int;
@@ -349,6 +394,10 @@ namespace boost_no_complete_value_initialization
     m_derived_struct_array(),
     m_derived_int_struct(),
     m_derived_int_struct_array(),
+    m_char_array_struct(),
+    m_char_array_struct_array(),
+    m_int_array_pair(),
+    m_int_array_pair_array(),
     m_enum_holder_and_int(),
     m_enum_holder_and_int_array(),
     m_private_and_protected_int(),
@@ -421,6 +470,12 @@ namespace boost_no_complete_value_initialization
         (IS_VALUE_INITIALIZED(m_derived_int_struct) ? 0 : 1) + 
         (IS_VALUE_INITIALIZED(m_derived_int_struct_array[0]) ? 0 : 1) + 
         (IS_VALUE_INITIALIZED(m_derived_int_struct_array[1]) ? 0 : 1) + 
+        (IS_VALUE_INITIALIZED(m_char_array_struct) ? 0 : 1) +
+        (IS_VALUE_INITIALIZED(m_char_array_struct_array[0]) ? 0 : 1) +
+        (IS_VALUE_INITIALIZED(m_char_array_struct_array[1]) ? 0 : 1) +
+        (IS_VALUE_INITIALIZED(m_int_array_pair) ? 0 : 1) +
+        (IS_VALUE_INITIALIZED(m_int_array_pair_array[0]) ? 0 : 1) +
+        (IS_VALUE_INITIALIZED(m_int_array_pair_array[1]) ? 0 : 1) +
         (IS_VALUE_INITIALIZED(m_enum_holder_and_int) ? 0 : 1) + 
         (IS_VALUE_INITIALIZED(m_enum_holder_and_int_array[0]) ? 0 : 1) + 
         (IS_VALUE_INITIALIZED(m_enum_holder_and_int_array[1]) ? 0 : 1) + 
@@ -446,9 +501,21 @@ namespace boost_no_complete_value_initialization
     }
   };
 
+  // Equivalent to the dirty_stack() function from GCC Bug 33916,
+  // "Default constructor fails to initialize array members", reported by
+  // Michael Elizabeth Chastain: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=33916
+  void dirty_stack()
+  {
+    unsigned char array_on_stack[sizeof(value_initializer) + 256];
+    for (unsigned i = 0; i < sizeof(array_on_stack); ++i)
+    {
+      array_on_stack[i] = 0x11;
+    }
+  }
 
   int test()
   {
+    dirty_stack();
     // Check both value-initialization on the stack and on the heap:
     const unsigned num_failures_on_stack = value_initializer().check();
     const value_initializer* const ptr = new value_initializer();
@@ -458,7 +525,7 @@ namespace boost_no_complete_value_initialization
     {
       std::cout << "Number of initialization failures on the stack: " << num_failures_on_stack
         << "\nNumber of initialization failures on the heap: " << num_failures_on_heap
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 7."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 8."
         << std::endl;
     }
     return static_cast<int>(num_failures_on_stack + num_failures_on_heap);
