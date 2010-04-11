@@ -128,4 +128,6 @@ test-suite numeric/uBLAS
       ]
       [ run test_coordinate_matrix_sort.cpp
       ]
+      [ run test_complex_norms.cpp
+      ]
     ;
