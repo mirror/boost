@@ -72,7 +72,7 @@ namespace boost_no_complete_value_initialization
     return arg.data == 0;
   }
 
-  // Equivalent to the struct TData from CodeGear bug report 51854
+  // Equivalent to the struct TData from CodeGear bug report 51854,
   // "Value-initialization: POD struct should be zero-initialized",
   // reported by me (Niels Dekker, LKEB) in 2007:
   // http://qc.embarcadero.com/wc/qcmain.aspx?d=51854
@@ -372,6 +372,15 @@ namespace boost_no_complete_value_initialization
   public:
     value_initializer()
     :
+    // Note: CodeGear/Borland may produce a warning, W8039, for each data member
+    // whose type is an array type, saying "Constructor initializer list ignored".
+    // If it does, it probably won't value-initialize those arrays, as reported
+    // by me (Niels Dekker, LKEB) in 2010, report 83751, "Value-initialization:
+    // arrays should have each element value-initialized",
+    // http://qc.embarcadero.com/wc/qcmain.aspx?d=83751
+    // On the other hand, Microsoft Visual C++ may produce warnings of type C4351,
+    // saying "new behavior: elements of array '...' will be default initialized",
+    // which is actually the right behavior!
     int_struct(),
     m_enum_holder(),
     m_enum_holder_array(),
