@@ -298,7 +298,7 @@ namespace boost_no_complete_value_initialization
   {
     if ( ! is_variable_value_initializated )
     {
-      std::cout << "Note: " << variable_name << " is not value-initialized." << std::endl;
+      std::cout << "Note: Failed to value-initialize " << variable_name << '.' << std::endl;
     }
     return is_variable_value_initializated;
   }
@@ -544,7 +544,7 @@ namespace boost_no_complete_value_initialization
     const unsigned num_failures_of_a_temporary = value_initializer().check();
     if ( num_failures_of_a_temporary > 0 )
     {
-      std::cout << "  Number of initialization failures of a temporary: "
+      std::cout << "- Number of initialization failures of a temporary: "
         << num_failures_of_a_temporary << std::endl;
     }
     dirty_stack();
@@ -552,7 +552,7 @@ namespace boost_no_complete_value_initialization
     const unsigned num_failures_on_stack = object_on_stack.check();
     if ( num_failures_of_a_temporary > 0 || num_failures_on_stack > 0 )
     {
-      std::cout << "  Number of initialization failures on the stack: "
+      std::cout << "- Number of initialization failures on the stack: "
         << num_failures_on_stack << std::endl;
     }
     const value_initializer* const ptr = new value_initializer();
@@ -562,14 +562,14 @@ namespace boost_no_complete_value_initialization
     const unsigned total_num_failures = num_failures_of_a_temporary + num_failures_on_stack + num_failures_on_heap;
     if ( total_num_failures > 0 )
     {
-      std::cout <<  "  Number of initialization failures on the heap: "
+      std::cout <<  "- Number of initialization failures on the heap: "
         << num_failures_on_heap
-        << "\n  Total number of initialization failures ("
+        << "\n-- Total number of initialization failures ("
         << num_failures_of_a_temporary << '+'
         << num_failures_on_stack << '+'
         << num_failures_on_heap << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 10."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 11."
         << std::endl;
     }
     return static_cast<int>(num_failures_on_stack + num_failures_on_heap);
