@@ -10,12 +10,12 @@
 //  DESCRIPTION:   The C++ compiler does not to have implemented value-initialization completely.
 //  See also boost/libs/utility/value_init.htm#compiler_issues
 
-#include <cstdlib>
 #include <iostream>
 
 namespace boost_no_complete_value_initialization
 {
   enum enum_type { negative_number = -1, magic_number = 42 };
+
 
   // A POD struct.
   struct pod_struct
@@ -47,6 +47,7 @@ namespace boost_no_complete_value_initialization
       arg.p == 0;
   }
 
+
   struct derived_pod_struct: pod_struct
   {
     int derived_data;
@@ -57,6 +58,7 @@ namespace boost_no_complete_value_initialization
     const pod_struct& base_subobject = arg; 
     return arg.derived_data == 0 && is_value_initialized(base_subobject);
   }
+
 
   struct empty_struct
   {
@@ -72,6 +74,7 @@ namespace boost_no_complete_value_initialization
     return arg.data == 0;
   }
 
+
   // Equivalent to the struct TData from CodeGear bug report 51854,
   // "Value-initialization: POD struct should be zero-initialized",
   // reported by me (Niels Dekker, LKEB) in 2007:
@@ -86,6 +89,7 @@ namespace boost_no_complete_value_initialization
     return arg.data == 0;
   }
 
+
   struct int_struct_holder
   {
     int_struct data;
@@ -96,6 +100,7 @@ namespace boost_no_complete_value_initialization
     return is_value_initialized(arg.data);
   }
 
+
   struct derived_int_struct: int_struct
   {
   };
@@ -104,6 +109,7 @@ namespace boost_no_complete_value_initialization
   {
     return arg.data == 0;
   }
+
 
   struct char_array_struct
   {
@@ -145,6 +151,7 @@ namespace boost_no_complete_value_initialization
     }
     return true;
   }
+
 
   union pod_struct_and_int_union
   {
@@ -192,10 +199,10 @@ namespace boost_no_complete_value_initialization
     }
   };
 
-    bool is_value_initialized(const enum_holder& arg)
-    {
-      return arg.is_value_initialized();
-    }
+  bool is_value_initialized(const enum_holder& arg)
+  {
+    return arg.is_value_initialized();
+  }
 
 
   // An aggregate struct of a non-POD class and an int.
@@ -305,6 +312,7 @@ namespace boost_no_complete_value_initialization
 
 #define IS_VALUE_INITIALIZED(value) is_true( is_value_initialized(value), #value)
 
+
   // value_initializer initializes each of its data members by means
   // of an empty set of parentheses, and allows checking whether
   // each of them is indeed value-initialized, as specified by 
@@ -370,6 +378,8 @@ namespace boost_no_complete_value_initialization
     int_and_pod_struct_union m_int_and_pod_struct_union_array[2];
 
   public:
+    // Default constructor. Tries to value-initialize its base subobject and all
+    // of its data.members.
     value_initializer()
     :
     // Note: CodeGear/Borland may produce a warning, W8039, for each data member
@@ -441,7 +451,7 @@ namespace boost_no_complete_value_initialization
     unsigned check() const
     {
       const unsigned num_failures = 
-        (IS_VALUE_INITIALIZED(data) ? 0 : 1) +
+        (IS_VALUE_INITIALIZED(int_struct::data) ? 0 : 1) +
         (IS_VALUE_INITIALIZED(m_enum_holder) ? 0 : 1) +
         (IS_VALUE_INITIALIZED(m_enum_holder_array[0]) ? 0 : 1) +
         (IS_VALUE_INITIALIZED(m_enum_holder_array[1]) ? 0 : 1) +
@@ -524,6 +534,7 @@ namespace boost_no_complete_value_initialization
     }
   };
 
+
   // Equivalent to the dirty_stack() function from GCC Bug 33916,
   // "Default constructor fails to initialize array members", reported in 2007 by
   // Michael Elizabeth Chastain: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=33916
@@ -535,6 +546,7 @@ namespace boost_no_complete_value_initialization
       array_on_stack[i] = 0x11;
     }
   }
+
 
   int test()
   {
@@ -559,7 +571,9 @@ namespace boost_no_complete_value_initialization
     const unsigned num_failures_on_heap = ptr->check();
     delete ptr;
 
-    const unsigned total_num_failures = num_failures_of_a_temporary + num_failures_on_stack + num_failures_on_heap;
+    const unsigned total_num_failures = num_failures_of_a_temporary + 
+      num_failures_on_stack + num_failures_on_heap;
+
     if ( total_num_failures > 0 )
     {
       std::cout <<  "- Number of initialization failures on the heap: "
@@ -569,10 +583,10 @@ namespace boost_no_complete_value_initialization
         << num_failures_on_stack << '+'
         << num_failures_on_heap << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 11."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 12."
         << std::endl;
     }
-    return static_cast<int>(num_failures_on_stack + num_failures_on_heap);
+    return static_cast<int>(total_num_failures);
   }
 
 }  // End of namespace.
