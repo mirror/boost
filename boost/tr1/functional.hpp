@@ -48,7 +48,10 @@ namespace std{ namespace tr1{
 
 namespace std{ namespace tr1{
 
-   using ::boost::result_of;
+   template<class F>
+   struct result_of
+     : ::boost::tr1_result_of<F>
+   {};
 
 } }
 

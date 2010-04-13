@@ -5,6 +5,8 @@
 //  1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
+#define BOOST_RESULT_OF_USE_DECLTYPE
+
 // For more information, see http://www.boost.org/libs/utility
 #include <boost/utility/result_of.hpp>
 #include <utility>
@@ -131,6 +133,18 @@ int main()
   BOOST_STATIC_ASSERT((is_same<result_of<int_result_of_template<void>(double)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<const int_result_of_template<void>(double)>::type, int>::value));
 
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<int_result_type(float)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<int_result_of(double)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<const int_result_of(double)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<int_result_type_template<void>(float)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<int_result_of_template<void>(double)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<const int_result_of_template<void>(double)>::type, int>::value));
+
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<int_result_of(void)>::type, void>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<volatile int_result_of(void)>::type, void>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<int_result_of_template<void>(void)>::type, void>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<volatile int_result_of_template<void>(void)>::type, void>::value));
+
   // Prior to decltype, result_of could not deduce the return type
   // nullary function objects unless they exposed a result_type.
 #if !defined(BOOST_NO_DECLTYPE)
@@ -144,6 +158,9 @@ int main()
   BOOST_STATIC_ASSERT((is_same<result_of<int_result_of_template<void>(void)>::type, void>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<volatile int_result_of_template<void>(void)>::type, void>::value));
 #endif
+
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<int_result_type_and_float_result_of_and_char_return(char)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<int_result_type_and_float_result_of_and_char_return_template<void>(char)>::type, int>::value));
 
   // Prior to decltype, result_of ignored a nested result<> if
   // result_type was defined. After decltype, result_of deduces the
@@ -168,6 +185,17 @@ int main()
   BOOST_STATIC_ASSERT((is_same<result_of<mem_func_ptr_0(X)>::type, int>::value)); 
   BOOST_STATIC_ASSERT((is_same<result_of<func_ptr(void)>::type, int>::value));
 
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<func_ptr(char, float)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<func_ref(char, float)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<func_ptr_0()>::type, int>::value)); 
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<func_ref_0()>::type, int>::value)); 
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<mem_func_ptr(X,char)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<mem_func_ptr_c(X,char)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<mem_func_ptr_v(X,char)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<mem_func_ptr_cv(X,char)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<mem_func_ptr_0(X)>::type, int>::value)); 
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<func_ptr(void)>::type, int>::value));
+
   BOOST_STATIC_ASSERT((is_same<result_of<result_of_member_function_template(double)>::type, double>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<const result_of_member_function_template(double)>::type, const double>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<volatile result_of_member_function_template(double)>::type, volatile double>::value));
@@ -177,9 +205,21 @@ int main()
   BOOST_STATIC_ASSERT((is_same<result_of<result_of_member_function_template(int volatile &, int)>::type, int volatile &>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<result_of_member_function_template(int const volatile &, int)>::type, int const volatile &>::value));
 
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<result_of_member_function_template(double)>::type, double>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<const result_of_member_function_template(double)>::type, const double>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<volatile result_of_member_function_template(double)>::type, volatile double>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<const volatile result_of_member_function_template(double)>::type, const volatile double>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<result_of_member_function_template(int &, int)>::type, int &>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<result_of_member_function_template(int const &, int)>::type, int const &>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<result_of_member_function_template(int volatile &, int)>::type, int volatile &>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<result_of_member_function_template(int const volatile &, int)>::type, int const volatile &>::value));
+
   typedef int (*pf_t)(int);
   BOOST_STATIC_ASSERT((is_same<result_of<pf_t(int)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<pf_t const(int)>::type,int>::value));
+
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<pf_t(int)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<tr1_result_of<pf_t const(int)>::type,int>::value));
 
 #if !defined(BOOST_NO_DECLTYPE)
   BOOST_STATIC_ASSERT((is_same<result_of<no_result_type_or_result_of(double)>::type, int>::value));
