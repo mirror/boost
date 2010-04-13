@@ -133,6 +133,7 @@ test-suite range :
 #   	[ range-test mfc : <include>$(VC71_ROOT)/atlmfc/include ]
     [ range-test join ]
 	[ range-test partial_workaround ]
+	[ range-test pointer_as_iterator ]
 	[ range-test reversible_range ]
 	[ range-test std_container ]
 	[ range-test string ]

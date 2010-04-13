@@ -298,14 +298,22 @@ namespace boost
                return m_Begin[at];
            }
 #else
-           BOOST_DEDUCED_TYPENAME boost::detail::operator_brackets_result<iterator, value_type, reference>::type
-           operator[]( difference_type at ) const
-           {
-               BOOST_ASSERT( at >= 0 && at < size() );
-
-               typedef boost::detail::use_operator_brackets_proxy<value_type,reference> use_proxy;
-               return boost::detail::make_operator_brackets_result<iterator>(m_Begin + at, use_proxy());
-           }
+            // Using the operator_brackets_result mechanism properly supports
+            // the corner cases with proxies for references etc. However
+            // the operator_brackets_result implementation does not support
+            // pointers as iterators. Since a pointer can't have the
+            // issues with proxies this implementation uses a simpler
+            // implementation if the iterator is a pointer.
+            BOOST_DEDUCED_TYPENAME boost::mpl::if_<
+                boost::is_pointer<iterator>,
+                reference,
+                BOOST_DEDUCED_TYPENAME boost::detail::operator_brackets_result<iterator, value_type, reference>::type
+            >::type
+            operator[]( difference_type at ) const
+            {
+                BOOST_ASSERT( at >= 0 && at < size() );
+                return get_at(m_Begin, at);
+            }
 #endif
 
            //
@@ -332,6 +340,27 @@ namespace boost
            }
 
         private:
+            template<class Iterator>
+            static BOOST_DEDUCED_TYPENAME boost::enable_if<
+                boost::is_pointer<Iterator>,
+                reference
+                >::type
+            get_at( Iterator it, difference_type at )
+            {
+                return it[at];
+            }
+
+            template<class Iterator>
+            static BOOST_DEDUCED_TYPENAME boost::disable_if<
+                boost::is_pointer<Iterator>,
+                BOOST_DEDUCED_TYPENAME boost::detail::operator_brackets_result<Iterator, value_type, reference>::type
+                >::type
+            get_at( Iterator it, difference_type at )
+            {
+               typedef boost::detail::use_operator_brackets_proxy<value_type,reference> use_proxy;
+               return boost::detail::make_operator_brackets_result<Iterator>(it + at, use_proxy());
+            }
+
             // begin and end iterators
             IteratorT m_Begin;
             IteratorT m_End;
