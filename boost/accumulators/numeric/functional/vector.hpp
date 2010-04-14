@@ -28,7 +28,7 @@ namespace boost { namespace numeric
 {
     namespace operators
     {
-        namespace detail
+        namespace acc_detail
         {
             template<typename Fun>
             struct make_vector
@@ -42,7 +42,7 @@ namespace boost { namespace numeric
         template<typename Left, typename Right>
         typename lazy_enable_if<
             is_scalar<Right>
-          , detail::make_vector<functional::divides<Left, Right> >
+          , acc_detail::make_vector<functional::divides<Left, Right> >
         >::type
         operator /(std::vector<Left> const &left, Right const &right)
         {
@@ -75,7 +75,7 @@ namespace boost { namespace numeric
         template<typename Left, typename Right>
         typename lazy_enable_if<
             is_scalar<Right>
-          , detail::make_vector<functional::multiplies<Left, Right> >
+          , acc_detail::make_vector<functional::multiplies<Left, Right> >
         >::type
         operator *(std::vector<Left> const &left, Right const &right)
         {
@@ -93,7 +93,7 @@ namespace boost { namespace numeric
         template<typename Left, typename Right>
         typename lazy_enable_if<
             is_scalar<Left>
-          , detail::make_vector<functional::multiplies<Left, Right> >
+          , acc_detail::make_vector<functional::multiplies<Left, Right> >
         >::type
         operator *(Left const &left, std::vector<Right> const &right)
         {

@@ -29,7 +29,7 @@ namespace boost { namespace numeric
 {
     namespace operators
     {
-        namespace detail
+        namespace acc_detail
         {
             template<typename Fun>
             struct make_valarray
@@ -43,7 +43,7 @@ namespace boost { namespace numeric
         template<typename Left, typename Right>
         typename lazy_enable_if<
             mpl::and_<is_scalar<Right>, mpl::not_<is_same<Left, Right> > >
-          , detail::make_valarray<functional::divides<Left, Right> >
+          , acc_detail::make_valarray<functional::divides<Left, Right> >
         >::type
         operator /(std::valarray<Left> const &left, Right const &right)
         {
@@ -61,7 +61,7 @@ namespace boost { namespace numeric
         template<typename Left, typename Right>
         typename lazy_enable_if<
             mpl::and_<is_scalar<Right>, mpl::not_<is_same<Left, Right> > >
-          , detail::make_valarray<functional::multiplies<Left, Right> >
+          , acc_detail::make_valarray<functional::multiplies<Left, Right> >
         >::type
         operator *(std::valarray<Left> const &left, Right const &right)
         {
@@ -79,7 +79,7 @@ namespace boost { namespace numeric
         template<typename Left, typename Right>
         typename lazy_disable_if<
             is_same<Left, Right>
-          , detail::make_valarray<functional::plus<Left, Right> >
+          , acc_detail::make_valarray<functional::plus<Left, Right> >
         >::type
         operator +(std::valarray<Left> const &left, std::valarray<Right> const &right)
         {
