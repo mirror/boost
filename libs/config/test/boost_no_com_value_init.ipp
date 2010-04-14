@@ -538,6 +538,38 @@ namespace boost_no_complete_value_initialization
     }
   };
 
+  // Checks value-initialization of a number of small temporary objects.
+  // Returns the number of failures.
+  unsigned check_value_initialization_of_temporaries()
+  {
+    const unsigned num_failures = 
+      FAILED_TO_VALUE_INITIALIZE(enum_holder()) +
+      FAILED_TO_VALUE_INITIALIZE(enum_type()) +
+      FAILED_TO_VALUE_INITIALIZE(char()) +
+      FAILED_TO_VALUE_INITIALIZE(short()) +
+      FAILED_TO_VALUE_INITIALIZE(int()) +
+      FAILED_TO_VALUE_INITIALIZE(unsigned()) +
+      FAILED_TO_VALUE_INITIALIZE(long()) +
+      FAILED_TO_VALUE_INITIALIZE(float()) +
+      FAILED_TO_VALUE_INITIALIZE(double()) +
+      FAILED_TO_VALUE_INITIALIZE(int_struct()) +
+      FAILED_TO_VALUE_INITIALIZE(int_struct_holder()) +
+      FAILED_TO_VALUE_INITIALIZE(pod_struct()) +
+      FAILED_TO_VALUE_INITIALIZE(derived_pod_struct()) +
+      FAILED_TO_VALUE_INITIALIZE(derived_struct()) +
+      FAILED_TO_VALUE_INITIALIZE(derived_int_struct()) +
+      FAILED_TO_VALUE_INITIALIZE(char_array_struct()) +
+      FAILED_TO_VALUE_INITIALIZE(int_array_pair()) +
+      FAILED_TO_VALUE_INITIALIZE(enum_holder_and_int()) +
+      FAILED_TO_VALUE_INITIALIZE(private_and_protected_int()) +
+      FAILED_TO_VALUE_INITIALIZE(user_defined_destructor_holder()) +
+      FAILED_TO_VALUE_INITIALIZE(virtual_destructor_holder()) +
+      FAILED_TO_VALUE_INITIALIZE(non_pod_class()) +
+      FAILED_TO_VALUE_INITIALIZE(pod_struct_and_int_union()) +
+      FAILED_TO_VALUE_INITIALIZE(int_and_pod_struct_union());
+    return num_failures;
+  }
+
 
   // Equivalent to the dirty_stack() function from GCC Bug 33916,
   // "Default constructor fails to initialize array members", reported in 2007 by
@@ -554,40 +586,61 @@ namespace boost_no_complete_value_initialization
 
   int test()
   {
-    // Check value-initialization of a temporary object, an object on the stack,
-    // and one on the heap:
+    // Check value-initialization of the data members of a temporary object,
+    // an object on the stack, an object on the heap, and a number of small 
+    // temporary objects.
+
+    unsigned total_num_failures = 0;
+
     dirty_stack();
     const unsigned num_failures_of_a_temporary = value_initializer().check();
-    if ( num_failures_of_a_temporary > 0 )
+
+    total_num_failures += num_failures_of_a_temporary;
+    if ( total_num_failures > 0 )
     {
-      std::cout << "- Number of initialization failures of a temporary: "
+      std::cout << "- Number of member initialization failures of a temporary: "
         << num_failures_of_a_temporary << std::endl;
     }
     dirty_stack();
     value_initializer object_on_stack;
     const unsigned num_failures_on_stack = object_on_stack.check();
-    if ( num_failures_of_a_temporary > 0 || num_failures_on_stack > 0 )
+
+    total_num_failures += num_failures_on_stack;
+    if ( total_num_failures > 0 )
     {
-      std::cout << "- Number of initialization failures on the stack: "
+      std::cout << "- Number of member initialization failures on the stack: "
         << num_failures_on_stack << std::endl;
     }
     const value_initializer* const ptr = new value_initializer();
     const unsigned num_failures_on_heap = ptr->check();
     delete ptr;
 
-    const unsigned total_num_failures = num_failures_of_a_temporary + 
-      num_failures_on_stack + num_failures_on_heap;
+    total_num_failures += num_failures_on_heap;
+    if ( total_num_failures > 0 )
+    {
+      std::cout << "- Number of member initialization failures on the heap: "
+        << num_failures_on_heap << std::endl;
+    }
+
+    dirty_stack();
+    const unsigned num_failures_of_temporaries = check_value_initialization_of_temporaries();
+
+    total_num_failures += num_failures_of_temporaries;
+    if ( total_num_failures > 0 )
+    {
+      std::cout << "- Number of initialization failures of temporary objects: "
+        << num_failures_of_temporaries << std::endl;
+    }
 
     if ( total_num_failures > 0 )
     {
-      std::cout <<  "- Number of initialization failures on the heap: "
-        << num_failures_on_heap
-        << "\n-- Total number of initialization failures ("
+      std::cout << "-- Total number of initialization failures ("
         << num_failures_of_a_temporary << '+'
         << num_failures_on_stack << '+'
-        << num_failures_on_heap << "): "
+        << num_failures_on_heap << '+'
+        << num_failures_of_temporaries << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 13."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 14."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
