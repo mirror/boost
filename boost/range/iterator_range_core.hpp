@@ -290,23 +290,11 @@ namespace boost
                return *--last;
            }
 
-
-#ifdef __SUNPRO_CC
            reference operator[]( difference_type at ) const
            {
                BOOST_ASSERT( at >= 0 && at < size() );
                return m_Begin[at];
            }
-#else
-           BOOST_DEDUCED_TYPENAME boost::detail::operator_brackets_result<iterator, value_type, reference>::type
-           operator[]( difference_type at ) const
-           {
-               BOOST_ASSERT( at >= 0 && at < size() );
-
-               typedef boost::detail::use_operator_brackets_proxy<value_type,reference> use_proxy;
-               return boost::detail::make_operator_brackets_result<iterator>(m_Begin + at, use_proxy());
-           }
-#endif
 
            //
            // When storing transform iterators, operator[]()
