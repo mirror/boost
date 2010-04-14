@@ -412,7 +412,7 @@ namespace boost
         };
 
         // clean up disconnected connections
-        void nolock_cleanup_connections(bool grab_tracked,
+        void nolock_cleanup_connections_from(bool grab_tracked,
           const typename connection_list_type::iterator &begin, unsigned count = 0) const
         {
           BOOST_ASSERT(_shared_state.unique());
@@ -451,7 +451,7 @@ namespace boost
           {
             begin = _garbage_collector_it;
           }
-          nolock_cleanup_connections(grab_tracked, begin, count);
+          nolock_cleanup_connections_from(grab_tracked, begin, count);
         }
         /* Make a new copy of the slot list if it is currently being read somewhere else
         */
@@ -460,7 +460,7 @@ namespace boost
           if(_shared_state.unique() == false)
           {
             _shared_state.reset(new invocation_state(*_shared_state, _shared_state->connection_bodies()));
-            nolock_cleanup_connections(true, _shared_state->connection_bodies().begin());
+            nolock_cleanup_connections_from(true, _shared_state->connection_bodies().begin());
           }else
           {
             /* We need to try and check more than just 1 connection here to avoid corner
@@ -483,7 +483,7 @@ namespace boost
           {
             _shared_state.reset(new invocation_state(*_shared_state, _shared_state->connection_bodies()));
           }
-          nolock_cleanup_connections(false, _shared_state->connection_bodies().begin());
+          nolock_cleanup_connections_from(false, _shared_state->connection_bodies().begin());
         }
         shared_ptr<invocation_state> get_readable_state() const
         {
