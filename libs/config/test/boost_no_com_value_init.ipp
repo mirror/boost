@@ -298,19 +298,23 @@ namespace boost_no_complete_value_initialization
   }
 
 
-  // The first argument should specify whether a specific variable is value-initializated.
-  // The second argument should specify the name of the variable.
-  // Passes the information to standard output, if the variable is not value-initializated.
-  bool is_true(bool is_variable_value_initializated, const char *const variable_name)
+  // Returns zero when the specified object is value-initializated, and one otherwise.
+  // Prints a message to standard output if the value-initialization has failed.
+  template <typename T>
+  unsigned failed_to_value_initialized(const T& object, const char *const object_name)
   {
-    if ( ! is_variable_value_initializated )
+    if ( is_value_initialized(object) )
     {
-      std::cout << "Note: Failed to value-initialize " << variable_name << '.' << std::endl;
+      return 0u;
     }
-    return is_variable_value_initializated;
+    else
+    {
+      std::cout << "Note: Failed to value-initialize " << object_name << '.' << std::endl;
+      return 1u;
+    }
   }
 
-#define IS_VALUE_INITIALIZED(value) is_true( is_value_initialized(value), #value)
+#define FAILED_TO_VALUE_INITIALIZE(value) failed_to_value_initialized(value, #value)
 
 
   // value_initializer initializes each of its data members by means
@@ -451,85 +455,85 @@ namespace boost_no_complete_value_initialization
     unsigned check() const
     {
       const unsigned num_failures = 
-        (IS_VALUE_INITIALIZED(int_struct::data) ? 0 : 1) +
-        (IS_VALUE_INITIALIZED(m_enum_holder) ? 0 : 1) +
-        (IS_VALUE_INITIALIZED(m_enum_holder_array[0]) ? 0 : 1) +
-        (IS_VALUE_INITIALIZED(m_enum_holder_array[1]) ? 0 : 1) +
-        (IS_VALUE_INITIALIZED(m_enum) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_enum_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_enum_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_char) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_char_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_char_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_unsigned_char) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_unsigned_char_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_unsigned_char_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_short) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_short_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_short_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_int) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_int_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_int_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_unsigned) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_unsigned_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_unsigned_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_long) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_long_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_long_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_float) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_float_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_float_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_double) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_double_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_double_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_ptr) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_ptr_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_ptr_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_int_struct) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_int_struct_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_int_struct_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_int_struct_holder) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_int_struct_holder_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_int_struct_holder_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_pod_struct) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_pod_struct_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_pod_struct_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_derived_pod) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_derived_pod_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_derived_pod_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_derived_struct) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_derived_struct_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_derived_struct_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_derived_int_struct) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_derived_int_struct_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_derived_int_struct_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_char_array_struct) ? 0 : 1) +
-        (IS_VALUE_INITIALIZED(m_char_array_struct_array[0]) ? 0 : 1) +
-        (IS_VALUE_INITIALIZED(m_char_array_struct_array[1]) ? 0 : 1) +
-        (IS_VALUE_INITIALIZED(m_int_array_pair) ? 0 : 1) +
-        (IS_VALUE_INITIALIZED(m_int_array_pair_array[0]) ? 0 : 1) +
-        (IS_VALUE_INITIALIZED(m_int_array_pair_array[1]) ? 0 : 1) +
-        (IS_VALUE_INITIALIZED(m_enum_holder_and_int) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_enum_holder_and_int_array[0]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_enum_holder_and_int_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_private_and_protected_int) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_private_and_protected_int_array[0]) ? 0 : 1 ) +
-        (IS_VALUE_INITIALIZED(m_private_and_protected_int_array[1]) ? 0 : 1 ) +
-        (IS_VALUE_INITIALIZED(m_user_defined_destructor_holder) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_user_defined_destructor_holder_array[0])  ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_user_defined_destructor_holder_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_virtual_destructor_holder) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_virtual_destructor_holder_array[0])  ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_virtual_destructor_holder_array[1]) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_non_pod) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_non_pod_array[0]) ? 0 : 1 ) +
-        (IS_VALUE_INITIALIZED(m_non_pod_array[1]) ? 0 : 1 ) +
-        (IS_VALUE_INITIALIZED(m_pod_struct_and_int_union) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_pod_struct_and_int_union_array[0]) ? 0 : 1 ) +
-        (IS_VALUE_INITIALIZED(m_pod_struct_and_int_union_array[1]) ? 0 : 1 ) +
-        (IS_VALUE_INITIALIZED(m_int_and_pod_struct_union) ? 0 : 1) + 
-        (IS_VALUE_INITIALIZED(m_int_and_pod_struct_union_array[0]) ? 0 : 1 ) +
-        (IS_VALUE_INITIALIZED(m_int_and_pod_struct_union_array[1]) ? 0 : 1 );
+        FAILED_TO_VALUE_INITIALIZE(int_struct::data) +
+        FAILED_TO_VALUE_INITIALIZE(m_enum_holder) +
+        FAILED_TO_VALUE_INITIALIZE(m_enum_holder_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_enum_holder_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_enum) +
+        FAILED_TO_VALUE_INITIALIZE(m_enum_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_enum_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_char) +
+        FAILED_TO_VALUE_INITIALIZE(m_char_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_char_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_unsigned_char) +
+        FAILED_TO_VALUE_INITIALIZE(m_unsigned_char_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_unsigned_char_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_short) +
+        FAILED_TO_VALUE_INITIALIZE(m_short_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_short_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_int) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_unsigned) +
+        FAILED_TO_VALUE_INITIALIZE(m_unsigned_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_unsigned_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_long) +
+        FAILED_TO_VALUE_INITIALIZE(m_long_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_long_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_float) +
+        FAILED_TO_VALUE_INITIALIZE(m_float_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_float_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_double) +
+        FAILED_TO_VALUE_INITIALIZE(m_double_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_double_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_ptr) +
+        FAILED_TO_VALUE_INITIALIZE(m_ptr_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_ptr_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_struct) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_struct_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_struct_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_struct_holder) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_struct_holder_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_struct_holder_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_pod_struct) +
+        FAILED_TO_VALUE_INITIALIZE(m_pod_struct_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_pod_struct_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_derived_pod) +
+        FAILED_TO_VALUE_INITIALIZE(m_derived_pod_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_derived_pod_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_derived_struct) +
+        FAILED_TO_VALUE_INITIALIZE(m_derived_struct_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_derived_struct_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_derived_int_struct) +
+        FAILED_TO_VALUE_INITIALIZE(m_derived_int_struct_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_derived_int_struct_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_char_array_struct) +
+        FAILED_TO_VALUE_INITIALIZE(m_char_array_struct_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_char_array_struct_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_array_pair) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_array_pair_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_array_pair_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_enum_holder_and_int) +
+        FAILED_TO_VALUE_INITIALIZE(m_enum_holder_and_int_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_enum_holder_and_int_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_private_and_protected_int) +
+        FAILED_TO_VALUE_INITIALIZE(m_private_and_protected_int_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_private_and_protected_int_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_user_defined_destructor_holder) +
+        FAILED_TO_VALUE_INITIALIZE(m_user_defined_destructor_holder_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_user_defined_destructor_holder_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_virtual_destructor_holder) +
+        FAILED_TO_VALUE_INITIALIZE(m_virtual_destructor_holder_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_virtual_destructor_holder_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_non_pod) +
+        FAILED_TO_VALUE_INITIALIZE(m_non_pod_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_non_pod_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_pod_struct_and_int_union) +
+        FAILED_TO_VALUE_INITIALIZE(m_pod_struct_and_int_union_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_pod_struct_and_int_union_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_and_pod_struct_union) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_and_pod_struct_union_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_int_and_pod_struct_union_array[1]);
       return num_failures;
     }
   };
@@ -583,7 +587,7 @@ namespace boost_no_complete_value_initialization
         << num_failures_on_stack << '+'
         << num_failures_on_heap << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 12."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 13."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
