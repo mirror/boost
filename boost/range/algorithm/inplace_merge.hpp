@@ -36,33 +36,12 @@ inline BidirectionalRange& inplace_merge(BidirectionalRange& rng,
 }
 
 /// \overload
-template<class BidirectionalRange>
-inline const BidirectionalRange& inplace_merge(const BidirectionalRange& rng,
-    BOOST_DEDUCED_TYPENAME boost::range_iterator<const BidirectionalRange>::type middle)
-{
-    BOOST_RANGE_CONCEPT_ASSERT(( BidirectionalRangeConcept<const BidirectionalRange> ));
-    std::inplace_merge(boost::begin(rng), middle, boost::end(rng));
-    return rng;
-}
-
-/// \overload
 template<class BidirectionalRange, class BinaryPredicate>
 inline BidirectionalRange& inplace_merge(BidirectionalRange& rng,
     BOOST_DEDUCED_TYPENAME boost::range_iterator<BidirectionalRange>::type middle,
     BinaryPredicate pred)
 {
     BOOST_RANGE_CONCEPT_ASSERT(( BidirectionalRangeConcept<BidirectionalRange> ));
-    std::inplace_merge(boost::begin(rng), middle, boost::end(rng), pred);
-    return rng;
-}
-
-/// \overload
-template<class BidirectionalRange, class BinaryPredicate>
-inline const BidirectionalRange& inplace_merge(const BidirectionalRange& rng,
-    BOOST_DEDUCED_TYPENAME boost::range_iterator<const BidirectionalRange>::type middle,
-    BinaryPredicate pred)
-{
-    BOOST_RANGE_CONCEPT_ASSERT(( BidirectionalRangeConcept<const BidirectionalRange> ));
     std::inplace_merge(boost::begin(rng), middle, boost::end(rng), pred);
     return rng;
 }

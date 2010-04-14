@@ -38,18 +38,6 @@ equal_range(ForwardRange& rng, const Value& val)
 }
 
 /// \overload
-template<class ForwardRange, class Value>
-inline std::pair<
-        BOOST_DEDUCED_TYPENAME boost::range_iterator<const ForwardRange>::type,
-        BOOST_DEDUCED_TYPENAME boost::range_iterator<const ForwardRange>::type
-       >
-equal_range(const ForwardRange& rng, const Value& val)
-{
-    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
-    return std::equal_range(boost::begin(rng), boost::end(rng), val);
-}
-
-/// \overload
 template<class ForwardRange, class Value, class SortPredicate>
 inline std::pair<
         BOOST_DEDUCED_TYPENAME boost::range_iterator<ForwardRange>::type,
@@ -58,18 +46,6 @@ inline std::pair<
 equal_range(ForwardRange& rng, const Value& val, SortPredicate pred)
 {
     BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
-    return std::equal_range(boost::begin(rng), boost::end(rng), val, pred);
-}
-
-/// \overload
-template<class ForwardRange, class Value, class SortPredicate>
-inline std::pair<
-        BOOST_DEDUCED_TYPENAME boost::range_iterator<const ForwardRange>::type,
-        BOOST_DEDUCED_TYPENAME boost::range_iterator<const ForwardRange>::type
-       >
-equal_range(const ForwardRange& rng, const Value& val, SortPredicate pred)
-{
-    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     return std::equal_range(boost::begin(rng), boost::end(rng), val, pred);
 }
 

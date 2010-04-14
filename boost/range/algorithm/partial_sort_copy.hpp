@@ -28,30 +28,24 @@ namespace boost
 /// \pre SinglePassRange is a model of the SinglePassRangeConcept
 /// \pre RandomAccessRange is a model of the Mutable_RandomAccessRangeConcept
 /// \pre BinaryPredicate is a model of the BinaryPredicateConcept
-template<typename SinglePassRange, typename RandomAccessRange>
-inline typename range_iterator<RandomAccessRange>::type
+template<class SinglePassRange, class RandomAccessRange>
+inline BOOST_DEDUCED_TYPENAME range_iterator<RandomAccessRange>::type
 partial_sort_copy(const SinglePassRange& rng1, RandomAccessRange& rng2)
 {
     BOOST_RANGE_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange>));
-    BOOST_RANGE_CONCEPT_ASSERT((WriteableRandomAccessRangeConcept<RandomAccessRange>));
-    BOOST_RANGE_CONCEPT_ASSERT((range_detail::SameTypeConcept<typename range_value<SinglePassRange>::type, typename range_value<RandomAccessRange>::type>));
-    BOOST_RANGE_CONCEPT_ASSERT((LessThanComparableConcept<typename range_value<SinglePassRange>::type>));
 
     return std::partial_sort_copy(boost::begin(rng1), boost::end(rng1),
         boost::begin(rng2), boost::end(rng2));
 }
 
 /// \overload
-template<typename SinglePassRange, typename RandomAccessRange,
-         typename BinaryPredicate>
-inline typename range_iterator<RandomAccessRange>::type
+template<class SinglePassRange, class RandomAccessRange,
+         class BinaryPredicate>
+inline BOOST_DEDUCED_TYPENAME range_iterator<RandomAccessRange>::type
 partial_sort_copy(const SinglePassRange& rng1, RandomAccessRange& rng2,
     BinaryPredicate pred)
 {
     BOOST_RANGE_CONCEPT_ASSERT((SinglePassRangeConcept<SinglePassRange>));
-    BOOST_RANGE_CONCEPT_ASSERT((WriteableRandomAccessRangeConcept<RandomAccessRange>));
-    BOOST_RANGE_CONCEPT_ASSERT((range_detail::SameTypeConcept<typename range_value<SinglePassRange>::type, typename range_value<RandomAccessRange>::type>));
-    BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate, typename range_value<RandomAccessRange>::type, typename range_value<RandomAccessRange>::type>));
 
     return std::partial_sort_copy(boost::begin(rng1), boost::end(rng1),
         boost::begin(rng2), boost::end(rng2), pred);

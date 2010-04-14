@@ -26,15 +26,7 @@ namespace boost
 /// range-based version of the reverse_copy std algorithm
 ///
 /// \pre BidirectionalRange is a model of the BidirectionalRangeConcept
-template<typename BidirectionalRange, typename OutputIterator>
-inline OutputIterator reverse_copy(BidirectionalRange& rng, OutputIterator out)
-{
-    BOOST_RANGE_CONCEPT_ASSERT(( BidirectionalRangeConcept<BidirectionalRange> ));
-    return std::reverse_copy(boost::begin(rng), boost::end(rng), out);
-}
-
-/// \overload
-template<typename BidirectionalRange, typename OutputIterator>
+template<class BidirectionalRange, class OutputIterator>
 inline OutputIterator reverse_copy(const BidirectionalRange& rng, OutputIterator out)
 {
     BOOST_RANGE_CONCEPT_ASSERT(( BidirectionalRangeConcept<BidirectionalRange> ));

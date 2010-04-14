@@ -28,8 +28,8 @@ namespace boost
 ///
 /// \pre ForwardRange is a model of the ForwardRangeConcept
 /// \pre BinaryPredicate is a model of the BinaryPredicateConcept
-template< typename ForwardRange >
-inline typename range_iterator<ForwardRange>::type
+template< class ForwardRange >
+inline BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type
 adjacent_find(ForwardRange & rng)
 {
     BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
@@ -37,43 +37,19 @@ adjacent_find(ForwardRange & rng)
 }
 
 /// \overload
-template< typename ForwardRange >
-inline typename range_iterator<const ForwardRange>::type
-adjacent_find(const ForwardRange& rng)
-{
-    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
-    return std::adjacent_find(boost::begin(rng),boost::end(rng));
-}
-
-/// \overload
-template< typename ForwardRange, typename BinaryPredicate >
-inline typename range_iterator<ForwardRange>::type
+template< class ForwardRange, class BinaryPredicate >
+inline BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type
 adjacent_find(ForwardRange & rng, BinaryPredicate pred)
 {
     BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
-    BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
-        typename range_value<ForwardRange>::type,
-        typename range_value<ForwardRange>::type>));
-    return std::adjacent_find(boost::begin(rng),boost::end(rng),pred);
-}
-
-/// \overload
-template< typename ForwardRange, typename BinaryPredicate >
-inline typename range_iterator<const ForwardRange>::type
-adjacent_find(const ForwardRange& rng, BinaryPredicate pred)
-{
-    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
-    BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
-        typename range_value<const ForwardRange>::type,
-        typename range_value<const ForwardRange>::type>));
     return std::adjacent_find(boost::begin(rng),boost::end(rng),pred);
 }
 
 //  range_return overloads
 
 /// \overload
-template< range_return_value re, typename ForwardRange >
-inline typename range_return<ForwardRange,re>::type
+template< range_return_value re, class ForwardRange >
+inline BOOST_DEDUCED_TYPENAME range_return<ForwardRange,re>::type
 adjacent_find(ForwardRange & rng)
 {
     BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
@@ -83,37 +59,12 @@ adjacent_find(ForwardRange & rng)
 }
 
 /// \overload
-template< range_return_value re, typename ForwardRange >
-inline typename range_return<const ForwardRange,re>::type
-adjacent_find(const ForwardRange& rng)
-{
-    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
-    return range_return<const ForwardRange,re>::
-        pack(std::adjacent_find(boost::begin(rng),boost::end(rng)),
-             rng);
-}
-
-/// \overload
-template< range_return_value re, typename ForwardRange, typename BinaryPredicate >
-inline typename range_return<ForwardRange,re>::type
+template< range_return_value re, class ForwardRange, class BinaryPredicate >
+inline BOOST_DEDUCED_TYPENAME range_return<ForwardRange,re>::type
 adjacent_find(ForwardRange& rng, BinaryPredicate pred)
 {
     BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
-    BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
-        typename range_value<ForwardRange>::type,
-        typename range_value<ForwardRange>::type>));
     return range_return<ForwardRange,re>::
-        pack(std::adjacent_find(boost::begin(rng),boost::end(rng),pred),
-             rng);
-}
-
-/// \overload
-template< range_return_value re, typename ForwardRange, typename BinaryPredicate >
-inline typename range_return<const ForwardRange,re>::type
-adjacent_find(const ForwardRange& rng, BinaryPredicate pred)
-{
-    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
-    return range_return<const ForwardRange,re>::
         pack(std::adjacent_find(boost::begin(rng),boost::end(rng),pred),
              rng);
 }
