@@ -290,6 +290,36 @@ namespace boost_no_complete_value_initialization
   }
 
 
+  typedef char _2d_char_array_type[2][3];
+
+  bool is_value_initialized(const _2d_char_array_type& arg)
+  {
+    for(unsigned i = 0; i < sizeof(_2d_char_array_type); ++i)
+    {
+      if ((*arg)[i] != 0)
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  typedef char _3d_char_array_type[2][3][4];
+
+  bool is_value_initialized(const _3d_char_array_type& arg)
+  {
+    for(unsigned i = 0; i < sizeof(_3d_char_array_type); ++i)
+    {
+      if ((**arg)[i] != 0)
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
+
+
   // For built-in types and enumerated types.
   template <typename T>
   bool is_value_initialized(const T& arg)
@@ -336,6 +366,8 @@ namespace boost_no_complete_value_initialization
     char m_char_array[2];
     unsigned char m_unsigned_char;
     unsigned char m_unsigned_char_array[2];
+    _2d_char_array_type m_2d_char_array;
+    _3d_char_array_type m_3d_char_array;
     short m_short;
     short m_short_array[2];
     int m_int;
@@ -356,8 +388,8 @@ namespace boost_no_complete_value_initialization
     int_struct m_int_struct_holder_array[2];
     pod_struct m_pod_struct;
     pod_struct m_pod_struct_array[2];
-    derived_pod_struct m_derived_pod;
-    derived_pod_struct m_derived_pod_array[2];
+    derived_pod_struct m_derived_pod_struct;
+    derived_pod_struct m_derived_pod_struct_array[2];
     derived_struct m_derived_struct;
     derived_struct m_derived_struct_array[2];
     derived_int_struct m_derived_int_struct;
@@ -402,6 +434,8 @@ namespace boost_no_complete_value_initialization
     m_enum_array(),
     m_char(),
     m_char_array(),
+    m_2d_char_array(),
+    m_3d_char_array(),
     m_unsigned_char(),
     m_unsigned_char_array(),
     m_short(),
@@ -424,8 +458,8 @@ namespace boost_no_complete_value_initialization
     m_int_struct_holder_array(),
     m_pod_struct(),
     m_pod_struct_array(),
-    m_derived_pod(),
-    m_derived_pod_array(),
+    m_derived_pod_struct(),
+    m_derived_pod_struct_array(),
     m_derived_struct(),
     m_derived_struct_array(),
     m_derived_int_struct(),
@@ -465,6 +499,8 @@ namespace boost_no_complete_value_initialization
         FAILED_TO_VALUE_INITIALIZE(m_char) +
         FAILED_TO_VALUE_INITIALIZE(m_char_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_char_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_2d_char_array) +
+        FAILED_TO_VALUE_INITIALIZE(m_3d_char_array) +
         FAILED_TO_VALUE_INITIALIZE(m_unsigned_char) +
         FAILED_TO_VALUE_INITIALIZE(m_unsigned_char_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_unsigned_char_array[1]) +
@@ -498,9 +534,9 @@ namespace boost_no_complete_value_initialization
         FAILED_TO_VALUE_INITIALIZE(m_pod_struct) +
         FAILED_TO_VALUE_INITIALIZE(m_pod_struct_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_pod_struct_array[1]) +
-        FAILED_TO_VALUE_INITIALIZE(m_derived_pod) +
-        FAILED_TO_VALUE_INITIALIZE(m_derived_pod_array[0]) +
-        FAILED_TO_VALUE_INITIALIZE(m_derived_pod_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_derived_pod_struct) +
+        FAILED_TO_VALUE_INITIALIZE(m_derived_pod_struct_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_derived_pod_struct_array[1]) +
         FAILED_TO_VALUE_INITIALIZE(m_derived_struct) +
         FAILED_TO_VALUE_INITIALIZE(m_derived_struct_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_derived_struct_array[1]) +
@@ -562,6 +598,11 @@ namespace boost_no_complete_value_initialization
       FAILED_TO_VALUE_INITIALIZE(int_array_pair()) +
       FAILED_TO_VALUE_INITIALIZE(enum_holder_and_int()) +
       FAILED_TO_VALUE_INITIALIZE(private_and_protected_int()) +
+      // The following line, doing user_defined_destructor_holder(), causes  
+      // a compilation error on Embarcadero 2010 (Borland/CodeGear 6.21), 
+      // as reported by me (Niels Dekker, LKEB) in 2010, bug report 83851,
+      // "Value-initialized temporary triggers internal backend error C1798",
+      // http://qc.embarcadero.com/wc/qcmain.aspx?d=83851
       FAILED_TO_VALUE_INITIALIZE(user_defined_destructor_holder()) +
       FAILED_TO_VALUE_INITIALIZE(virtual_destructor_holder()) +
       FAILED_TO_VALUE_INITIALIZE(non_pod_class()) +
@@ -640,7 +681,7 @@ namespace boost_no_complete_value_initialization
         << num_failures_on_heap << '+'
         << num_failures_of_temporaries << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 14."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 15."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
