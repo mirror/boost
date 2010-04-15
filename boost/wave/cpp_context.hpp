@@ -232,7 +232,7 @@ public:
     bool remove_macro_definition(StringT const& undefname, bool even_predefined = false)
     { 
         // strip leading and trailing whitespace
-        string_type name = undefname;
+        string_type name = util::to_string<string_type>(undefname);
         typename string_type::size_type pos = name.find_first_not_of(" \t");
         if (pos != string_type::npos) {
             typename string_type::size_type endpos = name.find_last_not_of(" \t");
