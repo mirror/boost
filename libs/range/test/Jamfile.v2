@@ -128,6 +128,7 @@ test-suite range :
 	[ range-test counting_range ]
 	[ range-test extension_mechanism ]
 	[ range-test irange ]
+	[ range-test istream_range ]
 	[ range-test iterator_pair ]
 	[ range-test iterator_range ]
 #   	[ range-test mfc : <include>$(VC71_ROOT)/atlmfc/include ]
