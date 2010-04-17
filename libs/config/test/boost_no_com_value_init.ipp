@@ -355,7 +355,7 @@ namespace boost_no_complete_value_initialization
   // Note: its base class, int_struct, is there to try to reproduce GCC Bug 30111,
   // "Value-initialization of POD base class doesn't initialize members", reported
   // by Jonathan Wakely in 2006: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30111
-  class value_initializer: int_struct
+  class value_initializer: private int_struct
   {
   private:
     enum_holder m_enum_holder;
@@ -596,6 +596,11 @@ namespace boost_no_complete_value_initialization
       FAILED_TO_VALUE_INITIALIZE(derived_int_struct()) +
       FAILED_TO_VALUE_INITIALIZE(char_array_struct()) +
       FAILED_TO_VALUE_INITIALIZE(int_array_pair()) +
+      // IBM's XL V10.1.0.0 may fail to value-initialize a temporary of a non-POD
+      // type like enum_holder_and_int, virtual_destructor_holder, or non_pod_class, 
+      // as appeared at the Boost Config/trunk regression page in April 2010.
+      // Michael Wong (IBM Canada Ltd) confirmed the issue to me (Niels Dekker, LKEB),
+      // and gave it high priority.
       FAILED_TO_VALUE_INITIALIZE(enum_holder_and_int()) +
       FAILED_TO_VALUE_INITIALIZE(private_and_protected_int()) +
       // The following line, doing user_defined_destructor_holder(), causes  
@@ -681,7 +686,7 @@ namespace boost_no_complete_value_initialization
         << num_failures_on_heap << '+'
         << num_failures_of_temporaries << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 15."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 16."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
