@@ -24,7 +24,7 @@
 
 //H 10: t_6_063.cpp(20): #include "t_6_063.hpp"
 //H 04: "t_6_063.hpp"
-//H 05: t_6_063.hpp ($B(t_6_063.hpp))
+//H 05: $S(t_6_063.hpp) ($B(t_6_063.hpp))
 //H 18: boost::wave::preprocess_exception
 
 /*-
