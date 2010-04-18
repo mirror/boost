@@ -98,6 +98,7 @@ protected:
     //      $E: to the result of preprocessing the given expression
     //      $F: to the passed full filepath 
     //      $P: to the full path
+    //      $R: to the relative path
     //      $V: to the current Boost version number
     bool got_expected_result(std::string const& filename, 
         std::string const& result, std::string& expected);
