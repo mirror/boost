@@ -22,8 +22,9 @@
 #include <boost/range/adaptor/replaced_if.hpp>
 #include <boost/range/adaptor/reversed.hpp>
 #include <boost/range/adaptor/sliced.hpp>
+#include <boost/range/adaptor/strided.hpp>
 #include <boost/range/adaptor/tokenized.hpp>
 #include <boost/range/adaptor/transformed.hpp>
 #include <boost/range/adaptor/uniqued.hpp>
 
-#endif 
+#endif
