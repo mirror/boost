@@ -14,7 +14,7 @@
 =============================================================================*/
 
 // Tests error reporting: undefined behavior: End of a source file is  
-// <backslash><newline>.
+// <backslash><newline>: boostinspect:noend
 
 int dummy = 0;
 

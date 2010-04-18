@@ -14,7 +14,7 @@
 =============================================================================*/
 
 // Tests error reporting: undefined behavior: End of a source file with an 
-// unterminated comment.
+// unterminated comment: boostinspect:noend
 
 int dummy = 0;
 
