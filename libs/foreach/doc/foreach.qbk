@@ -28,11 +28,11 @@
 
 [def _foreach_                      [^BOOST_FOREACH]] 
 [def _range_                        [@../../libs/range/index.html Boost.Range]]
-[def _iterator_range_               [@../../libs/range/doc/utility_class.html#iter_range `boost::iterator_range<>`]]
-[def _sub_range_                    [@../../libs/range/doc/utility_class.html#sub_range `boost::sub_range<>`]]
-[def _extending_range_              [@../../libs/range/doc/boost_range.html#minimal_interface Extending Boost.Range]]
-[def _single_pass_range_concept_    [@../../libs/range/doc/range.html#single_pass_range Single Pass Range Concept]]
-[def _range_portability_            [@../../libs/range/doc/portability.html Boost.Range Portability]]
+[def _iterator_range_               [@boost:/libs/range/doc/html/range/utilities/iterator_range.html `boost::iterator_range<>`]]
+[def _sub_range_                    [@boost:/libs/range/doc/html/range/utilities/sub_range.html `boost::sub_range<>`]]
+[def _extending_range_              [@boost:/libs/range/doc/html/range/reference/extending.html Extending Boost.Range]]
+[def _single_pass_range_concept_    [@boost:/libs/range/doc/html/range/concepts/single_pass_range.html Single Pass Range Concept]]
+[def _range_portability_            [@boost:/libs/range/doc/html/range/portability.html Boost.Range Portability]]
 [def _noncopyable_                  [@../../libs/utility/utility.htm#Class_noncopyable `boost::noncopyable`]]
 [def _iterator_                     [@../../libs/iterator/doc/index.html Boost.Iterator]]
 
