@@ -374,9 +374,9 @@ lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(CCOMMENT, CCOMMENT),
     TOKEN_DATA(CPPCOMMENT, Q("/") Q("/[^\\n\\r]*") NEWLINEDEF ),
     TOKEN_DATA(CHARLIT, CHAR_SPEC "'" 
-                "(" ESCAPESEQ OR "[^\\n\\r']" OR UNIVERSALCHAR ")+" "'"),
+                "(" ESCAPESEQ OR "[^\\n\\r\\\\']" OR UNIVERSALCHAR ")+" "'"),
     TOKEN_DATA(STRINGLIT, CHAR_SPEC Q("\"") 
-                "(" ESCAPESEQ OR "[^\\n\\r\"]" OR UNIVERSALCHAR ")*" Q("\"")),
+                "(" ESCAPESEQ OR "[^\\n\\r\\\\\"]" OR UNIVERSALCHAR ")*" Q("\"")),
     TOKEN_DATA(SPACE, "[ \t\v\f]+"),
 //    TOKEN_DATA(SPACE2, "[\\v\\f]+"),
     TOKEN_DATA(CONTLINE, "\\" "\\n"), 
