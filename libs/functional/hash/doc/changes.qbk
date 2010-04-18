@@ -96,4 +96,14 @@
 * Some code formatting changes to fit lines into 80 characters.
 * Rename an internal namespace.
 
+[h2 Boost 1.43.0]
+
+* [@https://svn.boost.org/trac/boost/ticket/3866 Ticket 3866]:
+  Don't foward declare containers when using gcc's parallel library,
+  allow user to stop forward declaration by defining the
+  `BOOST_DETAIL_NO_CONTAINER_FWD` macro.
+* [@https://svn.boost.org/trac/boost/ticket/4038 Ticket 4038]:
+  Avoid hashing 0.5 and 0 to the same number.
+* Stop using deprecated `BOOST_HAS_*` macros.
+
 [endsect]
