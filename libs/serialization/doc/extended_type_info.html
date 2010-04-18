@@ -269,7 +269,7 @@ Return a pointer to the
 instance that corresponds to
 the "true type" of the type T.  The "true type" is the lowest type in the
 hierarchy of classes.  The type T can always be cast to the "true type" with
-a static cast.  Implemention of this function will vary among type id systems
+a static cast.  Implementation of this function will vary among type id systems
 and sometimes will make presumptions about the type T than can be identified
 with a particular <code style="white-space: normal">extended_type_info</code> implementation.
 </dd>
@@ -321,7 +321,7 @@ proper destructor and recovers allocated memory.
 <h3><a name="models">Models</a></h3>
 The serialization library includes two distinct
 <code style="white-space: normal"><a target="extended_type_info.hpp" href="../../../boost/serialization/extended_type_info.hpp">extended_type_info</a></code>
-implementatio's.
+implementations.
 <p>
 <code style="white-space: normal"><h4><a target="extended_type_info_typeid.hpp" href = "../../../boost/serialization/extended_type_info_typeid.hpp">
 extended_type_info_typeid</a></h4></code>is implemented in terms of the standard typeid(). It presumes that RTTI support is enabled
@@ -408,7 +408,7 @@ constructor of "my_class".
 
 
 A complete example of this can be found
-<a target="test_plugin.cpp" href="test_plugin.cpp">here</a>
+<a target="test_dll_plugin.cpp" href="../test/test_dll_plugin.cpp">here</a>
 <hr>
 <p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2005-2009. 
 Distributed under the Boost Software License, Version 1.0. (See
