@@ -39,28 +39,9 @@ namespace boost
 		}
 
 		template< class RandomAccessRange >
-		inline iterator_range< BOOST_DEDUCED_TYPENAME range_iterator<const RandomAccessRange>::type >
-		slice( const RandomAccessRange& rng, std::size_t t, std::size_t u )
-		{
-		    BOOST_ASSERT( t <= u && "error in slice indices" );
-		    BOOST_ASSERT( static_cast<std::size_t>(boost::size(rng)) >= u &&
-		                  "second slice index out of bounds" );
-
-            return boost::make_iterator_range( rng, t, u - boost::size(rng) );
-		}
-
-		template< class RandomAccessRange >
 		inline iterator_range<
 			     BOOST_DEDUCED_TYPENAME range_iterator<RandomAccessRange>::type >
 		operator|( RandomAccessRange& r, const sliced& f )
-		{
-			return adaptors::slice( r, f.t, f.u );
-		}
-
-		template< class RandomAccessRange >
-		inline iterator_range<
-				 BOOST_DEDUCED_TYPENAME range_iterator<const RandomAccessRange>::type >
-		operator|( const RandomAccessRange& r, const sliced& f )
 		{
 			return adaptors::slice( r, f.t, f.u );
 		}

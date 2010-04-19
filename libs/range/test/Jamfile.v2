@@ -42,6 +42,7 @@ test-suite range :
 	[ range-test adaptor_test/reversed ]
 	[ range-test adaptor_test/sliced ]
 	[ range-test adaptor_test/strided ]
+	[ range-test adaptor_test/strided2 ]
 	[ range-test adaptor_test/tokenized ]
 	[ range-test adaptor_test/transformed ]
 	[ range-test adaptor_test/uniqued ]
