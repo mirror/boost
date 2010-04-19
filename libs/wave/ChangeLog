@@ -40,10 +40,12 @@ Boost V1.43.0
   new preprocessing hook.
 - Added new preprocessing hook: found_unknown_directive, which is being invoked 
   whenever an unknown preprocessor directive (i.e. '#' followed by some 
-  identifier) is detected. IT allows to interprete the directive and to provide 
+  identifier) is detected. It allows to interpret the directive and to provide 
   some replacement text.
 - Added new example: custom_directives demonstrating the usage of the new 
   preprocessing hook.
+- Fixed #4113: cpp_lexer does not handle qualified backslashes correctly.
+- Fixed #3106: wave on VS2010 beta compiler generates error.
 
 Boost V1.42.0
 - V2.0.4
