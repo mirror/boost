@@ -14,8 +14,8 @@
  * http://www.boost.org/LICENSE_1_0.txt)
  *
  * 10 Mar 2010 - (mtc) fill method added, matching resolution of the standard library working group.
- *		See <http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#776> or Trac issue #3168
- *		Eventually, we should remove "assign" which is now a synonym for "fill" (Marshall Clow)
+ *      See <http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#776> or Trac issue #3168
+ *      Eventually, we should remove "assign" which is now a synonym for "fill" (Marshall Clow)
  * 10 Mar 2010 - added workaround for SUNCC and !STLPort [trac #3893] (Marshall Clow)
  * 29 Jan 2004 - c_array() added, BOOST_NO_PRIVATE_IN_AGGREGATE removed (Nico Josuttis)
  * 23 Aug 2002 - fix for Non-MSVC compilers combined with MSVC libraries.
@@ -169,7 +169,7 @@ namespace boost {
         }
 
         // assign one value to all elements
-        void assign (const T& value) { fill ( value ); }	// A synonym for fill
+        void assign (const T& value) { fill ( value ); }    // A synonym for fill
         void fill   (const T& value)
         {
             std::fill_n(begin(),size(),value);
@@ -295,8 +295,8 @@ namespace boost {
 
         // assign one value to all elements
         void assign (const T& value) { fill ( value ); }
-		void fill   (const T& ) {}
-		
+        void fill   (const T& ) {}
+        
         // check range (may be private because it is static)
         static reference failed_rangecheck () {
                 std::out_of_range e("attempt to access element of an empty array");
