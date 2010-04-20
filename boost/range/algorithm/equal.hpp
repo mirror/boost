@@ -20,7 +20,7 @@ namespace boost
     {
         // An implementation of equality comparison that is optimized for iterator
         // traversal categories less than RandomAccessTraversal.
-		template< class SinglePassTraversalReadableIterator1,
+        template< class SinglePassTraversalReadableIterator1,
                   class SinglePassTraversalReadableIterator2,
                   class IteratorCategoryTag1,
                   class IteratorCategoryTag2 >

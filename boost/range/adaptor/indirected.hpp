@@ -16,72 +16,72 @@
 
 namespace boost
 {
-	namespace range_detail
-	{
-		template< class R >
-		struct indirect_range :
-			public boost::iterator_range<
+    namespace range_detail
+    {
+        template< class R >
+        struct indirect_range :
+            public boost::iterator_range<
                         boost::indirect_iterator<
                             BOOST_DEDUCED_TYPENAME range_iterator<R>::type
                         >
                     >
-		{
-		private:
-			typedef boost::iterator_range<
+        {
+        private:
+            typedef boost::iterator_range<
                         boost::indirect_iterator<
                             BOOST_DEDUCED_TYPENAME range_iterator<R>::type
                         >
                     >
-				base;
+                base;
 
-		public:
-			explicit indirect_range( R& r )
+        public:
+            explicit indirect_range( R& r )
                 : base( r )
-			{ }
-		};
+            { }
+        };
 
-		struct indirect_forwarder {};
+        struct indirect_forwarder {};
 
-		template< class InputRng >
-		inline indirect_range<InputRng>
-		operator|( InputRng& r, indirect_forwarder )
-		{
-			return indirect_range<InputRng>( r );
-		}
+        template< class InputRng >
+        inline indirect_range<InputRng>
+        operator|( InputRng& r, indirect_forwarder )
+        {
+            return indirect_range<InputRng>( r );
+        }
 
-		template< class InputRng >
-		inline indirect_range<const InputRng>
-		operator|( const InputRng& r, indirect_forwarder )
-		{
-			return indirect_range<const InputRng>( r );
-		}
+        template< class InputRng >
+        inline indirect_range<const InputRng>
+        operator|( const InputRng& r, indirect_forwarder )
+        {
+            return indirect_range<const InputRng>( r );
+        }
 
-	} // 'range_detail'
+    } // 'range_detail'
 
-	using range_detail::indirect_range;
+    using range_detail::indirect_range;
 
-	namespace adaptors
-	{
-		namespace
-		{
-			const range_detail::indirect_forwarder indirected =
-				                            range_detail::indirect_forwarder();
-		}
+    namespace adaptors
+    {
+        namespace
+        {
+            const range_detail::indirect_forwarder indirected =
+                                            range_detail::indirect_forwarder();
+        }
 
-		template<class InputRange>
-		inline indirect_range<InputRange>
-		indirect(InputRange& rng)
-		{
-		    return indirect_range<InputRange>(rng);
-		}
+        template<class InputRange>
+        inline indirect_range<InputRange>
+        indirect(InputRange& rng)
+        {
+            return indirect_range<InputRange>(rng);
+        }
 
-		template<class InputRange>
-		inline indirect_range<const InputRange>
-		indirect(const InputRange& rng)
-		{
-		    return indirect_range<const InputRange>(rng);
-	    }
-	} // 'adaptors'
+        template<class InputRange>
+        inline indirect_range<const InputRange>
+        indirect(const InputRange& rng)
+        {
+            return indirect_range<const InputRange>(rng);
+        }
+    } // 'adaptors'
 
 }
 

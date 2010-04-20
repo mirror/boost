@@ -15,8 +15,8 @@
 
 namespace boost
 {
-	namespace range_detail
-	{
+    namespace range_detail
+    {
 
 template<class IteratorTraversalTag1, class IteratorTraversalTag2>
 struct demote_iterator_traversal_tag
@@ -26,7 +26,7 @@ struct demote_iterator_traversal_tag
 #define BOOST_DEMOTE_TRAVERSAL_TAG( Tag1, Tag2, ResultTag ) \
 template<> struct demote_iterator_traversal_tag< Tag1 , Tag2 > \
 { \
-	typedef ResultTag type; \
+    typedef ResultTag type; \
 };
 
 BOOST_DEMOTE_TRAVERSAL_TAG( no_traversal_tag, no_traversal_tag,            no_traversal_tag )
@@ -73,7 +73,7 @@ BOOST_DEMOTE_TRAVERSAL_TAG( random_access_traversal_tag, random_access_traversal
 
 #undef BOOST_DEMOTE_TRAVERSAL_TAG
 
-	} // namespace range_detail
+    } // namespace range_detail
 } // namespace boost
 
 #endif // include guard

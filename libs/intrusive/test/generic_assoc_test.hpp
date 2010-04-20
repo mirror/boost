@@ -402,9 +402,9 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_insert_before
       
       for(vec_iterator it(--values.end()); true; --it){
          testset.push_front(*it);
-		 if(it == values.begin()){
+         if(it == values.begin()){
             break;
-		 }
+         }
       }
       BOOST_TEST(testset.size() == values.size());
       TEST_INTRUSIVE_SEQUENCE_EXPECTED(values, testset.begin());

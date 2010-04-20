@@ -75,9 +75,9 @@ BOOST_AUTO_TEST_CASE( test_construction_from_pointers )
 {
 
     std::cout << ( ublas::make_compressed_matrix_view<ublas::column_major,IB>(4,3,NNZ
-									      , ublas::c_array_view<const unsigned int>(4,&(IA[0]))
-									      , ublas::c_array_view<const unsigned int>(6,&(JA[0]))
-									      , ublas::c_array_view<const double>(6,&(VA[0]))) ) << std::endl;
+                                                                              , ublas::c_array_view<const unsigned int>(4,&(IA[0]))
+                                                                              , ublas::c_array_view<const unsigned int>(6,&(JA[0]))
+                                                                              , ublas::c_array_view<const double>(6,&(VA[0]))) ) << std::endl;
 
     unsigned int * ia = new unsigned int[4]();
     unsigned int * ja = new unsigned int[6]();
@@ -94,9 +94,9 @@ BOOST_AUTO_TEST_CASE( test_construction_from_pointers )
       , ublas::c_array_view<double> > COMPMATVIEW;
 
     COMPMATVIEW viewA(4,3,NNZ
-		      , ublas::c_array_view<unsigned int>(4,ia)
-		      , ublas::c_array_view<unsigned int>(6,ja)
-		      , ublas::c_array_view<double>(6,va));
+                      , ublas::c_array_view<unsigned int>(4,ia)
+                      , ublas::c_array_view<unsigned int>(6,ja)
+                      , ublas::c_array_view<double>(6,va));
 
     std::cout << viewA << std::endl;
 

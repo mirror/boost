@@ -35,7 +35,7 @@ namespace boost
             {
             }
 
-	        container2_t& cont() { return m_cont; }
+            container2_t& cont() { return m_cont; }
 
             template<class Container>
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
@@ -45,14 +45,14 @@ namespace boost
             }
 
             template<range_return_value return_type>
-	        struct test_range
-	        {
-		        template<class Container, class Policy>
-		        BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
-		        operator()(Policy& policy, Container& cont)
-		        {
-		            return boost::find_first_of<return_type>(cont, policy.cont());
-		        }
+            struct test_range
+            {
+                template<class Container, class Policy>
+                BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
+                operator()(Policy& policy, Container& cont)
+                {
+                    return boost::find_first_of<return_type>(cont, policy.cont());
+                }
             };
 
             template<class Container>
@@ -77,8 +77,8 @@ namespace boost
             {
             }
 
-	        container2_t& cont() { return m_cont; }
-	        BinaryPredicate& pred() { return m_pred; }
+            container2_t& cont() { return m_cont; }
+            BinaryPredicate& pred() { return m_pred; }
 
             template<class Container>
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
@@ -88,14 +88,14 @@ namespace boost
             }
 
             template<range_return_value return_type>
-	        struct test_range
-	        {
-		        template<class Container, class Policy>
-		        BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
-		        operator()(Policy& policy, Container& cont)
-		        {
-		            return boost::find_first_of<return_type>(cont, policy.cont(), policy.pred());
-		        }
+            struct test_range
+            {
+                template<class Container, class Policy>
+                BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
+                operator()(Policy& policy, Container& cont)
+                {
+                    return boost::find_first_of<return_type>(cont, policy.cont(), policy.pred());
+                }
             };
 
             template<class Container>

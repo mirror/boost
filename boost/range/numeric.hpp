@@ -20,7 +20,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #if defined(_MSC_VER) && _MSC_VER >= 1000
-	#pragma once
+    #pragma once
 #endif
 
 #ifndef BOOST_RANGE_NUMERIC_HPP
@@ -36,82 +36,82 @@
 
 namespace boost
 {
-	template< class SinglePassRange, class Value >
-	inline Value accumulate( const SinglePassRange& rng, Value init )
-	{
+    template< class SinglePassRange, class Value >
+    inline Value accumulate( const SinglePassRange& rng, Value init )
+    {
         boost::function_requires< SinglePassRangeConcept<SinglePassRange> >();
-		return std::accumulate( boost::begin(rng), boost::end(rng), init );
-	}
+        return std::accumulate( boost::begin(rng), boost::end(rng), init );
+    }
 
-	template< class SinglePassRange, class Value, class BinaryOperation >
-	inline Value accumulate( const SinglePassRange& rng, Value init, BinaryOperation op )
-	{
+    template< class SinglePassRange, class Value, class BinaryOperation >
+    inline Value accumulate( const SinglePassRange& rng, Value init, BinaryOperation op )
+    {
         boost::function_requires< SinglePassRangeConcept<SinglePassRange> >();
-		return std::accumulate( boost::begin(rng), boost::end(rng), init, op );
-	}
+        return std::accumulate( boost::begin(rng), boost::end(rng), init, op );
+    }
 
 
-	template< class SinglePassRange1, class SinglePassRange2, class Value >
-	inline Value inner_product( const SinglePassRange1& rng1, const SinglePassRange2& rng2, Value init )
-	{
+    template< class SinglePassRange1, class SinglePassRange2, class Value >
+    inline Value inner_product( const SinglePassRange1& rng1, const SinglePassRange2& rng2, Value init )
+    {
         boost::function_requires< SinglePassRangeConcept<SinglePassRange1> >();
         boost::function_requires< SinglePassRangeConcept<SinglePassRange2> >();
         BOOST_ASSERT( boost::distance(rng2) >= boost::distance(rng1) );
-		return std::inner_product( boost::begin(rng1), boost::end(rng1), 
+        return std::inner_product( boost::begin(rng1), boost::end(rng1), 
             boost::begin(rng2), init ); 
-	}
+    }
 
-	template< class SinglePassRange1,
+    template< class SinglePassRange1,
               class SinglePassRange2,
               class Value, 
-		      class BinaryOperation1, class BinaryOperation2 >
-	inline Value inner_product( const SinglePassRange1& rng1, const SinglePassRange2& rng2,
+              class BinaryOperation1, class BinaryOperation2 >
+    inline Value inner_product( const SinglePassRange1& rng1, const SinglePassRange2& rng2,
                                 Value init, 
-							    BinaryOperation1 op1, BinaryOperation2 op2 )
-	{
+                                BinaryOperation1 op1, BinaryOperation2 op2 )
+    {
         boost::function_requires< SinglePassRangeConcept<SinglePassRange1> >();
         boost::function_requires< SinglePassRangeConcept<SinglePassRange2> >();
         BOOST_ASSERT( boost::distance(rng2) >= boost::distance(rng1) );
 
-		return std::inner_product( boost::begin(rng1), boost::end(rng1), 
+        return std::inner_product( boost::begin(rng1), boost::end(rng1), 
                                    boost::begin(rng2), init, op1, op2 ); 
-	}
+    }
 
-	template< class SinglePassRange, class OutputIterator >
-	inline OutputIterator partial_sum ( const SinglePassRange& rng, 
-										OutputIterator result )
-	{
+    template< class SinglePassRange, class OutputIterator >
+    inline OutputIterator partial_sum ( const SinglePassRange& rng, 
+                                        OutputIterator result )
+    {
         boost::function_requires< SinglePassRangeConcept<SinglePassRange> >();
-		return std::partial_sum( boost::begin(rng), boost::end(rng), result );
-	}
+        return std::partial_sum( boost::begin(rng), boost::end(rng), result );
+    }
 
-	template< class SinglePassRange, class OutputIterator, class BinaryOperation >
-	inline OutputIterator partial_sum ( const SinglePassRange& rng, OutputIterator result, 
-										BinaryOperation op )
-	{
+    template< class SinglePassRange, class OutputIterator, class BinaryOperation >
+    inline OutputIterator partial_sum ( const SinglePassRange& rng, OutputIterator result, 
+                                        BinaryOperation op )
+    {
         boost::function_requires< SinglePassRangeConcept<SinglePassRange> >();
-		return std::partial_sum( boost::begin(rng), boost::end(rng), result, op );
-	}
+        return std::partial_sum( boost::begin(rng), boost::end(rng), result, op );
+    }
 
-	template< class SinglePassRange, class OutputIterator >
-	inline OutputIterator adjacent_difference ( const SinglePassRange& rng,
-												OutputIterator result )
-	{
+    template< class SinglePassRange, class OutputIterator >
+    inline OutputIterator adjacent_difference ( const SinglePassRange& rng,
+                                                OutputIterator result )
+    {
         boost::function_requires< SinglePassRangeConcept<SinglePassRange> >();
-		return std::adjacent_difference( boost::begin(rng), boost::end(rng), 
-										 result );
-	}
+        return std::adjacent_difference( boost::begin(rng), boost::end(rng), 
+                                         result );
+    }
 
-	template< class SinglePassRange, class OutputIterator, class BinaryOperation >
-	inline OutputIterator adjacent_difference ( const SinglePassRange& rng,
-												OutputIterator result,
-												BinaryOperation op )
-	{
+    template< class SinglePassRange, class OutputIterator, class BinaryOperation >
+    inline OutputIterator adjacent_difference ( const SinglePassRange& rng,
+                                                OutputIterator result,
+                                                BinaryOperation op )
+    {
         boost::function_requires< SinglePassRangeConcept<SinglePassRange> >();
-		return std::adjacent_difference( boost::begin(rng), boost::end(rng), 
-										 result, op );
-	}
-	
+        return std::adjacent_difference( boost::begin(rng), boost::end(rng), 
+                                         result, op );
+    }
+    
 }
 
 #endif

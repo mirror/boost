@@ -379,25 +379,25 @@ namespace boost
                                                    range_result, reference_it);
             }
 
-	        template< range_return_value result_type, class Container, class TestPolicy >
-	        struct test_range
-	        {
-		        void operator()(Container& cont, TestPolicy policy)
-		        {
-		            typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type iterator_t;
-		            typedef BOOST_DEDUCED_TYPENAME range_return<Container, result_type>::type range_return_t;
-		            typedef BOOST_DEDUCED_TYPENAME TestPolicy::template test_range<result_type> test_range_t;
+            template< range_return_value result_type, class Container, class TestPolicy >
+            struct test_range
+            {
+                void operator()(Container& cont, TestPolicy policy)
+                {
+                    typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type iterator_t;
+                    typedef BOOST_DEDUCED_TYPENAME range_return<Container, result_type>::type range_return_t;
+                    typedef BOOST_DEDUCED_TYPENAME TestPolicy::template test_range<result_type> test_range_t;
 
-		            Container reference(cont);
-		            Container test_cont(cont);
+                    Container reference(cont);
+                    Container test_cont(cont);
 
-		            range_return_t range_result = test_range_t()(policy, test_cont);
-		            iterator_t reference_it = policy.reference(reference);
+                    range_return_t range_result = test_range_t()(policy, test_cont);
+                    iterator_t reference_it = policy.reference(reference);
 
-		            check_results<result_type>::check(test_cont, reference,
+                    check_results<result_type>::check(test_cont, reference,
                                                          range_result, reference_it);
-		        }
-	        };
+                }
+            };
         };
     }
 }

@@ -79,7 +79,7 @@ int main(int ac, char* av[])
         ifstream ifs(config_file.c_str());
         if (!ifs)
         {
-			   cout << "can not open config file: " << config_file << "\n";
+            cout << "can not open config file: " << config_file << "\n";
             return 0;
         }
         else

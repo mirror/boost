@@ -22,99 +22,99 @@
 
 namespace boost
 {
-	namespace range_detail
-	{
-		template< class Value >
-		class replace_value
-		{
-		public:
-			typedef const Value& result_type;
-			typedef const Value& first_argument_type;
+    namespace range_detail
+    {
+        template< class Value >
+        class replace_value
+        {
+        public:
+            typedef const Value& result_type;
+            typedef const Value& first_argument_type;
 
-			replace_value(const Value& from, const Value& to)
-				:	m_from(from), m_to(to)
-			{
-			}
+            replace_value(const Value& from, const Value& to)
+                :   m_from(from), m_to(to)
+            {
+            }
 
-			const Value& operator()(const Value& x) const
-			{
-				return (x == m_from) ? m_to : x;
-			}
+            const Value& operator()(const Value& x) const
+            {
+                return (x == m_from) ? m_to : x;
+            }
 
-		private:
-			Value m_from;
-			Value m_to;
-		};
+        private:
+            Value m_from;
+            Value m_to;
+        };
 
-		template< class R >
-		class replace_range :
-			public boost::iterator_range<
-				boost::transform_iterator<
-					replace_value< BOOST_DEDUCED_TYPENAME range_value<R>::type >,
-					BOOST_DEDUCED_TYPENAME range_iterator<R>::type > >
-		{
-		private:
-			typedef replace_value< BOOST_DEDUCED_TYPENAME range_value<R>::type > Fn;
+        template< class R >
+        class replace_range :
+            public boost::iterator_range<
+                boost::transform_iterator<
+                    replace_value< BOOST_DEDUCED_TYPENAME range_value<R>::type >,
+                    BOOST_DEDUCED_TYPENAME range_iterator<R>::type > >
+        {
+        private:
+            typedef replace_value< BOOST_DEDUCED_TYPENAME range_value<R>::type > Fn;
 
-			typedef boost::iterator_range<
-				boost::transform_iterator<
-					replace_value< BOOST_DEDUCED_TYPENAME range_value<R>::type >,
-					BOOST_DEDUCED_TYPENAME range_iterator<R>::type > > base_t;
+            typedef boost::iterator_range<
+                boost::transform_iterator<
+                    replace_value< BOOST_DEDUCED_TYPENAME range_value<R>::type >,
+                    BOOST_DEDUCED_TYPENAME range_iterator<R>::type > > base_t;
 
-		public:
-			typedef BOOST_DEDUCED_TYPENAME range_value<R>::type value_type;
+        public:
+            typedef BOOST_DEDUCED_TYPENAME range_value<R>::type value_type;
 
-			replace_range( R& r, value_type from, value_type to )
-				: base_t( make_transform_iterator( boost::begin(r), Fn(from, to) ),
-						  make_transform_iterator( boost::end(r), Fn(from, to) ) )
-			{ }
-		};
+            replace_range( R& r, value_type from, value_type to )
+                : base_t( make_transform_iterator( boost::begin(r), Fn(from, to) ),
+                          make_transform_iterator( boost::end(r), Fn(from, to) ) )
+            { }
+        };
 
-		template< class T >
-		class replace_holder : public holder2<T>
-		{
-		public:
-			replace_holder( const T& from, const T& to )
-				: holder2<T>(from, to)
-			{ }
-		private:
-			// not assignable
-			void operator=(const replace_holder&);
-		};
+        template< class T >
+        class replace_holder : public holder2<T>
+        {
+        public:
+            replace_holder( const T& from, const T& to )
+                : holder2<T>(from, to)
+            { }
+        private:
+            // not assignable
+            void operator=(const replace_holder&);
+        };
 
-		template< class InputRng >
-		inline replace_range<InputRng>
-		operator|( InputRng& r,
-				   const replace_holder<BOOST_DEDUCED_TYPENAME range_value<InputRng>::type>& f )
-		{
-			return replace_range<InputRng>(r, f.val1, f.val2);
-		}
+        template< class InputRng >
+        inline replace_range<InputRng>
+        operator|( InputRng& r,
+                   const replace_holder<BOOST_DEDUCED_TYPENAME range_value<InputRng>::type>& f )
+        {
+            return replace_range<InputRng>(r, f.val1, f.val2);
+        }
 
-		template< class InputRng >
-		inline replace_range<const InputRng>
-		operator|( const InputRng& r,
-				   const replace_holder<BOOST_DEDUCED_TYPENAME range_value<InputRng>::type>& f )
-		{
-			return replace_range<const InputRng>(r, f.val1, f.val2);
-		}
-	} // 'range_detail'
+        template< class InputRng >
+        inline replace_range<const InputRng>
+        operator|( const InputRng& r,
+                   const replace_holder<BOOST_DEDUCED_TYPENAME range_value<InputRng>::type>& f )
+        {
+            return replace_range<const InputRng>(r, f.val1, f.val2);
+        }
+    } // 'range_detail'
 
     using range_detail::replace_range;
 
-	namespace adaptors
-	{
-		namespace
-		{
-			const range_detail::forwarder2<range_detail::replace_holder>
-				replaced =
-					range_detail::forwarder2<range_detail::replace_holder>();
-		}
+    namespace adaptors
+    {
+        namespace
+        {
+            const range_detail::forwarder2<range_detail::replace_holder>
+                replaced =
+                    range_detail::forwarder2<range_detail::replace_holder>();
+        }
 
-		template<class InputRange>
-		inline replace_range<InputRange>
-		replace(InputRange& rng,
-		        BOOST_DEDUCED_TYPENAME range_value<InputRange>::type from,
-		        BOOST_DEDUCED_TYPENAME range_value<InputRange>::type to)
+        template<class InputRange>
+        inline replace_range<InputRange>
+        replace(InputRange& rng,
+                BOOST_DEDUCED_TYPENAME range_value<InputRange>::type from,
+                BOOST_DEDUCED_TYPENAME range_value<InputRange>::type to)
         {
             return replace_range<InputRange>(rng, from, to);
         }
@@ -128,7 +128,7 @@ namespace boost
             return replace_range<const InputRange>(rng, from ,to);
         }
 
-	} // 'adaptors'
+    } // 'adaptors'
 } // 'boost'
 
 #endif // include guard

@@ -18,40 +18,40 @@
 
 namespace boost
 {
-	namespace adaptors
-	{
-	    struct copied
-	    {
-	        copied(std::size_t t_, std::size_t u_)
+    namespace adaptors
+    {
+        struct copied
+        {
+            copied(std::size_t t_, std::size_t u_)
                 : t(t_), u(u_) {}
 
             std::size_t t;
             std::size_t u;
-	    };
+        };
 
-		template< class CopyableRandomAccessRng >
-		inline CopyableRandomAccessRng
-		operator|( const CopyableRandomAccessRng& r, const copied& f )
-		{
-			iterator_range<
-				BOOST_DEDUCED_TYPENAME range_iterator<const
-				                               CopyableRandomAccessRng>::type >
-			temp( adaptors::slice( r, f.t, f.u ) );
-			return CopyableRandomAccessRng( temp.begin(), temp.end() );
-		}
+        template< class CopyableRandomAccessRng >
+        inline CopyableRandomAccessRng
+        operator|( const CopyableRandomAccessRng& r, const copied& f )
+        {
+            iterator_range<
+                BOOST_DEDUCED_TYPENAME range_iterator<const
+                                               CopyableRandomAccessRng>::type >
+            temp( adaptors::slice( r, f.t, f.u ) );
+            return CopyableRandomAccessRng( temp.begin(), temp.end() );
+        }
 
-		template<class CopyableRandomAccessRange>
-		inline CopyableRandomAccessRange
-		copy(const CopyableRandomAccessRange& rng, std::size_t t, std::size_t u)
-		{
-		    iterator_range<
-		        BOOST_DEDUCED_TYPENAME range_iterator<const
-		            CopyableRandomAccessRange>::type> temp(
-		                adaptors::slice(rng, t, u));
+        template<class CopyableRandomAccessRange>
+        inline CopyableRandomAccessRange
+        copy(const CopyableRandomAccessRange& rng, std::size_t t, std::size_t u)
+        {
+            iterator_range<
+                BOOST_DEDUCED_TYPENAME range_iterator<const
+                    CopyableRandomAccessRange>::type> temp(
+                        adaptors::slice(rng, t, u));
 
             return CopyableRandomAccessRange( temp.begin(), temp.end() );
-		}
-	} // 'adaptors'
+        }
+    } // 'adaptors'
 
 }
 
