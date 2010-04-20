@@ -15,20 +15,25 @@
 namespace boost_no_complete_value_initialization
 {
   enum enum_type { negative_number = -1, magic_number = 42 };
-
+  
+  class incomplete_class;
+  
+  typedef int (*function_ptr_type)(int);
+  typedef int (incomplete_class::*member_function_ptr_type)(int);
 
   // A POD struct.
   struct pod_struct
   {
     enum_type e;
-    char c;  
-    unsigned char uc;  
+    char c;
+    unsigned char uc;
     short s;
     int i;
     unsigned u;
     long l;
-    float f;  
-    double d;  
+    float f;
+    double d;
+    long double ld;
     void* p;
   };
 
@@ -74,6 +79,38 @@ namespace boost_no_complete_value_initialization
     return arg.data == 0;
   }
 
+
+  struct bit_field_struct
+  {
+    bool b : 1;
+    char c : 7;
+    unsigned u: 8 * sizeof(unsigned) - 1;  
+  };
+  
+  bool is_value_initialized(const bit_field_struct& arg)
+  {
+    return arg.b == false && arg.c == '\0'&& arg.u == 0U;
+  }
+  
+  struct function_ptr_struct
+  {
+	function_ptr_type data;
+  };
+
+  bool is_value_initialized(const function_ptr_struct& arg)
+  {
+    return arg.data == 0;
+  }
+
+  struct member_function_ptr_struct
+  {
+	member_function_ptr_type data;
+  };
+
+  bool is_value_initialized(const member_function_ptr_struct& arg)
+  {
+    return arg.data == 0;
+  }
 
   // Equivalent to the struct TData from CodeGear bug report 51854,
   // "Value-initialization: POD struct should be zero-initialized",
@@ -380,8 +417,20 @@ namespace boost_no_complete_value_initialization
     float m_float_array[2];
     double m_double;
     double m_double_array[2];
+    long double m_long_double;
+    long double m_long_double_array[2];
     void* m_ptr;
     void* m_ptr_array[2];
+    function_ptr_type m_function_ptr;
+    function_ptr_type m_function_ptr_array[2];
+    function_ptr_struct m_function_ptr_struct;
+    function_ptr_struct m_function_ptr_struct_array[2];
+    member_function_ptr_type m_member_function_ptr;
+    member_function_ptr_type m_member_function_ptr_array[2];
+    member_function_ptr_struct m_member_function_ptr_struct;
+    member_function_ptr_struct m_member_function_ptr_struct_array[2];
+    bit_field_struct m_bit_field_struct;
+    bit_field_struct m_bit_field_struct_array[2];
     int_struct m_int_struct;
     int_struct m_int_struct_array[2];
     int_struct m_int_struct_holder;
@@ -450,8 +499,20 @@ namespace boost_no_complete_value_initialization
     m_float_array(),
     m_double(),
     m_double_array(),
+    m_long_double(),
+    m_long_double_array(),
     m_ptr(),
     m_ptr_array(),
+    m_function_ptr(),
+    m_function_ptr_array(),
+    m_function_ptr_struct(),
+    m_function_ptr_struct_array(),
+    m_member_function_ptr(),
+    m_member_function_ptr_array(),
+    m_member_function_ptr_struct(),
+    m_member_function_ptr_struct_array(),
+    m_bit_field_struct(),
+    m_bit_field_struct_array(),
     m_int_struct(),
     m_int_struct_array(),
     m_int_struct_holder(),
@@ -522,9 +583,27 @@ namespace boost_no_complete_value_initialization
         FAILED_TO_VALUE_INITIALIZE(m_double) +
         FAILED_TO_VALUE_INITIALIZE(m_double_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_double_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_long_double) +
+        FAILED_TO_VALUE_INITIALIZE(m_long_double_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_long_double_array[1]) +
         FAILED_TO_VALUE_INITIALIZE(m_ptr) +
         FAILED_TO_VALUE_INITIALIZE(m_ptr_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_ptr_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_function_ptr) +
+        FAILED_TO_VALUE_INITIALIZE(m_function_ptr_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_function_ptr_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_function_ptr_struct) +
+        FAILED_TO_VALUE_INITIALIZE(m_function_ptr_struct_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_function_ptr_struct_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_member_function_ptr) +
+        FAILED_TO_VALUE_INITIALIZE(m_member_function_ptr_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_member_function_ptr_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_member_function_ptr_struct) +
+        FAILED_TO_VALUE_INITIALIZE(m_member_function_ptr_struct_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_member_function_ptr_struct_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_bit_field_struct) +
+        FAILED_TO_VALUE_INITIALIZE(m_bit_field_struct_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_bit_field_struct_array[1]) +
         FAILED_TO_VALUE_INITIALIZE(m_int_struct) +
         FAILED_TO_VALUE_INITIALIZE(m_int_struct_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_int_struct_array[1]) +
@@ -578,16 +657,25 @@ namespace boost_no_complete_value_initialization
   // Returns the number of failures.
   unsigned check_value_initialization_of_temporaries()
   {
+    typedef long double long_double_type;
+    typedef unsigned char unsigned_char_type;
     const unsigned num_failures = 
       FAILED_TO_VALUE_INITIALIZE(enum_holder()) +
       FAILED_TO_VALUE_INITIALIZE(enum_type()) +
       FAILED_TO_VALUE_INITIALIZE(char()) +
+      FAILED_TO_VALUE_INITIALIZE(unsigned_char_type()) +
       FAILED_TO_VALUE_INITIALIZE(short()) +
       FAILED_TO_VALUE_INITIALIZE(int()) +
       FAILED_TO_VALUE_INITIALIZE(unsigned()) +
       FAILED_TO_VALUE_INITIALIZE(long()) +
       FAILED_TO_VALUE_INITIALIZE(float()) +
       FAILED_TO_VALUE_INITIALIZE(double()) +
+      FAILED_TO_VALUE_INITIALIZE(long_double_type()) +
+      FAILED_TO_VALUE_INITIALIZE(bit_field_struct()) +
+      FAILED_TO_VALUE_INITIALIZE(function_ptr_type()) +
+      FAILED_TO_VALUE_INITIALIZE(function_ptr_struct()) +
+      FAILED_TO_VALUE_INITIALIZE(member_function_ptr_type()) +
+      FAILED_TO_VALUE_INITIALIZE(member_function_ptr_struct()) +
       FAILED_TO_VALUE_INITIALIZE(int_struct()) +
       FAILED_TO_VALUE_INITIALIZE(int_struct_holder()) +
       FAILED_TO_VALUE_INITIALIZE(pod_struct()) +
@@ -686,7 +774,7 @@ namespace boost_no_complete_value_initialization
         << num_failures_on_heap << '+'
         << num_failures_of_temporaries << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 16."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 17."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
