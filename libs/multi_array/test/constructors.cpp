@@ -1,6 +1,6 @@
 // Copyright 2002 The Trustees of Indiana University.
 
-// Use, modification and distribution is subject to the Boost Software 
+// Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
@@ -25,8 +25,8 @@ void check_shape(const double&, std::size_t*, int*, unsigned int)
 {}
 
 template <class Array>
-void check_shape(const Array& A, 
-                 std::size_t* sizes, 
+void check_shape(const Array& A,
+                 std::size_t* sizes,
                  int* strides,
                  unsigned int num_elements)
 {
@@ -49,7 +49,7 @@ bool equal(const ArrayA& A, const ArrayB& B)
   typename ArrayA::const_iterator ia;
   typename ArrayB::const_iterator ib = B.begin();
   for (ia = A.begin(); ia != A.end(); ++ia, ++ib)
-    if (!equal(*ia, *ib))
+    if (!::equal(*ia, *ib))
       return false;
   return true;
 }
@@ -76,7 +76,7 @@ test_main(int, char*[])
     double* ptr = 0;
     boost::multi_array_ref<double,3> B(ptr,sizes);
     check_shape(B, &sizes[0], strides, num_elements);
-    
+
     const double* cptr = ptr;
     boost::const_multi_array_ref<double,3> C(cptr,sizes);
     check_shape(C, &sizes[0], strides, num_elements);
@@ -132,7 +132,7 @@ test_main(int, char*[])
     A.assign(vals.begin(),vals.end());
     boost::multi_array<double, 3> B(A);
     check_shape(B, &sizes[0], strides, num_elements);
-    BOOST_CHECK(equal(A, B));
+    BOOST_CHECK(::equal(A, B));
 
     double ptr[27];
     boost::multi_array_ref<double, 3> C(ptr,sizes);
@@ -182,7 +182,7 @@ test_main(int, char*[])
     A.assign(vals.begin(),vals.end());
     B = A;
     check_shape(B, &sizes[0], strides, num_elements);
-    BOOST_CHECK(equal(A, B));
+    BOOST_CHECK(::equal(A, B));
 
     double ptr1[27];
     double ptr2[27];
@@ -190,12 +190,12 @@ test_main(int, char*[])
     C.assign(vals.begin(),vals.end());
     D = C;
     check_shape(D, &sizes[0], strides, num_elements);
-    BOOST_CHECK(equal(C,D));
+    BOOST_CHECK(::equal(C,D));
   }
 
 
   // subarray value_type is multi_array
-  { 
+  {
     typedef boost::multi_array<double,3> array;
     typedef array::size_type size_type;
     size_type num_elements = 27;
@@ -209,8 +209,8 @@ test_main(int, char*[])
     subarray::value_type C = B[0];
 
     // should comparisons between the types work?
-    BOOST_CHECK(equal(A[1][0],C));
-    BOOST_CHECK(equal(B[0],C));
+    BOOST_CHECK(::equal(A[1][0],C));
+    BOOST_CHECK(::equal(B[0],C));
   }
   return boost::exit_success;
 }

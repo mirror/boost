@@ -1,6 +1,6 @@
 // Copyright 2002 The Trustees of Indiana University.
 
-// Use, modification and distribution is subject to the Boost Software 
+// Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
@@ -10,9 +10,9 @@
 //           Andrew Lumsdaine
 //  See http://www.boost.org/libs/multi_array for documentation.
 
-// 
+//
 // assign.cpp - Test out operator=() on the different types
-// 
+//
 //
 #include "generative_tests.hpp"
 #include "boost/array.hpp"
@@ -32,7 +32,7 @@ bool equal(const ArrayA& A, const ArrayB& B)
   typename ArrayA::const_iterator ia;
   typename ArrayB::const_iterator ib = B.begin();
   for (ia = A.begin(); ia != A.end(); ++ia, ++ib)
-    if (!equal(*ia, *ib))
+    if (!::equal(*ia, *ib))
       return false;
   return true;
 }
@@ -59,7 +59,7 @@ void access(Array& A, const mutable_array_tag&) {
 
   A = filler;
 
-  BOOST_CHECK(equal(A,filler));
+  BOOST_CHECK(::equal(A,filler));
   ++tests_run;
 }
 
