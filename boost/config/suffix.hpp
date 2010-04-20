@@ -554,6 +554,12 @@ namespace boost{
 
 #endif // defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 
+// When BOOST_NO_STD_TYPEINFO is defined, we can just import
+// the global definition into std namespace:
+#ifdef BOOST_NO_STD_TYPEINFO
+#include <typeinfo>
+namespace std{ using ::typeinfo; }
+#endif
 
 // ---------------------------------------------------------------------------//
 

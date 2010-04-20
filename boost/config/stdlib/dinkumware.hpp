@@ -86,6 +86,11 @@
 #  define BOOST_NO_STD_LOCALE
 #endif
 
+#include <typeinfo>
+#if !_HAS_EXCEPTIONS
+#  define BOOST_NO_STD_TYPEINFO    
+#endif  
+
 //  C++0x headers implemented in 520 (as shipped by Microsoft)
 //
 #if !defined(_CPPLIB_VER) || _CPPLIB_VER < 520
