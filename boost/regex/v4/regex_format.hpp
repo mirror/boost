@@ -964,7 +964,7 @@ struct format_functor3
    template <class OutputIter>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f)
    {
-      return unwrap_ref(func)(m, i, f);
+      return boost::unwrap_ref(func)(m, i, f);
    }
    template <class OutputIter, class Traits>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f, const Traits&)
@@ -984,7 +984,7 @@ struct format_functor2
    template <class OutputIter>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type /*f*/)
    {
-      return unwrap_ref(func)(m, i);
+      return boost::unwrap_ref(func)(m, i);
    }
    template <class OutputIter, class Traits>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f, const Traits&)
@@ -1021,7 +1021,7 @@ struct format_functor1
    template <class OutputIter>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type /*f*/)
    {
-      return do_format_string(unwrap_ref(func)(m), i);
+      return do_format_string(boost::unwrap_ref(func)(m), i);
    }
    template <class OutputIter, class Traits>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f, const Traits&)
