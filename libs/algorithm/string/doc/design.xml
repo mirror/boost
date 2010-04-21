@@ -25,7 +25,7 @@
         </para>
         <para>
             <emphasis role="bold">Definition:</emphasis> A string is a 
-            <ulink url="../../libs/range/doc/range.html">range</ulink> of characters accessible in sequential
+            <ulink url="../../libs/range/index.html">range</ulink> of characters accessible in sequential
             ordered fashion. Character is any value type with "cheap" copying and assignment.                
         </para>
         <para>

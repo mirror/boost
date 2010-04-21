@@ -14,6 +14,36 @@
 
 <!-- End Banner -->
 
+<h4>1.43</h4>
+
+<p>
+More fixes.
+</p>
+
+<ul>
+  <li>
+    Fix <code>write_device_impl&lt;ostream_tag&gt;</code>
+    (<a href="https://svn.boost.org/trac/boost/ticket/3839">#3839</a>).
+  </li>
+  <li>
+    Fix error checks after calling SetFilePointer
+    (<a href="https://svn.boost.org/trac/boost/ticket/3953">#3953</a>).
+  </li>
+  <li>
+    Gzip filter shouldn't require its source to be peekable
+    (<a href="https://svn.boost.org/trac/boost/ticket/3723">#3723</a>).
+  </li>
+  <li>
+    In <code>position_to_offset</code>, only cast to
+    <code>stream_offset</code> after calculating <code>_Myoff</code>
+    (<a href="https://svn.boost.org/trac/boost/ticket/3969">#3969</a>).
+  </li>
+  <li>
+    <code>ptrdiff_t</code> is in <code>std</code>
+    (<a href="https://svn.boost.org/trac/boost/ticket/2505">#2505</a>).
+  </li>
+</ul>
+
 <h4>1.42</h4>
 
 <p>

@@ -180,7 +180,7 @@ Features include:
 * Accept a space between `section:` and the section id.
 * Support table ids.
 
-[h3 Version 1.5.1]
+[h3 Version 1.5.1 - Boost 1.43.0]
 
 * Improve the post processor's list of block elements. `table`, `entry` and
   `varlistentry` are treated as blocks. `replaceable` is treated as an inline
@@ -189,6 +189,8 @@ Features include:
 * Add unicode escape characters, eg. `\u03B1` for \u03B1.
 * Support UTF-8 files with a unicode byte order mark.
 * Disallow `[` in simple markup. Fixes some errors with mismatched punctuation.
+* Add command line flag to define macros at the command line,
+  e.g. `quickbook "-D__italic_foo__=/foo/"`.
 
 [endsect]
 
