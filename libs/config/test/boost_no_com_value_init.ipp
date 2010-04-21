@@ -94,7 +94,7 @@ namespace boost_no_complete_value_initialization
   
   struct function_ptr_struct
   {
-	function_ptr_type data;
+    function_ptr_type data;
   };
 
   bool is_value_initialized(const function_ptr_struct& arg)
@@ -104,7 +104,7 @@ namespace boost_no_complete_value_initialization
 
   struct member_function_ptr_struct
   {
-	member_function_ptr_type data;
+    member_function_ptr_type data;
   };
 
   bool is_value_initialized(const member_function_ptr_struct& arg)
