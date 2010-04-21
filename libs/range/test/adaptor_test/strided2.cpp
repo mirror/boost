@@ -51,9 +51,6 @@ namespace boost
             reference += 4,8;
             BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
                 z.begin(), z.end() );
-
-            // C++0x Lambda experiment
-            std::sort( v.begin(), v.end(), [](int l, int r)  { return l < r; });
         }
     }
 }
