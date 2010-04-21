@@ -19,12 +19,14 @@ struct noncopy_vector
   : std::vector<int>
   , private boost::noncopyable
 {
+  noncopy_vector() { }
 };
 
 struct noncopy_range
   : boost::iterator_range<noncopy_vector::iterator>
   , private boost::noncopyable
 {
+  noncopy_range() { }
 };
 
 // Tell FOREACH that noncopy_vector and noncopy_range are non-copyable.
