@@ -401,10 +401,10 @@ namespace boost_no_complete_value_initialization
     enum_type m_enum_array[2];
     char m_char;
     char m_char_array[2];
-    unsigned char m_unsigned_char;
-    unsigned char m_unsigned_char_array[2];
     _2d_char_array_type m_2d_char_array;
     _3d_char_array_type m_3d_char_array;
+    unsigned char m_unsigned_char;
+    unsigned char m_unsigned_char_array[2];
     short m_short;
     short m_short_array[2];
     int m_int;
@@ -774,7 +774,7 @@ namespace boost_no_complete_value_initialization
         << num_failures_on_heap << '+'
         << num_failures_of_temporaries << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 17."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 18."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
