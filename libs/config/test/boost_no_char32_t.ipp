@@ -14,7 +14,7 @@ namespace boost_no_char32_t {
 
 int test()
 {
-  char32_t c;
+  const char32_t* p = U"abc";
   return 0;
 }
 

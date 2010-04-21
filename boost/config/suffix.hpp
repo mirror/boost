@@ -314,6 +314,13 @@
 #  define BOOST_NO_INITIALIZER_LISTS
 #endif
 
+//
+// Set BOOST_HAS_RVALUE_REFS when BOOST_NO_RVALUE_REFERENCES is not defined
+//
+#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_HAS_RVALUE_REFS)
+#define BOOST_HAS_RVALUE_REFS
+#endif
+
 //  BOOST_HAS_ABI_HEADERS
 //  This macro gets set if we have headers that fix the ABI,
 //  and prevent ODR violations when linking to external libraries:

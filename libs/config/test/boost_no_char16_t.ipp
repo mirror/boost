@@ -1,3 +1,4 @@
+
 //  (C) Copyright Beman Dawes 2008
 
 //  Use, modification and distribution are subject to the
@@ -14,7 +15,7 @@ namespace boost_no_char16_t {
 
 int test()
 {
-  char16_t c;
+  const char16_t* p = u"abc";
   return 0;
 }
 
