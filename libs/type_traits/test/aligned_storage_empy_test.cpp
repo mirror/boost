@@ -53,7 +53,7 @@ namespace
     }
 
     template< class T >
-    void check()
+    void do_check()
     {
         std::ptrdiff_t addr1 = get_address1<0,T>();
         std::ptrdiff_t addr2 = get_address2<0,T>();
@@ -90,31 +90,31 @@ namespace
 
 TT_TEST_BEGIN(type_with_empty_alignment_buffer)
 
-check<char>();
-check<short>();
-check<int>();
-check<long>();
-check<float>();
-check<double>();
-check<long double>();
+do_check<char>();
+do_check<short>();
+do_check<int>();
+do_check<long>();
+do_check<float>();
+do_check<double>();
+do_check<long double>();
 
 #ifdef BOOST_HAS_MS_INT64
-check<__int64>();
+do_check<__int64>();
 #endif
 #ifdef BOOST_HAS_LONG_LONG
-check<long long>();
+do_check<long long>();
 #endif
 
-check<int(*)(int)>();
-check<int*>();
-check<VB>();
-check<VD>();
-check<enum_UDT>();
-check<mf2>();
-check<POD_UDT>();
-check<empty_UDT>();
-check<union_UDT>();
-check<boost::detail::max_align>();
+do_check<int(*)(int)>();
+do_check<int*>();
+do_check<VB>();
+do_check<VD>();
+do_check<enum_UDT>();
+do_check<mf2>();
+do_check<POD_UDT>();
+do_check<empty_UDT>();
+do_check<union_UDT>();
+do_check<boost::detail::max_align>();
 
 TT_TEST_END
 
