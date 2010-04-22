@@ -17,7 +17,7 @@
 #include <cassert>
 
 
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+#if defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION) && !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
 //  A definition is required even for integral static constants
 const bool boost::random_device::has_fixed_range;
 const boost::random_device::result_type boost::random_device::min_value;

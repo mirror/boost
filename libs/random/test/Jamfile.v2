@@ -13,6 +13,8 @@ project /boost/random/test ;
 run random_test.cpp ;
 run ../example/random_demo.cpp ;
 run validate.cpp ;
+run test_random_device.cpp /boost//random : : : <link>static : test_random_device ;
+run test_random_device.cpp /boost//random : : : <link>shared : test_random_device_dll ;
 
 local all-urngs = 
     rand48
