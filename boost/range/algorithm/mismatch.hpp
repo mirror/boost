@@ -71,6 +71,36 @@ namespace boost
 template< class SinglePassRange1, class SinglePassRange2 >
 inline std::pair<
     BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange1>::type,
+    BOOST_DEDUCED_TYPENAME range_iterator<const SinglePassRange2>::type >
+mismatch(SinglePassRange1& rng1, const SinglePassRange2 & rng2)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
+
+    return ::boost::range_detail::mismatch_impl(
+        ::boost::begin(rng1), ::boost::end(rng1),
+        ::boost::begin(rng2), ::boost::end(rng2));
+}
+
+/// \overload
+template< class SinglePassRange1, class SinglePassRange2 >
+inline std::pair<
+    BOOST_DEDUCED_TYPENAME range_iterator<const SinglePassRange1>::type,
+    BOOST_DEDUCED_TYPENAME range_iterator<const SinglePassRange2>::type >
+mismatch(const SinglePassRange1& rng1, const SinglePassRange2& rng2)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
+
+    return ::boost::range_detail::mismatch_impl(
+        ::boost::begin(rng1), ::boost::end(rng1),
+        ::boost::begin(rng2), ::boost::end(rng2));
+}
+
+/// \overload
+template< class SinglePassRange1, class SinglePassRange2 >
+inline std::pair<
+    BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange1>::type,
     BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange2>::type >
 mismatch(SinglePassRange1& rng1, SinglePassRange2 & rng2)
 {
@@ -83,6 +113,52 @@ mismatch(SinglePassRange1& rng1, SinglePassRange2 & rng2)
 }
 
 /// \overload
+template< class SinglePassRange1, class SinglePassRange2 >
+inline std::pair<
+    BOOST_DEDUCED_TYPENAME range_iterator<const SinglePassRange1>::type,
+    BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange2>::type >
+mismatch(const SinglePassRange1& rng1, SinglePassRange2& rng2)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
+
+    return ::boost::range_detail::mismatch_impl(
+        ::boost::begin(rng1), ::boost::end(rng1),
+        ::boost::begin(rng2), ::boost::end(rng2));
+}
+
+
+/// \overload
+template< class SinglePassRange1, class SinglePassRange2, class BinaryPredicate >
+inline std::pair<
+    BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange1>::type,
+    BOOST_DEDUCED_TYPENAME range_iterator<const SinglePassRange2>::type >
+mismatch(SinglePassRange1& rng1, const SinglePassRange2& rng2, BinaryPredicate pred)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
+
+    return ::boost::range_detail::mismatch_impl(
+        ::boost::begin(rng1), ::boost::end(rng1),
+        ::boost::begin(rng2), ::boost::end(rng2), pred);
+}
+
+/// \overload
+template< class SinglePassRange1, class SinglePassRange2, class BinaryPredicate >
+inline std::pair<
+    BOOST_DEDUCED_TYPENAME range_iterator<const SinglePassRange1>::type,
+    BOOST_DEDUCED_TYPENAME range_iterator<const SinglePassRange2>::type >
+mismatch(const SinglePassRange1& rng1, const SinglePassRange2& rng2, BinaryPredicate pred)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
+
+    return ::boost::range_detail::mismatch_impl(
+        ::boost::begin(rng1), ::boost::end(rng1),
+        ::boost::begin(rng2), ::boost::end(rng2), pred);
+}
+
+/// \overload
 template< class SinglePassRange1, class SinglePassRange2, class BinaryPredicate >
 inline std::pair<
     BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange1>::type,
@@ -90,6 +166,21 @@ inline std::pair<
 mismatch(SinglePassRange1& rng1, SinglePassRange2& rng2, BinaryPredicate pred)
 {
     BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
+
+    return ::boost::range_detail::mismatch_impl(
+        ::boost::begin(rng1), ::boost::end(rng1),
+        ::boost::begin(rng2), ::boost::end(rng2), pred);
+}
+
+/// \overload
+template< class SinglePassRange1, class SinglePassRange2, class BinaryPredicate >
+inline std::pair<
+    BOOST_DEDUCED_TYPENAME range_iterator<const SinglePassRange1>::type,
+    BOOST_DEDUCED_TYPENAME range_iterator<SinglePassRange2>::type >
+mismatch(const SinglePassRange1& rng1, SinglePassRange2& rng2, BinaryPredicate pred)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
     BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
 
     return ::boost::range_detail::mismatch_impl(

@@ -36,11 +36,29 @@ max_element(ForwardRange& rng)
 }
 
 /// \overload
+template<class ForwardRange>
+inline BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange>::type
+max_element(const ForwardRange& rng)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    return std::max_element(boost::begin(rng), boost::end(rng));
+}
+
+/// \overload
 template<class ForwardRange, class BinaryPredicate>
 inline BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type
 max_element(ForwardRange& rng, BinaryPredicate pred)
 {
     BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    return std::max_element(boost::begin(rng), boost::end(rng), pred);
+}
+
+/// \overload
+template<class ForwardRange, class BinaryPredicate>
+inline BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange>::type
+max_element(const ForwardRange& rng, BinaryPredicate pred)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     return std::max_element(boost::begin(rng), boost::end(rng), pred);
 }
 
@@ -58,12 +76,34 @@ max_element(ForwardRange& rng)
 }
 
 /// \overload
+template<range_return_value re, class ForwardRange>
+inline BOOST_DEDUCED_TYPENAME range_return<const ForwardRange,re>::type
+max_element(const ForwardRange& rng)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    return range_return<const ForwardRange,re>::pack(
+        std::max_element(boost::begin(rng), boost::end(rng)),
+        rng);
+}
+
+/// \overload
 template<range_return_value re, class ForwardRange, class BinaryPredicate>
 inline BOOST_DEDUCED_TYPENAME range_return<ForwardRange,re>::type
 max_element(ForwardRange& rng, BinaryPredicate pred)
 {
     BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
     return range_return<ForwardRange,re>::pack(
+        std::max_element(boost::begin(rng), boost::end(rng), pred),
+        rng);
+}
+
+/// \overload
+template<range_return_value re, class ForwardRange, class BinaryPredicate>
+inline BOOST_DEDUCED_TYPENAME range_return<const ForwardRange,re>::type
+max_element(const ForwardRange& rng, BinaryPredicate pred)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    return range_return<const ForwardRange,re>::pack(
         std::max_element(boost::begin(rng), boost::end(rng), pred),
         rng);
 }

@@ -33,6 +33,14 @@ inline UnaryFunction for_each(SinglePassRange & rng, UnaryFunction fun)
     return std::for_each(boost::begin(rng),boost::end(rng),fun);
 }
 
+/// \overload
+template< class SinglePassRange, class UnaryFunction >
+inline UnaryFunction for_each(const SinglePassRange& rng, UnaryFunction fun)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
+    return std::for_each(boost::begin(rng), boost::end(rng), fun);
+}
+
     } // namespace range
     using range::for_each;
 } // namespace boost
