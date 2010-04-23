@@ -138,6 +138,12 @@ void container_test(X& r, T const&)
 
     typedef BOOST_DEDUCED_TYPENAME X::allocator_type allocator_type;
     test::check_return_type<allocator_type>::equals(a_const.get_allocator());
+    
+    // Avoid unused variable warnings:
+
+    sink(u);
+    sink(u2);
+    sink(u3);
 }
 
 template <class X, class Key>
@@ -375,4 +381,16 @@ void unordered_test(X&, Key& k, T& t, Hash& hf, Pred& eq)
     test::check_return_type<float>::equals(b.max_load_factor());
     a.max_load_factor((float) 2.0);
     a.rehash(100);
+    
+    // Avoid unused variable warnings:
+
+    sink(a);
+    sink(a2);
+    sink(a3);
+    sink(a4);
+    sink(a5);
+    sink(a6);
+    sink(a7);
+    sink(a8);
+    sink(a9);
 }
