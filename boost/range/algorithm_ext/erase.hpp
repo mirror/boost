@@ -24,29 +24,32 @@ namespace boost
     {
 
 template< class Container >
-inline void erase( Container& on,
+inline Container& erase( Container& on,
       iterator_range<BOOST_DEDUCED_TYPENAME Container::iterator> to_erase )
 {
     BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<Container> ));
     on.erase( boost::begin(to_erase), boost::end(to_erase) );
+    return on;
 }
 
 template< class Container, class T >
-inline void remove_erase( Container& on, const T& val )
+inline Container& remove_erase( Container& on, const T& val )
 {
     BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<Container> ));
     on.erase(
         std::remove(boost::begin(on), boost::end(on), val),
         boost::end(on));
+    return on;
 }
 
 template< class Container, class Pred >
-inline void remove_erase_if( Container& on, Pred pred )
+inline Container& remove_erase_if( Container& on, Pred pred )
 {
     BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<Container> ));
     on.erase(
         std::remove_if(boost::begin(on), boost::end(on), pred),
         boost::end(on));
+    return on;
 }
 
     } // namespace range

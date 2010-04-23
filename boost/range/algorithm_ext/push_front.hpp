@@ -23,13 +23,14 @@ namespace boost
     {
 
 template< class Container, class Range >
-inline void push_front( Container& on, const Range& from )
+inline Container& push_front( Container& on, const Range& from )
 {
     BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<Container> ));
     BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const Range> ));
     BOOST_ASSERT( (void*)&on != (void*)&from &&
                   "cannot copy from a container to itself" );
     on.insert( on.begin(), boost::begin(from), boost::end(from) );
+    return on;
 }
 
     } // namespace range
