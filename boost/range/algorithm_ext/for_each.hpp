@@ -19,55 +19,55 @@
 
 namespace boost
 {
-	namespace range_detail
-	{
-		template<class InputIterator1, class InputIterator2, class Fn2>
-		inline Fn2 for_each_impl(InputIterator1 first1, InputIterator1 last1,
-								 InputIterator2 first2, InputIterator2 last2,
-								 Fn2 fn)
-		{
-			for (; first1 != last1 && first2 != last2; ++first1, ++first2)
-			{
-				fn(*first1, *first2);
-			}
-			return fn;
-		}
-	}
+    namespace range_detail
+    {
+        template<class InputIterator1, class InputIterator2, class Fn2>
+        inline Fn2 for_each_impl(InputIterator1 first1, InputIterator1 last1,
+                                 InputIterator2 first2, InputIterator2 last2,
+                                 Fn2 fn)
+        {
+            for (; first1 != last1 && first2 != last2; ++first1, ++first2)
+            {
+                fn(*first1, *first2);
+            }
+            return fn;
+        }
+    }
 
-	namespace range
-	{
-	    template<class SinglePassRange1, class SinglePassRange2, class Fn2>
-	    inline Fn2 for_each(const SinglePassRange1& rng1, const SinglePassRange2& rng2, Fn2 fn)
-	    {
-	        BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
-	        BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
+    namespace range
+    {
+        template<class SinglePassRange1, class SinglePassRange2, class Fn2>
+        inline Fn2 for_each(const SinglePassRange1& rng1, const SinglePassRange2& rng2, Fn2 fn)
+        {
+            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
 
-	        return ::boost::range_detail::for_each_impl(
+            return ::boost::range_detail::for_each_impl(
                 ::boost::begin(rng1), ::boost::end(rng1),
                 ::boost::begin(rng2), ::boost::end(rng2), fn);
-	    }
+        }
 
-	    template<class SinglePassRange1, class SinglePassRange2, class Fn2>
-	    inline Fn2 for_each(const SinglePassRange1& rng1, SinglePassRange2& rng2, Fn2 fn)
-	    {
-	        BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
-	        BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
+        template<class SinglePassRange1, class SinglePassRange2, class Fn2>
+        inline Fn2 for_each(const SinglePassRange1& rng1, SinglePassRange2& rng2, Fn2 fn)
+        {
+            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
 
-	        return ::boost::range_detail::for_each_impl(
+            return ::boost::range_detail::for_each_impl(
                 ::boost::begin(rng1), ::boost::end(rng1),
                 ::boost::begin(rng2), ::boost::end(rng2), fn);
-	    }
+        }
 
-	    template<class SinglePassRange1, class SinglePassRange2, class Fn2>
-	    inline Fn2 for_each(SinglePassRange1& rng1, const SinglePassRange2& rng2, Fn2 fn)
-	    {
-	        BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
-	        BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
+        template<class SinglePassRange1, class SinglePassRange2, class Fn2>
+        inline Fn2 for_each(SinglePassRange1& rng1, const SinglePassRange2& rng2, Fn2 fn)
+        {
+            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
+            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
 
-	        return ::boost::range_detail::for_each_impl(
+            return ::boost::range_detail::for_each_impl(
                 ::boost::begin(rng1), ::boost::end(rng1),
                 ::boost::begin(rng2), ::boost::end(rng2), fn);
-	    }
+        }
 
         template<class SinglePassRange1, class SinglePassRange2, class Fn2>
         inline Fn2 for_each(SinglePassRange1& rng1, SinglePassRange2& rng2, Fn2 fn)
@@ -79,8 +79,8 @@ namespace boost
                 ::boost::begin(rng1), ::boost::end(rng1),
                 ::boost::begin(rng2), ::boost::end(rng2), fn);
         }
-	} // namespace range
-	using range::for_each;
+    } // namespace range
+    using range::for_each;
 } // namespace boost
 
 #endif // include guard

@@ -3,12 +3,9 @@
 [heading Prototype]
 
 ``
-template<
-    class Container,
-    class Pred
-    >
-void remove_erase(Container& target,
-                  Pred pred);
+template<class Container, class Pred>
+Container& remove_erase_if(Container& target,
+                           Pred pred);
 ``
 
 [heading Description]

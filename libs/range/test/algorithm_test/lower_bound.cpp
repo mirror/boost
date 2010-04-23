@@ -36,16 +36,16 @@ namespace boost
                 return boost::lower_bound(cont, 5);
             }
 
-	        template<range_return_value return_type>
-	        struct test_range
-	        {
-	            template<class Container, class Policy>
-		        BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
-		        operator()(Policy&, Container& cont)
-		        {
-		            return boost::lower_bound<return_type>(cont, 5);
-		        }
-	        };
+            template<range_return_value return_type>
+            struct test_range
+            {
+                template<class Container, class Policy>
+                BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
+                operator()(Policy&, Container& cont)
+                {
+                    return boost::lower_bound<return_type>(cont, 5);
+                }
+            };
 
             template< class Container >
             BOOST_DEDUCED_TYPENAME range_iterator<Container>::type
@@ -66,15 +66,15 @@ namespace boost
             }
 
             template< range_return_value return_type >
-	        struct test_range
-	        {
-		        template<class Container, class Policy>
-		        BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
-		        operator()(Policy& policy, Container& cont)
-		        {
-		            return boost::lower_bound<return_type>(
-			            cont, 5, policy.pred());
-		        }
+            struct test_range
+            {
+                template<class Container, class Policy>
+                BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
+                operator()(Policy& policy, Container& cont)
+                {
+                    return boost::lower_bound<return_type>(
+                        cont, 5, policy.pred());
+                }
             };
 
             template<class Container>
@@ -85,10 +85,10 @@ namespace boost
                         cont.begin(), cont.end(), 5, m_pred);
             }
 
-	        BinaryPredicate& pred() { return m_pred; }
+            BinaryPredicate& pred() { return m_pred; }
 
-	    private:
-	        BinaryPredicate m_pred;
+        private:
+            BinaryPredicate m_pred;
         };
 
         template<class Container,

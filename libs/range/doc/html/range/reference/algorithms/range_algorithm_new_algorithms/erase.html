@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>erase</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Range 2.0">
 <link rel="up" href="../range_algorithm_new_algorithms.html" title="New algorithms">
 <link rel="prev" href="../range_algorithm_new_algorithms.html" title="New algorithms">
@@ -28,23 +28,21 @@
           erase</a>
 </h5></div></div></div>
 <a name="range.reference.algorithms.range_algorithm_new_algorithms.erase.prototype"></a><h6>
-<a name="id714130"></a>
+<a name="id3102704"></a>
             <a class="link" href="erase.html#range.reference.algorithms.range_algorithm_new_algorithms.erase.prototype">Prototype</a>
           </h6>
 <p>
             
 </p>
-<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
-    <span class="keyword">class</span> <span class="identifier">Container</span><span class="special">,</span>
-    <span class="keyword">class</span> <span class="identifier">SinglePassRange</span>
-    <span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">erase</span><span class="special">(</span><span class="identifier">Container</span><span class="special">&amp;</span> <span class="identifier">target</span><span class="special">,</span>
-           <span class="identifier">iterator_range</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Container</span><span class="special">::</span><span class="identifier">iterator</span><span class="special">&gt;</span> <span class="identifier">to_erase</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Container</span><span class="special">&gt;</span>
+<span class="identifier">Container</span><span class="special">&amp;</span> <span class="identifier">erase</span><span class="special">(</span>
+    <span class="identifier">Container</span><span class="special">&amp;</span> <span class="identifier">target</span><span class="special">,</span>
+    <span class="identifier">iterator_range</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Container</span><span class="special">::</span><span class="identifier">iterator</span><span class="special">&gt;</span> <span class="identifier">to_erase</span><span class="special">);</span>
 </pre>
 <p>
           </p>
 <a name="range.reference.algorithms.range_algorithm_new_algorithms.erase.description"></a><h6>
-<a name="id714284"></a>
+<a name="id3102848"></a>
             <a class="link" href="erase.html#range.reference.algorithms.range_algorithm_new_algorithms.erase.description">Description</a>
           </h6>
 <p>
@@ -52,15 +50,23 @@
             <code class="computeroutput"><span class="identifier">to_erase</span></code> from the container
             <code class="computeroutput"><span class="identifier">target</span></code>.
           </p>
+<p>
+            <code class="computeroutput"><span class="identifier">remove_erase</span></code> performs
+            the frequently used combination equivalent to <code class="computeroutput"><span class="identifier">target</span><span class="special">.</span><span class="identifier">erase</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">remove</span><span class="special">(</span><span class="identifier">target</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">target</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">value</span><span class="special">),</span> <span class="identifier">target</span><span class="special">.</span><span class="identifier">end</span><span class="special">());</span></code>
+          </p>
+<p>
+            <code class="computeroutput"><span class="identifier">remove_erase_if</span></code> performs
+            the frequently used combination equivalent to <code class="computeroutput"><span class="identifier">target</span><span class="special">.</span><span class="identifier">erase</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">remove_if</span><span class="special">(</span><span class="identifier">target</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">target</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">pred</span><span class="special">),</span> <span class="identifier">target</span><span class="special">.</span><span class="identifier">end</span><span class="special">());</span></code>
+          </p>
 <a name="range.reference.algorithms.range_algorithm_new_algorithms.erase.definition"></a><h6>
-<a name="id714340"></a>
+<a name="id3103154"></a>
             <a class="link" href="erase.html#range.reference.algorithms.range_algorithm_new_algorithms.erase.definition">Definition</a>
           </h6>
 <p>
             Defined in the header file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">algorithm_ext</span><span class="special">/</span><span class="identifier">erase</span><span class="special">.</span><span class="identifier">hpp</span></code>
           </p>
 <a name="range.reference.algorithms.range_algorithm_new_algorithms.erase.requirements"></a><h6>
-<a name="id714411"></a>
+<a name="id3103229"></a>
             <a class="link" href="erase.html#range.reference.algorithms.range_algorithm_new_algorithms.erase.requirements">Requirements</a>
           </h6>
 <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
@@ -68,7 +74,7 @@
               erase of an iterator range.
             </li></ol></div>
 <a name="range.reference.algorithms.range_algorithm_new_algorithms.erase.complexity"></a><h6>
-<a name="id714454"></a>
+<a name="id3103276"></a>
             <a class="link" href="erase.html#range.reference.algorithms.range_algorithm_new_algorithms.erase.complexity">Complexity</a>
           </h6>
 <p>

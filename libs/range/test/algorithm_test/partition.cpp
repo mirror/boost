@@ -44,17 +44,17 @@ namespace boost
                 return boost::partition(cont, UnaryPredicate());
             }
 
-	        UnaryPredicate pred() const { return UnaryPredicate(); }
+            UnaryPredicate pred() const { return UnaryPredicate(); }
 
             template< range_return_value return_type >
-	        struct test_range
-	        {
-		        template< class Container, class Policy >
-		        BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
-		        operator()(Policy& policy, Container& cont)
-	            {
-		            return boost::partition<return_type>(cont, policy.pred());
-		        }
+            struct test_range
+            {
+                template< class Container, class Policy >
+                BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
+                operator()(Policy& policy, Container& cont)
+                {
+                    return boost::partition<return_type>(cont, policy.pred());
+                }
             };
 
             template< class Container >

@@ -4,16 +4,16 @@
 
 ``
 template<class BidirectionalRange>
-void prev_permutation(BidirectionalRange& rng);
+bool prev_permutation(BidirectionalRange& rng);
 
 template<class BidirectionalRange>
-void prev_permutation(const BidirectionalRange& rng);
+bool prev_permutation(const BidirectionalRange& rng);
 
 template<class BidirectionalRange, class Compare>
-void prev_permutation(BidirectionalRange& rng, Compare pred);
+bool prev_permutation(BidirectionalRange& rng, Compare pred);
 
 template<class BidirectionalRange, class Compare>
-void prev_permutation(const BidirectionalRange& rng, Compare pred);
+bool prev_permutation(const BidirectionalRange& rng, Compare pred);
 ``
 
 [heading Description]
@@ -21,7 +21,7 @@ void prev_permutation(const BidirectionalRange& rng, Compare pred);
 `prev_permutation` transforms the range of elements `rng` into the lexicographically next smaller permutation of the elements if such a permutation exists. If one does not exist then the range is transformed into the lexicographically largest permutation and `false` is returned. `true` is returned when the next smaller permutation is successfully generated.
 
 The ordering relationship is determined by using `operator<` in the non-predicate versions, and by evaluating `pred` in the predicate versions.
- 
+
 [heading Definition]
 
 Defined in the header file `boost/range/algorithm/permutation.hpp`

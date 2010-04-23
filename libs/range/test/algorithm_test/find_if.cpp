@@ -41,15 +41,15 @@ namespace boost
                 return boost::find_if(cont, m_pred);
             }
 
-	        template<range_return_value return_type>
-	        struct test_range
-	        {
-		        template<class Container>
-		        BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
-		        operator()(find_if_test_policy& policy, Container& cont)
-		        {
-		            return boost::find_if<return_type>(cont, policy.pred());
-		        }
+            template<range_return_value return_type>
+            struct test_range
+            {
+                template<class Container>
+                BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
+                operator()(find_if_test_policy& policy, Container& cont)
+                {
+                    return boost::find_if<return_type>(cont, policy.pred());
+                }
             };
 
             template<class Container>
@@ -59,7 +59,7 @@ namespace boost
                 return std::find_if(cont.begin(), cont.end(), m_pred);
             }
 
-	        UnaryPredicate& pred() { return m_pred; }
+            UnaryPredicate& pred() { return m_pred; }
 
         private:
             UnaryPredicate m_pred;

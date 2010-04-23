@@ -37,14 +37,14 @@ namespace boost
             }
 
             template< range_return_value return_type >
-	        struct test_range
-	        {
-		        template< class Container, class Policy >
-		        BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
-		        operator()(Policy&, Container& cont)
-		        {
-		            return boost::min_element<return_type>(cont);
-	            }
+            struct test_range
+            {
+                template< class Container, class Policy >
+                BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
+                operator()(Policy&, Container& cont)
+                {
+                    return boost::min_element<return_type>(cont);
+                }
             };
 
             template< class Container >
@@ -66,17 +66,17 @@ namespace boost
                 return boost::min_element(cont, Pred());
             }
 
-	        Pred pred() const { return Pred(); }
+            Pred pred() const { return Pred(); }
 
             template< range_return_value return_type >
-	        struct test_range
-	        {
-		        template< class Container, class Policy >
-		        BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
-		        operator()(Policy& policy, Container& cont)
-		        {
-		            return boost::min_element<return_type>(cont, policy.pred());
-		        }
+            struct test_range
+            {
+                template< class Container, class Policy >
+                BOOST_DEDUCED_TYPENAME range_return<Container,return_type>::type
+                operator()(Policy& policy, Container& cont)
+                {
+                    return boost::min_element<return_type>(cont, policy.pred());
+                }
             };
 
             template< class Container >

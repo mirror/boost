@@ -4,16 +4,16 @@
 
 ``
 template<class RandomAccessRange>
-void make_heap(RandomAccessRange& rng);
+RandomAccessRange& make_heap(RandomAccessRange& rng);
 
 template<class RandomAccessRange>
-void make_heap(const RandomAccessRange& rng);
+const RandomAccessRange& make_heap(const RandomAccessRange& rng);
 
 template<class RandomAccessRange, class Compare>
-void make_heap(RandomAccessRange& rng, Compare pred);
+RandomAccessRange& make_heap(RandomAccessRange& rng, Compare pred);
 
 template<class RandomAccessRange, class Compare>
-void make_heap(const RandomAccessRange& rng, Compare pred);
+const RandomAccessRange& make_heap(const RandomAccessRange& rng, Compare pred);
 ``
 
 [heading Description]
@@ -21,7 +21,7 @@ void make_heap(const RandomAccessRange& rng, Compare pred);
 `make_heap` turns `rng` into a heap.
 
 The ordering relationship is determined by using `operator<` in the non-predicate versions, and by evaluating `pred` in the predicate versions.
- 
+
 [heading Definition]
 
 Defined in the header file `boost/range/algorithm/heap_algorithm.hpp`

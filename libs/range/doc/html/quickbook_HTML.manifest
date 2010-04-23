@@ -39,6 +39,7 @@ range/reference/algorithms/range_algorithm_mutating_algorithms.html
 range/reference/algorithms/range_algorithm_mutating_algorithms/copy.html
 range/reference/algorithms/range_algorithm_mutating_algorithms/copy_backward.html
 range/reference/algorithms/range_algorithm_mutating_algorithms/fill.html
+range/reference/algorithms/range_algorithm_mutating_algorithms/fill_n.html
 range/reference/algorithms/range_algorithm_mutating_algorithms/generate.html
 range/reference/algorithms/range_algorithm_mutating_algorithms/inplace_merge.html
 range/reference/algorithms/range_algorithm_mutating_algorithms/merge.html
@@ -84,6 +85,7 @@ range/reference/algorithms/heap_algorithms.html
 range/reference/algorithms/heap_algorithms/push_heap.html
 range/reference/algorithms/heap_algorithms/pop_heap.html
 range/reference/algorithms/heap_algorithms/make_heap.html
+range/reference/algorithms/heap_algorithms/sort_heap.html
 range/reference/algorithms/permutation_algorithms.html
 range/reference/algorithms/permutation_algorithms/next_permutation.html
 range/reference/algorithms/permutation_algorithms/prev_permutation.html

@@ -25,22 +25,11 @@ namespace boost
 /// range-based version of the rotate std algorithm
 ///
 /// \pre Rng meets the requirements for a Forward range
-template<typename ForwardRange>
+template<class ForwardRange>
 inline ForwardRange& rotate(ForwardRange& rng,
-    typename range_iterator<ForwardRange>::type middle)
+    BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type middle)
 {
     BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
-    std::rotate(boost::begin(rng), middle, boost::end(rng));
-    return rng;
-}
-
-/// \overload
-template<typename ForwardRange>
-inline const ForwardRange&
-    rotate(const ForwardRange& rng,
-           typename range_iterator<const ForwardRange>::type middle)
-{
-    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     std::rotate(boost::begin(rng), middle, boost::end(rng));
     return rng;
 }

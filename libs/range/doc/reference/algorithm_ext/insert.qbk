@@ -7,9 +7,9 @@ template<
     class Container,
     class SinglePassRange
     >
-void insert(Container& target,
-            typename Container::iterator before,
-            const SinglePassRange& from);
+Container& insert(Container& target,
+                  typename Container::iterator before,
+                  const SinglePassRange& from);
 ``
 
 [heading Description]

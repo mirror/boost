@@ -82,6 +82,7 @@ and there is no need to worry about generating an invalid range. Furthermore, if
 [include algorithm/copy.qbk]
 [include algorithm/copy_backward.qbk]
 [include algorithm/fill.qbk]
+[include algorithm/fill_n.qbk]
 [include algorithm/generate.qbk]
 [include algorithm/inplace_merge.qbk]
 [include algorithm/merge.qbk]
@@ -133,6 +134,7 @@ and there is no need to worry about generating an invalid range. Furthermore, if
 [include algorithm/push_heap.qbk]
 [include algorithm/pop_heap.qbk]
 [include algorithm/make_heap.qbk]
+[include algorithm/sort_heap.qbk]
 [endsect]
 
 [section:permutation_algorithms Permutation algorithms]

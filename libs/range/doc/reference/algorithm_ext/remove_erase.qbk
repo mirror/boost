@@ -3,17 +3,14 @@
 [heading Prototype]
 
 ``
-template<
-    class Container,
-    class T
-    >
-void remove_erase(Container& target,
-                  const T& val);
+template<class Container, class Value>
+Container& remove_erase(Container& target,
+                        const Value& value);
 ``
 
 [heading Description]
 
-`remove_erase` actually eliminates the elements equal to `val` from the container. This
+`remove_erase` actually eliminates the elements equal to `value` from the container. This
 is in contrast to the `remove` algorithm which merely rearranges elements.
 
 [heading Definition]

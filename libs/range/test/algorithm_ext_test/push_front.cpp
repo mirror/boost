@@ -21,6 +21,15 @@
 
 namespace
 {
+    struct DoubleValue
+    {
+        template< class Value >
+        Value operator()(Value x)
+        {
+            return x * 2;
+        }
+    };
+
     template< class Container >
     void test_push_front_impl(std::size_t n)
     {
@@ -34,10 +43,14 @@ namespace
         BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
             test.begin(), test.end() );
 
-        // Do it again to push onto non-empty container
-        reference.insert(reference.begin(), reference.begin(), reference.end());
+        // copy the orignal reference sequence
+        Container reference_copy(reference);
+        std::transform(reference.begin(), reference.end(), reference.begin(), DoubleValue());
 
-        boost::push_front(test, boost::irange<std::size_t>(0, n));
+        // Do it again to push onto non-empty container
+        reference.insert(reference.end(), reference_copy.begin(), reference_copy.end());
+
+        boost::push_front(test, boost::irange<std::size_t>(0, n * 2, 2));
 
         BOOST_CHECK_EQUAL_COLLECTIONS( reference.begin(), reference.end(),
             test.begin(), test.end() );

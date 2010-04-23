@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Range Algorithm - nth_element</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Range 2.0">
 <link rel="up" href="../range_algorithm_mutating_algorithms.html" title="Mutating algorithms">
 <link rel="prev" href="merge.html" title="Range Algorithm - merge">
@@ -28,34 +28,38 @@
           Range Algorithm - nth_element</a>
 </h5></div></div></div>
 <a name="range.reference.algorithms.range_algorithm_mutating_algorithms.nth_element.prototype"></a><h6>
-<a name="id669302"></a>
+<a name="id3055090"></a>
             <a class="link" href="nth_element.html#range.reference.algorithms.range_algorithm_mutating_algorithms.nth_element.prototype">Prototype</a>
           </h6>
 <p>
             
 </p>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">nth_element</span><span class="special">(</span><span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
-                 <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">nth</span><span class="special">);</span>
-                 
+<span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">nth_element</span><span class="special">(</span>
+    <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
+    <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">nth</span><span class="special">);</span>
+
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">nth_element</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
-                 <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">nth</span><span class="special">);</span>
-                 
+<span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">nth_element</span><span class="special">(</span>
+    <span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
+    <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">nth</span><span class="special">);</span>
+
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">nth_element</span><span class="special">(</span><span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
-                 <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">nth</span><span class="special">,</span>
-                 <span class="identifier">BinaryPredicate</span> <span class="identifier">sort_pred</span><span class="special">);</span>
-                 
+<span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">nth_element</span><span class="special">(</span>
+    <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
+    <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">nth</span><span class="special">,</span>
+    <span class="identifier">BinaryPredicate</span> <span class="identifier">sort_pred</span><span class="special">);</span>
+
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">nth_element</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
-                 <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">nth</span><span class="special">,</span>
-                 <span class="identifier">BinaryPredicate</span> <span class="identifier">sort_pred</span><span class="special">);</span>
+<span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">nth_element</span><span class="special">(</span>
+    <span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
+    <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">RandomAccessRange</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">nth</span><span class="special">,</span>
+    <span class="identifier">BinaryPredicate</span> <span class="identifier">sort_pred</span><span class="special">);</span>
 </pre>
 <p>
           </p>
 <a name="range.reference.algorithms.range_algorithm_mutating_algorithms.nth_element.description"></a><h6>
-<a name="id669789"></a>
+<a name="id3055618"></a>
             <a class="link" href="nth_element.html#range.reference.algorithms.range_algorithm_mutating_algorithms.nth_element.description">Description</a>
           </h6>
 <p>
@@ -66,14 +70,14 @@
             is the same as the element that would be in that position if <code class="computeroutput"><span class="identifier">rng</span></code> has been sorted.
           </p>
 <a name="range.reference.algorithms.range_algorithm_mutating_algorithms.nth_element.definition"></a><h6>
-<a name="id669866"></a>
+<a name="id3055700"></a>
             <a class="link" href="nth_element.html#range.reference.algorithms.range_algorithm_mutating_algorithms.nth_element.definition">Definition</a>
           </h6>
 <p>
             Defined in the header file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">nth_element</span><span class="special">.</span><span class="identifier">hpp</span></code>
           </p>
 <a name="range.reference.algorithms.range_algorithm_mutating_algorithms.nth_element.requirements"></a><h6>
-<a name="id669937"></a>
+<a name="id3055775"></a>
             <a class="link" href="nth_element.html#range.reference.algorithms.range_algorithm_mutating_algorithms.nth_element.requirements">Requirements</a>
           </h6>
 <p>
@@ -124,7 +128,7 @@
             </li>
 </ul></div>
 <a name="range.reference.algorithms.range_algorithm_mutating_algorithms.nth_element.complexity"></a><h6>
-<a name="id670160"></a>
+<a name="id3056012"></a>
             <a class="link" href="nth_element.html#range.reference.algorithms.range_algorithm_mutating_algorithms.nth_element.complexity">Complexity</a>
           </h6>
 <p>

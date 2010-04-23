@@ -28,9 +28,9 @@ namespace boost
     /// \pre Rng meets the requirements for a Forward range
     template<typename ForwardRange, typename OutputIterator>
     inline OutputIterator rotate_copy(
-        const ForwardRange&                                 rng,
-        typename range_iterator<const ForwardRange>::type   middle,
-        OutputIterator                                      target
+        const ForwardRange&                                             rng,
+        BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange>::type middle,
+        OutputIterator                                                  target
         )
     {
         BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));

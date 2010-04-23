@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>iota</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
 <link rel="home" href="../../../../index.html" title="Chapter&#160;1.&#160;Range 2.0">
 <link rel="up" href="../range_algorithm_new_algorithms.html" title="New algorithms">
 <link rel="prev" href="insert.html" title="insert">
@@ -28,19 +28,19 @@
           iota</a>
 </h5></div></div></div>
 <a name="range.reference.algorithms.range_algorithm_new_algorithms.iota.prototype"></a><h6>
-<a name="id716034"></a>
+<a name="id3104923"></a>
             <a class="link" href="iota.html#range.reference.algorithms.range_algorithm_new_algorithms.iota.prototype">Prototype</a>
           </h6>
 <p>
             
 </p>
-<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">SinglePassRange</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Value</span><span class="special">&gt;</span>
-<span class="identifier">iota</span><span class="special">(</span><span class="identifier">SinglePassRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Value</span> <span class="identifier">x</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ForwardRange</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Value</span><span class="special">&gt;</span>
+<span class="identifier">ForwardRange</span><span class="special">&amp;</span> <span class="identifier">iota</span><span class="special">(</span><span class="identifier">ForwardRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Value</span> <span class="identifier">x</span><span class="special">);</span>
 </pre>
 <p>
           </p>
 <a name="range.reference.algorithms.range_algorithm_new_algorithms.iota.description"></a><h6>
-<a name="id716150"></a>
+<a name="id3105053"></a>
             <a class="link" href="iota.html#range.reference.algorithms.range_algorithm_new_algorithms.iota.description">Description</a>
           </h6>
 <p>
@@ -51,21 +51,21 @@
             <span class="special">+</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">distance</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">begin</span><span class="special">(</span><span class="identifier">rng</span><span class="special">),</span> <span class="identifier">it</span><span class="special">)</span></code>
           </p>
 <a name="range.reference.algorithms.range_algorithm_new_algorithms.iota.definition"></a><h6>
-<a name="id716288"></a>
+<a name="id3105195"></a>
             <a class="link" href="iota.html#range.reference.algorithms.range_algorithm_new_algorithms.iota.definition">Definition</a>
           </h6>
 <p>
             Defined in the header file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">algorithm_ext</span><span class="special">/</span><span class="identifier">iota</span><span class="special">.</span><span class="identifier">hpp</span></code>
           </p>
 <a name="range.reference.algorithms.range_algorithm_new_algorithms.iota.requirements"></a><h6>
-<a name="id716360"></a>
+<a name="id3105266"></a>
             <a class="link" href="iota.html#range.reference.algorithms.range_algorithm_new_algorithms.iota.requirements">Requirements</a>
           </h6>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<code class="computeroutput"><span class="identifier">SinglePassRange</span></code> is
-              a model of the <a class="link" href="../../../concepts/single_pass_range.html" title="Single Pass Range">Single
-              Pass Range</a> Concept.
+<code class="computeroutput"><span class="identifier">ForwardRange</span></code> is a model
+              of the <a class="link" href="../../../concepts/forward_range.html" title="Forward Range">Forward Range</a>
+              Concept.
             </li>
 <li class="listitem">
 <code class="computeroutput"><span class="identifier">Value</span></code> is a model of
@@ -73,7 +73,7 @@
             </li>
 </ol></div>
 <a name="range.reference.algorithms.range_algorithm_new_algorithms.iota.complexity"></a><h6>
-<a name="id716434"></a>
+<a name="id3105345"></a>
             <a class="link" href="iota.html#range.reference.algorithms.range_algorithm_new_algorithms.iota.complexity">Complexity</a>
           </h6>
 <p>
