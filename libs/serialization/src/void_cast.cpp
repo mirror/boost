@@ -285,7 +285,8 @@ void_caster::recursive_unregister() const {
     for(it = s.begin(); it != s.end();){
         const void_caster * vc = *it;
         if(vc == this){
-            s.erase(it++);
+            s.erase(it);
+            it = s.begin();
         }
         else
         if(vc->m_parent == this){
