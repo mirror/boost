@@ -731,6 +731,18 @@ namespace boost { namespace unordered_detail {
 
     // Iterator Access
 
+#if !defined(__clang__)
+    class iterator_access
+    {
+    public:
+        template <class Iterator>
+        static BOOST_DEDUCED_TYPENAME Iterator::base const&
+            get(Iterator const& it)
+        {
+            return it.base_;
+        }
+    };
+#else
     class iterator_access
     {
     public:
@@ -751,6 +763,7 @@ namespace boost { namespace unordered_detail {
             return it.base_;
         }
     };
+#endif
 
     // Iterators
 
