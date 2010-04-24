@@ -210,6 +210,25 @@ namespace boost { namespace proto
         };
     };
 
+    /// \brief A PrimitiveTransform that does nothing
+    /// and returns void.
+    struct _void : transform<_void>
+    {
+        template<typename Expr, typename State, typename Data>
+        struct impl : transform_impl<Expr, State, Data>
+        {
+            typedef void result_type;
+
+            /// Does nothing and returns void
+            void operator ()(
+                typename impl::expr_param
+              , typename impl::state_param
+              , typename impl::data_param
+            ) const
+            {}
+        };
+    };
+
     /// \brief A unary CallableTransform that wraps its argument
     /// in a \c boost::reference_wrapper\<\>.
     ///

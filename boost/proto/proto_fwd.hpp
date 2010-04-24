@@ -717,6 +717,8 @@ namespace boost { namespace proto
 
     struct _value;
 
+    struct _void;
+
     template<int I>
     struct _child_c;
 

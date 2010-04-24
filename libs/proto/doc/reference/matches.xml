@@ -358,7 +358,7 @@ struct IsIntegral2 :
         <inherit><type><classname>proto::transform</classname>&lt;and_&lt;G...&gt; &gt;</type></inherit>
         <purpose>For matching all of a set of grammars. When used as a transform,
           <computeroutput>proto::and_&lt;&gt;</computeroutput> applies the transform associated
-          with the <emphasis>last</emphasis> grammar in the set.</purpose>
+          with each grammar in the set and returns the result of the last.</purpose>
         <description>
           <para>
             An expression type <computeroutput>E</computeroutput> matches
@@ -371,7 +371,7 @@ struct IsIntegral2 :
             <computeroutput>proto::and_&lt;G<subscript>0</subscript>,G<subscript>1</subscript>,...G<subscript>n</subscript>&gt;</computeroutput>
             as a transform with an expression <computeroutput>e</computeroutput>, state
             <computeroutput>s</computeroutput> and data <computeroutput>d</computeroutput>, it is equivalent
-            to <computeroutput>G<subscript>n</subscript>()(e, s, d)</computeroutput>.
+            to <computeroutput>(G<subscript>0</subscript>()(e, s, d),G<subscript>1</subscript>()(e, s, d),...G<subscript>n</subscript>()(e, s, d))</computeroutput>.
           </para>
           <para>
             The maximun number of template arguments <computeroutput>proto::and_&lt;&gt;</computeroutput> accepts
@@ -412,7 +412,7 @@ struct IsIntegral2 :
               </parameter>
               <returns>
                 <para>
-                  <computeroutput>G<subscript>n</subscript>()(expr, state, data)</computeroutput>
+                  <computeroutput>(G<subscript>0</subscript>()(expr, state, data),G<subscript>1</subscript>()(expr, state, data),...G<subscript>n</subscript>()(expr, state, data))</computeroutput>
                 </para>
               </returns>
             </method>
