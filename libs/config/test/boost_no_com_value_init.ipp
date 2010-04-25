@@ -69,6 +69,12 @@ namespace boost_no_complete_value_initialization
   {
   };
 
+
+  // A POD aggregate struct derived from an empty struct.
+  // Similar to struct Foo1 from Microsoft Visual C++ bug report 484295,
+  // "VC++ does not value-initialize members of derived classes without 
+  // user-declared constructor", reported in 2009 by Sylvester Hesp:
+  // https://connect.microsoft.com/VisualStudio/feedback/details/484295
   struct derived_struct: empty_struct
   {
     int data;
@@ -166,18 +172,30 @@ namespace boost_no_complete_value_initialization
   }
 
 
+  class private_int_holder
+  {
+  private:
+    int m_data;
+
+    friend bool is_value_initialized(const private_int_holder& arg)
+    {
+      return arg.m_data == 0;
+    }
+  };
+
+
   // Equivalent to the Stats class from GCC Bug 33916,
   // "Default constructor fails to initialize array members", reported in 2007 by
   // Michael Elizabeth Chastain: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=33916
-  class int_array_pair
+  class private_int_array_pair
   {
-    friend bool is_value_initialized(const int_array_pair& arg);
+    friend bool is_value_initialized(const private_int_array_pair& arg);
   private:
     int first[12];
     int second[12];
   };
 
-  bool is_value_initialized(const int_array_pair& arg)
+  bool is_value_initialized(const private_int_array_pair& arg)
   {
     for ( unsigned i = 0; i < 12; ++i)
     {
@@ -327,7 +345,7 @@ namespace boost_no_complete_value_initialization
   }
 
 
-  typedef char _2d_char_array_type[2][3];
+  typedef char _2d_char_array_type[3][4];
 
   bool is_value_initialized(const _2d_char_array_type& arg)
   {
@@ -341,7 +359,7 @@ namespace boost_no_complete_value_initialization
     return true;
   }
 
-  typedef char _3d_char_array_type[2][3][4];
+  typedef char _3d_char_array_type[5][6][7];
 
   bool is_value_initialized(const _3d_char_array_type& arg)
   {
@@ -358,16 +376,53 @@ namespace boost_no_complete_value_initialization
 
 
   // For built-in types and enumerated types.
-  template <typename T>
+  template <class T>
   bool is_value_initialized(const T& arg)
   {
     return arg == 0;
   }
 
 
+  // Wraps a heap object that it has allocated by doing new T().
+  template <class T>
+  class heap_object_wrapper
+  {
+  private:
+    T* const m_ptr;
+
+    // The following functions are intentionally left unimplemented
+    // (as if deleted, "= delete", in C++0x):
+    heap_object_wrapper(const heap_object_wrapper&);
+    void operator=(heap_object_wrapper);
+
+  public:
+    heap_object_wrapper()
+      :
+    m_ptr(new T())
+    {
+    }
+
+    ~heap_object_wrapper()
+    {
+      delete m_ptr;
+    }
+
+    bool is_wrapped_object_value_initialized() const
+    {
+      return (m_ptr != 0) && is_value_initialized(*m_ptr);
+    }
+  };
+
+  template <class T>
+  bool is_value_initialized(const heap_object_wrapper<T>& arg)
+  {
+    return arg.is_wrapped_object_value_initialized();
+  }
+
+
   // Returns zero when the specified object is value-initializated, and one otherwise.
   // Prints a message to standard output if the value-initialization has failed.
-  template <typename T>
+  template <class T>
   unsigned failed_to_value_initialized(const T& object, const char *const object_name)
   {
     if ( is_value_initialized(object) )
@@ -419,8 +474,8 @@ namespace boost_no_complete_value_initialization
     double m_double_array[2];
     long double m_long_double;
     long double m_long_double_array[2];
-    void* m_ptr;
-    void* m_ptr_array[2];
+    void* m_void_ptr;
+    void* m_void_ptr_array[2];
     function_ptr_type m_function_ptr;
     function_ptr_type m_function_ptr_array[2];
     function_ptr_struct m_function_ptr_struct;
@@ -443,10 +498,12 @@ namespace boost_no_complete_value_initialization
     derived_struct m_derived_struct_array[2];
     derived_int_struct m_derived_int_struct;
     derived_int_struct m_derived_int_struct_array[2];
+    private_int_holder m_private_int_holder;
+    private_int_holder m_private_int_holder_array[2];
     char_array_struct m_char_array_struct;
     char_array_struct m_char_array_struct_array[2];
-    int_array_pair m_int_array_pair;
-    int_array_pair m_int_array_pair_array[2];
+    private_int_array_pair m_private_int_array_pair;
+    private_int_array_pair m_private_int_array_pair_array[2];
     enum_holder_and_int m_enum_holder_and_int;
     enum_holder_and_int m_enum_holder_and_int_array[2];
     private_and_protected_int m_private_and_protected_int;
@@ -501,8 +558,8 @@ namespace boost_no_complete_value_initialization
     m_double_array(),
     m_long_double(),
     m_long_double_array(),
-    m_ptr(),
-    m_ptr_array(),
+    m_void_ptr(),
+    m_void_ptr_array(),
     m_function_ptr(),
     m_function_ptr_array(),
     m_function_ptr_struct(),
@@ -525,10 +582,12 @@ namespace boost_no_complete_value_initialization
     m_derived_struct_array(),
     m_derived_int_struct(),
     m_derived_int_struct_array(),
+    m_private_int_holder(),
+    m_private_int_holder_array(),
     m_char_array_struct(),
     m_char_array_struct_array(),
-    m_int_array_pair(),
-    m_int_array_pair_array(),
+    m_private_int_array_pair(),
+    m_private_int_array_pair_array(),
     m_enum_holder_and_int(),
     m_enum_holder_and_int_array(),
     m_private_and_protected_int(),
@@ -586,9 +645,9 @@ namespace boost_no_complete_value_initialization
         FAILED_TO_VALUE_INITIALIZE(m_long_double) +
         FAILED_TO_VALUE_INITIALIZE(m_long_double_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_long_double_array[1]) +
-        FAILED_TO_VALUE_INITIALIZE(m_ptr) +
-        FAILED_TO_VALUE_INITIALIZE(m_ptr_array[0]) +
-        FAILED_TO_VALUE_INITIALIZE(m_ptr_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_void_ptr) +
+        FAILED_TO_VALUE_INITIALIZE(m_void_ptr_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_void_ptr_array[1]) +
         FAILED_TO_VALUE_INITIALIZE(m_function_ptr) +
         FAILED_TO_VALUE_INITIALIZE(m_function_ptr_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_function_ptr_array[1]) +
@@ -622,12 +681,15 @@ namespace boost_no_complete_value_initialization
         FAILED_TO_VALUE_INITIALIZE(m_derived_int_struct) +
         FAILED_TO_VALUE_INITIALIZE(m_derived_int_struct_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_derived_int_struct_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_private_int_holder) +
+        FAILED_TO_VALUE_INITIALIZE(m_private_int_holder_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_private_int_holder_array[1]) +
         FAILED_TO_VALUE_INITIALIZE(m_char_array_struct) +
         FAILED_TO_VALUE_INITIALIZE(m_char_array_struct_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_char_array_struct_array[1]) +
-        FAILED_TO_VALUE_INITIALIZE(m_int_array_pair) +
-        FAILED_TO_VALUE_INITIALIZE(m_int_array_pair_array[0]) +
-        FAILED_TO_VALUE_INITIALIZE(m_int_array_pair_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_private_int_array_pair) +
+        FAILED_TO_VALUE_INITIALIZE(m_private_int_array_pair_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_private_int_array_pair_array[1]) +
         FAILED_TO_VALUE_INITIALIZE(m_enum_holder_and_int) +
         FAILED_TO_VALUE_INITIALIZE(m_enum_holder_and_int_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_enum_holder_and_int_array[1]) +
@@ -659,6 +721,8 @@ namespace boost_no_complete_value_initialization
   {
     typedef long double long_double_type;
     typedef unsigned char unsigned_char_type;
+    typedef void* void_ptr_type;
+
     const unsigned num_failures = 
       FAILED_TO_VALUE_INITIALIZE(enum_holder()) +
       FAILED_TO_VALUE_INITIALIZE(enum_type()) +
@@ -671,6 +735,7 @@ namespace boost_no_complete_value_initialization
       FAILED_TO_VALUE_INITIALIZE(float()) +
       FAILED_TO_VALUE_INITIALIZE(double()) +
       FAILED_TO_VALUE_INITIALIZE(long_double_type()) +
+      FAILED_TO_VALUE_INITIALIZE(void_ptr_type()) +
       FAILED_TO_VALUE_INITIALIZE(bit_field_struct()) +
       FAILED_TO_VALUE_INITIALIZE(function_ptr_type()) +
       FAILED_TO_VALUE_INITIALIZE(function_ptr_struct()) +
@@ -682,8 +747,9 @@ namespace boost_no_complete_value_initialization
       FAILED_TO_VALUE_INITIALIZE(derived_pod_struct()) +
       FAILED_TO_VALUE_INITIALIZE(derived_struct()) +
       FAILED_TO_VALUE_INITIALIZE(derived_int_struct()) +
+      FAILED_TO_VALUE_INITIALIZE(private_int_holder()) +
       FAILED_TO_VALUE_INITIALIZE(char_array_struct()) +
-      FAILED_TO_VALUE_INITIALIZE(int_array_pair()) +
+      FAILED_TO_VALUE_INITIALIZE(private_int_array_pair()) +
       // IBM's XL V10.1.0.0 may fail to value-initialize a temporary of a non-POD
       // type like enum_holder_and_int, virtual_destructor_holder, or non_pod_class, 
       // as appeared at the Boost Config/trunk regression page in April 2010.
@@ -704,6 +770,46 @@ namespace boost_no_complete_value_initialization
     return num_failures;
   }
 
+  // Checks value-initialization of small heap objects.
+  // Returns the number of failures.
+  unsigned check_value_initialization_of_heap_objects()
+  {
+    const unsigned num_failures = 
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<enum_holder>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<enum_type>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<char>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<unsigned char>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<short>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<int>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<unsigned>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<long>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<float>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<double>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<long double>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<void*>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<function_ptr_type>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<function_ptr_struct>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<member_function_ptr_type>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<member_function_ptr_struct>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<bit_field_struct>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<int_struct>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<int_struct>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<pod_struct>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<derived_pod_struct>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<derived_struct>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<derived_int_struct>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<char_array_struct>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<private_int_holder>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<private_int_array_pair>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<enum_holder_and_int>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<private_and_protected_int>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<user_defined_destructor_holder>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<virtual_destructor_holder>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<non_pod_class>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<pod_struct_and_int_union>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<int_and_pod_struct_union>() );
+    return num_failures;
+  }
 
   // Equivalent to the dirty_stack() function from GCC Bug 33916,
   // "Default constructor fails to initialize array members", reported in 2007 by
@@ -718,12 +824,12 @@ namespace boost_no_complete_value_initialization
   }
 
 
+  // Checks value-initialization of a large number of data members of a
+  // temporary object, an object on the stack, an object on the heap;
+  // furthermore it checks value-initialization of a number of smaller
+  // temporary objects and heap objects.
   int test()
   {
-    // Check value-initialization of the data members of a temporary object,
-    // an object on the stack, an object on the heap, and a number of small 
-    // temporary objects.
-
     unsigned total_num_failures = 0;
 
     dirty_stack();
@@ -766,15 +872,25 @@ namespace boost_no_complete_value_initialization
         << num_failures_of_temporaries << std::endl;
     }
 
+    const unsigned num_failures_of_heap_objects = check_value_initialization_of_heap_objects();
+
+    total_num_failures += num_failures_of_heap_objects;
+    if ( total_num_failures > 0 )
+    {
+      std::cout << "- Number of failures of heap objects: "
+        << num_failures_of_heap_objects << std::endl;
+    }
+
     if ( total_num_failures > 0 )
     {
       std::cout << "-- Total number of initialization failures ("
         << num_failures_of_a_temporary << '+'
         << num_failures_on_stack << '+'
         << num_failures_on_heap << '+'
-        << num_failures_of_temporaries << "): "
+        << num_failures_of_temporaries << '+'
+        << num_failures_of_heap_objects << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 18."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 19."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
