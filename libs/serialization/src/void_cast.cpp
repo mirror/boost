@@ -284,11 +284,6 @@ void_caster::recursive_unregister() const {
     void_cast_detail::set_type::iterator it;
     for(it = s.begin(); it != s.end();){
         const void_caster * vc = *it;
-        if(vc == this){
-            s.erase(it);
-            it = s.begin();
-        }
-        else
         if(vc->m_parent == this){
             s.erase(it);
             delete vc;
@@ -297,6 +292,11 @@ void_caster::recursive_unregister() const {
         else
             it++;
     }
+
+    // delete this guy if he's in there
+    it = s.find(this);
+    if(it != s.end())
+        s.erase(it);
 }
 
 } // namespace void_cast_detail
