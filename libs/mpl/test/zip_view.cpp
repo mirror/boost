@@ -1,5 +1,5 @@
 
-// Copyright Aleksey Gurtovoy 2002-2004
+// Copyright Aleksey Gurtovoy 2002-2010
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -25,6 +25,8 @@
 
 #include <boost/mpl/aux_/test.hpp>
 
+#include <boost/type_traits/is_same.hpp>
+
 
 MPL_TEST_CASE()
 {
@@ -38,4 +40,6 @@ MPL_TEST_CASE()
         , filter_view< range_c<int,10,30>, is_even<_> >
         , equal_to<_,_>
         > ));
+
+    MPL_ASSERT(( boost::is_same< zip_view<vector<> >, zip_view<vector<> >::type > ));
 }
