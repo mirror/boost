@@ -914,7 +914,6 @@ void test()
         BOOST_TEST(wp2.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
 
-        using std::swap;
         swap(wp, wp2);
 
         BOOST_TEST(wp.use_count() == 0);
@@ -950,7 +949,6 @@ void test()
         BOOST_TEST(wp2.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
 
-        using std::swap;
         swap(wp, wp2);
 
         BOOST_TEST(wp.use_count() == 0);
@@ -965,7 +963,6 @@ void test()
         BOOST_TEST(wp2.use_count() == 0);
         BOOST_TEST(!(wp < wp3 || wp3 < wp));
 
-        using std::swap;
         swap(wp, wp2);
 
         BOOST_TEST(wp.use_count() == 0);
