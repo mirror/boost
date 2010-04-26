@@ -24,6 +24,7 @@ namespace boost_no_complete_value_initialization
   // A POD struct.
   struct pod_struct
   {
+    bool b;
     enum_type e;
     char c;
     unsigned char uc;
@@ -40,6 +41,7 @@ namespace boost_no_complete_value_initialization
   bool is_value_initialized(const pod_struct& arg)
   {
     return
+      arg.b == 0 &&
       arg.e == 0 &&
       arg.c == 0 &&
       arg.uc == 0 &&
@@ -393,7 +395,7 @@ namespace boost_no_complete_value_initialization
     // The following functions are intentionally left unimplemented
     // (as if deleted, "= delete", in C++0x):
     heap_object_wrapper(const heap_object_wrapper&);
-    void operator=(heap_object_wrapper);
+    void operator=(const heap_object_wrapper&);
 
   public:
     heap_object_wrapper()
@@ -890,7 +892,7 @@ namespace boost_no_complete_value_initialization
         << num_failures_of_temporaries << '+'
         << num_failures_of_heap_objects << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 19."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 20."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
