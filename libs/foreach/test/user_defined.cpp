@@ -16,10 +16,6 @@ Revision history:
 namespace mine
 {
     struct dummy {};
-}
-
-namespace boost
-{
     char * range_begin(mine::dummy&) {return 0;}
     char const * range_begin(mine::dummy const&) {return 0;}
     char * range_end(mine::dummy&) {return 0;}
