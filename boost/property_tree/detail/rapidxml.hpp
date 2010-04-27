@@ -50,9 +50,9 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
     public:
     
         //! Constructs parse error
-        parse_error(const char *what, void *where)
-            : m_what(what)
-            , m_where(where)
+        parse_error(const char *wa, void *we)
+            : m_what(wa)
+            , m_where(we)
         {
         }
 
@@ -686,20 +686,20 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         //! <br><br>
         //! Size of name must be specified separately, because name does not have to be zero terminated.
         //! Use name(const Ch *) function to have the length automatically calculated (string must be zero terminated).
-        //! \param name Name of node to set. Does not have to be zero terminated.
+        //! \param n Name of node to set. Does not have to be zero terminated.
         //! \param size Size of name, in characters. This does not include zero terminator, if one is present.
-        void name(const Ch *name, std::size_t size)
+        void name(const Ch *n, std::size_t size)
         {
-            m_name = const_cast<Ch *>(name);
+            m_name = const_cast<Ch *>(n);
             m_name_size = size;
         }
 
         //! Sets name of node to a zero-terminated string.
         //! See also \ref ownership_of_strings and xml_node::name(const Ch *, std::size_t).
-        //! \param name Name of node to set. Must be zero terminated.
-        void name(const Ch *name)
+        //! \param n Name of node to set. Must be zero terminated.
+        void name(const Ch *n)
         {
-            this->name(name, internal::measure(name));
+            name(n, internal::measure(n));
         }
 
         //! Sets value of node to a non zero-terminated string.
@@ -716,20 +716,20 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         //! <br><br>
         //! If an element has a child node of type node_data, it will take precedence over element value when printing.
         //! If you want to manipulate data of elements using values, use parser flag rapidxml::parse_no_data_nodes to prevent creation of data nodes by the parser.
-        //! \param value value of node to set. Does not have to be zero terminated.
+        //! \param val value of node to set. Does not have to be zero terminated.
         //! \param size Size of value, in characters. This does not include zero terminator, if one is present.
-        void value(const Ch *value, std::size_t size)
+        void value(const Ch *val, std::size_t size)
         {
-            m_value = const_cast<Ch *>(value);
+            m_value = const_cast<Ch *>(val);
             m_value_size = size;
         }
 
         //! Sets value of node to a zero-terminated string.
         //! See also \ref ownership_of_strings and xml_node::value(const Ch *, std::size_t).
-        //! \param value Vame of node to set. Must be zero terminated.
-        void value(const Ch *value)
+        //! \param val Vame of node to set. Must be zero terminated.
+        void value(const Ch *val)
         {
-            this->value(value, internal::measure(value));
+            this->value(val, internal::measure(val));
         }
 
         ///////////////////////////////////////////////////////////////////////////
@@ -799,18 +799,18 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         }
 
         //! Gets previous attribute, optionally matching attribute name. 
-        //! \param name Name of attribute to find, or 0 to return previous attribute regardless of its name; this string doesn't have to be zero-terminated if name_size is non-zero
-        //! \param name_size Size of name, in characters, or 0 to have size calculated automatically from string
+        //! \param n Name of attribute to find, or 0 to return previous attribute regardless of its name; this string doesn't have to be zero-terminated if nsize is non-zero
+        //! \param nsize Size of name, in characters, or 0 to have size calculated automatically from string
         //! \param case_sensitive Should name comparison be case-sensitive; non case-sensitive comparison works properly only for ASCII characters
         //! \return Pointer to found attribute, or 0 if not found.
-        xml_attribute<Ch> *previous_attribute(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
+        xml_attribute<Ch> *previous_attribute(const Ch *n = 0, std::size_t nsize = 0, bool case_sensitive = true) const
         {
-            if (name)
+            if (n)
             {
-                if (name_size == 0)
-                    name_size = internal::measure(name);
+                if (nsize == 0)
+                    nsize = internal::measure(n);
                 for (xml_attribute<Ch> *attribute = m_prev_attribute; attribute; attribute = attribute->m_prev_attribute)
-                    if (internal::compare(attribute->name(), attribute->name_size(), name, name_size, case_sensitive))
+                    if (internal::compare(attribute->name(), attribute->name_size(), n, nsize, case_sensitive))
                         return attribute;
                 return 0;
             }
@@ -819,18 +819,18 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         }
 
         //! Gets next attribute, optionally matching attribute name. 
-        //! \param name Name of attribute to find, or 0 to return next attribute regardless of its name; this string doesn't have to be zero-terminated if name_size is non-zero
-        //! \param name_size Size of name, in characters, or 0 to have size calculated automatically from string
+        //! \param n Name of attribute to find, or 0 to return next attribute regardless of its name; this string doesn't have to be zero-terminated if nsize is non-zero
+        //! \param nsize Size of name, in characters, or 0 to have size calculated automatically from string
         //! \param case_sensitive Should name comparison be case-sensitive; non case-sensitive comparison works properly only for ASCII characters
         //! \return Pointer to found attribute, or 0 if not found.
-        xml_attribute<Ch> *next_attribute(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
+        xml_attribute<Ch> *next_attribute(const Ch *n = 0, std::size_t nsize = 0, bool case_sensitive = true) const
         {
-            if (name)
+            if (n)
             {
-                if (name_size == 0)
-                    name_size = internal::measure(name);
+                if (nsize == 0)
+                    nsize = internal::measure(n);
                 for (xml_attribute<Ch> *attribute = m_next_attribute; attribute; attribute = attribute->m_next_attribute)
-                    if (internal::compare(attribute->name(), attribute->name_size(), name, name_size, case_sensitive))
+                    if (internal::compare(attribute->name(), attribute->name_size(), n, nsize, case_sensitive))
                         return attribute;
                 return 0;
             }
@@ -867,9 +867,9 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
     
         //! Constructs an empty node with the specified type. 
         //! Consider using memory_pool of appropriate document to allocate nodes manually.
-        //! \param type Type of node to construct.
-        xml_node(node_type type)
-            : m_type(type)
+        //! \param t Type of node to construct.
+        xml_node(node_type t)
+            : m_type(t)
             , m_first_node(0)
             , m_first_attribute(0)
         {
@@ -899,18 +899,18 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         }
 
         //! Gets first child node, optionally matching node name.
-        //! \param name Name of child to find, or 0 to return first child regardless of its name; this string doesn't have to be zero-terminated if name_size is non-zero
-        //! \param name_size Size of name, in characters, or 0 to have size calculated automatically from string
+        //! \param n Name of child to find, or 0 to return first child regardless of its name; this string doesn't have to be zero-terminated if nsize is non-zero
+        //! \param nsize Size of name, in characters, or 0 to have size calculated automatically from string
         //! \param case_sensitive Should name comparison be case-sensitive; non case-sensitive comparison works properly only for ASCII characters
         //! \return Pointer to found child, or 0 if not found.
-        xml_node<Ch> *first_node(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
+        xml_node<Ch> *first_node(const Ch *n = 0, std::size_t nsize = 0, bool case_sensitive = true) const
         {
-            if (name)
+            if (n)
             {
-                if (name_size == 0)
-                    name_size = internal::measure(name);
+                if (nsize == 0)
+                    nsize = internal::measure(n);
                 for (xml_node<Ch> *child = m_first_node; child; child = child->next_sibling())
-                    if (internal::compare(child->name(), child->name_size(), name, name_size, case_sensitive))
+                    if (internal::compare(child->name(), child->name_size(), n, nsize, case_sensitive))
                         return child;
                 return 0;
             }
@@ -921,19 +921,19 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         //! Gets last child node, optionally matching node name. 
         //! Behaviour is undefined if node has no children.
         //! Use first_node() to test if node has children.
-        //! \param name Name of child to find, or 0 to return last child regardless of its name; this string doesn't have to be zero-terminated if name_size is non-zero
-        //! \param name_size Size of name, in characters, or 0 to have size calculated automatically from string
+        //! \param n Name of child to find, or 0 to return last child regardless of its name; this string doesn't have to be zero-terminated if nsize is non-zero
+        //! \param nsize Size of name, in characters, or 0 to have size calculated automatically from string
         //! \param case_sensitive Should name comparison be case-sensitive; non case-sensitive comparison works properly only for ASCII characters
         //! \return Pointer to found child, or 0 if not found.
-        xml_node<Ch> *last_node(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
+        xml_node<Ch> *last_node(const Ch *n = 0, std::size_t nsize = 0, bool case_sensitive = true) const
         {
             assert(m_first_node);  // Cannot query for last child if node has no children
-            if (name)
+            if (n)
             {
-                if (name_size == 0)
-                    name_size = internal::measure(name);
+                if (nsize == 0)
+                    nsize = internal::measure(n);
                 for (xml_node<Ch> *child = m_last_node; child; child = child->previous_sibling())
-                    if (internal::compare(child->name(), child->name_size(), name, name_size, case_sensitive))
+                    if (internal::compare(child->name(), child->name_size(), n, nsize, case_sensitive))
                         return child;
                 return 0;
             }
@@ -944,19 +944,19 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         //! Gets previous sibling node, optionally matching node name. 
         //! Behaviour is undefined if node has no parent.
         //! Use parent() to test if node has a parent.
-        //! \param name Name of sibling to find, or 0 to return previous sibling regardless of its name; this string doesn't have to be zero-terminated if name_size is non-zero
-        //! \param name_size Size of name, in characters, or 0 to have size calculated automatically from string
+        //! \param n Name of sibling to find, or 0 to return previous sibling regardless of its name; this string doesn't have to be zero-terminated if nsize is non-zero
+        //! \param nsize Size of name, in characters, or 0 to have size calculated automatically from string
         //! \param case_sensitive Should name comparison be case-sensitive; non case-sensitive comparison works properly only for ASCII characters
         //! \return Pointer to found sibling, or 0 if not found.
-        xml_node<Ch> *previous_sibling(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
+        xml_node<Ch> *previous_sibling(const Ch *n = 0, std::size_t nsize = 0, bool case_sensitive = true) const
         {
             assert(this->m_parent);     // Cannot query for siblings if node has no parent
-            if (name)
+            if (n)
             {
-                if (name_size == 0)
-                    name_size = internal::measure(name);
+                if (nsize == 0)
+                    nsize = internal::measure(n);
                 for (xml_node<Ch> *sibling = m_prev_sibling; sibling; sibling = sibling->m_prev_sibling)
-                    if (internal::compare(sibling->name(), sibling->name_size(), name, name_size, case_sensitive))
+                    if (internal::compare(sibling->name(), sibling->name_size(), n, nsize, case_sensitive))
                         return sibling;
                 return 0;
             }
@@ -967,19 +967,19 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         //! Gets next sibling node, optionally matching node name. 
         //! Behaviour is undefined if node has no parent.
         //! Use parent() to test if node has a parent.
-        //! \param name Name of sibling to find, or 0 to return next sibling regardless of its name; this string doesn't have to be zero-terminated if name_size is non-zero
-        //! \param name_size Size of name, in characters, or 0 to have size calculated automatically from string
+        //! \param n Name of sibling to find, or 0 to return next sibling regardless of its name; this string doesn't have to be zero-terminated if nsize is non-zero
+        //! \param nsize Size of name, in characters, or 0 to have size calculated automatically from string
         //! \param case_sensitive Should name comparison be case-sensitive; non case-sensitive comparison works properly only for ASCII characters
         //! \return Pointer to found sibling, or 0 if not found.
-        xml_node<Ch> *next_sibling(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
+        xml_node<Ch> *next_sibling(const Ch *n = 0, std::size_t nsize = 0, bool case_sensitive = true) const
         {
             assert(this->m_parent);     // Cannot query for siblings if node has no parent
-            if (name)
+            if (n)
             {
-                if (name_size == 0)
-                    name_size = internal::measure(name);
+                if (nsize == 0)
+                    nsize = internal::measure(n);
                 for (xml_node<Ch> *sibling = m_next_sibling; sibling; sibling = sibling->m_next_sibling)
-                    if (internal::compare(sibling->name(), sibling->name_size(), name, name_size, case_sensitive))
+                    if (internal::compare(sibling->name(), sibling->name_size(), n, nsize, case_sensitive))
                         return sibling;
                 return 0;
             }
@@ -988,18 +988,18 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         }
 
         //! Gets first attribute of node, optionally matching attribute name.
-        //! \param name Name of attribute to find, or 0 to return first attribute regardless of its name; this string doesn't have to be zero-terminated if name_size is non-zero
-        //! \param name_size Size of name, in characters, or 0 to have size calculated automatically from string
+        //! \param n Name of attribute to find, or 0 to return first attribute regardless of its name; this string doesn't have to be zero-terminated if nsize is non-zero
+        //! \param nsize Size of name, in characters, or 0 to have size calculated automatically from string
         //! \param case_sensitive Should name comparison be case-sensitive; non case-sensitive comparison works properly only for ASCII characters
         //! \return Pointer to found attribute, or 0 if not found.
-        xml_attribute<Ch> *first_attribute(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
+        xml_attribute<Ch> *first_attribute(const Ch *n = 0, std::size_t nsize = 0, bool case_sensitive = true) const
         {
-            if (name)
+            if (n)
             {
-                if (name_size == 0)
-                    name_size = internal::measure(name);
+                if (nsize == 0)
+                    nsize = internal::measure(n);
                 for (xml_attribute<Ch> *attribute = m_first_attribute; attribute; attribute = attribute->m_next_attribute)
-                    if (internal::compare(attribute->name(), attribute->name_size(), name, name_size, case_sensitive))
+                    if (internal::compare(attribute->name(), attribute->name_size(), n, nsize, case_sensitive))
                         return attribute;
                 return 0;
             }
@@ -1008,18 +1008,18 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         }
 
         //! Gets last attribute of node, optionally matching attribute name.
-        //! \param name Name of attribute to find, or 0 to return last attribute regardless of its name; this string doesn't have to be zero-terminated if name_size is non-zero
-        //! \param name_size Size of name, in characters, or 0 to have size calculated automatically from string
+        //! \param n Name of attribute to find, or 0 to return last attribute regardless of its name; this string doesn't have to be zero-terminated if nsize is non-zero
+        //! \param nsize Size of name, in characters, or 0 to have size calculated automatically from string
         //! \param case_sensitive Should name comparison be case-sensitive; non case-sensitive comparison works properly only for ASCII characters
         //! \return Pointer to found attribute, or 0 if not found.
-        xml_attribute<Ch> *last_attribute(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
+        xml_attribute<Ch> *last_attribute(const Ch *n = 0, std::size_t nsize = 0, bool case_sensitive = true) const
         {
-            if (name)
+            if (n)
             {
-                if (name_size == 0)
-                    name_size = internal::measure(name);
+                if (nsize == 0)
+                    nsize = internal::measure(n);
                 for (xml_attribute<Ch> *attribute = m_last_attribute; attribute; attribute = attribute->m_prev_attribute)
-                    if (internal::compare(attribute->name(), attribute->name_size(), name, name_size, case_sensitive))
+                    if (internal::compare(attribute->name(), attribute->name_size(), n, nsize, case_sensitive))
                         return attribute;
                 return 0;
             }
@@ -1031,10 +1031,10 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         // Node modification
     
         //! Sets type of node.
-        //! \param type Type of node to set.
-        void type(node_type type)
+        //! \param t Type of node to set.
+        void type(node_type t)
         {
-            m_type = type;
+            m_type = t;
         }
 
         ///////////////////////////////////////////////////////////////////////////
@@ -1757,7 +1757,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
             }
 
             // Remember value start
-            Ch *value = text;
+            Ch *val = text;
 
             // Skip until end of comment
             while (text[0] != Ch('-') || text[1] != Ch('-') || text[2] != Ch('>'))
@@ -1769,7 +1769,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
 
             // Create comment node
             xml_node<Ch> *comment = this->allocate_node(node_comment);
-            comment->value(value, text - value);
+            comment->value(val, text - val);
             
             // Place zero terminator after comment value
             if (!(Flags & parse_no_string_terminators))
@@ -1784,7 +1784,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
         xml_node<Ch> *parse_doctype(Ch *&text)
         {
             // Remember value start
-            Ch *value = text;
+            Ch *val = text;
 
             // Skip to >
             while (*text != Ch('>'))
@@ -1806,6 +1806,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
                             case Ch('['): ++depth; break;
                             case Ch(']'): --depth; break;
                             case 0: BOOST_PROPERTY_TREE_RAPIDXML_PARSE_ERROR("unexpected end of data", text);
+                            default: break;
                         }
                         ++text;
                     }
@@ -1828,7 +1829,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
             {
                 // Create a new doctype node
                 xml_node<Ch> *doctype = this->allocate_node(node_doctype);
-                doctype->value(value, text - value);
+                doctype->value(val, text - val);
                 
                 // Place zero terminator after value
                 if (!(Flags & parse_no_string_terminators))
@@ -1856,17 +1857,17 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
                 xml_node<Ch> *pi = this->allocate_node(node_pi);
 
                 // Extract PI target name
-                Ch *name = text;
+                Ch *n = text;
                 skip<node_name_pred, Flags>(text);
-                if (text == name)
+                if (text == n)
                     BOOST_PROPERTY_TREE_RAPIDXML_PARSE_ERROR("expected PI target", text);
-                pi->name(name, text - name);
+                pi->name(n, text - n);
                 
                 // Skip whitespace between pi target and pi
                 skip<whitespace_pred, Flags>(text);
 
                 // Remember start of pi
-                Ch *value = text;
+                Ch *val = text;
                 
                 // Skip to '?>'
                 while (text[0] != Ch('?') || text[1] != Ch('>'))
@@ -1877,8 +1878,8 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
                 }
 
                 // Set pi value (verbatim, no entity expansion or whitespace normalization)
-                pi->value(value, text - value);     
-                
+                pi->value(val, text - val);
+
                 // Place zero terminator after name and value
                 if (!(Flags & parse_no_string_terminators))
                 {
@@ -1914,7 +1915,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
                 text = contents_start;     
             
             // Skip until end of data
-            Ch *value = text, *end;
+            Ch *val = text, *end;
             if (Flags & parse_normalize_whitespace)
                 end = skip_and_expand_character_refs<text_pred, text_pure_with_ws_pred, Flags>(text);   
             else
@@ -1942,14 +1943,14 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
             if (!(Flags & parse_no_data_nodes))
             {
                 xml_node<Ch> *data = this->allocate_node(node_data);
-                data->value(value, end - value);
+                data->value(val, end - val);
                 node->append_node(data);
             }
 
             // Add data to parent node if no data exists yet
             if (!(Flags & parse_no_element_values)) 
                 if (*node->value() == Ch('\0'))
-                    node->value(value, end - value);
+                    node->value(val, end - val);
 
             // Place zero terminator after value
             if (!(Flags & parse_no_string_terminators))
@@ -1982,7 +1983,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
             }
 
             // Skip until end of cdata
-            Ch *value = text;
+            Ch *val = text;
             while (text[0] != Ch(']') || text[1] != Ch(']') || text[2] != Ch('>'))
             {
                 if (!text[0])
@@ -1992,7 +1993,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
 
             // Create new cdata node
             xml_node<Ch> *cdata = this->allocate_node(node_cdata);
-            cdata->value(value, text - value);
+            cdata->value(val, text - val);
 
             // Place zero terminator after value
             if (!(Flags & parse_no_string_terminators))
@@ -2010,11 +2011,11 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
             xml_node<Ch> *element = this->allocate_node(node_element);
 
             // Extract element name
-            Ch *name = text;
+            Ch *n = text;
             skip<node_name_pred, Flags>(text);
-            if (text == name)
+            if (text == n)
                 BOOST_PROPERTY_TREE_RAPIDXML_PARSE_ERROR("expected element name", text);
-            element->name(name, text - name);
+            element->name(n, text - n);
             
             // Skip whitespace between element name and attributes or >
             skip<whitespace_pred, Flags>(text);
@@ -2115,6 +2116,9 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
                         text += 9;      // skip '!DOCTYPE '
                         return parse_doctype<Flags>(text);
                     }
+                    break;
+
+                default: break;
 
                 }   // switch
 
@@ -2211,15 +2215,15 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
             while (attribute_name_pred::test(*text))
             {
                 // Extract attribute name
-                Ch *name = text;
+                Ch *n = text;
                 ++text;     // Skip first character of attribute name
                 skip<attribute_name_pred, Flags>(text);
-                if (text == name)
-                    BOOST_PROPERTY_TREE_RAPIDXML_PARSE_ERROR("expected attribute name", name);
+                if (text == n)
+                    BOOST_PROPERTY_TREE_RAPIDXML_PARSE_ERROR("expected attribute name", n);
 
                 // Create new attribute
                 xml_attribute<Ch> *attribute = this->allocate_attribute();
-                attribute->name(name, text - name);
+                attribute->name(n, text - n);
                 node->append_attribute(attribute);
 
                 // Skip whitespace after attribute name
@@ -2244,7 +2248,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
                 ++text;
 
                 // Extract attribute value and expand char refs in it
-                Ch *value = text, *end;
+                Ch *val = text, *end;
                 const int AttFlags = Flags & ~parse_normalize_whitespace;   // No whitespace normalization in attributes
                 if (quote == Ch('\''))
                     end = skip_and_expand_character_refs<attribute_value_pred<Ch('\'')>, attribute_value_pure_pred<Ch('\'')>, AttFlags>(text);
@@ -2252,7 +2256,7 @@ namespace boost { namespace property_tree { namespace detail {namespace rapidxml
                     end = skip_and_expand_character_refs<attribute_value_pred<Ch('"')>, attribute_value_pure_pred<Ch('"')>, AttFlags>(text);
                 
                 // Set attribute value
-                attribute->value(value, end - value);
+                attribute->value(val, end - val);
                 
                 // Make sure that end quote is present
                 if (*text != quote)

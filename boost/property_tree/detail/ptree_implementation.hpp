@@ -183,8 +183,8 @@ namespace boost { namespace property_tree
     }
 
     template<class K, class D, class C> inline
-    basic_ptree<K, D, C>::basic_ptree(const data_type &data)
-        : m_data(data), m_children(new typename subs::base_container)
+    basic_ptree<K, D, C>::basic_ptree(const data_type &d)
+        : m_data(d), m_children(new typename subs::base_container)
     {
     }
 
