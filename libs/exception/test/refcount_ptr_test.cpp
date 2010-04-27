@@ -28,11 +28,16 @@ test_type
         ++count_;
         }
 
-    void
+    bool
     release()
         {
-        if( !--count_ )
+        if( --count_ )
+            return false;
+        else
+            {
             delete this;
+            return true;
+            }
         }
 
     private:

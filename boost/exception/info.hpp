@@ -140,11 +140,16 @@ boost
                 ++count_;
                 }
 
-            void
+            bool
             release() const
                 {
-                if( !--count_ )
+                if( --count_ )
+                    return false;
+                else
+                    {
                     delete this;
+                    return true;
+                    }
                 }
 
             refcount_ptr<error_info_container>
