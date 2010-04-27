@@ -24,8 +24,8 @@ namespace boost_no_complete_value_initialization
   // A POD struct.
   struct pod_struct
   {
-    bool b;
     enum_type e;
+    bool b;
     char c;
     unsigned char uc;
     short s;
@@ -392,10 +392,9 @@ namespace boost_no_complete_value_initialization
   private:
     T* const m_ptr;
 
-    // The following functions are intentionally left unimplemented
+    // The following function is intentionally left unimplemented
     // (as if deleted, "= delete", in C++0x):
-    heap_object_wrapper(const heap_object_wrapper&);
-    void operator=(const heap_object_wrapper&);
+    void operator=(heap_object_wrapper);
 
   public:
     heap_object_wrapper()
@@ -408,6 +407,9 @@ namespace boost_no_complete_value_initialization
     {
       delete m_ptr;
     }
+
+    // The copy-constructor is intentionally left unimplemented.
+    heap_object_wrapper(const heap_object_wrapper&);
 
     bool is_wrapped_object_value_initialized() const
     {
@@ -456,6 +458,8 @@ namespace boost_no_complete_value_initialization
     enum_holder m_enum_holder_array[2];
     enum_type m_enum;
     enum_type m_enum_array[2];
+    bool m_bool;
+    bool m_bool_array[2];
     char m_char;
     char m_char_array[2];
     _2d_char_array_type m_2d_char_array;
@@ -540,6 +544,8 @@ namespace boost_no_complete_value_initialization
     m_enum_holder_array(),
     m_enum(),
     m_enum_array(),
+    m_bool(),
+    m_bool_array(),
     m_char(),
     m_char_array(),
     m_2d_char_array(),
@@ -618,6 +624,9 @@ namespace boost_no_complete_value_initialization
         FAILED_TO_VALUE_INITIALIZE(m_enum) +
         FAILED_TO_VALUE_INITIALIZE(m_enum_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_enum_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_bool) +
+        FAILED_TO_VALUE_INITIALIZE(m_bool_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_bool_array[1]) +
         FAILED_TO_VALUE_INITIALIZE(m_char) +
         FAILED_TO_VALUE_INITIALIZE(m_char_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_char_array[1]) +
@@ -728,6 +737,7 @@ namespace boost_no_complete_value_initialization
     const unsigned num_failures = 
       FAILED_TO_VALUE_INITIALIZE(enum_holder()) +
       FAILED_TO_VALUE_INITIALIZE(enum_type()) +
+      FAILED_TO_VALUE_INITIALIZE(bool()) +
       FAILED_TO_VALUE_INITIALIZE(char()) +
       FAILED_TO_VALUE_INITIALIZE(unsigned_char_type()) +
       FAILED_TO_VALUE_INITIALIZE(short()) +
@@ -779,6 +789,7 @@ namespace boost_no_complete_value_initialization
     const unsigned num_failures = 
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<enum_holder>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<enum_type>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<bool>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<char>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<unsigned char>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<short>() ) +
@@ -892,7 +903,7 @@ namespace boost_no_complete_value_initialization
         << num_failures_of_temporaries << '+'
         << num_failures_of_heap_objects << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 20."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 21."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
