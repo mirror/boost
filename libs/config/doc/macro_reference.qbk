@@ -581,7 +581,7 @@ defaulted (`= default`) functions.
 [[`BOOST_NO_DELETED_FUNCTIONS`][The compiler does not support 
 deleted (`= delete`) functions.              
 ]]              
-[[`BOOST_NO_EXPLICIT_CONVERSION_OPERATIONS`][The compiler does not support 
+[[`BOOST_NO_EXPLICIT_CONVERSION_OPERATORS`][The compiler does not support 
 explicit conversion operators (`explicit operator T()`).              
 ]] 
 [[`BOOST_NO_EXTERN_TEMPLATE`][The compiler does not support 
