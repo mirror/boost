@@ -467,8 +467,8 @@ namespace boost { namespace property_tree
         std::pair<typename subs::by_name_index::iterator,
                   typename subs::by_name_index::iterator> r(
             subs::assoc(this).equal_range(key));
-        return std::pair<assoc_iterator, assoc_iterator>(r.first,
-                                                         r.second);
+        return std::pair<assoc_iterator, assoc_iterator>(
+          assoc_iterator(r.first), assoc_iterator(r.second));
     }
 
     template<class K, class D, class C> inline
@@ -481,7 +481,7 @@ namespace boost { namespace property_tree
                   typename subs::by_name_index::const_iterator> r(
             subs::assoc(this).equal_range(key));
         return std::pair<const_assoc_iterator, const_assoc_iterator>(
-            r.first, r.second);
+            const_assoc_iterator(r.first), const_assoc_iterator(r.second));
     }
 
     template<class K, class D, class C> inline

@@ -9,8 +9,10 @@
 // ----------------------------------------------------------------------------
 #include "test_utils.hpp"
 #include <boost/any.hpp>
+#include <boost/range.hpp>
 #include <list>
 #include <cmath>
+#include <iostream>
 
 // If using VC, disable some warnings that trip in boost::serialization bowels
 #ifdef BOOST_MSVC
@@ -152,6 +154,7 @@ int test_main(int, char *[])
         test_front_back(pt);
         test_get_put(pt);
         test_get_child_put_child(pt);
+        test_equal_range(pt);
         test_path_separator(pt);
         test_path(pt);
         test_precision(pt);
@@ -184,6 +187,7 @@ int test_main(int, char *[])
         test_front_back(pt);
         test_get_put(pt);
         test_get_child_put_child(pt);
+        test_equal_range(pt);
         test_path_separator(pt);
         test_path(pt);
         test_precision(pt);
@@ -216,6 +220,7 @@ int test_main(int, char *[])
         test_front_back(pt);
         test_get_put(pt);
         test_get_child_put_child(pt);
+        test_equal_range(pt);
         test_path_separator(pt);
         test_path(pt);
         test_precision(pt);
@@ -248,6 +253,7 @@ int test_main(int, char *[])
         test_front_back(pt);
         test_get_put(pt);
         test_get_child_put_child(pt);
+        test_equal_range(pt);
         test_path_separator(pt);
         test_path(pt);
         test_precision(pt);

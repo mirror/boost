@@ -914,6 +914,21 @@ void test_get_child_put_child(PTREE *)
 
 }
 
+void test_equal_range(PTREE *)
+{
+    PTREE pt;
+    pt.add_child(T("k1"), PTREE());
+    pt.add_child(T("k2"), PTREE());
+    pt.add_child(T("k1"), PTREE());
+    pt.add_child(T("k3"), PTREE());
+    pt.add_child(T("k1"), PTREE());
+    pt.add_child(T("k2"), PTREE());
+
+    BOOST_CHECK(boost::distance(pt.equal_range(T("k1"))) == 3);
+    BOOST_CHECK(boost::distance(pt.equal_range(T("k2"))) == 2);
+    BOOST_CHECK(boost::distance(pt.equal_range(T("k3"))) == 1);
+}
+
 void test_path_separator(PTREE *)
 {
 
