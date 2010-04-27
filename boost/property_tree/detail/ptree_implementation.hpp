@@ -768,7 +768,8 @@ namespace boost { namespace property_tree
                                                          Translator tr) const
     {
         if (optional<const self_type&> child = get_child_optional(path))
-            return child.get().get_value_optional<Type>(tr);
+            return child.get().
+                BOOST_NESTED_TEMPLATE get_value_optional<Type>(tr);
         else
             return optional<Type>();
     }
