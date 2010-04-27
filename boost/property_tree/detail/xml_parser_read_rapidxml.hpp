@@ -106,6 +106,10 @@ namespace boost { namespace property_tree { namespace xml_parser
             const int f_tws = parse_normalize_whitespace
                             | parse_trim_whitespace;
             const int f_c = parse_comment_nodes;
+            // Some compilers don't like the bitwise or in the template arg.
+            const int f_tws_c = parse_normalize_whitespace
+                              | parse_trim_whitespace
+                              | parse_comment_nodes;
             xml_document<Ch> doc;
             if (flags & no_comments) {
                 if (flags & trim_whitespace)
@@ -114,7 +118,7 @@ namespace boost { namespace property_tree { namespace xml_parser
                     doc.BOOST_NESTED_TEMPLATE parse<0>(&v.front());
             } else {
                 if (flags & trim_whitespace)
-                    doc.BOOST_NESTED_TEMPLATE parse<f_tws | f_c>(&v.front());
+                    doc.BOOST_NESTED_TEMPLATE parse<f_tws_c>(&v.front());
                 else
                     doc.BOOST_NESTED_TEMPLATE parse<f_c>(&v.front());
             }
