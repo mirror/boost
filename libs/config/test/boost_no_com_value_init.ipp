@@ -8,10 +8,25 @@
 //  MACRO:         BOOST_NO_COMPLETE_VALUE_INITIALIZATION
 //  TITLE:         No complete value-initialization
 //  DESCRIPTION:   The C++ compiler does not to have implemented value-initialization completely.
-//  See also boost/libs/utility/value_init.htm#compiler_issues
+//                 See also boost/libs/utility/value_init.htm#compiler_issues
 
 #include <iostream>
 
+//  This test checks various forms of value-initialization:
+//  - doing member initialization inside a constructor
+//  - creating a temporary object by T()
+//  - creating a heap object by doing new T()
+//  It checks various DefaultConstructible types, including fundamental types,
+//  enum, union, pointer types, array types, POD and non-POD class types. For
+//  each type of object, a helper function is_value_initialized(const T&) tells 
+//  whether the object is value-initialized.
+//
+//  Note: It appeared insufficient to just check a single POD and a single 
+//  non-POD class type, because some compilers correctly value-initialize some
+//  POD and some non-POD objects, while failing to value-initialize others.
+//
+//  The test returns the number of encountered value-initialization failures.
+  
 namespace boost_no_complete_value_initialization
 {
   enum enum_type { negative_number = -1, magic_number = 42 };
@@ -54,7 +69,7 @@ namespace boost_no_complete_value_initialization
       arg.p == 0;
   }
 
-
+  // A POD struct derived from another POD struct.
   struct derived_pod_struct: pod_struct
   {
     int derived_data;
@@ -88,6 +103,7 @@ namespace boost_no_complete_value_initialization
   }
 
 
+  // A struct, having a bit-field.
   struct bit_field_struct
   {
     bool b : 1;
@@ -100,6 +116,7 @@ namespace boost_no_complete_value_initialization
     return arg.b == false && arg.c == '\0'&& arg.u == 0U;
   }
   
+  // A struct, having a function pointer.
   struct function_ptr_struct
   {
     function_ptr_type data;
@@ -110,6 +127,7 @@ namespace boost_no_complete_value_initialization
     return arg.data == 0;
   }
 
+  // A struct, having a member function pointer.
   struct member_function_ptr_struct
   {
     member_function_ptr_type data;
@@ -120,8 +138,8 @@ namespace boost_no_complete_value_initialization
     return arg.data == 0;
   }
 
-  // Equivalent to the struct TData from CodeGear bug report 51854,
-  // "Value-initialization: POD struct should be zero-initialized",
+  // A struct, having an int. Equivalent to the struct TData, from CodeGear bug
+  // report 51854, "Value-initialization: POD struct should be zero-initialized",
   // reported by me (Niels Dekker, LKEB) in 2007:
   // http://qc.embarcadero.com/wc/qcmain.aspx?d=51854
   struct int_struct
@@ -135,6 +153,7 @@ namespace boost_no_complete_value_initialization
   }
 
 
+  // A struct, having an int_struct.
   struct int_struct_holder
   {
     int_struct data;
@@ -146,6 +165,7 @@ namespace boost_no_complete_value_initialization
   }
 
 
+  // A struct derived from int_struct.
   struct derived_int_struct: int_struct
   {
   };
@@ -440,6 +460,8 @@ namespace boost_no_complete_value_initialization
     }
   }
 
+// A macro that passed both the name and the value of the specified object to
+// the function above here.
 #define FAILED_TO_VALUE_INITIALIZE(value) failed_to_value_initialized(value, #value)
 
 
