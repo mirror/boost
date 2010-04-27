@@ -16,9 +16,7 @@
 #include <memory>
 
 #if defined(BOOST_MSVC) && \
-    (_MSC_FULL_VER == 160020506 || \
-     _MSC_FULL_VER == 160021003 || \
-     _MSC_FULL_VER == 160030128)
+    (_MSC_FULL_VER >= 160000000 && _MSC_FULL_VER < 170000000)
 #define BOOST_PROPERTY_TREE_PAIR_BUG
 #endif
 
@@ -30,7 +28,7 @@ namespace boost { namespace property_tree
         struct by_name {};
         // The actual child container.
 #if defined(BOOST_PROPERTY_TREE_PAIR_BUG)
-        // MSVC 10 pre-release versions have moved std::pair's members to a base
+        // MSVC 10 has moved std::pair's members to a base
         // class. Unfortunately this does break the interface.
         BOOST_STATIC_CONSTANT(unsigned,
             first_offset = offsetof(value_type, first));
