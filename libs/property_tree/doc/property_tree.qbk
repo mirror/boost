@@ -53,6 +53,7 @@
 [def __ptree_get_value_optional__ [memberref boost::property_tree::basic_ptree::get_value_optional get_value_optional]]
 [def __ptree_get_child__ [memberref boost::property_tree::basic_ptree::get_child get_child]]
 [def __ptree_put__ [memberref boost::property_tree::basic_ptree::put put]]
+[def __ptree_put__ [memberref boost::property_tree::basic_ptree::add add]]
 [def __ptree_put_value__ [memberref boost::property_tree::basic_ptree::put_value put_value]]
 
 [/ free-functions]
