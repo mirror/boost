@@ -8,6 +8,8 @@
 #include "./containers.hpp"
 #include "../helpers/random_values.hpp"
 
+template <typename T> inline void avoid_unused_warning(T const&) {}
+
 test::seed_t seed(73041);
 
 template <class T>
@@ -17,6 +19,7 @@ struct copy_test1 : public test::exception_base
 
     void run() const {
         T y(x);
+        avoid_unused_warning(y);
     }
 };
 
@@ -30,6 +33,7 @@ struct copy_test2 : public test::exception_base
 
     void run() const {
         T y(x);
+        avoid_unused_warning(y);
     }
 };
 
@@ -43,6 +47,7 @@ struct copy_test3 : public test::exception_base
 
     void run() const {
         T y(x);
+        avoid_unused_warning(y);
     }
 };
 
@@ -57,6 +62,7 @@ struct copy_with_allocator_test : public test::exception_base
 
     void run() const {
         T y(x, allocator);
+        avoid_unused_warning(y);
     }
 };
 

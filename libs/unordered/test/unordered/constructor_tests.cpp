@@ -142,7 +142,6 @@ void constructor_tests1(T*,
 
     std::cerr<<"Construct 11\n";
     {
-        test::random_values<T> v(1000, generator);
         T x(al);
         BOOST_TEST(x.empty());
         BOOST_TEST(test::equivalent(x.hash_function(), hf));

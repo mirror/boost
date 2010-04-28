@@ -94,7 +94,7 @@ namespace test
 
             node* ptr_;
         public:
-            list_iterator() : ptr_(0) {};
+            list_iterator() : ptr_(0) {}
             explicit list_iterator(node* x) : ptr_(x) {}
 
             T& operator*() const { return ptr_->value_; }

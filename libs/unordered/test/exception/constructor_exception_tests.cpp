@@ -9,6 +9,8 @@
 #include "../helpers/random_values.hpp"
 #include "../helpers/input_iterator.hpp"
 
+template <typename T> inline void avoid_unused_warning(T const&) {}
+
 test::seed_t seed(91274);
 
 struct objects
@@ -24,6 +26,7 @@ struct construct_test1 : public objects, test::exception_base
 {
     void run() const {
         T x;
+        avoid_unused_warning(x);
     }
 };
 
@@ -32,6 +35,7 @@ struct construct_test2 : public objects, test::exception_base
 {
     void run() const {
         T x(300);
+        avoid_unused_warning(x);
     }
 };
 
@@ -40,6 +44,7 @@ struct construct_test3 : public objects, test::exception_base
 {
     void run() const {
         T x(0, hash);
+        avoid_unused_warning(x);
     }
 };
 
@@ -48,6 +53,7 @@ struct construct_test4 : public objects, test::exception_base
 {
     void run() const {
         T x(0, hash, equal_to);
+        avoid_unused_warning(x);
     }
 };
 
@@ -56,6 +62,7 @@ struct construct_test5 : public objects, test::exception_base
 {
     void run() const {
         T x(50, hash, equal_to, allocator);
+        avoid_unused_warning(x);
     }
 };
 
@@ -64,6 +71,7 @@ struct construct_test6 : public objects, test::exception_base
 {
     void run() const {
         T x(allocator);
+        avoid_unused_warning(x);
     }
 };
 
@@ -81,6 +89,7 @@ struct range_construct_test1 : public range<T>, objects
 {
     void run() const {
         T x(this->values.begin(), this->values.end());
+        avoid_unused_warning(x);
     }
 };
 
@@ -89,6 +98,7 @@ struct range_construct_test2 : public range<T>, objects
 {
     void run() const {
         T x(this->values.begin(), this->values.end(), 0);
+        avoid_unused_warning(x);
     }
 };
 
@@ -97,6 +107,7 @@ struct range_construct_test3 : public range<T>, objects
 {
     void run() const {
         T x(this->values.begin(), this->values.end(), 0, hash);
+        avoid_unused_warning(x);
     }
 };
 
@@ -105,6 +116,7 @@ struct range_construct_test4 : public range<T>, objects
 {
     void run() const {
         T x(this->values.begin(), this->values.end(), 100, hash, equal_to);
+        avoid_unused_warning(x);
     }
 };
 
@@ -118,6 +130,7 @@ struct range_construct_test5 : public range<T>, objects
     void run() const {
         T x(this->values.begin(), this->values.end(), 0,
             hash, equal_to, allocator);
+        avoid_unused_warning(x);
     }
 };
 
@@ -131,6 +144,7 @@ struct input_range_construct_test : public range<T>, objects
             begin = this->values.begin(), end = this->values.end();
         T x(test::input_iterator(begin), test::input_iterator(end),
                 0, hash, equal_to, allocator);
+        avoid_unused_warning(x);
     }
 };
 
