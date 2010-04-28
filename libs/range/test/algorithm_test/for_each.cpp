@@ -26,6 +26,12 @@ namespace boost
 {
     namespace
     {
+        template< class Range >
+        unsigned int udistance(Range& rng)
+        {
+            return static_cast<unsigned int>(boost::distance(rng));
+        }
+
         template< class SinglePassRange >
         void test_for_each_impl( SinglePassRange rng )
         {
@@ -35,12 +41,12 @@ namespace boost
 
             // Test the mutable version
             fn_t result_fn = boost::for_each(rng, fn_t(rng));
-            BOOST_CHECK_EQUAL( boost::distance(rng), result_fn.invocation_count() );
+            BOOST_CHECK_EQUAL( boost::udistance(rng), result_fn.invocation_count() );
 
             // Test the constant version
             const SinglePassRange& cref_rng = rng;
             result_fn = boost::for_each(cref_rng, fn_t(cref_rng));
-            BOOST_CHECK_EQUAL( boost::distance(cref_rng), result_fn.invocation_count() );
+            BOOST_CHECK_EQUAL( boost::udistance(cref_rng), result_fn.invocation_count() );
         }
 
         template< class Container >
@@ -51,7 +57,7 @@ namespace boost
             // Test empty
             Container cont;
             test_for_each_impl(cont);
-            
+
             // Test one element
             cont += 0;
             test_for_each_impl(cont);
@@ -63,7 +69,7 @@ namespace boost
 
         void test_for_each()
         {
-            boost::array<int, 10> a = { 0,1,2,3,4,5,6,7,8,9 };
+            boost::array<int, 10> a = {{ 0,1,2,3,4,5,6,7,8,9 }};
             test_for_each_impl(a);
 
             test_for_each_t< std::vector<int> >();
@@ -79,8 +85,8 @@ init_unit_test_suite(int argc, char* argv[])
 {
     boost::unit_test::test_suite* test
         = BOOST_TEST_SUITE( "RangeTestSuite.algorithm.for_each" );
-    
+
     test->add( BOOST_TEST_CASE( &boost::test_for_each ) );
-    
+
     return test;
 }

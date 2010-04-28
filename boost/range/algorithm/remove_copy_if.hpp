@@ -30,8 +30,8 @@ namespace boost
     inline OutputIterator
     remove_copy_if(SinglePassRange& rng, OutputIterator out_it, Predicate pred)
     {
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange> >();
-        return std::remove_copy_if(boost::begin(rng), boost::end(rng), out_it, pred); 
+        BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
+        return std::remove_copy_if(boost::begin(rng), boost::end(rng), out_it, pred);
     }
 }
 
