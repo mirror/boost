@@ -283,6 +283,23 @@ void mapped_file_test()
             "done reopening private mapped_file"
         );
     }
+
+    //-------------Check creating opening mapped_file with char*-------------//
+    
+    {
+        boost::iostreams::test::test_file orig;
+        char name[50];
+        std::strcpy(name, orig.name().c_str());
+        
+        mapped_file mf((char*) name);
+
+        BOOST_CHECK_MESSAGE(
+            boost::iostreams::test::test_writeable(mf),
+            "failed seeking within private mapped_file"
+        );
+
+        mf.close();
+    }
 }
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
