@@ -69,6 +69,18 @@
 #  endif
 #endif
 
+#if __GNUC__ < 4 || ( __GNUC__ == 4 && __GNUC_MINOR__ < 4 )
+// Previous versions of GCC did not completely implement value-initialization:
+// GCC Bug 30111, "Value-initialization of POD base class doesn't initialize
+// members", reported by Jonathan Wakely in 2006,
+// http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30111 (fixed for GCC 4.4)
+// GCC Bug 33916, "Default constructor fails to initialize array members",
+// reported by Michael Elizabeth Chastain in 2007,
+// http://gcc.gnu.org/bugzilla/show_bug.cgi?id=33916 (fixed for GCC 4.2.4)
+// See also: http://www.boost.org/libs/utility/value_init.htm#compiler_issues
+#define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
+#endif
+
 #ifndef __EXCEPTIONS
 # define BOOST_NO_EXCEPTIONS
 #endif
