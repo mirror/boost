@@ -8,7 +8,8 @@
 
 * [*Precondition:] The `value_type` of the range defines unary `operator*()`
 * [*Postcondition:] For all elements `x` in the returned range, `x` is the result of `*y` where `y` is the corresponding element in the original range.
-* [*Range Category:] `SinglePassRange`
+* [*Range Category:] __single_pass_range__
+* [*Returned Range Category:] The range category of `rng`
 
 [section:indirected_example indirected example]
 ``

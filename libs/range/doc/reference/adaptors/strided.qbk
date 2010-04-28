@@ -8,7 +8,8 @@
 
 * [*Precondition:] `0 <= n && n < distance(rng)`
 * [*Returns:] A new range based on `rng` where traversal is performed in steps of `n`.
-* [*Range Category:] `RandomAccessRange`
+* [*Range Category:] __random_access_range__
+* [*Returned Range Category:] __random_access_range__
 
 [section:strided_example strided example]
 ``

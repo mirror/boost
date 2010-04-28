@@ -1,8 +1,12 @@
 [section:reference Reference]
 
 [include reference/overview.qbk]
+
+[section:concept_implementation Range concept implementation]
 [include reference/synopsis.qbk]
 [include reference/semantics.qbk]
+[endsect]
+
 [include reference/adaptors.qbk]
 [include reference/algorithms.qbk]
 [include reference/ranges.qbk]

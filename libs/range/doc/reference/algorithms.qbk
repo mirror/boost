@@ -74,7 +74,7 @@ The same task may be accomplished simply with
 ``
 boost::erase(vec, boost::unique<boost::return_next_end>(vec));
 ``
-and there is no need to worry about generating an invalid range. Furthermore, if the container is complex, calling `vec.begin()` several times will be more expensive than using a range algorithm.
+and there is no need to worry about generating an invalid range. Furthermore, if the container is complex, calling `vec.end()` several times will be more expensive than using a range algorithm.
 
 [endsect]
 
