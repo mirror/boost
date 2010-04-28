@@ -69,73 +69,48 @@
         arrays?)
       </li>
 </ul></div>
-<p>
-      Below are given a small example (the complete example can be found <a href="http://www.boost.org/libs/range/test/algorithm_example.cpp" target="_top">here</a>
-      ):
-    </p>
+<a name="range.introduction.example___iterate_over_the_values_in_a_map"></a><h4>
+<a name="id2769376"></a>
+      <a class="link" href="introduction.html#range.introduction.example___iterate_over_the_values_in_a_map">Example
+      - Iterate over the values in a map</a>
+    </h4>
 <p>
       
 </p>
-<pre class="programlisting"><span class="comment">//
-</span><span class="comment">// example: extracting bounds in a generic algorithm
-</span><span class="comment">//
-</span><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">ForwardReadableRange</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span> <span class="special">&gt;</span>
-<span class="keyword">inline</span> <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">range_iterator</span><span class="special">&lt;</span> <span class="identifier">ForwardReadableRange</span> <span class="special">&gt;::</span><span class="identifier">type</span>
-<span class="identifier">find</span><span class="special">(</span> <span class="identifier">ForwardReadableRange</span><span class="special">&amp;</span> <span class="identifier">c</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">value</span> <span class="special">)</span>
-<span class="special">{</span>
-   <span class="keyword">return</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">find</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">begin</span><span class="special">(</span> <span class="identifier">c</span> <span class="special">),</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">end</span><span class="special">(</span> <span class="identifier">c</span> <span class="special">),</span> <span class="identifier">value</span> <span class="special">);</span>
-<span class="special">}</span>
-
-<span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">ForwardReadableRange</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span> <span class="special">&gt;</span>
-<span class="keyword">inline</span> <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">range_iterator</span><span class="special">&lt;</span> <span class="keyword">const</span> <span class="identifier">ForwardReadableRange</span> <span class="special">&gt;::</span><span class="identifier">type</span>
-<span class="identifier">find</span><span class="special">(</span> <span class="keyword">const</span> <span class="identifier">ForwardReadableRange</span><span class="special">&amp;</span> <span class="identifier">c</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">value</span> <span class="special">)</span>
-<span class="special">{</span>
-   <span class="keyword">return</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">find</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">begin</span><span class="special">(</span> <span class="identifier">c</span> <span class="special">),</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">end</span><span class="special">(</span> <span class="identifier">c</span> <span class="special">),</span> <span class="identifier">value</span> <span class="special">);</span>
-<span class="special">}</span>
-
-<span class="comment">//
-</span><span class="comment">// replace first value and return its index
-</span><span class="comment">//
-</span><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">ForwardReadableWriteableRange</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span> <span class="special">&gt;</span>
-<span class="keyword">inline</span> <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">range_size</span><span class="special">&lt;</span> <span class="identifier">ForwardReadableWriteableRange</span> <span class="special">&gt;::</span><span class="identifier">type</span>
-<span class="identifier">my_generic_replace</span><span class="special">(</span> <span class="identifier">ForwardReadableWriteableRange</span><span class="special">&amp;</span> <span class="identifier">c</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">value</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">replacement</span> <span class="special">)</span>
-<span class="special">{</span>
-   <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">range_iterator</span><span class="special">&lt;</span> <span class="identifier">ForwardReadableWriteableRange</span> <span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">found</span> <span class="special">=</span> <span class="identifier">find</span><span class="special">(</span> <span class="identifier">c</span><span class="special">,</span> <span class="identifier">value</span> <span class="special">);</span>
-
-   <span class="keyword">if</span><span class="special">(</span> <span class="identifier">found</span> <span class="special">!=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">end</span><span class="special">(</span> <span class="identifier">c</span> <span class="special">)</span> <span class="special">)</span>
-       <span class="special">*</span><span class="identifier">found</span> <span class="special">=</span> <span class="identifier">replacement</span><span class="special">;</span>
-   <span class="keyword">return</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">distance</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">begin</span><span class="special">(</span> <span class="identifier">c</span> <span class="special">),</span> <span class="identifier">found</span> <span class="special">);</span>
-<span class="special">}</span>
-
-<span class="comment">//
-</span><span class="comment">// usage
-</span><span class="comment">//
-</span><span class="keyword">const</span> <span class="keyword">int</span> <span class="identifier">N</span> <span class="special">=</span> <span class="number">5</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">my_vector</span><span class="special">;</span>
-<span class="keyword">int</span> <span class="identifier">values</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">,</span><span class="number">6</span><span class="special">,</span><span class="number">7</span><span class="special">,</span><span class="number">8</span><span class="special">,</span><span class="number">9</span> <span class="special">};</span>
-
-<span class="identifier">my_vector</span><span class="special">.</span><span class="identifier">assign</span><span class="special">(</span> <span class="identifier">values</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">end</span><span class="special">(</span> <span class="identifier">values</span> <span class="special">)</span> <span class="special">);</span>
-<span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;::</span><span class="identifier">iterator</span> <span class="identifier">iterator</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">,</span><span class="identifier">iterator</span><span class="special">&gt;</span>       <span class="identifier">my_view</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">begin</span><span class="special">(</span> <span class="identifier">my_vector</span> <span class="special">),</span>
-                                            <span class="identifier">boost</span><span class="special">::</span><span class="identifier">begin</span><span class="special">(</span> <span class="identifier">my_vector</span> <span class="special">)</span> <span class="special">+</span> <span class="identifier">N</span> <span class="special">);</span>
-<span class="keyword">char</span>  <span class="identifier">str_val</span><span class="special">[]</span> <span class="special">=</span> <span class="string">"a string"</span><span class="special">;</span>
-<span class="keyword">char</span><span class="special">*</span> <span class="identifier">str</span>       <span class="special">=</span> <span class="identifier">str_val</span><span class="special">;</span>
-
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">my_generic_replace</span><span class="special">(</span> <span class="identifier">my_vector</span><span class="special">,</span> <span class="number">4</span><span class="special">,</span> <span class="number">2</span> <span class="special">);</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">my_generic_replace</span><span class="special">(</span> <span class="identifier">my_view</span><span class="special">,</span> <span class="number">4</span><span class="special">,</span> <span class="number">2</span> <span class="special">);</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">my_generic_replace</span><span class="special">(</span> <span class="identifier">str</span><span class="special">,</span> <span class="char">'a'</span><span class="special">,</span> <span class="char">'b'</span> <span class="special">);</span>
-
-<span class="comment">// prints '3', '5' and '0'
-</span></pre>
+<pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">adaptors</span><span class="special">;</span>
+<span class="identifier">for_each</span><span class="special">(</span> <span class="identifier">my_map</span> <span class="special">|</span> <span class="identifier">map_values</span><span class="special">,</span> <span class="identifier">fn</span> <span class="special">);</span>
+</pre>
 <p>
     </p>
+<a name="range.introduction.example___iterate_over_the_keys_in_a_map"></a><h4>
+<a name="id2769501"></a>
+      <a class="link" href="introduction.html#range.introduction.example___iterate_over_the_keys_in_a_map">Example
+      - Iterate over the keys in a map</a>
+    </h4>
 <p>
-      By using the free-standing functions and <a href="../../../../../libs/mpl/doc/refmanual/metafunction.html" target="_top">metafunctions</a>,
-      the code automatically works for all the types supported by this library; now
-      and in the future. Notice that we have to provide two versions of <code class="computeroutput"><span class="identifier">find</span><span class="special">()</span></code> since
-      we cannot forward a non-const rvalue with reference arguments (see this article
-      about <a href="http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2002/n1385.htm" target="_top">The
-      Forwarding Problem</a> ).
+      
+</p>
+<pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">adaptors</span><span class="special">;</span>
+<span class="identifier">for_each</span><span class="special">(</span> <span class="identifier">my_map</span> <span class="special">|</span> <span class="identifier">map_keys</span><span class="special">,</span> <span class="identifier">fn</span> <span class="special">);</span>
+</pre>
+<p>
+    </p>
+<a name="range.introduction.example___push_the_even_values_from_a_map_in_reverse_order_into_the_container__code__phrase_role__identifier__target__phrase___code_"></a><h4>
+<a name="id2767252"></a>
+      <a class="link" href="introduction.html#range.introduction.example___push_the_even_values_from_a_map_in_reverse_order_into_the_container__code__phrase_role__identifier__target__phrase___code_">Example
+      - Push the even values from a map in reverse order into the container <code class="computeroutput"><span class="identifier">target</span></code></a>
+    </h4>
+<p>
+      
+</p>
+<pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">adaptors</span><span class="special">;</span>
+<span class="comment">// Assume that is_even is a predicate that has been implemented elsewhere...
+</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">target</span><span class="special">,</span> <span class="identifier">my_map</span> <span class="special">|</span> <span class="identifier">map_values</span> <span class="special">|</span> <span class="identifier">filtered</span><span class="special">(</span><span class="identifier">is_even</span><span class="special">())</span> <span class="special">|</span> <span class="identifier">reversed</span><span class="special">);</span>
+</pre>
+<p>
     </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
