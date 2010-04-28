@@ -1,4 +1,4 @@
-[section Reference]
+[section:reference Reference]
 
 [include reference/overview.qbk]
 [include reference/synopsis.qbk]
@@ -6,6 +6,7 @@
 [include reference/adaptors.qbk]
 [include reference/algorithms.qbk]
 [include reference/ranges.qbk]
+[include reference/utilities.qbk]
 [include reference/extending.qbk]
 
 [endsect]

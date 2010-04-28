@@ -75,7 +75,7 @@ mismatch(const SinglePassRange1& rng1, SinglePassRange2& rng2,
 
 [heading Description]
 
-The versions of `mismatch` that return an iterator, return an iterator to the first position where `rng1` and `rng2` differ.
+`mismatch` finds the first position where the two ranges `rng1` and `rng2` differ.
 
 Equality is determined by `operator==` for non-predicate versions of `mismatch`, and by satisfying `pred` in the predicate versions.
 

@@ -1,6 +1,6 @@
 [section:adaptors Range Adaptors]
 
-[section:adaptors_introduction Introduction and motivation]
+[section:introduction Introduction and motivation]
 
 A [*Range Adaptor] is a class that wraps an existing Range to provide a new Range with different behaviour. Since the behaviour of Ranges is determined by their associated iterators, a Range Adaptor simply wraps the underlying iterators with new special iterators. In this example
 
@@ -145,7 +145,7 @@ rng | boost::adaptors::uniqued
 
 [endsect]
 
-[section:adaptors_general_requirements General Requirements]
+[section:general_requirements General Requirements]
 
 In the description of generator expressions, the following notation is used:
 
@@ -183,7 +183,7 @@ rng | boost::adaptors::adaptor_generator
 
 [endsect]
 
-[section:adaptors_reference Reference]
+[section:reference Reference]
 [include adaptors/adjacent_filtered.qbk]
 [include adaptors/copied.qbk]
 [include adaptors/filtered.qbk]
