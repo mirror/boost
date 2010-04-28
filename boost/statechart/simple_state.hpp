@@ -727,7 +727,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
         context< termination_state_type >() );
       const typename
         common_context_type::inner_context_ptr_type pCommonContext(
-          terminationState.context_ptr< common_context_type >() );
+          terminationState.template context_ptr< common_context_type >() );
       outermost_context_base_type & outermostContextBase(
         pCommonContext->outermost_context_base() );
 
@@ -949,7 +949,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       template< class State >
       static void check_store_deep_history_impl( State & stt )
       {
-        stt.store_deep_history_impl< MostDerived >();
+        stt.template store_deep_history_impl< MostDerived >();
       }
     };
     friend struct check_store_deep_history_impl_yes;

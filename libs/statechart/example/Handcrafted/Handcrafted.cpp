@@ -51,6 +51,8 @@ template< class Derived >
 class state : public state_base
 {
   public:
+    state() : state_base() { }
+
     static const Derived & instance()
     {
       return instance_;
@@ -92,7 +94,10 @@ class event : public event_base
 
 
 //////////////////////////////////////////////////////////////////////////////
-class EvFlipBit : public event< EvFlipBit > {};
+class EvFlipBit : public event< EvFlipBit > {
+public:
+  EvFlipBit() : event < EvFlipBit >() { }
+};
 const EvFlipBit flip;
 
 class BitMachine
@@ -110,6 +115,8 @@ class BitMachine
     //////////////////////////////////////////////////////////////////////////
     struct On : state< On >
     {
+      On() : state<On>() { }
+
       virtual const state_base & react( const EvFlipBit & ) const
       {
         return Off::instance();
@@ -118,6 +125,8 @@ class BitMachine
 
     struct Off : state< Off >
     {
+      Off() : state<Off>() { }
+
       virtual const state_base & react( const EvFlipBit & ) const
       {
         return On::instance();
