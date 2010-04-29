@@ -108,6 +108,8 @@ namespace boost
     class lib3_error_category_imp : public boost::system::error_category
     {
     public:
+      lib3_error_category_imp() : boost::system::error_category() { }
+
       const char * name() const
       {
         return "lib3";
@@ -168,6 +170,8 @@ namespace lib4
   class lib4_error_category_imp : public boost::system::error_category
   {
   public:
+    lib4_error_category_imp() : boost::system::error_category() { }
+
     const char * name() const
     {
       return "lib4";
