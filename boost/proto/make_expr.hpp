@@ -966,7 +966,7 @@
 
             result_type operator()(BOOST_PP_ENUM_BINARY_PARAMS(N, typename add_reference<A, >::type a)) const
             {
-                expr_type that = {
+                expr_type const that = {
                     BOOST_PP_ENUM(N, BOOST_PROTO_AS_CHILD, (A, a, Domain))
                 };
                 return Domain()(that);
@@ -1001,7 +1001,7 @@
             static type const call(Sequence const &sequence)
             {
                 BOOST_PROTO_FUSION_ITERATORS(N)
-                expr_type that = {
+                expr_type const that = {
                     BOOST_PP_ENUM(N, BOOST_PROTO_FUSION_AS_CHILD_AT, ~)
                 };
                 return Domain()(that);
