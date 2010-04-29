@@ -222,7 +222,7 @@ namespace boost { namespace proto
                 >                                                                                   \
               , 2                                                                                   \
             > that_type;                                                                            \
-            that_type that = {                                                                      \
+            that_type const that = {                                                                \
                 *this                                                                               \
               , a                                                                                   \
             };                                                                                      \
@@ -269,7 +269,7 @@ namespace boost { namespace proto
                 >                                                                                   \
               , 2                                                                                   \
             > that_type;                                                                            \
-            that_type that = {                                                                      \
+            that_type const that = {                                                                \
                 *static_cast<proto_derived_expr ThisConst() *>(this)                                \
               , boost::proto::as_child<proto_domain>(a)                                             \
             };                                                                                      \
@@ -333,7 +333,7 @@ namespace boost { namespace proto
                 >                                                                                   \
               , 2                                                                                   \
             > that_type;                                                                            \
-            that_type that = {                                                                      \
+            that_type const that = {                                                                \
                 *static_cast<proto_derived_expr ThisConst() *>(this)                                \
               , boost::proto::as_child<proto_domain>(a)                                             \
             };                                                                                      \

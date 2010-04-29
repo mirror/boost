@@ -204,7 +204,7 @@
                 template<typename Expr2, typename S, typename D>
                 result_type operator()(Expr2 const &e, S const &, D const &) const
                 {
-                    expr_type that = {
+                    expr_type const that = {
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_FUN, ~)
                     };
 

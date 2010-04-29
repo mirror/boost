@@ -120,8 +120,8 @@ namespace boost { namespace proto
             static typename proto_domain::template result<proto_domain(expr_type)>::type
             make(Left &left, Right &right)
             {
-                term_type term = {right};
-                expr_type that = {left, proto_domain()(term)};
+                term_type const term = {right};
+                expr_type const that = {left, proto_domain()(term)};
                 return proto_domain()(that);
             }
         };
@@ -142,8 +142,8 @@ namespace boost { namespace proto
             static typename proto_domain::template result<proto_domain(expr_type)>::type
             make(Left &left, Right &right)
             {
-                term_type term = {left};
-                expr_type that = {proto_domain()(term), right};
+                term_type const term = {left};
+                expr_type const that = {proto_domain()(term), right};
                 return proto_domain()(that);
             }
         };
@@ -166,7 +166,7 @@ namespace boost { namespace proto
             static typename proto_domain::template result<proto_domain(expr_type)>::type
             make(Left &left, Right &right)
             {
-                expr_type that = {left, right};
+                expr_type const that = {left, right};
                 return proto_domain()(that);
             }
         };
@@ -252,7 +252,7 @@ namespace boost { namespace proto
     operator OP(Arg &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                                  \
     {                                                                                               \
         typedef proto::expr<TAG, list1<Arg &>, 1> that_type;                                        \
-        that_type that = {arg};                                                                     \
+        that_type const that = {arg};                                                               \
         return typename Arg::proto_domain()(that);                                                  \
     }                                                                                               \
     template<typename Arg>                                                                          \
@@ -264,7 +264,7 @@ namespace boost { namespace proto
     operator OP(Arg const &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                            \
     {                                                                                               \
         typedef proto::expr<TAG, list1<Arg const &>, 1> that_type;                                  \
-        that_type that = {arg};                                                                     \
+        that_type const that = {arg};                                                               \
         return typename Arg::proto_domain()(that);                                                  \
     }                                                                                               \
     /**/
