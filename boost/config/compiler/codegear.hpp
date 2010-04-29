@@ -51,6 +51,15 @@
 // Temporary hack, until specific MPL preprocessed headers are generated
 #  define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
 
+// CodeGear has not yet completely implemented value-initialization, for
+// example for array types, as I reported in 2010: Embarcadero Report 83751,
+// "Value-initialization: arrays should have each element value-initialized",
+// http://qc.embarcadero.com/wc/qcmain.aspx?d=83751
+// Last checked version: Embarcadero C++ 6.21
+// See also: http://www.boost.org/libs/utility/value_init.htm#compiler_issues
+// (Niels Dekker, LKEB, April 2010)
+#  define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
+
 #  ifdef NDEBUG
       // fix broken <cstring> so that Boost.test works:
 #     include <cstring>
