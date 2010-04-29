@@ -1,0 +1,34 @@
+[section:remove_copy remove_copy]
+
+[heading Prototype]
+
+``
+template<class ForwardRange, class Outputiterator, class Value>
+OutputIterator
+remove_copy(ForwardRange& rng, OutputIterator out, const Value& val);
+
+template<class ForwardRange, class OutputIterator, class Value>
+OutputIterator
+remove_copy(const ForwardRange& rng, OutputIterator out, const Value& val);
+``
+
+[heading Description]
+
+`remove_copy` copied all of the elements `x` from `rng` for which `x == val` is `false`.
+
+[heading Definition]
+
+Defined in the header file `boost/range/algorithm/remove_copy.hpp`
+
+[heading Requirements]
+
+* `ForwardRange` is a model of the __forward_range__ Concept.
+* `ForwardRange` is mutable.
+* `Value` is a model of the `EqualityComparableConcept`.
+* Objects of type `Value` can be compared for equality with objects of `ForwardRange`'s value type.
+
+[heading Complexity]
+
+Linear. `remove_copy` performs exactly `distance(rng)` comparisons for equality.
+
+[endsect]

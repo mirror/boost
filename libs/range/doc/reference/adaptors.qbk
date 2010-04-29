@@ -1,6 +1,6 @@
 [section:adaptors Range Adaptors]
 
-[section:adaptors_introduction Introduction and motivation]
+[section:introduction Introduction and motivation]
 
 A [*Range Adaptor] is a class that wraps an existing Range to provide a new Range with different behaviour. Since the behaviour of Ranges is determined by their associated iterators, a Range Adaptor simply wraps the underlying iterators with new special iterators. In this example
 
@@ -121,31 +121,7 @@ In other words:
 
 [endsect]
 
-[section:adaptors_synopsis Synopsis]
-
-The library provides the following Adapter Generator expressions:
-
-``
-rng | boost::adaptors::adjacent_filtered(bi_pred)
-rng | boost::adaptors::copied(n,m)
-rng | boost::adaptors::filtered(pred)
-rng | boost::adaptors::indexed
-rng | boost::adaptors::indirected
-rng | boost::adaptors::map_keys
-rng | boost::adaptors::map_values
-rng | boost::adaptors::replaced(new_value, old_value)
-rng | boost::adaptors::replaced_if(pred, new_value)
-rng | boost::adaptors::reversed
-rng | boost::adaptors::sliced(n, m)
-rng | boost::adaptors::strided(n)
-rng | boost::adaptors::tokenized( <see arguments below> )
-rng | boost::adaptors::transformed(fun)
-rng | boost::adaptors::uniqued
-``
-
-[endsect]
-
-[section:adaptors_general_requirements General Requirements]
+[section:general_requirements General Requirements]
 
 In the description of generator expressions, the following notation is used:
 
@@ -183,7 +159,7 @@ rng | boost::adaptors::adaptor_generator
 
 [endsect]
 
-[section:adaptors_reference Reference]
+[section:reference Reference]
 [include adaptors/adjacent_filtered.qbk]
 [include adaptors/copied.qbk]
 [include adaptors/filtered.qbk]

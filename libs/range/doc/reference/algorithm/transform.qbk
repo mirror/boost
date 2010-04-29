@@ -1,4 +1,4 @@
-[section:transform Range Algorithm - transform]
+[section:transform transform]
 
 [heading Prototype]
 
@@ -11,7 +11,7 @@ template<
 OutputIterator transform(const SinglePassRange1& rng,
                          OutputIterator out,
                          UnaryOperation fun);
-                         
+
 template<
     class SinglePassRange1,
     class SinglePassRange2,

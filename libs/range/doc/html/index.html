@@ -30,7 +30,7 @@
 </h3></div></div>
 <div><p class="copyright">Copyright &#169; 2003 -2010 Thorsten Ottosen, Neil Groves</p></div>
 <div><div class="legalnotice" title="Legal Notice">
-<a name="id3005003"></a><p>
+<a name="id2680258"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -49,46 +49,48 @@
 <dt><span class="section"><a href="range/concepts/random_access_range.html">Random Access Range</a></span></dt>
 <dt><span class="section"><a href="range/concepts/concept_checking.html">Concept Checking</a></span></dt>
 </dl></dd>
-<dt><span class="section"><a href="range/reference.html">Reference</a></span></dt>
+<dt><span class="section"><a href="range/reference.html"> Reference</a></span></dt>
 <dd><dl>
 <dt><span class="section"><a href="range/reference/overview.html">Overview</a></span></dt>
-<dt><span class="section"><a href="range/reference/synopsis.html">Synopsis</a></span></dt>
-<dt><span class="section"><a href="range/reference/semantics.html">Semantics</a></span></dt>
+<dt><span class="section"><a href="range/reference/concept_implementation.html"> Range concept
+      implementation</a></span></dt>
 <dd><dl>
-<dt><span class="section"><a href="range/reference/semantics/metafunctions.html">Metafunctions</a></span></dt>
-<dt><span class="section"><a href="range/reference/semantics/functions.html">Functions</a></span></dt>
+<dt><span class="section"><a href="range/reference/concept_implementation/synopsis.html">Synopsis</a></span></dt>
+<dt><span class="section"><a href="range/reference/concept_implementation/semantics.html">Semantics</a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="range/reference/adaptors.html"> Range Adaptors</a></span></dt>
 <dd><dl>
-<dt><span class="section"><a href="range/reference/adaptors/adaptors_introduction.html"> Introduction
+<dt><span class="section"><a href="range/reference/adaptors/introduction.html"> Introduction
         and motivation</a></span></dt>
-<dt><span class="section"><a href="range/reference/adaptors/adaptors_synopsis.html"> Synopsis</a></span></dt>
-<dt><span class="section"><a href="range/reference/adaptors/adaptors_general_requirements.html">
-        General Requirements</a></span></dt>
-<dt><span class="section"><a href="range/reference/adaptors/adaptors_reference.html"> Reference</a></span></dt>
+<dt><span class="section"><a href="range/reference/adaptors/general_requirements.html"> General
+        Requirements</a></span></dt>
+<dt><span class="section"><a href="range/reference/adaptors/reference.html"> Reference</a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="range/reference/algorithms.html"> Range Algorithm</a></span></dt>
 <dd><dl>
 <dt><span class="section"><a href="range/reference/algorithms/range_algorithm_introduction.html">
         Introduction and motivation</a></span></dt>
-<dt><span class="section"><a href="range/reference/algorithms/range_algorithm_mutating_algorithms.html">
-        Mutating algorithms</a></span></dt>
-<dt><span class="section"><a href="range/reference/algorithms/range_algorithm_non_mutating_algorithms.html">
-        Non-mutating algorithms</a></span></dt>
-<dt><span class="section"><a href="range/reference/algorithms/set_algorithms.html"> Set algorithms</a></span></dt>
-<dt><span class="section"><a href="range/reference/algorithms/heap_algorithms.html"> Heap algorithms</a></span></dt>
-<dt><span class="section"><a href="range/reference/algorithms/permutation_algorithms.html">
-        Permutation algorithms</a></span></dt>
-<dt><span class="section"><a href="range/reference/algorithms/range_algorithm_new_algorithms.html">
-        New algorithms</a></span></dt>
-<dt><span class="section"><a href="range/reference/algorithms/range_numeric.html"> Numeric
+<dt><span class="section"><a href="range/reference/algorithms/mutating.html"> Mutating algorithms</a></span></dt>
+<dt><span class="section"><a href="range/reference/algorithms/non_mutating.html"> Non-mutating
         algorithms</a></span></dt>
+<dt><span class="section"><a href="range/reference/algorithms/set.html"> Set algorithms</a></span></dt>
+<dt><span class="section"><a href="range/reference/algorithms/heap.html"> Heap algorithms</a></span></dt>
+<dt><span class="section"><a href="range/reference/algorithms/permutation.html"> Permutation
+        algorithms</a></span></dt>
+<dt><span class="section"><a href="range/reference/algorithms/new.html"> New algorithms</a></span></dt>
+<dt><span class="section"><a href="range/reference/algorithms/numeric.html"> Numeric algorithms</a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="range/reference/ranges.html"> Provided Ranges</a></span></dt>
 <dd><dl>
 <dt><span class="section"><a href="range/reference/ranges/counting_range.html"> counting_range</a></span></dt>
 <dt><span class="section"><a href="range/reference/ranges/istream_range.html"> istream_range</a></span></dt>
 <dt><span class="section"><a href="range/reference/ranges/irange.html"> irange</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="range/reference/utilities.html"> Utilities</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="range/reference/utilities/iterator_range.html"> Class <code class="computeroutput"><span class="identifier">iterator_range</span></code></a></span></dt>
+<dt><span class="section"><a href="range/reference/utilities/sub_range.html"> Class <code class="computeroutput"><span class="identifier">sub_range</span></code></a></span></dt>
+<dt><span class="section"><a href="range/reference/utilities/join.html"> Function join</a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="range/reference/extending.html"> Extending the library</a></span></dt>
 <dd><dl>
@@ -100,14 +102,15 @@
         range adaptor implementations</a></span></dt>
 </dl></dd>
 </dl></dd>
-<dt><span class="section"><a href="range/utilities.html"> Utilities</a></span></dt>
-<dd><dl>
-<dt><span class="section"><a href="range/utilities/iterator_range.html"> Class <code class="computeroutput"><span class="identifier">iterator_range</span></code></a></span></dt>
-<dt><span class="section"><a href="range/utilities/sub_range.html"> Class <code class="computeroutput"><span class="identifier">sub_range</span></code></a></span></dt>
-<dt><span class="section"><a href="range/utilities/join.html"> Function join</a></span></dt>
-</dl></dd>
 <dt><span class="section"><a href="range/style_guide.html"> Terminology and style guidelines</a></span></dt>
 <dt><span class="section"><a href="range/library_headers.html">Library Headers</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="range/library_headers/general.html">General</a></span></dt>
+<dt><span class="section"><a href="range/library_headers/adaptors.html">Adaptors</a></span></dt>
+<dt><span class="section"><a href="range/library_headers/algorithm.html">Algorithm</a></span></dt>
+<dt><span class="section"><a href="range/library_headers/algorithm_extensions.html">Algorithm
+      Extensions</a></span></dt>
+</dl></dd>
 <dt><span class="section"><a href="range/examples.html">Examples</a></span></dt>
 <dt><span class="section"><a href="range/mfc_atl.html"> MFC/ATL (courtesy of Shunsuke Sogame)</a></span></dt>
 <dd><dl>
@@ -130,12 +133,16 @@
 </dl>
 </div>
 <p>
-    Boost.Range is a collection of concepts and utilities that are particularly useful
-    for specifying and implementing generic algorithms.
+    Boost.Range is a collection of concepts and utilities, range-based algorithms,
+    as well as range adaptors that allow for efficient and expressive code.
+  </p>
+<p>
+    Using Boost.Range inplace of the standard library alternatives results in more
+    readable code and in many cases greater efficiency.
   </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: April 11, 2010 at 21:49:16 GMT</small></p></td>
+<td align="left"><p><small>Last revised: April 28, 2010 at 17:51:33 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>

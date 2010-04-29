@@ -1,4 +1,4 @@
-[section:rotate Range Algorithm - rotate]
+[section:rotate rotate]
 
 [heading Prototype]
 
@@ -6,7 +6,7 @@
 template<class ForwardRange>
 ForwardRange& rotate(ForwardRange& rng,
                      typename range_iterator<ForwardRange>::type middle);
-                     
+
 template<class ForwardRange>
 const ForwardRange& rotate(const ForwardRange& rng,
                            typename range_iterator<const ForwardRange>::type middle);

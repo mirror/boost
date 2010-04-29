@@ -38,7 +38,7 @@
     </p>
 <p>
       Notice also that some compilers cannot do function template ordering properly.
-      In that case one must rely of <a class="link" href="reference/semantics/metafunctions.html" title="Metafunctions"><code class="computeroutput"><span class="identifier">range_iterator</span></code></a> and a single function
+      In that case one must rely of <a class="link" href="reference/concept_implementation/semantics/metafunctions.html" title="Metafunctions"><code class="computeroutput"><span class="identifier">range_iterator</span></code></a> and a single function
       definition instead of overloaded versions for const and non-const arguments.
       So if one cares about old compilers, one should not pass rvalues to the functions.
     </p>
@@ -50,12 +50,14 @@
         do not use built-in arrays,
       </li>
 <li class="listitem">
-        do not pass rvalues to <a class="link" href="reference/semantics/functions.html" title="Functions"><code class="computeroutput"><span class="identifier">begin</span></code></a><code class="computeroutput"><span class="special">()</span></code>,
-        <a class="link" href="reference/semantics/functions.html" title="Functions"><code class="computeroutput"><span class="identifier">end</span></code></a><code class="computeroutput"><span class="special">()</span></code> and <a class="link" href="utilities/iterator_range.html" title="Class iterator_range"><code class="computeroutput"><span class="identifier">iterator_range</span></code></a> Range constructors
+        do not pass rvalues to <a class="link" href="reference/concept_implementation/semantics/functions.html" title="Functions"><code class="computeroutput"><span class="identifier">begin</span></code></a><code class="computeroutput"><span class="special">()</span></code>,
+        <a class="link" href="reference/concept_implementation/semantics/functions.html" title="Functions"><code class="computeroutput"><span class="identifier">end</span></code></a><code class="computeroutput"><span class="special">()</span></code>
+        and <a class="link" href="reference/utilities/iterator_range.html" title="Class iterator_range"><code class="computeroutput"><span class="identifier">iterator_range</span></code></a> Range constructors
         and assignment operators,
       </li>
 <li class="listitem">
-        use <a class="link" href="reference/semantics/functions.html" title="Functions"><code class="computeroutput"><span class="identifier">const_begin</span></code></a><code class="computeroutput"><span class="special">()</span></code> and <a class="link" href="reference/semantics/functions.html" title="Functions"><code class="computeroutput"><span class="identifier">const_end</span></code></a><code class="computeroutput"><span class="special">()</span></code>
+        use <a class="link" href="reference/concept_implementation/semantics/functions.html" title="Functions"><code class="computeroutput"><span class="identifier">const_begin</span></code></a><code class="computeroutput"><span class="special">()</span></code>
+        and <a class="link" href="reference/concept_implementation/semantics/functions.html" title="Functions"><code class="computeroutput"><span class="identifier">const_end</span></code></a><code class="computeroutput"><span class="special">()</span></code>
         whenever your code by intention is read-only; this will also solve most rvalue
         problems,
       </li>

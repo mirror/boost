@@ -4,17 +4,17 @@
 
 ``
 template<class Integer>
-integer_range< range_detail::integer_iterator<Integer> >
+iterator_range< range_detail::integer_iterator<Integer> >
 irange(Integer first, Integer  last);
 
 template<class Integer, class StepSize>
-integer_range< range_detail::integer_iterator_with_step<Integer, StepSize> >
+iterator_range< range_detail::integer_iterator_with_step<Integer, StepSize> >
 irange(Integer first, Integer last, StepSize step_size);
 ``
 
 [heading Description]
 
-`irange` is a function to generate an Integer Range. 
+`irange` is a function to generate an Integer Range.
 
 `irange` allows treating integers as a model of the __random_access_range__ Concept. It should be noted that the `first` and `last` parameters denoted a half-open range.
 

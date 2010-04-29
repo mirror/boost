@@ -8,7 +8,8 @@
 
 * [*Precondition:] The `value_type` of the range is comparable with `operator==()`.
 * [*Postcondition:] For all adjacent elements `[x,y]` in the returned range, `x==y` is false.
-* [*Range Category:] `ForwardRange`
+* [*Range Category:] __forward_range__
+* [*Returned Range Category:] The minimum of the range concept of `rng` and __forward_range__.
 
 [section:uniqued_example uniqued example]
 ``

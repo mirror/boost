@@ -1,4 +1,4 @@
-[section:inplace_merge Range Algorithm - inplace_merge]
+[section:inplace_merge inplace_merge]
 
 [heading Prototype]
 
@@ -7,18 +7,18 @@ template<class BidirectionalRange>
 BidirectionalRange&
 inplace_merge( BidirectionalRange& rng,
                typename range_iterator<BidirectionalRange>::type middle );
-               
+
 template<class BidirectionalRange>
 const BidirectionalRange&
 inplace_merge( const BidirectionalRange& rng,
                typename range_iterator<const BidirectionalRange>::type middle );
-               
+
 template<class BidirectionalRange, class BinaryPredicate>
 BidirectionalRange&
 inplace_merge( BidirectionalRange& rng,
                typename range_iterator<BidirectionalRange>::type middle,
                BinaryPredicate pred );
-               
+
 template<class BidirectionalRange, class BinaryPredicate>
 const BidirectionalRange&
 inplace_merge( const BidirectionalRange& rng,
