@@ -60,6 +60,5 @@
 #define BOOST_NO_EXTERN_TEMPLATE
 
 #ifndef BOOST_COMPILER
-// NOTE: Clang does not expose a version number
-#  define BOOST_COMPILER "Clang C++"
+#  define BOOST_COMPILER "Clang version " __clang_version__
 #endif
