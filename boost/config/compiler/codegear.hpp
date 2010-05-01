@@ -19,8 +19,8 @@
 #endif
 //
 // versions check:
-// last known and checked version is 0x620
-#if (__CODEGEARC__ > 0x620)
+// last known and checked version is 0x621
+#if (__CODEGEARC__ > 0x621)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
@@ -41,7 +41,7 @@
 #endif
 
 // CodeGear C++ Builder 2010
-#if (__CODEGEARC__ <= 0x620)
+#if (__CODEGEARC__ <= 0x621)
 #  define BOOST_NO_TYPENAME_WITH_CTOR    // Cannot use typename keyword when making temporaries of a dependant type
 #  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
