@@ -103,7 +103,8 @@ void reversible_container_test()
     c.pop_back(); 
     BOOST_CHECK( !c.empty() );
     c.insert( c.end(), new T );
-    c.insert( c.end(), std::auto_ptr<T>( new T ) );
+    std::auto_ptr<T> ap(new T);
+    c.insert( c.end(), ap );
     BOOST_CHECK_EQUAL( c.size(), 5u );
 
 #if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
@@ -135,7 +136,7 @@ void reversible_container_test()
 #else
     auto_type ptr       = c.release( c.begin() );
 #endif    
-    std::auto_ptr<C> ap = c.release();
+    std::auto_ptr<C> ap2 = c.release();
     c                   = c2.clone();
     BOOST_CHECK( !c.empty() );
     auto_type ptr2      = c.replace( c.begin(), new T );
