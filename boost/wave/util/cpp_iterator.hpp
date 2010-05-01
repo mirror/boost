@@ -277,8 +277,8 @@ public:
                 lexer_type(), 
                 pos_.get_file().c_str()
             )), 
-        seen_newline(true), must_emit_line_directive(false),
-        act_pos(ctx_.get_main_pos()),
+        seen_newline(true), skipped_newline(false), 
+        must_emit_line_directive(false), act_pos(ctx_.get_main_pos()),
         whitespace(boost::wave::need_insert_whitespace(ctx.get_language()))
     {
         act_pos.set_file(pos_.get_file());
