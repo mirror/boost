@@ -41,6 +41,8 @@ namespace Foo
         //
         struct X
         {
+          X() : vec() { }
+
                 typedef std::vector<int>       data_t;
                 typedef data_t::iterator       iterator;
                 typedef data_t::const_iterator const_iterator;
