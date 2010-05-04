@@ -1,6 +1,6 @@
 /* Boost.Flyweight example of a composite design.
  *
- * Copyright 2006-2008 Joaquin M Lopez Munoz.
+ * Copyright 2006-2010 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -63,10 +63,8 @@ struct list_hasher:boost::static_visitor<std::size_t>
     return h(str);
   }
 
-  std::size_t operator()(
-    const boost::recursive_wrapper<list_elems>& elmsw)const
+  std::size_t operator()(const list_elems& elms)const
   {
-    const list_elems& elms=elmsw.get();
     std::size_t res=0;
     for(list_elems::const_iterator it=elms.begin(),it_end=elms.end();
         it!=it_end;++it){
