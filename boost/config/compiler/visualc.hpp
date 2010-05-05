@@ -99,6 +99,18 @@
 #  define BOOST_NO_ADL_BARRIER
 #endif
 
+// MSVC has not yet completely implemented value-initialization, as
+// is reported:
+// "VC++ does not value-initialize members of derived classes without 
+// user-declared constructor", reported in 2009 by Sylvester Hesp:
+// https://connect.microsoft.com/VisualStudio/feedback/details/484295
+// "Value-initialization in new-expression", reported in 2005 by
+// Pavel Kuznetsov (MetaCommunications Engineering):
+// https://connect.microsoft.com/VisualStudio/feedback/details/100744
+// See also: http://www.boost.org/libs/utility/value_init.htm#compiler_issues
+// (Niels Dekker, LKEB, May 2010)
+#define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
+
 #if _MSC_VER <= 1500  || !defined(BOOST_STRICT_CONFIG) // 1500 == VC++ 9.0
 #  define BOOST_NO_INITIALIZER_LISTS
 #endif
