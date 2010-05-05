@@ -636,7 +636,7 @@ namespace boost_no_complete_value_initialization
     }
 
     // Returns the number of failures.
-    unsigned check() const
+    unsigned check_failures() const
     {
       const unsigned num_failures = 
         FAILED_TO_VALUE_INITIALIZE(int_struct::data) +
@@ -868,7 +868,7 @@ namespace boost_no_complete_value_initialization
     unsigned total_num_failures = 0;
 
     dirty_stack();
-    const unsigned num_failures_of_a_temporary = value_initializer().check();
+    const unsigned num_failures_of_a_temporary = value_initializer().check_failures();
 
     total_num_failures += num_failures_of_a_temporary;
     if ( total_num_failures > 0 )
@@ -878,7 +878,7 @@ namespace boost_no_complete_value_initialization
     }
     dirty_stack();
     value_initializer object_on_stack;
-    const unsigned num_failures_on_stack = object_on_stack.check();
+    const unsigned num_failures_on_stack = object_on_stack.check_failures();
 
     total_num_failures += num_failures_on_stack;
     if ( total_num_failures > 0 )
@@ -887,7 +887,7 @@ namespace boost_no_complete_value_initialization
         << num_failures_on_stack << std::endl;
     }
     const value_initializer* const ptr = new value_initializer();
-    const unsigned num_failures_on_heap = ptr->check();
+    const unsigned num_failures_on_heap = ptr->check_failures();
     delete ptr;
 
     total_num_failures += num_failures_on_heap;
