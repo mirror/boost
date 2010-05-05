@@ -50,7 +50,7 @@
                   , State                                                                           \
                   , Data                                                                            \
                 >()(                                                                                \
-                    proto::child_c<N>(e), s, d                                                      \
+                    e.proto_base().BOOST_PP_CAT(child, N), s, d                                     \
                 )                                                                                   \
                 /**/
 
