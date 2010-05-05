@@ -866,7 +866,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_recursion()
    recursion_stack.back().results = *m_presult;
    recursion_stack.back().repeater_stack = next_count;
    pstate = static_cast<const re_jump*>(pstate)->alt.p;
-   recursion_stack.back().id = static_cast<const re_brace*>(pstate)->index;
+   recursion_stack.back().idx = static_cast<const re_brace*>(pstate)->index;
 
    repeater_count<BidiIterator>* saved = next_count;
    repeater_count<BidiIterator> r(&next_count); // resets all repeat counts since we're recursing and starting fresh on those
@@ -897,7 +897,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_endmark()
       }
       if(!recursion_stack.empty())
       {
-         if(index == recursion_stack.back().id)
+         if(index == recursion_stack.back().idx)
          {
             recursion_info<results_type> saved = recursion_stack.back();
             recursion_stack.pop_back();
@@ -929,7 +929,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_match()
 {
    if(!recursion_stack.empty())
    {
-      BOOST_ASSERT(0 == recursion_stack.back().id);
+      BOOST_ASSERT(0 == recursion_stack.back().idx);
       const re_syntax_base* saved_state = pstate = recursion_stack.back().preturn_address;
       *m_presult = recursion_stack.back().results;
       recursion_stack.pop_back();

@@ -336,7 +336,7 @@ struct recursion_info
 {
    typedef typename Results::value_type value_type;
    typedef typename value_type::iterator iterator;
-   int id;
+   int idx;
    const re_syntax_base* preturn_address;
    Results results;
    repeater_count<iterator>* repeater_stack;
@@ -522,7 +522,7 @@ private:
    void push_repeater_count(int i, repeater_count<BidiIterator>** s);
    void push_single_repeat(std::size_t c, const re_repeat* r, BidiIterator last_position, int state_id);
    void push_non_greedy_repeat(const re_syntax_base* ps);
-   void push_recursion(int id, const re_syntax_base* p, results_type* presults);
+   void push_recursion(int idx, const re_syntax_base* p, results_type* presults);
    void push_recursion_pop();
 
    // pointer to base of stack:

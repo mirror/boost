@@ -732,10 +732,10 @@ inline bool perl_matcher<BidiIterator, Allocator, traits>::match_assert_backref(
    {
       // Have we recursed into subexpression "index"?
       // If index == 0 then check for any recursion at all, otherwise for recursion to -index-1.
-      int id = -index-1;
-      if(id >= 10000)
-         id = re.get_data().get_id(id);
-      result = !recursion_stack.empty() && ((recursion_stack.back().id == id) || (index == 0));
+      int idx = -index-1;
+      if(idx >= 10000)
+         idx = re.get_data().get_id(idx);
+      result = !recursion_stack.empty() && ((recursion_stack.back().idx == idx) || (index == 0));
       pstate = pstate->next.p;
    }
    return result;
