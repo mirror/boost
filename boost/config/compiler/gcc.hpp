@@ -81,7 +81,7 @@
 #define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
 #endif
 
-#ifndef __EXCEPTIONS
+#if !defined(__EXCEPTIONS) && !defined(BOOST_NO_EXCEPTIONS)
 # define BOOST_NO_EXCEPTIONS
 #endif
 

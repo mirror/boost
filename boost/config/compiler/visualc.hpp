@@ -115,7 +115,7 @@
 
 //   
 // check for exception handling support:   
-#ifndef _CPPUNWIND 
+#if !defined(_CPPUNWIND) && !defined(BOOST_NO_EXCEPTIONS)
 #  define BOOST_NO_EXCEPTIONS   
 #endif 
 

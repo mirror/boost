@@ -44,7 +44,7 @@
 #endif 
 
 // See also kai.hpp which checks a Kai-specific symbol for EH
-# if !defined(__KCC) && !defined(__EXCEPTIONS)
+# if !defined(__KCC) && !defined(__EXCEPTIONS) && !defined(BOOST_NO_EXCEPTIONS)
 #     define BOOST_NO_EXCEPTIONS
 # endif
 

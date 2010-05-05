@@ -8,7 +8,7 @@
 
 // Clang compiler setup.
 
-#if __has_feature(cxx_exceptions)
+#if __has_feature(cxx_exceptions) && !defined(BOOST_NO_EXCEPTIONS)
 #else
 #  define BOOST_NO_EXCEPTIONS
 #endif
