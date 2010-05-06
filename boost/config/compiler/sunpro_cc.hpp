@@ -88,12 +88,7 @@
 //
 // C++0x features
 //
-
-#if(__SUNPRO_CC >= 0x590) 
 #  define BOOST_HAS_LONG_LONG
-#else
-#  define BOOST_NO_LONG_LONG
-#endif
 
 #define BOOST_NO_AUTO_DECLARATIONS
 #define BOOST_NO_AUTO_MULTIDECLARATIONS
