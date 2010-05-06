@@ -25,7 +25,7 @@ namespace
     boost::regbase::normal | boost::regbase::icase);
   boost::regex html_url_regex(
     "<([^\\s<>]*)\\s*[^<>]*\\s+(?:HREF|SRC)" // HREF or SRC
-    "\\s*=\\s*(['\"])(.*?)\\2"
+    "\\s*=\\s*(['\"])\\s*(.*?)\\s*\\2"
     "|<!--.*?-->",
     boost::regbase::normal | boost::regbase::icase);
   boost::regex css_url_regex(
@@ -329,7 +329,7 @@ namespace boost
           if(!no_link_errors) {
             ++m_invalid_errors;
             int ln = std::count( contents_begin, url_start, '\n' ) + 1;
-            error( library_name, source_path, "Unknown protocol: " + decoded_url, ln );
+            error( library_name, source_path, "Unknown protocol: '" + scheme + "' in url: " + decoded_url, ln );
           }
         }
 
