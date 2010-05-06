@@ -20,14 +20,17 @@ namespace fs = boost::filesystem;
 namespace
 {
   boost::regex html_bookmark_regex(
-    "<([^\\s<>]*)\\s*[^<>]*\\s+(?:NAME|ID)\\s*=\\s*(['\"])(.*?)\\2",
+    "<([^\\s<>]*)\\s*[^<>]*\\s+(?:NAME|ID)\\s*=\\s*(['\"])(.*?)\\2"
+    "|<!--.*?-->",
     boost::regbase::normal | boost::regbase::icase);
   boost::regex html_url_regex(
     "<([^\\s<>]*)\\s*[^<>]*\\s+(?:HREF|SRC)" // HREF or SRC
-    "\\s*=\\s*(['\"])(.*?)\\2",
+    "\\s*=\\s*(['\"])(.*?)\\2"
+    "|<!--.*?-->",
     boost::regbase::normal | boost::regbase::icase);
   boost::regex css_url_regex(
-    "(\\@import\\s*[\"']|url\\s*\\(\\s*[\"']?)([^\"')]*)",
+    "(\\@import\\s*[\"']|url\\s*\\(\\s*[\"']?)([^\"')]*)"
+    "|/\\*.*?\\*/",
     boost::regbase::normal | boost::regbase::icase);
 
   // Regular expression for parsing URLS from:
@@ -152,27 +155,30 @@ namespace boost
           // a_what[1] contains the tag iterators.
           // a_what[3] contains the bookmark iterators.
 
-          string tag( a_what[1].first, a_what[1].second );
-          boost::algorithm::to_lower(tag);
-
-          if ( tag != "meta" )
+          if (a_what[3].matched)
           {
-            string bookmark( a_what[3].first, a_what[3].second );
-            bookmarks.insert( bookmark );
-//            std::cout << "******************* " << bookmark << '\n';
+            string tag( a_what[1].first, a_what[1].second );
+            boost::algorithm::to_lower(tag);
 
-            // w3.org recommends case-insensitive checking for duplicate bookmarks
-            // since some browsers do a case-insensitive match.
-            string bookmark_lowercase( bookmark );
-            boost::algorithm::to_lower(bookmark_lowercase);
-
-            std::pair<bookmark_set::iterator, bool> result
-              = bookmarks_lowercase.insert( bookmark_lowercase );
-            if (!result.second)
+            if ( tag != "meta" )
             {
-              ++m_duplicate_bookmark_errors;
-              int ln = std::count( contents.begin(), a_what[3].first, '\n' ) + 1;
-              error( library_name, full_path, "Duplicate bookmark: " + bookmark, ln );
+              string bookmark( a_what[3].first, a_what[3].second );
+              bookmarks.insert( bookmark );
+//              std::cout << "******************* " << bookmark << '\n';
+
+              // w3.org recommends case-insensitive checking for duplicate bookmarks
+              // since some browsers do a case-insensitive match.
+              string bookmark_lowercase( bookmark );
+              boost::algorithm::to_lower(bookmark_lowercase);
+
+              std::pair<bookmark_set::iterator, bool> result
+                = bookmarks_lowercase.insert( bookmark_lowercase );
+              if (!result.second)
+              {
+                ++m_duplicate_bookmark_errors;
+                int ln = std::count( contents.begin(), a_what[3].first, '\n' ) + 1;
+                error( library_name, full_path, "Duplicate bookmark: " + bookmark, ln );
+              }
             }
           }
 
@@ -195,14 +201,17 @@ namespace boost
           // what[0] contains the whole string iterators.
           // what[1] contains the element type iterators.
           // what[3] contains the URL iterators.
+          
+          if(what[3].matched)
+          {
+            string type( what[1].first, what[1].second );
+            boost::algorithm::to_lower(type);
 
-          string type( what[1].first, what[1].second );
-          boost::algorithm::to_lower(type);
-
-          // TODO: Complain if 'link' tags use external stylesheets.
-          do_url( string( what[3].first, what[3].second ),
-            library_name, full_path, no_link_errors,
-            type == "a" || type == "link", contents.begin(), what[3].first );
+            // TODO: Complain if 'link' tags use external stylesheets.
+            do_url( string( what[3].first, what[3].second ),
+              library_name, full_path, no_link_errors,
+              type == "a" || type == "link", contents.begin(), what[3].first );
+          }
 
           start = what[0].second; // update search position
           flags |= boost::match_prev_avail; // update flags
@@ -214,9 +223,13 @@ namespace boost
       {
         // what[0] contains the whole string iterators.
         // what[2] contains the URL iterators.
-        do_url( string( what[2].first, what[2].second ),
-          library_name, full_path, no_link_errors, false,
-          contents.begin(), what[3].first );
+        
+        if(what[2].matched)
+        {
+          do_url( string( what[2].first, what[2].second ),
+            library_name, full_path, no_link_errors, false,
+            contents.begin(), what[3].first );
+        }
 
         start = what[0].second; // update search position
         flags |= boost::match_prev_avail; // update flags
