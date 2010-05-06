@@ -47,41 +47,150 @@ namespace boost { namespace unordered_detail {
           : table(x, a, m) {}
         ~hash_equivalent_table() {}
 
-        // Insert methods
-
-        iterator_base emplace_impl(node_constructor& a);
-        void emplace_impl_no_rehash(node_constructor& a);
-
         // equals
 
         bool equals(hash_equivalent_table const&) const;
 
-        inline node_ptr add_node(node_constructor& a,
-            bucket_ptr bucket, node_ptr pos);
+        ////////////////////////////////////////////////////////////////////////
+        // A convenience method for adding nodes.
+
+        inline node_ptr add_node(
+            node_constructor& a, bucket_ptr bucket, node_ptr pos)
+        {
+            node_ptr n = a.release();
+            if(BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+                node::add_after_node(n, pos);                
+            }
+            else {
+                node::add_to_bucket(n, *bucket);
+                if(bucket < this->cached_begin_bucket_)
+                    this->cached_begin_bucket_ = bucket;
+            }
+            ++this->size_;
+            return n;
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // Insert methods
+
+        inline iterator_base emplace_impl(node_constructor& a)
+        {
+            key_type const& k = this->get_key(a.value());
+            std::size_t hash_value = this->hash_function()(k);
+            
+            if(!this->size_) {
+                return this->emplace_empty_impl_with_node(a, 1);
+            }
+            else {
+                bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
+                node_ptr position = this->find_iterator(bucket, k);
+    
+                // reserve has basic exception safety if the hash function
+                // throws, strong otherwise.
+                if(this->reserve_for_insert(this->size_ + 1))
+                    bucket = this->bucket_ptr_from_hash(hash_value);
+    
+                return iterator_base(bucket, add_node(a, bucket, position));
+            }
+        }
+        
+        inline void emplace_impl_no_rehash(node_constructor& a)
+        {
+            key_type const& k = this->get_key(a.value());
+            bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
+            add_node(a, bucket, this->find_iterator(bucket, k));
+        }
 
 #if defined(BOOST_UNORDERED_STD_FORWARD)
-
+    
+        // Emplace (equivalent key containers)
+        // (I'm using an overloaded emplace for both 'insert' and 'emplace')
+    
+        // if hash function throws, basic exception safety
+        // strong otherwise
         template <class... Args>
-        iterator_base emplace(Args&&... args);
-
+        iterator_base emplace(Args&&... args)
+        {
+            // Create the node before rehashing in case it throws an
+            // exception (need strong safety in such a case).
+            node_constructor a(*this);
+            a.construct(std::forward<Args>(args)...);
+    
+            return emplace_impl(a);
+        }
+    
 #else
-
-#define BOOST_UNORDERED_INSERT_IMPL(z, n, _)                                   \
-        template <BOOST_UNORDERED_TEMPLATE_ARGS(z, n)>                         \
-        iterator_base emplace(BOOST_UNORDERED_FUNCTION_PARAMS(z, n));
-
+    
+#define BOOST_UNORDERED_INSERT_IMPL(z, num_params, _)                       \
+        template <BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)>             \
+        iterator_base emplace(                                              \
+            BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))                 \
+        {                                                                   \
+            node_constructor a(*this);                                      \
+            a.construct(BOOST_UNORDERED_CALL_PARAMS(z, num_params));        \
+            return emplace_impl(a);                                         \
+        }
+    
         BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
             BOOST_UNORDERED_INSERT_IMPL, _)
-
+    
 #undef BOOST_UNORDERED_INSERT_IMPL
 #endif
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // Insert range methods
 
+    // if hash function throws, or inserting > 1 element, basic exception safety
+    // strong otherwise
         template <class I>
-        void insert_for_range(I i, I j, forward_traversal_tag);
+        inline void insert_for_range(I i, I j, forward_traversal_tag)
+        {
+            if(i == j) return;
+            std::size_t distance = unordered_detail::distance(i, j);
+            if(distance == 1) {
+                emplace(*i);
+            }
+            else {
+                node_constructor a(*this);
+    
+                // Only require basic exception safety here
+                if(this->size_) {
+                    this->reserve_for_insert(this->size_ + distance);
+                }
+                else {
+                    a.construct(*i++);
+                    this->emplace_empty_impl_with_node(a, distance);
+                }
+    
+                for (; i != j; ++i) {
+                    a.construct(*i);
+                    emplace_impl_no_rehash(a);
+                }
+            }
+        }
+    
+        // if hash function throws, or inserting > 1 element, basic exception
+        // safety strong otherwise
         template <class I>
-        void insert_for_range(I i, I j, boost::incrementable_traversal_tag);
+        inline void insert_for_range(
+            I i, I j, boost::incrementable_traversal_tag)
+        {
+            node_constructor a(*this);
+            for (; i != j; ++i) {
+                a.construct(*i);
+                emplace_impl(a);
+            }
+        }
+    
+        // if hash function throws, or inserting > 1 element, basic exception
+        // safety strong otherwise
         template <class I>
-        void insert_range(I i, I j);
+        void insert_range(I i, I j)
+        {
+            BOOST_DEDUCED_TYPENAME boost::iterator_traversal<I>::type
+                iterator_traversal_tag;
+            insert_for_range(i, j, iterator_traversal_tag);
+        }
     };
 
     template <class H, class P, class A>
@@ -141,163 +250,6 @@ namespace boost { namespace unordered_detail {
         }
 
         return true;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // A convenience method for adding nodes.
-
-    template <class T>
-    inline BOOST_DEDUCED_TYPENAME hash_equivalent_table<T>::node_ptr
-        hash_equivalent_table<T>
-            ::add_node(node_constructor& a, bucket_ptr bucket, node_ptr pos)
-    {
-        node_ptr n = a.release();
-        if(BOOST_UNORDERED_BORLAND_BOOL(pos)) {
-            node::add_after_node(n, pos);                
-        }
-        else {
-            node::add_to_bucket(n, *bucket);
-            if(bucket < this->cached_begin_bucket_)
-                this->cached_begin_bucket_ = bucket;
-        }
-        ++this->size_;
-        return n;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // Insert methods
-
-    template <class T>
-    inline BOOST_DEDUCED_TYPENAME
-        hash_equivalent_table<T>::iterator_base
-        hash_equivalent_table<T>::emplace_impl(node_constructor& a)
-    {
-        key_type const& k = this->get_key(a.value());
-        std::size_t hash_value = this->hash_function()(k);
-        
-        if(!this->size_) {
-            return this->emplace_empty_impl_with_node(a, 1);
-        }
-        else {
-            bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
-            node_ptr position = this->find_iterator(bucket, k);
-
-            // reserve has basic exception safety if the hash function
-            // throws, strong otherwise.
-            if(this->reserve_for_insert(this->size_ + 1))
-                bucket = this->bucket_ptr_from_hash(hash_value);
-
-            return iterator_base(bucket, add_node(a, bucket, position));
-        }
-    }
-    
-    template <class T>
-    inline void hash_equivalent_table<T>
-            ::emplace_impl_no_rehash(node_constructor& a)
-    {
-        key_type const& k = this->get_key(a.value());
-        bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
-        add_node(a, bucket, this->find_iterator(bucket, k));
-    }
-
-#if defined(BOOST_UNORDERED_STD_FORWARD)
-
-    // Emplace (equivalent key containers)
-    // (I'm using an overloaded emplace for both 'insert' and 'emplace')
-
-    // if hash function throws, basic exception safety
-    // strong otherwise
-    template <class T>
-    template <class... Args>
-    BOOST_DEDUCED_TYPENAME hash_equivalent_table<T>::iterator_base
-        hash_equivalent_table<T>
-            ::emplace(Args&&... args)
-    {
-        // Create the node before rehashing in case it throws an
-        // exception (need strong safety in such a case).
-        node_constructor a(*this);
-        a.construct(std::forward<Args>(args)...);
-
-        return emplace_impl(a);
-    }
-
-#else
-
-#define BOOST_UNORDERED_INSERT_IMPL(z, num_params, _)                       \
-    template <class T>                                                      \
-    template <BOOST_UNORDERED_TEMPLATE_ARGS(z, num_params)>                 \
-    BOOST_DEDUCED_TYPENAME hash_equivalent_table<T>::iterator_base          \
-        hash_equivalent_table<T>                                            \
-            ::emplace(BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))       \
-    {                                                                       \
-        node_constructor a(*this);                                          \
-        a.construct(BOOST_UNORDERED_CALL_PARAMS(z, num_params));            \
-        return emplace_impl(a);                                             \
-    }
-
-    BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT,
-        BOOST_UNORDERED_INSERT_IMPL, _)
-
-#undef BOOST_UNORDERED_INSERT_IMPL
-#endif
-
-    ////////////////////////////////////////////////////////////////////////////
-    // Insert range methods
-
-    // if hash function throws, or inserting > 1 element, basic exception safety
-    // strong otherwise
-    template <class T>
-    template <class I>
-    inline void hash_equivalent_table<T>
-        ::insert_for_range(I i, I j, forward_traversal_tag)
-    {
-        if(i == j) return;
-        std::size_t distance = unordered_detail::distance(i, j);
-        if(distance == 1) {
-            emplace(*i);
-        }
-        else {
-            node_constructor a(*this);
-
-            // Only require basic exception safety here
-            if(this->size_) {
-                this->reserve_for_insert(this->size_ + distance);
-            }
-            else {
-                a.construct(*i++);
-                this->emplace_empty_impl_with_node(a, distance);
-            }
-
-            for (; i != j; ++i) {
-                a.construct(*i);
-                emplace_impl_no_rehash(a);
-            }
-        }
-    }
-
-    // if hash function throws, or inserting > 1 element, basic exception safety
-    // strong otherwise
-    template <class T>
-    template <class I>
-    inline void hash_equivalent_table<T>
-        ::insert_for_range(I i, I j, boost::incrementable_traversal_tag)
-    {
-        node_constructor a(*this);
-        for (; i != j; ++i) {
-            a.construct(*i);
-            emplace_impl(a);
-        }
-    }
-
-    // if hash function throws, or inserting > 1 element, basic exception safety
-    // strong otherwise
-    template <class T>
-    template <class I>
-    void hash_equivalent_table<T>::insert_range(I i, I j)
-    {
-        BOOST_DEDUCED_TYPENAME boost::iterator_traversal<I>::type
-            iterator_traversal_tag;
-        insert_for_range(i, j, iterator_traversal_tag);
     }
 }}
 
