@@ -1111,7 +1111,6 @@ namespace quickbook
         {
             std::string::size_type const n =
                 qualified_section_id.find_last_of('.');
-            if(std::string::npos != n);
             qualified_section_id.erase(n, std::string::npos);
         }
     }
