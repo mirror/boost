@@ -30,11 +30,11 @@
 #  define BOOST_NO_INITIALIZER_LISTS
 #endif
 
-#if (__IBMCPP__ <= 1010)
-// XL C++ V10.1.0.0 may not always value-initialize a temporary object T(),
-// when T is a non-POD aggregate class type. Michael Wong (IBM Canada Ltd)
-// has confirmed this issue and gave it high priority.
-// -- Niels Dekker (LKEB), 2010.
+#if (__IBMCPP__ <= 1101)
+// XL C++ V11.0.1.0 and earlier versions may not always value-initialize  
+// a temporary object T(), when T is a non-POD aggregate class type. 
+// Michael Wong (IBM Canada Ltd) has confirmed this issue and gave it 
+// high priority. -- Niels Dekker (LKEB), May 2010.
 #  define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
 #endif
 
