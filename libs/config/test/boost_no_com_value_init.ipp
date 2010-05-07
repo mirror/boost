@@ -636,7 +636,7 @@ namespace boost_no_complete_value_initialization
     }
 
     // Returns the number of failures.
-    unsigned check_failures() const
+    unsigned check_value_initialization_of_subobjects() const
     {
       const unsigned num_failures = 
         FAILED_TO_VALUE_INITIALIZE(int_struct::data) +
@@ -859,42 +859,44 @@ namespace boost_no_complete_value_initialization
   }
 
 
-  // Checks value-initialization of a large number of data members of a
-  // temporary object, an object on the stack, an object on the heap;
-  // furthermore it checks value-initialization of a number of smaller
-  // temporary objects and heap objects.
+  // Checks value-initialization of the subobjects of a temporary object, 
+  // an object on the stack, an object on the heap; furthermore it checks 
+  // value-initialization of a number of smaller temporary objects and 
+  // heap objects.
   int test()
   {
     unsigned total_num_failures = 0;
 
     dirty_stack();
-    const unsigned num_failures_of_a_temporary = value_initializer().check_failures();
+    const unsigned num_failures_of_subobjects_of_a_temporary =
+      value_initializer().check_value_initialization_of_subobjects();
 
-    total_num_failures += num_failures_of_a_temporary;
+    total_num_failures += num_failures_of_subobjects_of_a_temporary;
     if ( total_num_failures > 0 )
     {
-      std::cout << "- Number of member initialization failures of a temporary: "
-        << num_failures_of_a_temporary << std::endl;
+      std::cout << "- Number of subobject initialization failures of a temporary: "
+        << num_failures_of_subobjects_of_a_temporary << std::endl;
     }
     dirty_stack();
     value_initializer object_on_stack;
-    const unsigned num_failures_on_stack = object_on_stack.check_failures();
+    const unsigned num_failures_of_subobjects_on_stack =
+      object_on_stack.check_value_initialization_of_subobjects();
 
-    total_num_failures += num_failures_on_stack;
+    total_num_failures += num_failures_of_subobjects_on_stack;
     if ( total_num_failures > 0 )
     {
-      std::cout << "- Number of member initialization failures on the stack: "
-        << num_failures_on_stack << std::endl;
+      std::cout << "- Number of subobject initialization failures on the stack: "
+        << num_failures_of_subobjects_on_stack << std::endl;
     }
     const value_initializer* const ptr = new value_initializer();
-    const unsigned num_failures_on_heap = ptr->check_failures();
+    const unsigned num_failures_of_subobjects_on_heap = ptr->check_value_initialization_of_subobjects();
     delete ptr;
 
-    total_num_failures += num_failures_on_heap;
+    total_num_failures += num_failures_of_subobjects_on_heap;
     if ( total_num_failures > 0 )
     {
-      std::cout << "- Number of member initialization failures on the heap: "
-        << num_failures_on_heap << std::endl;
+      std::cout << "- Number of subobject initialization failures on the heap: "
+        << num_failures_of_subobjects_on_heap << std::endl;
     }
 
     dirty_stack();
@@ -919,13 +921,13 @@ namespace boost_no_complete_value_initialization
     if ( total_num_failures > 0 )
     {
       std::cout << "-- Total number of initialization failures ("
-        << num_failures_of_a_temporary << '+'
-        << num_failures_on_stack << '+'
-        << num_failures_on_heap << '+'
+        << num_failures_of_subobjects_of_a_temporary << '+'
+        << num_failures_of_subobjects_on_stack << '+'
+        << num_failures_of_subobjects_on_heap << '+'
         << num_failures_of_temporaries << '+'
         << num_failures_of_heap_objects << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 21."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 22."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
