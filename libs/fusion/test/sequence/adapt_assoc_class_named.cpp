@@ -63,7 +63,7 @@ main()
     std::cout << tuple_delimiter(", ");
 
     {
-        BOOST_MPL_ASSERT_NOT((traits::is_view<adapted::point>));
+        BOOST_MPL_ASSERT((traits::is_view<adapted::point>));
         ns::point basep(123, 456);
         adapted::point p(basep);
 
