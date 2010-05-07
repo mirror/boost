@@ -111,11 +111,15 @@ portable_binary_iarchive::init(unsigned int flags){
     m_flags = x << CHAR_BIT;
 }
 
+#include <boost/archive/impl/archive_serializer_map.ipp>
 #include <boost/archive/impl/basic_binary_iprimitive.ipp>
-
 
 namespace boost {
 namespace archive {
+
+namespace detail {
+    template class archive_serializer_map<portable_binary_iarchive>;
+}
 
 template class basic_binary_iprimitive<
     portable_binary_iarchive,

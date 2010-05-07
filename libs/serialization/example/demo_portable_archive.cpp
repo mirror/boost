@@ -27,6 +27,7 @@ class A
 {
     friend class boost::serialization::access;
     char c;
+    A *pa;
     int i;
     int i2; // special tricky case to check sign extension
     unsigned int ui;
@@ -49,6 +50,7 @@ public:
     }
     A() :
         c(0xFF & std::rand()),
+        pa(0),
         i(std::rand()),
         i2(0x80),
         ui(std::rand()),
