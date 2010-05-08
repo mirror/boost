@@ -18,6 +18,7 @@
 #include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/tags.hpp>
 #include <boost/proto/expr.hpp>
+#include <boost/proto/domain.hpp>
 #include <boost/proto/matches.hpp>
 #include <boost/proto/generate.hpp>
 #include <boost/proto/make_expr.hpp>
@@ -26,31 +27,6 @@ namespace boost { namespace proto
 {
     namespace detail
     {
-        template<typename Domain1, typename Domain2>
-        struct choose_domain2
-        {
-            BOOST_MPL_ASSERT((boost::is_same<Domain1, Domain2>));
-            typedef Domain1 type;
-        };
-
-        template<typename Domain1>
-        struct choose_domain2<Domain1, proto::default_domain>
-        {
-            typedef Domain1 type;
-        };
-
-        template<typename Domain2>
-        struct choose_domain2<proto::default_domain, Domain2>
-        {
-            typedef Domain2 type;
-        };
-
-        template<>
-        struct choose_domain2<proto::default_domain, proto::default_domain>
-        {
-            typedef proto::default_domain type;
-        };
-
         template<typename Domain, typename Expr, typename EnableIf = void>
         struct generate_if
           : lazy_enable_if_c<
@@ -156,12 +132,12 @@ namespace boost { namespace proto
         template<typename Tag, typename Left, typename Right>
         struct as_expr_if<Tag, Left, Right, typename Left::proto_is_expr_, typename Right::proto_is_expr_>
           : generate_if<
-                typename choose_domain2<typename Left::proto_domain, typename Right::proto_domain>::type
+                typename common_domain2<typename Left::proto_domain, typename Right::proto_domain>::type
               , proto::expr<Tag, list2<Left &, Right &>, 2>
             >
         {
             typedef proto::expr<Tag, list2<Left &, Right &>, 2> expr_type;
-            typedef typename choose_domain2<typename Left::proto_domain, typename Right::proto_domain>::type proto_domain;
+            typedef typename common_domain2<typename Left::proto_domain, typename Right::proto_domain>::type proto_domain;
 
             static typename proto_domain::template result<proto_domain(expr_type)>::type
             make(Left &left, Right &right)

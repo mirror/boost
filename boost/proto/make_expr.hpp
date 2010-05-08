@@ -91,7 +91,7 @@
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_FUSION_NEXT_ITERATOR_TYPE(Z, N, DATA)                                       \
-        typedef typename fusion::result_of::next<                                \
+        typedef typename fusion::result_of::next<                                                   \
             BOOST_PP_CAT(fusion_iterator, N)>::type                                                 \
                 BOOST_PP_CAT(fusion_iterator, BOOST_PP_INC(N));                                     \
         /**/
@@ -100,7 +100,7 @@
     ///
     #define BOOST_PROTO_FUSION_ITERATORS_TYPE(N)                                                    \
         typedef                                                                                     \
-            typename fusion::result_of::begin<Sequence const>::type              \
+            typename fusion::result_of::begin<Sequence const>::type                                 \
         fusion_iterator0;                                                                           \
         BOOST_PP_REPEAT(BOOST_PP_DEC(N), BOOST_PROTO_FUSION_NEXT_ITERATOR_TYPE, fusion_iterator)    \
         /**/
@@ -109,7 +109,7 @@
     ///
     #define BOOST_PROTO_FUSION_AT_TYPE(Z, N, DATA)                                                  \
         typename add_const<                                                                         \
-            typename fusion::result_of::value_of<                                \
+            typename fusion::result_of::value_of<                                                   \
                 BOOST_PP_CAT(fusion_iterator, N)                                                    \
             >::type                                                                                 \
         >::type                                                                                     \
@@ -191,47 +191,6 @@
                 {
                     return functional::as_child<Domain>()(t);
                 }
-            };
-
-            template<
-                int Index
-                BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
-                    BOOST_PROTO_MAX_ARITY
-                  , typename D
-                  , = void BOOST_PP_INTERCEPT
-                )
-            >
-            struct select_nth
-            {
-                BOOST_MPL_ASSERT_MSG((false), PROTO_DOMAIN_MISMATCH, (select_nth));
-                typedef default_domain type;
-            };
-
-            template<typename Void = void>
-            struct deduce_domain0
-            {
-                typedef default_domain type;
-            };
-
-            template<int I>
-            struct sized
-            {
-                char buffer[I];
-            };
-
-            template<typename T>
-            struct nondeduced_domain
-            {
-                typedef nondeduced_domain type;
-                nondeduced_domain(T);
-                nondeduced_domain(default_domain);
-            };
-
-            template<>
-            struct nondeduced_domain<default_domain>
-            {
-                typedef nondeduced_domain type;
-                nondeduced_domain(default_domain);
             };
 
             template<typename Tag, typename Domain, typename Sequence, std::size_t Size>
@@ -898,59 +857,6 @@
             }
         };
     #endif
-
-        template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename T)>
-        struct select_nth<BOOST_PP_DEC(N), BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, T)>
-        {
-            typedef BOOST_PP_CAT(T, BOOST_PP_DEC(N)) type;
-        };
-
-        // Use function overloading as an efficient mechanism for
-        // calculating the domain shared by a bunch of proto expressions
-        // (or non-expressions, assumed to be in the default_domain).
-        // The domain of a set of domains S is deduced as follows:
-        // - If S contains only default_domain, the deduced domain is
-        //   default_domain.
-        // - If S contains only X and default_domain, the deduced domain
-        //   is X.
-        // - If S contains different domains X and Y, neither of which is
-        //   default_domain, it is an error.
-        template<BOOST_PP_ENUM_PARAMS(N, typename A)>
-        struct BOOST_PP_CAT(deduce_domain, N)
-        {
-            #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
-            // The function overloading trick doesn't work on MSVC-7.1, so
-            // do it the hard (expensive) way.
-            typedef
-                typename mpl::eval_if_c<
-                    is_same<typename domain_of<A0>::type, default_domain>::value
-                  , BOOST_PP_CAT(deduce_domain, BOOST_PP_DEC(N))<BOOST_PP_ENUM_SHIFTED_PARAMS(N, A)>
-                  , domain_of<A0>
-                >::type
-            type;
-            #else
-            #define M0(N, F) char (&F)[BOOST_PP_INC(N)]
-            static M0(BOOST_PROTO_MAX_ARITY, deducer(...));
-            #define M1(Z, X, DATA)                                                                  \
-            typedef typename domain_of<BOOST_PP_CAT(A, X)>::type BOOST_PP_CAT(D, X);                \
-            static BOOST_PP_CAT(D, X) &BOOST_PP_CAT(d, X);                                          \
-            template<typename T>                                                                    \
-            static M0(X, deducer(                                                                   \
-                BOOST_PP_ENUM_PARAMS_Z(Z, X, default_domain BOOST_PP_INTERCEPT)                     \
-                BOOST_PP_COMMA_IF(X) T                                                              \
-                BOOST_PP_ENUM_TRAILING_PARAMS_Z(                                                    \
-                    Z                                                                               \
-                  , BOOST_PP_DEC(BOOST_PP_SUB(N, X))                                                \
-                  , typename nondeduced_domain<T>::type BOOST_PP_INTERCEPT                          \
-                )                                                                                   \
-            ));
-            BOOST_PP_REPEAT(N, M1, ~)
-            #undef M0
-            #undef M1
-            BOOST_STATIC_CONSTANT(int, value = sizeof(deducer(BOOST_PP_ENUM_PARAMS(N, d))) - 1);
-            typedef typename select_nth<value, BOOST_PP_ENUM_PARAMS(N, D)>::type type;
-            #endif
-        };
 
         template<typename Tag, typename Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         struct make_expr_<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
