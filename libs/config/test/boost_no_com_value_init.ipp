@@ -298,6 +298,41 @@ namespace boost_no_complete_value_initialization
     return arg.e.is_value_initialized() && arg.i == 0;
   }
 
+  class user_defined_copy_constructor_holder
+  {
+  public:
+    int data;
+
+    user_defined_copy_constructor_holder()
+    :
+    data(0)
+    {
+    }
+
+    user_defined_copy_constructor_holder(const user_defined_copy_constructor_holder& arg)
+    :
+    data(arg.data)
+    {
+    }
+  };
+
+  // An aggregate struct that has a data member which has a user-defined
+  // copy constructor and a data member of a scalar type.
+  // Similar to struct B from Microsoft Visual C++ bug report 499606,
+  // "Presence of copy constructor breaks member class initialization", 
+  // reported in 2009 by Alex Vakulenko:
+  // https://connect.microsoft.com/VisualStudio/feedback/details/499606
+  struct user_defined_copy_constructor_holder_and_int
+  {
+    user_defined_copy_constructor_holder first;
+    int second;
+  };
+
+  bool is_value_initialized(const user_defined_copy_constructor_holder_and_int& arg)
+  {
+    return arg.first.data == 0 && arg.second == 0;
+  }
+
 
   // An class that has a private and a protected int data member.
   class private_and_protected_int
@@ -536,6 +571,8 @@ namespace boost_no_complete_value_initialization
     enum_holder_and_int m_enum_holder_and_int_array[2];
     private_and_protected_int m_private_and_protected_int;
     private_and_protected_int m_private_and_protected_int_array[2];
+    user_defined_copy_constructor_holder_and_int m_user_defined_copy_constructor_holder_and_int;
+    user_defined_copy_constructor_holder_and_int m_user_defined_copy_constructor_holder_and_int_array[2];
     user_defined_destructor_holder m_user_defined_destructor_holder;
     user_defined_destructor_holder m_user_defined_destructor_holder_array[2];
     virtual_destructor_holder m_virtual_destructor_holder;
@@ -622,6 +659,8 @@ namespace boost_no_complete_value_initialization
     m_enum_holder_and_int_array(),
     m_private_and_protected_int(),
     m_private_and_protected_int_array(),
+    m_user_defined_copy_constructor_holder_and_int(),
+    m_user_defined_copy_constructor_holder_and_int_array(),
     m_user_defined_destructor_holder(),
     m_user_defined_destructor_holder_array(),
     m_virtual_destructor_holder(),
@@ -729,6 +768,9 @@ namespace boost_no_complete_value_initialization
         FAILED_TO_VALUE_INITIALIZE(m_private_and_protected_int) +
         FAILED_TO_VALUE_INITIALIZE(m_private_and_protected_int_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_private_and_protected_int_array[1]) +
+        FAILED_TO_VALUE_INITIALIZE(m_user_defined_copy_constructor_holder_and_int) +
+        FAILED_TO_VALUE_INITIALIZE(m_user_defined_copy_constructor_holder_and_int_array[0]) +
+        FAILED_TO_VALUE_INITIALIZE(m_user_defined_copy_constructor_holder_and_int_array[1]) +
         FAILED_TO_VALUE_INITIALIZE(m_user_defined_destructor_holder) +
         FAILED_TO_VALUE_INITIALIZE(m_user_defined_destructor_holder_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_user_defined_destructor_holder_array[1]) +
@@ -791,6 +833,7 @@ namespace boost_no_complete_value_initialization
       // and gave it high priority.
       FAILED_TO_VALUE_INITIALIZE(enum_holder_and_int()) +
       FAILED_TO_VALUE_INITIALIZE(private_and_protected_int()) +
+      FAILED_TO_VALUE_INITIALIZE(user_defined_copy_constructor_holder_and_int()) +
       // The following line, doing user_defined_destructor_holder(), causes  
       // a compilation error on Embarcadero 2010 (Borland/CodeGear 6.21), 
       // as reported by me (Niels Dekker, LKEB) in 2010, bug report 83851,
@@ -838,6 +881,7 @@ namespace boost_no_complete_value_initialization
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<private_int_array_pair>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<enum_holder_and_int>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<private_and_protected_int>() ) +
+      FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<user_defined_copy_constructor_holder_and_int>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<user_defined_destructor_holder>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<virtual_destructor_holder>() ) +
       FAILED_TO_VALUE_INITIALIZE( heap_object_wrapper<non_pod_class>() ) +
@@ -927,7 +971,7 @@ namespace boost_no_complete_value_initialization
         << num_failures_of_temporaries << '+'
         << num_failures_of_heap_objects << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 22."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 23."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
