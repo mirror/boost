@@ -33,6 +33,7 @@
                    
 <ul>
           <li><a href="#val_init"><code>template class value_initialized&lt;T&gt;</code></a></li>
+          <li><a href="#initialized"><code>template class initialized&lt;T&gt;</code></a></li>
           <li><a href="#initialized_value"><code>initialized_value</code></a></li>
                    
 </ul>
@@ -121,6 +122,12 @@ constructed by the following declaration:
 <pre>
   value_initialized&lt;T&gt; var;
 </pre>
+</p>
+<p>
+The template <a href="#initialized"><code>initialized</code></a>
+offers both value-initialization and direct-initialization.
+It is especially useful as a data member type, allowing the very same object
+to be either direct-initialized or value-initialized.
 </p>
 <p>
 The <code>const</code> object <a href="#initialized_value"><code>initialized_value</code></a>
@@ -340,6 +347,52 @@ the wrapped object is always performed with the <code>get()</code> idiom:</p>
                    
 <pre>value_initialized&lt;int&gt; x ;<br>get(x) = 1 ; // OK<br><br>value_initialized&lt;int const&gt; cx ;<br>get(x) = 1 ; // ERROR: Cannot modify a const object<br><br>value_initialized&lt;int&gt; const x_c ;<br>get(x_c) = 1 ; // ERROR: Cannot modify a const object<br><br>value_initialized&lt;int const&gt; const cx_c ;<br>get(cx_c) = 1 ; // ERROR: Cannot modify a const object<br></pre>
 
+<h2><a name="initialized"><code>template class initialized&lt;T&gt;</code></a></h2>
+                   
+<pre>namespace boost {<br><br>template&lt;class T&gt;<br>class initialized<br>{
+<br>  public :
+<br>    initialized() : x() {}
+<br>    explicit initialized(T const &amp; arg) : x(arg) {}
+<br>    operator T const &amp;() const;
+<br>    operator T&amp;();
+<br>    T const &amp;data() const;
+<br>    T&amp; data();
+<br>    void swap( value_initialized&lt;T&gt;&amp; );
+<br>
+<br>  private :
+<br>    <i>unspecified</i> x ;
+<br>} ;
+<br>
+<br>template&lt;class T&gt;
+<br>T const&amp; get ( initialized&lt;T&gt; const&amp; x );
+<br>
+<br>template&lt;class T&gt;
+<br>T&amp; get ( initialized&lt;T&gt;&amp; x );
+<br>
+<br>} // namespace boost
+<br></pre>
+
+The template class <code>boost::initialized&lt;T&gt;</code> supports both value-initialization
+and direct-initialization, so its interface is a superset of the interface
+of <code>value_initialized&lt;T&gt;</code>: Its default-constructor 
+value-initializes the wrapped object just like the default-constructor of
+<code>value_initialized&lt;T&gt;</code>, but <code>boost::initialized&lt;T&gt;</code>
+also offers an extra <code>explicit</code>
+constructor, which direct-initializes the wrapped object by the specified value.
+<p>
+
+<code>initialized&lt;T&gt;</code> is especially useful when the wrapped
+object must be either value-initialized or direct-initialized, depending on
+runtime conditions. For example, <code>initialized&lt;T&gt;</code> could
+hold the value of a data member that may be value-initialized by some
+constructors, and direct-initialized by others.
+On the other hand, if it is known beforehand that the
+object must <i>always</i> be value-initialized, <code>value_initialized&lt;T&gt;</code>
+may be preferable. And if the object must always be
+direct-initialized, none of the two wrappers really needs to be used.
+</p>
+ 
+
 <h2><a name="initialized_value"><code>initialized_value</code></a></h2>
 
 <pre>
@@ -399,6 +452,9 @@ Special thanks to Bj&ouml;rn Karlsson who carefully edited and completed this do
 <p>value_initialized was reimplemented by Fernando Cacciola and Niels Dekker
 for Boost release version 1.35 (2008), offering a workaround to various compiler issues.
      </p>
+<p><code>boost::initialized</code> was very much inspired by feedback from Edward Diener and 
+  Jeffrey Hellrung.
+     </p>
 <p>initialized_value was written by Niels Dekker, and added to Boost release version 1.36 (2008).
      </p>
 <p>Developed by <a href="mailto:fernando_cacciola@hotmail.com">Fernando Cacciola</a>,
@@ -407,9 +463,9 @@ for Boost release version 1.35 (2008), offering a workaround to various compiler
      </p>
                     
 <hr>          
-<p>Revised 03 October 2009</p>
+<p>Revised 1 May 2010</p>
                    
-<p>&copy; Copyright Fernando Cacciola, 2002, 2009.</p>
+<p>&copy; Copyright Fernando Cacciola, 2002 - 2010.</p>
                    
 <p>Distributed under the Boost Software License, Version 1.0. See
 <a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</a></p>
