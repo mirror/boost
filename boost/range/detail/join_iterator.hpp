@@ -71,23 +71,18 @@ private:
     mutable reference_count_t count;
 };
 
-} // range_detail
-
 template<typename Iterator1, typename Iterator2>
-inline void intrusive_ptr_add_ref(const range_detail::join_iterator_link<Iterator1,Iterator2>* p)
+inline void intrusive_ptr_add_ref(const join_iterator_link<Iterator1,Iterator2>* p)
 {
     p->add_reference();
 }
 
 template<typename Iterator1, typename Iterator2>
-inline void intrusive_ptr_release(const range_detail::join_iterator_link<Iterator1,Iterator2>* p)
+inline void intrusive_ptr_release(const join_iterator_link<Iterator1,Iterator2>* p)
 {
     if (p->release_reference())
         delete p;
 }
-
-namespace range_detail
-{
 
 class join_iterator_begin_tag {};
 class join_iterator_end_tag {};
