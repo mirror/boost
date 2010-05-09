@@ -480,14 +480,16 @@ namespace boost { namespace property_tree
     typename basic_ptree<K, D, C>::iterator
         basic_ptree<K, D, C>::to_iterator(assoc_iterator ai)
     {
-        return iterator(subs::ch(this).project<0>(ai.base()));
+        return iterator(subs::ch(this).
+            BOOST_NESTED_TEMPLATE project<0>(ai.base()));
     }
 
     template<class K, class D, class C> inline
     typename basic_ptree<K, D, C>::const_iterator
         basic_ptree<K, D, C>::to_iterator(const_assoc_iterator ai) const
     {
-        return const_iterator(subs::ch(this).project<0>(ai.base()));
+        return const_iterator(subs::ch(this).
+            BOOST_NESTED_TEMPLATE project<0>(ai.base()));
     }
 
     // Property tree view
@@ -746,7 +748,7 @@ namespace boost { namespace property_tree
                                                          Translator tr) const
     {
         if (optional<const self_type&> child = get_child_optional(path))
-            return child.get().get_value_optional<Type>(tr);
+            return child.get().BOOST_NESTED_TEMPLATE get_value_optional<Type>(tr);
         else
             return optional<Type>();
     }
