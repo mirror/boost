@@ -13,6 +13,12 @@
 #ifndef BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_HPP
 #define BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_HPP
 
+#include "boost/type_traits/add_reference.hpp"
+#include "boost/type_traits/add_const.hpp"
+#include "boost/type_traits/remove_const.hpp"
+#include "boost/lambda/detail/lambda_fwd.hpp"
+#include "boost/lambda/detail/lambda_traits.hpp"
+
 namespace boost { 
 namespace lambda {
 
