@@ -971,9 +971,15 @@ namespace boost_no_complete_value_initialization
         << num_failures_of_temporaries << '+'
         << num_failures_of_heap_objects << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 23."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 24."
         << std::endl;
     }
+
+// TODO The following lines should not be merged into the release branch!!! 
+#ifdef __IBMCPP__
+      std::cout << "__IBMCPP__ = " << __IBMCPP__ << std::endl;
+#endif
+
     return static_cast<int>(total_num_failures);
   }
 
