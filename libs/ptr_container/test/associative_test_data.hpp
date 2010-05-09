@@ -102,7 +102,8 @@ void ptr_set_test()
     c.insert( c.end(), t );    
     c.insert( c.end(), std::auto_ptr<T>( new T ) );
     c.insert( new T ); 
-    c.insert( std::auto_ptr<T>( new T ) );
+    std::auto_ptr<T> ap( new T );
+    c.insert( ap );
     c3.insert( c.begin(), c.end() ); 
     c.erase( c.begin() );
     c3.erase( c3.begin(), c3.end() );
@@ -129,7 +130,7 @@ void ptr_set_test()
              
     c.insert( c.end(), new T );
     typename C::auto_type ptr2  = c.release( c.begin() );
-    std::auto_ptr<C> ap         = c.release();
+    std::auto_ptr<C> ap2         = c.release();
     c                           = c2.clone();
     BOOST_MESSAGE( "finished release/clone test" ); 
 
