@@ -16,12 +16,6 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/unordered/detail/fwd.hpp>
 
-#if BOOST_WORKAROUND(__BORLANDC__, <= 0X0582)
-#define BOOST_UNORDERED_BORLAND_BOOL(x) (bool)(x)
-#else
-#define BOOST_UNORDERED_BORLAND_BOOL(x) x
-#endif
-
 namespace boost { namespace unordered_detail {
 
     ////////////////////////////////////////////////////////////////////////////

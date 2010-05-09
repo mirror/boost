@@ -31,23 +31,6 @@ namespace boost { namespace unordered_detail {
 
     // strong exception safety, no side effects
     template <class T>
-    template <class Key, class Pred>
-    inline BOOST_DEDUCED_TYPENAME T::node_ptr
-        hash_table<T>::find_iterator(bucket_ptr bucket, Key const& k,
-            Pred const& eq) const
-    {
-        node_ptr it = bucket->next_;
-        while (BOOST_UNORDERED_BORLAND_BOOL(it) &&
-            !eq(k, get_key(node::get_value(it))))
-        {
-            it = node::next_group(it);
-        }
-
-        return it;
-    }
-
-    // strong exception safety, no side effects
-    template <class T>
     inline BOOST_DEDUCED_TYPENAME T::node_ptr
         hash_table<T>::find_iterator(
             bucket_ptr bucket, key_type const& k) const

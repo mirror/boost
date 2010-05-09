@@ -248,7 +248,7 @@ namespace boost { namespace unordered_detail {
         // strong otherwise
     
         template<class... Args>
-        emplace_return hash_unique_table<T>::emplace(Args&&... args)
+        emplace_return emplace(Args&&... args)
         {
             return this->size_ ?
                 emplace_impl(
