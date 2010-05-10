@@ -3,10 +3,6 @@
 # (See accompanying file LICENSE_1_0.txt or copy at 
 # http://www.boost.org/LICENSE_1_0.txt.
 
-project boost/regex
-    : source-location ../src
-    ;
-
 #
 # ICU configuration:
 #
@@ -14,240 +10,35 @@ if [ modules.peek : ICU_PATH ]
 {    
     ICU_PATH =  [ modules.peek : ICU_PATH ] ;
 }
-
-rule check-icu-config ( )
-{
-   local HAVE_ICU = [ modules.peek : HAVE_ICU ] ;
-   local ICU_LINK = [ modules.peek : ICU_LINK ] ;
-
-   if ! $(gICU_CONFIG_CHECKED)
-   {
-      if $(HAVE_ICU) && ! $(ICU_PATH)
-      {
-         gHAS_ICU = true ;
-         gICU_CORE_LIB = icuuc ;
-         gICU_IN_LIB = icui18n ;
-         gICU_DATA_LIB = icudata ;
-         gICU_CONFIG_CHECKED = true ;
-      }
-      else if $(ICU_PATH)
-      {
-         dir = $(ICU_PATH) ;
-      
-         if [ GLOB $(dir)/include/unicode : utypes.h ]
-         {
-            gHAS_ICU = true ;
-            
-            # try and find ICU libraries, look for NT versions first:
-            if $(ICU_LINK)
-            {
-               gICU_LIBS += <linkflags>$(ICU_LINK) ;
-            }
-            else if [ GLOB $(dir)/lib64 : icuuc.* ]
-            {
-               gICU_CORE_LIB = icuuc ;
-            }
-            else if [ GLOB $(dir)/lib : icuuc.* ]
-            {
-               gICU_CORE_LIB = icuuc ;
-            }
-            else if [ GLOB $(dir)/lib : libicuuc.* ]
-            {
-               gICU_CORE_LIB = icuuc ;
-            }
-            else if [ GLOB $(ICU_PATH)/lib : cygicuuc*.dll ]
-            {
-               gICU_CORE_LIB = cygicuuc.dll ;
-               gICU_CYGWIN = true ;
-            }
-            else
-            {
-               ECHO warning: ICU shared common library not found in path. ;
-               ECHO hint:    If the regex library fails to link then try again ;
-               ECHO          with the environment variable ICU_LINK set to contain ;
-               ECHO          the linker options required to link to ICU. ;
-               ECHO          Defaulting to look for libicuuc ... ;
-               gICU_CORE_LIB = icuuc ;
-            }
-            
-            if $(ICU_LINK)
-            {
-               # nothing to do, it's already been done!
-               # gICU_LIBS += <linkflags>$(ICU_LINK) ;
-            }
-            else if [ GLOB $(dir)/lib : icuin.* ]
-            {
-               gICU_IN_LIB = icuin ;
-            }
-            else if [ GLOB $(dir)/lib : icui18n.* ]
-            {
-               gICU_IN_LIB = icui18n ;
-            }
-            else if [ GLOB $(dir)/lib64 : libicui18n.* ]
-            {
-               gICU_IN_LIB = icui18n ;
-            }
-            else if [ GLOB $(dir)/lib : libicui18n.* ]
-            {
-               gICU_IN_LIB = icui18n ;
-            }
-            else if [ GLOB $(ICU_PATH)/lib : cygicuin*.dll ]
-            {
-               gICU_IN_LIB = cygicuin.dll ;
-               gICU_CYGWIN = true ;
-            }
-            else
-            {
-               ECHO warning: ICU shared i18n library not found in path. ;
-               ECHO hint:    If the regex library fails to link then try again ;
-               ECHO          with the environment variable ICU_LINK set to contain ;
-               ECHO          the linker options required to link to ICU. ;
-               ECHO          Defaulting to look for libicui18n ... ;
-               gICU_IN_LIB = icui18n ;
-            }
-#Added by Tommy Nordgren - libicudata muct be linked against on Mac OS X            
-            if $(ICU_LINK)
-            {
-               # nothing to do, it's already been done!
-               # gICU_LIBS += <linkflags>$(ICU_LINK) ;
-            }
-            else if [ GLOB $(dir)/lib64 : icudt.* ]
-            {
-               gICU_DATA_LIB = icudt ;
-            }
-            else if [ GLOB $(dir)/lib : icudt.* ]
-            {
-               gICU_DATA_LIB = icudt ;
-            }
-            else if [ GLOB $(dir)/lib : libicudata.* ]
-            {
-               gICU_DATA_LIB = icudata ;
-            }
-            else if [ GLOB $(ICU_PATH)/lib : cygicudt*.dll ]
-            {
-               gICU_DATA_LIB = cygicudt.dll ;
-               gICU_CYGWIN = true ;
-            }
-            else
-            {
-               local os = [ modules.peek : OS ] ;
-               echo $(os) ;
-               if $(os) != "DARWIN"
-               {
-                  ECHO warning: ICU shared data library not found in path. ;
-                  ECHO hint:    If the regex library fails to link then try again ;
-                  ECHO          with the environment variable ICU_LINK set to contain ;
-                  ECHO          the linker options required to link to ICU. ;
-               }
-               else
-               {
-                  ECHO warning: ICU shared data library not found in path. ;
-                  ECHO hint:    If the regex library fails to link then try again ;
-                  ECHO          with the environment variable ICU_LINK set to contain ;
-                  ECHO          the linker options required to link to ICU. ;
-                  ECHO          Defaulting to look for libicudata ... ;
-                  gICU_DATA_LIB = icudata ;
-               }
-            }
-#End of addition by Tommy Nordgren
-         }
-      }
-
-      gICU_CONFIG_CHECKED = true ;
-   }
-   
-   if $(gHAS_ICU)
-   {
-      message icu_config ;
-      message icu_config2 
-         : Note: Building Boost.Regex with Unicode/ICU support enabled
-         : "    Using ICU in " $(ICU_PATH:J=" ")/include ;
-      return true ;
-   }
-   else
-   {
-      message icu_config
-		: "warning: Building Boost.Regex with the optional Unicode/ICU support disabled."
-		: "note: Please refer to the Boost.Regex documentation for more information"
-		: "note: this is a strictly optional feature." ;
-
-      if $(ICU_PATH)
-      {
-         message icu_config2 
-           : warning! ICU configuration failed
-           : "    Couldn't find utypes.h in " $(ICU_PATH:J=" ")/include/unicode ;
-      }
-      else
-      {
-         message icu_config2 ;
-      }
-   }
+if [ modules.peek : ICU_LINK ]
+{    
+    ICU_LINK =  [ modules.peek : ICU_LINK ] ;
 }
 
-explicit icu_config ;
-explicit icu_config2 ;
-
-if [ check-icu-config ]
+if $(ICU_LINK)
 {
-if $(gHAS_ICU)
-{
-   BOOST_REGEX_ICU_OPTS = "<target-os>freebsd:<include>/usr/local/include" ;
-   ICU_SEARCH_OPTS = "<target-os>freebsd:<search>$(ICU_PATH)/lib" ; 
-   BOOST_REGEX_ICU_OPTS += "<define>BOOST_HAS_ICU=1" ;
-   BOOST_REGEX_ICU_OPTS += "$(gICU_LIBS)" ;
-   
-   if $(ICU_PATH)
-   {
-      # If ICU_PATH is specified on the command line, then it's
-      # relative to the current directory, while paths specified
-      # in a Jamfile are relative to that Jamfile. So, to
-      # avoid confusing the user if he's not running from
-      # libs/regex/build, explicitly root this.
-      ICU_PATH = [ path.native 
-          [ path.root [ path.make $(ICU_PATH) ] [ path.pwd ] ] ] ;
-      if $(ICU_PATH) != "/usr" && $(ICU_PATH) != "/usr/local"
-      {
-         BOOST_REGEX_ICU_OPTS += "<include>$(ICU_PATH)/include" ;
-         ICU_SEARCH_OPTS = <search>$(ICU_PATH)/lib ;
-      }
-   }
-   
-   if $(gICU_CYGWIN)
-   {
-      if $(gICU_CORE_LIB)
-      {
-         BOOST_REGEX_ICU_OPTS  += "<linkflags>$(gICU_CORE_LIB) ;
-      }
-      if $(gICU_IN_LIB)
-      {
-         BOOST_REGEX_ICU_OPTS  += "<linkflags>$(gICU_IN_LIB) ;
-      }
-   }
-   else
-   {
-      if $(gICU_CORE_LIB)
-      {
-         lib icucore : : <name>$(gICU_CORE_LIB) $(ICU_SEARCH_OPTS) <link>shared ;
-         ICU_EXTRA_SOURCE = icucore ;
-         explicit icucore ;
-      }
-      if $(gICU_IN_LIB)
-      {
-         lib icuin : : <name>$(gICU_IN_LIB) $(ICU_SEARCH_OPTS) <link>shared ;
-         ICU_EXTRA_SOURCE += icuin ;
-         explicit icuin ;
-      }
-#Added by Tommy Nordgren libicudata must be linked against on Mac OS X
-      if $(gICU_DATA_LIB)
-      {
-         lib icudata : : <name>$(gICU_DATA_LIB) $(ICU_SEARCH_OPTS) <link>shared ;
-         ICU_EXTRA_SOURCE += icudata ;
-         explicit icudata ; 
-      }
-#End of addition by Tommy Nordgren
-   }
-   }
+   ICU_OPTS = <include>$(ICU_PATH)/include <linkflags>$(ICU_LINK) <dll-path>$(ICU_PATH)/bin <define>BOOST_HAS_ICU=1 <runtime-link>shared ;
 }
+else
+{
+   lib icuuc : : <search>$(ICU_PATH)/lib <link>shared <runtime-link>shared ;
+   lib icuuc : : <toolset>msvc <variant>debug <name>icuucd <search>$(ICU_PATH)/lib <link>shared <runtime-link>shared ;
+   lib icuuc : : <name>this_is_an_invalid_library_name ;
+   lib icudt : : <search>$(ICU_PATH)/lib <name>icudata <link>shared <runtime-link>shared ;
+   lib icudt : : <search>$(ICU_PATH)/lib <name>icudt <toolset>msvc <link>shared <runtime-link>shared ;
+   lib icudt : : <name>this_is_an_invalid_library_name ;
+   lib icuin : : <search>$(ICU_PATH)/lib <name>icui18n <link>shared <runtime-link>shared ;
+   lib icuin : : <toolset>msvc <variant>debug <name>icuind <search>$(ICU_PATH)/lib <link>shared <runtime-link>shared ;
+   lib icuin : : <toolset>msvc <variant>release <name>icuin <search>$(ICU_PATH)/lib <link>shared <runtime-link>shared ;
+   lib icuin : : <name>this_is_an_invalid_library_name ;
+
+   ICU_OPTS = <include>$(ICU_PATH)/include <library>icuuc/<link>shared/<runtime-link>shared <library>icudt/<link>shared/<runtime-link>shared <library>icuin/<link>shared/<runtime-link>shared <dll-path>$(ICU_PATH)/bin <define>BOOST_HAS_ICU=1 <runtime-link>shared ;
+}
+
+exe has_icu : ./has_icu_test.cpp  : $(ICU_OPTS) ;
+explicit has_icu ;
+
+alias icu_options : : : : [ check-target-builds has_icu : $(ICU_OPTS) : ] ;
 
 SOURCES = 
    c_regex_traits.cpp
@@ -269,59 +60,13 @@ SOURCES =
    usinstances.cpp ;
 
 
-lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE) icu_config2 icu_config
+lib boost_regex : ../src/$(SOURCES) icu_options
     :         
-        #<link>static:<define>BOOST_REGEX_NO_LIB=1
-        #<link>static:<define>BOOST_REGEX_STATIC_LINK=1
 	     <link>shared:<define>BOOST_REGEX_DYN_LINK=1
 	     <toolset>gcc-mw:<link>static
 	     <toolset>gcc-mingw:<link>static
 	     <toolset>gcc-cygwin:<link>static
-	     $(BOOST_REGEX_ICU_OPTS)
-             <conditional>@force-shared-linking
     ;
 
-shared-linking-warning-emitted = ;
-
-# The ICU is shipped as shared libraries with dynamic runtime.
-# If Boost.Regex is built against static runtime, the combination
-# will not work. The below rule forces shared runtime, and
-# prints an explanation.
-rule force-shared-linking ( properties * )
-{
-    if $(gHAS_ICU)
-    {
-        if <runtime-link>static in $(properties)
-        {
-            if ! $(shared-linking-warning-emitted)
-            {
-                shared-linking-warning-emitted = 1 ;
-                ECHO "warning: forcing runtime-link=shared for Boost.Regex" ;
-                ECHO "warning: this is required when using the ICU library" ;
-            }
-        }        
-        return <runtime-link>shared ;
-    }    
-}
-
-
-
-alias icu_options : $(ICU_EXTRA_SOURCE) : : : $(BOOST_REGEX_ICU_OPTS) ;
-explicit icu_options ;
-
 boost-install boost_regex ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

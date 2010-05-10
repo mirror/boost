@@ -9,9 +9,15 @@ project
       <link>shared:<define>BOOST_REGEX_DYN_LINK=1 
       <toolset>msvc-7.1:<define>TEST_MFC=1 
       <toolset>msvc-7.0:<define>TEST_MFC=1
+      <toolset>msvc:<asynch-exceptions>on
       # There are unidentified linker problems on these platforms:
       <toolset>mipspro-7.4:<link>static
       <toolset>sun-5.9:<link>static
+      <toolset>msvc:<warnings>all
+      <toolset>gcc:<warnings>all
+      <toolset>gcc:<cxxflags>-Wextra
+      <toolset>gcc:<cxxflags>-Wshadow
+      <define>U_USING_ICU_NAMESPACE=0
     ;
 
 #
@@ -135,4 +141,4 @@ test-suite regex
  ]
 ;
       
-
+build-project ../example ;

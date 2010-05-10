@@ -35,7 +35,7 @@ int main()
    regex_tA re;
    int result;
    result = regcompA(&re, expression, REG_AWK);
-   if(result > REG_NOERROR)
+   if(result > (int)REG_NOERROR)
    {
       char buf[256];
       regerrorA(result, &re, buf, sizeof(buf));
@@ -46,7 +46,7 @@ int main()
    matches[0].rm_so = 0;
    matches[0].rm_eo = strlen(text);
    result = regexecA(&re, text, 1, matches, REG_NOTBOL | REG_NOTEOL | REG_STARTEND);
-   if(result > REG_NOERROR)
+   if(result > (int)REG_NOERROR)
    {
       char buf[256];
       regerrorA(result, &re, buf, sizeof(buf));

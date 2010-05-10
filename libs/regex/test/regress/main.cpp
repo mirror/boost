@@ -33,9 +33,14 @@ int* get_array_data();
 
 int error_count = 0;
 
+#ifndef TEST_THREADS
 #define RUN_TESTS(name) \
    std::cout << "Running test case \"" #name "\".\n";\
    name();
+#else
+#define RUN_TESTS(name) \
+   name();
+#endif
 
 
 void run_tests()
