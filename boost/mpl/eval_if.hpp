@@ -30,7 +30,6 @@ template<
     >
 struct eval_if
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
-	|| BOOST_WORKAROUND(BOOST_MSVC, == 1600) \
      || ( BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, >= 0x0300) \
         && BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, BOOST_TESTED_AT(0x0304)) \
         )
