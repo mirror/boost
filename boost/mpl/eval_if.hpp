@@ -39,6 +39,7 @@ struct eval_if
 #else
     : if_<C,F1,F2>::type
 {
+	typedef typename if_<C,F1,F2>::type type;
 #endif
     BOOST_MPL_AUX_LAMBDA_SUPPORT(3,eval_if,(C,F1,F2))
 };
@@ -61,6 +62,7 @@ struct eval_if_c
 #else
     : if_c<C,F1,F2>::type
 {
+	typedef typename if_c<C,F1,F2>::type type;
 #endif
 };
 
