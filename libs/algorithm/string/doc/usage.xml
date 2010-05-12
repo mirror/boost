@@ -339,7 +339,7 @@
     typedef vector&lt; string &gt; split_vector_type;
     
     split_vector_type SplitVec; // #2: Search for tokens
-    split( SplitVec, str1, is_any_of("-*") ); // SplitVec == { "hello abc","ABC","aBc goodbye" }
+    split( SplitVec, str1, is_any_of("-*"), token_compress_on ); // SplitVec == { "hello abc","ABC","aBc goodbye" }
         </programlisting>
         <para>
             <code>[hello]</code> designates an <code>iterator_range</code> delimiting this substring.                       
