@@ -7,6 +7,7 @@
    http://www.boost.org/LICENSE_1_0.txt)
   -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:exsl="http://exslt.org/common"
                 version="1.0">
 
   <!-- Maximum length of directory and file names is 31 characters.
@@ -154,40 +155,65 @@
   <xsl:template name="build-fully-qualified-name">
     <xsl:param name="is.id" select="false()" />
 
-    <!-- The depth of qualified name element that we will print now-->
-    <xsl:param name="depth" select="1"/>
-
     <!-- Determine the set of ancestor namespaces -->
     <xsl:variable name="ancestors"
       select="ancestor::namespace|
                   ancestor::class|ancestor::struct|ancestor::union|
                   ancestor::class-specialization|ancestor::struct-specialization|ancestor::union-specialization"/>
 
+    <xsl:for-each select="$ancestors">
+      <xsl:apply-templates select="." mode="fast-print-id-part">
+        <xsl:with-param name="is.id" select="$is.id"/>
+      </xsl:apply-templates>
+      <xsl:choose>
+        <xsl:when test="$is.id"><xsl:text>.</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>::</xsl:text></xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+    <xsl:apply-templates select="." mode="fast-print-id-part">
+      <xsl:with-param name="is.id" select="$is.id"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:variable name="elements-with-ids">
+    <xsl:apply-templates select="namespace|class|struct|union|class-specialization|struct-specialization|union-specialization"
+                         mode="preprocess-ids"/>
+  </xsl:variable>
+  
+  <xsl:variable name="fast-elements" select="exsl:node-set($elements-with-ids)"/>
+  
+  <xsl:template match="*" mode="preprocess-ids">
+    <element>
+      <xsl:attribute name="id">
+        <xsl:value-of select="generate-id()"/>
+      </xsl:attribute>
+      <xsl:attribute name="part-id">
+        <xsl:call-template name="print-id-part"/>
+      </xsl:attribute>
+    </element>
+  </xsl:template>
+  
+  <xsl:template name="print-id-part">
+    <xsl:apply-templates select="." mode="print-id-part"/>
+  </xsl:template>
+  
+  <xsl:template match="*" mode="fast-print-id-part">
+    <xsl:param name="is.id"/>
     <xsl:choose>
-      <xsl:when test="$depth &gt; count($ancestors)">
+      <xsl:when test="not($is.id)">
+        <xsl:apply-templates select="." mode="print-name"/>
+      </xsl:when>
+      <xsl:when test="$fast-elements[@id=generate-id()]">
+        <xsl:value-of select="$fast-elements[@id=generate-id()]/@part-id"/>
+      </xsl:when>
+      <xsl:otherwise>
         <xsl:apply-templates select="." mode="print-id-part">
           <xsl:with-param name="is.id" select="$is.id"/>
         </xsl:apply-templates>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:if test="name($ancestors[$depth])='namespace' or
-                      count(ancestor::free-function-group)=0">
-          <xsl:apply-templates select="$ancestors[$depth]" mode="print-id-part">
-            <xsl:with-param name="is.id" select="$is.id"/>
-          </xsl:apply-templates>
-          <xsl:choose>
-            <xsl:when test="$is.id"><xsl:text>.</xsl:text></xsl:when>
-            <xsl:otherwise><xsl:text>::</xsl:text></xsl:otherwise>
-          </xsl:choose>
-        </xsl:if>
-        <xsl:call-template name="build-fully-qualified-name">
-          <xsl:with-param name="is.id" select="$is.id"/>
-          <xsl:with-param name="depth" select="$depth + 1"/>
-        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
+  
   <!-- Print the part of a fully qualified name for a single element -->
   <xsl:template match="*" mode="print-id-part">
     <xsl:param name="is.id"/>
@@ -252,167 +278,93 @@
     <xsl:apply-templates select="specialization/template-arg" mode="print-name"/>
     <xsl:text>&gt;</xsl:text>
   </xsl:template>
+  
+  <xsl:template name="concat-directives">
+    <xsl:param name="directives"/>
+    <xsl:for-each select="$directives">
+      <xsl:apply-templates select="." mode="print-name"/>
+      <xsl:text>::</xsl:text>
+    </xsl:for-each>
+  </xsl:template>
 
-  <xsl:template name="name-matches-node">
+  <xsl:template name="get-name-qualifiers">
+    <xsl:param name="name"/>
+    <xsl:param name="node"/>
+    
+    <!-- Find all the ancestor scopes of the node -->
+    <xsl:variable name="ancestors"
+      select="ancestor::namespace|
+                  ancestor::class|ancestor::struct|ancestor::union|
+                  ancestor::class-specialization|ancestor::struct-specialization|ancestor::union-specialization"/>
+
+    <!-- concatenate their names together separated by .'s -->
+    <xsl:for-each select="$ancestors">
+      <xsl:apply-templates select="." mode="fast-print-id-part">
+        <xsl:with-param name="is.id" select="false()"/>
+      </xsl:apply-templates>
+      <xsl:text>::</xsl:text>
+    </xsl:for-each>
+
+  </xsl:template>
+  
+  <xsl:template name="find-nodes-matching-name">
     <!-- The name we are looking for -->
     <xsl:param name="name"/>
-
-    <!-- The name to display -->
-    <xsl:param name="display-name" select="$name"/>
 
     <!-- The context in which this name occurs -->
     <xsl:param name="context"/>
 
     <!-- The node that we are checking against -->
-    <xsl:param name="node"/>
+    <xsl:param name="nodes"/>
 
-    <!-- The mode we are in. Can be one of:
-           matches: emits the matches as they are found (for debugging)
-           link: link to the node that was found
-         -->
-    <xsl:param name="mode" select="'matches'"/>
-
-    <!-- The index into the list of using directives for the context node -->
-    <xsl:param name="index" select="1"/>
-
-    <!-- The prefix we should append to the name when checking this node -->
-    <xsl:param name="prefix" select="''"/>
-
-    <xsl:choose>
-      <xsl:when test="count($node) &gt; 1">
-        <xsl:variable name="matches">
-          <xsl:call-template name="count-matches">
-            <xsl:with-param name="name" select="$name"/>
-            <xsl:with-param name="context" select="$context"/>
-            <xsl:with-param name="nodes" select="$node[position() = 1]"/>
-          </xsl:call-template>
-        </xsl:variable>
-
-        <xsl:choose>
-          <xsl:when test="$matches = 0">
-            <xsl:call-template name="name-matches-node">
-              <xsl:with-param name="name" select="$name"/>
-              <xsl:with-param name="display-name" select="$display-name"/>
-              <xsl:with-param name="context" select="$context"/>
-              <xsl:with-param name="node" select="$node[position() &gt; 1]"/>
-              <xsl:with-param name="mode" select="$mode"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="name-matches-node">
-              <xsl:with-param name="name" select="$name"/>
-              <xsl:with-param name="display-name" select="$display-name"/>
-              <xsl:with-param name="context" select="$context"/>
-              <xsl:with-param name="node" select="$node[position() = 1]"/>
-              <xsl:with-param name="mode" select="$mode"/>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:when test="count($node) = 1">
-        <!-- The fully-qualified name of the node we are checking against -->
-        <xsl:variable name="fully-qualified-name">
-          <xsl:call-template name="fully-qualified-name">
-            <xsl:with-param name="node" select="$node"/>
-          </xsl:call-template>
-        </xsl:variable>
-
-        <!-- The set of using directives for this context node -->
-        <xsl:variable name="directives"
-          select="$context/ancestor::*/using-namespace |
+    <!-- The set of using directives for this context node -->
+    <xsl:variable name="directives"
+      select="$context/ancestor::*/using-namespace |
                   $context/ancestor::namespace |
                   $context/ancestor::*/using-class |
                   $context/ancestor::class |
                   $context/ancestor::struct"/>
 
-        <!-- The name of the current directive -->
-        <xsl:variable name="this-context">
-          <xsl:apply-templates select="$directives[$index]" mode="print-name"/>
-        </xsl:variable>
-
-        <!-- Check if we have a match -->
-        <xsl:variable name="have-match"
-          select="$fully-qualified-name = concat($prefix, $name)"/>
-
-        <xsl:if test="$have-match">
-          <xsl:choose>
-            <xsl:when test="$mode='matches'">
-              Match in namespace ::<xsl:value-of select="$prefix"/>
-            </xsl:when>
-            <xsl:when test="$mode='link'">
-              <xsl:call-template name="internal-link">
-                <xsl:with-param name="to">
-                  <xsl:call-template name="generate.id">
-                    <xsl:with-param name="node" select="$node"/>
-                  </xsl:call-template>
-                </xsl:with-param>
-                <xsl:with-param name="text" select="$display-name"/>
-              </xsl:call-template>
-            </xsl:when>
-          </xsl:choose>
-        </xsl:if>
-
-        <xsl:if test="(not($index &gt; count($directives))) and
-                      (not($have-match) or ($mode = 'matches'))">
-          <xsl:variable name="first-branch">
-            <xsl:if test="not ($prefix = '')">
-              <!-- Recurse and append the current context node to the prefix -->
-              <xsl:call-template name="name-matches-node">
-                <xsl:with-param name="name" select="$name"/>
-                <xsl:with-param name="display-name" select="$display-name"/>
-                <xsl:with-param name="context" select="$context"/>
-                <xsl:with-param name="node" select="$node"/>
-                <xsl:with-param name="mode" select="$mode"/>
-                <xsl:with-param name="index" select="$index + 1"/>
-                <xsl:with-param name="prefix"
-                  select="concat($prefix, $this-context, '::')"/>
-              </xsl:call-template>
-            </xsl:if>
-          </xsl:variable>
-
-          <xsl:choose>
-            <xsl:when test="string($first-branch) != ''">
-              <xsl:copy-of select="$first-branch"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <!-- Recurse with just the current context node -->
-              <xsl:call-template name="name-matches-node">
-                <xsl:with-param name="name" select="$name"/>
-                <xsl:with-param name="display-name" select="$display-name"/>
-                <xsl:with-param name="context" select="$context"/>
-                <xsl:with-param name="node" select="$node"/>
-                <xsl:with-param name="mode" select="$mode"/>
-                <xsl:with-param name="index" select="$index + 1"/>
-                <xsl:with-param name="prefix"
-                  select="concat($this-context, '::')"/>
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:if>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
-
-  <!-- Count the number of nodes in the set that match the given name and
-       lookup context -->
-  <xsl:template name="count-matches">
-    <xsl:param name="name"/>
-    <xsl:param name="context"/>
-    <xsl:param name="nodes"/>
-
-    <xsl:variable name="match-string">
-      <xsl:for-each select="$nodes">
-        <xsl:variable name="does-match">
-          <xsl:call-template name="name-matches-node">
-            <xsl:with-param name="name" select="$name"/>
-            <xsl:with-param name="context" select="$context"/>
-            <xsl:with-param name="node" select="."/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="not($does-match='')">X</xsl:if>
-      </xsl:for-each>
+    <xsl:variable name="directives-str">
+      <xsl:call-template name="concat-directives">
+        <xsl:with-param name="directives" select="$directives"/>
+      </xsl:call-template>
     </xsl:variable>
-    <xsl:value-of select="string-length($match-string)"/>
+
+    <xsl:apply-templates select="$nodes" mode="generate-cxx-links">
+      <xsl:with-param name="name" select="$name"/>
+      <xsl:with-param name="directives-str" select="$directives-str"/>
+    </xsl:apply-templates>
+  </xsl:template>
+  
+  <xsl:template match="*" mode="generate-cxx-links">
+    <xsl:param name="name"/>
+    <xsl:param name="directives-str"/>
+
+    <xsl:variable name="qualifiers">
+      <xsl:call-template name="get-name-qualifiers">
+        <xsl:with-param name="name" select="$name"/>
+        <xsl:with-param name="node" select="."/>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <!-- Check if this node matches any visible namespace -->
+    <xsl:if test="contains($directives-str, $qualifiers)">
+      <xsl:variable name="myid">
+        <xsl:call-template name="generate.id">
+          <xsl:with-param name="node" select="."/>
+        </xsl:call-template>
+      </xsl:variable>
+      <cxx-link-helper>
+        <xsl:attribute name="id">
+          <xsl:value-of select="$myid"/>
+        </xsl:attribute>
+        <xsl:attribute name="namespace">
+          <xsl:value-of select="$qualifiers"/>
+        </xsl:attribute>
+        <xsl:text>random text</xsl:text>
+      </cxx-link-helper>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="cxx-link-name">
@@ -433,18 +385,20 @@
 
     <!-- The list of nodes that match the lookup node in both name and type -->
     <xsl:param name="nodes"/>
-
-    <!-- Count the number of nodes that match -->
-    <xsl:variable name="matches">
-      <xsl:call-template name="count-matches">
+    
+    <!-- Filter the nodes to leave only the ones that are in scope. -->
+    <xsl:variable name="matches1">
+      <xsl:call-template name="find-nodes-matching-name">
         <xsl:with-param name="name" select="$name"/>
-        <xsl:with-param name="context" select="$lookup"/>
         <xsl:with-param name="nodes" select="$nodes"/>
+        <xsl:with-param name="context" select="$lookup"/>
       </xsl:call-template>
     </xsl:variable>
+    
+    <xsl:variable name="matches" select="exsl:node-set($matches1)//cxx-link-helper"/>
 
     <xsl:choose>
-      <xsl:when test="$matches = 0">
+      <xsl:when test="count($matches) = 0">
         <xsl:message>
           <xsl:text>Cannot find </xsl:text>
           <xsl:value-of select="$type"/>
@@ -454,39 +408,27 @@
         </xsl:message>
         <xsl:value-of select="$display-name"/>
       </xsl:when>
-      <xsl:when test="$matches = 1">
-        <xsl:for-each select="$nodes">
-          <xsl:call-template name="name-matches-node">
-            <xsl:with-param name="name" select="$name"/>
-            <xsl:with-param name="display-name" select="$display-name"/>
-            <xsl:with-param name="context" select="$lookup"/>
-            <xsl:with-param name="node" select="."/>
-            <xsl:with-param name="mode" select="'link'"/>
-          </xsl:call-template>
-        </xsl:for-each>
-      </xsl:when>
       <xsl:otherwise>
-        <xsl:message>
-          <xsl:text>Reference to </xsl:text>
-          <xsl:value-of select="$type"/>
-          <xsl:text> '</xsl:text>
-          <xsl:value-of select="$name"/>
-          <xsl:text>' is ambiguous. Found:</xsl:text>
-          <xsl:for-each select="$nodes">
-            <xsl:call-template name="name-matches-node">
-              <xsl:with-param name="name" select="$name"/>
-              <xsl:with-param name="context" select="$lookup"/>
-              <xsl:with-param name="node" select="."/>
-              <xsl:with-param name="mode" select="'matches'"/>
-            </xsl:call-template>
-          </xsl:for-each>
-        </xsl:message>
-        <xsl:call-template name="name-matches-node">
-          <xsl:with-param name="name" select="$name"/>
-          <xsl:with-param name="display-name" select="$display-name"/>
-          <xsl:with-param name="context" select="$lookup"/>
-          <xsl:with-param name="node" select="$nodes"/>
-          <xsl:with-param name="mode" select="'link'"/>
+        <!-- If we found more than one, print a message and take the first -->
+        <xsl:if test="count($matches) &gt; 1">
+          <xsl:message>
+            <xsl:text>Reference to </xsl:text>
+            <xsl:value-of select="$type"/>
+            <xsl:text> '</xsl:text>
+            <xsl:value-of select="$name"/>
+            <xsl:text>' is ambiguous. Found:</xsl:text>
+            <xsl:for-each select="$matches">
+              <xsl:text>
+              Match in namespace ::</xsl:text>
+              <xsl:value-of select="@namespace"/>
+            </xsl:for-each>
+          </xsl:message>
+        </xsl:if>
+        <xsl:call-template name="internal-link">
+          <xsl:with-param name="to">
+            <xsl:value-of select="$matches[position() = 1]/@id"/>
+          </xsl:with-param>
+          <xsl:with-param name="text" select="$display-name"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
