@@ -42,6 +42,7 @@
 #   define BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
 #   define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #   define BOOST_NO_IS_ABSTRACT
+#   define BOOST_NO_EXTERN_TEMPLATE
 #elif __GNUC__ == 3
 #  if defined (__PATHSCALE__)
 #     define BOOST_NO_TWO_PHASE_NAME_LOOKUP
@@ -58,6 +59,7 @@
 #  if __GNUC_MINOR__ < 4
 #     define BOOST_NO_IS_ABSTRACT
 #  endif
+#  define BOOST_NO_EXTERN_TEMPLATE
 #endif
 #if __GNUC__ < 4
 //
@@ -119,7 +121,6 @@
 // C++0x features not implemented in any GCC version
 //
 #define BOOST_NO_CONSTEXPR
-#define BOOST_NO_EXTERN_TEMPLATE
 #define BOOST_NO_NULLPTR
 #define BOOST_NO_TEMPLATE_ALIASES
 
