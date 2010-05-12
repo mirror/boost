@@ -16,13 +16,13 @@
   <xsl:import
     href="http://docbook.sourceforge.net/release/xsl/current/xhtml/math.xsl"/>
 
-  <xsl:import href="chunk-common.xsl"/>
-  <xsl:import href="docbook-layout.xsl"/>
-  <xsl:import href="navbar.xsl"/>
-  <xsl:import href="admon.xsl"/>
-  <xsl:import href="xref.xsl"/>
-  <xsl:import href="relative-href.xsl"/>
-  <xsl:import href="callout.xsl"/>
+  <xsl:include href="chunk-common.xsl"/>
+  <xsl:include href="docbook-layout.xsl"/>
+  <xsl:include href="navbar.xsl"/>
+  <xsl:include href="admon.xsl"/>
+  <xsl:include href="xref.xsl"/>
+  <xsl:include href="relative-href.xsl"/>
+  <xsl:include href="callout.xsl"/>
 
   <xsl:param name="html.stylesheet">
     <xsl:choose>

@@ -16,14 +16,23 @@
   <xsl:import
     href="http://docbook.sourceforge.net/release/xsl/current/html/math.xsl"/>
 
-  <xsl:import href="chunk-common.xsl"/>
-  <xsl:import href="docbook-layout.xsl"/>
-  <xsl:import href="navbar.xsl"/>
-  <xsl:import href="admon.xsl"/>
-  <xsl:import href="xref.xsl"/>
-  <xsl:import href="relative-href.xsl"/>
-  <xsl:import href="callout.xsl"/>
-
+  <!-- Bring in the fast chunking overrides.  There's nothing
+       that we need to override, so include instead of importing it. -->
+  <xsl:include
+    href="http://docbook.sourceforge.net/release/xsl/current/html/chunkfast.xsl"/>
+  
+  <!-- We have to make sure that our templates override all
+       docbook templates.  Therefore, we include our own templates
+       instead of importing them.  In order for this to work,
+       the stylesheets included here cannot also include each other -->
+  <xsl:include href="chunk-common.xsl"/>
+  <xsl:include href="docbook-layout.xsl"/>
+  <xsl:include href="navbar.xsl"/>
+  <xsl:include href="admon.xsl"/>
+  <xsl:include href="xref.xsl"/>
+  <xsl:include href="relative-href.xsl"/>
+  <xsl:include href="callout.xsl"/>
+  
   <xsl:param name="html.stylesheet">
     <xsl:choose>
       <xsl:when test = "$boost.defaults = 'Boost'">
@@ -280,6 +289,8 @@ set       toc,title
      </div>
   </xsl:template>
 
+  <xsl:template name="generate.html.title"/>
+  
 <!-- ============================================================ -->
 
 <xsl:template name="output.html.stylesheets">
