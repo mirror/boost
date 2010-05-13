@@ -86,6 +86,11 @@ class compressed_sparse_row_graph<
                                       GraphProperty, Vertex, EdgeIndex>
     base_type;
 
+  // Export some typedefs from our base graph type.
+  typedef typename base_type::inherited_vertex_properties 
+    inherited_vertex_properties;
+  typedef typename base_type::forward_type forward_type;
+
   // -----------------------------------------------------------------
   // Graph concept requirements
   typedef Vertex vertex_descriptor;
