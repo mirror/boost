@@ -71,6 +71,7 @@ template<class E> BOOST_ATTRIBUTE_NORETURN inline void throw_exception( E const 
     exception_detail
     {
         template <class E>
+        BOOST_ATTRIBUTE_NORETURN
         void
         throw_exception_( E const & x, char const * current_function, char const * file, int line )
         {
