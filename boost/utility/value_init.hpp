@@ -163,7 +163,12 @@ class value_initialized
     initialized<T> m_data;
 
   public :
-
+    
+    value_initialized()
+    :
+    m_data()
+    { }
+    
     T const & data() const
     {
       return m_data.data();
