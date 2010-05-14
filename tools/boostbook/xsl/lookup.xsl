@@ -287,26 +287,6 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template name="get-name-qualifiers">
-    <xsl:param name="name"/>
-    <xsl:param name="node"/>
-    
-    <!-- Find all the ancestor scopes of the node -->
-    <xsl:variable name="ancestors"
-      select="ancestor::namespace|
-                  ancestor::class|ancestor::struct|ancestor::union|
-                  ancestor::class-specialization|ancestor::struct-specialization|ancestor::union-specialization"/>
-
-    <!-- concatenate their names together separated by .'s -->
-    <xsl:for-each select="$ancestors">
-      <xsl:apply-templates select="." mode="fast-print-id-part">
-        <xsl:with-param name="is.id" select="false()"/>
-      </xsl:apply-templates>
-      <xsl:text>::</xsl:text>
-    </xsl:for-each>
-
-  </xsl:template>
-  
   <xsl:template name="find-nodes-matching-name">
     <!-- The name we are looking for -->
     <xsl:param name="name"/>
@@ -341,29 +321,37 @@
     <xsl:param name="name"/>
     <xsl:param name="directives-str"/>
 
-    <xsl:variable name="qualifiers">
-      <xsl:call-template name="get-name-qualifiers">
-        <xsl:with-param name="name" select="$name"/>
+    <xsl:variable name="node-name">
+      <xsl:call-template name="fully-qualified-name">
         <xsl:with-param name="node" select="."/>
       </xsl:call-template>
     </xsl:variable>
 
+    <xsl:variable name="leading-chars"
+                  select="string-length($node-name) - string-length($name)"/>
+
     <!-- Check if this node matches any visible namespace -->
-    <xsl:if test="contains($directives-str, $qualifiers)">
-      <xsl:variable name="myid">
-        <xsl:call-template name="generate.id">
-          <xsl:with-param name="node" select="."/>
-        </xsl:call-template>
-      </xsl:variable>
-      <cxx-link-helper>
-        <xsl:attribute name="id">
-          <xsl:value-of select="$myid"/>
-        </xsl:attribute>
-        <xsl:attribute name="namespace">
-          <xsl:value-of select="$qualifiers"/>
-        </xsl:attribute>
-        <xsl:text>random text</xsl:text>
-      </cxx-link-helper>
+    <xsl:if test="string-length($node-name) &gt;= string-length($name) and
+                  substring($node-name, $leading-chars + 1,
+                                        string-length($name)) = $name">
+      <xsl:variable name="qualifiers"
+                    select="substring($node-name, 1, $leading-chars)"/>
+      <xsl:if test="contains($directives-str, $qualifiers)">
+        <xsl:variable name="myid">
+          <xsl:call-template name="generate.id">
+            <xsl:with-param name="node" select="."/>
+          </xsl:call-template>
+        </xsl:variable>
+        <cxx-link-helper>
+          <xsl:attribute name="id">
+            <xsl:value-of select="$myid"/>
+          </xsl:attribute>
+          <xsl:attribute name="namespace">
+            <xsl:value-of select="$qualifiers"/>
+          </xsl:attribute>
+          <xsl:text>random text</xsl:text>
+        </cxx-link-helper>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 
