@@ -2,6 +2,7 @@
 project 
     : requirements <library>../build//boost_program_options
       <hardcode-dll-paths>true
+      <link>static
     ;
 
 exe first : first.cpp ;

@@ -77,13 +77,13 @@ if (vm.count(&quot;compression&quot;)) {
   <para>It's now a good time to try compiling the code yourself, but if
     you're not yet ready, here's an example session:
 <screen>
-$<userinput>bin/gcc/debug/first</userinput>
+$ <userinput>bin/gcc/debug/first</userinput>
 Compression level was not set.
-$<userinput>bin/gcc/debug/first --help</userinput>
+$ <userinput>bin/gcc/debug/first --help</userinput>
 Allowed options:
   --help                 : produce help message
   --compression arg      : set compression level
-$<userinput>bin/gcc/debug/first --compression 10</userinput>
+$ <userinput>bin/gcc/debug/first --compression 10</userinput>
 Compression level was set to 10.
     </screen>
   </para>
@@ -199,16 +199,16 @@ cout &lt;&lt; &quot;Optimization level is &quot; &lt;&lt; opt &lt;&lt; &quot;\n&
 
   <para>Here's an example session:
     <screen>
-$<userinput>bin/gcc/debug/options_description --help</userinput>
+$ <userinput>bin/gcc/debug/options_description --help</userinput>
 Usage: options_description [options]
 Allowed options:
   --help                 : produce help message
   --optimization arg     : optimization level
   -I [ --include-path ] arg : include path
   --input-file arg       : input file
-$bin/gcc/debug/options_description
+$ <userinput>bin/gcc/debug/options_description</userinput>
 Optimization level is 10
-$<userinput>bin/gcc/debug/options_description --optimization 4 -I foo a.cpp</userinput>
+$ <userinput>bin/gcc/debug/options_description --optimization 4 -I foo a.cpp</userinput>
 Include paths are: foo
 Input files are: a.cpp
 Optimization level is 4
@@ -308,10 +308,10 @@ visible.add(generic).add(config);
 
     <para>Here's an example session:
 <screen>
-$<userinput>bin/gcc/debug/multiple_sources</userinput>
+$ <userinput>bin/gcc/debug/multiple_sources</userinput>
 Include paths are: /opt
 Optimization level is 1
-$<userinput>bin/gcc/debug/multiple_sources --help</userinput>
+$ <userinput>bin/gcc/debug/multiple_sources --help</userinput>
 Allows options:
 
 Generic options:
@@ -322,7 +322,7 @@ Configuration:
   --optimization n       : optimization level
   -I [ --include-path ] path : include path
 
-$<userinput>bin/gcc/debug/multiple_sources --optimization=4 -I foo a.cpp b.cpp</userinput>
+$ <userinput>bin/gcc/debug/multiple_sources --optimization=4 -I foo a.cpp b.cpp</userinput>
 Include paths are: foo /opt
 Input files are: a.cpp b.cpp
 Optimization level is 4
