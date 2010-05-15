@@ -22,6 +22,7 @@
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/version.hpp>
+#include <boost/serialization/collection_size_type.hpp>
 
 namespace boost{
 namespace serialization {
@@ -35,18 +36,20 @@ template<class Archive, class Container>
 inline void save_hash_collection(Archive & ar, const Container &s)
 {
     // record number of elements
-    unsigned int count = s.size();
+    unsigned int c = s.size();
+    collection_size_type count(c);
     ar <<  BOOST_SERIALIZATION_NVP(count);
     // make sure the target type is registered so we can retrieve
     // the version when we load
     if(3 < ar.get_library_version()){
-        const unsigned int bucket_count = s.bucket_count();
+        const collection_size_type bucket_count(s.bucket_count());
         ar << BOOST_SERIALIZATION_NVP(bucket_count);
-        const unsigned int item_version = version<BOOST_DEDUCED_TYPENAME Container::value_type>::value;
+        const boost::archive::version_type item_version(
+                version<BOOST_DEDUCED_TYPENAME Container::value_type>::value);
         ar << BOOST_SERIALIZATION_NVP(item_version);
     }
     BOOST_DEDUCED_TYPENAME Container::const_iterator it = s.begin();
-    while(count-- > 0){
+    while(c-- > 0){
         // note borland emits a no-op without the explicit namespace
         boost::serialization::save_construct_data_adl(
             ar, 

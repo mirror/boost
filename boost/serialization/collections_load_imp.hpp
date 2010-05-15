@@ -139,12 +139,13 @@ inline void load_collection(Archive & ar, Container &s)
     s.clear();
     // retrieve number of elements
     collection_size_type count;
-    unsigned int item_version;
+    unsigned int item_version_val = 0;
     ar >> BOOST_SERIALIZATION_NVP(count);
-    if(3 < ar.get_library_version())
-        ar >> BOOST_SERIALIZATION_NVP(item_version);
-    else
-        item_version = 0;
+    if(3 < ar.get_library_version()) {
+      boost::archive::version_type item_version(0);
+      ar >> BOOST_SERIALIZATION_NVP(item_version);
+      item_version_val = item_version.t;
+    }
     R rx;
     rx(s, count);
     std::size_t c = count;
@@ -152,7 +153,7 @@ inline void load_collection(Archive & ar, Container &s)
     BOOST_DEDUCED_TYPENAME Container::iterator hint;
     hint = s.begin();
     while(c-- > 0){
-        hint = ifunc(ar, s, item_version, hint);
+        hint = ifunc(ar, s, item_version_val, hint);
     }
 }
 
