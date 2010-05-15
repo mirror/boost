@@ -221,11 +221,17 @@ stored in *this.
    template <class charT, class Traits, class A>
    difference_type length(const std::basic_string<charT, Traits, A>&)const;
 
+
+[*Requires]: that the match_results object has been initialized as a result of a 
+successful call to [regex_search] or [regex_match] or was returned from a [regex_iterator], and 
+that the underlying iterators have not been subsequently invalidated.  Will raise a 
+`std::logic_error` if the match_results object was not initialized.
+
 [*Effects]: Returns the length of sub-expression /sub/, that is to say: 
 `(*this)[sub].length()`.
 
 The overloads that accept a string refer to a named sub-expression /n/.
-In the event that there is no such named sub-expression then returns an empty string.  
+In the event that there is no such named sub-expression then returns zero.  
 
 The template overloads of this function, allow the string and\/or character type
 to be different from the character type of the underlying sequence and\/or regular expression: 
@@ -244,12 +250,17 @@ Unicode character type.
    template <class charT, class Traits, class A>
    difference_type position(const std::basic_string<charT, Traits, A>&)const;
 
+[*Requires]: that the match_results object has been initialized as a result of a 
+successful call to [regex_search] or [regex_match] or was returned from a [regex_iterator], and 
+that the underlying iterators have not been subsequently invalidated.  Will raise a 
+`std::logic_error` if the match_results object was not initialized.
+
 [*Effects]: Returns the starting location of sub-expression /sub/, or -1 if /sub/ was 
 not matched.  Note that if this represents a partial match , then `position()` 
 will return the location of the partial match even though `(*this)[0].matched` is false.
 
 The overloads that accept a string refer to a named sub-expression /n/.
-In the event that there is no such named sub-expression then returns an empty string.  
+In the event that there is no such named sub-expression then returns -1.  
 
 The template overloads of this function, allow the string and\/or character type
 to be different from the character type of the underlying sequence and\/or regular expression: 
@@ -270,6 +281,11 @@ Unicode character type.
    string_type str(const charT* sub)const;
    template <class charT, class Traits, class A>
    string_type str(const std::basic_string<charT, Traits, A>& sub)const;
+
+[*Requires]: that the match_results object has been initialized as a result of a 
+successful call to [regex_search] or [regex_match] or was returned from a [regex_iterator], and 
+that the underlying iterators have not been subsequently invalidated.  Will raise a 
+`std::logic_error` if the match_results object was not initialized.
 
 [*Effects]: Returns sub-expression /sub/ as a string:  `string_type((*this)[sub])`.
 
@@ -296,6 +312,11 @@ Unicode character type.
 	template <class charT, class Traits, class A>
 	const_reference operator[](const std::basic_string<charT, Traits, A>& n) const;
 
+[*Requires]: that the match_results object has been initialized as a result of a 
+successful call to [regex_search] or [regex_match] or was returned from a [regex_iterator], and 
+that the underlying iterators have not been subsequently invalidated.  Will raise a 
+`std::logic_error` if the match_results object was not initialized.
+
 [*Effects]: Returns a reference to the [sub_match] object representing the character 
 sequence that matched marked sub-expression /n/. If `n == 0` then returns a 
 reference to a [sub_match] object representing the character sequence that 
@@ -321,6 +342,11 @@ Unicode character type.
 
    const_reference prefix()const;
 
+[*Requires]: that the match_results object has been initialized as a result of a 
+successful call to [regex_search] or [regex_match] or was returned from a [regex_iterator], and 
+that the underlying iterators have not been subsequently invalidated.  Will raise a 
+`std::logic_error` if the match_results object was not initialized.
+
 [*Effects]: Returns a reference to the [sub_match] object representing the 
 character sequence from the start of the string being matched or searched, to the 
 start of the match found.
@@ -329,6 +355,11 @@ start of the match found.
 [#boost_regex.match_results.suffix]
 
    const_reference suffix()const;
+
+[*Requires]: that the match_results object has been initialized as a result of a 
+successful call to [regex_search] or [regex_match] or was returned from a [regex_iterator], and 
+that the underlying iterators have not been subsequently invalidated.  Will raise a 
+`std::logic_error` if the match_results object was not initialized.
 
 [*Effects]: Returns a reference to the [sub_match] object representing the 
 character sequence from the end of the match found to the end of the 
@@ -373,6 +404,11 @@ OutputIterator position.  Note that if the formatter is a functor, then it is
 might want to use [@../../../../doc/html/ref.html Boost.Ref] to wrap the object so 
 that it's passed by reference.
 
+[*Requires]: that the match_results object has been initialized as a result of a 
+successful call to [regex_search] or [regex_match] or was returned from a [regex_iterator], and 
+that the underlying iterators have not been subsequently invalidated.  Will raise a 
+`std::logic_error` if the match_results object was not initialized.
+
 [*Effects]: If `fmt` is either a null-terminated string, or a 
 container of `char_type`'s, then copies the character sequence `[fmt.begin(), fmt.end())` to 
 `OutputIterator` /out/. For each format specifier or escape sequence in 
@@ -413,6 +449,11 @@ that computes the replacement string from a function call: either
 replacement text, or either `fmt(*this, out)` or `fmt(*this, out, flags)`, both of
 which write the replacement text to `*out`, and then return the new
 OutputIterator position.
+
+[*Requires]: that the match_results object has been initialized as a result of a 
+successful call to [regex_search] or [regex_match] or was returned from a [regex_iterator], and 
+that the underlying iterators have not been subsequently invalidated.  Will raise a 
+`std::logic_error` if the match_results object was not initialized.
 
 [*Effects]: 
 If `fmt` is either a null-terminated string, or a 
@@ -464,6 +505,11 @@ rely on that.
 [#boost_regex.match_results.captures]
 
    const capture_sequence_type& captures(std::size_t i)const; 
+
+[*Requires]: that the match_results object has been initialized as a result of a 
+successful call to [regex_search] or [regex_match] or was returned from a [regex_iterator], and 
+that the underlying iterators have not been subsequently invalidated.  Will raise a 
+`std::logic_error` if the match_results object was not initialized.
 
 [*Effects]: returns a sequence containing all the captures obtained for sub-expression i.
 
