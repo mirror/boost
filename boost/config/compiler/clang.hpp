@@ -28,7 +28,7 @@
 #  define BOOST_HAS_MS_INT64
 #endif
 
-// NOTE: Clang does not yet support NRVO.
+#define BOOST_HAS_NRVO
 
 // NOTE: Clang's C++0x support is not worth detecting. However, it
 // supports both extern templates and "long long" even in C++98/03
