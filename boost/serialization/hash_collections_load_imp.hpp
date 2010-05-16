@@ -19,6 +19,7 @@
 
 // helper function templates for serialization of hashed collections
 #include <boost/config.hpp>
+#include <boost/archive/basic_archive.hpp> // for version_type
 #include <boost/serialization/nvp.hpp>
 //#include <boost/serialization/collections_load_imp.hpp>
 #include <boost/serialization/collection_size_type.hpp>

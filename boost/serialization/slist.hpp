@@ -27,6 +27,7 @@ namespace std{
 #ifdef BOOST_HAS_SLIST
 #include BOOST_SLIST_HEADER
 
+#include <boost/archive/basic_archive.hpp> // for version_type
 #include <boost/serialization/collections_save_imp.hpp>
 #include <boost/serialization/collections_load_imp.hpp>
 #include <boost/serialization/split_free.hpp>

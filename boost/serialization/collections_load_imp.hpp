@@ -33,6 +33,7 @@ namespace std{
 #include <boost/detail/workaround.hpp>
 
 #include <boost/serialization/access.hpp>
+#include <boost/archive/basic_archive.hpp> // for version_type
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/detail/stack_constructor.hpp>
 #include <boost/serialization/collection_size_type.hpp>

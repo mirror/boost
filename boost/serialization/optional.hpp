@@ -17,6 +17,7 @@
 #include <boost/config.hpp>
 
 #include <boost/optional.hpp>
+#include <boost/archive/basic_archive.hpp> // for version_type
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/nvp.hpp>
