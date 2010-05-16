@@ -19,10 +19,8 @@
 
 // helper function templates for serialization of hashed collections
 #include <boost/config.hpp>
-#include <boost/archive/basic_archive.hpp> // for version_type
 #include <boost/serialization/nvp.hpp>
 //#include <boost/serialization/collections_load_imp.hpp>
-#include <boost/serialization/collection_size_type.hpp>
 
 namespace boost{
 namespace serialization {
@@ -36,9 +34,9 @@ inline void load_hash_collection(Archive & ar, Container &s)
 {
     s.clear();
     // retrieve number of elements
-    collection_size_type count;
-    boost::archive::version_type item_version(0);
-    collection_size_type bucket_count;
+    unsigned int count;
+    unsigned int item_version(0);
+    unsigned int bucket_count;;
     ar >> BOOST_SERIALIZATION_NVP(count);
     if(3 < ar.get_library_version()){
        ar >> BOOST_SERIALIZATION_NVP(bucket_count);

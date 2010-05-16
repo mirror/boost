@@ -33,7 +33,6 @@ namespace std{
 #include <boost/detail/workaround.hpp>
 
 #include <boost/serialization/access.hpp>
-#include <boost/archive/basic_archive.hpp> // for version_type
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/detail/stack_constructor.hpp>
 #include <boost/serialization/collection_size_type.hpp>
@@ -140,13 +139,12 @@ inline void load_collection(Archive & ar, Container &s)
     s.clear();
     // retrieve number of elements
     collection_size_type count;
-    unsigned int item_version_val = 0;
+    unsigned int item_version;
     ar >> BOOST_SERIALIZATION_NVP(count);
-    if(3 < ar.get_library_version()) {
-      boost::archive::version_type item_version(0);
-      ar >> BOOST_SERIALIZATION_NVP(item_version);
-      item_version_val = item_version.t;
-    }
+    if(3 < ar.get_library_version())
+        ar >> BOOST_SERIALIZATION_NVP(item_version);
+    else
+        item_version = 0;
     R rx;
     rx(s, count);
     std::size_t c = count;
@@ -154,7 +152,7 @@ inline void load_collection(Archive & ar, Container &s)
     BOOST_DEDUCED_TYPENAME Container::iterator hint;
     hint = s.begin();
     while(c-- > 0){
-        hint = ifunc(ar, s, item_version_val, hint);
+        hint = ifunc(ar, s, item_version, hint);
     }
 }
 

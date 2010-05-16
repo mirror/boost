@@ -27,7 +27,6 @@ namespace std{
 #ifdef BOOST_HAS_SLIST
 #include BOOST_SLIST_HEADER
 
-#include <boost/archive/basic_archive.hpp> // for version_type
 #include <boost/serialization/collections_save_imp.hpp>
 #include <boost/serialization/collections_load_imp.hpp>
 #include <boost/serialization/split_free.hpp>
@@ -61,11 +60,9 @@ inline void load(
     ar >> BOOST_SERIALIZATION_NVP(count);
     if(std::size_t(0) == count)
         return;
-    unsigned int v = 0;
+    unsigned int v;
     if(3 < ar.get_library_version()){
-      boost::archive::version_type item_version(0);
-      ar >> BOOST_SERIALIZATION_NVP(item_version);
-      v = item_version.t;
+        ar >> boost::serialization::make_nvp("item_version", v);
     }
     boost::serialization::detail::stack_construct<Archive, U> u(ar, v);
     ar >> boost::serialization::make_nvp("item", u.reference());

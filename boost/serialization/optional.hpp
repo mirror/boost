@@ -17,7 +17,6 @@
 #include <boost/config.hpp>
 
 #include <boost/optional.hpp>
-#include <boost/archive/basic_archive.hpp> // for version_type
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/nvp.hpp>
@@ -39,8 +38,8 @@ void save(
     ar << boost::serialization::make_nvp("initialized", tflag);
     if (tflag){
         if(3 < ar.get_library_version()){
-          const boost::archive::version_type v(version<T>::value);
-          ar << boost::serialization::make_nvp("item_version", v);
+            const int v = version<T>::value;
+            ar << boost::serialization::make_nvp("item_version", v);
         }
         ar << boost::serialization::make_nvp("value", *t);
     }
@@ -57,9 +56,7 @@ void load(
     if (tflag){
         unsigned int v = 0;
         if(3 < ar.get_library_version()){
-          boost::archive::version_type vt(v);
-          ar >> boost::serialization::make_nvp("item_version", vt);
-          v = vt.t;
+            ar >> boost::serialization::make_nvp("item_version", v);
         }
         detail::stack_construct<Archive, T> aux(ar, v);
         ar >> boost::serialization::make_nvp("value", aux.reference());

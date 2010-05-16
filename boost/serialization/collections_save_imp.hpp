@@ -19,7 +19,6 @@
 // helper function templates for serialization of collections
 
 #include <boost/config.hpp>
-#include <boost/archive/basic_archive.hpp> // for version_type
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/version.hpp>
@@ -42,10 +41,10 @@ inline void save_collection(Archive & ar, const Container &s)
     // make sure the target type is registered so we can retrieve
     // the version when we load
     if(3 < ar.get_library_version()){
-      const boost::archive::version_type item_version(version<
+        const unsigned int item_version = version<
             BOOST_DEDUCED_TYPENAME Container::value_type
-        >::value);
-      ar << BOOST_SERIALIZATION_NVP(item_version);
+        >::value;
+        ar << BOOST_SERIALIZATION_NVP(item_version);
     }
     BOOST_DEDUCED_TYPENAME Container::const_iterator it = s.begin();
     collection_size_type c=count;
