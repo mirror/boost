@@ -60,11 +60,9 @@ inline void load(
     ar >> BOOST_SERIALIZATION_NVP(count);
     if(std::size_t(0) == count)
         return;
-    unsigned int v = 0;
+    unsigned int v;
     if(3 < ar.get_library_version()){
-      boost::archive::version_type item_version(0);
-      ar >> BOOST_SERIALIZATION_NVP(item_version);
-      v = item_version.t;
+        ar >> boost::serialization::make_nvp("item_version", v);
     }
     boost::serialization::detail::stack_construct<Archive, U> u(ar, v);
     ar >> boost::serialization::make_nvp("item", u.reference());
