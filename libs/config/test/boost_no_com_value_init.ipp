@@ -517,6 +517,17 @@ namespace boost_no_complete_value_initialization
 // the function above here.
 #define FAILED_TO_VALUE_INITIALIZE(value) failed_to_value_initialized(value, #value)
 
+// TODO Niels Dekker, May 17, 2010: The following code is meant to be very tentative (trunk only).
+// It should be removed later this month, and is certainly not meant to become part of the release branch!!!
+#ifdef __INTEL_COMPILER
+    #if __INTEL_COMPILER <= 1110
+    // The following macro indicates that initialization of m_ptr_to_member_array must be skipped.
+    // Such an initialization triggered an internal error (assertion failed at: "shared/edgglue/edg_expr.c", 
+    // line 2859) on Intel <= 11.1 (Intel support issue 589832, reported by John Maddock, May 2010).
+    BOOST_DETAIL_NO_COMPLETE_VALUE_INITIALIZATION_SKIP_PTR_TO_MEMBER_ARRAY
+    #endif
+#endif
+
 
   // value_initializer initializes each of its data members by means
   // of an empty set of parentheses, and allows checking whether
@@ -658,7 +669,9 @@ namespace boost_no_complete_value_initialization
     m_member_function_ptr_struct(),
     m_member_function_ptr_struct_array(),
     m_ptr_to_member(),
+#ifndef BOOST_DETAIL_NO_COMPLETE_VALUE_INITIALIZATION_SKIP_PTR_TO_MEMBER_ARRAY
     m_ptr_to_member_array(),
+#endif
     m_ptr_to_member_struct(),
     m_ptr_to_member_struct_array(),
     m_bit_field_struct(),
@@ -759,8 +772,12 @@ namespace boost_no_complete_value_initialization
         FAILED_TO_VALUE_INITIALIZE(m_member_function_ptr_struct_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_member_function_ptr_struct_array[1]) +
         FAILED_TO_VALUE_INITIALIZE(m_ptr_to_member) +
+#ifdef BOOST_DETAIL_NO_COMPLETE_VALUE_INITIALIZATION_SKIP_PTR_TO_MEMBER_ARRAY
+        ( (std::cout << "Skipped m_ptr_to_member_array check\n"), 1) +
+#else
         FAILED_TO_VALUE_INITIALIZE(m_ptr_to_member_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_ptr_to_member_array[1]) +
+#endif
         FAILED_TO_VALUE_INITIALIZE(m_ptr_to_member_struct) +
         FAILED_TO_VALUE_INITIALIZE(m_ptr_to_member_struct_array[0]) +
         FAILED_TO_VALUE_INITIALIZE(m_ptr_to_member_struct_array[1]) +
@@ -1007,7 +1024,7 @@ namespace boost_no_complete_value_initialization
         << num_failures_of_temporaries << '+'
         << num_failures_of_heap_objects << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 26."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 27."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
