@@ -68,6 +68,9 @@
     </xsl:variable>
 
     <xsl:choose>
+    <xsl:when test="$navtext = 'xxx'">
+        <xsl:value-of select="$direction"/>
+    </xsl:when>
 	<xsl:when test="$navig.graphics != 0">
 	    <img>
 		<xsl:attribute name="src">
