@@ -100,6 +100,12 @@
 #  define BOOST_NO_ADL_BARRIER
 #endif
 
+
+// TODO The following condition should probably be #if (_MSC_VER <= 1600).
+// However, I need to have a look at the regression page beforehand:
+// http://www.boost.org/development/tests/trunk/developer/config.html
+// (Niels Dekker, LKEB, May 17, 2010)
+#if (_MSC_VER < 1600)
 // MSVC has not yet completely implemented value-initialization, as
 // is reported:
 // "VC++ does not value-initialize members of derived classes without 
@@ -111,6 +117,7 @@
 // See also: http://www.boost.org/libs/utility/value_init.htm#compiler_issues
 // (Niels Dekker, LKEB, May 2010)
 #define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
+#endif
 
 #if _MSC_VER <= 1500  || !defined(BOOST_STRICT_CONFIG) // 1500 == VC++ 9.0
 #  define BOOST_NO_INITIALIZER_LISTS
