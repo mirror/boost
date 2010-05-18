@@ -524,7 +524,7 @@ namespace boost_no_complete_value_initialization
     // The following macro indicates that initialization of m_ptr_to_member_array must be skipped.
     // Such an initialization triggered an internal error (assertion failed at: "shared/edgglue/edg_expr.c", 
     // line 2859) on Intel <= 11.1 (Intel support issue 589832, reported by John Maddock, May 2010).
-    BOOST_DETAIL_NO_COMPLETE_VALUE_INITIALIZATION_SKIP_PTR_TO_MEMBER_ARRAY
+	#define BOOST_DETAIL_NO_COMPLETE_VALUE_INITIALIZATION_SKIP_PTR_TO_MEMBER_ARRAY
     #endif
 #endif
 
@@ -1024,7 +1024,7 @@ namespace boost_no_complete_value_initialization
         << num_failures_of_temporaries << '+'
         << num_failures_of_heap_objects << "): "
         << total_num_failures
-        << "\nDetected by boost_no_complete_value_initialization::test() revision 27."
+        << "\nDetected by boost_no_complete_value_initialization::test() revision 28."
         << std::endl;
     }
     return static_cast<int>(total_num_failures);
