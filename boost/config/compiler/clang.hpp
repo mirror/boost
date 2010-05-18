@@ -69,3 +69,7 @@
 #ifndef BOOST_COMPILER
 #  define BOOST_COMPILER "Clang version " __clang_version__
 #endif
+
+// Macro used to identify the Clang compiler.
+#define BOOST_CLANG 1
+
