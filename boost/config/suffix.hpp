@@ -83,6 +83,13 @@
 #endif
 
 //
+// Normalize BOOST_NO_STATIC_ASSERT and (depricated) BOOST_HAS_STATIC_ASSERT:
+//
+#if !defined(BOOST_NO_STATIC_ASSERT) && !defined(BOOST_HAS_STATIC_ASSERT)
+#  define BOOST_HAS_STATIC_ASSERT
+#endif
+
+//
 // if there is no __int64 then there is no specialisation
 // for numeric_limits<__int64> either:
 //

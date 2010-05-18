@@ -16,6 +16,7 @@ namespace boost_no_0x_hdr_tuple {
 
 int test()
 {
+  std::tuple<int, int, long> t(0, 1, 2);
   return 0;
 }
 
