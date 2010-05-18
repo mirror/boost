@@ -831,6 +831,9 @@ PPPPP is the compiler build number.
 Defined if the compiler is an Intel compiler, takes the same value as the
 compiler version macro.
 ]]
+[[`BOOST_CLANG`][`<boost/config.hpp>`][
+Defined to 1 if the compiler is the Clang compiler.
+]]
 [[`BOOST_WINDOWS`][`<boost/config.hpp>`][
 Defined if the Windows platfrom API is available.
 ]]
