@@ -184,6 +184,9 @@
 #define BOOST_NO_STATIC_ASSERT
 #define BOOST_NO_NULLPTR
 #endif // _MSC_VER < 1600
+#if _MSC_VER >= 1600
+#define BOOST_HAS_STDINT_H
+#endif
 
 // C++0x features not supported by any versions
 #define BOOST_NO_CHAR16_T
