@@ -101,16 +101,15 @@
 #endif
 
 
-// TODO The following condition should probably be #if (_MSC_VER <= 1600).
-// However, I need to have a look at the regression page beforehand:
-// http://www.boost.org/development/tests/trunk/developer/config.html
-// (Niels Dekker, LKEB, May 17, 2010)
-#if (_MSC_VER < 1600)
-// MSVC has not yet completely implemented value-initialization, as
-// is reported:
+#if (_MSC_VER <= 1600)
+// MSVC (including the latest checked version) has not yet completely 
+// implemented value-initialization, as is reported:
 // "VC++ does not value-initialize members of derived classes without 
 // user-declared constructor", reported in 2009 by Sylvester Hesp:
 // https://connect.microsoft.com/VisualStudio/feedback/details/484295
+// "Presence of copy constructor breaks member class initialization",
+// reported in 2009 by Alex Vakulenko:
+// https://connect.microsoft.com/VisualStudio/feedback/details/499606
 // "Value-initialization in new-expression", reported in 2005 by
 // Pavel Kuznetsov (MetaCommunications Engineering):
 // https://connect.microsoft.com/VisualStudio/feedback/details/100744
