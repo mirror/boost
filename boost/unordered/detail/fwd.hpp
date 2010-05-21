@@ -58,12 +58,6 @@
 
 #endif
 
-#if BOOST_WORKAROUND(__BORLANDC__, <= 0X0582)
-#define BOOST_UNORDERED_BORLAND_BOOL(x) (bool)(x)
-#else
-#define BOOST_UNORDERED_BORLAND_BOOL(x) x
-#endif
-
 namespace boost { namespace unordered_detail {
 
     static const float minimum_max_load_factor = 1e-3f;
@@ -475,25 +469,13 @@ namespace boost { namespace unordered_detail {
             return extractor::extract(node::get_value(n));
         }
         bool equal(key_type const& k, value_type const& v) const;
-
         template <class Key, class Pred>
-        inline node_ptr find_iterator(bucket_ptr bucket, Key const& k,
-                Pred const& eq) const
-        {
-            node_ptr it = bucket->next_;
-            while (BOOST_UNORDERED_BORLAND_BOOL(it) &&
-                !eq(k, get_key(node::get_value(it))))
-            {
-                it = node::next_group(it);
-            }
-    
-            return it;
-        }
-        
+        node_ptr find_iterator(bucket_ptr bucket, Key const& k,
+            Pred const&) const;
         node_ptr find_iterator(bucket_ptr bucket, key_type const& k) const;
         node_ptr find_iterator(key_type const& k) const;
         node_ptr* find_for_erase(bucket_ptr bucket, key_type const& k) const;
-
+        
         // Load methods
 
         std::size_t max_size() const;
