@@ -106,14 +106,9 @@ public:
 
    allocator_architype();
    allocator_architype(const allocator_architype&);
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1600)
-   //
-   // This doesn't appear to be part of the allocator requirements
-   // in the std, but is required by std::vector in VC10 :-(
-   //
+
    template <class Other>
    allocator_architype(const allocator_architype<Other>&);
-#endif
 
    void construct(pointer, const_reference);
    void destroy(pointer);
