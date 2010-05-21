@@ -1,0 +1,73 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Back-end classes</title><meta name="generator" content="DocBook XSL-NS Stylesheets V1.75.2"><link rel="home" href="index.html" title="Meta State Machine (MSM)"><link rel="up" href="rn01.html" title="Reference"><link rel="prev" href="rn01.html" title="Reference"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Back-end classes</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="rn01.html">Prev</a>&nbsp;</td><th width="60%" align="center">Reference</th><td width="20%" align="right">&nbsp;</td></tr></table><hr></div><div class="refentry" title="Back-end classes"><a name="d0e5675"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Back-end classes &#8212; the types provided by the back-end (boost::msm::back)</p></div><div class="refsect1" title="state_machine.hpp"><a name="d0e5681"></a><h2>state_machine.hpp</h2><p> This header provides one type, state_machine, MSM's state machine engine
+                        implementation.</p><pre class="classsynopsis"> <span class="ooclass"><span class="classname">template &lt;class Derived,class
+                                HistoryPolicy=NoHistory,class CompilePolicy=favor_runtime_speed&gt;
+                                state_machine</span></span>&nbsp;{<br>}</pre><div class="refsect2" title="methods"><a name="d0e5690"></a><h3> methods </h3><div class="refsect3" title="start"><a name="d0e5693"></a><h4>start</h4><p> The start methods must be called before any call to
+                                process_event. It activates the entry action of the initial
+                                state(s). This allows you to choose when a state machine can start.
+                                (TODO in user guide)</p><code class="methodsynopsis"><span class="methodname">void start</span>(<span class="methodparam"></span>);</code></div><div class="refsect3" title="process_event"><a name="d0e5703"></a><h4>process_event</h4><p>The event processing method implements the double-dispatch. Each
+                                call to this function with a new event type instantiates a new
+                                dispatch algorithm and increases compile-time.</p><code class="methodsynopsis"><span class="methodname">template &lt;class Event&gt; HandledEnum
+                                    process_event</span>(<span class="methodparam">Event const&amp;</span>);</code></div><div class="refsect3" title="current_state"><a name="d0e5714"></a><h4>current_state</h4><p>Returns the ids of currently active states. You will typically
+                                need it only for debugging or logging purposes.</p><code class="methodsynopsis"><span class="methodname">const int* current_state const</span>(<span class="methodparam"></span>);</code></div><div class="refsect3" title="get_state_by_id"><a name="d0e5724"></a><h4>get_state_by_id</h4><p>Returns the state whose id is given. As all states of a concrete
+                                state machine share a common base state, the return value is a base
+                                state. If the id corresponds to no state, a null pointer is
+                                returned.</p><code class="methodsynopsis"><span class="methodname">const BaseState* get_state_by_id const</span>(<span class="methodparam">int id</span>);</code></div><div class="refsect3" title="is_contained"><a name="d0e5735"></a><h4>is_contained</h4><p>Helper returning true if the state machine is contained as a
+                                submachine of another state machine.</p><code class="methodsynopsis"><span class="methodname">bool is_contained const</span>(<span class="methodparam"></span>);</code></div><div class="refsect3" title="get_state"><a name="d0e5745"></a><h4>get_state</h4><p>Returns the required state of the state machine as a pointer. A
+                                compile error will occur if the state is not to be found in the
+                                state machine.</p><code class="methodsynopsis"><span class="methodname">template &lt;class State&gt; State* get_state</span>(<span class="methodparam"></span>);</code></div><div class="refsect3" title="get_state"><a name="d0e5755"></a><h4>get_state</h4><p>Returns the required state of the state machine as a reference. A
+                                compile error will occur if the state is not to be found in the
+                                state machine.</p><code class="methodsynopsis"><span class="methodname">template &lt;class State&gt; State&amp;
+                                    get_state</span>(<span class="methodparam"></span>);</code></div><div class="refsect3" title="is_flag_active"><a name="d0e5765"></a><h4>is_flag_active</h4><p>Returns true if the given flag is currently active. A flag is
+                                active if the active state of one region is tagged with this flag
+                                (using OR as BinaryOp) or active states of <span class="underline">all</span> regions (using AND as
+                                BinaryOp)</p><code class="methodsynopsis"><span class="methodname">template &lt;class Flag,class BinaryOp&gt; bool
+                                    is_flag_active</span>(<span class="methodparam"></span>);</code></div><div class="refsect3" title="is_flag_active"><a name="d0e5778"></a><h4>is_flag_active</h4><p>Returns true if the given flag is currently active. A flag is
+                                active if the active state of one region is tagged with this
+                                flag.</p><code class="methodsynopsis"><span class="methodname">template &lt;class Flag&gt; bool
+                                    is_flag_active</span>(<span class="methodparam"></span>);</code></div><div class="refsect3" title="visit_current_states"><a name="d0e5788"></a><h4>visit_current_states</h4><p>Visits all active states and their substates. A state is visited
+                                using the <code class="code">accept</code> method without argument. The base
+                                class of all states must provide an <code class="code">accept_sig</code>
+                                type.</p><code class="methodsynopsis"><span class="methodname">void visit_current_states</span>(<span class="methodparam"></span>);</code></div><div class="refsect3" title="visit_current_states"><a name="d0e5804"></a><h4>visit_current_states</h4><p>Visits all active states and their substates. A state is visited
+                                using the <code class="code">accept</code> method with arguments. The base class
+                                of all states must provide an <code class="code">accept_sig</code> type defining
+                                the signature and thus the number and type of the parameters.</p><code class="methodsynopsis"><span class="methodname">void visit_current_states</span>(<span class="methodparam">any-type param1, any-type param2,...</span>);</code></div><div class="refsect3" title="defer_event"><a name="d0e5821"></a><h4>defer_event</h4><p> Defers the provided event. This method can be called only if at
+                                least one state defers an event or if the state machine provides the
+                                    <code class="code">activate_deferred_events</code>(TODO example) type either
+                                directly or using the deferred_events configuration of eUML
+                                    (<code class="code">configure_ &lt;&lt; deferred_events</code>)</p><code class="methodsynopsis"><span class="methodname">template &lt;class Event&gt; void defer_event</span>(<span class="methodparam">Event const&amp;</span>);</code></div></div><div class="refsect2" title="Types"><a name="d0e5838"></a><h3>Types</h3><div class="refsect3" title="entry_pt"><a name="d0e5841"></a><h4>entry_pt</h4><p>This nested type provides the necessary typedef for entry point
+                                pseudostates.
+                                    <code class="code">state_machine&lt;...&gt;::entry_pt&lt;state_name&gt;</code> is a
+                                transition's valid target inside the containing state machine's
+                                transition table.</p><pre class="classsynopsis"> <span class="ooclass"><span class="classname">entry_pt</span></span>&nbsp;{<br>}</pre></div><div class="refsect3" title="exit_pt"><a name="d0e5853"></a><h4>exit_pt</h4><p>This nested type provides the necessary typedef for exit point
+                                pseudostates.
+                                    <code class="code">state_machine&lt;...&gt;::exit_pt&lt;state_name&gt;</code> is a
+                                transition's valid source inside the containing state machine's
+                                transition table.</p><pre class="classsynopsis"> <span class="ooclass"><span class="classname">exit_pt</span></span>&nbsp;{<br>}</pre></div><div class="refsect3" title="direct"><a name="d0e5865"></a><h4>direct</h4><p>This nested type provides the necessary typedef for an explicit
+                                entry inside a submachine.
+                                    <code class="code">state_machine&lt;...&gt;::direct&lt;state_name&gt;</code> is a
+                                transition's valid target inside the containing state machine's
+                                transition table.</p><pre class="classsynopsis"> <span class="ooclass"><span class="classname">direct</span></span>&nbsp;{<br>}</pre></div></div></div><div class="refsect1" title="args.hpp"><a name="d0e5877"></a><h2>args.hpp</h2><p>This header provides one type, args. which provides the necessary types
+                        for a visitor implementation.</p></div><div class="refsect1" title="history_policies.hpp"><a name="d0e5882"></a><h2>history_policies.hpp</h2><p>This header provides the out-of-the-box history policies supported by MSM.
+                        There are 3 such policies. Every history policy must implement the following
+                        methods:</p><div class="refsect2" title="set_initial_states"><a name="d0e5887"></a><h3> set_initial_states </h3><p> This method is called by msm::back::state_machine when constructed.
+                            It gives the policy a chance to save the ids of all initial states
+                            (passed as array).</p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void set_initial_states(</code></td><td><code>)</code>;</td><td>&nbsp;</td></tr></table><div class="paramdef-list"><code>
+                                    <code>(</code>int* const<code>)</code>
+                                </code>;</div><div class="funcprototype-spacer">&nbsp;</div></div></div><div class="refsect2" title="history_exit"><a name="d0e5901"></a><h3> history_exit </h3><p>This method is called by msm::back::state_machine when the submachine
+                            is exited. It gives the policy a chance to remember the ids of the last
+                            active substates of this submachine states (passed as array).</p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void history_exit(</code></td><td><code>)</code>;</td><td>&nbsp;</td></tr></table><div class="paramdef-list"><code>
+                                    <code>(</code>int* const<code>)</code>
+                                </code>;</div><div class="funcprototype-spacer">&nbsp;</div></div></div><div class="refsect2" title="history_entry"><a name="d0e5915"></a><h3> history_entry </h3><p>This method is called by msm::back::state_machine when the submachine
+                            is entered. It gives the policy a chance to set the the active states
+                            according to the policy's aim. The policy gets as parameter the event
+                            which activated the submachine and returns an array of active states
+                            ids.</p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">template &lt;class Event&gt; int* const history_exit(</code></td><td><code>)</code>;</td><td>&nbsp;</td></tr></table><div class="paramdef-list"><code>
+                                    <code>(</code>Event const&amp;<code>)</code>
+                                </code>;</div><div class="funcprototype-spacer">&nbsp;</div></div></div><div class="refsect2" title="NoHistory"><a name="d0e5929"></a><h3>NoHistory</h3><p>This policy is the default used by state_machine. No active state of a
+                            submachine is remembered and at every new activation of the submachine,
+                            the initial state(s) are activated. </p></div><div class="refsect2" title="AlwaysHistory"><a name="d0e5934"></a><h3>AlwaysHistory</h3><p>This policy is a non-UML-standard extension. The active state(s) of a
+                            submachine is (are) always remembered at every new activation of the
+                            submachine. </p></div><div class="refsect2" title="ShallowHistory"><a name="d0e5939"></a><h3>ShallowHistory</h3><p>This policy activates the active state(s) of a submachine if the event
+                            is found in the policy's event list. </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="rn01.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="rn01.html">Up</a></td><td width="40%" align="right">&nbsp;</td></tr><tr><td width="40%" align="left" valign="top">Reference&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;</td></tr></table></div></body></html>
