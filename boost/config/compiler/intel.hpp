@@ -162,7 +162,8 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 // internal error on Intel <= 11.1 (last checked version), as was 
 // reported by John Maddock, Intel support issue 589832, May 2010.
 // Moreover, according to test results from Huang-Vista-x86_32_intel,
-// intel-vc9-win-11.1 may leave a non-POD array uninitialized.
+// intel-vc9-win-11.1 may leave a non-POD array uninitialized, in some 
+// cases when it should be value-initialized.
 // (Niels Dekker, LKEB, May 2010)
 #if defined(__INTEL_COMPILER)
 #  if __INTEL_COMPILER <= 1110
