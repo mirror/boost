@@ -19,6 +19,11 @@ Thanks to Dave Abrahams for an especially detailed review, and for making a
 VM with msvc-7.1 available so I could track down portability issues on that
 compiler.
 
+Many thanks to Daniel Wallin who first implemented the code used to find the
+common domain among a set, accounting for super- and sub-domains. Thanks also
+to Jeremiah Willcock, John Bytheway and Krishna Achuthan who offered alternate
+solutions to this tricky programming problem.
+
 Thanks also to the developers of _PETE_. I found many good ideas there.
 
 [endsect]
