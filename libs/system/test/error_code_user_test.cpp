@@ -398,5 +398,5 @@ int main( int, char *[] )
 
   //test3::run();
 
-  return 0;
+  return ::boost::report_errors();
 }

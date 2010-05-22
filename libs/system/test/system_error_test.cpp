@@ -103,7 +103,7 @@ int main( int, char *[] )
   TEST( c6_0, 0, "c6_0: The operation completed successfully" );
   TEST( c6_1, 1, "c6_1: Incorrect function" );
 
-  return 0;
+  return ::boost::report_errors();
 }
 
 
