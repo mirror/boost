@@ -52,6 +52,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::_void">proto::_void</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::address_of">proto::address_of</classname>
         </computeroutput>
       </listitem>

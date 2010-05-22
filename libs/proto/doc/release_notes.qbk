@@ -8,6 +8,21 @@
 [section:release_notes Appendix A: Release Notes]
 
 [/=================]
+[heading Boost 1.44]
+[/=================]
+
+In Boost 1.44, the behavior of _and_ as a transform changed. Previously, it only
+applied the transform associated with the last grammar in the set. Now, it applies
+all the transforms but only returns the result of the last. That makes it behave
+like C++'s comma operator. For example, a grammar such as:
+
+  proto::and_< G0, G1, G2 >
+
+when evaluated with an expression `e` now behaves like this:
+
+  (G0()(e), G1()(e), G2()(e))
+
+[/=================]
 [heading Boost 1.43]
 [/=================]
 

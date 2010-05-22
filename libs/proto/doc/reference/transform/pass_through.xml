@@ -100,8 +100,16 @@ struct Promote :
             <purpose>For exposition only</purpose>
             <type>typename Expr::proto_tag</type>
           </typedef>
-          <typedef name="result_type">
+          <typedef name="D">
+            <purpose>For exposition only</purpose>
+            <type>typename Expr::proto_domain</type>
+          </typedef>
+          <typedef name="expr_type">
+            <purpose>For exposition only</purpose>
             <type><classname>proto::expr</classname>&lt;T, <classname>proto::listN</classname>&lt;R0,...RN&gt; &gt;</type>
+          </typedef>
+          <typedef name="result_type">
+            <type>typename boost::result_of&lt;D(expr_type)&gt;::type</type>
           </typedef>
           <method-group name="public member functions">
             <method name="operator()" cv="const">
@@ -124,11 +132,11 @@ struct Promote :
               </requires>
               <returns>
                 <para>
-                  <programlisting>result_type::make(
+                  <programlisting>D()(expr_type::make(
   G0()(<functionname>proto::child_c</functionname>&lt;0&gt;(expr), state, data),
   ...
   GN()(<functionname>proto::child_c</functionname>&lt;N&gt;(expr), state, data)
-)</programlisting>
+))</programlisting>
                 </para>
               </returns>
             </method>

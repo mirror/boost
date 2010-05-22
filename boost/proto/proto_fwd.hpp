@@ -138,6 +138,10 @@ namespace boost { namespace proto
             typename boost::remove_const<typename boost::remove_reference<X>::type>::type
 
         struct _default;
+
+        struct not_a_domain;
+        struct not_a_grammar;
+        struct not_a_generator;
     }
 
     typedef detail::ignore const ignore;
@@ -255,7 +259,11 @@ namespace boost { namespace proto
     ////////////////////////////////////////////////////////////////////////////////////////////////
     namespace domainns_
     {
-        template<typename Generator = default_generator, typename Grammar = proto::_>
+        template<
+            typename Generator  = default_generator
+          , typename Grammar    = proto::_
+          , typename Super      = detail::not_a_domain
+        >
         struct domain;
 
         struct default_domain;
@@ -716,6 +724,8 @@ namespace boost { namespace proto
     struct _data;
 
     struct _value;
+
+    struct _void;
 
     template<int I>
     struct _child_c;

@@ -1248,8 +1248,8 @@ In addition to the above primitive transforms, all of Proto's grammar elements a
       [For the specified set of alternate sub-grammars, find the one that matches 
        the given expression and apply its associated transform.]]
  [[_and_]
-      [For the given set of sub-grammars, take the /last/ sub-grammar and apply its 
-       associated transform.]]
+      [For the given set of sub-grammars, apply all the associated transforms and
+       return the result of the last.]]
  [[_not_]
       [Return the current expression unmodified.]]
  [[_if_]
