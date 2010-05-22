@@ -158,6 +158,19 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #endif
 
 //
+// An attempt to value-initialize a pointer-to-member may trigger an
+// internal error on Intel <= 11.1 (last checked version), as was 
+// reported by John Maddock, Intel support issue 589832, May 2010.
+// Moreover, according to test results from Huang-Vista-x86_32_intel,
+// intel-vc9-win-11.1 may leave a non-POD array uninitialized.
+// (Niels Dekker, LKEB, May 2010)
+#if defined(__INTEL_COMPILER)
+#  if __INTEL_COMPILER <= 1110
+#    define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
+#  endif
+#endif
+
+//
 // last known and checked version:
 #if (BOOST_INTEL_CXX_VERSION > 1110)
 #  if defined(BOOST_ASSERT_CONFIG)
