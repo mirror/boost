@@ -20,6 +20,13 @@ TODO (known issues):
 
 CHANGELOG
 
+Boost V1.44.0
+- V2.0.6
+- Added information about file type to iteration context. This can be either
+  main_file, system_header, or user_header depending whether the handled file
+  is the main file to preprocess, a include file opened from #include <>, or
+  a include file opened from #include "". 
+
 Boost V1.43.0
 - V2.0.5
 - Fixed the wave driver application to strip leading and trailing whitespace
