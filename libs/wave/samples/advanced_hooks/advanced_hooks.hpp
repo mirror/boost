@@ -151,7 +151,7 @@ public:
     {
         // prepend a comment at the beginning of all skipped lines
         using namespace boost::wave;
-        if (need_comment) {
+        if (need_comment && token_id(token) != T_SPACE) {
             std::cout << "// ";
             need_comment = false;
         }
