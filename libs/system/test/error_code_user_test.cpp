@@ -18,7 +18,7 @@
 #include <boost/cerrno.hpp>
 #include <string>
 #include <cstdio>
-#include <boost/test/minimal.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #ifdef BOOST_POSIX_API
 # include <sys/stat.h>
@@ -264,7 +264,7 @@ namespace lib4
 //
 //  void check_success(const boost::system::error_code& ec, bool expect)
 //  {
-//    BOOST_CHECK( (ec == boost::system::posix::success) == expect );
+//    BOOST_TEST( (ec == boost::system::posix::success) == expect );
 //    if (ec == boost::system::posix::success)
 //      std::cout << "yes... " << (expect ? "ok" : "fail") << '\n';
 //    else
@@ -273,7 +273,7 @@ namespace lib4
 //
 //  void check_permission_denied(const boost::system::error_code& ec, bool expect)
 //  {
-//    BOOST_CHECK( (ec == boost::system::posix::permission_denied) == expect );
+//    BOOST_TEST( (ec == boost::system::posix::permission_denied) == expect );
 //    if (ec ==  boost::system::posix::permission_denied)
 //      std::cout << "yes... " << (expect ? "ok" : "fail") << '\n';
 //    else
@@ -282,7 +282,7 @@ namespace lib4
 //
 //  void check_out_of_memory(const boost::system::error_code& ec, bool expect)
 //  {
-//    BOOST_CHECK( (ec == boost::system::posix::not_enough_memory) == expect );
+//    BOOST_TEST( (ec == boost::system::posix::not_enough_memory) == expect );
 //    if (ec ==  boost::system::posix::not_enough_memory)
 //      std::cout << "yes... " << (expect ? "ok" : "fail") << '\n';
 //    else
@@ -337,7 +337,7 @@ namespace lib4
 
 //  ------------------------------------------------------------------------  //
 
-int test_main( int, char *[] )
+int main( int, char *[] )
 {
   boost::system::error_code ec;
 
@@ -346,35 +346,35 @@ int test_main( int, char *[] )
   ec = my_mkdir( "/no-such-file-or-directory/will-not-succeed" );
   std::cout << "ec.value() is " << ec.value() << '\n';
 
-  BOOST_CHECK( ec );
-  BOOST_CHECK( ec == boost::system::posix::no_such_file_or_directory );
-  BOOST_CHECK( ec.category() == boost::system::system_category );
+  BOOST_TEST( ec );
+  BOOST_TEST( ec == boost::system::posix::no_such_file_or_directory );
+  BOOST_TEST( ec.category() == boost::system::system_category );
 
   // Library 2 tests:
 
   ec = my_remove( "/no-such-file-or-directory" );
   std::cout << "ec.value() is " << ec.value() << '\n';
 
-  BOOST_CHECK( ec );
-  BOOST_CHECK( ec == boost::system::posix::no_such_file_or_directory );
-  BOOST_CHECK( ec.category() == boost::system::posix_category );
+  BOOST_TEST( ec );
+  BOOST_TEST( ec == boost::system::posix::no_such_file_or_directory );
+  BOOST_TEST( ec.category() == boost::system::posix_category );
 
   // Library 3 tests:
 
   ec = boost::lib3::boo_boo;
   std::cout << "ec.value() is " << ec.value() << '\n';
 
-  BOOST_CHECK( ec );
-  BOOST_CHECK( ec == boost::lib3::boo_boo );
-  BOOST_CHECK( ec.value() == boost::lib3::boo_boo );
-  BOOST_CHECK( ec.category() == boost::lib3::lib3_error_category );
+  BOOST_TEST( ec );
+  BOOST_TEST( ec == boost::lib3::boo_boo );
+  BOOST_TEST( ec.value() == boost::lib3::boo_boo );
+  BOOST_TEST( ec.category() == boost::lib3::lib3_error_category );
 
-  BOOST_CHECK( ec == boost::system::posix::io_error );
+  BOOST_TEST( ec == boost::system::posix::io_error );
 
   boost::system::error_code ec3( boost::lib3::boo_boo+100,
     boost::lib3::lib3_error_category );
-  BOOST_CHECK( ec3.category() == boost::lib3::lib3_error_category );
-  BOOST_CHECK( ec3.default_error_condition().category()
+  BOOST_TEST( ec3.category() == boost::lib3::lib3_error_category );
+  BOOST_TEST( ec3.default_error_condition().category()
     == boost::lib3::lib3_error_category );
 
   // Library 4 tests:
@@ -382,16 +382,16 @@ int test_main( int, char *[] )
   ec = lib4::boo_boo;
   std::cout << "ec.value() is " << ec.value() << '\n';
 
-  BOOST_CHECK( ec );
-  BOOST_CHECK( ec == lib4::boo_boo );
-  BOOST_CHECK( ec.value() == lib4::boo_boo.value() );
-  BOOST_CHECK( ec.category() == lib4::lib4_error_category );
+  BOOST_TEST( ec );
+  BOOST_TEST( ec == lib4::boo_boo );
+  BOOST_TEST( ec.value() == lib4::boo_boo.value() );
+  BOOST_TEST( ec.category() == lib4::lib4_error_category );
 
-  BOOST_CHECK( ec == boost::system::posix::io_error );
+  BOOST_TEST( ec == boost::system::posix::io_error );
 
   boost::system::error_code ec4( lib4::boo_boo.value()+100,
     lib4::lib4_error_category );
-  BOOST_CHECK( ec4.default_error_condition().category()
+  BOOST_TEST( ec4.default_error_condition().category()
     == lib4::lib4_error_category );
 
   // Test 3

@@ -164,11 +164,6 @@
 #endif
 
 //
-// all versions support __declspec:
-//
-#define BOOST_HAS_DECLSPEC
-
-//
 // C++0x features
 //
 //   See above for BOOST_NO_LONG_LONG

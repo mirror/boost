@@ -13,11 +13,10 @@
 
 #define BOOST_ERROR_CODE_HEADER_ONLY
 
-#include <boost/test/minimal.hpp>
-
+#include <boost/detail/lightweight_test.hpp>
 #include <boost/system/error_code.hpp>
 
-int test_main( int, char*[] )
+int main( int, char*[] )
 {
   boost::system::error_code ec( 0, boost::system::system_category );
   return 0;

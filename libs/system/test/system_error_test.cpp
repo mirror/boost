@@ -14,7 +14,7 @@
 
 #include <boost/config/warning_disable.hpp>
 
-#include <boost/test/minimal.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <boost/system/system_error.hpp>
 #include <iostream>
 #include <string>
@@ -36,8 +36,8 @@ namespace
     int v, const char * str )
   {
     std::cout << "test " << desc << "\n what() returns \"" << ex.what() << "\"\n";
-    BOOST_CHECK( ex.code().value() == v );
-    BOOST_CHECK( ex.code().category() == system_category );
+    BOOST_TEST( ex.code().value() == v );
+    BOOST_TEST( ex.code().category() == system_category );
 # ifdef BOOST_WINDOWS_API
     LANGID language_id;
 #   if !defined(__MINGW32__) && !defined(__CYGWIN__)
@@ -48,7 +48,7 @@ namespace
     // std::cout << "GetUserDefaultUILanguage() returns " << language_id << '\n';
     if ( language_id == 0x0409 )  // English (United States)
     {
-      BOOST_CHECK( std::string( ex.what() ) == str );
+      BOOST_TEST( std::string( ex.what() ) == str );
       if ( std::string( ex.what() ) != str )
         std::cout << "expected \"" << str << "\", but what() returned \""
           << ex.what() << "\"\n";
@@ -59,7 +59,7 @@ namespace
   const boost::uint_least32_t uvalue = 2u;
 }
 
-int test_main( int, char *[] )
+int main( int, char *[] )
 {
   // all constructors, in the same order as they appear in the header:
 

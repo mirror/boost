@@ -18,12 +18,6 @@
 #  define BOOST_NO_RTTI
 #endif
 
-#if defined(__int32)
-// HACK: Clang only defines the type __int32 in Microsoft-compatibility mode,
-// which means that declspecs are also available
-#  define BOOST_HAS_DECLSPEC
-#endif
-
 #if defined(__int64)
 #  define BOOST_HAS_MS_INT64
 #endif
