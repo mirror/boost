@@ -1852,16 +1852,16 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
      {
          direct_event_start_helper(library_sm* self_):self(self_){}
          // this variant is for the standard case, entry due to activation of the containing FSM
-         template <class EventType>
+         template <class EventType,class FsmType>
          typename ::boost::disable_if<typename has_direct_entry<EventType>::type,void>::type
-             operator()(EventType const& evt, ::boost::msm::back::dummy<0> = 0)
+             operator()(EventType const& evt,FsmType& fsm, ::boost::msm::back::dummy<0> = 0)
          {
-             (static_cast<Derived*>(self))->on_entry(evt,*self);
+             (static_cast<Derived*>(self))->on_entry(evt,fsm);
              self->start(evt);
          }
 
          // this variant is for the direct entry case (just one entry, not a sequence of entries)
-         template <class EventType>
+         template <class EventType,class FsmType>
          typename ::boost::enable_if<
              typename ::boost::mpl::and_<
                         typename ::boost::mpl::not_< typename is_pseudo_entry<
@@ -1871,9 +1871,9 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
                                                             <typename EventType::active_state>::type >::type 
                                                     >::type>::type,void
                                   >::type
-         operator()(EventType const& evt, ::boost::msm::back::dummy<1> = 0)
+         operator()(EventType const& evt,FsmType& fsm, ::boost::msm::back::dummy<1> = 0)
          {
-             (static_cast<Derived*>(self))->on_entry(evt,*self);
+             (static_cast<Derived*>(self))->on_entry(evt,fsm);
              int state_id = get_state_id<stt,typename EventType::active_state>::value;
              BOOST_STATIC_ASSERT(EventType::active_state::zone_index >= 0);
              BOOST_STATIC_ASSERT(EventType::active_state::zone_index <= nr_regions::value);
@@ -1883,7 +1883,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
          }
 
          // this variant is for the fork entry case (a sequence on entries)
-         template <class EventType>
+         template <class EventType,class FsmType>
          typename ::boost::enable_if<
              typename ::boost::mpl::and_<
                     typename ::boost::mpl::not_<
@@ -1893,9 +1893,9 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
                                                                 typename EventType::active_state>::type 
                                                 >::type>::type,void 
                                 >::type
-         operator()(EventType const& evt, ::boost::msm::back::dummy<2> = 0)
+         operator()(EventType const& evt,FsmType& fsm, ::boost::msm::back::dummy<2> = 0)
          {
-             (static_cast<Derived*>(self))->on_entry(evt,*self);
+             (static_cast<Derived*>(self))->on_entry(evt,fsm);
              ::boost::mpl::for_each<typename EventType::active_state, 
                                     ::boost::msm::wrap< ::boost::mpl::placeholders::_1> >
                                                         (fork_helper<EventType>(self,evt));
@@ -1904,14 +1904,14 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
          }
 
          // this variant is for the pseudo state entry case
-         template <class EventType>
+         template <class EventType,class FsmType>
          typename ::boost::enable_if<
              typename is_pseudo_entry<typename EventType::active_state >::type,void
                                     >::type
-         operator()(EventType const& evt, ::boost::msm::back::dummy<3> = 0)
+         operator()(EventType const& evt,FsmType& fsm, ::boost::msm::back::dummy<3> = 0)
          {
              // entry on the FSM
-             (static_cast<Derived*>(self))->on_entry(evt,*self);
+             (static_cast<Derived*>(self))->on_entry(evt,fsm);
              int state_id = get_state_id<stt,typename EventType::active_state>::value;
              // given region starts with the entry pseudo state as active state
              self->m_states[EventType::active_state::zone_index] = state_id;
@@ -1973,27 +1973,27 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
          static void do_exit(library_sm*,Event const& ){}
      };
      // entry/exit for states machines which are themselves embedded in other state machines (composites)
-	 template <class Event>
-     void do_entry(Event const& incomingEvent)
+	 template <class Event,class FsmType>
+     void do_entry(Event const& incomingEvent,FsmType& fsm)
      {
         // by default we activate the history/init states, can be overwritten by direct_event_start_helper
         region_entry_exit_helper< ::boost::mpl::int_<0> >::template do_entry(this,incomingEvent);
         // block immediate handling of events
         m_event_processing = true;
         // if the event is generating a direct entry/fork, set the current state(s) to the direct state(s)
-        direct_event_start_helper(this)(incomingEvent);
+        direct_event_start_helper(this)(incomingEvent,fsm);
         // handle messages which were generated and blocked in the init calls
         m_event_processing = false;
         process_message_queue(this);
      }
-	 template <class Event>
-     void do_exit(Event const& incomingEvent)
+	 template <class Event,class FsmType>
+     void do_exit(Event const& incomingEvent,FsmType& fsm)
      {
         // first recursively exit the sub machines
         // forward the event for handling by sub state machines
         region_entry_exit_helper< ::boost::mpl::int_<0> >::template do_exit(this,incomingEvent);
         // then call our own exit
-        (static_cast<Derived*>(this))->on_exit(incomingEvent,*this);
+        (static_cast<Derived*>(this))->on_exit(incomingEvent,fsm);
         // give the history a chance to handle this (or not).
         m_history.history_exit(this->m_states);
      }
@@ -2052,7 +2052,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
         execute_entry(StateType& astate,EventType const& evt,FsmType& fsm,boost::msm::back::dummy<0> = 0)
     {
         // calls on_entry on the fsm then handles direct entries, fork, entry pseudo state
-        astate.do_entry(evt);
+        astate.do_entry(evt,fsm);
     }
     // variant for states
     template <class StateType,class EventType,class FsmType>
@@ -2079,9 +2079,9 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
     template <class StateType,class EventType,class FsmType>
     static
         typename ::boost::enable_if<typename is_composite_state<StateType>::type,void >::type
-    execute_exit(StateType& astate,EventType const& evt,FsmType& , ::boost::msm::back::dummy<0> = 0)
+    execute_exit(StateType& astate,EventType const& evt,FsmType& fsm, ::boost::msm::back::dummy<0> = 0)
     {
-        astate.do_exit(evt);
+        astate.do_exit(evt,fsm);
     }
     template <class StateType,class EventType,class FsmType>
     static
