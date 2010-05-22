@@ -26,6 +26,8 @@ Boost V1.44.0
   main_file, system_header, or user_header depending whether the handled file
   is the main file to preprocess, a include file opened from #include <>, or
   a include file opened from #include "". 
+- Added support for new Boost visibility macros. Properlz exported all 
+  exceptions, etc.
 
 Boost V1.43.0
 - V2.0.5
