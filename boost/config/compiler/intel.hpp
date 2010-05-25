@@ -172,6 +172,15 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #endif
 
 //
+// Dynamic shared object (DSO) and dynamic-link library (DLL) support
+//
+#if defined(__GNUC__) && (__GNUC__ >= 4)
+#  define BOOST_SYMBOL_EXPORT __attribute__((visibility("default")))
+#  define BOOST_SYMBOL_IMPORT
+#  define BOOST_SYMBOL_VISIBLE __attribute__((visibility("default")))
+#endif
+
+//
 // last known and checked version:
 #if (BOOST_INTEL_CXX_VERSION > 1110)
 #  if defined(BOOST_ASSERT_CONFIG)
