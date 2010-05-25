@@ -42,8 +42,9 @@
 #include <boost/bind.hpp>
 #include <boost/bind/apply.hpp>
 #include <boost/function.hpp>
+#ifndef BOOST_NO_RTTI
 #include <boost/any.hpp>
-
+#endif
 #include <boost/msm/row_tags.hpp>
 #include <boost/msm/back/metafunctions.hpp>
 #include <boost/msm/back/history_policies.hpp>
@@ -1445,7 +1446,9 @@ private:
     template <class Event>
     void no_action(Event const&){}
 
-	HandledEnum process_any_event( ::boost::any const& evt);
+#ifndef BOOST_NO_RTTI
+    HandledEnum process_any_event( ::boost::any const& evt);
+#endif
 
 private:
     // composite accept implementation. First calls accept on the composite, then accept on all its active states.
