@@ -129,31 +129,58 @@
  
  -->
 
-<xsl:template match="//programlisting/phrase[@role='keyword']">
+<xsl:template match="//phrase[@role='keyword' and
+                     (ancestor::programlisting or
+                      ancestor::synopsis or
+                      ancestor::literallayout)]">
   <fo:inline color="#0000AA"><xsl:apply-templates/></fo:inline>
 </xsl:template>
-<xsl:template match="//programlisting/phrase[@role='special']">
+<xsl:template match="//phrase[@role='special' and
+                     (ancestor::programlisting or
+                      ancestor::synopsis or
+                      ancestor::literallayout)]">
   <fo:inline color="#707070"><xsl:apply-templates/></fo:inline>
 </xsl:template>
-<xsl:template match="//programlisting/phrase[@role='preprocessor']">
+<xsl:template match="//phrase[@role='preprocessor' and
+                     (ancestor::programlisting or
+                      ancestor::synopsis or
+                      ancestor::literallayout)]">
   <fo:inline color="#402080"><xsl:apply-templates/></fo:inline>
 </xsl:template>
-<xsl:template match="//programlisting/phrase[@role='char']">
+<xsl:template match="//phrase[@role='char' and
+                     (ancestor::programlisting or
+                      ancestor::synopsis or
+                      ancestor::literallayout)]">
   <fo:inline color="teal"><xsl:apply-templates/></fo:inline>
 </xsl:template>
-<xsl:template match="//programlisting/phrase[@role='comment']">
+<xsl:template match="//phrase[@role='comment' and
+                     (ancestor::programlisting or
+                      ancestor::synopsis or
+                      ancestor::literallayout)]">
   <fo:inline color="#800000"><xsl:apply-templates/></fo:inline>
 </xsl:template>
-<xsl:template match="//programlisting/phrase[@role='string']">
+<xsl:template match="//phrase[@role='string' and
+                     (ancestor::programlisting or
+                      ancestor::synopsis or
+                      ancestor::literallayout)]">
   <fo:inline color="teal"><xsl:apply-templates/></fo:inline>
 </xsl:template>
-<xsl:template match="//programlisting/phrase[@role='number']">
+<xsl:template match="//phrase[@role='number' and
+                     (ancestor::programlisting or
+                      ancestor::synopsis or
+                      ancestor::literallayout)]">
   <fo:inline color="teal"><xsl:apply-templates/></fo:inline>
 </xsl:template>
-<xsl:template match="//programlisting/phrase[@role='white_bkd']">
+<xsl:template match="//phrase[@role='white_bkd' and
+                     (ancestor::programlisting or
+                      ancestor::synopsis or
+                      ancestor::literallayout)]">
   <fo:inline color="#FFFFFF"><xsl:apply-templates/></fo:inline>
 </xsl:template>
-<xsl:template match="//programlisting/phrase[@role='dk_grey_bkd']">
+<xsl:template match="//phrase[@role='dk_grey_bkd' and
+                     (ancestor::programlisting or
+                      ancestor::synopsis or
+                      ancestor::literallayout)]">
   <fo:inline color="#999999"><xsl:apply-templates/></fo:inline>
 </xsl:template>
 
