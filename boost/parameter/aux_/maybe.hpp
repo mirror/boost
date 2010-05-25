@@ -16,6 +16,7 @@
 # include <boost/aligned_storage.hpp>
 # include <boost/type_traits/remove_cv.hpp>
 # include <boost/type_traits/add_const.hpp>
+# include <boost/parameter/aux_/is_maybe.hpp>
 
 namespace boost { namespace parameter { namespace aux {
 
@@ -37,23 +38,21 @@ struct referent_storage
     >::type type;
 };
 
-struct maybe_base {};
-
 template <class T>
 struct maybe : maybe_base
 {
     typedef typename add_reference<
 # if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
         T const
-# else 
+# else
         typename add_const<T>::type
-# endif 
+# endif
     >::type reference;
-    
+
     typedef typename remove_cv<
         BOOST_DEDUCED_TYPENAME remove_reference<reference>::type
     >::type non_cv_value;
-        
+
     explicit maybe(T value_)
       : value(value_)
       , constructed(false)
