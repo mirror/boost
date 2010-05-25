@@ -105,10 +105,6 @@ these three basic patterns of usage:
    itself.] Used when you want to vary control flow depending on get
    success/failure. Or to check for presence of a key.
 
-# [*Why does the separator character come before the path and not after
-    as one would expect?]
-It helps with overload resolution in some cases.
-
 [heading Future Development]
 * More parsers:  YAML, environment strings.
 * More robust XML parser.
