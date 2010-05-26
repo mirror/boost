@@ -14,7 +14,9 @@
 # include <boost/parameter/aux_/preprocessor/flatten.hpp>
 
 # include <boost/preprocessor/repetition/repeat_from_to.hpp>
+# include <boost/preprocessor/comparison/equal.hpp>
 # include <boost/preprocessor/control/if.hpp>
+# include <boost/preprocessor/control/iif.hpp>
 # include <boost/preprocessor/control/expr_if.hpp>
 # include <boost/preprocessor/repetition/enum_params.hpp>
 # include <boost/preprocessor/repetition/enum_binary_params.hpp>
@@ -24,6 +26,7 @@
 # include <boost/preprocessor/seq/for_each_i.hpp> 
 # include <boost/preprocessor/tuple/elem.hpp> 
 # include <boost/preprocessor/seq/fold_left.hpp>
+# include <boost/preprocessor/seq/push_back.hpp>
 # include <boost/preprocessor/seq/size.hpp>
 # include <boost/preprocessor/seq/enum.hpp>
 
