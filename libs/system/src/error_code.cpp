@@ -221,7 +221,9 @@ namespace
   # if ENOTEMPTY != EEXIST // AIX treats ENOTEMPTY and EEXIST as the same value
     case ENOTEMPTY: return make_error_condition( directory_not_empty );
   # endif // ENOTEMPTY != EEXIST
-    case ENOTRECOVERABLE: return make_error_condition( state_not_recoverable );
+  # if ENOTRECOVERABLE != ECONNRESET // the same on some Broadcom chips 
+    case ENOTRECOVERABLE: return make_error_condition( state_not_recoverable ); 
+  # endif // ENOTRECOVERABLE != ECONNRESET 
     case ENOTSOCK: return make_error_condition( not_a_socket );
     case ENOTSUP: return make_error_condition( not_supported );
     case ENOTTY: return make_error_condition( inappropriate_io_control_operation );
@@ -230,7 +232,9 @@ namespace
     case EOPNOTSUPP: return make_error_condition( operation_not_supported );
   # endif // EOPNOTSUPP != ENOTSUP
     case EOVERFLOW: return make_error_condition( value_too_large );
-    case EOWNERDEAD: return make_error_condition( owner_dead );
+  # if EOWNERDEAD != ECONNABORTED // the same on some Broadcom chips 
+    case EOWNERDEAD: return make_error_condition( owner_dead ); 
+  # endif // EOWNERDEAD != ECONNABORTED 
     case EPERM: return make_error_condition( operation_not_permitted );
     case EPIPE: return make_error_condition( broken_pipe );
     case EPROTO: return make_error_condition( protocol_error );
