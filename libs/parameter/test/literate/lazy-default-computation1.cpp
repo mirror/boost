@@ -18,13 +18,11 @@ std::string f(ArgumentPack const& args)
     std::string const& s1 = args[_s1];
     std::string const& s2 = args[_s2];
 #line 1905 "../../../../libs/parameter/doc/index.rst"
-using boost::bind;
-using boost::ref;
-
 typename parameter::binding<
     ArgumentPack, tag::s3, std::string
->::type s3 = args[_s3 || bind(std::plus<std::string>(), ref(s1), ref(s2)) ];
-#line 1931 "../../../../libs/parameter/doc/index.rst"
+>::type s3 = args[_s3
+    || boost::bind(std::plus<std::string>(), boost::ref(s1), boost::ref(s2)) ];
+#line 1930 "../../../../libs/parameter/doc/index.rst"
     return s3;
 }
 

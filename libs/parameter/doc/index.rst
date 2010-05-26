@@ -1902,12 +1902,10 @@ object.
 
 .. parsed-literal::
 
-   using boost::bind;
-   using boost::ref;
-
    typename parameter::binding<
        ArgumentPack, tag::s3, std::string
-   >::type s3 = args[_s3 **|| bind(std::plus<std::string>(), ref(s1), ref(s2))** ];
+   >::type s3 = args[_s3
+       **|| boost::bind(std::plus<std::string>(), boost::ref(s1), boost::ref(s2))** ];
 
 .. @example.prepend('''
    #include <boost/bind.hpp>
