@@ -247,7 +247,7 @@ namespace program_options {
     /** Class thrown when duplicate option description is found. */
     class BOOST_PROGRAM_OPTIONS_DECL duplicate_option_error : public error {
     public:
-        duplicate_option_error(const std::string& what) : error(what) {}
+        duplicate_option_error(const std::string& xwhat) : error(xwhat) {}
     };
 }}
 
