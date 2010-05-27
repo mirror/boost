@@ -21,6 +21,7 @@ test-suite "proto"
     :
         [ run calculator.cpp ]
         [ run deep_copy.cpp ]
+        [ run deduce_domain.cpp ]
         [ run examples.cpp ]
         [ run lambda.cpp ]
         [ run make_expr.cpp ]

@@ -27,6 +27,10 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/proto/proto_fwd.hpp>
 
+#ifndef BOOST_PROTO_ASSERT_VALID_DOMAIN
+# define BOOST_PROTO_ASSERT_VALID_DOMAIN(DOM) BOOST_MPL_ASSERT_NOT((boost::is_same<DOM, boost::proto::detail::not_a_domain>))
+#endif
+
 namespace boost
 {
     namespace proto
@@ -171,7 +175,7 @@ namespace boost
                     typedef A0 common1;                                                             \
                     BOOST_PP_REPEAT_FROM_TO(1, N, M0, ~)                                            \
                     typedef common ## N type;                                                       \
-                    BOOST_MPL_ASSERT_NOT((is_same<type, not_a_domain>));                            \
+                    BOOST_PROTO_ASSERT_VALID_DOMAIN(type);                                          \
                 };                                                                                  \
                                                                                                     \
                 template<BOOST_PP_ENUM_PARAMS(N, typename E)>                                       \
