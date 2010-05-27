@@ -71,16 +71,16 @@ __ ../../../../index.htm
 -------------------------------------
 
 :Authors:       David Abrahams, Daniel Wallin
-:Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
-:Organization:  `Boost Consulting`_
-:Date:          $Date: 2005/07/18 20:34:31 $
+:Contact:       dave@boost-consulting.com, daniel@boostpro.com
+:organization:  `BoostPro Computing`_
+:date:          $Date: 2005/07/17 19:53:01 $
 
-:Copyright:     Copyright David Abrahams, Daniel Wallin 2005. 
-                Distributed under the Boost Software License,
+:copyright:     Copyright David Abrahams, Daniel Wallin
+                2005-2009. Distributed under the Boost Software License,
                 Version 1.0. (See accompanying file LICENSE_1_0.txt
                 or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-.. _`Boost Consulting`: http://www.boost-consulting.com
+.. _`BoostPro Computing`: http://www.boostpro.com
 
 .. _concepts: http://www.boost.org/more/generic_programming.html#concept
 
@@ -1112,7 +1112,7 @@ be used within the body of a class::
   struct callable2
   {
       BOOST_PARAMETER_CONST_MEMBER_FUNCTION(
-          (void), operator(), tag, (required (arg1,(int))(arg2,(int))))
+          (void), call, tag, (required (arg1,(int))(arg2,(int))))
       {
           std::cout << arg1 << ", " << arg2 << std::endl;
       }
@@ -1120,7 +1120,9 @@ be used within the body of a class::
 
 .. @example.prepend('''
    #include <boost/parameter.hpp>
-   #include <iostream>''')
+   #include <iostream>
+   using namespace boost::parameter;
+   ''')
 
 .. @test('compile')
 
@@ -1131,7 +1133,7 @@ arguments on to a separate implementation function::
   struct callable2
   {
       BOOST_PARAMETER_CONST_MEMBER_FUNCTION(
-          (void), operator(), tag, (required (arg1,(int))(arg2,(int))))
+          (void), call, tag, (required (arg1,(int))(arg2,(int))))
       {
           call_impl(arg1,arg2);
       }
@@ -1143,9 +1145,39 @@ arguments on to a separate implementation function::
    #include <boost/parameter.hpp>
 
    BOOST_PARAMETER_NAME(arg1)
-   BOOST_PARAMETER_NAME(arg2)''')
+   BOOST_PARAMETER_NAME(arg2)
+   using namespace boost::parameter;
+   ''')
 
 .. @test('compile')
+
+Static Member Functions
+=======================
+
+To expose a static member function, simply insert the keyword
+“``static``” before the function name:
+
+.. parsed-literal::
+
+  BOOST_PARAMETER_NAME(arg1)
+
+  struct somebody
+  {
+      BOOST_PARAMETER_MEMBER_FUNCTION(
+          (void), **static** f, tag, (optional (arg1,(int),0)))
+      {
+          std::cout << arg1 << std::endl;
+      }
+  };
+
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+   #include <iostream>
+   using namespace boost::parameter;
+   ''')
+
+.. @test('compile')
+
 
 ------------------------------
 Parameter-Enabled Constructors
@@ -1339,10 +1371,10 @@ separately)::
   using boost::mpl::_;
 
   typedef parameter::parameters<
-      required<tag::class_type, is_class<_> >
-    , optional<tag::base_list, mpl::is_sequence<_> >
-    , optional<tag::held_type>
-    , optional<tag::copyable>
+      required<tag::class_type, boost::is_class<_> >
+    , parameter::optional<tag::base_list, mpl::is_sequence<_> >
+    , parameter::optional<tag::held_type>
+    , parameter::optional<tag::copyable>
   > class_signature;
 
   }}
@@ -1351,6 +1383,7 @@ separately)::
    #include <boost/parameter.hpp>
    #include <boost/mpl/is_sequence.hpp>
    #include <boost/noncopyable.hpp>
+   #include <boost/type_traits/is_class.hpp>
    #include <memory>
 
    using namespace boost::parameter;
@@ -1377,12 +1410,13 @@ separately)::
 Argument Packs and Parameter Extraction
 ---------------------------------------
 
-Next, within the body of ``class_`` , we use the |ParameterSpec|\
-'s nested ``::bind< … >`` template to bundle the actual arguments
-into an |ArgumentPack|_ type, and then use the library's ``binding<
-… >`` metafunction to extract “logical parameters”.  Note that
-defaults are specified by supplying an optional third argument to
-``binding< … >``::
+Next, within the body of ``class_`` , we use the |ParameterSpec|\ 's
+nested ``::bind< … >`` template to bundle the actual arguments into an
+|ArgumentPack|_ type, and then use the library's ``value_type< … >``
+metafunction to extract “logical parameters”.  ``value_type< … >`` is
+a lot like ``binding< … >``, but no reference is added to the actual
+argument type.  Note that defaults are specified by passing it an
+optional third argument::
 
   namespace boost { namespace python {
 
@@ -1400,16 +1434,16 @@ defaults are specified by supplying an optional third argument to
       args;
 
       // Extract first logical parameter.
-      typedef typename parameter::binding<
+      typedef typename parameter::value_type<
         args, tag::class_type>::type class_type;
       
-      typedef typename parameter::binding<
+      typedef typename parameter::value_type<
         args, tag::base_list, bases<> >::type base_list;
       
-      typedef typename parameter::binding<
+      typedef typename parameter::value_type<
         args, tag::held_type, class_type>::type held_type;
       
-      typedef typename parameter::binding<
+      typedef typename parameter::value_type<
         args, tag::copyable, void>::type copyable;
   };
 
@@ -1511,12 +1545,12 @@ parameters deducible::
   typedef parameter::parameters<
       required<tag::class_type, is_class<_> >
 
-    , optional<
+    , parameter::optional<
           deduced<tag::base_list>
         , is_base_and_derived<detail::bases_base,_>
       >
 
-    , optional<
+    , parameter::optional<
           deduced<tag::held_type>
         , mpl::not_<
               mpl::or_<
@@ -1526,11 +1560,12 @@ parameters deducible::
           >
       >
 
-    , optional<deduced<tag::copyable>, is_same<noncopyable,_> >
+    , parameter::optional<deduced<tag::copyable>, is_same<noncopyable,_> >
 
   > class_signature;
 
 .. @example.prepend('''
+   #include <boost/type_traits/is_class.hpp>
    namespace boost { namespace python {''')
 
 .. @example.append('''
@@ -1548,16 +1583,16 @@ parameters deducible::
        args;
  
        // Extract first logical parameter.
-       typedef typename parameter::binding<
+       typedef typename parameter::value_type<
          args, tag::class_type>::type class_type;
       
-       typedef typename parameter::binding<
+       typedef typename parameter::value_type<
          args, tag::base_list, bases<> >::type base_list;
       
-       typedef typename parameter::binding<
+       typedef typename parameter::value_type<
          args, tag::held_type, class_type>::type held_type;
       
-       typedef typename parameter::binding<
+       typedef typename parameter::value_type<
          args, tag::copyable, void>::type copyable;
    };
 
@@ -1778,15 +1813,13 @@ function template and allow *it* to do type deduction::
 Occasionally one needs to deduce argument types without an extra
 layer of function call.  For example, suppose we wanted to return
 twice the value of the ``index`` parameter?  In that
-case we can use the ``binding< … >`` metafunction introduced
+case we can use the ``value_type< … >`` metafunction introduced
 `earlier`__::
 
    BOOST_PARAMETER_NAME(index)
 
    template <class ArgumentPack>
-   typename remove_reference<
-       typename parameter::binding<ArgumentPack, tag::index, int>::type
-   >::type
+   typename parameter::value_type<ArgumentPack, tag::index, int>::type
    twice_index(ArgumentPack const& args)
    {
        return 2 * args[_index|42];
@@ -1800,38 +1833,19 @@ case we can use the ``binding< … >`` metafunction introduced
    #include <cassert>
 
    namespace parameter = boost::parameter;
-   using boost::remove_reference;''')
-
-Note that the ``remove_reference< … >`` dance is necessary because
-``binding< … >`` will return a reference type when the argument
-is bound in the argument pack. If we don't strip the reference we
-end up returning a reference to the temporary created in the ``2 * …``
-expression. A convenient shortcut would be to use the ``value_type< … >``
-metafunction:
-
-.. parsed-literal::
-
-   template <class ArgumentPack>
-   typename **parameter::value_type<ArgumentPack, tag::index, int>**::type
-   twice_index(ArgumentPack const& args)
-   {
-       return 2 * args[_index|42];
-   }
-
-.. @example.wrap('namespace with_value_type {', '''
-   int six = twice_index(_index = 3);
-   }''')
-
-.. TODO: binding<> returns a reference. We should use value_type<> here.
+   ''')
 
 .. @example.append('''
    int main()
    {
        assert(six == 6);
-       assert(with_value_type::six == 6);
    }''')
 
 .. @test('run', howmany='all')
+
+Note that if we had used ``binding< … >`` rather than ``value_type< …
+>``, we would end up returning a reference to the temporary created in
+the ``2 * …`` expression.
 
 __ binding_intro_
 
@@ -1888,12 +1902,10 @@ object.
 
 .. parsed-literal::
 
-   using boost::bind;
-   using boost::ref;
-
    typename parameter::binding<
        ArgumentPack, tag::s3, std::string
-   >::type s3 = args[_s3 **|| bind(std::plus<std::string>(), ref(s1), ref(s2))** ];
+   >::type s3 = args[_s3
+       **|| boost::bind(std::plus<std::string>(), boost::ref(s1), boost::ref(s2))** ];
 
 .. @example.prepend('''
    #include <boost/bind.hpp>
