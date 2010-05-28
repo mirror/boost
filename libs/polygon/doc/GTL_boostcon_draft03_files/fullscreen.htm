@@ -1,0 +1,42 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=PowerPoint.Slide>
+<meta name=Generator content="Microsoft PowerPoint 11">
+<link id=Main-File rel=Main-File href="../GTL_boostcon_draft03.htm">
+<link rel=Preview href=preview.wmf>
+<script src=script.js></script>
+<script><!--
+var SCREEN_MODE   = "FullScreen";
+
+function Load() {
+	str=unescape(document.location.hash),idx=str.indexOf('#')
+	if(idx>=0) str=str.substr(1);
+	if(!str) str = "slide0001.htm";
+	
+	if (MHTMLPrefix != "")
+	{
+		str = RemoveFilePrefixFromHref(str);
+		PPTSld.location.replace(MHTMLPrefix+escape(str));	
+	}
+	else
+	{
+		PPTSld.location.replace(str);
+	}
+}
+
+function Unload() {
+	if ( document.body.PPTSldFrameset != null )
+		document.body.PPTSldFrameset.frames[1].document.body.resume();
+}
+
+//-->
+</script>
+</head>
+
+<frameset rows="*" frameborder=0 onload="Load()" onunload="Unload()">
+ <frame name=PPTSld>
+</frameset>
+
+</html>

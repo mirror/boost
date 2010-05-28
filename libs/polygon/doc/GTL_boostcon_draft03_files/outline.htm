@@ -1,0 +1,1891 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=PowerPoint.Slide>
+<meta name=Generator content="Microsoft PowerPoint 11">
+<link id=Main-File rel=Main-File href="../GTL_boostcon_draft03.htm">
+<link rel=Preview href=preview.wmf>
+<meta name=Robots content=NoIndex>
+<script src=script.js></script><script><!--
+
+if( !(IsWin("PPTOtl")||IsWin("PPTNav")||IsWin("PPTOtlNav")) )
+{
+	obj = GetObj("Main-File")
+	parent.location.href=obj.href
+}
+
+var gOtlHiliteClr="#ffffff",gOtlNormalClr="#000000",gOtlActiveClr="#ffff00",gSelected="",gTxtState=false,gChildEntryTable=new Array()
+
+function Load()
+{
+	if( IsWin("PPTOtl" ) ){ LoadOtl(); parent.gOtlLoaded=true; return }
+	if( g_supportsPPTHTML ) {
+		if( IsWin("PPTNav" ) ){ LoadNav("NavObj",UpdNav); parent.gNavLoaded=true; return }
+		if( IsWin("PPTOtlNav" ) ){ LoadNav("OtlNavObj",UpdOtlNav); parent.gOtlNavLoaded=true; return }
+	}
+}
+function Upd(){ if( IsWin("PPTNav") ) LoadNav("NavObj",UpdNav) }
+function LoadNav( oId,UpdFunc )
+{
+	document.ondragstart=CancelDrag
+	document.onselectstart=CancelDrag
+	document.body.style.margin=2
+	UpdFunc()
+	obj=document.all.item(oId)
+	obj.style.display="block"
+	obj.style.visibility="visible"
+	document.bgColor="threedface"
+
+	if( parent.frames["PPTNts"] )
+		notesBtn.style.display = ""
+	if( parent.gHasNarration )
+		nb_voiceBorder.style.display = ""
+}
+function LoadOtl()
+{
+	var otl=GetObj("OtlObj")
+	otl.style.display="block"
+	otl.style.visibility="visible"
+	if( gOtlActiveClr == "" ) gOtlActiveClr=document.linkColor
+	if( gOtlHiliteClr == "" ) gOtlHiliteClr=document.fgColor
+	if( gOtlNormalClr == "" )
+		gOtlNormalClr=document.bgColor
+	else
+		document.bgColor=gOtlNormalClr  
+
+	InitArray()
+
+	if( ObjExists( parent.gCurSld ) ) {
+		ChangeState( parent.gCurSld,gOtlNormalClr,gOtlHiliteClr )
+		gSelected=parent.gCurSld
+	}
+	else gSelected = -1
+
+	UpdOtl()
+}
+function UpdOtl(){ UpdIdx(parent.gCurSld) }
+function UpdIdx( idx )
+{
+	if( gSelected != idx ) {
+		if( gSelected > 0 )
+			ChangeState( gSelected,gOtlHiliteClr,gOtlNormalClr )
+
+		if( ObjExists( idx ) ) {
+			gSelected = idx
+			ChangeState( gSelected,gOtlNormalClr,gOtlHiliteClr )
+		}
+		else gSelected = -1
+	}
+
+	if( gTxtState != parent.gOtlTxtExp ) {
+		state = "block"
+		if( !parent.gOtlTxtExp )
+			state="none"
+
+		for(ii=0; ii<gChildEntryTable.length; ii++) {
+			obj=gChildEntryTable[ii];
+			if( obj.id == null ) continue;
+
+			if( obj.id.indexOf("PPTC") >= 0 )
+				obj.style.display=state;
+		} 
+		gTxtState=parent.gOtlTxtExp
+		if( ObjExists( gSelected ) )
+			ChangeState( gSelected,gOtlNormalClr,gOtlHiliteClr )
+	}
+}
+function InitArray()
+{
+	count=0
+	var list=GetTags(document,"DIV");
+	for(ii=0; ii<list.length; ii++) {
+		obj=list.item(ii)
+		if( obj.id == null ) continue
+
+		if( obj.id.indexOf("PPTC") >= 0 )  
+			gChildEntryTable[count++]=obj
+	}
+}
+function ChangeState( idx,fgColor,bgColor )
+{
+	obj=GetObj("PPTL"+idx)
+	obj.style.color=fgColor
+
+	obj=GetObj("PPTP"+idx)
+	obj.style.backgroundColor=bgColor
+}
+function ChgClr( o,clr ){ if( o.id != "PPTL"+gSelected ) o.style.color=clr }
+function Over( src ){ ChgClr(GetLink(src),gOtlActiveClr) }
+function Out( src ){ ChgClr(GetLink(src),gOtlHiliteClr) }
+function Follow(src){ window.location.href = GetLink(src).href; }
+function ObjExists( ii ) { obj=GetObj("PPTP"+ii ); return( obj ) }
+function GoToSld( href ){ UpdIdx(parent.GetSldNum(href)); parent.GoToSld( href ) }
+function CancelDrag(){ window.event.cancelBubble=true;window.event.returnValue=false}
+function GetLink(src)
+{
+   if(src.tagName=="A") return src
+   else return GetTags(src,"A").item(0)
+}
+
+function UpdNav()
+{
+	txt = "<center>";
+	if( parent.GetHrefObj( parent.gCurSld ).mOrigVis == 1 )
+		txt += "Slide " + parent.GetCurSldNum() + " of " + parent.GetNumSlds()
+	else
+		txt += "Hidden Slide"
+	txt += "</center>";
+	nav_text.innerHTML = txt;
+
+	if( !parent.HasPrevSld() )
+		gBtnArr["nb_prev"].Enabled(0)
+	else
+		gBtnArr["nb_prev"].Enabled(1)
+
+	if( !parent.HasNextSld() )
+		gBtnArr["nb_next"].Enabled(0)
+	else
+		gBtnArr["nb_next"].Enabled(1)
+	gBtnArr["nb_nts"].Enabled(1)
+	gBtnArr["nb_ntsBorder"].SetFlag( parent.gHasNts )
+
+	gBtnArr["nb_sldshw"].Enabled(1)
+	gBtnArr["nb_voice"].Enabled(1)
+}
+
+function ExecBtn()
+{
+	if (event.keyCode == 13)
+	{
+		BtnOnDown();
+		BtnOnUp();
+	}
+}
+function UpdOtlNav()
+{
+	gBtnArr["nb_otl"].SetEnabled();
+
+	if( parent.gOtlOpen )
+		gBtnArr["nb_otlTxt"].Enabled( true );
+	else
+		document.all.item("nb_otlTxtBorder").style.visibility = "hidden";
+}
+
+
+
+
+//--></script>
+<style>
+<!--.PTxt
+	{position:relative;
+	width:100%;
+	margin-top:5px;
+	padding-left:2px;
+	font-weight:bold;}
+.CTxt
+	{position:relative;
+	width:100%;
+	margin-top:5px;}
+a
+	{color:white;
+	text-decoration:none;}
+ul
+	{color:white;
+	margin-bottom:0px;
+	margin-left:20px;}
+.sldNum
+	{margin-top:5px;
+	color:white;}
+.button
+	{position:absolute;
+	width:32px;
+	height:20px;
+	border-style:solid;
+	border-width:1px;
+	border-color:threedface;}
+-->
+</style>
+</head>
+
+<body onload="Load()" style='margin:2px'>
+
+<div id=NavObj onload="Load()" onmouseover="BtnOnOver()"
+onmousedown="BtnOnDown()" onmouseout="BtnOnOut()" onmouseup="BtnOnUp()"
+onkeypress="ExecBtn()" style='display:none;visibility:hidden'>
+<table id="notesBtn" style='display:none;position:relative;width:55px' align=left cellpadding=0
+ cellspacing=0>
+ <td nowrap>
+ <div id="nb_ntsElem" title="Show/Hide
+Notes" align=center style='position:relative;margin-left:5px;margin-right:5px;padding:3px;
+ font-family:Arial;color:buttontext;font-size:9pt; cursor:default'>
+ <img src="notes_flag.gif" id="nb_nts" style='display:none'> &nbsp;Notes</div>
+ <div id="nb_ntsBorder" title ="Show/Hide
+Notes" onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=1 style='position:absolute;top:0%;left:0%;width:100%;height:20px'>
+
+ </div>
+ </td>
+</table>
+
+
+<table style='position:relative;width:70px' align=right cellpadding=0 cellspacing=0>
+ <td nowrap>
+ <div id="nb_sldshwText" title="Full Screen Slide Show" align=center style='position:relative;margin-left:20px;padding:3px;
+ font-family:Arial;color:buttontext;font-size:9pt;cursor:default'>Slide
+Show</div>
+ <div id="nb_sldshwBorder" title="Full Screen Slide Show" onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=5 style='position:absolute;top:0%;left:0%;width:100%;height:20px'>
+ <div style='position:absolute;clip:rect(0px, 18px, 18px, 0px)'><img
+ src="buttons.gif" id="nb_sldshw" style='position:relative;left:-254px'></div>
+ </div>
+ </td>
+ <td>
+ <div id="nb_voiceBorder" style='display:none;position:absolute;top:0;left:-40px;
+ width:20px;height:20px' onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=4 class=button>
+ <div style='position:absolute;clip:rect(0px, 18px, 18px, 0px)'><img
+ src="buttons.gif" id="nb_voice" title="Pause/Play Narration" style='position:
+ relative;left:-290px'></div>
+ </div>
+ </td>
+</table>
+
+<table style='position:relative' align=center cellpadding=0 cellspacing=0>
+ <td nowrap>
+ <div id="nb_prevBorder" onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=2 class=button style='left:-30px'>
+ <div style='position:absolute;clip:rect(0px, 30px, 18px, 0px)'><img
+ src="buttons.gif" id="nb_prev" title="Previous Slide" style='position:relative;
+ left:0px'></div>
+ </div>
+ <span id="nav_text" style='position:relative;top:3px;width:100px;font-family:
+ Arial;color:buttontext;font-size:9pt'></span>
+ <div id="nb_nextBorder" onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=3 class=button>
+ <div style='position:absolute;clip:rect(0px, 30px, 18px, 0px)'><img
+ src="buttons.gif" id="nb_next" title="Next Slide" style='position:relative;
+ left:-90px'></div>
+ </div>
+ </td>
+</table>
+</div>
+
+<div id=OtlNavObj onload="Load()" onmouseover="BtnOnOver()"
+onmousedown="BtnOnDown()" onmouseout="BtnOnOut()" onmouseup="BtnOnUp()"
+onkeypress="ExecBtn()" style='display:none;visibility:hidden'>
+
+<table style='position:relative;width:70px' align=left cellpadding=0 cellspacing=0>
+ <td nowrap><div title="Show/Hide
+Outline" id="nb_otl" onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=11
+ style='position:absolute;top:0%;left:0%;width:100%;height:100%;cursor:default'>
+ <div id="nb_otlElem" align=center style='position:relative;padding:3px;font-family:Arial;
+ color:buttontext;font-size:9pt'>Outline</div></div>
+ </td>
+</table>
+
+<table style='position:relative' align=center cellpadding=0 cellspacing=0>
+ <td>
+ <div style='position:absolute;left:-18px;width:24px;height:20px;border-style:
+ solid;border-width:1px;border-color:threedface' onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=12 id="nb_otlTxtBorder">
+ <div style='position:absolute;clip:rect(0px, 22px, 18px, 0px)'><img
+ src=buttons.gif id="nb_otlTxt" title="Expand/Collapse Outline"
+ style='position:relative;left:-157px'></div>
+ </div>
+ </td>
+</table>
+
+</div>
+
+<div id=OtlObj style='display:none;visibility:hidden;'>
+
+
+<table width="100%" style='font-family:Arial;font-size:9pt'>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>1</font></div>
+  </td>
+  <td width="100%">
+  <div id=PPTP1 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0001.htm');" id=PPTL1>GTL<span
+  style='mso-spacerun:yes'>  </span>Geometry Template Library</a></font></div>
+  <div id=PPTC1 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>-for stl-like polygon manipulation</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>2</font></div>
+  </td>
+  <td>
+  <div id=PPTP2 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0073.htm');" id=PPTL2>Overview</a></font></div>
+  <div id=PPTC2 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Intel badly needed high performance algorithms for planar polygon
+       manipulation</li>
+   <ul>
+    <li>I implemented them</li>
+   </ul>
+   <li>We have 2D Cartesian geometry</li>
+   <ul>
+    <li>Coordinate, Interval, Point, Rectangle, Polygon, Polygon Set</li>
+    <li>Library of concepts for each</li>
+   </ul>
+   <li>Many generic functions that operate on conceptual types</li>
+   <ul>
+    <li>API strives for symmetry, consistency and simplicity</li>
+   </ul>
+   <li>Some pretty heavy weight algorithms under the hood</li>
+   <li>3 man years and 30kloc</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>3</font></div>
+  </td>
+  <td>
+  <div id=PPTP3 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0068.htm');" id=PPTL3>Introduction</a></font></div>
+  <div id=PPTC3 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Implemented goofy template argument inheritance type system and
+       Manhattan geometry features</li>
+   <li>Request for interest from boost in 2007</li>
+   <ul>
+    <li>Discussed the design on boost dev list</li>
+    <li>Found out the design was bad and needed to be redone the boost way</li>
+    <ul>
+     <li>Thank you Joel Guzman</li>
+    </ul>
+   </ul>
+   <li>Added 45 degree geometry features</li>
+   <li>After six months of work we got permission from Intel to release under
+       boost license</li>
+   <ul>
+    <li>Discussed the code on the boost dev list</li>
+    <li>Got a lot of feedback on specific design considerations</li>
+   </ul>
+   <li>Rewrote the interfaces to be more generic by using tag dispatching</li>
+   <ul>
+    <li>Got more feedback on design considerations from boost, especially
+        refinement</li>
+   </ul>
+   <li>Re-rewrote the interfaces to be more generic still and based on SFINAE</li>
+   <li>Added arbitrary-angle geometry features</li>
+   <ul>
+    <li>Got feedback on arbitrary-angle algorithms and robustness
+        considerations from boost</li>
+    <ul>
+     <li>Thank you Fernando Cacciola</li>
+    </ul>
+   </ul>
+   <li>Ported new SFINAE interfaces to MSVC9</li>
+   <ul>
+    <li>Thank you Steven Watanabe</li>
+   </ul>
+   <li>The library now looks more like Joel said it should back in 2007</li>
+   <ul>
+    <li>We may pursue formal review this year</li>
+   </ul>
+   <li>Deployed library to internal users who are using it now to create the
+       next generation of silicon fabrication process technology and
+       microprocessors</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>4</font></div>
+  </td>
+  <td>
+  <div id=PPTP4 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0002.htm');" id=PPTL4>Agenda</a></font></div>
+  <div id=PPTC4 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>GTL Feature Set</li>
+   <li>Benchmark Comparisons</li>
+   <li>Generic Sweep-line Booleans Algorithm</li>
+   <li>Numerical Robustness</li>
+   <li>Geometry Concepts Type System</li>
+   <li>Booleans Operator Syntax</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>5</font></div>
+  </td>
+  <td>
+  <div id=PPTP5 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0003.htm');" id=PPTL5>Primary GTL Feature</a></font></div>
+  <div id=PPTC5 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Boolean operations on sets of polygons</li>
+   <ul>
+    <li>Manhattan</li>
+    <br>
+    <br>
+    <li>45-degree</li>
+    <br>
+    <br>
+    <br>
+    <li>Arbitrary Angle (XOR)</li>
+   </ul>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>6</font></div>
+  </td>
+  <td>
+  <div id=PPTP6 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0067.htm');" id=PPTL6>Using Booleans</a></font></div>
+  <div id=PPTC6 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Productive operator syntax</li>
+   <li>Clip polygon a against bounding box c, then subtract polygon b, storing
+       the result in polygon set d</li>
+   <li>Takes longer to say than to type</li>
+   <li>No try/catch and no memory management</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>7</font></div>
+  </td>
+  <td>
+  <div id=PPTP7 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0004.htm');" id=PPTL7>Details Of Booleans</a></font></div>
+  <div id=PPTC7 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>?</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>8</font></div>
+  </td>
+  <td>
+  <div id=PPTP8 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0005.htm');" id=PPTL8>Details of 45-degree
+  Booleans</a></font></div>
+  <div id=PPTC8 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Preserve 45-degree nature of geometry at output</li>
+   <li>Handle off-grid intersections by inserting an edge to approximate the
+       output region</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>9</font></div>
+  </td>
+  <td>
+  <div id=PPTP9 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0006.htm');" id=PPTL9>Boolean Operation Output
+  Modes</a></font></div>
+  <div id=PPTC9 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Manhattan Booleans</li>
+   <ul>
+    <li>Polygons with lists of holes</li>
+    <li>Keyhole holes to outer polygon</li>
+    <li>Horizontal and vertical sliced rectangle tiling</li>
+   </ul>
+   <li>45-degree Booleans</li>
+   <ul>
+    <li>Polygon with lists of holes</li>
+    <li>Keyhole holes to outer polygon</li>
+    <li>Vertical sliced trapezoid tiling</li>
+   </ul>
+   <li>Arbitrary-angle Booleans</li>
+   <ul>
+    <li>Polygon with lists of holes</li>
+    <li>Keyhole holes to outer polygon</li>
+   </ul>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>10</font></div>
+  </td>
+  <td>
+  <div id=PPTP10 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0007.htm');" id=PPTL10>Polygon
+  Buffering/Resizing/Offsetting</a></font></div>
+  <div id=PPTC10 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Manhattan</li>
+   <ul>
+    <li>Uniform resizing</li>
+    <li>Resizing by different amount in each of the four directions</li>
+    <li>Optionally leave corners unfilled</li>
+   </ul>
+   <li>45-Degree</li>
+   <ul>
+    <li>Uniform resizing</li>
+    <li>Preserve original topology or cut off acute angled corners at resizing
+        distance</li>
+    <li>Snapping options for moving 45-degree edges</li>
+   </ul>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>11</font></div>
+  </td>
+  <td>
+  <div id=PPTP11 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0010.htm');" id=PPTL11>Many More Features</a></font></div>
+  <div id=PPTC11 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Rectangle query tree</li>
+   <li>Maximum enclosed rectangle in Manhattan polygon</li>
+   <li>Connectivity Extraction</li>
+   <li>Property Merge/Map Overlay</li>
+   <li>Etc.</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>12</font></div>
+  </td>
+  <td>
+  <div id=PPTP12 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0011.htm');" id=PPTL12>Small Arbitrary-angle
+  Input Benchmark Comparison</a></font></div>
+  <div id=PPTC12 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Runtime for intersection operation</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>13</font></div>
+  </td>
+  <td>
+  <div id=PPTP13 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0012.htm');" id=PPTL13>Large Scale
+  Arbitrary-angle Performance Comparison</a></font></div>
+  <div id=PPTC13 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>One to two orders of magnitude larger than previous benchmark</li>
+   <li>Though fastest for small inputs, GPC does not scale well</li>
+   <li>gtlb excludes line segment intersection</li>
+   <li>Core Boolean is n log n, Intel micro-architecture accelerates processing
+       of large vectorss</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>14</font></div>
+  </td>
+  <td>
+  <div id=PPTP14 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0013.htm');" id=PPTL14>Manhattan Benchmarking</a></font></div>
+  <div id=PPTC14 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>100X performance delta between optimal gtl 90-degree algorithm and
+       general algorithms</li>
+   <li>gtl 45-degree Boolean is optimal</li>
+   <li>Core arbitrary angle Boolean (gtlb) is optimal</li>
+   <li>gtl arbitrary angle Boolean is slightly suboptimal due to line segment
+       intersection</li>
+   <li>CGAL is optimal, but has a high constant factor</li>
+   <li>GPC and PolyBoolean both scale sub-optimally</li>
+   <br>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>15</font></div>
+  </td>
+  <td>
+  <div id=PPTP15 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0014.htm');" id=PPTL15>Benchmarking
+  Conclusions about GTL</a></font></div>
+  <div id=PPTC15 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>GTL arbitrary-angle Booleans is near optimal</li>
+   <li>Performance of GTL arbitrary-angle Booleans is middle-of-road for small
+       inputs</li>
+   <li>Performance of GTL arbitrary-angle Booleans is best in class for large
+       inputs</li>
+   <li>Performance of GTL could be improved by up to 10X with further work on
+       the arbitrary-angle Booleans</li>
+   <li>If you have 45-degree or Manhattan polygons gtl provides 50X and 100X
+       performance advantage over cgal</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>16</font></div>
+  </td>
+  <td>
+  <div id=PPTP16 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0016.htm');" id=PPTL16>Observations on GPC,
+  CGAL and PolyBoolean</a></font></div>
+  <div id=PPTC16 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>We found at least two different bugs in PolyBoolean</li>
+   <li>We found one bug in CGAL</li>
+   <li>GPC and PolyBoolean have very difficult to use C-style APIs</li>
+   <li>GPC and PolyBoolean cannot merge multiple overlapping polygons in one
+       step</li>
+   <li>GPC and PolyBoolean both have O(n<sup>1.5</sup>log n) line segment
+       intersection algorithms (sort all edges that intersect sweep-line at
+       every x)</li>
+   <li>PolyBoolean has O(n * m * k) algorithm to determine which polygons
+       contain which holes (n polygons, m holes, k points per polygon), which
+       is O(n^2) in the worst case</li>
+   <li>CGAL requires that overlapping polygons be merged before being an input
+       to a Boolean, but can do that itself</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>17</font></div>
+  </td>
+  <td>
+  <div id=PPTP17 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0018.htm');" id=PPTL17>Observations About
+  Preconditions</a></font></div>
+  <div id=PPTC17 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>CGAL throws an “Precondition Violated” exception if an input polygon is
+       self intersecting/overlapping or has “closed” semantic at last vertex</li>
+   <li>PolyBoolean returns a “bad input polygon” error code if an input polygon
+       is self intersecting/overlapping has zero area or is a hole with no
+       enclosing polygon</li>
+   <li>Both PolyBoolean and CGAL inform the user the input is bad when a bug in
+       their algorithms leads to a fatal error</li>
+   <li>GPC produces garbage output when input polygons are self
+       intersecting/overlapping</li>
+   <li>GTL has no preconditions and produces correct output in all cases</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>18</font></div>
+  </td>
+  <td>
+  <div id=PPTP18 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0015.htm');" id=PPTL18>Generic Sweep-line
+  Algorithm</a></font></div>
+  <div id=PPTC18 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Sweep-line algorithms for polygon clipping is a tradition that goes back
+       to 1979</li>
+   <li>Sweep-line is the best known method for line segment intersection</li>
+   <li>GTL implements different sweep lines for Manhattan, 45-degree and
+       general case</li>
+   <li>GTL Booleans sweep-lines are parameterized to allow them to perform
+       multiple operations</li>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>19</font></div>
+  </td>
+  <td>
+  <div id=PPTP19 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0019.htm');" id=PPTL19>Better Booleans through
+  Calculus</a></font></div>
+  <div id=PPTC19 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>We use the same algorithm for Manhattan, 45-degree and general polygon
+       Booleans</li>
+   <br>
+   <br>
+   <br>
+   <br>
+   <li>We will explain how it works in the Manhattan case first, then how we
+       generalize it</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>20</font></div>
+  </td>
+  <td>
+  <div id=PPTP20 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0020.htm');" id=PPTL20>Boolean Polygon Model</a></font></div>
+  <div id=PPTC20 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>We define a polygon as a two dimensional Boolean function</li>
+   <ul>
+    <li>Function evaluates to true inside the polygon</li>
+    <li>Function evaluates to false outside the polygon</li>
+   </ul>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>21</font></div>
+  </td>
+  <td>
+  <div id=PPTP21 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0021.htm');" id=PPTL21>Math With Polygon Model</a></font></div>
+  <div id=PPTC21 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Because the Polygon is now modeled mathematically…</li>
+   <li>We can manipulate it with calculus</li>
+   <li>The derivative with respect to x of the polygon function is the change
+       in polygon count as we cross its vertical edges</li>
+   <li>In one dimension the polygon looks like a step function at its vertical
+       edges</li>
+   <li>Derivative of a step function is an impulse with area of one</li>
+   <li>Summing changes in polygon count from left to right (scanline) performs
+       an integration over the df/dx to produce the original polygon</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>22</font></div>
+  </td>
+  <td>
+  <div id=PPTP22 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0022.htm');" id=PPTL22>The Great Thing About
+  Math</a></font></div>
+  <div id=PPTC22 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>If it works once, it will work a second time</li>
+   <li>The derivative with respect to y of the d/dx of polygon function f is
+       the change in the change in polygon count with respect to x as we enter
+       and leave its vertical edges in the y dimension</li>
+   <li>In the y dimension d f/dx (vertical edges) looks like a step function</li>
+   <li>Derivative of a step function is an impulse with area of one</li>
+   <li>Summing changes in y of changes in x from low to high y integrates the
+       function and produces changes in x (edges) that can be integrated left
+       to right to produce polygons</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>23</font></div>
+  </td>
+  <td>
+  <div id=PPTP23 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0023.htm');" id=PPTL23>1D Boolean OR Operation
+  Example</a></font></div>
+  <div id=PPTC23 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>We want a data model for polygons that can provide the input for
+       sweep-line and be constructed from n polygon verticies in O(n log n)
+       time</li>
+   <li>If you want to sum two piece-wise linear functions (continuous)</li>
+   <ul>
+    <li>you can take the derivative of each (discreet)</li>
+    <li>combine their derivatives in linear time by merging (sum any
+        overlapping values)</li>
+    <li>and then integrate by summing from low to high (in linear time)</li>
+   </ul>
+   <li>The math is what allows the boolean algorithm to achieve optimal time
+       complexity</li>
+   <ul>
+    <li>All we do is sort vertices, but you have to carry the dxdy values along
+        with them so that the meaning of the vertices is retained</li>
+   </ul>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>24</font></div>
+  </td>
+  <td>
+  <div id=PPTP24 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0027.htm');" id=PPTL24>2D, Two Layer Boolean
+  XOR Example</a></font></div>
+  <div id=PPTC24 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>XOR an L shape with a rectangle</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>25</font></div>
+  </td>
+  <td>
+  <div id=PPTP25 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0028.htm');" id=PPTL25>XOR Example</a></font></div>
+  <div id=PPTC25 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Preprocess input polygons into a merged, sorted sequence of change on y
+       of change on x of polygon intersection count</li>
+   <li>Decomposition is linear, sort is n log n, merge is linear</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>26</font></div>
+  </td>
+  <td>
+  <div id=PPTP26 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0029.htm');" id=PPTL26>XOR Example</a></font></div>
+  <div id=PPTC26 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Sweep-line data structure initialized to a single interval from
+       -infinity to +infinity with intersection count of zero for each input
+       layer</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>27</font></div>
+  </td>
+  <td>
+  <div id=PPTP27 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0030.htm');" id=PPTL27>XOR Example</a></font></div>
+  <div id=PPTC27 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Intersect first input interval of intersection count change on x against
+       sweep-line data structure of intersection count intervals</li>
+   <li>Intersection count changes from zero to one on layer1 on that interval</li>
+   <li>0 xor 0 = false, 1 xor 0 = true, output a left edge because Boolean
+       logic changed from false to true</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>28</font></div>
+  </td>
+  <td>
+  <div id=PPTP28 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0031.htm');" id=PPTL28>XOR Example</a></font></div>
+  <div id=PPTC28 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Intersect second input interval against sweep-line data structure</li>
+   <li>Intersection count changes from zero to one for layer2 on that interval</li>
+   <li>1 xor 0 = true, 1 xor 1 = false, so output a right edge because Boolean
+       logic has changed from true to false</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>29</font></div>
+  </td>
+  <td>
+  <div id=PPTP29 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0032.htm');" id=PPTL29>XOR Example</a></font></div>
+  <div id=PPTC29 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Intersect third input interval against sweep-line data structure</li>
+   <li>Intersection count changes from one to zero for layer1 on that interval</li>
+   <li>1 xor 0 = false, 0 xor 1 = false, so no output</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>30</font></div>
+  </td>
+  <td>
+  <div id=PPTP30 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0033.htm');" id=PPTL30>XOR Example</a></font></div>
+  <div id=PPTC30 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Intersect fourth input interval against sweep-line data structure</li>
+   <li>Intersection count changes from one to zero for layer1 on one interval</li>
+   <li>1 xor 0 = true, 0 xor 0 = false, so output a right edge because Boolean
+       logic has changed from true to false</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>31</font></div>
+  </td>
+  <td>
+  <div id=PPTP31 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0034.htm');" id=PPTL31>XOR Example</a></font></div>
+  <div id=PPTC31 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Intersect fifth input interval against sweep-line data structure</li>
+   <li>Intersection count changes from one to zero for layer1 on two intervals</li>
+   <li>1 xor 0 = true, 0 xor 0 = false, so output a right edge for the first
+       interval</li>
+   <li>1 xor 1 = false, 0 xor 1 = true, so output a left edge for the second
+       interval</li>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>32</font></div>
+  </td>
+  <td>
+  <div id=PPTP32 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0035.htm');" id=PPTL32>XOR Example</a></font></div>
+  <div id=PPTC32 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Intersect sixth input interval against sweep-line data structure</li>
+   <li>Intersection count changes from one to zero for layer2 on one interval</li>
+   <li>0 xor 1 = true, 0 xor 0 = false, so output a right edge</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>33</font></div>
+  </td>
+  <td>
+  <div id=PPTP33 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0036.htm');" id=PPTL33>XOR Example</a></font></div>
+  <div id=PPTC33 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Sweep-line Polygon Formation produces output polygon</li>
+   <li>Could be done in the same pass as the xor</li>
+   <li>Leaving it in the derivative form allows direct input to a subsequent
+       Boolean</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>34</font></div>
+  </td>
+  <td>
+  <div id=PPTP34 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0037.htm');" id=PPTL34>Generalizing The
+  Algorithm</a></font></div>
+  <div id=PPTC34 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>We want the derivative of this vertex:</li>
+   <li>We apply d/dx and d/dy</li>
+   <li>To get a result in terms of &#952;:</li>
+   <li>We sweep the &#952; from low to high:</li>
+   <li>As we integrate wrt. y:</li>
+   <li>And finally integrate wrt. x:</li>
+   <li>To which we assign counter clockwise winding and output partial polygon:</li>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>35</font></div>
+  </td>
+  <td>
+  <div id=PPTP35 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0038.htm');" id=PPTL35>The Algorithm Requires
+  No Preconditions</a></font></div>
+  <div id=PPTC35 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>The great thing about math is that it’s general</li>
+   <li>Every special case is just another instance of the general case</li>
+   <li>Every case that breaks other algorithms is handled implicitly and
+       correctly</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>36</font></div>
+  </td>
+  <td>
+  <div id=PPTP36 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0041.htm');" id=PPTL36>Taking Things One Step
+  Further</a></font></div>
+  <div id=PPTC36 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>The Booleans algorithm is parameterized</li>
+   <li>N layer operations are implemented with a single pass of the same
+       algorithm</li>
+   <li>Is used to provide connectivity extraction / spatial map join and
+       property merge / map overlay</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>37</font></div>
+  </td>
+  <td>
+  <div id=PPTP37 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0039.htm');" id=PPTL37>Robustness</a></font></div>
+  <div id=PPTC37 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Strategies employed by GTL are provably robust for all cases</li>
+   <ul>
+    <li>100% robust--not just “works for all the cases we’ve tried”</li>
+   </ul>
+   <li>A firm guarantee of 100% numerical robustness is a very comforting
+       feature</li>
+   <li>PolyBoolean fails to find polygons that enclose some holes because its
+       point-in-polygon calculation is not numerically robust</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>38</font></div>
+  </td>
+  <td>
+  <div id=PPTP38 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0064.htm');" id=PPTL38>Robust Predicate
+  Primitives</a></font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>39</font></div>
+  </td>
+  <td>
+  <div id=PPTP39 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0040.htm');" id=PPTL39>Robust Comparison of
+  Slope</a></font></div>
+  <div id=PPTC39 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>		Segment 1: (x11,y11) to (x12, y12)</li>
+   <li>		Segment 2: (x21,y21) to (x22, y22)</li>
+   <li>		Slope1: (y12 - y11) / (x12 - x11)</li>
+   <li>		Slope2: (y22 - y21) / (x22 - x21)</li>
+   <li>		Slope1 &lt; Slope2 iff (y12 - y11)(x22 - x21) &lt; (x12 - x11)(y22 -
+       y21)</li>
+   <li>Cross multiplication avoids integer truncation of division</li>
+   <li>Requires 65 bits for signed 32 bit integer coordinates</li>
+   <ul>
+    <li>Use long double, multi-precision, SSE quad word, or unsigned 64 bit
+        integer with sign computed separately</li>
+   </ul>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>40</font></div>
+  </td>
+  <td>
+  <div id=PPTP40 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0042.htm');" id=PPTL40>Robust Comparison Of
+  Point and Line Segment</a></font></div>
+  <div id=PPTC40 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Make a 2<sup>nd</sup> segment from one end of the segment to the point</li>
+   <li>Compare slopes</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>41</font></div>
+  </td>
+  <td>
+  <div id=PPTP41 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0045.htm');" id=PPTL41>Robust Line Segment
+  Intersection Check</a></font></div>
+  <div id=PPTC41 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Compute whether the two ends of each segment are on, above or below the
+       other segment</li>
+   <li>Both points of one segment on the same side of the other means no
+       intersection</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>42</font></div>
+  </td>
+  <td>
+  <div id=PPTP42 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0065.htm');" id=PPTL42>Robust Point In Polygon
+  Predicate</a></font></div>
+  <div id=PPTC42 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>For all edges which contain the x value of the point within their x
+       interval</li>
+   <ul>
+    <li>Accumulate the sum of such edges the point is above</li>
+   </ul>
+   <li>The point is inside if the sum is odd</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>43</font></div>
+  </td>
+  <td>
+  <div id=PPTP43 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0044.htm');" id=PPTL43>Robust Calculation of
+  Slope Intercept</a></font></div>
+  <div id=PPTC43 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Apply GMP multi-precision rational and compute exact result</li>
+   <li>To compare two slope intercepts</li>
+   <br>
+   <br>
+   <br>
+   <br>
+   <li>			(requires 97 bits of precision)</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>44</font></div>
+  </td>
+  <td>
+  <div id=PPTP44 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0046.htm');" id=PPTL44>Robust Calculation of
+  Line Segment Intersection Point</a></font></div>
+  <div id=PPTC44 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Apply GMP multi-precision rational and compute exact result.</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>45</font></div>
+  </td>
+  <td>
+  <div id=PPTP45 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0047.htm');" id=PPTL45>Robust Snapping of
+  Non-Integer Intersection Points to Grid</a></font></div>
+  <div id=PPTC45 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Truncate down and to left</li>
+   <li>Causes Edges to move slightly</li>
+   <li>Moving edges may introduce artifacts</li>
+   <li>Non overlapping edges may become parallel and overlap</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>46</font></div>
+  </td>
+  <td>
+  <div id=PPTP46 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0049.htm');" id=PPTL46><span
+  style='mso-spacerun:yes'> </span></a></font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>47</font></div>
+  </td>
+  <td>
+  <div id=PPTP47 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0048.htm');" id=PPTL47>Intersections Creating
+  Intersections</a></font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>48</font></div>
+  </td>
+  <td>
+  <div id=PPTP48 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0050.htm');" id=PPTL48>Acceptable vs.
+  Unacceptable Artifacts</a></font></div>
+  <div id=PPTC48 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>An artifact is unacceptable</li>
+   <ul>
+    <li>if it causes any line segments to intersect other than at their end
+        points</li>
+    <li>if it causes a closed cycle in the input to become open at the output</li>
+   </ul>
+   <li>Inserting vertices on line segments and merging vertices are acceptable</li>
+   <li>We insert vertices and merge vertices to snap to integer grid robustly</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>49</font></div>
+  </td>
+  <td>
+  <div id=PPTP49 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0066.htm');" id=PPTL49>What code that uses GTL
+  looks like</a></font></div>
+  <div id=PPTC49 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Two lines of code in the example invoke five different GTL algorithms</li>
+   <li>Arguments passed into functions are not GTL data types</li>
+   <li>The code is maximally concise, yet easy to read</li>
+   <li>Clip b to the bounding box of a, XOR that with a shrunk by ten then
+       merge into result</li>
+   <li>Details of memory management for intermediate results are abstracted
+       away from the use of algorithms</li>
+   <li>Such code is easy to write and easy to maintain</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>50</font></div>
+  </td>
+  <td>
+  <div id=PPTP50 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0052.htm');" id=PPTL50>C++ Concepts-based Type
+  System</a></font></div>
+  <div id=PPTC50 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>GTL allows application data types to be arguments to its API</li>
+   <li>You can check if your point type lies inside your polygon type with a
+       call to GTL contains() passing in your point and your polygon</li>
+   <li>		gtl::contains(my_polygon, my_point);</li>
+   <li>This is accomplished by use of a C++ Concepts-based statically
+       polymorphic type system</li>
+   <li>This is much more convenient than copying your polygon into a GTL
+       polygon data type first</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>51</font></div>
+  </td>
+  <td>
+  <div id=PPTP51 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0054.htm');" id=PPTL51>C++ Traits</a></font></div>
+  <div id=PPTC51 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>GTL accesses your geometry types through type traits that you must
+       provide</li>
+   <li>These traits map your implementation of a geometry object to GTL’s
+       concept of how a such geometry behaves</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>52</font></div>
+  </td>
+  <td>
+  <div id=PPTP52 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0055.htm');" id=PPTL52>C++ Concepts
+  Overloading</a></font></div>
+  <div id=PPTC52 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>GTL functions that expect a polygon check whether the input data type is
+       registered as a polygon and will not instantiate if the check fails</li>
+   <li>A different gtl function with the same name can instantiate if the data
+       type turns out to be registered as a rectangle, or a point</li>
+   <li>The mechanism for doing this is called substitution failure is not an
+       error (SFINAE)</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>53</font></div>
+  </td>
+  <td>
+  <div id=PPTP53 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0058.htm');" id=PPTL53>Concept Refinement</a></font></div>
+  <div id=PPTC53 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>A rectangle is a refinement of the concept of a polygon</li>
+   <ul>
+    <li>A rectangle narrows-down the definition of polygon to four sided,
+        90-degree angles</li>
+   </ul>
+   <li>A function that requires read only access to a polygon can always work
+       on a rectangle</li>
+   <ul>
+    <li><span style='mso-spacerun:yes'> </span>A polygon is a generalization of
+        a rectangle</li>
+   </ul>
+   <li>A function that requires write-access to a polygon cannot work on a
+       rectangle</li>
+   <ul>
+    <li>A rectangle cannot store a polygon</li>
+   </ul>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>54</font></div>
+  </td>
+  <td>
+  <div id=PPTP54 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0059.htm');" id=PPTL54>GTL Refinement
+  Relationships</a></font></div>
+  <div id=PPTC54 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>GTL assign() function</li>
+   <ul>
+    <li>copies data between objects of the same conceptual type</li>
+    <li>copies data from a refinement to a more general conceptual type</li>
+    <li>instantiates for each of the 49 legal combinations</li>
+    <li>requires only one overload definition per concept type</li>
+    <li>each overload protected by SFINAE concept check</li>
+    <br>
+    <br>
+   </ul>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>55</font></div>
+  </td>
+  <td>
+  <div id=PPTP55 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0060.htm');" id=PPTL55>Concept Casting</a></font></div>
+  <div id=PPTC55 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>A Manhattan polygon is a refinement of a general polygon</li>
+   <li>Given a general polygon and the certainly that it contains only
+       Manhattan data</li>
+   <ul>
+    <li>GTL view_as&lt;polygon_90_concept&gt;() can allow that polygon to be
+        legally passed to functions expecting a Manhattan polygon</li>
+   </ul>
+   <li>This is useful when general objects are used by applications to model
+       several specific kinds of data</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>56</font></div>
+  </td>
+  <td>
+  <div id=PPTP56 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0053.htm');" id=PPTL56>Booleans Operator
+  Syntax</a></font></div>
+  <div id=PPTC56 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>GTL overloads the C++ bit-wise logical operators &amp;|^ and the
+       subtraction operator -</li>
+   <li>They perform Boolean AND, OR, XOR and AND-NOT (SUBTRACT)</li>
+   <li>They work with any polygons, rectangles, vectors or lists of polygons or
+       rectangles and the GTL polygon-set data types</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>57</font></div>
+  </td>
+  <td>
+  <div id=PPTP57 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0061.htm');" id=PPTL57>GTL Booleans Operator
+  Templates</a></font></div>
+  <div id=PPTC57 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>C++ requires that operators return their result by value</li>
+   <li>The return value of a GTL Boolean operator function call is an operator
+       template</li>
+   <li>The operator template stores references to the arguments and defers the
+       operation until the result is requested</li>
+   <li>In this way the operation is performed after the operator template is
+       returned by the operator function</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>58</font></div>
+  </td>
+  <td>
+  <div id=PPTP58 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0062.htm');" id=PPTL58>Operator Templates</a></font></div>
+  <div id=PPTC58 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>When chaining operator templates they cache references to each other and
+       build an expression tree</li>
+   <li>When the final result is requested the expression is evaluated and the
+       result is produced</li>
+   <li>This avoids unnecessary copying of intermediate results</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>59</font></div>
+  </td>
+  <td>
+  <div id=PPTP59 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0070.htm');" id=PPTL59>MSVC SFINAE limitation</a></font></div>
+  <div id=PPTC59 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>SFINAE works in MSVC for the simple cases</li>
+   <li>Order of template instantiation in MSVC depends on type of template</li>
+   <ul>
+    <li>compile time constant vs. by type</li>
+   </ul>
+   <li>Substitution failure of a nested template is an error in MSVC</li>
+   <li>The only way to get reliable SFINAE behavior out of MSVC is to use
+       enable_if with compile time logic expressions</li>
+   <li>It took two weeks of work to port the code from EDG/gcc compatibility to
+       MSVC</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>60</font></div>
+  </td>
+  <td>
+  <div id=PPTP60 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0069.htm');" id=PPTL60>EDG SFINAE Bug</a></font></div>
+  <div id=PPTC60 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>An unnamed enum type cannot be referred to in the template definition
+       when instantiating a template on that type</li>
+   <li>STL uses unnamed enum types with arithmetic operators</li>
+   <li>Substituion of my generic operators for the unnamed STL enum types
+       should fail</li>
+   <li>A bug in older versions of EDG frontend produces a syntax error instead
+       of SFINAE if the template references it in the definition</li>
+   <li>Currently fixed in the version of EGD used by the new icc11</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>61</font></div>
+  </td>
+  <td>
+  <div id=PPTP61 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0071.htm');" id=PPTL61>EDG Bug Workaround</a></font></div>
+  <div id=PPTC61 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>If substitution of a nested template parameter fails before EDG tries to
+       instantiate the template that would refer to the unnamed enum type no
+       syntax error is generated</li>
+   <li>EDG supports nested SFINAE, of course</li>
+   <li>I provide an intermediate meta-function with preprocessor macros in its
+       definition that results in nested SFINAE except when compiled by MSVC to
+       work around both bugs</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+</table>
+
+
+
+</div>
+
+<div style='display:none'><a href=master03.htm></a><a href=master03.xml></a><a
+href=preview.wmf></a><a href=pres.xml></a><a href=slide0001.htm></a><a
+href="slide0001_image001.png"></a><a href="slide0001_image002.jpg"></a><a
+href=slide0073.htm></a><a href=slide0068.htm></a><a href=slide0002.htm></a><a
+href="slide0002_image003.png"></a><a href="slide0002_image004.jpg"></a><a
+href=slide0003.htm></a><a href="slide0003_image005.png"></a><a
+href="slide0003_image006.jpg"></a><a href="slide0003_image007.png"></a><a
+href="slide0003_image008.jpg"></a><a href="slide0003_image009.gif"></a><a
+href="slide0003_image010.jpg"></a><a href="slide0003_image011.gif"></a><a
+href="slide0003_image012.gif"></a><a href=slide0067.htm></a><a
+href="slide0067_image013.gif"></a><a href=slide0004.htm></a><a
+href="slide0004_image014.png"></a><a href="slide0004_image015.gif"></a><a
+href="slide0004_image016.png"></a><a href="slide0004_image017.gif"></a><a
+href="slide0004_image018.gif"></a><a href="slide0004_image019.gif"></a><a
+href="slide0004_image020.gif"></a><a href="slide0004_image021.gif"></a><a
+href="slide0004_image022.gif"></a><a href="slide0004_image023.gif"></a><a
+href="slide0004_image024.gif"></a><a href="slide0004_image025.gif"></a><a
+href="slide0004_image026.gif"></a><a href="slide0004_image027.gif"></a><a
+href="slide0004_image028.gif"></a><a href="slide0004_image029.gif"></a><a
+href=slide0005.htm></a><a href="slide0005_image030.png"></a><a
+href="slide0005_image031.jpg"></a><a href=slide0006.htm></a><a
+href=slide0006.xml></a><a href="slide0006_image032.gif"></a><a
+href="slide0006_image033.gif"></a><a href="slide0006_image034.gif"></a><a
+href="slide0006_image035.gif"></a><a href="slide0006_image036.gif"></a><a
+href="slide0006_image037.gif"></a><a href="slide0006_image038.gif"></a><a
+href="slide0006_image039.gif"></a><a href="slide0006_image040.gif"></a><a
+href="slide0006_image041.gif"></a><a href="slide0006_image042.gif"></a><a
+href="slide0006_image043.gif"></a><a href="slide0006_image044.gif"></a><a
+href="slide0006_image045.gif"></a><a href="slide0006_image046.gif"></a><a
+href="slide0006_image047.gif"></a><a href="slide0006_image048.gif"></a><a
+href="slide0006_image049.gif"></a><a href="slide0006_image050.gif"></a><a
+href="slide0006_image051.gif"></a><a href="slide0006_image052.gif"></a><a
+href="slide0006_image053.gif"></a><a href="slide0006_image054.gif"></a><a
+href="slide0006_image055.gif"></a><a href="slide0006_image056.gif"></a><a
+href="slide0006_image057.gif"></a><a href="slide0006_image058.gif"></a><a
+href="slide0006_image059.gif"></a><a href="slide0006_image060.gif"></a><a
+href="slide0006_image061.gif"></a><a href="slide0006_image062.gif"></a><a
+href="slide0006_image063.gif"></a><a href="slide0006_image064.gif"></a><a
+href="slide0006_image065.gif"></a><a href="slide0006_image066.gif"></a><a
+href="slide0006_image067.gif"></a><a href="slide0006_image068.gif"></a><a
+href="slide0006_image069.gif"></a><a href="slide0006_image070.gif"></a><a
+href="slide0006_image071.gif"></a><a href="slide0006_image072.gif"></a><a
+href="slide0006_image073.gif"></a><a href="slide0006_image074.gif"></a><a
+href="slide0006_image075.gif"></a><a href="slide0006_image076.gif"></a><a
+href="slide0006_image077.gif"></a><a href="slide0006_image078.gif"></a><a
+href="slide0006_image079.gif"></a><a href="slide0006_image080.gif"></a><a
+href="slide0006_image081.gif"></a><a href=slide0007.htm></a><a
+href="slide0007_image082.gif"></a><a href=slide0010.htm></a><a
+href="slide0010_image083.gif"></a><a href=slide0011.htm></a><a
+href="slide0011_image084.png"></a><a href="slide0011_image085.jpg"></a><a
+href="slide0011_image086.png"></a><a href="slide0011_image087.jpg"></a><a
+href="slide0011_image088.gif"></a><a href="slide0011_image089.gif"></a><a
+href="slide0011_image090.png"></a><a href="slide0011_image091.jpg"></a><a
+href="slide0011_image092.gif"></a><a href=slide0012.htm></a><a
+href="slide0012_image093.png"></a><a href="slide0012_image094.jpg"></a><a
+href="slide0012_image095.gif"></a><a href="slide0012_image096.gif"></a><a
+href="slide0012_image097.gif"></a><a href="slide0012_image098.gif"></a><a
+href="slide0012_image099.gif"></a><a href="slide0012_image100.gif"></a><a
+href=slide0013.htm></a><a href="slide0013_image101.png"></a><a
+href="slide0013_image102.jpg"></a><a href="slide0013_image103.gif"></a><a
+href="slide0013_image104.gif"></a><a href="slide0013_image105.gif"></a><a
+href="slide0013_image106.gif"></a><a href="slide0013_image107.gif"></a><a
+href="slide0013_image108.gif"></a><a href="slide0013_image109.gif"></a><a
+href="slide0013_image110.gif"></a><a href="slide0013_image111.gif"></a><a
+href="slide0013_image112.gif"></a><a href="slide0013_image113.gif"></a><a
+href="slide0013_image114.gif"></a><a href="slide0013_image115.gif"></a><a
+href="slide0013_image116.gif"></a><a href="slide0013_image117.gif"></a><a
+href="slide0013_image118.gif"></a><a href=slide0014.htm></a><a
+href=slide0016.htm></a><a href=slide0018.htm></a><a href=slide0015.htm></a><a
+href=slide0019.htm></a><a href="slide0019_image119.png"></a><a
+href="slide0019_image120.jpg"></a><a href="slide0019_image121.png"></a><a
+href="slide0019_image122.jpg"></a><a href=slide0020.htm></a><a
+href="slide0020_image123.gif"></a><a href="slide0020_image124.gif"></a><a
+href="slide0020_image125.gif"></a><a href="slide0020_image126.gif"></a><a
+href="slide0020_image127.gif"></a><a href="slide0020_image128.gif"></a><a
+href=slide0021.htm></a><a href="slide0021_image129.gif"></a><a
+href="slide0021_image130.gif"></a><a href="slide0021_image131.gif"></a><a
+href="slide0021_image132.gif"></a><a href="slide0021_image133.gif"></a><a
+href="slide0021_image134.gif"></a><a href="slide0021_image135.gif"></a><a
+href="slide0021_image136.gif"></a><a href="slide0021_image137.gif"></a><a
+href="slide0021_image138.gif"></a><a href="slide0021_image139.gif"></a><a
+href="slide0021_image140.gif"></a><a href="slide0021_image141.gif"></a><a
+href="slide0021_image142.gif"></a><a href="slide0021_image143.gif"></a><a
+href="slide0021_image144.gif"></a><a href="slide0021_image145.gif"></a><a
+href="slide0021_image146.gif"></a><a href="slide0021_image147.gif"></a><a
+href=slide0022.htm></a><a href="slide0022_image148.gif"></a><a
+href="slide0022_image149.gif"></a><a href="slide0022_image150.gif"></a><a
+href="slide0022_image151.gif"></a><a href="slide0022_image152.gif"></a><a
+href="slide0022_image153.gif"></a><a href="slide0022_image154.gif"></a><a
+href="slide0022_image155.gif"></a><a href="slide0022_image156.gif"></a><a
+href="slide0022_image157.gif"></a><a href="slide0022_image158.gif"></a><a
+href="slide0022_image159.gif"></a><a href="slide0022_image160.gif"></a><a
+href="slide0022_image161.gif"></a><a href="slide0022_image162.gif"></a><a
+href="slide0022_image163.gif"></a><a href="slide0022_image164.gif"></a><a
+href="slide0022_image165.gif"></a><a href="slide0022_image166.gif"></a><a
+href="slide0022_image167.gif"></a><a href="slide0022_image168.gif"></a><a
+href="slide0022_image169.gif"></a><a href=slide0023.htm></a><a
+href="slide0023_image170.gif"></a><a href="slide0023_image171.gif"></a><a
+href="slide0023_image172.gif"></a><a href="slide0023_image173.gif"></a><a
+href="slide0023_image174.gif"></a><a href="slide0023_image175.gif"></a><a
+href="slide0023_image176.gif"></a><a href="slide0023_image177.gif"></a><a
+href="slide0023_image178.gif"></a><a href="slide0023_image179.gif"></a><a
+href="slide0023_image180.gif"></a><a href="slide0023_image181.gif"></a><a
+href="slide0023_image182.gif"></a><a href="slide0023_image183.gif"></a><a
+href="slide0023_image184.gif"></a><a href="slide0023_image185.gif"></a><a
+href="slide0023_image186.gif"></a><a href="slide0023_image187.gif"></a><a
+href="slide0023_image188.gif"></a><a href="slide0023_image189.gif"></a><a
+href="slide0023_image190.gif"></a><a href="slide0023_image191.gif"></a><a
+href="slide0023_image192.gif"></a><a href="slide0023_image193.gif"></a><a
+href="slide0023_image194.gif"></a><a href="slide0023_image195.gif"></a><a
+href="slide0023_image196.gif"></a><a href="slide0023_image197.gif"></a><a
+href="slide0023_image198.gif"></a><a href="slide0023_image199.gif"></a><a
+href="slide0023_image200.gif"></a><a href="slide0023_image201.gif"></a><a
+href="slide0023_image202.gif"></a><a href="slide0023_image203.gif"></a><a
+href="slide0023_image204.gif"></a><a href="slide0023_image205.gif"></a><a
+href="slide0023_image206.gif"></a><a href="slide0023_image207.gif"></a><a
+href="slide0023_image208.gif"></a><a href=slide0027.htm></a><a
+href="slide0027_image209.gif"></a><a href="slide0027_image210.gif"></a><a
+href="slide0027_image211.gif"></a><a href="slide0027_image212.gif"></a><a
+href="slide0027_image213.gif"></a><a href="slide0027_image214.gif"></a><a
+href="slide0027_image215.gif"></a><a href="slide0027_image216.gif"></a><a
+href="slide0027_image217.gif"></a><a href="slide0027_image218.gif"></a><a
+href="slide0027_image219.gif"></a><a href="slide0027_image220.gif"></a><a
+href="slide0027_image221.gif"></a><a href="slide0027_image222.gif"></a><a
+href="slide0027_image223.gif"></a><a href="slide0027_image224.gif"></a><a
+href="slide0027_image225.gif"></a><a href="slide0027_image226.gif"></a><a
+href="slide0027_image227.gif"></a><a href="slide0027_image228.gif"></a><a
+href="slide0027_image229.gif"></a><a href="slide0027_image230.gif"></a><a
+href="slide0027_image231.gif"></a><a href=slide0028.htm></a><a
+href="slide0028_image232.gif"></a><a href="slide0028_image233.gif"></a><a
+href="slide0028_image234.gif"></a><a href="slide0028_image235.gif"></a><a
+href="slide0028_image236.gif"></a><a href="slide0028_image237.gif"></a><a
+href="slide0028_image238.gif"></a><a href="slide0028_image239.gif"></a><a
+href="slide0028_image240.gif"></a><a href="slide0028_image241.gif"></a><a
+href="slide0028_image242.gif"></a><a href="slide0028_image243.gif"></a><a
+href="slide0028_image244.gif"></a><a href="slide0028_image245.gif"></a><a
+href="slide0028_image246.gif"></a><a href="slide0028_image247.gif"></a><a
+href="slide0028_image248.gif"></a><a href="slide0028_image249.gif"></a><a
+href="slide0028_image250.gif"></a><a href="slide0028_image251.gif"></a><a
+href="slide0028_image252.gif"></a><a href="slide0028_image253.gif"></a><a
+href="slide0028_image254.gif"></a><a href="slide0028_image255.gif"></a><a
+href="slide0028_image256.gif"></a><a href="slide0028_image257.gif"></a><a
+href="slide0028_image258.gif"></a><a href="slide0028_image259.gif"></a><a
+href="slide0028_image260.gif"></a><a href="slide0028_image261.gif"></a><a
+href="slide0028_image262.gif"></a><a href="slide0028_image263.gif"></a><a
+href="slide0028_image264.gif"></a><a href="slide0028_image265.gif"></a><a
+href="slide0028_image266.gif"></a><a href=slide0029.htm></a><a
+href="slide0029_image267.gif"></a><a href="slide0029_image268.gif"></a><a
+href="slide0029_image269.gif"></a><a href="slide0029_image270.gif"></a><a
+href="slide0029_image271.gif"></a><a href="slide0029_image272.gif"></a><a
+href="slide0029_image273.gif"></a><a href="slide0029_image274.gif"></a><a
+href="slide0029_image275.gif"></a><a href="slide0029_image276.gif"></a><a
+href="slide0029_image277.gif"></a><a href=slide0030.htm></a><a
+href="slide0030_image278.gif"></a><a href="slide0030_image279.gif"></a><a
+href="slide0030_image280.gif"></a><a href="slide0030_image281.gif"></a><a
+href="slide0030_image282.gif"></a><a href="slide0030_image283.gif"></a><a
+href="slide0030_image284.gif"></a><a href="slide0030_image285.gif"></a><a
+href="slide0030_image286.gif"></a><a href="slide0030_image287.gif"></a><a
+href="slide0030_image288.gif"></a><a href="slide0030_image289.gif"></a><a
+href="slide0030_image290.gif"></a><a href="slide0030_image291.gif"></a><a
+href="slide0030_image292.gif"></a><a href=slide0031.htm></a><a
+href="slide0031_image293.gif"></a><a href="slide0031_image294.gif"></a><a
+href="slide0031_image295.gif"></a><a href="slide0031_image296.gif"></a><a
+href="slide0031_image297.gif"></a><a href="slide0031_image298.gif"></a><a
+href="slide0031_image299.gif"></a><a href="slide0031_image300.gif"></a><a
+href="slide0031_image301.gif"></a><a href="slide0031_image302.gif"></a><a
+href="slide0031_image303.gif"></a><a href="slide0031_image304.gif"></a><a
+href="slide0031_image305.gif"></a><a href="slide0031_image306.gif"></a><a
+href="slide0031_image307.gif"></a><a href="slide0031_image308.gif"></a><a
+href="slide0031_image309.gif"></a><a href=slide0032.htm></a><a
+href="slide0032_image310.gif"></a><a href="slide0032_image311.gif"></a><a
+href="slide0032_image312.gif"></a><a href="slide0032_image313.gif"></a><a
+href="slide0032_image314.gif"></a><a href="slide0032_image315.gif"></a><a
+href="slide0032_image316.gif"></a><a href="slide0032_image317.gif"></a><a
+href="slide0032_image318.gif"></a><a href="slide0032_image319.gif"></a><a
+href="slide0032_image320.gif"></a><a href="slide0032_image321.gif"></a><a
+href="slide0032_image322.gif"></a><a href="slide0032_image323.gif"></a><a
+href="slide0032_image324.gif"></a><a href="slide0032_image325.gif"></a><a
+href="slide0032_image326.gif"></a><a href="slide0032_image327.gif"></a><a
+href=slide0033.htm></a><a href="slide0033_image328.gif"></a><a
+href="slide0033_image329.gif"></a><a href="slide0033_image330.gif"></a><a
+href="slide0033_image331.gif"></a><a href="slide0033_image332.gif"></a><a
+href="slide0033_image333.gif"></a><a href="slide0033_image334.gif"></a><a
+href="slide0033_image335.gif"></a><a href="slide0033_image336.gif"></a><a
+href="slide0033_image337.gif"></a><a href="slide0033_image338.gif"></a><a
+href="slide0033_image339.gif"></a><a href="slide0033_image340.gif"></a><a
+href="slide0033_image341.gif"></a><a href="slide0033_image342.gif"></a><a
+href="slide0033_image343.gif"></a><a href="slide0033_image344.gif"></a><a
+href="slide0033_image345.gif"></a><a href="slide0033_image346.gif"></a><a
+href=slide0034.htm></a><a href="slide0034_image347.gif"></a><a
+href="slide0034_image348.gif"></a><a href="slide0034_image349.gif"></a><a
+href="slide0034_image350.gif"></a><a href="slide0034_image351.gif"></a><a
+href="slide0034_image352.gif"></a><a href="slide0034_image353.gif"></a><a
+href="slide0034_image354.gif"></a><a href="slide0034_image355.gif"></a><a
+href="slide0034_image356.gif"></a><a href="slide0034_image357.gif"></a><a
+href="slide0034_image358.gif"></a><a href="slide0034_image359.gif"></a><a
+href="slide0034_image360.gif"></a><a href="slide0034_image361.gif"></a><a
+href="slide0034_image362.gif"></a><a href="slide0034_image363.gif"></a><a
+href="slide0034_image364.gif"></a><a href="slide0034_image365.gif"></a><a
+href="slide0034_image366.gif"></a><a href="slide0034_image367.gif"></a><a
+href="slide0034_image368.gif"></a><a href="slide0034_image369.gif"></a><a
+href="slide0034_image370.gif"></a><a href=slide0035.htm></a><a
+href="slide0035_image371.gif"></a><a href="slide0035_image372.gif"></a><a
+href="slide0035_image373.gif"></a><a href="slide0035_image374.gif"></a><a
+href="slide0035_image375.gif"></a><a href="slide0035_image376.gif"></a><a
+href="slide0035_image377.gif"></a><a href="slide0035_image378.gif"></a><a
+href="slide0035_image379.gif"></a><a href="slide0035_image380.gif"></a><a
+href="slide0035_image381.gif"></a><a href="slide0035_image382.gif"></a><a
+href="slide0035_image383.gif"></a><a href="slide0035_image384.gif"></a><a
+href="slide0035_image385.gif"></a><a href="slide0035_image386.gif"></a><a
+href="slide0035_image387.gif"></a><a href="slide0035_image388.gif"></a><a
+href="slide0035_image389.gif"></a><a href="slide0035_image390.gif"></a><a
+href="slide0035_image391.gif"></a><a href="slide0035_image392.gif"></a><a
+href="slide0035_image393.gif"></a><a href="slide0035_image394.gif"></a><a
+href="slide0035_image395.gif"></a><a href="slide0035_image396.gif"></a><a
+href="slide0035_image397.gif"></a><a href=slide0036.htm></a><a
+href="slide0036_image398.gif"></a><a href="slide0036_image399.gif"></a><a
+href="slide0036_image400.gif"></a><a href="slide0036_image401.gif"></a><a
+href="slide0036_image402.gif"></a><a href="slide0036_image403.gif"></a><a
+href="slide0036_image404.gif"></a><a href="slide0036_image405.gif"></a><a
+href="slide0036_image406.gif"></a><a href="slide0036_image407.gif"></a><a
+href="slide0036_image408.gif"></a><a href="slide0036_image409.gif"></a><a
+href="slide0036_image410.gif"></a><a href="slide0036_image411.gif"></a><a
+href="slide0036_image412.gif"></a><a href="slide0036_image413.gif"></a><a
+href="slide0036_image414.gif"></a><a href="slide0036_image415.gif"></a><a
+href="slide0036_image416.gif"></a><a href="slide0036_image417.gif"></a><a
+href="slide0036_image418.gif"></a><a href="slide0036_image419.gif"></a><a
+href="slide0036_image420.gif"></a><a href=slide0037.htm></a><a
+href="slide0037_image421.gif"></a><a href="slide0037_image422.gif"></a><a
+href="slide0037_image423.gif"></a><a href="slide0037_image424.gif"></a><a
+href="slide0037_image425.gif"></a><a href="slide0037_image426.gif"></a><a
+href="slide0037_image427.gif"></a><a href=slide0038.htm></a><a
+href="slide0038_image428.gif"></a><a href="slide0038_image429.gif"></a><a
+href=slide0041.htm></a><a href=slide0039.htm></a><a href=slide0064.htm></a><a
+href="slide0064_image430.gif"></a><a href="slide0064_image431.gif"></a><a
+href="slide0064_image432.gif"></a><a href="slide0064_image433.gif"></a><a
+href="slide0064_image434.gif"></a><a href="slide0064_image435.gif"></a><a
+href="slide0064_image436.gif"></a><a href="slide0064_image437.gif"></a><a
+href="slide0064_image438.gif"></a><a href=slide0040.htm></a><a
+href="slide0040_image439.gif"></a><a href="slide0040_image440.gif"></a><a
+href=slide0042.htm></a><a href="slide0042_image441.gif"></a><a
+href="slide0042_image442.gif"></a><a href="slide0042_image443.gif"></a><a
+href="slide0042_image444.gif"></a><a href=slide0045.htm></a><a
+href="slide0045_image445.gif"></a><a href=slide0065.htm></a><a
+href="slide0065_image446.gif"></a><a href="slide0065_image447.gif"></a><a
+href="slide0065_image448.gif"></a><a href="slide0065_image449.gif"></a><a
+href=slide0044.htm></a><a href="slide0044_image450.gif"></a><a
+href="slide0044_image451.gif"></a><a href="slide0044_image452.gif"></a><a
+href="slide0044_image453.gif"></a><a href="slide0044_image454.gif"></a><a
+href=slide0046.htm></a><a href="slide0046_image455.gif"></a><a
+href="slide0046_image456.gif"></a><a href=slide0047.htm></a><a
+href=slide0047.xml></a><a href="slide0047_image457.gif"></a><a
+href="slide0047_image458.gif"></a><a href=slide0049.htm></a><a
+href=slide0049.xml></a><a href="slide0049_image459.gif"></a><a
+href=slide0048.htm></a><a href=slide0048.xml></a><a
+href="slide0048_image460.gif"></a><a href="slide0048_image461.gif"></a><a
+href="slide0048_image462.gif"></a><a href=slide0050.htm></a><a
+href=slide0066.htm></a><a href="slide0066_image463.gif"></a><a
+href=slide0052.htm></a><a href=slide0054.htm></a><a href=slide0055.htm></a><a
+href="slide0055_image464.gif"></a><a href=slide0058.htm></a><a
+href=slide0059.htm></a><a href=slide0059.xml></a><a
+href="slide0059_image465.gif"></a><a href="slide0059_image466.png"></a><a
+href="slide0059_image467.jpg"></a><a href=slide0060.htm></a><a
+href=slide0053.htm></a><a href=slide0061.htm></a><a href=slide0062.htm></a><a
+href="slide0062_image468.gif"></a><a href="slide0062_image469.gif"></a><a
+href="slide0062_image470.gif"></a><a href=slide0070.htm></a><a
+href=slide0069.htm></a><a href=slide0071.htm></a><a
+href="slide0071_image471.gif"></a><a href=master01.htm></a><a
+href="master03_stylesheet.css"></a><a href=script.js></a><a
+href="../GTL_boostcon_draft03.htm"></a><a href=fullscreen.htm></a><a
+href=buttons.gif></a><a href=frame.htm></a><a href=outline.htm></a></div>
+
+</body>
+
+</html>

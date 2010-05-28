@@ -1,0 +1,452 @@
+<xml xmlns:v="urn:schemas-microsoft-com:vml"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:p="urn:schemas-microsoft-com:office:powerpoint"
+ xmlns:oa="urn:schemas-microsoft-com:office:activation">
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="7"/>
+ </o:shapelayout><p:shaperange id="_x0000_s7170">
+  <v:shape id="_x0000_s7170" type="#_x0000_m1026" style='position:absolute;
+   left:24pt;top:21.625pt;width:684pt;height:90pt'>
+   <v:fill o:detectmouseclick="f"/>
+   <v:stroke o:forcedash="f"/>
+   <o:lock v:ext="edit" text="f"/>
+   <p:placeholder type="title"/>
+  </v:shape><v:shape id="_x0000_s7336" type="#_x0000_m1027" style='position:absolute;
+   left:0;top:100.75pt;width:378.25pt;height:428pt' o:spt="1" path="m,l,21600r21600,l21600,xe"
+   filled="f" fillcolor="#bbe0e3 [4]" stroked="f" strokecolor="black [1]">
+   <v:fill color2="white [0]" o:detectmouseclick="f"/>
+   <v:stroke joinstyle="miter" o:forcedash="f"/>
+   <v:shadow color="gray [2]"/>
+   <v:path gradientshapeok="t" o:connecttype="rect"/>
+   <o:lock v:ext="edit" text="f" grouping="t"/>
+   <p:placeholder type="body" position="1"/>
+  </v:shape><v:shapetype id="_x0000_t13" coordsize="21600,21600" o:spt="13"
+   adj="16200,5400" path="m@0,l@0@1,0@1,0@2@0@2@0,21600,21600,10800xe">
+   <v:stroke joinstyle="miter"/>
+   <v:formulas>
+    <v:f eqn="val #0"/>
+    <v:f eqn="val #1"/>
+    <v:f eqn="sum height 0 #1"/>
+    <v:f eqn="sum 10800 0 #1"/>
+    <v:f eqn="sum width 0 #0"/>
+    <v:f eqn="prod @4 @3 10800"/>
+    <v:f eqn="sum width 0 @5"/>
+   </v:formulas>
+   <v:path o:connecttype="custom" o:connectlocs="@0,0;0,10800;@0,21600;21600,10800"
+    o:connectangles="270,180,90,0" textboxrect="0,@1,@6,@2"/>
+   <v:handles>
+    <v:h position="#0,#1" xrange="0,21600" yrange="0,10800"/>
+   </v:handles>
+  </v:shapetype><v:shape id="_x0000_s7450" type="#_x0000_t13" style='position:absolute;
+   left:497.875pt;top:439.5pt;width:96pt;height:90pt;mso-wrap-style:none;
+   v-text-anchor:middle' filled="f" fillcolor="#bbe0e3 [4]" strokecolor="black [1]">
+   <v:fill color2="white [0]"/>
+   <v:shadow color="gray [2]"/>
+  </v:shape><v:line id="_x0000_s7451" style='position:absolute' from="605.875pt,463.5pt"
+   to="653.875pt,463.5pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7452" style='position:absolute' from="605.875pt,493.5pt"
+   to="665.875pt,493.5pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7453" style='position:absolute' from="653.875pt,469.5pt"
+   to="701.875pt,469.5pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7454" style='position:absolute' from="701.875pt,469.5pt"
+   to="701.875pt,523.5pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7455" style='position:absolute' from="653.875pt,463.5pt"
+   to="653.875pt,493.5pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7456" style='position:absolute;flip:y' from="605.875pt,463.5pt"
+   to="605.875pt,493.5pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7457" style='position:absolute' from="665.875pt,523.5pt"
+   to="701.875pt,523.5pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7458" style='position:absolute' from="665.875pt,469.5pt"
+   to="665.875pt,523.5pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7459" style='position:absolute' from="623.875pt,469.5pt"
+   to="641.875pt,469.5pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7460" style='position:absolute;flip:y' from="623.875pt,463.5pt"
+   to="623.875pt,493.5pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7461" style='position:absolute;flip:y' from="641.875pt,463.5pt"
+   to="641.875pt,493.5pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7462" style='position:absolute' from="623.875pt,481.5pt"
+   to="641.875pt,481.5pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7463">
+  <v:line id="_x0000_s7463" style='position:absolute' from="391.875pt,127.625pt"
+   to="439.875pt,127.625pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7464">
+  <v:line id="_x0000_s7464" style='position:absolute' from="391.875pt,157.625pt"
+   to="451.875pt,157.625pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7465">
+  <v:line id="_x0000_s7465" style='position:absolute' from="439.875pt,133.625pt"
+   to="487.875pt,133.625pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7466">
+  <v:line id="_x0000_s7466" style='position:absolute' from="487.875pt,133.625pt"
+   to="487.875pt,187.625pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7467">
+  <v:line id="_x0000_s7467" style='position:absolute' from="439.875pt,127.625pt"
+   to="439.875pt,133.625pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7468">
+  <v:line id="_x0000_s7468" style='position:absolute;flip:y' from="391.875pt,127.625pt"
+   to="391.875pt,157.625pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7469">
+  <v:line id="_x0000_s7469" style='position:absolute' from="451.875pt,187.625pt"
+   to="487.875pt,187.625pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7470">
+  <v:line id="_x0000_s7470" style='position:absolute' from="451.875pt,157.625pt"
+   to="451.875pt,187.625pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7471">
+  <v:line id="_x0000_s7471" style='position:absolute' from="409.875pt,133.625pt"
+   to="427.875pt,133.625pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7472">
+  <v:line id="_x0000_s7472" style='position:absolute;flip:y' from="409.875pt,133.625pt"
+   to="409.875pt,145.625pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7473">
+  <v:line id="_x0000_s7473" style='position:absolute;flip:y' from="427.875pt,133.625pt"
+   to="427.875pt,145.625pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7474">
+  <v:line id="_x0000_s7474" style='position:absolute' from="409.875pt,145.625pt"
+   to="427.875pt,145.625pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7475">
+  <v:line id="_x0000_s7475" style='position:absolute' from="605.625pt,247.875pt"
+   to="653.625pt,247.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7476">
+  <v:line id="_x0000_s7476" style='position:absolute' from="605.625pt,277.875pt"
+   to="665.625pt,277.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7477">
+  <v:line id="_x0000_s7477" style='position:absolute' from="653.625pt,253.875pt"
+   to="701.625pt,253.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7478">
+  <v:line id="_x0000_s7478" style='position:absolute' from="701.625pt,253.875pt"
+   to="701.625pt,307.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7479">
+  <v:line id="_x0000_s7479" style='position:absolute' from="653.625pt,247.875pt"
+   to="653.625pt,253.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7480">
+  <v:line id="_x0000_s7480" style='position:absolute;flip:y' from="605.625pt,247.875pt"
+   to="605.625pt,277.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7481">
+  <v:line id="_x0000_s7481" style='position:absolute' from="665.625pt,307.875pt"
+   to="701.625pt,307.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7482">
+  <v:line id="_x0000_s7482" style='position:absolute' from="665.625pt,277.875pt"
+   to="665.625pt,307.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7483">
+  <v:line id="_x0000_s7483" style='position:absolute' from="623.625pt,253.875pt"
+   to="641.625pt,253.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7484">
+  <v:line id="_x0000_s7484" style='position:absolute;flip:y' from="623.625pt,253.875pt"
+   to="623.625pt,265.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7485">
+  <v:line id="_x0000_s7485" style='position:absolute;flip:y' from="641.625pt,247.875pt"
+   to="641.625pt,265.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7486">
+  <v:line id="_x0000_s7486" style='position:absolute' from="623.625pt,265.875pt"
+   to="641.625pt,265.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:shape id="_x0000_s7487" type="#_x0000_t13" style='position:absolute;
+   left:496.875pt;top:225.5pt;width:96pt;height:90pt;mso-wrap-style:none;
+   v-text-anchor:middle' filled="f" fillcolor="#bbe0e3 [4]" strokecolor="black [1]">
+   <v:fill color2="white [0]"/>
+   <v:shadow color="gray [2]"/>
+  </v:shape></p:shaperange>
+ <p:shaperange id="_x0000_s7500">
+  <v:line id="_x0000_s7500" style='position:absolute' from="605.875pt,134.25pt"
+   to="653.875pt,134.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7501">
+  <v:line id="_x0000_s7501" style='position:absolute' from="605.875pt,164.25pt"
+   to="665.875pt,164.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7502">
+  <v:line id="_x0000_s7502" style='position:absolute' from="653.875pt,140.25pt"
+   to="701.875pt,140.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7503">
+  <v:line id="_x0000_s7503" style='position:absolute' from="701.875pt,140.25pt"
+   to="701.875pt,194.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7504">
+  <v:line id="_x0000_s7504" style='position:absolute' from="653.875pt,134.25pt"
+   to="653.875pt,140.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7505">
+  <v:line id="_x0000_s7505" style='position:absolute;flip:y' from="605.875pt,134.25pt"
+   to="605.875pt,164.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7506">
+  <v:line id="_x0000_s7506" style='position:absolute' from="665.875pt,194.25pt"
+   to="701.875pt,194.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7507">
+  <v:line id="_x0000_s7507" style='position:absolute' from="665.875pt,164.25pt"
+   to="665.875pt,194.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7508">
+  <v:line id="_x0000_s7508" style='position:absolute' from="623.875pt,140.25pt"
+   to="641.875pt,140.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7509">
+  <v:line id="_x0000_s7509" style='position:absolute;flip:y' from="623.875pt,140.25pt"
+   to="623.875pt,152.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7510">
+  <v:line id="_x0000_s7510" style='position:absolute;flip:y' from="641.875pt,140.25pt"
+   to="641.875pt,152.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7511">
+  <v:line id="_x0000_s7511" style='position:absolute' from="623.875pt,152.25pt"
+   to="641.875pt,152.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:shape id="_x0000_s7512" type="#_x0000_t13" style='position:absolute;
+   left:497.875pt;top:110.25pt;width:96pt;height:90pt;mso-wrap-style:none;
+   v-text-anchor:middle' filled="f" fillcolor="#bbe0e3 [4]" strokecolor="black [1]">
+   <v:fill color2="white [0]"/>
+   <v:shadow color="gray [2]"/>
+  </v:shape></p:shaperange>
+ <p:shaperange id="_x0000_s7513">
+  <v:line id="_x0000_s7513" style='position:absolute' from="390.375pt,246.125pt"
+   to="438.375pt,246.125pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7514">
+  <v:line id="_x0000_s7514" style='position:absolute' from="390.375pt,276.125pt"
+   to="450.375pt,276.125pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7515">
+  <v:line id="_x0000_s7515" style='position:absolute' from="438.375pt,252.125pt"
+   to="486.375pt,252.125pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7516">
+  <v:line id="_x0000_s7516" style='position:absolute' from="486.375pt,252.125pt"
+   to="486.375pt,306.125pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7517">
+  <v:line id="_x0000_s7517" style='position:absolute' from="438.375pt,246.125pt"
+   to="438.375pt,252.125pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7518">
+  <v:line id="_x0000_s7518" style='position:absolute;flip:y' from="390.375pt,246.125pt"
+   to="390.375pt,276.125pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7519">
+  <v:line id="_x0000_s7519" style='position:absolute' from="450.375pt,306.125pt"
+   to="486.375pt,306.125pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7520">
+  <v:line id="_x0000_s7520" style='position:absolute' from="450.375pt,276.125pt"
+   to="450.375pt,306.125pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7521">
+  <v:line id="_x0000_s7521" style='position:absolute' from="408.375pt,252.125pt"
+   to="426.375pt,252.125pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7522">
+  <v:line id="_x0000_s7522" style='position:absolute;flip:y' from="408.375pt,252.125pt"
+   to="408.375pt,264.125pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7523">
+  <v:line id="_x0000_s7523" style='position:absolute;flip:y' from="426.375pt,252.125pt"
+   to="426.375pt,264.125pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7524">
+  <v:line id="_x0000_s7524" style='position:absolute' from="408.375pt,264.125pt"
+   to="426.375pt,264.125pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line></p:shaperange>
+ <p:shaperange id="_x0000_s7525">
+  <v:shape id="_x0000_s7525" type="#_x0000_t13" style='position:absolute;
+   left:497.625pt;top:337.875pt;width:96pt;height:90pt;mso-wrap-style:none;
+   v-text-anchor:middle' filled="f" fillcolor="#bbe0e3 [4]" strokecolor="black [1]">
+   <v:fill color2="white [0]"/>
+   <v:shadow color="gray [2]"/>
+  </v:shape><v:line id="_x0000_s7526" style='position:absolute' from="605.625pt,361.875pt"
+   to="653.625pt,361.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7527" style='position:absolute' from="605.625pt,391.875pt"
+   to="701.625pt,391.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7528" style='position:absolute' from="605.625pt,367.875pt"
+   to="701.625pt,367.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7529" style='position:absolute' from="701.625pt,367.875pt"
+   to="701.625pt,421.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7530" style='position:absolute' from="653.625pt,361.875pt"
+   to="653.625pt,367.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7531" style='position:absolute;flip:y' from="605.625pt,361.875pt"
+   to="605.625pt,391.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7532" style='position:absolute' from="665.625pt,421.875pt"
+   to="701.625pt,421.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7533" style='position:absolute' from="665.625pt,391.875pt"
+   to="665.625pt,421.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7534" style='position:absolute' from="623.625pt,367.875pt"
+   to="641.625pt,367.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7535" style='position:absolute;flip:y' from="623.625pt,367.875pt"
+   to="623.625pt,379.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7536" style='position:absolute;flip:y' from="641.625pt,367.875pt"
+   to="641.625pt,379.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7537" style='position:absolute' from="605.625pt,379.875pt"
+   to="701.625pt,379.875pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7539" style='position:absolute' from="391.25pt,361.25pt"
+   to="439.25pt,361.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7540" style='position:absolute' from="391.25pt,391.25pt"
+   to="451.25pt,391.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7541" style='position:absolute' from="439.25pt,367.25pt"
+   to="487.25pt,367.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7542" style='position:absolute' from="487.25pt,367.25pt"
+   to="487.25pt,421.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7543" style='position:absolute' from="439.25pt,361.25pt"
+   to="439.25pt,367.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7544" style='position:absolute;flip:y' from="391.25pt,361.25pt"
+   to="391.25pt,391.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7545" style='position:absolute' from="451.25pt,421.25pt"
+   to="487.25pt,421.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7546" style='position:absolute' from="451.25pt,391.25pt"
+   to="451.25pt,421.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7547" style='position:absolute' from="409.25pt,367.25pt"
+   to="427.25pt,367.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7548" style='position:absolute;flip:y' from="409.25pt,367.25pt"
+   to="409.25pt,379.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7549" style='position:absolute;flip:y' from="427.25pt,367.25pt"
+   to="427.25pt,379.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7550" style='position:absolute' from="409.25pt,379.25pt"
+   to="427.25pt,379.25pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7551" style='position:absolute' from="392.625pt,459.375pt"
+   to="440.625pt,459.375pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7552" style='position:absolute' from="392.625pt,489.375pt"
+   to="452.625pt,489.375pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7553" style='position:absolute' from="440.625pt,465.375pt"
+   to="488.625pt,465.375pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7554" style='position:absolute' from="488.625pt,465.375pt"
+   to="488.625pt,519.375pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7555" style='position:absolute' from="440.625pt,459.375pt"
+   to="440.625pt,465.375pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7556" style='position:absolute;flip:y' from="392.625pt,459.375pt"
+   to="392.625pt,489.375pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7557" style='position:absolute' from="452.625pt,519.375pt"
+   to="488.625pt,519.375pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7558" style='position:absolute' from="452.625pt,489.375pt"
+   to="452.625pt,519.375pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7559" style='position:absolute' from="410.625pt,465.375pt"
+   to="428.625pt,465.375pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7560" style='position:absolute;flip:y' from="410.625pt,465.375pt"
+   to="410.625pt,477.375pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7561" style='position:absolute;flip:y' from="428.625pt,465.375pt"
+   to="428.625pt,477.375pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:line id="_x0000_s7562" style='position:absolute' from="410.625pt,477.375pt"
+   to="428.625pt,477.375pt" strokecolor="black [1]">
+   <v:shadow color="gray [2]"/>
+  </v:line><v:rect id="_x0000_s7563" style='position:absolute;left:668pt;top:489.875pt;
+   width:14.125pt;height:22.25pt;mso-wrap-style:none;v-text-anchor:middle'
+   fillcolor="white [0]" strokecolor="white [0]">
+   <v:fill color2="white [0]"/>
+   <v:shadow color="gray [2]"/>
+  </v:rect></p:shaperange>
+</xml>

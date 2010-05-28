@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:(null)1="http://www.w3.org/TR/REC-html40"><head><!--
+    Copyright 2009-2010 Intel Corporation
+    license banner
+-->
+<title>Boost Polygon Library: Point 3D Concept</title>
+    <meta http-equiv="content-type" content="text/html;charset=ISO-8859-1">
+    <!-- <link type="text/css" rel="stylesheet" href="adobe_source.css"> -->
+<table style="margin: 0pt; padding: 0pt; width: 100%;" border="0" cellpadding="0" cellspacing="0"><tbody><tr>
+<td style="background-color: rgb(238, 238, 238);" nowrap="1" valign="top">
+    <div style="padding: 5px;" align="center">
+        <img border="0" src="images/boost.png" width="277" height="86"><a title="www.boost.org home page" href="http://www.boost.org/" tabindex="2" style="border: medium none ;">
+            </a>
+    </div>
+    <div style="margin: 5px;">
+        <h3 class="navbar">Contents</h3>
+        <ul>
+            <li><a href="index.htm">Boost.Polygon Main Page</a></li>
+            <li><a href="gtl_design_overview.htm">Design Overview</a></li>
+            <li><a href="gtl_isotropy.htm">Isotropy</a></li>
+            <li><a href="gtl_coordinate_concept.htm">Coordinate Concept</a></li>
+            <li><a href="gtl_interval_concept.htm">Interval Concept</a></li>
+			<li><a href="gtl_point_concept.htm">Point Concept</a></li>
+			<li><a href="gtl_rectangle_concept.htm">Rectangle Concept</a></li>
+			<li><a href="gtl_polygon_90_concept.htm">Polygon 90 Concept</a></li>
+			<li><a href="gtl_polygon_90_with_holes_concept.htm">Polygon 90 With Holes Concept</a></li>
+			<li><a href="gtl_polygon_45_concept.htm">Polygon 45 Concept</a></li>
+			<li><a href="gtl_polygon_45_with_holes_concept.htm">Polygon 45 With Holes Concept</a></li>
+			<li><a href="gtl_polygon_concept.htm">Polygon Concept</a></li>
+			<li><a href="gtl_polygon_with_holes_concept.htm">Polygon With Holes Concept</a></li>
+			<li><a href="gtl_polygon_90_set_concept.htm">Polygon 90 Set Concept</a></li>
+			<li><a href="gtl_polygon_45_set_concept.htm">Polygon 45 Set Concept</a></li>
+			<li><a href="gtl_polygon_set_concept.htm">Polygon Set Concept</a></li>
+			<li><a href="gtl_connectivity_extraction_90.htm">Connectivity Extraction 90</a></li>
+			<li><a href="gtl_connectivity_extraction_45.htm">Connectivity Extraction 45</a></li>
+			<li><a href="gtl_connectivity_extraction.htm">Connectivity Extraction</a></li>
+			<li><a href="gtl_property_merge_90.htm">Property Merge 90</a></li>
+			<li><a href="gtl_property_merge_45.htm">Property Merge 45</a></li>
+			<li><a href="gtl_property_merge.htm">Property Merge</a></li>
+        </ul>
+        <h3 class="navbar">Other Resources</h3>
+        <ul>
+            <li><a href="GTL_boostcon2009.pdf">GTL Boostcon 2009 Paper</a></li>
+             <li><a href="GTL_boostcon_draft03.htm">GTL Boostcon 2009 
+				Presentation</a></li>
+             <li><a href="analysis.htm">Performance Analysis</a></li>
+        	<li><a href="gtl_tutorial.htm">Layout Versus Schematic Tutorial</a></li>
+        	<li><a href="gtl_minkowski_tutorial.htm">Minkowski Sum Tutorial</a></li>
+        </ul>
+    </div>
+        <h3 class="navbar">Polygon Sponsor</h3>
+    <div style="padding: 5px;" align="center">
+        <img border="0" src="images/intlogo.gif" width="127" height="51"><a title="www.adobe.com home page" href="http://www.adobe.com/" tabindex="2" style="border: medium none ;">
+            </a>
+    </div>    
+</td>
+<td style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" valign="top" width="100%">
+
+<!-- End Header -->
+
+<br>
+<p>
+</p><h1>Point3D Concept</h1>
+
+<p> 
+<p> 
+The point_3d concept type identifier is <font face="Courier New">
+point_3d_concept</font><p> 
+To register a user defined type as a model of point_3d concept, specialize the 
+geometry concept meta-function for that type.&nbsp; In the example below 
+CPoint3D is registered as a model of point_3d&nbsp; concept.<p> 
+<font face="Courier New">template &lt;&gt;<br>
+struct geometry_concept&lt;CPoint3D&gt; { typedef point_3d_concept type; };</font><p> 
+<font face="Times New Roman">The semantic of an point_3d is that it has an x and 
+y coordinate.&nbsp; An int[3], boost::tuple&lt;int, int, int, int&gt; or boost::array&lt;int, 
+3&gt; 
+could all be made models of point_3d by simply providing indirect access to their 
+elements through traits.</font><p> 
+<font face="Times New Roman">Below is shown the default point_3d traits.&nbsp; 
+Specialization of these traits is required for types that don't conform to the 
+default behavior.</font><p> 
+template &lt;typename T&gt;<br>
+struct point_3d_traits {<br>
+&nbsp;&nbsp;&nbsp;&nbsp; typedef typename T::coordinate_type coordinate_type;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp; static inline coordinate_type get(const T&amp; point, 
+orientation_3d orient) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return point.get(orient); 
+}<br>
+};<br>
+<br>
+template &lt;typename T&gt;<br>
+struct point_3d_mutable_traits {<br>
+&nbsp;&nbsp;&nbsp;&nbsp; static inline void set(T&amp; point, orientation_3d orient, 
+typename point_3d_traits&lt;T&gt;::coordinate_type value) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; point.set(orient, value); 
+}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp; static inline T construct(typename point_3d_traits&lt;T&gt;::coordinate_type 
+x_value, <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+typename point_3d_traits&lt;T&gt;::coordinate_type y_value, <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+typename point_3d_traits&lt;T&gt;::coordinate_type z_value) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return T(x_value, y_value, 
+z_value); }<br>
+};<h2>Functions</h2>
+<table border="1" width="100%" id="table1">
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename T&gt;<br>
+		coordinate_type <b>get</b>(const T&amp; point_3d, orientation_3d)</font></td>
+		<td><font face="Times New Roman">Expects a model of point_3d.&nbsp; 
+		Returns the x or y coordinate of the point_3d, depending on the 
+		orientation_3d value.</font><font face="Courier New"><br>
+&nbsp;</font></td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename T, typename 
+		coordinate_type&gt;<br>
+		void <b>set</b>(T&amp; point_3d, orientation_3d, coordinate_type)</font></td>
+		<td><font face="Times New Roman">Expects a model of point_3d.&nbsp;&nbsp; 
+		Sets the x, y or z coordinate of the point_3d to the coordinate, depending 
+		on the orientation_3d&nbsp; value. </font></td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename T&gt;<br>
+		T <b>construct</b>(coordinate_type x, coordinate_type y, </font>
+		<br><font face="Courier New">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; coordinate_type z)</font></td>
+		<td>Construct an object that is a model of point_3d given x, y and z 
+		coordinate values.</td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename T1, typename 
+		T2&gt;<br>
+		T1&amp; <b>assign</b>(T1&amp; left, const T2&amp; right)</font></td>
+		<td>Copies data from right object that models point_3d into left object 
+		that models point_3d.</td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename T, typename 
+		T2&gt;<br>
+		bool <b>equivalence</b>(const T&amp; point_3d1, const T2&amp; point_3d2)</font></td>
+		<td>Given two objects that model point_3d, compares and returns true if 
+		their x, y and z values are respectively equal to each other.</td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename 
+		point_3d_type&gt;<br>
+		coordinate_type <b>x</b>(const point_3d_type&amp; point_3d)</font></td>
+		<td>Returns the x coordinate of an object that models point_3d.</td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename 
+		point_3d_type&gt;<br>
+		coordinate_type <b>y</b>(const point_3d_type&amp; point_3d)</font></td>
+		<td>Returns the y coordinate of an object that models point_3d.&nbsp; </td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename 
+		point_3d_type&gt;<br>
+		coordinate_type <b>z</b>(const point_3d_type&amp; point_3d)</font></td>
+		<td>Returns the z coordinate of an object that models point_3d.&nbsp; </td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename 
+		point_3d_type&gt;<br>
+		void <b>x</b>(point_3d_type&amp; point_3d, coordinate_type )</font></td>
+		<td>Sets the x coordinate of the object that models point_3d to the 
+		coordinate value.&nbsp; </td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename 
+		point_3d_type&gt;<br>
+		void <b>y</b>(point_3d_type&amp; point_3d, coordinate_type )</font></td>
+		<td>Sets the y coordinate of the object that models point_3d to the 
+		coordinate value.&nbsp; </td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename 
+		point_3d_type&gt;<br>
+		void <b>z</b>(point_3d_type&amp; point_3d, coordinate_type )</font></td>
+		<td>Sets the z coordinate of the object that models point_3d to the 
+		coordinate value. </td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename 
+		point_3d_type&gt;<br>
+		point_3d_type&amp; <b>scale_up</b>(point_3d_type&amp; point_3d, <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		unsigned_area_type factor)</font></td>
+		<td>Multiplies x, y and z coordinate of an object that models point_3d by 
+		unsigned factor.</td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename 
+		point_3d_type&gt;<br>
+		point_3d_type&amp; <b>scale_down</b>(point_3d_type&amp; point_3d, <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		unsigned_area_type factor)</font></td>
+		<td>Divides x, y and z coordinate of an object that models point_3d by 
+		unsigned factor.</td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename 
+		point_3d_type, typename scaling_type&gt;<br>
+		point_3d_type&amp; <b>scale</b>(point_3d_type&amp; point_3d,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		const scaling_type&amp; factor) </font></td>
+		<td>Calls the scale member function of scaling type on the x, y and z value 
+		of an object that models point_3d and sets the point_3d to the scaled 
+		values.</td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename 
+		point_3d_type, typename transform_type&gt;<br>
+		point_3d_type&amp; <b>transform</b>(point_3d_type&amp; point_3d,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		const transform_type&amp; transform) </font></td>
+		<td>Calls the transform member function of transform type on the x, y and 
+		z 
+		value of an object that models point_3d and sets the point_3d to the 
+		transformed values.</td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename T&gt;<br>
+		point_3d_type&amp; <b>move</b>(T&amp; point_3d, orientation_3d<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; coordinate_difference displacement)</font></td>
+		<td>Adds displacement value to the coordinate of an object that models 
+		point_3d indicated by the orientation_3d.</td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename T1, typename 
+		T2&gt;<br>
+		T1&amp; <b>convolve</b>(T1&amp; a, const T2&amp; b)</font></td>
+		<td>Adds x coordinate of b to x coordinate of a and adds y coordinate of 
+		b to y coordinate of a and adds z coordinate of b to z coordinate of a.</td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename T1, typename 
+		T2&gt;<br>
+		T1&amp; <b>deconvolve</b>(T1&amp; a, const T2&amp; b)</font></td>
+		<td>Subtracts x coordinate of b from x coordinate of a and subtracts y 
+		coordinate of b from y coordinate of a and subtracts z coordinate of b 
+		from z coordinate of a. </td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename T1, typename 
+		T2&gt;<br>
+		coordinate_distance <b>euclidean_distance</b>(const T1&amp;,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		const T2&amp;)</font></td>
+		<td>Returns the distance from an object that models point_3d to a second 
+		object that models point_3d.</td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename T&gt;<br>
+		coordinate_difference <b>euclidean_distance</b>(const T&amp;,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; orientation_3d, coordinate_type)</font></td>
+		<td>Returns the distance from an object that models point_3d to a 
+		coordinate in the given orientation_3d.</td>
+	</tr>
+	<tr>
+		<td width="586"><font face="Courier New">template &lt;typename T1, typename 
+		T2&gt;<br>
+		coordinate_distance <b>manhattan_distance</b>(const T1&amp;,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		const T2&amp;)</font></td>
+		<td>Returns the distance in x plus the distance in y plus the distance 
+		in z from an object that 
+		models point_3d to a second object that models point_3d.</td>
+	</tr>
+	</table>
+<p>&nbsp;<tr>
+<td style="background-color: rgb(238, 238, 238);" nowrap="1" valign="top">
+    &nbsp;</td>
+<td style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" valign="top" width="100%">
+
+
+<table class="docinfo" rules="none" frame="void" id="table2">
+	<colgroup>
+		<col class="docinfo-name"><col class="docinfo-content">
+	</colgroup>
+	<tbody vAlign="top">
+		<tr>
+			<th class="docinfo-name">Copyright:</th>
+			<td>Copyright © Intel Corporation 2008-2010.</td>
+		</tr>
+		<tr class="field">
+			<th class="docinfo-name">License:</th>
+			<td class="field-body">Distributed under the Boost Software License, 
+			Version 1.0. (See accompanying file <tt class="literal">
+			<span class="pre">LICENSE_1_0.txt</span></tt> or copy at
+			<a class="reference" target="_top" href="http://www.boost.org/LICENSE_1_0.txt">
+			http://www.boost.org/LICENSE_1_0.txt</a>)</td>
+		</tr>
+</table>
+
+</html>

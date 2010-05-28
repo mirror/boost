@@ -1,0 +1,196 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:p="urn:schemas-microsoft-com:office:powerpoint"
+xmlns:oa="urn:schemas-microsoft-com:office:activation"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=PowerPoint.Slide>
+<meta name=Generator content="Microsoft PowerPoint 11">
+<link id=Main-File rel=Main-File href="../GTL_boostcon_draft03.htm">
+<link rel=Preview href=preview.wmf>
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+p\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+v\:textbox {display:none;}
+</style>
+<![endif]-->
+<title>GTL  Geometry Template Library</title>
+<meta name=Description
+content="5/15/2009: Robust Calculation of Line Segment Intersection Point">
+<link rel=Stylesheet href="master03_stylesheet.css">
+<![if !ppt]>
+<style media=print>
+<!--.sld
+	{left:0px !important;
+	width:6.0in !important;
+	height:4.5in !important;
+	font-size:107% !important;}
+-->
+</style>
+<script src=script.js></script><script><!--
+if( !IsNts() ) Redirect( "PPTSld" );
+//--></script><!--[if vml]><script>g_vml = 1;
+</script><![endif]--><![endif]><o:shapelayout v:ext="edit">
+ <o:idmap v:ext="edit" data="49"/>
+</o:shapelayout>
+</head>
+
+<body lang=EN-US style='margin:0px;background-color:black'
+onclick="DocumentOnClick()" onresize="_RSW()" onload="LoadSld()"
+onkeypress="_KPH()">
+
+<div id=SlideObj class=sld style='position:absolute;top:0px;left:0px;
+width:534px;height:400px;font-size:16px;background-color:white;clip:rect(0%, 101%, 101%, 0%);
+visibility:hidden'><p:slide coordsize="720,540"
+ colors="#ffffff,#000000,#808080,#000000,#bbe0e3,#333399,#009999,#99cc00"
+ masterhref="master03.xml">
+ <p:shaperange href="master03.xml#_x0000_s1025"/><![if !ppt]><p:shaperange
+  href="master03.xml#_x0000_s1028"/><p:shaperange
+  href="master03.xml#_x0000_s1029"/><p:shaperange
+  href="master03.xml#_x0000_s1030"/>
+ <div v:shape="_x0000_s1030" class=O>
+ <div style='text-align:right;position:absolute;top:92.0%;left:72.65%;
+ width:21.53%;height:3.25%'><span style='font-size:78%;mso-field-code:meta16'>44</span><span
+ style='font-size:78%;mso-special-format:lastCR;display:none'>&#13;</span></div>
+ </div>
+ <![endif]><p:shaperange href="master03.xml#_x0000_m1026"/><v:shape id="_x0000_s50178"
+  type="#_x0000_m1026" style='position:absolute;left:16pt;top:21.625pt;width:685.75pt;
+  height:90pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="title"/></v:shape><p:shaperange
+  href="master03.xml#_x0000_m1027"/><v:shape id="_x0000_s50179" type="#_x0000_m1027"
+  style='position:absolute;left:36pt;top:198.75pt;width:9in;height:283.625pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="body" position="1"/></v:shape><v:shapetype id="_x0000_t202"
+  coordsize="21600,21600" o:spt="202" path="m,l,21600r21600,l21600,xe">
+  <v:stroke joinstyle="miter"/>
+  <v:path gradientshapeok="t" o:connecttype="rect"/>
+ </v:shapetype><v:shape id="_x0000_s50180" type="#_x0000_t202" style='position:absolute;
+  left:74.75pt;top:284.625pt;width:550.625pt;height:255.375pt;
+  mso-position-horizontal-relative:char;mso-position-vertical-relative:line'
+  stroked="f">
+  <v:textbox style='mso-next-textbox:#_x0000_s50180'/>
+ </v:shape><v:line id="_x0000_s50181" style='position:absolute' from="308pt,2in"
+  to="357pt,155.875pt" strokecolor="black [1]">
+  <v:shadow color="gray [2]"/>
+ </v:line><v:line id="_x0000_s50182" style='position:absolute;flip:y' from="314pt,131.25pt"
+  to="351.375pt,168.5pt" strokecolor="black [1]">
+  <v:shadow color="gray [2]"/>
+ </v:line><v:rect id="_x0000_s50183" style='position:absolute;left:347.625pt;
+  top:150.75pt;width:29.75pt;height:24pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:rect><v:rect id="_x0000_s50184" style='position:absolute;left:344.875pt;
+  top:122.5pt;width:29.75pt;height:24pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:rect><v:rect id="_x0000_s50185" style='position:absolute;left:378pt;top:144.75pt;
+  width:56.375pt;height:24pt' filled="f" fillcolor="#bbe0e3 [4]" stroked="f"
+  strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:rect><![if !vml]><img border=0
+ v:shapes="_x0000_s50180,_x0000_s50181,_x0000_s50182"
+ src="slide0046_image455.gif" style='position:absolute;top:24.25%;left:10.29%;
+ width:76.77%;height:76.25%'><![endif]>
+ <div v:shape="_x0000_s50178" class=T><span style='position:absolute;
+ top:4.0%;left:-3.37%;width:106.55%;height:8.5%'><span style='font-size:91%'>Robust
+ Calculation of Line Segment </span></span><span style='position:absolute;
+ top:12.75%;left:3.18%;width:93.44%;height:8.5%'><span style='font-size:91%'>Intersection
+ Point</span></span></div>
+ <div v:shape="_x0000_s50179" class=B><span style='position:absolute;
+ top:37.75%;left:9.73%;width:92.32%;height:6.75%'><span class=BB
+ style='position:absolute;left:-4.05%'>•</span>Apply GMP multi-precision
+ rational and </span><span style='position:absolute;top:45.0%;left:9.73%;
+ width:84.45%;height:6.75%'>compute exact result.</span></div>
+ <div v:shape="_x0000_s50180" class=O>
+ <div style='position:absolute;top:53.5%;left:11.42%;width:74.71%;height:4.5%'><span
+ style='font-family:"Courier New";mso-ascii-font-family:"Courier New";
+ mso-hansi-font-family:"Courier New";font-size:111%'>//Segment 1: (x11,y11) to
+ (x12, y12)&#13;</span></div>
+ <div style='position:absolute;top:57.99%;left:11.42%;width:74.71%;height:4.5%'><span
+ style='font-family:"Courier New";mso-ascii-font-family:"Courier New";
+ mso-hansi-font-family:"Courier New";font-size:111%'>dx1 = x12 - x11;<span
+ style='mso-spacerun:yes'>  </span>dy1 = y12 - y11;&#13;</span></div>
+ <div style='position:absolute;top:62.5%;left:11.42%;width:74.71%;height:4.5%'><span
+ style='font-family:"Courier New";mso-ascii-font-family:"Courier New";
+ mso-hansi-font-family:"Courier New";font-size:111%'>//Segment 2: (x21,y21) to
+ (x22, y22)&#13;</span></div>
+ <div style='position:absolute;top:67.0%;left:11.42%;width:74.71%;height:4.5%'><span
+ style='font-family:"Courier New";mso-ascii-font-family:"Courier New";
+ mso-hansi-font-family:"Courier New";font-size:111%'>dx2 = x22 - x21;<span
+ style='mso-spacerun:yes'>  </span>dy2 = y22 - y21;&#13;</span></div>
+ <div style='position:absolute;top:71.25%;left:11.42%;width:80.14%;height:4.5%'><span
+ style='font-family:"Courier New";mso-ascii-font-family:"Courier New";
+ mso-hansi-font-family:"Courier New";font-size:111%'>x = (x11 * dy1 * dx2 – x21
+ * dy2 * dx1 + &#13;</span></div>
+ <div style='position:absolute;top:75.75%;left:11.42%;width:82.2%;height:4.5%'><span
+ style='font-family:"Courier New";mso-ascii-font-family:"Courier New";
+ mso-hansi-font-family:"Courier New";font-size:111%'><span
+ style='mso-spacerun:yes'>     </span>y21 * dx1 * dx2 - y11 * dx1 * dx2) /
+ &#13;</span></div>
+ <div style='position:absolute;top:80.25%;left:11.42%;width:74.71%;height:4.5%'><span
+ style='font-family:"Courier New";mso-ascii-font-family:"Courier New";
+ mso-hansi-font-family:"Courier New";font-size:111%'><span
+ style='mso-spacerun:yes'>     </span>(dy1 * dx2 - dy2 * dx1); &#13;</span></div>
+ <div style='position:absolute;top:84.75%;left:11.42%;width:80.14%;height:4.5%'><span
+ style='font-family:"Courier New";mso-ascii-font-family:"Courier New";
+ mso-hansi-font-family:"Courier New";font-size:111%'>y = (y11 * dx1 * dy2 - y21
+ * dx2 * dy1 + &#13;</span></div>
+ <div style='position:absolute;top:89.0%;left:11.42%;width:82.2%;height:4.5%'><span
+ style='font-family:"Courier New";mso-ascii-font-family:"Courier New";
+ mso-hansi-font-family:"Courier New";font-size:111%'><span
+ style='mso-spacerun:yes'>     </span>x21 * dy1 * dy2 - x11 * dy1 * dy2) /
+ &#13;</span></div>
+ <div style='position:absolute;top:93.25%;left:11.42%;width:74.71%;height:4.75%'><span
+ style='font-family:"Courier New";mso-ascii-font-family:"Courier New";
+ mso-hansi-font-family:"Courier New";font-size:111%'><span
+ style='mso-spacerun:yes'>     </span>(dx1 * dy2 - dx2 * dy1); </span><span
+ style='font-size:111%;mso-special-format:lastCR;display:none'>&#13;</span></div>
+ </div>
+ <div v:shape="_x0000_s50183" class=B style='position:absolute;top:28.74%;
+ left:49.25%;width:2.24%;height:3.25%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-size:44%'>b</span></div>
+ <div v:shape="_x0000_s50184" class=B style='position:absolute;top:23.5%;
+ left:48.87%;width:2.24%;height:3.25%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-size:44%'>a</span></div>
+ <div v:shape="_x0000_s50185" class=B style='position:absolute;top:27.75%;
+ left:53.55%;width:5.99%;height:3.25%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-size:44%'>p?</span></div>
+ <v:roundrect id="_x0000_s50186" style='position:absolute;left:293.25pt;top:115pt;
+  width:141.75pt;height:77.25pt;mso-wrap-style:none;v-text-anchor:middle'
+  arcsize="10923f" filled="f" fillcolor="#bbe0e3 [4]" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:roundrect><v:rect id="_x0000_s50187" style='position:absolute;left:320.25pt;
+  top:124.875pt;width:29.75pt;height:24pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:rect><v:oval id="_x0000_s50188" style='position:absolute;left:329.75pt;
+  top:146.5pt;width:7pt;height:7pt;mso-wrap-style:none;v-text-anchor:middle'
+  fillcolor="black" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:oval><![if !vml]><img border=0 v:shapes="_x0000_s50186,_x0000_s50188"
+ src="slide0046_image456.gif" style='position:absolute;top:21.25%;left:40.63%;
+ width:20.03%;height:14.75%'><![endif]>
+ <div v:shape="_x0000_s50187" class=B style='position:absolute;top:24.0%;
+ left:45.5%;width:2.24%;height:3.25%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-size:44%'>p</span></div>
+</p:slide></div>
+
+</body>
+
+</html>

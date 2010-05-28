@@ -1,0 +1,118 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:p="urn:schemas-microsoft-com:office:powerpoint"
+xmlns:oa="urn:schemas-microsoft-com:office:activation"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=PowerPoint.Slide>
+<meta name=Generator content="Microsoft PowerPoint 11">
+<link id=Main-File rel=Main-File href="../GTL_boostcon_draft03.htm">
+<link rel=Preview href=preview.wmf>
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+p\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+v\:textbox {display:none;}
+</style>
+<![endif]-->
+<title>GTL  Geometry Template Library</title>
+<meta name=Description content="5/15/2009: Observations About Preconditions">
+<link rel=Stylesheet href="master03_stylesheet.css">
+<![if !ppt]>
+<style media=print>
+<!--.sld
+	{left:0px !important;
+	width:6.0in !important;
+	height:4.5in !important;
+	font-size:107% !important;}
+-->
+</style>
+<script src=script.js></script><script><!--
+if( !IsNts() ) Redirect( "PPTSld" );
+//--></script><!--[if vml]><script>g_vml = 1;
+</script><![endif]--><![endif]><o:shapelayout v:ext="edit">
+ <o:idmap v:ext="edit" data="21"/>
+</o:shapelayout>
+</head>
+
+<body lang=EN-US style='margin:0px;background-color:black'
+onclick="DocumentOnClick()" onresize="_RSW()" onload="LoadSld()"
+onkeypress="_KPH()">
+
+<div id=SlideObj class=sld style='position:absolute;top:0px;left:0px;
+width:534px;height:400px;font-size:16px;background-color:white;clip:rect(0%, 101%, 101%, 0%);
+visibility:hidden'><p:slide coordsize="720,540"
+ colors="#ffffff,#000000,#808080,#000000,#bbe0e3,#333399,#009999,#99cc00"
+ masterhref="master03.xml">
+ <p:shaperange href="master03.xml#_x0000_s1025"/><![if !ppt]><p:shaperange
+  href="master03.xml#_x0000_s1028"/><p:shaperange
+  href="master03.xml#_x0000_s1029"/><p:shaperange
+  href="master03.xml#_x0000_s1030"/>
+ <div v:shape="_x0000_s1030" class=O>
+ <div style='text-align:right;position:absolute;top:92.0%;left:72.65%;
+ width:21.53%;height:3.25%'><span style='font-size:78%;mso-field-code:meta16'>17</span><span
+ style='font-size:78%;mso-special-format:lastCR;display:none'>&#13;</span></div>
+ </div>
+ <![endif]><p:shaperange href="master03.xml#_x0000_m1026"/><v:shape id="_x0000_s21506"
+  type="#_x0000_m1026" style='position:absolute;left:36pt;top:21.625pt;width:9in;
+  height:90pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="title"/></v:shape><p:shaperange
+  href="master03.xml#_x0000_m1027"/><v:shape id="_x0000_s21507" type="#_x0000_m1027"
+  style='position:absolute;left:36pt;top:126pt;width:9in;height:377.25pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="body" position="1"/></v:shape>
+ <div v:shape="_x0000_s21506" class=T style='position:absolute;top:8.5%;
+ left:-.37%;width:100.93%;height:8.5%'><span style='font-size:91%'>Observations
+ About Preconditions</span></div>
+ <div v:shape="_x0000_s21507" class=B>
+ <div style='mso-line-spacing:"90 20 0"'><span style='position:absolute;
+ top:23.75%;left:9.73%;width:98.12%;height:5.25%'><span style='font-size:75%'><span
+ style='mso-special-format:bullet;position:absolute;left:-3.81%'>•</span></span><span
+ style='font-size:75%'>CGAL throws an “Precondition Violated” exception if an </span></span><span
+ style='position:absolute;top:28.74%;left:9.73%;width:91.01%;height:5.25%'><span
+ style='font-size:75%'>input polygon is self intersecting/overlapping or has </span></span><span
+ style='position:absolute;top:33.5%;left:9.73%;width:84.45%;height:5.25%'><span
+ style='font-size:75%'>“closed” semantic at last vertex&#13;</span></span></div>
+ <div style='mso-line-spacing:"90 20 0"'><span style='position:absolute;
+ top:39.25%;left:9.73%;width:97.37%;height:5.25%'><span style='font-size:75%'><span
+ style='mso-special-format:bullet;position:absolute;left:-3.84%'>•</span></span><span
+ style='font-size:75%'>PolyBoolean returns a “bad input polygon” error code if </span></span><span
+ style='position:absolute;top:44.0%;left:9.73%;width:100.74%;height:5.25%'><span
+ style='font-size:75%'>an input polygon is self intersecting/overlapping has
+ zero </span></span><span style='position:absolute;top:48.75%;left:9.73%;
+ width:84.45%;height:5.25%'><span style='font-size:75%'>area or is a hole with
+ no enclosing polygon&#13;</span></span></div>
+ <div style='mso-line-spacing:"90 20 0"'><span style='position:absolute;
+ top:54.75%;left:9.73%;width:100.0%;height:5.25%'><span style='font-size:75%'><span
+ style='mso-special-format:bullet;position:absolute;left:-3.74%'>•</span></span><span
+ style='font-size:75%'>Both PolyBoolean and CGAL inform the user the input is </span></span><span
+ style='position:absolute;top:59.5%;left:9.73%;width:98.12%;height:5.25%'><span
+ style='font-size:75%'>bad when a bug in their algorithms leads to a fatal
+ error&#13;</span></span></div>
+ <div style='mso-line-spacing:"90 20 0"'><span style='position:absolute;
+ top:65.25%;left:9.73%;width:99.06%;height:5.25%'><span style='font-size:75%'><span
+ style='mso-special-format:bullet;position:absolute;left:-3.78%'>•</span></span><span
+ style='font-size:75%'>GPC produces garbage output when input polygons are </span></span><span
+ style='position:absolute;top:70.25%;left:9.73%;width:84.45%;height:5.25%'><span
+ style='font-size:75%'>self intersecting/overlapping&#13;</span></span></div>
+ <div style='mso-line-spacing:"90 20 0"'><span style='position:absolute;
+ top:76.0%;left:9.73%;width:101.12%;height:5.25%'><span style='font-size:75%'><span
+ style='mso-special-format:bullet;position:absolute;left:-3.7%'>•</span></span><span
+ style='font-size:75%'>GTL has no preconditions and produces correct output in </span></span><span
+ style='position:absolute;top:80.75%;left:9.73%;width:84.45%;height:5.25%'><span
+ style='font-size:75%'>all cases</span></span></div>
+ </div>
+</p:slide></div>
+
+</body>
+
+</html>

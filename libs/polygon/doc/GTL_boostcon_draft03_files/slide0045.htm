@@ -1,0 +1,131 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:p="urn:schemas-microsoft-com:office:powerpoint"
+xmlns:oa="urn:schemas-microsoft-com:office:activation"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=PowerPoint.Slide>
+<meta name=Generator content="Microsoft PowerPoint 11">
+<link id=Main-File rel=Main-File href="../GTL_boostcon_draft03.htm">
+<link rel=Preview href=preview.wmf>
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+p\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+v\:textbox {display:none;}
+</style>
+<![endif]-->
+<title>GTL  Geometry Template Library</title>
+<meta name=Description
+content="5/15/2009: Robust Line Segment Intersection Check">
+<link rel=Stylesheet href="master03_stylesheet.css">
+<![if !ppt]>
+<style media=print>
+<!--.sld
+	{left:0px !important;
+	width:6.0in !important;
+	height:4.5in !important;
+	font-size:107% !important;}
+-->
+</style>
+<script src=script.js></script><script><!--
+if( !IsNts() ) Redirect( "PPTSld" );
+//--></script><!--[if vml]><script>g_vml = 1;
+</script><![endif]--><![endif]><o:shapelayout v:ext="edit">
+ <o:idmap v:ext="edit" data="48"/>
+</o:shapelayout>
+</head>
+
+<body lang=EN-US style='margin:0px;background-color:black'
+onclick="DocumentOnClick()" onresize="_RSW()" onload="LoadSld()"
+onkeypress="_KPH()">
+
+<div id=SlideObj class=sld style='position:absolute;top:0px;left:0px;
+width:534px;height:400px;font-size:16px;background-color:white;clip:rect(0%, 101%, 101%, 0%);
+visibility:hidden'><p:slide coordsize="720,540"
+ colors="#ffffff,#000000,#808080,#000000,#bbe0e3,#333399,#009999,#99cc00"
+ masterhref="master03.xml">
+ <p:shaperange href="master03.xml#_x0000_s1025"/><![if !ppt]><p:shaperange
+  href="master03.xml#_x0000_s1028"/><p:shaperange
+  href="master03.xml#_x0000_s1029"/><p:shaperange
+  href="master03.xml#_x0000_s1030"/>
+ <div v:shape="_x0000_s1030" class=O>
+ <div style='text-align:right;position:absolute;top:92.0%;left:72.65%;
+ width:21.53%;height:3.25%'><span style='font-size:78%;mso-field-code:meta16'>41</span><span
+ style='font-size:78%;mso-special-format:lastCR;display:none'>&#13;</span></div>
+ </div>
+ <![endif]><p:shaperange href="master03.xml#_x0000_m1026"/><v:shape id="_x0000_s49154"
+  type="#_x0000_m1026" style='position:absolute;left:0;top:20.125pt;width:10in;
+  height:90pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="title"/></v:shape><p:shaperange
+  href="master03.xml#_x0000_m1027"/><v:shape id="_x0000_s49155" type="#_x0000_m1027"
+  style='position:absolute;left:36pt;top:202.375pt;width:9in;height:280pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="body" position="1"/></v:shape><v:roundrect id="_x0000_s49156"
+  style='position:absolute;left:301.625pt;top:115.875pt;width:141.75pt;
+  height:77.25pt;mso-wrap-style:none;v-text-anchor:middle' arcsize="10923f"
+  filled="f" fillcolor="#bbe0e3 [4]" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:roundrect><v:line id="_x0000_s49157" style='position:absolute;flip:y'
+  from="314.125pt,130pt" to="375pt,156pt" strokecolor="black [1]">
+  <v:shadow color="gray [2]"/>
+ </v:line><v:line id="_x0000_s49158" style='position:absolute;flip:y' from="321.5pt,140.375pt"
+  to="352.125pt,164.125pt" strokecolor="black [1]">
+  <v:shadow color="gray [2]"/>
+ </v:line><v:rect id="_x0000_s49159" style='position:absolute;left:338.875pt;
+  top:153.75pt;width:29.75pt;height:24pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:rect><v:rect id="_x0000_s49160" style='position:absolute;left:320.375pt;
+  top:124.125pt;width:29.75pt;height:24pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:rect><v:rect id="_x0000_s49161" style='position:absolute;left:378.75pt;
+  top:145.625pt;width:56.375pt;height:24pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:rect><![if !vml]><img border=0
+ v:shapes="_x0000_s49156,_x0000_s49157,_x0000_s49158"
+ src="slide0045_image445.gif" style='position:absolute;top:21.5%;left:41.76%;
+ width:20.03%;height:14.75%'><![endif]>
+ <div v:shape="_x0000_s49154" class=T><span style='position:absolute;
+ top:3.75%;left:-.18%;width:100.74%;height:8.5%'><span style='font-size:91%'>Robust
+ Line Segment Intersection </span></span><span style='position:absolute;
+ top:12.5%;left:.93%;width:98.12%;height:8.5%'><span style='font-size:91%'>Check</span></span></div>
+ <div v:shape="_x0000_s49155" class=B><span style='position:absolute;
+ top:38.5%;left:9.73%;width:92.88%;height:6.75%'><span class=BB
+ style='position:absolute;left:-4.03%'>•</span>Compute whether the two ends of
+ each </span><span style='position:absolute;top:45.75%;left:9.73%;width:98.68%;
+ height:6.75%'>segment are on, above or below the other </span><span
+ style='position:absolute;top:52.75%;left:9.73%;width:84.45%;height:6.75%'>segment&#13;</span><span
+ style='position:absolute;top:61.25%;left:9.73%;width:95.69%;height:6.75%'><span
+ class=BB style='position:absolute;left:-3.91%'>•</span>Both points of one
+ segment on the same </span><span style='position:absolute;top:68.5%;
+ left:9.73%;width:91.94%;height:6.75%'>side of the other means no intersection </span></div>
+ <div v:shape="_x0000_s49159" class=B style='position:absolute;top:29.25%;
+ left:48.12%;width:2.24%;height:3.25%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-size:44%'>b</span></div>
+ <div v:shape="_x0000_s49160" class=B style='position:absolute;top:23.75%;
+ left:45.5%;width:2.24%;height:3.25%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-size:44%'>a</span></div>
+ <div v:shape="_x0000_s49161" class=B style='position:absolute;top:27.75%;
+ left:53.55%;width:6.92%;height:3.25%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-size:44%'>a X b?</span></div>
+</p:slide></div>
+
+</body>
+
+</html>
