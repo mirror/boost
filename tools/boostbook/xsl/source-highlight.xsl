@@ -23,14 +23,18 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
+
+  <xsl:variable name="id-start-chars" select="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"/>
   <xsl:variable name="id-chars" select="'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_'"/>
+  <xsl:variable name="digits" select="'1234567890'"/>
+  <xsl:variable name="number-chars" select="'1234567890abcdefABCDEFxX.'"/>
   <xsl:variable name="keywords"
     select="' asm auto bool break case catch char class const const_cast continue default delete do double dynamic_cast else enum explicit export extern false float for friend goto if inline int long mutable namespace new operator private protected public register reinterpret_cast return short signed sizeof static static_cast struct switch template this throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while '"/>
   <xsl:variable name="operators4" select="'%:%:'"/>
   <xsl:variable name="operators3" select="'&gt;&gt;= &lt;&lt;= -&gt;* ...'"/>
   <xsl:variable name="operators2" select="'.* :: ## &lt;: :&gt; &lt;% %&gt; %: += -= *= /= %= ^= &amp;= |= &lt;&lt; &gt;&gt; == != &lt;= &gt;= &amp;&amp; || ++ -- -&gt;'"/>
   <xsl:variable name="operators1" select="'. ? { } [ ] # ( ) ; : + - * / % ^ &amp; | ~ ! = &lt; &gt; ,'"/>
+  <xsl:variable name="single-quote">'</xsl:variable>
   
   <!-- Syntax highlighting -->
   <xsl:template name="highlight-keyword">
@@ -94,6 +98,48 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template name="highlight-number">
+    <xsl:param name="text"/>
+    <xsl:choose>
+      <xsl:when test="$boost.syntax.highlight='1'">
+        <phrase role="number">
+          <xsl:value-of select="$text"/>
+        </phrase>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="highlight-string">
+    <xsl:param name="text"/>
+    <xsl:choose>
+      <xsl:when test="$boost.syntax.highlight='1'">
+        <phrase role="string">
+          <xsl:value-of select="$text"/>
+        </phrase>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="highlight-char">
+    <xsl:param name="text"/>
+    <xsl:choose>
+      <xsl:when test="$boost.syntax.highlight='1'">
+        <phrase role="char">
+          <xsl:value-of select="$text"/>
+        </phrase>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
   <xsl:template name="highlight-pp-directive">
     <xsl:param name="text"/>
     <xsl:choose>
@@ -123,6 +169,54 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$pos - 1"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="highlight-text-number-length">
+    <xsl:param name="text"/>
+    <xsl:param name="pos" select="1"/>
+    <xsl:choose>
+      <xsl:when test="string-length($text) + 1 = $pos">
+        <xsl:value-of select="$pos - 1"/>
+      </xsl:when>
+      <xsl:when test="contains($number-chars, substring($text, $pos, 1))">
+        <xsl:call-template name ="highlight-text-ident-length">
+          <xsl:with-param name="text" select="$text"/>
+          <xsl:with-param name="pos" select="$pos + 1"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$pos - 1"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="highlight-text-string-length">
+    <xsl:param name="text"/>
+    <xsl:param name="terminator"/>
+    <xsl:param name="pos" select="2"/>
+    <xsl:choose>
+      <xsl:when test="string-length($text) + 1 = $pos">
+        <xsl:value-of select="$pos - 1"/>
+      </xsl:when>
+      <xsl:when test="substring($text, $pos, 1) = $terminator">
+        <xsl:value-of select="$pos"/>
+      </xsl:when>
+      <xsl:when test="substring($text, $pos, 1) = '\' and
+                      string-length($text) != $pos">
+        <xsl:call-template name="highlight-text-string-length">
+          <xsl:with-param name="text" select="$text"/>
+          <xsl:with-param name="terminator" select="$terminator"/>
+          <xsl:with-param name="pos" select="$pos + 2"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="highlight-text-string-length">
+          <xsl:with-param name="text" select="$text"/>
+          <xsl:with-param name="terminator" select="$terminator"/>
+          <xsl:with-param name="pos" select="$pos + 1"/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -214,7 +308,7 @@
     <xsl:param name="text"/>
     <xsl:choose>
       <xsl:when test="string-length($text) = 0"/>
-      <xsl:when test="contains($id-chars, substring($text, 1, 1))">
+      <xsl:when test="contains($id-start-chars, substring($text, 1, 1))">
         <xsl:variable name="ident-length">
           <xsl:call-template name="highlight-text-ident-length">
             <xsl:with-param name="text" select="$text"/>
@@ -225,6 +319,44 @@
         </xsl:call-template>
         <xsl:call-template name="highlight-text-impl-root">
           <xsl:with-param name="text" select="substring($text, $ident-length + 1)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="contains($digits, substring($text, 1, 1))">
+        <xsl:variable name="number-length">
+          <xsl:call-template name="highlight-text-number-length">
+            <xsl:with-param name="text" select="$text"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:call-template name="highlight-number">
+          <xsl:with-param name="text" select="substring($text, 1, $number-length)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="substring($text, 1, 1) = '&#x22;'">
+        <xsl:variable name="string-length">
+          <xsl:call-template name="highlight-text-string-length">
+            <xsl:with-param name="text" select="$text"/>
+            <xsl:with-param name="terminator" select="'&#x22;'"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:call-template name="highlight-string">
+          <xsl:with-param name="text" select="substring($text, 1, $string-length)"/>
+        </xsl:call-template>
+        <xsl:call-template name="highlight-text-impl-root">
+          <xsl:with-param name="text" select="substring($text, $string-length + 1)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="substring($text, 1, 1) = $single-quote">
+        <xsl:variable name="char-length">
+          <xsl:call-template name="highlight-text-string-length">
+            <xsl:with-param name="text" select="$text"/>
+            <xsl:with-param name="terminator" select="$single-quote"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:call-template name="highlight-char">
+          <xsl:with-param name="text" select="substring($text, 1, $char-length)"/>
+        </xsl:call-template>
+        <xsl:call-template name="highlight-text-impl-root">
+          <xsl:with-param name="text" select="substring($text, $char-length + 1)"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:when test="substring($text, 1, 2) = '//'">
