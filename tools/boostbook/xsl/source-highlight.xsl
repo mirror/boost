@@ -167,7 +167,7 @@
           <xsl:with-param name="pos" select="$pos + 1"/>
         </xsl:call-template>
       </xsl:when>
-      <xsl:when test="contains(' \t', substring($text, $pos, 1))">
+      <xsl:when test="contains(' &#x9;', substring($text, $pos, 1))">
         <xsl:call-template name="highlight-text-pp-directive-length">
           <xsl:with-param name="text" select="$text"/>
           <xsl:with-param name="pos" select="$pos + 1"/>
@@ -229,10 +229,10 @@
       </xsl:when>
       <xsl:when test="substring($text, 1, 2) = '//'">
         <xsl:call-template name="highlight-comment">
-          <xsl:with-param name="text" select="substring-before($text, '\n')"/>
+          <xsl:with-param name="text" select="substring-before($text, '&#xA;')"/>
         </xsl:call-template>
         <xsl:call-template name="highlight-text-impl-root">
-          <xsl:with-param name="text" select="concat('\n', substring-after($text, '\n'))"/>
+          <xsl:with-param name="text" select="concat('&#xA;', substring-after($text, '&#xA;'))"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:when test="substring($text, 1, 2) = '/*'">
