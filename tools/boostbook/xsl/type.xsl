@@ -333,8 +333,10 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
               <xsl:with-param name="link-type" select="$link-type"/>
               <xsl:with-param name="highlight" select="true()"/>
             </xsl:call-template>
-            <xsl:value-of select="substring(concat(';', $name-padding),
-              1, $max-name-length - string-length($truncated-typedef-name))"/>
+            <xsl:call-template name="highlight-text">
+              <xsl:with-param name="text" select="substring(concat(';', $name-padding),
+                1, $max-name-length - string-length($truncated-typedef-name))"/>
+            </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
             <xsl:text> </xsl:text>
