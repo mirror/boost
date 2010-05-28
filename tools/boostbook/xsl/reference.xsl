@@ -29,9 +29,8 @@
       <xsl:with-param name="indentation" select="$indentation"/>
     </xsl:call-template>
     <xsl:call-template name="source-highlight">
-      <xsl:with-param name="text" select="concat('namespace ',@name)"/>
+      <xsl:with-param name="text" select="concat('namespace ',@name, ' {')"/>
     </xsl:call-template>
-    <xsl:text> {</xsl:text>
 
     <!-- Emit namespace types -->
     <xsl:apply-templates select="class|class-specialization|
@@ -58,7 +57,9 @@
     <xsl:call-template name="indent">
       <xsl:with-param name="indentation" select="$indentation"/>
     </xsl:call-template>
-    <xsl:text>}</xsl:text>
+    <xsl:call-template name="highlight-text">
+      <xsl:with-param name="text" select="'}'"/>
+    </xsl:call-template>
   </xsl:template>
 
   <!-- Emit namespace synopsis -->

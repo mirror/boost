@@ -161,7 +161,7 @@
 
     <!-- Build the text that follows the declarator-->
     <xsl:variable name="postdeclarator">
-      <xsl:if test="@cv">
+      <xsl:if test="@cv and @cv != ''">
         <xsl:text> </xsl:text>
         <xsl:value-of select="@cv"/>
       </xsl:if>
@@ -246,7 +246,9 @@
           <xsl:with-param name="highlight" select="true()"/>
         </xsl:call-template>
 
-        <xsl:text>(</xsl:text>
+        <xsl:call-template name="highlight-text">
+          <xsl:with-param name="text" select="'('"/>
+        </xsl:call-template>
         <xsl:call-template name="function-parameters">
           <xsl:with-param name="include-names" select="$include-names"/>
           <xsl:with-param name="indentation"
@@ -254,12 +256,16 @@
                     + string-length($function-name) + 1"/>
           <xsl:with-param name="final" select="true()"/>
         </xsl:call-template>
-        <xsl:text>)</xsl:text>
+        <xsl:call-template name="highlight-text">
+          <xsl:with-param name="text" select="')'"/>
+        </xsl:call-template>
 
         <xsl:call-template name="source-highlight">
           <xsl:with-param name="text" select="$postdeclarator"/>
         </xsl:call-template>
-        <xsl:text>;</xsl:text>
+        <xsl:call-template name="highlight-text">
+          <xsl:with-param name="text" select="';'"/>
+        </xsl:call-template>
       </xsl:when>
 
       <!-- This declaration will take multiple lines -->
@@ -317,7 +323,9 @@
           <xsl:with-param name="link-type" select="$link-type"/>
           <xsl:with-param name="highlight" select="true()"/>
         </xsl:call-template>
-        <xsl:text>(</xsl:text>
+        <xsl:call-template name="highlight-text">
+          <xsl:with-param name="text" select="'('"/>
+        </xsl:call-template>
         <xsl:call-template name="function-parameters">
           <xsl:with-param name="include-names" select="$include-names"/>
           <xsl:with-param name="indentation"
@@ -325,11 +333,15 @@
                     + string-length($function-name) + 1"/>
           <xsl:with-param name="final" select="true()"/>
         </xsl:call-template>
-        <xsl:text>)</xsl:text>
+        <xsl:call-template name="highlight-text">
+          <xsl:with-param name="text" select="')'"/>
+        </xsl:call-template>
         <xsl:call-template name="source-highlight">
           <xsl:with-param name="text" select="$postdeclarator"/>
         </xsl:call-template>
-        <xsl:text>;</xsl:text>
+        <xsl:call-template name="highlight-text">
+          <xsl:with-param name="text" select="';'"/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -364,7 +376,18 @@
       <!-- Information for this parameter -->
       <xsl:variable name="parameter" select="$parameters[position()=1]"/>
       <xsl:variable name="pack">
-        <xsl:if test="$parameter/@pack=1"><xsl:text>...</xsl:text></xsl:if>
+        <xsl:if test="$parameter/@pack=1">
+          <xsl:choose>
+            <xsl:when test="$final">
+              <xsl:call-template name="highlight-text">
+                <xsl:with-param name="text" select="'...'"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>...</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:if>
       </xsl:variable>
       <xsl:variable name="name">
         <xsl:if test="$include-names and $parameter/@name != ''">
@@ -377,18 +400,32 @@
       <xsl:variable name="default">
         <xsl:choose>
           <xsl:when test="$parameter/@default">
-            <xsl:text> = </xsl:text>
-            <xsl:value-of select="$parameter/@default"/>
-          </xsl:when>
-          <xsl:when test="$parameter/default">
-            <xsl:text> = </xsl:text>
             <xsl:choose>
               <xsl:when test="$final">
-                <xsl:apply-templates
-                  select="$parameter/default/*|$parameter/default/text()"
-                  mode="annotation"/>
+                <xsl:call-template name="highlight-text">
+                  <xsl:with-param name="text" select="concat(' = ', $parameter/@default)"/>
+                </xsl:call-template>
               </xsl:when>
               <xsl:otherwise>
+                <xsl:text> = </xsl:text>
+                <xsl:value-of select="$parameter/@default"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:when test="$parameter/default">
+            <xsl:choose>
+              <xsl:when test="$final">
+                <xsl:call-template name="highlight-text">
+                  <xsl:with-param name="text" select="' = '"/>
+                </xsl:call-template>
+                <xsl:apply-templates
+                  select="$parameter/default/*|$parameter/default/text()"
+                  mode="annotation">
+                  <xsl:with-param name="highlight" select="true()"/>
+                </xsl:apply-templates>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text> = </xsl:text>
                 <xsl:value-of select="string($parameter/default)"/>
               </xsl:otherwise>
             </xsl:choose>
@@ -407,13 +444,15 @@
                         or not($wrap)">
           <xsl:choose>
             <xsl:when test="$final">
-              <xsl:value-of select="$prefix"/>
+              <xsl:call-template name="highlight-text">
+                <xsl:with-param name="text" select="$prefix"/>
+              </xsl:call-template>
               <xsl:apply-templates
                 select="$parameter/paramtype/*|$parameter/paramtype/text()"
                 mode="annotation">
                 <xsl:with-param name="highlight" select="true()"/>
               </xsl:apply-templates>
-              <xsl:value-of select="$pack"/>
+              <xsl:copy-of select="$pack"/>
               <xsl:value-of select="$name"/>
               <xsl:copy-of select="$default"/>
             </xsl:when>
@@ -437,7 +476,17 @@
         <!-- Parameter goes on next line -->
         <xsl:otherwise>
           <!-- The comma goes on this line -->
-          <xsl:value-of select="$prefix"/><xsl:text>&#10;</xsl:text>
+          <xsl:choose>
+            <xsl:when test="$final">
+              <xsl:call-template name="highlight-text">
+                <xsl:with-param name="text" select="$prefix"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$prefix"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:text>&#10;</xsl:text>
 
           <!-- Indent and print the parameter -->
           <xsl:call-template name="indent">

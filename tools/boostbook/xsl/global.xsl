@@ -57,7 +57,9 @@
       </xsl:call-template>
       <xsl:text> </xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="type/*|type/text()" mode="annotation" />
+    <xsl:apply-templates select="type/*|type/text()" mode="annotation">
+      <xsl:with-param name="highlight" select="true()"/>
+    </xsl:apply-templates>
     <xsl:text> </xsl:text>
     <xsl:call-template name="link-or-anchor">
       <xsl:with-param name="to">
@@ -66,7 +68,9 @@
       <xsl:with-param name="text" select="@name" />
       <xsl:with-param name="link-type" select="$link-type" />
     </xsl:call-template>
-    <xsl:text>;</xsl:text>
+    <xsl:call-template name="highlight-text">
+      <xsl:with-param name="text" select="';'"/>
+    </xsl:call-template>
   </xsl:template>
   <xsl:template match="data-member" mode="generate.id">
     <xsl:call-template name="fully-qualified-id">
