@@ -24,5 +24,5 @@ struct foo
 
 int main( int, char ** )
 {
-       return 0;
+  return ::boost::report_errors();
 }

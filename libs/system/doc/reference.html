@@ -40,6 +40,7 @@
       <a href="#Introduction">Introduction</a><br>
       <a href="#Macros">Macros</a><br>
       <a href="#Deprecated-names">Deprecated names</a><br>
+      <a href="#Breaking-changes">Breaking changes</a><br>
       <a href="#Header-error_code">Header &lt;boost/system/error_code.hpp&gt;</a><br>
       <a href="#Class-error_category">Class <code>error_category</code></a><br>
       &nbsp;&nbsp;&nbsp;<a href="#Class-error_category-synopsis">Class <code>error_category</code> synopsis</a><br>
@@ -77,55 +78,50 @@ errno</code>.</p>
 <h2><a name="Macros">Macros</a></h2>
 <p>Users may defined the following macros if desired. Sensible defaults are 
 provided, so users may ignore these macros if they prefer.</p>
-<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111">
+<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" height="368">
   <tr>
-    <td><b><i>Macro Name</i></b></td>
-    <td><b><i>Default</i></b></td>
-    <td><b><i>Effect if defined</i></b></td>
+    <td height="16"><b><i>Macro Name</i></b></td>
+    <td height="16"><b><i>Default</i></b></td>
+    <td height="16"><b><i>Effect if defined</i></b></td>
   </tr>
   <tr>
-    <td valign="top"><code>BOOST_WINDOWS_API</code></td>
-    <td valign="top">Defined if Windows is detected by Boost.System's automatic configuration 
-    code, otherwise not defined.</td>
-    <td valign="top">Implementation uses the Microsoft Windows native 
-    application program interface (API).</td>
-  </tr>
-  <tr>
-    <td valign="top"><code>BOOST_POSIX_API</code></td>
-    <td valign="top">Defined if Windows is not detected by Boost.System's automatic configuration 
-    code.</td>
-    <td valign="top">Implementation uses the POSIX native 
-    application program interface (API).</td>
-  </tr>
-  <tr>
-    <td valign="top"><code>BOOST_SYSTEM_DYN_LINK</code></td>
-    <td valign="top">Defined if <code>BOOST_ALL_DYN_LINK</code> is defined, 
+    <td valign="top" height="64"><code>BOOST_SYSTEM_DYN_LINK</code></td>
+    <td valign="top" height="64">Defined if <code>BOOST_ALL_DYN_LINK</code> is defined, 
     otherwise not defined.</td>
-    <td valign="top">Boost.System library is dynamically linked. If not defined, 
+    <td valign="top" height="64">Boost.System library is dynamically linked. If not defined, 
     static linking is assumed.</td>
   </tr>
   <tr>
-    <td valign="top"><code>BOOST_SYSTEM_NO_LIB</code></td>
-    <td valign="top">Defined if <code>BOOST_ALL_NO_LIB</code> is defined, 
+    <td valign="top" height="47"><code>BOOST_SYSTEM_NO_LIB</code></td>
+    <td valign="top" height="47">Defined if <code>BOOST_ALL_NO_LIB</code> is defined, 
     otherwise not defined.</td>
-    <td valign="top">Boost.System library does not use the Boost auto-link 
+    <td valign="top" height="47">Boost.System library does not use the Boost auto-link 
     facility.</td>
   </tr>
   <tr>
-    <td valign="top"><code>BOOST_SYSTEM_NO_DEPRECATED</code></td>
-    <td valign="top">Not defined.</td>
-    <td valign="top">Deprecated features are excluded.</td>
+    <td valign="top" height="32"><code>BOOST_SYSTEM_NO_DEPRECATED</code></td>
+    <td valign="top" height="32">Not defined.</td>
+    <td valign="top" height="32">Deprecated features are excluded.</td>
   </tr>
-</table>
+  </table>
 <h2><a name="Deprecated-names">Deprecated names</a></h2>
-<p>In the process of adding Boost.System to C++0x standard library, some of the 
-names are being changed. To ease transition, Boost.System deprecates the old 
+<p>In the process of adding Boost.System to C++0x standard library, the C++ 
+committee changed some  
+names. To ease transition, Boost.System deprecates the old 
 names, but continues to provide them unless macro <code>BOOST_SYSTEM_NO_DEPRECATED</code> 
 is defined.</p>
 <table border="1" cellpadding="5" cellspacing="1" style="border-collapse: collapse" bordercolor="#111111">
   <tr>
-    <td><b><i>Old name, now deprecated</i></b></td>
-    <td><b><i>New name</i></b></td>
+    <td><b><i>Old usage, now deprecated</i></b></td>
+    <td><b><i>Replacement</i></b></td>
+  </tr>
+  <tr>
+    <td><code>get_generic_category()</code></td>
+    <td><code>generic_category()</code></td>
+  </tr>
+  <tr>
+    <td><code>get_system_category()</code></td>
+    <td><code>system_category()</code></td>
   </tr>
   <tr>
     <td><code>namespace posix</code></td>
@@ -141,21 +137,39 @@ is defined.</p>
   </tr>
   <tr>
     <td><code>get_posix_category()</code></td>
-    <td><code>get_generic_category()</code></td>
+    <td><code>generic_category()</code></td>
   </tr>
   <tr>
     <td><code>posix_category</code></td>
-    <td><code>generic_category</code></td>
+    <td><code>generic_category()</code></td>
   </tr>
   <tr>
     <td><code>errno_ecat</code></td>
-    <td><code>generic_category</code></td>
+    <td><code>generic_category()</code></td>
   </tr>
   <tr>
     <td><code>native_ecat</code></td>
-    <td><code>system_category</code></td>
+    <td><code>system_category()</code></td>
   </tr>
 </table>
+<h2><a name="Breaking-changes">Breaking changes</a></h2>
+<p>Two static consts are replaced by functions. These are breaking changes best 
+fixed by globally adding () to these names to turn them into function calls.</p>
+<table border="1" cellpadding="5" cellspacing="1" style="border-collapse: collapse" bordercolor="#111111">
+  <tr>
+    <td><b><i>Old usage, now broken</i></b></td>
+    <td><b><i>Replacement</i></b></td>
+  </tr>
+  <tr>
+    <td><code>generic_category</code></td>
+    <td><code>generic_category()</code></td>
+  </tr>
+  <tr>
+    <td><code>system_category</code></td>
+    <td><code>system_category()</code></td>
+  </tr>
+  </table>
+<p>User-defined BOOST_POSIX_API and BOOST_WINDOWS_API are no longer supported.</p>
 <h2><a name="Header-error_code">Header &lt;boost/system/error_code.hpp&gt;</a></h2>
 <h3>&lt;boost/system/error_code.hpp&gt; synopsis</h3>
 <blockquote>
@@ -265,9 +279,6 @@ is defined.</p>
     template<> struct is_error_condition_enum<posix::posix_errno>&lt;errc::errc_t&gt;
       { static const bool value = true; };
 
-    // predefined error_code object used as &quot;throw on error&quot; tag
-    extern error_code <a href="#throws-object">throws</a>;
-
     //  <a href="#Non-member-functions">non-member functions</a>
 
     bool operator==( const error_code &amp; lhs, const error_code &amp; rhs );
@@ -336,11 +347,8 @@ types should create a single object of each such type. <i>—end note</i> ]</p>
       bool operator&lt; ( const error_category &amp; rhs ) const;
     };
 
-    const error_category &amp;  get_system_category();
-    const error_category &amp;  get_generic_category();
-
-    static const error_category &amp;  system_category = get_system_category();
-    static const error_category &amp;  generic_category = get_generic_category();
+    const error_category &amp;  system_category();
+    const error_category &amp;  generic_category();
   }
 }</pre>
 </blockquote>
@@ -402,13 +410,13 @@ const;</code></p>
 </blockquote>
 <h3><a name="Class-error_category-non-member-functions">Class <code>error_category</code> 
 non-member functions</a></h3>
-<pre>const error_category &amp; get_system_category();</pre>
+<pre>const error_category &amp; system_category();</pre>
 <blockquote>
   <p><i>Returns:</i> A reference to a <code>error_category</code> object 
   identifying errors originating from the operating system.</p>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
-<pre>const error_category &amp; get_generic_category();</pre>
+<pre>const error_category &amp; generic_category();</pre>
 <blockquote>
   <p><i>Returns:</i> A reference to a <code>error_category</code> object 
   identifying portable error conditions.</p>
@@ -831,7 +839,7 @@ application program interfaces.</p>
 <hr>
 
 <p>Revised 
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->October 11, 2008<!--webbot bot="Timestamp" endspan i-checksum="30976" --> </font>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->May 29, 2010<!--webbot bot="Timestamp" endspan i-checksum="11273" --> </font>
 </p>
 
 <p>© Copyright Beman Dawes, 2006, 2007, 2008</p>

@@ -25,7 +25,7 @@ namespace boost
   {
     BOOST_SYSTEM_DECL void throw_test()
     {
-      throw system_error(9999, get_system_category(), "boo boo");
+      throw system_error(9999, system_category(), "boo boo");
     }
   }
 }

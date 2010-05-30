@@ -11,22 +11,10 @@
 #define BOOST_SYSTEM_CONFIG_HPP
 
 #include <boost/config.hpp>
+#include <boost/system/api_config.hpp>  // for BOOST_POSIX_API or BOOST_WINDOWS_API
 
-//  BOOST_POSIX_API or BOOST_WINDOWS_API specify which API to use.
-//  If not specified, a sensible default will be applied.
-
-# if defined( BOOST_WINDOWS_API ) && defined( BOOST_POSIX_API )
-#   error both BOOST_WINDOWS_API and BOOST_POSIX_API are defined
-# elif !defined( BOOST_WINDOWS_API ) && !defined( BOOST_POSIX_API )
-#   if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
-      // All Win32 development environments, including 64-bit Windows and MinGW, define 
-      // _WIN32 or one of its variant spellings. Note that Cygwin is a POSIX environment,
-      // so does not define _WIN32 or its variants.
-#     define BOOST_WINDOWS_API
-#   else
-#     define BOOST_POSIX_API 
-#   endif
-# endif
+// This header implements separate compilation features as described in
+// http://www.boost.org/more/separate_compilation.html
 
 //  enable dynamic or static linking as requested --------------------------------------//
 

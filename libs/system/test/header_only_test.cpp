@@ -18,6 +18,6 @@
 
 int main( int, char*[] )
 {
-  boost::system::error_code ec( 0, boost::system::system_category );
+  boost::system::error_code ec( 0, boost::system::system_category() );
   return ::boost::report_errors();
 }

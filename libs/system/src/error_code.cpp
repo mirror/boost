@@ -159,7 +159,7 @@ namespace
     switch ( ev )
     {
     case 0: return make_error_condition( success );
-  # if defined(BOOST_POSIX_API)
+# if defined(BOOST_POSIX_API)
     // POSIX-like O/S -> posix_errno decode table  ---------------------------//
     case E2BIG: return make_error_condition( argument_list_too_long );
     case EACCES: return make_error_condition( permission_denied );
@@ -329,7 +329,7 @@ namespace
     case WSAETIMEDOUT: return make_error_condition( timed_out );
     case WSAEWOULDBLOCK: return make_error_condition( operation_would_block );
   #endif
-    default: return error_condition( ev, system_category );
+    default: return error_condition( ev, system_category() );
     }
   }
 
@@ -337,7 +337,7 @@ namespace
 
   std::string system_error_category::message( int ev ) const
   {
-    return generic_category.message( ev );
+    return generic_category().message( ev );
   }
 # else
 // TODO:
@@ -423,13 +423,13 @@ namespace boost
                                          //  address for comparison purposes
 # endif
 
-    BOOST_SYSTEM_DECL const error_category & get_system_category()
+    BOOST_SYSTEM_DECL const error_category & system_category()
     {
       static const system_error_category  system_category_const;
       return system_category_const;
     }
 
-    BOOST_SYSTEM_DECL const error_category & get_generic_category()
+    BOOST_SYSTEM_DECL const error_category & generic_category()
     {
       static const generic_error_category generic_category_const;
       return generic_category_const;
