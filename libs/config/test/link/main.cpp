@@ -9,6 +9,10 @@
 
 int main()
 {
+#ifndef BOOST_NO_EXTERN_TEMPLATE
+   test_free_proc<int>(0);
+   tester<int>::test();
+#endif
    return check_options(dyn_link, dyn_rtl, has_threads, debug, stl_debug) ? 0 : -1;
 }
 
