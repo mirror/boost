@@ -54,7 +54,7 @@ int main()
       regfreeA(&re);
       return result;
    }
-   assert(matches[0].rm_so == matches[0].rm_eo == 1);
+   assert((matches[0].rm_so == matches[0].rm_eo) && (matches[0].rm_eo == 1));
    regfreeA(&re);
    printf("no errors found\n");
    return 0;
