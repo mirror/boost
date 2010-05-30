@@ -223,37 +223,65 @@ it <em>may</em> in practice still be left uninitialized, because of those
 compiler issues! It's hard to make a general statement on what those issues
 are like, because they depend on the compiler you are using, its version number,
 and the type of object you would like to have value-initialized.
-Compilers usually support value-initialization for built-in types properly.
-But objects of user-defined types that involve <em>aggregates</em> may <em>in some cases</em>
-be partially, or even entirely left uninitialized, when they should be value-initialized.
+All compilers we have tested so far support value-initialization for arithmetic types properly.
+However, various compilers may leave some types of <em>aggregates</em> uninitialized, when they 
+should be value-initialized. Value-initialization of objects of a pointer-to-member type may also
+go wrong on various compilers. 
 </p>
 <p>
-We have encountered issues regarding value-initialization on compilers by
-Microsoft, Sun, Borland, and GNU. Here is a list of bug reports on those issues:
-<table summary="Compiler bug reports regarding value-initialization" border="0" cellpadding="7" cellspacing="1" >
-<tr><td>
-<a href="https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=100744">
-Microsoft Feedback ID 100744 - Value-initialization in new-expression</a>
-<br>Reported by Pavel Kuznetsov (MetaCommunications Engineering), 2005-07-28
-<br>
-<a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30111">
-GCC Bug 30111 - Value-initialization of POD base class doesn't initialize members</a>
-<br>Reported by Jonathan Wakely, 2006-12-07 
-<br>
-<a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=33916">
-GCC Bug 33916 - Default constructor fails to initialize array members</a>
-<br>Reported by Michael Elizabeth Chastain, 2007-10-26
-<br>
-<a href="http://qc.codegear.com/wc/qcmain.aspx?d=51854">
-Borland Report 51854 - Value-initialization: POD struct should be zero-initialized</a>
-<br>Reported by Niels Dekker (LKEB, Leiden University Medical Center), 2007-09-11
-<br>
-</td></tr></table>
+At the moment of writing, May 2010, the following reported issues regarding 
+value-initialization are still there in current compiler releases:
+<ul>
+<li>
+<a href="https://connect.microsoft.com/VisualStudio/feedback/details/100744">
+Microsoft Visual Studio Feedback ID 100744, Value-initialization in new-expression</a>
+<br>Reported by Pavel Kuznetsov (MetaCommunications Engineering), 2005
+</li><li>
+<a href="http://connect.microsoft.com/VisualStudio/feedback/details/484295">
+Microsoft Visual Studio Feedback ID 484295, VC++ does not value-initialize members of derived classes without user-declared constructor</a>
+<br>Reported by Sylvester Hesp, 2009
+</li><li>
+<a href="https://connect.microsoft.com/VisualStudio/feedback/details/499606">
+Microsoft Visual Studio Feedback ID 499606, Presence of copy constructor breaks member class initialization</a>
+<br>Reported by Alex Vakulenko, 2009
+</li><li>
+<a href="http://qc.embarcadero.com/wc/qcmain.aspx?d=83751">
+Embarcadero/C++Builder Report 83751, Value-initialization: arrays should have each element value-initialized</a>
+<br>Reported by Niels Dekker (LKEB), 2010
+</li><li>
+<a href="http://qc.embarcadero.com/wc/qcmain.aspx?d=83851">
+Embarcadero/C++Builder Report 83851, Value-initialized temporary triggers internal backend error C1798</a>
+<br>Reported by Niels Dekker, 2010
+</li><li>
+<a href="http://qc.embarcadero.com/wc/qcmain.aspx?d=84279">
+Embarcadero/C++Builder Report 84279, Internal compiler error (F1004), value-initializing member function pointer by "new T()"</a>
+<br>Reported by Niels Dekker, 2010
+</li><li>
+Sun CR 6947016, Sun 5.10 may fail to value-initialize an object of a non-POD aggregate.
+<br>Reported to Steve Clamage by Niels Dekker, 2010
+</li><li>
+IBM's XL V10.1 and V11.1 may fail to value-initialize a temporary of a non-POD aggregate.
+<br>Reported to Michael Wong by Niels Dekker, 2010
+</li><li>
+Intel support issue 589832, Attempt to value-initialize pointer-to-member triggers internal error
+on Intel 11.1.
+<br>Reported by John Maddock, 2010
+</li>
+</ul>
+Note that all known GCC issues regarding value-initialization are
+fixed with GCC version 4.4, including
+<a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30111">GCC Bug 30111</a>.
+Clang also has completely implemented value-initialization, as far as we know,
+now that <a href="http://llvm.org/bugs/show_bug.cgi?id=7139">Clang Bug 7139</a> is fixed. 
 </p><p>
+
 New versions of <code>value_initialized</code>
 (Boost release version 1.35 or higher)
-offer a workaround to these issues: <code>value_initialized</code> will now clear
-its internal data, prior to constructing the object that it contains.
+offer a workaround to these issues: <code>value_initialized</code> may now clear
+its internal data, prior to constructing the object that it contains. It will do
+so for those compilers that need to have such a workaround, based on the
+<a href="../config/doc/html/boost_config/boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_defects"
+>compiler defect macro</a> BOOST_NO_COMPLETE_VALUE_INITIALIZATION.
 </p>
                    
 <h2><a name="types"></a>Types and objects</h2>
@@ -463,7 +491,7 @@ for Boost release version 1.35 (2008), offering a workaround to various compiler
      </p>
                     
 <hr>          
-<p>Revised 1 May 2010</p>
+<p>Revised 30 May 2010</p>
                    
 <p>&copy; Copyright Fernando Cacciola, 2002 - 2010.</p>
                    
