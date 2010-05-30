@@ -24,7 +24,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:variable name="id-start-chars" select="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"/>
+  <xsl:variable name="id-start-chars" select="'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_'"/>
   <xsl:variable name="id-chars" select="'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_'"/>
   <xsl:variable name="digits" select="'1234567890'"/>
   <xsl:variable name="number-chars" select="'1234567890abcdefABCDEFxX.'"/>
