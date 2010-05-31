@@ -62,7 +62,7 @@ namespace boost {
  * pseudo-device, which blocks on reads if the entropy pool has no more
  * random bits available.
  *
- * <b>Inplementation Note for Windows</b>
+ * <b>Implementation Note for Windows</b>
  *
  * On the Windows operating system, token is interpreted as the name
  * of a cryptographic service provider.  By default \random_device uses

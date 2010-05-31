@@ -17,7 +17,7 @@
 #include <cassert>
 
 
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+#if defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION) && !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
 //  A definition is required even for integral static constants
 const bool boost::random_device::has_fixed_range;
 const boost::random_device::result_type boost::random_device::min_value;
@@ -31,7 +31,30 @@ const boost::random_device::result_type boost::random_device::max_value;
 #include <wincrypt.h>
 #include <stdexcept>  // std::invalid_argument
 
-#pragma comment(lib, "Advapi32.lib")
+#define BOOST_AUTO_LINK_NOMANGLE
+#define BOOST_LIB_NAME "Advapi32"
+#include <boost/config/auto_link.hpp>
+
+#ifdef __MINGW32__
+
+extern "C" {
+
+// mingw's wincrypt.h appears to be missing some things
+WINADVAPI
+BOOL
+WINAPI
+CryptEnumProvidersA(
+    DWORD dwIndex,
+    DWORD *pdwReserved,
+    DWORD dwFlags,
+    DWORD *pdwProvType,
+    LPSTR szProvName,
+    DWORD *pcbProvName
+    );
+
+}
+
+#endif
 
 BOOST_RANDOM_DECL const char * const boost::random_device::default_token = MS_DEF_PROV_A;
 
@@ -77,7 +100,6 @@ public:
 
 private:
   void error(const std::string & msg) {
-    DWORD error_code = GetLastError();
     char buf[80];
     DWORD num = FormatMessageA(
       FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
