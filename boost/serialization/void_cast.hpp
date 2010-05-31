@@ -108,6 +108,7 @@ class BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) void_caster :
 protected:
     void recursive_register(bool includes_virtual_base = false) const;
     void recursive_unregister() const;
+    virtual bool has_virtual_base() const = 0;
 public:
     // Data members
     const extended_type_info * m_derived;
@@ -166,6 +167,9 @@ class void_caster_primitive :
             );
         return b;
     }
+    virtual bool has_virtual_base() const {
+        return false;
+    }
 public:
     void_caster_primitive();
     virtual ~void_caster_primitive();
@@ -197,6 +201,9 @@ template <class Derived, class Base>
 class void_caster_virtual_base : 
     public void_caster
 {
+    virtual bool has_virtual_base() const {
+        return true;
+    }
 public:
     virtual void const * downcast(void const * const t) const {
         const Derived * d = 

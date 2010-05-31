@@ -102,6 +102,8 @@ public:
         const unsigned int x = t.t;
         * this->This() << x;
     }
+    // note the following four overrides are necessary for some borland
+    // compilers(5.51) which don't handle BOOST_STRONG_TYPE properly.
     void save_override(const class_id_type & t, int){
         // note:t.t resolves borland ambguity
         const int x = t.t;

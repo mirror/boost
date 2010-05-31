@@ -157,7 +157,7 @@ BOOST_ARCHIVE_DECL(void)
 xml_iarchive_impl<Archive>::init(){
     gimpl->init(is);
     this->set_library_version(
-        version_type(gimpl->rv.version)
+        library_version_type(gimpl->rv.version)
     );
 }
 

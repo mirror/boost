@@ -29,7 +29,6 @@
 #include <boost/detail/workaround.hpp>
 
 #include <boost/archive/detail/common_iarchive.hpp>
-#include <boost/serialization/string.hpp>
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
@@ -62,13 +61,14 @@ public:
     // template ordering
     typedef detail::common_iarchive<Archive> detail_common_iarchive;
     template<class T>
-    void load_override(T & t, BOOST_PFTO int)
-    {
+    void load_override(T & t, BOOST_PFTO int){
         this->detail_common_iarchive::load_override(t, 0);
     }
     // text file don't include the optional information 
     void load_override(class_id_optional_type & /*t*/, int){}
 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
+    load_override(version_type & t, int);
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load_override(class_name_type & t, int);
 

@@ -56,7 +56,7 @@ basic_binary_iarchive<Archive>::init(){
 
     // make sure the version of the reading archive library can
     // support the format of the archive being read
-    version_type input_library_version;
+    library_version_type input_library_version;
     * this->This() >> input_library_version;
     
     #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
