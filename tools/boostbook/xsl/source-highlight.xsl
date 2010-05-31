@@ -330,6 +330,9 @@
         <xsl:call-template name="highlight-number">
           <xsl:with-param name="text" select="substring($text, 1, $number-length)"/>
         </xsl:call-template>
+        <xsl:call-template name="highlight-text-impl-root">
+          <xsl:with-param name="text" select="substring($text, $number-length + 1)"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:when test="substring($text, 1, 1) = '&#x22;'">
         <xsl:variable name="string-length">
