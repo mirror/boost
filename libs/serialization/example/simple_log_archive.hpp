@@ -106,7 +106,7 @@ public:
     template<class T>
     void register_type(const T * = NULL){}
 
-    unsigned int get_library_version(){
+    library_version_type get_library_version(){
         return 0;
     }
 

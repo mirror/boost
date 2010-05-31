@@ -100,6 +100,9 @@ class void_caster_shortcut : public void_caster
     virtual bool is_shortcut() const {
         return true;
     }
+    virtual bool has_virtual_base() const {
+        return m_includes_virtual_base;
+    }
 public:
     void_caster_shortcut(
         extended_type_info const * derived,
@@ -192,6 +195,10 @@ class void_caster_argument : public void_caster
         assert(false);
         return NULL;
     }
+    virtual bool has_virtual_base() const {
+        assert(false);
+        return false;
+    }
 public:
     void_caster_argument(
         extended_type_info const * derived,
@@ -239,7 +246,7 @@ void_caster::recursive_register(bool includes_virtual_base) const {
                     (*it)->m_derived, 
                     m_base,
                     m_difference + (*it)->m_difference,
-                    includes_virtual_base,
+                    (*it)->has_virtual_base() || includes_virtual_base,
                     this
                 );
             }
@@ -256,7 +263,7 @@ void_caster::recursive_register(bool includes_virtual_base) const {
                     m_derived, 
                     (*it)->m_base, 
                     m_difference + (*it)->m_difference,
-                    includes_virtual_base,
+                    (*it)->has_virtual_base() || includes_virtual_base,
                     this
                 );
             }

@@ -100,9 +100,7 @@ class basic_oarchive_impl {
             const basic_oserializer & bos
         ) :
             m_bos_ptr(& bos),
-            m_class_id(
-                static_cast<class_id_type>(class_id)
-            ),
+            m_class_id(class_id),
             m_initialized(false)
         {}
         cobject_type(const basic_oserializer & bos)
@@ -446,7 +444,7 @@ basic_oarchive::register_basic_serializer(const basic_oserializer & bos){
     pimpl->register_type(bos);
 }
 
-BOOST_ARCHIVE_DECL(unsigned int)
+BOOST_ARCHIVE_DECL(library_version_type)
 basic_oarchive::get_library_version() const{
     return BOOST_ARCHIVE_VERSION();
 }

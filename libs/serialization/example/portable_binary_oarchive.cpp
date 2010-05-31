@@ -70,7 +70,7 @@ portable_binary_oarchive::init(unsigned int flags) {
         );
         * this << file_signature;
         // write library version
-        const boost::archive::version_type v(
+        const boost::archive::library_version_type v(
             boost::archive::BOOST_ARCHIVE_VERSION()
         );
         * this << v;

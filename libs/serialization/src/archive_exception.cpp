@@ -74,7 +74,8 @@ archive_exception::archive_exception(
         m_msg += (NULL != e2) ? e2 : "?";
         break;
     case unsupported_class_version:
-        m_msg = "class version";
+        m_msg = "class version ";
+        m_msg += (NULL != e1) ? e1 : "<unknown class>";
         break;
     case other_exception:
         // if get here - it indicates a derived exception 

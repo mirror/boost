@@ -49,7 +49,7 @@ namespace detail {
 
 class basic_iarchive_impl {
     friend class basic_iarchive;
-    version_type m_archive_library_version;
+    library_version_type m_archive_library_version;
     unsigned int m_flags;
 
     //////////////////////////////////////////////////////////////////////
@@ -172,7 +172,7 @@ class basic_iarchive_impl {
         pending_version(0)
     {}
     ~basic_iarchive_impl(){}
-    void set_library_version(version_type archive_library_version){
+    void set_library_version(library_version_type archive_library_version){
         m_archive_library_version = archive_library_version;
     }
     bool
@@ -296,9 +296,7 @@ basic_iarchive_impl::register_type(
         <= 
         boost::integer_traits<class_id_type>::const_max
     );
-    class_id_type cid(static_cast<class_id_type>(
-        cobject_info_set.size()
-    ));
+    class_id_type cid(cobject_info_set.size());
     cobject_type co(cid, bis);
     std::pair<cobject_info_set_type::const_iterator, bool>
         result = cobject_info_set.insert(co);
@@ -527,7 +525,7 @@ basic_iarchive::~basic_iarchive()
 }
 
 BOOST_ARCHIVE_DECL(void)
-basic_iarchive::set_library_version(version_type archive_library_version){
+basic_iarchive::set_library_version(library_version_type archive_library_version){
     pimpl->set_library_version(archive_library_version);
 }
 
@@ -571,7 +569,7 @@ basic_iarchive::delete_created_pointers()
     pimpl->delete_created_pointers();
 }
 
-BOOST_ARCHIVE_DECL(unsigned int) 
+BOOST_ARCHIVE_DECL(boost::archive::library_version_type) 
 basic_iarchive::get_library_version() const{
     return pimpl->m_archive_library_version;
 }

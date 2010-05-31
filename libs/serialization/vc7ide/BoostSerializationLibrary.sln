@@ -299,6 +299,74 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo", "demo.vcproj", "{A7D
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_list", "test_list.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_binary", "test_binary.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_class_info_load", "test_class_info_load.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_class_info_save", "test_class_info_save.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_contained_class", "test_contained_class.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_cyclic_ptrs", "test_cyclic_ptrs.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_delete_pointer", "test_delete_pointer.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_deque", "test_deque.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_derived_class_ptr", "test_derived_class_ptr.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_diamond", "test_diamond.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_iterators", "test_iterators.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_iterators_base64", "test_iterators_base64.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_list_ptrs", "test_list_ptrs.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_mult_archive_types", "test_mult_archive_types.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_singleton", "test_singleton.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_smart_cast", "test_smart_cast.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_diamond_complex", "test_diamond_complex.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -450,20 +518,20 @@ Global
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-dynamic|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-dynamic|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
@@ -1276,6 +1344,244 @@ Global
 		{30E10563-960A-11D7-9FE9-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
 		{30E10563-960A-11D7-9FE9-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static|Win32
 		{30E10563-960A-11D7-9FE9-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.Build.0 = Debug runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.ActiveCfg = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static.Build.0 = Debug runtime-static|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.ActiveCfg = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-static threading-multi.Build.0 = Debug runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.ActiveCfg = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-dynamic.Build.0 = Release runtime-dynamic|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.ActiveCfg = Release runtime-static threading-multi|Win32
+		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release runtime-static.Build.0 = Release runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug runtime-static threading-multi|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug runtime-dynamic.ActiveCfg = Debug runtime-dynamic|Win32
