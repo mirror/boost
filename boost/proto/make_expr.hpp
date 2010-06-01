@@ -868,14 +868,15 @@
               , N
             > expr_type;
 
-            typedef typename Domain::template result<Domain(expr_type)>::type result_type;
+            typedef typename Domain::proto_generator proto_generator;
+            typedef typename proto_generator::template result<proto_generator(expr_type)>::type result_type;
 
             result_type operator()(BOOST_PP_ENUM_BINARY_PARAMS(N, typename add_reference<A, >::type a)) const
             {
                 expr_type const that = {
                     BOOST_PP_ENUM(N, BOOST_PROTO_AS_CHILD, (A, a, Domain))
                 };
-                return Domain()(that);
+                return proto_generator()(that);
             }
         };
 
@@ -902,7 +903,8 @@
               , N
             > expr_type;
 
-            typedef typename Domain::template result<Domain(expr_type)>::type type;
+            typedef typename Domain::proto_generator proto_generator;
+            typedef typename proto_generator::template result<proto_generator(expr_type)>::type type;
 
             static type const call(Sequence const &sequence)
             {
@@ -910,7 +912,7 @@
                 expr_type const that = {
                     BOOST_PP_ENUM(N, BOOST_PROTO_FUSION_AS_CHILD_AT, ~)
                 };
-                return Domain()(that);
+                return proto_generator()(that);
             }
         };
 

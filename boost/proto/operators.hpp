@@ -31,7 +31,7 @@ namespace boost { namespace proto
         struct generate_if
           : lazy_enable_if_c<
                 matches<Expr, typename Domain::proto_grammar>::value
-              , typename Domain::template result<Domain(Expr)>
+              , typename Domain::proto_generator::template result<typename Domain::proto_generator(Expr)>
             >
         {};
 
@@ -46,8 +46,8 @@ namespace boost { namespace proto
         struct generate_if_left
           : lazy_enable_if_c<
                 matches<proto::expr<Tag, proto::list2<Left &, Right>, 2>, typename Domain::proto_grammar>::value
-              , typename Domain::template result<Domain(
-                    proto::expr<Tag, proto::list2<Left &, typename Domain::template result<Domain(Right)>::type>, 2>
+              , typename Domain::proto_generator::template result<typename Domain::proto_generator(
+                    proto::expr<Tag, proto::list2<Left &, typename Domain::proto_generator::template result<Domain(Right)>::type>, 2>
                 )>
             >
         {};
@@ -63,8 +63,8 @@ namespace boost { namespace proto
         struct generate_if_right
           : lazy_enable_if_c<
                 matches<proto::expr<Tag, proto::list2<Left, Right &>, 2>, typename Domain::proto_grammar>::value
-              , typename Domain::template result<Domain(
-                    proto::expr<Tag, proto::list2<typename Domain::template result<Domain(Left)>::type, Right &>, 2>
+              , typename Domain::proto_generator::template result<typename Domain::proto_generator(
+                    proto::expr<Tag, proto::list2<typename Domain::proto_generator::template result<Domain(Left)>::type, Right &>, 2>
                 )>
             >
         {};
@@ -90,15 +90,24 @@ namespace boost { namespace proto
             >
         {
             typedef proto::expr<tag::terminal, term<Right &>, 0> term_type;
-            typedef typename Left::proto_domain proto_domain;
-            typedef proto::expr<Tag, list2<Left &, typename proto_domain::template result<proto_domain(term_type)>::type>, 2> expr_type;
+            typedef typename Left::proto_generator proto_generator;
+            typedef
+                proto::expr<
+                    Tag
+                  , list2<
+                        Left &
+                      , typename proto_generator::template result<proto_generator(term_type)>::type
+                    >
+                  , 2
+                >
+            expr_type;
 
-            static typename proto_domain::template result<proto_domain(expr_type)>::type
+            static typename proto_generator::template result<proto_generator(expr_type)>::type
             make(Left &left, Right &right)
             {
                 term_type const term = {right};
-                expr_type const that = {left, proto_domain()(term)};
-                return proto_domain()(that);
+                expr_type const that = {left, proto_generator()(term)};
+                return proto_generator()(that);
             }
         };
 
@@ -112,15 +121,24 @@ namespace boost { namespace proto
             >
         {
             typedef proto::expr<tag::terminal, term<Left &>, 0> term_type;
-            typedef typename Right::proto_domain proto_domain;
-            typedef proto::expr<Tag, list2<typename proto_domain::template result<proto_domain(term_type)>::type, Right &>, 2> expr_type;
+            typedef typename Right::proto_generator proto_generator;
+            typedef
+                proto::expr<
+                    Tag
+                  , list2<
+                        typename proto_generator::template result<proto_generator(term_type)>::type
+                      , Right &
+                    >
+                  , 2
+                >
+            expr_type;
 
-            static typename proto_domain::template result<proto_domain(expr_type)>::type
+            static typename proto_generator::template result<proto_generator(expr_type)>::type
             make(Left &left, Right &right)
             {
                 term_type const term = {left};
-                expr_type const that = {proto_domain()(term), right};
-                return proto_domain()(that);
+                expr_type const that = {proto_generator()(term), right};
+                return proto_generator()(that);
             }
         };
 
@@ -137,13 +155,19 @@ namespace boost { namespace proto
             >
         {
             typedef proto::expr<Tag, list2<Left &, Right &>, 2> expr_type;
-            typedef typename common_domain2<typename Left::proto_domain, typename Right::proto_domain>::type proto_domain;
+            typedef
+                typename common_domain2<
+                    typename Left::proto_domain
+                  , typename Right::proto_domain
+                >::type
+            proto_domain;
+            typedef typename proto_domain::proto_generator proto_generator;
 
-            static typename proto_domain::template result<proto_domain(expr_type)>::type
+            static typename proto_generator::template result<proto_generator(expr_type)>::type
             make(Left &left, Right &right)
             {
                 expr_type const that = {left, right};
-                return proto_domain()(that);
+                return proto_generator()(that);
             }
         };
 
@@ -229,7 +253,7 @@ namespace boost { namespace proto
     {                                                                                               \
         typedef proto::expr<TAG, list1<Arg &>, 1> that_type;                                        \
         that_type const that = {arg};                                                               \
-        return typename Arg::proto_domain()(that);                                                  \
+        return typename Arg::proto_generator()(that);                                               \
     }                                                                                               \
     template<typename Arg>                                                                          \
     typename detail::generate_if<                                                                   \
@@ -241,7 +265,7 @@ namespace boost { namespace proto
     {                                                                                               \
         typedef proto::expr<TAG, list1<Arg const &>, 1> that_type;                                  \
         that_type const that = {arg};                                                               \
-        return typename Arg::proto_domain()(that);                                                  \
+        return typename Arg::proto_generator()(that);                                               \
     }                                                                                               \
     /**/
 

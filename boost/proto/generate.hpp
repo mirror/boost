@@ -349,6 +349,12 @@
         {
             typedef Expr type;
         };
+
+        template<typename Expr>
+        struct result_of<proto::default_generator(Expr)>
+        {
+            typedef Expr type;
+        };
     }
 
     #endif // BOOST_PROTO_GENERATE_HPP_EAN_02_13_2007
