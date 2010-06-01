@@ -99,7 +99,7 @@
                 /// \param expr A Proto expression
                 /// \return expr
                 template<typename Expr>
-                #ifndef BOOST_NO_DECLTYPE
+                #ifdef BOOST_PROTO_STRICT_RESULT_OF
                 Expr
                 #else
                 Expr const &
