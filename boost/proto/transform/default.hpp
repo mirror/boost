@@ -482,7 +482,7 @@
                 function_type;
 
                 typedef
-                    typename boost::result_of<function_type()>::type
+                    typename boost::tr1_result_of<function_type()>::type
                 result_type;
 
                 result_type operator ()(
@@ -615,7 +615,7 @@
             function_type;
 
             typedef
-                typename boost::result_of<
+                typename boost::tr1_result_of<
                     function_type(BOOST_PP_ENUM_SHIFTED_PARAMS(N, r))
                 >::type
             result_type;
