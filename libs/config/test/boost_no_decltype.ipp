@@ -1,3 +1,4 @@
+
 //  (C) Copyright Beman Dawes 2008
 
 //  Use, modification and distribution are subject to the
@@ -12,10 +13,34 @@
 
 namespace boost_no_decltype {
 
+struct test_class
+{
+   test_class() {}
+};
+
+test_class get_test_class()
+{
+   return test_class();
+}
+
+template<typename F>
+void baz(F f)
+{
+    //
+    // Strangely VC-10 deduces the return type of F
+    // to be "test_class&".  Remove the constructor
+    // from test_class and then decltype does work OK!!
+    //
+    typedef decltype(f()) res;
+    res r;
+}
+
 int test()
 {
   int i;
   decltype(i) j;
+  decltype(get_test_class()) k;
+  baz(get_test_class);
   return 0;
 }
 

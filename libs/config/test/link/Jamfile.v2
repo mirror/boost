@@ -14,3 +14,6 @@ lib link_test : link_test.cpp
         debug release
     ;
 
+run main.cpp link_test : : : <define>BOOST_DYN_LINK=1 <define>BOOST_CONFIG_NO_LIB <link>shared <runtime-link>shared <threading>single : link_test_test ;
+
+

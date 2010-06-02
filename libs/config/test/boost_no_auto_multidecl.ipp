@@ -11,14 +11,14 @@
 
 namespace boost_no_auto_multideclarations {
 
-void check(int& x, int*& y)
+void check_f(int& x, int*& y)
 {
 }
 
 int test()
 {
    auto x = 10, *y = &x;
-   check(x, y);
+   check_f(x, y);
    return 0;
 }
 

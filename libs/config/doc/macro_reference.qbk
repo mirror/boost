@@ -49,6 +49,10 @@ Koenig lookup); see std::3.4.2 \[basic.koenig.lookup\]
 [[`BOOST_NO_AUTO_PTR`][Standard library][
 If the compiler / library supplies non-standard or broken `std::auto_ptr`.
 ]]
+[[`BOOST_NO_COMPLETE_VALUE_INITIALIZATION`][Compiler][ 
+Compiler has not completely implemented value-initialization. 
+See also [@../../../utility/value_init.htm#compiler_issues The Utility\/Value Init docs] 
+]] 
 [[`BOOST_NO_CTYPE_FUNCTIONS`][Platform][
 The Platform does not provide functions for the character-classifying
 operations `<ctype.h>` and `<cctype>`, only macros.
@@ -313,6 +317,7 @@ void g() { return f(); }
 
 [#config_features]
 
+
 [section Macros that describe optional features]
 
 The following macros describe features that are not required by the C++
@@ -327,10 +332,6 @@ The platform supports BeOS style threads.
 ]]
 [[`BOOST_HAS_CLOCK_GETTIME`][Platform][
 The platform has the POSIX API `clock_gettime`.
-]]
-[[`BOOST_HAS_DECLSPEC`][Compiler][
-The compiler uses `__declspec(dllexport)` and `__declspec(dllimport)` to
-export/import symbols from dll's.
 ]]
 [[`BOOST_HAS_DIRENT_H`][Platform][
 The platform has the POSIX header `<dirent.h>`.
@@ -577,11 +578,11 @@ defaulted (`= default`) functions.
 [[`BOOST_NO_DELETED_FUNCTIONS`][The compiler does not support 
 deleted (`= delete`) functions.              
 ]]              
-[[`BOOST_NO_EXPLICIT_CONVERSION_OPERATIONS`][The compiler does not support 
+[[`BOOST_NO_EXPLICIT_CONVERSION_OPERATORS`][The compiler does not support 
 explicit conversion operators (`explicit operator T()`).              
 ]] 
 [[`BOOST_NO_EXTERN_TEMPLATE`][The compiler does not support 
-explicit instantiation declarations for templates (`explicit template`).
+explicit instantiation forward declarations for templates (`extern template ...`).
 ]]
 [[`BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS`][The compiler does not support
 default template arguments for function templates.
@@ -864,9 +865,98 @@ the configuration.
 [section Macros for libraries with separate source code]
 
 The following macros and helper headers are of use to authors whose libraries
-include separate source code, and are intended to address two issues: fixing
-the ABI of the compiled library, and selecting which compiled library to link
-against based upon the compilers settings.
+include separate source code, and are intended to address several issues:
+
+* Controlling shared library symbol visibility
+* Fixing the ABI of the compiled library
+* Selecting which compiled library to link against based upon the compilers settings
+
+See [@http://svn.boost.org/trac/boost/wiki/Guidelines/Separate Guidelines for Authors of Boost Libraries Containing Separate Source] 
+
+[section Macros controlling shared library symbol visibility]
+
+Some compilers support C++ extensions that control which symbols 
+will be exported from shared libraries such as dynamic shared objects (DSO's) on Unix-like
+systems or dynamic-link libraries (DLL's) on Windows.
+
+The Microsoft VC++ compiler has long supplied 
+`__declspec(dllexport)` and `__declspec(dllimport)` extensions for this purpose,
+as do virtually all other compilers targeting the Windows platform.
+ 
+Modern versions of the GNU GCC compiler provide the `__attribute__((visibility("default")))` 
+extension to indicate that a symbol should be exported. All other symbols may be hidden by using the
+`-fvisibility-hidden` or `-fvisibility-ms-compat` compiler switches.
+
+Boost supplies several macros to make it easier to manage symbol visibility in a way that
+is portable between compilers and operating systems.
+
+[table
+[[Macro       ][Description       ]]
+[[`BOOST_SYMBOL_EXPORT`][
+Defines the syntax of a C++ language extension that indicates a symbol is to be exported from a shared library.
+If the compiler has no such extension, the macro is defined with no replacement text. 
+]]
+[[`BOOST_SYMBOL_IMPORT`][
+Defines the syntax of a C++ language extension that indicates a symbol is to be imported from a shared library.
+If the compiler has no such extension, the macro is defined with no replacement text. 
+]]
+[[`BOOST_SYMBOL_VISIBLE`][
+Defines the syntax of a C++ language extension that indicates a symbol is to be globally visible.
+If the compiler has no such extension, the macro is defined with no replacement text. 
+Needed for classes that are not otherwise exported, but are used by RTTI. Examples include
+class for objects that will be thrown as exceptions or used in dynamic_casts,
+across shared library boundaries. For example, a header-only exception class might look like this:
+``
+  class BOOST_SYMBOL_VISIBLE my_exception : public std::runtime_error { ... };
+`` 
+Without BOOST_SYMBOL_VISIBLE, it would be impossible to catch my_exception thrown from a shared library
+compiled by GCC with the -fvisibility=hidden option.
+]]
+[[`BOOST_HAS_DECLSPEC`][
+The compiler has C++ extensions `__declspec(dllexport)` and `__declspec(dllimport)` to control
+export/import of symbols from shared libraries.
+['Deprecated. This macro is no longer necessary since BOOST_SYMBOL_EXPORT and BOOST_SYMBOL_IMPORT
+are now supplied. It is provided to support legacy code.]
+]]
+]
+
+Typical usage:
+
+[*boost/foo/config.hpp]
+
+    ...
+    #if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_FOO_DYN_LINK)
+    # if defined(BOOST_FOO_SOURCE)
+    #   define BOOST_FOO_DECL BOOST_SYMBOL_EXPORT
+    # else 
+    #   define BOOST_FOO_DECL BOOST_SYMBOL_IMPORT
+    # endif
+    #else
+    # define BOOST_FOO_DECL
+    #endif
+    ...
+ 
+[*boost/foo/foo.hpp] 
+  
+    #include <boost/foo/config.hpp>
+    ...
+    class BOOST_FOO_DECL bar { ... };
+    ...
+    void BOOST_FOO_DECL f();
+    ...
+
+[*boost/libs/foo/src/foo.cpp] 
+   
+    #define BOOST_FOO_SOURCE
+    #include <boost/foo/foo.hpp>    
+    ...
+    void BOOST_FOO_DECL f()
+    {
+      ...
+    }
+    ...
+     
+[endsect]
 
 [section ABI Fixing]
 
@@ -988,3 +1078,6 @@ match that used to create the libraries via bjam 's install rules.
 [endsect]
 
 [endsect]
+
+
+

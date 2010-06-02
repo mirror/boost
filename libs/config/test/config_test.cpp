@@ -1,4 +1,4 @@
-//  This file was automatically generated on Sun Oct 11 13:04:18 2009
+//  This file was automatically generated on Fri Apr 09 12:24:54 2010
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -171,6 +171,11 @@ namespace boost_no_char16_t = empty_boost;
 #include "boost_no_char32_t.ipp"
 #else
 namespace boost_no_char32_t = empty_boost;
+#endif
+#ifndef BOOST_NO_COMPLETE_VALUE_INITIALIZATION
+#include "boost_no_com_value_init.ipp"
+#else
+namespace boost_no_complete_value_initialization = empty_boost;
 #endif
 #ifndef BOOST_NO_CONCEPTS
 #include "boost_no_concepts.ipp"
@@ -1249,6 +1254,11 @@ int main( int, char *[] )
    if(0 != boost_no_char32_t::test())
    {
       std::cerr << "Failed test for BOOST_NO_CHAR32_T at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_complete_value_initialization::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_COMPLETE_VALUE_INITIALIZATION at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_concepts::test())

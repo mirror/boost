@@ -44,11 +44,11 @@ static const bool stl_debug = false;
 //
 // set up import and export options:
 //
-#if defined(BOOST_HAS_DECLSPEC) && defined(BOOST_DYN_LINK)
+#if defined(BOOST_DYN_LINK)
 #  ifdef BOOST_CONFIG_SOURCE
-#      define BOOST_CONFIG_DECL __declspec(dllexport)
+#      define BOOST_CONFIG_DECL BOOST_SYMBOL_EXPORT
 #  else
-#      define BOOST_CONFIG_DECL __declspec(dllimport)
+#      define BOOST_CONFIG_DECL BOOST_SYMBOL_IMPORT
 #  endif
 #endif
 #ifndef BOOST_CONFIG_DECL
@@ -73,5 +73,36 @@ bool BOOST_CONFIG_DECL check_options(
 #  include <boost/config/auto_link.hpp>
 #endif
 
+#ifndef BOOST_NO_EXTERN_TEMPLATE
+
+template <class T>
+T test_free_proc(T v)
+{
+   return v;
+}
+
+template <class T>
+struct tester
+{
+   static int test();
+};
+
+template <class T>
+int tester<T>::test()
+{
+   return 0;
+}
+
+#ifdef BOOST_CONFIG_SOURCE
+template BOOST_SYMBOL_EXPORT int test_free_proc<int>(int);
+template BOOST_SYMBOL_EXPORT int tester<int>::test();
+#else
+extern template BOOST_SYMBOL_IMPORT int test_free_proc<int>(int);
+extern template BOOST_SYMBOL_IMPORT int tester<int>::test();
+#endif
+
+#endif // BOOST_NO_EXTERN_TEMPLATE
+
 #endif // BOOST_LINK_TEST_HPP
+
 

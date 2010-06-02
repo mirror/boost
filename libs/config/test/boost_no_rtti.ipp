@@ -36,7 +36,7 @@ void B::t()
 namespace boost_no_rtti
 {
 
-int check(const A& a)
+int check_f(const A& a)
 {
    return typeid(a) == typeid(B) ? 0 : 1;
 }
@@ -45,7 +45,7 @@ int test()
 {
    try{
       B b;
-      return check(b);
+      return check_f(b);
    }
    catch(...)
    {

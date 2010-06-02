@@ -14,8 +14,8 @@ namespace boost_no_raw_literals {
 
 int test()
 {
-  const char* s = R"[abc]";
-  const wchar_t* ws = LR"[abc]";
+  const char* s = R"(abc)";
+  const wchar_t* ws = LR"(abc)";
   return 0;
 }
 

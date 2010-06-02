@@ -11,11 +11,18 @@
 //  DESCRIPTION:   If the compiler does not support C++0x initializer lists
 
 #include <initializer_list>
+#include <vector>
 
 namespace boost_no_initializer_lists {
 
+void f(std::initializer_list<int>)
+{
+}
+
 int test()
 {
+    std::vector<std::string> v{"once", "upon", "a", "time"}; // See C++ std 8.5.4
+    f( { 1, 2, 3, 4 } );
     std::initializer_list<int> x = { 1, 2 };
     return 0;
 }

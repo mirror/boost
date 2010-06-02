@@ -12,7 +12,26 @@
 
 namespace boost_no_extern_template {
 
-extern template<class T> void f(T);
+template<class T, class U> void f(T const* p, U const* q)
+{
+   p = q;
+}
+
+template <class T>
+class must_not_compile
+{
+public:
+   void f(T const* p, int const* q);
+};
+
+template <class T>
+void must_not_compile<T>::f(T const* p, int const* q)
+{
+   p = q;
+}
+
+extern template void f<>(int const*, float const*);
+extern template class must_not_compile<int>;
 
 int test()
 {
