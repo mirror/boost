@@ -84,17 +84,12 @@ namespace boost
         #ifdef BOOST_NO_DECLTYPE
             template<int N, typename Domain>
             struct nth_domain
-              : nth_domain<N - 2, typename Domain::base::base>
+              : nth_domain<N - 1, typename Domain::base>
             {};
 
             template<typename Domain>
             struct nth_domain<0, Domain>
               : Domain
-            {};
-
-            template<typename Domain>
-            struct nth_domain<1, Domain>
-              : Domain::base
             {};
         #endif
 
