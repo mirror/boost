@@ -316,8 +316,8 @@ name of the adapted struct.
 The sequence `(namespace0)(namespace1)...` declares the namespace
 for `adapted_name`. It yields to a fully qualified name for `adapted_name` of
 `namespace0::namespace1::... adapted_name`.
-If an empty namespace sequence is given, the adapted view is placed in the
-global namespace.
+If an empty namespace sequence is given (that is a macro that expands to
+nothing), the adapted view is placed in the global namespace.
 If no namespace sequence is given (i.e. `BOOST_FUSION_ADAPT_STRUCT_NAMED`), the
 adapted view is placed in the namespace `boost::fusion::adapted`.
 The sequence of `(member_typeN, member_nameN)`
@@ -507,8 +507,8 @@ using `adapted_name` as the name of the adapted struct.
 The sequence `(namespace0)(namespace1)...` declares the namespace
 for `adapted_name`. It yields to a fully qualified name for `adapted_name` of
 `namespace0::namespace1::... adapted_name`.
-If an empty namespace sequence is given, the adapted view is placed in the
-global namespace.
+If an empty namespace sequence is given (that is a macro that expands to
+nothing), the adapted view is placed in the global namespace.
 If no namespace sequence is given (i.e. `BOOST_FUSION_ADAPT_STRUCT_ASSOC_NAMED`), the
 adapted view is placed in the namespace `boost::fusion::adapted`.
 The sequence of `(member_typeN, member_nameN, key_typeN)`
@@ -579,8 +579,8 @@ as a model of __random_access_sequence__.
 The sequence `(namespace0)(namespace1)...` declares the namespace
 for `struct_name`. It yields to a fully qualified name for `struct_name` of
 `namespace0::namespace1::... struct_name`.
-If an empty namespace sequence is given, the struct is placed in the
-global namespace.
+If an empty namespace sequence is given (that is a macro that expands to
+nothing), the struct is placed in the global namespace.
 The sequence of `(member_typeN, member_nameN)`
 pairs declares the type and names of each of the struct members that are
 part of the sequence.
@@ -624,8 +624,8 @@ model of __random_access_sequence__.
 [heading Synopsis]
 
     BOOST_FUSION_DEFINE_TPL_STRUCT(
-        (namespace0)(namespace1)...,
         (template_param0)(template_param1)...,
+        (namespace0)(namespace1)...,
         struct_name,
         (member_type0, member_name0)
         (member_type1, member_name1)
@@ -643,13 +643,13 @@ model of __random_access_sequence__.
 
 The above macro generates the necessary code that defines and adapts `struct_name`
 as a model of __random_access_sequence__.
+The sequence `(template_param0)(template_param1)...` declares the names of
+the template type parameters used.
 The sequence `(namespace0)(namespace1)...` declares the namespace
 for `struct_name`. It yields to a fully qualified name for `struct_name` of
 `namespace0::namespace1::... struct_name`.
-If an empty namespace sequence is given, the struct is placed in the
-global namespace.
-The sequence `(template_param0)(template_param1)...` declares the names of
-the template type parameters used.
+If an empty namespace sequence is given (that is a macro that expands to
+nothing), the struct is placed in the global namespace.
 The sequence of `(member_typeN, member_nameN)`
 pairs declares the type and names of each of the struct members that are
 part of the sequence.
@@ -676,7 +676,7 @@ defined in __random_access_sequence__.
 
     // Any instantiated demo::employee is a Fusion sequence
     BOOST_FUSION_DEFINE_TPL_STRUCT(
-        (demo), (Name)(Age), employee,
+        (Name)(Age), (demo), employee,
         (Name, name)
         (Age, age))
 
@@ -713,8 +713,8 @@ as a model of __random_access_sequence__ and __associative_sequence__.
 The sequence `(namespace0)(namespace1)...` declares the namespace
 for `struct_name`. It yields to a fully qualified name for `struct_name` of
 `namespace0::namespace1::... struct_name`.
-If an empty namespace sequence is given, the struct is placed in the
-global namespace.
+If an empty namespace sequence is given (that is a macro that expands to
+nothing), the struct is placed in the global namespace.
 The sequence of `(member_typeN, member_nameN, key_typeN)`
 triples declares the type, name and key type of each of the struct members
 that are part of the sequence.
@@ -764,8 +764,8 @@ model of __random_access_sequence__  and __associative_sequence__.
 [heading Synopsis]
 
     BOOST_FUSION_DEFINE_ASSOC_TPL_STRUCT(
-        (namespace0)(namespace1)...,
         (template_param0)(template_param1)...,
+        (namespace0)(namespace1)...,
         struct_name,
         (member_type0, member_name0, key_type0)
         (member_type1, member_name1, key_type1)
@@ -784,13 +784,13 @@ model of __random_access_sequence__  and __associative_sequence__.
 The above macro generates the necessary code that defines and adapts
 `struct_name` as a model of __random_access_sequence__  and
 __associative_sequence__.
+The sequence `(template_param0)(template_param1)...` declares the names of
+the template type parameters used.
 The sequence `(namespace0)(namespace1)...` declares the namespace
 for `struct_name`. It yields to a fully qualified name for `struct_name` of
 `namespace0::namespace1::... struct_name`.
-If an empty namespace sequence is given, the struct is placed in the
-global namespace.
-The sequence `(template_param0)(template_param1)...` declares the names of
-the template type parameters used.
+If an empty namespace sequence is given (that is a macro that expands to
+nothing), the struct is placed in the global namespace.
 The sequence of `(member_typeN, member_nameN, key_typeN)`
 triples declares the type, name and key type of each of the struct members
 that are part of the sequence.
@@ -823,7 +823,7 @@ defined in __random_access_sequence__ and __associative_sequence__.
     
     // Any instantiated demo::employee is a Fusion sequence
     BOOST_FUSION_DEFINE_ASSOC_TPL_STRUCT(
-        (demo), (Name)(Age), employee,
+        (Name)(Age), (demo), employee,
         (Name, name, keys::name)
         (Age, age, keys::age))
 
