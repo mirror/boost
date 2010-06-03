@@ -478,20 +478,22 @@ namespace boost { namespace graph { namespace distributed {
 
         for( tie(vstart, vend) = vertices(g); vstart != vend; vstart++ ) {
           vertex_descriptor v = get(succ_map, *vstart);
-          if( v != graph_traits<Graph>::null_vertex() )
+          if( v != graph_traits<Graph>::null_vertex() ) {
             if (dest_map[v] == id)
               set_map[v].succ.push_back(*vstart);
             else
               successors[dest_map[v]].push_back( std::make_pair(v, *vstart) );
+          }
         }
 
         for( tie(rev_vstart, rev_vend) = vertices(gr); rev_vstart != rev_vend; rev_vstart++ ) {
           vertex_descriptor v = get(pred_map, *rev_vstart);
-          if( v != graph_traits<Graph>::null_vertex() )
+          if( v != graph_traits<Graph>::null_vertex() ) {
             if (dest_map[v] == id)
               set_map[v].pred.push_back(get(rf, *rev_vstart));
             else
               predecessors[dest_map[v]].push_back( std::make_pair(v, get(rf, *rev_vstart)) );
+          }
         }
 
         // Send predecessor and successor messages
