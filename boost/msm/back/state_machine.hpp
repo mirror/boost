@@ -685,7 +685,10 @@ private:
         // if a guard condition is here, call it to check that the event is accepted
         static bool check_guard(library_sm& fsm,transition_event const& evt)
         {
-            if ( ROW::guard_call(fsm,evt,fsm,fsm,fsm.m_substate_list) )
+            if ( ROW::guard_call(fsm,evt,
+                ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
+                ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
+                fsm.m_substate_list) )
                 return true;
             return false;
         }
@@ -699,7 +702,10 @@ private:
             }
 
             // then call the action method
-            ROW::action_call(fsm,evt,fsm,fsm,fsm.m_substate_list);
+            ROW::action_call(fsm,evt,
+                ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
+                ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
+                fsm.m_substate_list);
             return HANDLED_TRUE;
         }
     };
@@ -717,7 +723,10 @@ private:
         static HandledEnum execute(library_sm& fsm, int region_index, int state, transition_event const& evt)
         {
             // then call the action method
-            ROW::action_call(fsm,evt,fsm,fsm,fsm.m_substate_list);
+            ROW::action_call(fsm,evt,
+                ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
+                ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
+                fsm.m_substate_list);
             return HANDLED_TRUE;
         }
     };
@@ -734,7 +743,10 @@ private:
         // if a guard condition is here, call it to check that the event is accepted
         static bool check_guard(library_sm& fsm,transition_event const& evt)
         {
-            if ( ROW::guard_call(fsm,evt,fsm,fsm,fsm.m_substate_list) )
+            if ( ROW::guard_call(fsm,evt,
+                ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
+                ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
+                fsm.m_substate_list) )
                 return true;
             return false;
         }
