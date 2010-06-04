@@ -29,7 +29,6 @@
 #include <boost/config/no_tr1/cmath.hpp> // isnan
 #include <cassert>
 #include <cstddef> // size_t
-#include <boost/serialization/collection_size_type.hpp>
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
