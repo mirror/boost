@@ -1,4 +1,4 @@
-//  This file was automatically generated on Fri Apr 09 12:24:54 2010
+//  This file was automatically generated on Fri Jun 04 12:51:35 2010
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -111,6 +111,11 @@ namespace boost_no_0x_hdr_thread = empty_boost;
 #include "boost_no_0x_hdr_tuple.ipp"
 #else
 namespace boost_no_0x_hdr_tuple = empty_boost;
+#endif
+#ifndef BOOST_NO_0X_HDR_TYPEINDEX
+#include "boost_no_0x_hdr_typeindex.ipp"
+#else
+namespace boost_no_0x_hdr_typeindex = empty_boost;
 #endif
 #ifndef BOOST_NO_0X_HDR_TYPE_TRAITS
 #include "boost_no_0x_hdr_type_traits.ipp"
@@ -1194,6 +1199,11 @@ int main( int, char *[] )
    if(0 != boost_no_0x_hdr_tuple::test())
    {
       std::cerr << "Failed test for BOOST_NO_0X_HDR_TUPLE at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_0x_hdr_typeindex::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_0X_HDR_TYPEINDEX at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_0x_hdr_type_traits::test())
