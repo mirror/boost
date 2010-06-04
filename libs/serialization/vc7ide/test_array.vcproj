@@ -1770,6 +1770,7 @@
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				WarningLevel="4"
+				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="1"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
