@@ -76,8 +76,8 @@ struct version_type
     typedef uint_least8_t base_type;
     base_type t;
     version_type(){};
-    explicit version_type(const version_type & t_) : t(t_.t){}
-    version_type(const unsigned int & t_) : t(t_){
+    version_type(const version_type & t_) : t(t_.t){}
+    explicit version_type(const unsigned int & t_) : t(t_){
         assert(t_ <= boost::integer_traits<base_type>::const_max);
     }
     version_type & operator=(const version_type & rhs){

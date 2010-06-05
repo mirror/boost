@@ -33,7 +33,7 @@ BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_text_iarchive<Archive>::load_override(version_type & t, int){
     unsigned int v;
     load_override(v, 0);
-    t = v;
+    t = version_type(v);
 }
 
 template<class Archive>

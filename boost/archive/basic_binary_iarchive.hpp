@@ -92,16 +92,6 @@ public:
             t = boost::serialization::item_version_type(x);
         }
     }
-    void load_override(serialization::collection_size_type & t, int version){
-        if(boost::archive::library_version_type(6) < this->get_library_version()){
-            this->detail_common_iarchive::load_override(t, version);
-        }
-        else{
-            unsigned int x=0;
-            * this->This() >> x;
-            t = serialization::collection_size_type(x);
-        } 
-    }
 
     void load_override(version_type & t, int version){
         if(boost::archive::library_version_type(6) < this->get_library_version()){
@@ -112,6 +102,17 @@ public:
             * this->This() >> x;
             t = boost::archive::version_type(x);
         }
+    }
+
+    void load_override(serialization::collection_size_type & t, int version){
+        if(boost::archive::library_version_type(5) < this->get_library_version()){
+            this->detail_common_iarchive::load_override(t, version);
+        }
+        else{
+            unsigned int x=0;
+            * this->This() >> x;
+            t = serialization::collection_size_type(x);
+        } 
     }
 
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)

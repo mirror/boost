@@ -27,8 +27,8 @@ struct item_version_type
     typedef uint_least8_t base_type;
     base_type t;
     item_version_type(){};
-    explicit item_version_type(const item_version_type & t_) : t(t_.t){}
-    item_version_type(const unsigned int & t_) : t(t_){
+    item_version_type(const item_version_type & t_) : t(t_.t){}
+    explicit item_version_type(const unsigned int & t_) : t(t_){
         assert(t_ <= boost::integer_traits<base_type>::const_max);
     }
     item_version_type & operator=(const item_version_type & rhs){

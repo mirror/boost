@@ -104,27 +104,15 @@ public:
     }
     void save(const signed char t)
     {
-        if(os.fail())
-            boost::serialization::throw_exception(
-                archive_exception(archive_exception::stream_error)
-            );
-        os << static_cast<short int>(t);
+        save(static_cast<short int>(t));
     }
     void save(const unsigned char t)
     {
-        if(os.fail())
-            boost::serialization::throw_exception(
-                archive_exception(archive_exception::stream_error)
-            );
-        os << static_cast<short unsigned int>(t);
+        save(static_cast<short unsigned int>(t));
     }
     void save(const char t)
     {
-        if(os.fail())
-            boost::serialization::throw_exception(
-                archive_exception(archive_exception::stream_error)
-            );
-        os << static_cast<short int>(t);
+        save(static_cast<short int>(t));
     }
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
     void save(const wchar_t t)

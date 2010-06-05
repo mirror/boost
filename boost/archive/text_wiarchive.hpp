@@ -60,7 +60,7 @@ protected:
     void load(boost::serialization::item_version_type & t){
         unsigned int x;
         basic_text_iprimitive<std::wistream>::load(x);
-        t = x;
+        t = boost::serialization::item_version_type(x);
     }
     BOOST_WARCHIVE_DECL(void)
     load(char * t);
