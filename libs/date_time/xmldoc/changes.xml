@@ -12,6 +12,30 @@
 
   <!-- if each new change tgroup has a "Bug Fix" as the first "Type", the columns will line up nicely -->
 
+  <bridgehead renderas="sect3">Changes from Boost 1.41 to 1.44 (date_time 1.08 to 1.09)</bridgehead>
+  <informaltable frame="all">
+    <tgroup cols="2">
+      <thead>
+        <row>
+          <entry>Type</entry>
+          <entry>Description</entry>
+        </row>
+      </thead>
+      <tbody>
+
+        <row>
+          <entry>Bug fix</entry>
+          <entry>
+            The "%T" and "%R" format specifiers are now processed by the library rather than underlying standard facet.
+            This fixes the cases when the placeholders are not supported by the facet
+            (<ulink url="https://svn.boost.org/trac/boost/ticket/3876">#3876</ulink>).
+          </entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </informaltable>
+
   <bridgehead renderas="sect3">Changes from Boost 1.40 to 1.41 (date_time 1.07 to 1.08)</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">

@@ -11,10 +11,10 @@
   <title>Format Flags</title>
 
   <para>Many of the format flags this new system uses for output are those used by <code>strftime(...)</code>, but not all. Some new flags have been added, and others overridden. The input system supports only specific flags, therefore, not all flags that work for output will work with input (we are currently working to correct this situation).</para>
- 
-  <para>The following tables list the all the flags available for both date_time IO as well as strftime. Format flags marked with a single asterisk (*) have a behavior unique to date_time. Those flags marked with an exclamation point (!) are not usable for input (at this time). The first table is for dates, and the second table is for times.
+
+  <para>The following tables list the all the flags available for both date_time IO as well as strftime. Format flags marked with a single asterisk (*) have a behavior unique to date_time. Those flags marked with an exclamation point (!) are not usable for input (at this time). The flags marked with a hash sign (#) are implemented by system locale and are known to be missing on some platforms. The first table is for dates, and the second table is for times.
   </para>
-  
+
   <para>
     <anchor id="date_time_io.date_format_flags" />
     Date Facet Format Flags
@@ -71,7 +71,7 @@
           </row>
 
           <row>
-            <entry valign="top" morerows="1"><screen>%C !</screen></entry>
+            <entry valign="top" morerows="1"><screen>%C !#</screen></entry>
             <entry>The century number (year/100) as a 2-digit integer.</entry>
           </row>
           <row>
@@ -87,15 +87,15 @@
           </row>
 
           <row>
-            <entry valign="top" morerows="1"><screen>%D !</screen></entry>
+            <entry valign="top" morerows="1"><screen>%D !#</screen></entry>
             <entry>Equivalent to %m/%d/%y</entry>
           </row>
           <row>
             <entry><screen></screen></entry>
           </row>
-          
+
           <row>
-            <entry valign="top" morerows="1"><screen>%e</screen></entry>
+            <entry valign="top" morerows="1"><screen>%e #</screen></entry>
             <entry>Like %d, the day of the month as a decimal number, but a leading zero is replaced by a space</entry>
           </row>
           <row>
@@ -119,7 +119,7 @@
           </row>
 
           <row>
-            <entry valign="top" morerows="1"><screen>%h !</screen></entry>
+            <entry valign="top" morerows="1"><screen>%h !#</screen></entry>
             <entry> Equivalent to %b</entry>
           </row>
           <row>
@@ -156,14 +156,14 @@
           </row>
           <row>
             <entry><screen>date d(2005, Jan, 1); // Saturday
-  // with format %U
-  ss &lt;&lt; d; // "00"
-  d += day(1); // Sunday
-  ss &lt;&lt; d; // "01" beginning of week 1</screen></entry>
+// with format %U
+ss &lt;&lt; d; // "00"
+d += day(1); // Sunday
+ss &lt;&lt; d; // "01" beginning of week 1</screen></entry>
           </row>
 
           <row>
-            <entry valign="top" morerows="1"><screen>%V !</screen></entry>
+            <entry valign="top" morerows="1"><screen>%V !#</screen></entry>
             <entry>The ISO 8601:1988 week number of the current year as  a  decimal number,  range 01 to 53, where week 1 is the first week that has at least 4 days in the current year,  and  with  Monday  as  the first day of the week.</entry>
           </row>
           <row>
@@ -184,10 +184,10 @@
           </row>
           <row>
             <entry><screen>date d(2005, Jan, 2); // Sunday
-  // with format %W
-  ss &lt;&lt; d; // "00"
-  d += day(1); // Monday
-  ss &lt;&lt; d; // "01" beginning of week 1</screen></entry>
+// with format %W
+ss &lt;&lt; d; // "00"
+d += day(1); // Monday
+ss &lt;&lt; d; // "01" beginning of week 1</screen></entry>
           </row>
 
           <row>
@@ -196,15 +196,15 @@
           </row>
           <row>
             <entry><screen>date d(2005,Oct,31);
-  date_facet* f = new date_facet("%x");
-   
-  locale loc = locale(locale("en_US"), f);
-  cout.imbue(loc);
-  cout &lt;&lt; d; // "10/31/2005"
-    
-  loc = locale(locale("de_DE"), f);
-  cout.imbue(loc);
-  cout &lt;&lt; d; // "31.10.2005"</screen></entry>
+date_facet* f = new date_facet("%x");
+
+locale loc = locale(locale("en_US"), f);
+cout.imbue(loc);
+cout &lt;&lt; d; // "10/31/2005"
+
+loc = locale(locale("de_DE"), f);
+cout.imbue(loc);
+cout &lt;&lt; d; // "31.10.2005"</screen></entry>
           </row>
 
           <row>
@@ -296,21 +296,20 @@
           </row>
           <row>
             <entry><screen>"13:15:16"
-  "05:04:03.001234"
-            </screen></entry>
+"05:04:03.001234"</screen></entry>
           </row>
 
           <row>
-            <entry valign="top" morerows="1"><screen>%O</screen></entry>
-            <entry>The number of hours in a time duration as a decimal number (range 0 to max. representable duration); single digits are preceded by a zero.</entry>
+            <entry valign="top" morerows="1"><screen>%H</screen></entry>
+            <entry>The hour as a decimal number using a 24-hour clock (range 00 to 23).</entry>
           </row>
           <row>
-            <entry><screen></screen></entry>
+            <entry></entry>
           </row>
 
           <row>
             <entry valign="top" morerows="1"><screen>%I !</screen></entry>
-            <entry>The hour as a decimal number using a 12-hour clock</entry>
+            <entry>The hour as a decimal number using a 12-hour clock (range 01 to 12).</entry>
           </row>
           <row>
             <entry></entry>
@@ -321,7 +320,7 @@
             <entry>The hour (24-hour clock) as a decimal number (range 0 to 23); single digits are preceded by a blank.</entry>
           </row>
           <row>
-            <entry><screen></screen></entry>
+            <entry></entry>
           </row>
 
           <row>
@@ -329,7 +328,23 @@
             <entry>The hour (12-hour clock) as a decimal number (range  1  to  12); single digits are preceded by a blank.</entry>
           </row>
           <row>
-            <entry><screen></screen></entry>
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry valign="top" morerows="1"><screen>%M</screen></entry>
+            <entry>The minute as a decimal number (range 00 to 59).</entry>
+          </row>
+          <row>
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry valign="top" morerows="1"><screen>%O</screen></entry>
+            <entry>The number of hours in a time duration as a decimal number (range 0 to max. representable duration); single digits are preceded by a zero.</entry>
+          </row>
+          <row>
+            <entry></entry>
           </row>
 
           <row>
@@ -337,23 +352,23 @@
             <entry>Either `AM' or `PM' according to the given time value, or the corresponding strings for the current locale.</entry>
           </row>
           <row>
-            <entry><screen></screen></entry>
+            <entry></entry>
           </row>
 
           <row>
-            <entry valign="top" morerows="1"><screen>%P !</screen></entry>
+            <entry valign="top" morerows="1"><screen>%P !#</screen></entry>
             <entry>Like %p but in lowercase: `am' or `pm' or a corresponding string for the current locale.</entry>
           </row>
           <row>
-            <entry><screen></screen></entry>
+            <entry></entry>
           </row>
 
           <row>
-            <entry valign="top" morerows="1"><screen>%r !</screen></entry>
+            <entry valign="top" morerows="1"><screen>%r !#</screen></entry>
             <entry>The time in a.m. or p.m. notation. In the POSIX locale this is equivalent to `%I:%M:%S %p'</entry>
           </row>
           <row>
-            <entry><screen></screen></entry>
+            <entry></entry>
           </row>
 
           <row>
@@ -361,7 +376,7 @@
             <entry>The time in 24-hour notation (%H:%M)</entry>
           </row>
           <row>
-            <entry><screen></screen></entry>
+            <entry></entry>
           </row>
 
           <row>
@@ -385,7 +400,7 @@
             <entry>The time in 24-hour notation (%H:%M:%S)</entry>
           </row>
           <row>
-            <entry><screen></screen></entry>
+            <entry></entry>
           </row>
 
           <row>
@@ -434,16 +449,16 @@
           </row>
           <row>
             <entry><screen>date d(2005,Oct,31);
-  ptime pt(d, hours(20));
-  time_facet* f = new time_facet("%x %X");
-   
-  locale loc = locale(locale("en_US"), f);
-  cout.imbue(loc);
-  cout &lt;&lt; pt; // "10/31/2005 08:00:00 PM"
-    
-  loc = locale(locale("de_DE"), f);
-  cout.imbue(loc);
-  cout &lt;&lt; pt; // "31.10.2005 20:00:00"</screen></entry>
+ptime pt(d, hours(20));
+time_facet* f = new time_facet("%x %X");
+
+locale loc = locale(locale("en_US"), f);
+cout.imbue(loc);
+cout &lt;&lt; pt; // "10/31/2005 08:00:00 PM"
+
+loc = locale(locale("de_DE"), f);
+cout.imbue(loc);
+cout &lt;&lt; pt; // "31.10.2005 20:00:00"</screen></entry>
           </row>
 
           <row>
@@ -451,9 +466,7 @@
             <entry>ISO format</entry>
           </row>
           <row>
-            <entry><screen>"20051015T131211-0700"
-  // Oct 15, 2005 13:12:11 MST
-            </screen></entry>
+            <entry><screen>"20051015T131211-0700" // Oct 15, 2005 13:12:11 MST</screen></entry>
           </row>
 
           <row>
@@ -501,5 +514,6 @@
     </informaltable>
   </para>
   <para>* Signifies flags that have a behavior unique to <code>date_time</code>.</para>
+  <para># Signifies flags that have a platform-dependent behavior. These may not be supported everywhere.</para>
   <para>! Signifies flags that currently do not work for input.</para>
 </section>
