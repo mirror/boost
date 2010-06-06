@@ -152,14 +152,12 @@
             template<typename Expr, typename Context>
             struct is_member_function_eval
               : is_member_function_pointer<
-                    typename remove_const<
-                        typename remove_reference<
-                            typename proto::result_of::eval<
-                                typename remove_reference<
-                                    typename proto::result_of::child_c<Expr, 1>::type
-                                >::type
-                              , Context
+                    typename detail::uncvref<
+                        typename proto::result_of::eval<
+                            typename remove_reference<
+                                typename proto::result_of::child_c<Expr, 1>::type
                             >::type
+                          , Context
                         >::type
                     >::type
                 >

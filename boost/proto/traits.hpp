@@ -37,7 +37,6 @@
     #include <boost/type_traits/is_same.hpp>
     #include <boost/type_traits/is_function.hpp>
     #include <boost/type_traits/remove_cv.hpp>
-    #include <boost/type_traits/remove_const.hpp>
     #include <boost/type_traits/add_reference.hpp>
     #include <boost/proto/proto_fwd.hpp>
     #include <boost/proto/args.hpp>

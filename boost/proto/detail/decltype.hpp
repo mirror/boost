@@ -22,7 +22,6 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/type_traits/is_class.hpp>
-#include <boost/type_traits/remove_cv.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_function.hpp>
@@ -391,9 +390,7 @@ namespace boost { namespace proto
             {
                 typedef
                     typename classtypeof<
-                        typename remove_const<
-                            typename remove_reference<U>::type
-                        >::type
+                        typename uncvref<U>::type
                     >::type
                 V;
 
@@ -487,7 +484,7 @@ namespace boost { namespace proto
         template<typename T, typename PMF>
         struct memfun
         {
-            typedef typename remove_const<typename remove_reference<PMF>::type>::type pmf_type;
+            typedef typename uncvref<PMF>::type pmf_type;
             typedef typename classtypeof<pmf_type>::type V;
             typedef typename boost::tr1_result_of<pmf_type(T)>::type result_type;
 

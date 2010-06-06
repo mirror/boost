@@ -122,6 +122,24 @@ namespace boost { namespace proto
             typedef T type;
         };
 
+        template<typename T, std::size_t N>
+        struct uncvref<T const[N]>
+        {
+            typedef T type[N];
+        };
+
+        template<typename T, std::size_t N>
+        struct uncvref<T (&)[N]>
+        {
+            typedef T type[N];
+        };
+
+        template<typename T, std::size_t N>
+        struct uncvref<T const (&)[N]>
+        {
+            typedef T type[N];
+        };
+
         struct ignore
         {
             ignore()
@@ -135,7 +153,8 @@ namespace boost { namespace proto
         /// INTERNAL ONLY
         ///
         #define BOOST_PROTO_UNCVREF(X)                                                              \
-            typename boost::remove_const<typename boost::remove_reference<X>::type>::type
+			typename boost::proto::detail::uncvref<X>::type											\
+			/**/
 
         struct _default;
 
@@ -752,8 +771,10 @@ namespace boost { namespace proto
     template<typename T>
     struct is_extension;
 
-    namespace exops
-    {}
+    //namespace exops
+    //{}
+
+	namespace exops = exprns_;
 
 }} // namespace boost::proto
 

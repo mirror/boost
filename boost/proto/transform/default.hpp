@@ -171,14 +171,12 @@
             template<typename Grammar, typename Expr, typename State, typename Data>
             struct is_member_function_invocation
               : is_member_function_pointer<
-                    typename remove_const<
-                        typename remove_reference<
-                            typename Grammar::template impl<
-                                typename result_of::child_c<Expr, 1>::type
-                              , State
-                              , Data
-                            >::result_type
-                        >::type
+                    typename uncvref<
+                        typename Grammar::template impl<
+                            typename result_of::child_c<Expr, 1>::type
+                            , State
+                            , Data
+                        >::result_type
                     >::type
                 >
             {};
