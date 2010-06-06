@@ -14,6 +14,7 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/join.hpp>
 #include "./quickbook.hpp"
 #include "./actions.hpp"
 #include "./utils.hpp"
@@ -1523,6 +1524,8 @@ namespace quickbook
 
     void write_document_info(collector& out, quickbook::actions& actions)
     {
+        std::vector<std::string> invalid_attributes;
+
         out << "  <" << actions.doc_type << "info>\n";
 
         if(!actions.doc_authors.empty())
@@ -1563,25 +1566,50 @@ namespace quickbook
 
         if (!actions.doc_purpose.empty())
         {
-            out << "    <" << actions.doc_type << "purpose>\n"
-                << "      " << actions.doc_purpose
-                << "    </" << actions.doc_type << "purpose>\n"
-                << "\n"
-            ;
+            if (actions.doc_type == "library")
+            {
+                out << "    <" << actions.doc_type << "purpose>\n"
+                    << "      " << actions.doc_purpose
+                    << "    </" << actions.doc_type << "purpose>\n"
+                    << "\n"
+                ;
+            }
+            else
+            {
+                invalid_attributes.push_back("purpose");
+            }
         }
 
         if (!actions.doc_category.empty())
         {
-            out << "    <" << actions.doc_type << "category name=\"category:"
-                << actions.doc_category
-                << "\"></" << actions.doc_type << "category>\n"
-                << "\n"
-            ;
+            if (actions.doc_type == "library")
+            {
+                out << "    <" << actions.doc_type << "category name=\"category:"
+                    << actions.doc_category
+                    << "\"></" << actions.doc_type << "category>\n"
+                    << "\n"
+                ;
+            }
+            else
+            {
+                invalid_attributes.push_back("category");
+            }
         }
 
         out << "  </" << actions.doc_type << "info>\n"
             << "\n"
         ;
+        
+        if(!invalid_attributes.empty())
+        {
+            detail::outwarn(actions.filename.native_file_string(),1)
+                << (invalid_attributes.size() > 1 ?
+                    "Invalid attributes" : "Invalid attribute")
+                << " for '" << actions.doc_type << "': "
+                << boost::algorithm::join(invalid_attributes, ", ")
+                << "\n"
+                ;
+        }
     }
 
     void phrase_to_string_action::operator()(iterator first, iterator last) const
