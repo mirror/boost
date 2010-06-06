@@ -346,6 +346,38 @@ namespace boost {
         x.swap(y);
     }
 
+	// Specific for boost::array: simply returns its elems data member.
+	template <typename T, std::size_t N>
+	T(&get_c_array(boost::array<T,N>& arg))[N]
+	{
+		return arg.elems;
+	}
+	
+	// Const version.
+	template <typename T, std::size_t N>
+	const T(&get_c_array(const boost::array<T,N>& arg))[N]
+	{
+		return arg.elems;
+	}
+
+#if 0
+	// Overload for std::array, assuming that std::array will have
+	// explicit conversion functions as discussed at the WG21 meeting
+	// in Summit, March 2009.
+	template <typename T, std::size_t N>
+	T(&get_c_array(std::array<T,N>& arg))[N]
+	{
+		return static_cast<T(&)[N]>(arg);
+	}
+	
+	// Const version.
+	template <typename T, std::size_t N>
+	const T(&get_c_array(const std::array<T,N>& arg))[N]
+	{
+		return static_cast<T(&)[N]>(arg);
+	}
+#endif
+
 } /* namespace boost */
 
 
