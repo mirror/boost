@@ -197,6 +197,7 @@ Features include:
 * Generate more valid boostbook (still invalid in a few places).
 * Warn about invalid doc_info members.
 * Support multiple categories in library doc_info.
+* Use the cygwin 1.7 API for better path handling.
 
 [endsect]
 
