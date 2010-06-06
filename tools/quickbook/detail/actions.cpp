@@ -1479,7 +1479,9 @@ namespace quickbook
         }
 
         out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            << "<!DOCTYPE library PUBLIC \"-//Boost//DTD BoostBook XML V1.0//EN\"\n"
+            << "<!DOCTYPE "
+            << actions.doc_type
+            << " PUBLIC \"-//Boost//DTD BoostBook XML V1.0//EN\"\n"
             << "     \"http://www.boost.org/tools/boostbook/dtd/boostbook.dtd\">\n"
             << '<' << actions.doc_type << "\n"
             << "    id=\"" << actions.doc_id << "\"\n";

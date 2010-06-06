@@ -194,6 +194,8 @@ Features include:
 
 [h3 Version 1.5.2 - Boost 1.44.0]
 
+* Generate more valid boostbook (still invalid in a few places).
+
 [endsect]
 
 [section:syntax Syntax Summary]
