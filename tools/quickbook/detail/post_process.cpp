@@ -194,6 +194,7 @@ namespace quickbook
         , "para"
         , "row"
         , "section"
+        , "simpara"
         , "table"
         , "tbody"
         , "textobject"

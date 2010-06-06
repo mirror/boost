@@ -45,8 +45,8 @@ namespace quickbook
     const char* note_post           = "</note>";
     const char* tip_pre             = "<tip>";
     const char* tip_post            = "</tip>";
-    const char* list_item_pre       = "<listitem>\n";
-    const char* list_item_post      = "\n</listitem>";
+    const char* list_item_pre       = "<listitem><simpara>\n";
+    const char* list_item_post      = "\n</simpara></listitem>";
     const char* bold_pre_           = "<emphasis role=\"bold\">";
     const char* bold_post_          = "</emphasis>";
     const char* italic_pre_         = "<emphasis>";

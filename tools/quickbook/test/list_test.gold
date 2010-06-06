@@ -9,10 +9,14 @@
   </para>
   <itemizedlist>
     <listitem>
-      A
+      <simpara>
+        A
+      </simpara>
     </listitem>
     <listitem>
-      B
+      <simpara>
+        B
+      </simpara>
     </listitem>
   </itemizedlist>
   <para>
@@ -20,10 +24,14 @@
   </para>
   <orderedlist>
     <listitem>
-      A
+      <simpara>
+        A
+      </simpara>
     </listitem>
     <listitem>
-      B
+      <simpara>
+        B
+      </simpara>
     </listitem>
   </orderedlist>
   <para>
@@ -31,24 +39,36 @@
   </para>
   <itemizedlist>
     <listitem>
-      A
+      <simpara>
+        A
+      </simpara>
       <itemizedlist>
         <listitem>
-          A
+          <simpara>
+            A
+          </simpara>
         </listitem>
         <listitem>
-          B
+          <simpara>
+            B
+          </simpara>
         </listitem>
       </itemizedlist>
     </listitem>
     <listitem>
-      B
+      <simpara>
+        B
+      </simpara>
       <itemizedlist>
         <listitem>
-          A
+          <simpara>
+            A
+          </simpara>
         </listitem>
         <listitem>
-          B
+          <simpara>
+            B
+          </simpara>
         </listitem>
       </itemizedlist>
     </listitem>
@@ -58,62 +78,36 @@
   </para>
   <orderedlist>
     <listitem>
-      A
+      <simpara>
+        A
+      </simpara>
       <itemizedlist>
         <listitem>
-          A
+          <simpara>
+            A
+          </simpara>
         </listitem>
         <listitem>
-          B
+          <simpara>
+            B
+          </simpara>
         </listitem>
       </itemizedlist>
     </listitem>
     <listitem>
-      B
+      <simpara>
+        B
+      </simpara>
       <itemizedlist>
         <listitem>
-          A
+          <simpara>
+            A
+          </simpara>
         </listitem>
         <listitem>
-          B
-        </listitem>
-      </itemizedlist>
-    </listitem>
-  </orderedlist>
-  <para>
-    Three level list:
-  </para>
-  <orderedlist>
-    <listitem>
-      A
-      <itemizedlist>
-        <listitem>
-          A
-        </listitem>
-        <listitem>
-          B
-          <itemizedlist>
-            <listitem>
-              C
-            </listitem>
-            <listitem>
-              D
-            </listitem>
-          </itemizedlist>
-        </listitem>
-        <listitem>
-          E
-        </listitem>
-        <listitem>
-          F
-          <itemizedlist>
-            <listitem>
-              G
-            </listitem>
-            <listitem>
-              H
-            </listitem>
-          </itemizedlist>
+          <simpara>
+            B
+          </simpara>
         </listitem>
       </itemizedlist>
     </listitem>
@@ -123,29 +117,99 @@
   </para>
   <orderedlist>
     <listitem>
-      A
+      <simpara>
+        A
+      </simpara>
       <itemizedlist>
         <listitem>
-          A
+          <simpara>
+            A
+          </simpara>
         </listitem>
         <listitem>
-          B
+          <simpara>
+            B
+          </simpara>
+          <itemizedlist>
+            <listitem>
+              <simpara>
+                C
+              </simpara>
+            </listitem>
+            <listitem>
+              <simpara>
+                D
+              </simpara>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <simpara>
+            E
+          </simpara>
+        </listitem>
+        <listitem>
+          <simpara>
+            F
+          </simpara>
+          <itemizedlist>
+            <listitem>
+              <simpara>
+                G
+              </simpara>
+            </listitem>
+            <listitem>
+              <simpara>
+                H
+              </simpara>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </orderedlist>
+  <para>
+    Three level list:
+  </para>
+  <orderedlist>
+    <listitem>
+      <simpara>
+        A
+      </simpara>
+      <itemizedlist>
+        <listitem>
+          <simpara>
+            A
+          </simpara>
+        </listitem>
+        <listitem>
+          <simpara>
+            B
+          </simpara>
           <orderedlist>
             <listitem>
-              C
+              <simpara>
+                C
+              </simpara>
             </listitem>
             <listitem>
-              D
+              <simpara>
+                D
+              </simpara>
             </listitem>
           </orderedlist>
         </listitem>
       </itemizedlist>
     </listitem>
     <listitem>
-      G
+      <simpara>
+        G
+      </simpara>
     </listitem>
     <listitem>
-      H
+      <simpara>
+        H
+      </simpara>
     </listitem>
   </orderedlist>
 </article>

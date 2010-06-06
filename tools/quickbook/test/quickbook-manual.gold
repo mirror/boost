@@ -68,24 +68,36 @@
     </para>
     <itemizedlist>
       <listitem>
-        generate <ulink url="http://www.boost.org/doc/html/boostbook.html">BoostBook</ulink>
-        xml, to generate HTML, PostScript and PDF
+        <simpara>
+          generate <ulink url="http://www.boost.org/doc/html/boostbook.html">BoostBook</ulink>
+          xml, to generate HTML, PostScript and PDF
+        </simpara>
       </listitem>
       <listitem>
-        simple markup to link to Doxygen-generated entities
+        <simpara>
+          simple markup to link to Doxygen-generated entities
+        </simpara>
       </listitem>
       <listitem>
-        macro system for simple text substitution
+        <simpara>
+          macro system for simple text substitution
+        </simpara>
       </listitem>
       <listitem>
-        simple markup for italics, bold, preformatted, blurbs, code samples, tables,
-        URLs, anchors, images, etc.
+        <simpara>
+          simple markup for italics, bold, preformatted, blurbs, code samples, tables,
+          URLs, anchors, images, etc.
+        </simpara>
       </listitem>
       <listitem>
-        automatic syntax coloring of code samples
+        <simpara>
+          automatic syntax coloring of code samples
+        </simpara>
       </listitem>
       <listitem>
-        CSS support
+        <simpara>
+          CSS support
+        </simpara>
       </listitem>
     </itemizedlist>
   </section>
@@ -97,112 +109,172 @@
     </bridgehead>
     <itemizedlist>
       <listitem>
-        Quickbook file inclusion [include].
+        <simpara>
+          Quickbook file inclusion [include].
+        </simpara>
       </listitem>
       <listitem>
-        Better xml output (pretty layout). Check out the generated XML.
+        <simpara>
+          Better xml output (pretty layout). Check out the generated XML.
+        </simpara>
       </listitem>
       <listitem>
-        Regression testing facility: to make sure your document will always be compatible
-        (full backward compatibility) regardless of changes to QuickBook.
+        <simpara>
+          Regression testing facility: to make sure your document will always be
+          compatible (full backward compatibility) regardless of changes to QuickBook.
+        </simpara>
       </listitem>
       <listitem>
-        Code cleanup and refactoring.
+        <simpara>
+          Code cleanup and refactoring.
+        </simpara>
       </listitem>
       <listitem>
-        Allow phrase markup in the doc-info.
+        <simpara>
+          Allow phrase markup in the doc-info.
+        </simpara>
       </listitem>
       <listitem>
-        Preformatted code blocks via ``code`` (double ticks) allows code in tables
-        and lists, for example.
+        <simpara>
+          Preformatted code blocks via ``code`` (double ticks) allows code in tables
+          and lists, for example.
+        </simpara>
       </listitem>
       <listitem>
-        Quickbook versioning; allows full backward compatibility. You have to add
-        [quickbook 1.3] to the doc-info header to enable the new features. Without
-        this, QuickBook will assume that the document is a pre-1.3 document.
+        <simpara>
+          Quickbook versioning; allows full backward compatibility. You have to add
+          [quickbook 1.3] to the doc-info header to enable the new features. Without
+          this, QuickBook will assume that the document is a pre-1.3 document.
+        </simpara>
       </listitem>
       <listitem>
-        Better (intuitive) paragraph termination. Some markups may terminate a paragraph.
-        Example:
+        <simpara>
+          Better (intuitive) paragraph termination. Some markups may terminate a
+          paragraph. Example:
 <programlisting><phrase role="special">[</phrase><phrase role="identifier">section</phrase> <phrase role="identifier">x</phrase><phrase role="special">]</phrase>
 <phrase role="identifier">blah</phrase><phrase role="special">...</phrase>
 <phrase role="special">[</phrase><phrase role="identifier">endsect</phrase><phrase role="special">]</phrase></programlisting>
+        </simpara>
       </listitem>
       <listitem>
-        Fully qualified section and headers. Subsection names are concatenated to
-        the ID to avoid clashing. Example: <code><phrase role="identifier">doc_name</phrase><phrase
-        role="special">.</phrase><phrase role="identifier">sect_name</phrase><phrase
-        role="special">.</phrase><phrase role="identifier">sub_sect_name</phrase><phrase
-        role="special">.</phrase><phrase role="identifier">sub_sub_sect_name</phrase></code>
+        <simpara>
+          Fully qualified section and headers. Subsection names are concatenated
+          to the ID to avoid clashing. Example: <code><phrase role="identifier">doc_name</phrase><phrase
+          role="special">.</phrase><phrase role="identifier">sect_name</phrase><phrase
+          role="special">.</phrase><phrase role="identifier">sub_sect_name</phrase><phrase
+          role="special">.</phrase><phrase role="identifier">sub_sub_sect_name</phrase></code>
+        </simpara>
       </listitem>
       <listitem>
-        Better &amp;nbsp; and whitespace handling in code snippets.
+        <simpara>
+          Better &amp;nbsp; and whitespace handling in code snippets.
+        </simpara>
       </listitem>
       <listitem>
-        [xinclude] fixes up the relative path to the target XML file when input_directory
-        is not the same as the output_directory.
+        <simpara>
+          [xinclude] fixes up the relative path to the target XML file when input_directory
+          is not the same as the output_directory.
+        </simpara>
       </listitem>
       <listitem>
-        Allow untitled tables.
+        <simpara>
+          Allow untitled tables.
+        </simpara>
       </listitem>
       <listitem>
-        Allow phrase markups in section titles.
+        <simpara>
+          Allow phrase markups in section titles.
+        </simpara>
       </listitem>
       <listitem>
-        Allow escaping back to QuickBook from code, code blocks and inline code.
+        <simpara>
+          Allow escaping back to QuickBook from code, code blocks and inline code.
+        </simpara>
       </listitem>
       <listitem>
-        Footnotes, with the [footnote This is the footnote] syntax.
+        <simpara>
+          Footnotes, with the [footnote This is the footnote] syntax.
+        </simpara>
       </listitem>
       <listitem>
-        Post-processor bug fix for escaped XML code that it does not recognize.
+        <simpara>
+          Post-processor bug fix for escaped XML code that it does not recognize.
+        </simpara>
       </listitem>
       <listitem>
-        Replaceable, with the [~replacement] syntax.
+        <simpara>
+          Replaceable, with the [~replacement] syntax.
+        </simpara>
       </listitem>
       <listitem>
-        Generic Headers
+        <simpara>
+          Generic Headers
+        </simpara>
       </listitem>
       <listitem>
-        Code changes to allow full recursion (i.e. Collectors and push/pop functions)
+        <simpara>
+          Code changes to allow full recursion (i.e. Collectors and push/pop functions)
+        </simpara>
       </listitem>
       <listitem>
-        Various code cleanup/maintenance
+        <simpara>
+          Various code cleanup/maintenance
+        </simpara>
       </listitem>
       <listitem>
-        Templates!
+        <simpara>
+          Templates!
+        </simpara>
       </listitem>
       <listitem>
-        [conceptref] for referencing BoostBook &lt;concept&gt; entities.
+        <simpara>
+          [conceptref] for referencing BoostBook &lt;concept&gt; entities.
+        </simpara>
       </listitem>
       <listitem>
-        Allow escape of spaces. The escaped space is removed from the output. Syntax:
-        <code><phrase role="special">\</phrase> </code>.
+        <simpara>
+          Allow escape of spaces. The escaped space is removed from the output. Syntax:
+          <code><phrase role="special">\</phrase> </code>.
+        </simpara>
       </listitem>
       <listitem>
-        Nested comments are now allowed.
+        <simpara>
+          Nested comments are now allowed.
+        </simpara>
       </listitem>
       <listitem>
-        Quickbook blocks can nest inside comments.
+        <simpara>
+          Quickbook blocks can nest inside comments.
+        </simpara>
       </listitem>
       <listitem>
-        <link linkend="quickbook.syntax.block.import">Import</link> facility.
+        <simpara>
+          <link linkend="quickbook.syntax.block.import">Import</link> facility.
+        </simpara>
       </listitem>
       <listitem>
-        Callouts on imported code
+        <simpara>
+          Callouts on imported code
+        </simpara>
       </listitem>
       <listitem>
-        Simple markups can now span a whole block.
+        <simpara>
+          Simple markups can now span a whole block.
+        </simpara>
       </listitem>
       <listitem>
-        <link linkend="quickbook.syntax.block.blurbs">Blurbs</link>, <link linkend="quickbook.syntax.block.admonitions">Admonitions</link>
-        and table cells (see <link linkend="quickbook.syntax.block.tables">Tables</link>)
-        may now contain paragraphs.
+        <simpara>
+          <link linkend="quickbook.syntax.block.blurbs">Blurbs</link>, <link linkend="quickbook.syntax.block.admonitions">Admonitions</link>
+          and table cells (see <link linkend="quickbook.syntax.block.tables">Tables</link>)
+          may now contain paragraphs.
+        </simpara>
       </listitem>
       <listitem>
-        <code><phrase role="special">\</phrase><phrase role="identifier">n</phrase></code>
-        and <code><phrase role="special">[</phrase><phrase role="identifier">br</phrase><phrase
-        role="special">]</phrase></code> are now deprecated.
+        <simpara>
+          <code><phrase role="special">\</phrase><phrase role="identifier">n</phrase></code>
+          and <code><phrase role="special">[</phrase><phrase role="identifier">br</phrase><phrase
+          role="special">]</phrase></code> are now deprecated.
+        </simpara>
       </listitem>
     </itemizedlist>
   </section>
@@ -344,33 +416,47 @@ the true business precept.]
         </para>
         <itemizedlist>
           <listitem>
-            Simple markups cannot nest. You can combine a simple markup with a nestable
-            markup.
+            <simpara>
+              Simple markups cannot nest. You can combine a simple markup with a
+              nestable markup.
+            </simpara>
           </listitem>
           <listitem>
-            Simple markups cannot contain any other form of quickbook markup.
+            <simpara>
+              Simple markups cannot contain any other form of quickbook markup.
+            </simpara>
           </listitem>
           <listitem>
-            A non-space character must follow the leading markup
+            <simpara>
+              A non-space character must follow the leading markup
+            </simpara>
           </listitem>
           <listitem>
-            A non-space character must precede the trailing markup
+            <simpara>
+              A non-space character must precede the trailing markup
+            </simpara>
           </listitem>
           <listitem>
-            A space or a punctuation must follow the trailing markup
+            <simpara>
+              A space or a punctuation must follow the trailing markup
+            </simpara>
           </listitem>
           <listitem>
-            If the matching markup cannot be found within a block, the formatting
-            will not be applied. This is to ensure that un-matched formatting markups,
-            which can be a common mistake, does not corrupt anything past a single
-            block. We do not want the rest of the document to be rendered bold just
-            because we forgot a trailing '*'. A single block is terminated by two
-            end of lines or the close bracket: ']'.
+            <simpara>
+              If the matching markup cannot be found within a block, the formatting
+              will not be applied. This is to ensure that un-matched formatting markups,
+              which can be a common mistake, does not corrupt anything past a single
+              block. We do not want the rest of the document to be rendered bold
+              just because we forgot a trailing '*'. A single block is terminated
+              by two end of lines or the close bracket: ']'.
+            </simpara>
           </listitem>
           <listitem>
-            A line starting with the star will be interpreted as an unordered list.
-            See <link linkend="quickbook.syntax.block.lists.unordered_lists">Unordered
-            lists</link>.
+            <simpara>
+              A line starting with the star will be interpreted as an unordered list.
+              See <link linkend="quickbook.syntax.block.lists.unordered_lists">Unordered
+              lists</link>.
+            </simpara>
           </listitem>
         </itemizedlist>
         <table frame="all">
@@ -998,37 +1084,59 @@ escape (no processing/formatting)
         </para>
         <itemizedlist>
           <listitem>
-            book
+            <simpara>
+              book
+            </simpara>
           </listitem>
           <listitem>
-            article
+            <simpara>
+              article
+            </simpara>
           </listitem>
           <listitem>
-            library
+            <simpara>
+              library
+            </simpara>
           </listitem>
           <listitem>
-            chapter
+            <simpara>
+              chapter
+            </simpara>
           </listitem>
           <listitem>
-            part
+            <simpara>
+              part
+            </simpara>
           </listitem>
           <listitem>
-            appendix
+            <simpara>
+              appendix
+            </simpara>
           </listitem>
           <listitem>
-            preface
+            <simpara>
+              preface
+            </simpara>
           </listitem>
           <listitem>
-            qandadiv
+            <simpara>
+              qandadiv
+            </simpara>
           </listitem>
           <listitem>
-            qandaset
+            <simpara>
+              qandaset
+            </simpara>
           </listitem>
           <listitem>
-            reference
+            <simpara>
+              reference
+            </simpara>
           </listitem>
           <listitem>
-            set
+            <simpara>
+              set
+            </simpara>
           </listitem>
         </itemizedlist>
         <para>
@@ -1112,13 +1220,19 @@ escape (no processing/formatting)
           </para>
           <orderedlist>
             <listitem>
-              One
+              <simpara>
+                One
+              </simpara>
             </listitem>
             <listitem>
-              Two
+              <simpara>
+                Two
+              </simpara>
             </listitem>
             <listitem>
-              Three
+              <simpara>
+                Three
+              </simpara>
             </listitem>
           </orderedlist>
         </section>
@@ -1146,43 +1260,65 @@ escape (no processing/formatting)
           </para>
           <orderedlist>
             <listitem>
-              One
+              <simpara>
+                One
+              </simpara>
             </listitem>
             <listitem>
-              Two
+              <simpara>
+                Two
+              </simpara>
             </listitem>
             <listitem>
-              Three
+              <simpara>
+                Three
+              </simpara>
               <orderedlist>
                 <listitem>
-                  Three.a
+                  <simpara>
+                    Three.a
+                  </simpara>
                 </listitem>
                 <listitem>
-                  Three.b
+                  <simpara>
+                    Three.b
+                  </simpara>
                 </listitem>
                 <listitem>
-                  Three.c
+                  <simpara>
+                    Three.c
+                  </simpara>
                 </listitem>
               </orderedlist>
             </listitem>
             <listitem>
-              Fourth
+              <simpara>
+                Fourth
+              </simpara>
               <orderedlist>
                 <listitem>
-                  Four.a
+                  <simpara>
+                    Four.a
+                  </simpara>
                   <orderedlist>
                     <listitem>
-                      Four.a.i
+                      <simpara>
+                        Four.a.i
+                      </simpara>
                     </listitem>
                     <listitem>
-                      Four.a.ii
+                      <simpara>
+                        Four.a.ii
+                      </simpara>
                     </listitem>
                   </orderedlist>
                 </listitem>
               </orderedlist>
             </listitem>
             <listitem>
-              Five
+              <simpara>
+                Five
+              </simpara>
             </listitem>
           </orderedlist>
         </section>
@@ -1203,16 +1339,23 @@ escape (no processing/formatting)
 </programlisting>
           <orderedlist>
             <listitem>
-              A short item.
+              <simpara>
+                A short item.
+              </simpara>
             </listitem>
             <listitem>
-              A very long item. A very long item. A very long item. A very long item.
-              A very long item. A very long item. A very long item. A very long item.
-              A very long item. A very long item. A very long item. A very long item.
-              A very long item. A very long item. A very long item.
+              <simpara>
+                A very long item. A very long item. A very long item. A very long
+                item. A very long item. A very long item. A very long item. A very
+                long item. A very long item. A very long item. A very long item.
+                A very long item. A very long item. A very long item. A very long
+                item.
+              </simpara>
             </listitem>
             <listitem>
-              A short item.
+              <simpara>
+                A short item.
+              </simpara>
             </listitem>
           </orderedlist>
         </section>
@@ -1228,13 +1371,19 @@ escape (no processing/formatting)
           </para>
           <itemizedlist>
             <listitem>
-              First
+              <simpara>
+                First
+              </simpara>
             </listitem>
             <listitem>
-              Second
+              <simpara>
+                Second
+              </simpara>
             </listitem>
             <listitem>
-              Third
+              <simpara>
+                Third
+              </simpara>
             </listitem>
           </itemizedlist>
         </section>
@@ -1257,27 +1406,41 @@ escape (no processing/formatting)
           </para>
           <orderedlist>
             <listitem>
-              One
+              <simpara>
+                One
+              </simpara>
             </listitem>
             <listitem>
-              Two
+              <simpara>
+                Two
+              </simpara>
             </listitem>
             <listitem>
-              Three
+              <simpara>
+                Three
+              </simpara>
               <itemizedlist>
                 <listitem>
-                  Three.a
+                  <simpara>
+                    Three.a
+                  </simpara>
                 </listitem>
                 <listitem>
-                  Three.b
+                  <simpara>
+                    Three.b
+                  </simpara>
                 </listitem>
                 <listitem>
-                  Three.c
+                  <simpara>
+                    Three.c
+                  </simpara>
                 </listitem>
               </itemizedlist>
             </listitem>
             <listitem>
-              Four
+              <simpara>
+                Four
+              </simpara>
             </listitem>
           </orderedlist>
           <para>
@@ -1302,44 +1465,68 @@ escape (no processing/formatting)
           </para>
           <orderedlist>
             <listitem>
-              1
+              <simpara>
+                1
+              </simpara>
               <itemizedlist>
                 <listitem>
-                  1.a
+                  <simpara>
+                    1.a
+                  </simpara>
                   <orderedlist>
                     <listitem>
-                      1.a.1
+                      <simpara>
+                        1.a.1
+                      </simpara>
                     </listitem>
                     <listitem>
-                      1.a.2
+                      <simpara>
+                        1.a.2
+                      </simpara>
                     </listitem>
                   </orderedlist>
                 </listitem>
                 <listitem>
-                  1.b
+                  <simpara>
+                    1.b
+                  </simpara>
                 </listitem>
               </itemizedlist>
             </listitem>
             <listitem>
-              2
+              <simpara>
+                2
+              </simpara>
               <itemizedlist>
                 <listitem>
-                  2.a
+                  <simpara>
+                    2.a
+                  </simpara>
                 </listitem>
                 <listitem>
-                  2.b
+                  <simpara>
+                    2.b
+                  </simpara>
                   <orderedlist>
                     <listitem>
-                      2.b.1
+                      <simpara>
+                        2.b.1
+                      </simpara>
                     </listitem>
                     <listitem>
-                      2.b.2
+                      <simpara>
+                        2.b.2
+                      </simpara>
                       <itemizedlist>
                         <listitem>
-                          2.b.2.a
+                          <simpara>
+                            2.b.2.a
+                          </simpara>
                         </listitem>
                         <listitem>
-                          2.b.2.b
+                          <simpara>
+                            2.b.2.b
+                          </simpara>
                         </listitem>
                       </itemizedlist>
                     </listitem>
@@ -1800,12 +1987,16 @@ Hi, my name is [name]. I am [age] years old. I am a [what].
         </para>
         <itemizedlist>
           <listitem>
-            An initial alphabetic character or the underscore, followed by zero or
-            more alphanumeric characters or the underscore. This is similar to your
-            typical C/C++ identifier.
+            <simpara>
+              An initial alphabetic character or the underscore, followed by zero
+              or more alphanumeric characters or the underscore. This is similar
+              to your typical C/C++ identifier.
+            </simpara>
           </listitem>
           <listitem>
-            A single character punctuation (a non-alphanumeric printable character)
+            <simpara>
+              A single character punctuation (a non-alphanumeric printable character)
+            </simpara>
           </listitem>
         </itemizedlist>
         <anchor id="quickbook.syntax.block.templates.formal_template_arguments"/>
@@ -1928,16 +2119,20 @@ replacement text...
         </para>
         <itemizedlist>
           <listitem>
-            The explicit <link linkend="quickbook.syntax.block.templates.template_expansion">template
-            expansion syntax</link>. This is an advantage because, now, we don't
-            have to use obscure naming conventions like double underscores (e.g.
-            __alpha__) to avoid unwanted macro replacement.
+            <simpara>
+              The explicit <link linkend="quickbook.syntax.block.templates.template_expansion">template
+              expansion syntax</link>. This is an advantage because, now, we don't
+              have to use obscure naming conventions like double underscores (e.g.
+              __alpha__) to avoid unwanted macro replacement.
+            </simpara>
           </listitem>
           <listitem>
-            The template is expanded at the point where it is invoked. A macro is
-            expanded immediately at its point of declaration. This is subtle and
-            can cause a slight difference in behavior especially if you refer to
-            other macros and templates in the body.
+            <simpara>
+              The template is expanded at the point where it is invoked. A macro
+              is expanded immediately at its point of declaration. This is subtle
+              and can cause a slight difference in behavior especially if you refer
+              to other macros and templates in the body.
+            </simpara>
           </listitem>
         </itemizedlist>
         <para>
@@ -2001,12 +2196,16 @@ for the journey to old age.]]]
         </para>
         <itemizedlist>
           <listitem>
-            Break the last argument into two, at the first space found (<literal>'',
-            '\n', \t' or '\r'</literal>).
+            <simpara>
+              Break the last argument into two, at the first space found (<literal>'',
+              '\n', \t' or '\r'</literal>).
+            </simpara>
           </listitem>
           <listitem>
-            Repeat until there are enough arguments or if there are no more spaces
-            found (in which case, an error is reported).
+            <simpara>
+              Repeat until there are enough arguments or if there are no more spaces
+              found (in which case, an error is reported).
+            </simpara>
           </listitem>
         </itemizedlist>
         <para>
@@ -2424,11 +2623,15 @@ for the journey to old age.]]]
         </para>
         <itemizedlist>
           <listitem>
-            The __FILENAME__ predefined macro will reflect the name of the file currently being
-            processed.
+            <simpara>
+              The __FILENAME__ predefined macro will reflect the name of the file currently being
+              processed.
+            </simpara>
           </listitem>
           <listitem>
-            Any macros defined in the included file are scoped to that file.
+            <simpara>
+              Any macros defined in the included file are scoped to that file.
+            </simpara>
           </listitem>
         </itemizedlist>
         <para>
@@ -2504,10 +2707,14 @@ for the journey to old age.]]]
           </para>
           <itemizedlist>
             <listitem>
-              lists
+              <simpara>
+                lists
+              </simpara>
             </listitem>
             <listitem>
-              etc.
+              <simpara>
+                etc.
+              </simpara>
             </listitem>
           </itemizedlist>
           <para>
@@ -2651,67 +2858,80 @@ for the journey to old age.]]]
       </para>
       <orderedlist>
         <listitem>
-          First of all you need to have a copy of <code><phrase role="identifier">xsltproc</phrase></code>
-          for Windows. There are many ways to get this tool, but to keep things simple,
-          use the <ulink url="http://www.zlatkovic.com/pub/libxml/">binary packages</ulink>
-          made by Igor Zlatkovic. At the very least, you need to download the following
-          packages: <code><phrase role="identifier">iconv</phrase></code>, <code><phrase
-          role="identifier">zlib</phrase></code>, <code><phrase role="identifier">libxml2</phrase></code>
-          and <code><phrase role="identifier">libxslt</phrase></code>.
+          <simpara>
+            First of all you need to have a copy of <code><phrase role="identifier">xsltproc</phrase></code>
+            for Windows. There are many ways to get this tool, but to keep things
+            simple, use the <ulink url="http://www.zlatkovic.com/pub/libxml/">binary
+            packages</ulink> made by Igor Zlatkovic. At the very least, you need
+            to download the following packages: <code><phrase role="identifier">iconv</phrase></code>,
+            <code><phrase role="identifier">zlib</phrase></code>, <code><phrase role="identifier">libxml2</phrase></code>
+            and <code><phrase role="identifier">libxslt</phrase></code>.
+          </simpara>
         </listitem>
         <listitem>
-          Unpack all these packages in the same directory so that you get unique
-          <code><phrase role="identifier">bin</phrase></code>, <code><phrase role="identifier">include</phrase></code>
-          and <code><phrase role="identifier">lib</phrase></code> directories within
-          the hierarchy. These instructions use <code><phrase role="identifier">C</phrase><phrase
-          role="special">:\</phrase><phrase role="identifier">Users</phrase><phrase
-          role="special">\</phrase><phrase role="identifier">example</phrase><phrase
-          role="special">\</phrase><phrase role="identifier">Documents</phrase><phrase
-          role="special">\</phrase><phrase role="identifier">boost</phrase><phrase
-          role="special">\</phrase><phrase role="identifier">xml</phrase></code>
-          as the root for all files.
+          <simpara>
+            Unpack all these packages in the same directory so that you get unique
+            <code><phrase role="identifier">bin</phrase></code>, <code><phrase role="identifier">include</phrase></code>
+            and <code><phrase role="identifier">lib</phrase></code> directories within
+            the hierarchy. These instructions use <code><phrase role="identifier">C</phrase><phrase
+            role="special">:\</phrase><phrase role="identifier">Users</phrase><phrase
+            role="special">\</phrase><phrase role="identifier">example</phrase><phrase
+            role="special">\</phrase><phrase role="identifier">Documents</phrase><phrase
+            role="special">\</phrase><phrase role="identifier">boost</phrase><phrase
+            role="special">\</phrase><phrase role="identifier">xml</phrase></code>
+            as the root for all files.
+          </simpara>
         </listitem>
         <listitem>
-          From the command line, go to the <code><phrase role="identifier">bin</phrase></code>
-          directory and launch <code><phrase role="identifier">xsltproc</phrase><phrase
-          role="special">.</phrase><phrase role="identifier">exe</phrase></code>
-          to ensure it works. You should get usage information on screen.
+          <simpara>
+            From the command line, go to the <code><phrase role="identifier">bin</phrase></code>
+            directory and launch <code><phrase role="identifier">xsltproc</phrase><phrase
+            role="special">.</phrase><phrase role="identifier">exe</phrase></code>
+            to ensure it works. You should get usage information on screen.
+          </simpara>
         </listitem>
         <listitem>
-          Download <ulink url="http://www.docbook.org/xml/4.2/docbook-xml-4.2.zip">Docbook
-          XML 4.2</ulink> and unpack it in the same directory used above. That is:
-          <code><phrase role="identifier">C</phrase><phrase role="special">:\</phrase><phrase
-          role="identifier">Users</phrase><phrase role="special">\</phrase><phrase
-          role="identifier">example</phrase><phrase role="special">\</phrase><phrase
-          role="identifier">Documents</phrase><phrase role="special">\</phrase><phrase
-          role="identifier">boost</phrase><phrase role="special">\</phrase><phrase
-          role="identifier">xml</phrase><phrase role="special">\</phrase><phrase
-          role="identifier">docbook</phrase><phrase role="special">-</phrase><phrase
-          role="identifier">xml</phrase></code>.
+          <simpara>
+            Download <ulink url="http://www.docbook.org/xml/4.2/docbook-xml-4.2.zip">Docbook
+            XML 4.2</ulink> and unpack it in the same directory used above. That
+            is: <code><phrase role="identifier">C</phrase><phrase role="special">:\</phrase><phrase
+            role="identifier">Users</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">example</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">Documents</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">boost</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">xml</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">docbook</phrase><phrase role="special">-</phrase><phrase
+            role="identifier">xml</phrase></code>.
+          </simpara>
         </listitem>
         <listitem>
-          Download the latest <ulink url="http://sourceforge.net/project/showfiles.php?group_id=21935&amp;package_id=16608">Docbook
-          XSL</ulink> version and unpack it, again in the same directory used before.
-          To make things easier, rename the directory created during the extraction
-          to <code><phrase role="identifier">docbook</phrase><phrase role="special">-</phrase><phrase
-          role="identifier">xsl</phrase></code> (bypassing the version name): <code><phrase
-          role="identifier">C</phrase><phrase role="special">:\</phrase><phrase role="identifier">Users</phrase><phrase
-          role="special">\</phrase><phrase role="identifier">example</phrase><phrase
-          role="special">\</phrase><phrase role="identifier">Documents</phrase><phrase
-          role="special">\</phrase><phrase role="identifier">boost</phrase><phrase
-          role="special">\</phrase><phrase role="identifier">xml</phrase><phrase
-          role="special">\</phrase><phrase role="identifier">docbook</phrase><phrase
-          role="special">-</phrase><phrase role="identifier">xsl</phrase></code>.
+          <simpara>
+            Download the latest <ulink url="http://sourceforge.net/project/showfiles.php?group_id=21935&amp;package_id=16608">Docbook
+            XSL</ulink> version and unpack it, again in the same directory used before.
+            To make things easier, rename the directory created during the extraction
+            to <code><phrase role="identifier">docbook</phrase><phrase role="special">-</phrase><phrase
+            role="identifier">xsl</phrase></code> (bypassing the version name):
+            <code><phrase role="identifier">C</phrase><phrase role="special">:\</phrase><phrase
+            role="identifier">Users</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">example</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">Documents</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">boost</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">xml</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">docbook</phrase><phrase role="special">-</phrase><phrase
+            role="identifier">xsl</phrase></code>.
+          </simpara>
         </listitem>
         <listitem>
-          Add the following to your <code><phrase role="identifier">user</phrase><phrase
-          role="special">-</phrase><phrase role="identifier">config</phrase><phrase
-          role="special">.</phrase><phrase role="identifier">jam</phrase></code>
-          file, which should live in your home directory (<code><phrase role="special">%</phrase><phrase
-          role="identifier">HOMEDRIVE</phrase><phrase role="special">%%</phrase><phrase
-          role="identifier">HOMEPATH</phrase><phrase role="special">%</phrase></code>).
-          You must already have it somewhere or otherwise you could not be building
-          Boost (i.e. missing tools configuration).
+          <simpara>
+            Add the following to your <code><phrase role="identifier">user</phrase><phrase
+            role="special">-</phrase><phrase role="identifier">config</phrase><phrase
+            role="special">.</phrase><phrase role="identifier">jam</phrase></code>
+            file, which should live in your home directory (<code><phrase role="special">%</phrase><phrase
+            role="identifier">HOMEDRIVE</phrase><phrase role="special">%%</phrase><phrase
+            role="identifier">HOMEPATH</phrase><phrase role="special">%</phrase></code>).
+            You must already have it somewhere or otherwise you could not be building
+            Boost (i.e. missing tools configuration).
+          </simpara>
         </listitem>
       </orderedlist>
       
@@ -2730,34 +2950,42 @@ for the journey to old age.]]]
       </para>
       <orderedlist>
         <listitem>
-          Go to Quickbook's source directory (<code><phrase role="identifier">BOOST_ROOT</phrase><phrase
-          role="special">\</phrase><phrase role="identifier">tools</phrase><phrase
-          role="special">\</phrase><phrase role="identifier">quickbook</phrase></code>).
+          <simpara>
+            Go to Quickbook's source directory (<code><phrase role="identifier">BOOST_ROOT</phrase><phrase
+            role="special">\</phrase><phrase role="identifier">tools</phrase><phrase
+            role="special">\</phrase><phrase role="identifier">quickbook</phrase></code>).
+          </simpara>
         </listitem>
         <listitem>
-          Build the utility by issuing <code><phrase role="identifier">bjam</phrase>
-          <phrase role="special">--</phrase><phrase role="identifier">v2</phrase></code>.
+          <simpara>
+            Build the utility by issuing <code><phrase role="identifier">bjam</phrase>
+            <phrase role="special">--</phrase><phrase role="identifier">v2</phrase></code>.
+          </simpara>
         </listitem>
         <listitem>
-          Copy the resulting <code><phrase role="identifier">quickbook</phrase><phrase
-          role="special">.</phrase><phrase role="identifier">exe</phrase></code>
-          binary (located under the <code><phrase role="identifier">BOOST_ROOT</phrase><phrase
-          role="special">\</phrase><phrase role="identifier">bin</phrase><phrase
-          role="special">.</phrase><phrase role="identifier">v2</phrase></code> hierarchy)
-          to a safe place. Following our previous example, you can install it into:
-          <code><phrase role="identifier">C</phrase><phrase role="special">:\</phrase><phrase
-          role="identifier">Users</phrase><phrase role="special">\</phrase><phrase
-          role="identifier">example</phrase><phrase role="special">\</phrase><phrase
-          role="identifier">Documents</phrase><phrase role="special">\</phrase><phrase
-          role="identifier">boost</phrase><phrase role="special">\</phrase><phrase
-          role="identifier">xml</phrase><phrase role="special">\</phrase><phrase
-          role="identifier">bin</phrase></code>.
+          <simpara>
+            Copy the resulting <code><phrase role="identifier">quickbook</phrase><phrase
+            role="special">.</phrase><phrase role="identifier">exe</phrase></code>
+            binary (located under the <code><phrase role="identifier">BOOST_ROOT</phrase><phrase
+            role="special">\</phrase><phrase role="identifier">bin</phrase><phrase
+            role="special">.</phrase><phrase role="identifier">v2</phrase></code>
+            hierarchy) to a safe place. Following our previous example, you can install
+            it into: <code><phrase role="identifier">C</phrase><phrase role="special">:\</phrase><phrase
+            role="identifier">Users</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">example</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">Documents</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">boost</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">xml</phrase><phrase role="special">\</phrase><phrase
+            role="identifier">bin</phrase></code>.
+          </simpara>
         </listitem>
         <listitem>
-          Add the following to your <code><phrase role="identifier">user</phrase><phrase
-          role="special">-</phrase><phrase role="identifier">config</phrase><phrase
-          role="special">.</phrase><phrase role="identifier">jam</phrase></code>
-          file:
+          <simpara>
+            Add the following to your <code><phrase role="identifier">user</phrase><phrase
+            role="special">-</phrase><phrase role="identifier">config</phrase><phrase
+            role="special">.</phrase><phrase role="identifier">jam</phrase></code>
+            file:
+          </simpara>
         </listitem>
       </orderedlist>
       
@@ -2817,29 +3045,37 @@ for the journey to old age.]]]
       </para>
       <orderedlist>
         <listitem>
-          Go to Quickbook's source directory (<code><phrase role="identifier">BOOST_ROOT</phrase><phrase
-          role="special">/</phrase><phrase role="identifier">tools</phrase><phrase
-          role="special">/</phrase><phrase role="identifier">quickbook</phrase></code>).
+          <simpara>
+            Go to Quickbook's source directory (<code><phrase role="identifier">BOOST_ROOT</phrase><phrase
+            role="special">/</phrase><phrase role="identifier">tools</phrase><phrase
+            role="special">/</phrase><phrase role="identifier">quickbook</phrase></code>).
+          </simpara>
         </listitem>
         <listitem>
-          Build the utility by issuing <code><phrase role="identifier">bjam</phrase>
-          <phrase role="special">--</phrase><phrase role="identifier">v2</phrase></code>.
+          <simpara>
+            Build the utility by issuing <code><phrase role="identifier">bjam</phrase>
+            <phrase role="special">--</phrase><phrase role="identifier">v2</phrase></code>.
+          </simpara>
         </listitem>
         <listitem>
-          Copy the resulting <code><phrase role="identifier">quickbook</phrase></code>
-          binary (located under the <code><phrase role="identifier">BOOST_ROOT</phrase><phrase
-          role="special">/</phrase><phrase role="identifier">bin</phrase><phrase
-          role="special">.</phrase><phrase role="identifier">v2</phrase></code> hierarchy)
-          to a safe place. The traditional location is <code><phrase role="special">/</phrase><phrase
-          role="identifier">usr</phrase><phrase role="special">/</phrase><phrase
-          role="identifier">local</phrase><phrase role="special">/</phrase><phrase
-          role="identifier">bin</phrase></code>.
+          <simpara>
+            Copy the resulting <code><phrase role="identifier">quickbook</phrase></code>
+            binary (located under the <code><phrase role="identifier">BOOST_ROOT</phrase><phrase
+            role="special">/</phrase><phrase role="identifier">bin</phrase><phrase
+            role="special">.</phrase><phrase role="identifier">v2</phrase></code>
+            hierarchy) to a safe place. The traditional location is <code><phrase
+            role="special">/</phrase><phrase role="identifier">usr</phrase><phrase
+            role="special">/</phrase><phrase role="identifier">local</phrase><phrase
+            role="special">/</phrase><phrase role="identifier">bin</phrase></code>.
+          </simpara>
         </listitem>
         <listitem>
-          Add the following to your <code><phrase role="identifier">user</phrase><phrase
-          role="special">-</phrase><phrase role="identifier">config</phrase><phrase
-          role="special">.</phrase><phrase role="identifier">jam</phrase></code>
-          file, using the full path of the quickbook executable:
+          <simpara>
+            Add the following to your <code><phrase role="identifier">user</phrase><phrase
+            role="special">-</phrase><phrase role="identifier">config</phrase><phrase
+            role="special">.</phrase><phrase role="identifier">jam</phrase></code>
+            file, using the full path of the quickbook executable:
+          </simpara>
         </listitem>
       </orderedlist>
       
