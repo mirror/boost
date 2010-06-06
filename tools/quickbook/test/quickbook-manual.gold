@@ -29,13 +29,11 @@
     <title><link linkend="quickbook.intro"> Introduction</link></title>
     <blockquote>
       <para>
-        <para>
-          <emphasis role="bold"><emphasis><quote>Why program by hand in five days
-          what you can spend five years of your life automating?</quote></emphasis></emphasis>
-        </para>
-        <para>
-          -- Terrence Parr, author ANTLR/PCCTS
-        </para>
+        <emphasis role="bold"><emphasis><quote>Why program by hand in five days what
+        you can spend five years of your life automating?</quote></emphasis></emphasis>
+      </para>
+      <para>
+        -- Terrence Parr, author ANTLR/PCCTS
       </para>
     </blockquote>
     <para>
@@ -46,9 +44,7 @@
     </para>
     <blockquote>
       <para>
-        <para>
-          <ulink url="../quickbook.qbk">quickbook.qbk</ulink>
-        </para>
+        <ulink url="../quickbook.qbk">quickbook.qbk</ulink>
       </para>
     </blockquote>
     <para>
@@ -1476,9 +1472,7 @@ escape (no processing/formatting)
 </programlisting>
         <blockquote>
           <para>
-            <para>
-              Indents the paragraph. This applies to one paragraph only.
-            </para>
+            Indents the paragraph. This applies to one paragraph only.
           </para>
         </blockquote>
       </section>
@@ -2650,9 +2644,7 @@ for the journey to old age.]]]
       </para>
       <blockquote>
         <para>
-          <para>
-            <emphasis>Section contributed by Julio M. Merino Vidal</emphasis>
-          </para>
+          <emphasis>Section contributed by Julio M. Merino Vidal</emphasis>
         </para>
       </blockquote>
       <para>
@@ -2883,9 +2875,7 @@ for the journey to old age.]]]
       <title><link linkend="quickbook.editors.scite"> Scintilla Text Editor</link></title>
       <blockquote>
         <para>
-          <para>
-            <emphasis>Section contributed by Dean Michael Berris</emphasis>
-          </para>
+          <emphasis>Section contributed by Dean Michael Berris</emphasis>
         </para>
       </blockquote>
       <para>
@@ -2941,9 +2931,7 @@ comment.box.end.props=]
     </para>
     <blockquote>
       <para>
-        <para>
-          <emphasis>Faq contributed by Michael Marcin</emphasis>
-        </para>
+        <emphasis>Faq contributed by Michael Marcin</emphasis>
       </para>
     </blockquote>
     <para>
