@@ -43,7 +43,7 @@ namespace quickbook
         , list_buffer()
 
     // state
-        , filename(fs::complete(fs::path(filein_, fs::native)))
+        , filename(fs::complete(fs::path(filein_)))
         , outdir(outdir_)
         , macro()
         , section_level(0)
@@ -185,7 +185,7 @@ namespace quickbook
         // turn off __FILENAME__ macro on debug mode = true
         std::string filename_str = debug_mode ?
             std::string("NO_FILENAME_MACRO_GENERATED_IN_DEBUG_MODE") :
-            filename.native_file_string();
+            filename.file_string();
 
         // add the predefined macros
         macro.add

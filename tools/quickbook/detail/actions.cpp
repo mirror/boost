@@ -453,12 +453,12 @@ namespace quickbook
         fs::path const img_path(image_fileref);
         
         attribute_map::iterator it = attributes.find("alt");
-        std::string alt_text = it != attributes.end() ? it->second : fs::basename(img_path);
+        std::string alt_text = it != attributes.end() ? it->second : img_path.stem();
         attributes.erase("alt");
 
         attributes.insert(attribute_map::value_type("fileref", image_fileref));
 
-        if(fs::extension(img_path) == ".svg")
+        if(img_path.extension() == ".svg")
         {
            //
            // SVG's need special handling:
@@ -755,7 +755,7 @@ namespace quickbook
             else if (!is_block)
             {
                 //  do a phrase level parse
-                iterator first(body.begin(), body.end(), actions.filename.native_file_string().c_str());
+                iterator first(body.begin(), body.end(), actions.filename.file_string().c_str());
                 first.set_position(template_pos);
                 iterator last(body.end(), body.end());
                 r = boost::spirit::classic::parse(first, last, phrase_p).full;
@@ -770,7 +770,7 @@ namespace quickbook
                 body.push_back('\n');
                 while (iter != body.end() && ((*iter == '\r') || (*iter == '\n')))
                     ++iter; // skip initial newlines
-                iterator first(iter, body.end(), actions.filename.native_file_string().c_str());
+                iterator first(iter, body.end(), actions.filename.file_string().c_str());
                 first.set_position(template_pos);
                 iterator last(body.end(), body.end());
                 r = boost::spirit::classic::parse(first, last, block_p).full;
@@ -1149,7 +1149,7 @@ namespace quickbook
         if (!path.is_complete())
         {
             fs::path infile = fs::complete(actions.filename).normalize();
-            path = (infile.branch_path() / path).normalize();
+            path = (infile.parent_path() / path).normalize();
             fs::path outdir = fs::complete(actions.outdir).normalize();
             path = path_difference(outdir, path);
         }
@@ -1289,7 +1289,7 @@ namespace quickbook
     {
         fs::path include_search(fs::path const & current, std::string const & name)
         {
-            fs::path path(name,fs::native);
+            fs::path path(name);
 
             // If the path is relative, try and resolve it.
             if (!path.is_complete())
@@ -1303,7 +1303,7 @@ namespace quickbook
                 // Search in each of the include path locations.
                 BOOST_FOREACH(std::string const & p, include_path)
                 {
-                    fs::path full(p,fs::native);
+                    fs::path full(p);
                     full /= path;
                     if (fs::exists(full))
                     {
@@ -1318,8 +1318,8 @@ namespace quickbook
 
     void import_action::operator()(iterator first, iterator last) const
     {
-        fs::path path = include_search(actions.filename.branch_path(), std::string(first,last));
-        std::string ext = fs::extension(path);
+        fs::path path = include_search(actions.filename.parent_path(), std::string(first,last));
+        std::string ext = path.extension();
         std::vector<template_symbol> storage;
         actions.error_count +=
             load_snippets(path.string(), storage, ext, actions.doc_id);
@@ -1343,7 +1343,7 @@ namespace quickbook
 
     void include_action::operator()(iterator first, iterator last) const
     {
-        fs::path filein = include_search(actions.filename.branch_path(), std::string(first,last));
+        fs::path filein = include_search(actions.filename.parent_path(), std::string(first,last));
         std::string doc_type, doc_id, doc_dirname, doc_last_revision;
 
         // swap the filenames
@@ -1369,10 +1369,10 @@ namespace quickbook
         }
 
         // update the __FILENAME__ macro
-        *boost::spirit::classic::find(actions.macro, "__FILENAME__") = actions.filename.native_file_string();
+        *boost::spirit::classic::find(actions.macro, "__FILENAME__") = actions.filename.file_string();
 
         // parse the file
-        quickbook::parse(actions.filename.native_file_string().c_str(), actions, true);
+        quickbook::parse(actions.filename.file_string().c_str(), actions, true);
 
         // restore the values
         std::swap(actions.filename, filein);
@@ -1458,7 +1458,7 @@ namespace quickbook
             qbk_major_version = 1;
             qbk_minor_version = 1;
             qbk_version_n = 101;
-            detail::outwarn(actions.filename.native_file_string(),1)
+            detail::outwarn(actions.filename.file_string(),1)
                 << "Warning: Quickbook version undefined. "
                 "Version 1.1 is assumed" << std::endl;
         }
@@ -1608,7 +1608,7 @@ namespace quickbook
         
         if(!invalid_attributes.empty())
         {
-            detail::outwarn(actions.filename.native_file_string(),1)
+            detail::outwarn(actions.filename.file_string(),1)
                 << (invalid_attributes.size() > 1 ?
                     "Invalid attributes" : "Invalid attribute")
                 << " for '" << actions.doc_type << "': "
