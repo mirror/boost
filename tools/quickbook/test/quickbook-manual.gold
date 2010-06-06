@@ -2612,9 +2612,9 @@ for the journey to old age.]]]
         <para>
           <para>
             
-<programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo_bar</phrase><phrase role="special">()</phrase> <!--quickbook-escape-prefix--><phrase role="callout_bug"><co id="quickbook0co" linkends="quickbook0" /></phrase><!--quickbook-escape-postfix-->
+<programlisting><phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo_bar</phrase><phrase role="special">()</phrase> <!--quickbook-escape-prefix--><co id="quickbook0co" linkends="quickbook0" /><!--quickbook-escape-postfix-->
 <phrase role="special">{</phrase>
-    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo-bar&quot;</phrase><phrase role="special">;</phrase> <!--quickbook-escape-prefix--><phrase role="callout_bug"><co id="quickbook1co" linkends="quickbook1" /></phrase><!--quickbook-escape-postfix-->
+    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo-bar&quot;</phrase><phrase role="special">;</phrase> <!--quickbook-escape-prefix--><co id="quickbook1co" linkends="quickbook1" /><!--quickbook-escape-postfix-->
 <phrase role="special">}</phrase>
 </programlisting>
           </para>

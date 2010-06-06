@@ -1173,29 +1173,17 @@ namespace quickbook
         int callout_id = 0;
     }
 
-    void code_snippet_actions::callout(iterator first, iterator last, char const* role)
+    void code_snippet_actions::callout(iterator first, iterator last)
     {
         using detail::callout_id;
         code += "``'''";
-        code += std::string("<phrase role=\"") + role + "\">";
         code += "<co id=\"";
         code += doc_id + boost::lexical_cast<std::string>(callout_id + callouts.size()) + "co\" ";
         code += "linkends=\"";
         code += doc_id + boost::lexical_cast<std::string>(callout_id + callouts.size()) + "\" />";
-        code += "</phrase>";
         code += "'''``";
 
         callouts.push_back(std::string(first, last));
-    }
-
-    void code_snippet_actions::inline_callout(iterator first, iterator last)
-    {
-        callout(first, last, "callout_bug");
-    }
-
-    void code_snippet_actions::line_callout(iterator first, iterator last)
-    {
-        callout(first, last, "line_callout_bug");
     }
 
     void code_snippet_actions::escaped_comment(iterator first, iterator last)
