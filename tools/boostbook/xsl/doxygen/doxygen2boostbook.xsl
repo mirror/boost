@@ -204,8 +204,7 @@
     <xsl:param name="in-file"/>
     <xsl:param name="with-namespace-refs"/>
 
-    <xsl:if test="contains(string(location/attribute::file), 
-                           concat('/', $in-file)) ">
+    <xsl:if test="string(location/attribute::file)=$in-file">
     
       <!-- The short name of this class -->
       <xsl:variable name="name-with-spec">
@@ -261,7 +260,9 @@
         <xsl:apply-templates select="briefdescription" mode="passthrough"/>
         <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
         <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
-        <xsl:apply-templates/>
+        <xsl:apply-templates>
+          <xsl:with-param name="in-file" select="$in-file"/>  
+        </xsl:apply-templates>
       </xsl:element>
     </xsl:if>
   </xsl:template>
@@ -269,8 +270,7 @@
   <xsl:template name="enum">
     <xsl:param name="in-file"/>
 
-    <xsl:if test="contains(string(location/attribute::file), 
-                           concat('/', $in-file))">
+    <xsl:if test="string(location/attribute::file)=$in-file">
       <xsl:variable name="name">
         <xsl:call-template name="strip-qualifiers">
           <xsl:with-param name="name" select="name"/>
@@ -384,7 +384,7 @@
         <xsl:apply-templates mode="toplevel">
           <xsl:with-param name="with-namespace-refs"
             select="innernamespace"/>
-          <xsl:with-param name="in-file" select="string(compoundname)"/>
+          <xsl:with-param name="in-file" select="location/attribute::file"/>
         </xsl:apply-templates>
       </header>
     </xsl:if>
@@ -498,11 +498,15 @@
       </xsl:when>
 
       <xsl:when test="@kind='function'">
-        <xsl:call-template name="function" />
+        <xsl:call-template name="function">
+          <xsl:with-param name="in-file" select="$in-file"/>
+        </xsl:call-template>
       </xsl:when>
 
       <xsl:when test="@kind='typedef'">
-        <xsl:call-template name="typedef" />
+        <xsl:call-template name="typedef">
+          <xsl:with-param name="in-file" select="$in-file"/>
+        </xsl:call-template>
       </xsl:when>
 
       <xsl:when test="@kind='variable'">
@@ -664,6 +668,7 @@
         <method-group name="public static functions">
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
+            <xsl:with-param name="in-file" select="$in-file"/>
           </xsl:apply-templates>
         </method-group>
       </xsl:when>
@@ -672,6 +677,7 @@
         <method-group name="protected static functions">
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
+            <xsl:with-param name="in-file" select="$in-file"/>
           </xsl:apply-templates>
         </method-group>
       </xsl:when>
@@ -680,13 +686,14 @@
         <method-group name="private static functions">
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
+            <xsl:with-param name="in-file" select="$in-file"/>
           </xsl:apply-templates>
         </method-group>
       </xsl:when>
       <xsl:when test="@kind='public-func'">
         <xsl:variable name="members" select="./memberdef"/>
         <xsl:variable name="num-internal-only">
-          <xsl:value-of 
+          <xsl:value-of
             select="count($members[contains(detaileddescription/para,
                                   'INTERNAL ONLY')])"/>
         </xsl:variable>
@@ -694,6 +701,7 @@
           <method-group name="public member functions">
             <xsl:apply-templates>
               <xsl:with-param name="in-section" select="true()"/>
+              <xsl:with-param name="in-file" select="$in-file"/>
             </xsl:apply-templates>
           </method-group>
           <xsl:apply-templates/>
@@ -703,6 +711,7 @@
         <method-group name="protected member functions">
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
+            <xsl:with-param name="in-file" select="$in-file"/>
           </xsl:apply-templates>
         </method-group>
         <xsl:apply-templates/>
@@ -718,6 +727,7 @@
           <method-group name="private member functions">
             <xsl:apply-templates>
               <xsl:with-param name="in-section" select="true()"/>
+              <xsl:with-param name="in-file" select="$in-file"/>
             </xsl:apply-templates>
           </method-group>
         </xsl:if>
@@ -728,15 +738,20 @@
           <method-group name="friend functions">
             <xsl:apply-templates>
               <xsl:with-param name="in-section" select="true()"/>
+              <xsl:with-param name="in-file" select="$in-file"/>
             </xsl:apply-templates>
           </method-group>
         </xsl:if>
       </xsl:when>
       <xsl:when test="@kind='public-static-attrib' or @kind='public-attrib'">
-        <xsl:apply-templates/>
+        <xsl:apply-templates>
+          <xsl:with-param name="in-file" select="$in-file"/>
+        </xsl:apply-templates>
       </xsl:when>
       <xsl:when test="@kind='public-type'">
-        <xsl:apply-templates/>
+        <xsl:apply-templates>
+          <xsl:with-param name="in-file" select="$in-file"/>
+        </xsl:apply-templates>
       </xsl:when>
       <xsl:when test="@kind='private-type'">
         <!--skip private members-->
@@ -765,7 +780,9 @@
         </xsl:apply-templates>
       </xsl:when>
       <xsl:when test="@kind='user-defined'">
-        <xsl:apply-templates/>
+        <xsl:apply-templates>
+          <xsl:with-param name="in-file" select="$in-file"/>
+        </xsl:apply-templates>
       </xsl:when>
       <xsl:when test="@kind=''">
         <xsl:apply-templates select="memberdef[generate-id() =
@@ -875,8 +892,7 @@
   <xsl:template name="typedef">
     <xsl:param name="in-file" select="''"/>
 
-    <xsl:if test="contains(string(location/attribute::file), 
-                           concat('/', $in-file))">
+    <xsl:if test="string(location/attribute::file)=$in-file">
       <!-- TBD: Handle public/protected/private -->
       <typedef>
         <!-- Name of the type -->
@@ -1007,8 +1023,7 @@
 
     <xsl:variable name="firstpara" 
       select="normalize-space(detaileddescription/para[1])"/>
-    <xsl:if test="contains(string(location/attribute::file), 
-                           concat('/', $in-file))
+    <xsl:if test="string(location/attribute::file)=$in-file
                   and 
                   not($firstpara=normalize-space($boost.doxygen.overload))">
 
@@ -1182,8 +1197,7 @@
   <!-- Handle member variables -->
   <xsl:template name="variable">
     <xsl:param name="in-file"/>
-    <xsl:if test="contains(string(location/attribute::file), 
-                           concat('/', $in-file))">
+    <xsl:if test="string(location/attribute::file)=$in-file">
     <data-member>
       <xsl:attribute name="name">
         <xsl:value-of select="name/text()"/>
