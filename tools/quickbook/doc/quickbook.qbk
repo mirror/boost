@@ -192,6 +192,8 @@ Features include:
 * Add command line flag to define macros at the command line,
   e.g. `quickbook "-D__italic_foo__=/foo/"`.
 
+[h3 Version 1.5.2 - Boost 1.44.0]
+
 [endsect]
 
 [section:syntax Syntax Summary]

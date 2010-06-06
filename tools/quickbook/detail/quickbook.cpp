@@ -1,4 +1,4 @@
-/*=============================================================================
+j/*=============================================================================
     Copyright (c) 2002 2004 2006 Joel de Guzman
     Copyright (c) 2004 Eric Niebler
     http://spirit.sourceforge.net/
@@ -29,7 +29,7 @@
 #pragma warning(disable:4355)
 #endif
 
-#define QUICKBOOK_VERSION "Quickbook Version 1.5.1"
+#define QUICKBOOK_VERSION "Quickbook Version 1.5.2"
 
 namespace quickbook
 {
