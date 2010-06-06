@@ -332,17 +332,15 @@ the true business precept.]
         </para>
         <para>
           Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
-          are much stricter
-          <footnote>
-            <para>
-              Thanks to David Barrett, author of <ulink url="http://quinthar.com/qwikiwiki/index.php?page=Home">Qwiki</ulink>,
-              for sharing these samples and teaching me these obscure formatting
-              rules. I wasn't sure at all if <ulink url="http://spirit.sourceforge.net">Spirit</ulink>,
-              being more or less a formal EBNF parser, can handle the context sensitivity
-              and ambiguity.
-            </para>
-          </footnote>
-          .
+          are much stricter<footnote>
+          <para>
+            Thanks to David Barrett, author of <ulink url="http://quinthar.com/qwikiwiki/index.php?page=Home">Qwiki</ulink>,
+            for sharing these samples and teaching me these obscure formatting rules.
+            I wasn't sure at all if <ulink url="http://spirit.sourceforge.net">Spirit</ulink>,
+            being more or less a formal EBNF parser, can handle the context sensitivity
+            and ambiguity.
+          </para>
+          </footnote>.
         </para>
         <itemizedlist>
           <listitem>
@@ -946,13 +944,11 @@ escape (no processing/formatting)
 <programlisting><!--quickbook-escape-prefix-->[footnote A sample footnote]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
-          will generate this
-          <footnote>
-            <para>
-              A sample footnote
-            </para>
-          </footnote>
-          .
+          will generate this<footnote>
+          <para>
+            A sample footnote
+          </para>
+          </footnote>.
         </para>
         <section id="quickbook.syntax.phrase.footnotes.macro_expansion">
           <title><link linkend="quickbook.syntax.phrase.footnotes.macro_expansion">Macro

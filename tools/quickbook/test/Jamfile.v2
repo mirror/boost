@@ -37,6 +37,7 @@ test-suite quickbook.test :
     [ quickbook-test doc-info-1 ]
     [ quickbook-test callouts ]
     [ quickbook-test simple_markup ]
+    [ quickbook-test blocks ]
     [ quickbook-fail-test fail-include ]
     [ quickbook-fail-test fail-import ]
     [ quickbook-fail-test fail-template-arguments1 ]

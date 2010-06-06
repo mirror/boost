@@ -184,7 +184,6 @@ namespace quickbook
         , "caution"
         , "copyright"
         , "entry"
-        , "footnote"
         , "important"
         , "informaltable"
         , "itemizedlist"
