@@ -26,7 +26,7 @@ namespace quickbook
         , doc_dirname()
         , doc_copyrights()
         , doc_purpose()
-        , doc_category()
+        , doc_categories()
         , doc_authors()
         , doc_license()
         , doc_last_revision()

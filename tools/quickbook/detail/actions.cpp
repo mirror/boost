@@ -1580,15 +1580,21 @@ namespace quickbook
             }
         }
 
-        if (!actions.doc_category.empty())
+        if (!actions.doc_categories.empty())
         {
             if (actions.doc_type == "library")
             {
-                out << "    <" << actions.doc_type << "category name=\"category:"
-                    << actions.doc_category
-                    << "\"></" << actions.doc_type << "category>\n"
-                    << "\n"
-                ;
+                for(actions::string_list::const_iterator
+                    it = actions.doc_categories.begin(),
+                    end = actions.doc_categories.end();
+                    it != end; ++it)
+                {
+                    out << "    <" << actions.doc_type << "category name=\"category:"
+                        << *it
+                        << "\"></" << actions.doc_type << "category>\n"
+                        << "\n"
+                    ;
+                }
             }
             else
             {
