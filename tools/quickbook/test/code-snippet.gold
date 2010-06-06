@@ -16,5 +16,9 @@
       <phrase role="special">}</phrase></code>, should be properly formatted and
       not glued to the surrounding text.
     </para>
+    <para>
+      There shoud be no spacees around (<code><phrase role="keyword">this</phrase></code>),
+      and spaces around <code><phrase role="keyword">this</phrase></code> code.
+    </para>
   </section>
 </article>
