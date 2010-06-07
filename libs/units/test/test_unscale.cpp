@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -13,7 +13,7 @@
     
 \brief test_unscale.cpp
 
-\detailed
+\details
 Test that unscale works in an attempt to isolate the sun problems.
 
 Output:

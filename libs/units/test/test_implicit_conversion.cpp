@@ -13,7 +13,7 @@
     
 \brief test_implicit_conversion.cpp
 
-\detailed
+\details
 Test implicit conversions for quantity.
 
 Output:

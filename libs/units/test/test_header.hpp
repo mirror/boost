@@ -13,7 +13,7 @@
     
 \brief test_header.hpp
 
-\detailed
+\details
 Unit system for test purposes.
 
 Output:

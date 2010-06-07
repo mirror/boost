@@ -13,7 +13,7 @@
     
 \brief systems.cpp
 
-\detailed
+\details
 Test various non-si units
 
 Output:

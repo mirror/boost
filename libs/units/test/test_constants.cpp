@@ -13,7 +13,7 @@
     
 \brief test_constants.cpp
 
-\detailed
+\details
 Test all combinations of operators with the constants.
 
 **/

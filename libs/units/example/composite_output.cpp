@@ -13,7 +13,7 @@
     
 \brief composite_output.cpp
 
-\detailed An example of textual representations of units.
+\details An example of textual representations of units.
 
 Output:
 @verbatim

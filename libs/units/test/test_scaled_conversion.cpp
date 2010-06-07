@@ -13,7 +13,7 @@
     
 \brief test_scaled_conversion.cpp
 
-\detailed
+\details
 Test unit scaling
 
 Output:

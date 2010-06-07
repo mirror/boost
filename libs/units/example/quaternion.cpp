@@ -13,7 +13,7 @@
     
 \brief quaternion.cpp
 
-\detailed
+\details
 Demonstrate interoperability with Boost.Quaternion.
 
 Output:

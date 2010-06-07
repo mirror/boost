@@ -27,19 +27,18 @@
 
 #include <boost/units/systems/si/plane_angle.hpp>
 
-/// \file 
-/// \brief Overloads of functions in \<cmath\> for quantities
-///
-/// \detailed Only functions for which a dimensionally-correct result type  
-/// can be determined are overloaded. All functions work with dimensionless
-/// quantities.
+/// \file
+/// \brief Overloads of functions in \<cmath\> for quantities.
+/// \details Only functions for which a dimensionally-correct result type
+///   can be determined are overloaded.
+///   All functions work with dimensionless quantities.
 
 // BOOST_PREVENT_MACRO_SUBSTITUTION is needed on certain compilers that define 
 // some <cmath> functions as macros; it is used for all functions even though it
 // isn't necessary -- I didn't want to think :)
 //
 // the form using namespace detail; return(f(x)); is used
-// to enable ADL for UDTs
+// to enable ADL for UDTs.
 
 namespace boost {
 

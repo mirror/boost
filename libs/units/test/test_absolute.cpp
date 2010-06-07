@@ -13,7 +13,7 @@
     
 \brief test_absolute.cpp
 
-\detailed
+\details
 Test absolute units.
 
 Output:

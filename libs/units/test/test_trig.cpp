@@ -12,7 +12,7 @@
     
 \brief test_trig.cpp
 
-\detailed
+\details
 Test trigonometric functions.
 
 Output:

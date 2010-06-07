@@ -13,7 +13,7 @@
     
 \brief fail_unit_quantity_add.cpp
 
-\detailed
+\details
 Test addition of unit and quantity.
 
 Output:

@@ -13,7 +13,7 @@
     
 \brief test_limits.cpp
 
-\detailed
+\details
 Test numeric_limits specialization.
 
 Output:

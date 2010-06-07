@@ -13,7 +13,7 @@
     
 \brief fail_heterogeneous_unit.cpp
 
-\detailed
+\details
 make sure that trying to bind a heterogeneous system to a different dimension fails.
 
 Output:

@@ -13,7 +13,7 @@
     
 \brief performance.cpp
 
-\detailed
+\details
 Test runtime performance.
 
 Output:

@@ -12,7 +12,7 @@
     
 \brief fail_quantity_non_unit.cpp
 
-\detailed
+\details
 
 Make sure that trying to use a base_unit as though
 it were a unit fails.

@@ -55,7 +55,8 @@ rule run_doxygen ( target : files * : name )
 
 run_doxygen units_reference
   :
-    [ glob $(here)/../../../boost/units/*.hpp ]
+    [ glob $(here)/../../../boost/units/*.hpp :
+           $(here)/../../../boost/units/physical_dimensions.hpp ]
   :
     "Units Reference"
   ;

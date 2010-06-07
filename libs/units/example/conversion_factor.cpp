@@ -13,7 +13,7 @@
     
 \brief conversion_factor.cpp
 
-\detailed An example of using conversion_factor.
+\details An example of using conversion_factor.
 
 Output:
 @verbatim

@@ -13,7 +13,7 @@
     
 \brief quantity.cpp
 
-\detailed
+\details
 Test quantity algebra.
 
 Output:

@@ -13,7 +13,7 @@
     
 \brief radar_beam_height.cpp
 
-\detailed
+\details
 Demonstrate library usage for user test cases suggested by Michael Fawcett.
 
 Output:

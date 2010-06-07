@@ -13,7 +13,7 @@
     
 \brief complex.cpp
 
-\detailed
+\details
 Demonstrate a complex number class that functions correctly with quantities.
 
 Output:

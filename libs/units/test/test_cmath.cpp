@@ -13,7 +13,7 @@
     
 \brief test_units_1.cpp
 
-\detailed
+\details
 Test unit class.
 
 Output:

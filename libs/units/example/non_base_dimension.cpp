@@ -13,7 +13,7 @@
     
 \brief non_base_dimension.cpp
 
-\detailed
+\details
 Another example of user-defined units with conversions.
 
 Output:

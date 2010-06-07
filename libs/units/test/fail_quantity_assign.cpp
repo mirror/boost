@@ -13,7 +13,7 @@
     
 \brief fail_quantity_assign.cpp
 
-\detailed
+\details
 Test assignment of quantity from different dimensions.
 
 Output:

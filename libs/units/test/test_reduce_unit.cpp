@@ -13,7 +13,7 @@
     
 \brief test_reduce_unit.cpp
 
-\detailed
+\details
 Test that reduce_unit works correctly by itself to try to isolate problems.
 
 Output:

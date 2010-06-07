@@ -13,7 +13,7 @@
     
 \brief dimension.cpp
 
-\detailed
+\details
 Test dimension list manipulation.
 
 Output:

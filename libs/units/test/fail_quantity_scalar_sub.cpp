@@ -13,7 +13,7 @@
     
 \brief fail_quantity_scalar_sub.cpp
 
-\detailed
+\details
 Test subtraction of quantity and scalar.
 
 Output:

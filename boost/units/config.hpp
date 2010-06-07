@@ -8,6 +8,10 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+/// \file
+/// \brief Boost units library configuration and Doxygen mainpage.
+/// \details BOOST_UNITS_HAS_BOOST_TYPEOF, BOOST_UNITS_REQUIRE_LAYOUT_COMPATIBILITY
+
 #ifndef BOOST_UNITS_CONFIG_HPP
 #define BOOST_UNITS_CONFIG_HPP
 
@@ -91,7 +95,7 @@
 /// is not layout compatible with T
 #define BOOST_UNITS_REQUIRE_LAYOUT_COMPATIBILITY
 
-/// If defined will diasable a preprocessor check that the
+/// If defined will disable a preprocessor check that the
 /// compiler is able to handle the library.
 #define BOOST_UNITS_NO_COMPILER_CHECK
 

@@ -1,9 +1,9 @@
 [library Boost.Units
-  [quickbook 1.3]
-  [version 1.0.0]
+  [quickbook 1.5]
+  [version 1.1.0]
   [authors [Schabel, Matthias C.]]
   [authors [Watanabe, Steven]]
-  [copyright 2003-2008 Matthias Christian Schabel, 2007-2008 Steven Watanabe]
+  [copyright 2003-2008 Matthias Christian Schabel, 2007-2010 Steven Watanabe]
   [license
       Distributed under the Boost Software License, Version 1.0.
       (See accompanying file LICENSE_1_0.txt or copy at
@@ -12,10 +12,15 @@
   [purpose zero-overhead compile-time dimensional analysis and unit computations]
 ]
 
+[/ Some links to external sources.]
+[def __boost [@http://www.boost.org/ Boost]]
+[def __boostroot [@boost: Boost root]]
+[def __boostlicense [@http://www.boost.org/LICENSE_1_0.txt Boost License]]
 [def __boost_mpl [@http://www.boost.org/libs/mpl/doc/index.html Boost Metaprogramming Library]]
 
 [def __mpl_forward_sequence [@http://www.boost.org/libs/mpl/doc/refmanual/forward-sequence.html MPL Forward Sequence]]
 
+[/Links within this document.]
 [def __ordinal [classref boost::units::ordinal ordinal]]
 [def __dim [classref boost::units::dim dim]]
 [def __static_rational [classref boost::units::static_rational static_rational]]
@@ -61,7 +66,6 @@
 [def __unscale [classref boost::units::unscale unscale]]
 
 [def __BOOST_UNITS_STATIC_CONSTANT [macroref BOOST_UNITS_STATIC_CONSTANT]]
-
 [def __BOOST_UNITS_DEFINE_CONVERSION_FACTOR [macroref BOOST_UNITS_DEFINE_CONVERSION_FACTOR]]
 [def __BOOST_UNITS_DEFINE_CONVERSION_FACTOR_TEMPLATE [macroref BOOST_UNITS_DEFINE_CONVERSION_FACTOR_TEMPLATE]]
 [def __BOOST_UNITS_DEFAULT_CONVERSION [macroref BOOST_UNITS_DEFAULT_CONVERSION]]
@@ -113,13 +117,14 @@ in the following :
    no specific restriction on what base dimensions can be used. Base dimensions are essentially a tag type and 
    provide no dimensional analysis functionality themselves.
 *  *Dimension* : A collection of zero or more base dimensions, each
-   potentially raised to a different rational power. For example, area = \[L\]^2, velocity = \[L\]^1/\[T\]^1, and
+   potentially raised to a different rational power.
+   For example, length = \[L\]^1, area = \[L\]^2, velocity = \[L\]^1/\[T\]^1, and
    energy = \[M\]^1 \[L\]^2/\[T\]^2 are all dimensions.
 *  *Base unit* : A base unit represents a specific measure of a dimension. For example, while length is an abstract measure of
    distance, the meter is a concrete base unit of distance.  Conversions are defined using base units.
    Much like base dimensions, base units are a tag type used solely to define units and do not support dimensional
    analysis algebra.
-*  *Unit* : A set of base units raised to rational exponents, e.g. kg^1 m^1/s^2.
+*  *Unit* : A set of base units raised to rational exponents, e.g. m^1, kg^1, m^1/s^2.
 *  *System* : A unit system is a collection of base units representing all the measurable entities of interest for a 
    specific problem. For example, the SI unit system defines seven base units : length (\[L\]) in meters, 
    mass (\[M\]) in kilograms, time (\[T\]) in seconds, current (\[I\]) in amperes, temperature (\[theta\]) in kelvin, 
@@ -150,8 +155,8 @@ The intent and function of the above code should be obvious; the output produced
 While this library attempts to make simple dimensional computations easy to code, it is in no way
 tied to any particular unit system (SI or otherwise). Instead, it provides a highly flexible compile-time
 system for dimensional analysis, supporting arbitrary collections of base dimensions, rational 
-powers of units, and explicit quantity conversions. It accomplishes all of this via template metaprogramming techniques. With 
-modern optimizing compilers, this results in zero runtime overhead for quantity computations relative to the 
+powers of units, and explicit quantity conversions. It accomplishes all of this via template metaprogramming techniques.
+With modern optimizing compilers, this results in zero runtime overhead for quantity computations relative to the
 same code without unit checking.
 
 [endsect]
@@ -319,7 +324,7 @@ The `name()` and `symbol()` methods of [___base_unit_info] provide full and shor
 we have the rudimentary beginnings of our unit system, which can be used to determine reduced dimensions for arbitrary 
 unit calculations.
 
-[endsect]
+[endsect] [/section Base Units]
 
 [section Scaled Base Units]
 
@@ -340,7 +345,7 @@ There are several advantages to this approach.
 * Similarly, if the symbol for grams is defined as "g", then the symbol for kilograms
   will be "kg" without any extra effort.
 
-[endsect]
+[endsect] [/section Scaled Base Units]
 
 [section Scaled Units]
 
@@ -353,15 +358,14 @@ A simple example of its usage would be.
 
     typedef make_scaled_unit<si::time, scale<10, static_rational<-9> > >::type nanosecond;
 
-nanosecond is a specialization of [___unit], and can be
-used in a quantity normally.
+nanosecond is a specialization of [___unit], and can be used in a quantity normally.
 
     quantity<nanosecond> t(1.0 * si::seconds);
     std::cout << t << std::endl;    // prints 1e9 ns
 
-[endsect]
+[endsect] [/section Scaled Units]
 
-[endsect]
+[endsect] [/section:Units Units]
 
 [section:Quantities Quantities]
 
@@ -507,7 +511,8 @@ to produce new composite dimensions :
 
 [dimension_snippet_1]
 
-outputting (with symbol demangling, implemented in [headerref boost/units/detail/utility.hpp])
+outputting (with symbol demangling, implemented in
+[@boost:/boost/units/detail/utility.hpp utility.hpp])
 
 [dimension_output]
 
@@ -518,7 +523,7 @@ outputting (with symbol demangling, implemented in [headerref boost/units/detail
 ([@../../libs/units/example/unit.cpp unit.cpp])
 
 This example demonstrates the use of the simple but functional unit system implemented in 
-[headerref libs/units/example/test_system.hpp] :
+[@boost:/libs/units/example/test_system.hpp test_system.hpp]
 
 [import ../example/unit.cpp]
 
@@ -557,7 +562,7 @@ to `std::complex<double>` and performing the appropriate dimensional analysis :
 
 [endsect]
 
-[section:KitchenSinkExample Kitchen Sink Example]
+[section:KitchenSinkExample Kitchen Sink Example using SI units]
 
 ([@../../libs/units/example/kitchen_sink.cpp kitchen_sink.cpp])
 
@@ -958,6 +963,60 @@ unit is also done correctly.
 
 [endsect]
 
+[section:autoscale Automatically Scaled Units]
+
+It is often desirable to scale a [___unit] automatically, depending on its value,
+to keep the integral part in a limited range, usually between 1 and 999.
+
+For example, using [@http://en.wikipedia.org/wiki/Engineering_notation engineering notation prefixes],
+
+ "1234.5 m" is more helpfully displayed as "1.234 km"
+ "0.000000001234 m" is more clearly displayed as "1.2345 nanometer".
+
+The iostream manipulators `engineering_prefixes` or `binary_prefixes` make this easy.
+
+[import ../example/autoprefixes.cpp]
+
+[autoprefixes_snippet_1]
+
+(The complete set of [@http://physics.nist.gov/cuu/Units/prefixes.html engineering and scientific multiples]
+is not used (not centi or deci for example), but only powers of ten that are multiples of three, 10^3).
+
+Similarly, the equivalent [@http://en.wikipedia.org/wiki/Binary_prefixes binary prefixes]
+used for displaying computing kilobytes, megabytes, gigabytes...
+
+These are the 2^10 = 1024, 2^20 = 1 048 576, 2^30 ... multiples.
+
+(See also [@http://physics.nist.gov/cuu/Units/binary.html Prefixes for binary multiples]
+
+This scale is specified in IEC 60027-2, Second edition, 2000-11,
+Letter symbols to be used in electrical technology -
+Part 2: Telecommunications and electronics).
+
+[autoprefixes_snippet_2]
+
+But note that scalar dimensionless values, like int, float and double,
+are *not* prefixed automatically by the engineering_prefix or binary_prefix iostream manipulators.
+
+[autoprefixes_snippet_3]
+
+You can output the name or symbol of a unit (rather than the most common quantity of a unit).
+
+[autoprefixes_snippet_4]
+
+Note too that all the formatting flags are persistent,
+so that if you set engineering_prefix, then it applies to all future outputs,
+until you select binary_prefix, or explicitly switch autoprefix off.
+You can specify no prefix (the default of course) in two ways:
+
+[autoprefixes_snippet_5]
+
+And you can get the format flags for diagnosing problems.
+
+[autoprefixes_snippet_6]
+
+[endsect] [/section:autoscale Automatically Scaled Units]
+
 [section:ConversionFactor Conversion Factor]
 
 This code demonstrates the use of the `conversion_factor` free function to determine
@@ -1233,7 +1292,7 @@ Thanks to:
 and all the members of the Boost mailing list who provided their input into 
 the design and implementation of this library.
 
-[endsect]
+[endsect] [/section:Acknowledgements Acknowledgements]
 
 [section:HelpWanted Help Wanted]
 
@@ -1245,7 +1304,23 @@ the design and implementation of this library.
 
 [endsect]
 
+[section:version_id Version Info]
+
+__boostroot
+
+Last edit to Quickbook file __FILENAME__ was at __TIME__ on __DATE__.
+
+[tip This should appear on the pdf version (but may be redundant on html).]
+[/ Useful on pdf version. See also Last revised timestamp on first page of html version.]
+[/See also Adobe Reader pdf File Properties for creation date, and PDF producer, version and page count.]
+
+[endsect] [/section:version_id Version Info]
+
 [section:ReleaseNotes Release Notes]
+
+1.2 (March 2010)
+
+* Added autoprefix ready for Boost 1.43
 
 1.0.0 (August 1, 2008) :
 
@@ -1253,21 +1328,22 @@ the design and implementation of this library.
 
 0.7.1 (March 14, 2007) :
 
-* Boost.Typeof emulation support
+* Boost.Typeof emulation support.
 * attempting to rebind a heterogeneous_system to a different set of dimensions now fails.
-* cmath.hpp now works with como-win32
-* minor changes to the tests and examples to make msvc 7.1 happy
+* cmath.hpp now works with como-win32.
+* minor changes to the tests and examples to make msvc 7.1 happy.
 
 0.7.0 (March 13, 2007) :
 
-* heterogeneous and mixed system functionality added
-* added fine-grained implicit unit conversion on a per fundamental dimension basis
-* added a number of utility metafunction classes and predicates
-* [headerref boost/units/operators.hpp] now uses `BOOST_TYPEOF` when possible
-* angular units added in [headerref boost/units/systems/trig.hpp] - implicit conversion
-    of radians between trigonometric, SI, and CGS systems allowed
-* a variety of [___unit] and [___quantity] tests added
-* examples now provide self-tests
+* heterogeneous and mixed system functionality added.
+* added fine-grained implicit unit conversion on a per fundamental dimension basis.
+* added a number of utility metafunction classes and predicates.
+* [headerref boost/units/operators.hpp] now uses `BOOST_TYPEOF` when possible.
+* angular units added in [headerref boost/units/systems/angle/gradians.hpp]
+  and [headerref boost/units/systems/angle/gradians.hpp].
+  Implicit conversion of radians between trigonometric, SI, and CGS systems is allowed.
+* a variety of [___unit] and [___quantity] tests added.
+* examples now provide self-tests.
 
 0.6.2 (February 22, 2007) :
 
@@ -1395,4 +1471,4 @@ in 2003.
 * Implementation of I/O is rudimentary; consider methods of i18n using facets
 * Consider runtime variant, perhaps using overload like `quantity<runtime,Y>`
 
-[endsect]
+[endsect] [/section:TODO TODO]

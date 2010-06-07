@@ -13,7 +13,7 @@
     
 \brief heterogeneous_unit.cpp
 
-\detailed
+\details
 Test heterogeneous units and quantities.
 
 Output:
