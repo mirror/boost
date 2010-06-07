@@ -19,15 +19,15 @@
 
 namespace boost { namespace msm { namespace front
 {
-	template<
-		class Event
+    template<
+        class Event
         , typename CalledForAction
         , void (CalledForAction::*action)(Event const&)
-	>
-	struct a_internal
-	{
+    >
+    struct a_internal
+    {
         typedef sm_a_i_row_tag row_type_tag;
-		typedef Event Evt;
+        typedef Event Evt;
         template <class FSM,class SourceState,class TargetState,class AllStates>
         static void action_call(FSM& fsm,Event const& evt,SourceState& src,TargetState& tgt, 
                                 AllStates& all_states)
@@ -37,19 +37,19 @@ namespace boost { namespace msm { namespace front
                 (fsm,evt,src,tgt,all_states,
                 ::boost::mpl::bool_< ::boost::is_base_of<CalledForAction,FSM>::type::value>());
         }
-	};
+    };
 
-	template<
+    template<
         class Event
         , typename CalledForAction
         , void (CalledForAction::*action)(Event const&)
         , typename CalledForGuard
         , bool (CalledForGuard::*guard)(Event const&)
-	>
-	struct internal
-	{
+    >
+    struct internal
+    {
         typedef sm_i_row_tag row_type_tag;
-		typedef Event Evt;
+        typedef Event Evt;
         template <class FSM,class SourceState,class TargetState,class AllStates>
         static void action_call(FSM& fsm,Event const& evt,SourceState& src,TargetState& tgt, 
                                 AllStates& all_states)
@@ -59,25 +59,6 @@ namespace boost { namespace msm { namespace front
                 (fsm,evt,src,tgt,all_states,
                 ::boost::mpl::bool_< ::boost::is_base_of<CalledForAction,FSM>::type::value>());
         }
-        template <class FSM,class SourceState,class TargetState,class AllStates>
-        static bool guard_call(FSM& fsm,Event const& evt,SourceState& src,TargetState& tgt,
-                               AllStates& all_states)
-        {
-            // in this front-end, we don't need to know source and target states
-            return ::boost::msm::front::detail::row2_guard_helper<CalledForGuard,Event,guard>::call_helper
-                (fsm,evt,src,tgt,all_states,
-                ::boost::mpl::bool_< ::boost::is_base_of<CalledForGuard,FSM>::type::value>());
-        }
-	};
-	template<
-		class Event
-        , typename CalledForGuard
-        , bool (CalledForGuard::*guard)(Event const&)
-	>
-	struct g_internal
-	{
-        typedef sm_g_i_row_tag row_type_tag;
-		typedef Event Evt;
         template <class FSM,class SourceState,class TargetState,class AllStates>
         static bool guard_call(FSM& fsm,Event const& evt,SourceState& src,TargetState& tgt,
                                AllStates& all_states)
@@ -88,13 +69,32 @@ namespace boost { namespace msm { namespace front
                 ::boost::mpl::bool_< ::boost::is_base_of<CalledForGuard,FSM>::type::value>());
         }
     };
-	template<
-		class Event
-	>
-	struct _internal
-	{
+    template<
+        class Event
+        , typename CalledForGuard
+        , bool (CalledForGuard::*guard)(Event const&)
+    >
+    struct g_internal
+    {
+        typedef sm_g_i_row_tag row_type_tag;
+        typedef Event Evt;
+        template <class FSM,class SourceState,class TargetState,class AllStates>
+        static bool guard_call(FSM& fsm,Event const& evt,SourceState& src,TargetState& tgt,
+                               AllStates& all_states)
+        {
+            // in this front-end, we don't need to know source and target states
+            return ::boost::msm::front::detail::row2_guard_helper<CalledForGuard,Event,guard>::call_helper
+                (fsm,evt,src,tgt,all_states,
+                ::boost::mpl::bool_< ::boost::is_base_of<CalledForGuard,FSM>::type::value>());
+        }
+    };
+    template<
+        class Event
+    >
+    struct _internal
+    {
         typedef sm__i_row_tag row_type_tag;
-		typedef Event Evt;
+        typedef Event Evt;
     };
 }}}
 

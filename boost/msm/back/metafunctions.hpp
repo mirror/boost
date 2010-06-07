@@ -92,49 +92,49 @@ template <class stt>
 struct generate_state_ids
 {
     typedef typename 
-	    ::boost::mpl::fold<
-	    stt,::boost::mpl::pair< ::boost::mpl::map< >, ::boost::mpl::int_<0> >,
-	    ::boost::mpl::pair<
-		    ::boost::mpl::if_<
-				     ::boost::mpl::has_key< ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
+        ::boost::mpl::fold<
+        stt,::boost::mpl::pair< ::boost::mpl::map< >, ::boost::mpl::int_<0> >,
+        ::boost::mpl::pair<
+            ::boost::mpl::if_<
+                     ::boost::mpl::has_key< ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
                                             transition_source_type< ::boost::mpl::placeholders::_2> >,
-				     ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
-				     ::boost::mpl::insert< ::boost::mpl::first<mpl::placeholders::_1>,
-							    make_pair_source_state_id< ::boost::mpl::second< ::boost::mpl::placeholders::_1 >,
-							                               ::boost::mpl::placeholders::_2> >
-				      >,
-		    ::boost::mpl::if_<
-				    ::boost::mpl::has_key< ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
+                     ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
+                     ::boost::mpl::insert< ::boost::mpl::first<mpl::placeholders::_1>,
+                                make_pair_source_state_id< ::boost::mpl::second< ::boost::mpl::placeholders::_1 >,
+                                                           ::boost::mpl::placeholders::_2> >
+                      >,
+            ::boost::mpl::if_<
+                    ::boost::mpl::has_key< ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
                                            transition_source_type< ::boost::mpl::placeholders::_2> >,
-				    ::boost::mpl::second< ::boost::mpl::placeholders::_1 >,
-				    ::boost::mpl::next< ::boost::mpl::second<mpl::placeholders::_1 > >
-				    >
-	    > //pair
-	    >::type source_state_ids;
+                    ::boost::mpl::second< ::boost::mpl::placeholders::_1 >,
+                    ::boost::mpl::next< ::boost::mpl::second<mpl::placeholders::_1 > >
+                    >
+        > //pair
+        >::type source_state_ids;
     typedef typename ::boost::mpl::first<source_state_ids>::type source_state_map;
     typedef typename ::boost::mpl::second<source_state_ids>::type highest_state_id;
 
 
     typedef typename 
-	    ::boost::mpl::fold<
-	    stt,::boost::mpl::pair<source_state_map,highest_state_id >,
-	    ::boost::mpl::pair<
-		    ::boost::mpl::if_<
-				     ::boost::mpl::has_key< ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
+        ::boost::mpl::fold<
+        stt,::boost::mpl::pair<source_state_map,highest_state_id >,
+        ::boost::mpl::pair<
+            ::boost::mpl::if_<
+                     ::boost::mpl::has_key< ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
                                             transition_target_type< ::boost::mpl::placeholders::_2> >,
-				     ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
-				     ::boost::mpl::insert< ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
-							    make_pair_target_state_id< ::boost::mpl::second< ::boost::mpl::placeholders::_1 >,
-							    ::boost::mpl::placeholders::_2> >
-				     >,
-		    ::boost::mpl::if_<
-				    ::boost::mpl::has_key< ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
+                     ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
+                     ::boost::mpl::insert< ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
+                                make_pair_target_state_id< ::boost::mpl::second< ::boost::mpl::placeholders::_1 >,
+                                ::boost::mpl::placeholders::_2> >
+                     >,
+            ::boost::mpl::if_<
+                    ::boost::mpl::has_key< ::boost::mpl::first< ::boost::mpl::placeholders::_1>,
                                            transition_target_type< ::boost::mpl::placeholders::_2> >,
-				    ::boost::mpl::second< ::boost::mpl::placeholders::_1 >,
-				    ::boost::mpl::next< ::boost::mpl::second< ::boost::mpl::placeholders::_1 > >
-				    >
-	    > //pair
-	    >::type all_state_ids;
+                    ::boost::mpl::second< ::boost::mpl::placeholders::_1 >,
+                    ::boost::mpl::next< ::boost::mpl::second< ::boost::mpl::placeholders::_1 > >
+                    >
+        > //pair
+        >::type all_state_ids;
     typedef typename ::boost::mpl::first<all_state_ids>::type type;
 };
 
@@ -151,9 +151,9 @@ template <class States>
 struct get_initial_states 
 {
     typedef typename ::boost::mpl::if_<
-	    ::boost::mpl::is_sequence<States>,
-	    States,
-		typename ::boost::mpl::push_back< ::boost::mpl::vector0<>,States>::type >::type type;
+        ::boost::mpl::is_sequence<States>,
+        States,
+        typename ::boost::mpl::push_back< ::boost::mpl::vector0<>,States>::type >::type type;
 };
 
 // returns a mpl::int_ containing the size of a region. If the argument is not a sequence, returns 1
@@ -161,9 +161,9 @@ template <class region>
 struct get_number_of_regions 
 {
     typedef typename mpl::if_<
-	    ::boost::mpl::is_sequence<region>,
-	    ::boost::mpl::size<region>,
-	    ::boost::mpl::int_<1> >::type type;
+        ::boost::mpl::is_sequence<region>,
+        ::boost::mpl::size<region>,
+        ::boost::mpl::int_<1> >::type type;
 };
 
 // builds a mpl::vector of initial states
@@ -171,9 +171,9 @@ template <class region>
 struct get_regions_as_sequence 
 {
     typedef typename ::boost::mpl::if_<
-	    ::boost::mpl::is_sequence<region>,
-	    region,
-	    typename ::boost::mpl::push_back< ::boost::mpl::vector0<>,region>::type >::type type;
+        ::boost::mpl::is_sequence<region>,
+        region,
+        typename ::boost::mpl::push_back< ::boost::mpl::vector0<>,region>::type >::type type;
 };
 
 template <class ToCreateSeq>
@@ -216,8 +216,8 @@ struct keep_source_names
 {
     // instead of the rows we want only the names of the states (from source)
     typedef typename 
-	    ::boost::mpl::transform<
-	    stt,transition_source_type< ::boost::mpl::placeholders::_1> >::type type;
+        ::boost::mpl::transform<
+        stt,transition_source_type< ::boost::mpl::placeholders::_1> >::type type;
 };
 
 // transform a transition table in a container of target states
@@ -226,8 +226,8 @@ struct keep_target_names
 {
     // instead of the rows we want only the names of the states (from source)
     typedef typename 
-	    ::boost::mpl::transform<
-	    stt,transition_target_type< ::boost::mpl::placeholders::_1> >::type type;
+        ::boost::mpl::transform<
+        stt,transition_target_type< ::boost::mpl::placeholders::_1> >::type type;
 };
 
 template <class stt>
@@ -237,15 +237,15 @@ struct generate_state_set
     typedef typename keep_source_names<stt>::type sources;
     typedef typename keep_target_names<stt>::type targets;
     typedef typename 
-	    ::boost::mpl::fold<
-	    sources, ::boost::mpl::set<>,
-	    ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2>
-	    >::type source_set;
+        ::boost::mpl::fold<
+        sources, ::boost::mpl::set<>,
+        ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2>
+        >::type source_set;
     typedef typename 
-	    ::boost::mpl::fold<
-	    targets,source_set,
-	    ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2>
-	    >::type type;
+        ::boost::mpl::fold<
+        targets,source_set,
+        ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2>
+        >::type type;
 };
 
 // iterates through the transition table and generate a mpl::set<> containing all the events
@@ -271,8 +271,8 @@ struct has_state_delayed_event
     typedef typename ::boost::mpl::find<typename State::deferred_events,Event>::type found;
     typedef typename ::boost::mpl::if_<
         ::boost::is_same<found,typename ::boost::mpl::end<typename State::deferred_events>::type >,
-	    ::boost::mpl::bool_<false>,
-	    ::boost::mpl::bool_<true> >::type type;
+        ::boost::mpl::bool_<false>,
+        ::boost::mpl::bool_<true> >::type type;
 };
 // returns a mpl::bool_<true> if State has any deferred event
 template <class State>
@@ -351,15 +351,15 @@ struct create_stt
     typedef typename get_regions_as_sequence<typename Derived::initial_state>::type init_states;
     // iterate through the initial states and add them in the stt if not already there
     typedef typename 
-	    ::boost::mpl::fold<
-	    init_states,Stt,
-	    ::boost::mpl::if_<
-			     ::boost::mpl::has_key<states, ::boost::mpl::placeholders::_2>,
-			     ::boost::mpl::placeholders::_1,
-			     ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::end<mpl::placeholders::_1>,
-						     not_a_row< ::boost::mpl::placeholders::_2 > > 
-			      >
-	    >::type with_init;
+        ::boost::mpl::fold<
+        init_states,Stt,
+        ::boost::mpl::if_<
+                 ::boost::mpl::has_key<states, ::boost::mpl::placeholders::_2>,
+                 ::boost::mpl::placeholders::_1,
+                 ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::end<mpl::placeholders::_1>,
+                             not_a_row< ::boost::mpl::placeholders::_2 > > 
+                  >
+        >::type with_init;
     // do the same for states marked as explicitly created
     typedef typename get_explicit_creation_as_sequence<
        typename ::boost::mpl::eval_if<
@@ -369,19 +369,19 @@ struct create_stt
         >::type fake_explicit_created;
 
     typedef typename 
-	    ::boost::mpl::transform<
-	    fake_explicit_created,convert_fake_state< ::boost::mpl::placeholders::_1,Derived> >::type explicit_created;
+        ::boost::mpl::transform<
+        fake_explicit_created,convert_fake_state< ::boost::mpl::placeholders::_1,Derived> >::type explicit_created;
 
     typedef typename 
-	    ::boost::mpl::fold<
-	    explicit_created,with_init,
-	    ::boost::mpl::if_<
-			     ::boost::mpl::has_key<states, ::boost::mpl::placeholders::_2>,
-			     ::boost::mpl::placeholders::_1,
-			     ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::end<mpl::placeholders::_1>,
-						     not_a_row< ::boost::mpl::placeholders::_2 > > 
-			      >
-	    >::type type;
+        ::boost::mpl::fold<
+        explicit_created,with_init,
+        ::boost::mpl::if_<
+                 ::boost::mpl::has_key<states, ::boost::mpl::placeholders::_2>,
+                 ::boost::mpl::placeholders::_1,
+                 ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::end<mpl::placeholders::_1>,
+                             not_a_row< ::boost::mpl::placeholders::_2 > > 
+                  >
+        >::type type;
 };
 
 // returns the transition table of a Composite state
@@ -397,16 +397,16 @@ struct recursive_get_transition_table
 {
     // get the transition table of the state if it's a state machine
     typedef typename ::boost::mpl::eval_if<typename is_composite_state<Composite>::type,
-	    get_transition_table<Composite>,
-	    ::boost::mpl::vector0<> >::type org_table;
+        get_transition_table<Composite>,
+        ::boost::mpl::vector0<> >::type org_table;
 
     typedef typename generate_state_set<org_table>::type states;
 
     // and for every substate, recursively get the transition table if it's a state machine
     typedef typename ::boost::mpl::fold<
-	    states,org_table,
-	    ::boost::mpl::insert_range< ::boost::mpl::placeholders::_1, ::boost::mpl::end<mpl::placeholders::_1>,
-	    recursive_get_transition_table< ::boost::mpl::placeholders::_2 > >
+        states,org_table,
+        ::boost::mpl::insert_range< ::boost::mpl::placeholders::_1, ::boost::mpl::end<mpl::placeholders::_1>,
+        recursive_get_transition_table< ::boost::mpl::placeholders::_2 > >
     >::type type;
 
 };
@@ -460,10 +460,10 @@ struct find_completion_events
 
     typedef typename ::boost::mpl::fold<
         event_list, ::boost::mpl::set<>,
-	    ::boost::mpl::if_<
-			     is_completion_event< ::boost::mpl::placeholders::_2>,
-			     ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2 >, 
-			     ::boost::mpl::placeholders::_1 >
+        ::boost::mpl::if_<
+                 is_completion_event< ::boost::mpl::placeholders::_2>,
+                 ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2 >, 
+                 ::boost::mpl::placeholders::_1 >
     >::type type;
 };
 
@@ -548,10 +548,10 @@ struct is_state_blocking
 {
     typedef typename ::boost::mpl::fold<
         typename StateType::flag_list, ::boost::mpl::set<>,
-	    ::boost::mpl::if_<
-			     has_event_blocking_flag< ::boost::mpl::placeholders::_2>,
-			     ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2 >, 
-			     ::boost::mpl::placeholders::_1 >
+        ::boost::mpl::if_<
+                 has_event_blocking_flag< ::boost::mpl::placeholders::_2>,
+                 ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2 >, 
+                 ::boost::mpl::placeholders::_1 >
     >::type blocking_flags;
 
     typedef typename ::boost::mpl::if_<
@@ -568,10 +568,10 @@ struct has_fsm_blocking_states
 
     typedef typename ::boost::mpl::fold<
         state_list, ::boost::mpl::set<>,
-	    ::boost::mpl::if_<
-			     is_state_blocking< ::boost::mpl::placeholders::_2>,
-			     ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2 >, 
-			     ::boost::mpl::placeholders::_1 >
+        ::boost::mpl::if_<
+                 is_state_blocking< ::boost::mpl::placeholders::_2>,
+                 ::boost::mpl::insert< ::boost::mpl::placeholders::_1, ::boost::mpl::placeholders::_2 >, 
+                 ::boost::mpl::placeholders::_1 >
     >::type blocking_states;
 
     typedef typename ::boost::mpl::if_<

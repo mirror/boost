@@ -75,8 +75,8 @@ struct BuildNextStates
                     proto::comma<BuildNextStates,BuildEntry >,
                     ::boost::mpl::push_back<
                                 BuildNextStates(proto::_left),
-						        BuildEntry(proto::_right) >()                
-		>
+                                BuildEntry(proto::_right) >()                
+        >
    >
 {};
 
@@ -141,7 +141,7 @@ struct BuildEvent
        , proto::when<
                 proto::divides<proto::terminal<event_tag>,BuildActionSequence >,
                 TempRow<none,proto::_left,none,
-					    BuildActionSequence(proto::_right) >() >
+                        BuildActionSequence(proto::_right) >() >
         // event [ guard ]
        , proto::when<
                 proto::subscript<proto::terminal<event_tag>,BuildGuards >,
@@ -166,7 +166,7 @@ struct BuildSource
        , proto::when<
                 proto::divides<BuildSourceState,BuildActionSequence >,
                 TempRow<BuildSourceState(proto::_left),none,none,
-					    BuildActionSequence(proto::_right) >() >
+                        BuildActionSequence(proto::_right) >() >
         // == source [ guard ]
        , proto::when<
                 proto::subscript<BuildSourceState,BuildGuards >,

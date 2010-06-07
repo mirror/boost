@@ -153,18 +153,18 @@ struct dispatch_table
     template <class EventType,class Enable=void>
     struct default_init_cell
     {
-	    default_init_cell(dispatch_table* self_,cell* tofill_entries_)
-		    : self(self_),tofill_entries(tofill_entries_)
-	    {}
+        default_init_cell(dispatch_table* self_,cell* tofill_entries_)
+            : self(self_),tofill_entries(tofill_entries_)
+        {}
         template <class State>
         typename ::boost::enable_if<typename has_state_delayed_event<State,Event>::type,void>::type
         operator()(boost::msm::wrap<State> const&,boost::msm::back::dummy<0> = 0)
-	    {
+        {
             typedef typename create_stt<Fsm>::type stt; 
             BOOST_STATIC_CONSTANT(int, state_id = (get_state_id<stt,State>::value));
             cell call_no_transition = &Fsm::defer_transition;
             tofill_entries[state_id] = call_no_transition;
-	    }
+        }
         template <class State>
         typename ::boost::disable_if<typename has_state_delayed_event<State,Event>::type,void >::type
         operator()(boost::msm::wrap<State> const&,boost::msm::back::dummy<1> = 0)
@@ -175,8 +175,8 @@ struct dispatch_table
             tofill_entries[state_id] = call_no_transition;
         }
 
-	    dispatch_table* self;
-	    cell* tofill_entries;
+        dispatch_table* self;
+        cell* tofill_entries;
     };
 
     // variant for anonymous transitions
@@ -185,23 +185,23 @@ struct dispatch_table
                              typename ::boost::enable_if<
                                 typename is_completion_event<EventType>::type>::type>
     {
-	    default_init_cell(dispatch_table* self_,cell* tofill_entries_)
-		    : self(self_),tofill_entries(tofill_entries_)
-	    {}
+        default_init_cell(dispatch_table* self_,cell* tofill_entries_)
+            : self(self_),tofill_entries(tofill_entries_)
+        {}
 
         // this event is a compound one (not a real one, just one for use in event-less transitions)
         // Note this event cannot be used as deferred!
-	    template <class State>
+        template <class State>
         void operator()(boost::msm::wrap<State> const&)
-	    {
+        {
             typedef typename create_stt<Fsm>::type stt; 
             BOOST_STATIC_CONSTANT(int, state_id = (get_state_id<stt,State>::value));
             cell call_no_transition = &Fsm::default_eventless_transition;
             tofill_entries[state_id] = call_no_transition;
-	    }
+        }
 
-	    dispatch_table* self;
-	    cell* tofill_entries;
+        dispatch_table* self;
+        cell* tofill_entries;
     };
 
  public:
@@ -209,7 +209,7 @@ struct dispatch_table
     dispatch_table()
     {
         // Initialize cells for no transition
-	    ::boost::mpl::for_each<typename generate_state_set<Stt>::type, 
+        ::boost::mpl::for_each<typename generate_state_set<Stt>::type, 
                                boost::msm::wrap< ::boost::mpl::placeholders::_1> >
                         (default_init_cell<Event>(this,entries));
 

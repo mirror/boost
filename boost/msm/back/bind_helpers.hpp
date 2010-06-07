@@ -18,22 +18,22 @@ namespace boost { namespace msm { namespace back
     // helper to replace std::plus as the lack of implicit conversion makes it not usable in one of our bind
     template<class _Ty,class _Tz>
     struct plus2
-	    : public std::binary_function<_Ty, _Tz, _Ty>
+        : public std::binary_function<_Ty, _Tz, _Ty>
     {	// functor for operator+
-	    _Ty operator()( _Ty _Left, _Tz _Right) const
-	    {	// apply operator+ to operands
-		    return (_Left + _Right);
-	    }
+        _Ty operator()( _Ty _Left, _Tz _Right) const
+        {	// apply operator+ to operands
+            return (_Left + _Right);
+        }
     };
     // helper to dereference a pointer to a function pointer
     template <class T>
     struct deref 
     {
-	    typedef T& result_type;
-	    T& operator()(T*  f) const
-	    {
-		    return *f;
-	    }
+        typedef T& result_type;
+        T& operator()(T*  f) const
+        {
+            return *f;
+        }
     };
 } } }//boost::msm::back
 #endif //BOOST_MSM_BACK_BIND_HELPERS_H

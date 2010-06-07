@@ -29,11 +29,11 @@ namespace boost { namespace msm { namespace front { namespace euml
 template <class T1,class T2>
 struct Or_ : euml_action<Or_<T1,T2> >
 {
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)
-	{
-		return (T1()(evt,fsm,src,tgt) || T2()(evt,fsm,src,tgt));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)
+    {
+        return (T1()(evt,fsm,src,tgt) || T2()(evt,fsm,src,tgt));
+    }
     template <class Event,class FSM,class STATE>
     bool operator()(Event const& evt,FSM& fsm,STATE& state)
     {
@@ -43,11 +43,11 @@ struct Or_ : euml_action<Or_<T1,T2> >
 template <class T1,class T2>
 struct And_ : euml_action<And_<T1,T2> >
 {
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)
-	{
-		return (T1()(evt,fsm,src,tgt) && T2()(evt,fsm,src,tgt));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)
+    {
+        return (T1()(evt,fsm,src,tgt) && T2()(evt,fsm,src,tgt));
+    }
     template <class Event,class FSM,class STATE>
     bool operator()(Event const& evt,FSM& fsm,STATE& state)
     {
@@ -57,11 +57,11 @@ struct And_ : euml_action<And_<T1,T2> >
 template <class T1>
 struct Not_ : euml_action<Not_<T1> >
 {
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)
-	{
-		return !(T1()(evt,fsm,src,tgt));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)
+    {
+        return !(T1()(evt,fsm,src,tgt));
+    }
     template <class Event,class FSM,class STATE>
     bool operator()(Event const& evt,FSM& fsm,STATE& state)
     {
@@ -89,32 +89,32 @@ struct If_Else_<Condition,Action1,Action2
     };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename Action1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-	 operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-	    if (Condition()(evt,fsm,src,tgt))
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename Action1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+     operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        if (Condition()(evt,fsm,src,tgt))
         {
             return Action1()(evt,fsm,src,tgt);
         }
         return Action2()(evt,fsm,src,tgt);
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename Action1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename Action1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
      operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
+    {
         if (Condition()(evt,fsm,state))
         {
             return Action1()(evt,fsm,state);
         }
         return Action2()(evt,fsm,state);
-	}
+    }
 };
 
 template <class Condition,class Action1,class Action2>
@@ -134,24 +134,24 @@ struct If_Else_<Condition,Action1,Action2
     };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-	    if (Condition()(evt,fsm,src,tgt))
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        if (Condition()(evt,fsm,src,tgt))
         {
             return Action1()(evt,fsm,src,tgt);
         }
         return Action2()(evt,fsm,src,tgt);
-	}
-	template <class Event,class FSM,class STATE>
+    }
+    template <class Event,class FSM,class STATE>
     bool operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
+    {
         if (Condition()(evt,fsm,state))
         {
             return Action1()(evt,fsm,state);
         }
         return Action2()(evt,fsm,state);
-	}
+    }
 };
 
 struct if_tag 
@@ -192,30 +192,30 @@ struct If_Then_<Condition,Action1
     };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename Action1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-	 operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename Action1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+     operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
         if (Condition()(evt,fsm,src,tgt))
         {
             return Action1()(evt,fsm,src,tgt);
         }
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename Action1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename Action1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
      operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
+    {
         if (Condition()(evt,fsm,state))
         {
             return Action1()(evt,fsm,state);
         }
-	}
+    }
 };
 
 template <class Condition,class Action1>
@@ -235,22 +235,22 @@ struct If_Then_<Condition,Action1
     };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
         if (Condition()(evt,fsm,src,tgt))
         {
             return Action1()(evt,fsm,src,tgt);
         }
-	}
-	template <class Event,class FSM,class STATE>
+    }
+    template <class Event,class FSM,class STATE>
     bool operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
+    {
         if (Condition()(evt,fsm,state))
         {
             return Action1()(evt,fsm,state);
         }
-	}
+    }
 };
 struct if_then_tag 
 {
@@ -465,23 +465,23 @@ struct Deref_ : euml_action<Deref_<T> >
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
     template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return *(T()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return *(T()(evt,fsm,state));
-	}
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return *(T()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return *(T()(evt,fsm,state));
+    }
 };
 
 template <class T>
@@ -489,109 +489,109 @@ struct Pre_inc_ : euml_action<Pre_inc_<T> >
 {
     using euml_action<Pre_inc_<T> >::operator=;
 
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename get_result_type2<T,Event,FSM,STATE>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename get_result_type<T,EVT,FSM,SourceState,TargetState>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename get_result_type2<T,Event,FSM,STATE>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename get_result_type<T,EVT,FSM,SourceState,TargetState>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return ++T()(evt,fsm,src,tgt);
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return ++T()(evt,fsm,state);
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return ++T()(evt,fsm,src,tgt);
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return ++T()(evt,fsm,state);
+    }
 };
 template <class T>
 struct Pre_dec_ : euml_action<Pre_dec_<T> >
 {
     using euml_action<Pre_dec_<T> >::operator=;
 
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename get_result_type2<T,Event,FSM,STATE>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename get_result_type<T,EVT,FSM,SourceState,TargetState>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename get_result_type2<T,Event,FSM,STATE>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename get_result_type<T,EVT,FSM,SourceState,TargetState>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return --T()(evt,fsm,src,tgt);
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return --T()(evt,fsm,state);
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return --T()(evt,fsm,src,tgt);
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return --T()(evt,fsm,state);
+    }
 };
 template <class T>
 struct Post_inc_ : euml_action<Post_inc_<T> >
 {
     using euml_action<Post_inc_<T> >::operator=;
 
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename ::boost::remove_reference<
-			typename get_result_type2<T,Event,FSM,STATE>::type>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename ::boost::remove_reference<
-			typename get_result_type<T,EVT,FSM,SourceState,TargetState>::type>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename ::boost::remove_reference<
+            typename get_result_type2<T,Event,FSM,STATE>::type>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename ::boost::remove_reference<
+            typename get_result_type<T,EVT,FSM,SourceState,TargetState>::type>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return T()(evt,fsm,src,tgt)++;
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return T()(evt,fsm,state)++;
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return T()(evt,fsm,src,tgt)++;
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return T()(evt,fsm,state)++;
     }
 };
 template <class T>
@@ -599,804 +599,804 @@ struct Post_dec_ : euml_action<Post_dec_<T> >
 {
     using euml_action<Post_dec_<T> >::operator=;
 
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename ::boost::remove_reference<
-			typename get_result_type2<T,Event,FSM,STATE>::type>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename ::boost::remove_reference<
-			typename get_result_type<T,EVT,FSM,SourceState,TargetState>::type>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename ::boost::remove_reference<
+            typename get_result_type2<T,Event,FSM,STATE>::type>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename ::boost::remove_reference<
+            typename get_result_type<T,EVT,FSM,SourceState,TargetState>::type>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return T()(evt,fsm,src,tgt)--;
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return T()(evt,fsm,state)--;
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return T()(evt,fsm,src,tgt)--;
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return T()(evt,fsm,state)--;
+    }
 };
 
 template <class T1,class T2>
 struct Plus_ : euml_action<Plus_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type2<T1,Event,FSM,STATE>::type>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type>::type type;
-	};
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return T1()(evt,fsm,src,tgt)+T2()(evt,fsm,src,tgt);
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return T1()(evt,fsm,state)+T2()(evt,fsm,state);
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return T1()(evt,fsm,src,tgt)+T2()(evt,fsm,src,tgt);
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return T1()(evt,fsm,state)+T2()(evt,fsm,state);
+    }
 };
 template <class T1,class T2>
 struct Minus_ : euml_action<Minus_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type2<T1,Event,FSM,STATE>::type>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type>::type type;
-	};
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return T1()(evt,fsm,src,tgt)-T2()(evt,fsm,src,tgt);
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return T1()(evt,fsm,state)-T2()(evt,fsm,state);
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return T1()(evt,fsm,src,tgt)-T2()(evt,fsm,src,tgt);
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return T1()(evt,fsm,state)-T2()(evt,fsm,state);
+    }
 };
 template <class T1,class T2>
 struct Multiplies_ : euml_action<Multiplies_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type2<T1,Event,FSM,STATE>::type>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type>::type type;
-	};
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return T1()(evt,fsm,src,tgt)*T2()(evt,fsm,src,tgt);
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return T1()(evt,fsm,state)*T2()(evt,fsm,state);
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return T1()(evt,fsm,src,tgt)*T2()(evt,fsm,src,tgt);
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return T1()(evt,fsm,state)*T2()(evt,fsm,state);
+    }
 };
 template <class T1,class T2>
 struct Divides_ : euml_action<Divides_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type2<T1,Event,FSM,STATE>::type>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type>::type type;
-	};
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return T1()(evt,fsm,src,tgt)/T2()(evt,fsm,src,tgt);
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return T1()(evt,fsm,state)/T2()(evt,fsm,state);
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return T1()(evt,fsm,src,tgt)/T2()(evt,fsm,src,tgt);
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return T1()(evt,fsm,state)/T2()(evt,fsm,state);
+    }
 };
 template <class T1,class T2>
 struct Modulus_ : euml_action<Modulus_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type2<T1,Event,FSM,STATE>::type>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type>::type type;
-	};
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return T1()(evt,fsm,src,tgt)%T2()(evt,fsm,src,tgt);
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return T1()(evt,fsm,state)%T2()(evt,fsm,state);
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return T1()(evt,fsm,src,tgt)%T2()(evt,fsm,src,tgt);
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return T1()(evt,fsm,state)%T2()(evt,fsm,state);
+    }
 };
 template <class T1,class T2>
 struct Bitwise_And_ : euml_action<Bitwise_And_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type2<T1,Event,FSM,STATE>::type>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type>::type type;
-	};
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return T1()(evt,fsm,src,tgt)&T2()(evt,fsm,src,tgt);
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return T1()(evt,fsm,state)&T2()(evt,fsm,state);
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return T1()(evt,fsm,src,tgt)&T2()(evt,fsm,src,tgt);
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return T1()(evt,fsm,state)&T2()(evt,fsm,state);
+    }
 };
 template <class T1,class T2>
 struct Bitwise_Or_ : euml_action<Bitwise_Or_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type2<T1,Event,FSM,STATE>::type>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type>::type type;
-	};
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return T1()(evt,fsm,src,tgt)|T2()(evt,fsm,src,tgt);
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return T1()(evt,fsm,state)|T2()(evt,fsm,state);
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return T1()(evt,fsm,src,tgt)|T2()(evt,fsm,src,tgt);
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return T1()(evt,fsm,state)|T2()(evt,fsm,state);
+    }
 };
 template <class T1,class T2>
 struct Bitwise_Xor_ : euml_action<Bitwise_Xor_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type2<T1,Event,FSM,STATE>::type>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type>::type type;
-	};
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return T1()(evt,fsm,src,tgt)^T2()(evt,fsm,src,tgt);
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return T1()(evt,fsm,state)^T2()(evt,fsm,state);
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return T1()(evt,fsm,src,tgt)^T2()(evt,fsm,src,tgt);
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return T1()(evt,fsm,state)^T2()(evt,fsm,state);
+    }
 };
 template <class T1,class T2>
 struct Subscript_ : euml_action<Subscript_<T1,T2> >
 {
-	template <class T>
-	struct get_reference 
-	{
-		typedef typename T::reference type;
-	};
-	template <class T>
-	struct get_mapped_type 
-	{
+    template <class T>
+    struct get_reference 
+    {
+        typedef typename T::reference type;
+    };
+    template <class T>
+    struct get_mapped_type 
+    {
         typedef typename T::value_type::second_type& type;
-	};
+    };
     template <class Event,class FSM,class STATE >
     struct state_action_result 
     {
-		typedef typename ::boost::remove_reference<
-			typename get_result_type2<T1,Event,FSM,STATE>::type>::type container_type;
-		typedef typename ::boost::mpl::eval_if<
-			typename has_key_type<container_type>::type,
-			get_mapped_type<container_type>,
+        typedef typename ::boost::remove_reference<
+            typename get_result_type2<T1,Event,FSM,STATE>::type>::type container_type;
+        typedef typename ::boost::mpl::eval_if<
+            typename has_key_type<container_type>::type,
+            get_mapped_type<container_type>,
             ::boost::mpl::eval_if<
                 typename ::boost::is_pointer<container_type>::type,
                 ::boost::add_reference<typename ::boost::remove_pointer<container_type>::type >,
-			    get_reference<container_type> 
+                get_reference<container_type> 
              >
         >::type type;
     };
     template <class EVT,class FSM,class SourceState,class TargetState>
     struct transition_action_result 
     {
-		typedef typename ::boost::remove_reference<
-			typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type>::type container_type;
-		typedef typename ::boost::mpl::eval_if<
-			typename has_key_type<container_type>::type,
-			get_mapped_type<container_type>,
+        typedef typename ::boost::remove_reference<
+            typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type>::type container_type;
+        typedef typename ::boost::mpl::eval_if<
+            typename has_key_type<container_type>::type,
+            get_mapped_type<container_type>,
             ::boost::mpl::eval_if<
                 typename ::boost::is_pointer<container_type>::type,
                 ::boost::add_reference<typename ::boost::remove_pointer<container_type>::type >,
-			    get_reference<container_type> 
+                get_reference<container_type> 
              >
         >::type type;
     };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return T1()(evt,fsm,src,tgt)[T2()(evt,fsm,src,tgt)];
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return T1()(evt,fsm,state)[T2()(evt,fsm,state)];
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return T1()(evt,fsm,src,tgt)[T2()(evt,fsm,src,tgt)];
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return T1()(evt,fsm,state)[T2()(evt,fsm,state)];
+    }
 };
 template <class T1,class T2>
 struct Plus_Assign_ : euml_action<Plus_Assign_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt)+=T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return (T1()(evt,fsm,state)+=T2()(evt,fsm,state));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt)+=T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return (T1()(evt,fsm,state)+=T2()(evt,fsm,state));
+    }
 };
 template <class T1,class T2>
 struct Minus_Assign_ : euml_action<Minus_Assign_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt)-=T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return (T1()(evt,fsm,state)-=T2()(evt,fsm,state));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt)-=T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return (T1()(evt,fsm,state)-=T2()(evt,fsm,state));
+    }
 };
 template <class T1,class T2>
 struct Multiplies_Assign_ : euml_action<Multiplies_Assign_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt)*=T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return (T1()(evt,fsm,state)*=T2()(evt,fsm,state));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt)*=T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return (T1()(evt,fsm,state)*=T2()(evt,fsm,state));
+    }
 };
 template <class T1,class T2>
 struct Divides_Assign_ : euml_action<Divides_Assign_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt)/=T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return (T1()(evt,fsm,state)/=T2()(evt,fsm,state));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt)/=T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return (T1()(evt,fsm,state)/=T2()(evt,fsm,state));
+    }
 };
 template <class T1,class T2>
 struct Modulus_Assign_ : euml_action<Modulus_Assign_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt)%=T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return (T1()(evt,fsm,state)%=T2()(evt,fsm,state));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt)%=T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return (T1()(evt,fsm,state)%=T2()(evt,fsm,state));
+    }
 };
 template <class T1,class T2>
 struct ShiftLeft_Assign_ : euml_action<ShiftLeft_Assign_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt)<<=T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return (T1()(evt,fsm,state)<<=T2()(evt,fsm,state));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt)<<=T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return (T1()(evt,fsm,state)<<=T2()(evt,fsm,state));
+    }
 };
 template <class T1,class T2>
 struct ShiftRight_Assign_ : euml_action<ShiftRight_Assign_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt)>>=T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return (T1()(evt,fsm,state)>>=T2()(evt,fsm,state));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt)>>=T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return (T1()(evt,fsm,state)>>=T2()(evt,fsm,state));
+    }
 };
 template <class T1,class T2>
 struct ShiftLeft_ : euml_action<ShiftLeft_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt)<<T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return (T1()(evt,fsm,state)<<T2()(evt,fsm,state));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt)<<T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return (T1()(evt,fsm,state)<<T2()(evt,fsm,state));
+    }
 };
 template <class T1,class T2>
 struct ShiftRight_ : euml_action<ShiftRight_<T1,T2> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt)>>T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return (T1()(evt,fsm,state)>>T2()(evt,fsm,state));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt)>>T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return (T1()(evt,fsm,state)>>T2()(evt,fsm,state));
+    }
 };
 template <class T1,class T2>
 struct Assign_ : euml_action<Assign_<T1,T2> >
 {
     using euml_action< Assign_<T1,T2> >::operator=;
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
-		typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
-		typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
-	};
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
+        typedef typename get_result_type2<T1,Event,FSM,STATE>::type type;
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
+        typedef typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type type;
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt)=T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return (T1()(evt,fsm,state)=T2()(evt,fsm,state));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt)=T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return (T1()(evt,fsm,state)=T2()(evt,fsm,state));
+    }
 };
 template <class T1>
 struct Unary_Plus_ : euml_action<Unary_Plus_<T1> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type2<T1,Event,FSM,STATE>::type>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type>::type type;
-	};
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return +T1()(evt,fsm,src,tgt);
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return +T1()(evt,fsm,state);
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return +T1()(evt,fsm,src,tgt);
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return +T1()(evt,fsm,state);
+    }
 };
 template <class T1>
 struct Unary_Minus_ : euml_action<Unary_Minus_<T1> >
 {
-	template <class Event,class FSM,class STATE >
-	struct state_action_result 
-	{
+    template <class Event,class FSM,class STATE >
+    struct state_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type2<T1,Event,FSM,STATE>::type>::type type;
-	};
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	struct transition_action_result 
-	{
+    };
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    struct transition_action_result 
+    {
         typedef typename ::boost::remove_reference<
             typename get_result_type<T1,EVT,FSM,SourceState,TargetState>::type>::type type;
-	};
+    };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return -(T1()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
-		return -(T1()(evt,fsm,state));
-	}
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return -(T1()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
+        return -(T1()(evt,fsm,state));
+    }
 };
 template <class T1,class T2>
 struct Less_ : euml_action<Less_<T1,T2> >
@@ -1413,12 +1413,12 @@ struct Less_ : euml_action<Less_<T1,T2> >
     };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt) < T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt) < T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
     bool operator()(Event const& evt,FSM& fsm,STATE& state)const
     {
         return (T1()(evt,fsm,state) < T2()(evt,fsm,state));
@@ -1439,12 +1439,12 @@ struct LessEqual_ : euml_action<LessEqual_<T1,T2> >
     };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt) <= T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt) <= T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
     bool operator()(Event const& evt,FSM& fsm,STATE& state)const
     {
         return (T1()(evt,fsm,state) <= T2()(evt,fsm,state));
@@ -1465,12 +1465,12 @@ struct Greater_ : euml_action<Greater_<T1,T2> >
     };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt) > T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt) > T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
     bool operator()(Event const& evt,FSM& fsm,STATE& state)const
     {
         return (T1()(evt,fsm,state) > T2()(evt,fsm,state));
@@ -1491,12 +1491,12 @@ struct GreaterEqual_ : euml_action<GreaterEqual_<T1,T2> >
     };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt) >= T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt) >= T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
     bool operator()(Event const& evt,FSM& fsm,STATE& state)const
     {
         return (T1()(evt,fsm,state) >= T2()(evt,fsm,state));
@@ -1517,12 +1517,12 @@ struct EqualTo_ : euml_action<EqualTo_<T1,T2> >
     };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt) == T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt) == T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
     bool operator()(Event const& evt,FSM& fsm,STATE& state)const
     {
         return (T1()(evt,fsm,state) == T2()(evt,fsm,state));
@@ -1543,12 +1543,12 @@ struct NotEqualTo_ : euml_action<NotEqualTo_<T1,T2> >
     };
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
-	template <class EVT,class FSM,class SourceState,class TargetState>
-	bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return (T1()(evt,fsm,src,tgt) != T2()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
+    template <class EVT,class FSM,class SourceState,class TargetState>
+    bool operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return (T1()(evt,fsm,src,tgt) != T2()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
     bool operator()(Event const& evt,FSM& fsm,STATE& state)const
     {
         return (T1()(evt,fsm,state) != T2()(evt,fsm,state));

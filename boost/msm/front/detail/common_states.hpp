@@ -25,8 +25,8 @@ struct inherit_attributes
 {
     inherit_attributes():m_attributes(){}
     inherit_attributes(Attributes const& the_attributes):m_attributes(the_attributes){}
-	// on the fly attribute creation capability
-	typedef Attributes		attributes_type;
+    // on the fly attribute creation capability
+    typedef Attributes		attributes_type;
     template <class Index>
     typename ::boost::fusion::result_of::at_key<attributes_type, 
                                                 Index>::type
@@ -39,7 +39,7 @@ struct inherit_attributes
     typename ::boost::add_const<
         typename ::boost::fusion::result_of::at_key<attributes_type,
                                                     Index>::type>::type
-	get_attribute(Index const&)const 
+    get_attribute(Index const&)const 
     {
         return const_cast< 
             typename ::boost::add_const< 
@@ -49,8 +49,8 @@ struct inherit_attributes
     }
 
 private:
-	// attributes
-	Attributes m_attributes;
+    // attributes
+    Attributes m_attributes;
 };
 
 // the interface for all states. Defines entry and exit functions. Overwrite to implement for any state needing it.
@@ -58,7 +58,7 @@ template<class USERBASE,class Attributes= ::boost::fusion::map<> >
 struct state_base : public inherit_attributes<Attributes>, USERBASE
 {
     typedef USERBASE		user_state_base;
-	typedef Attributes		attributes_type;
+    typedef Attributes		attributes_type;
 
     // empty implementation for the states not wishing to define an entry condition
     // will not be called polymorphic way

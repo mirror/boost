@@ -87,23 +87,23 @@ struct BackInserter_ : euml_action<BackInserter_<T> >
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
     template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return std::back_inserter(T()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return std::back_inserter(T()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
         return std::back_inserter(T()(evt,fsm,state));
-	}
+    }
 };
 
 struct back_inserter_tag {};
@@ -141,23 +141,23 @@ struct FrontInserter_ : euml_action<FrontInserter_<T> >
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
     template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return std::front_inserter(T()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return std::front_inserter(T()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
         return std::front_inserter(T()(evt,fsm,state));
-	}
+    }
 };
 
 struct front_inserter_tag {};
@@ -195,23 +195,23 @@ struct Inserter_ : euml_action<Inserter_<T,Pos> >
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
     template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
-		operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
-	{
-		return std::inserter(T()(evt,fsm,src,tgt),Pos()(evt,fsm,src,tgt));
-	}
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename T::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
-		operator()(Event const& evt,FSM& fsm,STATE& state )const
-	{
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+        operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
+    {
+        return std::inserter(T()(evt,fsm,src,tgt),Pos()(evt,fsm,src,tgt));
+    }
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename T::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
+        operator()(Event const& evt,FSM& fsm,STATE& state )const
+    {
         return std::inserter(T()(evt,fsm,state),Pos()(evt,fsm,state));
-	}
+    }
 };
 
 struct inserter_tag {};
@@ -252,20 +252,20 @@ struct Transform_<Param1,Param2,Param3,Param4,Param5,
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
     template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename Param1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename Param1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
      operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
     {
         return std::transform(Param1()(evt,fsm,src,tgt),Param2()(evt,fsm,src,tgt),Param3()(evt,fsm,src,tgt),
                               Param4()(evt,fsm,src,tgt));
     }
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename Param1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename Param1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
      operator()(Event const& evt,FSM& fsm,STATE& state )const
     {
         return std::transform(Param1()(evt,fsm,state),Param2()(evt,fsm,state),Param3()(evt,fsm,state),
@@ -291,20 +291,20 @@ struct Transform_<Param1,Param2,Param3,Param4,Param5,
     typedef ::boost::mpl::set<state_action_tag,action_tag> tag_type;
 
     template <class EVT,class FSM,class SourceState,class TargetState>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename Param1::tag_type,action_tag>::type,
-			typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename Param1::tag_type,action_tag>::type,
+            typename transition_action_result<EVT,FSM,SourceState,TargetState>::type >::type 
      operator()(EVT const& evt, FSM& fsm,SourceState& src,TargetState& tgt)const
     {
         return std::transform (Param1()(evt,fsm,src,tgt),Param2()(evt,fsm,src,tgt),Param3()(evt,fsm,src,tgt),
                                Param4()(evt,fsm,src,tgt),Param5()(evt,fsm,src,tgt));
     }
-	template <class Event,class FSM,class STATE>
-	typename ::boost::enable_if<
-		typename ::boost::mpl::has_key<
-			typename Param1::tag_type,state_action_tag>::type,
-			typename state_action_result<Event,FSM,STATE>::type >::type 
+    template <class Event,class FSM,class STATE>
+    typename ::boost::enable_if<
+        typename ::boost::mpl::has_key<
+            typename Param1::tag_type,state_action_tag>::type,
+            typename state_action_result<Event,FSM,STATE>::type >::type 
      operator()(Event const& evt,FSM& fsm,STATE& state )const
     {
         return std::transform (Param1()(evt,fsm,state),Param2()(evt,fsm,state),Param3()(evt,fsm,state),

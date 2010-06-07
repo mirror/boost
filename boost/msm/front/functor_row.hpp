@@ -165,7 +165,7 @@ namespace boost { namespace msm { namespace front
     template<class TGT>
     struct get_row_target
     {
-	    typedef typename TGT::Target type;
+        typedef typename TGT::Target type;
     };
 
     template <class EVENT,class ACTION=none,class GUARD=none>

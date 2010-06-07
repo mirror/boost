@@ -176,7 +176,7 @@ private:
 
  public: 
     // tags
-	//typedef ::boost::mpl::true_	 composite_state;
+    //typedef ::boost::mpl::true_	 composite_state;
     typedef int composite_tag;
 
     // in case someone needs to know
@@ -229,7 +229,7 @@ private:
         }    
         exit_pt():m_forward(){}
         // by assignments, we keep our forwarding functor unchanged as our containing SM did not change
-	template <class RHS>
+    template <class RHS>
         exit_pt(RHS& rhs):m_forward(){}
         exit_pt<ExitPoint>& operator= (const exit_pt<ExitPoint>& ) 
         { 
@@ -805,37 +805,37 @@ private:
     {
         typedef g_row_<Transition> type;
     };
-	template <class Transition,class StateType>
+    template <class Transition,class StateType>
     struct create_backend_stt<a_row_tag,Transition,StateType>
     {
         typedef a_row_<Transition> type;
     };
-	template <class Transition,class StateType>
+    template <class Transition,class StateType>
     struct create_backend_stt<_row_tag,Transition,StateType>
     {
         typedef _row_<Transition> type;
     };
-	template <class Transition,class StateType>
-	struct create_backend_stt<row_tag,Transition,StateType>
-	{
-		typedef row_<Transition> type;
-	};
+    template <class Transition,class StateType>
+    struct create_backend_stt<row_tag,Transition,StateType>
+    {
+        typedef row_<Transition> type;
+    };
     // internal transitions
     template <class Transition,class StateType>
     struct create_backend_stt<g_irow_tag,Transition,StateType>
     {
         typedef g_irow_<Transition> type;
     };
-	template <class Transition,class StateType>
+    template <class Transition,class StateType>
     struct create_backend_stt<a_irow_tag,Transition,StateType>
     {
         typedef a_irow_<Transition> type;
     };
-	template <class Transition,class StateType>
-	struct create_backend_stt<irow_tag,Transition,StateType>
-	{
-		typedef irow_<Transition> type;
-	};
+    template <class Transition,class StateType>
+    struct create_backend_stt<irow_tag,Transition,StateType>
+    {
+        typedef irow_<Transition> type;
+    };
     template <class Transition,class StateType>
     struct create_backend_stt<_irow_tag,Transition,StateType>
     {
@@ -872,22 +872,22 @@ private:
     struct create_real_stt 
     {
         //typedef typename BaseType::transition_table stt_simulated;
-	    typedef typename ::boost::mpl::fold<
-		    stt_simulated,mpl::vector0<>,
+        typedef typename ::boost::mpl::fold<
+            stt_simulated,mpl::vector0<>,
             ::boost::mpl::push_back< ::boost::mpl::placeholders::_1,
                                      make_row_tag< ::boost::mpl::placeholders::_2 , BaseType > >
-	    >::type type;
+        >::type type;
     };
 
-	template <class Table,class Intermediate,class StateType>
-	struct add_forwarding_row_helper
-	{
-		typedef typename generate_event_set<Table>::type all_events;
-		typedef typename ::boost::mpl::fold<
-			all_events, Intermediate,
-			::boost::mpl::push_back< ::boost::mpl::placeholders::_1,
-			frow<StateType, ::boost::mpl::placeholders::_2> > >::type type;
-	};
+    template <class Table,class Intermediate,class StateType>
+    struct add_forwarding_row_helper
+    {
+        typedef typename generate_event_set<Table>::type all_events;
+        typedef typename ::boost::mpl::fold<
+            all_events, Intermediate,
+            ::boost::mpl::push_back< ::boost::mpl::placeholders::_1,
+            frow<StateType, ::boost::mpl::placeholders::_2> > >::type type;
+    };
     // gets the transition table from a composite and make from it a forwarding row
     template <class StateType,class IsComposite>
     struct get_internal_transition_table
@@ -899,18 +899,18 @@ private:
         // Note: these are added first because they must have a lesser prio
         // than the deeper transitions in the sub regions
         typedef typename StateType::internal_transition_table istt_simulated;
-	    typedef typename ::boost::mpl::fold<
-		    istt_simulated,::boost::mpl::vector0<>,
+        typedef typename ::boost::mpl::fold<
+            istt_simulated,::boost::mpl::vector0<>,
             ::boost::mpl::push_back< ::boost::mpl::placeholders::_1,
                                      make_row_tag< ::boost::mpl::placeholders::_2 , StateType> >
-	    >::type intermediate;
+        >::type intermediate;
 
         // and add for every event a forwarding row
-		typedef typename ::boost::mpl::eval_if<
-				typename CompilePolicy::add_forwarding_rows,
-				add_forwarding_row_helper<original_table,intermediate,StateType>,
-				::boost::mpl::identity<intermediate>
-		>::type type;
+        typedef typename ::boost::mpl::eval_if<
+                typename CompilePolicy::add_forwarding_rows,
+                add_forwarding_row_helper<original_table,intermediate,StateType>,
+                ::boost::mpl::identity<intermediate>
+        >::type type;
     };
     template <class StateType>
     struct get_internal_transition_table<StateType, ::boost::mpl::false_ >
@@ -934,14 +934,14 @@ private:
         typedef typename Composite::stt Stt;
         // for every state, add its transition table (if any)
         // transformed as frow
-		typedef typename ::boost::mpl::fold<state_list,Stt,
-				::boost::mpl::insert_range< 
+        typedef typename ::boost::mpl::fold<state_list,Stt,
+                ::boost::mpl::insert_range< 
                         ::boost::mpl::placeholders::_1, 
                         ::boost::mpl::end< ::boost::mpl::placeholders::_1>,
-						get_internal_transition_table< 
+                        get_internal_transition_table< 
                                 ::boost::mpl::placeholders::_2,
                                 is_composite_state< ::boost::mpl::placeholders::_2> > > 
-		>::type type;
+        >::type type;
     };
     // extend the table with tables from composite states
     typedef typename extend_table<library_sm>::type complete_table;
@@ -1142,10 +1142,10 @@ private:
      public:
      // Construct with the default initial states
      state_machine<Derived,HistoryPolicy,CompilePolicy   >()
-	     :Derived()
-	     ,m_events_queue() 
-	     ,m_deferred_events_queue()
-	     ,m_history()
+         :Derived()
+         ,m_events_queue() 
+         ,m_deferred_events_queue()
+         ,m_history()
          ,m_event_processing(false)
          ,m_is_included(false)
          ,m_visitors()
@@ -1166,9 +1166,9 @@ private:
         state_machine<Derived,HistoryPolicy,CompilePolicy                           \
         >(BOOST_PP_ENUM(n, MSM_CONSTRUCTOR_HELPER_EXECUTE_SUB, ~ ) )                \
         :Derived(BOOST_PP_ENUM_PARAMS(n,t))                                         \
-	     ,m_events_queue()                                                          \
-	     ,m_deferred_events_queue()                                                 \
-	     ,m_history()                                                               \
+         ,m_events_queue()                                                          \
+         ,m_deferred_events_queue()                                                 \
+         ,m_history()                                                               \
          ,m_event_processing(false)                                                 \
          ,m_is_included(false)                                                      \
          ,m_visitors()                                                              \
@@ -1482,21 +1482,21 @@ private:
 #undef MSM_COMPOSITE_ACCEPT_EXECUTE
 #undef MSM_COMPOSITE_ACCEPT_SUB
 
-	// helper used to call the init states at the start of the state machine
+    // helper used to call the init states at the start of the state machine
     template <class Event>
-	struct call_init
-	{
-		call_init(Event const& an_event,library_sm* self_):
+    struct call_init
+    {
+        call_init(Event const& an_event,library_sm* self_):
                 evt(an_event),self(self_){}
-		template <class State>
-		void operator()(boost::msm::wrap<State> const&)
-		{
+        template <class State>
+        void operator()(boost::msm::wrap<State> const&)
+        {
             execute_entry(::boost::fusion::at_key<State>(self->m_substate_list),evt,*self);
-		}
-	private:
+        }
+    private:
         Event const& evt;
         library_sm* self;
-	};
+    };
     // helper for flag handling. Uses OR by default on orthogonal zones.
     template <class Flag,bool orthogonalStates>
     struct FlagHelper 
@@ -1604,7 +1604,7 @@ private:
     {
         static void set_sm(library_sm* )
         {
-	        // state doesn't need its sm
+            // state doesn't need its sm
         }
     };
     // create a state requiring a pointer to the state machine
@@ -1613,8 +1613,8 @@ private:
     {
         static void set_sm(library_sm* sm)
         {
-	        // create and set the fsm
-	        ::boost::fusion::at_key<State>(sm->m_substate_list).set_sm_ptr(sm);
+            // create and set the fsm
+            ::boost::fusion::at_key<State>(sm->m_substate_list).set_sm_ptr(sm);
         }
     };
         // main unspecialized helper class
@@ -1657,13 +1657,13 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
         m_is_included=true;
         ::boost::fusion::for_each(m_substate_list,add_state<ContainingSM>(this,sm));
     }
-	// A function object for use with mpl::for_each that stuffs
+    // A function object for use with mpl::for_each that stuffs
     // states into the state list.
     template<class ContainingSM>
     struct add_state
     {
         add_state(library_sm* self_,ContainingSM* sm)
-	        : self(self_),containing_sm(sm){}
+            : self(self_),containing_sm(sm){}
 
         // State is a sub fsm with exit pseudo states and gets a pointer to this fsm, so it can build a callback
         template <class StateType>
@@ -1674,7 +1674,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
             ::boost::fusion::at_key<StateType>(self->m_substate_list).set_containing_sm(containing_sm);
         }
         // State is a sub fsm without exit pseudo states and does not get a callback to this fsm
-		// or state is a normal state and needs nothing except creation
+        // or state is a normal state and needs nothing except creation
         template <class StateType>
         typename ::boost::enable_if<
             typename boost::mpl::and_<typename boost::mpl::not_
@@ -1856,7 +1856,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
          static void do_start(library_sm*,Event const& ){}
      };
      // start for states machines which are themselves embedded in other state machines (composites)
-	 template <class Event>
+     template <class Event>
      void start(Event const& incomingEvent)
      {
          region_start_helper< ::boost::mpl::int_<0> >::template do_start(this,incomingEvent);
@@ -1988,7 +1988,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
          static void do_exit(library_sm*,Event const& ){}
      };
      // entry/exit for states machines which are themselves embedded in other state machines (composites)
-	 template <class Event,class FsmType>
+     template <class Event,class FsmType>
      void do_entry(Event const& incomingEvent,FsmType& fsm)
      {
         // by default we activate the history/init states, can be overwritten by direct_event_start_helper
@@ -2001,7 +2001,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
         m_event_processing = false;
         process_message_queue(this);
      }
-	 template <class Event,class FsmType>
+     template <class Event,class FsmType>
      void do_exit(Event const& incomingEvent,FsmType& fsm)
      {
         // first recursively exit the sub machines

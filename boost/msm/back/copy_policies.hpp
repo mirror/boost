@@ -19,7 +19,7 @@ namespace boost { namespace msm { namespace back
     struct NoCopy : ::boost::noncopyable
     {
     };
-	
+    
     // allows deep copy
     struct DeepCopy
     {
