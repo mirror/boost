@@ -26,8 +26,6 @@
     #include <boost/mpl/aux_/template_arity.hpp>
     #include <boost/mpl/aux_/lambda_arity_param.hpp>
     #include <boost/utility/result_of.hpp>
-    #include <boost/type_traits/remove_const.hpp>
-    #include <boost/type_traits/remove_reference.hpp>
     #include <boost/proto/proto_fwd.hpp>
     #include <boost/proto/traits.hpp>
     #include <boost/proto/args.hpp>
@@ -96,11 +94,7 @@
             // TODO could optimize this if R is a transform
             template<typename R, typename Expr, typename State, typename Data>
             struct make_if_<R, Expr, State, Data, true>
-              : remove_const<
-                    typename remove_reference<
-                        typename R::template impl<Expr, State, Data>::result_type
-                    >::type
-                >
+              : uncvref<typename R::template impl<Expr, State, Data>::result_type>
             {};
 
             template<typename Type, bool IsAggregate = is_aggregate<Type>::value>
@@ -335,11 +329,9 @@
             struct make_if_<R(BOOST_PP_ENUM_PARAMS(N, A)), Expr, State, Data, false>
             {
                 typedef
-                    typename remove_const<
-                        typename remove_reference<
-                            typename when<_, R(BOOST_PP_ENUM_PARAMS(N, A))>
-                                ::template impl<Expr, State, Data>::result_type
-                        >::type
+                    typename uncvref<
+                        typename when<_, R(BOOST_PP_ENUM_PARAMS(N, A))>
+                            ::template impl<Expr, State, Data>::result_type
                     >::type
                 type;
             };
@@ -352,11 +344,9 @@
             struct make_if_<R(*)(BOOST_PP_ENUM_PARAMS(N, A)), Expr, State, Data, false>
             {
                 typedef
-                    typename remove_const<
-                        typename remove_reference<
-                            typename when<_, R(BOOST_PP_ENUM_PARAMS(N, A))>
-                                ::template impl<Expr, State, Data>::result_type
-                        >::type
+                    typename uncvref<
+                        typename when<_, R(BOOST_PP_ENUM_PARAMS(N, A))>
+                            ::template impl<Expr, State, Data>::result_type
                     >::type
                 type;
             };

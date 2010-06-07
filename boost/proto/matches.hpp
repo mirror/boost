@@ -323,12 +323,18 @@
 
             template<typename Tag, typename Args1, typename Args2>
             struct matches_< proto::expr<Tag, Args1, 1>, proto::expr<Tag, Args2, 1> >
-              : matches_<typename detail::expr_traits<typename Args1::child0>::value_type::proto_base_expr, typename Args2::child0::proto_base_expr>
+              : matches_<
+					typename detail::expr_traits<typename Args1::child0>::value_type::proto_base_expr
+				  , typename Args2::child0::proto_base_expr
+				>
             {};
 
             template<typename Tag, typename Args1, typename Args2>
             struct matches_< proto::expr<Tag, Args1, 1>, proto::expr<proto::_, Args2, 1> >
-              : matches_<typename detail::expr_traits<typename Args1::child0>::value_type::proto_base_expr, typename Args2::child0::proto_base_expr>
+              : matches_<
+					typename detail::expr_traits<typename Args1::child0>::value_type::proto_base_expr
+				  , typename Args2::child0::proto_base_expr
+				>
             {};
 
         #define BOOST_PROTO_MATCHES_N_FUN(Z, N, DATA)                                               \
@@ -377,7 +383,9 @@
 
             template<typename Expr, typename If>
             struct matches_<Expr, proto::if_<If> >
-              : detail::uncvref<typename when<_, If>::template impl<Expr, int, int>::result_type>::type
+              : detail::uncvref<
+					typename when<_, If>::template impl<Expr, int, int>::result_type
+				>::type
             {};
 
             // handle degenerate cases of proto::or_
@@ -560,7 +568,7 @@
 
                     /// \param expr An expression
                     /// \return \c e
-                    #ifndef BOOST_NO_DECLTYPE
+                    #ifdef BOOST_PROTO_STRICT_RESULT_OF
                     result_type
                     #else
                     typename impl::expr_param 
@@ -612,7 +620,7 @@
                     /// \param e An expression
                     /// \pre <tt>matches\<Expr,not_\>::::value</tt> is \c true.
                     /// \return \c e
-                    #ifndef BOOST_NO_DECLTYPE
+                    #ifdef BOOST_PROTO_STRICT_RESULT_OF
                     result_type
                     #else
                     typename impl::expr_param 
@@ -1020,14 +1028,20 @@
             template<typename Args, typename Back, long To>
             struct vararg_matches_impl<Args, Back, N, To>
               : and_2<
-                    matches_<typename detail::expr_traits<typename Args::BOOST_PP_CAT(child, BOOST_PP_DEC(N))>::value_type::proto_base_expr, Back>::value
+                    matches_<
+						typename detail::expr_traits<typename Args::BOOST_PP_CAT(child, BOOST_PP_DEC(N))>::value_type::proto_base_expr
+					  , Back
+					>::value
                   , vararg_matches_impl<Args, Back, N + 1, To>
                 >
             {};
 
             template<typename Args, typename Back>
             struct vararg_matches_impl<Args, Back, N, N>
-              : matches_<typename detail::expr_traits<typename Args::BOOST_PP_CAT(child, BOOST_PP_DEC(N))>::value_type::proto_base_expr, Back>
+              : matches_<
+					typename detail::expr_traits<typename Args::BOOST_PP_CAT(child, BOOST_PP_DEC(N))>::value_type::proto_base_expr
+				  , Back
+				>
             {};
 
             template<
@@ -1035,7 +1049,11 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Expr)
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Grammar)
             >
-            struct lambda_matches<T<BOOST_PP_ENUM_PARAMS(N, Expr)>, T<BOOST_PP_ENUM_PARAMS(N, Grammar)> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(N) >
+            struct lambda_matches<
+				T<BOOST_PP_ENUM_PARAMS(N, Expr)>
+			  , T<BOOST_PP_ENUM_PARAMS(N, Grammar)>
+			    BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(N)
+			>
               : BOOST_PP_CAT(and_, N)<
                     BOOST_PROTO_DEFINE_LAMBDA_MATCHES(~, 0, ~)::value,
                     BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_DEFINE_LAMBDA_MATCHES, ~)

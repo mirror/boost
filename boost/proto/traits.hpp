@@ -37,7 +37,6 @@
     #include <boost/type_traits/is_same.hpp>
     #include <boost/type_traits/is_function.hpp>
     #include <boost/type_traits/remove_cv.hpp>
-    #include <boost/type_traits/remove_const.hpp>
     #include <boost/type_traits/add_reference.hpp>
     #include <boost/proto/proto_fwd.hpp>
     #include <boost/proto/args.hpp>
@@ -256,7 +255,8 @@
                     >::type
                 arg0_;
                 typedef proto::expr<proto::tag::terminal, term<arg0_>, 0> expr_;
-                typedef typename Domain::template result<Domain(expr_)>::type type;
+                typedef typename Domain::proto_generator proto_generator;
+                typedef typename proto_generator::template result<Domain(expr_)>::type type;
                 typedef type const reference;
 
                 /// INTERNAL ONLY
@@ -264,7 +264,7 @@
                 template<typename T2>
                 static reference call(T2 &t)
                 {
-                    return Domain()(expr_::make(t));
+                    return proto_generator()(expr_::make(t));
                 }
             };
 
@@ -289,7 +289,8 @@
             >
             {
                 typedef typename T::proto_derived_expr expr_; // removes the const
-                typedef typename Domain::template result<Domain(expr_)>::type type;
+                typedef typename Domain::proto_generator proto_generator;
+                typedef typename proto_generator::template result<proto_generator(expr_)>::type type;
                 typedef type const reference;
 
                 /// INTERNAL ONLY
@@ -297,7 +298,7 @@
                 template<typename T2>
                 static reference call(T2 &t)
                 {
-                    return Domain()(t);
+                    return proto_generator()(t);
                 }
             };
 
@@ -344,14 +345,15 @@
             struct as_child
             {
                 typedef proto::expr<proto::tag::terminal, term<T &>, 0> expr_;
-                typedef typename Domain::template result<Domain(expr_)>::type type;
+                typedef typename Domain::proto_generator proto_generator;
+                typedef typename proto_generator::template result<proto_generator(expr_)>::type type;
 
                 /// INTERNAL ONLY
                 ///
                 template<typename T2>
                 static type call(T2 &t)
                 {
-                    return Domain()(expr_::make(t));
+                    return proto_generator()(expr_::make(t));
                 }
             };
 
@@ -375,14 +377,19 @@
               #endif
             >
             {
+                typedef typename Domain::proto_generator proto_generator;
                 // BUGBUG should be able to hold this guy by reference, no?
                 #if BOOST_WORKAROUND(BOOST_MSVC, == 1310) || \
                     BOOST_WORKAROUND(BOOST_INTEL, BOOST_TESTED_AT(1010))
                 // These compilers don't strip top-level cv qualifiers
                 // on arguments in function types
-                typedef typename Domain::template result<Domain(typename T::proto_derived_expr)>::type type;
+                typedef
+                    typename proto_generator::template result<
+                        proto_generator(typename T::proto_derived_expr)
+                    >::type
+                type;
                 #else
-                typedef typename Domain::template result<Domain(T)>::type type;
+                typedef typename proto_generator::template result<proto_generator(T)>::type type;
                 #endif
 
                 /// INTERNAL ONLY
@@ -390,7 +397,7 @@
                 template<typename T2>
                 static type call(T2 &t)
                 {
-                    return Domain()(t);
+                    return proto_generator()(t);
                 }
             };
 
@@ -542,7 +549,7 @@
                     /// \pre <tt>matches\<Expr, terminal\<T\> \>::::value</tt> is \c true.
                     /// \return \c e
                     /// \throw nothrow
-                    #ifndef BOOST_NO_DECLTYPE
+                    #ifdef BOOST_PROTO_STRICT_RESULT_OF
                     result_type
                     #else
                     typename impl::expr_param
@@ -612,7 +619,7 @@
                     /// \pre <tt>matches\<Expr, nullary_expr\<Tag, T\> \>::::value</tt> is \c true.
                     /// \return \c e
                     /// \throw nothrow
-                    #ifndef BOOST_NO_DECLTYPE
+                    #ifdef BOOST_PROTO_STRICT_RESULT_OF
                     result_type
                     #else
                     typename impl::expr_param

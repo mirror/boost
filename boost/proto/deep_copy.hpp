@@ -41,13 +41,13 @@
                 actual_terminal_type;
 
                 typedef typename terminal<actual_terminal_type>::type expr_type;
-                typedef typename Expr::proto_domain proto_domain;
-                typedef typename proto_domain::template result<proto_domain(expr_type)>::type result_type;
+                typedef typename Expr::proto_generator proto_generator;
+                typedef typename proto_generator::template result<proto_generator(expr_type)>::type result_type;
 
                 template<typename Expr2, typename S, typename D>
                 result_type operator()(Expr2 const &e, S const &, D const &) const
                 {
-                    return typename Expr::proto_domain()(expr_type::make(e.proto_base().child0));
+                    return proto_generator()(expr_type::make(e.proto_base().child0));
                 }
             };
         }
@@ -198,8 +198,8 @@
                     >
                 expr_type;
 
-                typedef typename Expr::proto_domain proto_domain;
-                typedef typename proto_domain::template result<proto_domain(expr_type)>::type result_type;
+                typedef typename Expr::proto_generator proto_generator;
+                typedef typename proto_generator::template result<proto_generator(expr_type)>::type result_type;
 
                 template<typename Expr2, typename S, typename D>
                 result_type operator()(Expr2 const &e, S const &, D const &) const
@@ -208,7 +208,7 @@
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_FUN, ~)
                     };
 
-                    return typename Expr::proto_domain()(that);
+                    return proto_generator()(that);
                 }
             };
 

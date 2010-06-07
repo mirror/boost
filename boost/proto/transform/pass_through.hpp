@@ -69,7 +69,7 @@
                 /// \param e An expression
                 /// \return \c e
                 /// \throw nothrow
-                #ifndef BOOST_NO_DECLTYPE
+                #ifdef BOOST_PROTO_STRICT_RESULT_OF
                 result_type
                 #else
                 typename pass_through_impl::expr_param
@@ -175,8 +175,8 @@
                   , N
                 > expr_type;
 
-                typedef typename unref_expr::proto_domain proto_domain;
-                typedef typename boost::result_of<proto_domain(expr_type)>::type result_type;
+                typedef typename unref_expr::proto_generator proto_generator;
+                typedef typename boost::tr1_result_of<proto_generator(expr_type)>::type result_type;
 
                 result_type const operator ()(
                     typename pass_through_impl::expr_param e
@@ -193,7 +193,7 @@
                     // built with VC8.
                     &that;
                     #endif
-                    return proto_domain()(that);
+                    return proto_generator()(that);
                 }
             };
 

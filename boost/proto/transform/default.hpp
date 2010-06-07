@@ -171,14 +171,12 @@
             template<typename Grammar, typename Expr, typename State, typename Data>
             struct is_member_function_invocation
               : is_member_function_pointer<
-                    typename remove_const<
-                        typename remove_reference<
-                            typename Grammar::template impl<
-                                typename result_of::child_c<Expr, 1>::type
-                              , State
-                              , Data
-                            >::result_type
-                        >::type
+                    typename uncvref<
+                        typename Grammar::template impl<
+                            typename result_of::child_c<Expr, 1>::type
+                            , State
+                            , Data
+                        >::result_type
                     >::type
                 >
             {};
@@ -482,7 +480,7 @@
                 function_type;
 
                 typedef
-                    typename boost::result_of<function_type()>::type
+                    typename boost::tr1_result_of<function_type()>::type
                 result_type;
 
                 result_type operator ()(
@@ -615,7 +613,7 @@
             function_type;
 
             typedef
-                typename boost::result_of<
+                typename boost::tr1_result_of<
                     function_type(BOOST_PP_ENUM_SHIFTED_PARAMS(N, r))
                 >::type
             result_type;

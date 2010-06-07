@@ -74,8 +74,8 @@ namespace boost { namespace proto
     ///
     #define BOOST_PROTO_DEFINE_FUN_OP_IMPL_(Z, N, DATA, Const)                                      \
         BOOST_PP_IF(N, BOOST_PROTO_TEMPLATE_YES_, BOOST_PROTO_TEMPLATE_NO_)(Z, N)                   \
-        typename boost::result_of<                                                                  \
-            proto_domain(                                                                           \
+        typename boost::tr1_result_of<                                                              \
+            proto_generator(                                                                        \
                 typename boost::proto::result_of::BOOST_PP_CAT(funop, N)<                           \
                     proto_derived_expr Const()                                                      \
                   , proto_domain                                                                    \
@@ -90,7 +90,7 @@ namespace boost { namespace proto
               , proto_domain                                                                        \
                 BOOST_PP_ENUM_TRAILING_PARAMS_Z(Z, N, const A)                                      \
             > funop;                                                                                \
-            return proto_domain()(                                                                  \
+            return proto_generator()(                                                               \
                 funop::call(                                                                        \
                     *static_cast<proto_derived_expr Const() *>(this)                                \
                     BOOST_PP_ENUM_TRAILING_PARAMS_Z(Z, N, a)                                        \
@@ -103,8 +103,8 @@ namespace boost { namespace proto
     ///
     #define BOOST_PROTO_DEFINE_FUN_OP_VARIADIC_IMPL_(Const)                                         \
         template<typename... A>                                                                     \
-        typename boost::result_of<                                                                  \
-            proto_domain(                                                                           \
+        typename boost::tr1_result_of<                                                              \
+            proto_generator(                                                                        \
                 typename boost::proto::result_of::funop<                                            \
                     proto_derived_expr Const()(A const &...)                                        \
                   , proto_derived_expr                                                              \
@@ -119,7 +119,7 @@ namespace boost { namespace proto
               , proto_derived_expr                                                                  \
               , proto_domain                                                                        \
             > funop;                                                                                \
-            return proto_domain()(                                                                  \
+            return proto_generator()(                                                               \
                 funop::call(                                                                        \
                     *static_cast<proto_derived_expr Const() *>(this)                                \
                   , a...                                                                            \
@@ -196,12 +196,13 @@ namespace boost { namespace proto
     #define BOOST_PROTO_BASIC_EXTENDS(Expr, Derived, Domain)                                        \
         BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, Domain)                                           \
         typedef void proto_is_aggregate_;                                                           \
+        typedef Domain::proto_generator proto_generator;                                            \
         /**< INTERNAL ONLY */
 
     #define BOOST_PROTO_EXTENDS_COPY_ASSIGN_IMPL_(This, Const, Typename)                            \
         BOOST_PROTO_DISABLE_MSVC_C4522                                                              \
-        Typename() boost::result_of<                                                                \
-            Typename() This::proto_domain(                                                          \
+        Typename() boost::tr1_result_of<                                                            \
+            Typename() This::proto_generator(                                                       \
                 boost::proto::expr<                                                                 \
                     boost::proto::tag::assign                                                       \
                   , boost::proto::list2<                                                            \
@@ -226,7 +227,7 @@ namespace boost { namespace proto
                 *this                                                                               \
               , a                                                                                   \
             };                                                                                      \
-            return Typename() This::proto_domain()(that);                                           \
+            return Typename() This::proto_generator()(that);                                           \
         }                                                                                           \
         /**/
 
@@ -247,8 +248,8 @@ namespace boost { namespace proto
         ///
     #define BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(ThisConst, ThatConst)                                  \
         template<typename A>                                                                        \
-        typename boost::result_of<                                                                  \
-            proto_domain(                                                                           \
+        typename boost::tr1_result_of<                                                              \
+            proto_generator(                                                                        \
                 boost::proto::expr<                                                                 \
                     boost::proto::tag::assign                                                       \
                   , boost::proto::list2<                                                            \
@@ -273,7 +274,7 @@ namespace boost { namespace proto
                 *static_cast<proto_derived_expr ThisConst() *>(this)                                \
               , boost::proto::as_child<proto_domain>(a)                                             \
             };                                                                                      \
-            return proto_domain()(that);                                                            \
+            return proto_generator()(that);                                                            \
         }                                                                                           \
         /**/
 
@@ -311,8 +312,8 @@ namespace boost { namespace proto
         ///
     #define BOOST_PROTO_EXTENDS_SUBSCRIPT_IMPL_(ThisConst, ThatConst)                               \
         template<typename A>                                                                        \
-        typename boost::result_of<                                                                  \
-            proto_domain(                                                                           \
+        typename boost::tr1_result_of<                                                              \
+            proto_generator(                                                                        \
                 boost::proto::expr<                                                                 \
                     boost::proto::tag::subscript                                                    \
                   , boost::proto::list2<                                                            \
@@ -337,7 +338,7 @@ namespace boost { namespace proto
                 *static_cast<proto_derived_expr ThisConst() *>(this)                                \
               , boost::proto::as_child<proto_domain>(a)                                             \
             };                                                                                      \
-            return proto_domain()(that);                                                            \
+            return proto_generator()(that);                                                         \
         }                                                                                           \
         /**/
 
@@ -363,8 +364,8 @@ namespace boost { namespace proto
         struct result                                                                               \
         {                                                                                           \
             typedef                                                                                 \
-                typename boost::result_of<                                                          \
-                    proto_domain(                                                                   \
+                typename boost::tr1_result_of<                                                      \
+                    proto_generator(                                                                \
                         typename boost::proto::result_of::funop<                                    \
                             Sig                                                                     \
                           , proto_derived_expr                                                      \
@@ -497,6 +498,7 @@ namespace boost { namespace proto
 
             typedef extends proto_extends;
             BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, Domain)
+            typedef typename Domain::proto_generator proto_generator;
             BOOST_PROTO_EXTENDS_ASSIGN_CONST_()
             BOOST_PROTO_EXTENDS_SUBSCRIPT_CONST()
 
@@ -541,6 +543,7 @@ namespace boost { namespace proto
 
             typedef extends proto_extends;
             BOOST_PROTO_BASIC_EXTENDS_(Expr, Derived, Domain)
+            typedef typename Domain::proto_generator proto_generator;
             BOOST_PROTO_EXTENDS_ASSIGN_()
             BOOST_PROTO_EXTENDS_SUBSCRIPT()
 
@@ -577,6 +580,7 @@ namespace boost { namespace proto
                 expr<tag::member, list2<This &, expr<tag::terminal, term<Fun> > const &>, 2>
             proto_base_expr;
             typedef Domain proto_domain;
+            typedef typename Domain::proto_generator proto_generator;
             typedef virtual_member<This, Fun, Domain> proto_derived_expr;
             typedef typename proto_base_expr::proto_tag proto_tag;
             typedef typename proto_base_expr::proto_args proto_args;

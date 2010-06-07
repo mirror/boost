@@ -38,7 +38,7 @@ namespace boost { namespace proto
             /// \param e The current expression.
             /// \return \c e
             /// \throw nothrow
-            #ifndef BOOST_NO_DECLTYPE
+            #ifdef BOOST_PROTO_STRICT_RESULT_OF
             result_type
             #else
             typename impl::expr_param 
@@ -75,7 +75,7 @@ namespace boost { namespace proto
             /// \param s The current state.
             /// \return \c s
             /// \throw nothrow
-            #ifndef BOOST_NO_DECLTYPE
+            #ifdef BOOST_PROTO_STRICT_RESULT_OF
             result_type
             #else
             typename impl::state_param 
@@ -113,7 +113,7 @@ namespace boost { namespace proto
             /// \param d The current data.
             /// \return \c d
             /// \throw nothrow
-            #ifndef BOOST_NO_DECLTYPE
+            #ifdef BOOST_PROTO_STRICT_RESULT_OF
             result_type
             #else
             typename impl::data_param 
@@ -154,7 +154,7 @@ namespace boost { namespace proto
             /// \param e The current expression.
             /// \return <tt>proto::child_c\<N\>(e)</tt>
             /// \throw nothrow
-            #ifndef BOOST_NO_DECLTYPE
+            #ifdef BOOST_PROTO_STRICT_RESULT_OF
             result_type
             #else
             typename result_of::child_c<typename impl::expr_param, N>::type
@@ -194,7 +194,7 @@ namespace boost { namespace proto
             /// \param e The current expression.
             /// \return <tt>proto::value(e)</tt>
             /// \throw nothrow
-            #ifndef BOOST_NO_DECLTYPE
+            #ifdef BOOST_PROTO_STRICT_RESULT_OF
             typename mpl::if_c<is_array<result_type>::value, result_type &, result_type>::type
             #else
             typename result_of::value<typename impl::expr_param>::type
