@@ -1,3 +1,13 @@
+// Copyright 2010 Christophe Henry
+// henry UNDERSCORE christophe AT hotmail DOT com
+// This is an extended version of the state machine available in the boost::mpl library
+// Distributed under the same license as the original.
+// Copyright for the original version:
+// Copyright 2005 David Abrahams and Aleksey Gurtovoy. Distributed
+// under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 #include <iostream>
 // back-end
 #include <boost/msm/back/state_machine.hpp>
@@ -248,11 +258,11 @@ namespace
              _row < Stopped , stop        , Stopped                                              >,
             //  +---------+-------------+---------+---------------------+----------------------+
             g_row < Open    , open_close  , Empty   ,                     &p::can_close_drawer   >,
-			Row   < Open    , play        , none    , Defer             , none                   >,
+            Row   < Open    , play        , none    , Defer             , none                   >,
             //  +---------+-------------+---------+---------------------+----------------------+
             a_row < Empty   , open_close  , Open    , &p::open_drawer                            >,
             a_row < Empty   , cd_detected , Stopped , &p::store_cd_info                          >,
-			Row   < Empty   , play        , none    , Defer             , none                   >,
+            Row   < Empty   , play        , none    , Defer             , none                   >,
             //  +---------+-------------+---------+---------------------+----------------------+
             a_row < Playing , stop        , Stopped , &p::stop_playback                          >,
             a_row < Playing , pause       , Paused  , &p::pause_playback                         >,

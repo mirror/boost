@@ -1,3 +1,13 @@
+// Copyright 2010 Christophe Henry
+// henry UNDERSCORE christophe AT hotmail DOT com
+// This is an extended version of the state machine available in the boost::mpl library
+// Distributed under the same license as the original.
+// Copyright for the original version:
+// Copyright 2005 David Abrahams and Aleksey Gurtovoy. Distributed
+// under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 #include <iostream>
 // back-end
 #include <boost/msm/back/state_machine.hpp>
@@ -21,7 +31,7 @@ namespace
     struct to_ignore {};
 
     // A "complicated" event type that carries some data.
-	enum DiskTypeEnum
+    enum DiskTypeEnum
     {
         DISK_CD=0,
         DISK_DVD=1
@@ -193,7 +203,7 @@ namespace
 
     BOOST_AUTO_TEST_CASE( my_test )
     {     
-		player p;
+        player p;
 
         p.start(); 
         BOOST_CHECK_MESSAGE(p.get_state<player_::Empty&>().entry_counter == 1,"Empty entry not called correctly");
@@ -228,7 +238,7 @@ namespace
         BOOST_CHECK_MESSAGE(p.get_state<player_::Stopped&>().entry_counter == 1,"Stopped entry not called correctly");
         BOOST_CHECK_MESSAGE(p.internal_guard_counter == 3,"Internal guard not called correctly");
 
-		p.process_event(play());
+        p.process_event(play());
         BOOST_CHECK_MESSAGE(p.current_state()[0] == 3,"Playing should be active"); //Playing
         BOOST_CHECK_MESSAGE(p.get_state<player_::Stopped&>().exit_counter == 1,"Stopped exit not called correctly");
         BOOST_CHECK_MESSAGE(p.get_state<player_::Playing&>().entry_counter == 1,"Playing entry not called correctly");

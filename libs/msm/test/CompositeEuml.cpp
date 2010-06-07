@@ -1,3 +1,13 @@
+// Copyright 2010 Christophe Henry
+// henry UNDERSCORE christophe AT hotmail DOT com
+// This is an extended version of the state machine available in the boost::mpl library
+// Distributed under the same license as the original.
+// Copyright for the original version:
+// Copyright 2005 David Abrahams and Aleksey Gurtovoy. Distributed
+// under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 #include <iostream>
 #include <boost/msm/back/state_machine.hpp>
 #include <boost/msm/front/euml/euml.hpp>
@@ -12,7 +22,7 @@ namespace msm = boost::msm;
 namespace
 {
     // A "complicated" event type that carries some data.
-	enum DiskTypeEnum
+    enum DiskTypeEnum
     {
         DISK_CD=0,
         DISK_DVD=1
@@ -41,14 +51,14 @@ namespace
     BOOST_MSM_EUML_STATE(( ++state_(entry_counter),++state_(exit_counter),attributes_ << entry_counter << exit_counter),Stopped)
     BOOST_MSM_EUML_STATE(( ++state_(entry_counter),++state_(exit_counter),attributes_ << entry_counter << exit_counter),Paused)
 
-	// Playing is now a state machine itself.
+    // Playing is now a state machine itself.
     BOOST_MSM_EUML_DECLARE_ATTRIBUTE(unsigned int,start_next_song_counter)
     BOOST_MSM_EUML_DECLARE_ATTRIBUTE(unsigned int,start_prev_song_guard_counter)
     // It has 5 substates
     BOOST_MSM_EUML_STATE(( ++state_(entry_counter),++state_(exit_counter),attributes_ << entry_counter << exit_counter),Song1)
     BOOST_MSM_EUML_STATE(( ++state_(entry_counter),++state_(exit_counter),attributes_ << entry_counter << exit_counter),Song2)
     BOOST_MSM_EUML_STATE(( ++state_(entry_counter),++state_(exit_counter),attributes_ << entry_counter << exit_counter),Song3)
-	BOOST_MSM_EUML_STATE(( ++state_(entry_counter),++state_(exit_counter),attributes_ << entry_counter << exit_counter),Region2State1)
+    BOOST_MSM_EUML_STATE(( ++state_(entry_counter),++state_(exit_counter),attributes_ << entry_counter << exit_counter),Region2State1)
     BOOST_MSM_EUML_STATE(( ++state_(entry_counter),++state_(exit_counter),attributes_ << entry_counter << exit_counter),Region2State2)
 
     // Playing has a transition table 
@@ -67,8 +77,8 @@ namespace
                                         ++state_(entry_counter), // Entry
                                         ++state_(exit_counter), // Exit
                                         attributes_ << entry_counter << exit_counter 
-													<< start_next_song_counter
-													<< start_prev_song_guard_counter // Attributes
+                                                    << start_next_song_counter
+                                                    << start_prev_song_guard_counter // Attributes
                                         ),Playing_)
     // choice of back-end
     typedef msm::back::state_machine<Playing_> Playing_type;
@@ -138,7 +148,7 @@ namespace
 
     BOOST_AUTO_TEST_CASE( my_test )
     {     
-		player p;
+        player p;
 
         p.start(); 
         BOOST_CHECK_MESSAGE(p.get_state<BOOST_MSM_EUML_STATE_NAME(Empty)&>().get_attribute(entry_counter) == 1,
@@ -188,7 +198,7 @@ namespace
         BOOST_CHECK_MESSAGE(
             p.get_state<Playing_type&>().get_state<BOOST_MSM_EUML_STATE_NAME(Region2State1)&>().get_attribute(entry_counter) == 1,
             "Region2State1 entry not called correctly");
-		BOOST_CHECK_MESSAGE(
+        BOOST_CHECK_MESSAGE(
             p.get_state<Playing_type&>().get_state<BOOST_MSM_EUML_STATE_NAME(Song2)&>().get_attribute(entry_counter) == 1,
             "Song2 entry not called correctly");
         BOOST_CHECK_MESSAGE(

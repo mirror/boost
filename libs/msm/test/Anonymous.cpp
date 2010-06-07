@@ -1,3 +1,13 @@
+// Copyright 2010 Christophe Henry
+// henry UNDERSCORE christophe AT hotmail DOT com
+// This is an extended version of the state machine available in the boost::mpl library
+// Distributed under the same license as the original.
+// Copyright for the original version:
+// Copyright 2005 David Abrahams and Aleksey Gurtovoy. Distributed
+// under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 #include <iostream>
 // back-end
 #include <boost/msm/back/state_machine.hpp>
@@ -132,7 +142,7 @@ namespace
 
     BOOST_AUTO_TEST_CASE( my_test )
     {        
-		my_machine p;
+        my_machine p;
 
         // needed to start the highest-level SM. This will call on_entry and mark the start of the SM
         // in this case it will also immediately trigger all anonymous transitions

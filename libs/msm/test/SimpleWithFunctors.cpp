@@ -1,3 +1,13 @@
+// Copyright 2010 Christophe Henry
+// henry UNDERSCORE christophe AT hotmail DOT com
+// This is an extended version of the state machine available in the boost::mpl library
+// Distributed under the same license as the original.
+// Copyright for the original version:
+// Copyright 2005 David Abrahams and Aleksey Gurtovoy. Distributed
+// under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 #include <iostream>
 // back-end
 #include <boost/msm/back/state_machine.hpp>
@@ -29,7 +39,7 @@ namespace
     struct open_close {};
 
     // A "complicated" event type that carries some data.
-	enum DiskTypeEnum
+    enum DiskTypeEnum
     {
         DISK_CD=0,
         DISK_DVD=1
@@ -50,12 +60,12 @@ namespace
     {
         unsigned int start_playback_counter;
         unsigned int can_close_drawer_counter;
-		unsigned int test_fct_counter;
+        unsigned int test_fct_counter;
 
         player_():
         start_playback_counter(0),
         can_close_drawer_counter(0),
-		test_fct_counter(0)
+        test_fct_counter(0)
         {}
 
         // The list of FSM states
@@ -114,12 +124,12 @@ namespace
         typedef Empty initial_state;
 
         // transition actions
-		struct TestFct 
+        struct TestFct 
         {
             template <class EVT,class FSM,class SourceState,class TargetState>
             void operator()(EVT const&, FSM& fsm,SourceState& ,TargetState& )
             {
-				++fsm.test_fct_counter;
+                ++fsm.test_fct_counter;
             }
         };
         struct start_playback 
@@ -127,7 +137,7 @@ namespace
             template <class EVT,class FSM,class SourceState,class TargetState>
             void operator()(EVT const& ,FSM& fsm,SourceState& ,TargetState& )
             {
-				++fsm.start_playback_counter;
+                ++fsm.start_playback_counter;
             }
         };
         struct open_drawer 
@@ -217,12 +227,12 @@ namespace
                 return true;
             }
         };
-		struct can_close_drawer 
+        struct can_close_drawer 
         {
             template <class EVT,class FSM,class SourceState,class TargetState>
             bool operator()(EVT const& evt ,FSM& fsm,SourceState& ,TargetState& )
             {      
-				++fsm.can_close_drawer_counter;
+                ++fsm.can_close_drawer_counter;
                 return true;
             }
         };
@@ -287,7 +297,7 @@ namespace
 
     BOOST_AUTO_TEST_CASE( my_test )
     {     
-		player p;
+        player p;
 
         p.start(); 
         BOOST_CHECK_MESSAGE(p.get_state<player_::Empty&>().entry_counter == 1,"Empty entry not called correctly");
