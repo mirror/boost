@@ -2217,6 +2217,7 @@ bool test_extents() {
   pts.push_back(Point(54, 69));
   pts.push_back(Point(54, 81));
   pts.push_back(Point(126, 81));
+  set_points(polygon, pts.begin(), pts.end());
   psT.insert(view_as<polygon_90_concept>(polygon));
   
   Rectangle rect, rect2;
