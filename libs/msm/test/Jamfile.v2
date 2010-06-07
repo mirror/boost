@@ -12,6 +12,7 @@ project msm
     :
     requirements
         <include>.
+        <library>/boost/test//boost_unit_test_framework/<link>static
     ;
 
 test-suite msm-unit-tests
