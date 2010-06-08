@@ -96,7 +96,7 @@ private:
     typedef ::boost::function<
         execute_return () >                         deferred_fct;
     typedef std::deque<deferred_fct >               deferred_events_queue_t;
-    typedef std::queue<transition_fct >	            events_queue_t;
+    typedef std::queue<transition_fct >             events_queue_t;
     typedef bool (*flag_handler)(library_sm&);
 
     // all state machines are friend with each other to allow embedding any of them in another fsm
@@ -176,7 +176,6 @@ private:
 
  public: 
     // tags
-    //typedef ::boost::mpl::true_	 composite_state;
     typedef int composite_tag;
 
     // in case someone needs to know
@@ -1064,7 +1063,7 @@ private:
     get_state(::boost::msm::back::dummy<1> = 0)
     {
         return ::boost::fusion::at_key<typename ::boost::remove_reference<State>::type>(m_substate_list);
-    }	
+    }
 
     // checks if a flag is active using the BinaryOp as folding function
     template <class Flag,class BinaryOp>
@@ -1079,7 +1078,7 @@ private:
                     ::boost::bind(::boost::msm::back::deref<flag_handler>(),
                         ::boost::bind(::boost::msm::back::plus2<flag_handler*,int>(),
                         flags_entries, _2)),
-                        ::boost::ref(*this)), _1));		
+                        ::boost::ref(*this)), _1));
     }
     // checks if a flag is active using no binary op if 1 region, or OR if > 1 regions
     template <class Flag>
@@ -1445,7 +1444,7 @@ private:
         if (!handled && !is_contained() && !is_completion_event<Event>::type::value)
         {
             for (int i=0; i<nr_regions::value;++i)
-            {	
+            {
                 no_transition(evt,*this,this->m_states[i]);
             }
         }
@@ -1595,7 +1594,7 @@ private:
         // build a state list
         ::boost::mpl::for_each<state_list, boost::msm::wrap< ::boost::mpl::placeholders::_1> >
                         (init_flags<Flag>(flags_entries));
-        return flags_entries;	
+        return flags_entries;
     }
 
     // helper used to create a state using the correct constructor
@@ -1757,7 +1756,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
              // nothing to do
          }
 
-         library_sm*	 m_sm;
+         library_sm*     m_sm;
      };
      // helper to copy the active states attribute
      template <class region_id,int Dummy=0>

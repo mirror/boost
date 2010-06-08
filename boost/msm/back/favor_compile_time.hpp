@@ -41,23 +41,23 @@ struct process_any_event_helper
         }
     }
 private:
-    msm::back::HandledEnum&		res;
-    Fsm*						self;
-    ::boost::any			    any_event;
-    bool						finished;
+    msm::back::HandledEnum&     res;
+    Fsm*                        self;
+    ::boost::any                any_event;
+    bool                        finished;
 };
 
-#define BOOST_MSM_BACK_GENERATE_PROCESS_EVENT(fsmname)												\
+#define BOOST_MSM_BACK_GENERATE_PROCESS_EVENT(fsmname)                                              \
     namespace boost { namespace msm { namespace back{                                               \
     template<>                                                                                      \
-    ::boost::msm::back::HandledEnum fsmname::process_any_event( ::boost::any const& any_event)		\
-    {																								\
-        typedef ::boost::msm::back::recursive_get_transition_table<fsmname>::type stt;				\
-        typedef ::boost::msm::back::generate_event_set<stt>::type all_events;						\
-        ::boost::msm::back::HandledEnum res= ::boost::msm::back::HANDLED_FALSE;						\
-        ::boost::mpl::for_each<all_events, ::boost::msm::wrap< ::boost::mpl::placeholders::_1> >	\
-        (::boost::msm::back::process_any_event_helper<fsmname>(res,this,any_event));				\
-        return res;																					\
+    ::boost::msm::back::HandledEnum fsmname::process_any_event( ::boost::any const& any_event)      \
+    {                                                                                               \
+        typedef ::boost::msm::back::recursive_get_transition_table<fsmname>::type stt;              \
+        typedef ::boost::msm::back::generate_event_set<stt>::type all_events;                       \
+        ::boost::msm::back::HandledEnum res= ::boost::msm::back::HANDLED_FALSE;                     \
+        ::boost::mpl::for_each<all_events, ::boost::msm::wrap< ::boost::mpl::placeholders::_1> >    \
+        (::boost::msm::back::process_any_event_helper<fsmname>(res,this,any_event));                \
+        return res;                                                                                 \
     }                                                                                               \
     }}}
 

@@ -26,7 +26,7 @@ struct inherit_attributes
     inherit_attributes():m_attributes(){}
     inherit_attributes(Attributes const& the_attributes):m_attributes(the_attributes){}
     // on the fly attribute creation capability
-    typedef Attributes		attributes_type;
+    typedef Attributes      attributes_type;
     template <class Index>
     typename ::boost::fusion::result_of::at_key<attributes_type, 
                                                 Index>::type
@@ -57,8 +57,8 @@ private:
 template<class USERBASE,class Attributes= ::boost::fusion::map<> >
 struct state_base : public inherit_attributes<Attributes>, USERBASE
 {
-    typedef USERBASE		user_state_base;
-    typedef Attributes		attributes_type;
+    typedef USERBASE        user_state_base;
+    typedef Attributes      attributes_type;
 
     // empty implementation for the states not wishing to define an entry condition
     // will not be called polymorphic way

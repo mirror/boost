@@ -42,7 +42,7 @@ struct dispatch_table
     template< typename Seq,typename AnEvent,typename State >
     struct chain_row
     {
-        typedef State	current_state_type;
+        typedef State   current_state_type;
         typedef AnEvent transition_event;
 
         // helper for building a disable/enable_if-controlled execute function

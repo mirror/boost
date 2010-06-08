@@ -257,9 +257,9 @@ namespace boost { namespace msm { namespace front
             FCT()(evt_,fsm_,state_);
         }
         private:
-            EVT const&	evt_;
-            FSM&		fsm_;
-            STATE&		state_;
+            EVT const&  evt_;
+            FSM&        fsm_;
+            STATE&      state_;
         };
         template <class EVT,class FSM,class SourceState,class TargetState>
         struct transition_action_result 

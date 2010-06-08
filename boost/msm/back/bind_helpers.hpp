@@ -19,9 +19,11 @@ namespace boost { namespace msm { namespace back
     template<class _Ty,class _Tz>
     struct plus2
         : public std::binary_function<_Ty, _Tz, _Ty>
-    {	// functor for operator+
+    {
+        // functor for operator+
         _Ty operator()( _Ty _Left, _Tz _Right) const
-        {	// apply operator+ to operands
+        {
+            // apply operator+ to operands
             return (_Left + _Right);
         }
     };
