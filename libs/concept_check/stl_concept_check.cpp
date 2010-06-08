@@ -47,7 +47,8 @@ main()
   function_requires< BackInsertionSequence<Vector> >();
 
 #if !(defined(__GNUC__) && defined(BOOST_HIDE_EXPECTED_ERRORS))
-#if !(defined(__sgi) && defined(BOOST_HIDE_EXPECTED_ERRORS))
+#if !((defined(__sgi) || (defined(__DECCXX) && defined(_RWSTD_VER) && _RWSTD_VER <= 0x0203)) \
+  && defined(BOOST_HIDE_EXPECTED_ERRORS))
   // old deque iterator missing n + iter operation
   function_requires< Mutable_RandomAccessContainer<Deque> >();
 #endif
