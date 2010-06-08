@@ -24,6 +24,7 @@
 #include <boost/units/pow.hpp>
 #include <boost/units/quantity.hpp>
 #include <boost/units/detail/cmath_impl.hpp>
+#include <boost/units/detail/dimensionless_unit.hpp>
 
 #include <boost/units/systems/si/plane_angle.hpp>
 
@@ -603,6 +604,15 @@ acos(const quantity<unit<dimensionless_type, homogeneous_system<System> >,Y>& va
     return quantity<unit<plane_angle_dimension, homogeneous_system<System> >,Y>(acos(val.value())*si::radians);
 }
 
+/// acos of dimensionless quantity returning angle in radians
+template<class Y>
+quantity<angle::radian_base_unit::unit_type,Y>
+acos(const quantity<unit<dimensionless_type, heterogeneous_dimensionless_system>,Y>& val)
+{
+    using std::acos;
+    return quantity<angle::radian_base_unit::unit_type,Y>::from_value(acos(val.value()));
+}
+
 /// asin of dimensionless quantity returning angle in same system
 template<class Y,class System>
 quantity<unit<plane_angle_dimension, homogeneous_system<System> >,Y>
@@ -610,6 +620,15 @@ asin(const quantity<unit<dimensionless_type, homogeneous_system<System> >,Y>& va
 {
     using std::asin;
     return quantity<unit<plane_angle_dimension, homogeneous_system<System> >,Y>(asin(val.value())*si::radians);
+}
+
+/// asin of dimensionless quantity returning angle in radians
+template<class Y>
+quantity<angle::radian_base_unit::unit_type,Y>
+asin(const quantity<unit<dimensionless_type, heterogeneous_dimensionless_system>,Y>& val)
+{
+    using std::asin;
+    return quantity<angle::radian_base_unit::unit_type,Y>::from_value(asin(val.value()));
 }
 
 /// atan of dimensionless quantity returning angle in same system
@@ -621,6 +640,15 @@ atan(const quantity<unit<dimensionless_type, homogeneous_system<System> >, Y>& v
     return quantity<unit<plane_angle_dimension, homogeneous_system<System> >,Y>(atan(val.value())*si::radians);
 }
 
+/// atan of dimensionless quantity returning angle in radians
+template<class Y>
+quantity<angle::radian_base_unit::unit_type,Y>
+atan(const quantity<unit<dimensionless_type, heterogeneous_dimensionless_system>, Y>& val)
+{
+    using std::atan;
+    return quantity<angle::radian_base_unit::unit_type,Y>::from_value(atan(val.value()));
+}
+
 /// atan2 of @c value_type returning angle in radians
 template<class Y, class Dimension, class System>
 quantity<unit<plane_angle_dimension, homogeneous_system<System> >, Y>
@@ -629,6 +657,16 @@ atan2(const quantity<unit<Dimension, homogeneous_system<System> >, Y>& y,
 {
     using std::atan2;
     return quantity<unit<plane_angle_dimension, homogeneous_system<System> >, Y>(atan2(y.value(),x.value())*si::radians);
+}
+
+/// atan2 of @c value_type returning angle in radians
+template<class Y, class Dimension, class System>
+quantity<angle::radian_base_unit::unit_type,Y>
+atan2(const quantity<unit<Dimension, heterogeneous_system<System> >, Y>& y,
+      const quantity<unit<Dimension, heterogeneous_system<System> >, Y>& x)
+{
+    using std::atan2;
+    return quantity<angle::radian_base_unit::unit_type,Y>::from_value(atan2(y.value(),x.value()));
 }
 
 } // namespace units
