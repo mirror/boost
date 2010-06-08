@@ -3,6 +3,20 @@
   <namespace name="boost">
     <namespace name="proto">
 
+      <!-- boost::proto::basic_expr -->
+
+      <struct name="basic_expr">
+        <template>
+          <template-type-parameter name="Tag"/>
+          <template-type-parameter name="Args"/>
+          <template-nontype-parameter name="Arity">
+            <type>long</type>
+          </template-nontype-parameter>
+        </template>
+
+        <purpose>Simplified representation of a node in an expression tree.</purpose>
+      </struct>
+
       <!-- boost::proto::expr -->
 
       <struct name="expr">
@@ -69,6 +83,10 @@
 
         <typedef name="proto_domain">
           <type><classname>proto::default_domain</classname></type>
+        </typedef>
+
+        <typedef name="proto_grammar">
+          <type><classname>proto::basic_expr</classname>&lt; Tag, Args, Arity &gt;</type>
         </typedef>
 
         <typedef name="proto_base_expr">

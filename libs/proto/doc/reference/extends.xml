@@ -136,6 +136,9 @@ struct my_expr
         <typedef name="proto_arity">
           <type>typename proto_base_expr::proto_arity</type>
         </typedef>
+        <typedef name="proto_grammar">
+          <type>typename proto_base_expr::proto_grammar</type>
+        </typedef>
         <typedef name="proto_childN">
           <purpose>For each <replaceable>N</replaceable> in <replaceable>[0,max(1,proto_arity_c))</replaceable></purpose>
           <type>typename proto_base_expr::proto_child<replaceable>N</replaceable></type>

@@ -55,7 +55,7 @@
         struct when
           : PrimitiveTransform
         {
-            typedef typename Grammar::proto_base_expr proto_base_expr;
+            typedef typename Grammar::proto_grammar proto_grammar;
         };
 
         /// \brief A specialization that treats function pointer Transforms as
@@ -138,7 +138,7 @@
         struct when<Grammar, R(BOOST_PP_ENUM_PARAMS(N, A))>
           : transform<when<Grammar, R(BOOST_PP_ENUM_PARAMS(N, A))> >
         {
-            typedef typename Grammar::proto_base_expr proto_base_expr;
+            typedef typename Grammar::proto_grammar proto_grammar;
 
             // Note: do not evaluate is_callable<R> in this scope.
             // R may be an incomplete type at this point.

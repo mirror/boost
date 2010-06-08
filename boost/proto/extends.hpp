@@ -165,6 +165,7 @@ namespace boost { namespace proto
         typedef typename proto_base_expr::proto_tag proto_tag;                                      \
         typedef typename proto_base_expr::proto_args proto_args;                                    \
         typedef typename proto_base_expr::proto_arity proto_arity;                                  \
+        typedef typename proto_base_expr::proto_grammar proto_grammar;                              \
         typedef typename proto_base_expr::address_of_hack_type_ proto_address_of_hack_type_;        \
         typedef void proto_is_expr_; /**< INTERNAL ONLY */                                          \
         BOOST_STATIC_CONSTANT(long, proto_arity_c = proto_base_expr::proto_arity_c);                \
@@ -576,20 +577,20 @@ namespace boost { namespace proto
         template<typename This, typename Fun, typename Domain>
         struct virtual_member
         {
-            typedef
-                expr<tag::member, list2<This &, expr<tag::terminal, term<Fun> > const &>, 2>
-            proto_base_expr;
             typedef Domain proto_domain;
             typedef typename Domain::proto_generator proto_generator;
             typedef virtual_member<This, Fun, Domain> proto_derived_expr;
-            typedef typename proto_base_expr::proto_tag proto_tag;
-            typedef typename proto_base_expr::proto_args proto_args;
-            typedef typename proto_base_expr::proto_arity proto_arity;
-            typedef typename proto_base_expr::address_of_hack_type_ proto_address_of_hack_type_;
+            typedef tag::member proto_tag;
+            typedef list2<This &, expr<tag::terminal, term<Fun> > const &> proto_args;
+            typedef mpl::long_<2> proto_arity;
+            typedef detail::not_a_valid_type proto_address_of_hack_type_;
             typedef void proto_is_expr_; /**< INTERNAL ONLY */
-            BOOST_STATIC_CONSTANT(long, proto_arity_c = proto_base_expr::proto_arity_c);
+            BOOST_STATIC_CONSTANT(long, proto_arity_c = 2);
             typedef boost::proto::tag::proto_expr fusion_tag;
-            BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXTENDS_CHILD, ~)
+            typedef This &proto_child0;
+            typedef expr<tag::terminal, term<Fun> > const &proto_child1;
+            typedef expr<proto_tag, proto_args, proto_arity_c> proto_base_expr;
+            typedef basic_expr<proto_tag, proto_args, proto_arity_c> proto_grammar;
             typedef void proto_is_aggregate_; /**< INTERNAL ONLY */
 
             BOOST_PROTO_EXTENDS_ASSIGN_()

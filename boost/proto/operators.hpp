@@ -15,7 +15,6 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/tags.hpp>
-#include <boost/proto/expr.hpp>
 #include <boost/proto/domain.hpp>
 #include <boost/proto/matches.hpp>
 #include <boost/proto/generate.hpp>
@@ -43,7 +42,10 @@ namespace boost { namespace proto
 
         template<typename Domain, typename Trait, typename Tag, typename Arg>
         struct enable_unary<Domain, proto::_, Trait, Tag, Arg>
-          : boost::lazy_enable_if_c<Trait::value, result_of::make_expr<Tag, Domain, Arg &> >
+          : boost::lazy_enable_if_c<
+                Trait::value
+              , result_of::make_expr<Tag, Domain, Arg &>
+            >
         {};
 
         template<typename Trait, typename Tag, typename Arg>
@@ -62,8 +64,8 @@ namespace boost { namespace proto
           : boost::lazy_enable_if_c<
                 boost::mpl::and_<
                     Trait
-                  , lazy_matches<proto::result_of::as_child<Left>, Grammar>
-                  , lazy_matches<proto::result_of::as_child<Right>, Grammar>
+                  , lazy_matches<result_of::as_child<Left>, Grammar>
+                  , lazy_matches<result_of::as_child<Right>, Grammar>
                   , lazy_matches<result_of::make_expr<Tag, Domain, Left &, Right &>, Grammar>
                 >::value
               , result_of::make_expr<Tag, Domain, Left &, Right &>
@@ -72,7 +74,10 @@ namespace boost { namespace proto
 
         template<typename Domain, typename Trait, typename Tag, typename Left, typename Right>
         struct enable_binary<Domain, proto::_, Trait, Tag, Left, Right>
-          : boost::lazy_enable_if_c<Trait::value, result_of::make_expr<Tag, Domain, Left &, Right &> >
+          : boost::lazy_enable_if_c<
+                Trait::value
+              , result_of::make_expr<Tag, Domain, Left &, Right &>
+            >
         {};
 
         template<typename Trait, typename Tag, typename Left, typename Right>
@@ -103,7 +108,7 @@ namespace boost { namespace proto
     >::type const                                                                                   \
     operator OP(Arg &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                                  \
     {                                                                                               \
-        return boost::proto::functional::make_expr<TAG, DOMAIN>::impl<Arg &>()(arg);                \
+        return boost::proto::detail::make_expr_<TAG, DOMAIN, Arg &>()(arg);                         \
     }                                                                                               \
                                                                                                     \
     template<typename Arg>                                                                          \
@@ -116,7 +121,7 @@ namespace boost { namespace proto
     >::type const                                                                                   \
     operator OP(Arg const &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                            \
     {                                                                                               \
-        return boost::proto::functional::make_expr<TAG, DOMAIN>::impl<Arg const &>()(arg);          \
+        return boost::proto::detail::make_expr_<TAG, DOMAIN, Arg const &>()(arg);                   \
     }                                                                                               \
     /**/
 
@@ -132,8 +137,7 @@ namespace boost { namespace proto
     >::type const                                                                                   \
     operator OP(Left &left, Right &right)                                                           \
     {                                                                                               \
-        return boost::proto::functional::make_expr<TAG, DOMAIN>::                                   \
-            impl<Left &, Right &>()(left, right);                                                   \
+        return boost::proto::detail::make_expr_<TAG, DOMAIN, Left &, Right &>()(left, right);       \
     }                                                                                               \
                                                                                                     \
     template<typename Left, typename Right>                                                         \
@@ -147,8 +151,7 @@ namespace boost { namespace proto
     >::type const                                                                                   \
     operator OP(Left &left, Right const &right)                                                     \
     {                                                                                               \
-        return boost::proto::functional::make_expr<TAG, DOMAIN>::                                   \
-            impl<Left &, Right const &>()(left, right);                                             \
+        return boost::proto::detail::make_expr_<TAG, DOMAIN, Left &, Right const &>()(left, right); \
     }                                                                                               \
                                                                                                     \
     template<typename Left, typename Right>                                                         \
@@ -162,8 +165,7 @@ namespace boost { namespace proto
     >::type const                                                                                   \
     operator OP(Left const &left, Right &right)                                                     \
     {                                                                                               \
-        return boost::proto::functional::make_expr<TAG, DOMAIN>::                                   \
-            impl<Left const &, Right &>()(left, right);                                             \
+        return boost::proto::detail::make_expr_<TAG, DOMAIN, Left const &, Right &>()(left, right); \
     }                                                                                               \
                                                                                                     \
     template<typename Left, typename Right>                                                         \
@@ -177,8 +179,7 @@ namespace boost { namespace proto
     >::type const                                                                                   \
     operator OP(Left const &left, Right const &right)                                               \
     {                                                                                               \
-        return boost::proto::functional::make_expr<TAG, DOMAIN>::                                   \
-            impl<Left const &, Right const &>()(left, right);                                       \
+        return boost::proto::detail::make_expr_<TAG, DOMAIN, Left const &, Right const &>()(left, right);\
     }                                                                                               \
     /**/
 
@@ -241,10 +242,22 @@ namespace boost { namespace proto
 
         // if_else, for the non-overloadable ternary conditional operator ?:
         template<typename A0, typename A1, typename A2>
-        typename result_of::make_expr<tag::if_else_, deduce_domain, A0 const &, A1 const &, A2 const &>::type const
+        typename result_of::make_expr<
+            tag::if_else_
+          , deduce_domain
+          , A0 const &
+          , A1 const &
+          , A2 const &
+        >::type const
         if_else(A0 const &a0, A1 const &a1, A2 const &a2)
         {
-            return functional::make_expr<tag::if_else_>::impl<A0 const &, A1 const &, A2 const &>()(a0, a1, a2);
+            return proto::detail::make_expr_<
+                tag::if_else_
+              , deduce_domain
+              , A0 const &
+              , A1 const &
+              , A2 const &
+            >()(a0, a1, a2);
         }
     }
 

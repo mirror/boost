@@ -63,6 +63,19 @@
     </description>
   </associated-type>
 
+  <associated-type name="proto_super_domain">
+    <get-member-type name="proto_super_domain">
+      <type name="Domain"/>
+    </get-member-type>
+    <description>
+      <simpara>
+        The Domain that is a super-domain of this domain, if
+        any such domain exists. If not, it is some unspecified
+        type.
+      </simpara>
+    </description>
+  </associated-type>
+
   <associated-type name="result_type">
     <get-member-type name="type">
       <apply-template name="boost::result_of">

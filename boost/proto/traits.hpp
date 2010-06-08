@@ -162,67 +162,67 @@
           : mpl::true_
         {};
 
+        /// \brief A Boolean metafunction that indicates whether a given
+        /// type \c T is a Proto expression type.
+        ///
+        /// If \c T has a nested type \c proto_is_expr_ that is a typedef
+        /// for \c void, <tt>is_expr\<T\>::::value</tt> is \c true. (Note, this
+        /// is the case for <tt>proto::expr\<\></tt>, any type that is derived
+        /// from <tt>proto::extends\<\></tt> or that uses the
+        /// <tt>BOOST_PROTO_BASIC_EXTENDS()</tt> macro.) Otherwise,
+        /// <tt>is_expr\<T\>::::value</tt> is \c false.
+        template<typename T, typename Void /* = void*/>
+        struct is_expr
+          : mpl::false_
+        {};
+
+        /// \brief A Boolean metafunction that indicates whether a given
+        /// type \c T is a Proto expression type.
+        ///
+        /// If \c T has a nested type \c proto_is_expr_ that is a typedef
+        /// for \c void, <tt>is_expr\<T\>::::value</tt> is \c true. (Note, this
+        /// is the case for <tt>proto::expr\<\></tt>, any type that is derived
+        /// from <tt>proto::extends\<\></tt> or that uses the
+        /// <tt>BOOST_PROTO_BASIC_EXTENDS()</tt> macro.) Otherwise,
+        /// <tt>is_expr\<T\>::::value</tt> is \c false.
+        template<typename T>
+        struct is_expr<T, typename T::proto_is_expr_>
+          : mpl::true_
+        {};
+            
+        template<typename T>
+        struct is_expr<T &, void>
+          : is_expr<T>
+        {};
+
+        /// \brief A metafunction that returns the tag type of a
+        /// Proto expression.
+        template<typename Expr>
+        struct tag_of
+        {
+            typedef typename Expr::proto_tag type;
+        };
+
+        template<typename Expr>
+        struct tag_of<Expr &>
+        {
+            typedef typename Expr::proto_tag type;
+        };
+
+        /// \brief A metafunction that returns the arity of a
+        /// Proto expression.
+        template<typename Expr>
+        struct arity_of
+          : Expr::proto_arity
+        {};
+
+        template<typename Expr>
+        struct arity_of<Expr &>
+          : Expr::proto_arity
+        {};
+
         namespace result_of
         {
-            /// \brief A Boolean metafunction that indicates whether a given
-            /// type \c T is a Proto expression type.
-            ///
-            /// If \c T has a nested type \c proto_is_expr_ that is a typedef
-            /// for \c void, <tt>is_expr\<T\>::::value</tt> is \c true. (Note, this
-            /// is the case for <tt>proto::expr\<\></tt>, any type that is derived
-            /// from <tt>proto::extends\<\></tt> or that uses the
-            /// <tt>BOOST_PROTO_BASIC_EXTENDS()</tt> macro.) Otherwise,
-            /// <tt>is_expr\<T\>::::value</tt> is \c false.
-            template<typename T, typename Void /* = void*/>
-            struct is_expr
-              : mpl::false_
-            {};
-
-            /// \brief A Boolean metafunction that indicates whether a given
-            /// type \c T is a Proto expression type.
-            ///
-            /// If \c T has a nested type \c proto_is_expr_ that is a typedef
-            /// for \c void, <tt>is_expr\<T\>::::value</tt> is \c true. (Note, this
-            /// is the case for <tt>proto::expr\<\></tt>, any type that is derived
-            /// from <tt>proto::extends\<\></tt> or that uses the
-            /// <tt>BOOST_PROTO_BASIC_EXTENDS()</tt> macro.) Otherwise,
-            /// <tt>is_expr\<T\>::::value</tt> is \c false.
-            template<typename T>
-            struct is_expr<T, typename T::proto_is_expr_>
-              : mpl::true_
-            {};
-            
-            template<typename T>
-            struct is_expr<T &, void>
-              : is_expr<T>
-            {};
-
-            /// \brief A metafunction that returns the tag type of a
-            /// Proto expression.
-            template<typename Expr>
-            struct tag_of
-            {
-                typedef typename Expr::proto_tag type;
-            };
-
-            template<typename Expr>
-            struct tag_of<Expr &>
-            {
-                typedef typename Expr::proto_tag type;
-            };
-
-            /// \brief A metafunction that returns the arity of a
-            /// Proto expression.
-            template<typename Expr>
-            struct arity_of
-              : Expr::proto_arity
-            {};
-
-            template<typename Expr>
-            struct arity_of<Expr &>
-              : Expr::proto_arity
-            {};
-
             /// \brief A metafunction that computes the return type of the \c as_expr()
             /// function.
             ///
@@ -528,258 +528,254 @@
 
         } // namespace result_of
 
-        namespace op
+        /// \brief A metafunction for generating terminal expression types,
+        /// a grammar element for matching terminal expressions, and a
+        /// PrimitiveTransform that returns the current expression unchanged.
+        template<typename T>
+        struct terminal
+          : proto::transform<terminal<T>, int>
         {
-            /// \brief A metafunction for generating terminal expression types,
-            /// a grammar element for matching terminal expressions, and a
-            /// PrimitiveTransform that returns the current expression unchanged.
-            template<typename T>
-            struct terminal
-              : proto::transform<terminal<T>, int>
-            {
-                typedef proto::expr<proto::tag::terminal, term<T>, 0> type;
-                typedef type proto_base_expr;
+            typedef proto::expr<proto::tag::terminal, term<T>, 0> type;
+            typedef proto::basic_expr<proto::tag::terminal, term<T>, 0> proto_grammar;
 
-                template<typename Expr, typename State, typename Data>
-                struct impl : transform_impl<Expr, State, Data>
+            template<typename Expr, typename State, typename Data>
+            struct impl : transform_impl<Expr, State, Data>
+            {
+                typedef Expr result_type;
+
+                /// \param e The current expression
+                /// \pre <tt>matches\<Expr, terminal\<T\> \>::::value</tt> is \c true.
+                /// \return \c e
+                /// \throw nothrow
+                #ifdef BOOST_PROTO_STRICT_RESULT_OF
+                result_type
+                #else
+                typename impl::expr_param
+                #endif
+                operator ()(
+                    typename impl::expr_param e
+                  , typename impl::state_param
+                  , typename impl::data_param
+                ) const
                 {
-                    typedef Expr result_type;
-
-                    /// \param e The current expression
-                    /// \pre <tt>matches\<Expr, terminal\<T\> \>::::value</tt> is \c true.
-                    /// \return \c e
-                    /// \throw nothrow
-                    #ifdef BOOST_PROTO_STRICT_RESULT_OF
-                    result_type
-                    #else
-                    typename impl::expr_param
-                    #endif
-                    operator ()(
-                        typename impl::expr_param e
-                      , typename impl::state_param
-                      , typename impl::data_param
-                    ) const
-                    {
-                        return e;
-                    }
-                };
-
-                /// INTERNAL ONLY
-                typedef proto::tag::terminal proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
+                    return e;
+                }
             };
 
-            /// \brief A metafunction for generating ternary conditional expression types,
-            /// a grammar element for matching ternary conditional expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<typename T, typename U, typename V>
-            struct if_else_
-              : proto::transform<if_else_<T, U, V>, int>
+            /// INTERNAL ONLY
+            typedef proto::tag::terminal proto_tag;
+            /// INTERNAL ONLY
+            typedef T proto_child0;
+        };
+
+        /// \brief A metafunction for generating ternary conditional expression types,
+        /// a grammar element for matching ternary conditional expressions, and a
+        /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
+        /// transform.
+        template<typename T, typename U, typename V>
+        struct if_else_
+          : proto::transform<if_else_<T, U, V>, int>
+        {
+            typedef proto::expr<proto::tag::if_else_, list3<T, U, V>, 3> type;
+            typedef proto::basic_expr<proto::tag::if_else_, list3<T, U, V>, 3> proto_grammar;
+
+            template<typename Expr, typename State, typename Data>
+            struct impl
+              : detail::pass_through_impl<if_else_, Expr, State, Data>
+            {};
+
+            /// INTERNAL ONLY
+            typedef proto::tag::if_else_ proto_tag;
+            /// INTERNAL ONLY
+            typedef T proto_child0;
+            /// INTERNAL ONLY
+            typedef U proto_child1;
+            /// INTERNAL ONLY
+            typedef V proto_child2;
+        };
+
+        /// \brief A metafunction for generating nullary expression types with a
+        /// specified tag type,
+        /// a grammar element for matching nullary expressions, and a
+        /// PrimitiveTransform that returns the current expression unchanged.
+        ///
+        /// Use <tt>nullary_expr\<_, _\></tt> as a grammar element to match any
+        /// nullary expression.
+        template<typename Tag, typename T>
+        struct nullary_expr
+          : proto::transform<nullary_expr<Tag, T>, int>
+        {
+            typedef proto::expr<Tag, term<T>, 0> type;
+            typedef proto::basic_expr<Tag, term<T>, 0> proto_grammar;
+
+            template<typename Expr, typename State, typename Data>
+            struct impl : transform_impl<Expr, State, Data>
             {
-                typedef proto::expr<proto::tag::if_else_, list3<T, U, V>, 3> type;
-                typedef type proto_base_expr;
+                typedef Expr result_type;
 
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<if_else_, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::if_else_ proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-                /// INTERNAL ONLY
-                typedef V proto_child2;
-            };
-
-            /// \brief A metafunction for generating nullary expression types with a
-            /// specified tag type,
-            /// a grammar element for matching nullary expressions, and a
-            /// PrimitiveTransform that returns the current expression unchanged.
-            ///
-            /// Use <tt>nullary_expr\<_, _\></tt> as a grammar element to match any
-            /// nullary expression.
-            template<typename Tag, typename T>
-            struct nullary_expr
-              : proto::transform<nullary_expr<Tag, T>, int>
-            {
-                typedef proto::expr<Tag, term<T>, 0> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl : transform_impl<Expr, State, Data>
+                /// \param e The current expression
+                /// \pre <tt>matches\<Expr, nullary_expr\<Tag, T\> \>::::value</tt> is \c true.
+                /// \return \c e
+                /// \throw nothrow
+                #ifdef BOOST_PROTO_STRICT_RESULT_OF
+                result_type
+                #else
+                typename impl::expr_param
+                #endif
+                operator ()(
+                    typename impl::expr_param e
+                  , typename impl::state_param
+                  , typename impl::data_param
+                ) const
                 {
-                    typedef Expr result_type;
-
-                    /// \param e The current expression
-                    /// \pre <tt>matches\<Expr, nullary_expr\<Tag, T\> \>::::value</tt> is \c true.
-                    /// \return \c e
-                    /// \throw nothrow
-                    #ifdef BOOST_PROTO_STRICT_RESULT_OF
-                    result_type
-                    #else
-                    typename impl::expr_param
-                    #endif
-                    operator ()(
-                        typename impl::expr_param e
-                      , typename impl::state_param
-                      , typename impl::data_param
-                    ) const
-                    {
-                        return e;
-                    }
-                };
-
-                /// INTERNAL ONLY
-                typedef Tag proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
+                    return e;
+                }
             };
 
-            /// \brief A metafunction for generating unary expression types with a
-            /// specified tag type,
-            /// a grammar element for matching unary expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            ///
-            /// Use <tt>unary_expr\<_, _\></tt> as a grammar element to match any
-            /// unary expression.
-            template<typename Tag, typename T>
-            struct unary_expr
-              : proto::transform<unary_expr<Tag, T>, int>
-            {
-                typedef proto::expr<Tag, list1<T>, 1> type;
-                typedef type proto_base_expr;
+            /// INTERNAL ONLY
+            typedef Tag proto_tag;
+            /// INTERNAL ONLY
+            typedef T proto_child0;
+        };
 
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<unary_expr, Expr, State, Data>
-                {};
+        /// \brief A metafunction for generating unary expression types with a
+        /// specified tag type,
+        /// a grammar element for matching unary expressions, and a
+        /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
+        /// transform.
+        ///
+        /// Use <tt>unary_expr\<_, _\></tt> as a grammar element to match any
+        /// unary expression.
+        template<typename Tag, typename T>
+        struct unary_expr
+          : proto::transform<unary_expr<Tag, T>, int>
+        {
+            typedef proto::expr<Tag, list1<T>, 1> type;
+            typedef proto::basic_expr<Tag, list1<T>, 1> proto_grammar;
 
-                /// INTERNAL ONLY
-                typedef Tag proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-            };
+            template<typename Expr, typename State, typename Data>
+            struct impl
+              : detail::pass_through_impl<unary_expr, Expr, State, Data>
+            {};
 
-            /// \brief A metafunction for generating binary expression types with a
-            /// specified tag type,
-            /// a grammar element for matching binary expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            ///
-            /// Use <tt>binary_expr\<_, _, _\></tt> as a grammar element to match any
-            /// binary expression.
-            template<typename Tag, typename T, typename U>
-            struct binary_expr
-              : proto::transform<binary_expr<Tag, T, U>, int>
-            {
-                typedef proto::expr<Tag, list2<T, U>, 2> type;
-                typedef type proto_base_expr;
+            /// INTERNAL ONLY
+            typedef Tag proto_tag;
+            /// INTERNAL ONLY
+            typedef T proto_child0;
+        };
 
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<binary_expr, Expr, State, Data>
-                {};
+        /// \brief A metafunction for generating binary expression types with a
+        /// specified tag type,
+        /// a grammar element for matching binary expressions, and a
+        /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
+        /// transform.
+        ///
+        /// Use <tt>binary_expr\<_, _, _\></tt> as a grammar element to match any
+        /// binary expression.
+        template<typename Tag, typename T, typename U>
+        struct binary_expr
+          : proto::transform<binary_expr<Tag, T, U>, int>
+        {
+            typedef proto::expr<Tag, list2<T, U>, 2> type;
+            typedef proto::basic_expr<Tag, list2<T, U>, 2> proto_grammar;
 
-                /// INTERNAL ONLY
-                typedef Tag proto_tag;
-                /// INTERNAL ONLY
-                typedef T proto_child0;
-                /// INTERNAL ONLY
-                typedef U proto_child1;
-            };
+            template<typename Expr, typename State, typename Data>
+            struct impl
+              : detail::pass_through_impl<binary_expr, Expr, State, Data>
+            {};
 
-        #define BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(Op)                                           \
-            template<typename T>                                                                    \
-            struct Op                                                                               \
-              : proto::transform<Op<T>, int>                                                        \
-            {                                                                                       \
-                typedef proto::expr<proto::tag::Op, list1<T>, 1> type;                              \
-                typedef type proto_base_expr;                                                       \
+            /// INTERNAL ONLY
+            typedef Tag proto_tag;
+            /// INTERNAL ONLY
+            typedef T proto_child0;
+            /// INTERNAL ONLY
+            typedef U proto_child1;
+        };
+
+    #define BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(Op)                                               \
+        template<typename T>                                                                        \
+        struct Op                                                                                   \
+          : proto::transform<Op<T>, int>                                                            \
+        {                                                                                           \
+            typedef proto::expr<proto::tag::Op, list1<T>, 1> type;                                  \
+            typedef proto::basic_expr<proto::tag::Op, list1<T>, 1> proto_grammar;                   \
                                                                                                     \
-                template<typename Expr, typename State, typename Data>                              \
-                struct impl                                                                         \
-                  : detail::pass_through_impl<Op, Expr, State, Data>                                \
-                {};                                                                                 \
+            template<typename Expr, typename State, typename Data>                                  \
+            struct impl                                                                             \
+              : detail::pass_through_impl<Op, Expr, State, Data>                                    \
+            {};                                                                                     \
                                                                                                     \
-                typedef proto::tag::Op proto_tag;                                                   \
-                typedef T proto_child0;                                                             \
-            };                                                                                      \
-            /**/
+            typedef proto::tag::Op proto_tag;                                                       \
+            typedef T proto_child0;                                                                 \
+        };                                                                                          \
+        /**/
 
-        #define BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(Op)                                          \
-            template<typename T, typename U>                                                        \
-            struct Op                                                                               \
-              : proto::transform<Op<T, U>, int>                                                     \
-            {                                                                                       \
-                typedef proto::expr<proto::tag::Op, list2<T, U>, 2> type;                           \
-                typedef type proto_base_expr;                                                       \
+    #define BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(Op)                                              \
+        template<typename T, typename U>                                                            \
+        struct Op                                                                                   \
+          : proto::transform<Op<T, U>, int>                                                         \
+        {                                                                                           \
+            typedef proto::expr<proto::tag::Op, list2<T, U>, 2> type;                               \
+            typedef proto::basic_expr<proto::tag::Op, list2<T, U>, 2> proto_grammar;                \
                                                                                                     \
-                template<typename Expr, typename State, typename Data>                              \
-                struct impl                                                                         \
-                  : detail::pass_through_impl<Op, Expr, State, Data>                                \
-                {};                                                                                 \
+            template<typename Expr, typename State, typename Data>                                  \
+            struct impl                                                                             \
+              : detail::pass_through_impl<Op, Expr, State, Data>                                    \
+            {};                                                                                     \
                                                                                                     \
-                typedef proto::tag::Op proto_tag;                                                   \
-                typedef T proto_child0;                                                             \
-                typedef U proto_child1;                                                             \
-            };                                                                                      \
-            /**/
+            typedef proto::tag::Op proto_tag;                                                       \
+            typedef T proto_child0;                                                                 \
+            typedef U proto_child1;                                                                 \
+        };                                                                                          \
+        /**/
 
-            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(unary_plus)
-            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(negate)
-            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(dereference)
-            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(complement)
-            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(address_of)
-            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(logical_not)
-            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(pre_inc)
-            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(pre_dec)
-            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(post_inc)
-            BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(post_dec)
+        BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(unary_plus)
+        BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(negate)
+        BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(dereference)
+        BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(complement)
+        BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(address_of)
+        BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(logical_not)
+        BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(pre_inc)
+        BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(pre_dec)
+        BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(post_inc)
+        BOOST_PROTO_DEFINE_UNARY_METAFUNCTION(post_dec)
 
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(shift_left)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(shift_right)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(multiplies)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(divides)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(modulus)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(plus)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(minus)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(less)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(greater)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(less_equal)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(greater_equal)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(equal_to)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(not_equal_to)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(logical_or)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(logical_and)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_or)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_and)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_xor)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(comma)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(mem_ptr)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(assign)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(shift_left_assign)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(shift_right_assign)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(multiplies_assign)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(divides_assign)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(modulus_assign)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(plus_assign)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(minus_assign)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_or_assign)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_and_assign)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_xor_assign)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(subscript)
-            BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(member)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(shift_left)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(shift_right)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(multiplies)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(divides)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(modulus)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(plus)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(minus)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(less)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(greater)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(less_equal)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(greater_equal)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(equal_to)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(not_equal_to)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(logical_or)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(logical_and)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_or)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_and)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_xor)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(comma)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(mem_ptr)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(assign)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(shift_left_assign)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(shift_right_assign)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(multiplies_assign)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(divides_assign)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(modulus_assign)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(plus_assign)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(minus_assign)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_or_assign)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_and_assign)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(bitwise_xor_assign)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(subscript)
+        BOOST_PROTO_DEFINE_BINARY_METAFUNCTION(member)
 
-        #undef BOOST_PROTO_DEFINE_UNARY_METAFUNCTION
-        #undef BOOST_PROTO_DEFINE_BINARY_METAFUNCTION
-
-        } // namespace op
+    #undef BOOST_PROTO_DEFINE_UNARY_METAFUNCTION
+    #undef BOOST_PROTO_DEFINE_BINARY_METAFUNCTION
 
     #define BOOST_PROTO_CHILD(Z, N, DATA)                                                           \
         /** INTERNAL ONLY */                                                                        \
@@ -806,10 +802,13 @@
 
                 template<typename This, typename T>
                 struct result<This(T)>
-                {
-                    typedef typename remove_reference<T>::type unref_type;
-                    typedef typename result_of::as_expr<unref_type, Domain>::type type;
-                };
+                  : result_of::as_expr<T, Domain>
+                {};
+
+                template<typename This, typename T>
+                struct result<This(T &)>
+                  : result_of::as_expr<T, Domain>
+                {};
 
                 /// \brief Wrap an object in a Proto terminal if it isn't a
                 /// Proto expression already.
@@ -860,10 +859,13 @@
 
                 template<typename This, typename T>
                 struct result<This(T)>
-                {
-                    typedef typename remove_reference<T>::type unref_type;
-                    typedef typename result_of::as_child<unref_type, Domain>::type type;
-                };
+                  : result_of::as_child<T, Domain>
+                {};
+
+                template<typename This, typename T>
+                struct result<This(T &)>
+                  : result_of::as_child<T, Domain>
+                {};
 
                 /// \brief Wrap an object in a Proto terminal if it isn't a
                 /// Proto expression already.
@@ -1384,93 +1386,89 @@
 
     #define N BOOST_PP_ITERATION()
     #if N > 0
-        namespace op
+        /// \brief A metafunction for generating function-call expression types,
+        /// a grammar element for matching function-call expressions, and a
+        /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
+        /// transform.
+        template<BOOST_PP_ENUM_PARAMS(N, typename A)>
+        struct function
+        #if N != BOOST_PROTO_MAX_ARITY
+        <
+            BOOST_PP_ENUM_PARAMS(N, A)
+            BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
+        >
+        #endif
+          : proto::transform<
+                function<
+                    BOOST_PP_ENUM_PARAMS(N, A)
+                    BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
+                >
+              , int
+            >
         {
-            /// \brief A metafunction for generating function-call expression types,
-            /// a grammar element for matching function-call expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            template<BOOST_PP_ENUM_PARAMS(N, typename A)>
-            struct function
-            #if N != BOOST_PROTO_MAX_ARITY
-            <
-                BOOST_PP_ENUM_PARAMS(N, A)
-                BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
-            >
-            #endif
-              : proto::transform<
-                    function<
-                        BOOST_PP_ENUM_PARAMS(N, A)
-                        BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
-                    >
-                  , int
+            typedef proto::expr<proto::tag::function, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)>, N> type;
+            typedef proto::basic_expr<proto::tag::function, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)>, N> proto_grammar;
+
+            template<typename Expr, typename State, typename Data>
+            struct impl
+              : detail::pass_through_impl<function, Expr, State, Data>
+            {};
+
+            /// INTERNAL ONLY
+            typedef proto::tag::function proto_tag;
+            BOOST_PP_REPEAT(N, BOOST_PROTO_CHILD, A)
+            BOOST_PP_REPEAT_FROM_TO(
+                N
+              , BOOST_PROTO_MAX_ARITY
+              , BOOST_PROTO_CHILD
+              , detail::if_vararg<BOOST_PP_CAT(A, BOOST_PP_DEC(N))> BOOST_PP_INTERCEPT
+            )
+        };
+
+        /// \brief A metafunction for generating n-ary expression types with a
+        /// specified tag type,
+        /// a grammar element for matching n-ary expressions, and a
+        /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
+        /// transform.
+        ///
+        /// Use <tt>nary_expr\<_, vararg\<_\> \></tt> as a grammar element to match any
+        /// n-ary expression; that is, any non-terminal.
+        template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
+        struct nary_expr
+        #if N != BOOST_PROTO_MAX_ARITY
+        <
+            Tag
+            BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
+            BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
+        >
+        #endif
+          : proto::transform<
+                nary_expr<
+                    Tag
+                    BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
+                    BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
                 >
-            {
-                typedef proto::expr<proto::tag::function, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)>, N> type;
-                typedef type proto_base_expr;
-
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<function, Expr, State, Data>
-                {};
-
-                /// INTERNAL ONLY
-                typedef proto::tag::function proto_tag;
-                BOOST_PP_REPEAT(N, BOOST_PROTO_CHILD, A)
-                BOOST_PP_REPEAT_FROM_TO(
-                    N
-                  , BOOST_PROTO_MAX_ARITY
-                  , BOOST_PROTO_CHILD
-                  , detail::if_vararg<BOOST_PP_CAT(A, BOOST_PP_DEC(N))> BOOST_PP_INTERCEPT
-                )
-            };
-
-            /// \brief A metafunction for generating n-ary expression types with a
-            /// specified tag type,
-            /// a grammar element for matching n-ary expressions, and a
-            /// PrimitiveTransform that dispatches to the <tt>pass_through\<\></tt>
-            /// transform.
-            ///
-            /// Use <tt>nary_expr\<_, vararg\<_\> \></tt> as a grammar element to match any
-            /// n-ary expression; that is, any non-terminal.
-            template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-            struct nary_expr
-            #if N != BOOST_PROTO_MAX_ARITY
-            <
-                Tag
-                BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
-                BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
+              , int
             >
-            #endif
-              : proto::transform<
-                    nary_expr<
-                        Tag
-                        BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
-                        BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
-                    >
-                  , int
-                >
-            {
-                typedef proto::expr<Tag, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)>, N> type;
-                typedef type proto_base_expr;
+        {
+            typedef proto::expr<Tag, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)>, N> type;
+            typedef proto::basic_expr<Tag, BOOST_PP_CAT(list, N)<BOOST_PP_ENUM_PARAMS(N, A)>, N> proto_grammar;
 
-                template<typename Expr, typename State, typename Data>
-                struct impl
-                  : detail::pass_through_impl<nary_expr, Expr, State, Data>
-                {};
+            template<typename Expr, typename State, typename Data>
+            struct impl
+              : detail::pass_through_impl<nary_expr, Expr, State, Data>
+            {};
 
-                /// INTERNAL ONLY
-                typedef Tag proto_tag;
-                BOOST_PP_REPEAT(N, BOOST_PROTO_CHILD, A)
-                BOOST_PP_REPEAT_FROM_TO(
-                    N
-                  , BOOST_PROTO_MAX_ARITY
-                  , BOOST_PROTO_CHILD
-                  , detail::if_vararg<BOOST_PP_CAT(A, BOOST_PP_DEC(N))> BOOST_PP_INTERCEPT
-                )
-            };
-
-        } // namespace op
+            /// INTERNAL ONLY
+            typedef Tag proto_tag;
+            BOOST_PP_REPEAT(N, BOOST_PROTO_CHILD, A)
+            BOOST_PP_REPEAT_FROM_TO(
+                N
+              , BOOST_PROTO_MAX_ARITY
+              , BOOST_PROTO_CHILD
+              , detail::if_vararg<BOOST_PP_CAT(A, BOOST_PP_DEC(N))> BOOST_PP_INTERCEPT
+            )
+        };
 
         namespace detail
         {

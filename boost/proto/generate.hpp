@@ -73,241 +73,238 @@
 
         }
 
-        namespace generatorns_
+        /// \brief A simple generator that passes an expression
+        /// through unchanged.
+        ///
+        /// Generators are intended for use as the first template parameter
+        /// to the \c domain\<\> class template and control if and how
+        /// expressions within that domain are to be customized.
+        /// The \c default_generator makes no modifications to the expressions
+        /// passed to it.
+        struct default_generator
         {
-            /// \brief A simple generator that passes an expression
-            /// through unchanged.
-            ///
-            /// Generators are intended for use as the first template parameter
-            /// to the \c domain\<\> class template and control if and how
-            /// expressions within that domain are to be customized.
-            /// The \c default_generator makes no modifications to the expressions
-            /// passed to it.
-            struct default_generator
+            BOOST_PROTO_CALLABLE()
+
+            template<typename Sig>
+            struct result;
+
+            template<typename This, typename Expr>
+            struct result<This(Expr)>
             {
-                BOOST_PROTO_CALLABLE()
-
-                template<typename Sig>
-                struct result;
-
-                template<typename This, typename Expr>
-                struct result<This(Expr)>
-                {
-                    typedef Expr type;
-                };
-
-                /// \param expr A Proto expression
-                /// \return expr
-                template<typename Expr>
-                #ifdef BOOST_PROTO_STRICT_RESULT_OF
-                Expr
-                #else
-                Expr const &
-                #endif
-                operator ()(Expr const &e) const
-                {
-                    return e;
-                }
+                typedef Expr type;
             };
 
-            /// \brief A generator that wraps expressions passed
-            /// to it in the specified extension wrapper.
-            ///
-            /// Generators are intended for use as the first template parameter
-            /// to the \c domain\<\> class template and control if and how
-            /// expressions within that domain are to be customized.
-            /// \c generator\<\> wraps each expression passed to it in
-            /// the \c Extends\<\> wrapper.
-            template<template<typename> class Extends>
-            struct generator
+            /// \param expr A Proto expression
+            /// \return expr
+            template<typename Expr>
+            #ifdef BOOST_PROTO_STRICT_RESULT_OF
+            Expr
+            #else
+            Expr const &
+            #endif
+            operator ()(Expr const &e) const
             {
-                BOOST_PROTO_CALLABLE()
+                return e;
+            }
+        };
 
-                template<typename Sig>
-                struct result;
+        /// \brief A generator that wraps expressions passed
+        /// to it in the specified extension wrapper.
+        ///
+        /// Generators are intended for use as the first template parameter
+        /// to the \c domain\<\> class template and control if and how
+        /// expressions within that domain are to be customized.
+        /// \c generator\<\> wraps each expression passed to it in
+        /// the \c Extends\<\> wrapper.
+        template<template<typename> class Extends>
+        struct generator
+        {
+            BOOST_PROTO_CALLABLE()
 
-                template<typename This, typename Expr>
-                struct result<This(Expr)>
-                {
-                    typedef Extends<Expr> type;
-                };
+            template<typename Sig>
+            struct result;
 
-                template<typename This, typename Expr>
-                struct result<This(Expr &)>
-                {
-                    typedef Extends<Expr> type;
-                };
-
-                template<typename This, typename Expr>
-                struct result<This(Expr const &)>
-                {
-                    typedef Extends<Expr> type;
-                };
-
-                /// \param expr A Proto expression
-                /// \return Extends<Expr>(expr)
-                template<typename Expr>
-                Extends<Expr> operator ()(Expr const &e) const
-                {
-                    return Extends<Expr>(e);
-                }
+            template<typename This, typename Expr>
+            struct result<This(Expr)>
+            {
+                typedef Extends<Expr> type;
             };
 
-            /// \brief A generator that wraps expressions passed
-            /// to it in the specified extension wrapper and uses
-            /// aggregate initialization for the wrapper.
-            ///
-            /// Generators are intended for use as the first template parameter
-            /// to the \c domain\<\> class template and control if and how
-            /// expressions within that domain are to be customized.
-            /// \c pod_generator\<\> wraps each expression passed to it in
-            /// the \c Extends\<\> wrapper, and uses aggregate initialzation
-            /// for the wrapped object.
-            template<template<typename> class Extends>
-            struct pod_generator
+            template<typename This, typename Expr>
+            struct result<This(Expr &)>
             {
-                BOOST_PROTO_CALLABLE()
-
-                template<typename Sig>
-                struct result;
-
-                template<typename This, typename Expr>
-                struct result<This(Expr)>
-                {
-                    typedef Extends<Expr> type;
-                };
-
-                template<typename This, typename Expr>
-                struct result<This(Expr &)>
-                {
-                    typedef Extends<Expr> type;
-                };
-
-                template<typename This, typename Expr>
-                struct result<This(Expr const &)>
-                {
-                    typedef Extends<Expr> type;
-                };
-
-                /// \param expr The expression to wrap
-                /// \return <tt>Extends\<Expr\> that = {expr}; return that;</tt>
-                template<typename Expr>
-                Extends<Expr> operator ()(Expr const &e) const
-                {
-                    Extends<Expr> that = {e};
-                    return that;
-                }
+                typedef Extends<Expr> type;
             };
 
-            /// \brief A generator that replaces child nodes held by
-            /// reference with ones held by value. Use with
-            /// \c compose_generators to forward that result to another
-            /// generator.
-            ///
-            /// Generators are intended for use as the first template parameter
-            /// to the \c domain\<\> class template and control if and how
-            /// expressions within that domain are to be customized.
-            /// \c by_value_generator ensures all child nodes are
-            /// held by value. This generator is typically composed with a
-            /// second generator for further processing, as
-            /// <tt>compose_generators\<by_value_generator, MyGenerator\></tt>.
-            struct by_value_generator
+            template<typename This, typename Expr>
+            struct result<This(Expr const &)>
             {
-                BOOST_PROTO_CALLABLE()
-
-                template<typename Sig>
-                struct result;
-
-                template<typename This, typename Expr>
-                struct result<This(Expr)>
-                {
-                    typedef
-                        typename detail::by_value_generator_<Expr>::type
-                    type;
-                };
-
-                template<typename This, typename Expr>
-                struct result<This(Expr &)>
-                {
-                    typedef
-                        typename detail::by_value_generator_<Expr>::type
-                    type;
-                };
-
-                template<typename This, typename Expr>
-                struct result<This(Expr const &)>
-                {
-                    typedef
-                        typename detail::by_value_generator_<Expr>::type
-                    type;
-                };
-
-                /// \param expr The expression to modify.
-                /// \return <tt>deep_copy(expr)</tt>
-                template<typename Expr>
-                typename result<by_value_generator(Expr)>::type operator ()(Expr const &e) const
-                {
-                    return detail::by_value_generator_<Expr>::make(e);
-                }
+                typedef Extends<Expr> type;
             };
 
-            /// \brief A composite generator that first applies one
-            /// transform to an expression and then forwards the result
-            /// on to another generator for further transformation.
-            ///
-            /// Generators are intended for use as the first template parameter
-            /// to the \c domain\<\> class template and control if and how
-            /// expressions within that domain are to be customized.
-            /// \c compose_generators\<\> is a composite generator that first
-            /// applies one transform to an expression and then forwards the
-            /// result on to another generator for further transformation.
-            template<typename First, typename Second>
-            struct compose_generators
+            /// \param expr A Proto expression
+            /// \return Extends<Expr>(expr)
+            template<typename Expr>
+            Extends<Expr> operator ()(Expr const &e) const
             {
-                BOOST_PROTO_CALLABLE()
+                return Extends<Expr>(e);
+            }
+        };
 
-                template<typename Sig>
-                struct result;
+        /// \brief A generator that wraps expressions passed
+        /// to it in the specified extension wrapper and uses
+        /// aggregate initialization for the wrapper.
+        ///
+        /// Generators are intended for use as the first template parameter
+        /// to the \c domain\<\> class template and control if and how
+        /// expressions within that domain are to be customized.
+        /// \c pod_generator\<\> wraps each expression passed to it in
+        /// the \c Extends\<\> wrapper, and uses aggregate initialzation
+        /// for the wrapped object.
+        template<template<typename> class Extends>
+        struct pod_generator
+        {
+            BOOST_PROTO_CALLABLE()
 
-                template<typename This, typename Expr>
-                struct result<This(Expr)>
-                {
-                    typedef
-                        typename Second::template result<
-                            Second(typename First::template result<First(Expr)>::type)
-                        >::type
-                    type;
-                };
+            template<typename Sig>
+            struct result;
 
-                template<typename This, typename Expr>
-                struct result<This(Expr &)>
-                {
-                    typedef
-                        typename Second::template result<
-                            Second(typename First::template result<First(Expr)>::type)
-                        >::type
-                    type;
-                };
-
-                template<typename This, typename Expr>
-                struct result<This(Expr const &)>
-                {
-                    typedef
-                        typename Second::template result<
-                            Second(typename First::template result<First(Expr)>::type)
-                        >::type
-                    type;
-                };
-
-                /// \param expr The expression to modify.
-                /// \return Second()(First()(expr))
-                template<typename Expr>
-                typename result<compose_generators(Expr)>::type operator ()(Expr const &e) const
-                {
-                    return Second()(First()(e));
-                }
+            template<typename This, typename Expr>
+            struct result<This(Expr)>
+            {
+                typedef Extends<Expr> type;
             };
-        }
+
+            template<typename This, typename Expr>
+            struct result<This(Expr &)>
+            {
+                typedef Extends<Expr> type;
+            };
+
+            template<typename This, typename Expr>
+            struct result<This(Expr const &)>
+            {
+                typedef Extends<Expr> type;
+            };
+
+            /// \param expr The expression to wrap
+            /// \return <tt>Extends\<Expr\> that = {expr}; return that;</tt>
+            template<typename Expr>
+            Extends<Expr> operator ()(Expr const &e) const
+            {
+                Extends<Expr> that = {e};
+                return that;
+            }
+        };
+
+        /// \brief A generator that replaces child nodes held by
+        /// reference with ones held by value. Use with
+        /// \c compose_generators to forward that result to another
+        /// generator.
+        ///
+        /// Generators are intended for use as the first template parameter
+        /// to the \c domain\<\> class template and control if and how
+        /// expressions within that domain are to be customized.
+        /// \c by_value_generator ensures all child nodes are
+        /// held by value. This generator is typically composed with a
+        /// second generator for further processing, as
+        /// <tt>compose_generators\<by_value_generator, MyGenerator\></tt>.
+        struct by_value_generator
+        {
+            BOOST_PROTO_CALLABLE()
+
+            template<typename Sig>
+            struct result;
+
+            template<typename This, typename Expr>
+            struct result<This(Expr)>
+            {
+                typedef
+                    typename detail::by_value_generator_<Expr>::type
+                type;
+            };
+
+            template<typename This, typename Expr>
+            struct result<This(Expr &)>
+            {
+                typedef
+                    typename detail::by_value_generator_<Expr>::type
+                type;
+            };
+
+            template<typename This, typename Expr>
+            struct result<This(Expr const &)>
+            {
+                typedef
+                    typename detail::by_value_generator_<Expr>::type
+                type;
+            };
+
+            /// \param expr The expression to modify.
+            /// \return <tt>deep_copy(expr)</tt>
+            template<typename Expr>
+            typename result<by_value_generator(Expr)>::type operator ()(Expr const &e) const
+            {
+                return detail::by_value_generator_<Expr>::make(e);
+            }
+        };
+
+        /// \brief A composite generator that first applies one
+        /// transform to an expression and then forwards the result
+        /// on to another generator for further transformation.
+        ///
+        /// Generators are intended for use as the first template parameter
+        /// to the \c domain\<\> class template and control if and how
+        /// expressions within that domain are to be customized.
+        /// \c compose_generators\<\> is a composite generator that first
+        /// applies one transform to an expression and then forwards the
+        /// result on to another generator for further transformation.
+        template<typename First, typename Second>
+        struct compose_generators
+        {
+            BOOST_PROTO_CALLABLE()
+
+            template<typename Sig>
+            struct result;
+
+            template<typename This, typename Expr>
+            struct result<This(Expr)>
+            {
+                typedef
+                    typename Second::template result<
+                        Second(typename First::template result<First(Expr)>::type)
+                    >::type
+                type;
+            };
+
+            template<typename This, typename Expr>
+            struct result<This(Expr &)>
+            {
+                typedef
+                    typename Second::template result<
+                        Second(typename First::template result<First(Expr)>::type)
+                    >::type
+                type;
+            };
+
+            template<typename This, typename Expr>
+            struct result<This(Expr const &)>
+            {
+                typedef
+                    typename Second::template result<
+                        Second(typename First::template result<First(Expr)>::type)
+                    >::type
+                type;
+            };
+
+            /// \param expr The expression to modify.
+            /// \return Second()(First()(expr))
+            template<typename Expr>
+            typename result<compose_generators(Expr)>::type operator ()(Expr const &e) const
+            {
+                return Second()(First()(e));
+            }
+        };
 
         /// INTERNAL ONLY
         template<>

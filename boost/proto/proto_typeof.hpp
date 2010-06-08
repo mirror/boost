@@ -65,12 +65,13 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::function)
 
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::exprns_::is_proto_expr)
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::exprns_::expr, (typename)(typename)(long))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::exprns_::basic_expr, (typename)(typename)(long))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::utility::literal, (typename)(typename))
 
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::detail::not_a_generator)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::detail::not_a_grammar)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::detail::not_a_domain)
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::domainns_::domain, 3)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::domain, 3)
 
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::term, 1)
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::list1, 1)

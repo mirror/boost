@@ -55,8 +55,8 @@ struct CountLeaves :
           </itemizedlist>
         </description>
         <inherit><type>PrimitiveTransform</type></inherit>
-        <typedef name="proto_base_expr">
-          <type>typename Grammar::proto_base_expr</type>
+        <typedef name="proto_grammar">
+          <type>typename Grammar::proto_grammar</type>
         </typedef>
       </struct>
 
@@ -184,8 +184,8 @@ struct CountLeaves :
             </method>
           </method-group>
         </struct>
-        <typedef name="proto_base_expr">
-          <type>typename Grammar::proto_base_expr</type>
+        <typedef name="proto_grammar">
+          <type>typename Grammar::proto_grammar</type>
         </typedef>
       </struct-specialization>
       

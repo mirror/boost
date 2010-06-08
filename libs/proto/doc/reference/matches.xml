@@ -82,7 +82,7 @@
             </method>
           </method-group>
         </struct>
-        <typedef name="proto_base_expr">
+        <typedef name="proto_grammar">
           <type>_</type>
         </typedef>
       </struct>
@@ -144,7 +144,7 @@
             </method>
           </method-group>
         </struct>
-        <typedef name="proto_base_expr">
+        <typedef name="proto_grammar">
           <type>not_</type>
         </typedef>
       </struct>
@@ -262,7 +262,7 @@ struct IsIntegral2 :
             </method>
           </method-group>
         </struct>
-        <typedef name="proto_base_expr">
+        <typedef name="proto_grammar">
           <type>if_</type>
         </typedef>
       </struct>
@@ -345,7 +345,7 @@ struct IsIntegral2 :
             </method>
           </method-group>
         </struct>
-        <typedef name="proto_base_expr">
+        <typedef name="proto_grammar">
           <type>or_</type>
         </typedef>
       </struct>
@@ -418,7 +418,7 @@ struct IsIntegral2 :
             </method>
           </method-group>
         </struct>
-        <typedef name="proto_base_expr">
+        <typedef name="proto_grammar">
           <type>and_</type>
         </typedef>
       </struct>
@@ -457,7 +457,7 @@ struct IsIntegral2 :
           <inherit><type>
     Cases::template case_&lt;typename Expr::tag_type&gt;::template impl&lt;Expr, State, Data&gt;</type></inherit>
         </struct>
-        <typedef name="proto_base_expr">
+        <typedef name="proto_grammar">
           <type>switch_</type>
         </typedef>
       </struct>
@@ -541,8 +541,8 @@ struct Function :
           <para>
             <computeroutput>proto::matches&lt;Expr, Grammar&gt;</computeroutput> inherits from
             <computeroutput>mpl::true_</computeroutput> if
-            <computeroutput>Expr::proto_base_expr</computeroutput> matches
-            <computeroutput>Grammar::proto_base_expr</computeroutput>, and from
+            <computeroutput>Expr::proto_grammar</computeroutput> matches
+            <computeroutput>Grammar::proto_grammar</computeroutput>, and from
             <computeroutput>mpl::false_</computeroutput> otherwise.
           </para>
           <para>

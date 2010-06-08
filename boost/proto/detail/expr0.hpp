@@ -56,6 +56,7 @@
         #else
         typedef BOOST_PP_CAT(list, BOOST_PP_ITERATION())<BOOST_PP_ENUM_PARAMS(ARG_COUNT, Arg)> proto_args;
         #endif
+        typedef basic_expr<Tag, proto_args, BOOST_PP_ITERATION() > proto_grammar;
         typedef default_domain proto_domain;
         typedef default_generator proto_generator;
         typedef proto::tag::proto_expr fusion_tag;
