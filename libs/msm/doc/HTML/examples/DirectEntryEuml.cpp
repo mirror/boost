@@ -1,3 +1,13 @@
+// Copyright 2010 Christophe Henry
+// henry UNDERSCORE christophe AT hotmail DOT com
+// This is an extended version of the state machine available in the boost::mpl library
+// Distributed under the same license as the original.
+// Copyright for the original version:
+// Copyright 2005 David Abrahams and Aleksey Gurtovoy. Distributed
+// under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 #include <vector>
 #include <iostream>
 
@@ -28,212 +38,212 @@ namespace  // Concrete FSM implementation
     event6_impl const event6;
 
     //Sub fsm state definition
-	BOOST_MSM_EUML_ACTION(SubState1_Entry)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "entering: SubFsm2::SubState1" << std::endl;
-		}
-	};
+    BOOST_MSM_EUML_ACTION(SubState1_Entry)
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "entering: SubFsm2::SubState1" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ACTION(SubState1_Exit)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "leaving: SubFsm2::SubState1" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "leaving: SubFsm2::SubState1" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_STATE(( SubState1_Entry,SubState1_Exit ),SubState1)
 
     BOOST_MSM_EUML_ACTION(SubState1b_Entry)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "entering: SubFsm2::SubState1b" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "entering: SubFsm2::SubState1b" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ACTION(SubState1b_Exit)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "leaving: SubFsm2::SubState1b" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "leaving: SubFsm2::SubState1b" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_STATE(( SubState1b_Entry,SubState1b_Exit ),SubState1b)
 
     BOOST_MSM_EUML_ACTION(SubState1c_Entry)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "entering: SubFsm2::SubState1c" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "entering: SubFsm2::SubState1c" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ACTION(SubState1c_Exit)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "leaving: SubFsm2::SubState1c" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "leaving: SubFsm2::SubState1c" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_STATE(( SubState1c_Entry,SubState1c_Exit ),SubState1c)
 
     BOOST_MSM_EUML_ACTION(SubState2_Entry)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "entering: SubFsm2::SubState2" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "entering: SubFsm2::SubState2" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ACTION(SubState2_Exit)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "leaving: SubFsm2::SubState2" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "leaving: SubFsm2::SubState2" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_EXPLICIT_ENTRY_STATE(0,( SubState2_Entry,SubState2_Exit ),SubState2)
 
     BOOST_MSM_EUML_ACTION(SubState2b_Entry)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "entering: SubFsm2::SubState2b" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "entering: SubFsm2::SubState2b" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ACTION(SubState2b_Exit)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "leaving: SubFsm2::SubState2b" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "leaving: SubFsm2::SubState2b" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_EXPLICIT_ENTRY_STATE(1,( SubState2b_Entry,SubState2b_Exit ),SubState2b)
 
     BOOST_MSM_EUML_ACTION(SubState2c_Entry)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "entering: SubFsm2::SubState2c" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "entering: SubFsm2::SubState2c" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ACTION(SubState2c_Exit)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "leaving: SubFsm2::SubState2c" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "leaving: SubFsm2::SubState2c" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_EXPLICIT_ENTRY_STATE(2,( SubState2c_Entry,SubState2c_Exit ),SubState2c)
 
     BOOST_MSM_EUML_ACTION(PseudoEntry1_Entry)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "entering: SubFsm2::PseudoEntry1" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "entering: SubFsm2::PseudoEntry1" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ACTION(PseudoEntry1_Exit)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "leaving: SubFsm2::PseudoEntry1" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "leaving: SubFsm2::PseudoEntry1" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ENTRY_STATE(0,( PseudoEntry1_Entry,PseudoEntry1_Exit ),PseudoEntry1)
 
     BOOST_MSM_EUML_ACTION(SubState3_Entry)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "entering: SubFsm2::SubState3" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "entering: SubFsm2::SubState3" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ACTION(SubState3_Exit)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "leaving: SubFsm2::SubState3" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "leaving: SubFsm2::SubState3" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_STATE(( SubState3_Entry,SubState3_Exit ),SubState3)
 
     BOOST_MSM_EUML_ACTION(SubState3b_Entry)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "entering: SubFsm2::SubState3b" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "entering: SubFsm2::SubState3b" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ACTION(SubState3b_Exit)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "leaving: SubFsm2::SubState3b" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "leaving: SubFsm2::SubState3b" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_STATE(( SubState3b_Entry,SubState3b_Exit ),SubState3b)
 
     BOOST_MSM_EUML_ACTION(PseudoExit1_Entry)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "entering: SubFsm2::PseudoExit1" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "entering: SubFsm2::PseudoExit1" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ACTION(PseudoExit1_Exit)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "leaving: SubFsm2::PseudoExit1" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "leaving: SubFsm2::PseudoExit1" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_EXIT_STATE(( event6,PseudoExit1_Entry,PseudoExit1_Exit ),PseudoExit1)
 
     // actions
     BOOST_MSM_EUML_ACTION(entry_action)
-	{
-		template <class FSM,class EVT,class SourceState,class TargetState>
-		void operator()(FSM& ,EVT const& ,SourceState& ,TargetState& )
-		{
-			cout << "calling entry_action" << endl;
-		}
-	};
+    {
+        template <class FSM,class EVT,class SourceState,class TargetState>
+        void operator()(FSM& ,EVT const& ,SourceState& ,TargetState& )
+        {
+            cout << "calling entry_action" << endl;
+        }
+    };
     // SubFsm definition
     BOOST_MSM_EUML_ACTION(SubFsm2_Entry)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "entering: SubFsm2" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "entering: SubFsm2" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ACTION(SubFsm2_Exit)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "leaving: SubFsm2" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "leaving: SubFsm2" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_TRANSITION_TABLE((
         //  +------------------------------------------------------------------------------+
             SubState3   == PseudoEntry1  + event4 / entry_action        ,
@@ -262,39 +272,39 @@ namespace  // Concrete FSM implementation
 
     // Fsm state definitions
     BOOST_MSM_EUML_ACTION(State1_Entry)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "entering: State1" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "entering: State1" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ACTION(State1_Exit)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "leaving: State1" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "leaving: State1" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_STATE(( State1_Entry,State1_Exit ),State1)
 
     BOOST_MSM_EUML_ACTION(State2_Entry)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "entering: State2" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "entering: State2" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_ACTION(State2_Exit)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const&,FSM&,STATE& )
-		{
-			std::cout << "leaving: State2" << std::endl;
-		}
-	};
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const&,FSM&,STATE& )
+        {
+            std::cout << "leaving: State2" << std::endl;
+        }
+    };
     BOOST_MSM_EUML_STATE(( State2_Entry,State2_Exit ),State2)
 
     // Fsm definition
@@ -314,14 +324,14 @@ namespace  // Concrete FSM implementation
 
 
     BOOST_MSM_EUML_ACTION(Log_No_Transition)
-	{
-		template <class Event,class FSM,class STATE>
-		void operator()(Event const& e,FSM&,STATE& )
-		{
+    {
+        template <class Event,class FSM,class STATE>
+        void operator()(Event const& e,FSM&,STATE& )
+        {
             std::cout << "no transition in Fsm"
                 << " on event " << typeid(e).name() << std::endl;
-		}
-	};
+        }
+    };
     BOOST_MSM_EUML_DECLARE_STATE_MACHINE(( transition_table, //STT
                                         init_ << State1, // Init State
                                         no_action, // Entry
