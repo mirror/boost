@@ -72,6 +72,7 @@ namespace boost
       T x;
   };
 
+  template <> struct Integer<char> {};
   template <> struct Integer<signed char> {};
   template <> struct Integer<unsigned char> {};
   template <> struct Integer<short> {};
