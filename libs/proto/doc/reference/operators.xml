@@ -7,7 +7,7 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
-        <inherit><type>mpl::false_</type></inherit>
+        <inherit><type><classname>is_expr</classname>&lt; T &gt;</type></inherit>
         <purpose>Boolean metafunction that can be used to enable the operator overloads in the
         <computeroutput>exops</computeroutput> namespace for the specified non-Proto terminal type.</purpose>
       </struct>
@@ -1786,11 +1786,6 @@
           <paramtype>A2 const &amp;</paramtype>
         </parameter>
       </function>
-      <namespace name="exops">
-        <data-member name="(is_extension, default_domain)">
-          <type><macroname>BOOST_PROTO_DEFINE_OPERATORS</macroname></type>
-        </data-member>
-      </namespace>
     </namespace>
   </namespace>
   <macro name="BOOST_PROTO_DEFINE_OPERATORS" kind="functionlike">
